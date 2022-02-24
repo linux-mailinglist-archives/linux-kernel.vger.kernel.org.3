@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924F84C2823
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9E24C2829
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiBXJdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S232812AbiBXJeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiBXJdv (ORCPT
+        with ESMTP id S232274AbiBXJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Feb 2022 04:33:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8633C26A3AC;
-        Thu, 24 Feb 2022 01:33:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52667ED1;
-        Thu, 24 Feb 2022 01:33:21 -0800 (PST)
-Received: from [10.57.8.211] (unknown [10.57.8.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F7F13F70D;
-        Thu, 24 Feb 2022 01:33:19 -0800 (PST)
-Message-ID: <9c8f15a3-563f-3bed-61a4-2f72b0c20e89@arm.com>
-Date:   Thu, 24 Feb 2022 09:33:18 +0000
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47D6279912
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:21 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id d17so1411433pfl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=uGKq58V3gxYUKFtQZRdwKaWzXyqF0DUlv4Zwkq/SlR8=;
+        b=NpJJwHFwezULevW3lMWM2pinE8pk/epL09fjtjQFCsp316hFRgc7pKq3BwEkwTOjG2
+         a71B7/eHoW07obcm96PaibgqPHdMwv88l4cjdU2cs4z4xp9VgIBeNwMGP/g7t/DoGKTu
+         zlruP47c+RyLrm0YYefpODWVoWoe4eh+hqB+QUOZDwkN3COq/Fllvw2t3IX5PfmG/rA3
+         HR6+g5myThA1+1lBR4S85RWQnAsSV1rh8+Nwp7U7o7Ix6EcqkULOlhBNt0QdPripP+Es
+         4uShhKwyVVSJIy/AQLrC316UPdvP1yAn9tNJpgu+wZG4Lx9m1vzEYPUKSBxAGMJY8HZ5
+         26dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=uGKq58V3gxYUKFtQZRdwKaWzXyqF0DUlv4Zwkq/SlR8=;
+        b=jgX3JsuAVtH1s2EIJrLxtes0i5PU9zs1BaJAxIWPgWXu9x2zjgqIYumqzdvw66fWvQ
+         gq56gp+nvjWv22NByA0Sz74DzvFo06prICO7CkIg0I4tb5VOQSfSG5Axwil0hazsp3TX
+         iPKOFK0FzI5UwW7+nPNG7O0EaAOPClD8t20QjcsH3spkIxkVNm6G+os6ZILmymW4bFK8
+         DT1Ra6X2pRf3IGEY12vmEU33tm4Orb7esWEiPCCZn+pDYHfsS+JMwXzasfU0ES7GdRNc
+         UDkjiVmtDcYuDeglFHMgPAiCi/bK2vzLiDZ+mjlzCyMsmvhCJEWDmNNPdbb0PEW1SVRL
+         dcSw==
+X-Gm-Message-State: AOAM532vCe55EQCdFNQTWrz9v9hRuvnbJkbHLrcoTqcRgylAHZLuwi1E
+        sYAYJnnvhQ5AudTFpjVv1ZMWvX/pMVxtpaVgVz0=
+X-Google-Smtp-Source: ABdhPJwdKDZrVSffdSzEt6BdsONC5042lUxNhhyE0sJ0vgt7foZBqnYaMLWsshBCPkpHGVZvP/Te7eagR6uanPF6h4E=
+X-Received: by 2002:a63:5959:0:b0:35e:ae24:7935 with SMTP id
+ j25-20020a635959000000b0035eae247935mr1627909pgm.120.1645695201280; Thu, 24
+ Feb 2022 01:33:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/4] OPP: Add support of "opp-microwatt" for advanced
- EM registration
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220224081131.27282-1-lukasz.luba@arm.com>
- <20220224081131.27282-4-lukasz.luba@arm.com>
- <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: deepakpriyanka54@gmail.com
+Received: by 2002:a17:90a:6c62:0:0:0:0 with HTTP; Thu, 24 Feb 2022 01:33:20
+ -0800 (PST)
+From:   Mrs Aisha Gaddafi <aisha0gaddafix@gmail.com>
+Date:   Thu, 24 Feb 2022 01:33:20 -0800
+X-Google-Sender-Auth: K7AY5hP7fL0pm26kH2vC_X3kC-E
+Message-ID: <CAPakwwmcimOmN61JnENG5HzGjpWpxRxr5N8HuLhKttmxoUSzfg@mail.gmail.com>
+Subject: Assalamu Alaikum
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7070]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:442 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [deepakpriyanka54[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aisha0gaddafix[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.3 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Assalamu Alaikum Dear Friend,
 
+May i use this medium to open a mutual communication with you seeking
+your acceptance towards investing in your country under your
+management as my partner, My name is Aisha Al-Qaddafi and presently
+living in Oman as a refugee with my three children, i am a Widow and
+single Mother with three Children, the only biological Daughter of
+late Libyan President (Late Colonel Muammar Al-Qaddafi) and presently
+i am under political asylum protection by Omani Government, However, I
+have funds worth "Twenty Seven Million Five Hundred Thousand United
+State Dollars" $27.500.000.00 US Dollars deposited in the bank which i
+want to entrust on you for investment project in your country or your
+company.
 
-On 2/24/22 09:13, Viresh Kumar wrote:
-> On 24-02-22, 08:11, Lukasz Luba wrote:
->> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
->>   
->> +/*
->> + * Callback function provided to the Energy Model framework upon registration.
->> + * It provides the power used by @dev at @kHz if it is the frequency of an
->> + * existing OPP, or at the frequency of the first OPP above @kHz otherwise
->> + * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
->> + * frequency and @mW to the associated power.
->> + *
->> + * Returns 0 on success or a proper -EINVAL value in case of error.
->> + */
->> +static int __maybe_unused
->> +_get_opp_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
-> 
-> Lets call it _get_dt_opp_power() or _get_dt_power() ?
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits, If you are
+willing to handle this project on my behalf, kindly reply to me
+urgently to enable me to provide you with more information about the
+investment funds, I shall appreciate your urgent response.
 
-OK, I'll return to _get_dt_power()
-
-> 
->> +{
->> +	struct dev_pm_opp *opp;
->> +	unsigned long opp_freq, opp_power;
->> +
->> +	/* Find the right frequency and related OPP */
->> +	opp_freq = *kHz * 1000;
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
->> +	if (IS_ERR(opp))
->> +		return -EINVAL;
->> +
->> +	opp_power = dev_pm_opp_get_power(opp);
-> 
-> As I said in 2/4, this should really give the total instead.
-
-make sense
-
-> 
->> +	dev_pm_opp_put(opp);
->> +	if (!opp_power)
->> +		return -EINVAL;
->> +
->> +	*kHz = opp_freq / 1000;
->> +	*mW = opp_power / 1000;
->> +
->> +	return 0;
->> +}
->> +
->>   /*
->>    * Callback function provided to the Energy Model framework upon registration.
->>    * This computes the power estimated by @dev at @kHz if it is the frequency
->> @@ -1488,6 +1520,24 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
->>   	return 0;
->>   }
->>   
->> +static bool _of_has_opp_microwatt_property(struct device *dev)
->> +{
->> +	unsigned long power, freq = 0;
->> +	struct dev_pm_opp *opp;
->> +
->> +	/* Check if at least one OPP has needed property */
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
->> +	if (IS_ERR(opp))
->> +		return false;
->> +
->> +	power = dev_pm_opp_get_power(opp);
->> +	dev_pm_opp_put(opp);
->> +	if (!power)
-> 
-> What if this particular frequency has 0 power mentioned for some
-> reason :)
-
-If that power 0 would be allowed here, then in next step when EM
-calls active_power() we check !power and report dev_err().
-IPA design would also not accept the power=0
-
-> 
-> Instead of this heavy stuff, just pick the first OPP from the opp
-> table and see its power-value.
-
-It is the first opp: freq=0.
-You mean by parsing the the DT node instead, like I had in v2 version?
-
-> 
->> +		return false;
->> +
->> +	return true;
->> +}
->> +
->>   /**
->>    * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
->>    * @dev		: Device for which an Energy Model has to be registered
->> @@ -1517,6 +1567,14 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->>   		goto failed;
->>   	}
->>   
->> +	/* First, try to find more precised Energy Model in DT */
->> +	if (_of_has_opp_microwatt_property(dev)) {
->> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_opp_power);
->> +
->> +		return em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
->> +						   cpus, true);
->> +	}
->> +
-> 
-> We have another em_dev_register_perf_domain() down the line, lets keep
-> only one such call and get it a callback that should be set in an
-> if/else loop.
-
-OK
+Warmest regards
+Mrs Aisha Al-Qaddafi

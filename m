@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6675C4C398F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A874C3994
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiBXXPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S230300AbiBXXSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiBXXPi (ORCPT
+        with ESMTP id S229596AbiBXXSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:15:38 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B8CD2757A0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:15:05 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-281-foIGsKlaMWyYIUBl_oNJDQ-1; Thu, 24 Feb 2022 23:15:02 +0000
-X-MC-Unique: foIGsKlaMWyYIUBl_oNJDQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 24 Feb 2022 23:15:01 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 24 Feb 2022 23:15:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "open list:VFIO DRIVER" <kvm@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: RE: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
-Thread-Topic: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
-Thread-Index: AQHYKbf4PreGRJIIQ0mXQjRI10uskKyjVBFg
-Date:   Thu, 24 Feb 2022 23:15:01 +0000
-Message-ID: <2a9391a3546d487ca937c4e523690ea9@AcuMS.aculab.com>
-References: <20220223164420.45344-1-andriy.shevchenko@linux.intel.com>
- <20220224123620.57fd6c8b@p-imbrenda>
- <CAHp75Vfm-zmzoO0AZTv-3eBjXf0FzHh7tbHRn3DoO7EjukFVig@mail.gmail.com>
-In-Reply-To: <CAHp75Vfm-zmzoO0AZTv-3eBjXf0FzHh7tbHRn3DoO7EjukFVig@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 24 Feb 2022 18:18:15 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79221B0190
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:17:44 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso706340wmr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:17:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8/1Ko41seG/Gcm0WMFG2nw3d5RUz09+SdFfLxzqmI+Y=;
+        b=3KjdLrszxDrpmXCBbrp8XDykgWJnHxMG4vGZnwF3Upt8qOUzgB1gxI4RelXYRvEYpk
+         rnZkYzC09Obn0wsG6q4clYgu6Gp3ZZs0tAcfZ2RdalJ/EDE4TD8Oxg68XLdpSKVESjE1
+         N44ZN7jWLfPpHwDq7Ux4HxISj/Y++/fKtqZNF6+vsNi2cQHYXU7TyP6XVrlgkVJy1IG6
+         f8WDxtTncheEKCF0O5DIGgLUITyURTLKWlA5WzYthQBCi3ey/kC2ojlgwLys1oC0qS7z
+         tNRgSxkw6k95uZCU7rhdFeGBqC4arUXaN0ybpNHt4nrQLaAx/xUCpfuZFSzx+tngDtDZ
+         BDvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8/1Ko41seG/Gcm0WMFG2nw3d5RUz09+SdFfLxzqmI+Y=;
+        b=1JfgJmc8CBjEdevmR5VD5zOF3ZPFFm8yfhU8/wwEYto9jYfpk3bRmlYMy8mJ1mF7kw
+         olAYocPVmpm7HPMY4emDJxWH++dzr0fJs560HfDovfTUFpN23SJ8+eS4OGUcntXsvKXS
+         3FsDGyMkMf/trtkRxEa80vpHcS6m4nDnCh4l3EHDYlqw4OWpax5byu+CXbFuiWN31GVU
+         w+YpA31CfeTryI+yDEG1VChmiMoQcuu5dkSoVB8LFnO+Vwm2dCZ2HwBJ1R7tex+3wS0A
+         7llZ8itXi2NleXSuLCh4eV8Rmlm4Z0PfKedD81lJRN8SCuTEwRWrdNtZcZq8qnjPyPVL
+         mf7w==
+X-Gm-Message-State: AOAM5310sZ9xEQ2lv9CUWRfBPy1wUBNPp8qVdd5WkSzaesMqBlacHe4k
+        qnx5oBgbRAhIf0ohyZlD7XxVEugRkB8wFA==
+X-Google-Smtp-Source: ABdhPJylRiAk8xI22jOcrIqwiVi33vbve6UeNUFi91annFZKh3Uzb8qARzjZWowIh8iJLzYTHFumMQ==
+X-Received: by 2002:a1c:2544:0:b0:381:18a:a46d with SMTP id l65-20020a1c2544000000b00381018aa46dmr294751wml.26.1645744663219;
+        Thu, 24 Feb 2022 15:17:43 -0800 (PST)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id e33-20020a05600c4ba100b003810c690ba2sm3136456wmp.3.2022.02.24.15.17.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 15:17:42 -0800 (PST)
+Date:   Thu, 24 Feb 2022 23:17:40 +0000
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] staging: r8188eu: remove redundant variable
+ reg_0x143
+Message-ID: <YhgSFC0VDvdfsryB@equinox>
+References: <20220224230658.151338-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224230658.151338-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQW5keSBTaGV2Y2hlbmtvDQo+IFNlbnQ6IDI0IEZlYnJ1YXJ5IDIwMjIgMTk6NTENCj4g
-DQo+IE9uIFRodSwgRmViIDI0LCAyMDIyIGF0IDI6NTEgUE0gQ2xhdWRpbyBJbWJyZW5kYSA8aW1i
-cmVuZGFAbGludXguaWJtLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBXZWQsIDIzIEZlYiAyMDIy
-IDE4OjQ0OjIwICswMjAwDQo+ID4gQW5keSBTaGV2Y2hlbmtvIDxhbmRyaXkuc2hldmNoZW5rb0Bs
-aW51eC5pbnRlbC5jb20+IHdyb3RlOg0KPiA+DQo+ID4gPiBXaGlsZSBpbiB0aGlzIHBhcnRpY3Vs
-YXIgY2FzZSBpdCB3b3VsZCBub3QgYmUgYSAoY3JpdGljYWwpIGlzc3VlLA0KPiA+ID4gdGhlIHBh
-dHRlcm4gaXRzZWxmIGlzIGJhZCBhbmQgZXJyb3IgcHJvbmUgaW4gY2FzZSBzb21lYm9keSBibGlu
-ZGx5DQo+ID4gPiBjb3BpZXMgdG8gdGhlaXIgY29kZS4NCj4gPiA+DQo+ID4gPiBEb24ndCBjYXN0
-IHBhcmFtZXRlciB0byB1bnNpZ25lZCBsb25nIHBvaW50ZXIgaW4gdGhlIGJpdCBvcGVyYXRpb25z
-Lg0KPiA+ID4gSW5zdGVhZCBjb3B5IHRvIGEgbG9jYWwgdmFyaWFibGUgb24gc3RhY2sgb2YgYSBw
-cm9wZXIgdHlwZSBhbmQgdXNlLg0KPiANCj4gLi4uDQo+IA0KPiA+ID4gKyAgICAgICAgICAgICBz
-dHJ1Y3QgeyAvKiBhcyBhIDI1Ni1iaXQgYml0bWFwICovDQo+ID4gPiArICAgICAgICAgICAgICAg
-ICAgICAgREVDTEFSRV9CSVRNQVAoYiwgMjU2KTsNCj4gPiA+ICsgICAgICAgICAgICAgfSBiaXRt
-YXA7DQo+ID4gPiArICAgICAgICAgICAgIHN0cnVjdCB7IC8qIGFzIGEgc2V0IG9mIDY0LWJpdCB3
-b3JkcyAqLw0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgIHU2NCB3b3JkWzRdOw0KPiA+ID4g
-ICAgICAgICAgICAgICB9IHU2NDsNCj4gDQo+ID4gPiAtICAgICBzZXRfYml0X2ludihJUE1fQklU
-X09GRlNFVCArIGdpc2MsICh1bnNpZ25lZCBsb25nICopIGdpc2EpOw0KPiA+ID4gKyAgICAgc2V0
-X2JpdF9pbnYoSVBNX0JJVF9PRkZTRVQgKyBnaXNjLCBnaXNhLT5iaXRtYXAuYik7DQo+ID4NCj4g
-PiB3b3VsZG4ndCBpdCBiZSBlbm91Z2ggdG8gcGFzcyBnaXNhLT51NjQud29yZCBoZXJlPw0KPiA+
-IHRoZW4gbm8gY2FzdCB3b3VsZCBiZSBuZWNlc3NhcnkNCj4gDQo+IE5vLCBpdCB3aWxsIGhhdmUg
-dGhlIHNhbWUgaGlkZGVuIGJ1Z3MuIEFzIEkgc3RhdGVkIGluIHRoZSBjb21taXQNCj4gbWVzc2Fn
-ZSwgdGhlIHBhdHRlcm4gaXMgcXVpdGUgYmFkIGV2ZW4gaWYgaW4gcGFydGljdWxhciBjb2RlIGl0
-IHdvdWxkDQo+IHdvcmsuDQo+IA0KPiBUaGFua3MsIE1pY2hhZWwsIGZvciBwb2ludGluZyBvdXQg
-b3RoZXIgcGxhY2VzLiBUaGV5IGFsbCBuZWVkIHRvIGJlIGZpeGVkLg0KDQpJdCBtYXkgZXZlbiBi
-ZSB3b3J0aCB3cml0aW5nIHNvbWUgYWx0ZXJuYXRlIGJpdG1hcCBmdW5jdGlvbnMNCnRoYXQgdXNl
-IHU2NFtdIGFuZCB1bmxvY2tlZCBvcGVyYXRpb25zPw0KDQpBbHRob3VnaCBJIHRoaW5rIEknZCBz
-dGlsbCB3YW50IHRvIGVuY2Fwc3VsYXRlIHRoZSBhY3R1YWwgYXJyYXkNCihzb21laG93KSBzbyB0
-aGF0IHdoYXQgaXMgZGVmaW5lZCBoYXMgdG8gYmUgdGhlIGJpdG1hcCB0eXBlLg0KDQoJRGF2aWQN
-Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
-cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
-KFdhbGVzKQ0K
+On Thu, Feb 24, 2022 at 11:06:58PM +0000, Colin Ian King wrote:
+> Variable reg_0x143 is being assigned a value, however is not being
+> read. The variable is redundant and can be removed.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> index cf58dfc3ff4d..53ebea311723 100644
+> --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> @@ -189,7 +189,6 @@ static void efuse_read_phymap_from_txpktbuf(
+>  {
+>  	u16 dbg_addr = 0;
+>  	u32 start  = 0, passing_time = 0;
+> -	u8 reg_0x143 = 0;
+>  	__le32 lo32 = 0, hi32 = 0;
+>  	u16 len = 0, count = 0;
+>  	int i = 0;
+> @@ -209,7 +208,7 @@ static void efuse_read_phymap_from_txpktbuf(
+>  
+>  		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
+>  		start = jiffies;
+> -		while (!(reg_0x143 = rtw_read8(adapter, REG_TXPKTBUF_DBG)) &&
+> +		while (!rtw_read8(adapter, REG_TXPKTBUF_DBG) &&
+>  		       (passing_time = rtw_get_passing_time_ms(start)) < 1000)
+>  			rtw_usleep_os(100);
+>  
+> -- 
+> 2.34.1
+> 
 
+Looks good to me, thanks Colin.
+
+Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
+
+Regards,
+Phil

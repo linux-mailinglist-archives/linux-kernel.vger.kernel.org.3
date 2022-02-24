@@ -2,144 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CCD4C3235
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2504C3232
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiBXQw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S230116AbiBXQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiBXQwY (ORCPT
+        with ESMTP id S231236AbiBXQw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:52:24 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709553586B;
-        Thu, 24 Feb 2022 08:51:46 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id qx21so5603428ejb.13;
-        Thu, 24 Feb 2022 08:51:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0BX8BM017uCOv9ckNj58aZrZbCd/kR/+hefTXMO9tPo=;
-        b=kiIocb6M3Uuv4xiRzAdVw033se264t+5e8SmYP5ibq1I4FYRMAbbkXLawlWwzOm54C
-         xHb9/0YbSlMUpw2Y6llCywFgYrAx7ZpZqQ+LatVEGnWWdWhVfJOQgo+QQSMiaB0nhH26
-         kpkq/SZK9dynlhtQuiHfpLZe9Mhcoq6diD0oyzZr+Eab5VLwELySFw3E0vHze+1GYjcg
-         a7cktJzM4p6B4R9ymuUjhoB5MBJsi2ax6GGP6CGvS9MpQvS2yOvXYqUupHSeCx/uSRcg
-         PBt4OTHJvYUrvjPylxPIa+CChh3DpYRgOwluNXETDaED4nhajMnp9x/THJUOxJfe+68g
-         DzYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0BX8BM017uCOv9ckNj58aZrZbCd/kR/+hefTXMO9tPo=;
-        b=q0d+qe+miDlHrQtrL3aAVTcYOPTh5r2IqEd5/F6rQOf3TMCfxCfQH1Fl0kLayU1sZk
-         6Yer7JpcT6ivvv7mgbek8wi63WwhW16JmZV6TSSaZRd/V9sFGCPu3uEPCkmIhVTghPzB
-         H9CP5rtCgfw8pdb70v9zbMqxyDLXVP9o6Czb3oIxHiI1DidN5kufSKxmD0lvjUdDpRve
-         LMg2QxfF7RQYOEx+RfS4J0VU+XYV51b0Gaes8Q+HRbsumzD68qmNWGz0YuX6HMyXAXsG
-         vMjcgQKxkcO00ukPPaGf1bWpWQIfv6DUUBZzYxbIFZGb1fC+Ea9RtMu/1ANfnwYtWA6p
-         UQ7g==
-X-Gm-Message-State: AOAM531+xG7c1bJwT1zAPYutuRRcATc/BrDYIbZ+OsSe+Yrx9qzbDRfN
-        DpdFEbjSrU443oifsv4aIuA=
-X-Google-Smtp-Source: ABdhPJyWV1zkvb8+mEvqp9ZSTYLeQknbMbcIBqw4G7wy2t0xWvm2gOYKTOxfOHmqMh5tXSGKmjzpjg==
-X-Received: by 2002:a17:906:af79:b0:6ce:61d3:7e9b with SMTP id os25-20020a170906af7900b006ce61d37e9bmr3085459ejb.191.1645721505223;
-        Thu, 24 Feb 2022 08:51:45 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id j3sm1600520ejj.9.2022.02.24.08.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:51:44 -0800 (PST)
-Date:   Thu, 24 Feb 2022 17:51:41 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/5] gpio: Don't fiddle with irqchips marked as immutable
-Message-ID: <Yhe3neSJbAxRbt+Z@orome>
-References: <20220223154405.54912-1-maz@kernel.org>
- <20220223154405.54912-2-maz@kernel.org>
+        Thu, 24 Feb 2022 11:52:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 517176005A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645721548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wQnCFSlEPwIrQJY4ob5M3VmIeJho108XdRbq+lfEG0A=;
+        b=brSYFkml/dEWsGpovtw9spUNC8cvccLEHunVjGSJRtbRDlx1ENEJ01JH7C6Qtp+vCJoXtW
+        ap5abAeDYuHbzmRYGPEkScCvLdikNIsFDc5cYUAHRzpU/FeKcvImEQF7IWx5b8p8P3l2XR
+        IZCv3XWahHofSkQayp6le1A7kcSGRi0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-qmSPY1UXMuuK43SZK1RQyA-1; Thu, 24 Feb 2022 11:52:27 -0500
+X-MC-Unique: qmSPY1UXMuuK43SZK1RQyA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 921B1824FA7;
+        Thu, 24 Feb 2022 16:52:25 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09D27837BF;
+        Thu, 24 Feb 2022 16:52:22 +0000 (UTC)
+Message-ID: <720d6a8d6cc3013f2f55750982439eac7ed950b0.camel@redhat.com>
+Subject: Re: [RFC PATCH 03/13] KVM: SVM: Detect X2APIC virtualization
+ (x2AVIC) support
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Feb 2022 18:52:21 +0200
+In-Reply-To: <20220221021922.733373-4-suravee.suthikulpanit@amd.com>
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+         <20220221021922.733373-4-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vbN/cyUZyiD0I2CK"
-Content-Disposition: inline
-In-Reply-To: <20220223154405.54912-2-maz@kernel.org>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---vbN/cyUZyiD0I2CK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Feb 23, 2022 at 03:44:01PM +0000, Marc Zyngier wrote:
-> In order to move away from gpiolib messing with the internals of
-> unsuspecting irqchips, add a flag by which irqchips advertise
-> that they are not to be messed with, and do solemnly swear that
-> they correctly call into the gpiolib helpers wueh required.
->=20
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+> Add CPUID check for the x2APIC virtualization (x2AVIC) feature.
+> If available, the SVM driver can support both AVIC and x2AVIC modes
+> when load the kvm_amd driver with avic=1. The operating mode will be
+> determined at runtime depending on the guest APIC mode.
+> 
+> Also introduce a helper function to get the AVIC operating mode
+> based on the VMCB configuration.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->  drivers/gpio/gpiolib.c | 7 ++++++-
->  include/linux/irq.h    | 2 ++
->  kernel/irq/debugfs.c   | 1 +
->  3 files changed, 9 insertions(+), 1 deletion(-)
+>  arch/x86/include/asm/svm.h |  3 +++
+>  arch/x86/kvm/svm/avic.c    | 44 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/svm/svm.c     |  8 ++-----
+>  arch/x86/kvm/svm/svm.h     |  1 +
+>  4 files changed, 50 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 7eb2df5417fb..7a7a2297165b 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -195,6 +195,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+>  #define AVIC_ENABLE_SHIFT 31
+>  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
+>  
+> +#define X2APIC_MODE_SHIFT 30
+> +#define X2APIC_MODE_MASK (1 << X2APIC_MODE_SHIFT)
+> +
+>  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
+>  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
+>  
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 472445aaaf42..abde08ca23ab 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -40,6 +40,15 @@
+>  #define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
+>  #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
+>  
+> +#define IS_AVIC_MODE_X1(x)		(avic_get_vcpu_apic_mode(x) == AVIC_MODE_X1)
+> +#define IS_AVIC_MODE_X2(x)		(avic_get_vcpu_apic_mode(x) == AVIC_MODE_X2)
+> +
+> +enum avic_modes {
+> +	AVIC_MODE_NONE = 0,
+> +	AVIC_MODE_X1,
+> +	AVIC_MODE_X2,
+> +};
+> +
+>  /* Note:
+>   * This hash table is used to map VM_ID to a struct kvm_svm,
+>   * when handling AMD IOMMU GALOG notification to schedule in
+> @@ -50,6 +59,7 @@ static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
+>  static u32 next_vm_id = 0;
+>  static bool next_vm_id_wrapped = 0;
+>  static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
+> +static enum avic_modes avic_mode;
+>  
+>  /*
+>   * This is a wrapper of struct amd_iommu_ir_data.
+> @@ -59,6 +69,15 @@ struct amd_svm_iommu_ir {
+>  	void *data;		/* Storing pointer to struct amd_ir_data */
+>  };
+>  
+> +static inline enum avic_modes avic_get_vcpu_apic_mode(struct vcpu_svm *svm)
+> +{
+> +	if (svm->vmcb->control.int_ctl & X2APIC_MODE_MASK)
+> +		return AVIC_MODE_X2;
+> +	else if (svm->vmcb->control.int_ctl & AVIC_ENABLE_MASK)
+> +		return AVIC_MODE_X1;
+> +	else
+> +		return AVIC_MODE_NONE;
+> +}
+I a bit don't like it.
 
-I kind of like this. The bit where the const cast is essentially guarded
-by an "immutable" flag is a bit funky, but it doesn't look like there is
-a good way to do it by making all references const without doing a huge
-all-at-once conversion.
+By definition if a vCPU has x2apic, it will use x2avic and if it is in 
+xapic mode it will use plain avic, unless avic is inhibited,
+which will also be the case when vCPU is in x2apic mode but hardware
+doesn't support x2avic.
 
-I've always found it a bit irritating that irq_chip was somewhere
-between a container for chip-specific data and an "ops" structure. I
-think it'd be even nicer if this was split into an extra struct
-irq_chip_ops, which could then always be const and a struct irq_chip
-that contained primarily chip-specific data as well as a pointer to
-struct irq_chip_ops.
+But I might have beeing mistaken here - anyway this function should
+be added when it is used so it will be clear how and why it is needed.
 
-But again, this seems fairly tricky to pull off given all the
-interdependencies and we can iterate on this in the future, so this
-seems like a good enough compromise:
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+>  
+>  /* Note:
+>   * This function is called from IOMMU driver to notify
+> @@ -1016,3 +1035,28 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>  
+>  	put_cpu();
+>  }
+> +
+> +/*
+> + * Note:
+> + * - The module param avic enable both xAPIC and x2APIC mode.
+> + * - Hypervisor can support both xAVIC and x2AVIC in the same guest.
+> + * - The mode can be switched at run-time.
+> + */
+> +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +	if (!npt_enabled)
+> +		return false;
+> +
+> +	if (boot_cpu_has(X86_FEATURE_AVIC)) {
+> +		avic_mode = AVIC_MODE_X1;
+> +		pr_info("AVIC enabled\n");
+> +	}
+> +
+> +	if (boot_cpu_has(X86_FEATURE_X2AVIC)) {
+> +		avic_mode = AVIC_MODE_X2;
+> +		pr_info("x2AVIC enabled\n");
+> +	}
+> +
+> +	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+If AVIC is not enabled, I guess no need to register GA log notifier?
 
---vbN/cyUZyiD0I2CK
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	return !!avic_mode;
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 821edf664e7a..3048f4b758d6 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4817,13 +4817,9 @@ static __init int svm_hardware_setup(void)
+>  			nrips = false;
+>  	}
+>  
+> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
+> +	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
+>  
+> -	if (enable_apicv) {
+> -		pr_info("AVIC enabled\n");
+> -
+> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+> -	} else {
+> +	if (!enable_apicv) {
+>  		svm_x86_ops.vcpu_blocking = NULL;
+>  		svm_x86_ops.vcpu_unblocking = NULL;
+>  	}
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index fa98d6844728..b53c83a44ec2 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -558,6 +558,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+>  
+>  /* avic.c */
+>  
+> +bool avic_hardware_setup(struct kvm_x86_ops *ops);
+>  int avic_ga_log_notifier(u32 ga_tag);
+>  void avic_vm_destroy(struct kvm *kvm);
+>  int avic_vm_init(struct kvm *kvm);
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXt5oACgkQ3SOs138+
-s6Hsmg//ZlvIGlAISsBwoAWBpifpjvE4OPtPa2w5okmTJxjSFYwmu1dcqaGOQbqk
-PM58PdveLzwtzZUMy2BFNGtyE1cXPfDvIQlUP2QXjkpmpOH0nZvLbKLtbaOKPe5/
-k7ZT1snfCCPyCSkTt3ObyRr/vd09RHkcocvJ3BPX8qgcFs8RP+csLO4LbtPdN4Mp
-DTPbjaUqdqG2RvSuEtRrHenTZ6f+g+39LrwgfzRXztvQvFtNEmK+D/sZDENkTVtm
-+YIJBgiANbzhXtib+/9FaG3MJECmu6ZBNNSaZat91Ksn+TWDz/RYRdZSsEcposEx
-eH5P6Oas2DsQ8P8ny7jplcGV1nOGobRdQBRWnWHXKDGrsDBaVzdFjc4Z/rzoRshO
-a5kV7CL+T6Gu+xVWS81PBBcUcwFsIpn5QWe32g3g0cPuNJpsWYpM6lnbH+CrQcQR
-LTOMQiTe8hyf6vdhTbdMfb6I/i3JscSm23KJYgZD1Se1bYkzi6DbCf62W2ygqHgT
-yakOPdNcZP8KZKp85niKcUdG/ecW9HtTSBGSLDkyMUgBqg4Jr/2uC6C1h/ra3t/D
-HlMJDYR4rrx0kR6JDiHl4Be0AJPPo2YksA+YZzVYIOgv0dMLzk9JX0AXeSwo6xBT
-Byu+xRCU7+shobZGJlJOJXnRXw7XwLhg3pdOwotfppxKxXcUgzU=
-=JQTC
------END PGP SIGNATURE-----
+Best regards,
+	Maxim Levitsky
 
---vbN/cyUZyiD0I2CK--

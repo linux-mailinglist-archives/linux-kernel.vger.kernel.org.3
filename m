@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2D74C2E8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938EE4C2E45
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiBXOiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S235460AbiBXOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235570AbiBXOiS (ORCPT
+        with ESMTP id S230136AbiBXOXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:38:18 -0500
-X-Greylist: delayed 909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 06:37:44 PST
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137329D0C2;
-        Thu, 24 Feb 2022 06:37:42 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; bh=U1Serj9HWMW/oXYgmC1Rsp6t8gZrl/v31HBeiGDPdW4=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220111215046; t=1645712524; v=1; x=1646144524;
- b=OYghG0ZP+iuW2kkTQeOuixHFPq878+wQ3HhdKX/+sGY09GTDTQFDIubVowj2KCUAMa6hGg5z
- emJxwo7k7iwM+JXu+3yE3DQsx9HG4ZBJFjS7BSFq9MSKfoo49MhkWqwuAJEne4d1p2n+MK3w3H8
- nhuIW5JuvEJLWhiNLUwOESPgCTRpscLtEwNsfWc0aDp2LixMpHlSmIO3VnR7RTqooKC9CJ452ta
- UM/qxfqM6Nlt5xE5jAS8lL/ueEDBCRO0qXA1nFOqZlgmtbsnnC34+1V9rWsHe+kOSZvMMUBiJFB
- K4HJAmTDISfkfJWq4HoGTEVo0ctw8pdW/tc5RR+gFhe9y5izzW0GcfFP8gvPREsJRbIYTHEZveH
- NJIUWtL5448BOMyUyVZJd8eXKj7O6wIfQYM5zT+W6lbbIGrxx6rNVZYEZmPnkite3l2zZVqeykW
- dCiw9yfIpH+X2yA4GZY9Gcn3xQzZozeYYlW/Q97jERXi6XkljbaZD4a3xtRGCiHv3oNAuM+Dq7w
- wbitZLVe9+B/0pgWjr3tva2lqhvnaBM4DX13iSpzOlTQPjc59ofE0WA1pB734Psd/WzIez+xhhJ
- 5uI3scCkVBLSXtxRDzqLthxm5AUzUYmDZ28l+DVLASRcTR9KsEqNWlrE/Qss9Etj2UT9EQdVjTg
- RrbyoJjcB0U=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id f168343e; Thu, 24 Feb
- 2022 09:22:04 -0500
+        Thu, 24 Feb 2022 09:23:19 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBE010075C;
+        Thu, 24 Feb 2022 06:22:45 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qx21so4634149ejb.13;
+        Thu, 24 Feb 2022 06:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zYTHUsVVhBwj0g4Gze0zy2RUZ5LyrxDkA+fp8E1dT/8=;
+        b=bUSWfnuHV6MsxDaAFBe/JODFU0yALi+lxDfaUl/fPb5TY2Nnf45hMpyf2aEVrRz6kh
+         8rCFA+jEIeielP42fOHvWQPq2OSgUZWG/SBNXBcgzKAxr5Loh2yVBatjbNGvFP8KRkFR
+         2lIBNm+P8achvv7DW8oxjPteqR1o7x/sxIKKypSF1AgtMxeemjaGQWIsOUSb2M/XnNcV
+         UNC9y4V4dZBF6oCEn0CpSFEHfazHkkHMaBuGNY0WVTdkVYuCvQBGwKigu4wUOuugBBZp
+         U+Wc32NEDol3lGb0vh8AT7ijboa+HvlM8/D7mBtBKd4bw05mBD0yuvJf6mXTE51236kF
+         HBYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zYTHUsVVhBwj0g4Gze0zy2RUZ5LyrxDkA+fp8E1dT/8=;
+        b=NmlYBZN/MZKsFsDTdjNcB6ts/S9E4QfInlHigTwBfvw8hG92lqhgOGlNGXfzThFOQv
+         OcjYnm8+ze2WB3X6klbjbuhJ9HjK+Rrlrda/B9MYhvLx1fzsaCAWgdUAW+y2ZqCZAREl
+         a6EaqJ6Y7VGU389ueP96ZZXKRNNk61WnmWI/Z59LQN2+XUhjuRASOZMxwKaI1UjV72+Q
+         aiyvLi8q5JOT6nXgefRLxty6S/SV7MQ9NT0hMQSdR2lM/TLx0wNzJGM08E00nlQyC99j
+         csKhRDAShFy28OlbS9uVQS5AbX29u9Zk0STFhFsHoKoZsSB8/kGp9nizwsU+mak7Il50
+         nrYA==
+X-Gm-Message-State: AOAM531jnhA7AZN1DSCGyCi6ucTk/u6Ph19ksoWuWv76TpU/ad4NdWXn
+        pODjCdC0PyQBNu8owD9cS4A=
+X-Google-Smtp-Source: ABdhPJzpx4N3xp1lLjkagnxhXCabnGndX91MAsGN9ExhB14AG7jRfTUCqS6EGeMdSNZnv+DNnPGwEA==
+X-Received: by 2002:a17:907:90c7:b0:6d1:c55:86a4 with SMTP id gk7-20020a17090790c700b006d10c5586a4mr2478924ejb.484.1645712564078;
+        Thu, 24 Feb 2022 06:22:44 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id r1sm1433162ejh.52.2022.02.24.06.22.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:22:43 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <e459dbcc-3a43-bd20-6f78-1a9d712ae020@redhat.com>
+Date:   Thu, 24 Feb 2022 15:22:41 +0100
 MIME-Version: 1.0
-Date:   Thu, 24 Feb 2022 09:22:04 -0500
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Anthony Yznaga <anthony.yznaga@oracle.com>,
-        matoro_bugzilla_kernel@matoro.tk,
-        Andrew Morton <akpm@linux-foundation.org>,
-        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
-In-Reply-To: <7e3a93e7-1300-8460-30fb-789180a745eb@physik.fu-berlin.de>
-References: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
- <823f70be-7661-0195-7c97-65673dc7c12a@leemhuis.info>
- <03497313-A472-4152-BD28-41C35E4E824E@chromium.org>
- <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
- <9A1F30F8-3DE2-4075-B103-81D891773246@chromium.org>
- <4e42e754-d87e-5f6b-90db-39b4700ee0f1@physik.fu-berlin.de>
- <202202232030.B408F0E895@keescook>
- <7e3a93e7-1300-8460-30fb-789180a745eb@physik.fu-berlin.de>
-Message-ID: <65ed8ab4fad779fadf572fb737dfb789@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] KVM: x86: nSVM: disallow userspace setting of
+ MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20220223115649.319134-1-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220223115649.319134-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees, I can provide live ssh access to my system exhibiting the 
-issue.  My system is a lot more stable due to using openrc rather than 
-systemd, for me GCC seems to be the only binary affected.  Would that be 
-helpful?
+On 2/23/22 12:56, Maxim Levitsky wrote:
+> If nested tsc scaling is disabled, MSR_AMD64_TSC_RATIO should
+> never have non default value.
+> 
+> Due to way nested tsc scaling support was implmented in qemu,
+> it would set this msr to 0 when nested tsc scaling was disabled.
+> Ignore that value for now, as it causes no harm.
+> 
+> 
+> Fixes: 5228eb96a487 ("KVM: x86: nSVM: implement nested TSC scaling")
+> Cc: stable@vger.kernel.org
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>   arch/x86/kvm/svm/svm.c | 19 +++++++++++++++++--
+>   1 file changed, 17 insertions(+), 2 deletions(-)
 
-On 2022-02-24 04:33, John Paul Adrian Glaubitz wrote:
-> Hi Kees!
-> 
-> On 2/24/22 06:16, Kees Cook wrote:
->>> You should be able to extract the binaries from this initrd image and 
->>> the "mount" command,
->>> for example, should be one of the affected binaries.
->> 
->> In dmesg, do you see any of these reports?
->> 
->>                 pr_info("%d (%s): Uhuuh, elf segment at %px requested 
->> but the memory is mapped already\n",
->>                         task_pid_nr(current), current->comm, (void 
->> *)addr);
-> 
-> I'll check that.
-> 
->> I don't see anything out of order in the "mount" binary from the above
->> initrd. What does "readelf -lW" show for the GCC you're seeing 
->> failures
->> on?
-> 
-> I'm not 100% sure whether it's the mount binary that is affected. What
-> happens is that once init takes over,
-> I'm seeing multiple "Segmentation Fault" message on the console until
-> I'm dropped to the initrd shell.
-> 
-> I can check what dmesg says.
-> 
-> Adrian
+Queued, thanks.
+
+Paolo
+
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 7038c76fa841..b80ad471776f 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -2705,8 +2705,23 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
+>   	u64 data = msr->data;
+>   	switch (ecx) {
+>   	case MSR_AMD64_TSC_RATIO:
+> -		if (!msr->host_initiated && !svm->tsc_scaling_enabled)
+> -			return 1;
+> +
+> +		if (!svm->tsc_scaling_enabled) {
+> +
+> +			if (!msr->host_initiated)
+> +				return 1;
+> +			/*
+> +			 * In case TSC scaling is not enabled, always
+> +			 * leave this MSR at the default value.
+> +			 *
+> +			 * Due to bug in qemu 6.2.0, it would try to set
+> +			 * this msr to 0 if tsc scaling is not enabled.
+> +			 * Ignore this value as well.
+> +			 */
+> +			if (data != 0 && data != svm->tsc_ratio_msr)
+> +				return 1;
+> +			break;
+> +		}
+>   
+>   		if (data & TSC_RATIO_RSVD)
+>   			return 1;
+

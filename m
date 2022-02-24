@@ -2,123 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DEE4C29B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9094C29B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbiBXKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S233527AbiBXKj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiBXKkO (ORCPT
+        with ESMTP id S233524AbiBXKjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:40:14 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E39F28AD8B;
-        Thu, 24 Feb 2022 02:39:45 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 195so1378795pgc.6;
-        Thu, 24 Feb 2022 02:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2Vh5cP09KPpUBAiHzIJdfbvku1bTkEPxJPZgY/cAC6g=;
-        b=n1De8gS0CLlFYpKENSHsqTOWS+rniNCEhj7lh0xhcPZq7fUWd2DjB5YwXkjb64d+tJ
-         jJnc6aav14lN/jwq/0LLT4j2sAnYXi3SknpAP7hBow4mx5jwvR0g5Jnl4pb3QNDy4N7o
-         U7kvWYSIdIXRgfCvcB4Z4lhPpOf7MEV0wG+yuYxcK8/GA34xVC+yzDsqodAhBa2BM08e
-         Uv9/ixkD9q3l7GLW6D9b/qIs+JMUZ55l4crhFwcwS0CCxFmEuK1ycVmsdrJLnIwBZdoq
-         qjfASEq/ymAiU/MPTQyNEbpWEBpc3CSUh+S3Du+iDYqqP7uiBO346zVKcjG2MbrH4Gtb
-         rFzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2Vh5cP09KPpUBAiHzIJdfbvku1bTkEPxJPZgY/cAC6g=;
-        b=C84+C+iPb2SXyKs9llTZwdFgFKfB0G7A6+Ca6BABcsT2yCqT0NHSYxiSf1qEkUpjQJ
-         N6ER5qbPXWzIKnshnLvHRta5yxyHGD1VAOfOJjGa0YaGuFsas5Rd5mMgxm0xdfuxHWua
-         fUICiZoVt8PGle7L9GV9ySp2nil5QXAwgLi1eIAZYo/dKkK55Gs73fBG3dg0ocC+4EyG
-         KGAfsvuBaFnDmAIvblHUGNqrVdqgtNGt0tYi+uBggVUYPtrjrlXu7zHR0eu9/OcBJeH0
-         2YojUEaEeJzmXFZebAvnZnkpyXXXRqPsWZIurQ5NEClCyIzyoqB2dUI2KstPjIh3Jylj
-         8Sww==
-X-Gm-Message-State: AOAM531gNaYM+UsTp/p2pEbayHRvWQybMNpp65KDFclqZvxjUgpJVmU3
-        SE5xn6fMupvuTm1fE1/Rc5d+rKuiPCHnQ/rc
-X-Google-Smtp-Source: ABdhPJyKDl17e3IrZ6PDMsRujoK/pWk4njV+gyUOCkB+5cRcl/CAaY2OVgqBQXC/x7gKlf/HNWWYyw==
-X-Received: by 2002:a63:e249:0:b0:36c:4f1f:95e0 with SMTP id y9-20020a63e249000000b0036c4f1f95e0mr1786299pgj.381.1645699184682;
-        Thu, 24 Feb 2022 02:39:44 -0800 (PST)
-Received: from localhost.localdomain ([157.255.44.219])
-        by smtp.gmail.com with ESMTPSA id t2sm2984555pfj.211.2022.02.24.02.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 02:39:44 -0800 (PST)
-From:   Harold Huang <baymaxhuang@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     jasowang@redhat.com, Harold Huang <baymaxhuang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tun: support NAPI to accelerate packet processing
-Date:   Thu, 24 Feb 2022 18:38:51 +0800
-Message-Id: <20220224103852.311369-1-baymaxhuang@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 24 Feb 2022 05:39:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227728AD8B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:39:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAA48B81C4A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D07C340E9;
+        Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645699160;
+        bh=JE74vM6F239/HyTrEDsqOE00ec9BmQ42Y4OdvszfnpU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qAs+hGS6Ri7GNCE9Har0J+LPVD+ewhbDdPU45i37O7fJZZKp9bcyVQb4eE4Jvb94e
+         4P7PTXOxSwb3MNglKP4zsZgu0734lr6EMTGVUWMidtpZi/GhVgwZ526WxmlhJoS4TG
+         YRULgtIp5lITDHTUl9XTZCrjWmaMCwnAGOoYJNecxrXJ6mmAhqGJGnTvqePx+ruLxE
+         ykAsn+5JTIlB+HnsujxgbU1U9Oqd14UR0JDzrh6Cer3YxKsG6gNuVywh/pMQBr6qml
+         W5n6O49t1pX+X4FoiLqeMlFzNIxpXPXlFriizE+cwWKxUdjN7brcP0yLpz3y41GVEr
+         BKjT6Li1tOwig==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nNBWo-00A9YD-5V; Thu, 24 Feb 2022 10:39:18 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 24 Feb 2022 10:39:17 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Philip Li <philip.li@intel.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>, surenb@google.com,
+        Android Kernel Team <kernel-team@android.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+In-Reply-To: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
+ <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
+ <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: ardb@kernel.org, philip.li@intel.com, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tun, NAPI is supported and we can also use NAPI in the path of
-batched XDP buffs to accelerate packet processing. What is more, after
-we use NPAI, GRO is also supported. The iperf shows that the throughput
-could be improved from 4.5Gbsp to 9.2Gbps per stream.
+On 2022-02-23 12:56, Ard Biesheuvel wrote:
+> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
+>> 
+>> On 2022-02-23 12:34, Philip Li wrote:
+>> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+>> >> On Wed, 23 Feb 2022 09:05:18 +0000,
+>> >> kernel test robot <lkp@intel.com> wrote:
+>> >> >
+>> >> > Hi Kalesh,
+>> >> >
+>> >> > Thank you for the patch! Perhaps something to improve:
+>> >> >
+>> >> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+>> >> >
+>> >> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+>> >> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+>> >> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+>> >> > reproduce (this is a W=1 build):
+>> >> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>> >> >         chmod +x ~/bin/make.cross
+>> >> >         # install arm64 cross compiling tool for clang build
+>> >> >         # apt-get install binutils-aarch64-linux-gnu
+>> >> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >> >         git remote add linux-review https://github.com/0day-ci/linux
+>> >> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>> >> >         # save the config file to linux build tree
+>> >> >         mkdir build_dir
+>> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+>> >> >
+>> >> > If you fix the issue, kindly add following tag as appropriate
+>> >> > Reported-by: kernel test robot <lkp@intel.com>
+>> >> >
+>> >> > All warnings (new ones prefixed by >>):
+>> >> >
+>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >> >    #define NULL ((void *)0)
+>> >> >                 ^~~~~~~~~~~
+>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+>> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+>> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
+>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
+>> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+>> >> >                                              ^~~~
+>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>> >> >    #define NULL ((void *)0)
+>> >> >                 ^~~~~~~~~~~
+>> >>
+>> >> Kalesh, please ignore this nonsense. There may be things to improve,
+>> >> but this is *NOT* one of them.
+>> >>
+>> >> These reports are pretty useless, and just lead people to ignore real
+>> >> bug reports.
+>> >
+>> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+>> > kindly ignore them. And the valuable ones are the new ones that
+>> > prefixed by >>, as the below one in original report.
+>> >
+>> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
+>> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+>> >    void __noreturn hyp_panic_bad_stack(void)
+>> >                    ^
+>> 
+>> This is only called from assembly code, so a prototype wouldn't bring
+>> much.
+>> 
+> 
+> Should probably be marked as 'asmlinkage' then. I've suggested many
+> times already that this bogus diagnostic should either be disabled, or
+> disregard 'asmlinkage' symbols.
 
-Reported-at: https://lore.kernel.org/netdev/CAHJXk3Y9_Fh04sakMMbcAkef7kOTEc-kf84Ne3DtWD7EAp13cg@mail.gmail.com/T/#t
-Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
----
- drivers/net/tun.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Yes, asmlinkage is definitely missing.
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index fed85447701a..4e1cea659b42 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -2388,6 +2388,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	struct virtio_net_hdr *gso = &hdr->gso;
- 	struct bpf_prog *xdp_prog;
- 	struct sk_buff *skb = NULL;
-+	struct sk_buff_head *queue;
- 	u32 rxhash = 0, act;
- 	int buflen = hdr->buflen;
- 	int err = 0;
-@@ -2464,7 +2465,14 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	    !tfile->detached)
- 		rxhash = __skb_get_hash_symmetric(skb);
- 
--	netif_receive_skb(skb);
-+	if (tfile->napi_enabled) {
-+		queue = &tfile->sk.sk_write_queue;
-+		spin_lock(&queue->lock);
-+		__skb_queue_tail(queue, skb);
-+		spin_unlock(&queue->lock);
-+	} else {
-+		netif_receive_skb(skb);
-+	}
- 
- 	/* No need to disable preemption here since this function is
- 	 * always called with bh disabled
-@@ -2507,6 +2515,9 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 		if (flush)
- 			xdp_do_flush();
- 
-+		if (tfile->napi_enabled)
-+			napi_schedule(&tfile->napi);
-+
- 		rcu_read_unlock();
- 		local_bh_enable();
- 
+But it is pretty obvious that the robot people aren't interested in
+fixing this particular issue, given how long we have been suggesting
+this...
+
+         M.
 -- 
-2.27.0
-
+Jazz is not dead. It just smells funny...

@@ -2,148 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71B54C306D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0395F4C3075
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbiBXPz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S236624AbiBXP4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236618AbiBXPz5 (ORCPT
+        with ESMTP id S233708AbiBXP4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:55:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778217C438
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:55:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A2E61764
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1E0C340EC;
-        Thu, 24 Feb 2022 15:55:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645718126;
-        bh=QqinqAC468TSKHfPVewQtZrGPuE4gy2uDC9DJz44xt4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N40eyeImIMne6IsvOpWskvHDWp/1aSFrqsLQecfhnOdC/G5/IU/UeavX9JBh9mau5
-         U49HHzDmkCsiSX1yA4/Tjm1CPaV8Q0DDjnnvV2LUUIM5ssEQhlbEcpFAC2nQU1/yM1
-         PQ9plYsKFK7LOPPheOG+RcWz7jFNZPWxUPHp2j60rkRs6OlzQCw6OtjlW0SWOw5oUd
-         SIgY1raFUrHwTlokFJ3PSpBxWbkW1T/TYq5eiFtkR8w9trxvNydX//RWr/ghkaqC1T
-         hn01CWJh8yu0Qym3jeCul7R1ESY6Vm6u2TaMZST6ZvQnYi//ILROLDYtLAqoLSrl5I
-         Z14BSX/QFF6xQ==
-Date:   Fri, 25 Feb 2022 00:55:20 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org,
-        alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-Message-Id: <20220225005520.c69be2fbdbd28028361792d9@kernel.org>
-In-Reply-To: <20220224151322.714815604@infradead.org>
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.714815604@infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 10:56:06 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E9216DADC;
+        Thu, 24 Feb 2022 07:55:36 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso1552667oti.3;
+        Thu, 24 Feb 2022 07:55:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hwWk0rF2AKk7PiZxFwIHj9zz4uI+BJYeLx4kKkwoHlc=;
+        b=kKtZMvNB4/K09c5e0rP1kjjzXnbOIdawxzNNo6jgHmU2nnw59TxYDPpsgwGpgqgB7V
+         liJ4KRFQ40BJEGVlg5Fl0idpgJX2CDTSeapwXydG07FpFSlWNP9FUel1JxR2ESyScuWX
+         Qn3vrXi9cSjONbXcv5q+x8bKBzIQ/P080WjeEzMVnn0ye9NeSFMsW1frgle5PhLV8N/9
+         Q2yQCruPQisAR8pX6VIHNF8xq9/z8lOw10cJh3IcsDbKINEY1E0AnQSw0drLn9m/DTn0
+         H9IuLiP9V6R6PnpjeiYC3O1R9nE1Wr3zen/4/TO33olo1lydij8C55ONYhkR58xFJWae
+         JzQg==
+X-Gm-Message-State: AOAM533ysiqQIhaHeLHLokPjeHK2/YkYEdoGE0rg5PgGCxCYZrMY4KWw
+        d+3dbGGLBick97QtAo+lKA==
+X-Google-Smtp-Source: ABdhPJz0d5KVjQ+1G4/eyV1LKEyrv8doihhEw++QrWPwlvXi1Nc657KxP7t8EqKOMYtHAfNRji94Hw==
+X-Received: by 2002:a9d:2a:0:b0:5af:7c41:60e5 with SMTP id 39-20020a9d002a000000b005af7c4160e5mr1114725ota.263.1645718135828;
+        Thu, 24 Feb 2022 07:55:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 4sm1296822otx.34.2022.02.24.07.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 07:55:34 -0800 (PST)
+Received: (nullmailer pid 3142509 invoked by uid 1000);
+        Thu, 24 Feb 2022 15:55:33 -0000
+Date:   Thu, 24 Feb 2022 09:55:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: writing-schema: Install from PyPI
+ repository
+Message-ID: <YheqdXDXi28vyYIm@robh.at.kernel.org>
+References: <20220223073547.8746-1-krzysztof.kozlowski@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223073547.8746-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
-
-On Thu, 24 Feb 2022 15:51:50 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> Have ftrace_location() search the symbol for the __fentry__ location
-> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
+On Wed, 23 Feb 2022 08:35:46 +0100, Krzysztof Kozlowski wrote:
+> From: Krzysztof Kozlowski <krzk@kernel.org>
 > 
-> This avoids a whole bunch of assumptions about __fentry__ being at
-> func+0.
+> Installing dtschema from github.com/devicetree-org is not needed anymore
+> because dtschema is now part of regular PyPI repository.  In certain
+> cases it might cause some troubles as it brings latest master version,
+> not the stable release:
 > 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>     $ pip3 show dtschema
+>     Version: 2020.8.2.dev4+g341f3e3
+>     $ make dt_binding_check
+>     dtschema minimum version is v2020.8.1
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  kernel/trace/ftrace.c |   30 ++++++++++++++++++++++++++++--
->  1 file changed, 28 insertions(+), 2 deletions(-)
-> 
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -1578,7 +1578,24 @@ unsigned long ftrace_location_range(unsi
->   */
->  unsigned long ftrace_location(unsigned long ip)
->  {
-> -	return ftrace_location_range(ip, ip);
-> +	struct dyn_ftrace *rec;
-> +	unsigned long offset;
-> +	unsigned long size;
-> +
-> +	rec = lookup_rec(ip, ip);
-> +	if (!rec) {
-> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
-> +			goto out;
-> +
-> +		if (!offset)
-
-Isn't this 'if (offset)' ?
-
-> +			rec = lookup_rec(ip - offset, (ip - offset) + size);
-> +	}
-> +
-> +	if (rec)
-> +		return rec->ip;
-> +
-> +out:
-> +	return 0;
->  }
-
-Thank you,
-
->  
->  /**
-> @@ -5110,11 +5127,16 @@ int register_ftrace_direct(unsigned long
->  	struct ftrace_func_entry *entry;
->  	struct ftrace_hash *free_hash = NULL;
->  	struct dyn_ftrace *rec;
-> -	int ret = -EBUSY;
-> +	int ret = -ENODEV;
->  
->  	mutex_lock(&direct_mutex);
->  
-> +	ip = ftrace_location(ip);
-> +	if (!ip)
-> +		goto out_unlock;
-> +
->  	/* See if there's a direct function at @ip already */
-> +	ret = -EBUSY;
->  	if (ftrace_find_rec_direct(ip))
->  		goto out_unlock;
->  
-> @@ -5222,6 +5244,10 @@ int unregister_ftrace_direct(unsigned lo
->  
->  	mutex_lock(&direct_mutex);
->  
-> +	ip = ftrace_location(ip);
-> +	if (!ip)
-> +		goto out_unlock;
-> +
->  	entry = find_direct_entry(&ip, NULL);
->  	if (!entry)
->  		goto out_unlock;
-> 
+>  Documentation/devicetree/bindings/writing-schema.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Applied, thanks!

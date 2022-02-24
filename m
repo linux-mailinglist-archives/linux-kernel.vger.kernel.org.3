@@ -2,167 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303254C3429
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02164C342C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiBXR4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S229576AbiBXR4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiBXR41 (ORCPT
+        with ESMTP id S232481AbiBXR4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:56:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4075323531F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645725356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xyZ+8mwH7A7IyXyP8sy2oOYKxL6VPV73PTdkRXEFeIw=;
-        b=MX4R9q2wzjzws8tux1M6ilcba2dKm3rlcHYJeVp7cK2NH07MskjFd9Gi4RIu3RKLVLaAlU
-        F9R7RmNSbWMpJwqhdisayaE1aVsJaWpEs3jM8zQtzMbJq9gxJQGN3fE3PTP5qJ7pIuzN+v
-        i8reQblmmaZYMR2IHhTwpl8GF/nP5sM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-146-qH-6tEONP6e-IovcrIIhyQ-1; Thu, 24 Feb 2022 12:55:54 -0500
-X-MC-Unique: qH-6tEONP6e-IovcrIIhyQ-1
-Received: by mail-wr1-f70.google.com with SMTP id p18-20020adfba92000000b001e8f7697cc7so193203wrg.20
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:55:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xyZ+8mwH7A7IyXyP8sy2oOYKxL6VPV73PTdkRXEFeIw=;
-        b=eVZ3t+b+LKAO1PzhjllnkIt4aRMnIg7Owdsqxg9jXStSzr/FMqsDsCAFRzJZB4al7g
-         +EV3+QV3pWrmrUYiHEvDCSgZAX5PVWhfE7Hn/JVdjKugzTCOQSV8cV834AkaUYfddHMk
-         jINqJThx0cs8l6ug4qceUjVU27IQ/GoMnT6V6Ewyr42rtWYpb2i0yUKnFKhojF7XqvFZ
-         zp2V7sxZoo/i7iaiKXx1VzQrxo8w33gEIpQcotvZK09gyDp+c8ArUQsg/W9ldLxPmp5W
-         PYe1bty3Awr/OwCuCqQFXjEbwxM3kmXQ/s12QBfVeG7493bJpwvFd8t2fqF8bl/3uAxm
-         aY/Q==
-X-Gm-Message-State: AOAM531NppqkAQdLewnmFnPikYAPWrzwddinW30WDH2rxUbWB0urpPYN
-        vvXFMAnEExXonmRYpQ4bv0gOkJ542NBJD1nMfrAZ6h/fpytUxTpCJgdmViVDUpvZmT/mhSmrs5Y
-        Fcda/Y6ove6VC7/FCVUwc5Kjq
-X-Received: by 2002:a05:600c:4e8d:b0:37c:4e20:baa6 with SMTP id f13-20020a05600c4e8d00b0037c4e20baa6mr3332962wmq.19.1645725353272;
-        Thu, 24 Feb 2022 09:55:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyPIbEkonNCeTz8FUscHAS8oihHXjPH9/S9rkSQ1S5nl9l6gCfI9+XK+q8zBFoGHuqRfK+4Tg==
-X-Received: by 2002:a05:600c:4e8d:b0:37c:4e20:baa6 with SMTP id f13-20020a05600c4e8d00b0037c4e20baa6mr3332937wmq.19.1645725352901;
-        Thu, 24 Feb 2022 09:55:52 -0800 (PST)
-Received: from redhat.com ([2.55.145.157])
-        by smtp.gmail.com with ESMTPSA id q7-20020adfcd87000000b001e8a4f58a8csm15343wrj.66.2022.02.24.09.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 09:55:52 -0800 (PST)
-Date:   Thu, 24 Feb 2022 12:55:48 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_ring: aovid reading flag from the descriptor ring
-Message-ID: <20220224122655-mutt-send-email-mst@kernel.org>
-References: <20211108081324.14204-1-jasowang@redhat.com>
+        Thu, 24 Feb 2022 12:56:42 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA3279469;
+        Thu, 24 Feb 2022 09:56:11 -0800 (PST)
+Received: from [192.168.88.87] (unknown [36.78.50.60])
+        by gnuweeb.org (Postfix) with ESMTPSA id 5107C7E2A3;
+        Thu, 24 Feb 2022 17:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1645725371;
+        bh=7y0qBUn+4Mr6bFU20/TGub2HSOx+UgE/hIlmL27DAVc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D7aZtVyLlCng7VVCYtJk2rzO6vsimwfxamI03avJnlQmAyFkNPTTJvxRG/Jg4tl2j
+         5kpRJDZD/gyCBx4UAGS2cJcv8MDcy4kUXgdLKzLClwG429hsY2UFpZdVVzeUPepMQK
+         INoaznkuuMgo01rQR2SB2xknWIZXiTNtbEDJXCq1KhUMNil0//085azpQLy/txcx6U
+         L/91ntrOD5KGFdQYd6JErvSfH71zayGAoklWMSA7Qnv/VSqfKxK5n7+uF3sc1NEiG3
+         +PBfs1ansVMY3NUFhUiz2zYBPhLkV7FF/oOL8Wlkqgj4uGSOntQvG73n2+YnhRhNcJ
+         Hak+Nrgofj+EQ==
+Message-ID: <5188759c-fd7a-4dbb-0f56-db74200603a8@gnuweeb.org>
+Date:   Fri, 25 Feb 2022 00:56:02 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108081324.14204-1-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Keyon Jie <yang.jie@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org>
+ <Yhe/3rELNfFOdU4L@sirena.org.uk>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <Yhe/3rELNfFOdU4L@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Typo in the subject btw.
-
-minor tweaks to commit log below
-
-On Mon, Nov 08, 2021 at 04:13:24PM +0800, Jason Wang wrote:
-> Commit 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra
-> for split virtqueue") tries to make it possible for the driver to not
-> read from the descriptor ring to prevent the device from corrupting
-> the descriptor ring. But it still read 
-
-reads
-
->the descriptor flag from the
-> descriptor ring during buffer detach.
+On 2/25/22 12:26 AM, Mark Brown wrote:
+> On Thu, Feb 24, 2022 at 09:51:24PM +0700, Ammar Faizi wrote:
+>> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>>
+>> Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
+>> -ENOMEM because it leads to a NULL pointer dereference bug.
+>>
+>> The dmesg says:
+>>
+>>    <6>[109482.497835][T138537] usb 1-2: Manufacturer: SIGMACHIP
+>>    <6>[109482.502506][T138537] input: SIGMACHIP USB Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/0003:1C4F:0002.000D/input/input34
+>>    <6>[109482.558976][T138537] hid-generic 0003:1C4F:0002.000D: input,hidraw1: USB HID v1.10 Keyboard [SIGMACHIP USB Keyboard] on usb-0000:00:14.0-2/input0
+>>    <6>[109482.561653][T138537] input: SIGMACHIP USB Keyboard Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.1/0003:1C4F:0002.000E/input/input35
 > 
-> This patch fixes 
+> Please think hard before including complete backtraces in upstream
+> reports, they are very large and contain almost no useful information
+> relative to their size so often obscure the relevant content in your
+> message. If part of the backtrace is usefully illustrative (it often is
+> for search engines if nothing else) then it's usually better to pull out
+> the relevant sections.
 
-fixes this
+I will strip the irrelevant information in the v2.
 
->by always store 
-
-storing
-
->the descriptor flag no matter whether
-> DMA API is used and then we can avoid reading descriptor flag from the
-> descriptor ring. This eliminates the possibly of unexpected next
-> descriptor caused by the wrong flag (e.g the next flag).
-> 
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-
-
-I'd also like the commit log to document what the issue is in a bit more depth.
-I think the main reason we are checking the dma API is this
-
-
-static unsigned int vring_unmap_one_split(const struct vring_virtqueue *vq,
-                                          unsigned int i)
-{
-        struct vring_desc_extra *extra = vq->split.desc_extra;
-        u16 flags;
-
-        if (!vq->use_dma_api)
-                goto out;
-
-	...
-}
-
-
-so I guess with a bad flag, what will happen is num_free will become too
-big is that right?
-
-
-
-
-> ---
->  drivers/virtio/virtio_ring.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 00f64f2f8b72..28734f4e57d3 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -583,7 +583,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->  	}
->  	/* Last one doesn't continue. */
->  	desc[prev].flags &= cpu_to_virtio16(_vq->vdev, ~VRING_DESC_F_NEXT);
-> -	if (!indirect && vq->use_dma_api)
-> +	if (!indirect)
->  		vq->split.desc_extra[prev & (vq->split.vring.num - 1)].flags &=
->  			~VRING_DESC_F_NEXT;
->  
-
-BTW I'm a bit confused why we need the & (vq->split.vring.num - 1) logic.
-Maybe it's time we stopped writing out descriptor then overwriting it -
-e.g. return the desc_extra pointer from virtqueue_add_desc_split
-instead of an index. Worth checking what this does to performance.
-
-
-> @@ -713,7 +713,7 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
->  	/* Put back on free list: unmap first-level descriptors and find end */
->  	i = head;
->  
-> -	while (vq->split.vring.desc[i].flags & nextflag) {
-> +	while (vq->split.desc_extra[i].flags & nextflag) {
->  		vring_unmap_one_split(vq, i);
->  		i = vq->split.desc_extra[i].next;
->  		vq->vq.num_free++;
-> -- 
-> 2.25.1
-
+-- 
+Ammar Faizi

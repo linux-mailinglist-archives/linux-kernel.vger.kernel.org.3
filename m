@@ -2,110 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E284C3010
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1127A4C303E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbiBXPmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S236635AbiBXPp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbiBXPmH (ORCPT
+        with ESMTP id S232725AbiBXPpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:42:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E881811A3D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:41:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9895A6166E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA92C340E9;
-        Thu, 24 Feb 2022 15:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645717295;
-        bh=i1VbX+3UHp78QF22K/i1FXekm2wijy/n94jgRTzywT4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=gE4y7mnXWB9mJwph9MNVnivBonLk66Rrr2RS8QVCfdqngOmY65GSLZyIwPF2DcOSF
-         N1AB6gGbLkGyAM3aAySMasgKe3YUoWDNFYcD1u1SyiDQoTXlc4iOpFxR1c0vJOfxmj
-         gUsIKztrxJXcrwq+3d3HAzEhH4k9t/8/yXcJfzYQBVnnr+og4qaqy7bLDkNX12X/kg
-         IoRG2FFGd4Wu5j/sKdVpzIXvKt54WfbPedffMs7ODoObMg6dZATWpmk2YuXj1GLrQU
-         sWk/b6rcjYmmKKsOf66VUAFtJdQmcp+tahXzZX07P5NTTcg4zURtP++uLIJXFyrQz1
-         TJJRo3xw7a4OA==
-Message-ID: <d38804da61e219e617b056a176cf8755c74c90d5.camel@kernel.org>
-Subject: Re: [PATCH] tracing: Dump stacktrace trigger to the corresponding
- instance
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>
-Date:   Thu, 24 Feb 2022 09:41:33 -0600
-In-Reply-To: <afbb0b4f18ba92c276865bc97204d438473f4ebc.1645396236.git.bristot@kernel.org>
-References: <afbb0b4f18ba92c276865bc97204d438473f4ebc.1645396236.git.bristot@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        Thu, 24 Feb 2022 10:45:53 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0126B7EA02;
+        Thu, 24 Feb 2022 07:45:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645717524; x=1677253524;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zg871vrIEgDmnoahtU2xZXU7HgaRjVw+9Mzig81rIO0=;
+  b=QM5WMO+rBgKyzLXp8nm/DiXxHSP3ptY7t91zIR7e2XQcmquvHuj8JkOw
+   fI/DxpSvaRAWbdyxBlHvW42pm+vRaMaRze0OBXrivVt5cwQ7uSP/eH66P
+   DvhFkBoXHpMppi00eGHd3OUq/rI88HMUaQjkpvNz3E2B84bKEBEyDJyUq
+   5n9Y9TlWdR73r+a7NNFxnhl5mdaqibReOfiaLXuFFDR+emeB3yXWeQ8lz
+   OUYTCuK3vlCwFXjB5V5S0u0YKSyokVjIpGfyWkF8aJbN5qm4z+VoukMTW
+   +ILROZHJINtNvXzsg4oBsN4KBdlDF/jSPM7hndjJYKshohz5qs5rhTfdF
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239663596"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="239663596"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:07 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="533178494"
+Received: from ronakmeh-mobl1.amr.corp.intel.com (HELO [10.212.97.131]) ([10.212.97.131])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:05 -0800
+Message-ID: <3dbed2f1-0c6d-9ba6-232f-db57ec9097ce@linux.intel.com>
+Date:   Thu, 24 Feb 2022 09:41:35 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] soundwire: qcom: add runtime pm support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, quic_srivasam@quicinc.com
+References: <20220224133125.6674-1-srinivas.kandagatla@linaro.org>
+ <20220224133125.6674-2-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220224133125.6674-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
 
-On Sun, 2022-02-20 at 23:49 +0100, Daniel Bristot de Oliveira wrote:
-> The stacktrace event trigger is dumping the stacktrace to the
-> instance
-> where it was enabled, but to the global "instance."
-> 
-> Use the private_data, pointing to the trigger file, to figure out the
-> corresponding trace instance, and use it in the trigger action, like
-> snapshot_trigger does.
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Tom Zanussi <zanussi@kernel.org>
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  kernel/trace/trace_events_trigger.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_events_trigger.c
-> b/kernel/trace/trace_events_trigger.c
-> index d00fee705f9c..e0d50c9577f3 100644
-> --- a/kernel/trace/trace_events_trigger.c
-> +++ b/kernel/trace/trace_events_trigger.c
-> @@ -1540,7 +1540,12 @@ stacktrace_trigger(struct event_trigger_data
-> *data,
->  		   struct trace_buffer *buffer,  void *rec,
->  		   struct ring_buffer_event *event)
+>  static const struct snd_soc_dai_ops qcom_swrm_pdm_dai_ops = {
+> @@ -1197,12 +1224,23 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
+>  static int swrm_reg_show(struct seq_file *s_file, void *data)
 >  {
-> -	trace_dump_stack(STACK_SKIP);
-> +	struct trace_event_file *file = data->private_data;
+>  	struct qcom_swrm_ctrl *swrm = s_file->private;
+> -	int reg, reg_val;
+> +	int reg, reg_val, ret;
 > +
-> +	if (file)
-> +		__trace_stack(file->tr, tracing_gen_ctx(), STACK_SKIP);
-> +	else
-> +		trace_dump_stack(STACK_SKIP);
->  }
+> +	ret = pm_runtime_get_sync(swrm->dev);
+> +	if (ret < 0 && ret != -EACCES) {
+> +		dev_err_ratelimited(swrm->dev,
+> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
+> +				    __func__, ret);
+> +		pm_runtime_put_noidle(swrm->dev);
+> +	}
 >  
->  static void
+>  	for (reg = 0; reg <= SWR_MSTR_MAX_REG_ADDR; reg += 4) {
+>  		swrm->reg_read(swrm, reg, &reg_val);
+>  		seq_printf(s_file, "0x%.3x: 0x%.2x\n", reg, reg_val);
+>  	}
+> +	pm_runtime_mark_last_busy(swrm->dev);
+> +	pm_runtime_put_autosuspend(swrm->dev);
+> +
 
+question: is there a reason why this specific set of reg_read() is
+surrounded pm_runtime stuff? Is this saying that in all other case where
+the callback is used, the controller is already resumed and fully
+operational? That's be worthy of a comment.
 
-Looks good to me.
+> struct qcom_swrm_ctrl *swrm
+> struct qcom_swrm_ctrl *ctrl
 
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Tested-by: Tom Zanussi <zanussi@kernel.org>
+nit-pick: it helps reviewers when the same variable name is used
+consistently.
 
-Thanks,
+> +static int __maybe_unused swrm_runtime_suspend(struct device *dev)
+> +{
+> +	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (!ctrl->clock_stop_not_supported) {
+> +		/* Mask bus clash interrupt */
+> +		ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_MASK_ADDR, ctrl->intr_mask);
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+> +	}
+> +	/* Prepare slaves for clock stop */
+> +	ret = sdw_bus_prep_clk_stop(&ctrl->bus);
+> +	if (ret < 0) {
 
-Tom
+if (ret < 0 && ret != -ENODATA) {
 
+?
 
-
-
+> +		dev_err(dev, "prepare clock stop failed %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = sdw_bus_clk_stop(&ctrl->bus);
+> +	if (ret < 0 && ret != -ENODATA) {
+> +		dev_err(dev, "bus clock stop failed %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	clk_disable_unprepare(ctrl->hclk);
+> +
+> +	usleep_range(300, 305);
+> +
+> +	return 0;
+> +}

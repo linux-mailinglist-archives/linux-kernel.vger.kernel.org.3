@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF554C2068
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4475A4C2076
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245175AbiBXALf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 19:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S245209AbiBXANy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 19:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbiBXALd (ORCPT
+        with ESMTP id S240912AbiBXANw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:11:33 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A665F4D1;
-        Wed, 23 Feb 2022 16:11:04 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id z7so483470ilb.6;
-        Wed, 23 Feb 2022 16:11:04 -0800 (PST)
+        Wed, 23 Feb 2022 19:13:52 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD06606D8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:13:24 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id h16so826858iol.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:13:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ol9UlquthQunriKvzPUzEkP+k0xGTuihXIeBY0Lwb0c=;
-        b=ZbbAlKNfVyVK58hbGxvH4SKkthcj2BPZwJvOA0LlQUi0+WzYsSxLEDu5B/A/dcNS4b
-         xfUuEBa7qZqIVmsKP7dxJhkWMYk8R1GQOvs3wmapoqk0I8QvCb4eqhb6VVr3hTH1fJJe
-         iHsxWSXRANyXCY7RtGeDJSf7BVnqVNgiSWP32gT4ARErzOEkMJefNeLTftXD4jOKTTPB
-         tcaCrMVOD6dDQnzhDrQUX4tuzrrFLLa/T9I9Uj5MPBfrDVujD+NTV2BAtwDzRmFmPqpw
-         vzAlh6BdyY3KZ4bEGGqTFiR2anVtVExgDtiAHkKtW9YDGcvhL7LzhrA/xArjMCRaeWfX
-         p3HA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XyYknUun+Ddrww1SSrtzpbIs8BRQxV9z2z6D5KQxpAY=;
+        b=PinJWtVZji/D+weJjsqoeKg0vX4N/3QY6c6SUxgAbSzcAbUMYoX4GkQ2fXlSive99Z
+         8a3OWxhikeYSDTUj05HdIx93dBL+yJjJTSlsqm3zWXCDYh8vTsal6pau4lehN9yD2uLX
+         LxpGvmnTJI0M46W6AasnjOXHfl5M43oBeMaBM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ol9UlquthQunriKvzPUzEkP+k0xGTuihXIeBY0Lwb0c=;
-        b=yHBM1TJelV1PXDR6Kri3byrSzrxqvqOO7SospMleL+f6P+OUnCyawJYokC8Fbf7xhW
-         XtvPWCjwETsZd/CiHswgAEksmNsB3dP9kPiVxj0YO8Igd5DuBXD4BnBYGUQqAPSsvzvo
-         VkDEuLX516vyL9ZwgoPk2VBXMyJP2CvkXW23S9ueMNWsPIQBiORTngKwax7DasMIkzM9
-         ZVdYVuwAvJOJc1zDpzNu9fiXmUB/nsZlszARRFT6HGhzP+/Kk/wIGLTzlZKSiTz4+qVN
-         bjNt8Pn0KRVvE0tl3dDjceqVcDsYW8E7WBH7VuttpzgWxbwJrAMbAAqrAb8JPttHV0tH
-         6l8Q==
-X-Gm-Message-State: AOAM530vvz+NVpYRNf4gUARaU/c0kd/PLUYh7/xCtQaoKQyCzZTgJ/RK
-        jsssbdOnOS1Si7LEqbcY0uMLCDYADZQKL4jaPOg=
-X-Google-Smtp-Source: ABdhPJyYcvOQ6ZrWIVNZoHD4OvZijlUKAfnRmdgayO+GwnDTQC48gQQGpnItr42lWNRrLzwAwx7fCcXlCqs0op6SaGQ=
-X-Received: by 2002:a92:c148:0:b0:2c2:615a:49e9 with SMTP id
- b8-20020a92c148000000b002c2615a49e9mr113780ilh.98.1645661463988; Wed, 23 Feb
- 2022 16:11:03 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XyYknUun+Ddrww1SSrtzpbIs8BRQxV9z2z6D5KQxpAY=;
+        b=40v3sXZ5HMZyMrmwmTx4HHRTq74dEyVSC/JTiq+QG+1i5T+kMIpLOQawHPZMTfZn2P
+         K1gchhj2b9ZWcGx4yAU3FICMhE1s33MdB5Ew6v18C5eVGrP31rJfSUF5i6GXHAAw3XAV
+         7VS+zRvB41rL+HDUfcSGHDS8MBvcAdkJXCA5F00bJdDgvI9/UTTUm6UHwCRqRq9mrD5T
+         wLcoPn0pAQSbZJlEyP+tDb5Ed2/Qdv4QkzpUNPUesxMbGZaC7cGPHd/9uFtrcOArP7Mq
+         SJiTyqHkZ2PtNqWYU4ULvuTlNKSQiUzp3aiupLIMY154sSCsB/ZxYNd30APhCDr+195E
+         N3aw==
+X-Gm-Message-State: AOAM531GSPjhExhaFYk2YH3IT0JUjj+pdqQ1YOOfKtb0wlSN1TnBUuxq
+        z4Qo5bJZhG9VdLth03uu5tEWfw==
+X-Google-Smtp-Source: ABdhPJxaouIBdOY1qgwPhBXj4EVDKZPmWsmeast1LF/IxcJtpuvmSBtOjHEmhERM2vtelB4ZHvX2cg==
+X-Received: by 2002:a02:19c6:0:b0:30e:e6a5:67ad with SMTP id b189-20020a0219c6000000b0030ee6a567admr41420jab.45.1645661603302;
+        Wed, 23 Feb 2022 16:13:23 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d18sm681572iln.79.2022.02.23.16.13.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 16:13:22 -0800 (PST)
+Subject: Re: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
+ kselftest framework
+To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
+ <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
+ <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
+ <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5200cb0b-6417-d97b-7f17-eae4bf4b0901@linuxfoundation.org>
+Date:   Wed, 23 Feb 2022 17:13:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220224000531.1265030-1-haoluo@google.com>
-In-Reply-To: <20220224000531.1265030-1-haoluo@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 23 Feb 2022 16:10:52 -0800
-Message-ID: <CAEf4Bzb44WR2LiYchxB5JZ=Jdie6FEEi90mh=SCv07v4h4W11w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,69 +79,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
->
-> For binaries that are statically linked, consecutive stack frames are
-> likely to be in the same VMA and therefore have the same build id.
-> As an optimization for this case, we can cache the previous frame's
-> VMA, if the new frame has the same VMA as the previous one, reuse the
-> previous one's build id. We are holding the MM locks as reader across
-> the entire loop, so we don't need to worry about VMA going away.
->
-> Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-> test_progs.
->
-> Suggested-by: Greg Thelen <gthelen@google.com>
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
+On 2/22/22 12:55 AM, tan.shaopeng@fujitsu.com wrote:
+> Hi Khan,
+> 
+>> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
+>>> In kselftest framework, all tests can be build/run at a time, and a
+>>> sub test also can be build/run individually. As follows:
+>>> $ make -C tools/testing/selftests run_tests $ make -C
+>>> tools/testing/selftests TARGETS=ptrace run_tests
+>>>
+>>> However, resctrl_tests cannot be run using kselftest framework, users
+>>> have to change directory to tools/testing/selftests/resctrl/, run
+>>> "make" to build executable file "resctrl_tests", and run "sudo
+>>> ./resctrl_tests" to execute the test.
+>>>
+>>> To build/run resctrl_tests using kselftest framework.
+>>> Modify tools/testing/selftests/Makefile and
+>>> tools/testing/selftests/resctrl/Makefile.
+>>>
+>>> Even after this change, users can still build/run resctrl_tests
+>>> without using framework as before.
+>>>
+>>> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+>>> ---
+>>> Some important feedbacks from v1&v2 are addressed as follows:
+>>>
+>>> - The changelog mentions that changes were made to the resctrl
+>>>     selftest Makefile but it does not describe what the change accomplish
+>>>     or why they are needed.
+>>>     => By changing the Makefile, resctrl_tests can use kselftest
+>>>        framework like other sub tests. I described this in changelog.
+>>>
+>>> - The changelog did not describe how a user may use the kselftest
+>>>     framework to run the resctrl tests nor the requested information
+>>>     on how existing workflows are impacted.
+>>>     => I described how to build/run resctrl_tests with kselftest framework,
+>>>        and described the existing workflows are not impacted that users can
+>>>        build/run resctrl_tests without using kselftest framework as before.
+>>>
+>>> - tools/testing/selftests/resctrl/README should be updated.
+>>>     => I separate the update of README to a new patch.[patch v3 3/5]
+>>>
+>>> - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
+>>>     why is "SRCS" no longer sufficient?
+>>>     => I referred to other Makefiles, and found "SRCS" is better
+>>>        than "EXTRA_SOURCES". So, I updated it to use "SRCS".
+>>>
+>>>    tools/testing/selftests/Makefile         |  1 +
+>>>    tools/testing/selftests/resctrl/Makefile | 20 ++++++--------------
+>>>    2 files changed, 7 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/Makefile
+>>> b/tools/testing/selftests/Makefile
+>>> index c852eb40c4f7..7df397c6893c 100644
+>>> --- a/tools/testing/selftests/Makefile
+>>> +++ b/tools/testing/selftests/Makefile
+>>> @@ -51,6 +51,7 @@ TARGETS += proc
+>>>    TARGETS += pstore
+>>>    TARGETS += ptrace
+>>>    TARGETS += openat2
+>>> +TARGETS += resctrl
+>>>    TARGETS += rlimits
+>>>    TARGETS += rseq
+>>>    TARGETS += rtc
+>>> diff --git a/tools/testing/selftests/resctrl/Makefile
+>>> b/tools/testing/selftests/resctrl/Makefile
+>>> index 6bcee2ec91a9..de26638540ba 100644
+>>> --- a/tools/testing/selftests/resctrl/Makefile
+>>> +++ b/tools/testing/selftests/resctrl/Makefile
+>>> @@ -1,17 +1,9 @@
+>>> -CC = $(CROSS_COMPILE)gcc
+>>> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -SRCS=$(wildcard *.c)
+>>> -OBJS=$(SRCS:.c=.o)
+>>> +CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
+>>>
+>>> -all: resctrl_tests
+>>> +TEST_GEN_PROGS := resctrl_tests
+>>> +SRCS := $(wildcard *.c)
+>>>
+>>> -$(OBJS): $(SRCS)
+>>> -	$(CC) $(CFLAGS) -c $(SRCS)
+>>> +all: $(TEST_GEN_PROGS)
+>>>
+>>> -resctrl_tests: $(OBJS)
+>>> -	$(CC) $(CFLAGS) -o $@ $^
+>>> -
+>>> -.PHONY: clean
+>>> -
+>>> -clean:
+>>> -	$(RM) $(OBJS) resctrl_tests
+>>> +$(TEST_GEN_PROGS): $(SRCS)
+>>
+>> This patch breaks the test build - the below use-cases fail
+>>
+>> make kselftest-all TARGETS=resctrl
+>> make -C  tools/testing/selftests/ TARGETS=resctrl
+>>
+>> Also a simple make in tools/testing/selftests/resctr
+> 
+> Thanks for your feedbacks.
+> I applied these patches to the source below and built
+> resctrl_tests successfully using above use-cases on x86/arm machine.
+> (1)
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>   Tag: v5.16
+> (2)
+>   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>   Tag: next-20220217
+> 
+> Could you tell me which kernel source you used to build
+> and what error message you got?
+> 
 
-LGTM. Can you share performance numbers before and after?
+I tried this on Linux 5.17-rc4
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  kernel/bpf/stackmap.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 22c8ae94e4c1..38bdfcd06f55 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -132,7 +132,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->         int i;
->         struct mmap_unlock_irq_work *work = NULL;
->         bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
-> -       struct vm_area_struct *vma;
-> +       struct vm_area_struct *vma, *prev_vma = NULL;
-> +       const char *prev_build_id;
->
->         /* If the irq_work is in use, fall back to report ips. Same
->          * fallback is used for kernel stack (!user) on a stackmap with
-> @@ -150,6 +151,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->         }
->
->         for (i = 0; i < trace_nr; i++) {
-> +               if (range_in_vma(prev_vma, ips[i], ips[i])) {
-> +                       vma = prev_vma;
-> +                       memcpy(id_offs[i].build_id, prev_build_id,
-> +                              BUILD_ID_SIZE_MAX);
-> +                       goto build_id_valid;
-> +               }
->                 vma = find_vma(current->mm, ips[i]);
->                 if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
->                         /* per entry fall back to ips */
-> @@ -158,9 +165,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->                         memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
->                         continue;
->                 }
-> +build_id_valid:
->                 id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
->                         - vma->vm_start;
->                 id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
-> +               prev_vma = vma;
-> +               prev_build_id = id_offs[i].build_id;
->         }
->         bpf_mmap_unlock_mm(work, current->mm);
->  }
-> --
-> 2.35.1.473.g83b2b277ed-goog
->
+thanks,
+-- Shuah

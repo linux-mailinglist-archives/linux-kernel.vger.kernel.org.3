@@ -2,342 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C429F4C36AA
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD1E4C36A8
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiBXUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S234296AbiBXUMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiBXUMb (ORCPT
+        with ESMTP id S234261AbiBXUM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:12:31 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C1710EA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645733519; x=1677269519;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=tU+PxZlH6C9Eoi9fFviDMwdRZTHXhp2XbDPLc6/PgjE=;
-  b=dLiK96Zuc43DRBqfutIykWbw3LkqKG0AC52dsiiQ215L9llmAEOmaRon
-   6eTTfF9OA8SW11gT5v5IifQd8BwPsapHRC9znkKADtCcyFByBdghTBTb6
-   DRqw7aYbfTURzKQefYCNN4k1+ZEIrXow5X2QQXZsVVzzdZEcNEQFfrL6E
-   yRM0vZ/Grmy/VEr8bNb8qBKUXQ/YSUT005UNVT55tKFFjde9YdRJszzr2
-   bRsRrYNpEp/FCD4DdaTMt5lGoM+bVZzuqvxk0SbzwaS3HN38da6OucBxF
-   +ldAVvFOYOGw2998Q4kfufUoeLdIGVtpyAAIKakfAnuOO67pfc/hiS804
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="276969170"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="276969170"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:11:59 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="639862943"
-Received: from hthen-mobl2.amr.corp.intel.com (HELO [10.209.48.194]) ([10.209.48.194])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:11:58 -0800
-Message-ID: <af7df79f-02b8-3025-c9a3-929b7bdd33e0@intel.com>
-Date:   Thu, 24 Feb 2022 12:11:54 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        Thu, 24 Feb 2022 15:12:28 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9EA64BE8;
+        Thu, 24 Feb 2022 12:11:58 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id i5so4716122oih.1;
+        Thu, 24 Feb 2022 12:11:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aQCXZh1IKYsJrJlH9qSfBMOC7gefnG0eIRo2Y5BDw6U=;
+        b=L3amgSLPtXTffEsbYyEY8TjXbAzN14aV8ggmJlX+U4yHhaHyVYRGgF7Q/LIx+/wnNz
+         sS/DDsmTo7Hw4YXoKEXLpYY8QVlP+HVHvOM+rhfGFNIZkjFBa2feu689cq2RPhszFPAr
+         jsC9XMUtBbWt6xsXFKUTQ0uhSiCSpK7Na9heuYQUUdXkpdUA8lCLEiE4H6ZIp5Ui8NKe
+         zHyQuLIYbFTjMy5y2ma4vQPhGAsJnNeUfVPS/5ExWHqXW8IerMqnjDRPpTtnUtRMVpoy
+         CYORFeD5jTwpHQfz+zQfckcPMjrd5Kyox5rY0/nT4vFReGLfr6or070by3/b0MT6sjOy
+         asVA==
+X-Gm-Message-State: AOAM533xxtyDiQ5Kz60Te1JHhP+j+HKciVbu5lVpY0or/A9oU+Jpr7Lz
+        +6hCYAdL4Ld6krpF/iTkernfBodO2Q==
+X-Google-Smtp-Source: ABdhPJwvMZHY/FLycuXsvTliMXXvMJHWr+Okbvm13l+P5zpggtPXh+pUyu2crnYPzL4MDhzq1BIxUw==
+X-Received: by 2002:a05:6808:d4b:b0:2d7:e4b:bb53 with SMTP id w11-20020a0568080d4b00b002d70e4bbb53mr2344451oik.198.1645733517741;
+        Thu, 24 Feb 2022 12:11:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be40-20020a05680821a800b002d06df28063sm304990oib.5.2022.02.24.12.11.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:11:56 -0800 (PST)
+Received: (nullmailer pid 3508003 invoked by uid 1000);
+        Thu, 24 Feb 2022 20:11:55 -0000
+Date:   Thu, 24 Feb 2022 14:11:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
-In-Reply-To: <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: dsa: add new mdio property
+Message-ID: <Yhfmi2Mn6e0NMXh3@robh.at.kernel.org>
+References: <20220221200102.6290-1-luizluca@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221200102.6290-1-luizluca@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 07:56, Kirill A. Shutemov wrote:
-> In non-TDX VMs, MMIO is implemented by providing the guest a mapping
-> which will cause a VMEXIT on access and then the VMM emulating the
-> instruction that caused the VMEXIT. That's not possible for TDX VM.
+On Mon, Feb 21, 2022 at 05:01:02PM -0300, Luiz Angelo Daros de Luca wrote:
+> The optional mdio property will be used by dsa switch to configure
+> slave_mii_bus when the driver does not allocate it during setup.
 > 
-> To emulate an instruction an emulator needs two things:
+> Some drivers already offer/require a similar property but, in some
+> cases, they rely on a compatible string to identify the mdio bus node.
+
+That case will fail with this change. It precludes any binding 
+referencing dsa.yaml from defining a 'mdio' node with properties other 
+than what mdio.yaml defines.
+
+The rule is becoming any common schema should not define more than one 
+level of nodes if those levels can be extended.
+
+> Each subdriver might decide to keep existing approach or migrate to this
+> new common property.
 > 
->   - R/W access to the register file to read/modify instruction arguments
->     and see RIP of the faulted instruction.
+> Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/net/dsa/dsa.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
->   - Read access to memory where instruction is placed to see what to
->     emulate. In this case it is guest kernel text.
-> 
-> Both of them are not available to VMM in TDX environment:
-> 
->   - Register file is never exposed to VMM. When a TD exits to the module,
->     it saves registers into the state-save area allocated for that TD.
->     The module then scrubs these registers before returning execution
->     control to the VMM, to help prevent leakage of TD state.
-> 
->   - Memory is encrypted a TD-private key. The CPU disallows software
->     other than the TDX module and TDs from making memory accesses using
->     the private key.
-> 
-> In TDX the MMIO regions are instead configured to trigger a #VE
-> exception in the guest. The guest #VE handler then emulates the MMIO
-> instruction inside the guest and converts it into a controlled hypercall
-> to the host.
-
-Nit on the changelog: This never really comes out and explicitly says
-what *this* patch does.  It never transitions into imperative voice.  Maybe:
-
-	In TDX, MMIO regions are configured by ____ to trigger a #VE
-	exception in the guest.
-
-	Add #VE handling that emulates the MMIO instruction inside the
-	guest and converts it into a controlled hypercall.
-
-I found this next transition jarring.  Maybe add a section title:
-
-=== Limitations of this approach ===
-
-> MMIO addresses can be used with any CPU instruction that accesses
-> memory. Address only MMIO accesses done via io.h helpers, such as
-> 'readl()' or 'writeq()'.
-
-Any CPU instruction that accesses memory can also be used to access
-MMIO.  However, by convention, MMIO access are typically performed via
-io.h helpers such as 'readl()' or 'writeq()'.
-
-> readX()/writeX() helpers limit the range of instructions which can trigger
-> MMIO. It makes MMIO instruction emulation feasible. Raw access to a MMIO
-> region allows the compiler to generate whatever instruction it wants.
-> Supporting all possible instructions is a task of a different scope.
-
-The io.h helpers intentionally use a limited set of instructions when
-accessing MMIO.  This known, limited set of instructions makes MMIO
-instruction decoding and emulation feasible in KVM hosts and SEV guests
-today.
-
-MMIO accesses are performed without the io.h helpers are at the mercy of
-the compiler.  Compilers can and will generate a much more broad set of
-instructions which can not practically be decoded and emulated.  TDX
-guests will oops if they encounter one of these decoding failures.
-
-This means that TDX guests *must* use the io.h helpers to access MMIO.
-
-This requirement is not new.  Both KVM hosts and AMD SEV guests have the
-same limitations on MMIO access.
-
----
-
-I found a few things lacking in that description.  How's that for a rewrite?
-
-
-> === Potential alternative approaches ===
-> 
-> == Paravirtualizing all MMIO ==
-> 
-> An alternative to letting MMIO induce a #VE exception is to avoid
-> the #VE in the first place. Similar to the port I/O case, it is
-> theoretically possible to paravirtualize MMIO accesses.
-> 
-> Like the exception-based approach offered here, a fully paravirtualized
-> approach would be limited to MMIO users that leverage common
-> infrastructure like the io.h macros.
-> 
-> However, any paravirtual approach would be patching approximately
-> 120k call sites. With a conservative overhead estimation of 5 bytes per
-> call site (CALL instruction), it leads to bloating code by 600k.
-
-There's one important detail missing there:
-
-	Any paravirtual approach would need to replace a bare memory
-	access instruction with (at least) a function call.
-
-> Many drivers will never be used in the TDX environment and the bloat
-> cannot be justified.
-> 
-> == Patching TDX drivers ==
-> 
-> Rather than touching the entire kernel, it might also be possible to
-> just go after drivers that use MMIO in TDX guests.  Right now, that's
-> limited only to virtio and some x86-specific drivers.
-> 
-> All virtio MMIO appears to be done through a single function, which
-> makes virtio eminently easy to patch. This will be implemented in the
-> future, removing the bulk of MMIO #VEs.
-
-Given what is written here, this sounds like a great solution especially
-compared to all the instruction decoding nasiness.  What's wrong with it?
-
-> diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-> index fd78b81a951d..15519e498679 100644
-> --- a/arch/x86/coco/tdx.c
-> +++ b/arch/x86/coco/tdx.c
-> @@ -8,11 +8,17 @@
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
->  #include <asm/vmx.h>
-> +#include <asm/insn.h>
-> +#include <asm/insn-eval.h>
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> index b9d48e357e77..f9aa09052785 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> @@ -32,6 +32,12 @@ properties:
+>        (single device hanging off a CPU port) must not specify this property
+>      $ref: /schemas/types.yaml#/definitions/uint32-array
 >  
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
->  #define TDX_GET_VEINFO			3
->  
-> +/* MMIO direction */
-> +#define EPT_READ	0
-> +#define EPT_WRITE	1
+> +  mdio:
+> +    unevaluatedProperties: false
+> +    description:
+> +      Container of PHY and devices on the switches MDIO bus.
+> +    $ref: /schemas/net/mdio.yaml#
 > +
->  static struct {
->  	unsigned int gpa_width;
->  	unsigned long attributes;
-> @@ -184,6 +190,108 @@ static bool handle_cpuid(struct pt_regs *regs)
->  	return true;
->  }
->  
-> +static bool mmio_read(int size, unsigned long addr, unsigned long *val)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = EXIT_REASON_EPT_VIOLATION,
-> +		.r12 = size,
-> +		.r13 = EPT_READ,
-> +		.r14 = addr,
-> +		.r15 = *val,
-> +	};
-> +
-> +	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-> +		return false;
-> +	*val = args.r11;
-> +	return true;
-> +}
-> +
-> +static bool mmio_write(int size, unsigned long addr, unsigned long val)
-> +{
-> +	return !_tdx_hypercall(EXIT_REASON_EPT_VIOLATION, size, EPT_WRITE,
-> +			       addr, val);
-> +}
-> +
-> +static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
-> +{
-> +	char buffer[MAX_INSN_SIZE];
-> +	unsigned long *reg, val;
-> +	struct insn insn = {};
-> +	enum mmio_type mmio;
-> +	int size, extend_size;
-> +	u8 extend_val = 0;
-> +
-> +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
-> +		return false;
-> +
-> +	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
-> +		return false;
-> +
-> +	mmio = insn_decode_mmio(&insn, &size);
-> +	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
-> +		return false;
-> +
-> +	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
-> +		reg = insn_get_modrm_reg_ptr(&insn, regs);
-> +		if (!reg)
-> +			return false;
-> +	}
-> +
-> +	ve->instr_len = insn.length;
-> +
-> +	switch (mmio) {
-> +	case MMIO_WRITE:
-> +		memcpy(&val, reg, size);
-> +		return mmio_write(size, ve->gpa, val);
-> +	case MMIO_WRITE_IMM:
-> +		val = insn.immediate.value;
-> +		return mmio_write(size, ve->gpa, val);
-> +	case MMIO_READ:
-> +	case MMIO_READ_ZERO_EXTEND:
-> +	case MMIO_READ_SIGN_EXTEND:
-> +		break;
-> +	case MMIO_MOVS:
-> +	case MMIO_DECODE_FAILED:
-> +		return false;
-> +	default:
-> +		BUG();
-> +	}
-
-Given the huge description above, it's borderline criminal to not
-discuss what could led to this BUG().
-
-It could literally be some minor tweak in the compiler that changed a
-non-io.h-using MMIO access to get converted over to a instruction that
-can't be decoded.
-
-Could we spend a few lines of comments to help out the future poor sod
-that sees "kernel bug at foo.c:1234"?  Maybe:
-
-	/*
-	 * MMIO was accessed with an instruction that could not
-	 * be decoded.  It was likely not using io.h helpers or
-	 * accessed MMIO accidentally.
-	 */
-
-> +	/* Handle reads */
-> +	if (!mmio_read(size, ve->gpa, &val))
-> +		return false;
-> +
-> +	switch (mmio) {
-> +	case MMIO_READ:
-> +		/* Zero-extend for 32-bit operation */
-> +		extend_size = size == 4 ? sizeof(*reg) : 0;
-> +		break;
-> +	case MMIO_READ_ZERO_EXTEND:
-> +		/* Zero extend based on operand size */
-> +		extend_size = insn.opnd_bytes;
-> +		break;
-> +	case MMIO_READ_SIGN_EXTEND:
-> +		/* Sign extend based on operand size */
-> +		extend_size = insn.opnd_bytes;
-> +		if (size == 1 && val & BIT(7))
-> +			extend_val = 0xFF;
-> +		else if (size > 1 && val & BIT(15))
-> +			extend_val = 0xFF;
-> +		break;
-> +	case MMIO_MOVS:
-> +	case MMIO_DECODE_FAILED:
-> +		return false;
-> +	default:
-> +		BUG();
-> +	}
-> +
-> +	if (extend_size)
-> +		memset(reg, extend_val, extend_size);
-> +	memcpy(reg, &val, size);
-> +	return true;
-> +}
-> +
->  void tdx_get_ve_info(struct ve_info *ve)
->  {
->  	struct tdx_module_output out;
-> @@ -237,6 +345,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
->  		return write_msr(regs);
->  	case EXIT_REASON_CPUID:
->  		return handle_cpuid(regs);
-> +	case EXIT_REASON_EPT_VIOLATION:
-> +		return handle_mmio(regs, ve);
->  	default:
->  		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
->  		return false;
-
+>  patternProperties:
+>    "^(ethernet-)?ports$":
+>      type: object
+> -- 
+> 2.35.1
+> 
+> 

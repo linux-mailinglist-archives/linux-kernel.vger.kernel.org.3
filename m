@@ -2,274 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326C24C2DEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4BD4C2DEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiBXOJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S235342AbiBXOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbiBXOJT (ORCPT
+        with ESMTP id S232103AbiBXOJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:09:19 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145BE247771;
-        Thu, 24 Feb 2022 06:08:47 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21OC4AkA029958;
-        Thu, 24 Feb 2022 15:08:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=OZyEljsP9pa68/pPXqNDTjzClhBC6YqXLqS4/jt+DlY=;
- b=QVOE3nmH7IfGHnfLIk1uU7JMsu2HiYBdUthmICcfdnDXbAXCK3b/kF12S4KJ5DBX41pO
- +j/2oPi7WsQRQ3tDcpFPjdS/haPjTHLeegEZTrz1LBiHprHUNbp2mAP32n/SWxJm/AQ3
- voGbC77v5Z9pEuc49IsWtBs6vLQ6nXH2XkCbqZD9CoQ6vZcwjdBYXPjICjohlmjqFF8z
- iuyskU87JcD4CPKYJKG3XDUHg86EX6G3LJzPqJgK3+4udVmfYfq2yczn+tMhNpXoh7pu
- lbXZPSLBJS9vNMhoyS0ZC5YjlGw+yBaPJa0qyavmciNR92lEAJDwLhxPoFKB+NllG3cn iw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ee5pajk28-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Feb 2022 15:08:29 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 88FA110002A;
-        Thu, 24 Feb 2022 15:08:28 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7581122ECDC;
-        Thu, 24 Feb 2022 15:08:28 +0100 (CET)
-Received: from [10.211.2.44] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 24 Feb
- 2022 15:08:27 +0100
-Message-ID: <da6bee63-6a79-2341-e099-d26b53fb557f@foss.st.com>
-Date:   Thu, 24 Feb 2022 15:08:27 +0100
+        Thu, 24 Feb 2022 09:09:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2E2229456D;
+        Thu, 24 Feb 2022 06:08:54 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74410ED1;
+        Thu, 24 Feb 2022 06:08:54 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58CC83F66F;
+        Thu, 24 Feb 2022 06:08:53 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:08:47 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: dwc: Fix integrated MSI Receiver mask reg setting
+ during resume
+Message-ID: <20220224140847.GA4839@lpieralisi>
+References: <20211226074019.2556-1-jszhang@kernel.org>
+ <Ye1D4lYAIpDe7qAN@xhacker>
+ <20220223114622.GA27645@lpieralisi>
+ <YhZbcU3yNuuBDXm/@xhacker>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] remoteproc: support self recovery after rproc crash
-Content-Language: en-US
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Peng Fan <peng.fan@nxp.com>
-References: <20220126085120.3397450-1-peng.fan@oss.nxp.com>
- <67ddf940-6f87-d8cc-8dc6-29a39a022265@foss.st.com>
-In-Reply-To: <67ddf940-6f87-d8cc-8dc6-29a39a022265@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-24_02,2022-02-24_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhZbcU3yNuuBDXm/@xhacker>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On Thu, Feb 24, 2022 at 12:06:09AM +0800, Jisheng Zhang wrote:
+> On Wed, Feb 23, 2022 at 11:46:22AM +0000, Lorenzo Pieralisi wrote:
+> > On Sun, Jan 23, 2022 at 08:02:42PM +0800, Jisheng Zhang wrote:
+> > > On Sun, Dec 26, 2021 at 03:40:19PM +0800, Jisheng Zhang wrote:
+> > > > If the host which makes use of the IP's integrated MSI Receiver losts
+> > > > power during suspend, we call dw_pcie_setup_rc() to reinit the RC. But
+> > > > dw_pcie_setup_rc() always set the pp->irq_mask[ctrl] as ~0, so the mask
+> > > > register is always set as 0xffffffff incorrectly, thus the MSI can't
+> > > > work after resume.
+> > > > 
+> > > > Fix this issue by moving pp->irq_mask[ctrl] initialization to
+> > > > dw_pcie_host_init(), so we can correctly set the mask reg during both
+> > > > boot and resume.
+> > > > 
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > 
+> > > Hi all,
+> > > 
+> > > This patch can still be applied to the latest linus tree. Do you want
+> > > me to rebase and send out a new version?
+> > > 
+> > > Without this patch, dwc host MSI interrupt(if use the IP's integrated
+> > > MSI receiver) can't work after resume. Could it be picked up as a fix
+> > > for v5.17?
+> > 
+> > The tricky bit with this patch is that it is not clear what piece of
+> > logic is lost on power down and what not. IIUC MSI interrupt controller
+> > logic is kept so it does not need to be saved/restored (but in
+> 
+> You may mean the external MSI interrupt controller case, but here the
+> focus is the integrated MSI Receiver in the IP. Normally, after
+> suspending to ram, the dwc IP would lost power, so the integrated MSI
+> Receiver also lost power.
+> 
+> > dw_pcie_setup_rc() we overwrite PCIE_MSI_INTR0_ENABLE even if it
+> > is not needed on resume - actually, it can even be destructive).
+> > 
+> 
+> For the integrated MSI Receiver case, since the entire IP power is lost,
+> so the PCIE_MSI_INTR0_MASK|ENABLE setting is lost, we need to resume the
+> mask to the one before suspending. For PCIE_MSI_INTR0_ENABLE register(s),
+> since it's always 0xffffffff, so current code is fine.
+> 
+> > Maybe we need to write suspend/resume hooks for the dwc core instead
+> > of moving code around to fix these bugs ?
+> > 
+> 
+> Even with suspend/resume hooks, we still need to fix the
+> PCIE_MSI_INTR0_MASK wrong setting with always ~0. After the fix, msi works
+> so we don't need suspend/resume hooks any more.
 
-On 2/14/22 19:41, Arnaud POULIQUEN wrote:
-> Hi Peng,
-> 
-> On 1/26/22 09:51, Peng Fan (OSS) wrote:
->> From: Peng Fan <peng.fan@nxp.com>
->>
->> Current logic only support main processor to stop/start the remote
->> processor after rproc crash. However to SoC, such as i.MX8QM/QXP, the
->> remote processor could do self recovery after crash and trigger watchdog
->> reboot. It does not need main processor to load image, stop/start M4
->> core.
-> 
-> 
-> On stm32mp1 platform the remote processor watchdog generates an early interrupt
-> that could be used to detach and reattach before the reset of the remote processor.
-> I need to test race condition,but I suppose that this should works if the resource
-> table is not reinitialized by the remote processor firmware.
-> 
-> Another option for the stm32mp1 is that remoteproc manages the reset of the 
-> remote processor.
-> For instance this allows to save a core-dump before manually resetting the remote
-> processor.
-> But looks like this use case can be handled later, as mentioned below. 
-> 
->>
->> This patch add a new flag to indicate whether the SoC has self recovery
->> capability. And introduce two functions: rproc_self_recovery,
->> rproc_assisted_recovery for the two cases. Assisted recovery is as
->> before, let main processor to help recovery, while self recovery is
->> recover itself withou help. To self recovery, we only do detach and
->> attach.
-> 
-> 
->>
->> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->> ---
->>
->> V2:
->>  Nothing change in V2.
->>  Only move this patch out from
->>  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=604364
->>
->>  drivers/remoteproc/remoteproc_core.c | 66 ++++++++++++++++++++--------
->>  include/linux/remoteproc.h           |  2 +
->>  2 files changed, 49 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index 69f51acf235e..4bd5544dab8f 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -1887,6 +1887,49 @@ static int __rproc_detach(struct rproc *rproc)
->>  	return 0;
->>  }
->>  
->> +static int rproc_self_recovery(struct rproc *rproc)
->> +{
->> +	int ret;
->> +
->> +	mutex_unlock(&rproc->lock);
->> +	ret = rproc_detach(rproc);
->> +	mutex_lock(&rproc->lock);
->> +	if (ret)
->> +		return ret;
-> 
-> Here we would want to perform a core dump and manually reset the
-> co-processor.
-> I suppose that a new rproc ops could be called here in a next step.
-> 
->> +
->> +	if (atomic_inc_return(&rproc->power) > 1)
->> +		return 0;
-> 
-> Do you identify a use case that needs to test rproc->power to
-> skip the attach?
-> If yes could you add a comment to describe it?
-> 
->> +	return rproc_attach(rproc);
->> +}
->> +
->> +static int rproc_assisted_recovery(struct rproc *rproc)
->> +{
->> +	const struct firmware *firmware_p;
->> +	struct device *dev = &rproc->dev;
->> +	int ret;
->> +
->> +	ret = rproc_stop(rproc, true);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* generate coredump */
->> +	rproc->ops->coredump(rproc);
->> +
->> +	/* load firmware */
->> +	ret = request_firmware(&firmware_p, rproc->firmware, dev);
->> +	if (ret < 0) {
->> +		dev_err(dev, "request_firmware failed: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	/* boot the remote processor up again */
->> +	ret = rproc_start(rproc, firmware_p);
->> +
->> +	release_firmware(firmware_p);
->> +
->> +	return ret;
->> +}
->> +
->>  /**
->>   * rproc_trigger_recovery() - recover a remoteproc
->>   * @rproc: the remote processor
->> @@ -1901,7 +1944,6 @@ static int __rproc_detach(struct rproc *rproc)
->>   */
->>  int rproc_trigger_recovery(struct rproc *rproc)
->>  {
->> -	const struct firmware *firmware_p;
->>  	struct device *dev = &rproc->dev;
->>  	int ret;
->>  
->> @@ -1915,24 +1957,10 @@ int rproc_trigger_recovery(struct rproc *rproc)
->>  
->>  	dev_err(dev, "recovering %s\n", rproc->name);
->>  
->> -	ret = rproc_stop(rproc, true);
->> -	if (ret)
->> -		goto unlock_mutex;
->> -
->> -	/* generate coredump */
->> -	rproc->ops->coredump(rproc);
->> -
->> -	/* load firmware */
->> -	ret = request_firmware(&firmware_p, rproc->firmware, dev);
->> -	if (ret < 0) {
->> -		dev_err(dev, "request_firmware failed: %d\n", ret);
->> -		goto unlock_mutex;
->> -	}
->> -
->> -	/* boot the remote processor up again */
->> -	ret = rproc_start(rproc, firmware_p);
->> -
->> -	release_firmware(firmware_p);
->> +	if (rproc->self_recovery)
->> +		ret = rproc_self_recovery(rproc);
-> 
-> If some platforms have to manually reset the remote processor (without
-> reloading the firmware) the name could not be relevant...
-> 
-> Following comments are only suggestions that needs to be commented by maintainers
-> 
-> What about rproc_attach_recovery ?
-> 
->> +	else
->> +		ret = rproc_assisted_recovery(rproc);
-> 
-> and rproc_firmware_recovery ?
-> 
-> 
->>  
->>  unlock_mutex:
->>  	mutex_unlock(&rproc->lock);
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index e0600e1e5c17..b32ef46f8aa4 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -529,6 +529,7 @@ struct rproc_dump_segment {
->>   * @elf_machine: firmware ELF machine
->>   * @cdev: character device of the rproc
->>   * @cdev_put_on_release: flag to indicate if remoteproc should be shutdown on @char_dev release
->> + * @self_recovery: flag to indicate if remoteproc support self recovery
->>   */
->>  struct rproc {
->>  	struct list_head node;
->> @@ -568,6 +569,7 @@ struct rproc {
->>  	u16 elf_machine;
->>  	struct cdev cdev;
->>  	bool cdev_put_on_release;
->> +	bool self_recovery;
-> 
-> This bool seems needed because we have lost the previous state before crash. 
-> I wonder if a new rproc->state such as RPROC_REBOOT could avoid this boolean.
-> 
-> 
-> I will try to test you patch on stm32mp1 next week
+I don't understand. The fix removes code that is writing into
+PCIE_MSI_INTR0_MASK (in dw_pcie_setup_rc()). Where that register
+content is restored on power up to the correct value then ?
 
-I performed few tests on the stm32mp1 with your patch.
-Thanks to the resetting of the resource tables on detachment, this works quite well.
+I assume those registers when the IP loses power are reset
+to their reset value, so something does not add up.
 
-Regards,
-Arnaud
-
-> 
-> Regards,
-> Arnaud
-> 
->>  };
->>  
->>  /**
+Lorenzo

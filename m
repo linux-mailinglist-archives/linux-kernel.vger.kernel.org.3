@@ -2,172 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4675B4C305A
+	by mail.lfdr.de (Postfix) with ESMTP id 924D04C305B
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236531AbiBXPvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S236549AbiBXPvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbiBXPvA (ORCPT
+        with ESMTP id S233510AbiBXPvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:51:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 665C2D95D0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:50:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645717829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jp/yMSlTvn3D/56VwEvq7WNBshS3m5GAHPXYoUU32sE=;
-        b=AxtH8OI0VUnjjMLyq+aSl+0w2e54t1bm1HScf1B44+Wq84M0d536wOPI3DdtXDD4JSqXXy
-        pY8JtFjYz7u+qo5n3uedjaRUK4UCOzgZmgU8W30uM4EeF3WEeNIq11U6Xzgmc4QdT8EbYr
-        LCP+5vS6KEqGIUtBG5AC1oWuDBWlitM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-392-6d4sK7tmOqqUhq6WKZ0tsA-1; Thu, 24 Feb 2022 10:50:26 -0500
-X-MC-Unique: 6d4sK7tmOqqUhq6WKZ0tsA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B2D5801AB2;
-        Thu, 24 Feb 2022 15:50:24 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CEBD98379C;
-        Thu, 24 Feb 2022 15:50:22 +0000 (UTC)
-Message-ID: <0c006613de3f809049dd021a84f50d76b4c9c73e.camel@redhat.com>
-Subject: Re: [PATCH v2 16/18] KVM: x86: introduce KVM_REQ_MMU_UPDATE_ROOT
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Date:   Thu, 24 Feb 2022 17:50:21 +0200
-In-Reply-To: <7741eeb1-183c-b465-e0f1-852b47a98780@redhat.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
-         <20220217210340.312449-17-pbonzini@redhat.com>
-         <YhATewkkO/l4P9UN@google.com>
-         <7741eeb1-183c-b465-e0f1-852b47a98780@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 10:51:02 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8847D144F7E;
+        Thu, 24 Feb 2022 07:50:31 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i19so103194wmq.5;
+        Thu, 24 Feb 2022 07:50:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VAU+x/FHA6Jlc8xXCTAj1x5xOvKQnNZlbxhMra3k1+0=;
+        b=UgjMfNueviHEAJ5uQi9+BHYmwDK310ew8O/yaCEfOS6cdIaDmnZjRCenXTVSSTTOqs
+         p860KcKtVd2JW6hEHzWGW8oxfEEpYFhZMERoS3au1eUOJYSCHn/+SGD90bsdTeMRJG5q
+         gJpgfUG8KD1maVcSw/LEZg3f8wJ503IrFV6Y9wSvLgKghv+4EcZdb9t5N7wKqtb0JPPt
+         UZ2ZdIug+TvDncdlAMk9qcm9uGUtCjUlBXA0cyTad91yjyG5dKnz63ragS/bG6d/pL8h
+         MMrRSPq5WRSK0X319texLFLz53pNdxl4zKE8ol9r32eQxgYM3hoJUAQKAukHrd6g9I7t
+         lKWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VAU+x/FHA6Jlc8xXCTAj1x5xOvKQnNZlbxhMra3k1+0=;
+        b=tk+gq3SdM+IsPJ/tf5mfJrwMLK0rm9zHvnowOeV94zhBbgfgV0aUVhY0ITbw9HTCPU
+         eOJfnAb/R4uM6z9JPJVHbe6oqxt+YQ0BqxPAXztSo+9KK82jHl0mDDfcwGaiGaKnZgCB
+         YtlGjlKvWZrWSinN7lmdeoh4idANFetm7021PdO+4hRsAERb6tSBvautUsw0Fv3SmSLk
+         e8yOkCN+v3ZMJq2RBH7WDusE771t2mUOW8nJricQgEG1egAvB6OKZHf02BjxxPUnHAQW
+         BIBhTWreJAsjqBd/6G1sHs0JECKeSRqdYMH3UkTBRrdcTBjznaGGqngGgr0yqeh2S+zV
+         Qdjw==
+X-Gm-Message-State: AOAM533plDCHZiZgJg/UvAgwvwkplyNY+jR2KiT7Ed9UMUdgQH9MnqZb
+        w2kTWu8m6YF7QBjljcwrsM0ENPwW4Xk=
+X-Google-Smtp-Source: ABdhPJyubDOmrxGB9Txp+2yBZMCjNf+ech3jj6h/8obNifoEBTzPHkPdViTBhH9Da7LvQQ0wgyjbQg==
+X-Received: by 2002:a05:600c:3046:b0:380:d5d3:930e with SMTP id n6-20020a05600c304600b00380d5d3930emr11229595wmh.12.1645717829865;
+        Thu, 24 Feb 2022 07:50:29 -0800 (PST)
+Received: from Ansuel-xps.localdomain ([5.170.140.187])
+        by smtp.gmail.com with ESMTPSA id e9sm3001686wrx.3.2022.02.24.07.50.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 07:50:29 -0800 (PST)
+Date:   Thu, 24 Feb 2022 16:50:25 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 07/16] clk: qcom: gcc-ipq806x: drop hardcoded pxo and
+ cxo source clk
+Message-ID: <YhepQc3k8l1g5NZ/@Ansuel-xps.localdomain>
+References: <20220217235703.26641-1-ansuelsmth@gmail.com>
+ <20220217235703.26641-8-ansuelsmth@gmail.com>
+ <YhcAdq4ouQenhn2f@builder.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhcAdq4ouQenhn2f@builder.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-02-19 at 08:54 +0100, Paolo Bonzini wrote:
-> On 2/18/22 22:45, Sean Christopherson wrote:
-> > On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> > > Whenever KVM knows the page role flags have changed, it needs to drop
-> > > the current MMU root and possibly load one from the prev_roots cache.
-> > > Currently it is papering over some overly simplistic code by just
-> > > dropping _all_ roots, so that the root will be reloaded by
-> > > kvm_mmu_reload, but this has bad performance for the TDP MMU
-> > > (which drops the whole of the page tables when freeing a root,
-> > > without the performance safety net of a hash table).
-> > > 
-> > > To do this, KVM needs to do a more kvm_mmu_update_root call from
-> > > kvm_mmu_reset_context.  Introduce a new request bit so that the call
-> > > can be delayed until after a possible KVM_REQ_MMU_RELOAD, which would
-> > > kill all hopes of finding a cached PGD.
-> > > 
-> > > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > > ---
+On Wed, Feb 23, 2022 at 09:50:14PM -0600, Bjorn Andersson wrote:
+> On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+> 
+> > We now define these clk in dts. Drop pxo and cxo hardcoded in the gcc
+> > probe function.
 > > 
-> > Please no.
-> > 
-> > I really, really do not want to add yet another deferred-load in the nested
-> > virtualization paths.
 > 
-> This is not a deferred load, is it?  It's only kvm_mmu_new_pgd that is 
-> deferred, but the PDPTR load is not.
+> As noted on the previous patch, this breaks booting with existing dtbs.
+> So I would like to split this with 1-2 releases in between to avoid any
+> problems.
 > 
-> I think I should first merge patches 1-13, then revisit the root_role 
-> series (which only depends on the fast_pgd_switch and caching changes), 
-> and then finally get back to this final part.  The reason is that 
-> root_role is what enables the stale-root check that you wanted; and it's 
-> easier to think about loading the guest PGD post-kvm_init_mmu if I can 
-> show you the direction I'd like to have in general, and not leave things 
-> half-done.
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
-> (Patch 17 is also independent and perhaps fixing a case of premature 
-> optimization, so I'm inclined to merge it as well).
+> on the change though.
 > 
-> > As Jim pointed out[1], KVM_REQ_GET_NESTED_STATE_PAGES should
-> > never have been merged. And on that point, I've no idea how this new request will
-> > interact with KVM_REQ_GET_NESTED_STATE_PAGE.  It may be a complete non-issue, but
-> > I'd honestly rather not have to spend the brain power.
-> 
-> Fair enough on the interaction, but I still think 
-> KVM_REQ_GET_NESTED_STATE_PAGES is a good idea.  I don't think KVM should 
-> access guest memory outside KVM_RUN, though there may be cases (possibly 
-> some PV MSRs, if I had to guess) where it does.
+> Regards,
+> Bjorn
+>
 
-KVM_REQ_GET_NESTED_STATE_PAGES is a real source of bugs, and a burden to maintain,
-I fixed too many bugs in it, and it will only get worse with time, not to mention,
-that without any proper tests, we are bound to access guest memory on
-setting the nested state without anybody noticing.
+Should I change this and register these clks only if they are not present?
 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/clk/qcom/gcc-ipq806x.c | 11 +----------
+> >  1 file changed, 1 insertion(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+> > index f6db7247835e..a4bf78fe8678 100644
+> > --- a/drivers/clk/qcom/gcc-ipq806x.c
+> > +++ b/drivers/clk/qcom/gcc-ipq806x.c
+> > @@ -3119,23 +3119,14 @@ MODULE_DEVICE_TABLE(of, gcc_ipq806x_match_table);
+> >  
+> >  static int gcc_ipq806x_probe(struct platform_device *pdev)
+> >  {
+> > -	struct device *dev = &pdev->dev;
+> >  	struct regmap *regmap;
+> >  	int ret;
+> >  
+> > -	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> >  	ret = qcom_cc_probe(pdev, &gcc_ipq806x_desc);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	regmap = dev_get_regmap(dev, NULL);
+> > +	regmap = dev_get_regmap(&pdev->dev, NULL);
+> >  	if (!regmap)
+> >  		return -ENODEV;
+> >  
+> > -- 
+> > 2.34.1
+> > 
 
-Best regards,
-	Maxim Levitsky
-
-> 
-> > And I still do not like the approach of converting kvm_mmu_reset_context() wholesale
-> > to not doing kvm_mmu_unload().  There are currently eight kvm_mmu_reset_context() calls:
-> > 
-> >    1.   nested_vmx_restore_host_state() - Only for a missed VM-Entry => VM-Fail
-> >         consistency check, not at all a performance concern.
-> > 
-> >    2.   kvm_mmu_after_set_cpuid() - Still needs to unload.  Not a perf concern.
-> > 
-> >    3.   kvm_vcpu_reset() - Relevant only to INIT.  Not a perf concern, but could be
-> >         converted manually to a different path without too much fuss.
-> > 
-> >    4+5. enter_smm() / kvm_smm_changed() - IMO, not a perf concern, but again could
-> >         be converted manually if anyone cares.
-> > 
-> >    6.   set_efer() - Silly corner case that basically requires host userspace abuse
-> >         of KVM APIs.  Not a perf concern.
-> > 
-> >    7+8. kvm_post_set_cr0/4() - These are the ones we really care about, and they
-> >         can be handled quite trivially, and can even share much of the logic with
-> >         kvm_set_cr3().
-> > 
-> > I strongly prefer that we take a more conservative approach and fix 7+8, and then
-> > tackle 1, 3, and 4+5 separately if someone cares enough about those flows to avoid
-> > dropping roots.
-> 
-> The thing is, I want to get rid of kvm_mmu_reset_context() altogether. 
-> I dislike the fact that it kills the roots but still keeps them in the 
-> hash table, thus relying on separate syncing to avoid future bugs.  It's 
-> very unintuitive what is "reset" and what isn't.
-> 
-> > Regarding KVM_REQ_MMU_RELOAD, that mess mostly goes away with my series to replace
-> > that with KVM_REQ_MMU_FREE_OBSOLETE_ROOTS.  Obsolete TDP MMU roots will never get
-> > a cache hit because the obsolete root will have an "invalid" role.  And if we care
-> > about optimizing this with respect to a memslot (highly unlikely), then we could
-> > add an MMU generation check in the cache lookup.  I was planning on posting that
-> > series as soon as this one is queued, but I'm more than happy to speculatively send
-> > a refreshed version that applies on top of this series.
-> 
-> Yes, please send a version on top of patches 1-13.  That can be reviewed 
-> and committed in parallel with the root_role changes.
-> 
-> Paolo
-> 
-> > [1] https://lore.kernel.org/all/CALMp9eT2cP7kdptoP3=acJX+5_Wg6MXNwoDh42pfb21-wdXvJg@mail.gmail.com
-> > [2] https://lore.kernel.org/all/20211209060552.2956723-1-seanjc@google.com
-
-
+-- 
+	Ansuel

@@ -2,96 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208BD4C23E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4791C4C23E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiBXGHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S230513AbiBXGIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiBXGHf (ORCPT
+        with ESMTP id S231145AbiBXGIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:07:35 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412885EBCD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645682826; x=1677218826;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gEhGUaD8oPJf4/lhLNSulzbS/gmsCvN7ZBmdIarR2AM=;
-  b=c63Ysc2RVf61VdfbC/lRButzZ+bxnrE3bEftL11QKcawT+GtWJV05ZbO
-   CibxxIcEGdfcD9mW1Wx/Gses5UC5gPyw/pij5I9R6ChNa7eAeincbr7m4
-   CB8xXokUSzhycRRV9wMa1nPXp8M07vtjnN//fWtU8Mr152fuE08Xeii7d
-   6WsRJCBFEsvw75G705nW5gZO2hC594tnxzHkjyVUSuU9SXXpq8PwE1q3U
-   UoAywQ3YaoNGwoHXG9RdR7/Y/QPEYoNRjUOmq+VoZZML3Fg38fpX7QyA+
-   eRE/sSVh42k/u2dQSylv/gqSo7PqyExjaYy2KhE1cJzP+99w+41kHB7H9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249739934"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="249739934"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="637715291"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 22:07:04 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN7HM-0002Kf-4O; Thu, 24 Feb 2022 06:07:04 +0000
-Date:   Thu, 24 Feb 2022 14:06:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vijayanand Jitta <vjitta@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
- 1049/8858] (.rodata+0x0): multiple definition of `__crc_si_swapinfo';
- arch/s390/appldata/appldata_base.o:(.rodata+0x0): first defined here
-Message-ID: <202202241314.H48PleNt-lkp@intel.com>
+        Thu, 24 Feb 2022 01:08:01 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0022F268357;
+        Wed, 23 Feb 2022 22:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645682851; x=1677218851;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6B/hiTCvtY/m9XPz5dXHxBpisy5Rc09v9jwyRkx6cmw=;
+  b=hm/h+Oy2zDDcsk9weM3/jgEgbVDG/wwMW2Xwc+y3p+OrLz2HsmQPmXPe
+   XuiRI8lbeybm3QQAhY/TBg33hOULDwL+l0fWpl6Y7QdFTyQKWghiVETM/
+   dUzGGg1SJSXOFuN7PdSPvvD3+M+6VUvTO0L/EpvhkHv5/u7id9podp2c+
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 22:07:30 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:29 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:29 -0800
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:25 -0800
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Marc Zyngier" <maz@kernel.org>
+CC:     Trilok Soni <quic_tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
+Subject: [PATCHv10 0/6] lib/rwmmio/arm64: Add support to trace register reads/writes
+Date:   Thu, 24 Feb 2022 11:37:02 +0530
+Message-ID: <cover.1644824638.git.quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijayanand,
+Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+are typically used to read/write from/to memory mapped registers
+and can cause hangs or some undefined behaviour in following cases,
 
-FYI, the error/warning still remains.
+* If the access to the register space is unclocked, for example: if
+  there is an access to multimedia(MM) block registers without MM
+  clocks.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-head:   9771767708df4fcf51cd1642e041c804a86e740c
-commit: 5e07d2eb085f9060663d0f5601dd486bf6fc2010 [1049/8858] ANDROID: mm: Export si_swapinfo
-config: s390-debug_defconfig (https://download.01.org/0day-ci/archive/20220224/202202241314.H48PleNt-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/5e07d2eb085f9060663d0f5601dd486bf6fc2010
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-        git checkout 5e07d2eb085f9060663d0f5601dd486bf6fc2010
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+* If the register space is protected and not set to be accessible from
+  non-secure world, for example: only EL3 (EL: Exception level) access
+  is allowed and any EL2/EL1 access is forbidden.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+* If xPU(memory/register protection units) is controlling access to
+  certain memory/register space for specific clients.
 
-All errors (new ones prefixed by >>):
+and more...
 
-   s390-linux-ld: mm/swapfile.o: in function `__crc_si_swapinfo':
->> (.rodata+0x0): multiple definition of `__crc_si_swapinfo'; arch/s390/appldata/appldata_base.o:(.rodata+0x0): first defined here
+Such cases usually results in instant reboot/SErrors/NOC or interconnect
+hangs and tracing these register accesses can be very helpful to debug
+such issues during initial development stages and also in later stages.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So use ftrace trace events to log such MMIO register accesses which
+provides rich feature set such as early enablement of trace events,
+filtering capability, dumping ftrace logs on console and many more.
+
+Sample output:
+
+rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+
+This series is a follow-up for the series [1] and a recent series [2] making use
+of both.
+
+[1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
+[2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
+
+Note in previous v4 version, Arnd suggested to benchmark and compare size with callback
+based implementation, please see [3] for more details on that with brief comparison below.
+
+
+**Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+   text           data             bss     dec             hex         filename
+ 23884219        14284468         532568 38701255        24e88c7        vmlinux
+
+**Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+    text          data             bss     dec             hex        filename
+ 24108179        14279596         532568 38920343        251e097       vmlinux
+
+$ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
+add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
+Total: Before=25812612, After=26043292, chg +0.89%
+
+[3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
+
+Changes in v10:
+ * Use GENMASK(31, 0) for -Woverflow warning in irqchip tegra driver (Marc).
+ * Convert ETM4x ARM64 driver to use asm-generic IO memory barriers (Catalin).
+ * Collect ack from Catalin for arm64 change.
+
+Changes in v9:
+ * Use TRACE_EVENT_CLASS for rwmmio_write and post_write (Steven Rostedt).
+
+Changes in v8:
+ * Fix build error reported by kernel test robot.
+
+Changes in v7:
+ * Use lib/ instead of kernel/trace/ based on review comment by Steven Rostedt.
+
+Changes in v6:
+ * Implemented suggestions by Arnd Bergmann:
+   - Use arch independent IO barriers in arm64/asm
+   - Add ARCH_HAVE_TRACE_MMIO_ACCESS
+   - Add post read and post write logging support
+   - Remove tracepoint_active check
+ * Fix build error reported by kernel test robot.
+
+Changes in v5:
+ * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
+ * Add inline logging for MMIO relaxed and non-relaxed accessors.
+ * Move nVHE KVM comment to makefile (Marc).
+ * Fix overflow warning due to switch to inline accessors instead of macro.
+ * Modify trace event field to include caller and parent details for more detailed logs.
+
+Changes in v4:
+ * Drop dynamic debug based filter support since that will be developed later with
+   the help from Steven (Ftrace maintainer).
+ * Drop value passed to writel as it is causing hangs when tracing is enabled.
+ * Code cleanup for trace event as suggested by Steven for earlier version.
+ * Fixed some build errors reported by 0-day bot.
+
+Changes in v3:
+ * Create a generic mmio header for instrumented version (Earlier suggested in [1]
+   by Will Deacon and recently [2] by Greg to have a generic version first).
+ * Add dynamic debug support to filter out traces which can be very useful for targeted
+   debugging specific to subsystems or drivers.
+ * Few modifications to the rwmmio trace event fields to include the mmio width and print
+   addresses in hex.
+ * Rewrote commit msg to explain some more about usecases.
+
+Prasad Sodagudi (1):
+  lib: Add register read/write tracing support
+
+Sai Prakash Ranjan (5):
+  arm64: io: Use asm-generic high level MMIO accessors
+  coresight: etm4x: Use asm-generic IO memory barriers
+  irqchip/tegra: Fix overflow implicit truncation warnings
+  drm/meson: Fix overflow implicit truncation warnings
+  asm-generic/io: Add logging support for MMIO accessors
+
+ arch/Kconfig                                  |  3 +
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/io.h                   | 41 ++------
+ arch/arm64/kvm/hyp/nvhe/Makefile              |  7 +-
+ drivers/gpu/drm/meson/meson_viu.c             | 22 ++---
+ .../coresight/coresight-etm4x-core.c          |  8 +-
+ drivers/hwtracing/coresight/coresight-etm4x.h |  8 +-
+ drivers/irqchip/irq-tegra.c                   | 10 +-
+ include/asm-generic/io.h                      | 82 +++++++++++++++-
+ include/trace/events/rwmmio.h                 | 97 +++++++++++++++++++
+ lib/Kconfig                                   |  7 ++
+ lib/Makefile                                  |  2 +
+ lib/trace_readwrite.c                         | 47 +++++++++
+ 13 files changed, 273 insertions(+), 62 deletions(-)
+ create mode 100644 include/trace/events/rwmmio.h
+ create mode 100644 lib/trace_readwrite.c
+
+
+base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
+-- 
+2.33.1
+

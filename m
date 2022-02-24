@@ -2,191 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2274C3365
+	by mail.lfdr.de (Postfix) with ESMTP id D96924C3366
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiBXRTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S229635AbiBXRTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiBXRTC (ORCPT
+        with ESMTP id S230342AbiBXRTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:19:02 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA125B894;
-        Thu, 24 Feb 2022 09:18:32 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id y7so3596669oih.5;
-        Thu, 24 Feb 2022 09:18:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7slgzKqOG5WOC/WsENczH0GLZVRx1odPiIFNJSTj50w=;
-        b=rDa2m5fEWXhmO8g+wDRXQWzeUcq5AL4qkzoJnHKMB82jpYb9VP3P0uU+qBTBlADMc5
-         UwtkxZtwYaaFWTOWz03KgZqjC43doG7cQa84MO4vcRKbjIvC+dc79ArGgsuNZzXDfufC
-         JHlJMLWOmp6IQ61gAKARMfBmdfo251MuKU9IzQW+LBgJgRNnE3tbgAvascO8Wxg5Z6Rj
-         DRJ6NMr3Kb0n8CgebZBAkaNU5I0/DLExm7hESu764MmPbhFZzLAyelp/tsr2SClPbYfp
-         rR1ZLAMWoteEr06QgmpEG1EhjGidK4RILJWDKJmP2dpM4Aa6cs/GkxvvIovVfjd1w9sX
-         lIBw==
-X-Gm-Message-State: AOAM531g5VT3yokV7oALZ5me/uVxbByvzanUfnR2UkxF2pUq96ugQxTb
-        oRhaDAV7KvvWMvUyzqTeug==
-X-Google-Smtp-Source: ABdhPJy7WQuDbUVEbzTIos+FK5YUQdNoBAGXEivNXy6JWYVM6FV6rNsboC4U1JBu0ZFrlMKW5PA40g==
-X-Received: by 2002:a05:6808:202a:b0:2d4:df36:68a4 with SMTP id q42-20020a056808202a00b002d4df3668a4mr7750425oiw.16.1645723111948;
-        Thu, 24 Feb 2022 09:18:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t40-20020a05680815a800b002d48ffad94bsm11498oiw.2.2022.02.24.09.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 09:18:31 -0800 (PST)
-Received: (nullmailer pid 3263579 invoked by uid 1000);
-        Thu, 24 Feb 2022 17:18:30 -0000
-Date:   Thu, 24 Feb 2022 11:18:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 2/9] dt-bindings: net: add schema for Microchip/SMSC
- LAN95xx USB Ethernet controllers
-Message-ID: <Yhe95rXZc7RzgO5o@robh.at.kernel.org>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-3-o.rempel@pengutronix.de>
+        Thu, 24 Feb 2022 12:19:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55F65F1AFD
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645723118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9zS1exBQ8/i7GE0yNuNzJ4368SmU3x1bv1hKHvRyPw8=;
+        b=G5kVW9EhSqAzx3RPivllE5QtIp+U3Vr12ukY096DvzRMtoHOFDpEIhsoNbvJWQZbvv4EeR
+        n8CK3FWTcPtsioKjHU/EUF/j0hFw85F40cYn4AoOipFOe6A80oasdCpd7ojRnkE/D+MqXo
+        UMRY9t2AjpaVM9lrwkpmzDf2fwE8uCc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-HjQKu-n9MBu3I-8CPxWnAQ-1; Thu, 24 Feb 2022 12:18:37 -0500
+X-MC-Unique: HjQKu-n9MBu3I-8CPxWnAQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9E31E1006AA6;
+        Thu, 24 Feb 2022 17:18:35 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2765F841D3;
+        Thu, 24 Feb 2022 17:18:32 +0000 (UTC)
+Message-ID: <9143d9d24d1b169668062a18a5f49bb8cf8e877b.camel@redhat.com>
+Subject: Re: [RFC PATCH 05/13] KVM: SVM: Update max number of vCPUs
+ supported for x2AVIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Feb 2022 19:18:31 +0200
+In-Reply-To: <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+         <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216074927.3619425-3-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 08:49:20AM +0100, Oleksij Rempel wrote:
-> Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-> import some of currently supported USB IDs form drivers/net/usb/smsc95xx.c
+On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+> xAVIC and x2AVIC modes can support diffferent number of vcpus.
+> Update existing logics to support each mode accordingly.
 > 
-> These devices are already used in some of DTs. So, this schema makes it official.
-> NOTE: there was no previously documented txt based DT binding for this
-> controllers.
+> Also, modify the maximum physical APIC ID for AVIC to 255 to reflect
+> the actual value supported by the architecture.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->  .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+>  arch/x86/include/asm/svm.h | 12 +++++++++---
+>  arch/x86/kvm/svm/avic.c    |  8 +++++---
+>  2 files changed, 14 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> new file mode 100644
-> index 000000000000..8521c65366b4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/microchip,lan95xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 7a7a2297165b..681a348a9365 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -250,10 +250,16 @@ enum avic_ipi_failure_cause {
+>  
+>  
+>  /*
+> - * 0xff is broadcast, so the max index allowed for physical APIC ID
+> - * table is 0xfe.  APIC IDs above 0xff are reserved.
+> + * For AVIC, the max index allowed for physical APIC ID
+> + * table is 0xff (255).
+>   */
+> -#define AVIC_MAX_PHYSICAL_ID_COUNT	0xff
+> +#define AVIC_MAX_PHYSICAL_ID		0XFFULL
 > +
-> +title: The device tree bindings for the USB Ethernet controllers
-> +
-> +maintainers:
-> +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> +
-> +description: |
-> +  Device tree properties for hard wired SMSC95xx compatible USB Ethernet
-> +  controller.
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - usb424,9500   # SMSC9500 USB Ethernet Device
-> +          - usb424,9505   # SMSC9505 USB Ethernet Device
-> +          - usb424,9530   # SMSC LAN9530 USB Ethernet Device
-> +          - usb424,9730   # SMSC LAN9730 USB Ethernet Device
-> +          - usb424,9900   # SMSC9500 USB Ethernet Device (SAL10)
-> +          - usb424,9901   # SMSC9505 USB Ethernet Device (SAL10)
-> +          - usb424,9902   # SMSC9500A USB Ethernet Device (SAL10)
-> +          - usb424,9903   # SMSC9505A USB Ethernet Device (SAL10)
-> +          - usb424,9904   # SMSC9512/9514 USB Hub & Ethernet Device (SAL10)
-> +          - usb424,9905   # SMSC9500A USB Ethernet Device (HAL)
-> +          - usb424,9906   # SMSC9505A USB Ethernet Device (HAL)
-> +          - usb424,9907   # SMSC9500 USB Ethernet Device (Alternate ID)
-> +          - usb424,9908   # SMSC9500A USB Ethernet Device (Alternate ID)
-> +          - usb424,9909   # SMSC9512/9514 USB Hub & Ethernet Devic.  ID)
-> +          - usb424,9e00   # SMSC9500A USB Ethernet Device
-> +          - usb424,9e01   # SMSC9505A USB Ethernet Device
-> +          - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
-> +          - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
-> +
-> +  reg: true
-> +  local-mac-address: true
-> +  mac-address: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ethernet@1 {
-> +            compatible = "usb424,ec00";
+> +/*
+> + * For x2AVIC, the max index allowed for physical APIC ID
+> + * table is 0x1ff (511).
+> + */
+> +#define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
 
-If this is a hub/ethernet combo device, how is it valid to be standalone 
-without the hub?
+Yep, physid page can't hold more entries...
 
-> +            reg = <1>;
-> +            local-mac-address = [00 00 00 00 00 00];
-> +        };
-> +    };
-> +  - |
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        usb1@1 {
-> +            compatible = "usb424,9514";
+This brings the inventible question of what to do when a VM has more
+that 512 vCPUs...
 
-Not documented.
+With AVIC, since it is xapic, it would be easy - xapic supports up to
+254 CPUs.
 
-> +            reg = <1>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            ethernet@1 {
-> +               compatible = "usb424,ec00";
-> +               reg = <1>;
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.30.2
-> 
-> 
+But with x2apic, there is no such restriction on max 512 CPUs,
+thus it is legal to create a VM with x2apic and more that 512 CPUs,
+and x2AVIC won't work well in this case.
+
+I guess AVIC_IPI_FAILURE_INVALID_TARGET, has to be extened to support those
+cases, even with loss of performance, or we need to inhibit x2AVIC.
+
+Best regards,
+	Maxim Levitsky
+
+>  
+>  #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
+>  #define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 0040824e4376..1999076966fd 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -195,7 +195,7 @@ void avic_init_vmcb(struct vcpu_svm *svm)
+>  	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
+>  	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
+>  	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
+> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID_COUNT;
+> +	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
+>  	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
+>  
+>  	if (kvm_apicv_activated(svm->vcpu.kvm))
+> @@ -210,7 +210,8 @@ static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
+>  	u64 *avic_physical_id_table;
+>  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
+>  
+> -	if (index >= AVIC_MAX_PHYSICAL_ID_COUNT)
+> +	if ((avic_mode == AVIC_MODE_X1 && index > AVIC_MAX_PHYSICAL_ID) ||
+> +	    (avic_mode == AVIC_MODE_X2 && index > X2AVIC_MAX_PHYSICAL_ID))
+>  		return NULL;
+>  
+>  	avic_physical_id_table = page_address(kvm_svm->avic_physical_id_table_page);
+> @@ -257,7 +258,8 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
+>  	int id = vcpu->vcpu_id;
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> -	if (id >= AVIC_MAX_PHYSICAL_ID_COUNT)
+> +	if ((avic_mode == AVIC_MODE_X1 && id > AVIC_MAX_PHYSICAL_ID) ||
+> +	    (avic_mode == AVIC_MODE_X2 && id > X2AVIC_MAX_PHYSICAL_ID))
+>  		return -EINVAL;
+>  
+>  	if (!vcpu->arch.apic->regs)
+
+

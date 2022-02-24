@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2DA4C2E1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2D74C2E8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbiBXOVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S235575AbiBXOiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiBXOVB (ORCPT
+        with ESMTP id S235570AbiBXOiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:21:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE04294FFF;
-        Thu, 24 Feb 2022 06:20:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 71E791F44C;
-        Thu, 24 Feb 2022 14:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645712430; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JBxbP4mnt4PQT7En4CTQ+ZSao55n9SOd/y/IHHDxShQ=;
-        b=dzKhQAuzzFjSdVY2KXefIhWND0BqHCS5hHFd+QD0vYdJzJi6NEOYbeUqDuEVvC9LXuGeeC
-        lByQkyo+sgIepE5w036yP0cmxejRSKzHwsujs3KyqjASejp/EdKq56Lf6qaHkMslDCSJkC
-        optx+FRHCxeIRTnKxMk0w3TxEogBZpQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645712430;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JBxbP4mnt4PQT7En4CTQ+ZSao55n9SOd/y/IHHDxShQ=;
-        b=w9m02HCZyuzQDwgPJ/k7jUYIkxUch/Z6WSYRQR6jOeOugcQ8MSUc638b3TRF7iWT0ib27X
-        AqQUJPAO2wapNlDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7CE313AE7;
-        Thu, 24 Feb 2022 14:20:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mzqZNi2UF2I6PgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 24 Feb 2022 14:20:29 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     zohar@linux.ibm.com
-Cc:     dvyukov@google.com, ebiggers@kernel.org, jmorris@namei.org,
-        keescook@chromium.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com
-Subject: Re: [PATCH 2/2] integrity: double check iint_cache was initialized
-Date:   Thu, 24 Feb 2022 15:20:25 +0100
-Message-Id: <20220224142025.2587-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20210322154207.6802-2-zohar@linux.ibm.com>
-References: <20210322154207.6802-2-zohar@linux.ibm.com>
+        Thu, 24 Feb 2022 09:38:18 -0500
+X-Greylist: delayed 909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 06:37:44 PST
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137329D0C2;
+        Thu, 24 Feb 2022 06:37:42 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; bh=U1Serj9HWMW/oXYgmC1Rsp6t8gZrl/v31HBeiGDPdW4=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220111215046; t=1645712524; v=1; x=1646144524;
+ b=OYghG0ZP+iuW2kkTQeOuixHFPq878+wQ3HhdKX/+sGY09GTDTQFDIubVowj2KCUAMa6hGg5z
+ emJxwo7k7iwM+JXu+3yE3DQsx9HG4ZBJFjS7BSFq9MSKfoo49MhkWqwuAJEne4d1p2n+MK3w3H8
+ nhuIW5JuvEJLWhiNLUwOESPgCTRpscLtEwNsfWc0aDp2LixMpHlSmIO3VnR7RTqooKC9CJ452ta
+ UM/qxfqM6Nlt5xE5jAS8lL/ueEDBCRO0qXA1nFOqZlgmtbsnnC34+1V9rWsHe+kOSZvMMUBiJFB
+ K4HJAmTDISfkfJWq4HoGTEVo0ctw8pdW/tc5RR+gFhe9y5izzW0GcfFP8gvPREsJRbIYTHEZveH
+ NJIUWtL5448BOMyUyVZJd8eXKj7O6wIfQYM5zT+W6lbbIGrxx6rNVZYEZmPnkite3l2zZVqeykW
+ dCiw9yfIpH+X2yA4GZY9Gcn3xQzZozeYYlW/Q97jERXi6XkljbaZD4a3xtRGCiHv3oNAuM+Dq7w
+ wbitZLVe9+B/0pgWjr3tva2lqhvnaBM4DX13iSpzOlTQPjc59ofE0WA1pB734Psd/WzIez+xhhJ
+ 5uI3scCkVBLSXtxRDzqLthxm5AUzUYmDZ28l+DVLASRcTR9KsEqNWlrE/Qss9Etj2UT9EQdVjTg
+ RrbyoJjcB0U=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id f168343e; Thu, 24 Feb
+ 2022 09:22:04 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Date:   Thu, 24 Feb 2022 09:22:04 -0500
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        matoro_bugzilla_kernel@matoro.tk,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
+In-Reply-To: <7e3a93e7-1300-8460-30fb-789180a745eb@physik.fu-berlin.de>
+References: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
+ <823f70be-7661-0195-7c97-65673dc7c12a@leemhuis.info>
+ <03497313-A472-4152-BD28-41C35E4E824E@chromium.org>
+ <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
+ <9A1F30F8-3DE2-4075-B103-81D891773246@chromium.org>
+ <4e42e754-d87e-5f6b-90db-39b4700ee0f1@physik.fu-berlin.de>
+ <202202232030.B408F0E895@keescook>
+ <7e3a93e7-1300-8460-30fb-789180a745eb@physik.fu-berlin.de>
+Message-ID: <65ed8ab4fad779fadf572fb737dfb789@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,19 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mimi, Tetsuo, Kees, all,
+Hi Kees, I can provide live ssh access to my system exhibiting the 
+issue.  My system is a lot more stable due to using openrc rather than 
+systemd, for me GCC seems to be the only binary affected.  Would that be 
+helpful?
 
-FYI this commit merged as 92063f3ca73a ("integrity: double check iint_cache was initialized")
-is the reason for openSUSE distro installer going back from lsm= to deprecated
-security= when filling default grub parameters because security=apparmor or
-security=selinux does not break boot when used with ima_policy=tcb, unlike
-using lsm.
-
-@Kees, @Mimi sure, people who use ima_policy=tcb will just remove lsm parameter
-or add "integrity" to it but I wonder whether there could be "integrity"
-automatic inclusion when using ima_policy=tcb. Although the point of lsm= (and
-CONFIG_LSM) is to have *ordered* list of enabled LSMs and it wouldn't be clear
-on which place.
-
-Kind regards,
-Petr
+On 2022-02-24 04:33, John Paul Adrian Glaubitz wrote:
+> Hi Kees!
+> 
+> On 2/24/22 06:16, Kees Cook wrote:
+>>> You should be able to extract the binaries from this initrd image and 
+>>> the "mount" command,
+>>> for example, should be one of the affected binaries.
+>> 
+>> In dmesg, do you see any of these reports?
+>> 
+>>                 pr_info("%d (%s): Uhuuh, elf segment at %px requested 
+>> but the memory is mapped already\n",
+>>                         task_pid_nr(current), current->comm, (void 
+>> *)addr);
+> 
+> I'll check that.
+> 
+>> I don't see anything out of order in the "mount" binary from the above
+>> initrd. What does "readelf -lW" show for the GCC you're seeing 
+>> failures
+>> on?
+> 
+> I'm not 100% sure whether it's the mount binary that is affected. What
+> happens is that once init takes over,
+> I'm seeing multiple "Segmentation Fault" message on the console until
+> I'm dropped to the initrd shell.
+> 
+> I can check what dmesg says.
+> 
+> Adrian

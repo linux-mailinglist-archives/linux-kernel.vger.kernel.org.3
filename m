@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5410B4C398D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6675C4C398F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiBXXOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S233235AbiBXXPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiBXXOl (ORCPT
+        with ESMTP id S230077AbiBXXPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:14:41 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C0E1BE131
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:14:10 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id g20so5011703edw.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bmpycma/zjjcJuhF073fXrtLhHn1tlejeVv1t+c4RaE=;
-        b=HfO07fQ+bJuju7vHLFATPl6K3k26YuC+0Tu7B0XRdV6xep1OyjMXgGYKf+JHBBxFST
-         OeF15jfKj2/1C4nWiI8/Nl9PFOoABVIR27eh2E/AhxOqtkmYQLpKEa5hZyT9ZyyXdYks
-         5VY2xg2+I8q+K3uQcxiu0S2sYPRXcoVFjCgP86SmC/0cRQ2bmFtec233MqL+ik+QZlc3
-         zo3BIrGC7dq4IPEsaEMYR3W/Jt8efZSY9kaEMWX0+UPGK9z9YFZKjaMWluHcYEzFSw2m
-         rQbOBvNyraeqsZuPPrVCD/sZWvyHTQ+KTfk5Zbm7FsqlZm6lys2vTThIlZVCBCYx9i6F
-         u1Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bmpycma/zjjcJuhF073fXrtLhHn1tlejeVv1t+c4RaE=;
-        b=LxZHL5xqd/Y7CiUlxsTrF+lf7rz4Obu8K/e/byT6hWqcsp82hballUaPECckjHz0Q/
-         JpZCTsXlE5azrZ/TdB8JhZoyTyFIQrfuTriadclAQfH6o1gsqwEBJk76X0OUyqzUl/ZP
-         AYwf4utJcxs1dXugvwWqnL6nxrcXoDX0xRC0e7WpihWA9OrQJM/eRMJiL/TTE1bGEz7H
-         /0EC4iyp4xcEas9Gy3bnsHHZR2bhh4+fDAjlyPDaVyfV+vv51vRlEbvd7cEuhgPWzi3z
-         dSfB/3m4tFSGzL7kFKGIu4TbJkS1iAQmaUxIsUZiuQCr2J1GFS8jZ2M3XDTH2bOfQGvl
-         UGEA==
-X-Gm-Message-State: AOAM532uVrm7vGoo0JTRRzmgx/InNLLpTQFTpuppuXiaQf3QhG1x480H
-        v2DFdQTsfG6pND4W1u1MRTs=
-X-Google-Smtp-Source: ABdhPJxf7U5RQz0T3IBUoE3o3P7XTXfKa9HRBv1r0ZNxC3UWdQ8Tj6Tcj6jtwJBf8XDeanOBdVBTQg==
-X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr4565808edy.332.1645744448478;
-        Thu, 24 Feb 2022 15:14:08 -0800 (PST)
-Received: from ubuntu2004 ([188.24.153.122])
-        by smtp.gmail.com with ESMTPSA id f3-20020a1709067f8300b006ce051bf215sm263599ejr.192.2022.02.24.15.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 15:14:07 -0800 (PST)
-Date:   Fri, 25 Feb 2022 01:14:03 +0200
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Rolf Eike Beer <eb@emlix.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: atc260x has broken locking
-Message-ID: <20220224231403.GA539966@ubuntu2004>
-References: <16136311.TfV2VxeR0u@mobilepool36.emlix.com>
+        Thu, 24 Feb 2022 18:15:38 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B8CD2757A0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:15:05 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-281-foIGsKlaMWyYIUBl_oNJDQ-1; Thu, 24 Feb 2022 23:15:02 +0000
+X-MC-Unique: foIGsKlaMWyYIUBl_oNJDQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 24 Feb 2022 23:15:01 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 24 Feb 2022 23:15:01 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "open list:VFIO DRIVER" <kvm@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: RE: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
+Thread-Topic: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
+Thread-Index: AQHYKbf4PreGRJIIQ0mXQjRI10uskKyjVBFg
+Date:   Thu, 24 Feb 2022 23:15:01 +0000
+Message-ID: <2a9391a3546d487ca937c4e523690ea9@AcuMS.aculab.com>
+References: <20220223164420.45344-1-andriy.shevchenko@linux.intel.com>
+ <20220224123620.57fd6c8b@p-imbrenda>
+ <CAHp75Vfm-zmzoO0AZTv-3eBjXf0FzHh7tbHRn3DoO7EjukFVig@mail.gmail.com>
+In-Reply-To: <CAHp75Vfm-zmzoO0AZTv-3eBjXf0FzHh7tbHRn3DoO7EjukFVig@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <16136311.TfV2VxeR0u@mobilepool36.emlix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eike,
-
-On Wed, Feb 23, 2022 at 12:07:48PM +0100, Rolf Eike Beer wrote:
-> When looking at this functions I found the locking to be broken for the atomic 
-> case (comments stripped):
-> 
-> static void regmap_lock_mutex(void *__mutex)
-> {
-> 	struct mutex *mutex = __mutex;
-> 
-> 	if (system_state > SYSTEM_RUNNING && irqs_disabled())
-> 		mutex_trylock(mutex);
-> 	else
-> 		mutex_lock(mutex);
-> }
-> 
-> static void regmap_unlock_mutex(void *__mutex)
-> {
-> 	struct mutex *mutex = __mutex;
-> 
-> 	mutex_unlock(mutex);
-> }
-> 
-> When the mutex is already locked and the atomic context is hit then the lock 
-> will not be acquired, this is never noticed, and it afterwards is unlocked 
-> anyway.
-> 
-> The comment says this is inspired from i2c_in_atomic_xfer_mode() to detect the 
-> atomic case, but the important caller __i2c_lock_bus_helper() actually does 
-> check and pass on the return value of mutex_trylock(), which is missing here.
-
-This is indeed a limitation of the current implementation because the
-main goal was to offer initial support for SBC poweroff and reboot
-use cases, which were the only cases where the atomic context kicks in.
-
-Hence it was more important to make sure those operations are triggered
-rather than failing due to an error condition which is hard to be
-handled properly - e.g. getting a behaviour similar with the '-EGAIN'
-scenario in the I2C implementation.
-
-As a matter of fact the tests I made so far using a RoseapplePi board
-didn't reveal any problems, but I will try to do some more extensive
-testing and see if the issue becomes visible eventually. Then it would
-be easier to try some possible solutions/workarounds.
-
-Out of pure curiosity, on which hardware do you plan to use this, if you
-haven't already?
-
-Thanks,
-Cristian
-
-> Greetings,
-> 
-> Eike
-> -- 
-> Rolf Eike Beer, emlix GmbH, https://www.emlix.com
-> Fon +49 551 30664-0, Fax +49 551 30664-11
-> Gothaer Platz 3, 37083 Göttingen, Germany
-> Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
-> Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
-> 
-> emlix - smart embedded open source
-
+RnJvbTogQW5keSBTaGV2Y2hlbmtvDQo+IFNlbnQ6IDI0IEZlYnJ1YXJ5IDIwMjIgMTk6NTENCj4g
+DQo+IE9uIFRodSwgRmViIDI0LCAyMDIyIGF0IDI6NTEgUE0gQ2xhdWRpbyBJbWJyZW5kYSA8aW1i
+cmVuZGFAbGludXguaWJtLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBXZWQsIDIzIEZlYiAyMDIy
+IDE4OjQ0OjIwICswMjAwDQo+ID4gQW5keSBTaGV2Y2hlbmtvIDxhbmRyaXkuc2hldmNoZW5rb0Bs
+aW51eC5pbnRlbC5jb20+IHdyb3RlOg0KPiA+DQo+ID4gPiBXaGlsZSBpbiB0aGlzIHBhcnRpY3Vs
+YXIgY2FzZSBpdCB3b3VsZCBub3QgYmUgYSAoY3JpdGljYWwpIGlzc3VlLA0KPiA+ID4gdGhlIHBh
+dHRlcm4gaXRzZWxmIGlzIGJhZCBhbmQgZXJyb3IgcHJvbmUgaW4gY2FzZSBzb21lYm9keSBibGlu
+ZGx5DQo+ID4gPiBjb3BpZXMgdG8gdGhlaXIgY29kZS4NCj4gPiA+DQo+ID4gPiBEb24ndCBjYXN0
+IHBhcmFtZXRlciB0byB1bnNpZ25lZCBsb25nIHBvaW50ZXIgaW4gdGhlIGJpdCBvcGVyYXRpb25z
+Lg0KPiA+ID4gSW5zdGVhZCBjb3B5IHRvIGEgbG9jYWwgdmFyaWFibGUgb24gc3RhY2sgb2YgYSBw
+cm9wZXIgdHlwZSBhbmQgdXNlLg0KPiANCj4gLi4uDQo+IA0KPiA+ID4gKyAgICAgICAgICAgICBz
+dHJ1Y3QgeyAvKiBhcyBhIDI1Ni1iaXQgYml0bWFwICovDQo+ID4gPiArICAgICAgICAgICAgICAg
+ICAgICAgREVDTEFSRV9CSVRNQVAoYiwgMjU2KTsNCj4gPiA+ICsgICAgICAgICAgICAgfSBiaXRt
+YXA7DQo+ID4gPiArICAgICAgICAgICAgIHN0cnVjdCB7IC8qIGFzIGEgc2V0IG9mIDY0LWJpdCB3
+b3JkcyAqLw0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgIHU2NCB3b3JkWzRdOw0KPiA+ID4g
+ICAgICAgICAgICAgICB9IHU2NDsNCj4gDQo+ID4gPiAtICAgICBzZXRfYml0X2ludihJUE1fQklU
+X09GRlNFVCArIGdpc2MsICh1bnNpZ25lZCBsb25nICopIGdpc2EpOw0KPiA+ID4gKyAgICAgc2V0
+X2JpdF9pbnYoSVBNX0JJVF9PRkZTRVQgKyBnaXNjLCBnaXNhLT5iaXRtYXAuYik7DQo+ID4NCj4g
+PiB3b3VsZG4ndCBpdCBiZSBlbm91Z2ggdG8gcGFzcyBnaXNhLT51NjQud29yZCBoZXJlPw0KPiA+
+IHRoZW4gbm8gY2FzdCB3b3VsZCBiZSBuZWNlc3NhcnkNCj4gDQo+IE5vLCBpdCB3aWxsIGhhdmUg
+dGhlIHNhbWUgaGlkZGVuIGJ1Z3MuIEFzIEkgc3RhdGVkIGluIHRoZSBjb21taXQNCj4gbWVzc2Fn
+ZSwgdGhlIHBhdHRlcm4gaXMgcXVpdGUgYmFkIGV2ZW4gaWYgaW4gcGFydGljdWxhciBjb2RlIGl0
+IHdvdWxkDQo+IHdvcmsuDQo+IA0KPiBUaGFua3MsIE1pY2hhZWwsIGZvciBwb2ludGluZyBvdXQg
+b3RoZXIgcGxhY2VzLiBUaGV5IGFsbCBuZWVkIHRvIGJlIGZpeGVkLg0KDQpJdCBtYXkgZXZlbiBi
+ZSB3b3J0aCB3cml0aW5nIHNvbWUgYWx0ZXJuYXRlIGJpdG1hcCBmdW5jdGlvbnMNCnRoYXQgdXNl
+IHU2NFtdIGFuZCB1bmxvY2tlZCBvcGVyYXRpb25zPw0KDQpBbHRob3VnaCBJIHRoaW5rIEknZCBz
+dGlsbCB3YW50IHRvIGVuY2Fwc3VsYXRlIHRoZSBhY3R1YWwgYXJyYXkNCihzb21laG93KSBzbyB0
+aGF0IHdoYXQgaXMgZGVmaW5lZCBoYXMgdG8gYmUgdGhlIGJpdG1hcCB0eXBlLg0KDQoJRGF2aWQN
+Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
+cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
+KFdhbGVzKQ0K
 

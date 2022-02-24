@@ -2,206 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0843F4C23A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECFB4C23A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiBXFgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S230304AbiBXFhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiBXFgO (ORCPT
+        with ESMTP id S229903AbiBXFhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:36:14 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162F25291A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:35:45 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id i27so992983vsr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7WWHAhC2u3Yrav5+xOTI+5uI30EbKHXrJLx3B/cdCfE=;
-        b=Zxw1fP3eRF14/jcI7VdenJgTzhXoypJ0ib3zhRFpIbjr+wVwCNg00v65TATB+HmKJE
-         rP9UfsVJh8JfLsEVwK4A9eJWX0+CBWbIzGbgfnidODFWuQaMxX8+rpw36HVTrxbu27Ya
-         zbiuaqp2AkVJNKnUoeKihalnYmkzKCCEccK8PWmEk22e/TfJRCRepHNWgG+tsPunMO+5
-         DVOs99aUGm2CmZiTWtAx181idOX7NmLagvg69pR2ltDgKcTLxB1lUNNBIKipRviWXene
-         yaRA6r3iGGGbwHFKSSPbpkCp+7V9T2tjotbYrVNcWxfzHyeIAWZVoRB7Sq3jCml7lAIk
-         xZPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7WWHAhC2u3Yrav5+xOTI+5uI30EbKHXrJLx3B/cdCfE=;
-        b=bQSYn36Eu887BrZcPgZm2U9ncHVrKSQ/G0mIxTX2oeXnUYIoDkX8Ihy7GQkPvyDD59
-         +t9Ya8zsyMCnlW1wWXQMQwIjmJmjvWh0xW7Nbkv8O4bIrQQRApQmdohDKRgy6UPMxIlG
-         8ae7gBk1/Vohsm9WatAUua7hLGKo8vPvcOdDW7g17gsc0vdPuFOGacF8zou1Wjc241yD
-         lsc0SSNtwTVK4JZuvhInCMSDQWIbq6v20OOgpkEJDnqBujgpLLlZd26ysZo93fUJW8W8
-         rX/cA452o+sYcMN3gpg6dLBnF4SP/Jq6v+8EFr45o7X/bkjLopA8jX8i8jy0at303gvH
-         /PgQ==
-X-Gm-Message-State: AOAM532+/jJpVnTHtHOVDWoZk1tYg2MYhQhdoHccoWd3lSCOjbjHV8ME
-        DESQvz3Y11WR3w2I+4SjtXIwH/PCdVhBacBTCeyVbw==
-X-Google-Smtp-Source: ABdhPJzIv19ZFkAGm9a7wUFfoCm24bkgs4miWsRzSszOLijZZHRHI4Zo6Ve/+i4RNDZIH9qICVbvebwjNoUYss5qmcg=
-X-Received: by 2002:a05:6102:2914:b0:31b:b756:7950 with SMTP id
- cz20-20020a056102291400b0031bb7567950mr396078vsb.41.1645680944016; Wed, 23
- Feb 2022 21:35:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20220208081902.3550911-1-yuzhao@google.com> <20220208081902.3550911-6-yuzhao@google.com>
- <87bkyy56nv.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAOUHufbekcu09DyEZAkJNRq_1qKaf_xibXQNeAVK=rsGBn9Z4Q@mail.gmail.com>
- <87y2213wrl.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAOUHufY8dRimricP=pvvgg8mEagb369nE8MVe6tnnLXQuKyAEA@mail.gmail.com>
- <87h78p3pp2.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAOUHufYgNr-82AsfGFu6DVOsVUdmVsOo2Jav3nHDXiuu6iDC9A@mail.gmail.com>
- <87a6eg4ywq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87a6eg4ywq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 23 Feb 2022 22:35:32 -0700
-Message-ID: <CAOUHufY9h2K4dPnufW-uD-EEuvROf6y7cF-w1gJ2VAFaSEDD7Q@mail.gmail.com>
-Subject: Re: [PATCH v7 05/12] mm: multigenerational LRU: minimal implementation
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        Thu, 24 Feb 2022 00:37:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 970B570F4E;
+        Wed, 23 Feb 2022 21:37:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28E7F106F;
+        Wed, 23 Feb 2022 21:37:03 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.48.178])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C497E3F66F;
+        Wed, 23 Feb 2022 21:36:58 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH] perf: Add irq and exception return branch types
+Date:   Thu, 24 Feb 2022 11:06:54 +0530
+Message-Id: <1645681014-3346-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:27 PM Huang, Ying <ying.huang@intel.com> wrote:
->
-> Yu Zhao <yuzhao@google.com> writes:
->
-> > On Wed, Feb 23, 2022 at 8:32 PM Huang, Ying <ying.huang@intel.com> wrote:
-> >>
-> >> Yu Zhao <yuzhao@google.com> writes:
-> >>
-> >> > On Wed, Feb 23, 2022 at 5:59 PM Huang, Ying <ying.huang@intel.com> wrote:
-> >> >>
-> >> >> Yu Zhao <yuzhao@google.com> writes:
-> >> >>
-> >> >> > On Wed, Feb 23, 2022 at 1:28 AM Huang, Ying <ying.huang@intel.com> wrote:
-> >> >> >>
-> >> >> >> Hi, Yu,
-> >> >> >>
-> >> >> >> Yu Zhao <yuzhao@google.com> writes:
-> >> >> >>
-> >> >> >> > To avoid confusions, the terms "promotion" and "demotion" will be
-> >> >> >> > applied to the multigenerational LRU, as a new convention; the terms
-> >> >> >> > "activation" and "deactivation" will be applied to the active/inactive
-> >> >> >> > LRU, as usual.
-> >> >> >>
-> >> >> >> In the memory tiering related commits and patchset, for example as follows,
-> >> >> >>
-> >> >> >> commit 668e4147d8850df32ca41e28f52c146025ca45c6
-> >> >> >> Author: Yang Shi <yang.shi@linux.alibaba.com>
-> >> >> >> Date:   Thu Sep 2 14:59:19 2021 -0700
-> >> >> >>
-> >> >> >>     mm/vmscan: add page demotion counter
-> >> >> >>
-> >> >> >> https://lore.kernel.org/linux-mm/20220221084529.1052339-1-ying.huang@intel.com/
-> >> >> >>
-> >> >> >> "demote" and "promote" is used for migrating pages between different
-> >> >> >> types of memory.  Is it better for us to avoid overloading these words
-> >> >> >> too much to avoid the possible confusion?
-> >> >> >
-> >> >> > Given that LRU and migration are usually different contexts, I think
-> >> >> > we'd be fine, unless we want a third pair of terms.
-> >> >>
-> >> >> This is true before memory tiering is introduced.  In systems with
-> >> >> multiple types memory (called memory tiering), LRU is used to identify
-> >> >> pages to be migrated to the slow memory node.  Please take a look at
-> >> >> can_demote(), which is called in shrink_page_list().
-> >> >
-> >> > This sounds clearly two contexts to me. Promotion/demotion (move
-> >> > between generations) while pages are on LRU; or promotion/demotion
-> >> > (migration between nodes) after pages are taken off LRU.
-> >> >
-> >> > Note that promotion/demotion are not used in function names. They are
-> >> > used to describe how MGLRU works, in comparison with the
-> >> > active/inactive LRU. Memory tiering is not within this context.
-> >>
-> >> Because we have used pgdemote_* in /proc/vmstat, "demotion_enabled" in
-> >> /sys/kernel/mm/numa, and will use pgpromote_* in /proc/vmstat.  It seems
-> >> better to avoid to use promote/demote directly for MGLRU in ABI.  A
-> >> possible solution is to use "mglru" and "promote/demote" together (such
-> >> as "mglru_promote_*" when it is needed?
-> >
-> > *If* it is needed. Currently there are no such plans.
->
-> OK.
->
-> >> >> >> > +static int get_swappiness(struct mem_cgroup *memcg)
-> >> >> >> > +{
-> >> >> >> > +     return mem_cgroup_get_nr_swap_pages(memcg) >= MIN_LRU_BATCH ?
-> >> >> >> > +            mem_cgroup_swappiness(memcg) : 0;
-> >> >> >> > +}
-> >> >> >>
-> >> >> >> After we introduced demotion support in Linux kernel.  The anonymous
-> >> >> >> pages in the fast memory node could be demoted to the slow memory node
-> >> >> >> via the page reclaiming mechanism as in the following commit.  Can you
-> >> >> >> consider that too?
-> >> >> >
-> >> >> > Sure. How do I check whether there is still space on the slow node?
-> >> >>
-> >> >> You can always check the watermark of the slow node.  But now, we
-> >> >> actually don't check that (as in demote_page_list()), instead we will
-> >> >> wake up kswapd of the slow node.  The intended behavior is something
-> >> >> like,
-> >> >>
-> >> >>   DRAM -> PMEM -> disk
-> >> >
-> >> > I'll look into this later -- for now, it's a low priority because
-> >> > there isn't much demand. I'll bump it up if anybody is interested in
-> >> > giving it a try. Meanwhile, please feel free to cook up something if
-> >> > you are interested.
-> >>
-> >> When we introduce a new feature, we shouldn't break an existing one.
-> >> That is, not introducing regression.  I think that it is a rule?
-> >>
-> >> If my understanding were correct, MGLRU will ignore to scan anonymous
-> >> page list even if there's demotion target for the node.  This breaks the
-> >> demotion feature in the upstream kernel.  Right?
-> >
-> > I'm not saying this shouldn't be fixed. I'm saying it's a low priority
-> > until somebody is interested in using/testing it (or making it work).
->
-> We are interested in this feature and can help to test it.
+This expands generic branch type classification by adding two more entries
+there in i.e irq and exception return. Also updates the x86 implementation
+to process X86_BR_IRET and X86_BR_IRQ records as appropriate. This changes
+branch types reported to user space on x86 platform but it should not be a
+problem. The possible scenarios and impacts are enumerated here.
 
-That's great. I'll make sure it works in the next version.
+--------------------------------------------------------------------------
+| kernel | perf tool |                     Impact                        |
+--------------------------------------------------------------------------
+|   old  |    old    |  Works as before                                  |
+--------------------------------------------------------------------------
+|   old  |    new    |  PERF_BR_UNKNOWN is processed                     |
+--------------------------------------------------------------------------
+|   new  |    old    |  PERF_BR_ERET/IRQ are blocked via old PERF_BR_MAX |
+--------------------------------------------------------------------------
+|   new  |    new    |  PERF_BR_ERET/IRQ are recognized                  |
+--------------------------------------------------------------------------
+
+When PERF_BR_ERET/IRQ are blocked via old PERF_BR_MAX (new kernel with old
+perf tool) the user space might throw up an warning complaining about some
+unrecognized branch types being reported, but it is expected. PERF_BR_ERET
+and PERF_BR_IRQ branch types will be used for BRBE implementation on arm64
+platform.
+
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v5.17-rc5
+
+These two new branch types expands generic branch type classification but
+still leaves another three entries in 'type' field for later. Please refer
+a previous discussion [1] for some further context.
+
+[1] https://lore.kernel.org/all/1643348653-24367-1-git-send-email-anshuman.khandual@arm.com/
+
+ arch/x86/events/intel/lbr.c           | 4 ++--
+ include/uapi/linux/perf_event.h       | 2 ++
+ tools/include/uapi/linux/perf_event.h | 2 ++
+ tools/perf/util/branch.c              | 4 +++-
+ 4 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 669c2be14784..fe1742c4ca49 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1329,10 +1329,10 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
+ 	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
+ 	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_INT */
+-	PERF_BR_UNKNOWN,	/* X86_BR_IRET */
++	PERF_BR_ERET,		/* X86_BR_IRET */
+ 	PERF_BR_COND,		/* X86_BR_JCC */
+ 	PERF_BR_UNCOND,		/* X86_BR_JMP */
+-	PERF_BR_UNKNOWN,	/* X86_BR_IRQ */
++	PERF_BR_IRQ,		/* X86_BR_IRQ */
+ 	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 82858b697c05..d37629dbad72 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -251,6 +251,8 @@ enum {
+ 	PERF_BR_SYSRET		= 8,	/* syscall return */
+ 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
+ 	PERF_BR_COND_RET	= 10,	/* conditional function return */
++	PERF_BR_ERET		= 11,	/* exception return */
++	PERF_BR_IRQ		= 12,	/* irq */
+ 	PERF_BR_MAX,
+ };
+ 
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index 82858b697c05..d37629dbad72 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -251,6 +251,8 @@ enum {
+ 	PERF_BR_SYSRET		= 8,	/* syscall return */
+ 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
+ 	PERF_BR_COND_RET	= 10,	/* conditional function return */
++	PERF_BR_ERET		= 11,	/* exception return */
++	PERF_BR_IRQ		= 12,	/* irq */
+ 	PERF_BR_MAX,
+ };
+ 
+diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+index 2285b1eb3128..a9a909db8cc7 100644
+--- a/tools/perf/util/branch.c
++++ b/tools/perf/util/branch.c
+@@ -49,7 +49,9 @@ const char *branch_type_name(int type)
+ 		"SYSCALL",
+ 		"SYSRET",
+ 		"COND_CALL",
+-		"COND_RET"
++		"COND_RET",
++		"ERET",
++		"IRQ"
+ 	};
+ 
+ 	if (type >= 0 && type < PERF_BR_MAX)
+-- 
+2.25.1
+

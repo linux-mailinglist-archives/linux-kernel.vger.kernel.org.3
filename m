@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49004C39F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B8C4C39FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbiBXXz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S235967AbiBXX5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiBXXzy (ORCPT
+        with ESMTP id S235591AbiBXX5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:55:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5D8F29A560
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645746922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9E09i9rW+J6vekvARH8o2H2vbvxRXniUVAYHryF0eTs=;
-        b=CqIDkKfruJOTODui8H/3ap9nDOI1RFWBH3xdZveh3H2XboSKzxm5jMm7ScugLF80Bx30uL
-        TJh2gY6j7gpYMvh+3INpUb9ma9fmYf23YNcLRf3GW4fWb2DGP/saYkk66x5jG16i3HoWca
-        q9SUmxB6zPaSa+e/R45Zt3apRh7J3w8=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-534--h95dIrbPQmesoYHqu14SA-1; Thu, 24 Feb 2022 18:55:21 -0500
-X-MC-Unique: -h95dIrbPQmesoYHqu14SA-1
-Received: by mail-qk1-f200.google.com with SMTP id i10-20020a05620a144a00b00648d4fa059dso4256876qkl.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:55:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9E09i9rW+J6vekvARH8o2H2vbvxRXniUVAYHryF0eTs=;
-        b=LDfRCr/R7VTafGeIvdNbPPyZMSGBf5vDycoO6j+4xrXKMNCKeQuTfzNvOrdppLahW4
-         toZ+158NMztOxxLS3y7Ov1+W3vGASbszp8370WnHAI/MxJM6JFlZjm1vUWRbQpFFyYV3
-         HS2YqGMx33o0MJE8dEZEu67+prDOmjUQx9ndMNUtFhRw8MEgg2EUfM+qcv45QMgGni7z
-         FKIO3JehwRXJPLPF5xuBhHX9KrpM903Upf04LOJZcVmB8U1+hRDOBaycABv1NGbHv68z
-         EWnMeQrmr3F5r+5p1ICA5lO8HNP8YHMMVh6V/g6TTnMasIZZJYsuATINNWaKTm2Qarl2
-         beoQ==
-X-Gm-Message-State: AOAM532QlZ1ONxkxQ+B0M8aFS7vJrAq47HQoORRPDLnEVA4wJjlFNGkR
-        Sk0gv4MPilsSHUwksDK9TcA2gwICgEq7k+G4Z5viCGCJMwYQm+DoKrpDSGGit1e1w+sYhMfjAGr
-        X2q9yZ3Rbfed08fWhyUe6u3LG
-X-Received: by 2002:ac8:7f01:0:b0:2dd:bab8:6885 with SMTP id f1-20020ac87f01000000b002ddbab86885mr4816494qtk.130.1645746920637;
-        Thu, 24 Feb 2022 15:55:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy/VsATmojth2uqM5nUm6t1vpGEWqqogoXeU81tqIBlCIjhSne2BXUb+VcNp3pgGNjqCsI86Q==
-X-Received: by 2002:ac8:7f01:0:b0:2dd:bab8:6885 with SMTP id f1-20020ac87f01000000b002ddbab86885mr4816481qtk.130.1645746920419;
-        Thu, 24 Feb 2022 15:55:20 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id d4-20020a05620a136400b0060dda40b3ecsm509760qkl.30.2022.02.24.15.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 15:55:19 -0800 (PST)
-Date:   Thu, 24 Feb 2022 15:55:16 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 18/39] x86/ibt: Add IBT feature, MSR and #CP handling
-Message-ID: <20220224235516.qdikcfdl7jo35iu6@treble>
-References: <20220224145138.952963315@infradead.org>
- <20220224151323.069205370@infradead.org>
+        Thu, 24 Feb 2022 18:57:14 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CE25F4E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645747001; x=1677283001;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zN8gIqP7DXdhVvzNWMECCUTyj4Z3gZZ0ZKc7mIvoOcg=;
+  b=ZsgiKGKKNxmWok7aMDemHpUIicfZqfBuLko6PBmxE8gy4t4CsKpUSt3y
+   2XsBJBhbkP1GV8TmAZ1Y5nkaCASlULGDJDCikANgN0eiTOChTMO9dOy39
+   I0kyBOYw3NgmpLr+q0nAEvx+Qd97KxW8pJKhV6BYkmqObRSw4mRoNdPGo
+   3W/9gJgMvxmdwDnu4yRYrqF4rC1UlAH+Dxwt0dIgxyH1E2NPPAFpN3OOb
+   Z9Y/1Wwk+k0+Ra2twgVM96WAqVx70BemPKtmEWuMKiQ8YuZduzQIQSaSp
+   0MZf4fL19W0vsSb66G35PmMdJNVVpBtecRepo3MJLgkJb+UTQ53W3SwN6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338814910"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="338814910"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 15:56:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="707663616"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2022 15:56:37 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNNyO-0003aQ-IQ; Thu, 24 Feb 2022 23:56:36 +0000
+Date:   Fri, 25 Feb 2022 07:55:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [trondmy-nfs-2.6:testing 43/47] xxhash_generic.c:undefined reference
+ to `xxh64'
+Message-ID: <202202250739.uOaDW2T2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224151323.069205370@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:56PM +0100, Peter Zijlstra wrote:
-> +static __always_inline void setup_cet(struct cpuinfo_x86 *c)
-> +{
-> +	u64 msr = CET_ENDBR_EN;
-> +
-> +	if (!HAS_KERNEL_IBT ||
-> +	    !cpu_feature_enabled(X86_FEATURE_IBT))
-> +		return;
+tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
+head:   18819db1468b966c49a5b95dade10d5e25216b83
+commit: aa6b34ca6840595e2d817de4c75534966cb49ba3 [43/47] NFS: Convert readdir page cache to use a cookie based index
+config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220225/202202250739.uOaDW2T2-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
+        git fetch --no-tags trondmy-nfs-2.6 testing
+        git checkout aa6b34ca6840595e2d817de4c75534966cb49ba3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-If you add X86_FEATURE_BIT to arch/x86/include/asm/disabled-features.h,
-the HAS_KERNEL_IBT check becomes redundant.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +bool ibt_selftest(void)
-> +{
-> +	unsigned long ret;
-> +
-> +	asm ("1: lea 2f(%%rip), %%rax\n\t"
-> +	     ANNOTATE_RETPOLINE_SAFE
-> +	     "   jmp *%%rax\n\t"
-> +	     ASM_REACHABLE
-> +	     ANNOTATE_NOENDBR
-> +	     "2: nop\n\t"
-> +
-> +	     /* unsigned ibt_selftest_ip = 2b */
-> +	     ".pushsection .rodata,\"a\"\n\t"
-> +	     ".align 8\n\t"
-> +	     ".type ibt_selftest_ip, @object\n\t"
-> +	     ".size ibt_selftest_ip, 8\n\t"
-> +	     "ibt_selftest_ip:\n\t"
-> +	     ".quad 2b\n\t"
-> +	     ".popsection\n\t"
+All errors (new ones prefixed by >>):
 
-It's still seems silly to make this variable in asm.
+   nios2-linux-ld: fs/nfs/dir.o: in function `nfs_readdir_page_get_locked':
+   dir.c:(.text+0x2998): undefined reference to `xxh32'
+   dir.c:(.text+0x2998): relocation truncated to fit: R_NIOS2_CALL26 against `xxh32'
+   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_digest':
+>> xxhash_generic.c:(.text+0x98): undefined reference to `xxh64'
+   xxhash_generic.c:(.text+0x98): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64'
+   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_final':
+>> xxhash_generic.c:(.text+0xfc): undefined reference to `xxh64_digest'
+   xxhash_generic.c:(.text+0xfc): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_digest'
+   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_update':
+>> xxhash_generic.c:(.text+0x158): undefined reference to `xxh64_update'
+   xxhash_generic.c:(.text+0x158): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_update'
+   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_init':
+>> xxhash_generic.c:(.text+0x184): undefined reference to `xxh64_reset'
+   xxhash_generic.c:(.text+0x184): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_reset'
+   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash_mod_init':
+>> xxhash_generic.c:(.init.text+0x10): undefined reference to `crypto_register_shash'
+   xxhash_generic.c:(.init.text+0x10): relocation truncated to fit: R_NIOS2_CALL26 against `crypto_register_shash'
 
-Also .rodata isn't going to work for CPU hotplug.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CRYPTO_XXHASH
+   Depends on CRYPTO
+   Selected by
+   - NFS_FS && NETWORK_FILESYSTEMS && INET && FILE_LOCKING && MULTIUSER
 
--- 
-Josh
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

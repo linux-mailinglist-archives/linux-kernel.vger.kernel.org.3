@@ -2,117 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541E24C3516
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195C64C3538
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiBXSzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S233127AbiBXS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiBXSzZ (ORCPT
+        with ESMTP id S232292AbiBXS7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:55:25 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1790924FB98;
-        Thu, 24 Feb 2022 10:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645728895; x=1677264895;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yz3VSeeqS/d8vtsV1wM/LL37fEG9kXMUFrMpOBnMrT0=;
-  b=Wr8dVCEqZiVfStV94KZJME9KB8cd8DcXJqqz8xINpM+HUqxYYmhasQ2F
-   /tC/QnPEnavn20jC26Bij2geh9JcZPfAFBD9FAD5OIYYa6ceF0fOTeg7R
-   DyRmkycdpxKByFGe3a1vftUhF/R3CnOCDaCqnHUrZ390fUXd2Sy1VSY5B
-   C6x6f8cpTSgi40qEsJCXzQ1HUSc4dnNn/MunkOoLCP8V38fdMuk6bSnd8
-   dTlbC07hSGNxxYvJ5Zf2uCqSFwxEWZ9hZkW8a+/ltK1FkwXaVvfZiKjbf
-   1J00DgVihPs+3LxItK3U/QIEUHENyiZVuT/8fGkISo/dm4zlILVI5zSeU
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,134,1643698800"; 
-   d="scan'208";a="154308419"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2022 11:54:55 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 24 Feb 2022 11:54:54 -0700
-Received: from [10.12.73.51] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 24 Feb 2022 11:54:52 -0700
-Message-ID: <c8eafea6-f530-1e17-7557-d4fa4224ee2a@microchip.com>
-Date:   Thu, 24 Feb 2022 19:54:52 +0100
+        Thu, 24 Feb 2022 13:59:31 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495818E42D;
+        Thu, 24 Feb 2022 10:59:00 -0800 (PST)
+Received: from integral2.. (unknown [36.78.50.60])
+        by gnuweeb.org (Postfix) with ESMTPSA id 81CFB7E2A3;
+        Thu, 24 Feb 2022 18:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1645729140;
+        bh=FCgV7HQ6Sz7X4EcW0AHGQFLFZjP2p7gApc5nIKixJdk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ll07GBV4MJ5dFyQU6rmVP1mJAwWEhaWkrlN618dRWC4jaGKEnpf1i9SlQIDNK1r6q
+         2i2Aap4XKfirQn+9MbzRuYSNvBoAKAzAhif1KYa0J/YVm/c7PcANr2NSnVcqi9Cu+r
+         0DScWrfxF0rDJtS8CzB5oaGYzcgXvswWfyfu8GFnG5pjQpGYcryc1SlB5V+E+uGZLg
+         EeiPBek0alz7Vfkc2KUKxQxMjwraQ0IE1tDI7gFrlmxlRS7bNAlfK50qVmEaYWJ5C/
+         zEAdkGKX9GzYMJCKzBX06u12/ynxwbSP09K0IgWUOZttB/fXK2h9ZCYmZS5ipZ4mXE
+         CfPdfKeyP8h+g==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Keyon Jie <yang.jie@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: [PATCH v4] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
+Date:   Fri, 25 Feb 2022 01:58:36 +0700
+Message-Id: <20220224185836.44907-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220224182818.40301-1-ammarfaizi2@gnuweeb.org>
+References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org> <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com> <Yhe/3rELNfFOdU4L@sirena.org.uk> <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com> <20220224180850.34592-1-ammarfaizi2@gnuweeb.org> <YhfLCWm0Ms3E+j4z@sirena.org.uk> <20220224182818.40301-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: configs: at91: sama7: Enable crypto IPs and software
- algs
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <claudiu.beznea@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>
-References: <20220204135905.512013-1-tudor.ambarus@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220204135905.512013-1-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/02/2022 at 14:59, Tudor Ambarus wrote:
-> Similar to sama5_defconfig, enable hardware acceleration for the
-> sama7 crypto IPs, enable crypto software implementations in case
-> the crypto IPs need a fallback to them, and enable the hash and
-> skcipher user interfaces in case one wants to offload the crypto
-> algs to the sama7 crypto IPs.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
+-ENOMEM because it leads to a NULL pointer dereference bug.
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Queued for 5.18 in at91-defconfig
+The dmesg says:
 
-Regards,
-   Nicolas
+  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
+  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
+  [ T1387] #PF: supervisor read access in kernel mode
+  [ T1387] #PF: error_code(0x0000) - not-present page
+  [ T1387] PGD 0 P4D 0
+  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
+  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3
+  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
+  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
+  [ T1387] Code: [... snip ...]
+  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
+  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
+  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
+  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
+  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
+  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
+  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
+  [ T1387] PKRU: 55555554
+  [ T1387] Call Trace:
+  [ T1387]  <TASK>
+  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
+  [... snip ...]
+  [ T1387]  </TASK>
 
-> ---
->   arch/arm/configs/sama7_defconfig | 14 +++++++++++++-
->   1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-> index c12278174579..d6e27b837f88 100644
-> --- a/arch/arm/configs/sama7_defconfig
-> +++ b/arch/arm/configs/sama7_defconfig
-> @@ -196,7 +196,19 @@ CONFIG_NLS_CODEPAGE_850=y
->   CONFIG_NLS_ISO8859_1=y
->   CONFIG_NLS_UTF8=y
->   CONFIG_LSM="N"
-> -# CONFIG_CRYPTO_HW is not set
-> +CONFIG_CRYPTO_AUTHENC=y
-> +CONFIG_CRYPTO_GCM=y
-> +CONFIG_CRYPTO_CBC=y
-> +CONFIG_CRYPTO_CFB=y
-> +CONFIG_CRYPTO_OFB=y
-> +CONFIG_CRYPTO_XTS=y
-> +CONFIG_CRYPTO_SHA1=y
-> +CONFIG_CRYPTO_DES=y
-> +CONFIG_CRYPTO_USER_API_HASH=m
-> +CONFIG_CRYPTO_USER_API_SKCIPHER=m
-> +CONFIG_CRYPTO_DEV_ATMEL_AES=y
-> +CONFIG_CRYPTO_DEV_ATMEL_TDES=y
-> +CONFIG_CRYPTO_DEV_ATMEL_SHA=y
->   CONFIG_CRC_CCITT=y
->   CONFIG_CRC_ITU_T=y
->   CONFIG_DMA_CMA=y
+Cc: Daniel Baluta <daniel.baluta@nxp.com>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: Keyon Jie <yang.jie@linux.intel.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Rander Wang <rander.wang@intel.com>
+Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: sound-open-firmware@alsa-project.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.2+
+Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
+Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
+Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
+Link: https://lore.kernel.org/lkml/20220224182818.40301-1-ammarfaizi2@gnuweeb.org/ # v3
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
 
+ v4:
+   - Remove 2 `Cc` tags after got the Reviewed-by tag from the CC'ed people
+     as they will be CC'ed anyway.
+   - Extra commit message cleanup.
 
+ v3:
+   - Address comment from Mark Brown (strip not useful kernel log
+     from the commit message, again).
+
+ v2:
+   - Append Reviewed-by tag from Peter Ujfalusi.
+   - Append Reviewed-by tag from Pierre-Louis Bossart.
+   - Address comment from Mark Brown (strip irrelevant kernel log
+     from the commit message).
+
+ sound/soc/sof/intel/hda-loader.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
+index 33306d2023a7..9bbfdab8009d 100644
+--- a/sound/soc/sof/intel/hda-loader.c
++++ b/sound/soc/sof/intel/hda-loader.c
+@@ -47,7 +47,7 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
+ 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
+ 	if (ret < 0) {
+ 		dev_err(sdev->dev, "error: memory alloc failed: %d\n", ret);
+-		goto error;
++		goto out_put;
+ 	}
+ 
+ 	hstream->period_bytes = 0;/* initialize period_bytes */
+@@ -58,22 +58,23 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
+ 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
+ 		if (ret < 0) {
+ 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %d\n", ret);
+-			goto error;
++			goto out_free;
+ 		}
+ 	} else {
+ 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
+ 		if (ret < 0) {
+ 			dev_err(sdev->dev, "error: hdac prepare failed: %d\n", ret);
+-			goto error;
++			goto out_free;
+ 		}
+ 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
+ 	}
+ 
+ 	return dsp_stream;
+ 
+-error:
+-	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
++out_free:
+ 	snd_dma_free_pages(dmab);
++out_put:
++	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
+ 	return ERR_PTR(ret);
+ }
+ 
+
+base-commit: 23d04328444a8fa0ca060c5e532220dac8e8bc26
 -- 
-Nicolas Ferre
+2.32.0
+

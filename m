@@ -2,336 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C594C24BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645C44C248C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiBXHv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 02:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S229870AbiBXHr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 02:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiBXHvV (ORCPT
+        with ESMTP id S229798AbiBXHrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 02:51:21 -0500
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 253C217E36D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:50:41 -0800 (PST)
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26020:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Thu, 24 Feb 2022 15:42:25 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v6 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Date:   Thu, 24 Feb 2022 15:42:42 +0800
-Message-Id: <20220224074242.6944-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220224074242.6944-1-xt.hu@cqplus1.com>
-References: <20220224074242.6944-1-xt.hu@cqplus1.com>
+        Thu, 24 Feb 2022 02:47:24 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358BC403F8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:46:54 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DCD9D3FCA4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:46:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645688812;
+        bh=FxOVZjnNiVO0i9jH0i6UiovfwrDBwVKl5GL2sYOaVX4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=kYfQ7AdKpVuWQ47pE+InvtpSOH38WYo2gVGkTi6Sp8RcteBq2x3kUPXSTxtT79Il3
+         o2cBPIR4+6OcMtVo3rJiS7N6pxzqZoGylPeNKUmpYqqKUCCuZ/jQoBGJskkE7hESMV
+         I66PoAmaHRp2qZGjAQcESmSCH4JiFzr9QJxdY1tBzPzuzlSAqPewtk8kuSI5i4pvwN
+         v/uyvW6So2vDEfQ50jl+Yq4qqTDGxBarodYEpLFS3cX5/Qj5Tbo3gS8IMV/H3ghIwl
+         Qp8v3qHrKD96HoXiNxr55OcRd7Mc8LrnUcU7T7BKiil14JX01M1yA7uf4qXOksWaaJ
+         dupFyWsl8NRAQ==
+Received: by mail-ej1-f70.google.com with SMTP id sa7-20020a170906eda700b006d1b130d65bso802102ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:46:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FxOVZjnNiVO0i9jH0i6UiovfwrDBwVKl5GL2sYOaVX4=;
+        b=Guj0Sxfc4Nzr8bXUWZlhJ+nyjjqStOVh9ZU0s66y56mtvYWc6oko4Y+DfdrsQeYNeB
+         FZLzAihVqaze47riZiRQCkR6uVd28EmSjNUwXaRjdRyF/TvD3cTh1q3y1RWLAQ8NegMy
+         NjKKkuv6kB01y7RTsHoItAuoaWjBTLuExc8rVb973ZZ+IznRrVUmd1/e63qu7p87yaqJ
+         WlRJD5BEBqfjb1ZtE5+fUNrFjeSeAldOwdW8Vrpv1uqMu5LCOTB5NaCHTIR27dqwIRO5
+         RFF8oDlDHYO5+lC/+Ny4fbudJ7LYBVgOzXHRuBjKSGxMEcZJvflYA5cq/e54im/hLklu
+         oKVg==
+X-Gm-Message-State: AOAM532pSyPqL9CMGOVaJWoGV5EGmYlD0DB7YP0IzqLi9hvjDXznLpL4
+        nn9BW1BO5YT0e6Su9RCu5jo2ovSQPKvE6frERjbKWv3yOwVtkDkGoPCkn0mKwFWu69wjYrLjYLL
+        NvxUI1jBdN9gjEk8HOEbnoiG3azuNewlkx2A2TQTbKg==
+X-Received: by 2002:a17:907:365:b0:6d1:bf9:9164 with SMTP id rs5-20020a170907036500b006d10bf99164mr1290181ejb.598.1645688811408;
+        Wed, 23 Feb 2022 23:46:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyF2QxOV5sZ3l9SN1ANQlm/aYyNKUMNdm1sWIKjHtTsjqFzwsoCzjjUbc5J7jIvGVZuZRXOYQ==
+X-Received: by 2002:a17:907:365:b0:6d1:bf9:9164 with SMTP id rs5-20020a170907036500b006d10bf99164mr1290164ejb.598.1645688811188;
+        Wed, 23 Feb 2022 23:46:51 -0800 (PST)
+Received: from [192.168.0.127] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id t24sm914666ejx.187.2022.02.23.23.46.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 23:46:50 -0800 (PST)
+Message-ID: <3e4f387b-53fb-b031-223c-88adac7d4dae@canonical.com>
+Date:   Thu, 24 Feb 2022 08:46:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 01/11] driver: platform: add and use helper for safer
+ setting of driver_override
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
+ <20220223191310.347669-2-krzysztof.kozlowski@canonical.com>
+ <20220223162538-mutt-send-email-mst@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220223162538-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sunplus SP7021 requires watchdog timer support.
-Add watchdog driver to enable this.
+On 23/02/2022 22:33, Michael S. Tsirkin wrote:
+> On Wed, Feb 23, 2022 at 08:13:00PM +0100, Krzysztof Kozlowski wrote:
+>> Several core drivers and buses expect that driver_override is a
+>> dynamically allocated memory thus later they can kfree() it.
+>>
+>> However such assumption is not documented, there were in the past and
+>> there are already users setting it to a string literal. This leads to
+>> kfree() of static memory during device release (e.g. in error paths or
+>> during unbind):
+>>
+>>     kernel BUG at ../mm/slub.c:3960!
+>>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>>     ...
+>>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
+>>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
+>>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
+>>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
+>>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
+>>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
+>>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
+>>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
+>>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
+>>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
+>>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
+>>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
+>>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
+>>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
+>>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
+>>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
+>>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
+>>     (do_one_initcall) from [<c0f012c0>] (kernel_init_freeable+0x3d0/0x4d8)
+>>     (kernel_init_freeable) from [<c0a7def0>] (kernel_init+0x8/0x114)
+>>     (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+>>
+>> Provide a helper which clearly documents the usage of driver_override.
+>> This will allow later to reuse the helper and reduce amount of
+>> duplicated code.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  drivers/base/driver.c           | 44 +++++++++++++++++++++++++++++++++
+>>  drivers/base/platform.c         | 24 +++---------------
+>>  include/linux/device/driver.h   |  1 +
+>>  include/linux/platform_device.h |  6 ++++-
+>>  4 files changed, 54 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/base/driver.c b/drivers/base/driver.c
+>> index 8c0d33e182fd..79efe51bb4c0 100644
+>> --- a/drivers/base/driver.c
+>> +++ b/drivers/base/driver.c
+>> @@ -30,6 +30,50 @@ static struct device *next_device(struct klist_iter *i)
+>>  	return dev;
+>>  }
+>>  
+>> +/*
+>> + * set_driver_override() - Helper to set or clear driver override.
+>> + * @dev: Device to change
+>> + * @override: Address of string to change (e.g. &device->driver_override);
+>> + *            The contents will be freed and hold newly allocated override.
+>> + * @s: NULL terminated string, new driver name to force a match, pass empty
+> 
+> Don't you mean NUL terminated?
 
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
-Changes in v6:
- - Addressed all comments from Mr. Guenter Roeck.
-   Drop the sp_wdt_set_timeout().
-   Fix devm_add_action_or_reset() called.
- - Remove the SIMPLE_DEV_PM_OPS.
- - Simplify code.
- - Change GPL version.
+Yeah, NUL.
 
- MAINTAINERS                    |   1 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/sunplus_wdt.c | 218 +++++++++++++++++++++++++++++++++
- 4 files changed, 231 insertions(+)
- create mode 100644 drivers/watchdog/sunplus_wdt.c
+> Do all callers really validate that it's NUL terminated?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe6cc971c..a1b3d76e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-+F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 9d222ba17..d3dbe8695 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called msc313e_wdt.
- 
-+config SUNPLUS_WATCHDOG
-+	tristate "Sunplus watchdog support"
-+	depends on ARCH_SUNPLUS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  Say Y here to include support for the watchdog timer
-+	  in Sunplus SoCs.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sunplus_wdt.
-+
- # X86 (i386 + ia64 + x86_64) Architecture
- 
- config ACQUIRE_WDT
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 2ee970641..0fa548ee6 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
- obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
- obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
-+obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-new file mode 100644
-index 000000000..19604b4fc
---- /dev/null
-+++ b/drivers/watchdog/sunplus_wdt.c
-@@ -0,0 +1,218 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * sunplus Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDT_CTRL		0x00
-+#define WDT_CNT			0x04
-+
-+#define WDT_STOP		0x3877
-+#define WDT_RESUME		0x4A4B
-+#define WDT_CLRIRQ		0x7482
-+#define WDT_UNLOCK		0xAB00
-+#define WDT_LOCK		0xAB01
-+#define WDT_CONMAX		0xDEAF
-+
-+#define SP_WDT_MAX_TIMEOUT	11U
-+#define SP_WDT_DEFAULT_TIMEOUT	10
-+
-+#define STC_CLK			90000
-+
-+#define DEVICE_NAME		"sunplus-wdt"
-+
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct sp_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static int sp_wdt_restart(struct watchdog_device *wdev,
-+			  unsigned long action, void *data)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+	writel(WDT_UNLOCK, base + WDT_CTRL);
-+	writel(0x0001, base + WDT_CNT);
-+	writel(WDT_LOCK, base + WDT_CTRL);
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
-+static int sp_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 count;
-+	u32 actual;
-+
-+	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
-+
-+	if (actual > SP_WDT_MAX_TIMEOUT) {
-+		writel(WDT_CONMAX, base + WDT_CTRL);
-+	} else {
-+		writel(WDT_UNLOCK, base + WDT_CTRL);
-+		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
-+		count = (actual * STC_CLK) >> 4;
-+		writel(count, base + WDT_CNT);
-+		writel(WDT_LOCK, base + WDT_CTRL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 val;
-+
-+	val = readl(base + WDT_CNT);
-+	val &= 0xffff;
-+	val = val << 4;
-+
-+	return val;
-+}
-+
-+static const struct watchdog_info sp_wdt_info = {
-+	.identity	= DEVICE_NAME,
-+	.options	= WDIOF_SETTIMEOUT |
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops sp_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= sp_wdt_start,
-+	.stop		= sp_wdt_stop,
-+	.ping		= sp_wdt_ping,
-+	.get_timeleft	= sp_wdt_get_timeleft,
-+	.restart	= sp_wdt_restart,
-+};
-+
-+static void sp_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void sp_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int sp_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_wdt_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get clock\n");
-+
-+	ret = clk_prepare_enable(priv->clk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable clock\n");
-+
-+	ret = devm_add_action_or_reset(dev, sp_clk_disable_unprepare, priv->clk);
-+	if (ret)
-+		return ret;
-+
-+	/* The timer and watchdog shared the STC reset */
-+	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(dev, PTR_ERR(priv->rstc), "Failed to get reset\n");
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	ret = devm_add_action_or_reset(dev, sp_reset_control_assert, priv->rstc);
-+	if (ret)
-+		return ret;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->wdev.info = &sp_wdt_info;
-+	priv->wdev.ops = &sp_wdt_ops;
-+	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.parent = dev;
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+	watchdog_init_timeout(&priv->wdev, timeout, dev);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_stop_on_reboot(&priv->wdev);
-+	watchdog_set_restart_priority(&priv->wdev, 128);
-+
-+	return devm_watchdog_register_device(dev, &priv->wdev);
-+}
-+
-+static const struct of_device_id sp_wdt_of_match[] = {
-+	{.compatible = "sunplus,sp7021-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-+
-+static struct platform_driver sp_wdt_driver = {
-+	.probe = sp_wdt_probe,
-+	.driver = {
-+		   .name = DEVICE_NAME,
-+		   .of_match_table = sp_wdt_of_match,
-+	},
-+};
-+
-+module_platform_driver(sp_wdt_driver);
-+
-+MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-+MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.1
+Good point, the callers use it in device attributes (sysfs) only, so it
+might come non-NUL. Previously this was solved by kstrndup() which is
+always terminating the string.
 
+
+> 
+>> + *     string to clear it
+>> + *
+>> + * Helper to setr or clear driver override in a device, intended for the cases
+> 
+> set?
+D'oh!
+
+> 
+>> + * when the driver_override field is allocated by driver/bus code.
+>> + *
+>> + * Returns: 0 on success or a negative error code on failure.
+>> + */
+>> +int driver_set_override(struct device *dev, char **override, const char *s)
+>> +{
+>> +	char *new, *old, *cp;
+>> +
+>> +	if (!dev || !override || !s)
+>> +		return -EINVAL;
+>> +
+>> +	new = kstrndup(s, strlen(s), GFP_KERNEL);
+> 
+> 
+> what's the point of this kstrndup then? why not just kstrdup?
+
+Thanks, it's a copy-paste. Useless now, but I'll pass the count directly
+from the callers and then this will be NULL-terminating it.
+
+> 
+>> +	if (!new)
+>> +		return -ENOMEM;
+>> +
+>> +	cp = strchr(new, '\n');
+>> +	if (cp)
+>> +		*cp = '\0';
+>> +
+>> +	device_lock(dev);
+>> +	old = *override;
+>> +	if (strlen(new)) {
+> 
+> We are re-reading the string like 3 times here.
+
+Yep, the same in old code. I guess we could compare just pointers -
+whether 'cp' is not NULL and different than 's'.
+
+> 
+>> +		*override = new;
+>> +	} else {
+>> +		kfree(new);
+>> +		*override = NULL;
+>> +	}
+>> +	device_unlock(dev);
+>> +
+>> +	kfree(old);
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(driver_set_override);
+>> +
+>>  /**
+>>   * driver_for_each_device - Iterator for devices bound to a driver.
+>>   * @drv: Driver we're iterating.
+>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+>> index 6cb04ac48bf0..d8853b32ea10 100644
+>> --- a/drivers/base/platform.c
+>> +++ b/drivers/base/platform.c
+>> @@ -1275,31 +1275,15 @@ static ssize_t driver_override_store(struct device *dev,
+>>  				     const char *buf, size_t count)
+>>  {
+>>  	struct platform_device *pdev = to_platform_device(dev);
+>> -	char *driver_override, *old, *cp;
+>> +	int ret;
+>>  
+>>  	/* We need to keep extra room for a newline */
+>>  	if (count >= (PAGE_SIZE - 1))
+>>  		return -EINVAL;
+> 
+> Given everyone seems to repeat this check, how about passing
+> in count and doing the validation in the helper?
+
+Good idea.
+
+> We will then also avoid the need to do strlen and strchr.
+
+The strlen() could be removed, but the strchr() should stay. What
+solution do you have in mind to remove strchr()?
+
+Thanks for review.
+
+
+Best regards,
+Krzysztof

@@ -2,102 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDD54C2F2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB194C2F2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbiBXPOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S235866AbiBXPO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235875AbiBXPOh (ORCPT
+        with ESMTP id S234658AbiBXPO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:14:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5243E20A950;
-        Thu, 24 Feb 2022 07:14:07 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D63B71EC0528;
-        Thu, 24 Feb 2022 16:14:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645715642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nSq5oYXo1UEvyHJYxYxFKGBXBtBsPoV2+wY1jf02ac4=;
-        b=h/WDBZg1kLW1wZiyrreLLv3am4Xhxws3c3qT9/EYQmDXy5LN0d09fkrZKnTJ3rl/KzXr1Z
-        9YkaCUAgmGjFiEY6Bs5yDLCoz5N0/JK33pvK9ZtbAYKtq/ntgVJ83Aoi6k9idFe/hZ6BnT
-        DSn6dEBIPL95eNvLo3Y588IpplhemCk=
-Date:   Thu, 24 Feb 2022 16:14:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH 1/2] x86/mce: Remove old CMCI storm mitigation code
-Message-ID: <YhegvWKq913TEd0M@zn.tnic>
-References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
- <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
- <Yg6HeKIn0FCRDk22@agluck-desk3.sc.intel.com>
+        Thu, 24 Feb 2022 10:14:57 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB29E20C1AD;
+        Thu, 24 Feb 2022 07:14:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645715666; x=1677251666;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M9jUeqkAyXzUagmCp47/FBC2qMpfYy6GI2kmKFu82Vs=;
+  b=c1Z96K5ysj31cGdt8WJXOzdHu7NsQakTHhMDrsI9R5GqJnSnLW2bc5pB
+   7Rnc+ibb1V16l79QTmssQAEuPMfyEscZLEilLJ7EOvWBjz7vjXhtHrEWz
+   05aHxmdzSw7aVXBUZm67ajBRq0B29ybXq+NilmCszSRVL59jl2XA9WXIp
+   JrsjiOXvn9uBAaOU+ZE3fOB+JWgc5ZPi85tpQXTECMS2De0wLyjssncLu
+   jQmhAOF+airFJspmgyc9/IOv7YpITpPxqqZp5VzlWZeNkxp4Gb/8ibfFd
+   ZmBCrWPPeWDsO2tZG5XxjW5pXAc3K8qPpVHAOZ7A5ix7ER6zUl+tC6uxZ
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,134,1643698800"; 
+   d="scan'208";a="154768329"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2022 08:14:24 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 24 Feb 2022 08:14:24 -0700
+Received: from [10.12.73.51] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 24 Feb 2022 08:14:22 -0700
+Message-ID: <0c9cd109-6e8e-9e26-a9d7-fae8b79bc6e3@microchip.com>
+Date:   Thu, 24 Feb 2022 16:14:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yg6HeKIn0FCRDk22@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] ARM: dts: at91: sama7g5: Add crypto nodes
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <claudiu.beznea@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kavyasree.kotagiri@microchip.com>
+References: <20220208105646.226623-1-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220208105646.226623-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 09:35:52AM -0800, Luck, Tony wrote:
-> When a "storm" of CMCI is detected this code mitigates by
-> disabling CMCI interrupt signalling from all of the banks
-> owned by the CPU that saw the storm.
+On 08/02/2022 at 11:56, Tudor Ambarus wrote:
+> Describe and enable the AES, SHA and TDES crypto IPs. Tested with the
+> extra run-time self tests of the registered crypto algorithms.
 > 
-> There are problems with this approach:
-> 
-> 1) It is very coarse grained. In all liklihood only one of the
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Unknown word [liklihood] in commit message.
-Suggestions: ['likelihood', 'livelihood']
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Queued for 5.18.
+Best regards,
+   Nicolas
 
-> banks was geenrating the interrupts, but CMCI is disabled for all.
-
-Unknown word [geenrating] in commit message.
-Suggestions: ['generating', 'penetrating', 'germinating', 'entreating', 'ingratiating']
-
-Do I need to give you the whole spiel about using a spellchecker?
-
-:)
-
-> This means Linux may delay seeing and processing errors logged
-> from other banks.
-> 
-> 2) Although CMCI stands for Corrected Machine Check Interrupt, it
-> is also used to signal when an uncorrected error is logged. This
-> is a problem because these errors should be handled in a timely
-> manner.
-> 
-> Delete all this code in preparation for a finer grained solution.
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  arch/x86/kernel/cpu/mce/core.c     |  20 +---
->  arch/x86/kernel/cpu/mce/intel.c    | 145 -----------------------------
->  arch/x86/kernel/cpu/mce/internal.h |   6 --
->  3 files changed, 1 insertion(+), 170 deletions(-)
+> v4: use the generic "crypto" node name for all the crypto nodes,
+> as recommended by the DT specification. Add Claudiu's R-b tag.
+> 
+> v3: remove explicit status = "okay", as it's already the default case
+> when not specified at all.
+> 
+> v2:
+> - add label to the tdes node
+> - update commit description and specify testing method
+> - put clocks and clock-names properties before dmas and dma-names
+>    because the clocks are mandatory, while DMA is optional for TDES and SHA
+> 
+>   arch/arm/boot/dts/sama7g5.dtsi | 32 ++++++++++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+> index 7972cb8c2562..2453a6901313 100644
+> --- a/arch/arm/boot/dts/sama7g5.dtsi
+> +++ b/arch/arm/boot/dts/sama7g5.dtsi
+> @@ -393,6 +393,27 @@ pit64b1: timer@e1804000 {
+>   			clock-names = "pclk", "gclk";
+>   		};
+>   
+> +		aes: crypto@e1810000 {
+> +			compatible = "atmel,at91sam9g46-aes";
+> +			reg = <0xe1810000 0x100>;
+> +			interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&pmc PMC_TYPE_PERIPHERAL 27>;
+> +			clock-names = "aes_clk";
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(1)>,
+> +			       <&dma0 AT91_XDMAC_DT_PERID(2)>;
+> +			dma-names = "tx", "rx";
+> +		};
+> +
+> +		sha: crypto@e1814000 {
+> +			compatible = "atmel,at91sam9g46-sha";
+> +			reg = <0xe1814000 0x100>;
+> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&pmc PMC_TYPE_PERIPHERAL 83>;
+> +			clock-names = "sha_clk";
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(48)>;
+> +			dma-names = "tx";
+> +		};
+> +
+>   		flx0: flexcom@e1818000 {
+>   			compatible = "atmel,sama5d2-flexcom";
+>   			reg = <0xe1818000 0x200>;
+> @@ -475,6 +496,17 @@ trng: rng@e2010000 {
+>   			status = "disabled";
+>   		};
+>   
+> +		tdes: crypto@e2014000 {
+> +			compatible = "atmel,at91sam9g46-tdes";
+> +			reg = <0xe2014000 0x100>;
+> +			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&pmc PMC_TYPE_PERIPHERAL 96>;
+> +			clock-names = "tdes_clk";
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(54)>,
+> +			       <&dma0 AT91_XDMAC_DT_PERID(53)>;
+> +			dma-names = "tx", "rx";
+> +		};
+> +
+>   		flx4: flexcom@e2018000 {
+>   			compatible = "atmel,sama5d2-flexcom";
+>   			reg = <0xe2018000 0x200>;
 
-Yah, can't complain about diffstats like that.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Nicolas Ferre

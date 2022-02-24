@@ -2,145 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1ED4C35F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21094C35FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233956AbiBXTh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S233972AbiBXTjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiBXTh0 (ORCPT
+        with ESMTP id S232408AbiBXTjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:37:26 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E613D107A95
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:36:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645731414; x=1677267414;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=zXoTW/dJmE8wojx7Hr/0TpruOTakiX6eGzL2WENLgKE=;
-  b=IdSBefoimv5u02vE8zibqZMzSc3rwcYttCts2X1p1bYlo+tJiwGNil9V
-   RgdQe22jJ5xL8rmF5BL/UMfYv8RqXp8DpbR1xVSouqiSQqg/4Wd/LSZSH
-   gG8VTCfGIbI9ArnOy1DhsPRdR6hGema1tNlLyMl2Mfb8qbpUkhdYDY+n6
-   5psSarGI53u/bL+lfx71RbaO8gkTEWLcn7Ah+mFPE/cJubopl5wS7yub3
-   ZM13lO0fcvm9azmltPzWAc1PAWGkFmOFAAqhy7JyeFo3MjPML7TH9XnD6
-   3ztgTDyMvynqUC186cxuHdnTmmA4587ysAbfSAcme8yUiJ2L03MImVswM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="249914136"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="249914136"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 11:36:54 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="548908550"
-Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 11:36:52 -0800
-Message-ID: <30b7f884-11a3-5d2e-d883-17e2d5af7c74@intel.com>
-Date:   Thu, 24 Feb 2022 11:36:47 -0800
+        Thu, 24 Feb 2022 14:39:10 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2065.outbound.protection.outlook.com [40.107.96.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A8B1D6839;
+        Thu, 24 Feb 2022 11:38:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TPkfA/pH6/3BlXc0qiPle44eYjpEXOzi3g7xcVbzZkyRV+69Z/q6VHjxOxtH3GNV9mNru3kOXSZiNuHGKonC4UNIFHi3Pk2zAjD7JHT89z3XSGR0kyNr1sH4HX5HeZH2TWmB1bBwd+g99RJMjmUZFFvd11Wr7eAgfbF7smhGPVo0Q6KlFyL+knMMA5j+ckJD9uSDjMNl3ijESXAJYM7cBLOGxXqqppwHE/LZ4BXzqz4OkceFGQ509ZnjCt3ChZZf0FFKykL9RDcSnkwVwBgeCdyRw5WWUul/G0WCKsZHRFGBDH//2nxiWuaP49/ih8U/O000/8lCh4IANYWwxTuIXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rRdrowPuPlJM8WroD+RtmGgyU/lVCHztNflgZuhsH1o=;
+ b=Q5EaljyAnHLyvS5gudqWokJW8yJkEqzw+uv/Y64T61MBEvm9Nai3RxbESksaeGWm6SIe/k7Izc6pWdAnR/OCkd3hzA5HJPQXaMwe+WqT1k6ib8WWg3u3AYc43chVxw3TYiq9surksanohye4DndeJ+DIXAZ7Wr0Or8EX741ETmatkMGHM/4VBdACJ4ZYF5qN9pczUYGTr8jCqQcMXipIPnaOboNqW51OJhgExDaWh84SuyAlp+lLo32d6wT45xkyatqAJ6jR71U/Z3a2nHdOKuv7gKbBawB2Fu+kbgKSkgHympmmKp3xHRDQD0kB7t0O1D8FGVgVIn0dNTiAlNV48g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rRdrowPuPlJM8WroD+RtmGgyU/lVCHztNflgZuhsH1o=;
+ b=NqCRyCIo9h84jsw+HW0qBx1qwzAVDE2JAOevCFk2VliM50g+viZWb1pP4uNK61VnvXqlPo7X0wYSo/1aTiwUV9qiF/mj7Yq/4CDSwVIWbIzeVuRV8QVkKbcGWm9xyMLniySa9Wp2h46735HAXEMKsUp/DnNiY4B56r5yMieQzrE=
+Received: from BN6PR16CA0047.namprd16.prod.outlook.com (2603:10b6:405:14::33)
+ by DM5PR12MB2358.namprd12.prod.outlook.com (2603:10b6:4:b3::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.25; Thu, 24 Feb
+ 2022 19:38:33 +0000
+Received: from BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:14:cafe::d7) by BN6PR16CA0047.outlook.office365.com
+ (2603:10b6:405:14::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.26 via Frontend
+ Transport; Thu, 24 Feb 2022 19:38:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT009.mail.protection.outlook.com (10.13.176.65) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Thu, 24 Feb 2022 19:38:32 +0000
+Received: from sbrijesh-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 24 Feb
+ 2022 13:38:30 -0600
+From:   Brijesh Singh <brijesh.singh@amd.com>
+To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
+        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: [PATCH v11 3.1/45] KVM: SVM: Create a separate mapping for the GHCB save area
+Date:   Thu, 24 Feb 2022 13:38:17 -0600
+Message-ID: <20220224193818.2187605-1-brijesh.singh@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220224165625.2175020-4-brijesh.singh@amd.com>
+References: <20220224165625.2175020-4-brijesh.singh@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-10-kirill.shutemov@linux.intel.com>
- <67dfdb0c-c483-ec3c-4fb8-57086ffde9bf@intel.com>
- <YhfWwHE4nZfQWPCl@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 09/30] x86/tdx: Add MSR support for TDX guests
-In-Reply-To: <YhfWwHE4nZfQWPCl@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fe46b429-7e57-48dc-3576-08d9f7cd3df2
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2358:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2358451DF8B7F78871537727E53D9@DM5PR12MB2358.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y4vKBslPHUuYp+IVwpQifuuK2z9OhTTOYG7KEkTz7Vmv3A0PE+TKtrBZPzT7AXnnGkcGkirrM9aMgKO+FTH73NlixB1PGCSc2JxFrkW3uVag8s2hpbd29jL19F1PVMSF4/biigw+Kc2pOS5IIXuGCD4P+fQlSpNIGHjVvYiLgo1jEz3PgHc/DGufE8oBboi3FaJwwDOS9dLtyFvc5mZiu680VHl/yITrhCYlLTOu50HjQMdR4kOTT/D5KyvnTDpNSM/A1R1F4DOtWzBkM83yE1I+7E20hWCDpfbSIWdDXCU/ZlABYuvqNiQvTuK+euQ8G5+j/AmiDE8LRmPIrq57FArSfXC9QU/nNkvzQ6FDCd8IxztKgxmaU7Fti/WhqSwf8te8/QJu5uBrLN5awgtxdugHxX/zXVooqT7MxO0yvo7Y2BA6j7Tu4erbSSMsuOteBb5C/Uxl4td9hRZ/1VJYJs9z2G9jbjL8mPUPeq8+F40NcDDw/WrDCVzvRg14VCM1F/T9qQYBRT7yKLWyOtN9J2QJJyQ/gR1SR8NNafYEzbtgrVlxvzxnGokJ1AGKX4rbFDzLgnalqeddOuDI0R4GUZgvDFzWPByQ13eiK6waJ8obFkr+A5l0892ucZOMierJ69HBDeZU07VBNITwQcAkb30JqK45LOK6naWBvmPgIDoDh4Wj1XaOqmC7hABdAPWMqbCtgTuHNQEQUGfMTnO/NZYCX7s/zBFa7/DTHYC5/9E=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2906002)(7416002)(7406005)(82310400004)(7696005)(8936002)(6666004)(81166007)(44832011)(356005)(86362001)(83380400001)(54906003)(110136005)(426003)(508600001)(5660300002)(40460700003)(26005)(186003)(47076005)(2616005)(36756003)(336012)(8676002)(70206006)(70586007)(4326008)(316002)(36860700001)(1076003)(16526019)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 19:38:32.8494
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe46b429-7e57-48dc-3576-08d9f7cd3df2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2358
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 11:04, Sean Christopherson wrote:
-> On Thu, Feb 24, 2022, Dave Hansen wrote:
->> On 2/24/22 07:56, Kirill A. Shutemov wrote:
->>> diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
->>> index 0a2e6be0cdae..89992593a209 100644
->>> --- a/arch/x86/coco/tdx.c
->>> +++ b/arch/x86/coco/tdx.c
->>> @@ -116,6 +116,44 @@ void __cpuidle tdx_safe_halt(void)
->>>  		WARN_ONCE(1, "HLT instruction emulation failed\n");
->>>  }
->>>  
->>> +static bool read_msr(struct pt_regs *regs)
->>> +{
->>> +	struct tdx_hypercall_args args = {
->>> +		.r10 = TDX_HYPERCALL_STANDARD,
->>> +		.r11 = EXIT_REASON_MSR_READ,
->> Just a minor note: these "EXIT_REASON_FOO"'s in r11 are effectively
->> *the* hypercall being made, right?
->>
->> The hypercall is being made in response to what would have otherwise
->> been a MSR read VMEXIT.  But, it's a *bit* goofy to see them here when
->> the TDX guest isn't doing any kind of VMEXIT.
-> But the TDX guest is doing a VM-Exit, that's all TDCALL is, an exit to the host.
-> r10 states that this is a GHCI-standard hypercall, r11 holds the reason why the
-> guest is exiting to the host.  The guest could pretty it up by redefining all the
-> VM-Exit reasons as TDX_REQUEST_MSR_READ or whatever, but IMO diverging from
-> directly using EXIT_REASON_* will be annoying in the long run, e.g. will make it
-> more difficult to grep KVM + kernel to understand the end-to-end flow.
+From: Tom Lendacky <thomas.lendacky@amd.com>
 
-I understand that it looks like an "exit" if you know how it's
-implemented, know the history and squint at it funny.  But, r11 is not
-an exit reason.  It's a hypercall number that just sometimes happens to
-also take an exit reason as a convention.  Don't confuse that with "r11
-*is* an exit reason".
+The initial implementation of the GHCB spec was based on trying to keep
+the register state offsets the same relative to the VM save area. However,
+the save area for SEV-ES has changed within the hardware causing the
+relation between the SEV-ES save area to change relative to the GHCB save
+area.
 
-Heck, look at the GHCI spec.  Does it simply cede some of the
-sub-function space and map them directly to VMEXIT reasons?  Nope.  It
-goes to the trouble of individually defining them:
+This is the second step in defining the multiple save areas to keep them
+separate and ensuring proper operation amongst the different types of
+guests. Create a GHCB save area that matches the GHCB specification.
 
-	12 Instruction.HLT
-	30 Instruction.IO
-	31 Instruction.RDMSR
-	32 Instruction.WRMSR
-	48 #VE.RequestMMIO
-	65 Instruction.PCONFIG
+Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+---
 
-I'm not saying we need 15 new #defines.  It would be really nice like
-you say to be able to connect the host and guest sides with a grep.  I
-wouldn't hate if we did something like:
+Changes since v11:
+ * Add missing GHCB xss accessor
 
-	.r11 = hcall_func(EXIT_REASON_MSR_READ),
+ arch/x86/include/asm/svm.h | 49 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 3 deletions(-)
 
-That retains greppability, but also tells you that r11 is a function
-number.  It even gives a nice place to stick a comment to say what the
-heck is going on:
+diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+index e748aa33c355..138db4e1b07d 100644
+--- a/arch/x86/include/asm/svm.h
++++ b/arch/x86/include/asm/svm.h
+@@ -390,11 +390,51 @@ struct sev_es_save_area {
+ 	u64 x87_state_gpa;
+ } __packed;
+ 
++struct ghcb_save_area {
++	u8 reserved_1[203];
++	u8 cpl;
++	u8 reserved_2[116];
++	u64 xss;
++	u8 reserved_3[24];
++	u64 dr7;
++	u8 reserved_4[16];
++	u64 rip;
++	u8 reserved_5[88];
++	u64 rsp;
++	u8 reserved_6[24];
++	u64 rax;
++	u8 reserved_7[264];
++	u64 rcx;
++	u64 rdx;
++	u64 rbx;
++	u8 reserved_8[8];
++	u64 rbp;
++	u64 rsi;
++	u64 rdi;
++	u64 r8;
++	u64 r9;
++	u64 r10;
++	u64 r11;
++	u64 r12;
++	u64 r13;
++	u64 r14;
++	u64 r15;
++	u8 reserved_9[16];
++	u64 sw_exit_code;
++	u64 sw_exit_info_1;
++	u64 sw_exit_info_2;
++	u64 sw_scratch;
++	u8 reserved_10[56];
++	u64 xcr0;
++	u8 valid_bitmap[16];
++	u64 x87_state_gpa;
++} __packed;
++
+ #define GHCB_SHARED_BUF_SIZE	2032
+ 
+ struct ghcb {
+-	struct sev_es_save_area save;
+-	u8 reserved_save[2048 - sizeof(struct sev_es_save_area)];
++	struct ghcb_save_area save;
++	u8 reserved_save[2048 - sizeof(struct ghcb_save_area)];
+ 
+ 	u8 shared_buffer[GHCB_SHARED_BUF_SIZE];
+ 
+@@ -405,6 +445,7 @@ struct ghcb {
+ 
+ 
+ #define EXPECTED_VMCB_SAVE_AREA_SIZE		740
++#define EXPECTED_GHCB_SAVE_AREA_SIZE		1032
+ #define EXPECTED_SEV_ES_SAVE_AREA_SIZE		1032
+ #define EXPECTED_VMCB_CONTROL_AREA_SIZE		1024
+ #define EXPECTED_GHCB_SIZE			PAGE_SIZE
+@@ -412,6 +453,7 @@ struct ghcb {
+ static inline void __unused_size_checks(void)
+ {
+ 	BUILD_BUG_ON(sizeof(struct vmcb_save_area)	!= EXPECTED_VMCB_SAVE_AREA_SIZE);
++	BUILD_BUG_ON(sizeof(struct ghcb_save_area)	!= EXPECTED_GHCB_SAVE_AREA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct sev_es_save_area)	!= EXPECTED_SEV_ES_SAVE_AREA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct vmcb_control_area)	!= EXPECTED_VMCB_CONTROL_AREA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct ghcb)		!= EXPECTED_GHCB_SIZE);
+@@ -482,7 +524,7 @@ struct vmcb {
+ /* GHCB Accessor functions */
+ 
+ #define GHCB_BITMAP_IDX(field)							\
+-	(offsetof(struct sev_es_save_area, field) / sizeof(u64))
++	(offsetof(struct ghcb_save_area, field) / sizeof(u64))
+ 
+ #define DEFINE_GHCB_ACCESSORS(field)						\
+ 	static inline bool ghcb_##field##_is_valid(const struct ghcb *ghcb)	\
+@@ -531,5 +573,6 @@ DEFINE_GHCB_ACCESSORS(sw_exit_info_1)
+ DEFINE_GHCB_ACCESSORS(sw_exit_info_2)
+ DEFINE_GHCB_ACCESSORS(sw_scratch)
+ DEFINE_GHCB_ACCESSORS(xcr0)
++DEFINE_GHCB_ACCESSORS(xss)
+ 
+ #endif
+-- 
+2.25.1
 
-/*
- * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
- * independently from but are currently matched 1:1 with VMX
- * EXIT_REASONs.  Reusing the KVM EXIT_REASON macros makes it easier to
- * connect the host and guest sides of these calls.
- */
-static u64 hcall_func(u64 exit_reason)
-{
-	return exit_reason;
-}
-
-Like I said, this is all a minor note.  But, things like this really go
-a long way for folks like me who don't spend our days looking at the KVM
-code or thinking deeply about how the hypercall is implemented.

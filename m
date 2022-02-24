@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAA94C33F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E994C33FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbiBXRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S232315AbiBXRs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiBXRq7 (ORCPT
+        with ESMTP id S229851AbiBXRsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:46:59 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F65279469;
-        Thu, 24 Feb 2022 09:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=1WdzptLcvU69z6TcnQKEUU0O4QbFw1jllXY4KPf6BEY=; b=dsNH3HsKu65edNdpcJnnGtONR4
-        lbI25QnHh5IFR24Oi/YkAyUTAyo+NYW6ZFqq+Ut7EoWt+8LfGybYJzejWRQ+8Ga6W4vElKKzZEUHd
-        v8sfRw0pDEzjbsJpuJHjUoYR9nDauVo6NaUdVHx9EZoH4MdPwpACJVnYRJrZJq0Rj0EZarunLCxSm
-        EwfF0lBbflXucRuiGts8wx7oQqV/BkxteCEfTA6aXrRXt4QvzehOxxY6/dVFFkrp/z8G3vZ1DThGX
-        0z8gLRoIGixBJnzr/NuO80D6bcEFVl8P1rO2iEg6DHs7U8Y2F8qXO2dewOPvPKZ2wj3ovgKsGcsrz
-        cShUO97A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNIC2-00CgT2-ME; Thu, 24 Feb 2022 17:46:19 +0000
-Message-ID: <97e0c66c-82e3-9016-f71a-cd78a83f7a77@infradead.org>
-Date:   Thu, 24 Feb 2022 09:46:12 -0800
+        Thu, 24 Feb 2022 12:48:55 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BB1B4012
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:48:24 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m14so5209793lfu.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V24rdVNExs0ytTjnUGhgxI/0/+mvlDmfxrFtfTJbU7k=;
+        b=MqCTqeHdkuXEQpvlJXoh1OEtSmCm3/vJpMIdKfSRYxXCnRpR9JWvac/hzemxQZ3MD0
+         Kzi9XUTdpnPdGHtDJfxWlY38lY9yU59vtizG+bwXlKZ2nQuR3bn/Qa98DqRJsct4Mv7/
+         z9sDCGNQjAGR6Nt543jn58ZCWn14cODxguj6k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V24rdVNExs0ytTjnUGhgxI/0/+mvlDmfxrFtfTJbU7k=;
+        b=fd/Gg1XK9WBdQ0M3SL9D0UMKC8yvOemIcd5lFADT9BLtCTCvpSaYz12kAwL41H0xX7
+         SUbChTzYQLRz6bqZ7ERCiqOPs2NSAESTDFA8jINTJaTOVxjivkqsJiUMRIJYmCMN97hi
+         ZPQJQIOa/qRg38feT8CWNt23dYxlud+NLwdZIaDWpqY4Zo9sHjH2rNrygCUwt03N7rCr
+         mdrByPn2BSpvkf/o2MmqWYv5PMxYhVYvzgy3h5nQJQ7uVfRHCC3mgD0sKHjOpE3Ys4uO
+         hNyF3yNeXqE27buyM63cLEMED1ci1Um1eDSSQUVbaqhM2E2+sVWFbRo4aw3gEpkModq3
+         uU2w==
+X-Gm-Message-State: AOAM532+E4Li2vQxJ+dEEMnC7aF1ZueJ3DQkQGhtkY4ZysMmcuKpMlg3
+        kJyL8nb5LiYQTC+PhfBp3YWQgTizPRwYklWKMhs=
+X-Google-Smtp-Source: ABdhPJxUVYr1jS4Jwk+ZkNs05S6ghU386lbZBbZp9cVbofs1HI5h3VZqogR0cUcyLSXA+L4xZZaMOw==
+X-Received: by 2002:a05:6512:1597:b0:443:bd68:6a70 with SMTP id bp23-20020a056512159700b00443bd686a70mr2470242lfb.548.1645724902523;
+        Thu, 24 Feb 2022 09:48:22 -0800 (PST)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id r9sm257790lfp.84.2022.02.24.09.48.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 09:48:21 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id j7so5207000lfu.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:48:21 -0800 (PST)
+X-Received: by 2002:a05:6512:e8a:b0:443:7b8c:579a with SMTP id
+ bi10-20020a0565120e8a00b004437b8c579amr2497656lfb.687.1645724900775; Thu, 24
+ Feb 2022 09:48:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: mmotm 2022-02-23-21-20 uploaded (iwlwifi + rfkill)
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>
-References: <20220224052137.BFB10C340E9@smtp.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220224052137.BFB10C340E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224122614.94921-1-david@redhat.com> <20220224122614.94921-6-david@redhat.com>
+ <CAHk-=wh+NxEVxeKc_o1xyVsJAQNqpN1zyCHN96gPEK+DzXaeLw@mail.gmail.com> <064ba776-e6c6-a430-7d74-0b691123e2a9@redhat.com>
+In-Reply-To: <064ba776-e6c6-a430-7d74-0b691123e2a9@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 24 Feb 2022 09:48:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whkO8w6YFbn8YsvwxgDi_pyUeKTCEgncDAzV6_kcqRJMw@mail.gmail.com>
+Message-ID: <CAHk-=whkO8w6YFbn8YsvwxgDi_pyUeKTCEgncDAzV6_kcqRJMw@mail.gmail.com>
+Subject: Re: [PATCH RFC 05/13] mm/rmap: remove do_page_add_anon_rmap()
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 24, 2022 at 9:41 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> Actually, I thought about doing it similarly to what I did in
+> page_alloc.c with fpi_t:
+>
+> typedef int __bitwise fpi_t;
+>
+> #define FPI_NONE                ((__force fpi_t)0)
+>
+> I can do something similar here.
 
+Yeah, that looks good. And then the relevant function declarations and
+definitions also have that explicit type there instead of 'int', which
+adds a bit more documentation for people grepping for use.
 
-On 2/23/22 21:21, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2022-02-23-21-20 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-
-on x86_64:
-
-# CONFIG_RFKILL is not set
-
-In file included from ../drivers/net/wireless/intel/iwlwifi/mvm/fw.c:19:0:
-../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h: In function ‘iwl_mvm_mei_set_sw_rfkill_state’:
-../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:2215:24: error: implicit declaration of function ‘rfkill_soft_blocked’; did you mean ‘rfkill_blocked’? [-Werror=implicit-function-declaration]
-   mvm->hw_registered ? rfkill_soft_blocked(mvm->hw->wiphy->rfkill) : false;
-                        ^~~~~~~~~~~~~~~~~~~
-                        rfkill_blocked
-In file included from ../drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c:22:0:
-../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h: In function ‘iwl_mvm_mei_set_sw_rfkill_state’:
-../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:2215:24: error: implicit declaration of function ‘rfkill_soft_blocked’; did you mean ‘rfkill_blocked’? [-Werror=implicit-function-declaration]
-   mvm->hw_registered ? rfkill_soft_blocked(mvm->hw->wiphy->rfkill) : false;
-                        ^~~~~~~~~~~~~~~~~~~
-                        rfkill_blocked
-
--- 
-~Randy
+Thanks,
+               Linus

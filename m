@@ -2,178 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13174C2980
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF214C2986
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiBXKbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S233495AbiBXKcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiBXKbH (ORCPT
+        with ESMTP id S230323AbiBXKcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:31:07 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E279204299;
-        Thu, 24 Feb 2022 02:30:38 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6B35F223EA;
-        Thu, 24 Feb 2022 11:30:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645698636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ixeMclLLzqQV/GX1oaqQ21tg7IiVFwINZ6keVlGAnDM=;
-        b=v3S7I9eyf1JDiZEQUCX+1vYSNGWISx88WGQf/yQN/UMnHq/C0Rdf31MqfXiMugdJ084Nqk
-        ukBKMspg3R+XxbS7ZPi8xM/stqWDgThoJmancm2xCqQLKAKIbZNARGqq/N3a6VYEDvveJs
-        l7y4beUJMMNLZrv8QCxkjZ5D+3l9QMk=
-From:   Michael Walle <michael@walle.cc>
-To:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     heiko.thiery@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 2/2] arm64: dts: imx8mn-evk: fix the min/max voltages of the PMIC
-Date:   Thu, 24 Feb 2022 11:30:30 +0100
-Message-Id: <20220224103030.2040048-2-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220224103030.2040048-1-michael@walle.cc>
-References: <20220224103030.2040048-1-michael@walle.cc>
+        Thu, 24 Feb 2022 05:32:00 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F028DDCC;
+        Thu, 24 Feb 2022 02:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=QJ61GVuJyclCnz18nFi5Rw74fGs3hl5irEBRqG/1OMo=;
+        t=1645698689; x=1646908289; b=md/HCKvYP8ZIxW3TNZBOQdjTNvjQAgjgiAkWpDaZz06/f7H
+        2yl16ZEme/I0Pvs6SbkXnu0dhA1JKT9ur8CqVFXZj4CB/pzDO7mqwDA4lMxTQWFzUcbRZnKCn16Bk
+        srFqehyjWkpycWV+Avw+HgsgZQSec7bdP/UXqe5PztPnUFTN2U9JdAeGLB+d0X6TD6Zw3rBamFzuG
+        OEmbs0JyiMVsuCMRvaunnJNnzK/oWODICSHiEtAZGgY7F6knqV31Chnn9H68NW1Jhpe4l5K/mhawX
+        Ij1gt7xuRLTVukOFxC3iJ0lLvRDx15975vXbe5jFdREirCU2J+EdUEu/3XdeV6/w==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nNBOz-0057ZC-Uj;
+        Thu, 24 Feb 2022 11:31:14 +0100
+Message-ID: <2fd265ec46a8b582b7c5dea9524185b6fe1b0322.camel@sipsolutions.net>
+Subject: Re: Use of void pointer arithmetic?
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Francesco Magliocca <franciman12@gmail.com>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        ath10k@lists.infradead.org, rmanohar@qti.qualcomm.com,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Thu, 24 Feb 2022 11:31:12 +0100
+In-Reply-To: <87fso8vb3w.fsf_-_@kernel.org>
+References: <20220221122638.7971-1-franciman12@gmail.com>
+         <e32de43c-e00a-5766-e988-fe192d36d719@quicinc.com>
+         <CAH4F6utmtAM3CzX2_Fbn94Sb-X8m0patPh8yWwbuBB0t1VYH=g@mail.gmail.com>
+         <87o82wvhtk.fsf@kernel.org> <20220224075346.GL3943@kadam>
+         <87fso8vb3w.fsf_-_@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the proper voltages as supported by the board instead of the ones
-supported by the PMIC. The voltages were taken from both the schematic
-of the 8MNANOLPD4-EVK eval board and the datasheet of the IMX8MN SoC.
+On Thu, 2022-02-24 at 11:59 +0200, Kalle Valo wrote:
+> 
+> A good question. I have always just thought we should avoid void pointer
+> arithmetic due to the C standard, but now that you mention it void
+> pointers can indeed simplify the code. So I'm not so sure anymore.
+> 
+> Any opinions? Is there a kernel wide recommendation for this?
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-Please help review and test this. This was never tested on the actual
-8MNANOLPD4-EVK because I don't have that board! Instead it is a
-"byproduct" of the development of an devicetree for the 8MNANOD3L-EVK
-which is quite similar except for the DDR voltage and the buck2
-converter.
+The kernel only enables it with W=3, which I guess nobody uses anyway
+... Originally it came from commit 4a5838ad9d2d ("kbuild: Add extra gcc
+checks") with a pointer to
 
-Changes since v1:
- - swap buck1 and buck2
+http://marc.info/?l=kernel-janitors&m=129802065918147&w=2
 
- arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 34 ++++++++++----------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+(which is offline right now due to an expired certificate ...)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
-index 2b685c0c7eeb..4eb467df5ba7 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
-@@ -42,8 +42,8 @@ pmic: pmic@25 {
- 		regulators {
- 			buck1: BUCK1{
- 				regulator-name = "VDD_SOC";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <2187500>;
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <950000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 				regulator-ramp-delay = <3125>;
-@@ -51,8 +51,8 @@ buck1: BUCK1{
- 
- 			buck2: BUCK2 {
- 				regulator-name = "VDD_ARM_0V9";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <2187500>;
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <1000000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 				regulator-ramp-delay = <3125>;
-@@ -62,32 +62,32 @@ buck2: BUCK2 {
- 
- 			buck4: BUCK4{
- 				regulator-name = "VDD_3V3";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <3400000>;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
- 
- 			buck5: BUCK5{
- 				regulator-name = "VDD_1V8";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <3400000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
- 
- 			buck6: BUCK6 {
- 				regulator-name = "NVCC_DRAM_1V1";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <3400000>;
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1100000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
- 
- 			ldo1: LDO1 {
- 				regulator-name = "NVCC_SNVS_1V8";
--				regulator-min-microvolt = <1600000>;
--				regulator-max-microvolt = <3300000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
-@@ -95,23 +95,23 @@ ldo1: LDO1 {
- 			ldo2: LDO2 {
- 				regulator-name = "VDD_SNVS_0V8";
- 				regulator-min-microvolt = <800000>;
--				regulator-max-microvolt = <1150000>;
-+				regulator-max-microvolt = <800000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
- 
- 			ldo3: LDO3 {
- 				regulator-name = "VDDA_1V8";
--				regulator-min-microvolt = <800000>;
--				regulator-max-microvolt = <3300000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
- 
- 			ldo4: LDO4 {
- 				regulator-name = "VDD_PHY_1V2";
--				regulator-min-microvolt = <800000>;
--				regulator-max-microvolt = <3300000>;
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
- 				regulator-boot-on;
- 				regulator-always-on;
- 			};
--- 
-2.30.2
+but setting back my clock it seems to point to
+
+https://lore.kernel.org/all/20110218091716.GA4384@bicker/
+
+but the thread kind of revolves around -Wconversion.
+
+
+FreeBSD does enable -Wpointer-arith which is why we've been trying to
+keep iwlwifi clean as a courtesy to them, but for really Linux-only code
+I dunno if there's much point. Although of course that applies also to
+FreeBSD ...
+
+johannes
 

@@ -2,284 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E8D4C2A94
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E8D4C2A79
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiBXLNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S233836AbiBXLOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiBXLM4 (ORCPT
+        with ESMTP id S233759AbiBXLOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:12:56 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC25A8F62B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:12:25 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id s5so2033568oic.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:12:25 -0800 (PST)
+        Thu, 24 Feb 2022 06:14:02 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D997293A23;
+        Thu, 24 Feb 2022 03:13:32 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso5391553pju.4;
+        Thu, 24 Feb 2022 03:13:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FMGh5b3H8B1bptKT8dWZUQN/k3IrOManq25i31eRbuk=;
-        b=c49R9bDpXj/oafr3iHjCnY5W2Vj9UJGTrjRgwfwFt6AIYTwbBhYN2el3Eqjy98kKMh
-         Ic5s8DId1D1SMvukPGa2DbOu4UgCCsihS9xXqadR9edyNx0un88WQCWzYQqZzA6IzNJd
-         UdsqqMauNbe+TGq/32WY5n3ZQWxFa3Gkmq0bx1CTpX2vmQ4wc43XjPZZquUhGGq8Wj2n
-         d6XwoEnok/vy/pB6ugQc9GfsEfCO67JC7ZHy/HhYUEvkP3FSOtGa6YCb33PekoCJth1v
-         0zsF3XYLLEfyD9f56q5T2ak6GRSEXjQWYEs2a2MtCXyiCAAm+rQj0+FsQmLs5bLm/uI9
-         pTzA==
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=WjQC5Y7ro/c9MdCjVexTb0YJtz1qK4y19XmmyHlyFew=;
+        b=Jirg0vziGW8V3SRKvS+PjhON7lmoM4owOMTYOfacsP7PA1kucpsNi1ShKnC1Xkovyw
+         o6U9yMSJlGTp/9bdcko9RMowA7lWuUecDmFzi+XEIU8N0VGjsiQpJZu1tXNBvuyMs/p2
+         rbCJzpbTs4etXqH/zrJ3B4vY3NwUmDan5gFm5+guije2IkK/PL83p0+na++9vFREa4W4
+         ArHXY4YXbYTIFTn95zCxQOQz6HcTe5XGs4vkROZUfpVuMcPdX7MbSwcnlAglD3ApP9Jx
+         lWwz3Oy0jJU+P8hF7OM/qdSde4sPYz/DR+kmgZ6Fea+azQZS46sldPZe+9sBPmJhsJ8u
+         +1sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FMGh5b3H8B1bptKT8dWZUQN/k3IrOManq25i31eRbuk=;
-        b=1s2duHBiwVZLLnigVquhUap9bweQXShkvTDl8d+lV1b2bIm/jyWY+7jAmwHfO7SS52
-         CER2a6rVeM+yUxFJfu8S/Stbakdg83HG5+mQZ+RrRcYYgLaeA99Q9SVbkcfkqloQwMpK
-         SBMPmHYsBcXsX0u1UWHuo5gjl7RNTs5A+BC9bN9jMh06Fe4kx8W8yKQz5Py3wpale+sr
-         JzWIguHDhAwZFJ77hLXGBZTiaTWEjwdVdTYAm6m2YvTFpnIy7lxrFfG7U0BU9gloF2t3
-         XSzuzCAToAkl3LuWbCIP0QPrqwE0FirItEZ9TENJkg5xX/GsZu7ocgnbpmJ4bgoO/5fy
-         w4fQ==
-X-Gm-Message-State: AOAM532BKyoC/phfTkJ43inJnJKK1OZtl6pWDL+X6EI82gEKtweK86TF
-        mshHANG9JNYPzbzYR2SCmWDE+nWALjtj3AJjBWBu8g==
-X-Google-Smtp-Source: ABdhPJww70Jos29ndOrNHrP/xD9umRk+JrJsK85ae+qoKVMNIi03s3zLdmtbsVSAA1SAscvAge2rfX6oJITlz0DP/fE=
-X-Received: by 2002:a05:6808:1823:b0:2d7:1bfc:1f4f with SMTP id
- bh35-20020a056808182300b002d71bfc1f4fmr903633oib.129.1645701145036; Thu, 24
- Feb 2022 03:12:25 -0800 (PST)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=WjQC5Y7ro/c9MdCjVexTb0YJtz1qK4y19XmmyHlyFew=;
+        b=OXfcT3gaQXUYsOKyjXe8G0KpcQNzY6fAwSVcEwqEXDi7iZEfDmpAGj7J8mDaa6XSeT
+         XigByXl8jIvnJWhReya6PZud4k/wl59JY0g/mEMw7CGxNWcR1V9P7D1Pifi8r5qihEbY
+         55bxZRJqLfuQzMOMrbcQOP8Xc2tBNtd++JUcldSMnDYAp7c2k5UVkO+4sf2H08AzCvES
+         kVgEmRILFF5DdAxGb+2HiwZQsRoKeE1yHIoAv8saY5mkyjZyqmibJUZYibQrepEN0Ugs
+         54g0fJ+tA5siI6pWMUoiAMxIpEjBLYsaWLKUoF0+2nyVts3lX+oYp72CvQ/TJdqAPBiP
+         xxdw==
+X-Gm-Message-State: AOAM533YDA5ahYS4HzQtB6oXH67JHwU3ADguuR3fJT4sfNoRDXFMK1p7
+        nTb9mjHN2BhfeeVR+qhJfnM=
+X-Google-Smtp-Source: ABdhPJyounr1R+DBw3MY3a4cGgCM4BABVn40lZPd0jyri1ZanC2IX019OiKZipTBZMe59x5+BtL/Dw==
+X-Received: by 2002:a17:90b:400c:b0:1bc:7190:5696 with SMTP id ie12-20020a17090b400c00b001bc71905696mr2284455pjb.109.1645701211364;
+        Thu, 24 Feb 2022 03:13:31 -0800 (PST)
+Received: from localhost (115-64-212-59.static.tpgi.com.au. [115.64.212.59])
+        by smtp.gmail.com with ESMTPSA id q1sm2911458pfs.112.2022.02.24.03.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 03:13:30 -0800 (PST)
+Date:   Thu, 24 Feb 2022 21:13:25 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "# 3.4.x" <stable@vger.kernel.org>
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+        <20220223135820.2252470-2-anders.roxell@linaro.org>
+        <1645670923.t0z533n7uu.astroid@bobo.none>
+        <1645678884.dsm10mudmp.astroid@bobo.none>
+        <CAK8P3a28XEN7aH-WdR=doBQKGskiTAeNsjbfvaD5YqEZNM=v0g@mail.gmail.com>
+        <1645694174.z03tip9set.astroid@bobo.none>
+        <CAK8P3a1LgZkAV2wX03hAgx527MuiFt5ABWFp1bGdsTGc=8OmMg@mail.gmail.com>
+In-Reply-To: <CAK8P3a1LgZkAV2wX03hAgx527MuiFt5ABWFp1bGdsTGc=8OmMg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220223192946.473172-1-bhupesh.sharma@linaro.org>
- <20220223192946.473172-3-bhupesh.sharma@linaro.org> <1645648568.439634.1426821.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1645648568.439634.1426821.nullmailer@robh.at.kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 24 Feb 2022 16:42:14 +0530
-Message-ID: <CAH=2Ntx0zKV7SNtuh6ATVp2qA1LKaks8KSMQoU2qtM=EmB52pQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: phy: qcom,qmp: Add SM8150 PCIe PHY bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, svarbanov@mm-sol.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        bhelgaas@google.com, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1645700767.qxyu8a9wl9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Excerpts from Arnd Bergmann's message of February 24, 2022 8:20 pm:
+> On Thu, Feb 24, 2022 at 11:11 AM Nicholas Piggin <npiggin@gmail.com> wrot=
+e:
+>> Excerpts from Arnd Bergmann's message of February 24, 2022 6:55 pm:
+>> > On Thu, Feb 24, 2022 at 6:05 AM Nicholas Piggin <npiggin@gmail.com> wr=
+ote:
+>> > We had the same thing on Arm a few years ago when binutils
+>> > started enforcing this more strictly, and it does catch actual
+>> > bugs. I think annotating individual inline asm statements is
+>> > the best choice here, as that documents what the intention is.
+>>
+>> A few cases where there are differences in privileged instructions
+>> (that won't be compiler generated), that will be done anyway.
+>>
+>> For new instructions added to the ISA though? I think it's ugly and
+>> unecesaary. There is no ambiguity about the intention when you see
+>> a lharx instruction is there?
+>>
+>> It would delinate instructions that can't be used on all processors
+>> but I don't see  much advantage there, it's not an exhaustive check
+>> because we have other restrictions on instructions in the kernel
+>> environment. And why would inline asm be special but not the rest
+>> of the asm? Would you propose to put these .machine directives
+>> everywhere in thousands of lines of asm code in the kernel? I
+>> don't know that it's an improvement. And inline asm is a small
+>> fraction of instructions.
+>=20
+> Most of the code is fine, as we tend to only build .S files that
+> are for the given target CPU,
 
-On Thu, 24 Feb 2022 at 02:06, Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, 24 Feb 2022 00:59:42 +0530, Bhupesh Sharma wrote:
-> > Add the following two PCIe PHYs found on SM8150, to the QMP binding:
-> >
-> > QMP GEN3x1 PHY - 1 lane
-> > QMP GEN3x2 PHY - 2 lanes
-> >
-> > Cc: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/patch/1596890
->
->
-> phy@1c06000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/qrb5165-rb5.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-db845c.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dt.yaml
+That's not true on powerpc at least. grep FTR_SECTION.
 
-Thanks for the above check.
-Although the warnings reflected in 'dtbs_check' are not related to this patch.
+Not all of them are different ISA, but it's more than just the
+CPU_FTR_ARCH ones which only started about POWER7.
 
-Still, looking at them, I can figure out that an additional patch is
-required to make
-''#clock-cells'' as optional property in the bindings as several qmp
-phy variants
-don't require the same.
+> the explicit .machine directives are
+> only needed when you have a file that mixes instructions for
+> incompatible machines, using a runtime detection.
 
-I will add it in v2.
+Right. There are .S files are in that category. And a lot of
+it for inline and .S we probably skirt entirely due to using raw=20
+instruction encoding because of old toolchains (which gets no error=20
+checking at all) which we really should tidy up and trim.
 
-Regards,
-Bhupesh
+>=20
+>> Right that should be caught if you just pass -m<superset> architecture
+>> to the assembler that does not include the mtpmr. 32-bit is a lot more
+>> complicated than 64s like this though, so it's pssible in some cases
+>> you will want more checking and -m<subset> + some .machine directives
+>> will work better.
+>>
+>> Once you add the .machine directive to your inline asm though, you lose
+>> *all* such static checking for the instruction. So it's really not a
+>> panacea and has its own downsides.
+>=20
+> Again, there should be a minimum number of those .machine directives
+> in inline asm as well, which tends to work out fine as long as the
+> entire kernel is built with the correct -march=3D option for the minimum
+> supported CPU, and stays away from inline asm that requires a higher
+> CPU level.
 
+There's really no advantage to them, and they're ugly and annoying
+and if we applied the concept consistently for all asm they would grow=20
+to a very large number.
 
->
-> phy@1c07000: '#clock-cells' is a required property
->         arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dt.yaml
->
-> phy@1c07000: 'lanes@1c06000' does not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm/boot/dts/qcom-sdx55-mtp.dt.yaml
->         arch/arm/boot/dts/qcom-sdx55-t55.dt.yaml
->         arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dt.yaml
->
-> phy@1c0a000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/sdm845-db845c.dt.yaml
->
-> phy@1c0e000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/qrb5165-rb5.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-crd.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-idp2.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-idp.dt.yaml
->
-> phy@1c0e000: 'lanes@1c0e200' does not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm64/boot/dts/qcom/sc7280-crd.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-herobrine.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-idp2.dt.yaml
->         arch/arm64/boot/dts/qcom/sc7280-idp.dt.yaml
->
-> phy@1c16000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/qrb5165-rb5.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dt.yaml
->
-> phy@1d87000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/qrb5165-rb5.dt.yaml
->         arch/arm64/boot/dts/qcom/sa8155p-adp.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r1.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r2.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r3.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-db845c.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8450-qrd.dt.yaml
->
-> phy@1d87000: 'lanes@1d87400', 'vdda-max-microamp', 'vdda-pll-max-microamp' do not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm64/boot/dts/qcom/sm8450-qrd.dt.yaml
->
-> phy@1d87000: 'vdda-max-microamp', 'vdda-pll-max-microamp' do not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dt.yaml
->
-> phy@1da7000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dt.yaml
->
-> phy@34000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dt.yaml
->
-> phy@58000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/ipq8074-hk01.dt.yaml
->
-> phy@627000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
->         arch/arm64/boot/dts/qcom/apq8096-ifc6640.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dt.yaml
->
-> phy@627000: 'vdda-phy-max-microamp', 'vdda-pll-max-microamp', 'vddp-ref-clk-always-on', 'vddp-ref-clk-max-microamp' do not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dt.yaml
->
-> phy@7410000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
->
-> phy@78000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/ipq8074-hk01.dt.yaml
->
-> phy@88e9000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/sdm845-db845c.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dt.yaml
->
-> phy@88eb000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/qrb5165-rb5.dt.yaml
->         arch/arm64/boot/dts/qcom/sa8155p-adp.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r1.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r2.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-cheza-r3.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-db845c.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm845-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8150-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8250-mtp.dt.yaml
->
-> phy@c010000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dt.yaml
->         arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dt.yaml
->
-> phy@ff6000: '#clock-cells' is a required property
->         arch/arm/boot/dts/qcom-sdx55-mtp.dt.yaml
->         arch/arm/boot/dts/qcom-sdx55-t55.dt.yaml
->         arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dt.yaml
->
-> phy-wrapper@88e9000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/sm8350-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-mtp.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8450-qrd.dt.yaml
->
-> phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml
->
-> phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml
->
-> phy-wrapper@88eb000: '#clock-cells' is a required property
->         arch/arm64/boot/dts/qcom/sm8350-hdk.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dt.yaml
->         arch/arm64/boot/dts/qcom/sm8350-mtp.dt.yaml
->
-> ssphy@78000: 'lane@78200' does not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
->         arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dt.yaml
->
+The idea they'll give you good static checking just doesn't really
+pan out.
+
+Thanks,
+Nick

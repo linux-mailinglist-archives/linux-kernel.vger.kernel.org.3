@@ -2,198 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB544C2D23
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61F34C2D3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbiBXNd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S235043AbiBXNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiBXNdX (ORCPT
+        with ESMTP id S234991AbiBXNfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:33:23 -0500
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B0F3D4B9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:32:51 -0800 (PST)
-X-QQ-mid: bizesmtp70t1645709553teogwjqm
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 24 Feb 2022 21:32:30 +0800 (CST)
-X-QQ-SSF: 01400000002000B0F000B00A0000000
-X-QQ-FEAT: ZKIyA7viXp0gWhLqDVbbfYxfkb1rGrN8gS7cOdtlS7mVfvwrf5J+8/rKYvFC7
-        C/XTCCvT/2Awyd/hxgYSSFTj/R5yQIMkL3l1RyA43TAJIF2tJMBNBuUdhQ599kCIe5m1noz
-        kUjxq2b8nrQ7DkWyQWIlT0qleP7kc1r1cSYDdHen1miSf+NvaRlggGCd+Kcj76Wi4JNQtXE
-        OD/CMdjoN465+2nybrK3U+NRd+oCxrEJ8AOka9iCl2ZQYRGFZRMHM7wA0RMv7GMYk3VEpUj
-        i9W801lL0B/6+bXVsryCWraTiCKfhuVS2lzwWA2vH+BEFDlPRc3JQSZMmpH6IP7isO/tisW
-        RW+2H+fxRLm+R8eBUnHpkjKNUUEekqKxxkEN684X+7BXf5WGJcBmalzqaVaXw==
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com,
-        deanbo422@gmail.com, ebiggers@kernel.org, tytso@mit.edu,
-        wad@chromium.org, john.johansen@canonical.com, jmorris@namei.org,
-        serge@hallyn.com, linux-csky@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH v3 2/2] fs/proc: Optimize arrays defined by struct ctl_path
-Date:   Thu, 24 Feb 2022 21:32:17 +0800
-Message-Id: <20220224133217.1755-2-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220224133217.1755-1-tangmeng@uniontech.com>
-References: <20220224133217.1755-1-tangmeng@uniontech.com>
+        Thu, 24 Feb 2022 08:35:01 -0500
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BFA178689;
+        Thu, 24 Feb 2022 05:34:31 -0800 (PST)
+Received: by mail-vs1-f50.google.com with SMTP id y26so2116234vsq.8;
+        Thu, 24 Feb 2022 05:34:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/rGJyXX5HuWtJN5KYux5wXK7Ltl9r3aNxihQ5ZjTDFA=;
+        b=UV3BxKRez+pXvCKAlbJeJgWGZKESsxE1s1oFIs2CH5iqa/D7ihRKXve9bUC3kpT6wR
+         YFECU4Rlua1deS6YXWME9svvA+8Nc7ZFX5qys2CkmYUAVAgzKg+mTXeXJk/HfjBr/zgb
+         NxqNQamwdwTO5PDOXAK7aW20Sn6rHAnrGkERF9DHbdg/WETQTu8p+MQUP7D/yKXRUDpV
+         Ytbx4roW58NECS43q8GyOUi5chxObS7IYcpEaP4RNP/OmU9drM6zAqfwoIZJUvEEEeeC
+         EerGtug7bHNTA26aEsETskBtw5tELAkLFABFl2nCJQ9DejzqOZ4NDL4AnCKj54HiK6N6
+         adZg==
+X-Gm-Message-State: AOAM531K/UsFQy0lpfIrtkjusL3m1pSsLYWl6Pvu3DLUHg37xaeQCanS
+        UfMp7F6ECkPxKr1UEo5ooCljZ/Oos8FhjA==
+X-Google-Smtp-Source: ABdhPJz6P2/5hUu/aC3862I412RyAhgL/oqOreW8Kik+K1TPhhe5zu5N0UvL/B8/lR4FgM8zijO0uA==
+X-Received: by 2002:a67:d38f:0:b0:31a:808b:7f1 with SMTP id b15-20020a67d38f000000b0031a808b07f1mr1022196vsj.56.1645709670531;
+        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id j24sm383459vki.39.2022.02.24.05.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id t25so898112uaa.3;
+        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
+X-Received: by 2002:ab0:6253:0:b0:341:8be9:7a1 with SMTP id
+ p19-20020ab06253000000b003418be907a1mr1074483uao.114.1645709670171; Thu, 24
+ Feb 2022 05:34:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
+ <97b69b3a-bf17-6a43-bf96-da19822051b3@microchip.com> <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
+ <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
+In-Reply-To: <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 24 Feb 2022 14:34:18 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
+Message-ID: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
+ compatible items
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Daire.McNamara@microchip.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, arrays defined by struct ctl_path is terminated
-with an empty one. When we actually only register one ctl_path,
-we've gone from 8 bytes to 16 bytes.
+Hi Conor,
 
-The optimization has been implemented in the previous patch,
-here to remove unnecessary terminate ctl_path with an empty one.
+On Thu, Feb 24, 2022 at 2:15 PM <Conor.Dooley@microchip.com> wrote:
+> On 24/02/2022 12:58, Geert Uytterhoeven wrote:
+> > On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
+> >> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
+> >>> make dt_binding_check:
+> >>>
+> >>>       Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+> >>
+> >> Hey Geert,
+> >> I've run dt_binding_check locally but I dont get a warning, is there
+> >> something I am missing?
+> >
+> > Interesting. Are you using the latest dtschema?
+> > https://github.com/devicetree-org/dt-schema.git
+>
+> I was on v2021.12, but have now tried v2022.01 & master
+> (2022.2.dev1+gf677c85).
+>
+> Is there something other than running "make dt_binding_check" in a fresh
+> checkout that I need to do?
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- arch/csky/abiv1/alignment.c | 5 ++---
- arch/nds32/mm/alignment.c   | 5 ++---
- fs/verity/signature.c       | 3 +--
- kernel/pid_namespace.c      | 2 +-
- kernel/seccomp.c            | 3 +--
- security/apparmor/lsm.c     | 3 +--
- security/loadpin/loadpin.c  | 3 +--
- security/yama/yama_lsm.c    | 3 +--
- 8 files changed, 10 insertions(+), 17 deletions(-)
+You did update your installation after the fresh[1] checkout?
 
-diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-index 2df115d0e210..5c2936b29d29 100644
---- a/arch/csky/abiv1/alignment.c
-+++ b/arch/csky/abiv1/alignment.c
-@@ -340,9 +340,8 @@ static struct ctl_table sysctl_table[2] = {
- 	{}
- };
- 
--static struct ctl_path sysctl_path[2] = {
--	{.procname = "csky"},
--	{}
-+static struct ctl_path sysctl_path[1] = {
-+	{.procname = "csky"}
- };
- 
- static int __init csky_alignment_init(void)
-diff --git a/arch/nds32/mm/alignment.c b/arch/nds32/mm/alignment.c
-index 1eb7ded6992b..5e79c01b91d6 100644
---- a/arch/nds32/mm/alignment.c
-+++ b/arch/nds32/mm/alignment.c
-@@ -560,9 +560,8 @@ static struct ctl_table nds32_sysctl_table[2] = {
- 	{}
- };
- 
--static struct ctl_path nds32_path[2] = {
--	{.procname = "nds32"},
--	{}
-+static struct ctl_path nds32_path[1] = {
-+	{.procname = "nds32"}
- };
- 
- /*
-diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-index 143a530a8008..6cdad230c438 100644
---- a/fs/verity/signature.c
-+++ b/fs/verity/signature.c
-@@ -92,8 +92,7 @@ static struct ctl_table_header *fsverity_sysctl_header;
- 
- static const struct ctl_path fsverity_sysctl_path[] = {
- 	{ .procname = "fs", },
--	{ .procname = "verity", },
--	{ }
-+	{ .procname = "verity", }
- };
- 
- static struct ctl_table fsverity_sysctl_table[] = {
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index a46a3723bc66..f4f6db65bf81 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -294,7 +294,7 @@ static struct ctl_table pid_ns_ctl_table[] = {
- 	},
- 	{ }
- };
--static struct ctl_path kern_path[] = { { .procname = "kernel", }, { } };
-+static struct ctl_path kern_path[] = { { .procname = "kernel", } };
- #endif	/* CONFIG_CHECKPOINT_RESTORE */
- 
- int reboot_pid_ns(struct pid_namespace *pid_ns, int cmd)
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index db10e73d06e0..03f88d0b79f1 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -2333,8 +2333,7 @@ static int seccomp_actions_logged_handler(struct ctl_table *ro_table, int write,
- 
- static struct ctl_path seccomp_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "seccomp", },
--	{ }
-+	{ .procname = "seccomp", }
- };
- 
- static struct ctl_table seccomp_sysctl_table[] = {
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 4f0eecb67dde..e35c3b29742d 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1729,8 +1729,7 @@ static int apparmor_dointvec(struct ctl_table *table, int write,
- }
- 
- static struct ctl_path apparmor_sysctl_path[] = {
--	{ .procname = "kernel", },
--	{ }
-+	{ .procname = "kernel", }
- };
- 
- static struct ctl_table apparmor_sysctl_table[] = {
-diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
-index b12f7d986b1e..0471b177d2e1 100644
---- a/security/loadpin/loadpin.c
-+++ b/security/loadpin/loadpin.c
-@@ -48,8 +48,7 @@ static DEFINE_SPINLOCK(pinned_root_spinlock);
- 
- static struct ctl_path loadpin_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "loadpin", },
--	{ }
-+	{ .procname = "loadpin", }
- };
- 
- static struct ctl_table loadpin_sysctl_table[] = {
-diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
-index 06e226166aab..b42b61e801b1 100644
---- a/security/yama/yama_lsm.c
-+++ b/security/yama/yama_lsm.c
-@@ -449,8 +449,7 @@ static int max_scope = YAMA_SCOPE_NO_ATTACH;
- 
- static struct ctl_path yama_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "yama", },
--	{ }
-+	{ .procname = "yama", }
- };
- 
- static struct ctl_table yama_sysctl_table[] = {
--- 
-2.20.1
+$ cd dt-schema
+$ pip3 install -e .
+
+[1] What about "git pull"? ;-)
 
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

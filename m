@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2664C2F5C
+	by mail.lfdr.de (Postfix) with ESMTP id C83EB4C2F5D
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiBXPTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:19:51 -0500
+        id S234061AbiBXPU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:20:28 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbiBXPSb (ORCPT
+        with ESMTP id S235955AbiBXPSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:18:31 -0500
+        Thu, 24 Feb 2022 10:18:40 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E335141FDC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:17:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B2515E6FB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=QAUleNMitdEV456BQHF8E2uz5k0IuNzEfT0St/nK4Ls=; b=SGid/uQ713gS7P4fC9kMcVYOcD
-        vNil022JW2VMFemGq4n6/qxpKZlo+f0ZEYY7MneZwrRaPtmcoNylxbyBhIfMqlCEM+sCLmoYYWaRk
-        EUx7SJZSM6Yhjve7LrCaeSTH1E3/U2b+NX8tncQpi1M5Vsg4iWj4KhFg713oxbacqGL+uV+wbLrH4
-        3skdlJWbu525Z9Di0grA7lQ44m4oK6kT3Vnotlbzhkgn1UPR9pNOXdmhWaPJ59xrFJOgKpoFkl4vL
-        n68fo4uqJjgs7lDY7pBvjTUw+nnAkkQYMq9HofW4XEAbfxfoXNJc7SyfIfsO1oxzVIstcgoIIwM+J
-        qS14Dbrw==;
+        bh=TkAGJ7zvVcxFDw+ALEkg770IMxdVbOyeQIIT2lBeroM=; b=Mah+icSYuh56wZ1diahoCaU3Ml
+        tQovF73+2jaUDzIllGpqicGbkt1WYVT6X1L+5Z5h/dRZ9fIpQDS027PG1S50LFvR4PveJ7AG5zY5E
+        IFYHSmEgXkK0W+Hc/0EYDb379saGjlyXE029Q3Gln8mksqotkoqGFsF7yRSEF9PPDXP8jLLCv18HB
+        YHU/OxLXVCxq9I8MiFF5+6LrpHvaJrupJEH2FloM4Aoh4jAL5db3LCGgh+sJ/OtgN0iw+mvEwH3l6
+        K6Rytsw1kdo+JaIK7vjj2xr1PQOJ89fC4EROOIRSIp9yxXlwaYS3/VwXSLTTWE9cRKTRjThWGqx2H
+        h9lmncUQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNFs4-00CeM5-0T; Thu, 24 Feb 2022 15:17:32 +0000
+        id 1nNFs4-00CeM6-Jc; Thu, 24 Feb 2022 15:17:32 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 512DA302D8A;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52007302DA2;
         Thu, 24 Feb 2022 16:17:29 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AFCB42B3547AF; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
-Message-ID: <20220224151324.137868984@infradead.org>
+        id B36862B3547B1; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
+Message-ID: <20220224151324.198359442@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 24 Feb 2022 15:52:14 +0100
+Date:   Thu, 24 Feb 2022 15:52:15 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v2 36/39] objtool: Find unused ENDBR instructions
+Subject: [PATCH v2 37/39] x86/ibt: Finish --ibt-fix-direct on module loading
 References: <20220224145138.952963315@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,195 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Find all unused ENDBR instructions and stick them in a section such
-that the kernel can poison them.
+Since modules are not fully linked objects, per construction, the
+LTO-like objtool pass cannot fix up the direct calls to external
+symbols.
+
+Have the module loader finish the job.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/kernel/vmlinux.lds.S           |    9 ++++
- tools/objtool/builtin-check.c           |    3 -
- tools/objtool/check.c                   |   72 +++++++++++++++++++++++++++++++-
- tools/objtool/include/objtool/builtin.h |    2 
- tools/objtool/include/objtool/objtool.h |    1 
- tools/objtool/objtool.c                 |    1 
- 6 files changed, 85 insertions(+), 3 deletions(-)
+ arch/x86/kernel/module.c |   40 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -285,6 +285,15 @@ SECTIONS
- 	}
- #endif
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -24,6 +24,7 @@
+ #include <asm/page.h>
+ #include <asm/setup.h>
+ #include <asm/unwind.h>
++#include <asm/ibt.h>
  
-+#ifdef CONFIG_X86_KERNEL_IBT
-+	. = ALIGN(8);
-+	.ibt_endbr_sites : AT(ADDR(.ibt_endbr_sites) - LOAD_OFFSET) {
-+		__ibt_endbr_sites = .;
-+		*(.ibt_endbr_sites)
-+		__ibt_endbr_sites_end = .;
-+	}
-+#endif
-+
- 	/*
- 	 * struct alt_inst entries. From the header (alternative.h):
- 	 * "Alternative instructions for different CPU types or capabilities"
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -21,7 +21,7 @@
- 
- bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
-      lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
--     ibt, ibt_fix_direct;
-+     ibt, ibt_fix_direct, ibt_seal;
- 
- static const char * const check_usage[] = {
- 	"objtool check [<options>] file.o",
-@@ -50,6 +50,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
- 	OPT_BOOLEAN(0, "ibt", &ibt, "validate ENDBR placement"),
- 	OPT_BOOLEAN(0, "ibt-fix-direct", &ibt_fix_direct, "fixup direct jmp/call to ENDBR"),
-+	OPT_BOOLEAN(0, "ibt-seal", &ibt_seal, "list superfluous ENDBR instructions"),
- 	OPT_END(),
- };
- 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -732,6 +732,58 @@ static int create_retpoline_sites_sectio
+ #if 0
+ #define DEBUGP(fmt, ...)				\
+@@ -128,6 +129,33 @@ int apply_relocate(Elf32_Shdr *sechdrs,
  	return 0;
  }
- 
-+static int create_ibt_endbr_sites_sections(struct objtool_file *file)
+ #else /*X86_64*/
++
++static inline void ibt_fix_direct(void *loc, u64 *val)
 +{
-+	struct instruction *insn;
-+	struct section *sec;
-+	int idx;
++#ifdef CONFIG_X86_KERNEL_IBT
++	const void *addr = (void *)(4 + *val);
++	union text_poke_insn text;
++	u32 insn;
 +
-+	sec = find_section_by_name(file->elf, ".ibt_endbr_sites");
-+	if (sec) {
-+		WARN("file already has .ibt_endbr_sites, skipping");
-+		return 0;
-+	}
++	if (get_kernel_nofault(insn, addr))
++		return;
 +
-+	idx = 0;
-+	list_for_each_entry(insn, &file->endbr_list, call_node)
-+		idx++;
++	if (!is_endbr(insn))
++		return;
 +
-+	if (stats) {
-+		printf("ibt: ENDBR at function start: %d\n", file->nr_endbr);
-+		printf("ibt: ENDBR inside functions:  %d\n", file->nr_endbr_int);
-+		printf("ibt: superfluous ENDBR:       %d\n", idx);
-+	}
++	/* validate jmp.d32/call @ loc */
++	if (WARN_ONCE(get_kernel_nofault(text, loc-1) ||
++		      (text.opcode != CALL_INSN_OPCODE &&
++		       text.opcode != JMP32_INSN_OPCODE),
++		      "Unexpected code at: %pS\n", loc))
++		return;
 +
-+	if (!idx)
-+		return 0;
++	DEBUGP("ibt_fix_direct: %pS\n", addr);
 +
-+	sec = elf_create_section(file->elf, ".ibt_endbr_sites", 0,
-+				 sizeof(int), idx);
-+	if (!sec) {
-+		WARN("elf_create_section: .ibt_endbr_sites");
-+		return -1;
-+	}
-+
-+	idx = 0;
-+	list_for_each_entry(insn, &file->endbr_list, call_node) {
-+
-+		int *site = (int *)sec->data->d_buf + idx;
-+		*site = 0;
-+
-+		if (elf_add_reloc_to_insn(file->elf, sec,
-+					  idx * sizeof(int),
-+					  R_X86_64_PC32,
-+					  insn->sec, insn->offset)) {
-+			WARN("elf_add_reloc_to_insn: .ibt_endbr_sites");
-+			return -1;
-+		}
-+
-+		idx++;
-+	}
-+
-+	return 0;
++	*val += 4;
++#endif
 +}
 +
- static int create_mcount_loc_sections(struct objtool_file *file)
- {
- 	struct section *sec;
-@@ -1179,6 +1231,7 @@ static int add_jump_destinations(struct
- 	for_each_insn(file, insn) {
- 		if (insn->type == INSN_ENDBR && insn->func) {
- 			if (insn->offset == insn->func->offset) {
-+				list_add_tail(&insn->call_node, &file->endbr_list);
- 				file->nr_endbr++;
- 			} else {
- 				file->nr_endbr_int++;
-@@ -3633,8 +3687,12 @@ validate_ibt_reloc(struct objtool_file *
- 	if (!dest)
- 		return NULL;
+ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+ 		   const char *strtab,
+ 		   unsigned int symindex,
+@@ -139,6 +167,7 @@ static int __apply_relocate_add(Elf64_Sh
+ 	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+ 	Elf64_Sym *sym;
+ 	void *loc;
++	int type;
+ 	u64 val;
  
--	if (dest->type == INSN_ENDBR)
-+	if (dest->type == INSN_ENDBR) {
-+		if (!list_empty(&dest->call_node))
-+			list_del_init(&dest->call_node);
+ 	DEBUGP("Applying relocate section %u to %u\n",
+@@ -153,13 +182,14 @@ static int __apply_relocate_add(Elf64_Sh
+ 		sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+ 			+ ELF64_R_SYM(rel[i].r_info);
+ 
++		type = ELF64_R_TYPE(rel[i].r_info);
 +
- 		return NULL;
-+	}
+ 		DEBUGP("type %d st_value %Lx r_addend %Lx loc %Lx\n",
+-		       (int)ELF64_R_TYPE(rel[i].r_info),
+-		       sym->st_value, rel[i].r_addend, (u64)loc);
++		       type, sym->st_value, rel[i].r_addend, (u64)loc);
  
- 	if (reloc->sym->static_call_tramp)
- 		return NULL;
-@@ -3777,6 +3835,11 @@ int check(struct objtool_file *file)
- 		return 1;
- 	}
+ 		val = sym->st_value + rel[i].r_addend;
  
-+	if (ibt_seal && !ibt_fix_direct) {
-+		fprintf(stderr, "--ibt-seal requires: --ibt-fix-direct\n");
-+		return 1;
-+	}
+-		switch (ELF64_R_TYPE(rel[i].r_info)) {
++		switch (type) {
+ 		case R_X86_64_NONE:
+ 			break;
+ 		case R_X86_64_64:
+@@ -185,6 +215,10 @@ static int __apply_relocate_add(Elf64_Sh
+ 		case R_X86_64_PLT32:
+ 			if (*(u32 *)loc != 0)
+ 				goto invalid_relocation;
 +
- 	arch_initial_func_cfi_state(&initial_func_cfi);
- 	init_cfi_state(&init_cfi);
- 	init_cfi_state(&func_cfi);
-@@ -3854,6 +3917,13 @@ int check(struct objtool_file *file)
- 		if (ret < 0)
- 			goto out;
- 		warnings += ret;
-+	}
++			if (type == R_X86_64_PLT32)
++				ibt_fix_direct(loc, &val);
 +
-+	if (ibt_seal) {
-+		ret = create_ibt_endbr_sites_sections(file);
-+		if (ret < 0)
-+			goto out;
-+		warnings += ret;
- 	}
- 
- 	if (stats) {
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -10,7 +10,7 @@
- extern const struct option check_options[];
- extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
- 	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
--	    ibt, ibt_fix_direct;
-+	    ibt, ibt_fix_direct, ibt_seal;
- 
- extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
- 
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -26,6 +26,7 @@ struct objtool_file {
- 	struct list_head retpoline_call_list;
- 	struct list_head static_call_list;
- 	struct list_head mcount_loc_list;
-+	struct list_head endbr_list;
- 	bool ignore_unreachables, c_file, hints, rodata;
- 
- 	unsigned int nr_endbr;
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -128,6 +128,7 @@ struct objtool_file *objtool_open_read(c
- 	INIT_LIST_HEAD(&file.retpoline_call_list);
- 	INIT_LIST_HEAD(&file.static_call_list);
- 	INIT_LIST_HEAD(&file.mcount_loc_list);
-+	INIT_LIST_HEAD(&file.endbr_list);
- 	file.c_file = !vmlinux && find_section_by_name(file.elf, ".comment");
- 	file.ignore_unreachables = no_unreachable;
- 	file.hints = false;
+ 			val -= (u64)loc;
+ 			write(loc, &val, 4);
+ #if 0
 
 

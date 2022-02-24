@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED124C23E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8894C23DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiBXGIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S231175AbiBXGI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiBXGIS (ORCPT
+        with ESMTP id S231185AbiBXGIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:08:18 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D7EB8212;
-        Wed, 23 Feb 2022 22:07:48 -0800 (PST)
+        Thu, 24 Feb 2022 01:08:24 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81319268366;
+        Wed, 23 Feb 2022 22:07:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645682869; x=1677218869;
+  t=1645682874; x=1677218874;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oiJlEqYi2G/M1ak/+E9q5Pf4TyGwzZSyE0d92xpEqUI=;
-  b=ETlf7FZhJMbbBsK6RwYj8hFoKhag45oZZ900A3wtVVH0t5BvCJfRO9Bu
-   gowsP7N7+9UYpJmoru4Ua6yEfgG8RCjEsFRgvQoIf1XfUofwW8o/Dptb5
-   HgrppBEDrMrIlte3b2MIMdIgsFokHjIGAAIK/rQm0eH0EtqYfmn+0f2au
-   U=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Feb 2022 22:07:48 -0800
+  bh=DQWaPQ+0rviNbgTffzEDspCm5f8s267jdCGIyLu/vFM=;
+  b=ClkexmZHkppj48k89NQAh8q4SZoy9r+bIp30KY3XM00kjWy4tXUlGDSb
+   khUkHQxkd/rHnWypFq4LNz7SVN2bxhghL3gpi/KwNZlW/m2HITxRlc8PJ
+   FOKrT2zTrvMvSgAy91vImTTgeLXKel7Tkt3Hltl7BBi3csNzPKPLc7EY9
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 23 Feb 2022 22:07:54 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:48 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:54 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 22:07:48 -0800
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:53 -0800
 Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 22:07:44 -0800
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:49 -0800
 From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 To:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -48,10 +48,12 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
         gregkh <gregkh@linuxfoundation.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
-Subject: [PATCHv10 3/6] irqchip/tegra: Fix overflow implicit truncation warnings
-Date:   Thu, 24 Feb 2022 11:37:05 +0530
-Message-ID: <df0b2d7a4b05d174b5d0539ef2f4add91069c247.1644824638.git.quic_saipraka@quicinc.com>
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCHv10 4/6] drm/meson: Fix overflow implicit truncation warnings
+Date:   Thu, 24 Feb 2022 11:37:06 +0530
+Message-ID: <9c7ff199d826b60e019c0eeeb6aa280abfdb9a82.1644824638.git.quic_saipraka@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1644824638.git.quic_saipraka@quicinc.com>
 References: <cover.1644824638.git.quic_saipraka@quicinc.com>
@@ -71,65 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix -Woverflow warnings for tegra irqchip driver which is a result
+Fix -Woverflow warnings for drm/meson driver which is a result
 of moving arm64 custom MMIO accessor macros to asm-generic function
 implementations giving a bonus type-checking now and uncovering these
 overflow warnings.
 
-drivers/irqchip/irq-tegra.c: In function ‘tegra_ictlr_suspend’:
-drivers/irqchip/irq-tegra.c:151:18: warning: large integer implicitly truncated to unsigned type [-Woverflow]
-   writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-                  ^
+drivers/gpu/drm/meson/meson_viu.c: In function ‘meson_viu_init’:
+drivers/gpu/drm/meson/meson_registers.h:1826:48: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+ #define  VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+                                                ^
+drivers/gpu/drm/meson/meson_viu.c:472:18: note: in expansion of macro ‘VIU_OSD_BLEND_REORDER’
+   writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+                  ^~~~~~~~~~~~~~~~~~~~~
 
-Cc: Marc Zyngier <maz@kernel.org>
-Suggested-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 ---
- drivers/irqchip/irq-tegra.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/meson/meson_viu.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/irqchip/irq-tegra.c b/drivers/irqchip/irq-tegra.c
-index e1f771c72fc4..ad3e2c1b3c87 100644
---- a/drivers/irqchip/irq-tegra.c
-+++ b/drivers/irqchip/irq-tegra.c
-@@ -148,10 +148,10 @@ static int tegra_ictlr_suspend(void)
- 		lic->cop_iep[i] = readl_relaxed(ictlr + ICTLR_COP_IEP_CLASS);
+diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
+index 259f3e6bec90..bb7e109534de 100644
+--- a/drivers/gpu/drm/meson/meson_viu.c
++++ b/drivers/gpu/drm/meson/meson_viu.c
+@@ -469,17 +469,17 @@ void meson_viu_init(struct meson_drm *priv)
+ 			priv->io_base + _REG(VD2_IF0_LUMA_FIFO_SIZE));
  
- 		/* Disable COP interrupts */
--		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-+		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_COP_IER_CLR);
+ 	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
+-		writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+-			       VIU_OSD_BLEND_REORDER(1, 0) |
+-			       VIU_OSD_BLEND_REORDER(2, 0) |
+-			       VIU_OSD_BLEND_REORDER(3, 0) |
+-			       VIU_OSD_BLEND_DIN_EN(1) |
+-			       VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
+-			       VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
+-			       VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
+-			       VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
+-			       VIU_OSD_BLEND_HOLD_LINES(4),
+-			       priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
++		u32 val = (u32)VIU_OSD_BLEND_REORDER(0, 1) |
++			  (u32)VIU_OSD_BLEND_REORDER(1, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(2, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(3, 0) |
++			  (u32)VIU_OSD_BLEND_DIN_EN(1) |
++			  (u32)VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
++			  (u32)VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
++			  (u32)VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
++			  (u32)VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
++			  (u32)VIU_OSD_BLEND_HOLD_LINES(4);
++		writel_relaxed(val, priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
  
- 		/* Disable CPU interrupts */
--		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_CPU_IER_CLR);
- 
- 		/* Enable the wakeup sources of ictlr */
- 		writel_relaxed(lic->ictlr_wake_mask[i], ictlr + ICTLR_CPU_IER_SET);
-@@ -172,12 +172,12 @@ static void tegra_ictlr_resume(void)
- 
- 		writel_relaxed(lic->cpu_iep[i],
- 			       ictlr + ICTLR_CPU_IEP_CLASS);
--		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_CPU_IER_CLR);
- 		writel_relaxed(lic->cpu_ier[i],
- 			       ictlr + ICTLR_CPU_IER_SET);
- 		writel_relaxed(lic->cop_iep[i],
- 			       ictlr + ICTLR_COP_IEP_CLASS);
--		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-+		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_COP_IER_CLR);
- 		writel_relaxed(lic->cop_ier[i],
- 			       ictlr + ICTLR_COP_IER_SET);
- 	}
-@@ -312,7 +312,7 @@ static int __init tegra_ictlr_init(struct device_node *node,
- 		lic->base[i] = base;
- 
- 		/* Disable all interrupts */
--		writel_relaxed(~0UL, base + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(GENMASK(31, 0), base + ICTLR_CPU_IER_CLR);
- 		/* All interrupts target IRQ */
- 		writel_relaxed(0, base + ICTLR_CPU_IEP_CLASS);
- 
+ 		writel_relaxed(OSD_BLEND_PATH_SEL_ENABLE,
+ 			       priv->io_base + _REG(OSD1_BLEND_SRC_CTRL));
 -- 
 2.33.1
 

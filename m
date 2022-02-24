@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72134C35C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D569D4C35C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiBXTXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S233804AbiBXTY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiBXTXr (ORCPT
+        with ESMTP id S231332AbiBXTY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:23:47 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28922177FC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:23:16 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id bd1so2661400plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:23:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=clEmBoE5acfF2gaQU5Wymn1ivohsrBcp66owW0vTwCw=;
-        b=LNrYxtpkyVVfVMoICJScMFXUo0rHwiaINcVDZUnigMYd+H/xLqwwqvMhzFk4Ipgyom
-         5vMfg9P17OZ4Pk2VDFT3Y8lofLf3PrgZlHInDxlWu9viEuYmAk1+6JPjXAiCE0LlMP4t
-         kHQKVVaZJLdToGcuaJa/jr1Af7G3SyRzHwWHJXdvToLFfLBxcHwRYSKo7oRPcBKfC/vW
-         NtHZE90IMf+MO5SMgEXJ4OGksP0g2mzy/4X4lbZaB54fe0zxiq6WyYBRpIwhfbcjWgwf
-         XvfoY+jd1balbv2X7M6KxzJdzqKe4uXM5NrjDYhzohpkOsSke1nogWbG+i2BCd6+H3MN
-         aHig==
+        Thu, 24 Feb 2022 14:24:26 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF43239D75;
+        Thu, 24 Feb 2022 11:23:56 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id j24so4359809oii.11;
+        Thu, 24 Feb 2022 11:23:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=clEmBoE5acfF2gaQU5Wymn1ivohsrBcp66owW0vTwCw=;
-        b=F7OXqZ+w0Yi3HuxIp/QTr95oPlppMnthMYggcPWRvX3Szp6twL7lrRhJoHNU94KMiR
-         bldDIKLhhe7/bK3YfwOkPKVWDNBUjWdoHNhyeT7Pq2ZeX3x5xo38GKAzoBMxOu5apNdd
-         RW/+z7Yvw0MHoTn34zC/WHcTq8/rf70iFnRNn4oHLGo1Kv0tZI7WbP8Aoeu2PJq3NvuC
-         sfLdsbAKB666/qWJlolaZJQ74bI/H0fde6onod33Gr5tsR/mGdd1wYOyYPLOME1njhnj
-         P1WBOKPim1foxKMypyV5x3yqPLeZQBhcsL10BcdJEg21tKs9+Urww1vPfVb/8KUfryz7
-         jUgA==
-X-Gm-Message-State: AOAM530DfUHavmf8kd/5Hogz+1KH/lMUZefbeWVTCimpaVRlXa1pR+ap
-        2itaW623pE88sjTDzguhqhgXuQ==
-X-Google-Smtp-Source: ABdhPJzYNSr+DxP6f/PRS3isytin7hYe3mJ0SSeq4b82nW2GIJ39fHj2ZGGu/uq2IAwDm0mbt6+KHw==
-X-Received: by 2002:a17:90a:aa98:b0:1b8:5adb:e35f with SMTP id l24-20020a17090aaa9800b001b85adbe35fmr4223123pjq.192.1645730595880;
-        Thu, 24 Feb 2022 11:23:15 -0800 (PST)
-Received: from [2620:15c:29:204:e8e6:cf42:a32d:384e] ([2620:15c:29:204:e8e6:cf42:a32d:384e])
-        by smtp.gmail.com with ESMTPSA id y39-20020a056a00182700b004e19980d6cbsm211760pfa.210.2022.02.24.11.23.15
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1ATEm+ezUxW7JC6KyJ4AzJTjSuX9kBPLT6sQlhoX0j0=;
+        b=EnoCqH1BLAeqoJC9b7VoFNLMlGzPDP4PO0SzCs9x5aeTpCTKc/F5zLhoGTPIzztR1f
+         NBAz1Gml4X7sgxyND2h2PDWdfjNh1AHgJ4yk442FmiMhpzaCH9spO3/ToC/Rx/qw/jR8
+         ud2Buukn/xM1jwhhgjjqwpST9axEUXePMkvZ4CqzAKb84k6Xi15BIy1eSALWZQCJSunu
+         BA3N4ClOBdXkX05wTtbHQkS3LyYSJ4whiMmlH8IhtESTWsv2G9+N64jC8gTGzYuk670i
+         sw4rIq2VhzHEznxx1P31gkXTm4xvivTd0HTCSyAI85JQW+HhDDKHJYHl6N2WnEXPqucL
+         jo7Q==
+X-Gm-Message-State: AOAM530Y/H0rptDzJbl+v9lDe/5Ch+iB4XQtDlQwxqSKnKvDHVA3yULC
+        3pDclgn4W4SZbE+gdhFqsA==
+X-Google-Smtp-Source: ABdhPJxqMJgJOH+d1ye9jcXWq/7lxeQLktPMAnrmzC3IQGcpdrnrpbjSIvxa+udq3xfO6UIcWqw05w==
+X-Received: by 2002:a05:6870:4301:b0:d4:1181:285f with SMTP id w1-20020a056870430100b000d41181285fmr6822568oah.93.1645730636188;
+        Thu, 24 Feb 2022 11:23:56 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m21-20020a056820051500b0031d0841b87esm86236ooj.34.2022.02.24.11.23.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 11:23:15 -0800 (PST)
-Date:   Thu, 24 Feb 2022 11:23:14 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/oom_kill: remove unneeded is_memcg_oom check
-In-Reply-To: <20220224115933.20154-1-linmiaohe@huawei.com>
-Message-ID: <1b625d1f-96eb-5535-1fd3-4e5ffa7d6c3e@google.com>
-References: <20220224115933.20154-1-linmiaohe@huawei.com>
+        Thu, 24 Feb 2022 11:23:55 -0800 (PST)
+Received: (nullmailer pid 3439705 invoked by uid 1000);
+        Thu, 24 Feb 2022 19:23:54 -0000
+Date:   Thu, 24 Feb 2022 13:23:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     kernel@pengutronix.de, shawnguo@kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
+        robh+dt@kernel.org, s.hauer@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        abel.vesa@nxp.com, linux-imx@nxp.com, sboyd@kernel.org
+Subject: Re: [PATCH V4 1/5] dt-bindings: clock: Add imx93 clock support
+Message-ID: <YhfbShLhZ4qNOo0D@robh.at.kernel.org>
+References: <20220224082251.1397754-1-peng.fan@oss.nxp.com>
+ <20220224082251.1397754-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224082251.1397754-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022, Miaohe Lin wrote:
-
-> oom_cpuset_eligible is always called when !is_memcg_oom. Remove this
-> unnecessary check.
+On Thu, 24 Feb 2022 16:22:47 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Add the clock dt-binding file for i.MX93.
+> 
+> Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/clock/imx93-clock.yaml           | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/imx93-clock.yaml
+> 
 
-Acked-by: David Rientjes <rientjes@google.com>
-
-This keeps oom_cpuset_eligible() only in the nodemask eligibility business 
-and memcg criteria remains isolated in its own function.
+Reviewed-by: Rob Herring <robh@kernel.org>

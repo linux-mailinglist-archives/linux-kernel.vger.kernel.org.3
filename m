@@ -2,197 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F0E4C21A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0754C2115
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiBXCRF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 21:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S229623AbiBXBhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiBXCRC (ORCPT
+        with ESMTP id S229563AbiBXBhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:17:02 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B02BB0A;
-        Wed, 23 Feb 2022 18:16:33 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:33614)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nN2rs-00GJkb-1D; Wed, 23 Feb 2022 18:24:28 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53352 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nN2rq-0044iM-PT; Wed, 23 Feb 2022 18:24:27 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <linus@torvalds.org>
-Cc:     Linux API <linux-api@vger.kernel.org>,
-        Etienne Dechamps <etienne@edechamps.fr>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Security Officers <security@kernel.org>,
-        Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
-        <20220215101150.GD21589@blackbody.suse.cz>
-        <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
-        <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
-        <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 19:24:19 -0600
-In-Reply-To: <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-        (Linus Torvalds's message of "Wed, 23 Feb 2022 11:50:38 -0800")
-Message-ID: <878ru1qcos.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 23 Feb 2022 20:37:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998B51D3;
+        Wed, 23 Feb 2022 17:36:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 139AB60ED2;
+        Thu, 24 Feb 2022 01:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458E4C340E7;
+        Thu, 24 Feb 2022 01:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645665979;
+        bh=8LDaM4Jy5ejD/wY59B/RpUu2ht19fRLgDsVinlKVkz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eoAVUn1fHYOdBWEUVuQXREhDK/0DHFrXmXjXifC8G4q8K8O7UC0WBstBt+H2QGX25
+         H8n77lvmTP/SCtZrse9ESioB7fzeJtocPDcnqcNTKYPhAiB6fBajXw37PHELsQeS6Z
+         1npEVBrlVVdePpm+5zXRAT/U8GLW9Q1nw1uw5QQTyndn7xFGfxf9Tf96k6nn4viJBe
+         5m3LCrlEHkAmmEjc2u+GrZc5SgveF6GFxdzE8baaa0Af9L3PhnLO1y7a4XzJGAWOEz
+         uJmclobZFzbazQEm4SluQosfJu7Cv+7HNoOrUQ73XcfhZDFBNOlTP1uF8p0EcF0FiO
+         a2nPv3A4zJr7g==
+Date:   Wed, 23 Feb 2022 17:26:17 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/8] fs-verity: define a function to return the
+ integrity protected file digest
+Message-ID: <YhbeuQpGuDxEmi9o@sol.localdomain>
+References: <20220211214310.119257-1-zohar@linux.ibm.com>
+ <20220211214310.119257-4-zohar@linux.ibm.com>
+ <YhbKYZcWxmi4auJU@sol.localdomain>
+ <f322ae351dde71b92d7d4037d78190c7338ca710.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nN2rq-0044iM-PT;;;mid=<878ru1qcos.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/U781PhiDNIl7q7MwB3lIxUeSfdkrvwaY=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f322ae351dde71b92d7d4037d78190c7338ca710.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <linus@torvalds.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 674 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (1.6%), b_tie_ro: 10 (1.4%), parse: 1.70
-        (0.3%), extract_message_metadata: 20 (2.9%), get_uri_detail_list: 3.7
-        (0.5%), tests_pri_-1000: 14 (2.1%), tests_pri_-950: 1.24 (0.2%),
-        tests_pri_-900: 1.03 (0.2%), tests_pri_-90: 124 (18.4%), check_bayes:
-        119 (17.7%), b_tokenize: 11 (1.6%), b_tok_get_all: 12 (1.7%),
-        b_comp_prob: 4.0 (0.6%), b_tok_touch_all: 89 (13.2%), b_finish: 0.93
-        (0.1%), tests_pri_0: 488 (72.4%), check_dkim_signature: 0.67 (0.1%),
-        check_dkim_adsp: 3.0 (0.4%), poll_dns_idle: 1.22 (0.2%), tests_pri_10:
-        2.2 (0.3%), tests_pri_500: 7 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: How should rlimits, suid exec, and capabilities interact?
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Linus Torvalds <linus@torvalds.org> writes:
-
-> Basic rule: it's better to be too lenient than to be too strict.
-
-Thank you.  With that guideline I can explore the space of what is
-possible.
-
-Question: Running a suid program today charges the activity of that
-program to the user who ran that program, not to the user the program
-runs as.  Does anyone see a problem with charging the user the program
-runs as?
-
-The reason I want to change who is charged with a process (besides it
-making more sense in my head) is so that capable(CAP_SYS_RESOURCE) can
-be used instead of the magic incantation (cred->user == INIT_USER).
-
-An accidental experiment happened in v5.14-rc1 in July when the ucount
-rlimit code was merged.  It was only this last week when after Michal
-Koutný discovered the discrepency through code inspect a bug fix was
-merged.
-
-This changes the behavior that has existed in some form since Linux v1.0
-when per user process limits were added.
-
-The original code in v1.0 looked like:
-> static int find_empty_process(void)
-> {
->        int free_task;
->        int i, tasks_free;
->        int this_user_tasks;
+On Wed, Feb 23, 2022 at 08:21:01PM -0500, Mimi Zohar wrote:
+> On Wed, 2022-02-23 at 15:59 -0800, Eric Biggers wrote:
+> > On Fri, Feb 11, 2022 at 04:43:05PM -0500, Mimi Zohar wrote:
+> > > +/**
+> > > + * fsverity_get_digest() - get a verity file's digest
+> > > + * @inode: inode to get digest of
+> > > + * @digest: (out) pointer to the digest
+> > > + * @alg: (out) pointer to the hash algorithm enumeration
+> > > + *
+> > > + * Return the file hash algorithm and digest of an fsverity protected file.
+> > > + *
+> > > + * Return: 0 on success, -errno on failure
+> > > + */
+> > > +int fsverity_get_digest(struct inode *inode,
+> > > +			u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
+> > > +			enum hash_algo *alg)
+> > > +{
+> > > +	const struct fsverity_info *vi;
+> > > +	const struct fsverity_hash_alg *hash_alg;
+> > > +	int i;
+> > > +
+> > > +	vi = fsverity_get_info(inode);
+> > > +	if (!vi)
+> > > +		return -ENODATA; /* not a verity file */
+> > 
+> > Sorry for the slow reviews; I'm taking a look again now.  One question about
+> > something I missed earlier: is the file guaranteed to have been opened before
+> > this is called?  fsverity_get_info() only returns a non-NULL value if the file
+> > has been opened at least once since the inode has been loaded into memory.  If
+> > the inode has just been loaded into memory without being opened, for example due
+> > to a call to stat(), then fsverity_get_info() will return NULL.
+> > 
+> > If the file is guaranteed to have been opened, then the code is fine, but the
+> > comment for fsverity_get_digest() perhaps should be updated to mention this
+> > assumption, given that it takes a struct inode rather than a struct file.
+> > 
+> > If the file is *not* guaranteed to have been opened, then it would be necessary
+> > to make fsverity_get_digest() call ensure_verity_info() to set up the
+> > fsverity_info.
 > 
-> repeat:
->        if ((++last_pid) & 0xffff8000)
->                last_pid=1;
->        this_user_tasks = 0;
->        tasks_free = 0;
->        free_task = -EAGAIN;
->        i = NR_TASKS;
->        while (--i > 0) {
->                if (!task[i]) {
->                        free_task = i;
->                        tasks_free++;
->                        continue;
->                }
->                if (task[i]->uid == current->uid)
->                        this_user_tasks++;
->                if (task[i]->pid == last_pid || task[i]->pgrp == last_pid ||
->                    task[i]->session == last_pid)
->                        goto repeat;
->        }
->        if (tasks_free <= MIN_TASKS_LEFT_FOR_ROOT ||
->            this_user_tasks > MAX_TASKS_PER_USER)
->                if (current->uid)
->                        return -EAGAIN;
->        return free_task;
-> }
+> Yes, fsverity_get_digest() is called as a result of a syscall - open,
+> execve, mmap, etc.   
+> Refer to the LSM hooks security_bprm_check() and security_mmap_file().
+> ima_file_check() is called directly in do_open().
 
-Having tracked the use of real uid in limits back this far my guess
-is that it was an accident of the implementation and real uid vs
-effective uid had not be considered.
+stat() is a syscall too, so the question is not whether this is being called as
+a result of a syscall, but rather whether it's only being called while the file
+is open (or at least previously opened).  Is the answer to that "yes"?
 
-Does anyone know if choosing the real uid was a deliberate decision
-anywhere in the history of Linux?
-
-
-
-Linus you were talking about making it possible to login as I think a
-non-root user to be able to use sudo and kill a fork bomb.
-
-The counter case is apache having a dedicated user for running
-cgi-scripts and using RLIMIT_NPROC to limit how many of those processes
-can exist.  Unless I am misunderstanding something that looks exactly
-like your login as non-root so you can run sudo to kill a fork-bomb.
-
-A comment from an in-process cleanup patch explains this as best I can:
-         /*
-         * In general rlimits are only enforced when a new resource
-         * is acquired.  That would be during fork for RLIMIT_NPROC.
-         * That is insufficient for RLIMIT_NPROC as many attributes of
-         * a new process must be set between fork and exec.
-         *
-         * A case where this matter is when apache runs forks a process
-         * and calls setuid to run cgi-scripts as a different user.
-         * Generating those processes through a code sequence like:
-         *
-         *      fork()
- 	 *	setrlimit(RLIMIT_NPROC, ...)         
-         *      execve()  -- suid wrapper
-         *      setuid()
-         *      execve()  -- cgi script
-         *
-         * The cgi-scripts are unlikely to fork on their own so unless
-         * RLIMIT_NPROC is checked after the user change and before
-         * the cgi-script starts, RLIMIT_NPROC simply will not be enforced
-         * for the cgi-scripts.
-         *
-         * So the code tracks if between fork and exec if an operation
-         * occurs that could cause the RLIMIT_NPROC check to fail.  If
-         * such an operation has happened re-check RLIMIT_NPROC.
-         */
-
-
-Answered-Question: I was trying to ask if anyone knows of a reason why
-we can't just sanitize the rlimits of the process during suid exec?
-Linus your guideline would appear to allow that behavior.  Unfortunately
-that looks like it would break current usage of apache suexec.
-
-Eric
+- Eric

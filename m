@@ -2,133 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E124C38AF
+	by mail.lfdr.de (Postfix) with ESMTP id C20194C38B0
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiBXWXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S235446AbiBXWXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiBXWXN (ORCPT
+        with ESMTP id S234205AbiBXWXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:23:13 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7011F6BE5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 14:22:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645741362; x=1677277362;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=5RiZZ9aPukW4GiysnDDSrpGKUCcJUHrJhiwKvfkbbek=;
-  b=KoTxr0dMmW17nB3tsSmkzgNSGXGmzAELExP4t79AGCWzf9bXwtkAP2iI
-   mOfbPBuMhTJIn4JLKGBsF4gpU1en/4HfaCFN/ERWZls45laC6gPKzQ9Gq
-   HIGlWa8WsxODMd7z/AM/fFkHMS/Qh++wqx/o7/C+94Trc4/fvdgQDOxLx
-   1icxvP2WvoGLhqkorn3/+RLh9PnsBXvklcFxQGVdUOxSoyFLcAPfAd1lk
-   38V9qulwnugGQVDxiHMYg1oNxuDoQq1R645iepX1KICHK1VvY3Np0L1QE
-   ZFgjoF90B9XKevCRFzJdIBJmqDKZu7/ote58U73RwSdBpXl+vwClFWuRd
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="235873948"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="235873948"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 14:22:42 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="639902503"
-Received: from hthen-mobl2.amr.corp.intel.com (HELO [10.209.48.194]) ([10.209.48.194])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 14:22:41 -0800
-Message-ID: <10b4cfef-49f8-12db-0ad7-2a6acad00234@intel.com>
-Date:   Thu, 24 Feb 2022 14:22:36 -0800
+        Thu, 24 Feb 2022 17:23:20 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E872177CA;
+        Thu, 24 Feb 2022 14:22:50 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id b22so3106699pls.7;
+        Thu, 24 Feb 2022 14:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KC38Q9auprSBL2KXS5vTL8BZyOlr0l+99ezAwIh0Alk=;
+        b=Fl47mfGKhSwRhjWAN2q9gQAHA0ODonroy6a5ZTZuMuaIbiVEFaorM/YC1NB1o70+3F
+         Nmfkh6rpxVY3nJmSSuGu3QTtuOfdxjizbCfXh60POt+T8vuZMfVojdoC6yYJnG6Ziwby
+         WZmED/nJSmEEeHY5EU9iUcP8xw5qoqR5fLhPuL/Z6ceS39ui35QcI79ee1VRuw3cxy9I
+         HatF/gUOA9mPpnJjlvGy5mit4GCMY07rBwrfrIDWNHB29eTYaD29IFqNvErH4Vc3SuVZ
+         rOhnPoREDEt0hmj5JoX+9/G3o3ZG5kj67W4GooYQhZSie0glAHTRnm3D7+ifOETj+wuJ
+         //6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KC38Q9auprSBL2KXS5vTL8BZyOlr0l+99ezAwIh0Alk=;
+        b=B/AVlbmYfBpnJ2NSndN5q5BaGr7b3FSbMi+k9ReT1LVIPN34tv31nyla5gaVS+tjaT
+         E/uwK3106PwoXOXbtGPelAfBX06vDzHVPKBjGwdxH4GZEPiGndClsiQ8j9W1IKNlCLug
+         jpKT+7uRm8KVxHwtNI0WnfWjCQagpE7tKM6cHVal1Ul2o9ym0njnW2Fdz0TFPIzlnOYK
+         ZcYhH6zUojbIKOxTvMFFALcvLNr2riaWW0cp+cqLNulXGYbQ4gTNigjRp9r9F2+MeK/W
+         +2s6mQPe2NFZ34Za0cp89w9VQyKRStmhlXigRBd6mmkI6BjMQgD4rnO+VG/sGeSR3ezi
+         80FA==
+X-Gm-Message-State: AOAM5310xneCN07o0ZKe8a1XtSMwdlnDywNDGhUNEof2uNEO/KIykEzc
+        NbVpj94R5t0IZ3yFaj/n6F0=
+X-Google-Smtp-Source: ABdhPJzallEYPS+l4SgLT9ah/U3MzuX2cTvZpiM9CTLd8ytUd2EJAFjf/cxgotvtqPmkd2n+G8lKSg==
+X-Received: by 2002:a17:90b:4ac4:b0:1ba:3b4:d3c with SMTP id mh4-20020a17090b4ac400b001ba03b40d3cmr202228pjb.201.1645741369032;
+        Thu, 24 Feb 2022 14:22:49 -0800 (PST)
+Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
+        by smtp.gmail.com with ESMTPSA id m6-20020a056a00080600b004e1bb196743sm561169pfk.5.2022.02.24.14.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:22:48 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Add MSM_SUBMIT_FENCE_SN_IN
+Date:   Thu, 24 Feb 2022 14:23:21 -0800
+Message-Id: <20220224222321.60653-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-17-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 16/30] x86/boot/compressed: Support TDX guest port I/O
- at decompression time
-In-Reply-To: <20220224155630.52734-17-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 07:56, Kirill A. Shutemov wrote:
-> @@ -24,4 +88,11 @@ void early_tdx_detect(void)
->  
->  	/* Cache TDX guest feature status */
->  	tdx_guest_detected = true;
-> +
-> +	pio_ops.inb = tdx_inb;
-> +	pio_ops.inw = tdx_inw;
-> +	pio_ops.inl = tdx_inl;
-> +	pio_ops.outb = tdx_outb;
-> +	pio_ops.outw = tdx_outw;
-> +	pio_ops.outl = tdx_outl;
->  }
+From: Rob Clark <robdclark@chromium.org>
 
-I guess the kernel isn't going to get far if any of this goes wrong.
-But, I do kinda wish that code ^^ was connected to the below code somehow:
+Add a way for userspace to specify the sequence number fence used to
+track completion of the submit.  As the seqno fence is simply an
+incrementing counter which is local to the submitqueue, it is easy for
+userspace to know the next value.
 
-> +static inline void init_io_ops(void)
-> +{
-> +	pio_ops.inb = inb;
-> +	pio_ops.inw = inw;
-> +	pio_ops.inl = inl;
-> +	pio_ops.outb = outb;
-> +	pio_ops.outw = outw;
-> +	pio_ops.outl = outl;
-> +}
+This is useful for native userspace drivers in a vm guest, as the guest
+to host roundtrip can have high latency.  Assigning the fence seqno in
+the guest userspace allows the guest to continue without waiting for
+response from the host.
 
-Maybe just a comment would do it.  Or, maybe init_io_ops() should  just
-be called init_default_io_ops().  I think this would do:
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_drv.c        |  3 +-
+ drivers/gpu/drm/msm/msm_gem_submit.c | 42 ++++++++++++++++++++++++----
+ include/uapi/drm/msm_drm.h           |  4 ++-
+ 3 files changed, 41 insertions(+), 8 deletions(-)
 
-	/*
-	 * Use the normal I/O instructions by default.
-	 * TDX guests override these to use hypercalls.
-	 */
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index 30fd18ca88c4..16f37f3d9061 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -41,9 +41,10 @@
+  * - 1.6.0 - Syncobj support
+  * - 1.7.0 - Add MSM_PARAM_SUSPENDS to access suspend count
+  * - 1.8.0 - Add MSM_BO_CACHED_COHERENT for supported GPUs (a6xx)
++ * - 1.9.0 - Add MSM_SUBMIT_FENCE_SN_IN
+  */
+ #define MSM_VERSION_MAJOR	1
+-#define MSM_VERSION_MINOR	8
++#define MSM_VERSION_MINOR	9
+ #define MSM_VERSION_PATCHLEVEL	0
+ 
+ static const struct drm_mode_config_funcs mode_config_funcs = {
+diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+index 6cfa984dee6a..c6d60c8d286d 100644
+--- a/drivers/gpu/drm/msm/msm_gem_submit.c
++++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+@@ -872,16 +872,46 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 
+ 	submit->nr_cmds = i;
+ 
++	/*
++	 * If using userspace provided seqno fence, validate that the id
++	 * is available before arming sched job.  Since access to fence_idr
++	 * is serialized on the queue lock, the slot should be still avail
++	 * after the job is armed
++	 */
++	if ((args->flags & MSM_SUBMIT_FENCE_SN_IN) &&
++			idr_find(&queue->fence_idr, args->fence)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	drm_sched_job_arm(&submit->base);
+ 
+ 	submit->user_fence = dma_fence_get(&submit->base.s_fence->finished);
+ 
+-	/*
+-	 * Allocate an id which can be used by WAIT_FENCE ioctl to map back
+-	 * to the underlying fence.
+-	 */
+-	submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
+-			submit->user_fence, 1, INT_MAX, GFP_KERNEL);
++	if (args->flags & MSM_SUBMIT_FENCE_SN_IN) {
++		/*
++		 * Userspace has assigned the seqno fence that it wants
++		 * us to use.  It is an error to pick a fence sequence
++		 * number that is not available.
++		 */
++		submit->fence_id = args->fence;
++		ret = idr_alloc_u32(&queue->fence_idr, submit->user_fence,
++				    &submit->fence_id, submit->fence_id,
++				    GFP_KERNEL);
++		/*
++		 * We've already validated that the fence_id slot is valid,
++		 * so if idr_alloc_u32 failed, it is a kernel bug
++		 */
++		WARN_ON(ret);
++	} else {
++		/*
++		 * Allocate an id which can be used by WAIT_FENCE ioctl to map
++		 * back to the underlying fence.
++		 */
++		submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
++						    submit->user_fence, 1,
++						    INT_MAX, GFP_KERNEL);
++	}
+ 	if (submit->fence_id < 0) {
+ 		ret = submit->fence_id = 0;
+ 		submit->fence_id = 0;
+diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+index 6b8fffc28a50..6cd45a7f6947 100644
+--- a/include/uapi/drm/msm_drm.h
++++ b/include/uapi/drm/msm_drm.h
+@@ -227,6 +227,7 @@ struct drm_msm_gem_submit_bo {
+ #define MSM_SUBMIT_SUDO          0x10000000 /* run submitted cmds from RB */
+ #define MSM_SUBMIT_SYNCOBJ_IN    0x08000000 /* enable input syncobj */
+ #define MSM_SUBMIT_SYNCOBJ_OUT   0x04000000 /* enable output syncobj */
++#define MSM_SUBMIT_FENCE_SN_IN   0x02000000 /* userspace passes in seqno fence */
+ #define MSM_SUBMIT_FLAGS                ( \
+ 		MSM_SUBMIT_NO_IMPLICIT   | \
+ 		MSM_SUBMIT_FENCE_FD_IN   | \
+@@ -234,6 +235,7 @@ struct drm_msm_gem_submit_bo {
+ 		MSM_SUBMIT_SUDO          | \
+ 		MSM_SUBMIT_SYNCOBJ_IN    | \
+ 		MSM_SUBMIT_SYNCOBJ_OUT   | \
++		MSM_SUBMIT_FENCE_SN_IN   | \
+ 		0)
+ 
+ #define MSM_SUBMIT_SYNCOBJ_RESET 0x00000001 /* Reset syncobj after wait. */
+@@ -253,7 +255,7 @@ struct drm_msm_gem_submit_syncobj {
+  */
+ struct drm_msm_gem_submit {
+ 	__u32 flags;          /* MSM_PIPE_x | MSM_SUBMIT_x */
+-	__u32 fence;          /* out */
++	__u32 fence;          /* out (or in with MSM_SUBMIT_FENCE_SN_IN flag) */
+ 	__u32 nr_bos;         /* in, number of submit_bo's */
+ 	__u32 nr_cmds;        /* in, number of submit_cmd's */
+ 	__u64 bos;            /* in, ptr to array of submit_bo's */
+-- 
+2.35.1
 
-if it went in init_io_ops() from the last patch.
-
-> 
-> +static inline unsigned int tdx_io_in(int size, u16 port)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = EXIT_REASON_IO_INSTRUCTION,
-> +		.r12 = size,
-> +		.r13  = 0,
-
-		    ^ munged whitespace?
-
-> +		.r14 = port,
-> +	};
-> +
-> +	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-> +		return UINT_MAX;
-> +
-> +	return args.r11;
-> +}
-
-With that fixed:
-
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>

@@ -2,156 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6804C3946
+	by mail.lfdr.de (Postfix) with ESMTP id A138B4C3948
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiBXW4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S232529AbiBXW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiBXW4y (ORCPT
+        with ESMTP id S230335AbiBXW53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:56:54 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C98B20B148;
-        Thu, 24 Feb 2022 14:56:23 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m13-20020a7bca4d000000b00380e379bae2so669886wml.3;
-        Thu, 24 Feb 2022 14:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=Zi1b2mViq0hVTmTwxj2JFBkk+1b6GZr054w+Vl7W0GI=;
-        b=hBfP3OoJH5NIU7oxbUX/xlrRJFszgcgy9tXwUa9Jg1W9dLdnn6fKKNMnEuoja0+VUg
-         yL/ZkH0AJNjWEQRqgEJmPUR17J+CY9/57H98qyaYaR7Qj7Y3yeOz9MfqXcBYZvNCkaJN
-         PtK1ShedhwUEb0JBeBBdoTEQuNsucb1M7MXxOvIPHX8BTY3s/UfMLcwGeGYePcPzvPGS
-         lYNDCk8Winn8TlGGLwnbZTUaKulvgFM9ik7jg3mNeFsJNeJzEXgdc1wcI7EfFO6F48XO
-         E/24FvyqhKg5jZ2y+mliA8fIxMNDaTZkQ8pdJoL3mJrFP7iBWDrKGTrodgWmXJaj5rL9
-         N1Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=Zi1b2mViq0hVTmTwxj2JFBkk+1b6GZr054w+Vl7W0GI=;
-        b=QXDQo3gdRt2r14h3MvwTeYHgn7kCeiFaDS4EkGaeFUCqJ1VRY124qcrAI0TciyaDIi
-         m2rM87MiU2PecEArwTDD+i51ZS8Ta3mFgGAQMKk0q7yiaNKif0LvMchnkSnEMRZfmKWO
-         IgH9jJ9t9GVuxFBOiaGBkqa5KZaOKlmLsioEjFd/14bUxUNbsCc5gQkVQGKJhWON1q9E
-         tHLwppJay8kcCtU6/bPPtCh65pkdifYWa2MkwnOWOB5wstzrlzlsw5RxgIW01rOf2ypJ
-         idkkdrU2EaltXAoaf2JfOSpryPEmYWKiqqvFqHBnkdUI5BJm1535oJu9xItDPhzpE9pl
-         RBqw==
-X-Gm-Message-State: AOAM530yjeQY63c2tg11vWu2qIJMFLsCYJNAKFWU2e3VTHrX7rxwMpvF
-        anxnDsn0dj6ZyDaFilZqazI=
-X-Google-Smtp-Source: ABdhPJzifE5j5Kie0K3/9MBfqUuyId1xxJ2IS6Gh/w2ybpj5C+80ta1nN4hCJRc1vQvNT5n1quPILw==
-X-Received: by 2002:a05:600c:1e0a:b0:37d:342c:36ac with SMTP id ay10-20020a05600c1e0a00b0037d342c36acmr236481wmb.168.1645743381962;
-        Thu, 24 Feb 2022 14:56:21 -0800 (PST)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id x3-20020adfdd83000000b001e58c8de11bsm624367wrl.39.2022.02.24.14.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 14:56:21 -0800 (PST)
-Message-ID: <69aeef03-69ba-07f4-2506-31e481f86c76@gmail.com>
-Date:   Thu, 24 Feb 2022 22:56:20 +0000
+        Thu, 24 Feb 2022 17:57:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC20458831;
+        Thu, 24 Feb 2022 14:56:58 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21OL80RZ018478;
+        Thu, 24 Feb 2022 22:56:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=hLMUQDq0hZU27/WUqn+x3uojwC5HLelaS3pmkFmruhI=;
+ b=VZdGmlWPt18YeT0z01npFX4CM7OrJo8BcshOeKt7bk8akb9UcRb/ecV0TAgEyhZtV5jb
+ 1wUbf4jjUiVCmAbvnEGkaCVL+K6j7bc5zqnF6cDu376Y5YIJ3yehzrk8sZPcFJyctpz/
+ MMx0+xJfc2etZIrWcijYHkNcABNbDgzyaa6p/qnHs3PIGaThlg1TuFjoZiMrlI546EwM
+ 6ljlsIg1A0ejVWD5PLNBI5L24Zn515TptgI4OTc1JH5pCv2nG/Z5EMlP6NNW6f0FE/qa
+ SG/maEs4jmnSBUus2SNShFbpNiWTKtQKBymOVb0ttEO3C8aJYTjTAnsRcx4X5G2rodtK 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3edpjvq48p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Feb 2022 22:56:53 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21OMk7EL005856;
+        Thu, 24 Feb 2022 22:56:52 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3edpjvq48f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Feb 2022 22:56:52 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21OMqHhj006768;
+        Thu, 24 Feb 2022 22:56:51 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma02wdc.us.ibm.com with ESMTP id 3ear6bcc84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Feb 2022 22:56:51 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21OMuoud12517692
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Feb 2022 22:56:50 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE23D7805E;
+        Thu, 24 Feb 2022 22:56:50 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53BC87805C;
+        Thu, 24 Feb 2022 22:56:50 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.163.20.50])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 24 Feb 2022 22:56:50 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-input@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org, joel@jms.id.au,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v4 0/2] input: misc: Add IBM Operation Panel driver
+Date:   Thu, 24 Feb 2022 16:56:33 -0600
+Message-Id: <20220224225635.40538-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        linux-iio@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: iio:adc:ad7280a: Move out of staging
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dIrw9o-CDiqPA5-TMBpr-Eo3BFp-hDOb
+X-Proofpoint-GUID: 1W8dCxWg2opM4B2REmJnKuM6Ydk2YrWI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-24_05,2022-02-24_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 adultscore=0 clxscore=1011 mlxscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202240123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds support for input from the IBM Operation Panel, which is
+a simple controller with three buttons and an LCD display meant for
+interacting with a server. It's connected over I2C, typically to a service
+processor. This series only supports the input from the panel, in which the
+panel masters the I2C bus and sends data to the host system when someone
+presses a button on the controller.
 
-Static analysis with clang scan picked up a potential issue with 
-drivers/iio/adc/ad7280a.c in function ad7280a_write_thresh, the analysis 
-is as follows:
+Changes since v3:
+ - Document linux,keycodes property
+ - Use linux,keycodes property to map the buttons
+ - Put the checksumming in a seperate function
+ - Don't do unneccessary input_unregister calls
+ - Minor cleanup and add debug data to dev_dbg calls
 
-         switch (chan->type) {
-         case IIO_VOLTAGE:
-                 value = ((val - 1000) * 100) / 1568; /* LSB 15.68mV */
-                 value = clamp(value, 0L, 0xFFL);
+Changes since v2:
+ - Add "additionalProperties: false" to dts doc
+ - Refactor switch statement in the input driver; check command size and call
+   the processing function within the STOP case
+ - Use a different definition name for Aspeed interrupt status mask
 
-                 ^^
-Note: variable value is being assigned a value
+Changes since v1:
+ - Redo DTS documentation example to use I2C_OWN_SLAVE_ADDRESS
+ - Reject commands received in the input driver that are too long
+ - Add a definition for the interrupt status mask in the Aspeed I2C driver
+ - Use I2C_OWN_SLAVE_ADDRESS for both dts additions
 
-                 switch (dir) {
-                 case IIO_EV_DIR_RISING:
-                         addr = AD7280A_CELL_OVERVOLTAGE_REG;
-                         ret = ad7280_write(st, AD7280A_DEVADDR_MASTER, 
-addr,
-                                            1, val);
-                         if (ret)
-                                 break;
-                         st->cell_threshhigh = value;
+Eddie James (2):
+  dt-bindings: input: Add documentation for IBM Operation Panel
+  input: misc: Add IBM Operation Panel driver
 
-..and value is being used here ^^
+ .../bindings/input/ibm,op-panel.yaml          |  49 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/input/misc/Kconfig                    |  18 ++
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/ibm-panel.c                | 198 ++++++++++++++++++
+ 5 files changed, 273 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/ibm,op-panel.yaml
+ create mode 100644 drivers/input/misc/ibm-panel.c
 
-                         break;
-                 case IIO_EV_DIR_FALLING:
-                         addr = AD7280A_CELL_UNDERVOLTAGE_REG;
-                         ret = ad7280_write(st, AD7280A_DEVADDR_MASTER, 
-addr,
-                                            1, val);
-                         if (ret)
-                                 break;
-                         st->cell_threshlow = value;
+-- 
+2.27.0
 
-and value is being used here ^^
-
-                         break;
-                 default:
-                         ret = -EINVAL;
-                         goto err_unlock;
-                 }
-                 break;
-
-However for the IIO_TEMP case:
-
-         case IIO_TEMP:
-                 value = (val * 10) / 196; /* LSB 19.6mV */
-                 value = clamp(value, 0L, 0xFFL);
-
-                 ^^
-Note: variable value is being assigned a value
-
-                 switch (dir) {
-                 case IIO_EV_DIR_RISING:
-                         addr = AD7280A_AUX_ADC_OVERVOLTAGE_REG;
-                         ret = ad7280_write(st, AD7280A_DEVADDR_MASTER, 
-addr,
-                                            1, val);
-                         if (ret)
-                                 break;
-                         st->aux_threshhigh = val;
-                                              ^^
-But val is being used here rather than value
-
-                         break;
-                 case IIO_EV_DIR_FALLING:
-                         addr = AD7280A_AUX_ADC_UNDERVOLTAGE_REG;
-                         ret = ad7280_write(st, AD7280A_DEVADDR_MASTER, 
-addr,
-                                            1, val);
-                         if (ret)
-                                 break;
-                         st->aux_threshlow = val;
-                                             ^^
-and val us being used here rather than value too
-
-
-So for the IIO_TEMP case either the assignment to value is redundant or 
-the setting of st->aux_threshhigh or st->auxthreashlow is incorrect.
-
-Colin

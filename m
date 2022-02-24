@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E72E4C324D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0B54C3257
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiBXQzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S229751AbiBXQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiBXQzq (ORCPT
+        with ESMTP id S229709AbiBXQ4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:55:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0735B11A02
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645721715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fjhQNIhph84bfsMFxiUxBEgb36uPYbCGqR8imgof9OE=;
-        b=cVnEqMStEMZloHGmZusGE3U6JxgjjvTM9xuIYN83nlUoiC4gs4jAcCGj+tIYBdRM3DqKUT
-        Bk3WBE90kkmmEOTVabOICQQj3rqbp4Y3FABHrLbe/Sdp/FXNYuz1YnTWXHb9NTxAcBiSmR
-        S7rTwr4Vn0FmJv4RefRnTHaT1+mzuBE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-53Mptq0NM5iNaH6eGbcKEg-1; Thu, 24 Feb 2022 11:55:09 -0500
-X-MC-Unique: 53Mptq0NM5iNaH6eGbcKEg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 41C77100C609;
-        Thu, 24 Feb 2022 16:55:08 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 36D0A804DC;
-        Thu, 24 Feb 2022 16:54:58 +0000 (UTC)
-Message-ID: <dc820a37ef302ed7c11315c01c6f434d5506c543.camel@redhat.com>
-Subject: Re: [RFC PATCH 04/13] KVM: SVM: Only call vcpu_(un)blocking when
- AVIC is enabled.
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 18:54:58 +0200
-In-Reply-To: <20220221021922.733373-5-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-5-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 11:56:06 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A891219C34;
+        Thu, 24 Feb 2022 08:55:36 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id m11so2267277pls.5;
+        Thu, 24 Feb 2022 08:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3jupyhKXUVgzI8jl6XLkxB3VWZ4j9bVDJBTUD2oEwyY=;
+        b=BOJNjF3xyVndodCcQOK86cBfUWQhJA40AxnlGYqWlLmglYuNH2k70JUJ9UlFA0iK8q
+         xl+EMxPU2sd48ePOxgbDoRzqyab9Pvqd7+aagqFqiaAxENZ3klDcSuGLlpTZOBMzvYeU
+         Zk8E/dL3HW61Y2bMNHVG4Sf1kFxJXd8yROaX/SK3G6jdSh4r3rE+i018U51E3KInLFlu
+         bR3j6zHHUfJ+n1GuNQdhxyD6c9LTiyOlLiG2pHEo3H7ng0FtX4f7qUy5ielAJ7RP59WO
+         HUVe9AKSF3kvminEYa6Ch0dOBFmQakw6ICZ+juP8uVJRkuyGZ5lpG6XOqRhNks8/eq+r
+         DGrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3jupyhKXUVgzI8jl6XLkxB3VWZ4j9bVDJBTUD2oEwyY=;
+        b=h3qE2pEDK2WGnoiSEzvs37Z2DH+Odqzr/NFgimhDmws2ZJZe60OeBDbKLOOMiRlHzV
+         jTiQ9LBAh5rgdS6WOr0GKIg/rgmVUtzPu8rMFrdVc31zhJ0o+p8qHmryA/kaxvTSl/Rm
+         z0JLTybogmb2E2ecPvm/4kQDob1ge0XdUUw2u+4go2k4NPhiX1j8CklqMhVYB7KWv6PH
+         oKoXutbnOZZwqMSdxJtcROVQ6v4oye1AEgbSFP2EGG0NaJ/arwVq24tZTQf3PGF6WlfK
+         UYhp8Q4t8kyKv11preKIyZLwb+t8bOCELl85o9FDpXH09AE3Gh7e734C7HHi3dnIGfJE
+         j+SQ==
+X-Gm-Message-State: AOAM532uvuUXzAYUGbaBSwnxXgo/n7faY9lAJ09hyP/ZLOJJVkbckjBe
+        2SM/hrTw7++2di+BTO1gmtQsAOV3NQo=
+X-Google-Smtp-Source: ABdhPJzpdF6V+TrUGFelU7N+ech1dEa5Yf8cBaK/SZaPLwugPzG3cUTrbKfY5N1wAuiv2rpp21ljzQ==
+X-Received: by 2002:a17:90a:e512:b0:1bc:22c8:cc82 with SMTP id t18-20020a17090ae51200b001bc22c8cc82mr15450092pjy.208.1645721735718;
+        Thu, 24 Feb 2022 08:55:35 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id pf14sm3750081pjb.16.2022.02.24.08.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 08:55:35 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 24 Feb 2022 06:55:34 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC V5 02/16] blk/rq-qos: prepare to make blk-rq-qos pluggable
+Message-ID: <Yhe4hmVyh9ygGycR@slm.duckdns.org>
+References: <20220224090654.54671-1-jianchao.wan9@gmail.com>
+ <20220224090654.54671-3-jianchao.wan9@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224090654.54671-3-jianchao.wan9@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> The kvm_x86_ops.vcpu_(un)blocking are needed by AVIC only.
-> Therefore, set the ops only when AVIC is enabled.
+On Thu, Feb 24, 2022 at 05:06:40PM +0800, Wang Jianchao (Kuaishou) wrote:
+> This patch makes blk-rq-qos policies pluggable as following,
+> (1) Add code to maintain the rq_qos_ops. A rq-qos policy need to
+>     register itself with rq_qos_register(). The original enum
+>     rq_qos_id will be removed in following patch. They will use
+>     a dynamic id maintained by rq_qos_ida.
+> (2) Add .init callback into rq_qos_ops. We use it to initialize the
+>     resource.
+> (3) Add /sys/block/x/queue/qos
+>     We can use '+name' or "-name" to open or close the blk-rq-qos
+>     policy.
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 12 ++++++++++--
->  arch/x86/kvm/svm/svm.c  |  7 -------
->  arch/x86/kvm/svm/svm.h  |  2 --
->  3 files changed, 10 insertions(+), 11 deletions(-)
+> This patch mainly prepare help interfaces and no functional changes.
+> Following patches will adpat the code of wbt, iolatency, iocost and
+> ioprio to make them pluggable one by one. And after that, the sysfs
+> interface /sys/block/xxx/queue/qos will be exported.
 > 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index abde08ca23ab..0040824e4376 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -996,7 +996,7 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
->  	WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
->  }
->  
-> -void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
-> +static void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
->  {
->  	if (!kvm_vcpu_apicv_active(vcpu))
->  		return;
-> @@ -1021,7 +1021,7 @@ void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
->  	preempt_enable();
->  }
->  
-> -void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
-> +static void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  {
->  	int cpu;
->  
-> @@ -1057,6 +1057,14 @@ bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
->  		pr_info("x2AVIC enabled\n");
->  	}
->  
-> +	if (avic_mode) {
-> +		x86_ops->vcpu_blocking = avic_vcpu_blocking;
-> +		x86_ops->vcpu_unblocking = avic_vcpu_unblocking;
-> +	} else {
-> +		x86_ops->vcpu_blocking = NULL;
-> +		x86_ops->vcpu_unblocking = NULL;
-> +	}
-> +
->  	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
->  	return !!avic_mode;
->  }
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3048f4b758d6..3687026f2859 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4531,8 +4531,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  	.prepare_guest_switch = svm_prepare_guest_switch,
->  	.vcpu_load = svm_vcpu_load,
->  	.vcpu_put = svm_vcpu_put,
-> -	.vcpu_blocking = avic_vcpu_blocking,
-> -	.vcpu_unblocking = avic_vcpu_unblocking,
->  
->  	.update_exception_bitmap = svm_update_exception_bitmap,
->  	.get_msr_feature = svm_get_msr_feature,
-> @@ -4819,11 +4817,6 @@ static __init int svm_hardware_setup(void)
->  
->  	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
->  
-> -	if (!enable_apicv) {
-> -		svm_x86_ops.vcpu_blocking = NULL;
-> -		svm_x86_ops.vcpu_unblocking = NULL;
-> -	}
+> Signed-off-by: Wang Jianchao (Kuaishou) <jianchao.wan9@gmail.com>
 
-Isn't this code already zeros these callbacks when avic is not enabled?
+As discussed before, the addition of new interface and custom module loading
+mechanism is unnecessary and undesirable.
 
-I am not sure why this patch is needed to be honest.
+Nacked-by: Tejun Heo <tj@kernel.org>
 
-Best regards,
-	Maxim Levitsky
+Thanks.
 
-> -
->  	if (vls) {
->  		if (!npt_enabled ||
->  		    !boot_cpu_has(X86_FEATURE_V_VMSAVE_VMLOAD) ||
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index b53c83a44ec2..1a0bf6b853df 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -578,8 +578,6 @@ void svm_hwapic_isr_update(struct kvm_vcpu *vcpu, int max_isr);
->  bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
->  		       uint32_t guest_irq, bool set);
-> -void avic_vcpu_blocking(struct kvm_vcpu *vcpu);
-> -void avic_vcpu_unblocking(struct kvm_vcpu *vcpu);
->  void avic_ring_doorbell(struct kvm_vcpu *vcpu);
->  
->  /* sev.c */
-
-
+-- 
+tejun

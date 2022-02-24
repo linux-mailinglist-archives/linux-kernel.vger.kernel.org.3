@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998BF4C2D8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDD74C2D8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbiBXNq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S235231AbiBXNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiBXNq4 (ORCPT
+        with ESMTP id S234912AbiBXNtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:46:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB33C27AA35
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:46:26 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so3539338wmj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:46:26 -0800 (PST)
+        Thu, 24 Feb 2022 08:49:01 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7B1A58E9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:48:31 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id r10so984941wma.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:48:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fE7kl2GhZCQLmfysy3Jz8Q5rFJOjnbH3GgpHqDMSeJg=;
-        b=rv0aGpluioskNTfLPijWXUXmUgO1Csy1GuyIJGrZ9VWydqKZSfq/olkTeEL6+M5jqm
-         vA9zrwS9nP0w30Fj2n+MIHm3iobZnSk8Qbaay8GSSWcs8OcTzssPLEEoQ1t2mmVst9Ma
-         JxBcB1ieYaQ7pjwelUGXRwiO/mDHAXjJSRNSZoQeSCyEzsewt0TU/MSJ7X4dn1HjU4t/
-         3MXY/QhzzD7TUJsG4EJf84mlhBtN0/Yw1nZ1/7dOHdwgPrve4uHjtMcQQa4HPXA0umQr
-         QgaW1+cj3LC1+AxFqKmVNGizKTLIwKeyBN2TSsgau79mRPaiu8sI6+zfhDXESazxgLuy
-         UhOg==
+        bh=Y6XYZppzb13xLXqFFu+ajD27M8IiQ/biSpno2EH25M0=;
+        b=pEivyOT5ulYJ8VlQWq8msOTtZSHSfZ3oZPUoczvtNyW+oR7jRcikMolq3eXuAZuWnq
+         Vo7G7UQYSLQS0rglQVYbgOqlITssODljoBqsytok35C+pTOd9pIDMHBl810MjPXGlCJx
+         VsdzPJnC0Kd3XSLme+oVSIQWGpVm39LZ0M0ZxSnex0iUmBEKYT2ZP4HZgdY7cju/NyEC
+         cK5bOhh+4t549hq3mQ/MjrZjyFhAwxgNgvvy7S2+GE24uOeAsP4PxCJbr/MJTzHhzDsH
+         QLDMkwXvg2t92O0erAHUS5k+sQ0BoChgQla9C8vWsH+IA1/c9oyPF5M26Hh8RNsMzI4q
+         dp5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=fE7kl2GhZCQLmfysy3Jz8Q5rFJOjnbH3GgpHqDMSeJg=;
-        b=F4qh8VTWnSvwM11k5+ZdXya2XLcat6ZWndmkUPPop0smhON7Q4NDLUQl+XVIuXtj+g
-         12nWMQqj2fZZJ7fkw7j3lAzqBNRamtUO0YKto9AQBAh+Kjx2onw06el3roNSGDCU+Exf
-         f5Cx10O2fNcw4S30cw0DEoj4Q2nT2oHYszEpi3JUD2SAKxsjbkZuvFtQSv5aMNYCGBot
-         e8By86H10y9CKZQKrwvjZpfeK2QD14t/BoxkEgUAqWGYmjvyf546P5WITvOhIEG8+4ny
-         4wmfn3sTgRCnLe3nsxphQVT3dlLdv7AmO1pcXgoaEPz+KSb8OY2FsbYQWTmSiPgOf1bD
-         T3ag==
-X-Gm-Message-State: AOAM531ZqMtJ0yeEKILQC6afaLMvwdMB4h0EscquPkiHBClGast5YyHR
-        Xe+ZQP8UxPRYEO4mUlrk8upZAw==
-X-Google-Smtp-Source: ABdhPJyh9rNJY6AS+e904Xmv+hju2DcFQtoseCfyBNBL9hQgNOxtDno2T3TB9eCXAs5sdguoqBwM3g==
-X-Received: by 2002:a1c:c910:0:b0:37d:1f4a:224e with SMTP id f16-20020a1cc910000000b0037d1f4a224emr11543849wmb.124.1645710385222;
-        Thu, 24 Feb 2022 05:46:25 -0800 (PST)
+        bh=Y6XYZppzb13xLXqFFu+ajD27M8IiQ/biSpno2EH25M0=;
+        b=LT7juEBKFjzXgjTcuw0z5n+3zRT2+Kv36k60LKpAwj8sUKe+HWsuzmr/i/ctC0leYY
+         ofNjkMDdWQezsq8tIsQLhg9tYtAVa/jlv0qIzJWS6QmnfgwjunSmNsymFe8rPEVhYJuK
+         RRRnnx4XReTlETTBROu2NF7R8Kgxjd5upcEtnlPnnr4V04WR8fRTaUVIUHEgGPF4XfNc
+         oIz9xbb0mAOw0MbSKBhemDZF9hfmOGljOWqu7u5+V09a/rufzsgQ8v5LEBd4Sz68xHYn
+         jbITjiBQKjrhf3CMEigoX/ldJtI9frlyXlNGs/WNvBYXS3jYEdST9uGlzovYcQvxE+wo
+         LJHw==
+X-Gm-Message-State: AOAM532vyt3UXsNeKJ+dDng/RK9b0bfxeAyn5d24y134b5adfd9ekS6T
+        DyCR8wv5phFnPDBF7DCWVuElQQ==
+X-Google-Smtp-Source: ABdhPJxPuK1rTPTgTvRp50LaZ8ASOalj6sW2lj7K+Rp12o9MnZHsT3Lejh0FWmothSCI/ZmmSiC4Dw==
+X-Received: by 2002:a1c:7216:0:b0:37b:f84d:d56e with SMTP id n22-20020a1c7216000000b0037bf84dd56emr11654546wmc.177.1645710509675;
+        Thu, 24 Feb 2022 05:48:29 -0800 (PST)
 Received: from [10.205.160.65] ([95.83.233.50])
-        by smtp.gmail.com with ESMTPSA id u12sm2792859wrs.2.2022.02.24.05.46.24
+        by smtp.gmail.com with ESMTPSA id b14sm809513wrj.101.2022.02.24.05.48.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 05:46:24 -0800 (PST)
-Message-ID: <d64555a6-79ce-bff0-bb06-bc0b02fa27ff@conchuod.ie>
-Date:   Thu, 24 Feb 2022 13:49:53 +0000
+        Thu, 24 Feb 2022 05:48:29 -0800 (PST)
+Message-ID: <4fa6664a-2362-b9eb-f279-12bcbf567e5e@conchuod.ie>
+Date:   Thu, 24 Feb 2022 13:51:58 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
  compatible items
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+To:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Conor Dooley <Conor.Dooley@microchip.com>
 Cc:     Wolfram Sang <wsa@kernel.org>, Daire.McNamara@microchip.com,
-        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -71,13 +71,15 @@ References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux
  <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
  <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
  <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
+ <YheLklKvZqR1qY90@robh.at.kernel.org>
 From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
+In-Reply-To: <YheLklKvZqR1qY90@robh.at.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,42 +88,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 24/02/2022 13:34, Geert Uytterhoeven wrote:
-> Hi Conor,
-> 
-> On Thu, Feb 24, 2022 at 2:15 PM <Conor.Dooley@microchip.com> wrote:
->> On 24/02/2022 12:58, Geert Uytterhoeven wrote:
->>> On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
->>>> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
->>>>> make dt_binding_check:
+On 24/02/2022 13:43, Rob Herring wrote:
+> On Thu, Feb 24, 2022 at 02:34:18PM +0100, Geert Uytterhoeven wrote:
+>> Hi Conor,
+>>
+>> On Thu, Feb 24, 2022 at 2:15 PM <Conor.Dooley@microchip.com> wrote:
+>>> On 24/02/2022 12:58, Geert Uytterhoeven wrote:
+>>>> On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
+>>>>> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
+>>>>>> make dt_binding_check:
+>>>>>>
+>>>>>>        Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 >>>>>
->>>>>        Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+>>>>> Hey Geert,
+>>>>> I've run dt_binding_check locally but I dont get a warning, is there
+>>>>> something I am missing?
 >>>>
->>>> Hey Geert,
->>>> I've run dt_binding_check locally but I dont get a warning, is there
->>>> something I am missing?
+>>>> Interesting. Are you using the latest dtschema?
+>>>> https://github.com/devicetree-org/dt-schema.git
 >>>
->>> Interesting. Are you using the latest dtschema?
->>> https://github.com/devicetree-org/dt-schema.git
+>>> I was on v2021.12, but have now tried v2022.01 & master
+>>> (2022.2.dev1+gf677c85).
+>>>
+>>> Is there something other than running "make dt_binding_check" in a fresh
+>>> checkout that I need to do?
 >>
->> I was on v2021.12, but have now tried v2022.01 & master
->> (2022.2.dev1+gf677c85).
+>> You did update your installation after the fresh[1] checkout?
 >>
->> Is there something other than running "make dt_binding_check" in a fresh
->> checkout that I need to do?
+>> $ cd dt-schema
+>> $ pip3 install -e .
+>>
+>> [1] What about "git pull"? ;-)
 > 
-> You did update your installation after the fresh[1] checkout?
-> 
-> $ cd dt-schema
-> $ pip3 install -e .
-> 
-> [1] What about "git pull"? ;-)
-> 
+> yamllint is not installed. It's optional from the kbuild perspective.
 
-I went for the option of "pip3 install 
-git+https://github.com/devicetree-org/dt-schema.git@master"
-If I alter check_dtschema_version to spit out the version, its as 
-expected. The checkout was of Linux not the dt-schema.
+Safe to say I won't forget yamllint next time I do an os reinstall..
 
-I have found the issue however, realised just before Rob pointed it out 
-that I missed yamllint when I reinstalled my OS recently.
+Thanks.

@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CB94C2800
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C4B4C2812
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiBXJZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S232741AbiBXJ2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:28:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiBXJZu (ORCPT
+        with ESMTP id S232300AbiBXJ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:25:50 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA91627990C;
-        Thu, 24 Feb 2022 01:25:20 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 770831476;
-        Thu, 24 Feb 2022 01:25:20 -0800 (PST)
-Received: from [10.57.8.211] (unknown [10.57.8.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 803A03F70D;
-        Thu, 24 Feb 2022 01:25:18 -0800 (PST)
-Message-ID: <02d16fbe-d4d6-a7f1-d81f-39f05dff76fc@arm.com>
-Date:   Thu, 24 Feb 2022 09:25:17 +0000
+        Thu, 24 Feb 2022 04:28:41 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC60822A24D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:28:11 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id y189so2606177ybe.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ygp7HmSMQP3Q+rbTx5g2DkVDCEdl+SFVfMjp/BmaoiI=;
+        b=cepL0hdCN9UbyCzkOyV9cQEdxhgUijKh9zmmcDO5ikU473yp2AMOZcJXilqLRa0sFX
+         zfJ9F6q5gR/6iBDSs/MWKl5HIY9yjtZF5m5sa1Ox3N3Gu4/ncdRBYcD3fvzUBnuQqtrM
+         nAUWwm6kL8VdrogYpBrNw18wLKWFmZd6DDEvOI6D4H+mHJGqcA8phVZheJzRPgN7lv64
+         eRe0E1LIuKHztxG7hg2oe7Qf66pC89aNTF/Ig8zlbtlXZZhzOOy4WbazNK2qNpt4Zstb
+         gznQQkwisI3iIEeReJZnQLwDvvvJDXee/MNMui+50vNhX2zNwhqzm+l5ZvFAoJxzA9Pw
+         B3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ygp7HmSMQP3Q+rbTx5g2DkVDCEdl+SFVfMjp/BmaoiI=;
+        b=naiPiAmKHcq3gX/LZQ6CpNIrk5CTtbAVb1+idF/Q1YiQEXjs+0y9Q83La3R9ehJGOI
+         TBG0vygysShQt7RsXlQMV3+tCqWl7vV89HCt2Dj7QOEn0u7EotKFU9qX6oI6LX/fz+7h
+         u8NssHHVZoJRMgjORdIntLsbae7LHUi+ARTKKbved7bA1WCu2et5uNr1IJFIVccvTBpv
+         89GdqX5yDDuxgMXv7XilglGbam3eNptu1ZOMQWfK6UnHo1c+53/2E36qrSv5QDlkYpAU
+         QOgyGaEuTEMQ1hKkpqRZXBdbHcsopSLnZnMyHW5MmL4KFpHiI0iMbDZnW258FOURTCgs
+         Oc2w==
+X-Gm-Message-State: AOAM531xoFplGuVERi2vhFLPfp+UoI0Nm8N/iAEmN63L9iIikbgwbDe9
+        zsK10JL8K/eJ4HqbBIoDOR/NNj0yZN38SJr4653x5w==
+X-Google-Smtp-Source: ABdhPJxscph16DkI7QPkYWvFXGKPAB18KesE5yybvpBkL5Qinq23VhWYa9sR4nWUBegylDrScVJnGI8fPsI6IwGs7nc=
+X-Received: by 2002:a25:6993:0:b0:624:55af:336c with SMTP id
+ e141-20020a256993000000b0062455af336cmr1603707ybc.412.1645694890926; Thu, 24
+ Feb 2022 01:28:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 4/4] Documentation: EM: Describe new registration
- method using DT
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220224081131.27282-1-lukasz.luba@arm.com>
- <20220224081131.27282-5-lukasz.luba@arm.com>
- <20220224091508.fp7emu2zyhavkfkt@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220224091508.fp7emu2zyhavkfkt@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Feb 2022 14:57:59 +0530
+Message-ID: <CA+G9fYs_8ww=Mi4o4XXjQxL2XJiTiAUbMd1WF08zL+FoiA7GRw@mail.gmail.com>
+Subject: [next] LTP: readahead02.c:295: TFAIL: readahead failed to save any I/O
+To:     LTP List <ltp@lists.linux.it>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Linux next 20220222 tag LTP syscalls test case readahead02 failed.
+Please find detail test output on below link [1]
 
+test failed log:
+--------------------
+readahead02.c:181: TPASS: offset is still at 0 as expected
+readahead02.c:285: TINFO: read_testfile(0) took: 37567 usec
+readahead02.c:286: TINFO: read_testfile(1) took: 37263 usec
+readahead02.c:288: TINFO: read_testfile(0) read: 0 bytes
+readahead02.c:290: TINFO: read_testfile(1) read: 0 bytes
+readahead02.c:295: TFAIL: readahead failed to save any I/O
 
-On 2/24/22 09:15, Viresh Kumar wrote:
-> On 24-02-22, 08:11, Lukasz Luba wrote:
->> The new registration method allows to get power values from the DT OPP
->> definition. The new OPP entry property "opp-microwatt" contains total
->> power expressed in micro-Watts. Align the EM documentation with this
->> new possible registration method of 'advanced' EM.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   Documentation/power/energy-model.rst | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
->> index 5ac62a7b4b7c..719253fd5215 100644
->> --- a/Documentation/power/energy-model.rst
->> +++ b/Documentation/power/energy-model.rst
->> @@ -113,6 +113,16 @@ to: return warning/error, stop working or panic.
->>   See Section 3. for an example of driver implementing this
->>   callback, or Section 2.4 for further documentation on this API
->>   
->> +Registration of 'advanced' EM using DT
-> 
-> I am not really sure if this should be called *Advanced*. Just call it
-> registration of EM using DT.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Our partners had a lot of issues with EM+EAS, because they were not
-aware of the internals of EM and limitations.
+--
+Linaro LKFT
+https://lkft.linaro.org
 
-We've started to name two types of EM: 'advanced' and 'simple'.
-The 'simple' is the one which causes issues. Now when we contact with
-partners we ask if they use 'simple' EM and see some issues in EAS.
-This is a needed clarification and naming convention that we use.
-
-Here the paragraph name is stressing the fact explicitly that
-from today we have the option to provide real power measurements using
-DT and it will be the 'advanced' EM.
-
+[1] https://lkft.validation.linaro.org/scheduler/job/4607403#L16941

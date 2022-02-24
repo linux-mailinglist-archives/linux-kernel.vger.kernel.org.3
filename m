@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284F24C28E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96A24C28E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbiBXKJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
+        id S233270AbiBXKJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiBXKJG (ORCPT
+        with ESMTP id S233227AbiBXKJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:09:06 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DF3277909
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1645697316;
-  x=1677233316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sYEoKm7dQb0+rGbVfxkxm4VUPTLb9rvL7TEm6KoFzK4=;
-  b=f2qBt1ys7bm6WsxHAvPIV3fDzjmlPHpUqyf7F6H655oDMrEChyqVob7Y
-   vWnY+OH7GIrV3Axsb867K2gSBK8Adt7PBLFr7Iwf+GT6LYMmK7tiNuyy3
-   MNqiPoVpznDxg6glKvMm9g5IA+ZhHRcv1FnFCI+MQ7tnNduyzM+ByWgA4
-   pkPX1CZzUGhZydAtpk/08T5+TVCwFPc+llTrPBd6kty0w2ELLC9baNnb5
-   yl60+Hiipg9pV8pcISr4CiNVh3EO4Fug4PmgdAW0X40Jakoo0Gogbh/VB
-   wxVygkWdmpoyqhpphOuTnh29N0JqMmN5X4F2JE38lfZYoQu84uaZUAZby
-   A==;
-Date:   Thu, 24 Feb 2022 11:08:33 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, kernel <kernel@axis.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] char: ttyprintk: register console
-Message-ID: <20220224100833.GA3807@axis.com>
-References: <20220215141750.92808-1-vincent.whitchurch@axis.com>
- <YhPZeDBlrHjLcgPh@kroah.com>
+        Thu, 24 Feb 2022 05:09:40 -0500
+Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223D128AD96;
+        Thu, 24 Feb 2022 02:09:05 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 50C8C434FC4A;
+        Thu, 24 Feb 2022 11:09:02 +0100 (CET)
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id SFVhmd4-Hbc4; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id BBDAB434FC4B;
+        Thu, 24 Feb 2022 11:09:01 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu BBDAB434FC4B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
+        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645697341;
+        bh=NsEziSD8zXGAxjibXFGFRrDDNKL9BST7ZKyzNe6aCCc=;
+        h=Message-ID:Date:MIME-Version:To:From;
+        b=cjdelavZb9bpnlZ24Xu1lGiiftDZaQ9y9quF0qr572LG3GfZefKKt9dUqmP7bjiLj
+         R1a8lWip6pBHta8VooDEz3xgPmIt8MdklEls7mtZKSqClTrUKqLM5TJBk0v+8Siyyx
+         keJo3orc3JNB7CeA95rH4x8IBQDcFtW6jFtaYZlc=
+X-Virus-Scanned: amavisd-new at mail.tintel.eu
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id 0BgzWEgqgmxJ; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
+Received: from [IPV6:2001:67c:21bc:20::10] (unknown [IPv6:2001:67c:21bc:20::10])
+        (Authenticated sender: stijn@tintel.eu)
+        by mail.tintel.eu (Postfix) with ESMTPSA id E115A434FC4A;
+        Thu, 24 Feb 2022 11:09:00 +0100 (CET)
+Message-ID: <ac624e07-5310-438a-dce3-d2edb01e8031@linux-ipv6.be>
+Date:   Thu, 24 Feb 2022 12:08:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YhPZeDBlrHjLcgPh@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
+Content-Language: en-GB
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <song@kernel.org>
+Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+References: <20220222204236.2192513-1-stijn@linux-ipv6.be>
+ <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
+ <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
+From:   Stijn Tintel <stijn@linux-ipv6.be>
+In-Reply-To: <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 07:27:04PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 15, 2022 at 03:17:49PM +0100, Vincent Whitchurch wrote:
-> > Register a console in the ttyprintk driver so that it can be selected
-> > for /dev/console with console=ttyprintk on the kernel command line,
-> > similar to other console drivers.
-> > 
-> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> > ---
-> >  drivers/char/Kconfig     |  3 ++-
-> >  drivers/char/ttyprintk.c | 16 ++++++++++++++++
-> >  2 files changed, 18 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-> > index 740811893c57..c553a8a50d03 100644
-> > --- a/drivers/char/Kconfig
-> > +++ b/drivers/char/Kconfig
-> > @@ -18,7 +18,8 @@ config TTY_PRINTK
-> >  	  The feature is useful to inline user messages with kernel
-> >  	  messages.
-> >  	  In order to use this feature, you should output user messages
-> > -	  to /dev/ttyprintk or redirect console to this TTY.
-> > +	  to /dev/ttyprintk or redirect console to this TTY, or boot
-> > +	  the kernel with console=ttyprintk.
-> 
-> Why do you want to use this tty device as a console?  What benifit
-> does that provide?
+On 24/02/2022 01:15, Andrii Nakryiko wrote:
+> On Tue, Feb 22, 2022 at 6:37 PM Song Liu <song@kernel.org> wrote:
+>> On Tue, Feb 22, 2022 at 12:51 PM Stijn Tintel <stijn@linux-ipv6.be> wrote:
+>>> When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
+>>> max_entries parameter set, this parameter will be set to the number of
+>>> possible CPUs. Due to this, the map_is_reuse_compat function will return
+>>> false, causing the following error when trying to reuse the map:
+>>>
+>>> libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
+>>>
+>>> Fix this by checking against the number of possible CPUs if the
+>>> max_entries parameter is not set in the map definition.
+>>>
+>>> Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
+>>> Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>>
+>> I think the following fix would be more future proof, but the patch
+>> as-is is better for
+>> stable backport? How about we add a follow up patch on top of current
+>> patch to fix
+>> def->max_entries once for all?
+> Keeping special logic for PERF_EVENT_ARRAY in one place is
+> preferrable. With this, the changes in map_is_reuse_compat() shouldn't
+> be necessary at all. Stijn, can you please send v2 with Song's
+> proposed changes?
+>
+Will do!
 
-I run Linux on a secondary processor on my SoC.  This secondary
-processor doesn't have any output peripherals of its own, so it uses
-pstore to put its kernel messages at a fixed location in memory from
-which the primary processor can read them out.
+Thanks,
+Stijn
 
-In order to access logs from the secondary processor's userspace, a
-simple way is to use ttyprintk.  Userspace logs to the console as normal
-and the primary processor can read the unified kernel+userspace logs
-from the pstore area.
-
-There are similar uses in other cases not involving multiple processors.
-I had mentioned on the lists a couple of years ago that I had this patch
-(without posting it), and last week I received a request (off-list) for
-it from someone who was looking to use it to debug userspace
-initialization in postmarketOS on an Android phone (they only had the
-ability to retreive the kernel's logs after a reboot using pstore).

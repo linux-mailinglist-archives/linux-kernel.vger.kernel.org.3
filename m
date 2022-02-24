@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4B24C285A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589BE4C286E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbiBXJo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S232946AbiBXJpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbiBXJoZ (ORCPT
+        with ESMTP id S232105AbiBXJpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:44:25 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA0A627DF19;
-        Thu, 24 Feb 2022 01:43:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9574AED1;
-        Thu, 24 Feb 2022 01:43:55 -0800 (PST)
-Received: from [10.57.8.211] (unknown [10.57.8.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A57C23F70D;
-        Thu, 24 Feb 2022 01:43:53 -0800 (PST)
-Message-ID: <eb49beb7-584d-152d-0c61-bad66056505c@arm.com>
-Date:   Thu, 24 Feb 2022 09:43:52 +0000
+        Thu, 24 Feb 2022 04:45:50 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF20A27DF31;
+        Thu, 24 Feb 2022 01:45:20 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bg10so3090013ejb.4;
+        Thu, 24 Feb 2022 01:45:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2bq1GD0jy9T+yRRISppNcCl5IjRO7UwAkdMEPjekUD4=;
+        b=CJKeWGRH84suOvoSjt58KDLWmFmX/vxqR72SQml+AHqPcLbBss5jDWcTr6AM7P9YG+
+         +cFxHfRFn49+jra/Fbe23fQ3ItjFw2uQJ3/E1+MqOBNZlQY0H0YimN4jC61KyqZ/bhFq
+         Fr14TUI2j5sG4M28ss3+5HsL6dNvfyY7xaoaBUFq6yCSKOpT9mSA4Y0XGrsGI8lcqauD
+         RKJEoylC8Emm3Ik6KTnHSdqwYQADVP0OKq5dDEd31LbIAyudOMbcaNqJAIMhmSz3Xbzf
+         eFnI+Zq53aXN7hJfLXs1zuCYwNzu/AqctUqlFgW8StCHzzmSbMw0upXx/DworrBaBqAG
+         wy7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2bq1GD0jy9T+yRRISppNcCl5IjRO7UwAkdMEPjekUD4=;
+        b=bqRxzqouBUtxh+nS5g/IisLltTI/U+cexJ59eZ2pHDfzZ9I8z9U8t0UtnMkBkLw8+f
+         EBlZEBqituqqej/OhPwwfoodQkQcxucfeKQoB5uD6lAiBDCAROgRxeAE6ahPq36IwO34
+         tXs5Gh3pv2ObdjNaO3WE/waSm8OrK3qYYQ0tv4Shv+8XyYf6M4I+mAhllXiEakamrOP/
+         r3FbZvbqnHziy4Qj9FYL8E0/Laze3silXL3skbIS/lkAfhIyPzxmAmF9Yw0tnSRDKq2X
+         E77uv1LY8I+vuHZZfEoRY3pxWNxsHKkRXoJEksTOMMZluquISjIb3Fco5Y2S0RNzS6AQ
+         dCXQ==
+X-Gm-Message-State: AOAM5310KCC9gqhvp8KvcVjn8ASGvzknLxSqvtIBoqWeHG145TIDMMSr
+        5Wjk+B74hR3QAH1JhgGHNHLuusNy+Q==
+X-Google-Smtp-Source: ABdhPJyI9AsrwzY4egVw/KkmAwv6B63e+6k98CRk1XQ8KI7+7LLVavtr+Ld0EyoA9Rue9FEoV6rTMw==
+X-Received: by 2002:a17:906:dfe9:b0:6cf:7f1d:dddd with SMTP id lc9-20020a170906dfe900b006cf7f1dddddmr1547256ejc.621.1645695919492;
+        Thu, 24 Feb 2022 01:45:19 -0800 (PST)
+Received: from localhost.localdomain ([46.53.251.11])
+        by smtp.gmail.com with ESMTPSA id s6sm1075471ejc.206.2022.02.24.01.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 01:45:19 -0800 (PST)
+Date:   Thu, 24 Feb 2022 12:45:17 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        David Gow <davidgow@google.com>,
+        Magnus =?utf-8?B?R3Jvw58=?= <magnus.gross@rwth-aachen.de>,
+        kunit-dev@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] binfmt_elf: Introduce KUnit test
+Message-ID: <YhdTrXhu6sgi35WQ@localhost.localdomain>
+References: <20220224054332.1852813-1-keescook@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/4] OPP: Add support of "opp-microwatt" for advanced
- EM registration
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220224081131.27282-1-lukasz.luba@arm.com>
- <20220224081131.27282-4-lukasz.luba@arm.com>
- <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
- <9c8f15a3-563f-3bed-61a4-2f72b0c20e89@arm.com>
- <20220224094216.mtxjjx65bbjzalqx@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220224094216.mtxjjx65bbjzalqx@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220224054332.1852813-1-keescook@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,41 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 09:43:32PM -0800, Kees Cook wrote:
+> Adds simple KUnit test for some binfmt_elf internals: specifically a
+> regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
+> fix overflow in total mapping size calculation").
 
+This can be tested by small 2 segment program run from userspace.
+Make 2 segments, swap them, and see executable rejected because mmap
+gets too big an area.
 
-On 2/24/22 09:42, Viresh Kumar wrote:
-> On 24-02-22, 09:33, Lukasz Luba wrote:
->> On 2/24/22 09:13, Viresh Kumar wrote:
->>> On 24-02-22, 08:11, Lukasz Luba wrote:
->>>> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> 
->>>> +static bool _of_has_opp_microwatt_property(struct device *dev)
->>>> +{
->>>> +	unsigned long power, freq = 0;
->>>> +	struct dev_pm_opp *opp;
->>>> +
->>>> +	/* Check if at least one OPP has needed property */
->>>> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
->>>> +	if (IS_ERR(opp))
->>>> +		return false;
->>>> +
->>>> +	power = dev_pm_opp_get_power(opp);
->>>> +	dev_pm_opp_put(opp);
->>>> +	if (!power)
->>>
->>> Instead of this heavy stuff, just pick the first OPP from the opp
->>> table and see its power-value.
->>
->> It is the first opp: freq=0.
->> You mean by parsing the the DT node instead, like I had in v2 version?
-> 
-> No, I was thinking if you can simply do:
-> 
-> opp = list_first_entry(&opp_table->opp_list, struct dev_pm_opp, node);
-> 
-> But that requires locking, etc as well. So maybe this is fine.
->   
-
-OK, so I'll leave it as is now.
-
-Thank you for the comments. I'll work on v4
+	PT_ALEXEY

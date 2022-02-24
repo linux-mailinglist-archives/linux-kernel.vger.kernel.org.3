@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB434C2A88
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BD54C2A95
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiBXLLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S233987AbiBXLLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbiBXLLU (ORCPT
+        with ESMTP id S233906AbiBXLLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:11:20 -0500
+        Thu, 24 Feb 2022 06:11:22 -0500
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3119128F446;
-        Thu, 24 Feb 2022 03:10:42 -0800 (PST)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K497K661Qz685ZG;
-        Thu, 24 Feb 2022 19:05:49 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D5D2819B2;
+        Thu, 24 Feb 2022 03:10:44 -0800 (PST)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K49Cj526lz67qTG;
+        Thu, 24 Feb 2022 19:09:37 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 24 Feb 2022 12:10:39 +0100
+ 15.1.2308.21; Thu, 24 Feb 2022 12:10:42 +0100
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 24 Feb 2022 11:10:37 +0000
+ 15.1.2308.21; Thu, 24 Feb 2022 11:10:39 +0000
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <chenxiang66@hisilicon.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <damien.lemoal@opensource.wdc.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 0/2] scsi: libsas: Some minor improvements
-Date:   Thu, 24 Feb 2022 19:04:57 +0800
-Message-ID: <1645700699-82369-1-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 1/2] scsi: libsas: Make sas_notify_{phy,port}_event() return void
+Date:   Thu, 24 Feb 2022 19:04:58 +0800
+Message-ID: <1645700699-82369-2-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1645700699-82369-1-git-send-email-john.garry@huawei.com>
+References: <1645700699-82369-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
@@ -51,22 +53,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Nobody checks the return codes, so make them return void. Indeed, if the
+LLDD cannot send an event, nothing much can be done in the LLDD about it.
 
-This is just a couple of small improvements which we had sitting on our
-dev branch. Please consider for 5.18.
+Also remove prototype for sas_notify_phy_event() in sas_internal.h, which
+should not be there.
 
-Thanks!
+Signed-off-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+---
+ drivers/scsi/libsas/sas_event.c    | 20 ++++++++------------
+ drivers/scsi/libsas/sas_internal.h |  2 --
+ include/scsi/libsas.h              |  8 ++++----
+ 3 files changed, 12 insertions(+), 18 deletions(-)
 
-John Garry (2):
-  scsi: libsas: Make sas_notify_{phy,port}_event() return void
-  scsi: libsas: Use bool for queue_work() return code
-
- drivers/scsi/libsas/sas_event.c    | 43 ++++++++++++------------------
- drivers/scsi/libsas/sas_internal.h |  4 +--
- include/scsi/libsas.h              |  8 +++---
- 3 files changed, 22 insertions(+), 33 deletions(-)
-
+diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
+index 3613b9b315bc..8ff58fd97837 100644
+--- a/drivers/scsi/libsas/sas_event.c
++++ b/drivers/scsi/libsas/sas_event.c
+@@ -165,8 +165,8 @@ static bool sas_defer_event(struct asd_sas_phy *phy, struct asd_sas_event *ev)
+ 	return deferred;
+ }
+ 
+-int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+-			  gfp_t gfp_flags)
++void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
++			   gfp_t gfp_flags)
+ {
+ 	struct sas_ha_struct *ha = phy->ha;
+ 	struct asd_sas_event *ev;
+@@ -176,7 +176,7 @@ int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+ 
+ 	ev = sas_alloc_event(phy, gfp_flags);
+ 	if (!ev)
+-		return -ENOMEM;
++		return;
+ 
+ 	/* Call pm_runtime_put() with pairs in sas_port_event_worker() */
+ 	pm_runtime_get_noresume(ha->dev);
+@@ -184,20 +184,18 @@ int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+ 	INIT_SAS_EVENT(ev, sas_port_event_worker, phy, event);
+ 
+ 	if (sas_defer_event(phy, ev))
+-		return 0;
++		return;
+ 
+ 	ret = sas_queue_event(event, &ev->work, ha);
+ 	if (ret != 1) {
+ 		pm_runtime_put(ha->dev);
+ 		sas_free_event(ev);
+ 	}
+-
+-	return ret;
+ }
+ EXPORT_SYMBOL_GPL(sas_notify_port_event);
+ 
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+-			 gfp_t gfp_flags)
++void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
++			  gfp_t gfp_flags)
+ {
+ 	struct sas_ha_struct *ha = phy->ha;
+ 	struct asd_sas_event *ev;
+@@ -207,7 +205,7 @@ int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+ 
+ 	ev = sas_alloc_event(phy, gfp_flags);
+ 	if (!ev)
+-		return -ENOMEM;
++		return;
+ 
+ 	/* Call pm_runtime_put() with pairs in sas_phy_event_worker() */
+ 	pm_runtime_get_noresume(ha->dev);
+@@ -215,14 +213,12 @@ int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+ 	INIT_SAS_EVENT(ev, sas_phy_event_worker, phy, event);
+ 
+ 	if (sas_defer_event(phy, ev))
+-		return 0;
++		return;
+ 
+ 	ret = sas_queue_event(event, &ev->work, ha);
+ 	if (ret != 1) {
+ 		pm_runtime_put(ha->dev);
+ 		sas_free_event(ev);
+ 	}
+-
+-	return ret;
+ }
+ EXPORT_SYMBOL_GPL(sas_notify_phy_event);
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index b60f0bf612cf..24843db2cb65 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -78,8 +78,6 @@ int sas_smp_phy_control(struct domain_device *dev, int phy_id,
+ 			enum phy_func phy_func, struct sas_phy_linkrates *);
+ int sas_smp_get_phy_events(struct sas_phy *phy);
+ 
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+-			 gfp_t flags);
+ void sas_device_set_phy(struct domain_device *dev, struct sas_port *port);
+ struct domain_device *sas_find_dev_by_rphy(struct sas_rphy *rphy);
+ struct domain_device *sas_ex_to_ata(struct domain_device *ex_dev, int phy_id);
+diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+index dc529cc92d65..df2c8fc43429 100644
+--- a/include/scsi/libsas.h
++++ b/include/scsi/libsas.h
+@@ -727,9 +727,9 @@ int sas_lu_reset(struct domain_device *dev, u8 *lun);
+ int sas_query_task(struct sas_task *task, u16 tag);
+ int sas_abort_task(struct sas_task *task, u16 tag);
+ 
+-int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+-			  gfp_t gfp_flags);
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+-			 gfp_t gfp_flags);
++void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
++			   gfp_t gfp_flags);
++void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
++			   gfp_t gfp_flags);
+ 
+ #endif /* _SASLIB_H_ */
 -- 
 2.26.2
 

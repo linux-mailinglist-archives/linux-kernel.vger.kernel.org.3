@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02164C342C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B814C3433
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiBXR4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S232520AbiBXR5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiBXR4m (ORCPT
+        with ESMTP id S232519AbiBXR5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:56:42 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA3279469;
-        Thu, 24 Feb 2022 09:56:11 -0800 (PST)
-Received: from [192.168.88.87] (unknown [36.78.50.60])
-        by gnuweeb.org (Postfix) with ESMTPSA id 5107C7E2A3;
-        Thu, 24 Feb 2022 17:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1645725371;
-        bh=7y0qBUn+4Mr6bFU20/TGub2HSOx+UgE/hIlmL27DAVc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D7aZtVyLlCng7VVCYtJk2rzO6vsimwfxamI03avJnlQmAyFkNPTTJvxRG/Jg4tl2j
-         5kpRJDZD/gyCBx4UAGS2cJcv8MDcy4kUXgdLKzLClwG429hsY2UFpZdVVzeUPepMQK
-         INoaznkuuMgo01rQR2SB2xknWIZXiTNtbEDJXCq1KhUMNil0//085azpQLy/txcx6U
-         L/91ntrOD5KGFdQYd6JErvSfH71zayGAoklWMSA7Qnv/VSqfKxK5n7+uF3sc1NEiG3
-         +PBfs1ansVMY3NUFhUiz2zYBPhLkV7FF/oOL8Wlkqgj4uGSOntQvG73n2+YnhRhNcJ
-         Hak+Nrgofj+EQ==
-Message-ID: <5188759c-fd7a-4dbb-0f56-db74200603a8@gnuweeb.org>
-Date:   Fri, 25 Feb 2022 00:56:02 +0700
+        Thu, 24 Feb 2022 12:57:20 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB6D4BB8B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:48 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g39so5204490lfv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TMceaaXnV0bDbvJSiP9ofcWLsC6a8Q6tO19sa8u3A0o=;
+        b=bYR2fdhQXZXtx52UFpQTKptu0+tKWepDRJYaSASQht99wn3VdFnIB4nTaKEwcTSwdj
+         9Y87wvLFaLqj5V5tKYfUmequSJmSMbEEC0W2q5XZLBYUTZVR06/y19JLh4eq/k4Gribx
+         M7XZANv8s8gcguKECoEtGWenFqs3zgJrcWIXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TMceaaXnV0bDbvJSiP9ofcWLsC6a8Q6tO19sa8u3A0o=;
+        b=KIPy+x5h8dtY/gVDUUibPm0UgpQ2LrmmFme7xYYJ66h2taH5xR3LH9JzVSTBtbk4AH
+         2G0ewSYCxz50YXjFM/5iFooNi7ZHHGDjhPvTeGbVwWrbXf3B4og7ioK5jlkQfjrsHCTh
+         ojcz0WVWg7Oi4lElilQVW1nnIZdTJYDHGY2R5qGeroNx1J3eRnPjxLl6YCAJmON8Zb1D
+         /HaloESumJWmBp6WsX9fxstaXxFY/6Az8qboRSca5VZBDmFMSOoCkoz3eU+y30gIM87U
+         /t4WVIYwUHEIbFoUGemjOJYCB7O4tfLfa6qWN9gJ5OgxZ4tkapamvAApim0CpmhvS8mw
+         oxeg==
+X-Gm-Message-State: AOAM533mXkCkMLeKg+Tj1H2PeiijQ+TJqwm6CVk1zzhOlqfIGhNd7aFX
+        AqggGbwtR8yyJwXxE5H8aN2mhHSUWChwuz5eUO8=
+X-Google-Smtp-Source: ABdhPJzT2jVdsvn2vNqgeVtm7SN29d5AplgTqY/hl92GToSTiOhWZlLEB8jpq9ZFRDUotY33ewZQnQ==
+X-Received: by 2002:ac2:4893:0:b0:443:3b8d:b54f with SMTP id x19-20020ac24893000000b004433b8db54fmr2370822lfc.73.1645725406673;
+        Thu, 24 Feb 2022 09:56:46 -0800 (PST)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id 1-20020a2e1641000000b002463630a11asm23294ljw.140.2022.02.24.09.56.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 09:56:44 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id m14so5246355lfu.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:43 -0800 (PST)
+X-Received: by 2002:ac2:5313:0:b0:443:99c1:7e89 with SMTP id
+ c19-20020ac25313000000b0044399c17e89mr2345835lfh.531.1645725402991; Thu, 24
+ Feb 2022 09:56:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org>
- <Yhe/3rELNfFOdU4L@sirena.org.uk>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <Yhe/3rELNfFOdU4L@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
+ <YhdfEIwI4EdtHdym@kroah.com>
+In-Reply-To: <YhdfEIwI4EdtHdym@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 24 Feb 2022 09:56:26 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh87tDvKyuTF+NXBPLrRt=bOszP_N2nf5nkf4knX8SxrQ@mail.gmail.com>
+Message-ID: <CAHk-=wh87tDvKyuTF+NXBPLrRt=bOszP_N2nf5nkf4knX8SxrQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 12:26 AM, Mark Brown wrote:
-> On Thu, Feb 24, 2022 at 09:51:24PM +0700, Ammar Faizi wrote:
->> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->>
->> Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
->> -ENOMEM because it leads to a NULL pointer dereference bug.
->>
->> The dmesg says:
->>
->>    <6>[109482.497835][T138537] usb 1-2: Manufacturer: SIGMACHIP
->>    <6>[109482.502506][T138537] input: SIGMACHIP USB Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/0003:1C4F:0002.000D/input/input34
->>    <6>[109482.558976][T138537] hid-generic 0003:1C4F:0002.000D: input,hidraw1: USB HID v1.10 Keyboard [SIGMACHIP USB Keyboard] on usb-0000:00:14.0-2/input0
->>    <6>[109482.561653][T138537] input: SIGMACHIP USB Keyboard Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.1/0003:1C4F:0002.000E/input/input35
-> 
-> Please think hard before including complete backtraces in upstream
-> reports, they are very large and contain almost no useful information
-> relative to their size so often obscure the relevant content in your
-> message. If part of the backtrace is usefully illustrative (it often is
-> for search engines if nothing else) then it's usually better to pull out
-> the relevant sections.
+On Thu, Feb 24, 2022 at 2:33 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> So, to follow the proposed solution in this thread, the following change
+> is the "correct" one to make, right?
 
-I will strip the irrelevant information in the v2.
+That would indeed be my preference.
 
--- 
-Ammar Faizi
+If we ever are able to change
+
+        list_for_each_entry(tmp, &ep->queue, queue)...
+
+to simply declare 'tmp' as the right type itself, then the e need to do
+
+        struct gr_request *tmp;
+
+outside the loop goes away, and this kind of "set a variable that is
+declared in the outside context" becomes the only way to do things.
+
+                    Linus

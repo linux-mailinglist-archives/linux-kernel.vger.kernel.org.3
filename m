@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08854C2283
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8354C228E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiBXDnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S229628AbiBXDop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiBXDnc (ORCPT
+        with ESMTP id S229538AbiBXDod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:43:32 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D400254562
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:43:03 -0800 (PST)
+        Wed, 23 Feb 2022 22:44:33 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADCA25A315;
+        Wed, 23 Feb 2022 19:44:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645674183; x=1677210183;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ms/Xul2z61Kdw7dANi6ZFHet41fbNqkpg5veI2ABXj4=;
-  b=MKTrN9C2dqkl9nMQ2d9okCctkBxviIpWK9YdbqWNtZoYZ/fwAJDcQ9zt
-   jJ4kk7e/fJM10LCts/9+SupQZGwOSh/+LhGy0BWKRvuPEFU1zcaD0Vrm7
-   4gxME7gsuLrQyCxMs8Z3rSIIRLi28j5vIA5Ny3xfX63lOoQt7WXFqUzO5
-   8XsufEgrnAkobhovZKWkrJRnNaNduMHSBd88VoZ61SL7YZgIJijRFsF2w
-   MyX+mlI5cszU/Q3kTuBPyt35hN46Vy5qSn1Q4ny7Y82Hzr24bK9ncqrFT
-   kc18jXrrOAs7enKuzhLCK191emkREW2q5cpWEeGA2CngDg661XQOoNZj8
+  t=1645674244; x=1677210244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sMfUs3/I8Kqm7yacgV7IQwHgTnaZ9y/L/q5GdicckSI=;
+  b=SPcEecwyxx2bWw7R8wTifyxO5gi+aSC6nskHqEpeE6VXxESeFTQXp1NN
+   OeH4JEbhgUkYvECSL3IcznTO8tK0/l15r6nukjqZs+KPw9IVpz3Al1ZAa
+   yswAu1QpkeubIZv9oq5yid5VAOrDbIx/KCp+2elqUIoNs8p/vUYawzlmU
+   fulHqyjViYq5VGisXxbqmWfhFKptR/iFZM5tNsEnoeV4lL9E4lPv8TO0x
+   QMrPrLhmG1i8Qsb3wMHCaR5FoNF8v2yss6hisazFOBQw8lTSM0wencXyA
+   QeN8S7061ZFhQT0G1bJzTeRe/7zwAxDNk7EHPJIWAnefaO5jhonrklpZT
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252335888"
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232763750"
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="252335888"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:43:02 -0800
+   d="scan'208";a="232763750"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:44:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="508709207"
+   d="scan'208";a="784617111"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Feb 2022 19:43:01 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2022 19:44:01 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nN51w-0002CN-Iu; Thu, 24 Feb 2022 03:43:00 +0000
-Date:   Thu, 24 Feb 2022 11:42:53 +0800
+        id 1nN52u-0002CV-M3; Thu, 24 Feb 2022 03:44:00 +0000
+Date:   Thu, 24 Feb 2022 11:43:06 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [peterz-queue:x86/wip.ibt 42/42]
- arch/x86/kernel/alternative.c:538:30: warning: passing argument 1 of
- 'is_endbr' makes integer from pointer without a cast
-Message-ID: <202202241157.jQc2OHWz-lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, sboyd@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        abel.vesa@nxp.com
+Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V3 4/5] clk: imx: support fracn gppll
+Message-ID: <202202241105.0bwJWaUv-lkp@intel.com>
+References: <20220223064358.4097307-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220223064358.4097307-5-peng.fan@oss.nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,92 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   27b6438f414b6a37b60dcd90c8980397586d49db
-commit: 27b6438f414b6a37b60dcd90c8980397586d49db [42/42] x86/alternative: Use .ibt_endbr_sites to seal indirect calls
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220224/202202241157.jQc2OHWz-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+Hi "Peng,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on next-20220217]
+[also build test ERROR on v5.17-rc5]
+[cannot apply to shawnguo/for-next robh/for-next clk/clk-next v5.17-rc5 v5.17-rc4 v5.17-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220223-144300
+base:    3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
+config: nds32-randconfig-r026-20220223 (https://download.01.org/0day-ci/archive/20220224/202202241105.0bwJWaUv-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=27b6438f414b6a37b60dcd90c8980397586d49db
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout 27b6438f414b6a37b60dcd90c8980397586d49db
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/93f29e11de75409d56c65d32c1bdafb50c9f6f51
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220223-144300
+        git checkout 93f29e11de75409d56c65d32c1bdafb50c9f6f51
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/include/asm/bug.h:86,
-                    from include/linux/bug.h:5,
-                    from include/linux/cpumask.h:14,
-                    from arch/x86/include/asm/cpumask.h:5,
-                    from arch/x86/include/asm/msr.h:11,
-                    from arch/x86/include/asm/processor.h:22,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from arch/x86/kernel/alternative.c:4:
-   arch/x86/kernel/alternative.c: In function 'apply_ibt_endbr':
->> arch/x86/kernel/alternative.c:538:30: warning: passing argument 1 of 'is_endbr' makes integer from pointer without a cast [-Wint-conversion]
-     538 |   if (WARN_ON_ONCE(!is_endbr(&endbr)))
-         |                              ^~~~~~
-         |                              |
-         |                              u32 * {aka unsigned int *}
-   include/asm-generic/bug.h:104:25: note: in definition of macro 'WARN_ON_ONCE'
-     104 |  int __ret_warn_on = !!(condition);   \
-         |                         ^~~~~~~~~
-   In file included from arch/x86/include/asm/linkage.h:6,
-                    from include/linux/linkage.h:8,
-                    from arch/x86/include/asm/cache.h:5,
-                    from include/linux/cache.h:6,
-                    from include/linux/time.h:5,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from arch/x86/kernel/alternative.c:4:
-   arch/x86/include/asm/ibt.h:34:42: note: expected 'unsigned int' but argument is of type 'u32 *' {aka 'unsigned int *'}
-      34 | static inline bool is_endbr(unsigned int val)
-         |                             ~~~~~~~~~~~~~^~~
-
-
-vim +/is_endbr +538 arch/x86/kernel/alternative.c
-
-   523	
-   524	/*
-   525	 * Generated by: objtool --ibt-seal
-   526	 */
-   527	void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
-   528	{
-   529		s32 *s;
-   530	
-   531		for (s = start; s < end; s++) {
-   532			void *addr = (void *)s + *s;
-   533			u32 endbr;
-   534	
-   535			if (WARN_ON_ONCE(get_kernel_nofault(endbr, addr)))
-   536				continue;
-   537	
- > 538			if (WARN_ON_ONCE(!is_endbr(&endbr)))
-   539				continue;
-   540	
-   541			DPRINTK("ENDBR at: %pS (%px)", addr, addr);
-   542	
-   543			/*
-   544			 * When we have IBT, the lack of ENDBR will trigger #CP
-   545			 * When we don't have IBT, explicitly trigger #UD
-   546			 */
-   547			DUMP_BYTES(((u8*)addr), 4, "%px: orig: ", addr);
-   548			DUMP_BYTES(((u8*)ud1_endbr), 4, "%px: repl: ", addr);
-   549			text_poke_early(addr, ud1_endbr, 4);
-   550		}
-   551	}
-   552	
+   nds32le-linux-ld: drivers/clk/imx/clk-fracn-gppll.o: in function `clk_fracn_gppll_recalc_rate':
+>> clk-fracn-gppll.c:(.text+0x228): undefined reference to `__udivdi3'
+   nds32le-linux-ld: clk-fracn-gppll.c:(.text+0x22c): undefined reference to `__udivdi3'
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

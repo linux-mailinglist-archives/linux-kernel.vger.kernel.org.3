@@ -2,64 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7094C30C2
+	by mail.lfdr.de (Postfix) with ESMTP id 301C64C30C3
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiBXQBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S229917AbiBXQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiBXQBk (ORCPT
+        with ESMTP id S229660AbiBXQCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:01:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C1916F973
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:01:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BDB6179A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001E3C340E9;
-        Thu, 24 Feb 2022 15:59:51 +0000 (UTC)
-Date:   Thu, 24 Feb 2022 10:59:50 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz,
-        alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-Message-ID: <20220224105950.26e90385@gandalf.local.home>
-In-Reply-To: <20220224105847.5c899324@gandalf.local.home>
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.714815604@infradead.org>
-        <20220225005520.c69be2fbdbd28028361792d9@kernel.org>
-        <20220224105847.5c899324@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 24 Feb 2022 11:02:12 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3CC193DE;
+        Thu, 24 Feb 2022 08:01:33 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id x15so352553wrg.8;
+        Thu, 24 Feb 2022 08:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y05yvb52Nsp11oYlXTQ2W1T0axwKZmDa9In+lb+g4zo=;
+        b=GnV/17WEDbgkTXw5Szy0hHTJZKC90jXe/+zj3SQueTq7TBeyrs/8twssH/6UgvEWGu
+         pPgsabBuHeUszXbWvLXy/atvo+h9H0fC5fwuRWN62mYXf2UQfXT6VW3H4PLtmrjQGRSc
+         mAvEnyt2IQe7TWSx+uEwkT1FSFXGo+rvonqUhxnXQ7YK/ZBFeaOHR6pE+Bztb17HMaTY
+         33eY9IDdWby1GJpfZDib5RhuFyoG7lAiRK7+OsCBHiGr5ULBD5HHm+kw7qYUn9f5XhRx
+         5iCMR9Fu3kUjdY3/vnGgrvMpr+h2eP2jLs0UZhY79trzcbqYp3NLACDL19mS0FIvKWDa
+         8Cxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y05yvb52Nsp11oYlXTQ2W1T0axwKZmDa9In+lb+g4zo=;
+        b=RoHFnikPONWlKmrINVZx1RZO+XhP/AFViV5Sn/tjofukfSSnFUs6CIfF2oVg7c9VY+
+         Jkp148Sjb1hwQtzFCSY6DxtHCYJqGCC5GtuemQNhm+OhJ+SY6E+e9WVogQWeZSwyrhsg
+         77zIB9xrj6OrXJ+a7APyK0GdZuz9Dy25rm6wKtuHefLXo8gVg98FLdUVkfspeyb0Trub
+         asxWDkMaI9ecweAXlhZC89YTebPksJOX0aFV/QeotdnU0CUt9CPC68Nz02gXuZC9mKRG
+         fZsYU7RIIMyukY/jrutIkxqWQpbdaCz9B+3NjfWVUWzCZaYPl/by0hhCPOWwF8zS+aHq
+         y4wg==
+X-Gm-Message-State: AOAM532CDcNgdn7gUQ+FFMd57IMnJKCcHhXL/ClVdtFslR3gwElnH/Do
+        WLOBkKF8jQlhQDAMzTQye3o=
+X-Google-Smtp-Source: ABdhPJwbEWyLUPKgPfJM8rbkKwDuyxaneNxCj7/Lstjc1QdxMEN0ykJ1Lu83MJZHWz7N7SoUgv2+Yw==
+X-Received: by 2002:a05:6000:8f:b0:1ed:bb0e:6cbe with SMTP id m15-20020a056000008f00b001edbb0e6cbemr2769902wrx.209.1645718491173;
+        Thu, 24 Feb 2022 08:01:31 -0800 (PST)
+Received: from Ansuel-xps.localdomain ([5.170.140.187])
+        by smtp.gmail.com with ESMTPSA id d13sm3704964wri.38.2022.02.24.08.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 08:01:30 -0800 (PST)
+Date:   Thu, 24 Feb 2022 17:01:27 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 12/16] dt-bindings: clock: add ipq8064 ce5 clk define
+Message-ID: <Yher1ybYkFCVLLVt@Ansuel-xps.localdomain>
+References: <20220217235703.26641-1-ansuelsmth@gmail.com>
+ <20220217235703.26641-13-ansuelsmth@gmail.com>
+ <YhcDCnMFRppk3Mo+@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhcDCnMFRppk3Mo+@builder.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 10:58:47 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, Feb 23, 2022 at 10:01:14PM -0600, Bjorn Andersson wrote:
+> On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+> 
+> > Add ipq8064 ce5 clk define needed for CryptoEngine in gcc driver.
+> > 
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  include/dt-bindings/clock/qcom,gcc-ipq806x.h | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/dt-bindings/clock/qcom,gcc-ipq806x.h b/include/dt-bindings/clock/qcom,gcc-ipq806x.h
+> > index 7deec14a6dee..02262d2ac899 100644
+> > --- a/include/dt-bindings/clock/qcom,gcc-ipq806x.h
+> > +++ b/include/dt-bindings/clock/qcom,gcc-ipq806x.h
+> > @@ -240,7 +240,7 @@
+> >  #define PLL14					232
+> >  #define PLL14_VOTE				233
+> >  #define PLL18					234
+> > -#define CE5_SRC					235
+> > +#define CE5_A_CLK				235
+> >  #define CE5_H_CLK				236
+> >  #define CE5_CORE_CLK				237
+> >  #define CE3_SLEEP_CLK				238
+> > @@ -283,5 +283,8 @@
+> >  #define EBI2_AON_CLK				281
+> >  #define NSSTCM_CLK_SRC				282
+> >  #define NSSTCM_CLK				283
+> 
+> You don't like 284?
+> 
+> Regards,
+> Bjorn
+>
 
-> No, the point to only look for the fentry location if the ip passed in
+In the QSDK 284 is used for a virtual clk used to scale the NSS core.
+I skipped that in case we will implement it and to keep these header
+similar across QSDK and linux.
 
-      "the point is to only look"
+> > +#define CE5_A_CLK_SRC				285
+> > +#define CE5_H_CLK_SRC				286
+> > +#define CE5_CORE_CLK_SRC			287
+> >  
+> >  #endif
+> > -- 
+> > 2.34.1
+> > 
 
--- Steve
-
-> points to the start of the function. IOW, +0 offset.
-
+-- 
+	Ansuel

@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951644C37F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CACB4C37F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiBXVmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S233882AbiBXVoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiBXVme (ORCPT
+        with ESMTP id S230375AbiBXVoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:42:34 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB469284C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m13-20020a7bca4d000000b00380e379bae2so590334wml.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
-        b=TskHSrRSAClsNWy/osGrf9N8tZVPsIzNFG9FImu4CzS4z3KvxPS29pJPJLpn3U6DKR
-         0WenYNPjdQ10OhM7+V32+DzPQF0baUVU5I3KLmLHW4XQduOhPlUXNN5uUPm7Iw3NkwZa
-         rPRjXbAZLAKfeGSEN7JyE9WuuBFndwMTuGKMsYG3+SAXdIB2X7+KPvi3g4gfd/TOnWUp
-         tWFUg7NZxwDhLODrxmwJEU3yQAzEbAmt3u7SImKjOi7N2gQOrYkw/kycHthrFf3xvcZB
-         ca6p4icjbFsgaYp7HbIuecKR43Zk5CDKnIEvwMw6gc710P9i2/HrAEjfZ1wzy5K+9OcG
-         zlqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
-        b=H10PT7YR2Q/MyxKuLgTFMBk9z7O90PSCtDg3MBm9PvOFG70IRVbos54dVDeJca99qg
-         q185WWgNPhaCMRIIMOHIbdL/fgEezgTe5RrHQ7nNfd3CF607J3jDYWX1xmodcsTw7hIf
-         hK6vR/KfTHH3Pra/PZ1JeFcWxhDg0r4Zsib/5GYmsfSjdhdRdYl77uEQTROswlwlZ3N4
-         9+7LAKNs4iT/kuWZd/D5DDPVs4oY2p6b5lZw30VzhX6CWEIpLRnGZNnFvZiDDcpHqs0v
-         4KSWr6YIWtEKo+Ey3h8Epq8kgoK63OyPEz+w+QYjHZ+/7vCJV0xQxPgWULA36nMf7Ryb
-         5f0w==
-X-Gm-Message-State: AOAM530usVyjUdqpJ7CJifesf6nk/+inwAMAh/mnF6SBWZhTuPM/g9V3
-        INEavaEgStrDKXNujbRbuJ+8Rg==
-X-Google-Smtp-Source: ABdhPJzsPdzdtG7H4jdgtnMyqQAl+jFoO1hKVjMQWOPd72cuoPkq+qQuiiZ2JyZtx/Fu0jNoO7q2sw==
-X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr54970wmh.59.1645738921363;
-        Thu, 24 Feb 2022 13:42:01 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm3786678wmj.5.2022.02.24.13.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 13:42:00 -0800 (PST)
-Message-ID: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
-Date:   Thu, 24 Feb 2022 22:41:58 +0100
+        Thu, 24 Feb 2022 16:44:06 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8F621D088
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645739016; x=1677275016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jiqXYXpys9xcbuB0hR37GCY7GtngpcftRj3NnXZTul8=;
+  b=I1Ty1c23UmN0Ib0lPSzQy6DOqfu+ndHQGIVGyqDDIsmgeWlTtWONRe2v
+   HYFMTAgQtRnSjNnqMia5MeT4OWsg6atShVVOrQ10qY5qeB/nPAN0pQRUc
+   0CY+kccHNylL1aFjxaJhaWfFFfz1y4zfxwr9mRVaGR1CiAQgo+tqeTdFF
+   2t36+0U5k+BaKESAtqimLQurndzwxn9/KrQo4Kr1oVO7xLVgAJKnW/OjX
+   FNJ4e+tTQQmxGSTTIa8oxQWK7fSX48GQnP3UrP6FmD95h7ijMtrzTUTtD
+   YZA5rknukqPI8Vl1K45Pqr94hFUEb0ZXGPliyJi9wZI52JxfInXU12N/s
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="232984813"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="232984813"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 13:43:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="574373275"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2022 13:43:34 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNLtd-0003Ui-Pk; Thu, 24 Feb 2022 21:43:33 +0000
+Date:   Fri, 25 Feb 2022 05:43:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [netfilter-nf:master 47/47] nf_queue.c:undefined reference to
+ `sock_gen_put'
+Message-ID: <202202250551.bHhoyNSe-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/4] Thermal library and tools
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220218125334.995447-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,95 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git master
+head:   661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+commit: 661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd [47/47] netfilter: nf_queue: don't assume sk is full socket
+config: arm-randconfig-c002-20220223 (https://download.01.org/0day-ci/archive/20220225/202202250551.bHhoyNSe-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git/commit/?id=661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+        git remote add netfilter-nf git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git
+        git fetch --no-tags netfilter-nf master
+        git checkout 661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-What shall I do with this series? Is everyone ok with it?
+All errors (new ones prefixed by >>):
 
+   arm-linux-gnueabi-ld: net/netfilter/nf_queue.o: in function `nf_queue_entry_release_refs':
+>> nf_queue.c:(.text+0x60): undefined reference to `sock_gen_put'
 
-
-On 18/02/2022 13:53, Daniel Lezcano wrote:
-> This series provides a thermal library providing the basic callback oriented
-> netlink communication and events with the thermal framework, a temperature
-> capture tool and a thermal monitoring skeleton using the thermal library.
-> 
-> Changelog:
->   - V1:
->      - Took into account RFC comments (unsubscribe, error enum, thermal daemon
->        renamed to thermal-engine)
-> 
-> Daniel Lezcano (4):
->    tools/lib/thermal: Add a thermal library
->    tools/thermal: Add util library
->    tools/thermal: A temperature capture tool
->    tools/thermal: Add thermal daemon skeleton
-> 
->   tools/Makefile                                |  36 +-
->   tools/lib/thermal/.gitignore                  |   2 +
->   tools/lib/thermal/Build                       |   5 +
->   tools/lib/thermal/Makefile                    | 165 ++++++++
->   tools/lib/thermal/commands.c                  | 351 ++++++++++++++++
->   tools/lib/thermal/events.c                    | 164 ++++++++
->   tools/lib/thermal/include/thermal.h           | 141 +++++++
->   tools/lib/thermal/libthermal.map              |  25 ++
->   tools/lib/thermal/libthermal.pc.template      |  12 +
->   tools/lib/thermal/sampling.c                  |  75 ++++
->   tools/lib/thermal/thermal.c                   | 126 ++++++
->   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
->   tools/lib/thermal/thermal_nl.h                |  46 ++
->   tools/thermal/lib/Build                       |   3 +
->   tools/thermal/lib/Makefile                    | 158 +++++++
->   .../thermal/lib/libthermal_tools.pc.template  |  12 +
->   tools/thermal/lib/log.c                       |  77 ++++
->   tools/thermal/lib/log.h                       |  31 ++
->   tools/thermal/lib/mainloop.c                  | 135 ++++++
->   tools/thermal/lib/mainloop.h                  |  14 +
->   tools/thermal/lib/thermal-tools.h             |  10 +
->   tools/thermal/lib/uptimeofday.c               |  40 ++
->   tools/thermal/lib/uptimeofday.h               |  12 +
->   tools/thermal/thermal-engine/Build            |   2 +
->   tools/thermal/thermal-engine/Makefile         |  27 ++
->   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
->   tools/thermal/thermometer/Build               |   2 +
->   tools/thermal/thermometer/Makefile            |  23 +
->   tools/thermal/thermometer/thermometer.c       | 393 ++++++++++++++++++
->   tools/thermal/thermometer/thermometer.conf    |   5 +
->   30 files changed, 2591 insertions(+), 3 deletions(-)
->   create mode 100644 tools/lib/thermal/.gitignore
->   create mode 100644 tools/lib/thermal/Build
->   create mode 100644 tools/lib/thermal/Makefile
->   create mode 100644 tools/lib/thermal/commands.c
->   create mode 100644 tools/lib/thermal/events.c
->   create mode 100644 tools/lib/thermal/include/thermal.h
->   create mode 100644 tools/lib/thermal/libthermal.map
->   create mode 100644 tools/lib/thermal/libthermal.pc.template
->   create mode 100644 tools/lib/thermal/sampling.c
->   create mode 100644 tools/lib/thermal/thermal.c
->   create mode 100644 tools/lib/thermal/thermal_nl.c
->   create mode 100644 tools/lib/thermal/thermal_nl.h
->   create mode 100644 tools/thermal/lib/Build
->   create mode 100644 tools/thermal/lib/Makefile
->   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
->   create mode 100644 tools/thermal/lib/log.c
->   create mode 100644 tools/thermal/lib/log.h
->   create mode 100644 tools/thermal/lib/mainloop.c
->   create mode 100644 tools/thermal/lib/mainloop.h
->   create mode 100644 tools/thermal/lib/thermal-tools.h
->   create mode 100644 tools/thermal/lib/uptimeofday.c
->   create mode 100644 tools/thermal/lib/uptimeofday.h
->   create mode 100644 tools/thermal/thermal-engine/Build
->   create mode 100644 tools/thermal/thermal-engine/Makefile
->   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
->   create mode 100644 tools/thermal/thermometer/Build
->   create mode 100644 tools/thermal/thermometer/Makefile
->   create mode 100644 tools/thermal/thermometer/thermometer.c
->   create mode 100644 tools/thermal/thermometer/thermometer.conf
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

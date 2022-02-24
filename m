@@ -2,228 +2,592 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9565F4C3454
+	by mail.lfdr.de (Postfix) with ESMTP id 24FF84C3453
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbiBXSKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S232476AbiBXSJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiBXSKK (ORCPT
+        with ESMTP id S229662AbiBXSJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:10:10 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2131E6952;
-        Thu, 24 Feb 2022 10:09:39 -0800 (PST)
-Received: from integral2.. (unknown [36.78.50.60])
-        by gnuweeb.org (Postfix) with ESMTPSA id F2A237E2A3;
-        Thu, 24 Feb 2022 18:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1645726178;
-        bh=fQ7yWSmUmNGgta8pPPpdWD21dq5EbkzWZGN4fe3AJWM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SmpHCmsZ397u9Gf4qpj7lqWmqdWL56tmeNuikhpi8UmTYyauGz0+DOTrMhFG9wJcs
-         dDNLO3jd+OH/H8MbI3ZUMLa2dpcbpY8HbMI+KA21qtwJ0vYFDy3cFvG5DWCTlLagPK
-         I+xmjz0BJNd41pl9TeWgvqmm5puSPsc/I33scVqe6yNIqyWiji4qovhU9Dl4kUnc8R
-         iK+T0CdfkTvLmzlavDdCwj/wAlkA2n5svOcLoXtxS4Y79LvGN8LOmgUu8LVVY89f5k
-         DrBah9dVH6AwTIWXSg0hImk2YIcFh+0oJT3PGUVj/c9lPFq0cmmhfKshifwMGT/Rey
-         Udmx8aacFP2Zw==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Date:   Fri, 25 Feb 2022 01:08:50 +0700
-Message-Id: <20220224180850.34592-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org>
-References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org> <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com> <Yhe/3rELNfFOdU4L@sirena.org.uk> <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com>
+        Thu, 24 Feb 2022 13:09:40 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B101D67D5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:09:07 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id r10so941089wrp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:09:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JBod19rkADe4RLTH6pIu+iewF45ltCOcT+bAF+Wv0jI=;
+        b=jbWx65rXhidUWKLzjE5t5/ELOwE9H4N7N1Py6DVq329fFUHtli6eeZN9hfBsWJ/VZg
+         JZBK/CdFrLEGqce2ZoQ9Wl3P5s2ApAyvLgpss0vbEIWK9I2Lf/N57ZOuoH5ccWswZ4Ss
+         7prwfrJSMgCv1bsliPkng8j4B9yloXNYc6hf4OgZBEo7WKGoxQxQ3MjRCy/SU1wPurNK
+         vuI2Z/Li4QP2k2hxhW0zNY2l/eo5ISqLSD9U+LTnSGGDYsjJhLKpRrgbbCuUWHerRBsA
+         ZygKhLNN1sV2ch5mVvtnMwFFaJuPbj3iw03WfuwBriXD/MXhG0lSCUo8yaeuirAX2jyZ
+         +Tsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JBod19rkADe4RLTH6pIu+iewF45ltCOcT+bAF+Wv0jI=;
+        b=QbEv1w7BRLM3qNpG9427XPAczySaehsybjxprhCCVzixRujSdqGf2jRtAtmLtjNXCS
+         lDL/q/pPVzx7cliWoUH1OHoCfSGSwHvFyPshgBASuS67Dr8eFTs4FcAR3mTtUGZAbHTY
+         yQszp42sRMjIdvZBF8GicK5cz0EgW70mLxPPvl7CmUzNsg3ZZigOOjslRuL7w6ALUUXG
+         GVh9rd7YFU215a+85NGeeQuhmmHR0xN3TeS3mWC2vQ/hA5/UBzZy5lBv/8LeflhbjqD1
+         Zxmw++3va0IMW2Ni2E1HQLD5Ui7fuEMOFRasdx4eejdUdC3fd09Dax+Kw8BdtF/TI2un
+         CXsg==
+X-Gm-Message-State: AOAM530l4zjmJQX9tBSdMfTdrVVZnY6mEgFobjcFVRshYrgoC06kjzxk
+        v9AjFNds9w0Rx1JKL0cjGa5m2KP8uLj2qEXcKTVy4w==
+X-Google-Smtp-Source: ABdhPJw3fGngrJIeXA2AngyWEbeuzVREcXS2h92NXlwzoHHBHZ2ErN9+yU7GNB6Mu3tbLl54mrAmF7kecbeXj1BnSLA=
+X-Received: by 2002:a5d:4b87:0:b0:1ed:f948:7bcf with SMTP id
+ b7-20020a5d4b87000000b001edf9487bcfmr2752186wrt.699.1645726146117; Thu, 24
+ Feb 2022 10:09:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224051439.640768-1-kaleshsingh@google.com>
+ <20220224051439.640768-8-kaleshsingh@google.com> <CA+EHjTwMvQzvyA2Nxq_TKNjM-0_XvTtoKPtBPVPjSn7cboBNUA@mail.gmail.com>
+In-Reply-To: <CA+EHjTwMvQzvyA2Nxq_TKNjM-0_XvTtoKPtBPVPjSn7cboBNUA@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 24 Feb 2022 10:08:55 -0800
+Message-ID: <CAC_TJvef9=gtidBJ1T1fEMY6prDAo8dTYr5uCiS=i3o03miuWg@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] KVM: arm64: Unwind and dump nVHE HYP stacktrace
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
--ENOMEM because it leads to a NULL pointer dereference bug.
+On Thu, Feb 24, 2022 at 4:28 AM Fuad Tabba <tabba@google.com> wrote:
+>
+> Hi Kalesh,
+>
+> On Thu, Feb 24, 2022 at 5:22 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > Unwind the stack in EL1, when CONFIG_NVHE_EL2_DEBUG is enabled. This is
+> > possible because CONFIG_NVHE_EL2_DEBUG disables the host stage 2 protection
+> > which allows host to access the hypervisor stack pages in EL1.
+>
+> For this comment to be clearer, and if my understanding is correct, I
+> think that it should say that CONFIG_NVHE_EL2_DEBUG allows host stage
+> 2 protection to be disabled on a hyp_panic. Otherwise, on reading the
+> comment one might think that CONFIG_NVHE_EL2_DEBUG runs without host
+> stage 2 protection at all.
 
-The dmesg says:
+Your understanding is correct: the host stage 2  protection is only
+disabled on a hyp_panic(). I'll rephrase to make it clearer.
 
-  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
-  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
-  [ T1387] #PF: supervisor read access in kernel mode
-  [ T1387] #PF: error_code(0x0000) - not-present page
-  [ T1387] PGD 0 P4D 0
-  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
-  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3 #3 56590caeed02394520e20ca5a2059907eb2d5079
-  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: 8b 87 80 03 00 00 48 85 c0 75 07 48 8b 05 f9 39 2b 02 48 85 c0 74 13 4c 8b 48 28 4d 85 c9 74 0a 48 89 da 44 89 c1 5b 41 ff e1 <48> 8b 0b 48 8b 11 48 8b 49 10 48 83 e2 fc 48 81 c6 ff 0f 00 00 48
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
-  [ T1387] Call Trace:
-  [ T1387]  <TASK>
-  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [ T1387]  hda_dsp_cl_boot_firmware_iccmax+0x50/0xf0 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [ T1387]  snd_sof_run_firmware+0xb5/0x300 [snd_sof b83a5eaf64712c6f474ef3641062bb71902deae4]
-  [ T1387]  sof_resume+0xb1/0x2c0 [snd_sof b83a5eaf64712c6f474ef3641062bb71902deae4]
-  [ T1387]  ? pci_pme_active+0x1b4/0x220
-  [ T1387]  pci_pm_runtime_resume+0xaa/0xe0
-  [ T1387]  ? pci_pm_runtime_suspend+0x190/0x190
-  [ T1387]  __rpm_callback+0x9c/0x320
-  [ T1387]  ? pci_pm_runtime_suspend+0x190/0x190
-  [ T1387]  ? pci_pm_runtime_suspend+0x190/0x190
-  [ T1387]  rpm_resume+0x50d/0x690
-  [ T1387]  __pm_runtime_resume+0x69/0x80
-  [ T1387]  snd_soc_pcm_component_pm_runtime_get+0x60/0xe0 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  __soc_pcm_open+0x82/0x530 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  dpcm_be_dai_startup+0x14b/0x260 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  dpcm_fe_dai_startup+0x73/0x930 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  ? dpcm_add_paths+0x109/0x1b0 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  dpcm_fe_dai_open+0x74/0x160 [snd_soc_core 6817f963f4c978c6ec831f778545ab4db1a1023f]
-  [ T1387]  snd_pcm_open_substream+0x56f/0x840 [snd_pcm 2213f8e36532d8bc92ec1ec574108b0385b1b13a]
-  [ T1387]  snd_pcm_open+0xb3/0x1d0 [snd_pcm 2213f8e36532d8bc92ec1ec574108b0385b1b13a]
-  [ T1387]  ? sched_dynamic_update+0x1a0/0x1a0
-  [ T1387]  ? cd_forget+0x80/0x80
-  [ T1387]  snd_pcm_playback_open+0x3c/0x60 [snd_pcm 2213f8e36532d8bc92ec1ec574108b0385b1b13a]
-  [ T1387]  chrdev_open+0x1d3/0x200
-  [ T1387]  ? cd_forget+0x80/0x80
-  [ T1387]  do_dentry_open+0x254/0x370
-  [ T1387]  path_openat+0x9e6/0xbc0
-  [ T1387]  ? lock_release+0x230/0x300
-  [ T1387]  ? snd_ctl_ioctl+0x759/0x900 [snd 1eb0a4959d3d3710c16836cd2838d885bf8f75a9]
-  [ T1387]  do_filp_open+0x93/0x120
-  [ T1387]  ? alloc_fd+0x147/0x180
-  [ T1387]  ? _raw_spin_unlock+0x29/0x40
-  [ T1387]  ? alloc_fd+0x147/0x180
-  [ T1387]  do_sys_openat2+0x68/0x130
-  [ T1387]  __x64_sys_openat+0x6f/0x80
-  [ T1387]  do_syscall_64+0x3d/0xb0
-  [ T1387]  ? exit_to_user_mode_prepare+0x2c/0x50
-  [ T1387]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-  [ T1387] RIP: 0033:0x7f42ee19a6e4
-  [ T1387] Code: 24 20 eb 8f 66 90 44 89 54 24 0c e8 16 d2 f7 ff 44 8b 54 24 0c 44 89 e2 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 89 44 24 0c e8 58 d2 f7 ff 8b 44
-  [ T1387] RSP: 002b:00007f42e2ffc620 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
-  [ T1387] RAX: ffffffffffffffda RBX: 0000000000080802 RCX: 00007f42ee19a6e4
-  [ T1387] RDX: 0000000000080802 RSI: 00007f42e2ffc6c0 RDI: 00000000ffffff9c
-  [ T1387] RBP: 00007f42e2ffc6c0 R08: 0000000000000000 R09: 00007f42e2ffc437
-  [ T1387] R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000080802
-  [ T1387] R13: 00007f42e8c3faa0 R14: 00007f42e2ffc6c0 R15: 0000000081204101
-  [ T1387]  </TASK>
+>
+> >
+> > Unwinding and dumping hyp call traces is gated on CONFIG_NVHE_EL2_DEBUG
+> > to avoid the potential leaking of information to the host.
+> >
+> > A simple stack overflow test produces the following output:
+> >
+> > [  580.376051][  T412] kvm: nVHE hyp panic at: ffffffc0116145c4!
+> > [  580.378034][  T412] kvm [412]: nVHE HYP call trace:
+> > [  580.378591][  T412] kvm [412]:  [<ffffffc011614934>]
+> > [  580.378993][  T412] kvm [412]:  [<ffffffc01160fa48>]
+> > [  580.379386][  T412] kvm [412]:  [<ffffffc0116145dc>]  // Non-terminating recursive call
+> > [  580.379772][  T412] kvm [412]:  [<ffffffc0116145dc>]
+> > [  580.380158][  T412] kvm [412]:  [<ffffffc0116145dc>]
+> > [  580.380544][  T412] kvm [412]:  [<ffffffc0116145dc>]
+> > [  580.380928][  T412] kvm [412]:  [<ffffffc0116145dc>]
+> > . . .
+> >
+> > Since nVHE hyp symbols are not included by kallsyms to avoid issues
+> > with aliasing, we fallback to the vmlinux addresses. Symbolizing the
+> > addresses is handled in the next patch in this series.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >
+> > Changes in v3:
+> >   - The nvhe hyp stack unwinder now makes use of the core logic from the
+> >     regular kernel unwinder to avoid duplication, per Mark
+> >
+> > Changes in v2:
+> >   - Add cpu_prepare_nvhe_panic_info()
+> >   - Move updating the panic info to hyp_panic(), so that unwinding also
+> >     works for conventional nVHE Hyp-mode.
+> >
+> >  arch/arm64/include/asm/kvm_asm.h    |  19 +++
+> >  arch/arm64/include/asm/stacktrace.h |  12 ++
+> >  arch/arm64/kernel/stacktrace.c      | 210 +++++++++++++++++++++++++---
+> >  arch/arm64/kvm/Kconfig              |   5 +-
+> >  arch/arm64/kvm/arm.c                |   2 +-
+> >  arch/arm64/kvm/handle_exit.c        |   3 +
+> >  arch/arm64/kvm/hyp/nvhe/switch.c    |  18 +++
+> >  7 files changed, 243 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> > index 2e277f2ed671..16efdf150a37 100644
+> > --- a/arch/arm64/include/asm/kvm_asm.h
+> > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > @@ -176,6 +176,25 @@ struct kvm_nvhe_init_params {
+> >         unsigned long vtcr;
+> >  };
+> >
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +/*
+> > + * Used by the host in EL1 to dump the nVHE hypervisor backtrace on
+> > + * hyp_panic. This is possible because CONFIG_NVHE_EL2_DEBUG disables
+> > + * the host stage 2 protection. See: __hyp_do_panic()
+>
+> Same as my comment above.
 
-  [... snip linked modules ...]
+Ack
+>
+> > + *
+> > + * @hyp_stack_base:             hyp VA of the hyp_stack base.
+> > + * @hyp_overflow_stack_base:    hyp VA of the hyp_overflow_stack base.
+> > + * @fp:                         hyp FP where the backtrace begins.
+> > + * @pc:                         hyp PC where the backtrace begins.
+> > + */
+> > +struct kvm_nvhe_panic_info {
+> > +       unsigned long hyp_stack_base;
+> > +       unsigned long hyp_overflow_stack_base;
+> > +       unsigned long fp;
+> > +       unsigned long pc;
+> > +};
+> > +#endif /* CONFIG_NVHE_EL2_DEBUG */
+> > +
+> >  /* Translate a kernel address @ptr into its equivalent linear mapping */
+> >  #define kvm_ksym_ref(ptr)                                              \
+> >         ({                                                              \
+> > diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+> > index e77cdef9ca29..18611a51cf14 100644
+> > --- a/arch/arm64/include/asm/stacktrace.h
+> > +++ b/arch/arm64/include/asm/stacktrace.h
+> > @@ -22,6 +22,10 @@ enum stack_type {
+> >         STACK_TYPE_OVERFLOW,
+> >         STACK_TYPE_SDEI_NORMAL,
+> >         STACK_TYPE_SDEI_CRITICAL,
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +       STACK_TYPE_KVM_NVHE_HYP,
+> > +       STACK_TYPE_KVM_NVHE_OVERFLOW,
+> > +#endif /* CONFIG_NVHE_EL2_DEBUG */
+> >         __NR_STACK_TYPES
+> >  };
+> >
+> > @@ -147,4 +151,12 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+> >         return false;
+> >  }
+> >
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +void kvm_nvhe_dump_backtrace(unsigned long hyp_offset);
+> > +#else
+> > +static inline void kvm_nvhe_dump_backtrace(unsigned long hyp_offset)
+> > +{
+> > +}
+> > +#endif /* CONFIG_NVHE_EL2_DEBUG */
+> > +
+> >  #endif /* __ASM_STACKTRACE_H */
+> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> > index e4103e085681..6ec85cb69b1f 100644
+> > --- a/arch/arm64/kernel/stacktrace.c
+> > +++ b/arch/arm64/kernel/stacktrace.c
+> > @@ -15,6 +15,8 @@
+> >
+> >  #include <asm/irq.h>
+> >  #include <asm/pointer_auth.h>
+> > +#include <asm/kvm_asm.h>
+> > +#include <asm/kvm_hyp.h>
+> >  #include <asm/stack_pointer.h>
+> >  #include <asm/stacktrace.h>
+> >
+> > @@ -64,26 +66,15 @@ NOKPROBE_SYMBOL(start_backtrace);
+> >   * records (e.g. a cycle), determined based on the location and fp value of A
+> >   * and the location (but not the fp value) of B.
+> >   */
+> > -static int notrace unwind_frame(struct task_struct *tsk,
+> > -                               struct stackframe *frame)
+> > +static int notrace __unwind_frame(struct stackframe *frame, struct stack_info *info,
+> > +               unsigned long (*translate_fp)(unsigned long, enum stack_type))
+> >  {
+> >         unsigned long fp = frame->fp;
+> > -       struct stack_info info;
+> > -
+> > -       if (!tsk)
+> > -               tsk = current;
+> > -
+> > -       /* Final frame; nothing to unwind */
+> > -       if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
+> > -               return -ENOENT;
+> >
+> >         if (fp & 0x7)
+> >                 return -EINVAL;
+> >
+> > -       if (!on_accessible_stack(tsk, fp, 16, &info))
+> > -               return -EINVAL;
+> > -
+> > -       if (test_bit(info.type, frame->stacks_done))
+> > +       if (test_bit(info->type, frame->stacks_done))
+> >                 return -EINVAL;
+> >
+> >         /*
+> > @@ -94,28 +85,62 @@ static int notrace unwind_frame(struct task_struct *tsk,
+> >          *
+> >          * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
+> >          * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
+> > +        * KVM_NVHE_HYP -> KVM_NVHE_OVERFLOW
+> >          *
+> >          * ... but the nesting itself is strict. Once we transition from one
+> >          * stack to another, it's never valid to unwind back to that first
+> >          * stack.
+> >          */
+> > -       if (info.type == frame->prev_type) {
+> > +       if (info->type == frame->prev_type) {
+> >                 if (fp <= frame->prev_fp)
+> >                         return -EINVAL;
+> >         } else {
+> >                 set_bit(frame->prev_type, frame->stacks_done);
+> >         }
+> >
+> > +       /* Record fp as prev_fp before attempting to get the next fp */
+> > +       frame->prev_fp = fp;
+> > +
+> > +       /*
+> > +        * If fp is not from the current address space perform the
+> > +        * necessary translation before dereferencing it to get next fp.
+> > +        */
+> > +       if (translate_fp)
+> > +               fp = translate_fp(fp, info->type);
+> > +       if (!fp)
+> > +               return -EINVAL;
+> > +
+> >         /*
+> >          * Record this frame record's values and location. The prev_fp and
+> > -        * prev_type are only meaningful to the next unwind_frame() invocation.
+> > +        * prev_type are only meaningful to the next __unwind_frame() invocation.
+> >          */
+> >         frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+> >         frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
+> > -       frame->prev_fp = fp;
+> > -       frame->prev_type = info.type;
+> > -
+> >         frame->pc = ptrauth_strip_insn_pac(frame->pc);
+> > +       frame->prev_type = info->type;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int notrace unwind_frame(struct task_struct *tsk, struct stackframe *frame)
+> > +{
+> > +       unsigned long fp = frame->fp;
+> > +       struct stack_info info;
+> > +       int err;
+> > +
+> > +       if (!tsk)
+> > +               tsk = current;
+> > +
+> > +       /* Final frame; nothing to unwind */
+> > +       if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
+> > +               return -ENOENT;
+> > +
+> > +       if (!on_accessible_stack(tsk, fp, 16, &info))
+> > +               return -EINVAL;
+> > +
+> > +       err = __unwind_frame(frame, &info, NULL);
+> > +       if (err)
+> > +               return err;
+> >
+> >  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> >         if (tsk->ret_stack &&
+> > @@ -143,20 +168,27 @@ static int notrace unwind_frame(struct task_struct *tsk,
+> >  }
+> >  NOKPROBE_SYMBOL(unwind_frame);
+> >
+> > -static void notrace walk_stackframe(struct task_struct *tsk,
+> > -                                   struct stackframe *frame,
+> > -                                   bool (*fn)(void *, unsigned long), void *data)
+> > +static void notrace __walk_stackframe(struct task_struct *tsk, struct stackframe *frame,
+> > +               bool (*fn)(void *, unsigned long), void *data,
+> > +               int (*unwind_frame_fn)(struct task_struct *tsk, struct stackframe *frame))
+> >  {
+> >         while (1) {
+> >                 int ret;
+> >
+> >                 if (!fn(data, frame->pc))
+> >                         break;
+> > -               ret = unwind_frame(tsk, frame);
+> > +               ret = unwind_frame_fn(tsk, frame);
+> >                 if (ret < 0)
+> >                         break;
+> >         }
+> >  }
+> > +
+> > +static void notrace walk_stackframe(struct task_struct *tsk,
+> > +                                   struct stackframe *frame,
+> > +                                   bool (*fn)(void *, unsigned long), void *data)
+> > +{
+> > +       __walk_stackframe(tsk, frame, fn, data, unwind_frame);
+> > +}
+> >  NOKPROBE_SYMBOL(walk_stackframe);
+> >
+> >  static bool dump_backtrace_entry(void *arg, unsigned long where)
+> > @@ -210,3 +242,135 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> >
+> >         walk_stackframe(task, &frame, consume_entry, cookie);
+> >  }
+> > +
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +DECLARE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+> > +DECLARE_KVM_NVHE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], hyp_overflow_stack);
+> > +DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_panic_info, kvm_panic_info);
+> > +
+> > +static inline bool kvm_nvhe_on_overflow_stack(unsigned long sp, unsigned long size,
+> > +                                struct stack_info *info)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr_nvhe_sym(kvm_panic_info);
+> > +       unsigned long low = (unsigned long)panic_info->hyp_overflow_stack_base;
+> > +       unsigned long high = low + PAGE_SIZE;
+> > +
+> > +       return on_stack(sp, size, low, high, STACK_TYPE_KVM_NVHE_OVERFLOW, info);
+> > +}
+> > +
+> > +static inline bool kvm_nvhe_on_hyp_stack(unsigned long sp, unsigned long size,
+> > +                                struct stack_info *info)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr_nvhe_sym(kvm_panic_info);
+> > +       unsigned long low = (unsigned long)panic_info->hyp_stack_base;
+> > +       unsigned long high = low + PAGE_SIZE;
+> > +
+> > +       return on_stack(sp, size, low, high, STACK_TYPE_KVM_NVHE_HYP, info);
+> > +}
+> > +
+> > +static inline bool kvm_nvhe_on_accessible_stack(unsigned long sp, unsigned long size,
+> > +                                      struct stack_info *info)
+> > +{
+> > +       if (info)
+> > +               info->type = STACK_TYPE_UNKNOWN;
+> > +
+> > +       if (kvm_nvhe_on_hyp_stack(sp, size, info))
+> > +               return true;
+> > +       if (kvm_nvhe_on_overflow_stack(sp, size, info))
+> > +               return true;
+> > +
+> > +       return false;
+> > +}
+> > +
+> > +static unsigned long kvm_nvhe_hyp_stack_kern_va(unsigned long addr)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr_nvhe_sym(kvm_panic_info);
+> > +       unsigned long hyp_base, kern_base, hyp_offset;
+> > +
+> > +       hyp_base = (unsigned long)panic_info->hyp_stack_base;
+> > +       hyp_offset = addr - hyp_base;
+> > +
+> > +       kern_base = (unsigned long)*this_cpu_ptr(&kvm_arm_hyp_stack_page);
+> > +
+> > +       return kern_base + hyp_offset;
+> > +}
+> > +
+> > +static unsigned long kvm_nvhe_overflow_stack_kern_va(unsigned long addr)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr_nvhe_sym(kvm_panic_info);
+> > +       unsigned long hyp_base, kern_base, hyp_offset;
+> > +
+> > +       hyp_base = (unsigned long)panic_info->hyp_overflow_stack_base;
+> > +       hyp_offset = addr - hyp_base;
+> > +
+> > +       kern_base = (unsigned long)this_cpu_ptr_nvhe_sym(hyp_overflow_stack);
+> > +
+> > +       return kern_base + hyp_offset;
+> > +}
+> > +
+> > +/*
+> > + * Convert KVM nVHE hypervisor stack VA to a kernel VA.
+> > + *
+> > + * The nVHE hypervisor stack is mapped in the flexible 'private' VA range, to allow
+> > + * for guard pages below the stack. Consequently, the fixed offset address
+> > + * translation macros won't work here.
+> > + *
+> > + * The kernel VA is calculated as an offset from the kernel VA of the hypervisor
+> > + * stack base. See: kvm_nvhe_hyp_stack_kern_va(),  kvm_nvhe_overflow_stack_kern_va()
+> > + */
+> > +static unsigned long kvm_nvhe_stack_kern_va(unsigned long addr,
+> > +                                       enum stack_type type)
+> > +{
+> > +       switch (type) {
+> > +       case STACK_TYPE_KVM_NVHE_HYP:
+> > +               return kvm_nvhe_hyp_stack_kern_va(addr);
+> > +       case STACK_TYPE_KVM_NVHE_OVERFLOW:
+> > +               return kvm_nvhe_overflow_stack_kern_va(addr);
+> > +       default:
+> > +               return 0UL;
+> > +       }
+> > +}
+> > +
+> > +static int notrace kvm_nvhe_unwind_frame(struct task_struct *tsk,
+> > +                                       struct stackframe *frame)
+> > +{
+> > +       struct stack_info info;
+> > +
+> > +       if (!kvm_nvhe_on_accessible_stack(frame->fp, 16, &info))
+> > +               return -EINVAL;
+> > +
+> > +       return  __unwind_frame(frame, &info, kvm_nvhe_stack_kern_va);
+> > +}
+> > +
+> > +static bool kvm_nvhe_dump_backtrace_entry(void *arg, unsigned long where)
+> > +{
+> > +       unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
+> > +       unsigned long hyp_offset = (unsigned long)arg;
+> > +
+> > +       where &= va_mask;       /* Mask tags */
+> > +       where += hyp_offset;    /* Convert to kern addr */
+> > +
+> > +       kvm_err("[<%016lx>] %pB\n", where, (void *)where);
+> > +
+> > +       return true;
+> > +}
+> > +
+> > +static void notrace kvm_nvhe_walk_stackframe(struct task_struct *tsk,
+> > +                                   struct stackframe *frame,
+> > +                                   bool (*fn)(void *, unsigned long), void *data)
+> > +{
+> > +       __walk_stackframe(tsk, frame, fn, data, kvm_nvhe_unwind_frame);
+> > +}
+> > +
+> > +void kvm_nvhe_dump_backtrace(unsigned long hyp_offset)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr_nvhe_sym(kvm_panic_info);
+> > +       struct stackframe frame;
+> > +
+> > +       start_backtrace(&frame, panic_info->fp, panic_info->pc);
+> > +       pr_err("nVHE HYP call trace:\n");
+> > +       kvm_nvhe_walk_stackframe(NULL, &frame, kvm_nvhe_dump_backtrace_entry,
+> > +                                       (void *)hyp_offset);
+> > +       pr_err("---- end of nVHE HYP call trace ----\n");
+> > +}
+> > +#endif /* CONFIG_NVHE_EL2_DEBUG */
+> > diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> > index 8a5fbbf084df..75f2c8255ff0 100644
+> > --- a/arch/arm64/kvm/Kconfig
+> > +++ b/arch/arm64/kvm/Kconfig
+> > @@ -51,8 +51,9 @@ config NVHE_EL2_DEBUG
+> >         depends on KVM
+> >         help
+> >           Say Y here to enable the debug mode for the non-VHE KVM EL2 object.
+> > -         Failure reports will BUG() in the hypervisor. This is intended for
+> > -         local EL2 hypervisor development.
+> > +         Failure reports will BUG() in the hypervisor; and panics will print
+> > +         the hypervisor call stack. This is intended for local EL2 hypervisor
+> > +         development.
+>
+> Nit: maybe for clarity you could rephrase as "calls to hyp_panic()
+> will result in printing the hypervisor call stack".
 
-  [ T1387] CR2: 0000000000000000
-  [ T1387] ---[ end trace 0000000000000000 ]---
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: 8b 87 80 03 00 00 48 85 c0 75 07 48 8b 05 f9 39 2b 02 48 85 c0 74 13 4c 8b 48 28 4d 85 c9 74 0a 48 89 da 44 89 c1 5b 41 ff e1 <48> 8b 0b 48 8b 11 48 8b 49 10 48 83 e2 fc 48 81 c6 ff 0f 00 00 48
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
+Ack. I'll update in the next version.
 
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Keyon Jie <yang.jie@linux.intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: Rander Wang <rander.wang@intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.com>
-Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
-Cc: stable@vger.kernel.org # v5.2+
-Cc: sound-open-firmware@alsa-project.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/lkml/cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com/T/ # v1
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
- v2:
-   - Append Reviewed-by tag from Peter Ujfalusi.
-   - Append Reviewed-by tag from Pierre-Louis Bossart.
-   - Address comment from Mark Brown (strip irrelevant kernel log
-     from the commit message).
-
- sound/soc/sof/intel/hda-loader.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 33306d2023a7..9bbfdab8009d 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -47,7 +47,7 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: memory alloc failed: %d\n", ret);
--		goto error;
-+		goto out_put;
- 	}
- 
- 	hstream->period_bytes = 0;/* initialize period_bytes */
-@@ -58,22 +58,23 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 	} else {
- 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: hdac prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
- 	}
- 
- 	return dsp_stream;
- 
--error:
--	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
-+out_free:
- 	snd_dma_free_pages(dmab);
-+out_put:
-+	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
- 	return ERR_PTR(ret);
- }
- 
--- 
-2.32.0
-
+Thanks,
+Kalesh
+>
+> Thanks,
+> /fuad
+>
+>
+> >
+> >           If unsure, say N.
+> >
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 7a23630c4a7f..66c07c04eb52 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -49,7 +49,7 @@ DEFINE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
+> >
+> >  DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+> >
+> > -static DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+> > +DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+> >  unsigned long kvm_arm_hyp_percpu_base[NR_CPUS];
+> >  DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+> >
+> > diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+> > index e3140abd2e2e..ff69dff33700 100644
+> > --- a/arch/arm64/kvm/handle_exit.c
+> > +++ b/arch/arm64/kvm/handle_exit.c
+> > @@ -17,6 +17,7 @@
+> >  #include <asm/kvm_emulate.h>
+> >  #include <asm/kvm_mmu.h>
+> >  #include <asm/debug-monitors.h>
+> > +#include <asm/stacktrace.h>
+> >  #include <asm/traps.h>
+> >
+> >  #include <kvm/arm_hypercalls.h>
+> > @@ -326,6 +327,8 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
+> >                 kvm_err("nVHE hyp panic at: %016llx!\n", elr_virt + hyp_offset);
+> >         }
+> >
+> > +       kvm_nvhe_dump_backtrace(hyp_offset);
+> > +
+> >         /*
+> >          * Hyp has panicked and we're going to handle that by panicking the
+> >          * kernel. The kernel offset will be revealed in the panic so we're
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+> > index efc20273a352..b8ecffc47424 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/switch.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+> > @@ -37,6 +37,22 @@ DEFINE_PER_CPU(unsigned long, kvm_hyp_vector);
+> >  #ifdef CONFIG_NVHE_EL2_DEBUG
+> >  DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], hyp_overflow_stack)
+> >         __aligned(16);
+> > +DEFINE_PER_CPU(struct kvm_nvhe_panic_info, kvm_panic_info);
+> > +
+> > +static inline void cpu_prepare_nvhe_panic_info(void)
+> > +{
+> > +       struct kvm_nvhe_panic_info *panic_info = this_cpu_ptr(&kvm_panic_info);
+> > +       struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
+> > +
+> > +       panic_info->hyp_stack_base = (unsigned long)(params->stack_hyp_va - PAGE_SIZE);
+> > +       panic_info->hyp_overflow_stack_base = (unsigned long)this_cpu_ptr(hyp_overflow_stack);
+> > +       panic_info->fp = (unsigned long)__builtin_frame_address(0);
+> > +       panic_info->pc = _THIS_IP_;
+> > +}
+> > + #else
+> > +static inline void cpu_prepare_nvhe_panic_info(void)
+> > +{
+> > +}
+> >  #endif
+> >
+> >  static void __activate_traps(struct kvm_vcpu *vcpu)
+> > @@ -360,6 +376,8 @@ asmlinkage void __noreturn hyp_panic(void)
+> >         struct kvm_cpu_context *host_ctxt;
+> >         struct kvm_vcpu *vcpu;
+> >
+> > +       cpu_prepare_nvhe_panic_info();
+> > +
+> >         host_ctxt = &this_cpu_ptr(&kvm_host_data)->host_ctxt;
+> >         vcpu = host_ctxt->__hyp_running_vcpu;
+> >
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+> >

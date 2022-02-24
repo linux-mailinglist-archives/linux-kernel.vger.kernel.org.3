@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696B64C245F
+	by mail.lfdr.de (Postfix) with ESMTP id B5A3F4C2460
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiBXHJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 02:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S231461AbiBXHJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 02:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiBXHJk (ORCPT
+        with ESMTP id S230323AbiBXHJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 02:09:40 -0500
+        Thu, 24 Feb 2022 02:09:39 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879F722F97F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:09:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5350322F977
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:09:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645686551; x=1677222551;
+  t=1645686550; x=1677222550;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1AEB+rXO4qYNx/T+8IC5iwE0UDDcuGwkqExAN7yCpKE=;
-  b=Wmfyarw+9MbQgvONTa0W1ixjMbVZmD6QcXfnkdxsXuNtu3GCm8drIyDw
-   C7q9RUTKHSmHQlSTjoCGTnxiadFygtZNYi+wc35iTF3Nl1R3S83GCbmnc
-   0Z3AuidEaznX9ihC90ingbxAreyG6H4JUIvl23f9sO8+NCWRmWsjOQ+zY
-   y+KRF7Y69o6p/YIhNH1+ohmJVyys51yf/5pOF4Z19xLTyQNZuN2EO/Zms
-   BpBmC00WSuv9k/69pBX4CcZgwc2Xo6z8u6ri2uX16ZTD97Poe3oUQjET2
-   JAE9xMHM/WdWKuLFPwas2J3ppds7nDmUpyo9hRm7Nui4iIbsE/698K3wH
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="235676720"
+  bh=Zz1uw34srLEy1L619ihfRSNoYf33JmEVqY+EzVqdyW4=;
+  b=awXQppctUw26RP0WeKhhnLczjsy/9IwsHOTcZ8zPHDP/82/k1SwBYvcv
+   RcHzWzoUjIHO+nTMCQaWwCPqxBOtKaUh0AgRmsQTJ4BqLffimhno92KZF
+   2fztH0qBd45og3BrYFeta6bM4SJkWnbAZBo6ERBqDmKLfwj49JgZtHCwF
+   5B3VSTppNnRuxlux0UGqOESBOurtNasEDfd8noY+2pzfIiDwWtHkrTw1d
+   iBUl3F3Ze0GEWJuJTZ7as6aBcnCxSyaIjeB60cSIPik4tsMjzD0Ne6XRm
+   nn118l6Ye3uEFp3pdzyE5NSdkHqx7l4kovVLp5518eqCtHSfmBjegZ/pc
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="235676717"
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="235676720"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+   d="scan'208";a="235676717"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 23:09:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="543609273"
+   d="scan'208";a="548613863"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
+  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 23:09:08 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nN8FP-0002R6-9V; Thu, 24 Feb 2022 07:09:07 +0000
-Date:   Thu, 24 Feb 2022 15:08:46 +0800
+        id 1nN8FP-0002R8-A1; Thu, 24 Feb 2022 07:09:07 +0000
+Date:   Thu, 24 Feb 2022 15:08:51 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -48,7 +48,7 @@ Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Subject: [ammarfaizi2-block:next/linux-next/akpm 334/334]
  lib/Kconfig.debug:337:error: recursive dependency detected!
-Message-ID: <202202241522.25enBK5u-lkp@intel.com>
+Message-ID: <202202241529.J5wGzdi8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,17 +66,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/akpm
 head:   4b738f94b3a6492ae5adad0940d580851fb9019b
 commit: 4b738f94b3a6492ae5adad0940d580851fb9019b [334/334] Merge commit 'next-20220215~2' into tmp-akpm/master
-config: hexagon-randconfig-r045-20220223
+config: riscv-randconfig-r023-20220223
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/ammarfaizi2/linux-block/commit/4b738f94b3a6492ae5adad0940d580851fb9019b
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block next/linux-next/akpm
         git checkout 4b738f94b3a6492ae5adad0940d580851fb9019b
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon  randconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>

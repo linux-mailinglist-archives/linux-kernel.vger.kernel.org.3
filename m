@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BC94C2E73
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDBC4C2E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbiBXOaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S235520AbiBXObz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiBXOaA (ORCPT
+        with ESMTP id S235490AbiBXObx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:30:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46F4117C402
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645712970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g+rrF8JUub4OBg9MyDm/2REtxx0IIbE/BeW/5erIvm0=;
-        b=hyRVWMMiEv7gaYo2vvV96PVVPrlRZdn/6QxsdOVC2/vbMPP4PM/1KBSpVtipiobaDnLcAl
-        xC0iBBgNK+08u7zDmOybbbxzSZpVIuzXt4aPIdwTkrtWvopLxHD4lLAYg1oxQ/sLtMxq5x
-        VoOnPpOu5cnK8Mj5m3GtE/5NvnrDtjg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-oJ337DgNMhuMaOMk2Uh3Qg-1; Thu, 24 Feb 2022 09:29:28 -0500
-X-MC-Unique: oJ337DgNMhuMaOMk2Uh3Qg-1
-Received: by mail-ej1-f72.google.com with SMTP id sa22-20020a1709076d1600b006ce78cacb85so1300688ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:29:27 -0800 (PST)
+        Thu, 24 Feb 2022 09:31:53 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63F517C42D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:31:22 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id c6so4176284ybk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=yN4qqwzRUbf48GIlrimNl5sMWvOFulKNBolCSX/vfSs=;
+        b=ueUn5iqUjUYldOHpCUKXR+wfQojXmywKv3+H2krKYsKK642HIuat0fTLg9wk1Ee8ea
+         mcolfxfYSHLI6NSj8TwUIDeC5Hx56X5uRgwWqEROPqKGls9/BFYx7tCQUTg6UqWzhdz9
+         L2WHYtp6ZZ1Hk8pGJaxUdcfaUybg2gZmI9pfBoHGxVg/Zjep4YtM+/3oychx5Q72LXgo
+         IWKa77qzorc88gHqjp+C3GwBwrFrS5AKV/+2ZLo2JGvCgQDlq1/sc8B/+EsN3odlmDq1
+         4qr6DfrU4ENLvh7OsvsDJ3xobLKGPY68ZLnCxGUuSFiyb2ay9BO5w0lAnNYPJUcibq20
+         S93Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g+rrF8JUub4OBg9MyDm/2REtxx0IIbE/BeW/5erIvm0=;
-        b=KMiPYM0B2NX9rvfvpprzmdlV4MwQWUJvuvfXSSG2Jm33IiccV4uKzC9DW5X1KjAHhC
-         HH6OiDgAc/DycIM+bvNyJ1C5OsculNcqhBk7zmSgvqpgqBUEd3Sz/nI1FtBEbFDZ2WDx
-         a1GLT1ppgNNjjEx5iHzoRs22bL1kyjMsSQMe6YcZ4S0zurQkG+lWz7OW+FnoFmF0+bSN
-         UPQ2blAhtzQkHruxSuYPsBeEzNRyuQswt4FxANwZVaumSXdaqidxwMPDyD7g+3QAWcaH
-         lujy9N382VQLlok2L9zMoV0qu7+gW36dyQ5OE8m6rksaXBdP8WqVma2uME5ZxjhyWZWG
-         HG2g==
-X-Gm-Message-State: AOAM531b2DmEuBpmh92skhxhoTHwRDuyeX4iX3NnTqD7CGt+wjZIn/up
-        xDTLy5AkUkOM1Bo+u8ZooQ2ailLPDD4c60VLRulo8tjyv4OVQ0cOQUAAUVNPAlHNqUnBxGfN99j
-        w7SgI4AMUhO7LunO//U96u+yc
-X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr2569834ejb.501.1645712966833;
-        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxjZMkWgbXyLCpjc8uqWGsi03sjuHBM8goCnZK40Hcr3xl8F7jTXXvNZQBGS3MZsj62ipbJbA==
-X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr2569822ejb.501.1645712966649;
-        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id 23sm1421805ejf.215.2022.02.24.06.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
-Message-ID: <ce8652bc-ad1d-b158-2822-33681ac3ea91@redhat.com>
-Date:   Thu, 24 Feb 2022 15:29:25 +0100
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=yN4qqwzRUbf48GIlrimNl5sMWvOFulKNBolCSX/vfSs=;
+        b=aj1n1AsCmH3DC6WopQ+fbN/NtmvR02kLkBezuIKscUFQi6dUyc9TavVrbJ8J2gfkyh
+         rqqA0UFEWMHQiiXd/+TgLjEqxHRwH7IsoUeNZeHznmaLjBfeSecJAHnlRtRSTiNqqXGN
+         qE07xrJPpBzjvG1ZJ3wP6FOgoyGYvasn92lUHqWwBU0hhwChqCWZW/ml/8KrO5EQHhd7
+         nUF+MnCX1UbbhL6iRBzydCaU+4HweNZ9tuLdjmJ08nNMX8oXk4eEqI7dOWw38nYNKoet
+         U1w+HpUmy/X2Dk4atzvgB6H7h3pHJghp9UnuwW9gleAxI0jYT6rCcBvXuYDR84XFBe4e
+         wpOw==
+X-Gm-Message-State: AOAM533xiLLONZGi8k2/MyHyZZKYcxUjjQBaO//93Ia10q7cLQ3uT9Aa
+        zXbGSHM5Gnfj9lIMUz1UE/NcmAQuZkRV1clKZT7oJw==
+X-Google-Smtp-Source: ABdhPJzCAv17bPxxtrBHUsYVgjz+4kPNay/KOgbfa2FRXojMJEjYMnZBpYaZ7q1jNSMEQ4TypGvXqY148lSE5HmF/i8=
+X-Received: by 2002:a25:6993:0:b0:624:55af:336c with SMTP id
+ e141-20020a256993000000b0062455af336cmr2650572ybc.412.1645713081929; Thu, 24
+ Feb 2022 06:31:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] vboxsf: Remove redundant assignment to out_len
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220224104853.71844-1-jiapeng.chong@linux.alibaba.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220224104853.71844-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Feb 2022 20:01:10 +0530
+Message-ID: <CA+G9fYu4PPE6_91mzor0bW7RSzBDNJ3xqqgeeK-jR1jokmhYOQ@mail.gmail.com>
+Subject: gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is outside
+ array bounds of 'const u8[6]'
+To:     dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[Please ignore this email if it is already reported]
 
-On 2/24/22 11:48, Jiapeng Chong wrote:
-> Clean up the following clang-w1 warning:
-> 
-> fs/vboxsf/utils.c:442:9: warning: variable 'out_len' set but not used
-> [-Wunused-but-set-variable].
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Linux next-20220223 arch riscv build warnings noticed.
+Build configs:
+  - riscv-gcc-9-defconfig
+  - riscv-gcc-9-defconfig
+  - riscv-gcc-10-defconfig
+  - riscv-gcc-11-defconfig
 
-This is not the correct fix out_len indeed is never read
-anywhere in this function, so the correct fix is to
-completely remove the out_len variable .
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
+  git_describe: next-20220223
+  arch: riscv
+  toolchain: gcc-11
 
-Regards,
+Build warnings:
+-----------
+drivers/gpu/drm/dp/drm_dp.c: In function
+'drm_dp_get_adjust_request_post_cursor':
+drivers/gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is
+outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'}
+[-Warray-bounds]
+   59 |         return link_status[r - DP_LANE0_1_STATUS];
+      |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/dp/drm_dp.c:210:51: note: while referencing 'link_status'
+  210 | u8 drm_dp_get_adjust_request_post_cursor(const u8
+link_status[DP_LINK_STATUS_SIZE],
+      |
+~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[1]: Target '__all' not remade because of errors.
 
-Hans
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+Steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
+tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+--kconfig defconfig
 
-> ---
->  fs/vboxsf/utils.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
-> index e1db0f3f7e5e..865fe5ddc993 100644
-> --- a/fs/vboxsf/utils.c
-> +++ b/fs/vboxsf/utils.c
-> @@ -439,7 +439,7 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
->  {
->  	const char *in;
->  	char *out;
-> -	size_t out_len;
-> +	size_t out_len = 0;
->  	size_t out_bound_len;
->  	size_t in_bound_len;
->  
-> @@ -447,7 +447,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
->  	in_bound_len = utf8_len;
->  
->  	out = name;
-> -	out_len = 0;
->  	/* Reserve space for terminating 0 */
->  	out_bound_len = name_bound_len - 1;
->  
+--
+Linaro LKFT
+https://lkft.linaro.org
 
+[1] https://builds.tuxbuild.com/25XO99nwfQgKrWKz4yfBPYw0wyU/

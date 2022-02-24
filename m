@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A194C265A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F5C4C2659
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiBXIb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S230412AbiBXIen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbiBXIbo (ORCPT
+        with ESMTP id S229489AbiBXIej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:31:44 -0500
-Received: from mx01.puc.rediris.es (outbound5mad.lav.puc.rediris.es [130.206.19.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35627AA2E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:30:36 -0800 (PST)
-Received: from mta-out01.sim.rediris.es (mta-out01.sim.rediris.es [130.206.24.43])
-        by mx01.puc.rediris.es  with ESMTP id 21O8U0DJ022857-21O8U0DL022857
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 24 Feb 2022 09:30:00 +0100
-Received: from mta-out01.sim.rediris.es (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPS id 88B8B300B952;
-        Thu, 24 Feb 2022 09:30:00 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTP id 78135300C3A2;
-        Thu, 24 Feb 2022 09:30:00 +0100 (CET)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        mta-out01.sim.rediris.es
-Received: from mta-out01.sim.rediris.es ([127.0.0.1])
-        by localhost (mta-out01.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ga1OKfOOAvLI; Thu, 24 Feb 2022 09:30:00 +0100 (CET)
-Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPA id F1025300B952;
-        Thu, 24 Feb 2022 09:29:59 +0100 (CET)
-Date:   Thu, 24 Feb 2022 09:29:55 +0100
-From:   Gabriel Paubert <paubert@iram.es>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/32: Clear volatile regs on syscall exit
-Message-ID: <YhdCAwQ+VfLTslnV@lt-gp.iram.es>
-References: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu>
- <YhadiVbwao/p2N7o@lt-gp.iram.es>
- <20220223232739.GJ614@gate.crashing.org>
+        Thu, 24 Feb 2022 03:34:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE7525A942
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:34:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E8AEB8235A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7749C340E9;
+        Thu, 24 Feb 2022 08:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645691647;
+        bh=G53eXGEaynby4+JOACWhGd19ejXFu5L6ZpLIPmdQdp4=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=sUxXxeJm5EfTGkBYjRocPhJwTMc9EoWytFZjx9fOavH1nsuqmYstgpYB2crPyYnTS
+         TbSolj5lSdtP/dcIiFETK9niVz55Ln0a6cuvq8Ser9UZYGqrCeHqhe94ST4ePNECjm
+         vhB2KuOgpcpIlWq8d5IitUxZsoUv5v44bVIKiG8ww3UdaQzsWvG7bIFiKOTSK7F2jf
+         mQMo20SsVCPffjcIoKduQ9AjyIqOlPIa5p2IB+h9TF0V+CpT3oB/Y3qAZr5wAtorXV
+         /HUO5AStE7R9KXEya+SBP4FOflVR6n+1r3KfpMphxuXopjAPF6cYb6ry/A8ythve5N
+         PxMhhfoyjdPbg==
+Message-ID: <af77ce1a-84cb-a0d0-3419-4e5ccfb7d6d9@kernel.org>
+Date:   Thu, 24 Feb 2022 16:34:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220223232739.GJ614@gate.crashing.org>
-X-FE-Policy-ID: 23:8:0:SYSTEM
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
- h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
- bh=qlaKR81TB9uC2qecK8Ka2Y5+wlvJqCdWDbHzUcfcJ7U=;
- b=ndlmi1AQs/O8De46rNXAR9JR8GwX4uyB1QBUMFmXWqdacLOh079Mhp/eegPEMKZg954bG9hOoScg
-        VcOb27Mdh41JaedY6PFZMnh+E1lVA4+WkxH+Y7v03pjbdBzUSZdbqKzySXGqABGHYW4pHelBvRwp
-        UlnhV7SXcomMZRou0yHIYHvFYpYhcWiE1aJaPVVegXfMoqKfbaoLTKTWM3Zu+8lDIkHXdmmoUe2i
-        PcC88D9V6X0cikzfXu1DrmE7L5xzrQbi9ilyuINsxvUnFY/725tpUxQgxDFi5mcI5M3Mr1GAyaDn
-        Jh9zAHux/U9FUMGQC8wtxpNNZ0Ab8qT0e82V0w==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: fix missing free nid in
+ f2fs_handle_failed_inode
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220212142023.2508247-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220212142023.2508247-1-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,70 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 05:27:39PM -0600, Segher Boessenkool wrote:
-> On Wed, Feb 23, 2022 at 09:48:09PM +0100, Gabriel Paubert wrote:
-> > On Wed, Feb 23, 2022 at 06:11:36PM +0100, Christophe Leroy wrote:
-> > > +	/* Zero volatile regs that may contain sensitive kernel data */
-> > > +	li	r0,0
-> > > +	li	r4,0
-> > > +	li	r5,0
-> > > +	li	r6,0
-> > > +	li	r7,0
-> > > +	li	r8,0
-> > > +	li	r9,0
-> > > +	li	r10,0
-> > > +	li	r11,0
-> > > +	li	r12,0
-> > > +	mtctr	r0
-> > > +	mtxer	r0
-> > 
-> > Here, I'm almost sure that on some processors, it would be better to
-> > separate mtctr form mtxer. mtxer is typically very expensive (pipeline
-> > flush) but I don't know what's the best ordering for the average core.
+On 2022/2/12 22:20, Jaegeuk Kim wrote:
+> This patch fixes xfstests/generic/475 failure.
 > 
-> mtxer is cheaper than mtctr on many cores :-)
-
-We're speaking of 32 bit here I believe; on my (admittedly old) paper
-copy of PowerPC 604 user's manual, I read in a footnote:
-
-"The mtspr (XER) instruction causes instructions to be flushed when it
-executes." 
-
-Also a paragraph about "PostDispatch Serialization Mode" which reads:
-"All instructions following the postdispatch serialization instruction
-are flushed, refetched, and reexecuted."
-
-Then it goes on to list the affected instructions which starts with:
-mtsper(xer), mcrxr, isync, ...
-
-I know there are probably very few 604 left in the field, but in this
-case mtspr(xer) looks very much like a superset of isync.
-
-I also just had a look at the documentation of a more widespread core:
-
-https://www.nxp.com/docs/en/reference-manual/MPC7450UM.pdf
-
-and mtspr(xer) is marked as execution and refetch serialized, actually
-it is the only instruction to have both.
-
-Maybe there is a subtle difference between "refetch serialization" and
-"pipeline flush", but in this case please educate me.
-
-Besides that the back to back mtctr/mtspr(xer) may limit instruction
-decoding and issuing bandwidth.  I'd rather move one of them up by a few
-lines since they can only go to one of the execution units on some
-(or even most?) cores. This was my main point initially.
-
-	Gabriel
-
+> [  293.680694] F2FS-fs (dm-1): May loss orphan inode, run fsck to fix.
+> [  293.685358] Buffer I/O error on dev dm-1, logical block 8388592, async page read
+> [  293.691527] Buffer I/O error on dev dm-1, logical block 8388592, async page read
+> [  293.691764] sh (7615): drop_caches: 3
+> [  293.691819] sh (7616): drop_caches: 3
+> [  293.694017] Buffer I/O error on dev dm-1, logical block 1, async page read
+> [  293.695659] sh (7618): drop_caches: 3
+> [  293.696979] sh (7617): drop_caches: 3
+> [  293.700290] sh (7623): drop_caches: 3
+> [  293.708621] sh (7626): drop_caches: 3
+> [  293.711386] sh (7628): drop_caches: 3
+> [  293.711825] sh (7627): drop_caches: 3
+> [  293.716738] sh (7630): drop_caches: 3
+> [  293.719613] sh (7632): drop_caches: 3
+> [  293.720971] sh (7633): drop_caches: 3
+> [  293.727741] sh (7634): drop_caches: 3
+> [  293.730783] sh (7636): drop_caches: 3
+> [  293.732681] sh (7635): drop_caches: 3
+> [  293.732988] sh (7637): drop_caches: 3
+> [  293.738836] sh (7639): drop_caches: 3
+> [  293.740568] sh (7641): drop_caches: 3
+> [  293.743053] sh (7640): drop_caches: 3
+> [  293.821889] ------------[ cut here ]------------
+> [  293.824654] kernel BUG at fs/f2fs/node.c:3334!
+> [  293.826226] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> [  293.828713] CPU: 0 PID: 7653 Comm: umount Tainted: G           OE     5.17.0-rc1-custom #1
+> [  293.830946] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> [  293.832526] RIP: 0010:f2fs_destroy_node_manager+0x33f/0x350 [f2fs]
+> [  293.833905] Code: e8 d6 3d f9 f9 48 8b 45 d0 65 48 2b 04 25 28 00 00 00 75 1a 48 81 c4 28 03 00 00 5b 41 5c 41 5d 41 5e 41 5f 5d c3 0f 0b
+> [  293.837783] RSP: 0018:ffffb04ec31e7a20 EFLAGS: 00010202
+> [  293.839062] RAX: 0000000000000001 RBX: ffff9df947db2eb8 RCX: 0000000080aa0072
+> [  293.840666] RDX: 0000000000000000 RSI: ffffe86c0432a140 RDI: ffffffffc0b72a21
+> [  293.842261] RBP: ffffb04ec31e7d70 R08: ffff9df94ca85780 R09: 0000000080aa0072
+> [  293.843909] R10: ffff9df94ca85700 R11: ffff9df94e1ccf58 R12: ffff9df947db2e00
+> [  293.845594] R13: ffff9df947db2ed0 R14: ffff9df947db2eb8 R15: ffff9df947db2eb8
+> [  293.847855] FS:  00007f5a97379800(0000) GS:ffff9dfa77c00000(0000) knlGS:0000000000000000
+> [  293.850647] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  293.852940] CR2: 00007f5a97528730 CR3: 000000010bc76005 CR4: 0000000000370ef0
+> [  293.854680] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  293.856423] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  293.858380] Call Trace:
+> [  293.859302]  <TASK>
+> [  293.860311]  ? ttwu_do_wakeup+0x1c/0x170
+> [  293.861800]  ? ttwu_do_activate+0x6d/0xb0
+> [  293.863057]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+> [  293.864411]  ? try_to_wake_up+0x9d/0x5e0
+> [  293.865618]  ? debug_smp_processor_id+0x17/0x20
+> [  293.866934]  ? debug_smp_processor_id+0x17/0x20
+> [  293.868223]  ? free_unref_page+0xbf/0x120
+> [  293.869470]  ? __free_slab+0xcb/0x1c0
+> [  293.870614]  ? preempt_count_add+0x7a/0xc0
+> [  293.871811]  ? __slab_free+0xa0/0x2d0
+> [  293.872918]  ? __wake_up_common_lock+0x8a/0xc0
+> [  293.874186]  ? __slab_free+0xa0/0x2d0
+> [  293.875305]  ? free_inode_nonrcu+0x20/0x20
+> [  293.876466]  ? free_inode_nonrcu+0x20/0x20
+> [  293.877650]  ? debug_smp_processor_id+0x17/0x20
+> [  293.878949]  ? call_rcu+0x11a/0x240
+> [  293.880060]  ? f2fs_destroy_stats+0x59/0x60 [f2fs]
+> [  293.881437]  ? kfree+0x1fe/0x230
+> [  293.882674]  f2fs_put_super+0x160/0x390 [f2fs]
+> [  293.883978]  generic_shutdown_super+0x7a/0x120
+> [  293.885274]  kill_block_super+0x27/0x50
+> [  293.886496]  kill_f2fs_super+0x7f/0x100 [f2fs]
+> [  293.887806]  deactivate_locked_super+0x35/0xa0
+> [  293.889271]  deactivate_super+0x40/0x50
+> [  293.890513]  cleanup_mnt+0x139/0x190
+> [  293.891689]  __cleanup_mnt+0x12/0x20
+> [  293.892850]  task_work_run+0x64/0xa0
+> [  293.894035]  exit_to_user_mode_prepare+0x1b7/0x1c0
+> [  293.895409]  syscall_exit_to_user_mode+0x27/0x50
+> [  293.896872]  do_syscall_64+0x48/0xc0
+> [  293.898090]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  293.899517] RIP: 0033:0x7f5a975cd25b
 > 
-> On p9 mtxer is cracked into two latency 3 ops (which run in parallel).
-> While mtctr has latency 5.
-> 
-> On p8 mtxer was horrible indeed (but nothing near as bad as a pipeline
-> flush).
-> 
-> 
-> Segher
- 
+> Fixes: 7735730d39d7 ("f2fs: fix to propagate error from __get_meta_page()")
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
+Reviewed-by: Chao Yu <chao@kernel.org>
+
+Thanks,

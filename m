@@ -2,116 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED484C36A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C429F4C36AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbiBXUM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S234282AbiBXUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbiBXUMW (ORCPT
+        with ESMTP id S234273AbiBXUMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:12:22 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88744BBB2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:11:50 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id ay7so4677552oib.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ekJG5G8qOYobu4hy5MdAQ+syegNXxA4HGg+ZP3ZwyeQ=;
-        b=iN+ib84jcK+deSXePxRnEvpZGPxfXggqQq/303xDtJuX1Ju46TszoyPnm0Xsppey3w
-         WFz7ih93fSMwHn5aXXMfJa411lHGkQYmMil7aEWRgMd4HDSuXL/4VcipdU64RyKTiOZ0
-         g1jl2cr06zHBOqxKLL3lEdLpSPPzBGSQGhSPEM/rWUXdbecD+MhUWvERG4pQiQhD97z+
-         EbDi9nfF3DHgq5VhkgOaSPEbnKBWXteUCKblQ+7UZ+iGZkXrym0FH2+pwKvPZnyIlBBb
-         9bliCQcvHSTkochiwiFgvQHGpfii2MXpNtv2lB2S+tofG7unEBBy8I4DEhXnZ0+1TeVB
-         AbnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ekJG5G8qOYobu4hy5MdAQ+syegNXxA4HGg+ZP3ZwyeQ=;
-        b=B8skypxOReDLLtwdbVmEZxMyd4bhS8uHOMIQs5ftRsVtlnYwX0C3xx3XvnbuC58zfj
-         QCq3Us283bj5rCymGMkaQ/26dNWDD46jx/Sf3a9mMBEiOutDnqOYSIcyd/AOOzC2Zz5W
-         6r8rDj9cIT/ypJrtjmXImxkG8EuakalKVGU9NJ28iEg7gmeMQYQXCz+F9lwSuSharJ+O
-         yXQNFcyx3yASTpu9Km/CsLeRSLwtVq5yv9eUgeIehOx7I6sk12/sdUICeEgW9/BfzBtT
-         SVAlxTHYuchVLe7QSyFPDvQt/8WJZQZgl+RyLM5DSetx6uyACOj/pm0r2lCg/TSVXvk9
-         AGqQ==
-X-Gm-Message-State: AOAM532RVChtqXxoOKQvVvVpZVUirrT+W/D8yNfIOCpWRCwukwZ5lBmH
-        dwwc4bnkcMEtYKt5d08efn8j1Q==
-X-Google-Smtp-Source: ABdhPJxxfBYAXQE4a4MShIJEhHE9ZwowoSa5/DZAC6IXOvyO1dx/+N2+rRF67FGwId7kao1AxTBGfA==
-X-Received: by 2002:aca:b688:0:b0:2d3:5411:9bc0 with SMTP id g130-20020acab688000000b002d354119bc0mr8152354oif.192.1645733509883;
-        Thu, 24 Feb 2022 12:11:49 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id q4-20020a056808200400b002d51db97398sm229191oiw.24.2022.02.24.12.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 12:11:49 -0800 (PST)
-Date:   Thu, 24 Feb 2022 14:11:46 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/10] dt-bindings: usb: qcom,dwc3: Add msm8953
- compatible
-Message-ID: <Yhfmgm2i5h7zEuvA@builder.lan>
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
- <20220220201909.445468-4-luca@z3ntu.xyz>
+        Thu, 24 Feb 2022 15:12:31 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C1710EA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645733519; x=1677269519;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=tU+PxZlH6C9Eoi9fFviDMwdRZTHXhp2XbDPLc6/PgjE=;
+  b=dLiK96Zuc43DRBqfutIykWbw3LkqKG0AC52dsiiQ215L9llmAEOmaRon
+   6eTTfF9OA8SW11gT5v5IifQd8BwPsapHRC9znkKADtCcyFByBdghTBTb6
+   DRqw7aYbfTURzKQefYCNN4k1+ZEIrXow5X2QQXZsVVzzdZEcNEQFfrL6E
+   yRM0vZ/Grmy/VEr8bNb8qBKUXQ/YSUT005UNVT55tKFFjde9YdRJszzr2
+   bRsRrYNpEp/FCD4DdaTMt5lGoM+bVZzuqvxk0SbzwaS3HN38da6OucBxF
+   +ldAVvFOYOGw2998Q4kfufUoeLdIGVtpyAAIKakfAnuOO67pfc/hiS804
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="276969170"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="276969170"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:11:59 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="639862943"
+Received: from hthen-mobl2.amr.corp.intel.com (HELO [10.209.48.194]) ([10.209.48.194])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:11:58 -0800
+Message-ID: <af7df79f-02b8-3025-c9a3-929b7bdd33e0@intel.com>
+Date:   Thu, 24 Feb 2022 12:11:54 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220220201909.445468-4-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
+In-Reply-To: <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
-
-> Document the compatible string for the DWC3 controller in msm8953.
+On 2/24/22 07:56, Kirill A. Shutemov wrote:
+> In non-TDX VMs, MMIO is implemented by providing the guest a mapping
+> which will cause a VMEXIT on access and then the VMM emulating the
+> instruction that caused the VMEXIT. That's not possible for TDX VM.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Greg, can you please pick this patch through the USB tree.
-
-Thanks,
-Bjorn
-
-> ---
-> Changes in v2:
-> - no changes
+> To emulate an instruction an emulator needs two things:
 > 
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>   - R/W access to the register file to read/modify instruction arguments
+>     and see RIP of the faulted instruction.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index 2d23a4ff702f..ce252db2aab3 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -16,6 +16,7 @@ properties:
->            - qcom,ipq4019-dwc3
->            - qcom,ipq6018-dwc3
->            - qcom,ipq8064-dwc3
-> +          - qcom,msm8953-dwc3
->            - qcom,msm8996-dwc3
->            - qcom,msm8998-dwc3
->            - qcom,sc7180-dwc3
-> -- 
-> 2.35.1
+>   - Read access to memory where instruction is placed to see what to
+>     emulate. In this case it is guest kernel text.
 > 
+> Both of them are not available to VMM in TDX environment:
+> 
+>   - Register file is never exposed to VMM. When a TD exits to the module,
+>     it saves registers into the state-save area allocated for that TD.
+>     The module then scrubs these registers before returning execution
+>     control to the VMM, to help prevent leakage of TD state.
+> 
+>   - Memory is encrypted a TD-private key. The CPU disallows software
+>     other than the TDX module and TDs from making memory accesses using
+>     the private key.
+> 
+> In TDX the MMIO regions are instead configured to trigger a #VE
+> exception in the guest. The guest #VE handler then emulates the MMIO
+> instruction inside the guest and converts it into a controlled hypercall
+> to the host.
+
+Nit on the changelog: This never really comes out and explicitly says
+what *this* patch does.  It never transitions into imperative voice.  Maybe:
+
+	In TDX, MMIO regions are configured by ____ to trigger a #VE
+	exception in the guest.
+
+	Add #VE handling that emulates the MMIO instruction inside the
+	guest and converts it into a controlled hypercall.
+
+I found this next transition jarring.  Maybe add a section title:
+
+=== Limitations of this approach ===
+
+> MMIO addresses can be used with any CPU instruction that accesses
+> memory. Address only MMIO accesses done via io.h helpers, such as
+> 'readl()' or 'writeq()'.
+
+Any CPU instruction that accesses memory can also be used to access
+MMIO.  However, by convention, MMIO access are typically performed via
+io.h helpers such as 'readl()' or 'writeq()'.
+
+> readX()/writeX() helpers limit the range of instructions which can trigger
+> MMIO. It makes MMIO instruction emulation feasible. Raw access to a MMIO
+> region allows the compiler to generate whatever instruction it wants.
+> Supporting all possible instructions is a task of a different scope.
+
+The io.h helpers intentionally use a limited set of instructions when
+accessing MMIO.  This known, limited set of instructions makes MMIO
+instruction decoding and emulation feasible in KVM hosts and SEV guests
+today.
+
+MMIO accesses are performed without the io.h helpers are at the mercy of
+the compiler.  Compilers can and will generate a much more broad set of
+instructions which can not practically be decoded and emulated.  TDX
+guests will oops if they encounter one of these decoding failures.
+
+This means that TDX guests *must* use the io.h helpers to access MMIO.
+
+This requirement is not new.  Both KVM hosts and AMD SEV guests have the
+same limitations on MMIO access.
+
+---
+
+I found a few things lacking in that description.  How's that for a rewrite?
+
+
+> === Potential alternative approaches ===
+> 
+> == Paravirtualizing all MMIO ==
+> 
+> An alternative to letting MMIO induce a #VE exception is to avoid
+> the #VE in the first place. Similar to the port I/O case, it is
+> theoretically possible to paravirtualize MMIO accesses.
+> 
+> Like the exception-based approach offered here, a fully paravirtualized
+> approach would be limited to MMIO users that leverage common
+> infrastructure like the io.h macros.
+> 
+> However, any paravirtual approach would be patching approximately
+> 120k call sites. With a conservative overhead estimation of 5 bytes per
+> call site (CALL instruction), it leads to bloating code by 600k.
+
+There's one important detail missing there:
+
+	Any paravirtual approach would need to replace a bare memory
+	access instruction with (at least) a function call.
+
+> Many drivers will never be used in the TDX environment and the bloat
+> cannot be justified.
+> 
+> == Patching TDX drivers ==
+> 
+> Rather than touching the entire kernel, it might also be possible to
+> just go after drivers that use MMIO in TDX guests.  Right now, that's
+> limited only to virtio and some x86-specific drivers.
+> 
+> All virtio MMIO appears to be done through a single function, which
+> makes virtio eminently easy to patch. This will be implemented in the
+> future, removing the bulk of MMIO #VEs.
+
+Given what is written here, this sounds like a great solution especially
+compared to all the instruction decoding nasiness.  What's wrong with it?
+
+> diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
+> index fd78b81a951d..15519e498679 100644
+> --- a/arch/x86/coco/tdx.c
+> +++ b/arch/x86/coco/tdx.c
+> @@ -8,11 +8,17 @@
+>  #include <asm/coco.h>
+>  #include <asm/tdx.h>
+>  #include <asm/vmx.h>
+> +#include <asm/insn.h>
+> +#include <asm/insn-eval.h>
+>  
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+>  #define TDX_GET_VEINFO			3
+>  
+> +/* MMIO direction */
+> +#define EPT_READ	0
+> +#define EPT_WRITE	1
+> +
+>  static struct {
+>  	unsigned int gpa_width;
+>  	unsigned long attributes;
+> @@ -184,6 +190,108 @@ static bool handle_cpuid(struct pt_regs *regs)
+>  	return true;
+>  }
+>  
+> +static bool mmio_read(int size, unsigned long addr, unsigned long *val)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r10 = TDX_HYPERCALL_STANDARD,
+> +		.r11 = EXIT_REASON_EPT_VIOLATION,
+> +		.r12 = size,
+> +		.r13 = EPT_READ,
+> +		.r14 = addr,
+> +		.r15 = *val,
+> +	};
+> +
+> +	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
+> +		return false;
+> +	*val = args.r11;
+> +	return true;
+> +}
+> +
+> +static bool mmio_write(int size, unsigned long addr, unsigned long val)
+> +{
+> +	return !_tdx_hypercall(EXIT_REASON_EPT_VIOLATION, size, EPT_WRITE,
+> +			       addr, val);
+> +}
+> +
+> +static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	char buffer[MAX_INSN_SIZE];
+> +	unsigned long *reg, val;
+> +	struct insn insn = {};
+> +	enum mmio_type mmio;
+> +	int size, extend_size;
+> +	u8 extend_val = 0;
+> +
+> +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
+> +		return false;
+> +
+> +	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
+> +		return false;
+> +
+> +	mmio = insn_decode_mmio(&insn, &size);
+> +	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
+> +		return false;
+> +
+> +	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
+> +		reg = insn_get_modrm_reg_ptr(&insn, regs);
+> +		if (!reg)
+> +			return false;
+> +	}
+> +
+> +	ve->instr_len = insn.length;
+> +
+> +	switch (mmio) {
+> +	case MMIO_WRITE:
+> +		memcpy(&val, reg, size);
+> +		return mmio_write(size, ve->gpa, val);
+> +	case MMIO_WRITE_IMM:
+> +		val = insn.immediate.value;
+> +		return mmio_write(size, ve->gpa, val);
+> +	case MMIO_READ:
+> +	case MMIO_READ_ZERO_EXTEND:
+> +	case MMIO_READ_SIGN_EXTEND:
+> +		break;
+> +	case MMIO_MOVS:
+> +	case MMIO_DECODE_FAILED:
+> +		return false;
+> +	default:
+> +		BUG();
+> +	}
+
+Given the huge description above, it's borderline criminal to not
+discuss what could led to this BUG().
+
+It could literally be some minor tweak in the compiler that changed a
+non-io.h-using MMIO access to get converted over to a instruction that
+can't be decoded.
+
+Could we spend a few lines of comments to help out the future poor sod
+that sees "kernel bug at foo.c:1234"?  Maybe:
+
+	/*
+	 * MMIO was accessed with an instruction that could not
+	 * be decoded.  It was likely not using io.h helpers or
+	 * accessed MMIO accidentally.
+	 */
+
+> +	/* Handle reads */
+> +	if (!mmio_read(size, ve->gpa, &val))
+> +		return false;
+> +
+> +	switch (mmio) {
+> +	case MMIO_READ:
+> +		/* Zero-extend for 32-bit operation */
+> +		extend_size = size == 4 ? sizeof(*reg) : 0;
+> +		break;
+> +	case MMIO_READ_ZERO_EXTEND:
+> +		/* Zero extend based on operand size */
+> +		extend_size = insn.opnd_bytes;
+> +		break;
+> +	case MMIO_READ_SIGN_EXTEND:
+> +		/* Sign extend based on operand size */
+> +		extend_size = insn.opnd_bytes;
+> +		if (size == 1 && val & BIT(7))
+> +			extend_val = 0xFF;
+> +		else if (size > 1 && val & BIT(15))
+> +			extend_val = 0xFF;
+> +		break;
+> +	case MMIO_MOVS:
+> +	case MMIO_DECODE_FAILED:
+> +		return false;
+> +	default:
+> +		BUG();
+> +	}
+> +
+> +	if (extend_size)
+> +		memset(reg, extend_val, extend_size);
+> +	memcpy(reg, &val, size);
+> +	return true;
+> +}
+> +
+>  void tdx_get_ve_info(struct ve_info *ve)
+>  {
+>  	struct tdx_module_output out;
+> @@ -237,6 +345,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+>  		return write_msr(regs);
+>  	case EXIT_REASON_CPUID:
+>  		return handle_cpuid(regs);
+> +	case EXIT_REASON_EPT_VIOLATION:
+> +		return handle_mmio(regs, ve);
+>  	default:
+>  		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+>  		return false;
+

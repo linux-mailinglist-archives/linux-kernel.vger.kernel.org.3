@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8354C228E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0104C2284
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiBXDop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
+        id S229663AbiBXDnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiBXDod (ORCPT
+        with ESMTP id S229666AbiBXDnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:44:33 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADCA25A315;
-        Wed, 23 Feb 2022 19:44:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645674244; x=1677210244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sMfUs3/I8Kqm7yacgV7IQwHgTnaZ9y/L/q5GdicckSI=;
-  b=SPcEecwyxx2bWw7R8wTifyxO5gi+aSC6nskHqEpeE6VXxESeFTQXp1NN
-   OeH4JEbhgUkYvECSL3IcznTO8tK0/l15r6nukjqZs+KPw9IVpz3Al1ZAa
-   yswAu1QpkeubIZv9oq5yid5VAOrDbIx/KCp+2elqUIoNs8p/vUYawzlmU
-   fulHqyjViYq5VGisXxbqmWfhFKptR/iFZM5tNsEnoeV4lL9E4lPv8TO0x
-   QMrPrLhmG1i8Qsb3wMHCaR5FoNF8v2yss6hisazFOBQw8lTSM0wencXyA
-   QeN8S7061ZFhQT0G1bJzTeRe/7zwAxDNk7EHPJIWAnefaO5jhonrklpZT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232763750"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="232763750"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:44:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="784617111"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2022 19:44:01 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN52u-0002CV-M3; Thu, 24 Feb 2022 03:44:00 +0000
-Date:   Thu, 24 Feb 2022 11:43:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, sboyd@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        abel.vesa@nxp.com
-Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 4/5] clk: imx: support fracn gppll
-Message-ID: <202202241105.0bwJWaUv-lkp@intel.com>
-References: <20220223064358.4097307-5-peng.fan@oss.nxp.com>
+        Wed, 23 Feb 2022 22:43:39 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB425A30B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id i5so1243545oih.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
+        b=cLYZ+u45ycfZDh38NHEb/21XbNgNJUZG3on3NOdklDWSJ7PYJ+mdinq7E890TK38OQ
+         tSkQUxI/xCNA/cht+qvJAbH0cwiq7f7N3rXRxmjZbGS3GHMwWBev1n1I02+bJN7zW90S
+         Y73yWgHuDPVmf6+iArbNDFcrS1A79n7D5oRnf5N/FJ8ywVtznp2wcRdZ9W46JWcAonIF
+         XUk4j4BQcWTfayGWJUrM4yxLtlsHnLKU4H2WPmutQHSw3DikI6o0QvBR6/NDcFEpdp1e
+         5No0/Xf00aVJsSrQu/9VrUfDI9OA88oOlURFV1yzpkIuS88PD7aWFFrnlzjG3lTTSP1/
+         +wIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
+        b=zaQlrdfLY3t74AVhSesWNPUfBp+LwRZYfUa62hVS/vdIexGotlKLwcb4SpwlxsiBv7
+         1q4EZ5DmqlLabV/54wAVkT8V8d7UdkxhWUyPKE77cTqpKVCkXT+Vp5gDRfGhuTe8gY+e
+         4S0fBvIEVqsOvDqAfAtEegDEc0TnJDV5kwfOeFsJ/wiIFnPHWOVLLIrIWTNOaodnLaE2
+         avcN1PXtJ5FgaGRX/+thuqBVlgELAe6hoPslHofUKo6syWAF9pSu14NdqidKPnFaZkMm
+         dW1TK2diXW/3ofQ+tj/0Bty2i5MH88YONO+hA614ZDq0EYv1rytowHIvqWfbi06od2Xs
+         hxTw==
+X-Gm-Message-State: AOAM5311Qg33BLXqos2BTuXSmE9LA9aGL/O5kbVIcJy35BSLRlLMUi6w
+        CrSpz5KMnEMWxPHfM94vHAICAg==
+X-Google-Smtp-Source: ABdhPJzgnESy4fUgWr9qkHrfCBVEALdcwUFNttweBpXgPrGC9ko/0af5qYzPPWqA86hfZugFItirDw==
+X-Received: by 2002:aca:32c1:0:b0:2ce:6ee7:2c9f with SMTP id y184-20020aca32c1000000b002ce6ee72c9fmr6192858oiy.205.1645674189114;
+        Wed, 23 Feb 2022 19:43:09 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id e9sm604775oos.19.2022.02.23.19.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 19:43:08 -0800 (PST)
+Date:   Wed, 23 Feb 2022 21:43:06 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 04/16] clk: qcom: gcc-ipq806x: fix wrong naming for
+ gcc_pxo_pll8_pll0
+Message-ID: <Yhb+yiSIBmO9iJNs@builder.lan>
+References: <20220217235703.26641-1-ansuelsmth@gmail.com>
+ <20220217235703.26641-5-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223064358.4097307-5-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220217235703.26641-5-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,41 +78,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
 
-Thank you for the patch! Yet something to improve:
+> Parent gcc_pxo_pll8_pll0 had the parent definition and parent map
+> swapped. Fix this naming error.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 
-[auto build test ERROR on next-20220217]
-[also build test ERROR on v5.17-rc5]
-[cannot apply to shawnguo/for-next robh/for-next clk/clk-next v5.17-rc5 v5.17-rc4 v5.17-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-url:    https://github.com/0day-ci/linux/commits/Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220223-144300
-base:    3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
-config: nds32-randconfig-r026-20220223 (https://download.01.org/0day-ci/archive/20220224/202202241105.0bwJWaUv-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/93f29e11de75409d56c65d32c1bdafb50c9f6f51
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220223-144300
-        git checkout 93f29e11de75409d56c65d32c1bdafb50c9f6f51
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   nds32le-linux-ld: drivers/clk/imx/clk-fracn-gppll.o: in function `clk_fracn_gppll_recalc_rate':
->> clk-fracn-gppll.c:(.text+0x228): undefined reference to `__udivdi3'
-   nds32le-linux-ld: clk-fracn-gppll.c:(.text+0x22c): undefined reference to `__udivdi3'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/clk/qcom/gcc-ipq806x.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+> index d6b7adb4be38..34cddf461dba 100644
+> --- a/drivers/clk/qcom/gcc-ipq806x.c
+> +++ b/drivers/clk/qcom/gcc-ipq806x.c
+> @@ -291,13 +291,13 @@ static const char * const gcc_pxo_pll3[] = {
+>  	"pll3",
+>  };
+>  
+> -static const struct parent_map gcc_pxo_pll8_pll0[] = {
+> +static const struct parent_map gcc_pxo_pll8_pll0_map[] = {
+>  	{ P_PXO, 0 },
+>  	{ P_PLL8, 3 },
+>  	{ P_PLL0, 2 }
+>  };
+>  
+> -static const char * const gcc_pxo_pll8_pll0_map[] = {
+> +static const char * const gcc_pxo_pll8_pll0[] = {
+>  	"pxo",
+>  	"pll8_vote",
+>  	"pll0_vote",
+> @@ -1993,7 +1993,7 @@ static struct clk_rcg usb30_master_clk_src = {
+>  	},
+>  	.s = {
+>  		.src_sel_shift = 0,
+> -		.parent_map = gcc_pxo_pll8_pll0,
+> +		.parent_map = gcc_pxo_pll8_pll0_map,
+>  	},
+>  	.freq_tbl = clk_tbl_usb30_master,
+>  	.clkr = {
+> @@ -2001,7 +2001,7 @@ static struct clk_rcg usb30_master_clk_src = {
+>  		.enable_mask = BIT(11),
+>  		.hw.init = &(struct clk_init_data){
+>  			.name = "usb30_master_ref_src",
+> -			.parent_names = gcc_pxo_pll8_pll0_map,
+> +			.parent_names = gcc_pxo_pll8_pll0,
+>  			.num_parents = 3,
+>  			.ops = &clk_rcg_ops,
+>  			.flags = CLK_SET_RATE_GATE,
+> @@ -2063,7 +2063,7 @@ static struct clk_rcg usb30_utmi_clk = {
+>  	},
+>  	.s = {
+>  		.src_sel_shift = 0,
+> -		.parent_map = gcc_pxo_pll8_pll0,
+> +		.parent_map = gcc_pxo_pll8_pll0_map,
+>  	},
+>  	.freq_tbl = clk_tbl_usb30_utmi,
+>  	.clkr = {
+> @@ -2071,7 +2071,7 @@ static struct clk_rcg usb30_utmi_clk = {
+>  		.enable_mask = BIT(11),
+>  		.hw.init = &(struct clk_init_data){
+>  			.name = "usb30_utmi_clk",
+> -			.parent_names = gcc_pxo_pll8_pll0_map,
+> +			.parent_names = gcc_pxo_pll8_pll0,
+>  			.num_parents = 3,
+>  			.ops = &clk_rcg_ops,
+>  			.flags = CLK_SET_RATE_GATE,
+> @@ -2133,7 +2133,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
+>  	},
+>  	.s = {
+>  		.src_sel_shift = 0,
+> -		.parent_map = gcc_pxo_pll8_pll0,
+> +		.parent_map = gcc_pxo_pll8_pll0_map,
+>  	},
+>  	.freq_tbl = clk_tbl_usb,
+>  	.clkr = {
+> @@ -2141,7 +2141,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
+>  		.enable_mask = BIT(11),
+>  		.hw.init = &(struct clk_init_data){
+>  			.name = "usb_hs1_xcvr_src",
+> -			.parent_names = gcc_pxo_pll8_pll0_map,
+> +			.parent_names = gcc_pxo_pll8_pll0,
+>  			.num_parents = 3,
+>  			.ops = &clk_rcg_ops,
+>  			.flags = CLK_SET_RATE_GATE,
+> @@ -2197,7 +2197,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
+>  	},
+>  	.s = {
+>  		.src_sel_shift = 0,
+> -		.parent_map = gcc_pxo_pll8_pll0,
+> +		.parent_map = gcc_pxo_pll8_pll0_map,
+>  	},
+>  	.freq_tbl = clk_tbl_usb,
+>  	.clkr = {
+> @@ -2205,7 +2205,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
+>  		.enable_mask = BIT(11),
+>  		.hw.init = &(struct clk_init_data){
+>  			.name = "usb_fs1_xcvr_src",
+> -			.parent_names = gcc_pxo_pll8_pll0_map,
+> +			.parent_names = gcc_pxo_pll8_pll0,
+>  			.num_parents = 3,
+>  			.ops = &clk_rcg_ops,
+>  			.flags = CLK_SET_RATE_GATE,
+> -- 
+> 2.34.1
+> 

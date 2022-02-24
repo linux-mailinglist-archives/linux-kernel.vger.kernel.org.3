@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6304C3464
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD774C3467
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiBXSNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S232614AbiBXSPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiBXSNt (ORCPT
+        with ESMTP id S231722AbiBXSPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:13:49 -0500
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A2223108;
-        Thu, 24 Feb 2022 10:13:18 -0800 (PST)
-Received: by mail-lf1-f41.google.com with SMTP id d23so5250046lfv.13;
-        Thu, 24 Feb 2022 10:13:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jeGCsvgLf6lDIaUf9nSWr2xBU0ddXBX+76rMpizQ4kk=;
-        b=ZKLa4bhzoK0aYAb1rCwPdNTMAlrjQ+ciN6pMoz90knLrCWRTkQSSGBL6plkkDH8Ckd
-         sCBAE8OdOERBn/AN89CsQmGtt1cO95KkPxILz14d+LEW2Los4ufrFP0/OjRt/OknXts8
-         B14IWeD09kWTOqxEYqhmpUpVTj7dyezWy8yMdsr3VW69xIOsnyvLBhoNSCSdl4dbMwgM
-         o57xoNSD2x9XE4+MksNDFMLGSfXlFywxGmF9hRWRvrOFj+Kv2XVUyZ36U5rj6UzfssVA
-         GbU+b6TItkmFT1VwTuYmRnqcABu9QmYXSBK5ekkLvrKxlLhIksB8Oe68cpWLhQTa19m9
-         4a/g==
-X-Gm-Message-State: AOAM532+uZLKhnyofrM068Rjc5n83kamvHxJQda1kE7FF+bjMW1neSoF
-        +QP6sLQUzXBgkgcoLArH+4CmXSb+L95HI5l95bEnDs+I
-X-Google-Smtp-Source: ABdhPJxekjZAOq28/vw9kIHAlAdiwhXyXAhBOqWsyiLgH7Ks9EUYfmOgidFOaFQKOXVyjJuNg6YoPhLKOCBisL0Iie8=
-X-Received: by 2002:ac2:5f90:0:b0:42f:b094:d72f with SMTP id
- r16-20020ac25f90000000b0042fb094d72fmr2436044lfe.586.1645726396659; Thu, 24
- Feb 2022 10:13:16 -0800 (PST)
+        Thu, 24 Feb 2022 13:15:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB283253146;
+        Thu, 24 Feb 2022 10:14:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58C3960C77;
+        Thu, 24 Feb 2022 18:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A536EC340E9;
+        Thu, 24 Feb 2022 18:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645726479;
+        bh=0tnbQuuR1loseTOVkHNgK1i4o0rJpGHkKLedHU7WA3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O6+zhvkgE5SOGjZqosBUShYmmK30Kv6oXuH+8frrX8X8SvMchdAWwel+ZJEOfQ6lc
+         4m7g+jj+9gYoGKlZXTCNqUPpks/kYKqgaMSVzQLkptK0mxifR8qRFJk5jJNwElBSmS
+         KDUswDo8SYFm+etrVflVgBDCgavsDlBO10GkTkCLVfK1l8zJ6QUhCsQ44oUUDne2Y7
+         s3Mf548/EFjLhJl72LEWzsQx8Y7pdB0/Tq1AzLAIAlGntQZailpzkDPcKvc70Iv3Me
+         QvCJhh3xebooqo+2anPzZfcZFRzYDwZPduXv6jgWqLJJZsEPsRCBlORJWwl6+oaMRo
+         F+I9sZzzF4niw==
+Date:   Thu, 24 Feb 2022 18:14:33 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Keyon Jie <yang.jie@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
+Message-ID: <YhfLCWm0Ms3E+j4z@sirena.org.uk>
+References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org>
+ <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com>
+ <Yhe/3rELNfFOdU4L@sirena.org.uk>
+ <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com>
+ <20220224180850.34592-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
-References: <20220224000531.1265030-1-haoluo@google.com> <CAPhsuW6BqEn8azap_zcWq0Zkvv8mRFg6g0UX2fPQXwzT+F6V=A@mail.gmail.com>
-In-Reply-To: <CAPhsuW6BqEn8azap_zcWq0Zkvv8mRFg6g0UX2fPQXwzT+F6V=A@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 24 Feb 2022 10:13:05 -0800
-Message-ID: <CAM9d7cjv1FnJ6ggq70uecWLAP4eQzzsaaEtMT68C9Nva5eMH+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
-To:     Song Liu <song@kernel.org>
-Cc:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zl5egPN1PrqPYZ2+"
+Content-Disposition: inline
+In-Reply-To: <20220224180850.34592-1-ammarfaizi2@gnuweeb.org>
+X-Cookie: I smell a wumpus.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Wed, Feb 23, 2022 at 6:31 PM Song Liu <song@kernel.org> wrote:
->
-> On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > For binaries that are statically linked, consecutive stack frames are
-> > likely to be in the same VMA and therefore have the same build id.
-> > As an optimization for this case, we can cache the previous frame's
-> > VMA, if the new frame has the same VMA as the previous one, reuse the
-> > previous one's build id. We are holding the MM locks as reader across
-> > the entire loop, so we don't need to worry about VMA going away.
-> >
-> > Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-> > test_progs.
-> >
-> > Suggested-by: Greg Thelen <gthelen@google.com>
-> > Signed-off-by: Hao Luo <haoluo@google.com>
+--zl5egPN1PrqPYZ2+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+On Fri, Feb 25, 2022 at 01:08:50AM +0700, Ammar Faizi wrote:
 
-Thanks,
-Namhyung
+> The dmesg says:
+>=20
+>   [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc fail=
+ed: -12
+>   [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
+>   [ T1387] #PF: supervisor read access in kernel mode
+>   [ T1387] #PF: error_code(0x0000) - not-present page
+>   [ T1387] PGD 0 P4D 0
+>   [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
+
+This is still an enormous and not super useful section of backtrace, at
+a glance the backtrace is longer than the rest of the commit :(
+
+--zl5egPN1PrqPYZ2+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIXywgACgkQJNaLcl1U
+h9D27QgAg7b99eY8qB9SbE2FGqEhJaR6N+rx0g1pg3KcyvVd85xyV0mqBabwfvvS
+9qNMyjpcHMpMlUWKNPtSAL7PcAmQcM2GJGD8TJRYgM9LcQHwEDcNABIu1nJIa2oD
+zls9hFti82GjNEaZZ5OTWLLfSAUvSCKHWtvtsQSAwAuZszqoYt5fgrKQvQDneWiG
+ybi3FB4/bp4msSyaqvoWtxVEaeiChIAerim9/umCqpP5xgfRbm5hjrVdBoHDVgTl
+ZK5SiLFxNEB3XZK4pqiHXqeHoryeLadPEZdabsdCmSjWLXPYQ08mtcUtctyF7q7d
+fPJlv7rZ+PWPWlibnrkfBRbK0bMDGQ==
+=Q3Zo
+-----END PGP SIGNATURE-----
+
+--zl5egPN1PrqPYZ2+--

@@ -2,116 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72AA4C23BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F854C23C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiBXFyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S230426AbiBXF5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiBXFyY (ORCPT
+        with ESMTP id S229737AbiBXF5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:54:24 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55D020E7B5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:53:52 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id bd1so778358plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X+fhHEd3jlnDXmWsjXWOtvRUtFULIhTMPTR4VyvQoy8=;
-        b=RDF4vBClMeC8l7SvlXrKraf+fvZTpJLC/TAm4V/1sh0nrygDDyFA2i7Utje46X2DSF
-         dy39/tOwODcZiZpUEVr/EsbgxsrLDy1LhBcJ33c4hxN3d/FTXStTUeOK85tSQ6u2dJsU
-         I2qDdml4zKKsUfommEdrkuuECe1qqRkkkrhoE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X+fhHEd3jlnDXmWsjXWOtvRUtFULIhTMPTR4VyvQoy8=;
-        b=ux59JGmMjQx+2POpcYbFQ3fDHz0fbAjEml0JtEVlUmyeIkQMc5fbLowjm7/DSZVSKA
-         rVMk01PGLpMDdonWb9eKn9G0zYR6PimOGMMHftKL7n+LcLocljrOZXgGEfkunBa7afWk
-         WyyD389BFS61WVYTpbj4+9AjQ1mbjBfqDrFhl4WkiX7rfmXIMt+m9YFBCJpP4Md1Vh56
-         eCIKuVtlpYbUB8HPHD8kGoyzKxkIDAfRwO1YqSZEDXVoBAmnMCrDGnx74Pn4CS+LcUAJ
-         7AbxFeWuYUKM+9qTv3mrsz8V0I4aHDS8/9UvFYCBGiOqrzE1ctji9w9MyWS1taCteQDg
-         1n5Q==
-X-Gm-Message-State: AOAM531sqwMs5jH+WCym4+KDIyAB2EOvboPY9/5gD8Bq5xcD6DqGxiY2
-        lyJSCy+HolHNSGXvHgBb1+4QQA==
-X-Google-Smtp-Source: ABdhPJwEk0I9qGNOiW9mqLlsyO3VeOVHZwPgcxgaYSmQnzHzA+2Hw0piO9smF1SXlQFL0Qkr6fggjA==
-X-Received: by 2002:a17:90b:4f4b:b0:1b9:3798:85f8 with SMTP id pj11-20020a17090b4f4b00b001b9379885f8mr12952612pjb.139.1645682032347;
-        Wed, 23 Feb 2022 21:53:52 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bd14sm1432528pfb.165.2022.02.23.21.53.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 21:53:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, David Gow <davidgow@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] kunit: tool: Do not colorize output when redirected
-Date:   Wed, 23 Feb 2022 21:53:50 -0800
-Message-Id: <20220224055350.1854078-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 24 Feb 2022 00:57:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E0649923;
+        Wed, 23 Feb 2022 21:57:02 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 90CC221111;
+        Thu, 24 Feb 2022 05:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645682221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rQTyriSdku10JiEVn6acHxJLlJX45uOq556RuFZO3T4=;
+        b=h2wDI5mbDkMaIPMEy3+Z5XWXrwVi0pt67DxbRIcxp0uLqTgZ80Nzx5SZx5TM7ypk6LD96u
+        XF+ti9STaN6W6IFRgR3zMhUPXGa1CNGYOGnPUGRlnuoRIpedCjJC9iUg1jlnvAxR7imkdS
+        YAr91kMcxPLWVRImItp4OuJum1gAS3g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645682221;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rQTyriSdku10JiEVn6acHxJLlJX45uOq556RuFZO3T4=;
+        b=TJQ/L/0fOg/XtjJgkPkOfZQMrY55H5wtXBsS4LVrl1khwwR4DRi6NrRjFIRUODmS4EI4lB
+        +vbVS0NUdgvnr+BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10CF613480;
+        Thu, 24 Feb 2022 05:56:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rawsLyoeF2JJFAAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 24 Feb 2022 05:56:58 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1349; h=from:subject; bh=QoKmh1KrreLF9dnMSlur2KZOYmGGj8snN9TMwvzF6pU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFx1t5TIN4DE+l35lN/t7HqhOYX6R8zXo63qOJpoC XCoeUEuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcdbQAKCRCJcvTf3G3AJqwcEA CqhZmOZ6Qk8yoxbUXNU1/AHvyiSmTBFuOuMo2IKLEl0Xc74ZNRR4ooGY321fS1vaxkoro98RWzTh2A 4r6ZWc2CYpeL7EnLnpk0p9ITpiTKm/78pidQv/7CcVM1n7DClAKF6wdcQifUGX10oU1hZKBUhq8pzh hNjMkY8XyO6tZA4GpHuEkcc3NqN2ONxm3AnNouTKnRu0NoUDcGju9gIXgL4bnsSLLLZMEwVkloqQpK LUm0v6txonSYFcX47gDXH5OHIshyz9MiqxwOoBl5Cp/BWK8mF6/WQJvF3iBcKeaKfX0Q1MMB3uL39r fxdLlyIGGIs3Kvo6t5tiiZ8PO70EjjuyaaxcPSTaNGZjMS/UxRKuPdVHiA0dyjnlEZ+n3b3GpraTDl W7Tl47s1biFVmTfO9MjmhIUgLzWAQO0nv5/M1OYDpbDp1ZNs6DlXarv4lSHN5UAwxi35Tnh8fyKNYX YQdDKMqxjXNCXD7PB5sEW/7o9libQ9hX9II6F3S4ZXjDtE3xEd79zuvUJrbqCqlz17C3KdEyFGCv5j /q530KLSfnh9tH7bzZTunL3ZvvZtiAI6MesHFOd29rscBw7VSeadjE/GDoezYVsBMFUs/yq63MpMAj j200GU7aqofMO6INycsdpQk5yp2VeRSvEylF9P2HGjaSuIyd1ieVfCrUClJg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     "Dave Chinner" <david@fromorbit.com>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Daire Byrne" <daire@dneg.com>,
+        "Andreas Dilger" <adilger.kernel@dilger.ca>
+Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
+In-reply-to: <20220224044328.GB8269@magnolia>
+References: <164549669043.5153.2021348013072574365@noble.neil.brown.name>,
+ <20220222224546.GE3061737@dread.disaster.area>,
+ <20220224044328.GB8269@magnolia>
+Date:   Thu, 24 Feb 2022 16:56:55 +1100
+Message-id: <164568221518.25116.18139840533197037520@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Filling log files with color codes makes diffs and other comparisons
-difficult. Only emit vt100 codes when the stdout is a TTY.
+On Thu, 24 Feb 2022, Darrick J. Wong wrote:
+> On Wed, Feb 23, 2022 at 09:45:46AM +1100, Dave Chinner wrote:
+> > On Tue, Feb 22, 2022 at 01:24:50PM +1100, NeilBrown wrote:
+> > >=20
+> > > Hi Al,
+> > >  I wonder if you might find time to have a look at this patch.  It
+> > >  allows concurrent updates to a single directory.  This can result in
+> > >  substantial throughput improvements when the application uses multiple
+> > >  threads to create lots of files in the one directory, and there is
+> > >  noticeable per-create latency, as there can be with NFS to a remote
+> > >  server.
+> > > Thanks,
+> > > NeilBrown
+> > >=20
+> > > Some filesystems can support parallel modifications to a directory,
+> > > either because the modification happen on a remote server which does its
+> > > own locking (e.g.  NFS) or because they can internally lock just a part
+> > > of a directory (e.g.  many local filesystems, with a bit of work - the
+> > > lustre project has patches for ext4 to support concurrent updates).
+> > >=20
+> > > To allow this, we introduce VFS support for parallel modification:
+> > > unlink (including rmdir) and create.  Parallel rename is not (yet)
+> > > supported.
+> >=20
+> > Yay!
+> >=20
+> > > If a filesystem supports parallel modification in a given directory, it
+> > > sets S_PAR_UNLINK on the inode for that directory.  lookup_open() and
+> > > the new lookup_hash_modify() (similar to __lookup_hash()) notice the
+> > > flag and take a shared lock on the directory, and rely on a lock-bit in
+> > > d_flags, much like parallel lookup relies on DCACHE_PAR_LOOKUP.
+> >=20
+> > I suspect that you could enable this for XFS right now. XFS has internal
+> > directory inode locking that should serialise all reads and writes
+> > correctly regardless of what the VFS does. So while the VFS might
+> > use concurrent updates (e.g. inode_lock_shared() instead of
+> > inode_lock() on the dir inode), XFS has an internal metadata lock
+> > that will then serialise the concurrent VFS directory modifications
+> > correctly....
+>=20
+> I don't think that will work because xfs_readdir doesn't hold the
+> directory ILOCK while it runs, which means that readdir will see garbage
+> if other threads now only hold inode_lock_shared while they update the
+> directory.
 
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/kunit/kunit_parser.py | 7 +++++++
- 1 file changed, 7 insertions(+)
+I added this:
+--- a/fs/xfs/xfs_icache.c
++++ b/fs/xfs/xfs_icache.c
+@@ -87,6 +87,7 @@ xfs_inode_alloc(
+ 	/* VFS doesn't initialise i_mode or i_state! */
+ 	VFS_I(ip)->i_mode =3D 0;
+ 	VFS_I(ip)->i_state =3D 0;
++	VFS_I(ip)->i_flags |=3D S_PAR_UPDATE;
+ 	mapping_set_large_folios(VFS_I(ip)->i_mapping);
+=20
+ 	XFS_STATS_INC(mp, vn_active);
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 05ff334761dd..807ed2bd6832 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -11,6 +11,7 @@
- 
- from __future__ import annotations
- import re
-+import sys
- 
- import datetime
- from enum import Enum, auto
-@@ -503,14 +504,20 @@ RESET = '\033[0;0m'
- 
- def red(text: str) -> str:
- 	"""Returns inputted string with red color code."""
-+	if not sys.stdout.isatty():
-+		return text
- 	return '\033[1;31m' + text + RESET
- 
- def yellow(text: str) -> str:
- 	"""Returns inputted string with yellow color code."""
-+	if not sys.stdout.isatty():
-+		return text
- 	return '\033[1;33m' + text + RESET
- 
- def green(text: str) -> str:
- 	"""Returns inputted string with green color code."""
-+	if not sys.stdout.isatty():
-+		return text
- 	return '\033[1;32m' + text + RESET
- 
- ANSI_LEN = len(red(''))
--- 
-2.30.2
+and ran my highly sophisticated test in an XFS directory:
 
+ for i in {1..70}; do ( for j in {1000..8000}; do touch $j; rm -f $j ; done )=
+ & done
+
+This doesn't crash - which is a good sign.
+While that was going I tried
+ while : ; do ls -l ; done
+
+it sometimes reports garbage for the stat info:
+
+total 0
+-????????? ? ?    ?    ?            ? 1749
+-????????? ? ?    ?    ?            ? 1764
+-????????? ? ?    ?    ?            ? 1765
+-rw-r--r-- 1 root root 0 Feb 24 16:47 1768
+-rw-r--r-- 1 root root 0 Feb 24 16:47 1770
+-rw-r--r-- 1 root root 0 Feb 24 16:47 1772
+....
+
+I *think* that is bad - probably the "garbage" that you referred to?
+
+Obviously I gets lots of=20
+ls: cannot access '1764': No such file or directory
+ls: cannot access '1749': No such file or directory
+ls: cannot access '1780': No such file or directory
+ls: cannot access '1765': No such file or directory
+
+but that is normal and expected when you are creating and deleting
+files during the ls.
+
+NeilBrown
+
+
+
+
+>=20
+> --D
+>=20
+> > Yeah, I know, this isn't true concurrent dir updates, but it should
+> > allow multiple implementations of the concurrent dir update VFS APIs
+> > across multiple filesystems and shake out any assumptions that might
+> > arise from a single implementation target (e.g. silly rename
+> > quirks).
+> >=20
+> > Cheers,
+> >=20
+> > Dave.
+> > --=20
+> > Dave Chinner
+> > david@fromorbit.com
+>=20
+>=20

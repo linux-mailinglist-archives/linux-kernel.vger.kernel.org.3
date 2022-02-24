@@ -2,107 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB5F4C3355
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2274C3365
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiBXRPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S230217AbiBXRTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiBXRPH (ORCPT
+        with ESMTP id S229635AbiBXRTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:15:07 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6E29EB94;
-        Thu, 24 Feb 2022 09:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645722877; x=1677258877;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=BmfD8NEvTaMkyVp8i1s9El4tLSdJA8+UBXOTKmrm3QI=;
-  b=AzWf098aT//uHgdtBBSZY7kAseWscbBTHu5jZBwOIG74oyNHOXyzfg8f
-   KnQMsOa3Sz/b+93cMV+tvZJVUrfGQPfrtaRprYbgeM0Y4NdUEyTmjPWE0
-   4hWTw0IlJ8pG+4dXEE6IISctZHSuZMgvOQKPZTx6BhxdUJZDcDwnM46PF
-   Dtz7HDGD/NBGUliz2fcsklRF0g5uZxqnBZ3Yk7t6V7xXEfG6tvFB+8oYO
-   ltJe+4tc/Y77MPhiJEAW/pZVtPLd1nIZtN+t74JEg9IdxAjC1J+wmSkMf
-   gPOc9g6S+CgkcKoyYG0xGkwDMMyLWoIlSgt3IdoeeJ+MrDYgQEgh/ON97
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313008314"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="313008314"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 09:14:09 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="548841064"
-Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 09:14:09 -0800
-Message-ID: <33646f1e-da44-503a-c454-02658d512926@intel.com>
-Date:   Thu, 24 Feb 2022 09:14:05 -0800
+        Thu, 24 Feb 2022 12:19:02 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA125B894;
+        Thu, 24 Feb 2022 09:18:32 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id y7so3596669oih.5;
+        Thu, 24 Feb 2022 09:18:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7slgzKqOG5WOC/WsENczH0GLZVRx1odPiIFNJSTj50w=;
+        b=rDa2m5fEWXhmO8g+wDRXQWzeUcq5AL4qkzoJnHKMB82jpYb9VP3P0uU+qBTBlADMc5
+         UwtkxZtwYaaFWTOWz03KgZqjC43doG7cQa84MO4vcRKbjIvC+dc79ArGgsuNZzXDfufC
+         JHlJMLWOmp6IQ61gAKARMfBmdfo251MuKU9IzQW+LBgJgRNnE3tbgAvascO8Wxg5Z6Rj
+         DRJ6NMr3Kb0n8CgebZBAkaNU5I0/DLExm7hESu764MmPbhFZzLAyelp/tsr2SClPbYfp
+         rR1ZLAMWoteEr06QgmpEG1EhjGidK4RILJWDKJmP2dpM4Aa6cs/GkxvvIovVfjd1w9sX
+         lIBw==
+X-Gm-Message-State: AOAM531g5VT3yokV7oALZ5me/uVxbByvzanUfnR2UkxF2pUq96ugQxTb
+        oRhaDAV7KvvWMvUyzqTeug==
+X-Google-Smtp-Source: ABdhPJy7WQuDbUVEbzTIos+FK5YUQdNoBAGXEivNXy6JWYVM6FV6rNsboC4U1JBu0ZFrlMKW5PA40g==
+X-Received: by 2002:a05:6808:202a:b0:2d4:df36:68a4 with SMTP id q42-20020a056808202a00b002d4df3668a4mr7750425oiw.16.1645723111948;
+        Thu, 24 Feb 2022 09:18:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t40-20020a05680815a800b002d48ffad94bsm11498oiw.2.2022.02.24.09.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 09:18:31 -0800 (PST)
+Received: (nullmailer pid 3263579 invoked by uid 1000);
+        Thu, 24 Feb 2022 17:18:30 -0000
+Date:   Thu, 24 Feb 2022 11:18:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 2/9] dt-bindings: net: add schema for Microchip/SMSC
+ LAN95xx USB Ethernet controllers
+Message-ID: <Yhe95rXZc7RzgO5o@robh.at.kernel.org>
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, linux-sgx@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-References: <20220222120342.5277-1-jarkko@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v4] x86/sgx: Free backing memory after faulting the
- enclave page
-In-Reply-To: <20220222120342.5277-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216074927.3619425-3-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 04:03, Jarkko Sakkinen wrote:
-> +	if (pcmd_page_empty) {
-> +		pgoff_t pcmd_off = encl->size + PAGE_SIZE /* SECS */ +
-> +				   page_index * sizeof(struct sgx_pcmd);
+On Wed, Feb 16, 2022 at 08:49:20AM +0100, Oleksij Rempel wrote:
+> Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
+> import some of currently supported USB IDs form drivers/net/usb/smsc95xx.c
+> 
+> These devices are already used in some of DTs. So, this schema makes it official.
+> NOTE: there was no previously documented txt based DT binding for this
+> controllers.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> new file mode 100644
+> index 000000000000..8521c65366b4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/microchip,lan95xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +		sgx_encl_truncate_backing_page(encl, PFN_DOWN(pcmd_off));
-> +	}
+> +title: The device tree bindings for the USB Ethernet controllers
 > +
->  	return ret;
->  }
->  
-> @@ -583,7 +613,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
->  static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
->  				struct sgx_backing *backing)
->  {
-> -	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
-> +	pgoff_t pcmd_off = encl->size + PAGE_SIZE /* SECS */ + page_index * sizeof(struct sgx_pcmd);
+> +maintainers:
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: |
+> +  Device tree properties for hard wired SMSC95xx compatible USB Ethernet
+> +  controller.
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - usb424,9500   # SMSC9500 USB Ethernet Device
+> +          - usb424,9505   # SMSC9505 USB Ethernet Device
+> +          - usb424,9530   # SMSC LAN9530 USB Ethernet Device
+> +          - usb424,9730   # SMSC LAN9730 USB Ethernet Device
+> +          - usb424,9900   # SMSC9500 USB Ethernet Device (SAL10)
+> +          - usb424,9901   # SMSC9505 USB Ethernet Device (SAL10)
+> +          - usb424,9902   # SMSC9500A USB Ethernet Device (SAL10)
+> +          - usb424,9903   # SMSC9505A USB Ethernet Device (SAL10)
+> +          - usb424,9904   # SMSC9512/9514 USB Hub & Ethernet Device (SAL10)
+> +          - usb424,9905   # SMSC9500A USB Ethernet Device (HAL)
+> +          - usb424,9906   # SMSC9505A USB Ethernet Device (HAL)
+> +          - usb424,9907   # SMSC9500 USB Ethernet Device (Alternate ID)
+> +          - usb424,9908   # SMSC9500A USB Ethernet Device (Alternate ID)
+> +          - usb424,9909   # SMSC9512/9514 USB Hub & Ethernet Devic.  ID)
+> +          - usb424,9e00   # SMSC9500A USB Ethernet Device
+> +          - usb424,9e01   # SMSC9505A USB Ethernet Device
+> +          - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
+> +          - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
+> +
+> +  reg: true
+> +  local-mac-address: true
+> +  mac-address: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ethernet@1 {
+> +            compatible = "usb424,ec00";
 
-Jarkko, I really don't like how this looks.  The '/* SECS */' thing is
-pretty ugly and the comment in the middle of an arithmetic operation is
-just really hard to read.
+If this is a hub/ethernet combo device, how is it valid to be standalone 
+without the hub?
 
-Then, there's the fact that this gem is copied-and-pasted.  Oh, and it
-looks a wee bit over 80 columns.
+> +            reg = <1>;
+> +            local-mac-address = [00 00 00 00 00 00];
+> +        };
+> +    };
+> +  - |
+> +    usb {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        usb1@1 {
+> +            compatible = "usb424,9514";
 
-I went to the trouble of writing a nice, fully-fleshed-out helper
-function for this with a comment included:
+Not documented.
 
-> https://lore.kernel.org/all/8afec431-4dfc-d8df-152b-76cca0e17ccb@intel.com/
-
-Was there a problem using that?  The change from the last version is:
-
-* Sanitized the offset calculations.
-
-Given that there have been multiple different calculations over the four
-versions so far, which version was right?  v3 or v4?
+> +            reg = <1>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            ethernet@1 {
+> +               compatible = "usb424,ec00";
+> +               reg = <1>;
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.30.2
+> 
+> 

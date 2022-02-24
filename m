@@ -2,201 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0264C2D85
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5504C2D80
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbiBXNqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S235204AbiBXNpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiBXNqh (ORCPT
+        with ESMTP id S233481AbiBXNpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:46:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5026F4E6;
-        Thu, 24 Feb 2022 05:46:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD74561B38;
-        Thu, 24 Feb 2022 13:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4884C340E9;
-        Thu, 24 Feb 2022 13:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645710365;
-        bh=jnbdT8UDAZtAA54FrGhoPcolloNf7HRAUDbtYfwfctw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IZrqtq2kceQS0Sq/mXjgWYuG/quLzDYr5v0h0g4VvsREdaekkp+FMtShpRfUNSGTS
-         1WIqmWBTkrWPqKLKuhDqisz1YeQJzLkCq9IMN8xPFgeBAuAkmMNf32u0ApbO9Wr0DX
-         Pl7/dtQrhGSKQHkybcvZ7OOwIJuQjLOE8xZW0+VxTxtoHcVI0AJRUVajJGJhBtIFsR
-         csu01x5+6DlNYc7zKoL1WvSkbfmfD8KDPeuU7qMlVuq0Ba4DovHY8mEvaq//wKnbNt
-         g8W5tHvwc4RvGnOq2Q3yUs1gasJVOI3PvnzmhDdWpa0XqYK/zLC0oOy14LvyTFMOh1
-         t6SBPIzc2LkPQ==
-From:   broonie@kernel.org
-To:     David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qu Wenruo <wqu@suse.com>,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
-Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes tree
-Date:   Thu, 24 Feb 2022 13:44:27 +0000
-Message-Id: <20220224134427.3208381-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 24 Feb 2022 08:45:06 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2112.outbound.protection.outlook.com [40.107.244.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CF627791B;
+        Thu, 24 Feb 2022 05:44:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YzeHMR5qD1LQCr0kEgVF9OXzwg98FPLRvkuTqCP94sWSn/OVn+FgA5RgMHI1rWae/J9KUiaMGr9LPcstBBqLsDMqVVitP7gIhBZf5xCGMexUMTGM3XLIOQCSrrL7Yo8yKjeGVT6a6zjxS15uBBg+/niSy9v5UCUABhYigvj1DBmuUbuzE9S2PRkt/yKMG2KhH7pbqBkh9bXPa3V1EO6Otvdz/sEXPrJcLrwZsxC1Hi7DkNQHIjWk6W+aYQz/6zfxSwzLhsb6NPduaFflV1CPN6xgitRxnugj5fhnx8Q6eNht56GgGt3folpjMPXPcw8AXyhmmDTICzfj6RioNRnmcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GcKbL00p0CLUwnx3rdLklU4hn9UCwyt/50iBd1JbMCU=;
+ b=XF45pVUKRrj9+vkoztcP2K1Pt0dQ7nbgWpNBIon5O39fk8XM/RPkgBxSv5HoQB5oKZZZ/uDbTy++xE6XkF6mJY1iYIdI4CO4glAAAVg4fxNOk3cbLXcAnmARm9VB9QhEl+l3q8jVmPDe/bAQ9nlftXRwu3Im7DXaHYk0PbSUp9m8BCe4NHLusYUgW3mSMeFhxMoC+Ek5N30d/qerkYJ/7Kjxq+MzuRwdLMen/Cwpf2ONXFbk1xUM2l4vtPAW9DzMHYCxjwyO14JRYcKqCxVuuyT2TdWSVFXuS+emDSonNIDsP2jJxQ2LHgB5GcvCnTFOBr5zJ87/DPjoAw1YT3UCqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
+ header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GcKbL00p0CLUwnx3rdLklU4hn9UCwyt/50iBd1JbMCU=;
+ b=Q+Dsu5XxtvYvx93xOlw6TzlCnQaJ/XuIh390AmFfk4xHe/IgCKrWvetXCnZHwvaQY29qiVntmxQ8ZyADVZBH/urXv+TtyxgO9YIZh2DhUH9JmLwipepxVnC8s/yEErSv57twQZMDwiPtHMfKnTFRphJ0CQ2ePAmlKo5iN8iQ6GdT8AYgoWGsQxmR9KrgbcwaNClpLVzUbnWeRO7taL36zXNmxxWXUOx9BVr1MK32EEJXVILL53cJ7xZJJ+sdjiECVb2hSfFhLND3lmqD0IoyGub23RC0YViA8IEEKEVENX1th58+AnV3lJVGkiM10oGtGIYnIjLOCQNkY3E0YSy+zQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
+Received: from PH0PR01MB6439.prod.exchangelabs.com (2603:10b6:510:d::22) by
+ BN7PR01MB3843.prod.exchangelabs.com (2603:10b6:406:84::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.24; Thu, 24 Feb 2022 13:44:32 +0000
+Received: from PH0PR01MB6439.prod.exchangelabs.com
+ ([fe80::4ce8:dd24:bf67:47fa]) by PH0PR01MB6439.prod.exchangelabs.com
+ ([fe80::4ce8:dd24:bf67:47fa%7]) with mapi id 15.20.5017.024; Thu, 24 Feb 2022
+ 13:44:32 +0000
+Message-ID: <01f0c30b-08dd-e70c-ddfa-b47843e76366@cornelisnetworks.com>
+Date:   Thu, 24 Feb 2022 08:44:29 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
+Content-Language: en-US
+To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+References: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
+ <e39730af26cc4a4d944fa3205fa17b3c@AcuMS.aculab.com>
+ <Yha1bIYZpCWZIowl@smile.fi.intel.com>
+From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+In-Reply-To: <Yha1bIYZpCWZIowl@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0342.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::17) To PH0PR01MB6439.prod.exchangelabs.com
+ (2603:10b6:510:d::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4eac0c54-01c1-41a9-5925-08d9f79bc97b
+X-MS-TrafficTypeDiagnostic: BN7PR01MB3843:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR01MB3843B9508185DE05B96190A8F43D9@BN7PR01MB3843.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fpsk+2TwoXfcs4FugbO+iR35j9x1IJcekWN2mRO4eDH3RG6wi4GG7wooKT1e7mJ0GrJu1SNZ0n1AqcOOmX9oboah6N9k8fPC8IvktSFs1fYbKB/4pphKjHKUJAPCpfEFExNtx89/eXizWEnhKr2gXR1Am4WQbk2Z8UF9fZRa+dNNZVR+w7k99yshuqJ241kNXmCyQVgYuORxiBhvnGBexI2/jw5CdCXHe7CyuPCYGoD8PEqxDstTzzVveWeVBnzA+6vJUAV3UTjuaipSu6AYVCf7kmMa2EHobGbnuhivKDJO9UPbRhTrHt+k+SPRhKt+JhHkTew58lxbiRyzwFS/nzYbOpPc6Jhwpi5+5ykiGdvkcRv+vdN5VIN92+lqUpCzDLepRf3DauNqf8gqIVA0sEgZFz9ZvK5d/bqoZsQXsFJZNqyMF7CtV0VZEOz3T9lSQsBKs0jYn5FJnzVgoGbYMc4Gf8eY9zL8lhXwibt6Sfj3lXMwnt8y6fI8Q3f8o5RlNJ7qQrOD3Nq6iqfZ0S1rsQJlwzv3XdxpUhI/3gMXP2WGdUWf47QGKYeWVyrQeHY/e7mr6iiDSdSh3DbsKGfCCCEa/Xq5Q+aVCALobtv16KFIVfK4Qc1dFxJ7Nx+vtO3EtvvVY0Iendy7CF9chCkMc6yneF0HYa7Wz+WPuFUz/80DXk5E00wwXS00ThYRYUASqVB+R4KgzJRVV4O7RoiuzrQCOtZxtsIYjxUGaQjUPLY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB6439.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(346002)(366004)(39840400004)(136003)(376002)(396003)(8936002)(6512007)(2906002)(52116002)(53546011)(66946007)(6506007)(66556008)(66476007)(4326008)(44832011)(8676002)(186003)(26005)(2616005)(6666004)(83380400001)(107886003)(5660300002)(38100700002)(38350700002)(54906003)(110136005)(86362001)(31696002)(6486002)(316002)(31686004)(36756003)(508600001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWFRNXJIL2daaGJJekNRQkhUdHFONU1iOGhkMFFobjVIUVAxREJ0SDNNYTBQ?=
+ =?utf-8?B?N2NvWEJuaThqZXAzY1ZOdThNVm8rYmphOUNMSnJCN3pMZ2tSZlVGbjNTeXNK?=
+ =?utf-8?B?T0l2N1JWeXp4Z1BIK0ZZOXN0cFFsVW1TU2RQTk1HM1NjUS9EMUJLVDBGQklq?=
+ =?utf-8?B?RmJsaEx0SkI5dWJiNU43cXZSZEt4REkxRTdoTnhUT1ljM2ZmVnRMcEQvNCti?=
+ =?utf-8?B?a0c1M28vb2lYaFhCOHJLeU1VaWt4SVhqZmFzVUlkN3piVUJWdDZmbDF5b3dW?=
+ =?utf-8?B?UFZMZ0wzWG5keGZCUU5YVzJoaEtNRWNhWjlrbDhXUnRTTmU1Tm9kODVtRlR4?=
+ =?utf-8?B?Q1VBTTFNL3FVcU5aS3ZSUlV2TGIrenNYQ2l6VkRKS1cwbDRFbEx5aWlubzZs?=
+ =?utf-8?B?eTNjSW91MlBvb3lkSkxibTN5Q1RtaEd3U1k4U3pIdUUxaWRIL1ZDdGQ2VGpt?=
+ =?utf-8?B?c0lrZ2JaeDUzWnVqU1pDQU5Pc29KWnZiTjBWU2x0bEpxcllWQzk3b3Znb1Iv?=
+ =?utf-8?B?c2FvQ3pXMElJSURaQ05rK09iUXNNTWtpMFdaK0MrOUgzcXhmZzZwYkdOYUlQ?=
+ =?utf-8?B?UkZYZXJkd3U5ckJQajNRdUpLWE9CU2F3Tmhoa3JURjMvT0lYRDluL2FGbG1k?=
+ =?utf-8?B?cjBFSGw2R2c2MzV4YXYrWkpwa1hlSmx0dlpkWEV2eGpXRnpXRThiQUJFclVa?=
+ =?utf-8?B?dW1BTllYTGV6MW5mSE9CQ2F5L1BScTZjUTQwRmt2YWhHa1VJUjBnLy92emFX?=
+ =?utf-8?B?MkV1aS9BeU9yK2xjRGRhMG9HU2NMYTFNUjU5cW94SE9KSUx0V0ZkU1plMmhy?=
+ =?utf-8?B?Q1ZlWlhON0xOaVBPSWpZM09VK05NTzM3WW9rZE1WaE9kc2Z2S1lWcEJ4RzZL?=
+ =?utf-8?B?MklmbTI1N3ZBbitsY1JwOFNFc2M5UVF0a05ZZ3ZuQlR6R1M2TUNGNUlvVnRX?=
+ =?utf-8?B?cld2aWZtc0h6bk9nZHFwS3Y4NVJleFg3YkxVd3Q3UzA4K0NjN0JuUGRCL1R3?=
+ =?utf-8?B?YlhoVHVOZmxveTArZlhwWGdUMWRDUFFqZXFjcFFaMHZZVzFrTXVyQkpDcFFn?=
+ =?utf-8?B?NnVsb0luWC80WXF0UzFyN1VGN3BjdCtKV0hEUHluTERUeHlpZmFhVWFLRkNp?=
+ =?utf-8?B?bTNFWERtUkdHVEtEUkcwbTdHZWRXWkdieGJIQ01uRkRzUm5QdGFDQXhEYzFZ?=
+ =?utf-8?B?MkJaRHByUUtNRldoZVpsYVM2V21PZU9NR0Jlc3kvUFdkcTczUXNrMnlnSEtm?=
+ =?utf-8?B?REw4ZXZlV25oTVVxRXdLdjkyODI4YkxNRkRYNFNyekdlN3gvREtQUzNXN0wx?=
+ =?utf-8?B?MEdyb1Z5TlJ0QnRnY2o1WnBoR0o3VjdOMjJ0UmhlR1lxWFYxU2ZOcmRiVVhy?=
+ =?utf-8?B?Vm5TbEtzMFpoN0cwdDd2RDZxZm9remdkWnlrMnBvSVJpTEFSSE1VVGNabUtG?=
+ =?utf-8?B?VW83S2pqNWxtclVSME0rN2tSeSthTHZjNWhaRlJ5cVJBRlkzdXA4V21pbDhm?=
+ =?utf-8?B?bld3a1VUMWpKNjk2bmlTZDh3OTRReUp2Z0ZQZ3pBMnlIZ3lwVVZ1ZHl2S01Y?=
+ =?utf-8?B?am1qeHJ3a0dHRXFIaGtrWlRxd1BzQU5rTlJhdUo0aHcwY0tQdnJrY0Y4bGo2?=
+ =?utf-8?B?QU10VU1nV25VVHV2a0FPaUo4a0NnVmQzcW4yNitUZ2F3ZHFmMm9NUEh3Nk82?=
+ =?utf-8?B?TllJVjh2MUlsaDIyTjI3U2UrVkRXWi9OMk5jSXo2eVNreTNYTHBwYmNSTUtT?=
+ =?utf-8?B?aWY4SUN1eElaQjgxRS9ySjF0SytnTkEvakswUWtHbER5ZHNnVHc5L0NNUXdL?=
+ =?utf-8?B?cmpub0IzZ1h2bElVOVkxZ0U0bmEvRmw1RkRBaHJHbGFhNG4wQS9MaGFxTCtV?=
+ =?utf-8?B?eUdYQ0EwbzNuZEh5dDFQeEZSOEZxQU9QK0NSNllIL2lmdFpFNG9zUXh2V1l5?=
+ =?utf-8?B?czB6dHg3TEhsaEJDSmRMSWkyQnZ1d1d3QXFGOHBXWlowbmZEN243aTl2dzVY?=
+ =?utf-8?B?SjNkakNRWWY1WlRaZ0pmRkpjYXgvZWdzTENkWFlaN3c5cVhsbHFrcFhNZU9Y?=
+ =?utf-8?B?eW9vUEVPUXhVTVJ6c2pPL09wUzV6eDdZVU9ITk1qeWdXZFVkd1ZqUHpEWUNj?=
+ =?utf-8?B?WFZENTEyQk5NQVVCOUxQZVY5b0ViUEpzTzN2am0rUUE0WE5BUVlGa2dPaGFE?=
+ =?utf-8?B?SFM5R2xyYWNEL0Q2TTFiYnN0NmhXWlBtcWkwb1FFZE1vaS9Kb1R6cTY4Rkto?=
+ =?utf-8?B?L3dlSDcweFRrV2lXTmN3UzduMXhqSC9Pb09RejBvdGo0TFdLNU8yOW1TUzRR?=
+ =?utf-8?B?aUNQYUU0bmZVOXMyRG0rWTFNcHVFUmJiZlphUEQ5Y1ludzFoOGZIQT09?=
+X-OriginatorOrg: cornelisnetworks.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4eac0c54-01c1-41a9-5925-08d9f79bc97b
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB6439.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 13:44:32.3962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z5c2hpd3kafHgC21O+pXDlkihudRs2GX2JymQCIVtan4pG/Zbzd19GFJAoTavEMic0+2+7/zPLxSoGciqahs7EgMZgfud6bQMxc0cvuVfOuaBwQ5g4+eISsr0QOVqaVF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR01MB3843
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 2/23/22 5:30 PM, 'Andy Shevchenko' wrote:
+> On Wed, Feb 23, 2022 at 09:44:32PM +0000, David Laight wrote:
+>> From: Andy Shevchenko
+>>> Sent: 23 February 2022 18:54
+>>>
+>>> While in this particular case it would not be a (critical) issue,
+>>> the pattern itself is bad and error prone in case somebody blindly
+>>> copies to their code.
+>>
+>> It is horribly wrong on BE systems.
+> 
+> You mean the pattern? Yes, it has three issues regarding to endianess and
+> potential out of boundary access.
+> 
+> ...
+> 
+>>> -	return handled;
+>>> +	return IRQ_RETVAL(!bitmap_empty(pending, CCE_NUM_INT_CSRS * 64));
+> 
+>> You really don't want to scan the bitmap again.
+> 
+> Either way it wastes cycles, the outcome depends on the actual distribution of
+> the interrupts across the bitmap. If it gathered closer to the beginning of the
+> bitmap, my code wins, otherwise the original ones.
+> 
+>> Actually, of the face of it, you could merge the two loops.
+>> Provided you clear the status bit before calling the relevant
+>> handler I expect it will all work.
+> 
+> True. I will consider that for v2.
 
-Today's linux-next merge of the btrfs tree got conflicts in:
+Will wait for a v2 patch and I'll test it. We are very sensitive to performance
+changes.
 
-  fs/btrfs/ctree.h
-  fs/btrfs/file.c
-  fs/btrfs/inode.c
-  fs/btrfs/ioctl.c
-  fs/btrfs/lzo.c
-
-between commit:
-
-  2ac3e062af024 ("btrfs: reduce extent threshold for autodefrag")
-  741b23a970a79 ("btrfs: prevent copying too big compressed lzo segment")
-  26fbac2517fca ("btrfs: autodefrag: only scan one inode once")
-  966d879bafaaf ("btrfs: defrag: allow defrag_one_cluster() to skip large extent which is not a target")
-  d5633b0dee02d ("btrfs: defrag: bring back the old file extent search behavior")
-
-from the btrfs-fixes tree and commit:
-
-  13b2f7ab699a5 ("btrfs: close the gap between inode_should_defrag() and autodefrag extent size threshold")
-  48b433a2ef82a ("btrfs: add lzo workspace buffer length constants")
-  db360c49d476f ("btrfs: autodefrag: only scan one inode once")
-  e6c69fcbee7ef ("btrfs: defrag: use control structure in btrfs_defrag_file()")
-  6b17743d934ec ("btrfs: defrag: bring back the old file extent search behavior")
-
-from the btrfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc fs/btrfs/ctree.h
-index 947f04789389e,5a569bc756c3c..0000000000000
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-diff --cc fs/btrfs/file.c
-index 01111ee06e1ef,8815981447034..0000000000000
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-diff --cc fs/btrfs/inode.c
-index 76e530f76e3cf,44e8d28182b7f..0000000000000
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-diff --cc fs/btrfs/ioctl.c
-index 8d47ec5fc4f44,998bf48e5ce29..0000000000000
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@@ -1435,16 -1460,16 +1461,23 @@@ static int defrag_collect_targets(struc
-  			goto add;
-  
-  		/* Skip too large extent */
-- 		if (range_len >= extent_thresh)
-+ 		if (range_len >= ctrl->extent_thresh)
-+ 			goto next;
-+ 
-+ 		/*
-+ 		 * Skip extents already at its max capacity, this is mostly for
-+ 		 * compressed extents, which max cap is only 128K.
-+ 		 */
-+ 		if (em->len >= get_extent_max_capacity(em))
-  			goto next;
-  
- +		/*
- +		 * Skip extents already at its max capacity, this is mostly for
- +		 * compressed extents, which max cap is only 128K.
- +		 */
- +		if (em->len >= get_extent_max_capacity(em))
- +			goto next;
- +
-  		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
-  							  locked);
-  		if (!next_mergeable) {
-@@@ -1683,19 -1715,11 +1723,20 @@@ static int defrag_one_cluster(struct bt
-  			break;
-  		}
-  
-- 		if (max_sectors)
-+ 		if (ctrl->max_sectors_to_defrag)
-  			range_len = min_t(u32, range_len,
-- 				(max_sectors - *sectors_defragged) * sectorsize);
-+ 					  (ctrl->max_sectors_to_defrag -
-+ 					   ctrl->sectors_defragged) * sectorsize);
-  
- +		/*
- +		 * If defrag_one_range() has updated last_scanned_ret,
- +		 * our range may already be invalid (e.g. hole punched).
- +		 * Skip if our range is before last_scanned_ret, as there is
- +		 * no need to defrag the range anymore.
- +		 */
- +		if (entry->start + range_len <= *last_scanned_ret)
- +			continue;
- +
-  		if (ra)
-  			page_cache_sync_readahead(inode->vfs_inode.i_mapping,
-  				ra, NULL, entry->start >> PAGE_SHIFT,
-@@@ -1834,13 -1879,11 +1898,10 @@@ int btrfs_defrag_file(struct inode *ino
-  			break;
-  		}
-  		if (do_compress)
-- 			BTRFS_I(inode)->defrag_compress = compress_type;
-- 		ret = defrag_one_cluster(BTRFS_I(inode), ra, cur,
-- 				cluster_end + 1 - cur, extent_thresh,
-- 				newer_than, do_compress, &sectors_defragged,
-- 				max_to_defrag, &last_scanned);
- -			BTRFS_I(inode)->defrag_compress = ctrl->compress;
-+ 		ret = defrag_one_cluster(BTRFS_I(inode), ra, ctrl, cur,
-+ 					 cluster_end + 1 - cur);
-  
-- 		if (sectors_defragged > prev_sectors_defragged)
-+ 		if (ctrl->sectors_defragged > prev_sectors_defragged)
-  			balance_dirty_pages_ratelimited(inode->i_mapping);
-  
-  		btrfs_inode_unlock(inode, 0);
-diff --cc fs/btrfs/lzo.c
-index e6e28a9c79877,430ad36b8b080..0000000000000
---- a/fs/btrfs/lzo.c
-+++ b/fs/btrfs/lzo.c
-
-
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 7d3542893a165..5ef7c08b24b89 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -1734,7 +1734,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
- 		 * Skip if our range is before last_scanned_ret, as there is
- 		 * no need to defrag the range anymore.
- 		 */
--		if (entry->start + range_len <= *last_scanned_ret)
-+		if (entry->start + range_len <= ctrl->last_scanned)
- 			continue;
- 
- 		if (ra)
-@@ -1760,7 +1760,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
- 		kfree(entry);
- 	}
- 	if (ret >= 0)
--		*last_scanned_ret = max(*last_scanned_ret, start + len);
-+		ctrl->last_scanned = max(ctrl->last_scanned, start + len);
- 	return ret;
- }
- 
+-Denny

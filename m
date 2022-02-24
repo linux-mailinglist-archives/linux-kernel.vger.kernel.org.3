@@ -2,169 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DE54C347E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAD94C3483
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiBXSTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S232682AbiBXSUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiBXSTX (ORCPT
+        with ESMTP id S232627AbiBXSUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:19:23 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2050.outbound.protection.outlook.com [40.107.100.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9221179A0B;
-        Thu, 24 Feb 2022 10:18:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IXkXoI7L+WbFsvta8whiJUzq/qcr1Ie9prPSAcgPxP7iHQRAmPU+aGwtpR13PWCamhyrDslEjLC27Bb2yfqHGWgmDxbcLcJt14PzWuoaxfkizwwdiXGc94HZGr9EeiH0XjpCsEPqbJ27hWb0f6NLt3xamNtfqr2YFmWM1ml7kdFVJwSHn2u0DH9jh0p4yg6sPVMDyv177lkF2Ay04F0E1MZCiAWv95w36V/s6IXW7ucEgHnkBMRxTrOphpN16m/926MkXppWhXC+TcWaqnR7Lxtz6W8RLQladqIEi4Xfs3PJs24LnkuODWRccnDkmNg9LWF5SvJ0XszXv5iqpm6Fuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=26BoLErwwggYKTMjJ7PQD7k247tft+A6Ow+Az9mngNQ=;
- b=n1+WiIQJ6AmD5k+MrfzaPolfzN2ZrCwabUCbZUe4pDZrkMvqkkRCcE5+2e1i9ekI3PY/pr5Q2thMzpcJ2NRLp+LBxaRnhm5ZzuhKdu8HsfAe1GNwWiZ0dK6KGRb40OhAt4CgMM4BVB7YYR4blM6sW8x23EWCpZmZdkQCse2Zj1C3hXgocTDNUbJLzlZNM1Ab3+J3jw/kbVnkvqmSKlgebLt0gcjFFCQhzuwIochjXntDGwY33O95Hzhm+djyLQ63ukBJLzAo3z/etkbIZGn8lbzNU7Jj9n5sOobDDvdKnM4LiKqUQMartSHWe8Go6K4XtNj7LdqtYegYw5D5HaoyaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=26BoLErwwggYKTMjJ7PQD7k247tft+A6Ow+Az9mngNQ=;
- b=be+f/EzzB4kduTKwcp+lPZPgoqEVMjaSCCrebxQdgwrHIaJX9uEIiJhXrZpdUdxEWg6uq61ImgKG2NSsvkp3UU1dsSeTPlr4eOqIUi1GskadHc8RgQ2AjMfvSuELwUAYxfN+DEdZTjOIx64ub27t9pYJGojKGdkzIg9sbS2X+lA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by CY4PR12MB1463.namprd12.prod.outlook.com (2603:10b6:910:e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
- 2022 18:18:50 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd%2]) with mapi id 15.20.5017.023; Thu, 24 Feb 2022
- 18:18:49 +0000
-Date:   Thu, 24 Feb 2022 18:18:45 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH v4 1/2] EDAC/amd64: Set memory type per DIMM
-Message-ID: <YhfMBbsex8+cTnSE@yaz-ubuntu>
-References: <20220202144307.2678405-1-yazen.ghannam@amd.com>
- <20220202144307.2678405-2-yazen.ghannam@amd.com>
- <YhafLB7Jw1Bul7YP@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhafLB7Jw1Bul7YP@zn.tnic>
-X-ClientProxiedBy: CH2PR19CA0010.namprd19.prod.outlook.com
- (2603:10b6:610:4d::20) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dc9be765-fc23-4b46-7881-08d9f7c21aa8
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1463:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB146370541A0A8CA1B44A2472F83D9@CY4PR12MB1463.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AMojwKMllxL2Dhrc+cep0y0rLpTto+kDGyGmOGg27ezv+i4TtdU47qXaVC/L8EnrPhutElpiPgT2nPgUyJttXeZVHJUkot2pGJrut+m0Zf1REav2yQ0syCBizSxx1ZN5SZm4Ntpwr+UFkPnNxTKHk6EL5LQoTE8q5kSadeO4aW6q2jxTdGP1dcMsM6AARyGYEvK0SP7+mTobsRzoGhVCsTQoBfpLlTi8nh/MWXyqp/iR/+GO8B5KK8FujGOLNIrsllE3RvLd5x5005L0JFFS+3rPM0LwNWkmQ25XjpKJkVrNDEHgZzsU12sd7KuPa3deOdp/+PPzI4hKVjnKW39MPwTYNNcHG2Mfqlm3GlmRYkOgNa2Zgnua0hBr1hrIH1t9cT3sfn4aKzoS8aVNQnC6r/Ioxqx3UB56hQVgeOL4doGXy9+dxBoI8A3WP64j0R5kGOPig7guC3hGphSy6qelgujeOqzVuV4KxMHw/xrh1PF/YcBvahH1ZKTeJfCYbrYuXatY2/RIgBnHnkDIbJb+AzvU7yoNnZNgYCYEp+xtoGMGGEa+4bWK86kF2xGyRxfmNalIwzKSC4CLMNRpFPuTeGHGvvN18z5p4aGjE+0kxwsPjEjG3nBFPP3VH01E6PcA55l51xBJ+qwiy4fZJKkpJXeiE7g5ljB0MhZX63qGZVCiD1gS1EjEZ/kUD4VoGF1eqAb4DsV1Ul2vAzN7xfjj3Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6486002)(44832011)(5660300002)(6916009)(9686003)(26005)(186003)(6512007)(2906002)(508600001)(33716001)(38100700002)(86362001)(6506007)(66476007)(6666004)(4326008)(8936002)(8676002)(66946007)(316002)(66556008)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d6KqmRRCHFvavoep1LX+FSEopke89BV8BnNjWyEziIMumC/q624ySKHe1Z9D?=
- =?us-ascii?Q?DPVi87Is8CRmf+XRjloyHhkDyMf0vseP5aJTzG0ZHXGy4ooO0VQWdnIQnHAh?=
- =?us-ascii?Q?zXpuqUcEDJpVNQ3BTQEZ5yF9kMAtIIGv+VOzPYwN7SBivvN8cUB1jX+8sStl?=
- =?us-ascii?Q?qbhLTbz8cmY3PFe23JBf3h+Oxa90h1zi2xEwQyrU2rD2KvobiJvbxqcXczCS?=
- =?us-ascii?Q?3iImzbug0sBobXGlPQPnXYriIrYKMJNLl912fFiHY1QXxuvpW/oF9ZjJpgQT?=
- =?us-ascii?Q?w6iD0iDo1hCGZBlgXkVyxNab+09zmI3YXCtlhnaCcdmaf7fTwOkhtOtNuaJT?=
- =?us-ascii?Q?U/msK1ZVG+8vuIMWKsXFOqgRsHNxKb9coDRTbW2fuxuVg26gjzir38OeIYZV?=
- =?us-ascii?Q?qlpTRRkYLo7fqwfUJ5wkHQPAKqWfKvLarBgpWKM/VaLZHbdqVQyXz7OJXyS3?=
- =?us-ascii?Q?x5PVtLQWDK+mArqBvCKOE8dfJ2RkBcms02JrpbVA86FD5HpgfRmEwXhO/l4p?=
- =?us-ascii?Q?h1omPl+A58a8KV0VMmbu309zr5oXAq8zBl32qCdghZY2SoByQMYlka7jvO0I?=
- =?us-ascii?Q?pkGInL/zj//0VRh0d5GsvMyI5+sMK4xstfsIldHhes0hNAaJGtrJDWQfzAgX?=
- =?us-ascii?Q?aE6FvqMEnsDnXtgVK1Kp1rQxFZ859DphePdWk+Ho5LBhx759quUdWi6imppL?=
- =?us-ascii?Q?2Zg1mkweD3b5EH0nghntGUCVcE5pdwbk3lO3GZkX1rWNt5eU2YRQQ/7CMtYi?=
- =?us-ascii?Q?sdZ6I8e4zaiyFAoiRd+4j5wlx/AGKjlRDYwNLsOXoKzxajxU2esZDYOJVDO/?=
- =?us-ascii?Q?z5N2kFFnABVVarzMRME0X7QhpnPyNJbS1+PRu64Qyo07gWFWisqtoGe9C51M?=
- =?us-ascii?Q?s/2yYLzlFe2BIKE0OzFVN9JMAtc+eL5s+bHus3vsSLTPO1/Uymb4TPDay4Po?=
- =?us-ascii?Q?wQ0Pgk2R1tgD59+uWFYcdFzXfZ6ReOULwb//vH6WZa2qV17oHCt/ZjF3CUgT?=
- =?us-ascii?Q?uRy12IQAIPVo11bIttmgAaCF0gD7681wqqewIlGgzhcVE+pbSkOGFKYK9C0n?=
- =?us-ascii?Q?y8jWYd7w6sb+d4a1Arb287C6gj21laC86y9XRlBq3J4vLaDaF0SaUnGEYuGh?=
- =?us-ascii?Q?HPdfMX4hHQDKyUkvvJfZ0yal3pMvgplc64iUOUqyragDk9jcFXuOuTzRdBUM?=
- =?us-ascii?Q?pL9KZabZuwc9ZzjUi0IN8U2Ll4cstS+O8quX2vnI42E2lwnsDf5/6FyiYR91?=
- =?us-ascii?Q?mRzLXrqDjBVG/EVfQ0jnXqH1rXAoR6AwhcoVOK6ogiFCOxToyAepyA7YS9hB?=
- =?us-ascii?Q?RN3NTb73dXdWAAO/ZMAPSRr5axaoSSIF1cEaAzZ6M0u6MIQwET/YylgS7r8e?=
- =?us-ascii?Q?uC5c9Xl6iL5Fsjaru9LsHy2uC1vfMnGNv9qOve1UKrn07LWHCeHqVNtzQlvn?=
- =?us-ascii?Q?ICJvaYtq/E5+kfOwi49M5O99FK19MmDFz9MOyxppZWadZNVbbUQPumsehvsl?=
- =?us-ascii?Q?3bA7uCsJq6vbkvo/b+Hjwg1UKmH8RRRBVu20Tv02dgHzDmqV4i0QKLpboeE0?=
- =?us-ascii?Q?fUjlWepe5ALjjAiRDHjgezwBSAHQ13Wuh0m6W8nnLIUTyrNBrZopiKFg8kdE?=
- =?us-ascii?Q?F+qhmc8FAEMwYXBEa8F6Zxs=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc9be765-fc23-4b46-7881-08d9f7c21aa8
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 18:18:49.6818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jelfqO3K/Qdf5lgq8gVr3M5z53UTQ/TabGbuVEFqhPiORfqkyMTs2p/p2JyV8jpLfz6R5f0NnuJUuZsLQ6ZiTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1463
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 13:20:40 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448A62556C4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:20:10 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso541005ybs.20
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Kr3msHxcEEuMu9ueVhf1C+yPycv5P/dhrWgKPHzNZeU=;
+        b=fPfQHUeXB8dFNhcE0pSs43bdxCMaS/5S9/DzhMcZXeydaAkCzPRYjyJPHchp7jv7Fl
+         YcI6FCU2KPWMX0IIyPh1fLisosge1/9iqrTFR4l3gwQI7GOxBAm65qyTsWZdNkjOK/NE
+         k4jN0vbm5oQiFlMVAdO2u8bXj4BrV70nE30yhUXw+c2oICHiL9Bcbrbx9AJSeWZ1qVOx
+         O0RxVsAvhoJ96n6AihRhyP/iKtz9DskulRg3Xx3PELkjLDNWIoeUowiVk8EiM0w4TMMA
+         qq+Tzg42a1SC40LYdWFOJm2uDwMGriG9HWn5UcdO7D//xszsaVryahaBE1Q/mOIF7Jnw
+         cvTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Kr3msHxcEEuMu9ueVhf1C+yPycv5P/dhrWgKPHzNZeU=;
+        b=QYfLcdNO0BBYoZMFqSEPm+N2n/WghvFe/rbQWeGy4w1XekqMLAYE6SAk08I9OFMuhG
+         fig+R9itLAuHQn3HUMBe3N35KCxSSUR4ihKijHmyHQt6Eh9dxzcBjqVBAT2FC+/EFIMr
+         iPyRe3EB86VfSePSNXEp45CKD7f/hWrG4b7gmppir9oWuQoRaL+RINgdIZErnU+f0sER
+         CLNl00ohBLvk90EZ0h7TWx+2I7kc7gjEOCt1u6zvrVBKxS8bx1ImNXHCbQ98pXo9mHFv
+         qUvzqerQmv5+nuLJkhwVfhl4BGFOxu7gcARlfPxjG3Nlp4vJ9Kwn/r6A61cPebcAvOZT
+         v8uA==
+X-Gm-Message-State: AOAM532eo4IA2MJPBGQ2btbBc6/nELdra07sy8/hKWbwZtSEjkgay9cS
+        HsII/ryIYy4T6nxfwOwYJgFC8eNS2vD5JAHpcrzy
+X-Google-Smtp-Source: ABdhPJykrFAu6LDou6qQ+GvUENavEY0K5NwYoXaucR3RWYojp3M1TWx2uHE2Wm2gvvSBpVRlJMazTjkK9Vnl7gjXfQT4
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:5d35:89ab:52c:6dea])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:8887:0:b0:622:77:ecad with SMTP
+ id d7-20020a258887000000b006220077ecadmr3666746ybl.30.1645726809505; Thu, 24
+ Feb 2022 10:20:09 -0800 (PST)
+Date:   Thu, 24 Feb 2022 10:19:53 -0800
+Message-Id: <20220224181953.1030665-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH] userfaultfd, capability: introduce CAP_USERFAULTFD
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Serge Hallyn <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:55:08PM +0100, Borislav Petkov wrote:
-> On Wed, Feb 02, 2022 at 02:43:06PM +0000, Yazen Ghannam wrote:
-> > +static void _determine_memory_type_df(struct amd64_umc *umc)
-> 
-> You don't need this function, right?
-> 
-> IOW, here's what I've applied:
-> 
+Historically, it has been shown that intercepting kernel faults with
+userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
+of time) can be exploited, or at least can make some kinds of exploits
+easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
+changed things so, in order for kernel faults to be handled by
+userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
+must be configured so that any unprivileged user can do it.
 
-...
+In a typical implementation of a hypervisor with live migration (take
+QEMU/KVM as one such example), we do indeed need to be able to handle
+kernel faults. But, both options above are less than ideal:
 
->  
-> -static void determine_memory_type(struct amd64_pvt *pvt)
-> +static void determine_memory_type_df(struct amd64_pvt *pvt)
->  {
-> -	u32 dram_ctrl, dcsm;
-> +	struct amd64_umc *umc;
-> +	u32 i;
->  
-> -	if (pvt->umc) {
-> -		if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(5))
-> -			pvt->dram_type = MEM_LRDDR4;
-> -		else if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(4))
-> -			pvt->dram_type = MEM_RDDR4;
-> +	for_each_umc(i) {
-> +		umc = &pvt->umc[i];
-> +
-> +		if (!(umc->sdp_ctrl & UMC_SDP_INIT)) {
-> +			umc->dram_type = MEM_EMPTY;
-> +			continue;
-> +		}
-> +
-> +		if (umc->dimm_cfg & BIT(5))
-> +			umc->dram_type = MEM_LRDDR4;
-> +		else if (umc->dimm_cfg & BIT(4))
-> +			umc->dram_type = MEM_RDDR4;
->  		else
-> -			pvt->dram_type = MEM_DDR4;
-> -		return;
-> +			umc->dram_type = MEM_DDR4;
-> +
-> +		edac_dbg(1, "  UMC%d DIMM type: %s\n", i, edac_mem_types[umc->dram_type]);
->  	}
-> +}
+- Toggling the sysctl increases attack surface by allowing any
+  unprivileged user to do it.
 
-Ah, I see. You got rid of the extra helper function. Makes sense and looks
-okay to me.
+- Granting the live migration process CAP_SYS_PTRACE gives it this
+  ability, but *also* the ability to "observe and control the
+  execution of another process [...], and examine and change [its]
+  memory and registers" (from ptrace(2)). This isn't something we need
+  or want to be able to do, so granting this permission violates the
+  "principle of least privilege".
 
-Thanks,
-Yazen
+This is all a long winded way to say: we want a more fine-grained way to
+grant access to userfaultfd, without granting other additional
+permissions at the same time.
+
+So, add CAP_USERFAULTFD, for this specific case.
+
+Setup a helper which accepts either CAP_USERFAULTFD, or for backward
+compatibility reasons (existing userspaces may depend on the old way of
+doing things), CAP_SYS_PTRACE.
+
+One special case is UFFD_FEATURE_EVENT_FORK: this is left requiring only
+CAP_SYS_PTRACE, since it is specifically about manipulating the memory
+of another (child) process, it sems like a better fit the way it is. To
+my knowledge, this isn't a feature required by typical live migration
+implementations, so this doesn't obviate the above.
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c                    | 6 +++---
+ include/linux/capability.h          | 5 +++++
+ include/uapi/linux/capability.h     | 7 ++++++-
+ security/selinux/include/classmap.h | 4 ++--
+ 4 files changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index e26b10132d47..1ec0d9b49a70 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -411,7 +411,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+ 	    ctx->flags & UFFD_USER_MODE_ONLY) {
+ 		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+ 			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++			"without obtaining CAP_USERFAULTFD capability\n");
+ 		goto out;
+ 	}
+ 
+@@ -2068,10 +2068,10 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 
+ 	if (!sysctl_unprivileged_userfaultfd &&
+ 	    (flags & UFFD_USER_MODE_ONLY) == 0 &&
+-	    !capable(CAP_SYS_PTRACE)) {
++	    !userfaultfd_capable()) {
+ 		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+ 			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++			"without obtaining CAP_USERFAULTFD capability\n");
+ 		return -EPERM;
+ 	}
+ 
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index 65efb74c3585..f1e7b3506432 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -270,6 +270,11 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+ 		ns_capable(ns, CAP_SYS_ADMIN);
+ }
+ 
++static inline bool userfaultfd_capable(void)
++{
++	return capable(CAP_USERFAULTFD) || capable(CAP_SYS_PTRACE);
++}
++
+ /* audit system wants to get cap info from files as well */
+ int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+ 			   const struct dentry *dentry,
+diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+index 463d1ba2232a..83a5d8601508 100644
+--- a/include/uapi/linux/capability.h
++++ b/include/uapi/linux/capability.h
+@@ -231,6 +231,7 @@ struct vfs_ns_cap_data {
+ #define CAP_SYS_CHROOT       18
+ 
+ /* Allow ptrace() of any process */
++/* Allow everything under CAP_USERFAULTFD for backward compatibility */
+ 
+ #define CAP_SYS_PTRACE       19
+ 
+@@ -417,7 +418,11 @@ struct vfs_ns_cap_data {
+ 
+ #define CAP_CHECKPOINT_RESTORE	40
+ 
+-#define CAP_LAST_CAP         CAP_CHECKPOINT_RESTORE
++/* Allow intercepting kernel faults with userfaultfd */
++
++#define CAP_USERFAULTFD		41
++
++#define CAP_LAST_CAP         CAP_USERFAULTFD
+ 
+ #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+ 
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+index 35aac62a662e..98e37b220159 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -28,9 +28,9 @@
+ 
+ #define COMMON_CAP2_PERMS  "mac_override", "mac_admin", "syslog", \
+ 		"wake_alarm", "block_suspend", "audit_read", "perfmon", "bpf", \
+-		"checkpoint_restore"
++		"checkpoint_restore", "userfaultfd"
+ 
+-#if CAP_LAST_CAP > CAP_CHECKPOINT_RESTORE
++#if CAP_LAST_CAP > CAP_USERFAULTFD
+ #error New capability defined, please update COMMON_CAP2_PERMS.
+ #endif
+ 
+-- 
+2.35.1.574.g5d30c73bfb-goog
+

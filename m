@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0810D4C3544
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B8B4C3547
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbiBXTDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S233171AbiBXTEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiBXTDf (ORCPT
+        with ESMTP id S229664AbiBXTEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:03:35 -0500
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5BA12E150;
-        Thu, 24 Feb 2022 11:03:05 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2d68d519a33so8620977b3.7;
-        Thu, 24 Feb 2022 11:03:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KGEpS7Bhdowi8weL04m6jlf8GznLn7sIWocKtZXzh8Q=;
-        b=zkKdx9QWLqkcma1wwhVUH2fMvsX7jGTA1Uh3aCywrYcSWpzpm2tbA8vfJ4WSpl+IGw
-         l36sO9Vs0k6+zub+j69ijq5azK9jc5oUy+iL8+mwyWIR83YwCxm2RzSytRuQe6Pc2tjp
-         g6Iz3HPOrGwTRxU8RyREecUUlE7qrH8FDZio4+84hgf5tsmDmp0ZSkNhG/Nvs20rIHiI
-         WAfcjFVn3ZUDshCXrjJZu059s0ry0j6LlQuSB+tXio13slwm7P4XYWd1e8LDvkPQkLSW
-         7t/WQSwzu6ovBg7Hx9zJmu2xyMJwP0V6v5iURlULdbz8QLM3nOqSDAhIGHHcaSQJLz0w
-         vbsA==
-X-Gm-Message-State: AOAM530I0gYZZW/q4jJ1Tx4VaFonflIR6cuoIT5jYhF9I3qmZjKO6eRh
-        thP6UzPjAblj1muRjR+T28uJkEJUkCPRVxU/tfMTsXoL
-X-Google-Smtp-Source: ABdhPJyyPpGPB5Swv0lOQOMTpA2ZcbJZajb64+GsWwBlE5yTpEaPa4WjtBh7br1iE9ZkesquRPwe8mRR3znPPiwBHS0=
-X-Received: by 2002:a81:1683:0:b0:2d2:aa58:ef87 with SMTP id
- 125-20020a811683000000b002d2aa58ef87mr3719714yww.326.1645729384914; Thu, 24
- Feb 2022 11:03:04 -0800 (PST)
+        Thu, 24 Feb 2022 14:04:41 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14A1E017D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645729450; x=1677265450;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=cia5oKJxlQnNWcyfcLJl3PXOjDFqv+fRs+nhPfQzUzs=;
+  b=bhvBpWkgDoU/8DrgmU2pmaNGFxGu4MDjhqgBBmtPz+qze63oI9+WG9rK
+   y2M8CTRetnBaIbqvZjfZolbYvCjdt2QUk3yAwyyhQibi2wQ+9SIX1uBUb
+   aLAb45el28xZZTdqwMzp63kf1fZC9F3CFRNUufFSONJoPjcvn5VqzJajf
+   hcGpNfpoe4d7W7F7pCV1E75KIoF+MlKXgwvxq6nuvuKTfzXR6qA5gpNBs
+   WRO7NvKAoihu9YVcwjT7elTy1o/PvyhG08xfoWz+u/BXFAxuX5/fD9Wtg
+   WfgSN0pIqi4gBSlVCrB50RBknconvYA9lLVJgNdpv9r1gLqLIlBaPv9uR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239725205"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="239725205"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 11:04:10 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="548895003"
+Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 11:04:09 -0800
+Message-ID: <51b6613d-eabd-941d-19b2-95b33ec27e99@intel.com>
+Date:   Thu, 24 Feb 2022 11:04:04 -0800
 MIME-Version: 1.0
-References: <9e3ba314-2030-8385-33ad-6b9a0291e5cd@linaro.org>
-In-Reply-To: <9e3ba314-2030-8385-33ad-6b9a0291e5cd@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 24 Feb 2022 20:02:54 +0100
-Message-ID: <CAJZ5v0iBaE-y_Q0Q4S4qUHd44r=C83JiLgxUzkhEHDLe7oZo=A@mail.gmail.com>
-Subject: Re: [GIT PULL] dtpm for v5.18-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-11-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 10/30] x86/tdx: Handle CPUID via #VE
+In-Reply-To: <20220224155630.52734-11-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 4:54 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
->
->    Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
->
-> are available in the Git repository at:
->
->    https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.18
->
-> for you to fetch changes up to f1ebef9e55f3c49063b575e97d2019832b8f8ef9:
->
->    dtpm/soc/rk3399: Add the ability to unload the module (2022-02-23
-> 19:46:29 +0100)
->
-> ----------------------------------------------------------------
-> - Added dtpm hierarchy description (Daniel Lezcano)
->
-> - Changed the locking scheme (Daniel Lezcano)
->
-> - Fixed dtpm_cpu cleanup at exit time and missing virtual dtpm pointer
->    release (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> Daniel Lezcano (12):
->        powercap/drivers/dtpm: Convert the init table section to a simple
-> array
->        powercap/drivers/dtpm: Add hierarchy creation
->        powercap/drivers/dtpm: Add CPU DT initialization support
->        powercap/drivers/dtpm: Add dtpm devfreq with energy model support
->        rockchip/soc/drivers: Add DTPM description for rk3399
->        powercap/dtpm: Change locking scheme
->        powercap/dtpm_cpu: Reset per_cpu variable in the release function
->        powercap/dtpm: Fixup kfree for virtual node
->        powercap/dtpm: Destroy hierarchy function
->        powercap/dtpm: Move the 'root' reset place
->        powercap/dtpm_cpu: Add exit function
->        dtpm/soc/rk3399: Add the ability to unload the module
->
->   drivers/powercap/Kconfig          |   8 ++++++
->   drivers/powercap/Makefile         |   1 +
->   drivers/powercap/dtpm.c           | 333
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------------
->   drivers/powercap/dtpm_cpu.c       |  55
-> +++++++++++++++++++++++++++++++++-----
->   drivers/powercap/dtpm_devfreq.c   | 203
-> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->   drivers/powercap/dtpm_subsys.h    |  22 ++++++++++++++++
->   drivers/soc/rockchip/Kconfig      |   8 ++++++
->   drivers/soc/rockchip/Makefile     |   1 +
->   drivers/soc/rockchip/dtpm.c       |  65
-> +++++++++++++++++++++++++++++++++++++++++++++
->   include/asm-generic/vmlinux.lds.h |  11 --------
->   include/linux/dtpm.h              |  36 ++++++++++++-------------
->   11 files changed, 634 insertions(+), 109 deletions(-)
->   create mode 100644 drivers/powercap/dtpm_devfreq.c
->   create mode 100644 drivers/powercap/dtpm_subsys.h
->   create mode 100644 drivers/soc/rockchip/dtpm.c
+On 2/24/22 07:56, Kirill A. Shutemov wrote:
+>  static bool virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+>  {
+> -	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> -	return false;
+> +	switch (ve->exit_reason) {
+> +	case EXIT_REASON_CPUID:
+> +		return handle_cpuid(regs);
+> +	default:
+> +		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> +		return false;
+> +	}
+>  }
 
-Pulled, thanks!
+What does this mean for userspace?  What kinds of things are we ceding
+to the (untrusted) VMM to supply to userspace?
+
+>  /* Handle the kernel #VE */
+> @@ -200,6 +235,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+>  		return read_msr(regs);
+>  	case EXIT_REASON_MSR_WRITE:
+>  		return write_msr(regs);
+> +	case EXIT_REASON_CPUID:
+> +		return handle_cpuid(regs);
+>  	default:
+>  		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+>  		return false;
+What kinds of random CPUID uses in the kernel at runtime need this
+handling?  Is it really OK that we let the VMM inject arbitrary CPUID
+values into random CPUID uses in the kernel... silently?
+
+Is this better than just returning 0's, for instance?

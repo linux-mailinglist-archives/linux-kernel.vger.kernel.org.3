@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBF04C3642
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0962D4C3648
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbiBXT4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S234113AbiBXT4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbiBXT4J (ORCPT
+        with ESMTP id S233357AbiBXT4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:56:09 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7625D6EC;
-        Thu, 24 Feb 2022 11:55:39 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id s5so4571227oic.10;
-        Thu, 24 Feb 2022 11:55:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/48U/SMEVzdXIrBsKPYPiGgB7YAdCZUvIfVb2uJmNzU=;
-        b=LEZ0IHES15Gl5VWs5rjo4jKsCxs7+Gjo4nLlKCckwU/tg1hWN+4X7tQTnB4JuYT6Kd
-         RqoN3TlTk2Ps8b+Sld9vrYqjHj6fWx37YqnjLB4XeYlua/J5IHyh3LthqniZICAdvgFo
-         sXPOaPPjwV67GJB1nYSJpbJkxBg8mu9GIEXek0gt8KvDXSbHXo4yKrDjPaoKiDUYUl9/
-         y6qZTbUalE/AcDArzd8tKAkokdBDYZe+4Dre318s7iTF0qKP3i6exPbtkHrOLHtRsD5D
-         zGLdE/D6WIzY7BOJykoFgYV8zdTciAiMEtlsiTmk5ZJu2v8E1Oera3c+5G+1nnOqhE80
-         UNXA==
-X-Gm-Message-State: AOAM532HhCblAaLufEvspK1V6eC/d08XI0/eHiCPJSRLjdXE5Aq4JkGZ
-        Is8prxfHVZaq+UwGGJj5uQ==
-X-Google-Smtp-Source: ABdhPJwsni0oyv5Isyt48ty0qDvHIrzDlmpRR0YrGhd3iRPPY9uGnFYnegdpoMxqF8jqmIDyYj9SGQ==
-X-Received: by 2002:aca:90e:0:b0:2d4:8fb3:2674 with SMTP id 14-20020aca090e000000b002d48fb32674mr2332252oij.124.1645732538912;
-        Thu, 24 Feb 2022 11:55:38 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t82-20020a4a3e55000000b0031847b47aaasm127848oot.26.2022.02.24.11.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 11:55:37 -0800 (PST)
-Received: (nullmailer pid 3484414 invoked by uid 1000);
-        Thu, 24 Feb 2022 19:55:36 -0000
-Date:   Thu, 24 Feb 2022 13:55:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH V3 2/3] dt-bindings: nvmem: brcm,nvram: add basic NVMEM
- cells
-Message-ID: <YhfiuDZgIUidrySY@robh.at.kernel.org>
-References: <20220124160300.25131-1-zajec5@gmail.com>
- <20220218070729.3256-1-zajec5@gmail.com>
- <20220218070729.3256-3-zajec5@gmail.com>
+        Thu, 24 Feb 2022 14:56:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A625D6F2;
+        Thu, 24 Feb 2022 11:56:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8DFB82928;
+        Thu, 24 Feb 2022 19:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE690C340F3;
+        Thu, 24 Feb 2022 19:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645732573;
+        bh=0HnlIL853B1xUMl8KCDADbVuNeDJ62TZ+d6tR2IxZ1k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GTT3ao6IIwNE2HdYz0tAok0Szt6NmyR+KTXpH7HnQtMKKtvq3M5Tc1Cqd4/em/k4X
+         cuNcIhbXq74yuJi9bOCYESKc9Yyk5txomn+4pH6cEPL1H3e82XB43v9VXe0YTW19+H
+         0mkd+o85pp8KL2IYVTltcSDFkCqrpWjla7I6Zfn/3XZwQ5Aw6i96rUNTSf52mIAN5b
+         M+BupFcNj6F0nnoIUTgsIKSvVcoC5i+VyG22+I4ZovjIqWuNK7lxwtSp3wLgJS4cVT
+         WdXiqVlzmY73PUQn6zF/yxy7v5h04KCkJOpHpdyxAO9zVo4c0qRiSLONeT4AOdkfM+
+         YyX9sEzoNYosA==
+Date:   Thu, 24 Feb 2022 13:56:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Jan Palus <jpalus@fastmail.com>, Marcel Menzel <mail@mcl.gg>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] PCI fixes for v5.17
+Message-ID: <20220224195611.GA289605@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220218070729.3256-3-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,22 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 08:07:28 +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> NVRAM doesn't have cells at hardcoded addresses. They are stored in
-> internal struct (custom & dynamic format). It's still important to
-> define relevant cells in DT so NVMEM consumers can reference them.
-> 
-> Update binding to allow including basic cells as NVMEM device subnodes.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Add children nodes description per Rob's request
-> V3: Document NVMEM cells as properties
-> ---
->  .../devicetree/bindings/nvmem/brcm,nvram.yaml | 25 +++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
-> 
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-5
+
+for you to fetch changes up to 3f1271b54edcc692da5a3663f2aa2a64781f9bc3:
+
+  PCI: Mark all AMD Navi10 and Navi14 GPU ATS as broken (2022-02-23 12:33:32 -0600)
+
+----------------------------------------------------------------
+PCI fixes:
+
+  - Fix a merge error that broke PCI device enumeration on mvebu platforms,
+    including Turris Omnia (Armada 385) (Pali Roh�r)
+
+  - Avoid using ATS on all AMD Navi10 and Navi14 GPUs because some VBIOSes
+    don't account for "harvested" (disabled) parts of the chip when
+    initializing caches (Alex Deucher)
+
+----------------------------------------------------------------
+Alex Deucher (1):
+      PCI: Mark all AMD Navi10 and Navi14 GPU ATS as broken
+
+Pali Roh�r (1):
+      PCI: mvebu: Fix device enumeration regression
+
+ drivers/pci/controller/pci-mvebu.c |  3 ++-
+ drivers/pci/quirks.c               | 14 +++++++++-----
+ 2 files changed, 11 insertions(+), 6 deletions(-)

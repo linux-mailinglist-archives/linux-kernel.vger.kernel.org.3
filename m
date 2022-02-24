@@ -2,158 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1644C23FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728AE4C2401
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbiBXGRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
+        id S231238AbiBXGVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiBXGRg (ORCPT
+        with ESMTP id S230303AbiBXGVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:17:36 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3A9673F7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645683426; x=1677219426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G2mdp6HxN1a+2naZZWsU9dYVOxgWYVpBp/V4/N2e1OM=;
-  b=YhRph+ioSUwe3Jjxj8POTO3twwXZphmxakL5QP1KDNNJYtPO+3QgKCIt
-   cD96poDyOvJg96KkSN+vc2SH1TdiBdyLyq1CUZbn6jgGs/1ycAIvWU37N
-   YJR1vqO4afdaXMwxRKwcgXDcWPIb7mJEymr6W2taKPhcPD1NwFgv+AH88
-   Itg+S47WbrlpVic7krMTIxTFm8Z8rI9UvzWXhB4ku7z64ujusWyMkNvFO
-   m93epqn3khoIGRyszaBTOI7Xc3pskIoEsTHlWQP5Y9JjNtleJsk3E09Ul
-   gwaIzwjyxYlYszyh5qKKQAmYWYuFVa8JEyzuV3PQnm+QrBqkHO6DRKlrl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="315386284"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="315386284"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:17:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="548598902"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 22:17:05 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN7R2-0002LO-G3; Thu, 24 Feb 2022 06:17:04 +0000
-Date:   Thu, 24 Feb 2022 14:16:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2145/2340]
- arch/mips/include/asm/mach-lantiq/lantiq.h:14:33: error: implicit
- declaration of function '__raw_readl'; did you mean '__raw_emt'?
-Message-ID: <202202241447.nXvL1YYU-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Thu, 24 Feb 2022 01:21:50 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E30269ABB;
+        Wed, 23 Feb 2022 22:21:20 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21O6CReR019977;
+        Thu, 24 Feb 2022 06:20:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2021-07-09;
+ bh=cBa3fX/3kqtFDlW1Ma4G8aMmpFPLROTasCGjla2YgMk=;
+ b=mbJZV13lwVKidQDo+wmy4LJ6acgGcXW1WpIJl8AMeXb/gEcAZVYJ4vrKzfKXFBKM8T5b
+ Gr/7vRlXM+RONbIuskzavZ7ZMYzDRwJPqhU8t5Og3SzmJPi5Mkq3yHKODmEpMJYXzqYm
+ 1A2bbcRnE+pcR9LBxXzWOhW7ARERmfGBxIZct0AdtybH3mtYwjV4FjuRan3OpJ+VwACQ
+ r8kkjfaBieZm3y32G9QnfawZ0xEd+bSgljQn9rfQYrL337r7/Rxz3RGogRnUFcilWNfZ
+ hQKfN0PyPAE9YzBgJjVSvSDNhwVbgRil0umF+paf3LEBOELUb8QkTljA8WP1jJ+ibwYn aQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ect7apdm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Feb 2022 06:20:48 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21O6GspE011366;
+        Thu, 24 Feb 2022 06:20:46 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by userp3020.oracle.com with ESMTP id 3eat0qcs7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Feb 2022 06:20:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ogMlkLa6nIAowCR3q9Au2nEyuSEotGrVyiVuM31dXzT+WM52ljMnF023TyP3eUMGOr9tqv8nlSjvxYjKekbufhGpCd0JZEycDkyJ2+VjWC+zME07W+WRucf6ga6wdrIjA9ljXKG2V140PHUI7n3KmPsic5tF7rKsL7q6voDCjZ7q0qPJi85XGA7zmH6cAlotkPInWjo+Mr0qqZ4wDwaGJCoFXoQ4ilqTRrv9DFRgeguxF6BnU2TAzwG2S696Bp0q45rtbjGskAPjeMHI1K0tTb3Ts2uncgB7k95mBAMcX20FD7lElpwi6MDixo3oapyCaTH7+RnQb0qloxaMza77oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PW1uceMj5blULPu73slwJYMfhWFFCrlFdBnEBmU7IuQ=;
+ b=OIwtApcyboKOlUsgK9C2352GmjrZvhg0DcW1aaEGsm6t4DXB+zqH3h1cTM6D1/mAmzCf2q6KvpgoBpdUKJWvv7MpjUGyJKnAgGJ7DMqWtEL9RsZe47yzuSFx0aBlMgNbzisU11eWjMYFdC1p5bNZAtijv5Fd4O8qgIMhTXfYwL0mLxXbQlpVpqnb1I+6FJ61RkxZuGxyfFAR/rtVfye46GVHl9V3XaVxtb2U7LrBG4n5u0dmfqUewRHleZlUXMhEwRdKfuHpMQ+COrg5f6OVghjPNiR5PzrSjWcxJylpBvB7//XTMSJdkICns/gCaNgVyUqWh611fN1O98gz6QpNHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PW1uceMj5blULPu73slwJYMfhWFFCrlFdBnEBmU7IuQ=;
+ b=TVXNh8DxNa+zsBhrTueXF1AqS7dSqMKRfyRYBw6UMgcIvQCukZIEjvTDKGbsaSbmvAoKfNOBGD2bUPa8BIZojsS9VSqyPuBqOSpdfghj9p08svLaTfgZlWWfRDIRCv3+rRakSik68YUml1ACIRPF/Zks3kkmpfJ37tiR5hADzoM=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR1001MB2173.namprd10.prod.outlook.com
+ (2603:10b6:301:2e::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.25; Thu, 24 Feb
+ 2022 06:20:44 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.4995.027; Thu, 24 Feb 2022
+ 06:20:44 +0000
+Date:   Thu, 24 Feb 2022 09:20:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [RFC PATCH 07/13] udp_tunnel: remove the usage of the list
+ iterator after the loop
+Message-ID: <20220224062022.GH3943@kadam>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-8-jakobkoschel@gmail.com>
+ <7ce2df48-b876-0c30-d003-32275c5a9f65@wanadoo.fr>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7ce2df48-b876-0c30-d003-32275c5a9f65@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0037.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::25)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca2a655a-8a60-464c-1a08-08d9f75dc98e
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2173:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB2173C3C247B820798AFEF9688E3D9@MWHPR1001MB2173.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a6BRFqIiT5M5/sRMBU8K1rQaRbd1SCtbr9bHA2GuzkoJJPJll2qdl9rOielJMVbv0GF4hq13EkMpj3VzvDYqVEJxzZQyOWbAZSBEwThTjAKlgcDaWAWYhPKE5HkCls025um88QCGR8f2V/dpydsaJIWv0T/9+PLALRbYWsA+r8tS7U3ZkuUvduYgFXfEbIyQJw5ro+PJ3QlP+kr3RYvhWzeinzJwvikzyIAabmVxDfEi/lUnXM1zvj78Erpxt1U+ufUa/vY5QemZsAYJht8FrmT7xKpcixxjmjrYS0H1spfJI6Kywso+zeLd+MXGlBt0opFPl5lzeQTpYfnrn0UakY5e3p452S9Sic5n46N81YqN7dam9gspN4s3D882OI5QsZnE08w8Au035agQSM/EJhqW/X9VtujOIDb8HAyfMJ/20JadASBaON8Ft8+lBNMVisvsTrZ84IWxhfdHYE2/bNG/W/7s5E8xGXD/kT+rtVHIm+hLnFxGSEu1hd03nhIKKdoLkMLgiR+Uh8O2H9ennxgUQQjc1524cc3FbxRqhWc67SLdNgZhmbHTMqFEp6cmUxIdUZeGJg2cTNMQ4qtcNQj17AXpUDJ6Z2Zk4OQB+r9dsnjqeNGT13ite/jpIWphjZ9YWBxlkg0N2BasdSZ73wQl236fd3ATJQg2NeepNlhVms5iOWQTaDuGEMRdrrS3xVF2SkOEO+vuSU5X58Zh3D8vlJc/1PCFGe8nO0PCb/7ZdqSyIvtSq/rXFpQKaS1LZQ7KdpWP5i++yKvQ7HPmYQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(44832011)(8936002)(6916009)(52116002)(33716001)(508600001)(6506007)(6486002)(86362001)(7416002)(5660300002)(2906002)(54906003)(966005)(83380400001)(66946007)(1076003)(66476007)(66556008)(8676002)(33656002)(38350700002)(186003)(316002)(26005)(9686003)(4326008)(6666004)(6512007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?x9m4VrDoKXiTd2AhkjXN5AQ4agfS5AXcvhhx+scSvbYhGEoyTRy/YnchcA?=
+ =?iso-8859-1?Q?nkHxH4gneV4pldMZoyGZbM5/vjtJ8JT0HbfEpdcBBN6zIfJYkSV1u+UaNt?=
+ =?iso-8859-1?Q?5UdvYFMM+O+Q55Q8T1B+qbC6Zw3tRfbIHQmP3EL8QwEg7IvdaNF1NBrcTy?=
+ =?iso-8859-1?Q?pbmIsp88JGM0c0sAGD1DJ8Dyar4e3Z2GobeUMv2YNWbeHVKHHPB1Y4s8UU?=
+ =?iso-8859-1?Q?XJ68CgBgG1zBciDUOoyn3AuBwffZUV0t6AXcd0jmtnajJ0JjnQ/8GTzEXm?=
+ =?iso-8859-1?Q?2qJe+s0uSKylxVxDF8K2qdwe7NKGBjFttmyVxDATFrSLtSvqn6SoOnVKCO?=
+ =?iso-8859-1?Q?WewZzcghCjEtRIoKrLyGSRdI5XOaaKeHhdWw+uabrb5yBzZUFMGY6zApCE?=
+ =?iso-8859-1?Q?Z6uQaqvWJU5BiSr7Ief81GfEdsEBAJzyex1SMXN4lQcqzeXIE6KFDhUjuQ?=
+ =?iso-8859-1?Q?WLksBP9aeMOnflBCSmXFpSDcLLcVsqZoxKgWLw2ACauyvkGOd5W7asWs2L?=
+ =?iso-8859-1?Q?vWc5hVcLCCaqiZY6lCGGIxeH59PEfcT+75ZJxzubrMbJWWCBMKdSWSBCeT?=
+ =?iso-8859-1?Q?Yv13F4m3zrga6GPfPxu8O1RodkaXkPuX9aMggeDdTAHP40580gPGBZJ82k?=
+ =?iso-8859-1?Q?TK6/Xp2gLFfSyydOvMffspj5mHQFKq6ETDGTPGKLwAlJGuLI8LtFmM4Wnl?=
+ =?iso-8859-1?Q?KrZcphIJSrnyEDoZUopp7h2Qnuwo/7Ra9lzQ20g3sUi4+s9fjCMtrRXSaf?=
+ =?iso-8859-1?Q?wB3QPWdWnBr4AiebuZpe7cBL3D+i3ksGmXvjoe8lYYRD7Pqo6yht0C76X6?=
+ =?iso-8859-1?Q?XKHIRrhLCO+Q0T2lyJBzQcUHyTt5bQ+PIbBLTs8W8xfvm4KCegoBQIeAkA?=
+ =?iso-8859-1?Q?oKqg4nYXh9vMHI37w5hOpx/gM5f2PrlXSjLozVP5FOElSEPPQUNjBB0n+B?=
+ =?iso-8859-1?Q?saaHRDnVVewrIpan8yepnfUAriNH/AGqstIET1/5JJ5qvCBiOIFT06ngCz?=
+ =?iso-8859-1?Q?kmV4NwcCGh4lWoRTmdFyhfDQ8znd9MRNmrhIHtn2UaDkvRQAEYfjVSaMXm?=
+ =?iso-8859-1?Q?LN8KT+C1Go3jJxPOmB0FEc7OJjVq9qDdXBHQF8HOZwBGDZWNaLwrx6D2vH?=
+ =?iso-8859-1?Q?NW00LaLLcM53UJWNBUG8mBW1vB1g1APawd+R4PRzkbabAL5BKd+9VRd9E5?=
+ =?iso-8859-1?Q?2S5VwdcyQYgYow3tjMT5oGHr1DnvoN7SsiSGPg1b9H8PA3eVw3Pn0WIX0P?=
+ =?iso-8859-1?Q?0yElvmxLZhGD+KmW5eF34lCK63De3U10Dhgd7u3CtXv1NSVV68nHp0WzvR?=
+ =?iso-8859-1?Q?qpgGu0rFnoqE5jgqlajO/nvhjZwOqsq1umLWvZIQiM4wYVJk5L6klfaG4+?=
+ =?iso-8859-1?Q?KHFT3KTpxSqQSF2oxix2o6Ht5mIxIhX+l3q6Te5SWcnuJzYQ2JtSPNVXKj?=
+ =?iso-8859-1?Q?XESeQtP6SMVy6awC9WeiUUw95NQ8OMBQEaTVrH62jN9z+O3Ma+7MdJRhWu?=
+ =?iso-8859-1?Q?wnig9i+XJu0jAZUTmMjGGnyTC+Wn4IlaNz8LMC+3Ss+qyuK9kcbVVx9TcJ?=
+ =?iso-8859-1?Q?wBVgwqdohdQLdXN7jSzA2QTbZjvLkJzJo89EqRCHsEuAURkruIoAgm+DNc?=
+ =?iso-8859-1?Q?uPcO7XLuiaA9+VFGPBu5fN637JpmMkKHncpInPwSIPnW8K9YzoIf1pLAeM?=
+ =?iso-8859-1?Q?nFM9Sbc56cuKPKMWHc4mEixLM3JZX302eO/oDlgVM4ghqS++nM2ALjc3+v?=
+ =?iso-8859-1?Q?uyow=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca2a655a-8a60-464c-1a08-08d9f75dc98e
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 06:20:44.0969
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zsfopY0IvI8BPRba8TF7v//AGElJEGlR/Y5nWfkah1+vkTEUKTfd1hm4gYiM4Ye4iKyUwTwuSQSuqAIlN0qFAAMlMuD1b0u+igF9+VRfyXM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2173
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10267 signatures=681306
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202240036
+X-Proofpoint-GUID: yyY8nMsa40mdkhm6YUFrA1fnH3bnkZ1M
+X-Proofpoint-ORIG-GUID: yyY8nMsa40mdkhm6YUFrA1fnH3bnkZ1M
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: fffdadeabd0c2d37ab9e2d170c1676dad47ffe6c [2145/2340] headers/deps: node: Optimize <linux/node.h> dependencies
-config: mips-xway_defconfig (https://download.01.org/0day-ci/archive/20220224/202202241447.nXvL1YYU-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=fffdadeabd0c2d37ab9e2d170c1676dad47ffe6c
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout fffdadeabd0c2d37ab9e2d170c1676dad47ffe6c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Feb 23, 2022 at 09:00:36PM +0100, Christophe JAILLET wrote:
+> Le 17/02/2022 à 19:48, Jakob Koschel a écrit :
+> > The usage of node->dev after the loop body is a legitimate type
+> > confusion if the break was not hit. It will compare an undefined
+> > memory location with dev that could potentially be equal. The value
+> > of node->dev in this case could either be a random struct member of the
+> > head element or an out-of-bounds value.
+> > 
+> > Therefore it is more safe to use the found variable. With the
+> > introduction of speculative safe list iterator this check could be
+> > replaced with if (!node).
+> > 
+> > Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> > ---
+> >   net/ipv4/udp_tunnel_nic.c | 7 +++++--
+> >   1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/net/ipv4/udp_tunnel_nic.c b/net/ipv4/udp_tunnel_nic.c
+> > index b91003538d87..c47f9fb36d29 100644
+> > --- a/net/ipv4/udp_tunnel_nic.c
+> > +++ b/net/ipv4/udp_tunnel_nic.c
+> > @@ -842,11 +842,14 @@ udp_tunnel_nic_unregister(struct net_device *dev, struct udp_tunnel_nic *utn)
+> >   	 */
+> >   	if (info->shared) {
+> >   		struct udp_tunnel_nic_shared_node *node, *first;
+> > +		bool found = false;
+> >   		list_for_each_entry(node, &info->shared->devices, list)
+> > -			if (node->dev == dev)
+> > +			if (node->dev == dev) {
+> > +				found = true;
+> >   				break;
+> > -		if (node->dev != dev)
+> > +			}
+> > +		if (!found)
+> >   			return;
+> >   		list_del(&node->list);
+> 
+> Hi,
+> 
+> just in case, see Dan Carpeter's patch for the same issue with another fix
+> at:
+> https://lore.kernel.org/kernel-janitors/20220222134251.GA2271@kili/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yeah.  My patch was already applied.
 
-All errors (new ones prefixed by >>):
+I've had an unpublished Smatch check for this for a while but I've been
+re-writing it recently to make it more generic so that it worked for
+all the different list_for_each type macros.  I'm going to publish it
+soon.
 
-   In file included from include/linux/irq.h:20,
-                    from arch/mips/include/asm/mach-lantiq/lantiq.h:9,
-                    from arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h:12,
-                    from arch/mips/lantiq/early_printk.c:8:
-   arch/mips/include/asm/irq.h:23:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'init_IRQ'
-      23 | extern void __init init_IRQ(void);
-         |                    ^~~~~~~~
-   In file included from arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h:12,
-                    from arch/mips/lantiq/early_printk.c:8:
-   arch/mips/lantiq/early_printk.c: In function 'prom_putchar':
->> arch/mips/include/asm/mach-lantiq/lantiq.h:14:33: error: implicit declaration of function '__raw_readl'; did you mean '__raw_emt'? [-Werror=implicit-function-declaration]
-      14 | #define ltq_r32(reg)            __raw_readl(reg)
-         |                                 ^~~~~~~~~~~
-   arch/mips/lantiq/early_printk.c:26:24: note: in expansion of macro 'ltq_r32'
-      26 |         do { } while ((ltq_r32(LTQ_ASC_FSTAT) & TXMASK) >> TXOFFSET);
-         |                        ^~~~~~~
->> arch/mips/include/asm/mach-lantiq/lantiq.h:19:33: error: implicit declaration of function '__raw_writeb' [-Werror=implicit-function-declaration]
-      19 | #define ltq_w8(val, reg)        __raw_writeb(val, reg)
-         |                                 ^~~~~~~~~~~~
-   arch/mips/lantiq/early_printk.c:28:17: note: in expansion of macro 'ltq_w8'
-      28 |                 ltq_w8('\r', LTQ_ASC_TBUF);
-         |                 ^~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h:12,
-                    from arch/mips/lantiq/xway/dcdc.c:12:
-   arch/mips/lantiq/xway/dcdc.c: In function 'dcdc_probe':
->> arch/mips/include/asm/mach-lantiq/lantiq.h:18:33: error: implicit declaration of function '__raw_readb'; did you mean '__raw_emt'? [-Werror=implicit-function-declaration]
-      18 | #define ltq_r8(reg)             __raw_readb(reg)
-         |                                 ^~~~~~~~~~~
-   arch/mips/lantiq/xway/dcdc.c:20:25: note: in expansion of macro 'ltq_r8'
-      20 | #define dcdc_r8(x)      ltq_r8(dcdc_membase + (x))
-         |                         ^~~~~~
-   include/linux/dev_printk.h:114:37: note: in expansion of macro 'dcdc_r8'
-     114 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   include/linux/dev_printk.h:154:9: note: in expansion of macro 'dev_printk_index_wrap'
-     154 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/lantiq/xway/dcdc.c:33:9: note: in expansion of macro 'dev_info'
-      33 |         dev_info(&pdev->dev, "Core Voltage : %d mV\n",
-         |         ^~~~~~~~
-   arch/mips/lantiq/xway/dcdc.c: At top level:
-   arch/mips/lantiq/xway/dcdc.c:52:12: warning: no previous prototype for 'dcdc_init' [-Wmissing-prototypes]
-      52 | int __init dcdc_init(void)
-         |            ^~~~~~~~~
-   cc1: some warnings being treated as errors
+Of course, all the real bugs are fixed so the remaining warnings are
+false positives.
 
-
-vim +14 arch/mips/include/asm/mach-lantiq/lantiq.h
-
-171bb2f19ed6f3 John Crispin 2011-03-30   8  
-171bb2f19ed6f3 John Crispin 2011-03-30  @9  #include <linux/irq.h>
-287e3f3f4e68ca John Crispin 2012-04-17  10  #include <linux/device.h>
-287e3f3f4e68ca John Crispin 2012-04-17  11  #include <linux/clk.h>
-171bb2f19ed6f3 John Crispin 2011-03-30  12  
-171bb2f19ed6f3 John Crispin 2011-03-30  13  /* generic reg access functions */
-171bb2f19ed6f3 John Crispin 2011-03-30 @14  #define ltq_r32(reg)		__raw_readl(reg)
-171bb2f19ed6f3 John Crispin 2011-03-30  15  #define ltq_w32(val, reg)	__raw_writel(val, reg)
-171bb2f19ed6f3 John Crispin 2011-03-30  16  #define ltq_w32_mask(clear, set, reg)	\
-171bb2f19ed6f3 John Crispin 2011-03-30  17  	ltq_w32((ltq_r32(reg) & ~(clear)) | (set), reg)
-171bb2f19ed6f3 John Crispin 2011-03-30 @18  #define ltq_r8(reg)		__raw_readb(reg)
-171bb2f19ed6f3 John Crispin 2011-03-30 @19  #define ltq_w8(val, reg)	__raw_writeb(val, reg)
-171bb2f19ed6f3 John Crispin 2011-03-30  20  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 171bb2f19ed6f3627f4f783f658f2f475b2fbd50 MIPS: Lantiq: Add initial support for Lantiq SoCs
-
-:::::: TO: John Crispin <blogic@openwrt.org>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+regards,
+dan carpenter

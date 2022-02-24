@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04FB4C2C32
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52244C2C37
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiBXMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:54:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S234496AbiBXMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbiBXMy1 (ORCPT
+        with ESMTP id S229986AbiBXMzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:54:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B6D20E796;
-        Thu, 24 Feb 2022 04:53:56 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3504F1F44A;
-        Thu, 24 Feb 2022 12:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645707235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2G7Q4/SbY0/u6FJFyQ5u7ok3xEUfxBWHs/wk8cUfVjo=;
-        b=UPAiUuz+WH8h7pPxSNNG6Dpza+Qb+DM5ZsIxaWxc1kG25pDybpqYRQX9kVy96n/KQltFxM
-        vCZj0mVEeW3p5oSQ+Rdkp5XuV/rGPiV4X0Q4CY3EpPGaEBOzTiQGkDt8cbMTH188U9lC2M
-        4/y8+BgA/LqcXC5UeGyUaGQEyyqilIo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645707235;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2G7Q4/SbY0/u6FJFyQ5u7ok3xEUfxBWHs/wk8cUfVjo=;
-        b=PIqZ3B1fxD+QIGOx68q/WUrx7rRxAgTPIf32nkK4Qbync3bJbDpyVAY9lHUo4LrfE3UD9a
-        22Slgo4cEHRrhsBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5311B13AD9;
-        Thu, 24 Feb 2022 12:53:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id d5/wEOJ/F2IoEgAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Thu, 24 Feb 2022 12:53:54 +0000
-Message-ID: <f62148d7-6f7a-3557-e3ca-3a261b61ac9d@suse.de>
-Date:   Thu, 24 Feb 2022 15:53:33 +0300
+        Thu, 24 Feb 2022 07:55:15 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC594214F89;
+        Thu, 24 Feb 2022 04:54:44 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z22so2719966edd.1;
+        Thu, 24 Feb 2022 04:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=os8ySsUHGCfn4fSlhWcW0LoCtu+dFeeC1o4LuexdWlg=;
+        b=hm0rq7ksIh2akap62WKEH05uGR9TSmZ7MqlrmAX5a72L7/3fsPEduRbJXSubJlErtb
+         rIIm3V2IoJacRZsoBc+ZwSNw5CqmnWpp3eUeuthEjiY/sSrhdPkl4W7+vNFmTZxtv8gx
+         vw/nLDi6WAlbR3AcgO9deqeahb2xmHpmQSflae5bjVICUtz5ifAehGhOtPEu2fhPds/S
+         TmTtx1GLljufg4N6ivv2XqJcaWqR31pLlszavn9Tk6/HrzABAI9jD1PbVLt7wqL+9/Mu
+         Ku1aau5xmiYZEXskSUHMhq0CQhrCK+J9KqFIKTmBZOvIoh7k0/2EQeaFyoV5xoYjrzCe
+         oN8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=os8ySsUHGCfn4fSlhWcW0LoCtu+dFeeC1o4LuexdWlg=;
+        b=l8SgCCs4nVQ7yYOw6mza+yX+84TVu9i3D+sEQPzKf730dNtBcmgkGVmon4GlC+SjIH
+         UtksLVBX4Gdq542s3u72PyrNgkTT2T4uD66rRZlB989cSDnQz66xi4iZ3/PUJH2f1rnF
+         gYl227Jo4j+ArDJuA6uL4Di8oAqRKYusvIAsDgws/y0n4hH1R6EbPNn182Cn645/OUhU
+         hOXjlDjd84mjsEpZiATPrgt/IxEUgvKB58VueMH7pYTv9sk1Muztl1DxE3ISN0HwgtOd
+         TVMeDqBNhaBC1APHetdWK0AMt97LBCAVwe2c1QYIdUwRt5kKLba2rYqk+g3TLgAOaGrv
+         JTBQ==
+X-Gm-Message-State: AOAM530aXLlRyoxjbb+Kz9+tu6zfnG0SarsQ7dQ/qrrNYlkEYXoyfOqX
+        0NSIBDWOjmATFHmASbU9bvg=
+X-Google-Smtp-Source: ABdhPJzQfeK3AEEbh7/kguzo/xuQtlKBLxOyQQ2N+KhzxVRgsqzAxPz1XnXA04R6/H0fgLR2EyU6Fw==
+X-Received: by 2002:a05:6402:438e:b0:410:a8bd:fee0 with SMTP id o14-20020a056402438e00b00410a8bdfee0mr2176280edc.426.1645707283299;
+        Thu, 24 Feb 2022 04:54:43 -0800 (PST)
+Received: from orome (p200300e41f0a6900000000000000043a.dip0.t-ipconnect.de. [2003:e4:1f0a:6900::43a])
+        by smtp.gmail.com with ESMTPSA id hp7sm1342998ejc.144.2022.02.24.04.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 04:54:42 -0800 (PST)
+Date:   Thu, 24 Feb 2022 13:54:37 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: atmel: remove redundant initialization of variable
+ timeout
+Message-ID: <YheADZELg0XyEk9j@orome>
+References: <20211210002250.639251-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] net: stmmac: only enable DMA interrupts when ready
-Content-Language: ru
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     kernel@axis.com, Lars Persson <larper@axis.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220224113829.1092859-1-vincent.whitchurch@axis.com>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20220224113829.1092859-1-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LbvGMTIkSSxx+Jrr"
+Content-Disposition: inline
+In-Reply-To: <20211210002250.639251-1-colin.i.king@gmail.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,103 +80,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--LbvGMTIkSSxx+Jrr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-2/24/22 14:38, Vincent Whitchurch пишет:
-> In this driver's ->ndo_open() callback, it enables DMA interrupts,
-> starts the DMA channels, then requests interrupts with request_irq(),
-> and then finally enables napi.
-> 
-> If RX DMA interrupts are received before napi is enabled, no processing
-> is done because napi_schedule_prep() will return false.  If the network
-> has a lot of broadcast/multicast traffic, then the RX ring could fill up
-> completely before napi is enabled.  When this happens, no further RX
-> interrupts will be delivered, and the driver will fail to receive any
-> packets.
-> 
-> Fix this by only enabling DMA interrupts after all other initialization
-> is complete.
-> 
-> Fixes: 523f11b5d4fd72efb ("net: stmmac: move hardware setup for stmmac_open to new function")
-> Reported-by: Lars Persson <larper@axis.com>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+On Fri, Dec 10, 2021 at 12:22:50AM +0000, Colin Ian King wrote:
+> The variable timeout is being initialized with a value that is never
+> read, it is being re-assigned the same value later on. Remove the
+> redundant initialization and keep the latter assignment because it's
+> closer to the use of the variable.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->   .../net/ethernet/stmicro/stmmac/stmmac_main.c | 28 +++++++++++++++++--
->   1 file changed, 26 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 6708ca2aa4f7..43978558d6c0 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -2260,6 +2260,23 @@ static void stmmac_stop_tx_dma(struct stmmac_priv *priv, u32 chan)
->   	stmmac_stop_tx(priv, priv->ioaddr, chan);
->   }
->   
-> +static void stmmac_enable_all_dma_irq(struct stmmac_priv *priv)
-> +{
-> +	u32 rx_channels_count = priv->plat->rx_queues_to_use;
-> +	u32 tx_channels_count = priv->plat->tx_queues_to_use;
-> +	u32 dma_csr_ch = max(rx_channels_count, tx_channels_count);
-> +	u32 chan;
-> +
-> +	for (chan = 0; chan < dma_csr_ch; chan++) {
-> +		struct stmmac_channel *ch = &priv->channel[chan];
-> +		unsigned long flags;
-> +
-> +		spin_lock_irqsave(&ch->lock, flags);
-> +		stmmac_enable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-> +		spin_unlock_irqrestore(&ch->lock, flags);
-> +	}
-> +}
-> +
->   /**
->    * stmmac_start_all_dma - start all RX and TX DMA channels
->    * @priv: driver private structure
-> @@ -2902,8 +2919,10 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
->   		stmmac_axi(priv, priv->ioaddr, priv->plat->axi);
->   
->   	/* DMA CSR Channel configuration */
-> -	for (chan = 0; chan < dma_csr_ch; chan++)
-> +	for (chan = 0; chan < dma_csr_ch; chan++) {
->   		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-Did you miss to take a channel lock?
-> +		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-> +	}
->   
->   	/* DMA RX Channel Configuration */
->   	for (chan = 0; chan < rx_channels_count; chan++) {
-> @@ -3759,6 +3778,7 @@ static int stmmac_open(struct net_device *dev)
->   
->   	stmmac_enable_all_queues(priv);
->   	netif_tx_start_all_queues(priv->dev);
-> +	stmmac_enable_all_dma_irq(priv);
->   
->   	return 0;
->   
-> @@ -6508,8 +6528,10 @@ int stmmac_xdp_open(struct net_device *dev)
->   	}
->   
->   	/* DMA CSR Channel configuration */
-> -	for (chan = 0; chan < dma_csr_ch; chan++)
-> +	for (chan = 0; chan < dma_csr_ch; chan++) {
->   		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-> +		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-> +	}
->   
->   	/* Adjust Split header */
->   	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
-> @@ -6570,6 +6592,7 @@ int stmmac_xdp_open(struct net_device *dev)
->   	stmmac_enable_all_queues(priv);
->   	netif_carrier_on(dev);
->   	netif_tx_start_all_queues(dev);
-> +	stmmac_enable_all_dma_irq(priv);
->   
->   	return 0;
->   
-> @@ -7447,6 +7470,7 @@ int stmmac_resume(struct device *dev)
->   	stmmac_restore_hw_vlan_rx_fltr(priv, ndev, priv->hw);
->   
->   	stmmac_enable_all_queues(priv);
-> +	stmmac_enable_all_dma_irq(priv);
->   
->   	mutex_unlock(&priv->lock);
->   	rtnl_unlock();
+>  drivers/pwm/pwm-atmel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Applied, thanks.
+
+Thierry
+
+--LbvGMTIkSSxx+Jrr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXgAoACgkQ3SOs138+
+s6GEChAApw2d+UIzuiHhq4rQmZHAlZMsL5OyuRWo14Kq7CZcPcBQuTf8PYVmtYak
+ei6u0+ug6g3LOhG+R7rYvS/x0eV0sO4uydIWlhTJhGEtdxbOuSDWKQxo1odhrvcW
+asIHs5gC1kpNzlHUMiIlHjzQ8+d7auwSRS3qO7us8BgtaAV+cKY6XvfSMm6A+/6k
+0VU+I0SFPVGy3jncmvip2Oa1kkyG6oWt+sY8a29q0C2DZ69jWLecBgibPrNOwzf2
+8T7EzBew6k/qguvpKgu7WitUENSn0WWJ38UW8IHcsJtC64DZv77hc62QZ4ZAgQu1
+OQ/Gz5aMXmA9HLQ2rJy7I33DbP81a+OePo2evwFH9XxuBJ4ANLT48vMLb31UHQLu
+dGclitZls+dE6YzdQW/Wy80RCCfNTBIVNYi42LgewkZiUUfdPYBPon1VF39PDZ+Q
+RhyiaM64czzaM276bqpHOmI6HKOXpFlDte7/LXbNdWWvCSy89/T9BHNfJpVIBzVw
+iSHzNCYXntFGu5lY4MnF1mhOwqPSJk4GBgCdyQoQTCIwq2Jp35Tm2rIwrZNbh9vp
+qDc11NoTsAOpOmMyZfdArlICNkUWDp9pJpV2iZiYxWiT4XimEHknSuL2cDNmmI1N
+Rx1f69kehNDWK2fJJe1SwbfP6E/fn5YT5lflhtsJ6wbhyjjyzXM=
+=pYZZ
+-----END PGP SIGNATURE-----
+
+--LbvGMTIkSSxx+Jrr--

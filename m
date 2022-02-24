@@ -2,105 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E3B4C2843
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ED14C283C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiBXJit convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Feb 2022 04:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S232944AbiBXJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiBXJik (ORCPT
+        with ESMTP id S232933AbiBXJjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:38:40 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F527AA11;
-        Thu, 24 Feb 2022 01:38:11 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21O35n7R011259;
-        Thu, 24 Feb 2022 04:38:09 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3edcksy2dm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Feb 2022 04:38:09 -0500
-Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 21O9CvqS013795;
-        Thu, 24 Feb 2022 04:38:09 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3edcksy2dh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Feb 2022 04:38:09 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 21O9c7g1043139
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Feb 2022 04:38:08 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 24 Feb
- 2022 04:38:06 -0500
-Received: from ASHBMBX9.ad.analog.com ([fe80::d8b1:bf2d:e832:4316]) by
- ASHBMBX9.ad.analog.com ([fe80::d8b1:bf2d:e832:4316%20]) with mapi id
- 15.02.0986.014; Thu, 24 Feb 2022 04:38:06 -0500
-From:   "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-CC:     "jic23@kernel.org" <jic23@kernel.org>
-Subject: RE: [PATCH -next] iio:accel:adxl367: fix missing unlock on error in
- adxl367_buffer_predisable()
-Thread-Topic: [PATCH -next] iio:accel:adxl367: fix missing unlock on error in
- adxl367_buffer_predisable()
-Thread-Index: AQHYKSE9sK8Q9sHL5kOKi62DBdSAj6yicf9A
-Date:   Thu, 24 Feb 2022 09:38:06 +0000
-Message-ID: <c2a836f26c3246dc93c8ccadb85c5a02@analog.com>
-References: <20220224020302.2177607-1-yangyingliang@huawei.com>
-In-Reply-To: <20220224020302.2177607-1-yangyingliang@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY3RhbmlzbGFc?=
- =?us-ascii?Q?YXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRi?=
- =?us-ascii?Q?YTI5ZTM1Ylxtc2dzXG1zZy03NzlmMThmMC05NTU1LTExZWMtYjZkZi00MTU2?=
- =?us-ascii?Q?NDUwMDAwMzBcYW1lLXRlc3RcNzc5ZjE4ZjItOTU1NS0xMWVjLWI2ZGYtNDE1?=
- =?us-ascii?Q?NjQ1MDAwMDMwYm9keS50eHQiIHN6PSIxNDU5IiB0PSIxMzI5MDE2OTA4NjM0?=
- =?us-ascii?Q?Mjc0MDMiIGg9Im1nS0FneHh5ZjlMNThHV202ZGVyUjQ0SXhyVT0iIGlkPSIi?=
- =?us-ascii?Q?IGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUVvQ0FB?=
- =?us-ascii?Q?QkxuL1k1WWluWUFmZnhIYkZybEU0aTkvRWRzV3VVVGlJREFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFIQUFBQURhQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFFQUFRQUJBQUFBVklFdm9RQUFBQUFBQUFBQUFBQUFBSjRBQUFCaEFHUUFh?=
- =?us-ascii?Q?UUJmQUhNQVpRQmpBSFVBY2dCbEFGOEFjQUJ5QUc4QWFnQmxBR01BZEFCekFG?=
- =?us-ascii?Q?OEFaZ0JoQUd3QWN3QmxBRjhBWmdCdkFITUFhUUIwQUdrQWRnQmxBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBWkFCcEFGOEFjd0JsQUdNQWRR?=
- =?us-ascii?Q?QnlBR1VBWHdCd0FISUFid0JxQUdVQVl3QjBBSE1BWHdCMEFHa0FaUUJ5QURF?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
- =?us-ascii?Q?QUFBQUNlQUFBQVlRQmtBR2tBWHdCekFHVUFZd0IxQUhJQVpRQmZBSEFBY2dC?=
- =?us-ascii?Q?dkFHb0FaUUJqQUhRQWN3QmZBSFFBYVFCbEFISUFNZ0FBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21l?=
- =?us-ascii?Q?dGE+?=
-x-dg-rorf: true
-x-originating-ip: [10.32.224.42]
-x-adiruleop-newscl: Rule Triggered
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 24 Feb 2022 04:39:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6827AFEB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:38:31 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nNAZw-0007AX-SJ; Thu, 24 Feb 2022 10:38:28 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nNAZv-0005M2-72; Thu, 24 Feb 2022 10:38:27 +0100
+Date:   Thu, 24 Feb 2022 10:38:27 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v2 1/1] net: dsa: microchip: ksz9477: implement
+ MTU configuration
+Message-ID: <20220224093827.GC4594@pengutronix.de>
+References: <20220223084055.2719969-1-o.rempel@pengutronix.de>
+ <20220223233833.mjknw5ko7hpxj3go@skbuf>
+ <20220224045936.GB4594@pengutronix.de>
+ <20220224093329.hssghouq7hmgxvwb@skbuf>
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: AWJ4c4yGNyyo7rhHwD7RZmDa1bFiGR_w
-X-Proofpoint-GUID: Jb0lTbiulbDrMtfrnrYsDCu1NqT_YjG5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-24_01,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 impostorscore=0 suspectscore=0 clxscore=1011
- malwarescore=0 bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202240057
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220224093329.hssghouq7hmgxvwb@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:35:47 up 75 days, 18:21, 87 users,  load average: 0.27, 0.23,
+ 0.26
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,44 +67,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+On Thu, Feb 24, 2022 at 11:33:29AM +0200, Vladimir Oltean wrote:
+> On Thu, Feb 24, 2022 at 05:59:36AM +0100, Oleksij Rempel wrote:
+> > > Are you sure the unit of measurement is ok? My KSZ9477 documentation
+> > > says this about register 0x0308:
+> > > 
+> > > Maximum Frame Length (MTU)
+> > > Specifies the maximum transmission unit (MTU), which is the maximum
+> > > frame payload size. Frames which exceed this maximum are truncated. This
+> > > value can be set as high as 9000 (= 0x2328) if jumbo frame support is
+> > > required.
+> > > 
+> > > "frame payload" to me means what MTU should mean. And ETH_HLEN +
+> > > VLAN_HLEN + ETH_FCS_LEN isn't part of that meaning.
+> > 
+> > if I set this value to anything less then 1522, it breaks the NFS boot. Since
+> > my NFS server is configured with MTU 1500, i tried to guess how
+> > frame size is calculated on this chip.
+> 
+> Sad that Microchip engineers can't decide on whether the MTU register
+> holds the "Maximum Frame Length" or the "maximum frame payload size".
+> They said both to have themselves covered, you understand what you will,
+> of course both are not right :)
 
-> -----Original Message-----
-> From: Yang Yingliang <yangyingliang@huawei.com>
-> Sent: Thursday, February 24, 2022 4:03 AM
-> To: linux-kernel@vger.kernel.org; linux-iio@vger.kernel.org
-> Cc: jic23@kernel.org; Tanislav, Cosmin <Cosmin.Tanislav@analog.com>
-> Subject: [PATCH -next] iio:accel:adxl367: fix missing unlock on error in
-> adxl367_buffer_predisable()
-> 
-> [External]
-> 
-> Add the missing unlock before return from function
-> adxl367_buffer_predisable()
-> in the error handling case.
-> 
-> Fixes: cbab791c5e2a ("iio: accel: add ADXL367 driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/iio/accel/adxl367.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-> index b452d74b1d4d..bdc95409abed 100644
-> --- a/drivers/iio/accel/adxl367.c
-> +++ b/drivers/iio/accel/adxl367.c
-> @@ -1359,7 +1359,7 @@ static int adxl367_buffer_predisable(struct iio_dev
-> *indio_dev)
-> 
->  	ret = adxl367_set_measure_en(st, true);
->  	if (ret)
-> -		return ret;
-> +		goto out;
-> 
->  	ret = adxl367_set_temp_adc_mask_en(st, indio_dev-
-> >active_scan_mask,
->  					   false);
-> --
-> 2.25.1
+¯\_(ツ)_/¯
 
+> > > > +	/* Now we can configure default MTU value */
+> > > > +	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
+> > > > +				 VLAN_ETH_FRAME_LEN + ETH_FCS_LEN);
+> > > 
+> > > Why do you need this? Doesn't DSA call dsa_slave_create() ->
+> > > dsa_slave_change_mtu(ETH_DATA_LEN) on probe?
+> > 
+> > This was my initial assumption as well, but cadence macb driver provides
+> > buggy max MTU == -18. I hardcoded bigger MTU for now[1], but was not able to
+> > find proper way to fix it. To avoid this kinds of regressions I decided
+> > to keep some sane default configuration.
+> > 
+> > [1] - my workaround.
+> > commit 5f8385e9641a383478a65f96ccee8fd992201f68
+> > Author: Oleksij Rempel <linux@rempel-privat.de>
+> > Date:   Mon Feb 14 14:41:06 2022 +0100
+> > 
+> >     WIP: net: macb: fix max mtu size
+> >     
+> >     The gem_readl(bp, JML) will return 0, so we get max_mtu size of -18,
+> >     this is breaking MTU configuration for DSA
+> >     
+> >     Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > 
+> > diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+> > index a363da928e8b..454d811991bb 100644
+> > --- a/drivers/net/ethernet/cadence/macb_main.c
+> > +++ b/drivers/net/ethernet/cadence/macb_main.c
+> > @@ -4727,7 +4727,7 @@ static int macb_probe(struct platform_device *pdev)
+> >  	/* MTU range: 68 - 1500 or 10240 */
+> >  	dev->min_mtu = GEM_MTU_MIN_SIZE;
+> >  	if (bp->caps & MACB_CAPS_JUMBO)
+> > -		dev->max_mtu = gem_readl(bp, JML) - ETH_HLEN - ETH_FCS_LEN;
+> > +		dev->max_mtu = 10240 - ETH_HLEN - ETH_FCS_LEN;
+> >  	else
+> >  		dev->max_mtu = ETH_DATA_LEN;
+> 
+> Yes, but the macb driver can be a DSA master for any switch, not just
+> for ksz9477. Better to fix this differently.
+
+Yes, it should be fixed. I just need some time to understand the proper
+way to do so. For now, let's proceed with the ksz patch. Should I send
+new version with some changes?
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

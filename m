@@ -2,271 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FA64C3977
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2A94C397B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbiBXXCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
+        id S231690AbiBXXDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBXXCP (ORCPT
+        with ESMTP id S233493AbiBXXDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:02:15 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DB24132E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:01:43 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id c6so4941201edk.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=X3EtjfKbehA9fHwRWa8Y/OMrArkCeB4aGDlGlg7yqZE=;
-        b=EGGqn11IUoyPVh7ZX1J8KqIGXWqgP7ARc8OdnJp+yNG7aExkjOIfpv60wE5TdCK6J4
-         2w4kzsZ3/Us3jfzoPonBoqnWqXO241j7d5Tz4Ys2fa59Ri9j1SyLf6upmuIoXmlAcZhI
-         ZQdEfS3Yk9sJWED8XDL5i3J8JZjo6nS9A6mWLLPc/bvaF7JIk7fxjV2eY++vKrc8KtWH
-         pMhnRVnObTFaC2kCu6T2Zwul7y54cTcbbQRyhd9XMmzKtVApM3mhnZtiKv+yvjo1a6OL
-         lPUbVfB95VXyXmBEEK6enG4rh+/OTZ3E8oGWIrX06c5SSo/KpHZCUASLyxQodnprymMZ
-         6EPA==
+        Thu, 24 Feb 2022 18:03:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D79141986E1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645743754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HnOBb78GLVNNv6PC7YyfKNTBlpalqvUKFNmaAgPGZ4w=;
+        b=V5LQystGpz7JopFUDSH26nk0J9qskdP+gh7FB8xAkgpz+21sCop5JycN7HvbAL6dpdc7gz
+        jKdUQOZkPaeiCBlCqcWpYOpR7Fbj30m/X2g1e2DkrRNmh2gBd1jGUTKzmX719br+IuCWmE
+        9aNSJzuen6q1TR4jp5WgEFbNo433BT4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-O400PZ9vP9yifiJL9qY6kQ-1; Thu, 24 Feb 2022 18:02:33 -0500
+X-MC-Unique: O400PZ9vP9yifiJL9qY6kQ-1
+Received: by mail-qt1-f197.google.com with SMTP id u28-20020a05622a199c00b002dd4f5801fbso818093qtc.14
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:02:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=X3EtjfKbehA9fHwRWa8Y/OMrArkCeB4aGDlGlg7yqZE=;
-        b=Ni0JW/SWZX2Vdfe9xV6AVdlfrITh6c5mVZQqfDKwt4SYrU8pnmhjbNzz7YclXyf5OL
-         4v2LKMATAq6NhEH+2vjmURe7PVs/p+Ak6mZrJbgT8OOlQ+MxKWkyjTF/HwgqyPTnyhfo
-         V1yLamPTJIfp8rqKlx+umAlczClIu3OpMTbk00ZVYVql0kE7MynxLi3Dsqn4qOcBRsBl
-         GLLI6PjlGyEgZOcYiv7P+TEtH4LfCQve4mTgE6lV39M/gOlQFuK4/PEdDXdMqe/yRKd4
-         4KRNJIDj7dwHBz6Zy7oWdvvRfFz/VzQKrHKp5klHo7PNYzqvbuZ81Zj5431xVhNvHpkR
-         Q7pg==
-X-Gm-Message-State: AOAM530ffehAJfpdtO/w3mGXSdJOzyDbEj2wSvzf9q32LQQ8Gb+B/cGS
-        p3rjJxj46qrz6rgl+2V4hL1QextBwV9uvx2oDvo=
-X-Google-Smtp-Source: ABdhPJycirbyAqbZ13XeIBPPBICl1WRVjb08/FUcXd+gGs+PAjuKX/EybFir/ArHyRHz7Se4xE8DUFqGSMvDZgPQNI8=
-X-Received: by 2002:aa7:d2c8:0:b0:410:e248:48eb with SMTP id
- k8-20020aa7d2c8000000b00410e24848ebmr4471404edr.325.1645743702061; Thu, 24
- Feb 2022 15:01:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HnOBb78GLVNNv6PC7YyfKNTBlpalqvUKFNmaAgPGZ4w=;
+        b=kdvnQThg47AGfMjvoHAXoTho0g1Wl0myWirXOMPkq/fWKbc/2ezOSpiWO5mJK9fCJw
+         uIEzjyEAoHac99JJimqmh2xyfqcIe6FZKEhcH6px0TczZKa+RE2RecbD64vukdrgkSw7
+         LMaJKH/mL4nxJQ2/5a2yuto3bUmvFA3s8FHzevwu0YBOdqHrElvWP2Vr7Z4VtkFM7BTx
+         RrzzvQwLBnJlR/OawVXd78X0z75RrfiAX2ho3wuGy2tvxiPJLJ9J3mj9FaYB+K1q+TA5
+         14WknoVlPf6W0GIe/f08aSOg40m4/BYz2Yrg3RSwy1WTMiPLXs2Lud3EtY6P4V9vibwm
+         pCMw==
+X-Gm-Message-State: AOAM532+/HKcxcDkMuOJ8iQqCM7ijsItfeq1KeNl2Sy0jQxMdRjCQ4Ut
+        QNQIoisRT5aSGQlYbSqsUww+vnjq30ET2KGI/NzDOKd0TfYSnwcmpJCriWYzSlvJOckQ4UqaWOX
+        R3/RZ9ekohmuHq4iBVf3p2SaD
+X-Received: by 2002:ac8:5b56:0:b0:2dd:b428:d2cc with SMTP id n22-20020ac85b56000000b002ddb428d2ccmr4606687qtw.304.1645743753032;
+        Thu, 24 Feb 2022 15:02:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDJa6bCuv/Wm/hhgnUbs1c8OBG3DCRoqXPrf4g4CA3NRDNyIPB+7iDl2jcE8mXoWOLm5O2BA==
+X-Received: by 2002:ac8:5b56:0:b0:2dd:b428:d2cc with SMTP id n22-20020ac85b56000000b002ddb428d2ccmr4606659qtw.304.1645743752732;
+        Thu, 24 Feb 2022 15:02:32 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id d202-20020a3768d3000000b005f18706845dsm469853qkc.73.2022.02.24.15.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 15:02:32 -0800 (PST)
+Date:   Thu, 24 Feb 2022 15:02:03 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 13/39] x86/livepatch: Validate __fentry__ location
+Message-ID: <20220224230203.a5z3mppfcywuvogq@treble>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.776015583@infradead.org>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 25 Feb 2022 09:01:30 +1000
-Message-ID: <CAPM=9twsapa3kN3wkRfpqT7dZPDbFePicHm8TT8yVnwqH6aZyA@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.17-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220224151322.776015583@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Thu, Feb 24, 2022 at 03:51:51PM +0100, Peter Zijlstra wrote:
+> Currently livepatch assumes __fentry__ lives at func+0, which is most
+> likely untrue with IBT on. Instead make it use ftrace_location() by
+> default which both validates and finds the actual ip if there is any
+> in the same symbol.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/include/asm/livepatch.h |    9 +++++++++
+>  kernel/livepatch/patch.c         |    2 +-
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> --- a/kernel/livepatch/patch.c
+> +++ b/kernel/livepatch/patch.c
+> @@ -133,7 +133,7 @@ static void notrace klp_ftrace_handler(u
+>  #ifndef klp_get_ftrace_location
+>  static unsigned long klp_get_ftrace_location(unsigned long faddr)
+>  {
+> -	return faddr;
+> +	return ftrace_location(faddr);
 
-Regular drm fixes pull, i915, amdgpu and tegra mostly, all pretty small.
+Now that ftrace is doing the dirty work, I think this means we can get
+rid of klp_get_ftrace_location() altogether:
 
-I'm in quarantine at home for next 7 days, shouldn't interrupt things,
-but might be erratic if anyone is looking for me.
+diff --git a/arch/powerpc/include/asm/livepatch.h b/arch/powerpc/include/asm/livepatch.h
+index 4fe018cc207b..7b9dcd51af32 100644
+--- a/arch/powerpc/include/asm/livepatch.h
++++ b/arch/powerpc/include/asm/livepatch.h
+@@ -19,16 +19,6 @@ static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+ 	regs_set_return_ip(regs, ip);
+ }
+ 
+-#define klp_get_ftrace_location klp_get_ftrace_location
+-static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
+-{
+-	/*
+-	 * Live patch works only with -mprofile-kernel on PPC. In this case,
+-	 * the ftrace location is always within the first 16 bytes.
+-	 */
+-	return ftrace_location_range(faddr, faddr + 16);
+-}
+-
+ static inline void klp_init_thread_info(struct task_struct *p)
+ {
+ 	/* + 1 to account for STACK_END_MAGIC */
+diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
+index fd295bbbcbc7..ed3464e68bda 100644
+--- a/kernel/livepatch/patch.c
++++ b/kernel/livepatch/patch.c
+@@ -124,19 +124,6 @@ static void notrace klp_ftrace_handler(unsigned long ip,
+ 	ftrace_test_recursion_unlock(bit);
+ }
+ 
+-/*
+- * Convert a function address into the appropriate ftrace location.
+- *
+- * Usually this is just the address of the function, but on some architectures
+- * it's more complicated so allow them to provide a custom behaviour.
+- */
+-#ifndef klp_get_ftrace_location
+-static unsigned long klp_get_ftrace_location(unsigned long faddr)
+-{
+-	return ftrace_location(faddr);
+-}
+-#endif
+-
+ static void klp_unpatch_func(struct klp_func *func)
+ {
+ 	struct klp_ops *ops;
+@@ -153,8 +140,7 @@ static void klp_unpatch_func(struct klp_func *func)
+ 	if (list_is_singular(&ops->func_stack)) {
+ 		unsigned long ftrace_loc;
+ 
+-		ftrace_loc =
+-			klp_get_ftrace_location((unsigned long)func->old_func);
++		ftrace_loc = ftrace_location((unsigned long)func->old_func);
+ 		if (WARN_ON(!ftrace_loc))
+ 			return;
+ 
 
-Dave.
-
-drm-fixes-2022-02-25:
-drm fixes for 5.17-rc6
-
-core:
-- edid: Always set RGB444
-
-tegra:
-- tegra186 suspend/resume fixes
-- syncpoint wait fix
-- build warning fix
-- eDP on older devices fix
-
-amdgpu:
-- Display FP fix
-- PCO powergating fix
-- RDNA2 OEM SKU stability fixes
-- Display PSR fix
-- PCI ASPM fix
-- Display link encoder fix for TEST_COMMIT
-- Raven2 suspend/resume fix
-- Fix a regression in virtual display support
-- GPUVM eviction fix
-
-i915:
-- Fix QGV handling on ADL-P+
-- Fix bw atomic check when switching between SAGV vs. no SAGV
-- Disconnect PHYs left connected by BIOS on disabled ports
-- Fix SAVG to no SAGV transitions on TGL+
-- Print PHY name properly on calibration error (DG2)
-
-imx:
-- dcss: Select GEM CMA helpers
-
-radeon:
-- Fix some variables's type
-
-vc4:
-- Fix codec cleanup
-- Fix PM reference counting
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507=
-:
-
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-02-25
-
-for you to fetch changes up to ecf8a99f4807c17fa310a83067a95964cedd9ac1:
-
-  Merge tag 'drm-intel-fixes-2022-02-24' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-02-25
-05:51:04 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.17-rc6
-
-core:
-- edid: Always set RGB444
-
-tegra:
-- tegra186 suspend/resume fixes
-- syncpoint wait fix
-- build warning fix
-- eDP on older devices fix
-
-amdgpu:
-- Display FP fix
-- PCO powergating fix
-- RDNA2 OEM SKU stability fixes
-- Display PSR fix
-- PCI ASPM fix
-- Display link encoder fix for TEST_COMMIT
-- Raven2 suspend/resume fix
-- Fix a regression in virtual display support
-- GPUVM eviction fix
-
-i915:
-- Fix QGV handling on ADL-P+
-- Fix bw atomic check when switching between SAGV vs. no SAGV
-- Disconnect PHYs left connected by BIOS on disabled ports
-- Fix SAVG to no SAGV transitions on TGL+
-- Print PHY name properly on calibration error (DG2)
-
-imx:
-- dcss: Select GEM CMA helpers
-
-radeon:
-- Fix some variables's type
-
-vc4:
-- Fix codec cleanup
-- Fix PM reference counting
-
-----------------------------------------------------------------
-Bas Nieuwenhuizen (1):
-      drm/amd/display: Protect update_bw_bounding_box FPU code.
-
-Chen Gong (1):
-      drm/amdgpu: do not enable asic reset for raven2
-
-Christian K=C3=B6nig (1):
-      drm/radeon: fix variable type
-
-Dave Airlie (4):
-      Merge tag 'drm-misc-fixes-2022-02-23' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'drm/tegra/for-5.17-rc6' of
-https://gitlab.freedesktop.org/drm/tegra into drm-fixes
-      Merge tag 'amd-drm-fixes-5.17-2022-02-23' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2022-02-24' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Dmitry Osipenko (1):
-      gpu: host1x: Fix hang on Tegra186+
-
-Evan Quan (2):
-      drm/amdgpu: disable MMHUB PG for Picasso
-      drm/amd/pm: fix some OEM SKU specific stability issues
-
-Guchun Chen (2):
-      Revert "drm/amdgpu: add modifiers in amdgpu_vkms_plane_init()"
-      drm/amdgpu: bypass tiling flag check in virtual display case (v2)
-
-Imre Deak (1):
-      drm/i915: Disconnect PHYs left connected by BIOS on disabled ports
-
-Jon Hunter (1):
-      drm/tegra: Fix cast to restricted __le32
-
-Mario Limonciello (1):
-      drm/amd: Check if ASPM is enabled from PCIe subsystem
-
-Matt Roper (1):
-      drm/i915/dg2: Print PHY name properly on calibration error
-
-Maxime Ripard (3):
-      drm/vc4: hdmi: Unregister codec device on unbind
-      drm/vc4: crtc: Fix runtime_pm reference counting
-      drm/edid: Always set RGB444
-
-Michel D=C3=A4nzer (1):
-      drm/amd/display: For vblank_disable_immediate, check PSR is really us=
-ed
-
-Mikko Perttunen (1):
-      gpu: host1x: Always return syncpoint value when waiting
-
-Nicholas Kazlauskas (1):
-      drm/amd/display: Fix stream->link_enc unassigned during stream remova=
-l
-
-Qiang Yu (1):
-      drm/amdgpu: check vm ready by amdgpu_vm->evicting flag
-
-Rudi Heitbaum (1):
-      drm/imx/dcss: i.MX8MQ DCSS select DRM_GEM_CMA_HELPER
-
-Thierry Reding (1):
-      drm/tegra: dpaux: Populate AUX bus
-
-Ville Syrj=C3=A4l=C3=A4 (3):
-      drm/i915: Widen the QGV point mask
-      drm/i915: Correctly populate use_sagv_wm for all pipes
-      drm/i915: Fix bw atomic check when switching between SAGV vs. no SAGV
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c        |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  3 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c           |  3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             |  9 ++++--
- drivers/gpu/drm/amd/amdgpu/soc15.c                 |  9 ++++--
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 17 ++++++-----
- .../amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c   |  2 ++
- drivers/gpu/drm/amd/display/dc/core/dc.c           |  7 +++--
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |  4 ---
- .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c    | 32 ++++++++++++++++++=
-+-
- drivers/gpu/drm/drm_edid.c                         |  2 +-
- drivers/gpu/drm/i915/display/intel_bw.c            | 18 +++++++++--
- drivers/gpu/drm/i915/display/intel_bw.h            |  8 ++---
- drivers/gpu/drm/i915/display/intel_snps_phy.c      |  2 +-
- drivers/gpu/drm/i915/display/intel_tc.c            | 26 ++++++++++++----
- drivers/gpu/drm/i915/intel_pm.c                    | 22 +++++++-------
- drivers/gpu/drm/imx/dcss/Kconfig                   |  1 +
- drivers/gpu/drm/radeon/radeon_uvd.c                |  8 ++---
- drivers/gpu/drm/tegra/Kconfig                      |  1 +
- drivers/gpu/drm/tegra/dpaux.c                      |  7 +++++
- drivers/gpu/drm/tegra/falcon.c                     |  2 +-
- drivers/gpu/drm/vc4/vc4_crtc.c                     |  8 +++--
- drivers/gpu/drm/vc4/vc4_hdmi.c                     |  8 +++++
- drivers/gpu/drm/vc4/vc4_hdmi.h                     |  1 +
- drivers/gpu/host1x/syncpt.c                        | 35 +++++++-----------=
-----
- 25 files changed, 156 insertions(+), 81 deletions(-)

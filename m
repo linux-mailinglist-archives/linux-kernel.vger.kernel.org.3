@@ -2,189 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD024C4FFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF534C4FF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbiBYUqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S237304AbiBYUqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237248AbiBYUp7 (ORCPT
+        with ESMTP id S237243AbiBYUqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:45:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B626A21CD29;
-        Fri, 25 Feb 2022 12:45:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5040A61A2D;
-        Fri, 25 Feb 2022 20:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B094EC340E7;
-        Fri, 25 Feb 2022 20:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645821925;
-        bh=vld9XorWUfjGbFW2+iZOPGxq8V89Q6Px0LoIq9ABYE8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DeWKLKC1mLoR+BXhFALLNEEiJ87s9TqKY9q/yv2NMKUQNjUuJZ2kNBVoYGtse4v0U
-         tFmmHFUvl2eS0fQ8fvPuBT9Vo4YJ6J13/4TDRk0jwGi1A/TKHcKZ4d/TtodcPPW8xk
-         K6KShJ+Ilgbmkhk93dzR+mpYpP0IFyrQNcJnk7ZVq9KvhRxXOeRsNWBRvCc3/3SI4g
-         JyQXctb9Ih1Yxpx+RUx2UrlIeLXv5AOTZn5E5SNy6ZQhOKXAQkRqTz/I83yK6YQRyd
-         C7mPr7yBnLpA46t8dWQ3qsA5vBwoep9tQtRGdEix3kmJbhGkXXe8GJbBkfnhRGrVNZ
-         njx8FconVCvOg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5808F5C0144; Fri, 25 Feb 2022 12:45:25 -0800 (PST)
-Date:   Fri, 25 Feb 2022 12:45:25 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] torture: Make thread detection more robust by using
- lspcu
-Message-ID: <20220225204525.GK4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
- <20220222120718.17141-2-pmenzel@molgen.mpg.de>
- <20220222174328.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <1084da08-f67d-b5d7-add4-580e9246b7b7@molgen.mpg.de>
- <20220224205617.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <bfab82a0-bf21-7782-f6fb-3adaf827ad25@molgen.mpg.de>
+        Fri, 25 Feb 2022 15:46:48 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D99421EBA5;
+        Fri, 25 Feb 2022 12:46:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645821975; x=1677357975;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4IFJBQRvvOxPLua3cn47AyBwu7FyY/fugGnla56bsGw=;
+  b=dyLOiOxNfyzurmatO4a+0wuIO3vB2klzdB6a/HjCoNJ69NSTZVMbYb19
+   UYKhCZCJev25LcdsS6c+Fr2T7jjOPOKEUU5B/3Dr47JnCqY9YGNkYE4RC
+   XfznmyVGk3mc+9fjQY0ageZUJ153iLzTwRiR18asJHLjurgDvtXL9dZBZ
+   M=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 25 Feb 2022 12:46:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 12:46:14 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 25 Feb 2022 12:46:13 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 25 Feb 2022 12:46:13 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v11 0/4]  drm/msm/dpu: enable widebus feature base on chip hardware revision
+Date:   Fri, 25 Feb 2022 12:45:52 -0800
+Message-ID: <1645821957-22633-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bfab82a0-bf21-7782-f6fb-3adaf827ad25@molgen.mpg.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 06:49:32AM +0100, Paul Menzel wrote:
-> Dear Paul,
-> 
-> 
-> Am 24.02.22 um 21:56 schrieb Paul E. McKenney:
-> > On Thu, Feb 24, 2022 at 09:24:11AM +0100, Paul Menzel wrote:
-> 
-> > > Am 22.02.22 um 18:43 schrieb Paul E. McKenney:
-> > > > On Tue, Feb 22, 2022 at 01:07:17PM +0100, Paul Menzel wrote:
-> > > > > For consecutive numbers *lscpu* collapses the output and just shows the
-> > > > > range with start and end. The processors are numbered that way on POWER8.
-> > > > > 
-> > > > >       $ sudo ppc64_cpu --smt=8
-> > > > >       $ lscpu | grep '^NUMA node'
-> > > > >       NUMA node(s):                    2
-> > > > >       NUMA node0 CPU(s):               0-79
-> > > > >       NUMA node8 CPU(s):               80-159
-> > > > > 
-> > > > > This causes the heuristic to detect the number threads per core, looking
-> > > > > for the number after the first comma, to fail, and QEMU aborts because of
-> > > > > invalid arguments.
-> > > > > 
-> > > > >       $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-> > > > >       $
-> > > > > 
-> > > > > (Before the last patch, the whole line was returned.)
-> > > > > 
-> > > > >       $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
-> > > > >       NUMA node0 CPU(s):               0-79
-> > > > > 
-> > > > > *lscpu* shows the number of threads per core, so use that value directly.
-> > > > > 
-> > > > >       $ sudo ppc64_cpu --smt=8
-> > > > >       $ lscpu | grep 'Thread(s) per core'
-> > > > >       Thread(s) per core:              8
-> > > > >       $ sudo ppc64_cpu --smt=off
-> > > > >       $ lscpu | grep 'Thread(s) per core'
-> > > > >       Thread(s) per core:              1
-> > > > > 
-> > > > > Note, the replaced heuristic is also incorrect for that case, where the
-> > > > > threads per core are disabled.
-> > > > > 
-> > > > >       $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-> > > > >       8
-> > > > > 
-> > > > > Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > > > 
-> > > > Makes sense, and thank you for chasing this down and for the fix!
-> > > > 
-> > > > But should this patch and 1/2 be merged?  Or am I confused and they
-> > > > are somehow affecting two different lines of scripting?
-> > > 
-> > > You are right. I guess with 1/2 I just wanted to document clearly, what I
-> > > learned in #sed@irc.libera.chat, that means, how to avoid using grep, when
-> > > sed is used.
-> > 
-> > Nothing wrong with that!
-> > 
-> > I have merged the two patches as shown below.  Does this work for you?
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 9f0daba62e958c31326c7a9eae33651e3a3cc6b4
-> > Author: Paul Menzel <pmenzel@molgen.mpg.de>
-> > Date:   Tue Feb 22 13:07:16 2022 +0100
-> > 
-> >      torture: Make thread detection more robust by using lspcu
-> >      For consecutive numbers the lscpu command collapses the output and just
-> >      shows the range with start and end. The processors are numbered that
-> >      way on POWER8.
-> >          $ sudo ppc64_cpu --smt=8
-> >          $ lscpu | grep '^NUMA node'
-> >          NUMA node(s):                    2
-> >          NUMA node0 CPU(s):               0-79
-> >          NUMA node8 CPU(s):               80-159
-> >      This causes the heuristic to detect the number threads per core, looking
-> >      for the number after the first comma, to fail, and QEMU aborts because of
-> >      invalid arguments.
-> >          $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
-> >          NUMA node0 CPU(s):               0-79
-> >      But the lscpu command shows the number of threads per core:
-> >          $ sudo ppc64_cpu --smt=8
-> >          $ lscpu | grep 'Thread(s) per core'
-> >          Thread(s) per core:              8
-> >          $ sudo ppc64_cpu --smt=off
-> >          $ lscpu | grep 'Thread(s) per core'
-> >          Thread(s) per core:              1
-> >      This commit therefore directly uses that value.
-> 
-> Maybe extend: …, and replaces `grep` by using using sed’s switch `-n` and
-> the command p.
+revise widebus timing engine programming and enable widebus feature base on chip
 
-Ah, good point -- I will update this on the next rebase.
+Kuogee Hsieh (4):
+  drm/msm/dpu: adjust display_v_end for eDP and DP
+  drm/msm/dpu: replace BIT(x) with correspond marco define string
+  drm/msm/dpu:  revise timing engine programming to support widebus
+    feature
+  drm/msm/dp: enable widebus feature for display port
 
-> >      Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> >      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-> > index c35ba24f994c3..66d0414d8e4bc 100644
-> > --- a/tools/testing/selftests/rcutorture/bin/functions.sh
-> > +++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-> > @@ -301,7 +301,7 @@ specify_qemu_cpus () {
-> >   			echo $2 -smp $3
-> >   			;;
-> >   		qemu-system-ppc64)
-> > -			nt="`lscpu | grep '^NUMA node0' | sed -e 's/^[^,]*,\([0-9]*\),.*$/\1/'`"
-> > +			nt="`lscpu | sed -n 's/^Thread(s) per core:\s*//p'`"
-> >   			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
-> >   			;;
-> >   		esac
-> 
-> Thank you for doing that, and sorry for the extra work.
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 14 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 62 ++++++++++++++++------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+ drivers/gpu/drm/msm/dp/dp_catalog.c                | 34 +++++++++++-
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |  2 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  7 ++-
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |  1 +
+ drivers/gpu/drm/msm/dp/dp_display.c                | 21 +++++++-
+ drivers/gpu/drm/msm/dp/dp_display.h                |  2 +
+ drivers/gpu/drm/msm/msm_drv.h                      |  6 +++
+ 12 files changed, 146 insertions(+), 21 deletions(-)
 
-No complaints!  You are after all testing on powerpc, and getting that
-working better is a good thing.
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-							Thanx, Paul

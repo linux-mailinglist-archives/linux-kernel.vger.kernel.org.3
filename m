@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBFF4C4912
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711E14C491B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242148AbiBYPdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S229829AbiBYPe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242145AbiBYPdw (ORCPT
+        with ESMTP id S238920AbiBYPez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:33:52 -0500
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE194181E77;
-        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id u3so6590446ybh.5;
-        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=eABu8QHBsdfkHA3w12JWmBEc2OZCUV76ZExfQivismc=;
-        b=ouie04PEWm6L1v9RlxcJAHW2NzEliePn7ocN1YUHFrRzlyNdcJpmX0BD/yOn8y3Mbh
-         sk8XVGjlAP5+TrK88b2K8zMt0+bTOW0jP5g0AZGwkl7WpjY1kQ5mGdeEStHGYR71MFqY
-         puWslGh60nf5r+rMUfmFF4V1HRhiAdmkb+5nZV/1bwc+WNI0fE7nhKJldcmBEOFgL6Jw
-         W/F86lrKbzNeUTMNKVR7zzzKXTgYPgy6VXAEXURGN8JRmpcUvQ+psk8Tv37sOzoIJLsx
-         qYRkHj7gWW0luaisppWwo1nkPranaisZSmZ4uo1FNE0gNoyYalHqYpublUqApoxBhdMN
-         1A2Q==
-X-Gm-Message-State: AOAM532yQ/dhkUf1NMMkcuNB/kSsM8w+NYcEgFCmWDrMm7Zms9VvW/0R
-        7J/wY4Rud1lQjRInoFC9p9HPfALc4wCcnorsW3SAWXmb/b4=
-X-Google-Smtp-Source: ABdhPJxsDqyFM8lHB1ww0LkZcf1spz1fbcJhFO7+5DEGzYZRLP8MjQ2NSomKv4l9/DlSpZ0uBgm2k0FloTFi7cxK+xM=
-X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
- s127-20020a257785000000b00614c2832a3dmr7913179ybc.137.1645803199100; Fri, 25
- Feb 2022 07:33:19 -0800 (PST)
+        Fri, 25 Feb 2022 10:34:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6223190B76;
+        Fri, 25 Feb 2022 07:34:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 616CBB83253;
+        Fri, 25 Feb 2022 15:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2B8C340E7;
+        Fri, 25 Feb 2022 15:34:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EWUvxbsv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645803256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aWLmVQxQDsQDY8xA+iWmKjooufWe/5wC2imqu/MRZlY=;
+        b=EWUvxbsv0f37oRy8gRLWgC2f9N5nllIJZsgvlWWTgwSXhwcn1SAw9ahMy2L+erFJzM3Cok
+        2LgLhaVSk7Y3z5WXitc4qbOO4HNlQEIOEgKhSZKCqlv5kIMeSZSSbrRloP3h+xPoexoTbJ
+        roWa02VZ8DoxU22UyCjoRq3cY9oiQgA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ca8076dc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 15:34:15 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 16:34:11 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, adrian@parity.io
+Cc:     Alexander Graf <graf@amazon.com>, KVM list <kvm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        adrian@parity.io, ben@skyportsystems.com,
+        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eduardo Habkost <ehabkost@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Laszlo Ersek <lersek@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v4] virt: vmgenid: introduce driver for reinitializing
+ RNG on VM fork
+Message-ID: <Yhj288aE5rW15Qpj@zx2c4.com>
+References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
+ <20220225124848.909093-1-Jason@zx2c4.com>
+ <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
+ <YhjjuMOeV7+T7thS@zx2c4.com>
+ <88ebdc32-2e94-ef28-37ed-1c927c12af43@amazon.com>
+ <YhjoyIUv2+18BwiR@zx2c4.com>
+ <9ac68552-c1fc-22c8-13e6-4f344f85a4fb@amazon.com>
+ <CAMj1kXEue6cDCSG0N7WGTVF=JYZx3jwE7EK4tCdhO-HzMtWwVw@mail.gmail.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Feb 2022 16:33:08 +0100
-Message-ID: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fix for v5.17-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEue6cDCSG0N7WGTVF=JYZx3jwE7EK4tCdhO-HzMtWwVw@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Feb 25, 2022 at 04:16:27PM +0100, Ard Biesheuvel wrote:
+> > > I just booted up a Windows VM, and it looks like Hyper-V uses
+> > > "Hyper_V_Gen_Counter_V1", which is also quite long, so we can't really
+> > > HID match on that either.
+> >
+> >
+> > Yes, due to the same problem. I'd really prefer we sort out the ACPI
+> > matching before this goes mainline. Matching on _HID is explicitly
+> > discouraged in the VMGenID spec.
+> >
+> 
+> OK, this really sucks. Quoting the ACPI spec:
+> 
+> """
+> A _HID object evaluates to either a numeric 32-bit compressed EISA
+> type ID or a string. If a string, the format must be an alphanumeric
+> PNP or ACPI ID with no asterisk or other leading characters.
+> A valid PNP ID must be of the form "AAA####" where A is an uppercase
+> letter and # is a hex digit.
+> A valid ACPI ID must be of the form "NNNN####" where N is an uppercase
+> letter or a digit ('0'-'9') and # is a hex digit. This specification
+> reserves the string "ACPI" for use only with devices defined herein.
+> It further reserves all strings representing 4 HEX digits for
+> exclusive use with PCI-assigned Vendor IDs.
+> """
+> 
+> So now we have to implement Microsoft's fork of ACPI to be able to use
+> this device, even if we expose it from QEMU instead of Hyper-V? I
+> strongly object to that.
+> 
+> Instead, we can match on _HID exposed by QEMU, and cordially invite
+> Microsoft to align their spec with the ACPI spec.
 
-Please pull from the tag
+I don't know about that... Seems a bit extreme. Hopefully Alex will be
+able to sort something out with the ACPI people, and this driver will
+work inside of Hyper-V.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.17-rc6
+Here's what we currently have:
 
-with top-most commit 3abea10e6a8f0e7804ed4c124bea2d15aca977c8
+  static const struct acpi_device_id vmgenid_ids[] = {
+    { "VMGENID", 0 },  <------------------------------------ ???
+    { "QEMUVGID", 0 }, <------------------------------------ QEMU
+    { },
+  };
 
- thermal: int340x: fix memory leak in int3400_notify()
+Adrian added "VMGENID" in last year's v4, so I copied that for this new
+driver here. But does anybody know which hypervisor it is for? Some
+internal Amazon thing? Firecracker? VMware? In case Alex does not
+succeed with the ACPI changes, it'd be nice to know which HIDs for
+which hypervisors we do and do not support.
 
-on top of commit cfb92440ee71adcc2105b0890bb01ac3cddb8507
-
- Linux 5.17-rc5
-
-to receive a thermal control fix for 5.17-rc6.
-
-This fixes a memory leak in the int340x thermal driver's ACPI notify
-handler (Chuansheng Liu).
-
-Thanks!
-
-
----------------
-
-Chuansheng Liu (1):
-      thermal: int340x: fix memory leak in int3400_notify()
-
----------------
-
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Jason

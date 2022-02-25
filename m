@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15F54C5230
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 00:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FA44C5234
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 00:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbiBYXoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 18:44:39 -0500
+        id S239464AbiBYXok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 18:44:40 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239546AbiBYXo2 (ORCPT
+        with ESMTP id S239510AbiBYXo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 18:44:28 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119CF19414E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 15:43:54 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d5258e8a4bso45549567b3.22
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 15:43:54 -0800 (PST)
+        Fri, 25 Feb 2022 18:44:29 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4517F1A270D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 15:43:56 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b18-20020a25fa12000000b0062412a8200eso4857681ybe.22
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 15:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=93Dy3pXp1EtGBKvAGMRWdloXVx8eO4YCYmEbzoeaeYk=;
-        b=pnXI1KrV9MNxcdc11kWQSQhoY7dWYBJtcK64UyHbc02BWWucUIXvShTv3FROxsL5BW
-         8vhoSDADnCQlSzakUBv1jjkdIoXtTZJKwyKp4vIZumKf4lK8elweUo9MrpFKaMqNsP1C
-         UljZGZKErOTVs8LZhCK/mR6FK+aAZobtlX80IqAAEBRl7Qe0B+CSCUHaDKs3wiaxWx5v
-         Z62FCKndn+O4YNFQgUuOl24uOevsHtzutVCrKav7zJn6AGUf0ysKVgFesRF5a4fbE0rz
-         WuajkK0JLUtcXqS6vpwYJ6i7eCHQ8hEC2mdov2uSU4z88wcDUhFlB9dzaJI8HK/2cM//
-         Cefg==
+        bh=zSQ3ZyUQ2OEfiGKk7osb66v16UBXeasV5LfSlDNJLTs=;
+        b=RAWcMz9SCO9AYZ5Pdggqlu3RxuyFkY6L5ZYVTbuszydG5Wij7F33XdUpXekqDNvgDb
+         BbWbrze1Z2q5JkRVH/Mrso+MKEvpttminKC8Jc8Xr9EZ4/5mI1+WvY6YbaYulqScKQ9j
+         1YLBQR1mMvdAHHfUlaqPu3ftcgq2VlgRWG5Q/GgUJKgBwYQa4yvPUYeZOCtdTy2Z88cI
+         1OgIKH+ZbEIKHOz5hZX4svpyPB4h86ryzdTGE/bvN1dTBn28bElnZWfe4IDGdFs5di39
+         4PGMTjYksntvmqRVXi+U2b/LGkRjGmblq9KBt6ylJxGB+j711I9tATWezK3+pr2Z+60A
+         c6Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=93Dy3pXp1EtGBKvAGMRWdloXVx8eO4YCYmEbzoeaeYk=;
-        b=gr+aZu/IVtz1ztln6wIiEe50d/bFloPklRa/kkAsBWERUAcgjUGgIZ3tqZz+JImPxz
-         V6nTcffSuSG+d8gzPDOlnnoPkiu+frUHESryqnTyaxwg/YJxqKwjPDiG3JXX0UPoT0qg
-         uBMMIzPmdTt+9AxQpWE+ecAPILIZl/lvzlwfJvyV8+301CY0T9l5I/tZo2pssq9Umre1
-         dL0co0AeD9zt7JvZr0j9/GDqtPx899SQGtoIpiyvoe0mlb80ab2AKFjKudC/gzgz/tnA
-         OpcQ1Uu0twGF7YNfEF63UUB0Xcrc+pmOtidvuligPYZuHZZPCtwomuTnKmjDRT6XGaRL
-         EqvA==
-X-Gm-Message-State: AOAM530y2OCSp2Yw1QxEoHDeYtjFPN7jRzJ0Gj+OBed7NSjNs1Zu2lbC
-        gSNbkg+ZnYWPKtHC01+P1GiO5Lf4cGI=
-X-Google-Smtp-Source: ABdhPJwaleac35eNfnnuZ5ZlgBLZqZSBlHD/27YuV/VOvM8XhXeNJ4XcCUmMceiEyeGNtaHSURlTJU5++EE=
+        bh=zSQ3ZyUQ2OEfiGKk7osb66v16UBXeasV5LfSlDNJLTs=;
+        b=guTZ8k35N40p3vTQZ0exh8QbZsdcVOJt553v1iFUGZiM6fS6kiVPlGdqQCAf2xhk2e
+         hV7fpMpV95qtfzukFw7dsZjI6ZgosajrmmY6/plH5zMZrtI4N4XvPxeOvg0B7fNmobMh
+         jU+jzu8wSTUwhtlzZcrwgI0IuFipSVw/K3qoW8UVPpi3qqFjpDjkDDdv6uTQcZRD1Vio
+         vfC3+xhGtm6vHdpYtSICIPLAtE2SJCUQIBPur/ZQGqDRS+VhXS3kLjOaMs45COCzz/SQ
+         j2cAOAL5TlsT5olKcKKkzO8944oDm8JiZzH24d6S1gEVyBk9/32MiTnLclqbJLtWeba1
+         qMig==
+X-Gm-Message-State: AOAM531QVR7pQT6EZgqcGQeUXpjL4AcGa2U7bGJ041ry4zGd3G5nPb9v
+        VGqgGzhDuCCsxKcEYSW2VlC77/yM5hk=
+X-Google-Smtp-Source: ABdhPJxqiIRkNLzksIZdrDz6SCwnzk2SPJ/9GP6wVJL0Xqy6aFUvgU6B8ncEMVzBhuX/1S7CgZJDqPIDleo=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:378d:645d:49ad:4f8b])
- (user=haoluo job=sendgmr) by 2002:a81:f0c:0:b0:2d6:83ab:7605 with SMTP id
- 12-20020a810f0c000000b002d683ab7605mr9979774ywp.150.1645832633202; Fri, 25
- Feb 2022 15:43:53 -0800 (PST)
-Date:   Fri, 25 Feb 2022 15:43:34 -0800
+ (user=haoluo job=sendgmr) by 2002:a25:c5d0:0:b0:624:41d4:e37c with SMTP id
+ v199-20020a25c5d0000000b0062441d4e37cmr9499906ybe.318.1645832635508; Fri, 25
+ Feb 2022 15:43:55 -0800 (PST)
+Date:   Fri, 25 Feb 2022 15:43:35 -0800
 In-Reply-To: <20220225234339.2386398-1-haoluo@google.com>
-Message-Id: <20220225234339.2386398-5-haoluo@google.com>
+Message-Id: <20220225234339.2386398-6-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220225234339.2386398-1-haoluo@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+Subject: [PATCH bpf-next v1 5/9] cgroup: Sleepable cgroup tracepoints.
 From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -75,232 +75,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new type of bpf tracepoints: sleepable tracepoints, which allows
-the handler to make calls that may sleep. With sleepable tracepoints, a
-set of syscall helpers (which may sleep) may also be called from
-sleepable tracepoints.
+Add two new sleepable tracepoints in cgroup: cgroup_mkdir_s and
+cgroup_rmdir_s. The suffix _s means they are in a sleepable context.
+These two tracepoints don't need full cgroup paths, they don't have
+to live in atomic context. These two tracepoints are also called without
+holding cgroup_mutex.
 
-In the following patches, we will whitelist some tracepoints to be
-sleepable.
+They can be used for bpf to monitor cgroup creation and deletion. Bpf
+sleepable programs can attach to these two tracepoints and create
+corresponding directories in bpffs. The created directories don't need
+the cgroup paths, cgroup id is sufficient to identify the cgroup. Once
+the bpffs directories have been created, the bpf prog can further pin
+bpf objects inside the directories and allow users to read the pinned
+objects.
 
+This serves a way to extend the fixed cgroup interface.
+
+Cc: Tejun Heo <tj@kernel.org>
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- include/linux/bpf.h             | 10 +++++++-
- include/linux/tracepoint-defs.h |  1 +
- include/trace/bpf_probe.h       | 22 ++++++++++++++----
- kernel/bpf/syscall.c            | 41 +++++++++++++++++++++++----------
- kernel/trace/bpf_trace.c        |  5 ++++
- 5 files changed, 61 insertions(+), 18 deletions(-)
+ include/trace/events/cgroup.h | 45 +++++++++++++++++++++++++++++++++++
+ kernel/cgroup/cgroup.c        |  5 ++++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c36eeced3838..759ade7b24b3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1810,6 +1810,9 @@ struct bpf_prog *bpf_prog_by_id(u32 id);
- struct bpf_link *bpf_link_by_id(u32 id);
+diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+index dd7d7c9efecd..4483a7d6c43a 100644
+--- a/include/trace/events/cgroup.h
++++ b/include/trace/events/cgroup.h
+@@ -204,6 +204,51 @@ DEFINE_EVENT(cgroup_event, cgroup_notify_frozen,
+ 	TP_ARGS(cgrp, path, val)
+ );
  
- const struct bpf_func_proto *bpf_base_func_proto(enum bpf_func_id func_id);
-+const struct bpf_func_proto *
-+tracing_prog_syscall_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
++/*
++ * The following tracepoints are supposed to be called in a sleepable context.
++ */
++DECLARE_EVENT_CLASS(cgroup_sleepable_tp,
 +
- void bpf_task_storage_free(struct task_struct *task);
- bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
- const struct btf_func_model *
-@@ -1822,7 +1825,6 @@ struct bpf_core_ctx {
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp),
++
++	TP_STRUCT__entry(
++		__field(	int,		root			)
++		__field(	int,		level			)
++		__field(	u64,		id			)
++	),
++
++	TP_fast_assign(
++		__entry->root = cgrp->root->hierarchy_id;
++		__entry->id = cgroup_id(cgrp);
++		__entry->level = cgrp->level;
++	),
++
++	TP_printk("root=%d id=%llu level=%d",
++		  __entry->root, __entry->id, __entry->level)
++);
++
++#ifdef DEFINE_EVENT_SLEEPABLE
++#undef DEFINE_EVENT
++#define DEFINE_EVENT(template, call, proto, args)		\
++	DEFINE_EVENT_SLEEPABLE(template, call, PARAMS(proto), PARAMS(args))
++#endif
++
++DEFINE_EVENT(cgroup_sleepable_tp, cgroup_mkdir_s,
++
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp)
++);
++
++DEFINE_EVENT(cgroup_sleepable_tp, cgroup_rmdir_s,
++
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp)
++);
++
+ #endif /* _TRACE_CGROUP_H */
  
- int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 		   int relo_idx, void *insn);
--
- #else /* !CONFIG_BPF_SYSCALL */
- static inline struct bpf_prog *bpf_prog_get(u32 ufd)
- {
-@@ -2011,6 +2013,12 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 	return NULL;
+ /* This part must be outside protection */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 9d05c3ca2d5e..f14ab00d9ef5 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5535,6 +5535,8 @@ int cgroup_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode)
+ 	cgroup_destroy_locked(cgrp);
+ out_unlock:
+ 	cgroup_kn_unlock(parent_kn);
++	if (!ret)
++		trace_cgroup_mkdir_s(cgrp);
+ 	return ret;
  }
  
-+static inline struct bpf_func_proto *
-+tracing_prog_syscall_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	return NULL;
-+}
+@@ -5725,6 +5727,9 @@ int cgroup_rmdir(struct kernfs_node *kn)
+ 		TRACE_CGROUP_PATH(rmdir, cgrp);
+ 
+ 	cgroup_kn_unlock(kn);
 +
- static inline void bpf_task_storage_free(struct task_struct *task)
- {
++	if (!ret)
++		trace_cgroup_rmdir_s(cgrp);
+ 	return ret;
  }
-diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-index e7c2276be33e..c73c7ab3680e 100644
---- a/include/linux/tracepoint-defs.h
-+++ b/include/linux/tracepoint-defs.h
-@@ -51,6 +51,7 @@ struct bpf_raw_event_map {
- 	void			*bpf_func;
- 	u32			num_args;
- 	u32			writable_size;
-+	u32			sleepable;
- } __aligned(32);
  
- /*
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 7660a7846586..4edfc6df2f52 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -88,7 +88,7 @@ __bpf_trace_##call(void *__data, proto)					\
-  * to make sure that if the tracepoint handling changes, the
-  * bpf probe will fail to compile unless it too is updated.
-  */
--#define __DEFINE_EVENT(template, call, proto, args, size)		\
-+#define __DEFINE_EVENT(template, call, proto, args, size, sleep)	\
- static inline void bpf_test_probe_##call(void)				\
- {									\
- 	check_trace_callback_type_##call(__bpf_trace_##template);	\
-@@ -104,6 +104,7 @@ __section("__bpf_raw_tp_map") = {					\
- 		.bpf_func	= __bpf_trace_##template,		\
- 		.num_args	= COUNT_ARGS(args),			\
- 		.writable_size	= size,					\
-+		.sleepable	= sleep,				\
- 	},								\
- };
- 
-@@ -123,11 +124,15 @@ static inline void bpf_test_buffer_##call(void)				\
- #undef DEFINE_EVENT_WRITABLE
- #define DEFINE_EVENT_WRITABLE(template, call, proto, args, size) \
- 	__CHECK_WRITABLE_BUF_SIZE(call, PARAMS(proto), PARAMS(args), size) \
--	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), size)
-+	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), size, 0)
-+
-+#undef DEFINE_EVENT_SLEEPABLE
-+#define DEFINE_EVENT_SLEEPABLE(template, call, proto, args)	\
-+	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), 0, 1)
- 
- #undef DEFINE_EVENT
- #define DEFINE_EVENT(template, call, proto, args)			\
--	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), 0)
-+	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), 0, 0)
- 
- #undef DEFINE_EVENT_PRINT
- #define DEFINE_EVENT_PRINT(template, name, proto, args, print)	\
-@@ -136,19 +141,26 @@ static inline void bpf_test_buffer_##call(void)				\
- #undef DECLARE_TRACE
- #define DECLARE_TRACE(call, proto, args)				\
- 	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))		\
--	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), 0)
-+	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), 0, 0)
- 
- #undef DECLARE_TRACE_WRITABLE
- #define DECLARE_TRACE_WRITABLE(call, proto, args, size) \
- 	__CHECK_WRITABLE_BUF_SIZE(call, PARAMS(proto), PARAMS(args), size) \
- 	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args)) \
--	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), size)
-+	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), size, 0)
-+
-+#undef DECLARE_TRACE_SLEEPABLE
-+#define DECLARE_TRACE_SLEEPABLE(call, proto, args)			\
-+	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))		\
-+	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), 0, 1)
- 
- #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
- 
- #undef DECLARE_TRACE_WRITABLE
- #undef DEFINE_EVENT_WRITABLE
- #undef __CHECK_WRITABLE_BUF_SIZE
-+#undef DECLARE_TRACE_SLEEPABLE
-+#undef DEFINE_EVENT_SLEEPABLE
- #undef __DEFINE_EVENT
- #undef FIRST
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 9e6d8d0c8af5..0a12f52fe8a9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4827,12 +4827,6 @@ static const struct bpf_func_proto bpf_sys_bpf_proto = {
- 	.arg3_type	= ARG_CONST_SIZE,
- };
- 
--const struct bpf_func_proto * __weak
--tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
--{
--	return bpf_base_func_proto(func_id);
--}
--
- BPF_CALL_1(bpf_sys_close, u32, fd)
- {
- 	/* When bpf program calls this helper there should not be
-@@ -5045,24 +5039,47 @@ const struct bpf_func_proto bpf_unlink_proto = {
- 	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
- };
- 
--static const struct bpf_func_proto *
--syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+/* Syscall helpers that are also allowed in sleepable tracing prog. */
-+const struct bpf_func_proto *
-+tracing_prog_syscall_func_proto(enum bpf_func_id func_id,
-+				const struct bpf_prog *prog)
- {
- 	switch (func_id) {
- 	case BPF_FUNC_sys_bpf:
- 		return &bpf_sys_bpf_proto;
--	case BPF_FUNC_btf_find_by_name_kind:
--		return &bpf_btf_find_by_name_kind_proto;
- 	case BPF_FUNC_sys_close:
- 		return &bpf_sys_close_proto;
--	case BPF_FUNC_kallsyms_lookup_name:
--		return &bpf_kallsyms_lookup_name_proto;
- 	case BPF_FUNC_mkdir:
- 		return &bpf_mkdir_proto;
- 	case BPF_FUNC_rmdir:
- 		return &bpf_rmdir_proto;
- 	case BPF_FUNC_unlink:
- 		return &bpf_unlink_proto;
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+const struct bpf_func_proto * __weak
-+tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	const struct bpf_func_proto *fn;
-+
-+	fn = tracing_prog_syscall_func_proto(func_id, prog);
-+	if (fn)
-+		return fn;
-+
-+	return bpf_base_func_proto(func_id);
-+}
-+
-+static const struct bpf_func_proto *
-+syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_btf_find_by_name_kind:
-+		return &bpf_btf_find_by_name_kind_proto;
-+	case BPF_FUNC_kallsyms_lookup_name:
-+		return &bpf_kallsyms_lookup_name_proto;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index a2024ba32a20..c816e0e0d4a0 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1691,6 +1691,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		fn = raw_tp_prog_func_proto(func_id, prog);
- 		if (!fn && prog->expected_attach_type == BPF_TRACE_ITER)
- 			fn = bpf_iter_get_func_proto(func_id, prog);
-+		if (!fn && prog->aux->sleepable)
-+			fn = tracing_prog_syscall_func_proto(func_id, prog);
- 		return fn;
- 	}
- }
-@@ -2053,6 +2055,9 @@ static int __bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *
- 	if (prog->aux->max_tp_access > btp->writable_size)
- 		return -EINVAL;
- 
-+	if (prog->aux->sleepable && !btp->sleepable)
-+		return -EPERM;
-+
- 	return tracepoint_probe_register_may_exist(tp, (void *)btp->bpf_func,
- 						   prog);
- }
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

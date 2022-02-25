@@ -2,114 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BB64C4584
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAFA4C4583
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241000AbiBYNLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S241017AbiBYNLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240977AbiBYNLK (ORCPT
+        with ESMTP id S241007AbiBYNLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:11:10 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339FF1E7A7A;
-        Fri, 25 Feb 2022 05:10:38 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id d17so4419640wrc.9;
-        Fri, 25 Feb 2022 05:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vlA3eK5Bl/FOBxIqQr2bttZn8OYu5JXlLYnsBhtHklM=;
-        b=VuBwrpJfbBOW1iuiiX8dWUcJxDuUJ+TBX4n14xRKUaMgGvkqFn1wfoGlRGk+NAh+nI
-         pkIgW9A+qpvKJTJCAJb7oquP1BxIcnRuGP+HSgi4UdUWyaWdAhJ06thtfoM/Ea3yEV/B
-         lJMx0sgO/HARsZgvWaDiOXJ1v4oriH5IEwwhsdK1AEkMYFN7NukdmTk6SPYCqPD+qTPD
-         gDuqGncUNOF73xbNLVQhgsk7cNwabNI6FXfMyVJx+i6f0vDn5JOmcNp66PI/m0NlpYMJ
-         xlFbVblvv8I3sxRKxTIK2PEWTSxdysMGovEVCdsbupdnYKWVigjFFpke/RPc/C/RFOuU
-         ub/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vlA3eK5Bl/FOBxIqQr2bttZn8OYu5JXlLYnsBhtHklM=;
-        b=cnHEZrrQPjXnUXdpoVVf1L/EwFVgp95pW7+QAbx4Mi8lG+8CcFk6M3Xrf9IPczC1Fa
-         RvcQHtkpX/U0OuMOhwV/2xyHty9GK4nV+bDLcRBVIPs11vCIGc+IMOKNSSvGRuveemH6
-         9jxetmoJElZ4M6GC6TF4hgiW8sqbpOR8ZL4/YkBZv4/C1Mg92aBbY+L/E5CHfyYVsz+Y
-         YuovOl1+lXFoGhJOMRyGkiH12hcPfgD4rDnIf1wz4mzh1yFZy596mT8e7bfNfbvPkQJr
-         +Ctu4RmOTPRrak0VhPw3LhAaiYoPZylGLKkjwbrR8xbKs5QR6/4SKauSh5xA+Ngfuhsx
-         hvOQ==
-X-Gm-Message-State: AOAM533L1Napu0S+T6K3o4NAySkTVW+v+usDcjAoxQWwF/AOfxKpU0ed
-        niN0tRnqQM5VosifaQmrgOE750CGRNQ=
-X-Google-Smtp-Source: ABdhPJxWUW59vdNTJb1moblRywRu740NlcfJzv3mxAcUsIBZhOfAJSixEyfk+zfOEz3FpQ69xpKccQ==
-X-Received: by 2002:adf:c512:0:b0:1ed:c0bc:c228 with SMTP id q18-20020adfc512000000b001edc0bcc228mr6035477wrf.174.1645794636806;
-        Fri, 25 Feb 2022 05:10:36 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id f17-20020adffcd1000000b001edbf438d83sm2296919wrs.32.2022.02.25.05.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 05:10:35 -0800 (PST)
-Date:   Fri, 25 Feb 2022 14:10:34 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     trix@redhat.com
-Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc/tegra: bpmp: cleanup double word in comment
-Message-ID: <YhjVSre39nZ4evyc@orome>
-References: <20220207130951.2059795-1-trix@redhat.com>
+        Fri, 25 Feb 2022 08:11:30 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B771EDA20
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:10:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E0CEF1F383;
+        Fri, 25 Feb 2022 13:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645794649; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eUojYv+oX7BFamXdVFlRIzLk+XRgrlr6JqewWUQNEIE=;
+        b=nEP45D6KFLEd+HysBxr9Xy5B5mCJurI/lwqkrTjggPy/ji64xOL//vVjwjJSRHgalctj7n
+        h5a8K1zOsjCZP3PXh0fvQIT0G1HmLkG73pIot6wTBSezWUQTRj5EJuGkKmab6qXgKinZQc
+        Xt979J4DnxUvCZUgSGCXGiApSxAZY7w=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C9F513519;
+        Fri, 25 Feb 2022 13:10:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z9ihOljVGGK+QgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 25 Feb 2022 13:10:48 +0000
+Message-ID: <375952e2-87af-79cc-c067-4364252ab22f@suse.com>
+Date:   Fri, 25 Feb 2022 14:10:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 1/3] MAINTAINERS: Update maintainers for paravirt ops
+ and VMware hypervisor interface
+Content-Language: en-US
+To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>, x86@kernel.org,
+        pv-drivers@vmware.com, tglx@linutronix.de, bp@alien8.de
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Deep Shah <sdeep@vmware.com>, vithampi@vmware.com,
+        keerthanak@vmware.com, srivatsab@vmware.com, anishs@vmware.com,
+        linux-kernel@vger.kernel.org, namit@vmware.com, joe@perches.com,
+        kuba@kernel.org, rostedt@goodmis.org
+References: <164574138686.654750.10250173565414769119.stgit@csail.mit.edu>
+ <164574143710.654750.17342470717937593195.stgit@csail.mit.edu>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <164574143710.654750.17342470717937593195.stgit@csail.mit.edu>
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gaMB5m1ByvcdMX1c"
-Content-Disposition: inline
-In-Reply-To: <20220207130951.2059795-1-trix@redhat.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ protocol="application/pgp-signature";
+ boundary="------------29t2LMCCQC8QOiYo5iq7cuuQ"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------29t2LMCCQC8QOiYo5iq7cuuQ
+Content-Type: multipart/mixed; boundary="------------AeeXwk2O6jRaKrbpuBln0voK";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>, x86@kernel.org,
+ pv-drivers@vmware.com, tglx@linutronix.de, bp@alien8.de
+Cc: Alexey Makhalov <amakhalov@vmware.com>, Deep Shah <sdeep@vmware.com>,
+ vithampi@vmware.com, keerthanak@vmware.com, srivatsab@vmware.com,
+ anishs@vmware.com, linux-kernel@vger.kernel.org, namit@vmware.com,
+ joe@perches.com, kuba@kernel.org, rostedt@goodmis.org
+Message-ID: <375952e2-87af-79cc-c067-4364252ab22f@suse.com>
+Subject: Re: [PATCH v5 1/3] MAINTAINERS: Update maintainers for paravirt ops
+ and VMware hypervisor interface
+References: <164574138686.654750.10250173565414769119.stgit@csail.mit.edu>
+ <164574143710.654750.17342470717937593195.stgit@csail.mit.edu>
+In-Reply-To: <164574143710.654750.17342470717937593195.stgit@csail.mit.edu>
 
---gaMB5m1ByvcdMX1c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--------------AeeXwk2O6jRaKrbpuBln0voK
+Content-Type: multipart/mixed; boundary="------------Wn4y4i3amsZqtrpQHhcygLzB"
+
+--------------Wn4y4i3amsZqtrpQHhcygLzB
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMjQuMDIuMjIgMjM6MjQsIFNyaXZhdHNhIFMuIEJoYXQgd3JvdGU6DQo+IEZyb206IFNy
+aXZhdHNhIFMuIEJoYXQgKFZNd2FyZSkgPHNyaXZhdHNhQGNzYWlsLm1pdC5lZHU+DQo+IA0K
+PiBEZWVwIGhhcyBkZWNpZGVkIHRvIHRyYW5zZmVyIHRoZSBqb2ludC1tYWludGFpbmVyc2hp
+cCBvZiBwYXJhdmlydCBvcHMNCj4gdG8gU3JpdmF0c2EsIGFuZCB0aGUgbWFpbnRhaW5lcnNo
+aXAgb2YgdGhlIFZNd2FyZSBoeXBlcnZpc29yIGludGVyZmFjZQ0KPiB0byBTcml2YXRzYSBh
+bmQgQWxleGV5LiBVcGRhdGUgdGhlIE1BSU5UQUlORVJTIGZpbGUgdG8gcmVmbGVjdCB0aGlz
+DQo+IGNoYW5nZSwgYW5kIGFsc28gYWRkIEFsZXhleSBhcyBhIHJldmlld2VyIGZvciBwYXJh
+dmlydCBvcHMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTcml2YXRzYSBTLiBCaGF0IChWTXdh
+cmUpIDxzcml2YXRzYUBjc2FpbC5taXQuZWR1Pg0KPiBBY2tlZC1ieTogQWxleGV5IE1ha2hh
+bG92IDxhbWFraGFsb3ZAdm13YXJlLmNvbT4NCj4gQWNrZWQtYnk6IERlZXAgU2hhaCA8c2Rl
+ZXBAdm13YXJlLmNvbT4NCj4gQ2M6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4N
+Cg0KQWNrZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVy
+Z2VuDQo=
+--------------Wn4y4i3amsZqtrpQHhcygLzB
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 07, 2022 at 05:09:51AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
->=20
-> Remove the second 'or'.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  include/soc/tegra/bpmp-abi.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Applied, thanks.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Thierry
+--------------Wn4y4i3amsZqtrpQHhcygLzB--
 
---gaMB5m1ByvcdMX1c
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------AeeXwk2O6jRaKrbpuBln0voK--
+
+--------------29t2LMCCQC8QOiYo5iq7cuuQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY1UkACgkQ3SOs138+
-s6EwSg/9EfbRbWhVM+OH+ni+mN2umIXqF2gMUQp12pZneEmDnCPlfkFFIrXrEUtV
-+hB7m2uTTCHiV7kpkAjoa2bpVSMH+Iz1w/gBCjxcI4B47juEwwxMz/iaNxVE3qk2
-h6hotb805FMsOKN4vyVTIIGuqv8CDQGXZM2FuWl1qjCYoYo9wlJbTzvhddPPfQLh
-u9N220LGHZw3hXWZM/HA2D6LyvE1KLzZD+ulNRMchjliuToadNgSocRN+goSm1Aj
-i5eqd54x+PgBaFxy4MOX3egogWh4xoeiMtmV4gvnKWyrhsBxQYJybe2tj8Q6qZa6
-BU/KmYZdhsCxoWm+CXT3tECHI6+ccz5v3hv1DRCpiWgqefx6Kc512gLZUuLfN8PD
-eW55wSwljECsXs3fcxkndW1sKIUT8kKtvwNRhCG/qKVD6/v9VnuiMP7j5X4U+Lmn
-J9JFJUHWZu/UoEC5ToU3dWjYDrzmpPFuchYP0uIRALDq2xz7WRe8016g+GgYia10
-JNKc4szSgepDNt0KJr85/DPOT3O+xM/+6XwZz9T6lhGIID33vJ6MsB/p1HmhcvNp
-6ocMa964idCjlc8aNXvum8GzpzkLrShuxYLKbQ6YPffemIitiNWptF8ZUuDQrWeO
-KqRbKAP4YMwrM5zeL3iDEbh8Zeon13HoxRZJ9L/P3ttNrD9m26s=
-=w44Z
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmIY1VgFAwAAAAAACgkQsN6d1ii/Ey8a
+lwgAg3CewYQxWcD0zp/zRFRvs391kC+/R247t8nwd2NPG3BudJzoH2itXHQk/nOpANxG09gGkGTD
+sW0mqnI5vIhea3tv746ocAOjB7goxpODQuY4crjv5JC2Daja2KjpBz2peF/uWlGxfUtzcJxb2K6r
+yRAbaooy17+vw2xbsB2v7pWT5ZLRaCuTC876/tqvBhzhA7GUbXzCc/qUFq2JdXRSWwV5j+56br1e
+vhFLUnZemd8pRTjUw/psL3kmqj99G9uvUjsxGSt767ygTb/Hwv5qhYf6Dd3tHLGzsQDfYdGXK92+
+yuypvfQO8H4VXAIEAlMMXw2oZxnK8PzkSy2E+Fk+NA==
+=xeNw
 -----END PGP SIGNATURE-----
 
---gaMB5m1ByvcdMX1c--
+--------------29t2LMCCQC8QOiYo5iq7cuuQ--

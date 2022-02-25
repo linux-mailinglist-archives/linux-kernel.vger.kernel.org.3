@@ -2,56 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525514C3EB5
+	by mail.lfdr.de (Postfix) with ESMTP id 080404C3EB4
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbiBYHGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S238003AbiBYHGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiBYHGh (ORCPT
+        with ESMTP id S237991AbiBYHGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:06:37 -0500
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30711E016C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:06:03 -0800 (PST)
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 5A1CD2013FA;
-        Fri, 25 Feb 2022 07:06:01 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id BA8ED802B3; Fri, 25 Feb 2022 08:05:43 +0100 (CET)
-Date:   Fri, 25 Feb 2022 08:05:43 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] random: cleanup UUID handling
-Message-ID: <Yhh/x2C0b8QvTm2N@owl.dominikbrodowski.net>
-References: <20220224220958.93263-1-Jason@zx2c4.com>
+        Fri, 25 Feb 2022 02:06:40 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199AF1E1107;
+        Thu, 24 Feb 2022 23:06:09 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id cp23-20020a17090afb9700b001bbfe0fbe94so4041037pjb.3;
+        Thu, 24 Feb 2022 23:06:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q/tCaefy/zF2YcxtAir2UFA6eKeXz41CXIJzupnqKxU=;
+        b=qhXpU1j94DTo8fXZmkVOFyVNMaSOfACjEYnt5+znFJFAyYrNkSBRrABkjNjwutIT5t
+         cvc7hWfP7QnMocVJbkNy+dT3uUWz9R+ezvoFG33w2H1C3Zn0a4JE52DziFsqN7oxEdFI
+         donDNU5ZWSlYLa4dffD8ap01WIqUEmLWwCdzNwmkWok4MPhFKy3rrmkmdeokXhGbmuBs
+         2XW9jPBDxFxEHIdNdq965xCVP9vJ2NESB+eBw8FOg6NWoWq3uzWNiugvaSfIQdRDumza
+         y6LQ50OU/tqhcNJhcTrDADtf0Uq3MdBbXG5pJOB/biUUQLl9GLXjzhWDMf7z3fIg2I46
+         4Bgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q/tCaefy/zF2YcxtAir2UFA6eKeXz41CXIJzupnqKxU=;
+        b=IEM0xADZRIavfafTbWZi5pEiq0/JU8TNiYE7jTOGZY1eFTxb4sbMGyMCjlUvY2bsYy
+         qzlY0OL4Gm6noilR/6/KmcMJ6HPYJt46cgn95uFI9CpO/qnNHzaDizvZnVDvDb1FgvxN
+         E2P4x7KNgU19syenVGgqTZzPaV6H7mvBok00DULKB9p4j4J38UzgfDMuwM8BTJjQiGa+
+         ZY54SfF8vc5HAxbTeUC2wbT2cxrjLMmhN/mTrIBFMzpyWsDpG8X2Kqi6sI5i8scT5dDe
+         0cAIAl0IHirA/qnA/hQVXER85vTq8BoCnU58To/2Bda/uk/WqAvnOaWTyiX9rL3MTxOA
+         E2qw==
+X-Gm-Message-State: AOAM531IoUpAQESHnc0SKjxY+aGwk2m/zb4jXJMupmwL1trtawf4UwZh
+        nMhu/YeRkL2j+PbX+S5d7No=
+X-Google-Smtp-Source: ABdhPJwB1i8k8yYncgvKIb1ud+vTwoPw9jzHgU7aiB5WCdFv1LaNP+W1u+1tV7Vhz7S74Dsh4NvC1w==
+X-Received: by 2002:a17:90a:f505:b0:1bc:d47e:8b19 with SMTP id cs5-20020a17090af50500b001bcd47e8b19mr1862036pjb.102.1645772768569;
+        Thu, 24 Feb 2022 23:06:08 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id u16-20020a056a00125000b004e1e36d4428sm1711084pfi.104.2022.02.24.23.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 23:06:08 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: kvm: add hyperv_svm_test to .gitignore
+Date:   Fri, 25 Feb 2022 15:05:57 +0800
+Message-Id: <20220225070558.73195-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224220958.93263-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, Feb 24, 2022 at 11:09:58PM +0100 schrieb Jason A. Donenfeld:
-> Rather than hard coding various lengths, we can use the right constants.
-> Strings should be `char *` while buffers should be `u8 *`. Rather than
-> have a nonsensical and unused maxlength, just remove it. Finally, use
-> snprintf instead of sprintf, just out of good hygiene.
-> 
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Like Xu <likexu@tencent.com>
 
-	Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+hyperv_svm_test's binary should be present in the .gitignore file
+for the git to ignore it.
 
-Thanks,
-	Dominik
+Fixes: e67bd7df28a0 ("KVM: selftests: nSVM: Add enlightened MSR-Bitmap selftest")
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ tools/testing/selftests/kvm/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index dce7de7755e6..62f9b781545b 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -20,6 +20,7 @@
+ /x86_64/hyperv_clock
+ /x86_64/hyperv_cpuid
+ /x86_64/hyperv_features
++/x86_64/hyperv_svm_test
+ /x86_64/mmio_warning_test
+ /x86_64/mmu_role_test
+ /x86_64/platform_info_test
+-- 
+2.35.1
+

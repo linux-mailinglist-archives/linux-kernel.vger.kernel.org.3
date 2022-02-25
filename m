@@ -2,231 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129084C41BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23454C41BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239236AbiBYJsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 04:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S239242AbiBYJtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 04:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237986AbiBYJsJ (ORCPT
+        with ESMTP id S233675AbiBYJtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 04:48:09 -0500
-Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75E219140F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 01:47:36 -0800 (PST)
-X-QQ-mid: bizesmtp69t1645782450t0kbe8hh
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 25 Feb 2022 17:47:24 +0800 (CST)
-X-QQ-SSF: 01400000002000C0F000000A0000000
-X-QQ-FEAT: vsfsx1ezZ8T9jEj1xNfTc/NNOY+XLDtQ8KYfXZfbFq1OAyvxyybatFq69W8AI
-        mycbPgvMN1QnO8/m3gZ4MXNE0Zk+9eIzUD8kDpcX4/3m0fuYQ1g3dyoYAnSaGiXEl3fj6HF
-        Km8scUlBVEan0JXqC0YQjUEIv+KBhB2DCtPGymk80N91YFlBGLQEvDJrWy39/796K1qPCVo
-        khjMPwmDue14T9tCbafeiSZU4SIUKbVJYPzTUUtsJitFFd2u/qoW0Q/W4Ir/CiC7S1lWgxU
-        hQ3WedHzT9K7OtW/iRZ8aTvg9APS/5NBzkWNrRTQe9cg0PEDaogOItAu/D5uXmJR5xDa+hJ
-        qkd9CQSAwDFbvgrIHt/V9YHcl4/IX7b4dN7hOQoCBap8M7kzcg=
-X-QQ-GoodBg: 1
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     airlied@linux.ie, daniel@ffwll.ch
-Cc:     evan.quan@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] gpu/amd: vega10_hwmgr: fix inappropriate private variable name
-Date:   Fri, 25 Feb 2022 17:47:22 +0800
-Message-Id: <20220225094722.4734-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 25 Feb 2022 04:49:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472B32255A8;
+        Fri, 25 Feb 2022 01:48:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0523C1F380;
+        Fri, 25 Feb 2022 09:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645782509; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5P4zVYBKfq9PaqqHPI7HgucU9j+DVcXognLTQWrknQ=;
+        b=Z4Tv7DRXcrN/Fg/4rhQtoqbR0F+ItAF3Gdyhbkxg9gG/PKqwvlc5TuYfBhJrxPntYRdTpb
+        ZJEn6Il2TfmmMgOUrKSi11cdxP956hQQBh+N72nUV6jvjLrWlvKPwqBOzQ3MDl3WG1roqm
+        3p7xTU2EpU7e032OvIrjXpenvo5JRrs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645782509;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5P4zVYBKfq9PaqqHPI7HgucU9j+DVcXognLTQWrknQ=;
+        b=vEKhzATAKezWEJ7UK90x1rmj7syMsxg+id66QPLtWh7PSpsK1tBjktlkI283qzqb2/574B
+        ucOtVIqQr09c22Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9247713B96;
+        Fri, 25 Feb 2022 09:48:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id S6ubIOylGGJrYQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 25 Feb 2022 09:48:28 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 6e4be55a;
+        Fri, 25 Feb 2022 09:48:42 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] ceph: add support for encrypted snapshot names
+References: <20220224112142.18052-1-lhenriques@suse.de>
+        <7d2a798d-ce32-4bf7-b184-267bb79f44e3@redhat.com>
+Date:   Fri, 25 Feb 2022 09:48:42 +0000
+In-Reply-To: <7d2a798d-ce32-4bf7-b184-267bb79f44e3@redhat.com> (Xiubo Li's
+        message of "Fri, 25 Feb 2022 14:55:02 +0800")
+Message-ID: <87h78ni8ed.fsf@brahms.olymp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In file vega10_hwmgr.c, the names of struct vega10_power_state *
-and struct pp_power_state * are confusingly used, which may lead
-to some confusion.
+Xiubo Li <xiubli@redhat.com> writes:
 
-Status quo is that variables of type struct vega10_power_state *
-are named "vega10_ps", "ps", "vega10_power_state". A more
-appropriate usage is that struct are named "ps" is used for
-variabled of type struct pp_power_state *.
+> On 2/24/22 7:21 PM, Lu=C3=ADs Henriques wrote:
+>> Since filenames in encrypted directories are already encrypted and shown
+>> as a base64-encoded string when the directory is locked, snapshot names
+>> should show a similar behaviour.
+>>
+>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+>> ---
+>>   fs/ceph/dir.c   | 15 +++++++++++++++
+>>   fs/ceph/inode.c | 10 +++++++++-
+>>   2 files changed, 24 insertions(+), 1 deletion(-)
+>>
+>> Support on the MDS for names that'll be > MAX_NAME when base64 encoded is
+>> still TBD.  I thought it would be something easy to do, but snapshots
+>> don't seem to make use of the CDir/CDentry (which is where alternate_name
+>> is stored on the MDS).  I'm still looking into this, but I may need some
+>> help there :-(
+>>
+>> Cheers,
+>> --
+>> Lu=C3=ADs
+>>
+>> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+>> index a449f4a07c07..20ae600ee7cd 100644
+>> --- a/fs/ceph/dir.c
+>> +++ b/fs/ceph/dir.c
+>> @@ -1065,6 +1065,13 @@ static int ceph_mkdir(struct user_namespace *mnt_=
+userns, struct inode *dir,
+>>   		op =3D CEPH_MDS_OP_MKSNAP;
+>>   		dout("mksnap dir %p snap '%pd' dn %p\n", dir,
+>>   		     dentry, dentry);
+>> +		/* XXX missing support for alternate_name in snapshots */
+>> +		if (IS_ENCRYPTED(dir) && (dentry->d_name.len >=3D 189)) {
+>> +			dout("encrypted snapshot name too long: %pd len: %d\n",
+>> +			     dentry, dentry->d_name.len);
+>> +			err =3D -ENAMETOOLONG;
+>> +			goto out;
+>> +		}
+>>   	} else if (ceph_snap(dir) =3D=3D CEPH_NOSNAP) {
+>>   		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
+>>   		op =3D CEPH_MDS_OP_MKDIR;
+>> @@ -1109,6 +1116,14 @@ static int ceph_mkdir(struct user_namespace *mnt_=
+userns, struct inode *dir,
+>>   	    !req->r_reply_info.head->is_target &&
+>>   	    !req->r_reply_info.head->is_dentry)
+>>   		err =3D ceph_handle_notrace_create(dir, dentry);
+>> +
+>> +	/*
+>> +	 * If we have created a snapshot we need to clear the cache, otherwise
+>> +	 * snapshot will show encrypted filenames in readdir.
+>> +	 */
+>
+> Do you mean dencrypted filenames ?
 
-So rename struct vega10_power_state * which are named "ps" and
-"vega10_power_state" to "vega10_ps", I also renamed "psa" to
-"vega10_psa" and "psb" to "vega10_psb" to make it more clearly.
+What I see without this d_drop() is that, if I run an 'ls' in a snapshot
+directory immediately after creating it, the filenames in that snapshot
+will be encrypted.  Maybe there's a bug somewhere else and this d_drop()
+isn't the right fix...?
 
-The rows longer than 100 columns are involved.
+Cheers,
+--=20
+Lu=C3=ADs
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- .../drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c | 68 +++++++++++--------
- 1 file changed, 38 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-index 3f040be0d158..37324f2009ca 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-+++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-@@ -3095,7 +3095,7 @@ static int vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
- 		void *pp_table, uint32_t classification_flag)
- {
- 	ATOM_Vega10_GFXCLK_Dependency_Record_V2 *patom_record_V2;
--	struct vega10_power_state *vega10_power_state =
-+	struct vega10_power_state *vega10_ps =
- 			cast_phw_vega10_power_state(&(power_state->hardware));
- 	struct vega10_performance_level *performance_level;
- 	ATOM_Vega10_State *state_entry = (ATOM_Vega10_State *)state;
-@@ -3145,17 +3145,17 @@ static int vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
- 	power_state->temperatures.min = 0;
- 	power_state->temperatures.max = 0;
- 
--	performance_level = &(vega10_power_state->performance_levels
--			[vega10_power_state->performance_level_count++]);
-+	performance_level = &(vega10_ps->performance_levels
-+			[vega10_ps->performance_level_count++]);
- 
- 	PP_ASSERT_WITH_CODE(
--			(vega10_power_state->performance_level_count <
-+			(vega10_ps->performance_level_count <
- 					NUM_GFXCLK_DPM_LEVELS),
- 			"Performance levels exceeds SMC limit!",
- 			return -1);
- 
- 	PP_ASSERT_WITH_CODE(
--			(vega10_power_state->performance_level_count <=
-+			(vega10_ps->performance_level_count <=
- 					hwmgr->platform_descriptor.
- 					hardwareActivityPerformanceLevels),
- 			"Performance levels exceeds Driver limit!",
-@@ -3169,8 +3169,8 @@ static int vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
- 	performance_level->mem_clock = mclk_dep_table->entries
- 			[state_entry->ucMemClockIndexLow].ulMemClk;
- 
--	performance_level = &(vega10_power_state->performance_levels
--				[vega10_power_state->performance_level_count++]);
-+	performance_level = &(vega10_ps->performance_levels
-+				[vega10_ps->performance_level_count++]);
- 	performance_level->soc_clock = socclk_dep_table->entries
- 				[state_entry->ucSocClockIndexHigh].ulClk;
- 	if (gfxclk_dep_table->ucRevId == 0) {
-@@ -3201,11 +3201,11 @@ static int vega10_get_pp_table_entry(struct pp_hwmgr *hwmgr,
- 		unsigned long entry_index, struct pp_power_state *state)
- {
- 	int result;
--	struct vega10_power_state *ps;
-+	struct vega10_power_state *vega10_ps;
- 
- 	state->hardware.magic = PhwVega10_Magic;
- 
--	ps = cast_phw_vega10_power_state(&state->hardware);
-+	vega10_ps = cast_phw_vega10_power_state(&state->hardware);
- 
- 	result = vega10_get_powerplay_table_entry(hwmgr, entry_index, state,
- 			vega10_get_pp_table_entry_callback_func);
-@@ -3218,10 +3218,10 @@ static int vega10_get_pp_table_entry(struct pp_hwmgr *hwmgr,
- 	 */
- 	/* set DC compatible flag if this state supports DC */
- 	if (!state->validation.disallowOnDC)
--		ps->dc_compatible = true;
-+		vega10_ps->dc_compatible = true;
- 
--	ps->uvd_clks.vclk = state->uvd_clocks.VCLK;
--	ps->uvd_clks.dclk = state->uvd_clocks.DCLK;
-+	vega10_ps->uvd_clks.vclk = state->uvd_clocks.VCLK;
-+	vega10_ps->uvd_clks.dclk = state->uvd_clocks.DCLK;
- 
- 	return 0;
- }
-@@ -4823,33 +4823,41 @@ static int vega10_check_states_equal(struct pp_hwmgr *hwmgr,
- 				const struct pp_hw_power_state *pstate1,
- 			const struct pp_hw_power_state *pstate2, bool *equal)
- {
--	const struct vega10_power_state *psa;
--	const struct vega10_power_state *psb;
-+	const struct vega10_power_state *vega10_psa;
-+	const struct vega10_power_state *vega10_psb;
- 	int i;
- 
- 	if (pstate1 == NULL || pstate2 == NULL || equal == NULL)
- 		return -EINVAL;
- 
--	psa = cast_const_phw_vega10_power_state(pstate1);
--	psb = cast_const_phw_vega10_power_state(pstate2);
--	/* If the two states don't even have the same number of performance levels they cannot be the same state. */
--	if (psa->performance_level_count != psb->performance_level_count) {
-+	vega10_psa = cast_const_phw_vega10_power_state(pstate1);
-+	vega10_psb = cast_const_phw_vega10_power_state(pstate2);
-+
-+	/* If the two states don't even have the same number of performance levels
-+	 * they cannot be the same state.
-+	 */
-+	if (vega10_psa->performance_level_count != vega10_psb->performance_level_count) {
- 		*equal = false;
- 		return 0;
- 	}
- 
--	for (i = 0; i < psa->performance_level_count; i++) {
--		if (!vega10_are_power_levels_equal(&(psa->performance_levels[i]), &(psb->performance_levels[i]))) {
--			/* If we have found even one performance level pair that is different the states are different. */
-+	for (i = 0; i < vega10_psa->performance_level_count; i++) {
-+		if (!vega10_are_power_levels_equal(&(vega10_psa->performance_levels[i]),
-+						   &(vega10_psb->performance_levels[i]))) {
-+			/* If we have found even one performance level pair
-+			 * that is different the states are different.
-+			 */
- 			*equal = false;
- 			return 0;
- 		}
- 	}
- 
- 	/* If all performance levels are the same try to use the UVD clocks to break the tie.*/
--	*equal = ((psa->uvd_clks.vclk == psb->uvd_clks.vclk) && (psa->uvd_clks.dclk == psb->uvd_clks.dclk));
--	*equal &= ((psa->vce_clks.evclk == psb->vce_clks.evclk) && (psa->vce_clks.ecclk == psb->vce_clks.ecclk));
--	*equal &= (psa->sclk_threshold == psb->sclk_threshold);
-+	*equal = ((vega10_psa->uvd_clks.vclk == vega10_psb->uvd_clks.vclk) &&
-+		  (vega10_psa->uvd_clks.dclk == vega10_psb->uvd_clks.dclk));
-+	*equal &= ((vega10_psa->vce_clks.evclk == vega10_psb->vce_clks.evclk) &&
-+		   (vega10_psa->vce_clks.ecclk == vega10_psb->vce_clks.ecclk));
-+	*equal &= (vega10_psa->sclk_threshold == vega10_psb->sclk_threshold);
- 
- 	return 0;
- }
-@@ -5444,19 +5452,19 @@ static int vega10_get_performance_level(struct pp_hwmgr *hwmgr, const struct pp_
- 				PHM_PerformanceLevelDesignation designation, uint32_t index,
- 				PHM_PerformanceLevel *level)
- {
--	const struct vega10_power_state *ps;
-+	const struct vega10_power_state *vega10_ps;
- 	uint32_t i;
- 
- 	if (level == NULL || hwmgr == NULL || state == NULL)
- 		return -EINVAL;
- 
--	ps = cast_const_phw_vega10_power_state(state);
-+	vega10_ps = cast_const_phw_vega10_power_state(state);
- 
--	i = index > ps->performance_level_count - 1 ?
--			ps->performance_level_count - 1 : index;
-+	i = index > vega10_ps->performance_level_count - 1 ?
-+			vega10_ps->performance_level_count - 1 : index;
- 
--	level->coreClock = ps->performance_levels[i].gfx_clock;
--	level->memory_clock = ps->performance_levels[i].mem_clock;
-+	level->coreClock = vega10_ps->performance_levels[i].gfx_clock;
-+	level->memory_clock = vega10_ps->performance_levels[i].mem_clock;
- 
- 	return 0;
- }
--- 
-2.20.1
-
-
-
+>
+> - Xiubo
+>
+>
+>> +	if (ceph_snap(dir) =3D=3D CEPH_SNAPDIR)
+>> +		d_drop(dentry);
+>> +
+>>   out_req:
+>>   	ceph_mdsc_put_request(req);
+>>   out:
+>> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+>> index 8b0832271fdf..080824610b73 100644
+>> --- a/fs/ceph/inode.c
+>> +++ b/fs/ceph/inode.c
+>> @@ -182,6 +182,13 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>>   	ci->i_rbytes =3D 0;
+>>   	ci->i_btime =3D ceph_inode(parent)->i_btime;
+>>   +	/* if encrypted, just borough fscrypt_auth from parent */
+>> +	if (IS_ENCRYPTED(parent)) {
+>> +		struct ceph_inode_info *pci =3D ceph_inode(parent);
+>> +		inode->i_flags |=3D S_ENCRYPTED;
+>> +		ci->fscrypt_auth_len =3D pci->fscrypt_auth_len;
+>> +		ci->fscrypt_auth =3D pci->fscrypt_auth;
+>> +	}
+>>   	if (inode->i_state & I_NEW) {
+>>   		inode->i_op =3D &ceph_snapdir_iops;
+>>   		inode->i_fop =3D &ceph_snapdir_fops;
+>> @@ -632,7 +639,8 @@ void ceph_free_inode(struct inode *inode)
+>>     	kfree(ci->i_symlink);
+>>   #ifdef CONFIG_FS_ENCRYPTION
+>> -	kfree(ci->fscrypt_auth);
+>> +	if (ceph_snap(inode) !=3D CEPH_SNAPDIR)
+>> +		kfree(ci->fscrypt_auth);
+>>   #endif
+>>   	fscrypt_free_inode(inode);
+>>   	kmem_cache_free(ceph_inode_cachep, ci);
+>>
+>

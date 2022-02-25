@@ -2,195 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A614C4DC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201D94C4DE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiBYSeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S233289AbiBYSe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiBYSee (ORCPT
+        with ESMTP id S232563AbiBYSe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:34:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2C61190C13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645814040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MeVbMsvqeKcfRpUCeZE0zT6P3QtSSS2eFOANTWB92Lg=;
-        b=bc24pSb8LIzfiDfrbImqVLPGJckxn9A+TAp5Pik+eZV6DROLB89HSn4HAqX0aXVYGgKjPy
-        sg2BGIYovhm6zAb/wnnm/9kxvesa7an8UTmvhQaFixMqbNdI+Cy/7jR6Qk7QhBETnE1NnX
-        b03WwxA5HImKFq95CSNatvetLODFxLg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-189-ExnxXd68PXSu9dwL9DMSig-1; Fri, 25 Feb 2022 13:33:57 -0500
-X-MC-Unique: ExnxXd68PXSu9dwL9DMSig-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5B94180FCD9;
-        Fri, 25 Feb 2022 18:33:55 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46A7D105C883;
-        Fri, 25 Feb 2022 18:33:53 +0000 (UTC)
-Message-ID: <6d01c59eab7f31eef1b4249a85869600410336b7.camel@redhat.com>
-Subject: Re: [PATCH 4/4] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM
- fast hypercall
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Feb 2022 20:33:52 +0200
-In-Reply-To: <20220222154642.684285-5-vkuznets@redhat.com>
-References: <20220222154642.684285-1-vkuznets@redhat.com>
-         <20220222154642.684285-5-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 25 Feb 2022 13:34:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280311A8CA1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645814064; x=1677350064;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=X+gL+ayeFkekglLaChjeWnBq47ZhBCUtvIdt9Wmz+hM=;
+  b=SCaKCJJwfPvk0o1D3ZzAikPiYnZ5gnxr3N/3oR2p298mzfxBgxSEIFZd
+   rHc7mIjYFJzrcFIHPi1Gnd5HuwfLfap5R7fdN0aDLCXWOudD2sgh1IJBk
+   LM6KGFQKHDAQW7aj7lvbi6jXPSHK+2IZJ758zOcgYKmwzY+DV3H5nTSsH
+   xYjurywVVx1mAe6f5/iCEPRKf8bnRyn6dmY/HMMnJssgYh2lwPy0AM05h
+   25zhYNsGV3mvf8hNN1z46LWP6++COf92dFBmZ/eXuojyn62kE84y8p/vB
+   JCCMFv18DR7fdfN6i3YL6oMG39T2Z14gvJ+DgRWkZRe5p0MQTE9/RsUdO
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338992328"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="338992328"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:34:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="492056461"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Feb 2022 10:34:22 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNfQ5-0004bn-KK; Fri, 25 Feb 2022 18:34:21 +0000
+Date:   Sat, 26 Feb 2022 02:34:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: [at91:at91-soc 6/6]
+ drivers/soc/microchip/mpfs-sys-controller.c:76:6: warning: no previous
+ prototype for 'mpfs_sys_controller_put'
+Message-ID: <202202260047.AMTP3O8K-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 16:46 +0100, Vitaly Kuznetsov wrote:
-> It has been proven on practice that at least Windows Server 2019 tries
-> using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
-> and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
-> hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
-> information is missing in TLFS as of 6.0b. Currently, KVM returns an error
-> (HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
-> 
-> Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
-> all its parameters fit into RDX:R8 and this is handled by KVM correctly.
-> 
-> Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 52 ++++++++++++++++++++++++++++---------------
->  1 file changed, 34 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 6dda93bf98ae..3060057bdfd4 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1890,6 +1890,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	int sparse_banks_len;
->  	u32 vector;
->  	bool all_cpus;
-> +	int i;
->  
->  	if (hc->code == HVCALL_SEND_IPI) {
->  		if (!hc->fast) {
-> @@ -1910,9 +1911,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  
->  		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
->  	} else {
-> -		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-> -					    sizeof(send_ipi_ex))))
-> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		if (!hc->fast) {
-> +			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-> +						    sizeof(send_ipi_ex))))
-> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		} else {
-> +			send_ipi_ex.vector = (u32)hc->ingpa;
-> +			send_ipi_ex.vp_set.format = hc->outgpa;
-> +			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
-> +		}
->  
->  		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
->  					 send_ipi_ex.vp_set.format,
-> @@ -1920,8 +1927,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  
->  		vector = send_ipi_ex.vector;
->  		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
-> -		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
-> -			sizeof(sparse_banks[0]);
-> +		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
-Is this change intentional? 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git at91-soc
+head:   d0054a470c33902f5ae88835ed8a8ecc3cf8faa4
+commit: d0054a470c33902f5ae88835ed8a8ecc3cf8faa4 [6/6] soc: add microchip polarfire soc system controller
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220226/202202260047.AMTP3O8K-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git/commit/?id=d0054a470c33902f5ae88835ed8a8ecc3cf8faa4
+        git remote add at91 https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
+        git fetch --no-tags at91 at91-soc
+        git checkout d0054a470c33902f5ae88835ed8a8ecc3cf8faa4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/microchip/
 
-I haven't fully reviewed this, because kvm/queue seem to have a bit different
-version of this, and I didn't fully follow on all of this.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-	Maxim Levitsky
+All warnings (new ones prefixed by >>):
 
->  
->  		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
->  
-> @@ -1931,12 +1937,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		if (!sparse_banks_len)
->  			goto ret_success;
->  
-> -		if (kvm_read_guest(kvm,
-> -				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
-> -							vp_set.bank_contents),
-> -				   sparse_banks,
-> -				   sparse_banks_len))
-> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		if (!hc->fast) {
-> +			if (kvm_read_guest(kvm,
-> +					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
-> +								vp_set.bank_contents),
-> +					   sparse_banks,
-> +					   sparse_banks_len * sizeof(sparse_banks[0])))
-> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		} else {
-> +			/*
-> +			 * The lower half of XMM0 is already consumed, each XMM holds
-> +			 * two sparse banks.
-> +			 */
-> +			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
-> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +			for (i = 0; i < sparse_banks_len; i++) {
-> +				if (i % 2)
-> +					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
-> +				else
-> +					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
-> +			}
-> +		}
->  	}
->  
->  check_and_send_ipi:
-> @@ -2098,6 +2119,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
-> +	case HVCALL_SEND_IPI_EX:
->  		return true;
->  	}
->  
-> @@ -2265,14 +2287,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->  		ret = kvm_hv_flush_tlb(vcpu, &hc);
->  		break;
->  	case HVCALL_SEND_IPI:
-> -		if (unlikely(hc.rep)) {
-> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -			break;
-> -		}
-> -		ret = kvm_hv_send_ipi(vcpu, &hc);
-> -		break;
->  	case HVCALL_SEND_IPI_EX:
-> -		if (unlikely(hc.fast || hc.rep)) {
-> +		if (unlikely(hc.rep)) {
->  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->  			break;
->  		}
+>> drivers/soc/microchip/mpfs-sys-controller.c:76:6: warning: no previous prototype for 'mpfs_sys_controller_put' [-Wmissing-prototypes]
+      76 | void mpfs_sys_controller_put(void *data)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/mpfs_sys_controller_put +76 drivers/soc/microchip/mpfs-sys-controller.c
+
+    75	
+  > 76	void mpfs_sys_controller_put(void *data)
+    77	{
+    78		struct mpfs_sys_controller *sys_controller = data;
+    79	
+    80		kref_put(&sys_controller->consumers, mpfs_sys_controller_delete);
+    81	}
+    82	EXPORT_SYMBOL(mpfs_sys_controller_put);
+    83	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

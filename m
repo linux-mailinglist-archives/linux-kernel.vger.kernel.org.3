@@ -2,193 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796DE4C4775
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7844C4774
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241722AbiBYOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S239129AbiBYObG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbiBYOaG (ORCPT
+        with ESMTP id S233831AbiBYObC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:30:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA42325CF;
-        Fri, 25 Feb 2022 06:29:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 25 Feb 2022 09:31:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A5142325EA
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645799428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gsFPcx+8cECH3pU7E+X+a8TC3R17DTuLbJ7iNefsFWs=;
+        b=cmBC7LgoZ4A44YqBRCM3Y6eGtS+sHms7eMOksnLLoONUMfNMGWvqyE9jxUviZusk6JIckX
+        MNqvaqgLikGJKRkQcU98BJR1kSmjhWt3Phk1n5JXSaNhop4Ws46tL/zWY5BZH6wcVzYcqI
+        umOvXhm8+CvlyljbkcaLExChBrwPS10=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-111-J7niIcJpMZKa8LQzhSaQTw-1; Fri, 25 Feb 2022 09:30:25 -0500
+X-MC-Unique: J7niIcJpMZKa8LQzhSaQTw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 184CF6126A;
-        Fri, 25 Feb 2022 14:29:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24F4C340E7;
-        Fri, 25 Feb 2022 14:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645799373;
-        bh=iWripn2F/c2T3ZQ+kXnkv4O/ng8xeHt3AqgattZQUjk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O4kvev2uq4G1MOAGbL4SkgIvzLHhXmysqT05TIxpwYP9JgnF3ilL59xJxn0/BQy7p
-         ZZejkKGJc3fnF0hmuK/iAnj9KnYRJLlIPIk+CWGhn2FHc7LZIcBGOGgEcF17zVSf0s
-         sQba1ArGDCecbjR6hv80xQknWChO0enZK8n7eoz75JeYbWwYYHHj7CiUVvtWCGWDeo
-         e/S0JlxnKQZq+GB1FXXFmtQS58aMtkFGWM8wasOjrDkgBxrUW0D3YQ2Gh+ZM6QdBWE
-         qPk2RIOvN0go6y01L7DmaBrBeiYVsdZ7EgLU0QYeRlcu/drDWp7Uo6E2oMWBmj5E4/
-         FT2zze1N8KRRg==
-Message-ID: <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
-Date:   Fri, 25 Feb 2022 08:29:31 -0600
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9FB951006AA5;
+        Fri, 25 Feb 2022 14:30:22 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B87B523789;
+        Fri, 25 Feb 2022 14:30:16 +0000 (UTC)
+Message-ID: <ef368bdef58c3db2cac47d0f30df0bdc0d5df73e.camel@redhat.com>
+Subject: Re: [PATCH v6 3/9] KVM: VMX: Detect Tertiary VM-Execution control
+ when setup VMCS config
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+Date:   Fri, 25 Feb 2022 16:30:15 +0200
+In-Reply-To: <20220225082223.18288-4-guang.zeng@intel.com>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+         <20220225082223.18288-4-guang.zeng@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-02-25 at 16:22 +0800, Zeng Guang wrote:
+> From: Robert Hoo <robert.hu@linux.intel.com>
+> 
+> Check VMX features on tertiary execution control in VMCS config setup.
+> Sub-features in tertiary execution control to be enabled are adjusted
+> according to hardware capabilities although no sub-feature is enabled
+> in this patch.
+> 
+> EVMCSv1 doesn't support tertiary VM-execution control, so disable it
+> when EVMCSv1 is in use. And define the auxiliary functions for Tertiary
+> control field here, using the new BUILD_CONTROLS_SHADOW().
+> 
+> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>  arch/x86/include/asm/vmx.h      |  3 +++
+>  arch/x86/kvm/vmx/capabilities.h |  7 ++++++
+>  arch/x86/kvm/vmx/evmcs.c        |  2 ++
+>  arch/x86/kvm/vmx/evmcs.h        |  1 +
+>  arch/x86/kvm/vmx/vmcs.h         |  1 +
+>  arch/x86/kvm/vmx/vmx.c          | 38 ++++++++++++++++++++++++++++++++-
+>  arch/x86/kvm/vmx/vmx.h          |  1 +
+>  7 files changed, 52 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index 0ffaa3156a4e..8c929596a299 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -31,6 +31,7 @@
+>  #define CPU_BASED_RDTSC_EXITING                 VMCS_CONTROL_BIT(RDTSC_EXITING)
+>  #define CPU_BASED_CR3_LOAD_EXITING		VMCS_CONTROL_BIT(CR3_LOAD_EXITING)
+>  #define CPU_BASED_CR3_STORE_EXITING		VMCS_CONTROL_BIT(CR3_STORE_EXITING)
+> +#define CPU_BASED_ACTIVATE_TERTIARY_CONTROLS	VMCS_CONTROL_BIT(TERTIARY_CONTROLS)
+>  #define CPU_BASED_CR8_LOAD_EXITING              VMCS_CONTROL_BIT(CR8_LOAD_EXITING)
+>  #define CPU_BASED_CR8_STORE_EXITING             VMCS_CONTROL_BIT(CR8_STORE_EXITING)
+>  #define CPU_BASED_TPR_SHADOW                    VMCS_CONTROL_BIT(VIRTUAL_TPR)
+> @@ -221,6 +222,8 @@ enum vmcs_field {
+>  	ENCLS_EXITING_BITMAP_HIGH	= 0x0000202F,
+>  	TSC_MULTIPLIER                  = 0x00002032,
+>  	TSC_MULTIPLIER_HIGH             = 0x00002033,
+> +	TERTIARY_VM_EXEC_CONTROL	= 0x00002034,
+> +	TERTIARY_VM_EXEC_CONTROL_HIGH	= 0x00002035,
+>  	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
+>  	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
+>  	VMCS_LINK_POINTER               = 0x00002800,
+> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> index 3f430e218375..31f3d88b3e4d 100644
+> --- a/arch/x86/kvm/vmx/capabilities.h
+> +++ b/arch/x86/kvm/vmx/capabilities.h
+> @@ -59,6 +59,7 @@ struct vmcs_config {
+>  	u32 pin_based_exec_ctrl;
+>  	u32 cpu_based_exec_ctrl;
+>  	u32 cpu_based_2nd_exec_ctrl;
+> +	u64 cpu_based_3rd_exec_ctrl;
+>  	u32 vmexit_ctrl;
+>  	u32 vmentry_ctrl;
+>  	struct nested_vmx_msrs nested;
+> @@ -131,6 +132,12 @@ static inline bool cpu_has_secondary_exec_ctrls(void)
+>  		CPU_BASED_ACTIVATE_SECONDARY_CONTROLS;
+>  }
+>  
+> +static inline bool cpu_has_tertiary_exec_ctrls(void)
+> +{
+> +	return vmcs_config.cpu_based_exec_ctrl &
+> +		CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
+> +}
+> +
+>  static inline bool cpu_has_vmx_virtualize_apic_accesses(void)
+>  {
+>  	return vmcs_config.cpu_based_2nd_exec_ctrl &
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index 87e3dc10edf4..6a61b1ae7942 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -297,8 +297,10 @@ const unsigned int nr_evmcs_1_fields = ARRAY_SIZE(vmcs_field_to_evmcs_1);
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  __init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
+>  {
+> +	vmcs_conf->cpu_based_exec_ctrl &= ~EVMCS1_UNSUPPORTED_EXEC_CTRL;
+>  	vmcs_conf->pin_based_exec_ctrl &= ~EVMCS1_UNSUPPORTED_PINCTRL;
+>  	vmcs_conf->cpu_based_2nd_exec_ctrl &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
+> +	vmcs_conf->cpu_based_3rd_exec_ctrl = 0;
+>  
+>  	vmcs_conf->vmexit_ctrl &= ~EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+>  	vmcs_conf->vmentry_ctrl &= ~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 8d70f9aea94b..f886a8ff0342 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -50,6 +50,7 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>   */
+>  #define EVMCS1_UNSUPPORTED_PINCTRL (PIN_BASED_POSTED_INTR | \
+>  				    PIN_BASED_VMX_PREEMPTION_TIMER)
+> +#define EVMCS1_UNSUPPORTED_EXEC_CTRL (CPU_BASED_ACTIVATE_TERTIARY_CONTROLS)
+>  #define EVMCS1_UNSUPPORTED_2NDEXEC					\
+>  	(SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY |				\
+>  	 SECONDARY_EXEC_VIRTUALIZE_APIC_ACCESSES |			\
+> diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
+> index e325c290a816..e18dc68eeeeb 100644
+> --- a/arch/x86/kvm/vmx/vmcs.h
+> +++ b/arch/x86/kvm/vmx/vmcs.h
+> @@ -50,6 +50,7 @@ struct vmcs_controls_shadow {
+>  	u32 pin;
+>  	u32 exec;
+>  	u32 secondary_exec;
+> +	u64 tertiary_exec;
+>  };
+>  
+>  /*
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c569dc2b9192..8a5713d49635 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2422,6 +2422,21 @@ static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
+>  	return 0;
+>  }
+>  
+> +static __init int adjust_vmx_controls_64(u64 ctl_min, u64 ctl_opt,
+> +					 u32 msr, u64 *result)
+> +{
+> +	u64 allowed1;
+> +
+> +	rdmsrl(msr, allowed1);
+> +
+> +	/* Ensure minimum (required) set of control bits are supported. */
+> +	if (ctl_min & ~allowed1)
+> +		return -EIO;
+> +
+> +	*result = (ctl_min | ctl_opt) & allowed1;
+> +	return 0;
+> +}
+> +
+>  static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  				    struct vmx_capability *vmx_cap)
+>  {
+> @@ -2430,6 +2445,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  	u32 _pin_based_exec_control = 0;
+>  	u32 _cpu_based_exec_control = 0;
+>  	u32 _cpu_based_2nd_exec_control = 0;
+> +	u64 _cpu_based_3rd_exec_control = 0;
+>  	u32 _vmexit_control = 0;
+>  	u32 _vmentry_control = 0;
+>  
+> @@ -2451,7 +2467,8 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  
+>  	opt = CPU_BASED_TPR_SHADOW |
+>  	      CPU_BASED_USE_MSR_BITMAPS |
+> -	      CPU_BASED_ACTIVATE_SECONDARY_CONTROLS;
+> +	      CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |
+> +	      CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
+>  	if (adjust_vmx_controls(min, opt, MSR_IA32_VMX_PROCBASED_CTLS,
+>  				&_cpu_based_exec_control) < 0)
+>  		return -EIO;
+> @@ -2525,6 +2542,16 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  				"1-setting enable VPID VM-execution control\n");
+>  	}
+>  
+> +	if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
+> +		u64 opt3 = 0;
+> +		u64 min3 = 0;
+> +
+> +		if (adjust_vmx_controls_64(min3, opt3,
+> +					   MSR_IA32_VMX_PROCBASED_CTLS3,
+> +					   &_cpu_based_3rd_exec_control))
+> +			return -EIO;
+> +	}
+> +
+>  	min = VM_EXIT_SAVE_DEBUG_CONTROLS | VM_EXIT_ACK_INTR_ON_EXIT;
+>  #ifdef CONFIG_X86_64
+>  	min |= VM_EXIT_HOST_ADDR_SPACE_SIZE;
+> @@ -2611,6 +2638,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  	vmcs_conf->pin_based_exec_ctrl = _pin_based_exec_control;
+>  	vmcs_conf->cpu_based_exec_ctrl = _cpu_based_exec_control;
+>  	vmcs_conf->cpu_based_2nd_exec_ctrl = _cpu_based_2nd_exec_control;
+> +	vmcs_conf->cpu_based_3rd_exec_ctrl = _cpu_based_3rd_exec_control;
+>  	vmcs_conf->vmexit_ctrl         = _vmexit_control;
+>  	vmcs_conf->vmentry_ctrl        = _vmentry_control;
+>  
+> @@ -4230,6 +4258,11 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
+>  	return exec_control;
+>  }
+>  
+> +static u64 vmx_tertiary_exec_control(struct vcpu_vmx *vmx)
+> +{
+> +	return vmcs_config.cpu_based_3rd_exec_ctrl;
+> +}
+> +
+>  /*
+>   * Adjust a single secondary execution control bit to intercept/allow an
+>   * instruction in the guest.  This is usually done based on whether or not a
+> @@ -4395,6 +4428,9 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  	if (cpu_has_secondary_exec_ctrls())
+>  		secondary_exec_controls_set(vmx, vmx_secondary_exec_control(vmx));
+>  
+> +	if (cpu_has_tertiary_exec_ctrls())
+> +		tertiary_exec_controls_set(vmx, vmx_tertiary_exec_control(vmx));
+> +
+>  	if (kvm_vcpu_apicv_active(&vmx->vcpu)) {
+>  		vmcs_write64(EOI_EXIT_BITMAP0, 0);
+>  		vmcs_write64(EOI_EXIT_BITMAP1, 0);
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index e07c76974fb0..d4a647d3ed4a 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -488,6 +488,7 @@ BUILD_CONTROLS_SHADOW(vm_exit, VM_EXIT_CONTROLS, 32)
+>  BUILD_CONTROLS_SHADOW(pin, PIN_BASED_VM_EXEC_CONTROL, 32)
+>  BUILD_CONTROLS_SHADOW(exec, CPU_BASED_VM_EXEC_CONTROL, 32)
+>  BUILD_CONTROLS_SHADOW(secondary_exec, SECONDARY_VM_EXEC_CONTROL, 32)
+> +BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
+>  
+>  /*
+>   * VMX_REGS_LAZY_LOAD_SET - The set of registers that will be updated in the
 
 
-On 2/25/22 02:52, Anshuman Khandual wrote:
-> 
-> 
-> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->> Hi Anshuman,
->>
->> On 2/13/22 20:30, Anshuman Khandual wrote:
->>> This defines and exports a platform specific custom vm_get_page_prot() via
->>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->>> macros can be dropped which are no longer needed.
->>>
->>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>> ---
->>>    arch/nios2/Kconfig               |  1 +
->>>    arch/nios2/include/asm/pgtable.h | 16 ------------
->>>    arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->>>    3 files changed, 46 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>> index 33fd06f5fa41..85a58a357a3b 100644
->>> --- a/arch/nios2/Kconfig
->>> +++ b/arch/nios2/Kconfig
->>> @@ -6,6 +6,7 @@ config NIOS2
->>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>        select ARCH_HAS_DMA_SET_UNCACHED
->>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>        select ARCH_NO_SWAP
->>>        select COMMON_CLK
->>>        select TIMER_OF
->>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
->>> index 4a995fa628ee..2678dad58a63 100644
->>> --- a/arch/nios2/include/asm/pgtable.h
->>> +++ b/arch/nios2/include/asm/pgtable.h
->>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>     */
->>>      /* Remove W bit on private pages for COW support */
->>> -#define __P000    MKP(0, 0, 0)
->>> -#define __P001    MKP(0, 0, 1)
->>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>> -#define __P100    MKP(1, 0, 0)
->>> -#define __P101    MKP(1, 0, 1)
->>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>      /* Shared pages can have exact HW mapping */
->>> -#define __S000    MKP(0, 0, 0)
->>> -#define __S001    MKP(0, 0, 1)
->>> -#define __S010    MKP(0, 1, 0)
->>> -#define __S011    MKP(0, 1, 1)
->>> -#define __S100    MKP(1, 0, 0)
->>> -#define __S101    MKP(1, 0, 1)
->>> -#define __S110    MKP(1, 1, 0)
->>> -#define __S111    MKP(1, 1, 1)
->>>      /* Used all over the kernel */
->>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
->>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>> index 613fcaa5988a..311b2146a248 100644
->>> --- a/arch/nios2/mm/init.c
->>> +++ b/arch/nios2/mm/init.c
->>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->>>    {
->>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>    }
->>> +
->>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>> +{
->>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>> +    case VM_NONE:
->>> +        return MKP(0, 0, 0);
->>> +    case VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    /* COW */
->>> +    case VM_WRITE:
->>> +        return MKP(0, 0, 0);
->>> +    /* COW */
->>> +    case VM_WRITE | VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    case VM_EXEC:
->>> +        return MKP(1, 0, 0);
->>> +    case VM_EXEC | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    /* COW */
->>> +    case VM_EXEC | VM_WRITE:
->>> +        return MKP(1, 0, 0);
->>> +    /* COW */
->>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    case VM_SHARED:
->>> +        return MKP(0, 0, 0);
->>> +    case VM_SHARED | VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    case VM_SHARED | VM_WRITE:
->>> +        return MKP(0, 1, 0);
->>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>> +        return MKP(0, 1, 1);
->>> +    case VM_SHARED | VM_EXEC:
->>> +        return MKP(1, 0, 0);
->>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>> +        return MKP(1, 1, 0);
->>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>> +        return MKP(1, 1, 1);
->>> +    default:
->>> +        BUILD_BUG();
->>> +    }
->>> +}
->>> +EXPORT_SYMBOL(vm_get_page_prot);
->>
->> I'm getting this compile error after applying this patch when build NIOS2:
-> 
-> Hmm, that is strange.
-> 
-> Did you apply the entire series or atleast upto the nios2 patch ? Generic
-> vm_get_page_prot() should not be called (which is build complaining here)
-> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
-> 
-> Ran a quick build test on nios2 for the entire series and also just upto
-> this particular patch, build was successful.
-> 
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Ok, I did not apply the whole series, just this patch.
+Best regards,
+	Maxim Levitsky
 
-Dinh

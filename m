@@ -2,188 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761794C46E8
+	by mail.lfdr.de (Postfix) with ESMTP id 29C554C46E7
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234461AbiBYNvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S235566AbiBYNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiBYNvD (ORCPT
+        with ESMTP id S233729AbiBYNvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:51:03 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB44B1DA440
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:50:30 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u1so4600717wrg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:50:30 -0800 (PST)
+        Fri, 25 Feb 2022 08:51:11 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DD21DA440;
+        Fri, 25 Feb 2022 05:50:39 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id b5so4669148wrr.2;
+        Fri, 25 Feb 2022 05:50:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9w9MNHceM5e/CbwY1+dyQPCC98anFtCZUOG8qqhTmyk=;
-        b=l0hKYKeJwsyR+c3rmZxWRXHiQXcj3S1dJf+VlCLB7EOkb6WzBZ9QCJueUpJ0Ce7Jq+
-         3QymsCM9QeJ/pcUwZ1idEJHRyJRPpDh0oKMOYuHEkU6TeQZasgkIM34+7OXz/4DCLBv8
-         8cubRbLob9HNJ6BCPAYGhrqZU3J7FHtwpD8e5zgDQsW/972C+M0zrMn3mOIj83gE1sI3
-         VssE6QdPEzVnJHPPjrHMc6EK58Tk7whTdLnROFly7itDCloHoY5pQqUbFw1saHZE3E+O
-         7n+YJjCQ4cZEqvZ4sO5icKUY5Q784PGd73STmsuiv5AngnEdbMRisUo6UhkiCXzyS4Ib
-         O4RA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ATbGzyh3Nal8Wuh5ClbaaT6PS0PYPkn30M5mIo7tHlA=;
+        b=eHwfx0elT0X2NkL9uZ0Nx5YpdEwcwV3MvfmoZzOcHPMysBfwnN9bQ8totyEwfdnOTH
+         h3fdfuDwaEZti3nCN2aRrp22fgLYK8J+hzaRxRZ0n73i1aK8TFAJ9BOTyItMO7nx4Nxs
+         IEIZxvAIsAewPVjM8h1Efr+nGXBHdFTJXfJJmw3c4xHg8rwYJiCIiBcJS+8b9aB1qgG0
+         QmkS/hHGv7NbNksohZm0DYUVbxCIc3B07nxkd+I2MrX5K6l+OQtowoSFzMKqCIOs3anL
+         JIQgt3NgeiaY86OR/QQvsJ8/3oG33Q/wNH67cTjEdaw57uoK9GKvf6ejsDrMwx/Woxed
+         /rIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=9w9MNHceM5e/CbwY1+dyQPCC98anFtCZUOG8qqhTmyk=;
-        b=NaMlJ71pjDLECa/fOnxgH7z33/sQyDS0V93vXPVtIAgrBP6eo1heJ8gOU11zDnlDUE
-         aWS0/bHiSowQ/TRGpILZ1HIeYslNC3NNd5vSZZ/bBMSVRk5dzzzHZzoxnUPOJEn1rKM7
-         PN4mGRPV1qLOTh2kieGBnYNxwdEghedvNK4iQS3xAiv3eBbcmc0pFqTDeaYOnC+bx69K
-         DdMDh/REIoCCKAqnUAMNJE1YXB3f4SNCZFWtQk3LqaFIIgEUpqLu3z7uCEDBVIoIYaT+
-         9WnEK3xD7TNipgQJSJ5EUz8wdJEju67Rxl5vC7u7oUPucnAgnkQ1f3P2i7yJ7ZOILm1c
-         oEfA==
-X-Gm-Message-State: AOAM530bTTRwdGgi7bF5tNkPR1U4ZiIcAMHhkw4gQ88Qahia9dHqqVQh
-        79qYtjYPIEEXNu6EGBhUwLPa4+aHtNUYlQ==
-X-Google-Smtp-Source: ABdhPJwNILx7Y3vqGmnf45KsaAhEwi7FjG9vOoWlbsOgEezNhsWb6i1JReFRh8OcKihQygaPpIuWgQ==
-X-Received: by 2002:a5d:6b0b:0:b0:1e3:1c27:5141 with SMTP id v11-20020a5d6b0b000000b001e31c275141mr6416258wrw.321.1645797029165;
-        Fri, 25 Feb 2022 05:50:29 -0800 (PST)
-Received: from localhost ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05600c479300b00380e461a4d2sm7344566wmo.0.2022.02.25.05.50.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 25 Feb 2022 05:50:28 -0800 (PST)
-Sender: Michal Simek <monstr@monstr.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Mahesh Bodapati <mbodapat@xilinx.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 1/1] microblaze: Use simple memmove/memcpy implementation from lib/string.c
-Date:   Fri, 25 Feb 2022 14:50:25 +0100
-Message-Id: <e31a03a5bb343d1c13b50e29dce42fb0681c5106.1645797022.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1645797022.git.michal.simek@xilinx.com>
-References: <cover.1645797022.git.michal.simek@xilinx.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ATbGzyh3Nal8Wuh5ClbaaT6PS0PYPkn30M5mIo7tHlA=;
+        b=bcJ6fHMzU8gIKUJmLNn8gq+xUqyDZBkVagj5skYb5HHsCStKDX3pmPSvIbRvFoguxB
+         sf24tZycoIt4OA4WLRXoerSxlIXqES6d/ObaQoYkcAmblwiDPpf2pwOrzwmcag/TUlDV
+         NQNBAlDBsmNPSpL8lY9W+DnfsARy/WzHQozqy4ELNmjLcBTFbDxEetWjvZpTABGD2m2Q
+         jRr5dRkh1CHwVxxe/+bm79CVw6dP9Ol1Eoevq9MOdpebEQGhw0RZQxoFs7yAJlbbe8rJ
+         74vC1Nmth7i9pKCz1dpduVPb6lU2kzF4ZmrEUOTJjq8F9rBfnKC4mRKxjZ8BlNJYDEr0
+         3aOA==
+X-Gm-Message-State: AOAM531k+Trt3YsSsU42bKz5B2syTXoNkX7CpCrvTdwLJo0osj5s3Gmk
+        byyB/gTTzfftwwe3IRAvR/a/olHOGrc=
+X-Google-Smtp-Source: ABdhPJw5fB4ALqWPdoEsUzsC/EipwrABWUhkidfssIRytK5jfvKZotEhlxoW1j6QMSoUcsjLGy2QbQ==
+X-Received: by 2002:adf:f049:0:b0:1ee:7523:ed53 with SMTP id t9-20020adff049000000b001ee7523ed53mr5195669wro.586.1645797038349;
+        Fri, 25 Feb 2022 05:50:38 -0800 (PST)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b0037bd5fabd10sm2896563wmq.48.2022.02.25.05.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:50:37 -0800 (PST)
+Date:   Fri, 25 Feb 2022 14:50:35 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, linux-tegra@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 1/2] gpu: host1x: Fix an error handling path in
+ 'host1x_probe()'
+Message-ID: <Yhjeq0yIjq0knq8I@orome>
+References: <05c1932b66048ebf6742705e2ab16eea852c46d9.1636319710.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vyHKb89PagxoToVb"
+Content-Disposition: inline
+In-Reply-To: <05c1932b66048ebf6742705e2ab16eea852c46d9.1636319710.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is based on previous commit ("microblaze: Use simple memset
-implementation from lib/string.c") where generic memset implementation is
-used when OPT_LIB_FUNCTION is not defined. The same change can be done for
-memset/memcpy implementation where doesn't make sense to have generic
-implementation in architecture code.
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+--vyHKb89PagxoToVb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- arch/microblaze/include/asm/string.h |  2 +-
- arch/microblaze/lib/memcpy.c         | 18 ++---------------
- arch/microblaze/lib/memmove.c        | 29 ++--------------------------
- 3 files changed, 5 insertions(+), 44 deletions(-)
+On Sun, Nov 07, 2021 at 10:16:25PM +0100, Christophe JAILLET wrote:
+> Add the missing 'host1x_bo_cache_destroy()' call in the error handling
+> path of the probe, as already done in the remove function.
+>=20
+> In order to simplify the error handling, move the 'host1x_bo_cache_init()'
+> call after all the devm_ function.
+>=20
+> Fixes: e3166698a8a0 ("drm/tegra: Implement buffer object cache")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Untested.
+> I hope that moving host1x_bo_cache_init() is just fine.
+> ---
+>  drivers/gpu/host1x/dev.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/microblaze/include/asm/string.h b/arch/microblaze/include/asm/string.h
-index dbdb9eb4a733..8798ad2c132a 100644
---- a/arch/microblaze/include/asm/string.h
-+++ b/arch/microblaze/include/asm/string.h
-@@ -10,13 +10,13 @@
- 
- #ifdef CONFIG_OPT_LIB_FUNCTION
- #define __HAVE_ARCH_MEMSET
--#endif
- #define __HAVE_ARCH_MEMCPY
- #define __HAVE_ARCH_MEMMOVE
- 
- extern void *memset(void *, int, __kernel_size_t);
- extern void *memcpy(void *, const void *, __kernel_size_t);
- extern void *memmove(void *, const void *, __kernel_size_t);
-+#endif
- 
- #endif /* __KERNEL__ */
- 
-diff --git a/arch/microblaze/lib/memcpy.c b/arch/microblaze/lib/memcpy.c
-index 63041fdf916d..9966dce55619 100644
---- a/arch/microblaze/lib/memcpy.c
-+++ b/arch/microblaze/lib/memcpy.c
-@@ -31,20 +31,7 @@
- 
- #include <linux/string.h>
- 
--#ifdef __HAVE_ARCH_MEMCPY
--#ifndef CONFIG_OPT_LIB_FUNCTION
--void *memcpy(void *v_dst, const void *v_src, __kernel_size_t c)
--{
--	const char *src = v_src;
--	char *dst = v_dst;
--
--	/* Simple, byte oriented memcpy. */
--	while (c--)
--		*dst++ = *src++;
--
--	return v_dst;
--}
--#else /* CONFIG_OPT_LIB_FUNCTION */
-+#ifdef CONFIG_OPT_LIB_FUNCTION
- void *memcpy(void *v_dst, const void *v_src, __kernel_size_t c)
- {
- 	const char *src = v_src;
-@@ -188,6 +175,5 @@ void *memcpy(void *v_dst, const void *v_src, __kernel_size_t c)
- 
- 	return v_dst;
- }
--#endif /* CONFIG_OPT_LIB_FUNCTION */
- EXPORT_SYMBOL(memcpy);
--#endif /* __HAVE_ARCH_MEMCPY */
-+#endif /* CONFIG_OPT_LIB_FUNCTION */
-diff --git a/arch/microblaze/lib/memmove.c b/arch/microblaze/lib/memmove.c
-index 9862f6b1e59d..2e49d0ef1e07 100644
---- a/arch/microblaze/lib/memmove.c
-+++ b/arch/microblaze/lib/memmove.c
-@@ -30,31 +30,7 @@
- #include <linux/compiler.h>
- #include <linux/string.h>
- 
--#ifdef __HAVE_ARCH_MEMMOVE
--#ifndef CONFIG_OPT_LIB_FUNCTION
--void *memmove(void *v_dst, const void *v_src, __kernel_size_t c)
--{
--	const char *src = v_src;
--	char *dst = v_dst;
--
--	if (!c)
--		return v_dst;
--
--	/* Use memcpy when source is higher than dest */
--	if (v_dst <= v_src)
--		return memcpy(v_dst, v_src, c);
--
--	/* copy backwards, from end to beginning */
--	src += c;
--	dst += c;
--
--	/* Simple, byte oriented memmove. */
--	while (c--)
--		*--dst = *--src;
--
--	return v_dst;
--}
--#else /* CONFIG_OPT_LIB_FUNCTION */
-+#ifdef CONFIG_OPT_LIB_FUNCTION
- void *memmove(void *v_dst, const void *v_src, __kernel_size_t c)
- {
- 	const char *src = v_src;
-@@ -215,6 +191,5 @@ void *memmove(void *v_dst, const void *v_src, __kernel_size_t c)
- 	}
- 	return v_dst;
- }
--#endif /* CONFIG_OPT_LIB_FUNCTION */
- EXPORT_SYMBOL(memmove);
--#endif /* __HAVE_ARCH_MEMMOVE */
-+#endif /* CONFIG_OPT_LIB_FUNCTION */
--- 
-2.35.1
+Applied, thanks.
 
+Thierry
+
+--vyHKb89PagxoToVb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY3qsACgkQ3SOs138+
+s6FT3Q/9F6ouUGIx+ao9mlUapqMP8vnTVr9d0cxp5t28yWE8LlqPzzPSxyxomgUn
+mowdGHqZHQily8pApgMRGONs4pdgmIiyGcvlcBgcY5Iby/PXHjupQL/bvkv732/w
+pg3hzpTXauvOnTvfhhphqVkg2NSONrSW9i/TVx4Qik5vG3c4K35khMpFzy58xvsh
+8ejhPJpwo800XNlFZelmOLgurB0wk3TBTPDLLgkBveQGAjOFmjuJObE9TqnLXcJd
+h1Fd42Upp6OD3Fnpht7EoDKeXlQAJCT76yYCfIl50oFv1+UVp6CURk7v9vg8beDz
+dEIFSswA6qUOYE1/l9GvY/I8uaqPO8N+1kYeUxQ52sNQrwU0dDRbsgw/xSihZ+uC
+wrIrkOOiM+FExKzPzyxAunJP5ywayyjXFdbJ87XuCY3C1/EJMoqDs4ln/j23m33j
+Sz+3qWMCbuABwjePdUloBcbVaeaJFAuE9tIeVaA5EMPmw0v/DnNOBRzJTr8N9dQX
+zooNMwZqCXIdYisT+5AovG8pGTSnN/WQ5tRdME6qlPTDhjnlsmJbtjcgX4vb//BL
+0y3lKvbmAw+qGmSVC7VRYteW4TQrmo8g4CKYQqhFAnWk0YtME+MBGX08ri7gY1Ck
+okeFaTvJk6CAG1orZTRdokMiRgnW+sAzg/3TF9YUdLoi0/9WXLw=
+=WtCw
+-----END PGP SIGNATURE-----
+
+--vyHKb89PagxoToVb--

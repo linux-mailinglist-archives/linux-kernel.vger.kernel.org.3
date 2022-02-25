@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FFD4C4285
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B024C428E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239692AbiBYKjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S239704AbiBYKki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239694AbiBYKjd (ORCPT
+        with ESMTP id S238106AbiBYKkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:39:33 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7408A1CABC2;
-        Fri, 25 Feb 2022 02:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=+Xn6FzCuUazJGXD67KTYniSd2lGAAlj38VcC1aa/bc0=; b=Ro+pJpQZ9JcDZevJIMLxTuad/H
-        Sseks3nrleSAy9xs9huspJ4b/Va+W2jw5nIxBRBQJK5CniSMzg4xetI5pqiAmXHKZsDFbgZg8TraO
-        jsVL4wsp73Yvo10CQSSyCZuq9xU9EeQkzUDkf3LntOrH8yygtcWk4wDMBbwkklrgtbAM=;
-Received: from p200300daa7204f00f847964d075b2b3d.dip0.t-ipconnect.de ([2003:da:a720:4f00:f847:964d:75b:2b3d] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1nNXzs-00088g-S6; Fri, 25 Feb 2022 11:38:48 +0100
-Message-ID: <18408826-3af1-a80a-181d-25f46b4920fb@nbd.name>
-Date:   Fri, 25 Feb 2022 11:38:48 +0100
+        Fri, 25 Feb 2022 05:40:35 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E1768F95
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645785604; x=1677321604;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=mudAdqXMqc4msOewE4p+yyZWAmcOkujoS1WyKCFB/IE=;
+  b=FFt9T0WqV5lV0JWgsvtJ5hCpdEe5PSWe8/tEotcquxQW/KPePRr2bvB0
+   qPjSHDobENEcom6S6D+/E08H5kHBdIsyA1n4MKcmRe4lV7iZ9OTD+EytG
+   08lVcRtSxizWRemLnpW+RY/s0JD7eHLnUyOCKTskEQR0vlRLtrkP6mrQg
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Feb 2022 02:40:04 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 02:40:03 -0800
+Received: from hu-rbankapu-blr.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 25 Feb 2022 02:39:59 -0800
+From:   Raghu Bankapur <quic_rbankapu@quicinc.com>
+To:     Vinod Koul <vkoul@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>,
+        ierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Kai Vehmanen" <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Raghu Bankapur <quic_rbankapu@quicinc.com>,
+        <alsa-devel@alsa-project.org>, Zubin Mithra <zsm@chromium.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Krishna Jha <quic_kkishorj@quicinc.com>
+Subject: [PATCH V0 0/1] ALSA: pcm: fix blocking while loop in 
+Date:   Fri, 25 Feb 2022 16:09:31 +0530
+Message-ID: <cover.1645784757.git.quic_rbankapu@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH 02/11] arm64: dts: mediatek: mt7622: add support for
- coherent DMA
-Content-Language: en-US
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220225101811.72103-1-nbd@nbd.name>
- <20220225101811.72103-3-nbd@nbd.name>
-In-Reply-To: <20220225101811.72103-3-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,11 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.02.22 11:18, Felix Fietkau wrote:
-> It improves performance by eliminating the need for a cache flush on rx and tx
-> 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Sorry, I accidentally left out the dt-bindings patches. They will be 
-included in v2.
+When period interrupts are disabled, while loop in snd_pcm_update_hw_ptr0()
+results in the machine locking up if runtime->hw_ptr_buffer_jiffies is 0.
+Validate runtime->hw_ptr_buffer_jiffies value before while loop to avoid
+delta check.
 
-- Felix
+
+when runtime->hw_ptr_buffer_jiffies is 0 then update of while condition 
+hdelta > xrun_threshold will be always true because hdelta will not
+change. This will lead to infinite loop causing lock-up
+
+This issue found during stability test, below log explains CPU lock-up on CPU1
+
+[ 922.249028] sched: RT throttling activated for rt_rq ffffffc0f9970778 (cpu 1)
+[ 922.249028] potential CPU hogs:
+[ 922.249028] **FastCapture (11426)
+[ 922.249105] ------------[ cut here ]---------
+
+To fix this lock-up issue, added new condition to check if runtime->
+hw_ptr_buffer_jiffies is ZERO or negative.
+
+Raghu Bankapur (1):
+  ALSA: pcm: fix blocking while loop in snd_pcm_update_hw_ptr0()
+
+ sound/core/pcm_lib.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+

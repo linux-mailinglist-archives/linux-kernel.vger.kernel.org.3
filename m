@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE30D4C4004
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB774C4006
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbiBYIYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 03:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S238470AbiBYIZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 03:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbiBYIYo (ORCPT
+        with ESMTP id S238130AbiBYIZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:24:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252761FE559;
-        Fri, 25 Feb 2022 00:24:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9189C61C2C;
-        Fri, 25 Feb 2022 08:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBFAC340E7;
-        Fri, 25 Feb 2022 08:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645777452;
-        bh=wUTRPoZn8BBAycadtcQaV6M3VNL/c4t5P7L45uO3280=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n1O9sO5wWbnSx3EvC2Z4tnYFNbOV5Q7hLiP08crAOSllI0TO/SUTUSRSWk+MSIWxB
-         KqVrA5RiWqGTQhe7zKDuRk3KKUlPACENjLk2UQEqjgF/Q4ZfJ/WXwqdmS3nWVazfGo
-         V8gpaasvP0cZ/VnwSPd8Q3dr7DrkLp/cIHDzzpsQWnZy2SO2HHN0Sp3pOq0I1M+P61
-         NeyDcKuAfqftetN8bMsSgzVUXeHHjbvcSB+jRTFyXRAPsWaJ8Qi5uprYIi63GY/5Hc
-         8WmphOFf8jn/QnBzzcp8PuLMocxWhibDRCt/fdPoOnBnnbKd5qRtxxeEsqyyc++6Tm
-         /Kx0oXkuJNmgA==
-Date:   Fri, 25 Feb 2022 13:54:07 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>
-Subject: Re: [PATCH 1/4] dt-bindings: phy: Add compatible for D1 USB PHY
-Message-ID: <YhiSJw1fhuyQF2Lg@matsya>
-References: <20220203013558.11490-1-samuel@sholland.org>
- <YhiRyq7k5jtSKlni@matsya>
+        Fri, 25 Feb 2022 03:25:00 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D7E1FE564
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 00:24:28 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id d17so4135191pfl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 00:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yum9+x02mmC9p3Nv4KcgRE/DjU3YZvYXccqQBT5GhAA=;
+        b=JJFjSjikZK5vZ42MIyUM4iSPqZY2jgbF13UZMHQRLNtFjSNMjLXnuwbO4VW6owvNp0
+         Uhm7Zwv6k+bYEQV/7S7y3PFsx5jIa7SiVxahJJucFDgycf0M4wCDAv81e6zLrcure5kI
+         rJjHZAHHFAi5WUI91/1eCeb5q5aqeylMXG/E0Q1jvEewc5z0MD1DVGU/144Pn6W7xkyP
+         +2mgWMHQ34F/aSqYEg6yN4TEh2ShMZ9Oolx7Sxn3wuSH+OUUcb9AWhhSjr60NcBdfya+
+         HRu6hB6KpbqByDIY/4F0ahgpJcxg7kdbSqmKFR2ok7qANiq0fV+kwb3+M1yg2sXZJ7FR
+         YhIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yum9+x02mmC9p3Nv4KcgRE/DjU3YZvYXccqQBT5GhAA=;
+        b=SsxhQaCTgSVTmTsyZBCCk+XD63PVg1W6ZwR7Mb1wIP3NLnQJ+Gc1oXYwDbQhbrBur/
+         fvfdHzCPzclFpFdMW8pCUQUCLoLahVuyHrt7aabJlZDCrTie8YTDFmuw9aF2es7iR8eT
+         5Ipqtu4iygMGV3J22JytIZndTnbwiuxF9pqdvCRZpu5qzy8YWxq2nc6Z2dmeU519MwWx
+         O22sQZUU1KelwQi6VWzR5aki8vunGTcqWs6oo/v1Fs2d2Yz9+oN1722oQL7SG1egS0B/
+         66C+XsWnG6pVbPSdBX8qlDZ2x0HV2oUNbNFCsYC7w7Rs8EUtHaBa+O7sGkiGYFvEiiNC
+         /nyQ==
+X-Gm-Message-State: AOAM533TaFGdeB1JzfVr/lIpaicr237fBEODp2p0sBER2OtJ3OR/6b3h
+        oGer3XqRquM8dg6MEvNNyGOnug==
+X-Google-Smtp-Source: ABdhPJxn496aHY+LlUfjJ+UwxuwXeyX/nvjvbcqDUnyAL8mg/Wu5Gs+Wu74+lDDqKI8EBIZ8qa78VQ==
+X-Received: by 2002:a65:6746:0:b0:377:16e2:33a2 with SMTP id c6-20020a656746000000b0037716e233a2mr1478335pgu.47.1645777468098;
+        Fri, 25 Feb 2022 00:24:28 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm2038607pfl.135.2022.02.25.00.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 00:24:27 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+Date:   Fri, 25 Feb 2022 16:24:20 +0800
+Message-Id: <20220225082420.450620-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhiRyq7k5jtSKlni@matsya>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,15 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-02-22, 13:52, Vinod Koul wrote:
-> On 02-02-22, 19:35, Samuel Holland wrote:
-> > D1 features one OTG port and one host port, like the A64 SoC, so its
-> > USB PHY supports the same set of properties. Add the new compatible to
-> > the existing binding.
-> 
-> Rob?
+In case that psci_pd_init_topology() fails for some reason,
+psci_pd_remove() will be responsible for deleting provider and removing
+genpd from psci_pd_providers list.  There will be a failure when removing
+the cluster PD, because the cpu (child) PDs haven't been removed.
 
-Never mind, b4 found it... Somehow my inbox doesnt show it... 
+[    0.050232] CPUidle PSCI: init PM domain cpu0
+[    0.050278] CPUidle PSCI: init PM domain cpu1
+[    0.050329] CPUidle PSCI: init PM domain cpu2
+[    0.050370] CPUidle PSCI: init PM domain cpu3
+[    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+[    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+[    0.051412] PM: genpd_remove: removed cpu3
+[    0.051449] PM: genpd_remove: removed cpu2
+[    0.051499] PM: genpd_remove: removed cpu1
+[    0.051546] PM: genpd_remove: removed cpu0
 
+Fix the problem by iterating the provider list in a reversely order, so
+that parent PD gets removed before child's PDs.
+
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+---
+ drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index ff2c3f8e4668..ce5c415fb04d 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -182,7 +182,8 @@ static void psci_pd_remove(void)
+ 	struct psci_pd_provider *pd_provider, *it;
+ 	struct generic_pm_domain *genpd;
+ 
+-	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
++	list_for_each_entry_safe_reverse(pd_provider, it,
++					 &psci_pd_providers, link) {
+ 		of_genpd_del_provider(pd_provider->node);
+ 
+ 		genpd = of_genpd_remove_last(pd_provider->node);
 -- 
-~Vinod
+2.25.1
+

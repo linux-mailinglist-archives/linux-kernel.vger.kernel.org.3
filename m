@@ -2,258 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1574C43A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B44B4C43A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240118AbiBYL2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S240131AbiBYL3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239446AbiBYL11 (ORCPT
+        with ESMTP id S239408AbiBYL3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:27:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1751AC29D;
-        Fri, 25 Feb 2022 03:26:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF361B82F1B;
-        Fri, 25 Feb 2022 11:26:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96AB8C340FB;
-        Fri, 25 Feb 2022 11:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645788375;
-        bh=wzU3M2wR8N6ReWJ/Q5n9T+IQ6J/c41uNq6io2nvM+hE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oXJXqMtMjHQKw8ya3RKVksHPcEVUS9mYthZaQwg4YsV+ZHvA9y+xb6lIq58470mRa
-         pbKfYgAY8dI0bCTjJnzSFQZq6UGCdliRokkwVRh0CgG9uAtP/l0UfMs9PBsy71HfMT
-         d/q+zNzA9kPlO0XrR2xDlQAgpu4ojK/in5mkEndmcaS55zvSXqLF7lZt1F8e9GrI+Y
-         5tdhG/z3NxB+Dh6zONoL1ZGA6WKb6LCeiKBamkV+dxGOk05rFoXBuGQ/DctOBGuzlg
-         MetCIK4BYAXPnFb6C7WG0Pd5FmRGv7enYoF+6nqdzeeUo5Ok4DuLHteGdNX1J2Q2p6
-         XmriU0DJCVOuA==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2d641c31776so29597127b3.12;
-        Fri, 25 Feb 2022 03:26:15 -0800 (PST)
-X-Gm-Message-State: AOAM533bEnjLjds0lvuCEjx6GFVw5T0w/eZbNMbcaPPXqGhKPXswF7qO
-        vmNYz7CtWUIdL0lXXRC/uCVdE2kyS50VYEHMFuE=
-X-Google-Smtp-Source: ABdhPJwIQZC9GDI5dYoHZxDvQWsfz96l2SZn3EH3J8+1jUaINvs7quVPjznmaJ/ej9wycL9PBKnx7quCWRYwgWRAJEQ=
-X-Received: by 2002:a81:7d04:0:b0:2d0:d0e2:126f with SMTP id
- y4-20020a817d04000000b002d0d0e2126fmr6861642ywc.485.1645788374561; Fri, 25
- Feb 2022 03:26:14 -0800 (PST)
+        Fri, 25 Feb 2022 06:29:50 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFEC1E4825
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:29:16 -0800 (PST)
+X-QQ-mid: bizesmtp86t1645788534t8f8h8iv
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 25 Feb 2022 19:28:48 +0800 (CST)
+X-QQ-SSF: 01400000002000C0F000000A0000000
+X-QQ-FEAT: fp8AQXDviwlRcg4zql4tzXpwUuKmi9it+HjeQlar+ZzEnu8sFGW5lg28uXVhq
+        Im1s3Z5UrlkvDa2u9izy9rzBOc02AkQXaTaz75GL2XcaRv111jDjkRM+VowxEwoxfOsr7Fy
+        5Aa55349s931VgwVxkQH5GWWeMsreZpe7F9RC3LLj4I95DMoxPdhGR1PZny9dR1iq6su5jx
+        t1/bRuRQzCsHoaOJlFpiJcOKblE7hbbdix6w4fcrE50grCUmtGJEqpcaR6AVO5tSi3hhU5T
+        k+1SMlZNjj73yOJlwjb8v88W6ikNJmgQPJJdD/tbugjbe91Tuo4mB7xSqBPPex6UU1hCE+M
+        pjjDVBJrbDP+AUk/kZyITDm1Nud7qN38w1kajD0qj7yVfBUI08=
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] sound/soc/amd: Use platform_get_irq() to get the interrupt
+Date:   Fri, 25 Feb 2022 19:28:47 +0800
+Message-Id: <20220225112847.21851-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220224133906.751587-1-Jason@zx2c4.com> <20220224133906.751587-2-Jason@zx2c4.com>
-In-Reply-To: <20220224133906.751587-2-Jason@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 25 Feb 2022 12:26:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGuh62A8=43NjSMLRkux_TCFULXtw5a1C5w=gy9A8dO6w@mail.gmail.com>
-Message-ID: <CAMj1kXGuh62A8=43NjSMLRkux_TCFULXtw5a1C5w=gy9A8dO6w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] random: add mechanism for VM forks to reinitialize crng
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        adrian@parity.io, dwmw@amazon.co.uk,
-        Alexander Graf <graf@amazon.com>, colmmacc@amazon.com,
-        raduweis@amazon.com, berrange@redhat.com,
-        Laszlo Ersek <lersek@redhat.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Eduardo Habkost <ehabkost@redhat.com>, ben@skyportsystems.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 at 14:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> When a VM forks, we must immediately mix in additional information to
-> the stream of random output so that two forks or a rollback don't
-> produce the same stream of random numbers, which could have catastrophic
-> cryptographic consequences. This commit adds a simple API, add_vmfork_
-> randomness(), for that, by force reseeding the crng.
->
-> This has the added benefit of also draining the entropy pool and setting
-> its timer back, so that any old entropy that was there prior -- which
-> could have already been used by a different fork, or generally gone
-> stale -- does not contribute to the accounting of the next 256 bits.
->
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Eric Biggers <ebiggers@google.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypassed the hierarchical setup and messed up the
+irq chaining.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
-> ---
->  drivers/char/random.c  | 50 +++++++++++++++++++++++++++++-------------
->  include/linux/random.h |  1 +
->  2 files changed, 36 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 9fb06fc298d3..e8b84791cefe 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -289,14 +289,14 @@ static DEFINE_PER_CPU(struct crng, crngs) = {
->  };
->
->  /* Used by crng_reseed() to extract a new seed from the input pool. */
-> -static bool drain_entropy(void *buf, size_t nbytes);
-> +static bool drain_entropy(void *buf, size_t nbytes, bool force);
->
->  /*
->   * This extracts a new crng key from the input pool, but only if there is a
-> - * sufficient amount of entropy available, in order to mitigate bruteforcing
-> - * of newly added bits.
-> + * sufficient amount of entropy available or force is true, in order to
-> + * mitigate bruteforcing of newly added bits.
->   */
-> -static void crng_reseed(void)
-> +static void crng_reseed(bool force)
->  {
->         unsigned long flags;
->         unsigned long next_gen;
-> @@ -304,7 +304,7 @@ static void crng_reseed(void)
->         bool finalize_init = false;
->
->         /* Only reseed if we can, to prevent brute forcing a small amount of new bits. */
-> -       if (!drain_entropy(key, sizeof(key)))
-> +       if (!drain_entropy(key, sizeof(key), force))
->                 return;
->
->         /*
-> @@ -406,7 +406,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
->          * in turn bumps the generation counter that we check below.
->          */
->         if (unlikely(time_after(jiffies, READ_ONCE(base_crng.birth) + CRNG_RESEED_INTERVAL)))
-> -               crng_reseed();
-> +               crng_reseed(false);
->
->         local_lock_irqsave(&crngs.lock, flags);
->         crng = raw_cpu_ptr(&crngs);
-> @@ -771,10 +771,10 @@ EXPORT_SYMBOL(get_random_bytes_arch);
->   *
->   * Finally, extract entropy via these two, with the latter one
->   * setting the entropy count to zero and extracting only if there
-> - * is POOL_MIN_BITS entropy credited prior:
-> + * is POOL_MIN_BITS entropy credited prior or force is true:
->   *
->   *     static void extract_entropy(void *buf, size_t nbytes)
-> - *     static bool drain_entropy(void *buf, size_t nbytes)
-> + *     static bool drain_entropy(void *buf, size_t nbytes, bool force)
->   *
->   **********************************************************************/
->
-> @@ -832,7 +832,7 @@ static void credit_entropy_bits(size_t nbits)
->         } while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
->
->         if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
-> -               crng_reseed();
-> +               crng_reseed(false);
->  }
->
->  /*
-> @@ -882,16 +882,16 @@ static void extract_entropy(void *buf, size_t nbytes)
->  }
->
->  /*
-> - * First we make sure we have POOL_MIN_BITS of entropy in the pool, and then we
-> - * set the entropy count to zero (but don't actually touch any data). Only then
-> - * can we extract a new key with extract_entropy().
-> + * First we make sure we have POOL_MIN_BITS of entropy in the pool unless force
-> + * is true, and then we set the entropy count to zero (but don't actually touch
-> + * any data). Only then can we extract a new key with extract_entropy().
->   */
-> -static bool drain_entropy(void *buf, size_t nbytes)
-> +static bool drain_entropy(void *buf, size_t nbytes, bool force)
->  {
->         unsigned int entropy_count;
->         do {
->                 entropy_count = READ_ONCE(input_pool.entropy_count);
-> -               if (entropy_count < POOL_MIN_BITS)
-> +               if (!force && entropy_count < POOL_MIN_BITS)
->                         return false;
->         } while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
->         extract_entropy(buf, nbytes);
-> @@ -915,6 +915,7 @@ static bool drain_entropy(void *buf, size_t nbytes)
->   *     void add_hwgenerator_randomness(const void *buffer, size_t count,
->   *                                     size_t entropy);
->   *     void add_bootloader_randomness(const void *buf, size_t size);
-> + *     void add_vmfork_randomness(const void *unique_vm_id, size_t size);
->   *     void add_interrupt_randomness(int irq);
->   *
->   * add_device_randomness() adds data to the input pool that
-> @@ -946,6 +947,10 @@ static bool drain_entropy(void *buf, size_t nbytes)
->   * add_device_randomness(), depending on whether or not the configuration
->   * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
->   *
-> + * add_vmfork_randomness() adds a unique (but not necessarily secret) ID
-> + * representing the current instance of a VM to the pool, without crediting,
-> + * and then force-reseeds the crng so that it takes effect immediately.
-> + *
->   * add_interrupt_randomness() uses the interrupt timing as random
->   * inputs to the entropy pool. Using the cycle counters and the irq source
->   * as inputs, it feeds the input pool roughly once a second or after 64
-> @@ -1175,6 +1180,21 @@ void add_bootloader_randomness(const void *buf, size_t size)
->  }
->  EXPORT_SYMBOL_GPL(add_bootloader_randomness);
->
-> +/*
-> + * Handle a new unique VM ID, which is unique, not secret, so we
-> + * don't credit it, but we do immediately force a reseed after so
-> + * that it's used by the crng posthaste.
-> + */
-> +void add_vmfork_randomness(const void *unique_vm_id, size_t size)
-> +{
-> +       add_device_randomness(unique_vm_id, size);
-> +       if (crng_ready()) {
-> +               crng_reseed(true);
-> +               pr_notice("crng reseeded due to virtual machine fork\n");
-> +       }
-> +}
-> +EXPORT_SYMBOL_GPL(add_vmfork_randomness);
-> +
->  struct fast_pool {
->         union {
->                 u32 pool32[4];
-> @@ -1564,7 +1584,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
->                         return -EPERM;
->                 if (crng_init < 2)
->                         return -ENODATA;
-> -               crng_reseed();
-> +               crng_reseed(false);
->                 return 0;
->         default:
->                 return -EINVAL;
-> diff --git a/include/linux/random.h b/include/linux/random.h
-> index 6148b8d1ccf3..51b8ed797732 100644
-> --- a/include/linux/random.h
-> +++ b/include/linux/random.h
-> @@ -34,6 +34,7 @@ extern void add_input_randomness(unsigned int type, unsigned int code,
->  extern void add_interrupt_randomness(int irq) __latent_entropy;
->  extern void add_hwgenerator_randomness(const void *buffer, size_t count,
->                                        size_t entropy);
-> +extern void add_vmfork_randomness(const void *unique_vm_id, size_t size);
->
->  extern void get_random_bytes(void *buf, size_t nbytes);
->  extern int wait_for_random_bytes(void);
-> --
-> 2.35.1
->
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ sound/soc/amd/acp-pcm-dma.c           | 11 ++++-------
+ sound/soc/amd/raven/acp3x-pcm-dma.c   |  8 ++------
+ sound/soc/amd/renoir/acp3x-pdm-dma.c  |  7 ++-----
+ sound/soc/amd/vangogh/acp5x-pcm-dma.c |  7 ++-----
+ 4 files changed, 10 insertions(+), 23 deletions(-)
+
+diff --git a/sound/soc/amd/acp-pcm-dma.c b/sound/soc/amd/acp-pcm-dma.c
+index 8fa2e2fde4f1..1cd2e70a57df 100644
+--- a/sound/soc/amd/acp-pcm-dma.c
++++ b/sound/soc/amd/acp-pcm-dma.c
+@@ -1217,9 +1217,8 @@ static const struct snd_soc_component_driver acp_asoc_platform = {
+ 
+ static int acp_audio_probe(struct platform_device *pdev)
+ {
+-	int status;
++	int status, irq;
+ 	struct audio_drv_data *audio_drv_data;
+-	struct resource *res;
+ 	const u32 *pdata = pdev->dev.platform_data;
+ 
+ 	if (!pdata) {
+@@ -1249,13 +1248,11 @@ static int acp_audio_probe(struct platform_device *pdev)
+ 
+ 	audio_drv_data->asic_type =  *pdata;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
+ 		return -ENODEV;
+-	}
+ 
+-	status = devm_request_irq(&pdev->dev, res->start, dma_irq_handler,
++	status = devm_request_irq(&pdev->dev, irq, dma_irq_handler,
+ 				  0, "ACP_IRQ", &pdev->dev);
+ 	if (status) {
+ 		dev_err(&pdev->dev, "ACP IRQ request failed\n");
+diff --git a/sound/soc/amd/raven/acp3x-pcm-dma.c b/sound/soc/amd/raven/acp3x-pcm-dma.c
+index 75c06697fa09..e4f8dbf0d11d 100644
+--- a/sound/soc/amd/raven/acp3x-pcm-dma.c
++++ b/sound/soc/amd/raven/acp3x-pcm-dma.c
+@@ -394,13 +394,9 @@ static int acp3x_audio_probe(struct platform_device *pdev)
+ 	if (!adata->acp3x_base)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
++	adata->i2s_irq =  platform_get_irq(pdev, 0);
++	if (adata->i2s_irq < 0)
+ 		return -ENODEV;
+-	}
+-
+-	adata->i2s_irq = res->start;
+ 
+ 	dev_set_drvdata(&pdev->dev, adata);
+ 	status = devm_snd_soc_register_component(&pdev->dev,
+diff --git a/sound/soc/amd/renoir/acp3x-pdm-dma.c b/sound/soc/amd/renoir/acp3x-pdm-dma.c
+index 9dd22a2fa2e5..88a242538461 100644
+--- a/sound/soc/amd/renoir/acp3x-pdm-dma.c
++++ b/sound/soc/amd/renoir/acp3x-pdm-dma.c
+@@ -399,13 +399,10 @@ static int acp_pdm_audio_probe(struct platform_device *pdev)
+ 	if (!adata->acp_base)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
++	adata->pdm_irq = platform_get_irq(pdev, 0);
++	if (adata->pdm_irq < 0)
+ 		return -ENODEV;
+-	}
+ 
+-	adata->pdm_irq = res->start;
+ 	adata->capture_stream = NULL;
+ 
+ 	dev_set_drvdata(&pdev->dev, adata);
+diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+index f10de38976cb..c8cd1777a63c 100644
+--- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
++++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+@@ -388,13 +388,10 @@ static int acp5x_audio_probe(struct platform_device *pdev)
+ 	if (!adata->acp5x_base)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
++	adata->i2s_irq = platform_get_irq(pdev, 0);
++	if (adata->i2s_irq < 0)
+ 		return -ENODEV;
+-	}
+ 
+-	adata->i2s_irq = res->start;
+ 	dev_set_drvdata(&pdev->dev, adata);
+ 	status = devm_snd_soc_register_component(&pdev->dev,
+ 						 &acp5x_i2s_component,
+-- 
+2.20.1
+
+
+

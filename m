@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DC64C4678
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8714C4674
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241397AbiBYNdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S241436AbiBYNeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241374AbiBYNdG (ORCPT
+        with ESMTP id S241308AbiBYNd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:33:06 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72151D831B;
-        Fri, 25 Feb 2022 05:32:33 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21P9aEit019306;
-        Fri, 25 Feb 2022 14:32:11 +0100
+        Fri, 25 Feb 2022 08:33:57 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9AA20BCDD;
+        Fri, 25 Feb 2022 05:33:25 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21PDGZ6Y003206;
+        Fri, 25 Feb 2022 14:33:12 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=BwCNzsJ9PxyLQNaGsXq+tfOpWqHh+TR8gmKWBgTxFsc=;
- b=1P3lG1jgvJg9unuV6tbP+7ocNP/hWvir2YNDGk/gSAsaTHAzBnB49BUnmAhshS8YFBYm
- eKa24Tq0EZ4YYg9rMGyISslr49cn+x5bkPss33vh4pRz/VYfWVwRDamVHxjjspydep9Q
- /Q7sIctMjgmJEhZvB5fJOVgakM4s72R8XbIlcspOmyby+y5i7Jdna0FLVuQ+jYt1rrfR
- CWRQZGkvt+ZpgmdyqFsoN8OlBaT3VsQFAHrx5x8K2S9JKgSHTiskjQ0SPfIXWLH26NuF
- 4cVN5y52PP05ru8ysajg5NBcW5s3yfwzmoxydbei6WEsFyE9oulVnHUU7apFOX8TBEqe 4Q== 
+ bh=SzLXOSkhzGzN5m22rAwAREfKfOZltcH16yNIJ5ynJA4=;
+ b=LLNUtAF9QF2ZYfieOw0ljVt2iqUp+nu+OVKkORdPFIdaSzNODag5gyuYnsGVgkneBpCL
+ N3Px+BTvSLSlfsAGQkcC9DCZpWDUYq7CFIqGWKFNxe7P8rJJX7+juurMM8iKZslMy5fs
+ sZpMbfcg8S7/xo+6cAH9GJGIelDHobxZmhkMxJBDgUGS7HaHchcyCGMRLlhADz4r9k71
+ skyozcUSl7D+BmHkcttEtXUYE9UF95izhqxdAFbX93WAPB/WYUlEWV2oeGCVSYWh+TPw
+ nIoGZMBq7/zz6tL+5kNuxOViYXOlU0cSMep2uZZymN1feQTc7yLvJyp4HTnUkVp9RBsi Qw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eevmgs9mc-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eetrn27mg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 14:32:11 +0100
+        Fri, 25 Feb 2022 14:33:11 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D294510002A;
-        Fri, 25 Feb 2022 14:32:10 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 66B1610002A;
+        Fri, 25 Feb 2022 14:33:11 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C779222788D;
-        Fri, 25 Feb 2022 14:32:10 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 25 Feb 2022 14:32:10
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5C7712278A4;
+        Fri, 25 Feb 2022 14:33:11 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 25 Feb 2022 14:33:11
  +0100
 From:   <gabriel.fernandez@foss.st.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
@@ -53,16 +53,16 @@ CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 04/13] clk: stm32mp13: add stm32_gate management
-Date:   Fri, 25 Feb 2022 14:31:28 +0100
-Message-ID: <20220225133137.813919-5-gabriel.fernandez@foss.st.com>
+Subject: [PATCH v2 05/13] clk: stm32mp13: add stm32 divider clock
+Date:   Fri, 25 Feb 2022 14:31:29 +0100
+Message-ID: <20220225133137.813919-6-gabriel.fernandez@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
 References: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
+X-Originating-IP: [10.75.127.45]
 X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -79,147 +79,183 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Just to introduce management of a stm32 gate clock.
+Just to introduce management of a stm32 divider clock
 
-Change-Id: I9c823f2742e8680bc131adcb854ad50ee66e682b
 Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 ---
- drivers/clk/stm32/clk-stm32-core.c | 124 +++++++++++++++++++++++++++++
- drivers/clk/stm32/clk-stm32-core.h |  37 +++++++++
- drivers/clk/stm32/clk-stm32mp13.c  |   6 ++
- 3 files changed, 167 insertions(+)
+ drivers/clk/stm32/clk-stm32-core.c | 161 +++++++++++++++++++++++++++++
+ drivers/clk/stm32/clk-stm32-core.h |  36 +++++++
+ drivers/clk/stm32/clk-stm32mp13.c  |   7 ++
+ 3 files changed, 204 insertions(+)
 
 diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
-index f34659625aff..91eae0386e5e 100644
+index 91eae0386e5e..57d039168779 100644
 --- a/drivers/clk/stm32/clk-stm32-core.c
 +++ b/drivers/clk/stm32/clk-stm32-core.c
-@@ -92,6 +92,109 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
- 	return 0;
- }
+@@ -195,6 +195,146 @@ const struct clk_ops clk_stm32_gate_ops = {
+ 	.disable_unused	= clk_stm32_gate_disable_unused,
+ };
  
-+void clk_stm32_endisable_gate(void __iomem *base,
-+			      struct clk_stm32_clock_data *data,
-+			      u16 gate_id, int enable)
++static unsigned int _get_table_div(const struct clk_div_table *table,
++				   unsigned int val)
 +{
-+	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
-+	void __iomem *addr = base + gate->offset;
++	const struct clk_div_table *clkt;
 +
-+	if (enable) {
-+		if (data->gate_cpt[gate_id]++ > 0)
-+			return;
++	for (clkt = table; clkt->div; clkt++)
++		if (clkt->val == val)
++			return clkt->div;
++	return 0;
++}
 +
-+		if (gate->set_clr != 0)
-+			writel(BIT(gate->bit_idx), addr);
-+		else
-+			writel(readl(addr) | BIT(gate->bit_idx), addr);
-+	} else {
-+		if (--data->gate_cpt[gate_id] > 0)
-+			return;
++static unsigned int _get_div(const struct clk_div_table *table,
++			     unsigned int val, unsigned long flags, u8 width)
++{
++	if (flags & CLK_DIVIDER_ONE_BASED)
++		return val;
++	if (flags & CLK_DIVIDER_POWER_OF_TWO)
++		return 1 << val;
++	if (table)
++		return _get_table_div(table, val);
++	return val + 1;
++}
 +
-+		if (gate->set_clr != 0)
-+			writel(BIT(gate->bit_idx), addr + gate->set_clr);
-+		else
-+			writel(readl(addr) & ~BIT(gate->bit_idx), addr);
++unsigned long clk_stm32_get_rate_divider(void __iomem *base,
++					 struct clk_stm32_clock_data *data,
++					 u16 div_id, unsigned long parent_rate)
++{
++	const struct stm32_div_cfg *divider = &data->dividers[div_id];
++	unsigned int val;
++	unsigned int div;
++
++	val =  readl(base + divider->offset) >> divider->shift;
++	val &= clk_div_mask(divider->width);
++	div = _get_div(divider->table, val, divider->flags, divider->width);
++
++	if (!div) {
++		WARN(!(divider->flags & CLK_DIVIDER_ALLOW_ZERO),
++		     "%d: Zero divisor and CLK_DIVIDER_ALLOW_ZERO not set\n",
++		     div_id);
++		return parent_rate;
 +	}
++
++	return DIV_ROUND_UP_ULL((u64)parent_rate, div);
 +}
 +
-+void clk_stm32_disable_unused_gate(void __iomem *base,
-+				   struct clk_stm32_clock_data *data,
-+				   u16 gate_id)
++int clk_stm32_set_rate_divider(void __iomem *base,
++			       struct clk_stm32_clock_data *data,
++			       u16 div_id,
++			       unsigned long rate,
++			       unsigned long parent_rate)
 +{
-+	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
-+	void __iomem *addr = base + gate->offset;
++	const struct stm32_div_cfg *divider = &data->dividers[div_id];
++	int value;
++	u32 val;
 +
-+	if (data->gate_cpt[gate_id] > 0)
-+		return;
++	value = divider_get_val(rate, parent_rate, divider->table,
++				divider->width, divider->flags);
++	if (value < 0)
++		return value;
 +
-+	if (gate->set_clr != 0)
-+		writel(BIT(gate->bit_idx), addr + gate->set_clr);
-+	else
-+		writel(readl(addr) & ~BIT(gate->bit_idx), addr);
-+}
++	if (divider->flags & CLK_DIVIDER_HIWORD_MASK) {
++		val = clk_div_mask(divider->width) << (divider->shift + 16);
++	} else {
++		val = readl(base + divider->offset);
++		val &= ~(clk_div_mask(divider->width) << divider->shift);
++	}
 +
-+int clk_stm32_is_enabled_gate(void __iomem *base,
-+			      struct clk_stm32_clock_data *data,
-+			      u16 gate_id)
-+{
-+	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
++	val |= (u32)value << divider->shift;
 +
-+	return (readl(base + gate->offset) & BIT(gate->bit_idx)) != 0;
-+}
-+
-+void clk_stm32_gate_endisable(struct clk_hw *hw, int enable)
-+{
-+	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
-+	unsigned long flags = 0;
-+
-+	spin_lock_irqsave(gate->lock, flags);
-+
-+	clk_stm32_endisable_gate(gate->base, gate->clock_data,
-+				 gate->gate_id, enable);
-+
-+	spin_unlock_irqrestore(gate->lock, flags);
-+}
-+
-+int clk_stm32_gate_enable(struct clk_hw *hw)
-+{
-+	clk_stm32_gate_endisable(hw, 1);
++	writel(val, base + divider->offset);
 +
 +	return 0;
 +}
 +
-+void clk_stm32_gate_disable(struct clk_hw *hw)
++int clk_stm32_divider_set_rate(struct clk_hw *hw, unsigned long rate,
++			       unsigned long parent_rate)
 +{
-+	clk_stm32_gate_endisable(hw, 0);
-+}
-+
-+int clk_stm32_gate_is_enabled(struct clk_hw *hw)
-+{
-+	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
-+
-+	return clk_stm32_is_enabled_gate(gate->base, gate->clock_data,
-+					 gate->gate_id);
-+}
-+
-+void clk_stm32_gate_disable_unused(struct clk_hw *hw)
-+{
-+	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
++	struct clk_stm32_div *div = to_clk_stm32_divider(hw);
 +	unsigned long flags = 0;
++	int ret;
 +
-+	spin_lock_irqsave(gate->lock, flags);
++	if (div->div_id == NO_STM32_DIV)
++		return rate;
 +
-+	clk_stm32_disable_unused_gate(gate->base, gate->clock_data, gate->gate_id);
++	spin_lock_irqsave(div->lock, flags);
 +
-+	spin_unlock_irqrestore(gate->lock, flags);
++	ret = clk_stm32_set_rate_divider(div->base, div->clock_data, div->div_id,
++					 rate, parent_rate);
++
++	spin_unlock_irqrestore(div->lock, flags);
++
++	return ret;
 +}
 +
-+const struct clk_ops clk_stm32_gate_ops = {
-+	.enable		= clk_stm32_gate_enable,
-+	.disable	= clk_stm32_gate_disable,
-+	.is_enabled	= clk_stm32_gate_is_enabled,
-+	.disable_unused	= clk_stm32_gate_disable_unused,
++long clk_stm32_divider_round_rate(struct clk_hw *hw, unsigned long rate,
++				  unsigned long *prate)
++{
++	struct clk_stm32_div *div = to_clk_stm32_divider(hw);
++	const struct stm32_div_cfg *divider;
++
++	if (div->div_id == NO_STM32_DIV)
++		return rate;
++
++	divider = &div->clock_data->dividers[div->div_id];
++
++	/* if read only, just return current value */
++	if (divider->flags & CLK_DIVIDER_READ_ONLY) {
++		u32 val;
++
++		val =  readl(div->base + divider->offset) >> divider->shift;
++		val &= clk_div_mask(divider->width);
++
++		return divider_ro_round_rate(hw, rate, prate, divider->table,
++				divider->width, divider->flags,
++				val);
++	}
++
++	return divider_round_rate_parent(hw, clk_hw_get_parent(hw),
++					 rate, prate, divider->table,
++					 divider->width, divider->flags);
++}
++
++unsigned long clk_stm32_divider_recalc_rate(struct clk_hw *hw,
++					    unsigned long parent_rate)
++{
++	struct clk_stm32_div *div = to_clk_stm32_divider(hw);
++
++	if (div->div_id == NO_STM32_DIV)
++		return parent_rate;
++
++	return clk_stm32_get_rate_divider(div->base, div->clock_data,
++					  div->div_id, parent_rate);
++}
++
++const struct clk_ops clk_stm32_divider_ops = {
++	.recalc_rate	= clk_stm32_divider_recalc_rate,
++	.round_rate	= clk_stm32_divider_round_rate,
++	.set_rate	= clk_stm32_divider_set_rate,
 +};
 +
  u8 clk_stm32_get_parent_mux(void __iomem *base,
  			    struct clk_stm32_clock_data *data,
  			    u16 mux_id)
-@@ -150,6 +253,27 @@ const struct clk_ops clk_stm32_mux_ops = {
- 	.set_parent	= clk_stm32_mux_set_parent,
- };
+@@ -274,6 +414,27 @@ struct clk_hw *clk_stm32_gate_register(struct device *dev,
+ 	return hw;
+ }
  
-+struct clk_hw *clk_stm32_gate_register(struct device *dev,
-+				       const struct stm32_rcc_match_data *data,
-+				       void __iomem *base,
-+				       spinlock_t *lock,
-+				       const struct clock_config *cfg)
++struct clk_hw *clk_stm32_div_register(struct device *dev,
++				      const struct stm32_rcc_match_data *data,
++				      void __iomem *base,
++				      spinlock_t *lock,
++				      const struct clock_config *cfg)
 +{
-+	struct clk_stm32_gate *gate = cfg->clock_cfg;
-+	struct clk_hw *hw = &gate->hw;
++	struct clk_stm32_div *div = cfg->clock_cfg;
++	struct clk_hw *hw = &div->hw;
 +	int err;
 +
-+	gate->base = base;
-+	gate->lock = lock;
-+	gate->clock_data = data->clock_data;
++	div->base = base;
++	div->lock = lock;
++	div->clock_data = data->clock_data;
 +
 +	err = clk_hw_register(dev, hw);
 +	if (err)
@@ -232,93 +268,98 @@ index f34659625aff..91eae0386e5e 100644
  				      const struct stm32_rcc_match_data *data,
  				      void __iomem *base,
 diff --git a/drivers/clk/stm32/clk-stm32-core.h b/drivers/clk/stm32/clk-stm32-core.h
-index 7c9f503d3388..1b4a73556512 100644
+index 1b4a73556512..833a3d4a064f 100644
 --- a/drivers/clk/stm32/clk-stm32-core.h
 +++ b/drivers/clk/stm32/clk-stm32-core.h
-@@ -84,6 +84,16 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
- #define DIV_NO_RDY		0xFF
+@@ -94,6 +94,16 @@ struct clk_stm32_gate {
  
- /* Definition of clock structure */
-+struct clk_stm32_gate {
-+	u16 gate_id;
+ #define to_clk_stm32_gate(_hw) container_of(_hw, struct clk_stm32_gate, hw)
+ 
++struct clk_stm32_div {
++	u16 div_id;
 +	struct clk_hw hw;
 +	void __iomem *base;
 +	struct clk_stm32_clock_data *clock_data;
 +	spinlock_t *lock; /* spin lock */
 +};
 +
-+#define to_clk_stm32_gate(_hw) container_of(_hw, struct clk_stm32_gate, hw)
++#define to_clk_stm32_divider(_hw) container_of(_hw, struct clk_stm32_div, hw)
 +
  struct clk_stm32_mux {
  	u16 mux_id;
  	struct clk_hw hw;
-@@ -95,6 +105,22 @@ struct clk_stm32_mux {
- #define to_clk_stm32_mux(_hw) container_of(_hw, struct clk_stm32_mux, hw)
+@@ -121,6 +131,21 @@ void clk_stm32_gate_disable(struct clk_hw *hw);
+ int clk_stm32_gate_is_enabled(struct clk_hw *hw);
+ void clk_stm32_gate_disable_unused(struct clk_hw *hw);
  
- /* Clock ops */
-+void clk_stm32_endisable_gate(void __iomem *base,
-+			      struct clk_stm32_clock_data *data,
-+			      u16 gate_id, int enable);
-+void clk_stm32_disable_unused_gate(void __iomem *base,
-+				   struct clk_stm32_clock_data *data,
-+				   u16 gate_id);
-+int clk_stm32_is_enabled_gate(void __iomem *base,
-+			      struct clk_stm32_clock_data *data,
-+			      u16 gate_id);
++int clk_stm32_set_rate_divider(void __iomem *base,
++			       struct clk_stm32_clock_data *data,
++			       u16 div_id, unsigned long rate,
++			       unsigned long parent_rate);
++unsigned long clk_stm32_get_rate_divider(void __iomem *base,
++					 struct clk_stm32_clock_data *data,
++					 u16 div_id, unsigned long parent_rate);
 +
-+void clk_stm32_gate_endisable(struct clk_hw *hw, int enable);
-+int clk_stm32_gate_enable(struct clk_hw *hw);
-+void clk_stm32_gate_disable(struct clk_hw *hw);
-+int clk_stm32_gate_is_enabled(struct clk_hw *hw);
-+void clk_stm32_gate_disable_unused(struct clk_hw *hw);
++int clk_stm32_divider_set_rate(struct clk_hw *hw, unsigned long rate,
++			       unsigned long parent_rate);
++long clk_stm32_divider_round_rate(struct clk_hw *hw, unsigned long rate,
++				  unsigned long *prate);
++unsigned long clk_stm32_divider_recalc_rate(struct clk_hw *hw,
++					    unsigned long parent_rate);
 +
  u8 clk_stm32_get_parent_mux(void __iomem *base,
  			    struct clk_stm32_clock_data *data, u16 mux_id);
  
-@@ -105,9 +131,16 @@ int clk_stm32_set_parent_mux(void __iomem *base,
- u8 clk_stm32_mux_get_parent(struct clk_hw *hw);
+@@ -132,6 +157,7 @@ u8 clk_stm32_mux_get_parent(struct clk_hw *hw);
  int clk_stm32_mux_set_parent(struct clk_hw *hw, u8 index);
  
-+extern const struct clk_ops clk_stm32_gate_ops;
+ extern const struct clk_ops clk_stm32_gate_ops;
++extern const struct clk_ops clk_stm32_divider_ops;
  extern const struct clk_ops clk_stm32_mux_ops;
  
  /* Clock registering */
-+struct clk_hw *clk_stm32_gate_register(struct device *dev,
-+				       const struct stm32_rcc_match_data *data,
-+				       void __iomem *base,
-+				       spinlock_t *lock,
-+				       const struct clock_config *cfg);
+@@ -141,6 +167,12 @@ struct clk_hw *clk_stm32_gate_register(struct device *dev,
+ 				       spinlock_t *lock,
+ 				       const struct clock_config *cfg);
+ 
++struct clk_hw *clk_stm32_div_register(struct device *dev,
++				      const struct stm32_rcc_match_data *data,
++				      void __iomem *base,
++				      spinlock_t *lock,
++				      const struct clock_config *cfg);
 +
  struct clk_hw *clk_stm32_mux_register(struct device *dev,
  				      const struct stm32_rcc_match_data *data,
  				      void __iomem *base,
-@@ -121,6 +154,10 @@ struct clk_hw *clk_stm32_mux_register(struct device *dev,
- 	.func		= (_register),\
- }
+@@ -158,6 +190,10 @@ struct clk_hw *clk_stm32_mux_register(struct device *dev,
+ 	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_gate *,\
+ 			&clk_stm32_gate_register)
  
-+#define STM32_GATE_CFG(_binding, _clk)\
-+	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_gate *,\
-+			&clk_stm32_gate_register)
++#define STM32_DIV_CFG(_binding, _clk)\
++	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_div *,\
++			&clk_stm32_div_register)
 +
  #define STM32_MUX_CFG(_binding, _clk)\
  	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_mux *,\
  			&clk_stm32_mux_register)
 diff --git a/drivers/clk/stm32/clk-stm32mp13.c b/drivers/clk/stm32/clk-stm32mp13.c
-index 89d4e039e4e6..24c0c9ff3602 100644
+index 24c0c9ff3602..66ebfe810b08 100644
 --- a/drivers/clk/stm32/clk-stm32mp13.c
 +++ b/drivers/clk/stm32/clk-stm32mp13.c
-@@ -410,8 +410,14 @@ static struct clk_stm32_mux ck_ker_eth1 = {
- 				       CLK_OPS_PARENT_ENABLE | CLK_SET_RATE_NO_REPARENT),
+@@ -415,9 +415,16 @@ static struct clk_stm32_gate eth1ck_k = {
+ 	.hw.init = CLK_HW_INIT_HW("eth1ck_k", &ck_ker_eth1.hw, &clk_stm32_gate_ops, 0),
  };
  
-+static struct clk_stm32_gate eth1ck_k = {
-+	.gate_id = GATE_ETH1CK,
-+	.hw.init = CLK_HW_INIT_HW("eth1ck_k", &ck_ker_eth1.hw, &clk_stm32_gate_ops, 0),
++static struct clk_stm32_div eth1ptp_k = {
++	.div_id = DIV_ETH1PTP,
++	.hw.init = CLK_HW_INIT_HW("eth1ptp_k", &ck_ker_eth1.hw, &clk_stm32_divider_ops,
++				  CLK_SET_RATE_NO_REPARENT),
 +};
 +
  static const struct clock_config stm32mp13_clock_cfg[] = {
  	STM32_MUX_CFG(NO_ID, ck_ker_eth1),
-+	STM32_GATE_CFG(ETH1CK_K, eth1ck_k),
+ 	STM32_GATE_CFG(ETH1CK_K, eth1ck_k),
++	STM32_DIV_CFG(ETH1PTP_K, eth1ptp_k),
  };
  
  u16 stm32mp13_cpt_gate[GATE_NB];

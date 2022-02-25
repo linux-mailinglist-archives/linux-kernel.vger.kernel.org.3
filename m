@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9254C3F1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38754C3F19
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238158AbiBYHhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S238146AbiBYHha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238148AbiBYHhh (ORCPT
+        with ESMTP id S231272AbiBYHh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:37:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FDFA23F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:37:05 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nNV9j-0006p5-Rk; Fri, 25 Feb 2022 08:36:47 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nNV9h-0003AS-UF; Fri, 25 Feb 2022 08:36:45 +0100
-Date:   Fri, 25 Feb 2022 08:36:45 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
-        abel.vesa@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V5 4/5] clk: imx: support fracn gppll
-Message-ID: <20220225073645.GA19585@pengutronix.de>
-References: <20220225014234.1766305-1-peng.fan@oss.nxp.com>
- <20220225014234.1766305-5-peng.fan@oss.nxp.com>
+        Fri, 25 Feb 2022 02:37:27 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0411AEF0A;
+        Thu, 24 Feb 2022 23:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645774615; x=1677310615;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KCskv1w22hj0gLP7vINQmo/MIRAACxuvRN4z4n3BQEY=;
+  b=SOrXuq6fK1ktnJjhigeeiOdlWTjm+2nPPJvt+oX9N+Nfn5t5PZk/qLtT
+   IsjAq3Qs6crjjtYkmHdY0ksxUlVDzeZG3t/415FK0V6FkB0R/5xpIAL2Y
+   IIhOj0dvvfReUh+6YKC9CFLHPdWSpg0yHc5P2iy+TiIPYhJNu1z0jzbth
+   o=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Feb 2022 23:36:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 23:36:55 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 24 Feb 2022 23:36:54 -0800
+Received: from [10.50.41.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
+ 2022 23:36:51 -0800
+Message-ID: <04907d26-db69-7d2d-ec05-59e7164b429e@quicinc.com>
+Date:   Fri, 25 Feb 2022 13:06:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225014234.1766305-5-peng.fan@oss.nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:36:19 up 76 days, 16:21, 81 users,  load average: 0.34, 0.19,
- 0.13
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCHv5] tty: hvc: dcc: Bind driver to CPU core0 for reads and
+ writes
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Jiri Slaby <jirislaby@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Shanker Donthineni" <shankerd@codeaurora.org>,
+        Adam Wallis <awallis@codeaurora.org>,
+        Timur Tabi <timur@codeaurora.org>,
+        Elliot Berman <eberman@codeaurora.org>
+References: <20220214031322.7498-1-quic_saipraka@quicinc.com>
+ <YhPbhZTtf1/4l6/I@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YhPbhZTtf1/4l6/I@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,409 +73,369 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 09:42:33AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> This PLL module is a Fractional-N synthesizer,
-> supporting 30-bit numerator and denominator. Numerator is a signed
-> number. It has feature to adjust fractional portion of feedback
-> divider dynamically. This fracn gppll is used in i.MX93.
-> 
-> Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Hi,
 
-Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+On 2/22/2022 12:05 AM, Greg Kroah-Hartman wrote:
+> On Mon, Feb 14, 2022 at 08:43:22AM +0530, Sai Prakash Ranjan wrote:
+>> From: Shanker Donthineni <shankerd@codeaurora.org>
+>>
+>> Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
+>> reads/writes from/to DCC on secondary cores. Each core has its
+>> own DCC device registers, so when a core reads or writes from/to DCC,
+>> it only accesses its own DCC device. Since kernel code can run on
+>> any core, every time the kernel wants to write to the console, it
+>> might write to a different DCC.
+>>
+>> In SMP mode, Trace32 creates multiple windows, and each window shows
+>> the DCC output only from that core's DCC. The result is that console
+>> output is either lost or scattered across windows.
+>>
+>> Selecting this option will enable code that serializes all console
+>> input and output to core 0. The DCC driver will create input and
+>> output FIFOs that all cores will use. Reads and writes from/to DCC
+>> are handled by a workqueue that runs only core 0.
+>>
+>> Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
+>> Acked-by: Adam Wallis <awallis@codeaurora.org>
+>> Signed-off-by: Timur Tabi <timur@codeaurora.org>
+>> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> ---
+>>
+>> Changes in v5:
+>>   * Use get_cpu() and put_cpu() for CPU id check in preemptible context.
+>>   * Revert back to build time Kconfig.
+> Why did you do this?  Why would you provide the option to not do this?
+>
+> Either it works properly or not at all.
 
-Sascha
+Huh? I don't understand what you mean here. This config is for the feature and not a
+hack around for non-working case. It is just like any other configs which are available
+throughout kernel for new features, what different thing are you seeing exactly?
 
-> ---
->  drivers/clk/imx/Makefile          |   1 +
->  drivers/clk/imx/clk-fracn-gppll.c | 324 ++++++++++++++++++++++++++++++
->  drivers/clk/imx/clk.h             |  21 ++
->  3 files changed, 346 insertions(+)
->  create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
-> 
-> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-> index 36c04922d789..60c8a4bb7574 100644
-> --- a/drivers/clk/imx/Makefile
-> +++ b/drivers/clk/imx/Makefile
-> @@ -5,6 +5,7 @@ mxc-clk-objs += clk-busy.o
->  mxc-clk-objs += clk-composite-7ulp.o
->  mxc-clk-objs += clk-composite-8m.o
->  mxc-clk-objs += clk-composite-93.o
-> +mxc-clk-objs += clk-fracn-gppll.o
->  mxc-clk-objs += clk-cpu.o
->  mxc-clk-objs += clk-divider-gate.o
->  mxc-clk-objs += clk-fixup-div.o
-> diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
-> new file mode 100644
-> index 000000000000..57b38147f05a
-> --- /dev/null
-> +++ b/drivers/clk/imx/clk-fracn-gppll.c
-> @@ -0,0 +1,324 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2021 NXP
-> + */
-> +
-> +#include <asm/div64.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/export.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/slab.h>
-> +#include <linux/jiffies.h>
-> +
-> +#include "clk.h"
-> +
-> +#define PLL_CTRL		0x0
-> +#define CLKMUX_BYPASS		BIT(2)
-> +#define CLKMUX_EN		BIT(1)
-> +#define POWERUP_MASK		BIT(0)
-> +
-> +#define PLL_ANA_PRG		0x10
-> +#define PLL_SPREAD_SPECTRUM	0x30
-> +
-> +#define PLL_NUMERATOR		0x40
-> +#define PLL_MFN_MASK		GENMASK(31, 2)
-> +
-> +#define PLL_DENOMINATOR		0x50
-> +#define PLL_MFD_MASK		GENMASK(29, 0)
-> +
-> +#define PLL_DIV			0x60
-> +#define PLL_MFI_MASK		GENMASK(24, 16)
-> +#define PLL_RDIV_MASK		GENMASK(15, 13)
-> +#define PLL_ODIV_MASK		GENMASK(7, 0)
-> +
-> +#define PLL_DFS_CTRL(x)		(0x70 + (x) * 0x10)
-> +
-> +#define PLL_STATUS		0xF0
-> +#define LOCK_STATUS		BIT(0)
-> +
-> +#define DFS_STATUS		0xF4
-> +
-> +#define LOCK_TIMEOUT_US		200
-> +
-> +#define PLL_FRACN_GP(_rate, _mfi, _mfn, _mfd, _rdiv, _odiv)	\
-> +	{							\
-> +		.rate	=	(_rate),			\
-> +		.mfi	=	(_mfi),				\
-> +		.mfn	=	(_mfn),				\
-> +		.mfd	=	(_mfd),				\
-> +		.rdiv	=	(_rdiv),			\
-> +		.odiv	=	(_odiv),			\
-> +	}
-> +
-> +struct clk_fracn_gppll {
-> +	struct clk_hw			hw;
-> +	void __iomem			*base;
-> +	const struct imx_fracn_gppll_rate_table *rate_table;
-> +	int rate_count;
-> +};
-> +
-> +/*
-> + * Fvco = Fref * (MFI + MFN / MFD)
-> + * Fout = Fvco / (rdiv * odiv)
-> + */
-> +static const struct imx_fracn_gppll_rate_table fracn_tbl[] = {
-> +	PLL_FRACN_GP(650000000U, 81, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(594000000U, 198, 0, 0, 0, 8),
-> +	PLL_FRACN_GP(560000000U, 70, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(400000000U, 50, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(393216000U, 81, 92, 100, 0, 5)
-> +};
-> +
-> +struct imx_fracn_gppll_clk imx_fracn_gppll = {
-> +	.rate_table = fracn_tbl,
-> +	.rate_count = ARRAY_SIZE(fracn_tbl),
-> +};
-> +EXPORT_SYMBOL_GPL(imx_fracn_gppll);
-> +
-> +static inline struct clk_fracn_gppll *to_clk_fracn_gppll(struct clk_hw *hw)
-> +{
-> +	return container_of(hw, struct clk_fracn_gppll, hw);
-> +}
-> +
-> +static const struct imx_fracn_gppll_rate_table *
-> +imx_get_pll_settings(struct clk_fracn_gppll *pll, unsigned long rate)
-> +{
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	int i;
-> +
-> +	for (i = 0; i < pll->rate_count; i++)
-> +		if (rate == rate_table[i].rate)
-> +			return &rate_table[i];
-> +
-> +	return NULL;
-> +}
-> +
-> +static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
-> +				       unsigned long *prate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	int i;
-> +
-> +	/* Assuming rate_table is in descending order */
-> +	for (i = 0; i < pll->rate_count; i++)
-> +		if (rate >= rate_table[i].rate)
-> +			return rate_table[i].rate;
-> +
-> +	/* return minimum supported value */
-> +	return rate_table[pll->rate_count - 1].rate;
-> +}
-> +
-> +static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	u32 pll_numerator, pll_denominator, pll_div;
-> +	u32 mfi, mfn, mfd, rdiv, odiv;
-> +	u64 fvco = parent_rate;
-> +	long rate = 0;
-> +	int i;
-> +
-> +	pll_numerator = readl_relaxed(pll->base + PLL_NUMERATOR);
-> +	mfn = FIELD_GET(PLL_MFN_MASK, pll_numerator);
-> +
-> +	pll_denominator = readl_relaxed(pll->base + PLL_DENOMINATOR);
-> +	mfd = FIELD_GET(PLL_MFD_MASK, pll_denominator);
-> +
-> +	pll_div = readl_relaxed(pll->base + PLL_DIV);
-> +	mfi = FIELD_GET(PLL_MFI_MASK, pll_div);
-> +
-> +	rdiv = FIELD_GET(PLL_RDIV_MASK, pll_div);
-> +	rdiv = rdiv + 1;
-> +	odiv = FIELD_GET(PLL_ODIV_MASK, pll_div);
-> +	switch (odiv) {
-> +	case 0:
-> +		odiv = 2;
-> +		break;
-> +	case 1:
-> +		odiv = 3;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	/*
-> +	 * Sometimes, the recalculated rate has deviation due to
-> +	 * the frac part. So find the accurate pll rate from the table
-> +	 * first, if no match rate in the table, use the rate calculated
-> +	 * from the equation below.
-> +	 */
-> +	for (i = 0; i < pll->rate_count; i++) {
-> +		if (rate_table[i].mfn == mfn && rate_table[i].mfi == mfi &&
-> +		    rate_table[i].mfd == mfd && rate_table[i].rdiv == rdiv &&
-> +		    rate_table[i].odiv == odiv)
-> +			rate = rate_table[i].rate;
-> +	}
-> +
-> +	if (rate)
-> +		return (unsigned long)rate;
-> +
-> +	/* Fvco = Fref * (MFI + MFN / MFD) */
-> +	fvco = fvco * mfi * mfd + fvco * mfn;
-> +	do_div(fvco, mfd * rdiv * odiv);
-> +
-> +	return (unsigned long)fvco;
-> +}
-> +
-> +static int clk_fracn_gppll_wait_lock(struct clk_fracn_gppll *pll)
-> +{
-> +	u32 val;
-> +
-> +	return readl_poll_timeout(pll->base + PLL_STATUS, val,
-> +				  val & LOCK_STATUS, 0, LOCK_TIMEOUT_US);
-> +}
-> +
-> +static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-> +				    unsigned long prate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate;
-> +	u32 tmp, pll_div, ana_mfn;
-> +	int ret;
-> +
-> +	rate = imx_get_pll_settings(pll, drate);
-> +
-> +	/* Disable output */
-> +	tmp = readl_relaxed(pll->base + PLL_CTRL);
-> +	tmp &= ~CLKMUX_EN;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Power Down */
-> +	tmp &= ~POWERUP_MASK;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Disable BYPASS */
-> +	tmp &= ~CLKMUX_BYPASS;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate->rdiv) | rate->odiv |
-> +		FIELD_PREP(PLL_MFI_MASK, rate->mfi);
-> +	writel_relaxed(pll_div, pll->base + PLL_DIV);
-> +	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
-> +	writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate->mfn), pll->base + PLL_NUMERATOR);
-> +
-> +	/* Wait for 5us according to fracn mode pll doc */
-> +	udelay(5);
-> +
-> +	/* Enable Powerup */
-> +	tmp |= POWERUP_MASK;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Wait Lock */
-> +	ret = clk_fracn_gppll_wait_lock(pll);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Enable output */
-> +	tmp |= CLKMUX_EN;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	ana_mfn = readl_relaxed(pll->base + PLL_STATUS);
-> +	ana_mfn = FIELD_GET(PLL_MFN_MASK, ana_mfn);
-> +
-> +	WARN(ana_mfn != rate->mfn, "ana_mfn != rate->mfn\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int clk_fracn_gppll_prepare(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +	int ret;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +	if (val & POWERUP_MASK)
-> +		return 0;
-> +
-> +	val |= CLKMUX_BYPASS;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	val |= POWERUP_MASK;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	val |= CLKMUX_EN;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	ret = clk_fracn_gppll_wait_lock(pll);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val &= ~CLKMUX_BYPASS;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int clk_fracn_gppll_is_prepared(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +
-> +	return (val & POWERUP_MASK) ? 1 : 0;
-> +}
-> +
-> +static void clk_fracn_gppll_unprepare(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +	val &= ~POWERUP_MASK;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +}
-> +
-> +static const struct clk_ops clk_fracn_gppll_ops = {
-> +	.prepare	= clk_fracn_gppll_prepare,
-> +	.unprepare	= clk_fracn_gppll_unprepare,
-> +	.is_prepared	= clk_fracn_gppll_is_prepared,
-> +	.recalc_rate	= clk_fracn_gppll_recalc_rate,
-> +	.round_rate	= clk_fracn_gppll_round_rate,
-> +	.set_rate	= clk_fracn_gppll_set_rate,
-> +};
-> +
-> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-> +				   const struct imx_fracn_gppll_clk *pll_clk)
-> +{
-> +	struct clk_fracn_gppll *pll;
-> +	struct clk_hw *hw;
-> +	struct clk_init_data init;
-> +	int ret;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	init.name = name;
-> +	init.flags = pll_clk->flags;
-> +	init.parent_names = &parent_name;
-> +	init.num_parents = 1;
-> +	init.ops = &clk_fracn_gppll_ops;
-> +
-> +	pll->base = base;
-> +	pll->hw.init = &init;
-> +	pll->rate_table = pll_clk->rate_table;
-> +	pll->rate_count = pll_clk->rate_count;
-> +
-> +	hw = &pll->hw;
-> +
-> +	ret = clk_hw_register(NULL, hw);
-> +	if (ret) {
-> +		pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
-> +		kfree(pll);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return hw;
-> +}
-> +EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll);
-> diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-> index 63eb7c53b123..a7cbbcd1a3f4 100644
-> --- a/drivers/clk/imx/clk.h
-> +++ b/drivers/clk/imx/clk.h
-> @@ -72,6 +72,27 @@ extern struct imx_pll14xx_clk imx_1416x_pll;
->  extern struct imx_pll14xx_clk imx_1443x_pll;
->  extern struct imx_pll14xx_clk imx_1443x_dram_pll;
->  
-> +/* NOTE: Rate table should be kept sorted in descending order. */
-> +struct imx_fracn_gppll_rate_table {
-> +	unsigned int rate;
-> +	unsigned int mfi;
-> +	unsigned int mfn;
-> +	unsigned int mfd;
-> +	unsigned int rdiv;
-> +	unsigned int odiv;
-> +};
-> +
-> +struct imx_fracn_gppll_clk {
-> +	const struct imx_fracn_gppll_rate_table *rate_table;
-> +	int rate_count;
-> +	int flags;
-> +};
-> +
-> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-> +				   const struct imx_fracn_gppll_clk *pll_clk);
-> +
-> +extern struct imx_fracn_gppll_clk imx_fracn_gppll;
-> +
->  #define imx_clk_cpu(name, parent_name, div, mux, pll, step) \
->  	to_clk(imx_clk_hw_cpu(name, parent_name, div, mux, pll, step))
->  
-> -- 
-> 2.25.1
-> 
-> 
+I have explained why device attribute like device tree property is not suitable in [1], if you
+insist then we can add Rob Herring and apparently as per your comment in previous
+version, we are not in 1990s to use module param :), so what other options are available to
+enable this feature?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+[1] https://lore.kernel.org/lkml/2866a87b-d1d2-7e9e-57d6-fdcfcd62e27e@quicinc.com/
+
+>
+>>   * Remove unnecessary hotplug locks, they result in sleeping in atomic context bugs.
+> Are you sure you can remove the locks?
+
+Please see below.
+
+>
+>>   * Add a comment for the spinlock.
+>>
+>> Changes in v4:
+>>   * Use module parameter for runtime choice of enabling this feature.
+>>   * Use hotplug locks to avoid race between cpu online check and work schedule.
+>>   * Remove ifdefs and move to common ops.
+>>   * Remove unnecessary check for this configuration.
+>>   * Use macros for buf size instead of magic numbers.
+>>   * v3 - https://lore.kernel.org/lkml/20211213141013.21464-1-quic_saipraka@quicinc.com/
+>>
+>> Changes in v3:
+>>   * Handle case where core0 is not online.
+>>
+>> Changes in v2:
+>>   * Checkpatch warning fixes.
+>>   * Use of IS_ENABLED macros instead of ifdefs.
+>>
+>> ---
+>>   drivers/tty/hvc/Kconfig   |  20 +++++
+>>   drivers/tty/hvc/hvc_dcc.c | 171 +++++++++++++++++++++++++++++++++++++-
+>>   2 files changed, 188 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/tty/hvc/Kconfig b/drivers/tty/hvc/Kconfig
+>> index 8d60e0ff67b4..c0754a2e3fe4 100644
+>> --- a/drivers/tty/hvc/Kconfig
+>> +++ b/drivers/tty/hvc/Kconfig
+>> @@ -87,6 +87,26 @@ config HVC_DCC
+>>   	  driver. This console is used through a JTAG only on ARM. If you don't have
+>>   	  a JTAG then you probably don't want this option.
+>>   
+>> +config HVC_DCC_SERIALIZE_SMP
+>> +	bool "Use DCC only on core 0"
+>> +	depends on SMP && HVC_DCC
+>> +	help
+>> +	  Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
+>> +	  reads/writes from/to DCC on more than one core. Each core has its
+>> +	  own DCC device registers, so when a core reads or writes from/to DCC,
+>> +	  it only accesses its own DCC device. Since kernel code can run on
+>> +	  any core, every time the kernel wants to write to the console, it
+>> +	  might write to a different DCC.
+>> +
+>> +	  In SMP mode, Trace32 creates multiple windows, and each window shows
+>> +	  the DCC output only from that core's DCC. The result is that console
+>> +	  output is either lost or scattered across windows.
+>> +
+>> +	  Selecting this option will enable code that serializes all console
+>> +	  input and output to core 0. The DCC driver will create input and
+>> +	  output FIFOs that all cores will use. Reads and writes from/to DCC
+>> +	  are handled by a workqueue that runs only core 0.
+>> +
+>>   config HVC_RISCV_SBI
+>>   	bool "RISC-V SBI console support"
+>>   	depends on RISCV_SBI_V01
+>> diff --git a/drivers/tty/hvc/hvc_dcc.c b/drivers/tty/hvc/hvc_dcc.c
+>> index 8e0edb7d93fd..6144135c24ed 100644
+>> --- a/drivers/tty/hvc/hvc_dcc.c
+>> +++ b/drivers/tty/hvc/hvc_dcc.c
+>> @@ -2,9 +2,13 @@
+>>   /* Copyright (c) 2010, 2014 The Linux Foundation. All rights reserved.  */
+>>   
+>>   #include <linux/console.h>
+>> +#include <linux/cpumask.h>
+>>   #include <linux/init.h>
+>> +#include <linux/kfifo.h>
+>>   #include <linux/serial.h>
+>>   #include <linux/serial_core.h>
+>> +#include <linux/smp.h>
+>> +#include <linux/spinlock.h>
+>>   
+>>   #include <asm/dcc.h>
+>>   #include <asm/processor.h>
+>> @@ -15,6 +19,15 @@
+>>   #define DCC_STATUS_RX		(1 << 30)
+>>   #define DCC_STATUS_TX		(1 << 29)
+>>   
+>> +#define DCC_INBUF_SIZE		128
+>> +#define DCC_OUTBUF_SIZE		1024
+>> +
+>> +/* Lock to serialize access to DCC fifo */
+>> +static DEFINE_SPINLOCK(dcc_lock);
+>> +
+>> +static DEFINE_KFIFO(inbuf, unsigned char, DCC_INBUF_SIZE);
+>> +static DEFINE_KFIFO(outbuf, unsigned char, DCC_OUTBUF_SIZE);
+>> +
+>>   static void dcc_uart_console_putchar(struct uart_port *port, int ch)
+>>   {
+>>   	while (__dcc_getstatus() & DCC_STATUS_TX)
+>> @@ -67,24 +80,176 @@ static int hvc_dcc_get_chars(uint32_t vt, char *buf, int count)
+>>   	return i;
+>>   }
+>>   
+>> +/*
+>> + * Check if the DCC is enabled. If CONFIG_HVC_DCC_SERIALIZE_SMP is enabled,
+>> + * then we assume then this function will be called first on core0. That way,
+>> + * dcc_core0_available will be true only if it's available on core0.
+>> + */
+>>   static bool hvc_dcc_check(void)
+>>   {
+>>   	unsigned long time = jiffies + (HZ / 10);
+>> +	static bool dcc_core0_available;
+>> +
+>> +	/*
+>> +	 * If we're not on core 0, but we previously confirmed that DCC is
+>> +	 * active, then just return true.
+>> +	 */
+>> +	int cpu = get_cpu();
+>> +
+>> +	if (IS_ENABLED(CONFIG_HVC_DCC_SERIALIZE_SMP) && cpu && dcc_core0_available) {
+>> +		put_cpu();
+>> +		return true;
+>> +	}
+>> +
+>> +	put_cpu();
+>>   
+>>   	/* Write a test character to check if it is handled */
+>>   	__dcc_putchar('\n');
+>>   
+>>   	while (time_is_after_jiffies(time)) {
+>> -		if (!(__dcc_getstatus() & DCC_STATUS_TX))
+>> +		if (!(__dcc_getstatus() & DCC_STATUS_TX)) {
+>> +			dcc_core0_available = true;
+>>   			return true;
+>> +		}
+>>   	}
+>>   
+>>   	return false;
+>>   }
+>>   
+>> +/*
+>> + * Workqueue function that writes the output FIFO to the DCC on core 0.
+>> + */
+>> +static void dcc_put_work(struct work_struct *work)
+>> +{
+>> +	unsigned char ch;
+>> +	unsigned long irqflags;
+>> +
+>> +	spin_lock_irqsave(&dcc_lock, irqflags);
+>> +
+>> +	/* While there's data in the output FIFO, write it to the DCC */
+>> +	while (kfifo_get(&outbuf, &ch))
+>> +		hvc_dcc_put_chars(0, &ch, 1);
+>> +
+>> +	/* While we're at it, check for any input characters */
+>> +	while (!kfifo_is_full(&inbuf)) {
+>> +		if (!hvc_dcc_get_chars(0, &ch, 1))
+>> +			break;
+>> +		kfifo_put(&inbuf, ch);
+>> +	}
+>> +
+>> +	spin_unlock_irqrestore(&dcc_lock, irqflags);
+>> +}
+>> +
+>> +static DECLARE_WORK(dcc_pwork, dcc_put_work);
+>> +
+>> +/*
+>> + * Workqueue function that reads characters from DCC and puts them into the
+>> + * input FIFO.
+>> + */
+>> +static void dcc_get_work(struct work_struct *work)
+>> +{
+>> +	unsigned char ch;
+>> +	unsigned long irqflags;
+>> +
+>> +	/*
+>> +	 * Read characters from DCC and put them into the input FIFO, as
+>> +	 * long as there is room and we have characters to read.
+>> +	 */
+>> +	spin_lock_irqsave(&dcc_lock, irqflags);
+>> +
+>> +	while (!kfifo_is_full(&inbuf)) {
+>> +		if (!hvc_dcc_get_chars(0, &ch, 1))
+>> +			break;
+>> +		kfifo_put(&inbuf, ch);
+>> +	}
+>> +	spin_unlock_irqrestore(&dcc_lock, irqflags);
+>> +}
+>> +
+>> +static DECLARE_WORK(dcc_gwork, dcc_get_work);
+>> +
+>> +/*
+>> + * Write characters directly to the DCC if we're on core 0 and the FIFO
+>> + * is empty, or write them to the FIFO if we're not.
+>> + */
+>> +static int hvc_dcc0_put_chars(u32 vt, const char *buf, int count)
+>> +{
+>> +	int len;
+>> +	unsigned long irqflags;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HVC_DCC_SERIALIZE_SMP))
+>> +		return hvc_dcc_put_chars(vt, buf, count);
+>> +
+>> +	spin_lock_irqsave(&dcc_lock, irqflags);
+>> +	if (smp_processor_id() || (!kfifo_is_empty(&outbuf))) {
+>> +		len = kfifo_in(&outbuf, buf, count);
+>> +		spin_unlock_irqrestore(&dcc_lock, irqflags);
+>> +
+>> +		/*
+>> +		 * We just push data to the output FIFO, so schedule the
+>> +		 * workqueue that will actually write that data to DCC.
+>> +		 * No hotplug lock required as we are in atomic context
+>> +		 * with interrupts and preemption disabled.
+>> +		 */
+>> +		if (cpu_online(0))
+>> +			schedule_work_on(0, &dcc_pwork);
+> Why is put_chars always called from atomic context?  Where is that
+> documented?
+
+It is called from vprintk_emit->console_unlock() which I believe runs in atomic context, see below stack trace.
+
+[   68.804747] BUG: sleeping function called from invalid context at ./include/linux/percpu-rwsem.h:49
+[   68.804752] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name: swapper/0
+[   68.804757] preempt_count: 1, expected: 0
+[   68.804794] Preemption disabled at:
+[   68.804796] [<ffffa9d50eb198fc>] vprintk_emit+0xc4/0x2e0
+[   68.804802] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G W         5.17.0-rc3-next-20220210-00001-g682663ac97d4-dirty #20
+[   68.804810] Call trace:
+[   68.804812]  dump_backtrace.part.6+0xd8/0xe8
+[   68.804820]  show_stack+0x14/0x60
+[   68.804827]  dump_stack_lvl+0x88/0xb0
+[   68.804831]  dump_stack+0x14/0x2c
+[   68.804836]  __might_resched+0x21c/0x268
+[   68.804840]  __might_sleep+0x44/0x78
+[   68.804844]  cpus_read_lock+0x20/0x168
+[   68.804848]  hvc_dcc0_put_chars+0x6c/0x110
+[   68.804852]  hvc_console_print+0x144/0x1d8
+[   68.804857]  console_unlock+0x2d8/0x5f8
+[   68.804862]  vprintk_emit+0xd0/0x2e0
+[   68.804867]  vprintk_default+0x30/0x38
+[   68.804871]  vprintk+0xcc/0xe8
+[   68.804876]  _printk+0x64/0x84
+
+> And that really will prevent another cpu from going offline after this
+> call has been checked?
+>
+
+I wasn't able to find any hotplug lock which can be used in atomic context, do you
+have any idea?
+
+>> +
+>> +		return len;
+>> +	}
+>> +
+>> +	/*
+>> +	 * If we're already on core 0, and the FIFO is empty, then just
+>> +	 * write the data to DCC.
+>> +	 */
+>> +	len = hvc_dcc_put_chars(vt, buf, count);
+>> +	spin_unlock_irqrestore(&dcc_lock, irqflags);
+>> +
+>> +	return len;
+>> +}
+>> +
+>> +/*
+>> + * Read characters directly from the DCC if we're on core 0 and the FIFO
+>> + * is empty, or read them from the FIFO if we're not.
+>> + */
+>> +static int hvc_dcc0_get_chars(u32 vt, char *buf, int count)
+>> +{
+>> +	int len;
+>> +	unsigned long irqflags;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HVC_DCC_SERIALIZE_SMP))
+>> +		return hvc_dcc_get_chars(vt, buf, count);
+>> +
+>> +	spin_lock_irqsave(&dcc_lock, irqflags);
+>> +
+>> +	if (smp_processor_id() || (!kfifo_is_empty(&inbuf))) {
+>> +		len = kfifo_out(&inbuf, buf, count);
+>> +		spin_unlock_irqrestore(&dcc_lock, irqflags);
+>> +
+>> +		/*
+>> +		 * If the FIFO was empty, there may be characters in the DCC
+>> +		 * that we haven't read yet.  Schedule a workqueue to fill
+>> +		 * the input FIFO, so that the next time this function is
+>> +		 * called, we'll have data. No hotplug lock required as we are
+>> +		 * in atomic context with interrupts and preemption disabled.
+>> +		 */
+>> +		if (!len && cpu_online(0))
+>> +			schedule_work_on(0, &dcc_gwork);
+> get_chars is in atomic context?  Even from the poll_get_char() callback?
+>
+>
+
+ From __hvc_poll(), see below stack trace:
+
+[   22.503594] BUG: sleeping function called from invalid context at ./include/linux/percpu-rwsem.h:49
+[   22.503634] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 49, name: khvcd
+[   22.503659] preempt_count: 1, expected: 0
+[   22.503677] RCU nest depth: 0, expected: 0
+[   22.503701] 2 locks held by khvcd/49:
+[   22.835450]  #0: ffffcbfe39f05868 (hvc_structs_mutex){+.+.}-{3:3}, at: khvcd+0x94/0x180
+[   22.835513]  #1: ffff44a5026723b0 (&hp->lock){....}-{2:2}, at: __hvc_poll+0x218/0x370
+[   23.477496] Preemption disabled at:
+[   23.477502] [<ffffcbfe38269540>] __hvc_poll+0x218/0x370
+[   23.602048] CPU: 1 PID: 49 Comm: khvcd Tainted: G W         5.17.0-rc3-next-20220210-00001-ga7a30b39bb99-dirty #33
+[   23.602100] Call trace:
+[   23.602115]  dump_backtrace.part.6+0xd8/0xe8
+[   23.602140]  show_stack+0x14/0x60
+[   23.602160]  dump_stack_lvl+0x98/0xd0
+[   23.602181]  dump_stack+0x14/0x2c
+[   23.602200]  __might_resched+0x21c/0x268
+[   23.602221]  __might_sleep+0x44/0x78
+[   23.602240]  cpus_read_lock+0x20/0x168
+[   23.602259]  hvc_dcc0_get_chars+0x70/0x128
+[   23.602278]  __hvc_poll+0x104/0x370
+[   23.602297]  khvcd+0xb8/0x180
+[   23.602316]  kthread+0xec/0x110
+[   23.602338]  ret_from_fork+0x10/0x20
+
+
+Thanks,
+Sai

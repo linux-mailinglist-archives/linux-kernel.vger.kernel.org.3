@@ -2,118 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F84C42D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323D14C42D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbiBYKxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S239858AbiBYKyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238587AbiBYKxe (ORCPT
+        with ESMTP id S234854AbiBYKyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:53:34 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEDC19E705
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:53:02 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so1429829wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:53:02 -0800 (PST)
+        Fri, 25 Feb 2022 05:54:10 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BC1B5112;
+        Fri, 25 Feb 2022 02:53:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qk11so10101521ejb.2;
+        Fri, 25 Feb 2022 02:53:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4+6O+dNZJj2RKRO+eDEVwSqedYiY63BPodTjJrSx078=;
-        b=GBxWSrKId+axKi2XG3Ra10c4ruhTUZkGGj21BNP71BMijoE1YkJ9COUmj43I+SGx5o
-         K3cgOLqLrQxo+wJHUGCheEUPcuHPhxFOay09Sc7PKzryanRC1ypAR+Z1Tq2KYnJTyTGx
-         CjrrVEnfqz7rd+VqodLwCE7P1FfSn39j2fnV4xo/ccEtt2pZarMDUFyd2fQstS8DIb4o
-         QqdR7fBM5fRBCHkCe6b+G+P48HL7YkA0oWHQ7OXyaOSxtZPrzRX9h9xFIwSFN/zmsvqi
-         va0loWu1FKK4CeIKRXm/SjSBj7Vmx17HN1x/41CaqioOwTExfcukSNUs9XZWfqM7PuYs
-         yF4Q==
+        bh=h/VZhFSee9mby4Ks5QygzWK3m4ma36DDzYBH8cRSTg0=;
+        b=GZfzCCgfBL2/cDdgRS599HRF7Vb27NDzxhC13Y62NhZecbpSIgfw6+ck6mVJyMf8nR
+         URiPWRVb7GUBXE+i0J0XeXb3Lsjk/CJitki8vj6Lj58paq4edRxugt9F0ueyOhHGMd8M
+         Dtt5OE7AHbE+nzXK+9IMAPURTDT+l8ia8DMMLen+YJq4CEu2BFfsnbIUXW/eIUKn07hy
+         e/YEENu+dqkFeT9WmoNdzN7noA6tKvlJptd6OdcLpksLAURTPeeA6gaBxbmi7dptm6fj
+         W/mAf2LSNTx13hDZ9ZeOU3nb5U1O6+rj7OTcFr7JvBruYAjgCgA7m3ItgkUw6M8WDa71
+         SdEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4+6O+dNZJj2RKRO+eDEVwSqedYiY63BPodTjJrSx078=;
-        b=6w8RNZ4P/u1j1pCMIfDJueuv6p159COg9QdUrU0lEklMysO6tV3TxGiWLFFvKSlIkp
-         eYOuYNfzW5ySRYLUr2wGzcgZM9qeVDkIYPKbUFrkWbZ4/zZXEXggNlVetTlZPaNHIclf
-         rSb0cW5epjZ2xJc935DnaeF0/ThsVycYyQYjEoNbDc01HOTR+8badfVezk2dGogWmxZ2
-         ifCWU16+oPQHCa2jcnpWbltA09Sg198n7plTdYeOCFUtICMnXb72jWgfrfnWkJVcKSSc
-         tiiV/TrxylQGe6p1HuwzI1VoBnefEiAYxgFAFctft9U/Z+63guKdJLpBPMf8U+Lr0JZ0
-         Cfug==
-X-Gm-Message-State: AOAM5318QGwSD1aNEDUkzth4OC1KkRJmElO8+dSedRqaY8r/O3pQT0ch
-        /shGFTN3E7hCCg9LI/NJ7ih/ugrGG8dQuA==
-X-Google-Smtp-Source: ABdhPJyz5ns4FMqlb35d9dHBpBxJSsqxLU/Q/sNKvmQGB9EB9JZYfnvPGDkOqd2lasu5L002KY6AAA==
-X-Received: by 2002:a05:600c:1914:b0:37c:fd93:1c68 with SMTP id j20-20020a05600c191400b0037cfd931c68mr2194026wmq.95.1645786380757;
-        Fri, 25 Feb 2022 02:53:00 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id s16-20020adfecd0000000b001e7be443a17sm2850758wro.27.2022.02.25.02.52.59
+        bh=h/VZhFSee9mby4Ks5QygzWK3m4ma36DDzYBH8cRSTg0=;
+        b=yGaQ8s9bARMWsACDfeioqG5nq0xk2ZZzkl9/YBsLCN4DOlPpLt0N00dO7QJTN35LCv
+         bffbEP4Li8p687SIk/vyYjEVY8P6GzJSvG3CIrgkALkzoW4gf8RHsHayKO61VmaALpyp
+         fDHUSDpoves8nWwJFQzVl3TJNwEM3qNWnDQfJbLbacH8TNvohkpUApNUEdjMYLeUew7B
+         9GbgkWP65zHOyHY5ILuTo+gd7vifJguA/0rjDGvpUuVgfSkVzhWNC27La50CBDkD0C2y
+         D+1hLPcWrxfOXoCPYmgLUMkbliVyk76Os4DCdvh0lY8V9Y0quq+4t6+3iZF6ktcQGTFh
+         k61g==
+X-Gm-Message-State: AOAM531JkdoQrBJrTLJ5RG5C5Z/mYyuH7pFAj3DsFQRaF1SNEF8XeTGz
+        6N91KfZXnyh2pBIXeHLQbRw9EL1UMj5K2g==
+X-Google-Smtp-Source: ABdhPJzokaQUIJjp3/0KAXV1pCNfs8zYTdoTpw2qYxda0pYYtBz7Cj7MKeszPpFl+5iO7sm+nNcgsg==
+X-Received: by 2002:a17:907:8a04:b0:6b4:e098:741a with SMTP id sc4-20020a1709078a0400b006b4e098741amr5615965ejc.550.1645786416760;
+        Fri, 25 Feb 2022 02:53:36 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id b15-20020a50cccf000000b0040f74c6abedsm1188548edj.77.2022.02.25.02.53.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 02:53:00 -0800 (PST)
-Message-ID: <35d2d1b2-07b1-ba54-c804-9622a0f94d4c@linaro.org>
-Date:   Fri, 25 Feb 2022 10:52:59 +0000
+        Fri, 25 Feb 2022 02:53:36 -0800 (PST)
+Message-ID: <3e3d0e25-cea4-5b1a-e181-15e793ecba91@gmail.com>
+Date:   Fri, 25 Feb 2022 11:53:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 0/3] nvmem: patches (set 2) for 5.18
+Subject: Re: [PATCH 1/2] arm64: dts: rockchip: add the usb3 nodes to rk356x
 Content-Language: en-US
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220223223502.29454-1-srinivas.kandagatla@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220223223502.29454-1-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+References: <20220225100943.2115933-1-michael.riesch@wolfvision.net>
+ <20220225100943.2115933-2-michael.riesch@wolfvision.net>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220225100943.2115933-2-michael.riesch@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Michael,
 
-On 23/02/2022 22:34, Srinivas Kandagatla wrote:
-> Hi Greg,
+On 2/25/22 11:09, Michael Riesch wrote:
+> The Rockchip RK3566 and RK3568 feature two USB 3.0 xHCI controllers,
+> one of them with Dual Role Device (DRD) capability.
 > 
-> Here is final set of nvmem patches for 5.18 which includes
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3568.dtsi |  5 ++
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 58 ++++++++++++++++++++++++
+>  2 files changed, 63 insertions(+)
 > 
-> - Add new Sunplus nvmem provider and bindings.
-> - fix in qfprom to increase blow timeout.
-> 
-> Can you please queue them up for 5.18.
-> 
-> thanks for you help,
-> srini
-> 
-> Knox Chiou (1):
->    nvmem: qfprom: Increase fuse blow timeout to prevent write fail
-> 
-> Vincent Shih (2):
->    nvmem: Add driver for OCOTP in Sunplus SP7021
->    dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP driver
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> index 91a0b798b857..0cd4ef36066a 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> @@ -116,3 +116,8 @@ power-domain@RK3568_PD_PIPE {
+>  		#power-domain-cells = <0>;
+>  	};
+>  };
+> +
+> +&usb_host0_dwc3 {
+> +	phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
+> +	phy-names = "usb2-phy", "usb3-phy";
+> +};
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 8b9fae3d348a..b46794486037 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -230,6 +230,64 @@ scmi_shmem: sram@0 {
+>  		};
+>  	};
+>  
+> +	usb_host0_xhci: usb@fcc00000 {
 
-Sorry for inconvenience, but can you please ignore this set if you have 
-not already applied them.
+> +		compatible = "rockchip,rk3399-dwc3";
 
-There seems to be a issue with yaml file which fails dt-bindings check 
-and there are few more patches that can go for 5.18.
+Add string to rockchip,dwc3.yaml
+and check with dtsb_check
 
-I will a send new set soon.
+compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
 
-Thanks for your help
---srini
+> +		#address-cells = <2>;
 
-> 
->   .../bindings/nvmem/sunplus,sp7021-ocotp.yaml  |  86 +++++++
->   MAINTAINERS                                   |   6 +
->   drivers/nvmem/Kconfig                         |  12 +
->   drivers/nvmem/Makefile                        |   2 +
->   drivers/nvmem/qfprom.c                        |   2 +-
->   drivers/nvmem/sunplus-ocotp.c                 | 228 ++++++++++++++++++
->   6 files changed, 335 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
->   create mode 100644 drivers/nvmem/sunplus-ocotp.c
-> 
+remove
+
+> +		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
+
+> +			 <&cru ACLK_USB3OTG0>, <&cru PCLK_PIPE>;
+
+PCLK_PIPE part of an other node, probably only to enable PD_PIPE.
+
+	combphy1: phy@fe830000 {
+		compatible = "rockchip,rk3568-naneng-combphy";
+		reg = <0x0 0xfe830000 0x0 0x100>;
+		clocks = <&pmucru CLK_PCIEPHY1_REF>,
+			 <&cru PCLK_PIPEPHY1>,
+			 <&cru PCLK_PIPE>;
+		clock-names = "ref", "apb", "pipe";
+		assigned-clocks = <&pmucru CLK_PCIEPHY1_REF>;
+		assigned-clock-rates = <100000000>;
+		resets = <&cru SRST_PIPEPHY1>;
+		rockchip,pipe-grf = <&pipegrf>;
+		rockchip,pipe-phy-grf = <&pipe_phy_grf1>;
+		#phy-cells = <1>;
+		status = "disabled";
+	};
+
+Rockchip RK3568 TRM Part1 V1.0-20210111.pdf
+page 475
+
+PD_PIPE:
+
+BIU_PIPE
+USB3OTG
+PCIE20
+PCIE30
+SATA
+XPCS
+
+PCIE, SATA USB clocks are child of aclk_pipe
+Yet PCLK_PIPE is the only clock that enables RK3568_PD_PIPE.
+
+
+	COMPOSITE_NOMUX(PCLK_PIPE, "pclk_pipe", "aclk_pipe", 0,
+			RK3568_CLKSEL_CON(29), 4, 4, DFLAGS,
+			RK3568_CLKGATE_CON(10), 1, GFLAGS),
+
+&power {
+	power-domain@RK3568_PD_PIPE {
+		reg = <RK3568_PD_PIPE>;
+
+		clocks = <&cru PCLK_PIPE>;
+
+Do we need more clocks here for USB for example?
+
+		pm_qos = <&qos_pcie2x1>,
+			 <&qos_pcie3x1>,
+			 <&qos_pcie3x2>,
+			 <&qos_sata0>,
+			 <&qos_sata1>,
+			 <&qos_sata2>,
+			 <&qos_usb3_0>,
+			 <&qos_usb3_1>;
+		#power-domain-cells = <0>;
+	};
+};
+
+> +		clock-names = "ref_clk", "suspend_clk", "bus_clk", "grf_clk";
+
+grf_clk only related to rk3399 ACLK_USB3_GRF and not to PCLK_PIPE.
+
+> +		ranges;
+> +		#size-cells = <2>;
+
+remove
+
+> +		status = "disabled";
+> +
+> +		usb_host0_dwc3: usb@fcc00000 {
+
+No subnode for "snps,dwc3"
+No more subdriver like rk3399.
+Use dwc core only and fix things/quirks there.
+
+> +			compatible = "snps,dwc3";
+> +			reg = <0x0 0xfcc00000 0x0 0x400000>;
+> +			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+> +			dr_mode = "otg";
+> +			phy_type = "utmi_wide";
+> +			power-domains = <&power RK3568_PD_PIPE>;
+> +			resets = <&cru SRST_USB3OTG0>;
+> +			reset-names = "usb3-otg";
+> +			snps,dis-del-phy-power-chg-quirk;
+> +			snps,dis_enblslpm_quirk;
+> +			snps,dis_rxdet_inp3_quirk;
+> +			snps,dis-tx-ipgap-linecheck-quirk;
+> +			snps,dis-u2-freeclk-exists-quirk;
+
+> +			snps,xhci-trb-ent-quirk;
+
+Not in mainline.
+See snps,dwc3.yaml
+
+> +		};
+> +	};
+> +
+> +	usb_host1_xhci: usb@fd000000 {
+> +		compatible = "rockchip,rk3399-dwc3";
+> +		#address-cells = <2>;
+> +		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
+> +			 <&cru ACLK_USB3OTG1>, <&cru PCLK_PIPE>;
+> +		clock-names = "ref_clk", "suspend_clk", "bus_clk", "grf_clk";
+> +		ranges;
+> +		#size-cells = <2>;
+> +		status = "disabled";
+> +
+> +		usb_host1_dwc3: usb@fd000000 {
+> +			compatible = "snps,dwc3";
+> +			reg = <0x0 0xfd000000 0x0 0x400000>;
+> +			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+> +			dr_mode = "host";
+> +			phy_type = "utmi_wide";
+> +			phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+> +			phy-names = "usb2-phy", "usb3-phy";
+> +			power-domains = <&power RK3568_PD_PIPE>;
+> +			resets = <&cru SRST_USB3OTG1>;
+
+> +			reset-names = "usb3-host";
+
+  reset-names:
+    const: usb3-otg
+
+Fix binding or DT ??
+
+> +			snps,dis-del-phy-power-chg-quirk;
+> +			snps,dis_enblslpm_quirk;
+> +			snps,dis_rxdet_inp3_quirk;
+> +			snps,dis-tx-ipgap-linecheck-quirk;
+> +			snps,dis-u2-freeclk-exists-quirk;
+
+> +			snps,xhci-trb-ent-quirk;
+
+Not in mainline ??
+
+> +		};
+> +	};
+> +
+
+
+	usbdrd3_1: usb@fd000000 {
+		compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
+		reg = <0x0 0xfd000000 0x0 0x400000>;
+		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru CLK_USB3OTG1_REF>,
+			 <&cru CLK_USB3OTG1_SUSPEND>,
+			 <&cru ACLK_USB3OTG1>;
+		clock-names = "ref_clk", "suspend_clk", "bus_clk";
+		dr_mode = "host";
+		phy_type = "utmi_wide";
+		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+		phy-names = "usb2-phy", "usb3-phy";
+		power-domains = <&power RK3568_PD_PIPE>;
+		resets = <&cru SRST_USB3OTG1>;
+		reset-names = "usb3-otg";
+		snps,dis-del-phy-power-chg-quirk;
+		snps,dis_enblslpm_quirk;
+		snps,dis_rxdet_inp3_quirk;
+		snps,dis-tx-ipgap-linecheck-quirk;
+		snps,dis-u2-freeclk-exists-quirk;
+		status = "disabled";
+	};
+
+
+>  	gic: interrupt-controller@fd400000 {
+>  		compatible = "arm,gic-v3";
+>  		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */

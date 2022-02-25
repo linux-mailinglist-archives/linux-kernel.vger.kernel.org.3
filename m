@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFF44C445C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991494C445F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbiBYMKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
+        id S240552AbiBYMLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240541AbiBYMKs (ORCPT
+        with ESMTP id S234338AbiBYMLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:10:48 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642FA20B16F;
-        Fri, 25 Feb 2022 04:10:15 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id s13so4175623wrb.6;
-        Fri, 25 Feb 2022 04:10:15 -0800 (PST)
+        Fri, 25 Feb 2022 07:11:23 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0C222759A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:10:47 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id j22so4131590wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:10:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8Y/NiUMDT4o9WesyCiv4t4HIqqx9u2movM8AhOuROWs=;
-        b=bw5zm9xJiLlxYM4Y0HyPeGLJ8VQtO4R1BlfQHug0KoiSeLnyfrdxJMZnZNhF1FfgFD
-         WzdI+ZwOM794EATAySdnzGKWRaXZWGPIxWis1qbXEqknG65YlATpWw12vu4gvLihpVhb
-         zQwYTOW3BOVqY/Qr/LdU3dpGtsvehWM3hoHEfPbJtTH8gA87dlxttwyDJATRhXWzbXrX
-         YlXPuIfhoEgX/do7F6K2S+hnUIudUAuZ8HxCxdcQD5FrCl5Z3jjy1LCN9UEjs8cJwuRL
-         F2yVFoJwm4zK72vbsCVS0aEY+qHciAtAbtDmjeoeKb62ES2QPmCR+uaiiuhNPrpCyw11
-         Eckw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XgZMeUwkhBpG4y/EWJsD1b8rX3LaUvWYgAU7slfNGsk=;
+        b=QcYK4/zOuAsBgjPCe0h9vhuqr0Gtz84iQyT+epjgPL/8/+6Ivcp0LEz+JXhuHqPUnp
+         j3Wy6IvUJFRz2f6XsvMjBcyPtEFd1WDzVrz+zEcS7UKhpns7+nMBHQy5CQk/tVVVe0+q
+         1y8o2xh7OrVDaq48IyLGgEEdE54VRlBhGqWHRh7ezDbxiCNoWO+JjQajacCfeTKDjc+b
+         Vhu7kYOEhSdqlep6aKOTa2JX3B/+UgAKX3ENAt1j9kPN2pYtLmQDLfQO5jjxUAzyH8AV
+         Mb2y+jkdtPRdLH3lZm1SUcOiUXrROWoQ+hiOLL4+ugmSQCXdc1IQhGRc2+aErdwQfTby
+         Kadg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=8Y/NiUMDT4o9WesyCiv4t4HIqqx9u2movM8AhOuROWs=;
-        b=nrtPOZHkFfPFGhMDidIWahBUvR1BFTBDySvplxfpPhjIsah0vuizmk2+k2CQH4LixI
-         qQfRjoHcThv/KKrdgcnVHgjPVk1M1XLHJnnetJu+2AHo+Kyaj4b8UQKUkxpZVnR0CY5/
-         E97AVV/qYqPCSNo3LUkDnI26wEYix/55cCHeCusHFICcJqlEZt2GyAzNif3o64LgiadZ
-         3yhatbFJOHhpwJlmQLug4tcsC8hJOvkzVVkZC3F4FYqFH4aOyw/bFMnd4CDiyJ3B92lk
-         mno3YcS+dKwWhcN6wNvRCGF1DXdiHwmMhhz95TuqzsU15MQaAamC6nlJb4AUTvhx8s/i
-         W/9w==
-X-Gm-Message-State: AOAM533bkMhD6+YS7f+vy8BtFzHH+OPhR1HSG4eSibgKzHQ+n0w+GePn
-        slFZ4bqd5vRbAl1Qq3cCtRw=
-X-Google-Smtp-Source: ABdhPJy5W+FR+p+CNgIV3LW8a7Od3pp/DnDWnDDBXPp4BDrxfuoWUu4rO+7AE2F7IOmJaFkBWKRi5A==
-X-Received: by 2002:a5d:6389:0:b0:1ed:bc35:cda4 with SMTP id p9-20020a5d6389000000b001edbc35cda4mr6111841wru.350.1645791013841;
-        Fri, 25 Feb 2022 04:10:13 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r2-20020a05600c35c200b00352cdcdd7b2sm16549826wmq.0.2022.02.25.04.10.12
+        bh=XgZMeUwkhBpG4y/EWJsD1b8rX3LaUvWYgAU7slfNGsk=;
+        b=KAohrFzp7RtSjTSZXE8ERBy1ia7Qfdb11tcZKSKmnJgB+LXE+DM9zIoCe4qouxuKYK
+         TL6ksupjKrd3/ivCTH8Ohpx51Ss2Hfm3qS43MOw4of2hMmclEtm/1mxMGSvvGHfc6bu/
+         TcGJBsEBtfL+C6l03radC0vNIert2aBtu/F6khNu/6ESkRHTX+36KQZD757q6u4BwpeC
+         NGtCo6GGYcf8S1XYS9kYy/u1yBq948wOiNaBFBkKXB0j2U8iaW61XtnptNH3iIl/4MKY
+         hGHMEihL4iyqD4wibjkh+zTQNDH5WRduC8BJ8NA18dNNa/EjPVCxuH8qakcIdLb+RGqA
+         8zFQ==
+X-Gm-Message-State: AOAM5303ZRzO6Ecbjm7jY1VFHMkfJkWL43D25vPGIQ889AjK4ZMCi0dd
+        TRr2Gx9EsiVHR/gA+InzXEXezA==
+X-Google-Smtp-Source: ABdhPJw/Mn6t9b+CBZfglGDHLIBBHSA2KYHMl6hzSorc5kJF8JmlIURyv8XlQTazMcQAYPabkgW7Eg==
+X-Received: by 2002:adf:de0b:0:b0:1ed:c0ae:cf76 with SMTP id b11-20020adfde0b000000b001edc0aecf76mr5892416wrm.501.1645791045869;
+        Fri, 25 Feb 2022 04:10:45 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm8417651wmk.9.2022.02.25.04.10.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 04:10:13 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
-Date:   Fri, 25 Feb 2022 13:10:12 +0100
+        Fri, 25 Feb 2022 04:10:45 -0800 (PST)
+Message-ID: <45015436-cc46-a239-e73c-db23e2c161a8@linaro.org>
+Date:   Fri, 25 Feb 2022 12:10:44 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
- constant
+Subject: Re: [PATCH V3 3/3] nvmem: core: add cell name based matching of DT
+ cell nodes
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Anton Romanov <romanton@google.com>
-References: <20220225013929.3577699-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220225013929.3577699-1-seanjc@google.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220124160300.25131-1-zajec5@gmail.com>
+ <20220218070729.3256-1-zajec5@gmail.com>
+ <20220218070729.3256-4-zajec5@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220218070729.3256-4-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,47 +82,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 02:39, Sean Christopherson wrote:
-> Don't snapshot tsc_khz into max_tsc_khz during KVM initialization if the
-> host TSC is constant, in which case the actual TSC frequency will never
-> change and thus capturing the "max" TSC during initialization is
-> unnecessary, KVM can simply use tsc_khz during VM creation.
-> 
-> On CPUs with constant TSC, but not a hardware-specified TSC frequency,
-> snapshotting max_tsc_khz and using that to set a VM's default TSC
-> frequency can lead to KVM thinking it needs to manually scale the guest's
-> TSC if refining the TSC completes after KVM snapshots tsc_khz.  The
-> actual frequency never changes, only the kernel's calculation of what
-> that frequency is changes.  On systems without hardware TSC scaling, this
-> either puts KVM into "always catchup" mode (extremely inefficient), or
-> prevents creating VMs altogether.
-> 
-> Ideally, KVM would not be able to race with TSC refinement, or would have
-> a hook into tsc_refine_calibration_work() to get an alert when refinement
-> is complete.  Avoiding the race altogether isn't practical as refinement
-> takes a relative eternity; it's deliberately put on a work queue outside
-> of the normal boot sequence to avoid unnecessarily delaying boot.
-> 
-> Adding a hook is doable, but somewhat gross due to KVM's ability to be
-> built as a module.  And if the TSC is constant, which is likely the case
-> for every VMX/SVM-capable CPU produced in the last decade, the race can
-> be hit if and only if userspace is able to create a VM before TSC
-> refinement completes; refinement is slow, but not that slow.
-> 
-> For now, punt on a proper fix, as not taking a snapshot can help some
-> uses cases and not taking a snapshot is arguably correct irrespective of
-> the race with refinement.
-> 
-> Cc: Suleiman Souhlal <suleiman@google.com>
-> Cc: Anton Romanov <romanton@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Hi Rafał
 
-Queued, but I'd rather have a subject that calls out that max_tsc_khz 
-needs a replacement at vCPU creation time.  In fact, the real change 
-(and bug, and fix) is in kvm_arch_vcpu_create(), while the subject 
-mentions only the change in kvm_timer_init().
+On 18/02/2022 07:07, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> When adding NVMEM cells defined by driver it's important to match them
+> with DT nodes that specify matching names. That way other bindings &
+> drivers can reference such "dynamic" NVMEM cells.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>   drivers/nvmem/core.c | 27 +++++++++++++++++++++++++++
+>   1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 53a43d843743..a891449c52f1 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -499,6 +499,31 @@ static int nvmem_cell_info_to_nvmem_cell_entry(struct nvmem_device *nvmem,
+>   	return 0;
+>   }
+>   
+> +/**
+> + * nvmem_find_cell_of_node() - Find DT node matching nvmem cell
+> + *
+> + * @nvmem: nvmem provider
+> + * @name: nvmem cell name
+> + *
+> + * Runtime created nvmem cells (those not coming from DT) may still need to be
+> + * referenced in DT. This function allows finding DT node referencing nvmem cell
+> + * by its name. Such a DT node can be then used by nvmem consumers.
+> + *
+> + * Return: NULL or pointer to DT node
+> + */
+> +static struct device_node *nvmem_find_cell_of_node(struct nvmem_device *nvmem,
+> +						   const char *name)
+> +{
+> +	struct device_node *child;
+> +
+> +	for_each_child_of_node(nvmem->dev.of_node, child) {
+> +		if (!strcmp(child->name, name))
+> +			return child;
+> +	}
 
-What do you think of "KVM: x86: Use current rather than max TSC 
-frequency if it is constant"?
+Isn't this just
 
-Pao
+	return of_get_child_by_name(nvmem->dev.of_node, name);
+
+
+> +
+> +	return NULL;
+> +}
+> +
+>   /**
+>    * nvmem_add_cells() - Add cell information to an nvmem device
+>    *
+> @@ -532,6 +557,8 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
+>   			goto err;
+>   		}
+>   
+> +		cells[i]->np = nvmem_find_cell_of_node(nvmem, cells[i]->name);
+
+
+This is really assuming that node name will be same as name passed in 
+nvmem_cell_info which might not be always true.
+
+This seems be very specific with brcm and this code does not belong in 
+nvmem core.
+
+How about adding device_node to struct nvmem_cell_info and update this 
+of_node as part of brcm_nvram_parse()?
+
+
+--srini
+
+
+> +
+>   		nvmem_cell_entry_add(cells[i]);
+>   	}
+>   

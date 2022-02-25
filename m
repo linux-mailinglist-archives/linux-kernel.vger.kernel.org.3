@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCEA4C4983
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772804C4987
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242304AbiBYPsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S242317AbiBYPti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240685AbiBYPsh (ORCPT
+        with ESMTP id S237967AbiBYPtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:48:37 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF4E6212B;
-        Fri, 25 Feb 2022 07:48:04 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso6725162ooi.1;
-        Fri, 25 Feb 2022 07:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gWZ4k2dTIF+KQYdLjdoJdXgFuc+j8wPi3Dg4q2AoyAo=;
-        b=iLf8Ixoep+7/J3JJqqWIStpEmQb2AEaQMZoiRwBYWTbe+IGLltv5i6T5eey+qrWdb4
-         t992d9qpgI10I2id82bAhwaEiRA23iyB+NHG/KScsr6UtUuIZWRyt6nFvA8wQc5gU1HX
-         iM25AfFMNZSJLMty1P/HPHddZ7Om/+YBEUzeYqj5aEU2FtOhJHaVvo9zbIvf9l2ezHzQ
-         2S4vwZ6exzsaiJOdB4mARDDLxyh29AQ6+DFPBDTIaYxvPQ7iYsrV3k77kCYBKTQI5c4u
-         KRwBb6k3RaX0i3ANO9mjFru3EoRdeKddLlWHhBb2Jy8dg6bBf25irr5zw3o8mRJX36e3
-         oejw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gWZ4k2dTIF+KQYdLjdoJdXgFuc+j8wPi3Dg4q2AoyAo=;
-        b=tQRfbIowTTD/7IfOzMaVuKV4d8j58LLQu4AVr6Uqc0ZA5lY/HMEphLTOEXbXRfzIqZ
-         FfY9uhyXrNz4xm1geXTSKP1M+Hn6CyI2JYzZvZURK1nJWC5GAAScRz2GMcGTHmt/ENe8
-         c4dorx3hrMqKjWrQKgrquXMrc7zyQHSF8qPwMDXX0RHzhsHH6SdHFwe0G/0r8JGviwee
-         eV546CEaxDt4O9ggwktXtQjh3voUoLA4Ki4aRObJRAOn+LfPjLtxFqcZt2K6ZtY1fj8v
-         4bc28QHhO6s24CDpipndixPdCD5Ej38F9u6qIJHQgMvTey2fBmyd/Eqky4stsaX/OjYz
-         twQg==
-X-Gm-Message-State: AOAM533I/eUE3Bemz6nbvjZOvgvNYh1M/PtqQdG6QQwLcCDcw8tbgUl5
-        BikjGskXFj2tdpqYQals25c=
-X-Google-Smtp-Source: ABdhPJxSe4kW9fBFv+61h6hRdMiN9B8RVylTM9oqSRayEPqFT+n3/9C3FHIxGeXChk1h95hFIa++uA==
-X-Received: by 2002:a05:6870:1b14:b0:d2:bcb8:7496 with SMTP id hl20-20020a0568701b1400b000d2bcb87496mr1517847oab.37.1645804083400;
-        Fri, 25 Feb 2022 07:48:03 -0800 (PST)
-Received: from ?IPV6:2601:282:800:dc80:641f:b8d5:43f6:63e9? ([2601:282:800:dc80:641f:b8d5:43f6:63e9])
-        by smtp.googlemail.com with ESMTPSA id y2-20020a056808130200b002d542a72882sm1603919oiv.3.2022.02.25.07.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 07:48:02 -0800 (PST)
-Message-ID: <41d055e3-9d88-bc43-cb3b-bd67ab071e11@gmail.com>
-Date:   Fri, 25 Feb 2022 08:48:00 -0700
+        Fri, 25 Feb 2022 10:49:36 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F396BDD7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L8L89r0l8PrFsV/eyc4s6aWGL88ctKd06KB+sGThLfQ=; b=klb52YbyG7gTLcYbbwq6x/kM+C
+        l8AGsuEwRgk/tjTuDy8rSKrfURHU1o2DxjlcsU3CkoigdR8hPOMyfF7ep5NAjI6FeocqoVDcBH3Lw
+        axrQrQHwyREzqpTK8WxhQeqmE6Q973pUnN0vLrbr3wEJmVvMQhYdQvNUzM3j69qZSuP8XzwlmsxpK
+        T2dDVFWpeUDg0RUCtG17qeNNUuswgTdmUn5BX1OqABnQQQjamRosJ5xpECJA2smxAhYCPBVOrIWHd
+        QAY3RzQyup9dzgycyDgBbI58SB3CqH7Hr/X1pe2ZAHfBKXqAR7ioGjMwbVxfrhrV3jPph0siCIs2c
+        O01mOvtA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNcq2-005uK8-Eo; Fri, 25 Feb 2022 15:48:58 +0000
+Date:   Fri, 25 Feb 2022 15:48:58 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
+Message-ID: <Yhj6ap3uEl2xFE8G@casper.infradead.org>
+References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+ <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
+ <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
+ <20220222013121-mutt-send-email-mst@kernel.org>
+ <8e60951973cab3a3d27a3c7f18d866cdb804e663.camel@infradead.org>
+ <YhVvOsI0+xVAKHdr@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH net-next v3 4/4] net: tun: track dropped skb via
- kfree_skb_reason()
-Content-Language: en-US
-To:     Menglong Dong <menglong8.dong@gmail.com>, dongli.zhang@oracle.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        imagedong@tencent.com, joao.m.martins@oracle.com,
-        joe.jin@oracle.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, netdev@vger.kernel.org, rostedt@goodmis.org
-References: <edddb6f9-70d1-4fcf-5630-cbdfe175e8ee@oracle.com>
- <20220225055732.1830237-1-imagedong@tencent.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220225055732.1830237-1-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhVvOsI0+xVAKHdr@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 10:57 PM, Menglong Dong wrote:
->>>
->>> For tun unique filters, how about using a shortened version of the ioctl
->>> name used to set the filter.
->>>
->>
->> Although TUN is widely used in virtualization environment, it is only one of
->> many drivers. I prefer to not introduce a reason that can be used only by a
->> specific driver.
->>
->> In order to make it more generic and more re-usable (e.g., perhaps people may
->> add ebpf filter to TAP driver as well), how about we create below reasons.
->>
->> SKB_DROP_REASON_DEV_FILTER,     /* dropped by filter attached to
->> 				 * or directly implemented by a
->> 				 * specific driver
->> 				 */
->> SKB_DROP_REASON_BPF_DEV,	/* dropped by bpf directly
->> 				 * attached to a specific device,
->> 				 * e.g., via TUNSETFILTEREBPF
->> 				 */
+On Tue, Feb 22, 2022 at 11:18:18PM +0000, Matthew Wilcox wrote:
+> On Tue, Feb 22, 2022 at 07:58:33AM +0000, David Woodhouse wrote:
+> > On Tue, 2022-02-22 at 01:31 -0500, Michael S. Tsirkin wrote:
+> > > On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
+> > > > 
+> > > > [dwoodhou@i7 virtio]$ sudo ~/virtio_test
+> > > > Detected virtual address range 0x1000-0x7ffffffff000
+> > > > spurious wakeups: 0x0 started=0x100000 completed=0x100000
+> > > > 
+> > > > Although in some circumstances I also see a different build failure:
+> > > > 
+> > > > cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h   -c -o vringh_test.o vringh_test.c
 > 
-> Aren't DEV_FILTER and BPF_DEV too generic? eBPF atached to netdev can
-> be many kinds, such as XDP, TC, etc.
-
-yes.
-
+> Trying to test this myself ...
 > 
-> I think that use TAP_TXFILTER instaed of DEV_FILTER maybe better?
-> and TAP_FILTER->BPF_DEV. Make them similar to the name in
-> __tun_chr_ioctl() may be easier for user to understand.
+> $ cd tools/virtio/
+> $ make
+> ...
+> cc -lpthread  virtio_test.o virtio_ring.o   -o virtio_test
+> /usr/bin/ld: virtio_ring.o: in function `spin_lock':
+> /home/willy/kernel/folio/tools/virtio/./linux/spinlock.h:16: undefined reference to `pthread_spin_lock'
 > 
+> So this is not the only problem here?
+> 
+> > > > In file included from ./linux/uio.h:3,
+> > > >                  from ./linux/../../../include/linux/vringh.h:15,
+> > > >                  from ./linux/vringh.h:1,
+> > > >                  from vringh_test.c:9:
+> > > > ./linux/../../../include/linux/uio.h:10:10: fatal error: linux/mm_types.h: No such file or directory
+> > > >    10 | #include <linux/mm_types.h>
+> > > >       |          ^~~~~~~~~~~~~~~~~~
+> > > > compilation terminated.
+> > > > make: *** [<builtin>: vringh_test.o] Error 1
+> > > 
+> > > Which tree has this build failure? In mine linux/uio.h does not
+> > > include linux/mm_types.h.
+> > 
+> > Strictly it's
+> > https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/xen-evtchn-kernel
+> > but I'm sure my part isn't relevant; it's just v5.17-rc5.
+> > 
+> >  $ git blame include/linux/uio.h | grep mm_types.h
+> > d9c19d32d86fa (Matthew Wilcox (Oracle) 2021-10-18 10:39:06 -0400  10) #include <linux/mm_types.h>
+> >  $ git describe --tags d9c19d32d86fa
+> > v5.16-rc4-37-gd9c19d32d86f
+> 
+> grr.  Originally, I had this doing a typebusting cast, but hch objected,
+> so I had to include mm_types.h.  This should fix it ...
 
-in this case given the unique attach points and API tap in the name
-seems more appropriate
+ping?  Just noticed this one crop up in a "list of problems".  Should
+I submit it myself?
+
+> $ git diff
+> diff --git a/tools/virtio/linux/mm_types.h b/tools/virtio/linux/mm_types.h
+> new file mode 100644
+> index 000000000000..3b0fc9bc5b8f
+> --- /dev/null
+> +++ b/tools/virtio/linux/mm_types.h
+> @@ -0,0 +1,3 @@
+> +struct folio {
+> +       struct page page;
+> +};
+> 
+> At least, it makes it compile for me.

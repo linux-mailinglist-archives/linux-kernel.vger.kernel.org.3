@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277AE4C4E0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2D04C4E11
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiBYSuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S233486AbiBYSxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiBYSuO (ORCPT
+        with ESMTP id S233445AbiBYSxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:50:14 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC7182D8A;
-        Fri, 25 Feb 2022 10:49:41 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id DED551F4664E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645814980;
-        bh=W1siran0TDWu7KT1NGueE/mVjJkk8nSZK4wyUM635do=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=WijUW/t4Phhx9H51BK2pBFSQkcaSPVGY+5nyahB6tSqLcsRuGthEKnKM6MTXySYOk
-         dtkboROcim2ASyTrJwugmHjLAIO/htDGkxMCbopG8TIZ6OJiRLjt9t3fuWqc38PLse
-         NkWA8WLGiyPonH80gGYow+LYwyiIeHsBdeh2neu66f0ZI0ksCFGWen6HOHw0X5wA8K
-         wXs+5lXyErJs6pG9+2mS6EAtOJXj09wOI/TFTaWExYF24I4/1bK8svQ1X6jARLdPVg
-         HGbQjB2pKOw15iNAkIimvqxIrHO2zFUVjbX3Q3nt1zVEn9OOqODCNwQGYHWhEb3ypZ
-         B6Hk93T9vDfZQ==
-Message-ID: <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
-Date:   Fri, 25 Feb 2022 18:49:37 +0000
+        Fri, 25 Feb 2022 13:53:07 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8228428E03
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:52:33 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id b8so5535698pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:52:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7dNTJr5q++G+HEI8xxfjALjTub5ZXLo8DVC3Ljh+kyE=;
+        b=NSDOuFp2RoBhAYqmgYPIBl/sqN0WzIMaNQnUJ/j912ElTGwDdxn+ONMwQRoT4jGjm7
+         ANyokD8T1yBD7YZtI2i/sI7mKNs1OQEAWtHRGO5NfawcfXeW+9B5N2dzioGeh/6zq7Z2
+         ANDM0HjWo/bHKifNrA/bySKjQ/lAWQ9v+JAYIJVhFc8DcMuAxh7nKQPjnwO0XckwAkJx
+         pPx+D+GBgvy11kuxiVF/O88tQQWzCaeqRt6hJUPJn2GEwlPVBHMCuuSDbtZorJD+y0py
+         O6QhpxhBDOJlV9ImAOzYEkh9tfSQhfNPiYgo2EWZFRYIJa8M+Qo2Zpk8Rqdp5pLLfyJ8
+         7tcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7dNTJr5q++G+HEI8xxfjALjTub5ZXLo8DVC3Ljh+kyE=;
+        b=IS0VH2Uz9bacArdxpHWLOy2U/EyC6fz//T6A4Bpvrpcg00qpqRhggd6wHYYG/CTqgX
+         t3oI+L5dGDPqs7Gxw3CzsYG2sXA9NGldQGxzgOvx++VISQVGUYwIoZnTMbGDaDRf/yIM
+         ShpXyw2AwMAYE2Dh6JSubtQNqGmyOxoRPEz2+xfGDLNLBo7G22M410h3M+HOV72an1Qk
+         rrPqwSLI7AG6fsLNQZWIT2AG0HugIzAmk+13Co3576hmNHXLc1aPx39ZZKgESeoVnclH
+         xTuoAdFYjTKs9NgJOwm4d3Fx4gxoF71M50vcWqdRPR970MUPD+hOD4/kBMEPugWhIoSn
+         RNSw==
+X-Gm-Message-State: AOAM533e8+sGnWfDvM4M5CseAjg/uOgvlnx/3/EnOQRNRIq9ney20tJy
+        pHM0O3fa2scFvHGFSbP9h6ZI5g==
+X-Google-Smtp-Source: ABdhPJwTfmdcyRiooN9YFNYHZwz54lNVcDJAqspFOY1cX7PJohuNNKI7950leqwKyvZvysW9mb124Q==
+X-Received: by 2002:a17:90b:1104:b0:1b8:b90b:22c7 with SMTP id gi4-20020a17090b110400b001b8b90b22c7mr4522553pjb.45.1645815152764;
+        Fri, 25 Feb 2022 10:52:32 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u19-20020a056a00159300b004e1590f88c1sm4319237pfk.220.2022.02.25.10.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 10:52:32 -0800 (PST)
+Date:   Fri, 25 Feb 2022 18:52:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXTERNAL] [PATCH v2] KVM: Don't actually set a request when
+ evicting vCPUs for GFN cache invd
+Message-ID: <YhklbH6ZyYrZmmGw@google.com>
+References: <20220223165302.3205276-1-seanjc@google.com>
+ <2547e9675d855449bc5cc7efb97251d6286a377c.camel@amazon.co.uk>
+ <YhkAJ+nw2lCzRxsg@google.com>
+ <915ddc7327585bbe8587b91b8cd208520d684db1.camel@infradead.org>
+ <YhkRcK64Jya6YpA9@google.com>
+ <550e1d7ef2b2f7f666e5b60e9bb855a8ccc0fb14.camel@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
-Content-Language: en-US
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
-In-Reply-To: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <550e1d7ef2b2f7f666e5b60e9bb855a8ccc0fb14.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 13:15, Guillaume Tucker wrote:
-> Add quotes around $(CC) when calling check_cc.sh from a Makefile to
-> pass the value as a single argument to the script even if it has
-> several words such as "ccache gcc".  Conversely, remove quotes in
-> check_cc.sh when calling $CC to make it a command with potentially
-> several arguments again.
+On Fri, Feb 25, 2022, David Woodhouse wrote:
+> On Fri, 2022-02-25 at 17:27 +0000, Sean Christopherson wrote:
+> > On Fri, Feb 25, 2022, David Woodhouse wrote:
+> > > On Fri, 2022-02-25 at 16:13 +0000, Sean Christopherson wrote:
+> > > > On Fri, Feb 25, 2022, Woodhouse, David wrote:
+> > > > > Since we need an active vCPU context to do dirty logging (thanks, dirty
+> > > > > ring)... and since any time vcpu_run exits to userspace for any reason
+> > > > > might be the last time we ever get an active vCPU context... I think
+> > > > > that kind of fundamentally means that we must flush dirty state to the
+> > > > > log on *every* return to userspace, doesn't it?
+> > > > 
+> > > > I would rather add a variant of mark_page_dirty_in_slot() that takes a vCPU, which
+> > > > we whould have in all cases.  I see no reason to require use of kvm_get_running_vcpu().
+> > > 
+> > > We already have kvm_vcpu_mark_page_dirty(), but it can't use just 'some
+> > > vcpu' because the dirty ring is lockless. So if you're ever going to
+> > > use anything other than kvm_get_running_vcpu() we need to add locks.
+> > 
+> > Heh, actually, scratch my previous comment.  I was going to respond that
+> > kvm_get_running_vcpu() is mutually exclusive with all other ioctls() on the same
+> > vCPU by virtue of vcpu->mutex, but I had forgotten that kvm_get_running_vcpu()
+> > really should be "kvm_get_loaded_vcpu()".  I.e. as long as KVM is in a vCPU-ioctl
+> > path, kvm_get_running_vcpu() will be non-null.
+> > 
+> > > And while we *could* do that, I don't think it would negate the
+> > > fundamental observation that *any* time we return from vcpu_run to
+> > > userspace, that could be the last time. Userspace might read the dirty
+> > > log for the *last* time, and any internally-cached "oh, at some point
+> > > we need to mark <this> page dirty" is lost because by the time the vCPU
+> > > is finally destroyed, it's too late.
+> > 
+> > Hmm, isn't that an existing bug?  I think the correct fix would be to flush all
+> > dirty vmcs12 pages to the memslot in vmx_get_nested_state().  Userspace _must_
+> > invoke that if it wants to migrated a nested vCPU.
 > 
-> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-> Tested-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> ---
->  tools/testing/selftests/vm/Makefile     | 6 +++---
->  tools/testing/selftests/x86/Makefile    | 6 +++---
->  tools/testing/selftests/x86/check_cc.sh | 2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+> Yes, AFAICT it's an existing bug in the way the kvm_host_map code works
+> today. Your suggestion makes sense as *long* as we consider it OK to
+> retrospectively document that userspace must extract the nested state
+> *before* doing the final read of the dirty log.
 > 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 1607322a112c..d934f026ebb5 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -49,9 +49,9 @@ TEST_GEN_FILES += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->  
->  ifeq ($(MACHINE),x86_64)
-> -CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
-> -CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
-> -CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-> +CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-> +CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
-> +CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
->  
->  TARGETS := protection_keys
->  BINARIES_32 := $(TARGETS:%=%_32)
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index 8a1f62ab3c8e..53df7d3893d3 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -6,9 +6,9 @@ include ../lib.mk
->  .PHONY: all all_32 all_64 warn_32bit_failure clean
->  
->  UNAME_M := $(shell uname -m)
-> -CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
-> -CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
-> -CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-> +CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
-> +CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
-> +CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
->  
->  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
->  			check_initial_reg_state sigreturn iopl ioperm \
-> diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
-> index 3e2089c8cf54..aff2c15018b5 100755
-> --- a/tools/testing/selftests/x86/check_cc.sh
-> +++ b/tools/testing/selftests/x86/check_cc.sh
-> @@ -7,7 +7,7 @@ CC="$1"
->  TESTPROG="$2"
->  shift 2
->  
-> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->      echo 1
->  else
->      echo 0
+> I am not aware that we have a clearly documented "the dirty log may
+> keep changing until XXX" anyway. But you're proposing that we change
+> it, I think. There may well be VMMs which assume that no pages will be
+> dirtied unless they are actually *running* a vCPU.
+> 
+> Which is why I was proposing that we flush the dirty status to the log
+> *every* time we leave vcpu_run back to userspace. But I'll not die on
+> that hill, if you make a good case for your proposal being OK.
 
-I see the change in check_cc.sh is already covered by Usama's patch:
+Drat, I didn't consider the ABI aspect.  Flushing on every exit to userspace would
+indeed be more robust.
 
-  selftests/x86: Add validity check and allow field splitting
+> > > I think I'm going to rip out the 'dirty' flag from the gfn_to_pfn_cache
+> > > completely and add a function (to be called with an active vCPU
+> > > context) which marks the page dirty *now*.
+> > 
+> > Hrm, something like?
+> > 
+> >   1. Drop @dirty from kvm_gfn_to_pfn_cache_init()
+> >   2. Rename @dirty => @old_dirty in kvm_gfn_to_pfn_cache_refresh()
+> >   3. Add an API to mark the associated slot dirty without unmapping
+> > 
+> > I think that makes sense.
+> 
+> Except I'll drop 'dirty' from kvm_gfn_to_pfn_cache_refresh() too.
+> There's no scope for a deferred "oh, I meant to tell you that was
+> dirty" even in that case, is there? Use the API we add in your #3.
 
--if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-+if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-
-
-However, the rest of this patch in the Makefiles still needs to
-be applied.  Let me know if I should rebase it on top of Usama's.
-
-Thanks,
-Guillaume
-
+But won't we end up with a bunch of call sites that attempt to determine whether
+not the dirty status needs to be flushed?  I'm specifically thinking of scenarios
+where the status needs to be conditionally flushed, e.g. if the backing pfn doesn't
+change, then it's ok to not mark the page dirty.  Not handling that in the refresh
+helper will either lead to unnecessary dirtying or duplicate code/work.

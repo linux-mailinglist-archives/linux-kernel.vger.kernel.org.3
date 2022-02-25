@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0874C3AF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF9A4C3AFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbiBYBcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 20:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        id S236425AbiBYBc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 20:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbiBYBcV (ORCPT
+        with ESMTP id S234984AbiBYBc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 20:32:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1EA4A923;
-        Thu, 24 Feb 2022 17:31:50 -0800 (PST)
+        Thu, 24 Feb 2022 20:32:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B58186216
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 17:32:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F09D660F01;
-        Fri, 25 Feb 2022 01:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22C5C340F0;
-        Fri, 25 Feb 2022 01:31:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37AE4B82A85
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 01:32:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A727C340E9;
+        Fri, 25 Feb 2022 01:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645752709;
-        bh=3AAPf7WkSDBU47MasXkUqlVc+MASq7jzM/CbTcX6ooM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ScwlZhwtdWXtWq7plCxg8/+Li9LCokWs9aZi1UQlDC4f/GB4PFGju2PlGN6lxf4YI
-         O+Ui8gRPpUYSrxfFp4jchgbYurTXPBpu3zA1Wqy1v/vqzAl9qQeAqOfbuhbl4fidMn
-         adMhIwzHGoRR7ozritc4CpwIF5n2N9vvYZXeOc+Gna2PaC28t/++nlIdWpU1afUw4B
-         XFFvqRx33AeRFOvnCBBrNEzHOBTE3j6fRyUfyG/yWOZ5xuE1GKM4M+ol6CA0NC7xCo
-         1I3zMoAUjtYSP7rdRF7E+OG1Df3YI89/GkNBLpzWPJ6uonF8FR4VkN+FLzViysg1B/
-         Cp1jGHPdOgmxA==
-Message-ID: <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
-Date:   Thu, 24 Feb 2022 19:31:47 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1645752740;
+        bh=WM2n7P5HcptYIrh/8Oiu/xF67/AfvdZbOpDJ2NsVTG0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NtfrDuV7INO5SSDNC/bwDgj1rZN0s1VgQAtJpxtUkr1iCnvPdtcYD5iJ4QYvKilFb
+         FfAG37xLNz1PwpOE8baMBsqJfLZaizdGJcK8uxWFZoZNoRs6X9PHTcnrBxnZvDBN3r
+         aPiJgjZrow2gkUWpfBKlQZruveUxh/o+/eZK3tgo5CpAqrcrXeE+xB5qj6tJcFig3B
+         W/x1eHkv6GMxQy+jhJQrZymMXD/iWNNzcckMj5fkZbbch228zklzfqVi8MWvBVKnyy
+         j4epE+f4tRyOt4mLYo64+4hTi8xDAqWv9N1kwt3hGls84V+Lyt+nTIqn770PReOFLQ
+         6713mU+pS483w==
+Date:   Fri, 25 Feb 2022 10:32:15 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-Id: <20220225103215.77080de0b3edd0fa2839b8fa@kernel.org>
+In-Reply-To: <20220224151322.892372059@infradead.org>
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.892372059@infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -60,181 +61,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+Hi Peter,
 
-On 2/13/22 20:30, Anshuman Khandual wrote:
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
+On Thu, 24 Feb 2022 15:51:53 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> With IBT on, sym+0 is no longer the __fentry__ site.
 > 
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> NOTE: the architecture has a special case and *does* allow placing an
+> INT3 breakpoint over ENDBR in which case #BP has precedence over #CP
+> and as such we don't need to disallow probing these instructions.
+
+Does this mean we can still putting a probe on sym+0??
+
+If so, NAK this patch, since the KPROBES_ON_FTRACE is not meaning
+to accelerate the function entry probe, but just allows user to
+put a probe on 'call _mcount' (which can be modified by ftrace).
+
+func:
+  endbr  <- sym+0  : INT3 is used. (kp->addr = func+0)
+  nop5   <- sym+4? : ftrace is used. (kp->addr = func+4?)
+  ...
+
+And anyway, in some case (e.g. perf probe) symbol will be a basement
+symbol like '_text' and @offset will be the function addr - _text addr
+so that we can put a probe on local-scope function.
+
+If you think we should not probe on the endbr, we should treat the
+pair of endbr and nop5 (or call _mcount) instructions as a virtual
+single instruction. This means kp->addr should point sym+0, but use
+ftrace to probe.
+
+func:
+  endbr  <- sym+0  : ftrace is used. (kp->addr = func+0)
+  nop5   <- sym+4? : This is not able to be probed.
+  ...
+
+Thank you,
+
+> 
+> NOTE: irrespective of the above; there is a complication in that
+> direct branches to functions are rewritten to not execute ENDBR, so
+> any breakpoint thereon might miss lots of actual function executions.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->   arch/nios2/Kconfig               |  1 +
->   arch/nios2/include/asm/pgtable.h | 16 ------------
->   arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->   3 files changed, 46 insertions(+), 16 deletions(-)
+>  arch/x86/kernel/kprobes/core.c |   11 +++++++++++
+>  kernel/kprobes.c               |   15 ++++++++++++---
+>  2 files changed, 23 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index 33fd06f5fa41..85a58a357a3b 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -6,6 +6,7 @@ config NIOS2
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_HAS_DMA_SET_UNCACHED
-> +	select ARCH_HAS_VM_GET_PAGE_PROT
->   	select ARCH_NO_SWAP
->   	select COMMON_CLK
->   	select TIMER_OF
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 4a995fa628ee..2678dad58a63 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -40,24 +40,8 @@ struct mm_struct;
->    */
->   
->   /* Remove W bit on private pages for COW support */
-> -#define __P000	MKP(0, 0, 0)
-> -#define __P001	MKP(0, 0, 1)
-> -#define __P010	MKP(0, 0, 0)	/* COW */
-> -#define __P011	MKP(0, 0, 1)	/* COW */
-> -#define __P100	MKP(1, 0, 0)
-> -#define __P101	MKP(1, 0, 1)
-> -#define __P110	MKP(1, 0, 0)	/* COW */
-> -#define __P111	MKP(1, 0, 1)	/* COW */
->   
->   /* Shared pages can have exact HW mapping */
-> -#define __S000	MKP(0, 0, 0)
-> -#define __S001	MKP(0, 0, 1)
-> -#define __S010	MKP(0, 1, 0)
-> -#define __S011	MKP(0, 1, 1)
-> -#define __S100	MKP(1, 0, 0)
-> -#define __S101	MKP(1, 0, 1)
-> -#define __S110	MKP(1, 1, 0)
-> -#define __S111	MKP(1, 1, 1)
->   
->   /* Used all over the kernel */
->   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 613fcaa5988a..311b2146a248 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->   {
->   	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->   }
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -1156,3 +1162,8 @@ int arch_trampoline_kprobe(struct kprobe
+>  {
+>  	return 0;
+>  }
 > +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +bool arch_kprobe_on_func_entry(unsigned long offset)
 > +{
-> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +	case VM_NONE:
-> +		return MKP(0, 0, 0);
-> +	case VM_READ:
-> +		return MKP(0, 0, 1);
-> +	/* COW */
-> +	case VM_WRITE:
-> +		return MKP(0, 0, 0);
-> +	/* COW */
-> +	case VM_WRITE | VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	/* COW */
-> +	case VM_EXEC | VM_WRITE:
-> +		return MKP(1, 0, 0);
-> +	/* COW */
-> +	case VM_EXEC | VM_WRITE | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED:
-> +		return MKP(0, 0, 0);
-> +	case VM_SHARED | VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_SHARED | VM_WRITE:
-> +		return MKP(0, 1, 0);
-> +	case VM_SHARED | VM_WRITE | VM_READ:
-> +		return MKP(0, 1, 1);
-> +	case VM_SHARED | VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_SHARED | VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED | VM_EXEC | VM_WRITE:
-> +		return MKP(1, 1, 0);
-> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +		return MKP(1, 1, 1);
-> +	default:
-> +		BUILD_BUG();
-> +	}
+> +	return offset <= 4*HAS_KERNEL_IBT;
 > +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
-
-I'm getting this compile error after applying this patch when build NIOS2:
-
-
-mm/mmap.c:105:2: error: ‘__P000’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |  ^~~~~~
-
-mm/mmap.c:105:10: error: ‘__P001’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |          ^~~~~~
-
-mm/mmap.c:105:18: error: ‘__P010’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                  ^~~~~~
-
-   AR      fs/devpts/built-in.a
-
-mm/mmap.c:105:26: error: ‘__P011’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                          ^~~~~~
-
-mm/mmap.c:105:34: error: ‘__P100’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                                  ^~~~~~
-
-mm/mmap.c:105:42: error: ‘__P101’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                                          ^~~~~~
-
-mm/mmap.c:105:50: error: ‘__P110’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                                                  ^~~~~~
-
-mm/mmap.c:105:58: error: ‘__P111’ undeclared here (not in a function)
-
-   105 |  __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
-
-       |                                                          ^~~~~~
-
-mm/mmap.c:106:2: error: ‘__S000’ undeclared here (not in a function)
-
-   106 |  __S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
-
-       |  ^~~~~~
-
-mm/mmap.c:106:10: error: ‘__S001’ undeclared here (not in a function)
-
-   106 |  __S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -67,10 +67,19 @@ static bool kprobes_all_disarmed;
+>  static DEFINE_MUTEX(kprobe_mutex);
+>  static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
+>  
+> -kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
+> -					unsigned int __unused)
+> +kprobe_opcode_t * __weak kprobe_lookup_name(const char *name, unsigned int offset)
+>  {
+> -	return ((kprobe_opcode_t *)(kallsyms_lookup_name(name)));
+> +	kprobe_opcode_t *addr = NULL;
+> +
+> +	addr = ((kprobe_opcode_t *)(kallsyms_lookup_name(name)));
+> +#ifdef CONFIG_KPROBES_ON_FTRACE
+> +	if (addr && !offset) {
+> +		unsigned long faddr = ftrace_location((unsigned long)addr);
+> +		if (faddr)
+> +			addr = (kprobe_opcode_t *)faddr;
+> +	}
+> +#endif
+> +	return addr;
+>  }
+>  
+>  /*
+> 
+> 
 
 
-
-Dinh
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

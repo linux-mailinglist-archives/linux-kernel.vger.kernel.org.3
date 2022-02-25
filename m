@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F8A4C46AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE3F4C46B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241521AbiBYNhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S241529AbiBYNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiBYNhj (ORCPT
+        with ESMTP id S241229AbiBYNiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:37:39 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59CD11B5CC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:37:04 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m13-20020a7bca4d000000b00380e379bae2so1692038wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LLpFgz78t1oyzWMh4Y4sBh571G9i6nh/jXJ+jWwza7k=;
-        b=qnSHncmvDNQSyhYwHGMPduQc2VHvZllkFXUi8WCqlPYsqHsGyxR7diTmu96tNyuXTX
-         9x+bEH6fjmLd7nsN9gI993CY2H8nLTNdPb6gMW7NirEFAE7nBZBJprOTc39xjriFm4mu
-         XAPm0YAplY9IcafACSXZHkVYKY+pUxToW8/h5YP2QbePSEZq3kUOXiy1rAIDTXxEzBMp
-         WVabxd+aXfZqvKx1VEX6pl3lsbfhk/TpDsJEJJBqfsdViqm/75f5hWJVLMJQeblI7pN8
-         3oMkXBdzlipXLk6CcWSaY4eDW0EGo9il0p7ext2xodaVi7ogy4RUR9CqDTV6Cbbow4zs
-         BkTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LLpFgz78t1oyzWMh4Y4sBh571G9i6nh/jXJ+jWwza7k=;
-        b=36MnRPueDnBwjNTYfmMorvSK7h++p9Ew/skWxDv7gftWxwQuOOlL+XUCdQbVUNjcNy
-         yom5yTRiUXZnM1AebWQnTvUMDZI6TOKhsENra5Z4Mex+16phgWAhXztw994dMaoo8VCk
-         HVhOTWXQO8DMM0b/1HZAFGN5wRRuAvgIAx1+8ge6miL+K/i3fWDQj1f2nneAAW9wNsOR
-         +pJayQcoQsWqBrW0WjmELra04VarmEbJizjTJf9U+0C22Y7XQDhUu0IuK2jFcWhpoq2K
-         uWg9BmP1v242xM/3HjMzkQvgcq5T696zmdoZi+G8ikA+0tIT4XVJ6o0OQ78TW/L5XTgw
-         UkzQ==
-X-Gm-Message-State: AOAM531cfi3RhL98FMHkG2NtBFC59Qx8RWW9GkOFcG4iFP2r/ZEqrZBJ
-        G1IEQObFw0/WEkpxyu1ZpysCzQ==
-X-Google-Smtp-Source: ABdhPJzlbmW009bfZhIOcWbIfq2JDYEC5ZLuIC33VFPLGDBy/EY9ndE8Zc9MvpIUd5BXrDsqFTyknA==
-X-Received: by 2002:a05:600c:3d06:b0:37b:f831:2a98 with SMTP id bh6-20020a05600c3d0600b0037bf8312a98mr2759914wmb.36.1645796223402;
-        Fri, 25 Feb 2022 05:37:03 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id u14-20020adfed4e000000b001e3323611e5sm2406589wro.26.2022.02.25.05.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 05:37:02 -0800 (PST)
-Message-ID: <861cd4c1-43a9-8175-7ad1-e7e51f5781b4@linaro.org>
-Date:   Fri, 25 Feb 2022 13:37:01 +0000
+        Fri, 25 Feb 2022 08:38:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E921688FE
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:37:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13161B83022
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D234C340E7;
+        Fri, 25 Feb 2022 13:37:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FsPQphjf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645796257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iLIf2o0dj/gBCR4aqE4HcDV1JjQTn81CJYVohfhg7z8=;
+        b=FsPQphjfbMLgAtdVrMWrs3R0Tq0dV+ZHbP2+Z8PsCghZ/vAr7/DY9WKyaVnnbbCvU7PCNG
+        RZoFMqQs/Rr+rRR5Osu+vLJP1cQjuNl/kVcUqFmfcvanYLCIepk7aU7+x5UCPJTL8XxXH3
+        Re0FIwv2lzkRYHKIdu71Zz/j6Pk4ZmQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5ea695b1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 13:37:37 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v2] random: cleanup UUID handling
+Date:   Fri, 25 Feb 2022 14:37:32 +0100
+Message-Id: <20220225133732.923604-1-Jason@zx2c4.com>
+In-Reply-To: <20220224220958.93263-1-Jason@zx2c4.com>
+References: <20220224220958.93263-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] soundwire: qcom: remove redundant wait for completion
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, koul@kernel.org,
-        yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1645795667-20176-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1645795667-20176-1-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Rather than hard coding various lengths, we can use the right constants.
+Strings should be `char *` while buffers should be `u8 *`. Rather than
+have a nonsensical and unused maxlength, just remove it. Finally, use
+snprintf instead of sprintf, just out of good hygiene.
 
+As well, remove the old comment about returning a binary UUID via the
+binary sysctl syscall. That syscall was removed from the kernel in 5.5,
+and actually, the "uuid_strategy" function and related infrastructure
+for even serving it via the binary sysctl syscall was removed with
+894d2491153a ("sysctl drivers: Remove dead binary sysctl support") back
+in 2.6.33.
 
-On 25/02/2022 13:27, Srinivasa Rao Mandadapu wrote:
-> Remove wait_for_completion_timeout from soundwire probe
-> as it seems unnecessary and device enumeration is anyway not
-> happening here.
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-May be some details on the side effects of this wait would be good to 
-add in the log.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 19bf44b9ba0f..ef138ceec241 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1634,22 +1634,25 @@ const struct file_operations urandom_fops = {
+ static int sysctl_random_min_urandom_seed = 60;
+ static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
+ static int sysctl_poolsize = POOL_BITS;
+-static char sysctl_bootid[16];
++static u8 sysctl_bootid[UUID_SIZE];
+ 
+ /*
+  * This function is used to return both the bootid UUID, and random
+- * UUID.  The difference is in whether table->data is NULL; if it is,
++ * UUID. The difference is in whether table->data is NULL; if it is,
+  * then a new UUID is generated and returned to the user.
+- *
+- * If the user accesses this via the proc interface, the UUID will be
+- * returned as an ASCII string in the standard UUID format; if via the
+- * sysctl system call, as 16 bytes of binary data.
+  */
+ static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
+ 			size_t *lenp, loff_t *ppos)
+ {
+-	struct ctl_table fake_table;
+-	unsigned char buf[64], tmp_uuid[16], *uuid;
++	u8 tmp_uuid[UUID_SIZE], *uuid;
++	char uuid_string[UUID_STRING_LEN + 1];
++	struct ctl_table fake_table = {
++		.data = uuid_string,
++		.maxlen = UUID_STRING_LEN
++	};
++
++	if (write)
++		return -EPERM;
+ 
+ 	uuid = table->data;
+ 	if (!uuid) {
+@@ -1664,12 +1667,8 @@ static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
+ 		spin_unlock(&bootid_spinlock);
+ 	}
+ 
+-	sprintf(buf, "%pU", uuid);
+-
+-	fake_table.data = buf;
+-	fake_table.maxlen = sizeof(buf);
+-
+-	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
++	snprintf(uuid_string, sizeof(uuid_string), "%pU", uuid);
++	return proc_dostring(&fake_table, 0, buffer, lenp, ppos);
+ }
+ 
+ static struct ctl_table random_table[] = {
+@@ -1704,13 +1703,11 @@ static struct ctl_table random_table[] = {
+ 	{
+ 		.procname	= "boot_id",
+ 		.data		= &sysctl_bootid,
+-		.maxlen		= 16,
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
+ 	{
+ 		.procname	= "uuid",
+-		.maxlen		= 16,
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
+-- 
+2.35.1
 
-> Also, as device enumeration event is dependent on wcd938x probe to be
-> completed, its of no use waiting here.
-
-fix tag is missing
-
-Fixes: 06dd96738d618 ("soundwire: qcom: wait for enumeration to be 
-complete in probe")
-
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
->   drivers/soundwire/qcom.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index 5481341..9a32a24 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -1309,8 +1309,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
->   	}
->   
->   	qcom_swrm_init(ctrl);
-> -	wait_for_completion_timeout(&ctrl->enumeration,
-> -				    msecs_to_jiffies(TIMEOUT_MS));
->   	ret = qcom_swrm_register_dais(ctrl);
->   	if (ret)
->   		goto err_master_add;

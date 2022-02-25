@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDCF4C444B
+	by mail.lfdr.de (Postfix) with ESMTP id 943014C444A
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiBYMIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S234991AbiBYMI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiBYMIs (ORCPT
+        with ESMTP id S232959AbiBYMIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:08:48 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F101A12AF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645790896; x=1677326896;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WVqYG+DiXIExAcDccN7FBAxpgMaONMHtVx9VTrInYlQ=;
-  b=OHCXBEuf19eEKd30VTwJoVukKGAxjVzkC/QAhfZ/VAZqcjZpuiYPChfQ
-   pXtPPBkiyHh/SOyBontSkK1aiYHJ9lx5zUjdjz+YjxbhaA5UeQ6xznfxN
-   dKozhA1EGzgRocgMlMdxiB6ebVI5DUOeEa1OGYIcLcgv6sxvltFFDQDpa
-   y9nbNGy7n2P1TZDjZS4jKslJ3vp3J0+R0YRHQ3GxkOTrRraIPdAsW9NAw
-   4N36lMDjw8l/W3vo6lFya6mdxAkodHkrY4PFE9HDQKD37q5+98bhBwRAd
-   KyNmEZckNs2gCyFt6eTi/ckw1yDKNX7GZdMoujmHkVaGUj2L76bnAsNmU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="232456535"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="232456535"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 04:08:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="574579422"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 04:08:07 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNZOI-0004Hn-L4; Fri, 25 Feb 2022 12:08:06 +0000
-Date:   Fri, 25 Feb 2022 20:07:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2786/4674] arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier
- 'smccc_trng_available'
-Message-ID: <202202252023.bwH1Xekw-lkp@intel.com>
+        Fri, 25 Feb 2022 07:08:55 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF1E1A39FE;
+        Fri, 25 Feb 2022 04:08:23 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21P4SjAs015204;
+        Fri, 25 Feb 2022 06:08:02 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=PnyIEGMUB/zij9tNaJ3PJr930XqiWXvaO3E0rGGsd6c=;
+ b=Katb5zY2kmpJDWvN5lVrncqHU5CRWbjnrpHq/1ib9+CxGTQCWh1zVvGwqKJtFwZEfCgn
+ 2nf6CexcUroY+lP7CV2ZawEnARnCFNWaLr8PJorEWrLJvg5xz/ShFAfmMeVX7T9NXmz8
+ iaKwmKFHR3zpmLxDo0dupXkvsjk77fLghM2OFTQkyxAcOopEC6zT9gyD3+UHgnijhrJk
+ rlJATnydjevvU1aJCvkP/oOuAcT9Rz3xBd/Fj+cPmKbIf2XtFBzJQ+HDBO8p2v23EHQh
+ qFZFSXYLrWV7x/sQgnQXvDQSwvBGbUWRzeIzar4vo7mezqBJ4X0WwUdl2eDahdZKkb8m Mg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ednxtk342-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 25 Feb 2022 06:08:02 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 25 Feb
+ 2022 12:08:00 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Fri, 25 Feb 2022 12:08:00 +0000
+Received: from [10.0.2.15] (AUSNPC0LSNW1.ad.cirrus.com [198.90.251.79])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 194B2B10;
+        Fri, 25 Feb 2022 12:08:00 +0000 (UTC)
+Subject: Re: [PATCH V2 1/2] ASoC: dt-bindings: audio-graph-port: Add
+ dai-tdm-slot-width-map
+To:     Rob Herring <robh@kernel.org>
+CC:     <broonie@kernel.org>, <kuninori.morimoto.gx@renesas.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+References: <20220217134835.282389-1-rf@opensource.cirrus.com>
+ <20220217134835.282389-2-rf@opensource.cirrus.com>
+ <YhgCbKzfPXEVauwW@robh.at.kernel.org>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+Message-ID: <7d11f36e-4b56-8c17-a114-d024f76f3b9e@opensource.cirrus.com>
+Date:   Fri, 25 Feb 2022 12:08:00 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhgCbKzfPXEVauwW@robh.at.kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: IfFZpD1AJt6Oo2nIABD5FeX_ybMecCzr
+X-Proofpoint-ORIG-GUID: IfFZpD1AJt6Oo2nIABD5FeX_ybMecCzr
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+On 24/02/2022 22:10, Rob Herring wrote:
+> On Thu, Feb 17, 2022 at 01:48:34PM +0000, Richard Fitzgerald wrote:
+>> Some audio hardware cannot support a fixed slot width or a slot width
+>> equal to the sample width in all cases. This is usually due either to
+>> limitations of the audio serial port or system clocking restrictions.
+>>
+>> This property allows setting a mapping of sample widths and the
+>> corresponding tdm slot widths.
+>>
+>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>> ---
+>>   .../devicetree/bindings/sound/audio-graph-port.yaml        | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/sound/audio-graph-port.yaml b/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
+>> index 476dcb49ece6..420adad49382 100644
+>> --- a/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
+>> +++ b/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
+>> @@ -71,4 +71,11 @@ patternProperties:
+>>           description: CPU to Codec rate channels.
+>>           $ref: /schemas/types.yaml#/definitions/uint32
+>>   
+>> +      dai-tdm-slot-width-map:
+>> +        description: Mapping of sample widths to slot widths. For hardware that
+>> +          cannot support a fixed slot width or a slot width equal to sample
+> 
+> A variable slot width sounds like a feature, not a limitation.
+> 
 
-FYI, the error/warning still remains.
+Depends on point of view. Most interfaces allow setting a fixed slot
+width but in some cases that's not possible so it is more likely to be
+seen as a limitation. It is however a feature in the sense that it can
+avoid using higher frequencies that are necessary.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   9eab20c98fb13b08ab49ae0bc8c90232e8e56d70
-commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/4674] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
-config: arm64-randconfig-r011-20220225 (https://download.01.org/0day-ci/archive/20220225/202202252023.bwH1Xekw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+>> +          width. An array containing one or more pairs of values. Each pair
+>> +          of values is a sample_width and the corresponding slot_width.
+> 
+> That sounds like a matrix, not an array. N entries of 2 cells each.
+> 
+>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +
+> 
+> I'd think there are some constraints on the values? Slots should be at
+> least 8 bits, right? A max of 2x32 bits or is there more
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+True. I didn't think it was appropriate for a generic binding to enforce
+a range when that depends on the exact hardware. But if you want I can
+enforce a range that's likely to be true for all hardware.
 
-All errors (new ones prefixed by >>):
+> than stereo within a slot? In any case, it's for sure no where near 2^32
+> max.
 
->> arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier 'smccc_trng_available'
-           kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-                                                ^
-   1 error generated.
+One sample per slot.
 
+> 
+> Is there a need for specifying where in the slot the data is?
 
-vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
+I don't believe so, all the protocols I know of have the data bits
+transmitted first followed by padding. There's no harm adding a
+reserved field to allow for this info if it is ever needed, but it would
+be unused at present as there's no kernel API to do this.
 
-  1997	
-  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
-  1999	{
-  2000		void *addr = phys_to_virt(hyp_mem_base);
-  2001		int ret;
-  2002	
-  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
-  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
-  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
-  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
-  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
-  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
-  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
-  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
-> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-  2012	
-  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
-  2014		if (ret)
-  2015			return ret;
-  2016	
-  2017		ret = init_stage2_iommu();
-  2018		if (ret < 0)
-  2019			return ret;
-  2020	
-  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
-  2022		if (ret)
-  2023			return ret;
-  2024	
-  2025		free_hyp_pgds();
-  2026	
-  2027		return 0;
-  2028	}
-  2029	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Rob
+> 

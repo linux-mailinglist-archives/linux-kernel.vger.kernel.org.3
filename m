@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7064C3F0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58444C3F13
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237358AbiBYHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S238142AbiBYHdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiBYHby (ORCPT
+        with ESMTP id S231272AbiBYHdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:31:54 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9043725D6F3;
-        Thu, 24 Feb 2022 23:31:22 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id r13so9117124ejd.5;
-        Thu, 24 Feb 2022 23:31:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=8s/sEEcezqOxjPo1IRls593HXMXJluYQRZTRz8WXcj8=;
-        b=Jd+WEwcsLf9IpHmWlG9ySEMdGpPs+3onyuscGmGbKmdhMheleGyTL9Cm9ALua0Q9YH
-         /ju3VD/q63kgKX4Mbo8t5adzCIT3trHUFM/TvGsnx9qEHGk/Iys989IMOTvzechAw1Em
-         ufYmqqNZNo0wUl7PC+rSgzqe+A3VUNFSlRW9+AfPIZ77BhnI5uYKFmK1bRGly64DhRDP
-         svTsahuO7E7fp8yH3Ar4o6+OLdDifCR2hSPuuhzRcn0XurBaw4O/EFalRhSZL9MDwRH0
-         Zd3ayxDHA26g6dyZA7GZgaynwbN6gXfi7vCvWwV5wQMkNSTRLoXxmMqCM6f8SigXM4aG
-         ZIJQ==
-X-Gm-Message-State: AOAM530jabgEoy8eHIflTTVBT24WRsPqN2r8BXtAvUVGTVyDBb1xQSpK
-        zcDpABpzK7VKUeTx4pgKGYc=
-X-Google-Smtp-Source: ABdhPJxD3DA6d3nPM0aMoQKdrjnBr7p9a+RYfT0msZEO4qIv24OP6aPqyshDjRat48CbBH1nxv5LkQ==
-X-Received: by 2002:a17:906:7e52:b0:6b6:bc81:eae9 with SMTP id z18-20020a1709067e5200b006b6bc81eae9mr5119912ejr.273.1645774280890;
-        Thu, 24 Feb 2022 23:31:20 -0800 (PST)
-Received: from [192.168.0.128] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id bx1-20020a0564020b4100b00410f01a91f0sm934477edb.73.2022.02.24.23.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 23:31:19 -0800 (PST)
-Message-ID: <b527a418-b807-7afa-9ed0-2ac4271ff79e@kernel.org>
-Date:   Fri, 25 Feb 2022 08:31:18 +0100
+        Fri, 25 Feb 2022 02:33:31 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95A225D6F3;
+        Thu, 24 Feb 2022 23:32:59 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21P7Vu6H114581;
+        Fri, 25 Feb 2022 01:31:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645774316;
+        bh=1jhEkkUHjPfXmVDqozvs1ZMseyvKYmDv+DanJ2yLQfg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=u4KS62z8fWz1UQ7srRh4oX1GPiPrzgXvR2Ys9m6s4t2UvOoUSvcPw1s4LOOt7ceX3
+         Q9hn3ZnhQX+XsFX9fgCKWkUkoK6aMu5Ita6W9oPoSFyGqTIpCLHo2FdU+x1qb5PZ6r
+         +eV6PlHxDi8vKVCizPZ9NOQhLP2o4tGwo/Bb5RKE=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21P7VunC068247
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 25 Feb 2022 01:31:56 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 25
+ Feb 2022 01:31:56 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 25 Feb 2022 01:31:56 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21P7VtmG125179;
+        Fri, 25 Feb 2022 01:31:56 -0600
+Date:   Fri, 25 Feb 2022 13:01:55 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/10] mtd: spi-nor: aspeed: Rename Kconfig option
+Message-ID: <20220225073155.f2cxfhm7surf34d4@ti.com>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-2-clg@kaod.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add sample averaging property
- for ADM1275
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220224154329.9755-1-potin.lai@quantatw.com>
- <20220224154329.9755-3-potin.lai@quantatw.com>
- <c6607953-927e-4d85-21cb-72e01a121453@kernel.org>
-In-Reply-To: <c6607953-927e-4d85-21cb-72e01a121453@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220214094231.3753686-2-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 08:06, Krzysztof Kozlowski wrote:
-> On 24/02/2022 16:43, Potin Lai wrote:
->> Add new properties for binding sample averaging in PMON_CONFIG register
->>
->> - adi,volt-curr-sample-average
->> - adi,power-sample-average
->>
->> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->> ---
->>  .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
->>  1 file changed, 44 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->> index 223393d7cafd..325f6827648f 100644
->> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->> @@ -37,6 +37,48 @@ properties:
->>      description:
->>        Shunt resistor value in micro-Ohm.
->>  
->> +  adi,volt-curr-sample-average:
->> +    description: |
->> +      A value to configure VI_AVG in PMON_CONFIG register to indicate a
->> +      number of samples to be used to report voltage and currentvalues.
-> 
-> missing space after current.
-> 
->> +      If set to 7, the 128 samples averaging would be used.
->> +
->> +    $ref: /schemas/types.yaml#/definitions/uint8
-> 
-> Make it a uint32.
-> 
-> The previous usage of this field was more appropriate. Instead of
-> keeping register values in DT, it's better to keep logical value. What
-> if in next cheap the register values have calculation method?
-> 
-> This should be like in v1 - enum for number of samples to take in averaging.
-> 
+On 14/02/22 10:42AM, Cédric Le Goater wrote:
+> To prepare transition to the new Aspeed SMC SPI controller driver using
+> the spi-mem interface, change the kernel CONFIG option of the current
+> driver to reflect that the implementation uses the MTD SPI-NOR interface.
+> Once the new driver is sufficiently exposed, we should remove the old one.
 
-One more thought: this field could also stay in current approach if you
-change the meaning from "value to configure VI_AVG" to something like
-"the exponent used to determine the number of samples, where the base is 2".
+I don't quite understand the reasoning behind this. Why keep the old 
+driver around? Why not directly replace it with the new one? Does the 
+new one have any limitations that this one doesn't?
 
-This approach would allow you to skip the "ilog" in the code. It sill
-won't be that easily scalable if another chip comes with different
-formula, but I think that's unlikely.
-
-Best regards,
-Krzysztof
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

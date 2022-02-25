@@ -2,241 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397C04C4266
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5860E4C426F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbiBYKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S239563AbiBYKio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbiBYKgF (ORCPT
+        with ESMTP id S234804AbiBYKig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:36:05 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DFC1E374A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:35:33 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id s5so6867632oic.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:35:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=26Nq0o7hW5EZ+8zlie26/Pg6VPaTLwAo76Sjggh2s9k=;
-        b=zKx334hk9YYZQLmFcJLwy/bhLPL4nd88z46U1TvpNH4CBaimEjqyFvqFfe0+pvoisT
-         a8rTK8wQIa1WIjCsLWQFtQEk4jHTxlGn4MlHcRlLanlTSoYtz0GyRx3nyxnKVQ+b3eLt
-         iWH/c1s/R3dNimGvEnt6n54r/jamln3WVqxzN0bUrCG4pIj2t4RnvFbZeJSI7AIuRaGW
-         zh5ty2BYi47FyZEKCGSGEF0YtYUsfjMUVZuss/Etk47hdydFLY6R6rYPBZyQ8CZblE/r
-         orrOWIZ+WFwBeyj6Lt1OrNz3IFe8fzfZy4tqkve08O0PMzSaGBTSyrbSW8LDg9YBgMuh
-         w90w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=26Nq0o7hW5EZ+8zlie26/Pg6VPaTLwAo76Sjggh2s9k=;
-        b=weBYIX0hMhUhAR/rtu4TQUpA5aU7ZyIrC6y73qSNB4OkjPBgjXRn33aAddGtVJa8gW
-         uzYfQoeQewd2aAQHKc8R5oa6go0s48PAiPIIV/b4oqqV52WNNEJmIyMECuv7xLl6VQo3
-         k+gv8EiI8+s2yPS34+OErCxKuYCy5Yi4uv6VPzpzs/OPZdvbg/QsNj9iGTMSH8EIoBwK
-         vwaLQE3xF6xRZ3NcUepJ+dC8f7O/gJ3dAWBHRjeOrFXTi5V+KFg4FAn+lDMd2RKuJzzK
-         C0jZmWWGm03/NaQ5n7uyt/PmoZuEWLjwhnvFA5cSW5FgH63HLpqaLKWuhAPhrfJiCAFe
-         o7kw==
-X-Gm-Message-State: AOAM532LfWUeGq4gc+Pdri+WTyR6FKwStPMA5jb+cdavP6wGRmijcj/S
-        xFmCCL/9hWznsxS6Pp8E3As7U5HtjFVvabvwoehQPWUnvzE=
-X-Google-Smtp-Source: ABdhPJwdkXioRfNt7+rdkdBWZGF6zg1vz8KD9b676zdXSu/0Gu8LknuEXMmkdSaXJIsGyK/aLaQ+addZ9GDQQLiMdjc=
-X-Received: by 2002:a05:6808:114e:b0:2d5:4101:844e with SMTP id
- u14-20020a056808114e00b002d54101844emr1154232oiu.169.1645785332453; Fri, 25
- Feb 2022 02:35:32 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 25 Feb 2022 02:35:31 -0800
+        Fri, 25 Feb 2022 05:38:36 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73513CF3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:38:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645785484; x=1677321484;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+9HfgleLO5mmjMRlqezvKr2Ck1pBw1IsGGw6GT9YZ80=;
+  b=D6uXXQ1rHALBLBubdaBPjHkV/ENy4eB+lW2+Y58zr0Jd+gZifIyK+LWf
+   SEGHIldsJQFoVXr+yBOBlnTIt7vRoI15QQo4fNSjMEKi7wH0SBtvefGdZ
+   CrLjyWsCN67Zz537DwN/fJI4RpUi6+qZDonM1TOGOkKJ20DM0JHuIonuR
+   YuCpbTXymKI6L2kz+T8IGp8ICv5hLyOi/dRP1RAQr1bCxah9/K93B4bDo
+   1xoXKza2m8EJvynkMLo42lD+fssQMtpUViIL73nHkc56gJ4MRDEa/35lK
+   g1JNZL2bW+/Ehtmt98Z3AiyRA2Il4gxtKbQdKCWYx9L6kqEchogTPOALB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252667577"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="252667577"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 02:38:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="707820158"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Feb 2022 02:38:00 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNXz5-0004C5-N7; Fri, 25 Feb 2022 10:37:59 +0000
+Date:   Fri, 25 Feb 2022 18:37:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 9f0daba62e958c31326c7a9eae33651e3a3cc6b4
+Message-ID: <6218b16e.8GOE1TON+M0qj7GJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <c5a83b5f-91cc-61f9-a570-fafb5672de9f@collabora.com>
-References: <20220218145437.18563-1-granquet@baylibre.com> <20220218145437.18563-4-granquet@baylibre.com>
- <c5a83b5f-91cc-61f9-a570-fafb5672de9f@collabora.com>
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: alot/0.10
-Date:   Fri, 25 Feb 2022 02:35:31 -0800
-Message-ID: <CABnWg9t0nW8NRkiLHvWRoavfUbOKL5wG00dbuY8qZW=WeTHxMw@mail.gmail.com>
-Subject: Re: [PATCH v8 03/19] drm/edid: Add cea_sad helpers for freq/length
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2022-02-21 15:30:04)
-> Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> >
-> > This patch adds two helper functions that extract the frequency and word
-> > length from a struct cea_sad.
-> >
-> > For these helper functions new defines are added that help translate the
-> > 'freq' and 'byte2' fields into real numbers.
-> >
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
-> >   drivers/gpu/drm/drm_edid.c | 74 ++++++++++++++++++++++++++++++++++++++
-> >   include/drm/drm_edid.h     | 18 ++++++++--
-> >   2 files changed, 90 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> > index 12893e7be89bb..500279a82167a 100644
-> > --- a/drivers/gpu/drm/drm_edid.c
-> > +++ b/drivers/gpu/drm/drm_edid.c
-> > @@ -4747,6 +4747,80 @@ int drm_edid_to_speaker_allocation(struct edid *edid, u8 **sadb)
-> >   }
-> >   EXPORT_SYMBOL(drm_edid_to_speaker_allocation);
-> >
-> > +/**
-> > + * drm_cea_sad_get_sample_rate - Extract the sample rate from cea_sad
-> > + * @sad: Pointer to the cea_sad struct
-> > + *
-> > + * Extracts the cea_sad frequency field and returns the sample rate in Hz.
-> > + *
-> > + * Return: Sample rate in Hz or a negative errno if parsing failed.
-> > + */
-> > +int drm_cea_sad_get_sample_rate(const struct cea_sad *sad)
-> > +{
-> > +     switch (sad->freq) {
-> > +     case DRM_CEA_SAD_FREQ_32KHZ:
-> > +             return 32000;
-> > +     case DRM_CEA_SAD_FREQ_44KHZ:
-> > +             return 44100;
-> > +     case DRM_CEA_SAD_FREQ_48KHZ:
-> > +             return 48000;
-> > +     case DRM_CEA_SAD_FREQ_88KHZ:
-> > +             return 88200;
-> > +     case DRM_CEA_SAD_FREQ_96KHZ:
-> > +             return 96000;
-> > +     case DRM_CEA_SAD_FREQ_176KHZ:
-> > +             return 176400;
-> > +     case DRM_CEA_SAD_FREQ_192KHZ:
-> > +             return 192000;
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
-> > +}
-> > +EXPORT_SYMBOL(drm_cea_sad_get_sample_rate);
-> > +
-> > +static bool drm_cea_sad_is_uncompressed(const struct cea_sad *sad)
-> > +{
-> > +     switch (sad->format) {
-> > +     case HDMI_AUDIO_CODING_TYPE_STREAM:
-> > +     case HDMI_AUDIO_CODING_TYPE_PCM:
-> > +             return true;
-> > +     default:
-> > +             return false;
-> > +     }
-> > +}
-> > +
-> > +/**
-> > + * drm_cea_sad_get_uncompressed_word_length - Extract word length
-> > + * @sad: Pointer to the cea_sad struct
-> > + *
-> > + * Extracts the cea_sad byte2 field and returns the word length for an
-> > + * uncompressed stream.
-> > + *
-> > + * Note: This function may only be called for uncompressed audio.
-> > + *
-> > + * Return: Word length in bits or a negative errno if parsing failed.
-> > + */
-> > +int drm_cea_sad_get_uncompressed_word_length(const struct cea_sad *sad)
-> > +{
-> > +     if (!drm_cea_sad_is_uncompressed(sad)) {
-> > +             DRM_WARN("Unable to get the uncompressed word length for a compressed format: %u\n",
-> > +                      sad->format);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     switch (sad->byte2) {
-> > +     case DRM_CEA_SAD_UNCOMPRESSED_WORD_16BIT:
-> > +             return 16;
-> > +     case DRM_CEA_SAD_UNCOMPRESSED_WORD_20BIT:
-> > +             return 20;
-> > +     case DRM_CEA_SAD_UNCOMPRESSED_WORD_24BIT:
-> > +             return 24;
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
-> > +}
-> > +EXPORT_SYMBOL(drm_cea_sad_get_uncompressed_word_length);
-> > +
-> >   /**
-> >    * drm_av_sync_delay - compute the HDMI/DP sink audio-video sync delay
-> >    * @connector: connector associated with the HDMI/DP sink
-> > diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-> > index 18f6c700f6d02..a30452b313979 100644
-> > --- a/include/drm/drm_edid.h
-> > +++ b/include/drm/drm_edid.h
-> > @@ -361,12 +361,24 @@ struct edid {
-> >
-> >   /* Short Audio Descriptor */
-> >   struct cea_sad {
-> > -     u8 format;
-> > +     u8 format; /* See HDMI_AUDIO_CODING_TYPE_* */
->
-> Hello Guillaume,
->
-> since you're adding comments to all the rest of the struct members,
-> I think that a small effort to instead convert this to kerneldoc is
-> totally worth it.
-> Can you please do that?
->
-> Thanks,
-> Angelo
->
-Hello Angelo,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 9f0daba62e958c31326c7a9eae33651e3a3cc6b4  torture: Make thread detection more robust by using lspcu
 
-Sure, that's a good suggestion.
+elapsed time: 796m
 
-Thx,
-Guillaume.
-> >       u8 channels; /* max number of channels - 1 */
-> > -     u8 freq;
-> > +     u8 freq; /* See CEA_SAD_FREQ_* */
-> >       u8 byte2; /* meaning depends on format */
-> >   };
-> >
-> > +#define DRM_CEA_SAD_FREQ_32KHZ  BIT(0)
-> > +#define DRM_CEA_SAD_FREQ_44KHZ  BIT(1)
-> > +#define DRM_CEA_SAD_FREQ_48KHZ  BIT(2)
-> > +#define DRM_CEA_SAD_FREQ_88KHZ  BIT(3)
-> > +#define DRM_CEA_SAD_FREQ_96KHZ  BIT(4)
-> > +#define DRM_CEA_SAD_FREQ_176KHZ BIT(5)
-> > +#define DRM_CEA_SAD_FREQ_192KHZ BIT(6)
-> > +
-> > +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_16BIT BIT(0)
-> > +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_20BIT BIT(1)
-> > +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_24BIT BIT(2)
-> > +
-> >   struct drm_encoder;
-> >   struct drm_connector;
-> >   struct drm_connector_state;
-> > @@ -374,6 +386,8 @@ struct drm_display_mode;
-> >
-> >   int drm_edid_to_sad(struct edid *edid, struct cea_sad **sads);
-> >   int drm_edid_to_speaker_allocation(struct edid *edid, u8 **sadb);
-> > +int drm_cea_sad_get_sample_rate(const struct cea_sad *sad);
-> > +int drm_cea_sad_get_uncompressed_word_length(const struct cea_sad *sad);
-> >   int drm_av_sync_delay(struct drm_connector *connector,
-> >                     const struct drm_display_mode *mode);
-> >
->
->
+configs tested: 135
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220225
+mips                 randconfig-c004-20220225
+arm                        spear6xx_defconfig
+powerpc                     sequoia_defconfig
+microblaze                      mmu_defconfig
+powerpc                  iss476-smp_defconfig
+h8300                     edosk2674_defconfig
+sh                           se7751_defconfig
+arm                         s3c6400_defconfig
+arm                         assabet_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                         wii_defconfig
+powerpc64                        alldefconfig
+mips                         rt305x_defconfig
+arm                           sama5_defconfig
+arm64                            alldefconfig
+sh                            shmin_defconfig
+x86_64                              defconfig
+powerpc                     mpc83xx_defconfig
+mips                         db1xxx_defconfig
+powerpc                      bamboo_defconfig
+m68k                         amcore_defconfig
+arm                        keystone_defconfig
+openrisc                         alldefconfig
+powerpc                     redwood_defconfig
+powerpc                        warp_defconfig
+xtensa                    xip_kc705_defconfig
+arc                    vdk_hs38_smp_defconfig
+h8300                               defconfig
+sh                           se7780_defconfig
+m68k                        m5272c3_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          lboxre2_defconfig
+arm                            zeus_defconfig
+arc                            hsdk_defconfig
+powerpc                     tqm8555_defconfig
+arc                          axs103_defconfig
+arm                  randconfig-c002-20220223
+arm                  randconfig-c002-20220224
+arm                  randconfig-c002-20220225
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220223
+arc                  randconfig-r043-20220224
+riscv                randconfig-r042-20220224
+s390                 randconfig-r044-20220224
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+powerpc              randconfig-c003-20220225
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220225
+mips                 randconfig-c004-20220225
+i386                          randconfig-c001
+riscv                randconfig-c006-20220225
+i386                             allyesconfig
+arm                         orion5x_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20220223
+hexagon              randconfig-r041-20220223
+riscv                randconfig-r042-20220223
+hexagon              randconfig-r041-20220224
+hexagon              randconfig-r045-20220224
+s390                 randconfig-r044-20220223
+hexagon              randconfig-r045-20220225
+hexagon              randconfig-r041-20220225
+riscv                randconfig-r042-20220225
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

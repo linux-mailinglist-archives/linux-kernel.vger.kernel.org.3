@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269A74C4EF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F534C4EF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiBYTf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S235309AbiBYTgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235163AbiBYTfZ (ORCPT
+        with ESMTP id S235242AbiBYTgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:35:25 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725331DB3D5;
-        Fri, 25 Feb 2022 11:34:52 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id x193so8454448oix.0;
-        Fri, 25 Feb 2022 11:34:52 -0800 (PST)
+        Fri, 25 Feb 2022 14:36:11 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4754A1AAFF5;
+        Fri, 25 Feb 2022 11:35:36 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id i6-20020a4ac506000000b0031c5ac6c078so7684853ooq.6;
+        Fri, 25 Feb 2022 11:35:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=k9v5qtATzrOvXz3YN1ZWcwAzzG9N2l4CYH652u8TC4g=;
-        b=feiQGO7G1m+TgTd2hh4SFmnTNyRDsuNxV+F+yYKz0tIM4z0s7Q3shJge/LkbbyoRsT
-         3rDlhEFplD0c2OKJX/EaufG0PGlIDDNxQhGIJZTHAyttkj5T1gMoD1tNAhvI38Vrw3eX
-         Y0W8M9fepIc4rYmRhL4Uu8P9nFHKId1x7VPsDP3S/1UAQoGGPsgRQJiUVTWN4zjBqCMU
-         n6uOnNYolTGcXJwRqMiatpZXv/TeS5n5K3kzwkleWvL3mfHx0JPmvSD35eHmYF2EdBi9
-         NksCuZks44tHab4jAXu6zq3tsOTuZHkCbkoITtDHmIY+6bYAi9gMcWxsK569AS80iOV0
-         E6eA==
-X-Gm-Message-State: AOAM533gkdQL+p5NMHLaUFKzKia1U1MU2m7qT2KHzMHw1ODx4Q/qwTqX
-        ndinndQUGmdQK0lON+fMkQ==
-X-Google-Smtp-Source: ABdhPJybpWDzjQJF9jGKPuCSK7Y0n1/VK66YoKWH8RCWHvU/F08Ob/+b5HLss7dQ80Wqhgfq0p9WxA==
-X-Received: by 2002:a05:6808:1983:b0:2d7:7fc:9e9b with SMTP id bj3-20020a056808198300b002d707fc9e9bmr630387oib.133.1645817691671;
-        Fri, 25 Feb 2022 11:34:51 -0800 (PST)
+        bh=89L85cYit20bkFsWPwAmB3tmEEHx1GMuglloEs9LbG8=;
+        b=yYrSuKQFhTq3AyIAhqJ0wynxlBnInRHpwKUeQsekn57J//VpEbHE8zJPpYjx+vB/PZ
+         YWC8iDO3Sf98ZK2A1Tc3M9Y0UPqoBM4dvw6DBgwxGznCNaTKJuQfPp1Pin9RgJuJXNGI
+         lBusokBpyjGzVThxKh2GHm/LGRe5TJ5JyVZ8z1GALZ/t1NKbLl3Pzsz5v4FSqkG6hXM7
+         E3fWDtVpBu24E6fhIhKHYAqefvp0qkK2/+HEWz6Pgo5ZyxcWQJL3h0M8i6Qmv5+0f0Gy
+         yrq+3oMGrqTQJpQOKDABlzG3rRbKCSfrIi4BTZYJ9tCBxB0ZmzPDnXJ0ZwzZMWlyZWyp
+         1Dxw==
+X-Gm-Message-State: AOAM532vdivS6I884S2mN/eBseBJQTa8lMoYKoXoX4VxPUGU9YNeYorF
+        hiqWCI2Q0IuxNJA5h+FmgQ==
+X-Google-Smtp-Source: ABdhPJwTB3dMTBlwo5pHLDzpohHjFzoCrMqR0lPTutQ46f+OsP6T04QO8IFX4yubZI0OTunbKa3GwQ==
+X-Received: by 2002:a05:6870:ee0d:b0:ce:c0c9:64a with SMTP id ga13-20020a056870ee0d00b000cec0c9064amr2072910oab.156.1645817735262;
+        Fri, 25 Feb 2022 11:35:35 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056870959600b000d277c48d18sm1862982oao.3.2022.02.25.11.34.50
+        by smtp.gmail.com with ESMTPSA id j25-20020a4ad199000000b003171dfeb5bfsm1458351oor.15.2022.02.25.11.35.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 11:34:51 -0800 (PST)
-Received: (nullmailer pid 1300868 invoked by uid 1000);
-        Fri, 25 Feb 2022 19:34:49 -0000
-Date:   Fri, 25 Feb 2022 13:34:49 -0600
+        Fri, 25 Feb 2022 11:35:34 -0800 (PST)
+Received: (nullmailer pid 1301936 invoked by uid 1000);
+        Fri, 25 Feb 2022 19:35:33 -0000
+Date:   Fri, 25 Feb 2022 13:35:33 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>, Nishanth Menon <nm@ti.com>,
-        linux-arm-kernel@lists.infradead.org,
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+        Jan Kotas <jank@cadence.com>,
+        Avri Altman <avri.altman@wdc.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mediatek@lists.infradead.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Li Wei <liwei213@huawei.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tero Kristo <kristo@kernel.org>, linux-kernel@vger.kernel.org,
-        Jan Kotas <jank@cadence.com>, Wei Xu <xuwei5@hisilicon.com>,
-        Yaniv Gardi <ygardi@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-scsi@vger.kernel.org,
         Stanley Chu <stanley.chu@mediatek.com>,
-        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 07/15] dt-bindings: ufs: mediatek,ufs: convert to
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Wei Xu <xuwei5@hisilicon.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-mediatek@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Li Wei <liwei213@huawei.com>,
+        Yaniv Gardi <ygardi@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 08/15] dt-bindings: ufs: snps,tc-dwc-g210: convert to
  dtschema
-Message-ID: <YhkvWWMq5X3/gqzF@robh.at.kernel.org>
+Message-ID: <YhkvhdFZXkVsteeq@robh.at.kernel.org>
 References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
- <20220222145854.358646-8-krzysztof.kozlowski@canonical.com>
+ <20220222145854.358646-9-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222145854.358646-8-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220222145854.358646-9-krzysztof.kozlowski@canonical.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 15:58:46 +0100, Krzysztof Kozlowski wrote:
-> Convert the Mediatek Universal Flash Storage (UFS) Controller to DT
+On Tue, 22 Feb 2022 15:58:47 +0100, Krzysztof Kozlowski wrote:
+> Convert the Synopsys Universal Flash Storage (UFS) Controller to DT
 > schema format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../devicetree/bindings/ufs/mediatek,ufs.yaml | 67 +++++++++++++++++++
->  .../devicetree/bindings/ufs/ufs-mediatek.txt  | 45 -------------
->  2 files changed, 67 insertions(+), 45 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
->  delete mode 100644 Documentation/devicetree/bindings/ufs/ufs-mediatek.txt
+>  .../bindings/ufs/snps,tc-dwc-g210.yaml        | 51 +++++++++++++++++++
+>  .../bindings/ufs/tc-dwc-g210-pltfrm.txt       | 26 ----------
+>  2 files changed, 51 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/ufs/snps,tc-dwc-g210.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/ufs/tc-dwc-g210-pltfrm.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

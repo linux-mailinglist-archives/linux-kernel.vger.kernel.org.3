@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9B44C4D44
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E8B4C4D51
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiBYSGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:06:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S231470AbiBYSHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:07:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiBYSGt (ORCPT
+        with ESMTP id S229984AbiBYSHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:06:49 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC931E6E97
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:06:16 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so7207553oop.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:06:16 -0800 (PST)
+        Fri, 25 Feb 2022 13:07:33 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5D11E6EA7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:07:00 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id x6-20020a4a4106000000b003193022319cso7332581ooa.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:07:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=I6MkJlQQ4hU61fN5YrqAtX/5cqN/fcZrZGOgyZvO0uI=;
-        b=OX3tyht/4LSsOvRcTrgfeXkyb76HiSQ7W8pI7J/RTBbroR/+j4T5kvlW2WmKmUzG/H
-         xu2NViAASbIERVgMW/VanajirDvxVwf0ERZWB7p3LhGVPmT1IPo1TuayrNHhrLPZUOdz
-         XJcFu2aCb6m5c3GwxNFlRaO8UGW/64pJTguBs=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NN5kUdin7citIfmsQk9dU1OmhSvd2Lzcs2UPLOuI96I=;
+        b=mZgUDHNQER4VN5jp1nQ+UOooKupVC14mE+ybXlq0GFuOTKAKgCScsKJvcQGhwYht6g
+         ADtrQysZaUbKJJ19rzSH/wl68dYebZWMjQTOFut1JcRerkMYl2ihS4ByNHAaHjex7h4v
+         +IhzLX/hd9wmJHdvKqey5LNtKgCQoF4vaz6XAk7nhicCmbXxzgZ2ZbbLl8MG59+1pfVs
+         6gpsx9/RUKSpG+C5CCV9SXXLkZhsXy1EgDOSuy8QxQNoHl0v9hoL0oaoJdlEQCzTYmhy
+         LUw0C5WFNUJDoSMnPZ74J9aVuDcw8GwlubVOHrsohk+dOgGnfsDvQdyFWdNvzCbUbPX8
+         Ce2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=I6MkJlQQ4hU61fN5YrqAtX/5cqN/fcZrZGOgyZvO0uI=;
-        b=5CaPQ9l/x3dhBrjuQzTX4wH+gBjdMufuYNINUi/sQfewxcBbQ79zZ3i1TNCULxAhfs
-         UtO1QpvcOOEksQBd8UT6uez7tiNz+X3lXuW8dKins+3d64V7/rlfQlhDRhNJEZNrsNvu
-         qqOhMSQGOt1JCfoLLbxk/kZE8oBBnGhPNJDO1FljDQilegygJSyfGXI6jtLr12v+9MIF
-         Z2S7IyWBMuPG1kOqmBe6OizZ8hjmkwdKrUSo9U3vwSqy7hfFeQ/wXKSpEWdUfY7t4RA0
-         8jMpJqXEa03E7LS+N8mkulgYbYaNEwtAy5TDxYsrJWbdtsWBDznSkgpXm/0oF7uz6lnF
-         NdiA==
-X-Gm-Message-State: AOAM530+rHLNfIK75YAERe/tJRbF9uagzoK6HJtBtRPokMHwyCwu2bqU
-        N82tYuxRR2RUe1ZlxFEJ3FOLjlglSywL6CafrFw75A==
-X-Google-Smtp-Source: ABdhPJwRntMGqiM80NVcK8YfATn8ptbQGr+zoLTrJsgW0P2rhsjH5L4rwRJB1IJxViwSIqXbAU1GJUTof7bUMNm0RH8=
-X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
- r41-20020a056870582900b000c89f42f919mr2012649oap.54.1645812375839; Fri, 25
- Feb 2022 10:06:15 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 25 Feb 2022 10:06:15 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NN5kUdin7citIfmsQk9dU1OmhSvd2Lzcs2UPLOuI96I=;
+        b=R6F3TAOATynHkDnWmGXOpfxLORoDvY2ndl+/VczTaY3nT+Oki8A5hmb5f3ByFOWIVq
+         V8bOrsCoRjabyBxsRi/P957nvIMvwq1Gp8voFAMvuuH7iWgDQik81hQkMJAtt6Q+mdSO
+         rtdqiel2bGCfcgmeuxcq16//ckQbLpqhDG5YJyZvHBz2KxodTaRjuJB1YpCPS9O8fQ4Q
+         lsR1zt1T4FCpZSqgncUoIKdgPdxc1f9aFxDkCujN0x/AI26h9CaYPOwopT9SsQuxtG9D
+         P9EFpVjUIwaZlOY2xOJeVgYHsoKqC8D1hlM0WGIOWJQrhlqbY0JYgnxH9ePCvot5ePSl
+         YJ1Q==
+X-Gm-Message-State: AOAM530eD7U7JBwxMgER4r36ADi0nsJXR7M3ufZY11oRRnS1AmAcPhUQ
+        49naAs6aImH2Cdni+XEoD82gwcbiAig8r0Zc2JWtOw==
+X-Google-Smtp-Source: ABdhPJwpr/Ifbo68q2+J4j/DBvPxK7bgpP1DW9yuyBh1wSi+UvI2AhGyYgCTxCmjYyEQl3QZtsML4iCA3H8W1zG2M3M=
+X-Received: by 2002:a05:6870:6490:b0:d6:d161:6dbb with SMTP id
+ cz16-20020a056870649000b000d6d1616dbbmr1808297oab.129.1645812419250; Fri, 25
+ Feb 2022 10:06:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1645804670-21898-2-git-send-email-quic_vpolimer@quicinc.com>
-References: <1645804670-21898-1-git-send-email-quic_vpolimer@quicinc.com> <1645804670-21898-2-git-send-email-quic_vpolimer@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 25 Feb 2022 10:06:15 -0800
-Message-ID: <CAE-0n52OPUEMO4iXP_6LuRcN5r+v-9oZoRwij_y+bwnUBC3ohw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] arm64/dts/qcom/sc7280: remove assigned-clock-rate
- property for mdp clk
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, quic_kalyant@quicinc.com
+References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+ <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
+ <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
+ <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
+In-Reply-To: <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 25 Feb 2022 10:06:48 -0800
+Message-ID: <CALMp9eQHKn=ApthER084vKGiQCMdVX7ztB5iLupBPdUY59WV_A@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vinod Polimera (2022-02-25 07:57:49)
-> Kernel clock driver assumes that initial rate is the
-> max rate for that clock and was not allowing it to scale
-> beyond the assigned clock value.
+On Fri, Feb 25, 2022 at 7:13 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> drop the assigned clock rate property and set it
-> during resume sequence with max value in the opp table.
+> On 2/25/22 16:12, Xiaoyao Li wrote:
+> >>>>
+> >>>
+> >>> I don't like the idea of making things up without notifying userspace
+> >>> that this is fictional. How is my customer running nested VMs supposed
+> >>> to know that L2 didn't actually shutdown, but L0 killed it because the
+> >>> notify window was exceeded? If this information isn't reported to
+> >>> userspace, I have no way of getting the information to the customer.
+> >>
+> >> Then, maybe a dedicated software define VM exit for it instead of
+> >> reusing triple fault?
+> >>
+> >
+> > Second thought, we can even just return Notify VM exit to L1 to tell L2
+> > causes Notify VM exit, even thought Notify VM exit is not exposed to L1.
 >
-> Fixes: 62fbdce91("arm64: dts: qcom: sc7280: add display dt nodes")
->
+> That might cause NULL pointer dereferences or other nasty occurrences.
 
-There shouldn't be a newline here. The fixes tag should be directly
-attached to the SoB area.
-
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 ++-------
-
-Can you also update sc7180.dtsi? Are there others SoCs that need an
-update because they're using an OPP table?
-
-Doesn't this need to come after the driver change?
+Could we synthesize a machine check? I haven't looked in detail at the
+MCE MSRs, but surely there must be room in there for Intel to reserve
+some encodings for synthesized machine checks.

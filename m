@@ -2,197 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420A84C44DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4891D4C44E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240728AbiBYMs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S240734AbiBYMtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbiBYMss (ORCPT
+        with ESMTP id S238515AbiBYMtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:48:48 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4342B715F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:48:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BsJ7FU3ACMRkDxJjcnmBkwiNoR8f5lfjDn7ZT/ibUHoZabh28EREzMnSqkoiW+P4ZFceaLA6l8cO1QEucuM+D/aa23MN+v0myWliZ1HuDC84abPDYHWot18lqQW0fZ1ZQwueUTz0ZqnXpTN8T+Oz1cWvDLLCGYdKTpZoAV6utG75KamvysfoIAPrI/MtOTUk7LbDwn0qGwshV8/z29d41M6Q88A+90y49gPtubLvOdIoivLzc32fkFUSX/l3klWb0ConUDFLGs5siXoUkxfLqqnLGrGjO60pXu6I7tBenFk5w/2XtBjfVLYLnCItnD1kLNxEXVO9gwGcWts2mOskZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oo/L6xyE4sNVTPHFs3/iV1h1+9WlSfFFgKQbQ6IVHRU=;
- b=ZtwgifSX3zRhFre4DZALciI0BGL6uouvY+KDif9cEvYlimTYgWZ7r3g8UCYIWN5ugA5rKm1UMLGZZJKBRApFDLlX+PcMfjUIQJQ8NYaNUgh/vyGhpVJOeNlrSBYBfb1AXr89RDtpnEIPWLFPTgEsQC5dHDDt0mVlANl7/GDB+nR8dlOKSmy/jm6E3pfsMwamC43mZwjAFzZMTNu2Wb9pfg50DsycCUm+ni1NuUzXxDBy9izZ8m2n0FuzoCscYP5iqIRiQosNBdFSm7qnWR1W8LATRR7LObWgImFpfl8kNDN1J1dVUIwax2FVOd/YdndzpctMuWzt/R793uLn1D/v0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oo/L6xyE4sNVTPHFs3/iV1h1+9WlSfFFgKQbQ6IVHRU=;
- b=fi3M9luOzfXJDq9vLJvNitOFmtSQ2EiTz/S+q7ZGVGBfKIjt+9g9Rg/7rxy9fDeVvzxh4B13B6BezDURBq8fLJiO5JiDU7DZuahWyyLobXPO0VSqOKmpxpiF8vgaZ6qPQC+MczcBGWRYBuwh71qL3jUKQzC0orzqcOqCoPb/bLo=
-Received: from PH0PR05MB8448.namprd05.prod.outlook.com (2603:10b6:510:cb::13)
- by BN7PR05MB4241.namprd05.prod.outlook.com (2603:10b6:406:f9::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.9; Fri, 25 Feb
- 2022 12:48:12 +0000
-Received: from PH0PR05MB8448.namprd05.prod.outlook.com
- ([fe80::c1a1:14a1:5e4a:eef9]) by PH0PR05MB8448.namprd05.prod.outlook.com
- ([fe80::c1a1:14a1:5e4a:eef9%7]) with mapi id 15.20.5038.010; Fri, 25 Feb 2022
- 12:48:09 +0000
-From:   Manikandan Jagatheesan <mjagatheesan@vmware.com>
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "ziy@nvidia.com" <ziy@nvidia.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "brouer@redhat.com" <brouer@redhat.com>,
-        Rajender M <manir@vmware.com>,
-        Abdul Anshad Azeez <aazees@vmware.com>,
-        Yiu Cho Lau <lauyiuch@vmware.com>
-Subject: [Linux Kernel 5.14 GA] ESXi Performance degradation
-Thread-Topic: [Linux Kernel 5.14 GA] ESXi Performance degradation
-Thread-Index: AQHYKkS3N5R2MwJAXkCkEhtVXDbvAg==
-Date:   Fri, 25 Feb 2022 12:48:09 +0000
-Message-ID: <PH0PR05MB8448FF2F53343CAA8AF2DD09AF3E9@PH0PR05MB8448.namprd05.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: cad46eef-e88d-48c5-6582-dfdaa6c04493
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 722c6036-fb50-4220-d85f-08d9f85d13b5
-x-ms-traffictypediagnostic: BN7PR05MB4241:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <BN7PR05MB4241F05979C8F4BFD090B325AF3E9@BN7PR05MB4241.namprd05.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HSZvcbXnQGpsJh3yFcnOPZldRkXo2gdPYfrGeUFol7CIF3bDwm9mdM0w+iHSe1cmQ4Xsxt8Gzezobm/EAxYDeL24ilzPnXTwLfwa8Tc9F9eap6rAGYSs3H28CLqQfADzdPvYg2Tv0uVGfnaMc6tHJacJmDZ++56OS5JiwuKleauOzj0qqE6OjuG5CGzESa8gudKqM1fQtb3Xn4Y12vqvR7qaYoliUfBoNGACb/RPfk5YrYad8A1J9Kc6DIzjCttJqWvHo/wKLkL84sKbXGCYv06NhLlL6/z502dyRZdGn2H4LWWVcAe8YFXJFX3hXVN16Jnx9OOpf7ZngybhkV5yhjXEIuH8Kv6Mis8ktwXWYoIJAdD0CHvOZlEn6blaeTNI8EELWKrOXq6Q567leEs3dKB37OA2Ji6ZZ1aLlxOw/IvZ9oVanElmdwtfDG59hAYa6zW7T76T0hGOqi2w3Jr9Jys/Qk0Sqa+mrkmcdhd1JCa2wjy9ewPtlQGc8vE5HxmOpLKbNENcyNLJtNtChaJbP4Va8sdL4eKWOBe25bR0RF2D/9byxVN5asUhhM5WbWyWhU0BkqS9IQD3BUupdmldto48PYTL4OeJrm3KEu4qlOn/D8mSne08/4kkUwzVo+BdVyY/dY4CSJzVC4I0uAH/QrOjoGmZo1BsgglwrWJSMb5SgwYoIDdgmntwqvZt6Gruf0L6EO0IBK3Xwyrh9xCHrH8r9T/E/IAkwppcEvaSTlsJQK7Zq5FNfGMJvRNu6slefXkMtq/OS4/VqNLXVytzglCDz/M95mtyAlg069qEfcitvgzaatIgpLhHixb3mJ6Brm6RAPW24rZMBOw8TxyIAPjpKxw26upUv899Ar8qMoN5niqk+gYsAFw/laDvGmcKi4zJgzwy5bg2RTUvCt3eRQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8448.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66446008)(66556008)(66476007)(66946007)(966005)(83380400001)(5660300002)(8676002)(8936002)(316002)(52536014)(508600001)(4326008)(38070700005)(71200400001)(55016003)(84970400001)(9686003)(26005)(91956017)(186003)(33656002)(76116006)(86362001)(38100700002)(122000001)(110136005)(107886003)(54906003)(64756008)(6506007)(7696005)(2906002)(334744004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?tyc04XRPO2AeokrgdJdb42TjL37kE3JsYVGiwQKYsCvt8YaS+r7HsuYV?=
- =?Windows-1252?Q?BZnvdrh8U9/6OXOnl1jUB53/GYhm4DHoZM2/1NSM2jIzADg+dvo8kucu?=
- =?Windows-1252?Q?si25Vm+0GP1VnvTOGJk+UvSzFZLxyfymyL+5pcRxgCzm2Uq1aXpPVVl6?=
- =?Windows-1252?Q?ayYLKU6c8OWbgmpE+ISQd6eEB0XhD9hIcNbUfmJ8EjoEKbLwWtecaLzB?=
- =?Windows-1252?Q?YMmEviinZDGgWJKInUXk+mViPEdb7WVVGeQgoDAg0rTIL6B13Lzm9Gej?=
- =?Windows-1252?Q?z+vqwMTR+jBW2IhNIkgcxqUmsxUZjuWEd0Mn3mXxeFFf4j+OIQ18eZYW?=
- =?Windows-1252?Q?hiETcsIpZi6vvluXtcM8kdYGq03IqCn4nqM5roTEOUAn1tPkZcJmqLHI?=
- =?Windows-1252?Q?6dpOxP++jWHwTLbKl+KmP62eCdt0c6xU3LpT0+jSdJLaQOXCkv1wPxxx?=
- =?Windows-1252?Q?HrV9EYtnKrP1FX23ptMPuSMmj6m9DEqv/ru1tstrTDhcjGfQt5nybuQ2?=
- =?Windows-1252?Q?71EXISxyRgqdkR3OrkyFzmvZfLP2Jb2ArCfC1BamZI+erkI924GThbzp?=
- =?Windows-1252?Q?WpiDU7sjJd7bR0On9RKNR62rQIQ+4G3SyQaRDSwBq6n8Z1vPczs3tXlb?=
- =?Windows-1252?Q?k/RFyl/AYhmUAChmora9RCiqij9LWf2zLiZGcQGgDMPImwWcSpaN9b0t?=
- =?Windows-1252?Q?wzbvKQv1Pjc0L47Yveyvr0WQ28PMlhxpJiAOrWasB5818wBmyb4q0eTV?=
- =?Windows-1252?Q?d7l7PqrxwVdXJd+D3fYBiuiw+URCvGmILSMDv9odSTVHPapmPrVNiUYP?=
- =?Windows-1252?Q?aqb2X/fVgkF8SnBgVS0BS4aJVxJob/4CYGy386R8NZvHaxyV7AsgHsBp?=
- =?Windows-1252?Q?KjqAmbm0IeWFomtibjdmC6voRGP07KVoR38Q+ZZH1uxVzTeZ+jTwf2fw?=
- =?Windows-1252?Q?SFwzm55IGwsby7fC6OApIE+jHadkZRF594Hyd4e9NZY7Wvhls10JXk01?=
- =?Windows-1252?Q?42xGYkXftVSC5dFpone9OR/rbs9mIxEw9VTLJCq4FbZKrO98enGhFD80?=
- =?Windows-1252?Q?ExUWmD426nEq4kRGw+rJluRXRT1GX8qsjwCmmsn1o29Nu4tN3lAHFhN4?=
- =?Windows-1252?Q?/EkS+VuSfRFrW1Y9PZZPk6D8syMROZscFaTBaPysw8dAoAk1JNOvsKN/?=
- =?Windows-1252?Q?QwBNB0v9UzFxiXYRrVG4TOxruG3KAJsMFr813LFCXZ0DsVrj1r0YK/6l?=
- =?Windows-1252?Q?6C2oumrpcHgFdEG3d4y7lIiweQKw8ftCh3l566VmoR47lyqd9lMyaXub?=
- =?Windows-1252?Q?lby5wguuyG1hL5Vyg/YeelXOIflTDwWvY/6Okt5UfFq6m0yE5rYd+8z6?=
- =?Windows-1252?Q?IWj4fd2F9dtXOJq86cImxYDQegkTJxw38yx2DB+3l2OElijaVRlr2kU7?=
- =?Windows-1252?Q?Zf7abr5zggO6BBZCaCGeNcnEskuiZK07jUZ8AYr0PmpRIfuHfcQddDS6?=
- =?Windows-1252?Q?0OISUgMbvDUvYUzmjPmlr1nQYjP6UDIS6t+J08B4mjwJNCHH3bQQeN8T?=
- =?Windows-1252?Q?GCvQqVz3NCnQ5iB8E3nGi6dbFci7ib6MFRE4jbpGB4i176pqQ93G/rSE?=
- =?Windows-1252?Q?SZ7v26IawEPMQfe9OWHmTYUGznI/yLA4cglKPPP5Me0kdfY7Xl95MF4U?=
- =?Windows-1252?Q?qeZAeVkJ/tAWtmWSaxXaQDP/6bfsigxpzsR7X/eQM6FuQa/1azkPfg?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 25 Feb 2022 07:49:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F6116DAFA;
+        Fri, 25 Feb 2022 04:49:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EED61BAD;
+        Fri, 25 Feb 2022 12:49:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12130C340E7;
+        Fri, 25 Feb 2022 12:49:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jdKV1mpJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645793352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LdPtdUugouca9RsozwqmoQ+bGf9XN+SJeuvutIA1cr4=;
+        b=jdKV1mpJW4q3IBJYtCxW+ae+a5bUZRK074ZSTJvMcn72jJcdvIBmiwUnxAqMS4+bl1eg0x
+        ReSUMCOqptum/00XCo/Ltsg0dMDxwJNzh5wDv4eFrGvUxLLpgjskZKWR5/s4jZ3IrN0mXX
+        eAyEN2sgqceovtPZ44OOExVR8o1P0zc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id da77a47e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 12:49:11 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     adrian@parity.io, ardb@kernel.org, ben@skyportsystems.com,
+        berrange@redhat.com, colmmacc@amazon.com, decui@microsoft.com,
+        dwmw@amazon.co.uk, ebiggers@kernel.org, ehabkost@redhat.com,
+        graf@amazon.com, gregkh@linuxfoundation.org,
+        haiyangz@microsoft.com, imammedo@redhat.com, jannh@google.com,
+        kys@microsoft.com, lersek@redhat.com, linux@dominikbrodowski.net,
+        mst@redhat.com, qemu-devel@nongnu.org, raduweis@amazon.com,
+        sthemmin@microsoft.com, tytso@mit.edu, wei.liu@kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v4] virt: vmgenid: introduce driver for reinitializing RNG on VM fork
+Date:   Fri, 25 Feb 2022 13:48:48 +0100
+Message-Id: <20220225124848.909093-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
+References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8448.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 722c6036-fb50-4220-d85f-08d9f85d13b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 12:48:09.4739
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s88uNoCyGXvn+jpASHG27VYtysi/ThTp+cKQp6hbtj+BdwPaq8gFL9f2f9cbWIbbdKJvjUbzqhY7Xv/sc5HmRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR05MB4241
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of VMware's performance regression testing for Linux=0A=
-Kernel upstream releases, we have evaluated the performance =0A=
-of Linux kernel 5.14 against the 5.13 release and would like =0A=
-to share the below observation. We have noticed performance =0A=
-degradation in ESXi Networking workloads up to 25% and ESXi =0A=
-Storage workloads up to 5%. From ESXi Networking perspective,=0A=
-we were able to notice performance degradation in Netperf =0A=
-=93TCP_STREAM_RECV large packets=94 Throughput tests up to 25%. =0A=
-In storage, we were able to notice performance degradation =0A=
-only in CPU cost metric up to 5%. =0A=
-=0A=
-After performing the bisect between kernel 5.14 and 5.13, we =0A=
-identified the root cause behavior to be a "memory allocation" =0A=
-of Mel's commit "44042b4498728f4376e84bae1ac8016d146d850b =0A=
-mm/page_alloc: allow high-order pages to be stored on the =0A=
-per-cpu lists").=0A=
-=0A=
-To confirm this, we have backed out the above mentioned commit=0A=
-from 5.14 & re-ran our tests and found that the performance was=0A=
-on-par to 5.13 kernel. =0A=
-=0A=
-Immediate before commit: 43b02ba93b25b1caff7a3457fc5d005485e78da5=0A=
-Mel's commit: 44042b4498728f4376e84bae1ac8016d146d850b=0A=
-Mel=92s commit git URL:=0A=
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=0A=
-linux.git/commit/?id=3D44042b4498728f4376e84bae1ac8016d146d850b=0A=
-=0A=
-To analyse the performance degradation further, we have collected=0A=
-perf stats between Mel's commit & immediate before commit while =0A=
-running the Netperf benchmark and observed high cache-misses in=0A=
-Mel's commit when compared to immediate before commit. Please =0A=
-find the perf-stats data when running netperf TCP_STREAM tests. =0A=
-=0A=
-Performance counter stats for 'system wide':=0A=
-Immediate before commit:=0A=
-cache-references - 5,343,078,363=0A=
-cache-misses - 26,632,656 (0.498 % of all cache refs)=0A=
-=0A=
-Mel's commit:=0A=
-cache-references - 4,930,300,091=0A=
-cache-misses - 319,495,743 (6.480 % of all cache refs)=0A=
-=0A=
-We have synced-up with Mel offline and performed different =0A=
-experiments requested by him. He identified the root cause =0A=
-of the perf degradation and provided us a patch to validate. =0A=
-We have validated his patch and confirmed that it fixes our =0A=
-perf degradation and the perf #s are also on-par with kernel 5.13.=0A=
-=0A=
-Performance data: =0A=
-TCP_STREAM_RECV Throughput: =0A=
-Immediate before commit: 16.394 Gbps =0A=
-Mel's commit: 15.465 Gbps =0A=
-Mel's patch: 16.461 Gbps=0A=
-=0A=
-Patch URL: https://lore.kernel.org/all/=0A=
-20220217002227.5739-1-mgorman@techsingularity.net/=0A=
-=0A=
-Since we have received a fix from Mel for the reported degradation=0A=
-through offline, we wanted to document this in this community for =0A=
-reference.=0A=
-=0A=
-Since we observe some performance degradation due to this commit=0A=
-(44042b4498728f4376e84bae1ac8016d146d850b), could you please =0A=
-backport this patch/fix to kernel 5.14 release.=0A=
-=0A=
-Manikandan Jagatheesan=0A=
-Performance Engineering=0A=
-VMware, Inc.=
+VM Generation ID is a feature from Microsoft, described at
+<https://go.microsoft.com/fwlink/?LinkId=260709>, and supported by
+Hyper-V and QEMU. Its usage is described in Microsoft's RNG whitepaper,
+<https://aka.ms/win10rng>, as:
+
+    If the OS is running in a VM, there is a problem that most
+    hypervisors can snapshot the state of the machine and later rewind
+    the VM state to the saved state. This results in the machine running
+    a second time with the exact same RNG state, which leads to serious
+    security problems.  To reduce the window of vulnerability, Windows
+    10 on a Hyper-V VM will detect when the VM state is reset, retrieve
+    a unique (not random) value from the hypervisor, and reseed the root
+    RNG with that unique value.  This does not eliminate the
+    vulnerability, but it greatly reduces the time during which the RNG
+    system will produce the same outputs as it did during a previous
+    instantiation of the same VM state.
+
+Linux has the same issue, and given that vmgenid is supported already by
+multiple hypervisors, we can implement more or less the same solution.
+So this commit wires up the vmgenid ACPI notification to the RNG's newly
+added add_vmfork_randomness() function.
+
+It can be used from qemu via the `-device vmgenid,guid=auto` parameter.
+After setting that, use `savevm` in the monitor to save the VM state,
+then quit QEMU, start it again, and use `loadvm`. That will trigger this
+driver's notify function, which hands the new UUID to the RNG. This is
+described in <https://git.qemu.org/?p=qemu.git;a=blob;f=docs/specs/vmgenid.txt>.
+And there are hooks for this in libvirt as well, described in
+<https://libvirt.org/formatdomain.html#general-metadata>.
+
+Note, however, that the treatment of this as a UUID is considered to be
+an accidental QEMU nuance, per
+<https://github.com/libguestfs/virt-v2v/blob/master/docs/vm-generation-id-across-hypervisors.txt>,
+so this driver simply treats these bytes as an opaque 128-bit binary
+blob, as per the spec. This doesn't really make a difference anyway,
+considering that's how it ends up when handed to the RNG in the end.
+
+Cc: Adrian Catangiu <adrian@parity.io>
+Cc: Daniel P. Berrangé <berrange@redhat.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Laszlo Ersek <lersek@redhat.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v3->v4:
+- Add this driver to MAINTAINERS, per Ard's request.
+  Note: I didn't really want to do this at first, because I was hoping the
+  original Amazon team looking into this last year would step up. But it seems
+  like that team has moved on, and anyway I've basically rewritten the driver
+  from scratch at this point -- not a single line of the original exists --
+  and so I guess I'll maintain it myself. Adding Greg to the CC for his ack on
+  this.
+- Don't use a static global state in case there are multiple instances.
+- Use devm_memremap instead of the acpi internal functions.
+- Default to being modular instead of a built-in, as apparently this is
+  udev-able.
+
+ MAINTAINERS            |   1 +
+ drivers/virt/Kconfig   |   9 ++++
+ drivers/virt/Makefile  |   1 +
+ drivers/virt/vmgenid.c | 112 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 123 insertions(+)
+ create mode 100644 drivers/virt/vmgenid.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 777cd6fa2b3d..a10997e15146 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16211,6 +16211,7 @@ M:	Jason A. Donenfeld <Jason@zx2c4.com>
+ T:	git https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+ S:	Maintained
+ F:	drivers/char/random.c
++F:	drivers/virt/vmgenid.c
+ 
+ RAPIDIO SUBSYSTEM
+ M:	Matt Porter <mporter@kernel.crashing.org>
+diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
+index 8061e8ef449f..5596c7313f59 100644
+--- a/drivers/virt/Kconfig
++++ b/drivers/virt/Kconfig
+@@ -13,6 +13,15 @@ menuconfig VIRT_DRIVERS
+ 
+ if VIRT_DRIVERS
+ 
++config VMGENID
++	tristate "Virtual Machine Generation ID driver"
++	default m
++	depends on ACPI
++	help
++	  Say Y here to use the hypervisor-provided Virtual Machine Generation ID
++	  to reseed the RNG when the VM is cloned. This is highly recommended if
++	  you intend to do any rollback / cloning / snapshotting of VMs.
++
+ config FSL_HV_MANAGER
+ 	tristate "Freescale hypervisor management driver"
+ 	depends on FSL_SOC
+diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+index 3e272ea60cd9..108d0ffcc9aa 100644
+--- a/drivers/virt/Makefile
++++ b/drivers/virt/Makefile
+@@ -4,6 +4,7 @@
+ #
+ 
+ obj-$(CONFIG_FSL_HV_MANAGER)	+= fsl_hypervisor.o
++obj-$(CONFIG_VMGENID)		+= vmgenid.o
+ obj-y				+= vboxguest/
+ 
+ obj-$(CONFIG_NITRO_ENCLAVES)	+= nitro_enclaves/
+diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
+new file mode 100644
+index 000000000000..e3dd4afb33c6
+--- /dev/null
++++ b/drivers/virt/vmgenid.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ *
++ * The "Virtual Machine Generation ID" is exposed via ACPI and changes when a
++ * virtual machine forks or is cloned. This driver exists for shepherding that
++ * information to random.c.
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/acpi.h>
++#include <linux/random.h>
++
++ACPI_MODULE_NAME("vmgenid");
++
++enum { VMGENID_SIZE = 16 };
++
++struct vmgenid_state {
++	u8 *next_id;
++	u8 this_id[VMGENID_SIZE];
++};
++
++static int vmgenid_acpi_add(struct acpi_device *device)
++{
++	struct acpi_buffer parsed = { ACPI_ALLOCATE_BUFFER };
++	struct vmgenid_state *state;
++	union acpi_object *obj;
++	phys_addr_t phys_addr;
++	acpi_status status;
++	int ret = 0;
++
++	state = devm_kmalloc(&device->dev, sizeof(*state), GFP_KERNEL);
++	if (!state)
++		return -ENOMEM;
++
++	status = acpi_evaluate_object(device->handle, "ADDR", NULL, &parsed);
++	if (ACPI_FAILURE(status)) {
++		ACPI_EXCEPTION((AE_INFO, status, "Evaluating ADDR"));
++		return -ENODEV;
++	}
++	obj = parsed.pointer;
++	if (!obj || obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 2 ||
++	    obj->package.elements[0].type != ACPI_TYPE_INTEGER ||
++	    obj->package.elements[1].type != ACPI_TYPE_INTEGER) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	phys_addr = (obj->package.elements[0].integer.value << 0) |
++		    (obj->package.elements[1].integer.value << 32);
++	state->next_id = devm_memremap(&device->dev, phys_addr, VMGENID_SIZE, MEMREMAP_WB);
++	if (!state->next_id) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	memcpy(state->this_id, state->next_id, sizeof(state->this_id));
++	add_device_randomness(state->this_id, sizeof(state->this_id));
++
++	device->driver_data = state;
++
++out:
++	ACPI_FREE(parsed.pointer);
++	return ret;
++}
++
++static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
++{
++	struct vmgenid_state *state = acpi_driver_data(device);
++	u8 old_id[VMGENID_SIZE];
++
++	memcpy(old_id, state->this_id, sizeof(old_id));
++	memcpy(state->this_id, state->next_id, sizeof(state->this_id));
++	if (!memcmp(old_id, state->this_id, sizeof(old_id)))
++		return;
++	add_vmfork_randomness(state->this_id, sizeof(state->this_id));
++}
++
++static const struct acpi_device_id vmgenid_ids[] = {
++	{ "VMGENID", 0 },
++	{ "QEMUVGID", 0 },
++	{ },
++};
++
++static struct acpi_driver acpi_driver = {
++	.name = "vmgenid",
++	.ids = vmgenid_ids,
++	.owner = THIS_MODULE,
++	.ops = {
++		.add = vmgenid_acpi_add,
++		.notify = vmgenid_acpi_notify,
++	}
++};
++
++static int __init vmgenid_init(void)
++{
++	return acpi_bus_register_driver(&acpi_driver);
++}
++
++static void __exit vmgenid_exit(void)
++{
++	acpi_bus_unregister_driver(&acpi_driver);
++}
++
++module_init(vmgenid_init);
++module_exit(vmgenid_exit);
++
++MODULE_DEVICE_TABLE(acpi, vmgenid_ids);
++MODULE_DESCRIPTION("Virtual Machine Generation ID");
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Jason A. Donenfeld <Jason@zx2c4.com>");
+-- 
+2.35.1
+

@@ -2,72 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D504C4E03
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277AE4C4E0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbiBYSsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S233406AbiBYSuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbiBYSrm (ORCPT
+        with ESMTP id S232773AbiBYSuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:47:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB41AC2BF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:47:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=PZHpSdMN9w0rcNlZN/RM7ulvKGH6eRZjhIQ04n6/lYY=; b=qeSNDh+GSF0GyrT9U3gmNvNeWd
-        Fd1V52KEa+XNHpmKeF4IVJO7keAuqy/GT/ALv2OjUS/BceYBJQB55WQAPjE95vDds0ifG+T3ymAa4
-        ic2C4H0joEKI6PTcx7LsmDy0/yAQWt89qidPwChfEjcM1mlSUYmTfpqUfn3JIdSBTr7Amm/gMGeDb
-        O/HOr9RR9qKU+UGrwW5lAJ8HSh+6uHo+1QTlzmdterWrEgb5eACutOdIFrFg9xUnX+LLJxBxCXRsj
-        5UtihNtxBOKGcsnTW6sl+QYI7CfBsmgg2mvNQkEfDNpQTR5INLBuL6/wY5XMF22R9UaCuWsT4uei6
-        YnIM62nA==;
-Received: from 089144202139.atnat0011.highway.a1.net ([89.144.202.139] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNfcT-006flO-OT; Fri, 25 Feb 2022 18:47:10 +0000
-Date:   Fri, 25 Feb 2022 19:47:07 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] configfs fix for Linux 5.17
-Message-ID: <YhkkKzBxKql579HU@infradead.org>
+        Fri, 25 Feb 2022 13:50:14 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC7182D8A;
+        Fri, 25 Feb 2022 10:49:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id DED551F4664E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645814980;
+        bh=W1siran0TDWu7KT1NGueE/mVjJkk8nSZK4wyUM635do=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=WijUW/t4Phhx9H51BK2pBFSQkcaSPVGY+5nyahB6tSqLcsRuGthEKnKM6MTXySYOk
+         dtkboROcim2ASyTrJwugmHjLAIO/htDGkxMCbopG8TIZ6OJiRLjt9t3fuWqc38PLse
+         NkWA8WLGiyPonH80gGYow+LYwyiIeHsBdeh2neu66f0ZI0ksCFGWen6HOHw0X5wA8K
+         wXs+5lXyErJs6pG9+2mS6EAtOJXj09wOI/TFTaWExYF24I4/1bK8svQ1X6jARLdPVg
+         HGbQjB2pKOw15iNAkIimvqxIrHO2zFUVjbX3Q3nt1zVEn9OOqODCNwQGYHWhEb3ypZ
+         B6Hk93T9vDfZQ==
+Message-ID: <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
+Date:   Fri, 25 Feb 2022 18:49:37 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
+Content-Language: en-US
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
+In-Reply-To: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6:
+On 25/02/2022 13:15, Guillaume Tucker wrote:
+> Add quotes around $(CC) when calling check_cc.sh from a Makefile to
+> pass the value as a single argument to the script even if it has
+> several words such as "ccache gcc".  Conversely, remove quotes in
+> check_cc.sh when calling $CC to make it a command with potentially
+> several arguments again.
+> 
+> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+> Tested-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
+>  tools/testing/selftests/vm/Makefile     | 6 +++---
+>  tools/testing/selftests/x86/Makefile    | 6 +++---
+>  tools/testing/selftests/x86/check_cc.sh | 2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 1607322a112c..d934f026ebb5 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -49,9 +49,9 @@ TEST_GEN_FILES += split_huge_page_test
+>  TEST_GEN_FILES += ksm_tests
+>  
+>  ifeq ($(MACHINE),x86_64)
+> -CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+> -CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+> -CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
+> +CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
+> +CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+> +CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+>  
+>  TARGETS := protection_keys
+>  BINARIES_32 := $(TARGETS:%=%_32)
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 8a1f62ab3c8e..53df7d3893d3 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -6,9 +6,9 @@ include ../lib.mk
+>  .PHONY: all all_32 all_64 warn_32bit_failure clean
+>  
+>  UNAME_M := $(shell uname -m)
+> -CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+> -CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+> -CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+> +CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
+> +CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
+> +CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+>  
+>  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+>  			check_initial_reg_state sigreturn iopl ioperm \
+> diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
+> index 3e2089c8cf54..aff2c15018b5 100755
+> --- a/tools/testing/selftests/x86/check_cc.sh
+> +++ b/tools/testing/selftests/x86/check_cc.sh
+> @@ -7,7 +7,7 @@ CC="$1"
+>  TESTPROG="$2"
+>  shift 2
+>  
+> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>      echo 1
+>  else
+>      echo 0
 
-  Merge tag 'platform-drivers-x86-v5.17-3' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 (2022-02-21 09:10:53 -0800)
+I see the change in check_cc.sh is already covered by Usama's patch:
 
-are available in the Git repository at:
+  selftests/x86: Add validity check and allow field splitting
 
-  git://git.infradead.org/users/hch/configfs.git tags/configfs-5.17-2022-02-25
+-if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
++if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
 
-for you to fetch changes up to 84ec758fb2daa236026506868c8796b0500c047d:
 
-  configfs: fix a race in configfs_{,un}register_subsystem() (2022-02-22 18:30:28 +0100)
+However, the rest of this patch in the Makefiles still needs to
+be applied.  Let me know if I should rebase it on top of Usama's.
 
-----------------------------------------------------------------
-configfs fix for Linux 5.17
+Thanks,
+Guillaume
 
- - fix a race in configfs_{,un}register_subsystem (ChenXiaoSong)
-
-----------------------------------------------------------------
-ChenXiaoSong (1):
-      configfs: fix a race in configfs_{,un}register_subsystem()
-
- fs/configfs/dir.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)

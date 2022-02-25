@@ -2,71 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DA14C46D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B90B4C46DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241620AbiBYNpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S241650AbiBYNqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiBYNpB (ORCPT
+        with ESMTP id S241635AbiBYNqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:45:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA8F210D5E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:44:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2D066CE25EF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90ACC340E7;
-        Fri, 25 Feb 2022 13:44:25 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 08:44:24 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     David Laight <David.Laight@aculab.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: Strange output on the console
-Message-ID: <20220225084424.1950c547@gandalf.local.home>
-In-Reply-To: <20220225134056.GE18720@1wt.eu>
-References: <20220224230035.36547137@gandalf.local.home>
-        <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
-        <20220225063637.GA18039@1wt.eu>
-        <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
-        <20220225103239.GA18720@1wt.eu>
-        <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
-        <20220225122546.GB18720@1wt.eu>
-        <20220225082850.2277179f@gandalf.local.home>
-        <20220225134056.GE18720@1wt.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 25 Feb 2022 08:46:15 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F08210D70
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:45:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: rcn)
+        with ESMTPSA id 83DA71F4107C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645796740;
+        bh=Jse5jslyQwK8jYrGmsf8TVyXCyfWaI4dN1Xg9g/UKcA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gc1+GTNX4IdQTjOQM2VQD5ijDrvyUPUpqyrQFN0haUjKHtHW0sNDisvEDtU17qO46
+         bigv6hv4lf6EzHG5cLoEnnD//MUgMcFWQJQNA6pJB7qyus7PPI3jYDFa6XZUchQOsF
+         BoUAJqJxSzl2U50ux1ZNInoIRGQ7sN8xEw9JuG3JQdokodMBPz4PK26qenZpfwRyiS
+         BdPmG6p0EvgIyZ0iaU3W1pdk4lCqFjUd6RpScWwzbgXHbgaZgq4zFRECK+3yNvp6jI
+         pK9lmNlAohPakmyxW8VT2umSKzX/PvIHVAom67c/lItl2j6WJXzcddmsYjtJoCaaIw
+         nZayvxyFFqCwQ==
+From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        kernel@collabora.com, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org
+Subject: [PATCH 0/2] Mitigate race condition problems when unbinding DRM driver
+Date:   Fri, 25 Feb 2022 14:45:02 +0100
+Message-Id: <20220225134504.457245-1-ricardo.canuelo@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 14:40:56 +0100
-Willy Tarreau <w@1wt.eu> wrote:
+Hi all,
 
-> Maybe you could try to change the config on the receiver to try to resync
-> with what it sent and see if you figure what setting is being used ? I
-> would personally try to set it to 7 bit with 1 stop and no parity, same
-> baud rate just to see.
+I'm sending these patches to try to improve the current situation for a
+particular corner case (DRM driver unbinding).
 
-It appears to be a bug in the kernel and the commit was reverted.
+I could reproduce a specific race condition during the unbinding of the
+mediatek-drm driver that caused an invalid memory address. The race
+condition is triggered by a userspace event (gnome-shell requesting a
+DRM GET_CONNECTOR ioctl) while the encoders and drivers are in the
+process of being disabled.
 
-I Cc'd you on my reply.
+While I tried to mitigate this by making a small change in the
+parade-ps8640 driver (for the bridge I'm testing on) and by making a
+couple of functions in drm_bridge.c more robust, this is only a symptom
+of a larger problem that might not be getting enough attention,
+understandably, because this is an unusual corner case.
 
-  https://lore.kernel.org/all/Yhhj9MLZTrhjSWUE@google.com/
+The scenario looks like this:
 
--- Steve
+<userspace>: unbind mediatek-drm   --------------------+
+              |                                        |
+           <kernel>                                    |
+              |                                        |
+             ...                                       |
+              |                                       ...
+        mtk_dsi_unbind                                 |
+              |                                        |
+              `- drm_encoder_cleanup                   v
+              |   |                                 gnome-shell
+             ...  `- drm_bridge_detach *<------ ioctl (GET_CONNECTOR)
+                                                   |
+                                                <kernel>
+                                                   |
+                                                  ...
+                                                   |
+                                                   |
+                                      ps8640_bridge_get_edid
+                                         |
+                                          `drm_bridge_chain_post_disable
+
+which causes drm_bridge_chain_post_disable() to walk the bridge chain
+after the bridge has already been detached and removed from the list. I
+guess a more radical and subsystem-wide solution would be to not allow
+or to block certain ioctl calls once the driver has started to unbind,
+but I'd like to hear your opinion on this.
+
+This was tested on an Acer Chromebook R13 (Elm, MT8173) running Debian
+Sid, the command that triggers the race condition is
+
+echo mediatek-drm.12.auto > /sys/bus/platform/drivers/mediatek-drm/unbind
+
+Cheers,
+Ricardo
+
+Ricardo Cañuelo (2):
+  drm/bridge: parade-ps8640: avoid race condition on driver unbinding
+  drm/bridge: Add extra checks in pre_enable and post_enable
+
+ drivers/gpu/drm/bridge/parade-ps8640.c | 6 +++---
+ drivers/gpu/drm/drm_bridge.c           | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+--
+2.25.1

@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97E34C4FC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FFA4C4FD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiBYUlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S236802AbiBYUmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiBYUle (ORCPT
+        with ESMTP id S236724AbiBYUmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:41:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42190214F99;
-        Fri, 25 Feb 2022 12:41:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01AA7B83363;
-        Fri, 25 Feb 2022 20:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB20C340E7;
-        Fri, 25 Feb 2022 20:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645821659;
-        bh=HE8061LF/iGlGPikfhtbvjKwTHd7MrtYrRbVauGucKk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=p1fVqOO/4teZOpAH/ugmrKB7ZJeG0J4pG1tth3XNCRtbdkF7vXE5d3pUJi+DzPm8u
-         i0ISzk+WNMwe1woR2UxwcRzkEL8yxQBaoiXm09MvY096J7S5RE1hbEKYRww4IbkKwD
-         p3JPKcwFLQUXYhxfsY7AyyFFlxa2DgYB/lrVdgw1ng7Pbyxt58oaaHzjhWTcM7u/h8
-         Ys9LgtK9IHDOQJlSwG3oxIdxtRsG4s3NxoLy54nQsPDPIyMv2aDxLWG4Hbt/b7WOnt
-         /vlLjEUoheH8f6zw5GGpyR2jIh43nxliyJteIEbmrfWb288JpylDo3Aa1yeJ4/IpI1
-         yhRaXZbAXJGVg==
-From:   broonie@kernel.org
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mmc@vger.kernel.org
-Subject: linux-next: build failure after merge of the char-misc tree
-Date:   Fri, 25 Feb 2022 20:40:55 +0000
-Message-Id: <20220225204055.3899986-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 25 Feb 2022 15:42:35 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C4120B38C;
+        Fri, 25 Feb 2022 12:42:02 -0800 (PST)
+Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BD49FC85A1;
+        Fri, 25 Feb 2022 20:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1645821721; bh=j4YPX1CJ6VNZFXbZ5LbV8+gDCRq7x3CH1YNtj2VgEro=;
+        h=From:To:Cc:Subject:Date;
+        b=X+VvD8y+TkjSA2jNk+cTB3Q39mXsDUYM4FyNXTtc2PQ1HyLZkqPIlhT8v/in7+c2r
+         uj+0SM2p+/YLkJ9TbXHkQwoePKuZ64v+ahyBZRjaNRz/QF+qaXL0+uMYEsU6Mp9Uf/
+         T/KgujMZL8ry0oQqzETbmAbO872aEsmPNhG1l7VA=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        marcel@holtmann.org, Luca Weiss <luca@z3ntu.xyz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: bluetooth: broadcom: add BCM43430A0 & BCM43430A1
+Date:   Fri, 25 Feb 2022 21:41:37 +0100
+Message-Id: <20220225204138.935022-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Document the compatible string for BCM43430A0 bluetooth used in lg-lenok
+and BCM43430A1 used in asus-sparrow.
 
-After merging the char-misc tree, today's linux-next build (x86
-allmodconfig) failed like this:
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+- add bcm43430a1 too, adjust commit message to reflect that
 
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
-  809 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1084 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1133 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1159 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1258 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1311 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-cc1: all warnings being treated as errors
+ Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Caused by commit
+diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+index 5aac094fd217..dd035ca639d4 100644
+--- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+@@ -19,6 +19,8 @@ properties:
+       - brcm,bcm4329-bt
+       - brcm,bcm4330-bt
+       - brcm,bcm4334-bt
++      - brcm,bcm43430a0-bt
++      - brcm,bcm43430a1-bt
+       - brcm,bcm43438-bt
+       - brcm,bcm4345c5
+       - brcm,bcm43540-bt
+-- 
+2.35.1
 
-  7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
-
-I have used the char-misc tree from yesterday instead.

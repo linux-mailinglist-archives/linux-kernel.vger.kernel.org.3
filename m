@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9911F4C3A91
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443CD4C3A98
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbiBYAzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S236191AbiBYA7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbiBYAzk (ORCPT
+        with ESMTP id S231271AbiBYA7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:55:40 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFC41DFDDE
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:55:09 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id l9so2954271pls.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:55:09 -0800 (PST)
+        Thu, 24 Feb 2022 19:59:13 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1C918C7B0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:58:42 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 12so3253233pgd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=R80GIipw6XPpWW++pfzM0QwwIWCfB4Mxcyp6hhjGsks=;
-        b=D5OEQLifQBIIqlZMBWksZ/o/x0PBukWHtoPiKnyHKdQQeb2iHnQiaPHXDuzDGTbSR2
-         xngAcDHOWg7h+6pps4BpB9j9QwhABXNbqtHmLXgxiwHYrEhBBZJLPkI6Fba+SgQ38SDy
-         HLtvOeWEWTLmZAXKtytkj7+imT1k01h8NBIw0=
+        bh=KVylA7c4QreaqL3IEnPyuKDimwPrtrjRybV/nnL1tjA=;
+        b=VLezqZJc+jGxvHEgirOlFROmKIdgMTLquAgf7ZPsuvNWiNOmfxPxjIL66Qq7aDgEpc
+         HNxrsNX0TU8Kh/gfyIghAy6cjJu3/ZWaZ9zZABqnMqSNO1i+UVv1/2CGPM5cgpm8STOA
+         JOx7gf2uutGYuxXrO0TX5LpejX/WtKcgsccnw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=R80GIipw6XPpWW++pfzM0QwwIWCfB4Mxcyp6hhjGsks=;
-        b=Bh9vU6zkHZHlhq2VnLscE9zLpnsGxkBbGLSNYTGyQHk2jqEovQ0mu6el6qaFJsNGAV
-         f/PlX6sft6MxA2YyLuB8lzS+ZmvZywShWxlvDhSWjEBoEd53jo3F2hCyiEUFOxPt/f8x
-         6pzFLQubANs4plXWwTwZaueXJ8KNxd5Q2M6NpkhqT0zz0ymPgoEtag+7dkDpTsthozMB
-         gNniDPMqIThjALipb578mdcfOnXg6sNr3dL9K6QH60bhxGDyXFhQ3EDetEdgLE1kjxIq
-         Sd+fvVhiEy1u0ouDx1oaoujWk+ZKYN9DMCh9yAUEA5Fsh3BLfTjH65R+rBDYrJrqN48J
-         ba4w==
-X-Gm-Message-State: AOAM532bay2a8V5fbabtaFNZzu11BeU0ZYJhYpjOW31qQuF42qxx3p4N
-        fgjwDe/Ta65oKb1JQzv23G98fA==
-X-Google-Smtp-Source: ABdhPJx9TVoWtw1R3F5zg8N6T1XdhYNM7KIQnWy6jSZTRSPSGHFqsmo5+fUs9s7F8VzVCO/jkkUJOg==
-X-Received: by 2002:a17:90a:de89:b0:1bc:8441:ffc9 with SMTP id n9-20020a17090ade8900b001bc8441ffc9mr700415pjv.236.1645750509472;
-        Thu, 24 Feb 2022 16:55:09 -0800 (PST)
+        bh=KVylA7c4QreaqL3IEnPyuKDimwPrtrjRybV/nnL1tjA=;
+        b=noYyIg9gTwAo3NWwaj8a6zqPCVEVSJXJZqtnXX1iZHEMWliuPBCmeaXgyrkkpvNsJm
+         KscIbK5v/wHFlfV0Ysk60Nn65AXCwjnNdtAHMAmy7zoPJQkTzul/mCqNX6DZABAhCbwn
+         WTYsP/HdR6JhRus/uYXc1zE0wxqJ5r6fNAsw7Su2PlTbxxrHC3I7A8F3SqI60W1JkUWM
+         s6zQCmloAa4xj88JpQaq6cL3ES/AbQP2qkY09ujA5KBU1/QcyRJt1gditlqbGSOA4IHy
+         ea6SX9m7cM3IwJH+Q9cGc3YO/F4efbaOspPBr+L9whgzE4WNcWHzX5jm4CUvDkgIbIAk
+         BOWA==
+X-Gm-Message-State: AOAM5337UcGRjYQ2pFsRlE7X2ePIT80FUAm/D02EGXJVBVJPP7mKazHM
+        VBMNLZesMAyaC0u2csTqV+UzxA==
+X-Google-Smtp-Source: ABdhPJzP7RwKYNjsY1KMBLscD49zWj2hDte4pRzb33UrHvI/KxQSOQ63bB4EeIsT8z32DkDfcGX9yA==
+X-Received: by 2002:aa7:8d0f:0:b0:4e1:31de:9080 with SMTP id j15-20020aa78d0f000000b004e131de9080mr5395122pfe.1.1645750722307;
+        Thu, 24 Feb 2022 16:58:42 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f3581ae086sm763364pfv.16.2022.02.24.16.55.08
+        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm740317pfu.40.2022.02.24.16.58.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:55:09 -0800 (PST)
-Date:   Thu, 24 Feb 2022 16:55:08 -0800
+        Thu, 24 Feb 2022 16:58:41 -0800 (PST)
+Date:   Thu, 24 Feb 2022 16:58:41 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
@@ -54,14 +54,14 @@ Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-Message-ID: <202202241654.1D43F008@keescook>
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-ID: <202202241657.6C894F8@keescook>
 References: <20220224145138.952963315@infradead.org>
- <20220224151322.714815604@infradead.org>
+ <20220224151322.892372059@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224151322.714815604@infradead.org>
+In-Reply-To: <20220224151322.892372059@infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,20 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:50PM +0100, Peter Zijlstra wrote:
-> Have ftrace_location() search the symbol for the __fentry__ location
-> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
+On Thu, Feb 24, 2022 at 03:51:53PM +0100, Peter Zijlstra wrote:
+> With IBT on, sym+0 is no longer the __fentry__ site.
 > 
-> This avoids a whole bunch of assumptions about __fentry__ being at
-> func+0.
+> NOTE: the architecture has a special case and *does* allow placing an
+> INT3 breakpoint over ENDBR in which case #BP has precedence over #CP
+> and as such we don't need to disallow probing these instructions.
 > 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> NOTE: irrespective of the above; there is a complication in that
+> direct branches to functions are rewritten to not execute ENDBR, so
+> any breakpoint thereon might miss lots of actual function executions.
+> 
 > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/kernel/kprobes/core.c |   11 +++++++++++
+>  kernel/kprobes.c               |   15 ++++++++++++---
+>  2 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -1156,3 +1162,8 @@ int arch_trampoline_kprobe(struct kprobe
+>  {
+>  	return 0;
+>  }
+> +
+> +bool arch_kprobe_on_func_entry(unsigned long offset)
+> +{
+> +	return offset <= 4*HAS_KERNEL_IBT;
+> +}
 
-Cool. This should help with anything using __fentry__ tricks (i.e.
-future CFI...), yes?
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Let's avoid magic (though obvious right now) literal values. Can the "4"
+be changed to a new ENBR_INSTR_SIZE macro or something?
 
 -- 
 Kees Cook

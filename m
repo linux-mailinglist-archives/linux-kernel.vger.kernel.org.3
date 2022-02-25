@@ -2,157 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A61C4C4D90
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C14A4C4D95
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiBYSXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S232169AbiBYSX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbiBYSXA (ORCPT
+        with ESMTP id S231986AbiBYSXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:23:00 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742BC1BE82
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id s1so7437534iob.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
+        Fri, 25 Feb 2022 13:23:23 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2306E8CE
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:51 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id o30-20020a634e5e000000b00373598b71d4so3034117pgl.21
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
-        b=P6fzb+OZwpOlvaG3+EnWy1v6RTMFv/HjCAiOKJanAe76hkVLxtNE5HdrdpTBhWnZxP
-         BpxRm/AAeooby+ng8DNSr6qE1UgblJnuS+pbruvGLX7cFH5ZHPSo0WfWiM56kRe20HZ5
-         pzvkhw4ZAIOsXC2D2YuzQqd2s0NERUatK41Hs=
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=x4Ku6YsMCKcusqhh1KEW7b8ua9qMmgZkvtpofAGbtVk=;
+        b=RCy+rU96VujgIkYwHn+eJ5lO3hg6B5rvgAVjzyr0MvZ1ZAAaC6UXB+cPjHj469kxNY
+         Dw/RtxHGBJYxtWSp0N+MA+FQg+U8eFE+C4uFNuV2LgxD+q84FNZsyaJANm2VwbaQlVFy
+         gqjB10qjYVDsTOnCB+tre7f3ppLBqcZQMoQOO77NG0G9ZEAKYrAZsvPopKEjUHud6Eji
+         j/4KlnmP+APgnEEeVFGEXmR+Jcxr3wj5lkdTlcY5lHXhtB4cvoq6WeNbwbMDKQRf7sFj
+         AleA+MFbDA9x+F044WEpWtsjE+yir3y5MtRaHwORbGb+qEIqd3DdTJltzhXYaAsN6Yog
+         hQAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
-        b=IXrNfuni0Sf91XAlgbzRo/tmvNe/bOd+q1xZ4KWRD0bos3s7ZXvPbrdFKFS1Ikloz1
-         HWFlbfDprKmrbMXEBV/RW3S0kt6RzdTE+MPnw7nH6K4dwpz4keKaZSMwQ/qBPcyw57b3
-         RGmIKZQcR79fmZp0u/llPa338ypulsV+sZvEv0pEyGHrQy3fqI/fqYeUowAjeN24wjD8
-         oWvJLmcm1xCDNUQrLF0knCsXcNuMe2ZK/nGsZLtDEl8sb2qui6PQtqG//R2MGYa7yBh8
-         kEcWApGAO18OPcDx6Lep/W5sl6H2dYaRPKO84DhBr98Ca8hLHLvDQps9aUJnnbsEeqAs
-         zB0Q==
-X-Gm-Message-State: AOAM532g+6HgjFyd/V5hp7Q0EJG4lUPSTe3qXFSKMg9VBcgbweDp76oc
-        HkzvjNeOz4/Ak3RgTHl31pm6jg==
-X-Google-Smtp-Source: ABdhPJzo/Kt9WGTU8DxFi837ltOzHh2NPMAEUvMDP0w2rSR46kgdf8Wl5YnxAc9awM/UaRhOFNu2vA==
-X-Received: by 2002:a05:6638:bc1:b0:311:905f:790c with SMTP id g1-20020a0566380bc100b00311905f790cmr7025930jad.74.1645813347815;
-        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d8189000000b006415781ebe5sm1957643ion.5.2022.02.25.10.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
-Subject: Re: [PATCH v3 0/5] selftests/resctrl: Add resctrl_tests into
- kselftest set
-To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <d9f81a0f-5f25-9304-fdca-fc164224a786@linuxfoundation.org>
- <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <34174016-e4fd-be4c-a5c0-81d63557de64@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 11:22:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=x4Ku6YsMCKcusqhh1KEW7b8ua9qMmgZkvtpofAGbtVk=;
+        b=DAukuLDrgxHDa4eeZxN1MUgS2lMfLzYxs9izLYOEer+7DbXYar5gIm2ViM56vIw6f6
+         orcIs3mVAzRiteuE6XEz1BVRmlcvTm/eEvzRq2JT/i4S6CO+jFpA08hVSzrX/cI9ojj4
+         mQhUGa3X2ypBs20CFTRTBajXRQAH13d/GZ15a/3PRk6VkvBQthLgcefzrM0snrVsVMVn
+         UPeVF9MYdlp3fYw/p24ALLqip16QIXZBNf/1BwkFsUpXLhR7cyU84N1aRHI/o41zZpuB
+         aO9EOV341qVSV76fDa5nYY7GyNpHXXFvl6KnPys/NN4QuHrjGHl2EkNrPphOnt36//o3
+         Lyyw==
+X-Gm-Message-State: AOAM5313t1bntaTBIqpp/PQ/1HeflRW9MuMe8+LjGHwKB+/SeIBMn0X1
+        9U4V7pMx9mXkiRgLc91hZRejtQL/pj8=
+X-Google-Smtp-Source: ABdhPJzTwrVJB5RstZ5uRrPjtjrFdFuxWajJeU/80rhuK+/Xbgr9+0EWknI0rOF0W7DBGk7e5DIi5QEDmPQ=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4f43:b0:1bc:7e5c:e024 with SMTP id
+ pj3-20020a17090b4f4300b001bc7e5ce024mr26588pjb.0.1645813370236; Fri, 25 Feb
+ 2022 10:22:50 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 25 Feb 2022 18:22:41 +0000
+Message-Id: <20220225182248.3812651-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH v2 0/7] KVM: x86/mmu: Zap only obsolete roots on "reload"
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 1:03 AM, tan.shaopeng@fujitsu.com wrote:
-> Hi Shuah,
-> 
->> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
->>> Hello,
->>>
->>> The aim of this series is to make resctrl_tests run by using kselftest
->>> framework.
->>> - I modify resctrl_test Makefile and kselftest Makefile,
->>>     to enable build/run resctrl_tests by using kselftest framework.
->>>     Of course, users can also build/run resctrl_tests without
->>>     using framework as before.
->>> - I change the default limited time for resctrl_tests to 120 seconds, to
->>>     ensure the resctrl_tests finish in limited time on different environments.
->>> - When resctrl file system is not supported by environment or
->>>     resctrl_tests is not run as root, return skip code of kselftest framework.
->>> - If resctrl_tests does not finish in limited time, terminate it as
->>>     same as executing ctrl+c that kills parent process and child process.
->>>
->>> Difference from v2:
->>> - I reworte changelog of this patch series.
->>> - I added how to use framework to run resctrl to README. [PATCH v3
->>> 2/5]
->>> - License has no dependencies on this patch series, I separated from it this
->> patch series to another patch.
->>> https://lore.kernel.org/lkml/20211213100154.180599-1-tan.shaopeng@jp.f
->>> ujitsu.com/
->>>
->>> With regard to the limited time, I think 120s is not a problem since
->>> some tests have a longer timeout (e.g. net test is 300s). Please let me know if
->> this is wrong.
->>>
->>> Thanks,
->>>
->>> Shaopeng Tan (5):
->>>     selftests/resctrl: Kill child process before parent process terminates
->>>       if SIGTERM is received
->>>     selftests/resctrl: Make resctrl_tests run using kselftest framework
->>>     selftests/resctrl: Update README about using kselftest framework to
->>>       build/run resctrl_tests
->>>     selftests/resctrl: Change the default limited time to 120 seconds
->>>     selftests/resctrl: Fix resctrl_tests' return code to work with
->>>       selftest framework
->>>
->>>    tools/testing/selftests/Makefile              |  1 +
->>>    tools/testing/selftests/resctrl/Makefile      | 20 ++++-------
->>>    tools/testing/selftests/resctrl/README        | 34
->> +++++++++++++++++++
->>>    .../testing/selftests/resctrl/resctrl_tests.c |  4 +--
->>>    tools/testing/selftests/resctrl/resctrl_val.c |  1 +
->>>    tools/testing/selftests/resctrl/settings      |  1 +
->>>    6 files changed, 45 insertions(+), 16 deletions(-)
->>>    create mode 100644 tools/testing/selftests/resctrl/settings
->>>
->>
->> Reviewed the patches - patches 1/5, 4/5 & 5/5 don't depend on kselftest
->> framework improvements. 2/5 and 3/5 are.
->>
->> Please reorder the patches - move 4/5 and 5/5 up and make 2/5 and 3/5 the
->> last in this series. Also see comments on individual patches.
-> 
-> Ok, I will reorder all patches as follows, so that independent patches come first
-> and Makefile related patches come last:
-> [PATCH 1/5] selftests/resctrl: Kill child process before parent process terminates if SIGTERM is received
-> [PATCH 4/5] selftests/resctrl: Change the default limited time to 120 seconds
-> [PATCH 5/5] selftests/resctrl: Fix resctrl_tests' return code to work with selftest framework
-> [PATCH 2/5] selftests/resctrl: Make resctrl_tests run using kselftest framework
-> [PATCH 3/5] selftests/resctrl: Update README about using kselftest framework to build/run resctrl_tests
-> [PATCH] selftests/resctrl: Add missing SPDX license to Makefile
-> 
-> Please let me know if I'm wrong.
-> 
+For all intents and purposes, this is an x86/mmu series, but it touches
+s390 and common KVM code because KVM_REQ_MMU_RELOAD is currently a generic
+request despite its use being encapsulated entirely within arch code.
 
-This split looks good to me.
+The meat of the series is to zap only obsolete (a.k.a. invalid) roots in
+response to KVM marking a root obsolete/invalid due to it being zapped.
+KVM currently drops/zaps all roots, which, aside from being a performance
+hit if the guest is using multiple roots, complicates x86 KVM paths that
+load a new root because it raises the question of what should be done if
+there's a pending KVM_REQ_MMU_RELOAD, i.e. if the path _knows_ that any
+root it loads will be obliterated.
 
-thanks,
--- Shuah
+Paolo, I'm hoping you can squash patch 01 with your patch it "fixes".
+
+I'm also speculating that this will be applied after my patch to remove
+KVM_REQ_GPC_INVALIDATE, otherwise the changelog in patch 06 will be
+wrong.
+
+v2:
+ - Collect reviews. [Claudio, Janosch]
+ - Rebase to latest kvm/queue.
+
+v1: https://lore.kernel.org/all/20211209060552.2956723-1-seanjc@google.com
+
+Sean Christopherson (7):
+  KVM: x86: Remove spurious whitespaces from kvm_post_set_cr4()
+  KVM: x86: Invoke kvm_mmu_unload() directly on CR4.PCIDE change
+  KVM: Drop kvm_reload_remote_mmus(), open code request in x86 users
+  KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped
+  KVM: s390: Replace KVM_REQ_MMU_RELOAD usage with arch specific request
+  KVM: Drop KVM_REQ_MMU_RELOAD and update vcpu-requests.rst
+    documentation
+  KVM: WARN if is_unsync_root() is called on a root without a shadow
+    page
+
+ Documentation/virt/kvm/vcpu-requests.rst |  7 +-
+ arch/s390/include/asm/kvm_host.h         |  2 +
+ arch/s390/kvm/kvm-s390.c                 |  8 +--
+ arch/s390/kvm/kvm-s390.h                 |  2 +-
+ arch/x86/include/asm/kvm_host.h          |  2 +
+ arch/x86/kvm/mmu.h                       |  1 +
+ arch/x86/kvm/mmu/mmu.c                   | 83 ++++++++++++++++++++----
+ arch/x86/kvm/x86.c                       | 10 +--
+ include/linux/kvm_host.h                 |  4 +-
+ virt/kvm/kvm_main.c                      |  5 --
+ 10 files changed, 90 insertions(+), 34 deletions(-)
+
+
+base-commit: f4bc051fc91ab9f1d5225d94e52d369ef58bec58
+-- 
+2.35.1.574.g5d30c73bfb-goog
 

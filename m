@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1EF4C4EC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DBD4C4EC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbiBYT2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S234756AbiBYT3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiBYT2l (ORCPT
+        with ESMTP id S232959AbiBYT3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:28:41 -0500
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DF163BE3;
-        Fri, 25 Feb 2022 11:28:08 -0800 (PST)
-Received: by mail-oo1-f50.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so7751823ooi.0;
-        Fri, 25 Feb 2022 11:28:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X8XRKdsoUlIbeZX9Kbpo1u5/qExNk89LzO1FLWxirjo=;
-        b=CRN0OwMvmjm+fcSZNdoNBeY20kPnEvNpzClB5rJND4MCmvIjjXQnSRY+Y8trfU4W3+
-         aI0jOYAOj9mM0Sqy58hrXoycrWa8UKJqkkV95K4yLmt2QYCMLb1rEkeOoAR5xQGU4XbU
-         weqqaWKCBHfja4Y0Wr86Z+j5JcvuESuwO5E+jb/sahfbPFAo/KHXuzP1Cu4T4gtvaDEB
-         4NnCwlsTX6Xx5s8B5pprCdaQQ6f2cq2SEcPyPKJkdT24ptO7JNV+9AH9caDnQLM4V3Zz
-         0ILkPkuECN6sp6D5tirs/TWyF+kah9Cxch0xDDzp3pz4WM/DC11VRFsfk7c1wBQnnccL
-         jQng==
-X-Gm-Message-State: AOAM533fvNuvwvKA5Vt8XQql8RuNDOiXHNLX2F2y3BxoQjWkVrsnSXAn
-        gBEutMwAYFC0nVVE7ON3Ew==
-X-Google-Smtp-Source: ABdhPJwVEZM5rvnnqotGkma9eczMXnrGAG98XV+6DQsn54U1mLF0tgQPBBOVv1ou/CBU/cdgtlOpnw==
-X-Received: by 2002:a4a:e656:0:b0:2e9:1181:18f with SMTP id q22-20020a4ae656000000b002e91181018fmr3404319oot.18.1645817287924;
-        Fri, 25 Feb 2022 11:28:07 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056830160200b005af14cf9962sm1501112otr.32.2022.02.25.11.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 11:28:07 -0800 (PST)
-Received: (nullmailer pid 1290648 invoked by uid 1000);
-        Fri, 25 Feb 2022 19:28:06 -0000
-Date:   Fri, 25 Feb 2022 13:28:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yaniv Gardi <ygardi@codeaurora.org>,
-        Jan Kotas <jank@cadence.com>, linux-arm-msm@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        devicetree@vger.kernel.org, Wei Xu <xuwei5@hisilicon.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        linux-mediatek@lists.infradead.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, Li Wei <liwei213@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v2 03/15] dt-bindings: ufs: cdns,ufshc: convert to
- dtschema
-Message-ID: <YhktxjvbD8E+tRHV@robh.at.kernel.org>
-References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
- <20220222145854.358646-4-krzysztof.kozlowski@canonical.com>
+        Fri, 25 Feb 2022 14:29:31 -0500
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26D91D8A85;
+        Fri, 25 Feb 2022 11:28:56 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru CCB7720A6E80
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+ <63f06bf0-fc7b-3c5c-8af9-5adfd7628354@omp.ru>
+ <dde846f0-1324-7fde-ef92-eb72d4200b50@physik.fu-berlin.de>
+ <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <9671b75b-d0c4-7967-a543-5eebdf942b35@omp.ru>
+Date:   Fri, 25 Feb 2022 22:28:52 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222145854.358646-4-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 15:58:42 +0100, Krzysztof Kozlowski wrote:
-> Convert the Cadence Universal Flash Storage (UFS) Controlle to DT schema
-> format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/ufs/cdns,ufshc.txt    | 32 ---------
->  .../devicetree/bindings/ufs/cdns,ufshc.yaml   | 68 +++++++++++++++++++
->  .../devicetree/bindings/ufs/ti,j721e-ufs.yaml |  7 +-
->  3 files changed, 71 insertions(+), 36 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/ufs/cdns,ufshc.txt
->  create mode 100644 Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml
-> 
+On 2/11/22 11:46 PM, Sergey Shtylyov wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[...]
+>>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+>>>> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
+>>>> that code to start the IRQ #s from 16 instead.
+>>>>
+>>>> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+>>>>
+>>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>>>
+>>>> ---
+>>>> The patch is against Linus Torvalds' 'linux.git' repo.
+>>>>
+>>>>  arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
+>>>>  include/linux/sh_intc.h        |    6 +++---
+>>>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>>>
+>>>> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+>>>> ===================================================================
+>>>> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
+>>>> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
+>>>> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+>>>>  	mov	r4, r0		! save vector->jmp table offset for later
+>>>>  
+>>>>  	shlr2	r4		! vector to IRQ# conversion
+>>>> -	add	#-0x10, r4
+>>>>  
+>>>> -	cmp/pz	r4		! is it a valid IRQ?
+>>>> +	mov	#0x10, r5
+>>>> +	cmp/ge	r5, r4		! is it a valid IRQ?
+>>>
+>>>    Maybe I should've used cmp/hs... my 1st try at SH assembly! :-)
+> 
+>    Yeah, cmp/hs seems m ore correct as we don't subtract any more...
+> 
+>> I can test your revised patch next week on my SH7785LCR.
+> 
+>    Please do, although testing on the AP-SH4A* bords would be a bit more
+> interesting, as they actually use IRQ0 for the SMSC911x chip...
+
+   So, were you finally able to test it?
+
+[...]
+
+MBR, Sergey

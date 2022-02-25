@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2D04C4E11
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A004C4E19
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiBYSxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S233560AbiBYSzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiBYSxH (ORCPT
+        with ESMTP id S233513AbiBYSzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:53:07 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8228428E03
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:52:33 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b8so5535698pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:52:33 -0800 (PST)
+        Fri, 25 Feb 2022 13:55:22 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBBC1CABC7;
+        Fri, 25 Feb 2022 10:54:49 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id hw13so12574245ejc.9;
+        Fri, 25 Feb 2022 10:54:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7dNTJr5q++G+HEI8xxfjALjTub5ZXLo8DVC3Ljh+kyE=;
-        b=NSDOuFp2RoBhAYqmgYPIBl/sqN0WzIMaNQnUJ/j912ElTGwDdxn+ONMwQRoT4jGjm7
-         ANyokD8T1yBD7YZtI2i/sI7mKNs1OQEAWtHRGO5NfawcfXeW+9B5N2dzioGeh/6zq7Z2
-         ANDM0HjWo/bHKifNrA/bySKjQ/lAWQ9v+JAYIJVhFc8DcMuAxh7nKQPjnwO0XckwAkJx
-         pPx+D+GBgvy11kuxiVF/O88tQQWzCaeqRt6hJUPJn2GEwlPVBHMCuuSDbtZorJD+y0py
-         O6QhpxhBDOJlV9ImAOzYEkh9tfSQhfNPiYgo2EWZFRYIJa8M+Qo2Zpk8Rqdp5pLLfyJ8
-         7tcg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FR9eFid3X2JFCac30thoddSUcXVjWfM7VVCjlcAvVos=;
+        b=UpUedE542p5XufpmCZXLrUgJaQoAeOV/LJuTynfFCVjDNp9wMd3x7oktyBaUsEw3q+
+         1G30QXSto77jg7E1SvpM8n67KBjQH2GM37iAnUovzwiEYDu3Flj6TlOq4tjbSw9hpsZc
+         aX6j10pd6ZsVS4j6XCGv09+xkkRBVvOlmjcoEKWFzE7X9P7ul51QIPxXzookZ+sPl0x1
+         l4ZDdAf4U3U+QULIgzs7PxGZM8PLjEvP9eOl657MC7TIUMCvn7dogg/M0bN/YmhXlqnC
+         5lCyMo0+Dm7bFf6NSyU04FQwfYM+LfsDk4EbNoMdWrEtt8IaPOLNSXTu956VfWcNIn1j
+         0bUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7dNTJr5q++G+HEI8xxfjALjTub5ZXLo8DVC3Ljh+kyE=;
-        b=IS0VH2Uz9bacArdxpHWLOy2U/EyC6fz//T6A4Bpvrpcg00qpqRhggd6wHYYG/CTqgX
-         t3oI+L5dGDPqs7Gxw3CzsYG2sXA9NGldQGxzgOvx++VISQVGUYwIoZnTMbGDaDRf/yIM
-         ShpXyw2AwMAYE2Dh6JSubtQNqGmyOxoRPEz2+xfGDLNLBo7G22M410h3M+HOV72an1Qk
-         rrPqwSLI7AG6fsLNQZWIT2AG0HugIzAmk+13Co3576hmNHXLc1aPx39ZZKgESeoVnclH
-         xTuoAdFYjTKs9NgJOwm4d3Fx4gxoF71M50vcWqdRPR970MUPD+hOD4/kBMEPugWhIoSn
-         RNSw==
-X-Gm-Message-State: AOAM533e8+sGnWfDvM4M5CseAjg/uOgvlnx/3/EnOQRNRIq9ney20tJy
-        pHM0O3fa2scFvHGFSbP9h6ZI5g==
-X-Google-Smtp-Source: ABdhPJwTfmdcyRiooN9YFNYHZwz54lNVcDJAqspFOY1cX7PJohuNNKI7950leqwKyvZvysW9mb124Q==
-X-Received: by 2002:a17:90b:1104:b0:1b8:b90b:22c7 with SMTP id gi4-20020a17090b110400b001b8b90b22c7mr4522553pjb.45.1645815152764;
-        Fri, 25 Feb 2022 10:52:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u19-20020a056a00159300b004e1590f88c1sm4319237pfk.220.2022.02.25.10.52.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FR9eFid3X2JFCac30thoddSUcXVjWfM7VVCjlcAvVos=;
+        b=Ui3GgGH5KDjYIiU0cmHfK1/Vm9gHgQaeX3Q5kvDA9B7RtDkz2YsWc+EfrrqLISYG9c
+         7nSaTLHIepA56MNYZ8T9l/vzJ/T6kGlkdoZyjtDqsPtPDpINa/j1X2w4rX0QzLZyKciN
+         GSgkhvm5w4fiOHvgy17+TLDkTyzI3fNqn7Kg/fTLD1KP34UHTwRnImPziyXOKbiab3zI
+         K9GYGk0cuCWcA5Dl91XYnDwsoHnFhSLc6ck7qq17iuA4vQzUOkUDw1csyfWNj+TbpAoc
+         2QSaZiiREwE/xVgZzw3AI9KeTnmlwfODs3vh6hNGEY19fTxsii8CyI0oN2aIrDs+GenT
+         t7SA==
+X-Gm-Message-State: AOAM530ZYC4eedOVLo2jgMHUQXSKScBe2gQZqNHJMSX8bUTVJl5Xq7TY
+        MRsOED6x3ixY7qmXGjHs0Dg=
+X-Google-Smtp-Source: ABdhPJx2dFzBtkXGAJI/WDmBibn4QWH/IQMXnly8GvOa19/V+Cbp36yzpGrzizCJr6wAoai4egqIgQ==
+X-Received: by 2002:a17:906:4987:b0:6c9:e16a:b5bf with SMTP id p7-20020a170906498700b006c9e16ab5bfmr6953533eju.247.1645815288284;
+        Fri, 25 Feb 2022 10:54:48 -0800 (PST)
+Received: from heron.intern.cm-ag (p200300dc6f1cbe000000000000000fd2.dip0.t-ipconnect.de. [2003:dc:6f1c:be00::fd2])
+        by smtp.gmail.com with ESMTPSA id u19-20020a170906125300b006ceb043c8e1sm1328508eja.91.2022.02.25.10.54.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 10:52:32 -0800 (PST)
-Date:   Fri, 25 Feb 2022 18:52:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXTERNAL] [PATCH v2] KVM: Don't actually set a request when
- evicting vCPUs for GFN cache invd
-Message-ID: <YhklbH6ZyYrZmmGw@google.com>
-References: <20220223165302.3205276-1-seanjc@google.com>
- <2547e9675d855449bc5cc7efb97251d6286a377c.camel@amazon.co.uk>
- <YhkAJ+nw2lCzRxsg@google.com>
- <915ddc7327585bbe8587b91b8cd208520d684db1.camel@infradead.org>
- <YhkRcK64Jya6YpA9@google.com>
- <550e1d7ef2b2f7f666e5b60e9bb855a8ccc0fb14.camel@infradead.org>
+        Fri, 25 Feb 2022 10:54:47 -0800 (PST)
+From:   Max Kellermann <max.kellermann@gmail.com>
+To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Max Kellermann <max.kellermann@gmail.com>
+Subject: [PATCH 1/4] include/pipe_fs_i.h: add missing #includes
+Date:   Fri, 25 Feb 2022 19:54:28 +0100
+Message-Id: <20220225185431.2617232-1-max.kellermann@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <550e1d7ef2b2f7f666e5b60e9bb855a8ccc0fb14.camel@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,76 +68,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022, David Woodhouse wrote:
-> On Fri, 2022-02-25 at 17:27 +0000, Sean Christopherson wrote:
-> > On Fri, Feb 25, 2022, David Woodhouse wrote:
-> > > On Fri, 2022-02-25 at 16:13 +0000, Sean Christopherson wrote:
-> > > > On Fri, Feb 25, 2022, Woodhouse, David wrote:
-> > > > > Since we need an active vCPU context to do dirty logging (thanks, dirty
-> > > > > ring)... and since any time vcpu_run exits to userspace for any reason
-> > > > > might be the last time we ever get an active vCPU context... I think
-> > > > > that kind of fundamentally means that we must flush dirty state to the
-> > > > > log on *every* return to userspace, doesn't it?
-> > > > 
-> > > > I would rather add a variant of mark_page_dirty_in_slot() that takes a vCPU, which
-> > > > we whould have in all cases.  I see no reason to require use of kvm_get_running_vcpu().
-> > > 
-> > > We already have kvm_vcpu_mark_page_dirty(), but it can't use just 'some
-> > > vcpu' because the dirty ring is lockless. So if you're ever going to
-> > > use anything other than kvm_get_running_vcpu() we need to add locks.
-> > 
-> > Heh, actually, scratch my previous comment.  I was going to respond that
-> > kvm_get_running_vcpu() is mutually exclusive with all other ioctls() on the same
-> > vCPU by virtue of vcpu->mutex, but I had forgotten that kvm_get_running_vcpu()
-> > really should be "kvm_get_loaded_vcpu()".  I.e. as long as KVM is in a vCPU-ioctl
-> > path, kvm_get_running_vcpu() will be non-null.
-> > 
-> > > And while we *could* do that, I don't think it would negate the
-> > > fundamental observation that *any* time we return from vcpu_run to
-> > > userspace, that could be the last time. Userspace might read the dirty
-> > > log for the *last* time, and any internally-cached "oh, at some point
-> > > we need to mark <this> page dirty" is lost because by the time the vCPU
-> > > is finally destroyed, it's too late.
-> > 
-> > Hmm, isn't that an existing bug?  I think the correct fix would be to flush all
-> > dirty vmcs12 pages to the memslot in vmx_get_nested_state().  Userspace _must_
-> > invoke that if it wants to migrated a nested vCPU.
-> 
-> Yes, AFAICT it's an existing bug in the way the kvm_host_map code works
-> today. Your suggestion makes sense as *long* as we consider it OK to
-> retrospectively document that userspace must extract the nested state
-> *before* doing the final read of the dirty log.
-> 
-> I am not aware that we have a clearly documented "the dirty log may
-> keep changing until XXX" anyway. But you're proposing that we change
-> it, I think. There may well be VMMs which assume that no pages will be
-> dirtied unless they are actually *running* a vCPU.
-> 
-> Which is why I was proposing that we flush the dirty status to the log
-> *every* time we leave vcpu_run back to userspace. But I'll not die on
-> that hill, if you make a good case for your proposal being OK.
+To verify that this header's #includes are correct, include it first
+in fs/pipe.c.
 
-Drat, I didn't consider the ABI aspect.  Flushing on every exit to userspace would
-indeed be more robust.
+To: Alexander Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+To: linux-kernel@vger.kernel.org
+Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
+---
+ fs/pipe.c                 | 2 +-
+ include/linux/pipe_fs_i.h | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-> > > I think I'm going to rip out the 'dirty' flag from the gfn_to_pfn_cache
-> > > completely and add a function (to be called with an active vCPU
-> > > context) which marks the page dirty *now*.
-> > 
-> > Hrm, something like?
-> > 
-> >   1. Drop @dirty from kvm_gfn_to_pfn_cache_init()
-> >   2. Rename @dirty => @old_dirty in kvm_gfn_to_pfn_cache_refresh()
-> >   3. Add an API to mark the associated slot dirty without unmapping
-> > 
-> > I think that makes sense.
-> 
-> Except I'll drop 'dirty' from kvm_gfn_to_pfn_cache_refresh() too.
-> There's no scope for a deferred "oh, I meant to tell you that was
-> dirty" even in that case, is there? Use the API we add in your #3.
+diff --git a/fs/pipe.c b/fs/pipe.c
+index cc28623a67b6..da842d13029d 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -5,6 +5,7 @@
+  *  Copyright (C) 1991, 1992, 1999  Linus Torvalds
+  */
+ 
++#include <linux/pipe_fs_i.h>
+ #include <linux/mm.h>
+ #include <linux/file.h>
+ #include <linux/poll.h>
+@@ -16,7 +17,6 @@
+ #include <linux/mount.h>
+ #include <linux/pseudo_fs.h>
+ #include <linux/magic.h>
+-#include <linux/pipe_fs_i.h>
+ #include <linux/uio.h>
+ #include <linux/highmem.h>
+ #include <linux/pagemap.h>
+diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+index c00c618ef290..0e36a58adf0e 100644
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -2,6 +2,9 @@
+ #ifndef _LINUX_PIPE_FS_I_H
+ #define _LINUX_PIPE_FS_I_H
+ 
++#include <linux/mutex.h>
++#include <linux/wait.h>
++
+ #define PIPE_DEF_BUFFERS	16
+ 
+ #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
+-- 
+2.34.0
 
-But won't we end up with a bunch of call sites that attempt to determine whether
-not the dirty status needs to be flushed?  I'm specifically thinking of scenarios
-where the status needs to be conditionally flushed, e.g. if the backing pfn doesn't
-change, then it's ok to not mark the page dirty.  Not handling that in the refresh
-helper will either lead to unnecessary dirtying or duplicate code/work.

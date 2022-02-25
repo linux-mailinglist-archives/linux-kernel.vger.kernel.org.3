@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FD04C4638
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D704C463D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241270AbiBYN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S241285AbiBYN0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241260AbiBYN0H (ORCPT
+        with ESMTP id S240999AbiBYN0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:26:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A4120E7AF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:25:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB4A5B830B2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCBEC340E7;
-        Fri, 25 Feb 2022 13:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645795531;
-        bh=AenqWGwFPUwIWvO5JW0dieBXgTH2qTczoKrSpCVievs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M2o18R+/4/kOiJJg2+CAvmAgoxEjLqp85lBMKzXdHrBlZi+wdEwQ6RpG45xm3BpMV
-         PnYKBxnU5kElb6DhiAoetEDsoAELhsR3/mpua9wpq1FruMm8fJmqnbxtbdgCgyGflU
-         /hcVEm3MiODPaHnXiKD8SkkIz7WkFU5aw0inQvEic34FowHogyeBuRY+FRxuBLG7MT
-         ZrF2JXP2mIrt2i9zRRYPrkoMyZQ5x875Bgjfr6JOPJy3MNZeGP/88KPgQuPK0QWrWB
-         5RN/PMnt73i1jAu2GMVrp4Ug50ZSVtE2Pn4OX8k6OWP88zuxMhQFPV65UCOSh5Mvj8
-         Qk5tYvI0nDqtg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nNabB-00AX24-2C; Fri, 25 Feb 2022 13:25:29 +0000
+        Fri, 25 Feb 2022 08:26:37 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31A8C202890
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:26:04 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 21PDPfo3019237;
+        Fri, 25 Feb 2022 14:25:41 +0100
+Date:   Fri, 25 Feb 2022 14:25:41 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: Strange output on the console
+Message-ID: <20220225132541.GD18720@1wt.eu>
+References: <20220224230035.36547137@gandalf.local.home>
+ <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
+ <20220225063637.GA18039@1wt.eu>
+ <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
+ <20220225103239.GA18720@1wt.eu>
+ <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
+ <20220225122546.GB18720@1wt.eu>
+ <20220225081719.7710f62e@gandalf.local.home>
 MIME-Version: 1.0
-Date:   Fri, 25 Feb 2022 13:25:28 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] KVM: arm64: fix semicolon.cocci warnings
-In-Reply-To: <20220225122922.GA19390@willie-the-truck>
-References: <202202250442.6Y6h26na-lkp@intel.com>
- <20220224200724.GA16837@6c0ef8ecd909>
- <20220225122922.GA19390@willie-the-truck>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5ba4356d4d526d72118664dd93d5f6f2@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: will@kernel.org, lkp@intel.com, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, catalin.marinas@arm.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225081719.7710f62e@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-25 12:29, Will Deacon wrote:
-> On Fri, Feb 25, 2022 at 04:07:24AM +0800, kernel test robot wrote:
->> From: kernel test robot <lkp@intel.com>
->> 
->> arch/arm64/kvm/psci.c:372:3-4: Unneeded semicolon
->> 
->> 
->>  Remove unneeded semicolon.
->> 
->> Generated by: scripts/coccinelle/misc/semicolon.cocci
->> 
->> Fixes: d43583b890e7 ("KVM: arm64: Expose PSCI SYSTEM_RESET2 call to 
->> the guest")
->> CC: Will Deacon <will@kernel.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: kernel test robot <lkp@intel.com>
->> ---
->> 
->> tree:   
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
->> master
->> head:   d4a0ae62a277377de396850ed4b709b6bd9b7326
->> commit: d43583b890e7cb0078d13d056753a56602b92406 [7067/7915] KVM: 
->> arm64: Expose PSCI SYSTEM_RESET2 call to the guest
->> :::::: branch date: 18 hours ago
->> :::::: commit date: 3 days ago
->> 
->>  arch/arm64/kvm/psci.c |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> --- a/arch/arm64/kvm/psci.c
->> +++ b/arch/arm64/kvm/psci.c
->> @@ -369,7 +369,7 @@ static int kvm_psci_1_x_call(struct kvm_
->>  				ret = 0;
->>  			}
->>  			break;
->> -		};
->> +		}
+On Fri, Feb 25, 2022 at 08:17:19AM -0500, Steven Rostedt wrote:
+> On Fri, 25 Feb 2022 13:25:46 +0100
+> Willy Tarreau <w@1wt.eu> wrote:
 > 
-> Acked-by: Will Deacon <will@kernel.org>
+> > > TnsTesOT s T sKTesOT sKTvsOTtsTtsKTtsT sKTesTesKT sKTesOT siT stTnsaTvsaTesKTnsOT s
+> > > TesKTnsT s TvsKTeslT sOTesT sKTtseTnseTvs_Tts_T sOTes TnsOT s T spTespTesdTesdTeseTtseTeseTt_rTe_rTv_oTes:T s:Tes:TnfwOTvfrKT fwT frTefpuTefpKTefpTvf:TnsOTvsOTnsoTvs Tvs TvsTtssTnsT sKTesTnsTvsTtsoTesmTnsgTesiTeslTtsTvsKTnsTvsOTtsT s_Tnsu
+> > > 
+> > > which really doesn't have enough different characters in it to be a fifo problem.
+> > > That looks like a UART struggling to find valid start and stop bits
+> > > on a continuous data stream that doesn't match the baud rate.
+> > > 
+> > > It may also be that whatever 'terminal' is being used is masking off the 0x80 bit.  
+> > 
+> > That could be one option I thought about but still, that sounds quite
+> > suspicious. You don't even get any #!:$/ etc. Or maybe the UART is
+> > configured in 6-bit mode (most 16550 support 5-8 bits), and maybe even
+> > the stop bit and/or parity participates.
 > 
-> but I really don't think this needs a Fixes: tag
+> One thing that's not easy to demonstrate here (I could try to video it), is
+> that this output is the final result. It shows a bunch of other characters
+> as it is displayed but then the cursor goes backwards and writes over it.
+> 
+> But the characters that are deleted still do not make sense. When watching
+> it, it reminds me of the Matrix characters, but running horizontal and not
+> vertical.
 
-The Fixes: really isn't warranted, there is a previous patch fixing
-the same thing already[1], and there is *another* '};' typo in the
-same file that the robot failed to pick on...
+Ah, so 6-bit might definitely make sense.
 
-If you don't mind, I'll add your Ack to the original fix, and squash
-the fix for the fix into it.
+> > ... and Steven having fun reading our proposals after having made this
+> > up entirely in preparation of the next April's fool :-)
+> 
+> 
+> I was thinking the same thing, but this output being the joke. Someone
+> planning on slipping in Matrix characters for printk?
 
-[1] 
-https://lore.kernel.org/r/20220223092750.1934130-1-deng.changcheng@zte.com.cn
--- 
-Jazz is not dead. It just smells funny...
+;-)
+
+Willy

@@ -2,239 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF604C4AD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671AA4C4ADC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243024AbiBYQdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S243047AbiBYQfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:35:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243011AbiBYQdV (ORCPT
+        with ESMTP id S243038AbiBYQez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:33:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A32717F6BB;
-        Fri, 25 Feb 2022 08:32:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98906B82BA4;
-        Fri, 25 Feb 2022 16:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0342C340E7;
-        Fri, 25 Feb 2022 16:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645806765;
-        bh=nmnDc+36Xrw59fFSgr5Xbdk3JLUugb9ySIi917EU0MY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UXOy76J8Q8dxU/qCnJRWXoroO5i0QLTb9kYbpdfKrxXnGD3CfL26k+0WPiYtoPekp
-         2cctTN8wDVStO9BqxITJKtLg10oAXrKQI9GIvtQ140kVLpZVlqxWrM/Z940wzV/2cf
-         iiUuFC4FaCE9DV9j/pnS9nDnFfp8Bgu1IqS8B0SU=
-Date:   Fri, 25 Feb 2022 17:32:42 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@redhat.com>
-Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-Message-ID: <YhkEqpF6QSYeoMQn@kroah.com>
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
- <YhdsgokMMSEQ0Yc8@kroah.com>
- <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
- <YhjbzxxgxtSxFLe/@kroah.com>
- <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+        Fri, 25 Feb 2022 11:34:55 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5641AEEDC;
+        Fri, 25 Feb 2022 08:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CjJ/pvULZ8qHqredqCBVppyq2Cz1aZBbUyIgsg9IYmA=; b=GjMbCpZQmec2RkYEuYmuPM7G40
+        h+UckYZxcyws6Vlmo/5aWofKUKSQl+BPIIS6Of3F+E3Zl1r6P9tvJlo8upZXlwTZhcoc+mUqvmC1a
+        NG3qOHXzHkQbGvvMMxL52LxnaA2bbTQXIwhokovtbmrNraCJ4BEnqrwBrPAkBHNkzbFgPi6rhey9m
+        wYsoZg57UxkKwtC5sqv/skhF3ht5we6HyumI49e/Rs68vUv2pwIRdHFiikUunHw/K2BnlvbtVXHd/
+        DZmIx47cbW81+juEx66Znhnn5eAONOd9L34obm17uPfmJ83+oECx1lmaVOThh3rMenma6uo7bk7XT
+        /UTGhH6A==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNdXd-005wPd-Cn; Fri, 25 Feb 2022 16:34:01 +0000
+Message-ID: <654a4070a547cf6a5dd4b2b42c41930a7900644a.camel@infradead.org>
+Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
+ constant
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Anton Romanov <romanton@google.com>
+Date:   Fri, 25 Feb 2022 16:34:00 +0000
+In-Reply-To: <YhkCBH9fsqrJYMca@google.com>
+References: <20220225013929.3577699-1-seanjc@google.com>
+         <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+         <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
+         <YhkCBH9fsqrJYMca@google.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-E/wI6b2nLqqvl+huBIzT"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 05:00:53PM +0100, Benjamin Tissoires wrote:
-> > > I plan on building a systemd intrinsic that would detect the HID
-> > > VID/PID and then load the various BPF programs associated with the
-> > > small fixes.
-> > > Note that everything can not be fixed through eBPF, simply because at
-> > > boot we don't always have the root partition mounted.
-> >
-> > Root partitions are now on HID devices?  :)
-> 
-> Sorry for not being clear :)
-> 
-> I mean that if you need a bpf program to be loaded from userspace at
-> boot to make your keyboard functional, then you need to have the root
-> partition mounted (or put the program in the initrd) so udev can load
-> it. Now if your keyboard is supposed to give the password used to
-> decrypt your root partition but you need a bpf program on that said
-> partition to make it functional, you are screwed :)
 
-True, but that's why the HID boot protocol was designed for keyboards
-and mice, so that they "always" work.  Yeah, I know many devices ignore
-it, oh well...
+--=-E/wI6b2nLqqvl+huBIzT
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Anyway, the requirement of "if you need it to boot, don't make it a bpf
-program" is fine, unless you can put the bpf program in a kernel module
-(see my other response for that.)
+On Fri, 2022-02-25 at 16:21 +0000, Sean Christopherson wrote:
+> > I also have questions about the use case for the above patch.... if
+> > this is a clean boot and you're just starting to host guests, surely we
+> > can wait for the time it takes for the TSC synchronization to complete?
+>=20
+> KVM is built into the kernel in their case, the vmx_init() =3D> kvm_init(=
+) gets
+> automatically called during boot.  The VMs aren't started until well afte=
+r
+> synchronization has completed, but KVM has already snapshotted the "bad" =
+value.
 
-> > > > > - Universal Stylus Interface (or any other new fancy feature that
-> > > > >   requires a new kernel API)
-> > > > >
-> > > > > See [0].
-> > > > > Basically, USI pens are requiring a new kernel API because there are
-> > > > > some channels of communication our HID and input stack are not capable
-> > > > > of. Instead of using hidraw or creating new sysfs or ioctls, we can rely
-> > > > > on eBPF to have the kernel API controlled by the consumer and to not
-> > > > > impact the performances by waking up userspace every time there is an
-> > > > > event.
-> > > >
-> > > > How is userspace supposed to interact with these devices in a unified
-> > > > way then?  This would allow random new interfaces to be created, one
-> > > > each for each device, and again, be a pain to track for a distro to keep
-> > > > in sync.  And how are you going to keep the ebpf interface these
-> > > > provides in sync with the userspace program?
-> > >
-> > > Right now, the idea we have is to export the USI specifics through
-> > > dbus. This has a couple of advantages: we are not tied to USI and can
-> > > "emulate" those parameters by storing them on disk instead of in the
-> > > pen, and this is easily accessible from all applications directly.
-> > >
-> > > I am trying to push to have one implementation of that dbus service
-> > > with the Intel and ChromeOS folks so general linux doesn't have to
-> > > recreate it. But if you look at it, with hidraw nothing prevents
-> > > someone from writing such a library/daemon in its own world without
-> > > sharing it with anybody.
-> > >
-> > > The main advantage of eBPF compared to hidraw is that you can analyse
-> > > the incoming event without waking userspace and only wake it up when
-> > > there is something noticeable.
-> >
-> > That is a very good benefit, and one that many battery-powered devices
-> > would like.
-> >
-> > > In terms of random interfaces, yes, this is a good point. But the way
-> > > I see it is that we can provide one kernel API (eBPF for HID) which we
-> > > will maintain and not have to maintain forever a badly designed kernel
-> > > API for a specific device. Though also note that USI is a HID standard
-> > > (I think there is a second one), so AFAICT, the same bpf program
-> > > should be able to be generic enough to be cross vendor. So there will
-> > > be one provider only for USI.
-> >
-> > Ok, that's good to know.
-> >
-> > <good stuff snipped>
-> >
-> > > Yeah, I completely understand the view. However, please keep in mind
-> > > that most of it (though not firewall and some corner cases of tracing)
-> > > is already possible to do through hidraw.
-> > > One other example of that is SDL. We got Sony involved to create a
-> > > nice driver for the DualSense controller (the PS5 one), but they
-> > > simply ignore it and use plain HID (through hidraw). They have the
-> > > advantage of this being cross-platform and can provide a consistent
-> > > experience across platforms. And as a result, in the kernel, we have
-> > > to hands up the handling of the device whenever somebody opens a
-> > > hidraw node for those devices (Steam is also doing the same FWIW).
-> > >
-> > > Which reminds me that I also have another use-case: joystick
-> > > dead-zone. You can have a small filter that configures the dead zone
-> > > and doesn't even wake up userspace for those hardware glitches...
-> >
-> > hidraw is a big issue, and I understand why vendors use that and prefer
-> > it over writing a kernel driver.  They can control it and ship it to
-> > users and it makes life easier for them.  It's also what Windows has
-> > been doing for decades now, so it's a comfortable interface for them to
-> > write their code in userspace.
-> >
-> > But, now you are going to ask them to use bpf instead?  Why would they
-> > switch off of hidraw to use this api?  What benefit are you going to
-> > provide them here for that?
-> 
-> Again, there are 2 big classes of users of hid-bpf ("you" here is a
-> developer in general):
-> 1. you need to fix your device
-> 2. you need to add a new kernel API
-> 
-> 2. can be entirely done with hidraw:
-> - you open the hidraw node
-> - you parse every incoming event
-> - out of that you build up your high level API
-> 
-> This is what we are doing in libratbag for instance to support gaming
-> mice that need extra features. We try to not read every single event,
-> but some mice are done in a way we don't have a choice.
-> 
-> With bpf, you could:
-> - load the bpf program
-> - have the kernel (bpf program) parse the incoming report without
-> waking up user space
-> - when something changes (a given button is pressed) the bpf program
-> notifies userspace with an event
-> - then userspace builds its own API on top of it (forward that change
-> through dbus for example)
-> 
-> As far as 1., the aim is not to replace hidraw but the kernel drivers
-> themselves:
-> instead of having a formal driver loaded in the kernel, you can rely
-> on a bpf program to do whatever needs to be done to make the device
-> working.
-> 
-> If the FW is wrong and the report descriptor messes up a button
-> mapping, you can change that with bpf instead of having a specific
-> driver for it.
-> And of course, using hidraw for that just doesn't work because the
-> event stream you get from hidraw is for the process only. In BPF, we
-> can change the event flow for anybody, which allows much more power
-> (but this is scarier too).
-> 
-> This class of bpf program should actually reside in the kernel tree so
-> everybody can benefit from it (circling back to your first point).
-> 
-> So I am not deprecating hidraw nor I am not asking them to use bpf instead.
-> But when you are interested in just one byte in the report, bpf allows
-> you to speed up your program and save battery.
 
-Ah, so really you are using bpf here as a "filter" for the HID events
-that you care about to send to userspace or act apon in some way.  That
-makes a lot more sense to me, sorry for not realizing it sooner.
+Gotcha.
 
-So yes, I agree, HID control with bpf does make sense.  You can fix up
-and filter out only the events you want without getting userspace
-involved if it does not match.  That should make people's lives easier
-(hopefully) and based on your example code you provide in this patch
-series, it doesn't look all that complex.
+So even when we put my patch in front, to snapshot a value into
+kvm->arch.default_tsc_khz, that's happening later at VM creation time
+so should also be snapshotting the *good* value.
 
-Along this line, now I think I know what we can do for USB with bpf as
-well.  Much the same thing, like a smart filter, which is what bpf was
-designed for.  USB is just a stream of data like a network connection
-with pipes and the like, so it will work quite well for this.
+And at least if it snapshots the bad value, all the vCPUs will be
+*consistent*.
 
-Ok, thanks for the explanations, you've sold me, nice work :)
+--=-E/wI6b2nLqqvl+huBIzT
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-One comment about the patch series.  You might want to break the patches
-up a bit smaller, having the example code in a separate commit from the
-"add this feature" commit, as it was hard to pick out what was kernel
-changes, and what was test changes from it.  That way I can complain
-about the example code and tests without having to worry about the
-kernel patches.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMjI1MTYzNDAwWjAvBgkqhkiG9w0BCQQxIgQgaQjdIdpC
+eEhVyZYP6UFvOzPCDc6NMCcKS+LgNa6RmVowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA9g0VXt7JlFx4vmK+vnvjzM6y0F7II56O9
+il3ohNZQJJCRvLwLM80y2RzbQt35QjwSgZOY+QP2ja4Wk2TmUxCBkojgahv2SnoBjJ98/sUXg4rk
+ZRWRZAkf/XA1Bgf8MAGaspf8ogh+hwTf59Yk2j+ueiWpFi4qLOWxmE5xfZTKBFiNkk5vZql7bH6v
+qbcViSou315vUqF2k3jx9D6vqsYpr+AdE3ANU4apQ0QU1CqYOV7SnluDcRzEtZATEcavrl4K68q4
+VM0TKlATMpzH22nFZbnK0BXwdOaqKf7vxLKIPMhGtjNIfk3ZMiJHlYV8PZi3pGtSqNW0WAtDqRvv
+zECn7cRo0+zN7UGKal2q3f/Opaxuddklae57OjraPAS2Cv0qd0ztfjyFNsFnnTcQ58p2e7LMFi9S
+GJ2iDZGlZdonaPSC74wTh6YKCKdXkaGDjXS3harqXbWU4H0Df5V09Ayfkv/F38bE5R5ofvLbTQEh
+2LDvRQT5Qz6iXX0Mi2T26hs5v0tjX8ofJ243kxVMyEbWQI5Tt2/G/CejlsrS2Ncn82vzXwxk30GC
+MvDOcOdT8cpcMXxUlqX2PNE//beHLzqxZb+L3jYOZe0KA5s3gJdnhNWjDlB1CnzYdCC1a8EXfuft
+ZESTwi6DejrozOv4+we7VN7e0F8UQsa9DPhXbWOA2QAAAAAAAA==
 
-thanks,
 
-greg k-h
+--=-E/wI6b2nLqqvl+huBIzT--
+

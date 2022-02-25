@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BA54C3CCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBB94C3CCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237257AbiBYD4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 22:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S237262AbiBYD4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiBYD4p (ORCPT
+        with ESMTP id S231767AbiBYD4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 22:56:45 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BBE3391
+        Thu, 24 Feb 2022 22:56:46 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF12E3396
         for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:56:15 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3775404pjb.0
+Received: by mail-pg1-x531.google.com with SMTP id c1so3506092pgk.11
         for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9EL9VRrPBu3az25e2ybIauwEmEdCvI/qWzhGi/e6E5Y=;
-        b=jcSFxySYSYdj4BZD63nO0EbhxamC376oNbineqS36uKRwh9Buzq62WyKxAtoxOeaav
-         9v1jABoix2QKwwyzDytesOlugbsEVZLu8HuKgUwGjeMAQqUZPOSZV8sv5iCDzLUFHa2f
-         nbj7QUigSrMOqlhNT0263Oq4BoU39MfL89xLg=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7wk96NA7fBBf+GyTYV14x3h1hBbK9x+rw14Wy3R8RPw=;
+        b=WI1Iw8CD3INJc5SOxZ4asph5F4Y1tJBVVMB309PBq+VhJ5NfXeUONS3KtwM69ReiyH
+         vYpQcMlu5y40+FqGqnXpRE+LLJLt/RifIQxtLUn/3o8nnB14Ge0K+56b9IE5he8iA1iA
+         X1KJ6KYiykAdxhlekZPzP3u5mD7yY7P6vhFNc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9EL9VRrPBu3az25e2ybIauwEmEdCvI/qWzhGi/e6E5Y=;
-        b=aPExuBJchQFgafhtLXltje5tqPKTjcPD0OStZqO100oPODKGuxPwrmcj6sSi7qz0yc
-         mWS5EkFl5tQO/iPHvNX5s6LTtZCfNAii9PTrzf+Xwao2f7NzEptVO592QDUxCai+7uaS
-         3ErKGRoLjsXcvKf3A+Kg24YI2heJXmeEhPXFsYvSHhxQ6bI14UpX8KZijNryh8GZFnUK
-         GQ3fpKivs1mepKT/6SqslVUWZObZC2/NtorxcFvBmj9M1on0WwfA219bUjxqiCkX1s2y
-         9GPciWpqGM9juMF+piLjSdvW9QXqehOZkoWP7bZAEYoiRw5It+wAr4C7sVTU4w/uhNDn
-         YsTQ==
-X-Gm-Message-State: AOAM532P0L2/sruKpdxuTdv171lKjJtbImKsz2aPEQ/98rOXDCldD/iK
-        uWeJR2KmBHDp/r+n1B8DpRsGDg==
-X-Google-Smtp-Source: ABdhPJz4XEl+dLLGOfRROoPWM4zEB50843UCWkcV9Myxwze9zuT7lnhfAPYHX+lJLKs/8Kyb0lahLw==
-X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr1327748pjj.46.1645761374562;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7wk96NA7fBBf+GyTYV14x3h1hBbK9x+rw14Wy3R8RPw=;
+        b=tv+t2eMN21wUqldOHedSWU6IcdufyVqwFsbPk5JoSzeZDwKmU2pyFgXHq7RyGXiz2x
+         a+APBDhzCvjD6o1cGRvesMBzkSb3XwNny7ChCJcycMZrlM2PoPtTi+cFEqqO7FVV8xg1
+         X8tDcxDyT+LRLc5YcJcrKTMPxYQiuld19GVBJzlOUkVaoMtivXLmBL7Hmk63ahGwnIBB
+         sXSN7VDrQ6y8tzWGMZHd1HSdPeAkmYo4KBfAzF72a7/sYf4YZmZ+oaDUrPBtu4UwDXon
+         hNsi2+o59Ydr3dRmu1a90MOFrLzGsB1uT6hj3YLoCJT9p41Z3jaWSt4cuATeWf4c8rp0
+         zjEQ==
+X-Gm-Message-State: AOAM531Ofxtvfy4tAXwGztN8z6cfHvt+iJYQIe0WMe5tFPCPwi04IaoQ
+        DIxl77HxAyZ4X020R1Ayrt8+fA==
+X-Google-Smtp-Source: ABdhPJze+EfYqPAnvJYyUK/5wdo3hsmPSf+5Itf33O+kpUIDjV5N1yWZU6u5IhBNjnyui2DRHho1kA==
+X-Received: by 2002:a63:5148:0:b0:373:c8d7:f23f with SMTP id r8-20020a635148000000b00373c8d7f23fmr4611264pgl.509.1645761374746;
         Thu, 24 Feb 2022 19:56:14 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm897373pgt.17.2022.02.24.19.56.14
+        by smtp.gmail.com with ESMTPSA id b17-20020a056a000a9100b004e1b7cdb8fdsm1058315pfl.70.2022.02.24.19.56.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 24 Feb 2022 19:56:14 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
@@ -52,7 +52,8 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Jani Nikula <jani.nikula@intel.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -63,14 +64,16 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
         Uma Shankar <uma.shankar@intel.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3 0/2] drm/dp: Fix out-of-bounds reads
-Date:   Thu, 24 Feb 2022 19:56:08 -0800
-Message-Id: <20220225035610.2552144-1-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 1/2] drm/dp: Fix off-by-one in register cache size
+Date:   Thu, 24 Feb 2022 19:56:09 -0800
+Message-Id: <20220225035610.2552144-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220225035610.2552144-1-keescook@chromium.org>
+References: <20220225035610.2552144-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=810; h=from:subject; bh=bU37iCBLJ7Q70x0XEhd7PjOmH28YCUaT+vra8oA4uZo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiGFNZdsEw9YGr2OGD24Hf0kq+QV8dh1Tl0BsSDlLS Qa8/sVWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhhTWQAKCRCJcvTf3G3AJonKD/ 9dwPGSsOpHqQ5De1f9MxlBVJY6fcHLK5tsekzkp7Nkho9GLFcV/wCa4odTI+ek/3p+TAAuY06YNpPY e2GtXNN2k1N/ScNeCVQ9tRgmqRwEVg8hkmhgTkI6cMdDVSnyWOMZpiXgGJfWshuo9yT4kAnnrL9T35 NuonIO45jrGXry/WROkxa4UTu0HNUqyfI36hke71TFsWNhMBWFBdsaUHcFw3CdNwLofm6yWegvdL6k upXRIp4OJlWrdNvpTRIn9LGq4+p6RlHibE17dzqMBAhkZqvqr9JSMAD/HXba24aIYnDtHGGdMR3rBW QrB6UmqP7HO93A2BGUkx/WnzxHJuF1ClR6XNUKghGz8ZBPdbBGehd/JzCQuJQghhS2IyrpJ2N4CiLk ckG5Mlse+9Nlon9Zr0UD4nmFHVBDLz+5CO0auzsrO93TvM3Brbj5ZsP9/6mv3xCj18QYFIXV2f/z8R m22ovOL5xu0SG2uLEPoXZRD3kLDzB6rb5RRQt6PozL4fRFufF4Pchl24Fh4yTRYaFhnTNVLCvSY+e4 CnqhcHhjE+X+n43xaOAuGZtnTxWrh20mUwWndVPSD7Cx/B4rXTCqesrZJF+s8m06eA0tuisE7j+nxb /Zggztye4Wb/Vo79hwmtVA42S20mTnykG1zZA30JuAQAyR4jKY8a/B/QOR6g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2186; h=from:subject; bh=XnOsDK/+y5ut9JOHl+TySo3UIYwEhWHbEO6qaNRWGSY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiGFNZW/hRfwrRCOANpF+kIRDX8smczwuFLS61jR5x Go4dvSGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhhTWQAKCRCJcvTf3G3AJovDD/ 4yUTMY28Mu3JJTBRXMY90Hwl/Lk8weWvE5upj/7BL/Ska+gAQoQJoEy1CvFmOr/qZ7HYAvGC7Y1meE aix4GNRbGGBCyXTajDyr0+52/U6mOJie3uoOvDtEZM25Uu/2xfHJQF/sUMgnNAfpgmdMZ96VcTTgd9 NLHu72Fg8wGY0TPxf5L/qX8hPQ3I/iMYh3olD1hH1UvaAG+Y2jY17o1P3n6DNuk2BYfomdDTEBbTrJ JnEhtvp1QDXGUMm8FzoxsKQx3u6cZveroMSL03TtuxU9zU+WFZhjZpUbNjzx/1PeY6YHIpA4whU9Ny 8vjW9A/kA8B7w8Kb6gK0ii8l2PpC3Dpx7S7nCXxqUwie19Ao2s5HII4wQAQm/dUTHEpNeGGf18iYUw kOLvwDmKTfNqqKYICXhmTB48qmYBRHIE1yJub5tsfc7+FvIY0UtwJEsaQLObUvWP1AU7LI1KJybv65 y1vTNTiiZ7IrCg0GgreFQ6Zil6IVniHPmGCFBAhd0Z+xP7UX8dU3Blminv/hZVi35o84bny+qeDybp bBXASiW8AadMr7Z79vtunngz2zsRrRP8R0L2tPV+bwDG36AhArVrlKhMpiAxjbTEDHKMjwglkdKoB2 wpyFMtu3uHSjyi0moyYrG9s19iR3UXMSJJA76tTiUI3uC7wBW8LV3eJNV9tQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -83,34 +86,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The pcon_dsc_dpcd array holds 13 registers (0x92 through 0x9E). Fix the
+math to calculate the max size. Found from a -Warray-bounds build:
 
-I'm sending these again, as they still need fixing. They have been
-rebased due to the drm_dp_helper code being moved into a subdirectory.
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
+ 3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
+      |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
+ 3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
+      |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Can someone please apply these? :)
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: dri-devel@lists.freedesktop.org
+Fixes: e2e16da398d9 ("drm/dp_helper: Add support for Configuring DSC for HDMI2.1 Pcon")
+Cc: stable@vger.kernel.org
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/lkml/20211214001849.GA62559@embeddedor/
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220105173310.2420598-1-keescook@chromium.org
+---
+ include/drm/dp/drm_dp_helper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
--Kees
-
-v1: https://patchwork.freedesktop.org/patch/465200/
-    https://patchwork.freedesktop.org/patch/465201/
-v2: https://patchwork.freedesktop.org/patch/468350/
-    https://patchwork.freedesktop.org/patch/468351/
-v3:
- - add review tags
- - rebase to drm/drm-next
-
-Kees Cook (2):
-  drm/dp: Fix off-by-one in register cache size
-  drm/dp: Fix OOB read when handling Post Cursor2 register
-
- drivers/gpu/drm/dp/drm_dp.c    | 10 ----------
- drivers/gpu/drm/tegra/dp.c     | 11 ++++++++++-
- include/drm/dp/drm_dp_helper.h |  4 +---
- 3 files changed, 11 insertions(+), 14 deletions(-)
-
+diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
+index 69487bd8ed56..2a0e75e69e80 100644
+--- a/include/drm/dp/drm_dp_helper.h
++++ b/include/drm/dp/drm_dp_helper.h
+@@ -456,7 +456,7 @@ struct drm_panel;
+ #define DP_FEC_CAPABILITY_1			0x091   /* 2.0 */
+ 
+ /* DP-HDMI2.1 PCON DSC ENCODER SUPPORT */
+-#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xC	/* 0x9E - 0x92 */
++#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xD	/* 0x92 through 0x9E */
+ #define DP_PCON_DSC_ENCODER                 0x092
+ # define DP_PCON_DSC_ENCODER_SUPPORTED      (1 << 0)
+ # define DP_PCON_DSC_PPS_ENC_OVERRIDE       (1 << 1)
 -- 
 2.30.2
 

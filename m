@@ -2,340 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0C34C435E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAD44C438E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbiBYLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S235321AbiBYL0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240050AbiBYLYw (ORCPT
+        with ESMTP id S240157AbiBYLZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:24:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC4222322E;
-        Fri, 25 Feb 2022 03:24:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 874336190C;
-        Fri, 25 Feb 2022 11:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2617C340F9;
-        Fri, 25 Feb 2022 11:24:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645788257;
-        bh=VaOu742RP2LwocmJ1+01sMqse3h6LbgsBGSrCtIR6go=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZZNZ2aZL70TaNtyfu0Ky4f6LUrvdiGgRXrTa443ElHp/neB5aZgF9NU2XaiLY4nGt
-         idW2b8I39c1RaLIUipBtHOvkik4yH1sJDjAsopuBrbj5i/C8farejpFP+BraBVM+Iw
-         N8iy5P0mXSgQv3puBwVPQf9uZn98qardEZO+HuZGCjew/07/9OIhwSeWRf7MpMRK4T
-         5KVX9PbSb2EvGkwcbWZSJfZKtwWmNWwTnsL+F8vgLHj4OpPwtGbu2JK9hDjXBP+Njb
-         Add7ER5WXynk2tNJTmjePGA4AEmTIV9wZrf4Bbk+8GHYPUKsBgw2ePqFO1oOe/71B/
-         8IaitSZp3A1aw==
-Received: by mail-yb1-f169.google.com with SMTP id e140so5181075ybh.9;
-        Fri, 25 Feb 2022 03:24:17 -0800 (PST)
-X-Gm-Message-State: AOAM530g1xKC6igasW4rP1w3RIeQ0CMkCE9qbQZV+e6a3OXrle4mLyTN
-        2Vd/e+aTt01W4eQvy9cKd6PVBVd2V6Splhr/qlA=
-X-Google-Smtp-Source: ABdhPJzyFAUvIiZAqOt8HiVgBGCdAtJM1r7J/8UreBhPGyHq4pDRXSw8PE6pk1tdeCiGUzabUotuUODSW972fXPAcz0=
-X-Received: by 2002:a25:4214:0:b0:624:6215:4823 with SMTP id
- p20-20020a254214000000b0062462154823mr6653602yba.432.1645788256940; Fri, 25
- Feb 2022 03:24:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20220224133906.751587-1-Jason@zx2c4.com> <20220224133906.751587-3-Jason@zx2c4.com>
-In-Reply-To: <20220224133906.751587-3-Jason@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 25 Feb 2022 12:24:05 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE-2sknZD7o72G-ZARpfm4Q0m+im1pTLuPhPu6TkqKOPQ@mail.gmail.com>
-Message-ID: <CAMj1kXE-2sknZD7o72G-ZARpfm4Q0m+im1pTLuPhPu6TkqKOPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] virt: vmgenid: introduce driver for reinitializing
- RNG on VM fork
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        adrian@parity.io, dwmw@amazon.co.uk,
-        Alexander Graf <graf@amazon.com>, colmmacc@amazon.com,
-        raduweis@amazon.com, berrange@redhat.com,
-        Laszlo Ersek <lersek@redhat.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Eduardo Habkost <ehabkost@redhat.com>, ben@skyportsystems.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jann Horn <jannh@google.com>,
+        Fri, 25 Feb 2022 06:25:52 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1F72614B4;
+        Fri, 25 Feb 2022 03:25:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WUTuDXh3IiS2uxMrgCDoqvuGbbbcYflVd7xeaU9i309vT2e8vGVmsFjGAr4p4c+n5zfPwkPRMiaebTexzEpq2LZMZ7AP7RgWf7LIM7vbe4zi5KR304ml+drJVXOJPMJSOR55f6fO9jgUM0y/9gZf/094j8x8S0Dfq1MhjJwChdXNbd/OZia+McC+y6ytbBhMu0rf/bhE6koxqJUp3T2wgm3u1OkkkerMCCi/sgco0wu3gu4xgSyrn4te8yqoNoFiPp5WUAD83hMZUY4MJKFX17KE8WNTJD2YqZgL3+xRKID/o4xnzpw4Ao+nKr//3+nBtcXI+kQvhcpDvJG8NiXMDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BFAy+Um3O0RTckh+dCumjqPCOmK2mSPn9LLw0VQbGCk=;
+ b=VHnBNIvDzJlHvgOQKy5iHKnpi34iEXwl94AC6GGuRf62G/J6EcV3wswp46AikQRVGx0ICylSMwuiGTYWTtk3loON/vB94OIUqtInPDAflaUvGWj/IM5pdik78UQQc2dKMzjiWrZehgtE0uMfcBzfPYG6CF45Kng5Vjt+GRrHg/swmHXph8RGZT4Ij8siiK06qFYhajUQ0rPD3VtJ8vuIlOGTPGvhl+3JZ/tem9gS5AEtm0tTYoOJDKZJ1zqJr4te0ePlQ/3rZCvPQajZHXZf+ULtxfUZ5juLp+rc27o5xDOJ9B1IRn7dmFI0E5YhDrtxp38yRWXzuC/8B9UoNaLucQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BFAy+Um3O0RTckh+dCumjqPCOmK2mSPn9LLw0VQbGCk=;
+ b=nHB9Aj8L5fxeDB/nC2s1sw5bM9tI0VOtAt1cJkAVKiNdPYZ+r2tm1kkkaVUcP/v0pU1Np/9SwwCAY/ztP05oKm7vXcpyc0CoQKp7ntm2POOkPe9IRQAlwc8b+c57ISCa7GRq8/vya5j1yaLa7F2pqM6zSBawzx5g7HTtFeQSg4M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=silabs.com;
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
+ by BN6PR11MB1428.namprd11.prod.outlook.com (2603:10b6:405:a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Fri, 25 Feb
+ 2022 11:24:54 +0000
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::dd2e:8a4e:fc77:1e66]) by PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::dd2e:8a4e:fc77:1e66%5]) with mapi id 15.20.5017.023; Fri, 25 Feb 2022
+ 11:24:54 +0000
+From:   Jerome Pouiller <Jerome.Pouiller@silabs.com>
+To:     linux-wireless@vger.kernel.org, Kalle Valo <kvalo@kernel.org>
+Cc:     devel@driverdev.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>
+Subject: [PATCH 10/10] staging: wfx: flags for SPI IRQ were ignored
+Date:   Fri, 25 Feb 2022 12:24:05 +0100
+Message-Id: <20220225112405.355599-11-Jerome.Pouiller@silabs.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220225112405.355599-1-Jerome.Pouiller@silabs.com>
+References: <20220225112405.355599-1-Jerome.Pouiller@silabs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-ClientProxiedBy: PR3P189CA0052.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:102:53::27) To PH0PR11MB5657.namprd11.prod.outlook.com
+ (2603:10b6:510:ee::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 255d334f-be68-4d56-ad79-08d9f85171dc
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1428:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR11MB14281D8DF6442776E638A711933E9@BN6PR11MB1428.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0noAKHnapktj4wFOAkKphno8mUiWBhORw6/IEbvltzBnVVL4jc0BVvCqo1qGU/gZlKoSsNROeYGj9U2H+iNaqQQThfE38vZg136fcH3h9jU72/HGmgG5pADge/7vLvqOlpRliYEKUcuc3KlL/NAMzKXuijlDDMF3aK+um6gc7XRzB/lyhMJahWz9D7bCBTrFR9ZixBoIwuAqbdwzwsINgTnkZZHI/fBQYu/kt1r9qFoWt1u8Uyopm5I27YiNKQt2LJitJaJIJabv2eujeOnX1bd1ZtMvd1dXGrnCluC985s2Kyfet3iXV85kEjI0TwaQdOHEgY0dhuUxhitDO5kYCjxVIECURr8GHzmiqBq03fLaH2+3OgyxqBmC2YZ+/AVmkzq5KXejJeq+b/4phD6OWuTgvHre+1t5HJWdL437/0ntEwB7nKXwQcK1RPhHrS3QRvLkEw+UeMNqxzLKl6uL3hLwg7YjvX+adCzdTZTm5fldNtyx2qV8/zXq7wtCX53AHhVpV4gbFRXFxVaHCD+5nED5Dsx3NI3CLj97YKwE+0M8VG/HNbvVY7HRRg2DIjMY8xKq73S+zeBxBvt0K1nVn1TBtvXujjlei6kFSQ6+9n1UoEWvCkeDcTsiXZaHYM33hJvdumiK8iZBJZRLNYdnOkhEQAm/mQyjmA5YV9hXkqJeaJwAlJca9xYjYlIEuAFFNydoUIkBDZ6XtBv0ZGqFnQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(36756003)(66574015)(107886003)(83380400001)(6506007)(6512007)(4744005)(8676002)(26005)(8936002)(2906002)(38350700002)(186003)(5660300002)(38100700002)(1076003)(508600001)(54906003)(66946007)(66556008)(6486002)(66476007)(52116002)(6916009)(86362001)(4326008)(316002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y3hlQlBpNTBqNVViNW1LMkQzQmc0bkF2V2dJdjJkQ0lLQmJHSG9iT0NRN1p1?=
+ =?utf-8?B?WHNiTHV4RUlBU3ZkVGZ3WDhKSjB2S1N0VVNBYzVpZWpTM21mMWVpZ2VjMFRI?=
+ =?utf-8?B?WVNwZmVkMy82Uk0xbWVMOTF0Tk1mWWwyVjVtd004YnF6ZXpsQWZXRzBWS011?=
+ =?utf-8?B?d21JV3hoTVRteUFWSDAybEVnbUVubFl4WG9IY1pKYU55b1BZclphYjRaK2Q0?=
+ =?utf-8?B?SWIxT1duZ0hQbU41aGZ2OURHeUxWWVJhbzFsUURLZkhaK3lpT29RTXB6c0tQ?=
+ =?utf-8?B?aHYwbGRwenkvUURoeTFKZ0QzVVdjZm5VVENjVnZnV2I2cFFEbVZMMVNVelF6?=
+ =?utf-8?B?ckZFbUlFNi9GK1gvMlFmWUVtcnYwcHlvdUJ2SEFwbmpCa2cyZThFRXFjSWU5?=
+ =?utf-8?B?bHpzZTRUZnloNkRhRUJBN2d6QmtKSE1rcjY1ckR1bnJPUTZ6eXBIU011Q0NW?=
+ =?utf-8?B?bGRHS3JKWUJaTlBlVExQSFUwL1VNRDVtbzdyS0FPU1BJcnpEVlVYR0Q3S2pa?=
+ =?utf-8?B?eVZweFViMlJBRkV3Wmh6dmNvRy9DM2ZkMnVobjRTVmljemt1alpHYTQzUlNj?=
+ =?utf-8?B?QXhmY2FQTEtrWW8vNmJveUhpZ0svcHRKa0cyR2I0VXAyVEw5OXAzb0p2MWpw?=
+ =?utf-8?B?NWFqa3Jhc0JiQVpSdHFvY2RYV1h1SEJyWVUwRFJxc080b082ZjdCeUl5RGdv?=
+ =?utf-8?B?cFZkVlpoVmtOUm9UaEprN2dyUHhrRlN6QlFFOGtTaUU0Q2ZmRms1UDhzdmw4?=
+ =?utf-8?B?WjRCWThGSGw3cTU4WTh4d01WYzF6Q2R3SDdLUFFYcUl0WnVjSTExSDdiMFpN?=
+ =?utf-8?B?ZHgxT0xCWTV4OVVGUzM1Nk1YN0pSV3dKWitQYzdGYWRMeS9QNUV1YWlWN0pG?=
+ =?utf-8?B?MHNPeU9id2JDalRrTTcrOXI5T1BhZVViWWhGL3BYb0hNUzdmajlHT0M2SWkv?=
+ =?utf-8?B?TGovdTJXWXoyck9IQ0VuejVsNFloOFZLelVXMkt3NU5ma2xwY0VPSDJqeTh6?=
+ =?utf-8?B?T3dEY2JBT1Z0ODN4RGkzL0E5OUJTRUJOS3RoekI1NDRmM0Q3bHoyTVNJdVY4?=
+ =?utf-8?B?VDFUTythQSttTHZJK29BaE1ZN3RNWWtUQnBLN1d6NXMrLzk1NVRlU083SjNr?=
+ =?utf-8?B?anFzWEw2aGpoVzJUbUIvK1pZUGw5dEJuY09PQkVkZFNNQnNXLy9wdFBqQ3VJ?=
+ =?utf-8?B?MVdsQkdGbjYzU0pscllLVGhESU9PQmNxZnhSbU92amFBcTJRYzRNTERVbElm?=
+ =?utf-8?B?d0t2cE5EUVlleXNXeTNEVWdlWFEzczlxRGlpZkNqaUpLMkVpQ282ODNyVGpo?=
+ =?utf-8?B?a0JSZVFkcmZ4bExlLzJrZC9MWmVpZDh4aXZESlZYbzN2RUFlRldZVEwrVGtD?=
+ =?utf-8?B?bWZRR09mTEFjS255T21jRXFVTHMxSnMwQk1sWXVLSmNOazFuTFcyTlZRL0do?=
+ =?utf-8?B?WUtwVG9vQ1V0TXhsNkhZdzBTQnZVc3UzQjUyK1RyWTE3MlErSk52TmtlbVp0?=
+ =?utf-8?B?NkI0YnJ5bzRiaW5zV0RtMS8wK0hwMUc0RmZQT0FGMHIvbDN2SzBaT1F4dXA4?=
+ =?utf-8?B?WjBlcGc0dXNzNDc3WDIyaGxHcnN3dm5qeFBvNHdJTDZVNy9sMFNOSklWMkxO?=
+ =?utf-8?B?eWVZK0ZmZGtPVXBjdC95UDV6ZXRBV3pKUjV5cnljZi9TL0tvb0xDamVuZ2hW?=
+ =?utf-8?B?dHA0TkF0Zk53aXNzd2RIeG8yTjQrbXdlOGtZdGJOYVNESVhNd3hqMk1zc2Vy?=
+ =?utf-8?B?eXErMGhwQUh2WWVyOTM2YXh4SnFhNGppTFJ3VUxkTVUzVk9Qb0ZNMk1aN0JX?=
+ =?utf-8?B?OU83RHAyY04wYXJpSFBUelhZT0NJdTJIOEI4QTVOdGxZbUxtOXJwdTh5ZDRH?=
+ =?utf-8?B?TnN0RVYveXgyRmdxdGlwcW9iYlFFeXZNSy9WYVlYek5Sc01WOGpJQWd3aTZt?=
+ =?utf-8?B?YlA1MXc2clFtVGpvOURUbHRybTZ2Z2s5KzZhdTVFL1RyeFRiMU9MNi9pNTNv?=
+ =?utf-8?B?czBWeGtmMThBbnZZMFViRHNOYkpMWGMyT2tXRHNTb0VjeGQvVVJxMW94QTFR?=
+ =?utf-8?B?NmtLdVpxNkN4Wk1IYlc0enE4aTA0QXJwbEhseFVBMVVBcEdNaFFZcW8vQlgr?=
+ =?utf-8?B?WkhzeVNsdEIrMFF2ajhyTnc2cnNKdWhDcENuZkoydkI1b2VLRCszZ2tuYysx?=
+ =?utf-8?Q?ghQbmkzCrd8Mwl6suGTJjx4=3D?=
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 255d334f-be68-4d56-ad79-08d9f85171dc
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 11:24:53.8631
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TxwSQXMgrVnJInIGZ5a+ZeUQ1A9JvIuFvjWcXs6yP1KzbFy6GRrkDqCvUW++8PDvtQhhUcFWRRUsA2yUe/6g2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1428
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 at 14:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> VM Generation ID is a feature from Microsoft, described at
-> <https://go.microsoft.com/fwlink/?LinkId=3D260709>, and supported by
-> Hyper-V and QEMU. Its usage is described in Microsoft's RNG whitepaper,
-> <https://aka.ms/win10rng>, as:
->
->     If the OS is running in a VM, there is a problem that most
->     hypervisors can snapshot the state of the machine and later rewind
->     the VM state to the saved state. This results in the machine running
->     a second time with the exact same RNG state, which leads to serious
->     security problems.  To reduce the window of vulnerability, Windows
->     10 on a Hyper-V VM will detect when the VM state is reset, retrieve
->     a unique (not random) value from the hypervisor, and reseed the root
->     RNG with that unique value.  This does not eliminate the
->     vulnerability, but it greatly reduces the time during which the RNG
->     system will produce the same outputs as it did during a previous
->     instantiation of the same VM state.
->
-> Linux has the same issue, and given that vmgenid is supported already by
-> multiple hypervisors, we can implement more or less the same solution.
-> So this commit wires up the vmgenid ACPI notification to the RNG's newly
-> added add_vmfork_randomness() function.
->
-> It can be used from qemu via the `-device vmgenid,guid=3Dauto` parameter.
-> After setting that, use `savevm` in the monitor to save the VM state,
-> then quit QEMU, start it again, and use `loadvm`. That will trigger this
-> driver's notify function, which hands the new UUID to the RNG. This is
-> described in <https://git.qemu.org/?p=3Dqemu.git;a=3Dblob;f=3Ddocs/specs/=
-vmgenid.txt>.
-> And there are hooks for this in libvirt as well, described in
-> <https://libvirt.org/formatdomain.html#general-metadata>.
->
-> Note, however, that the treatment of this as a UUID is considered to be
-> an accidental QEMU nuance, per
-> <https://github.com/libguestfs/virt-v2v/blob/master/docs/vm-generation-id=
--across-hypervisors.txt>,
-> so this driver simply treats these bytes as an opaque 128-bit binary
-> blob, as per the spec. This doesn't really make a difference anyway,
-> considering that's how it ends up when handed to the RNG in the end.
->
-> This driver builds on prior work from Adrian Catangiu at Amazon, and it
-> is my hope that that team can resume maintenance of this driver.
->
-> Cc: Adrian Catangiu <adrian@parity.io>
-> Cc: Laszlo Ersek <lersek@redhat.com>
-> Cc: Daniel P. Berrang=C3=A9 <berrange@redhat.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/virt/Kconfig   |   9 +++
->  drivers/virt/Makefile  |   1 +
->  drivers/virt/vmgenid.c | 121 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 131 insertions(+)
->  create mode 100644 drivers/virt/vmgenid.c
->
-> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
-> index 8061e8ef449f..d3276dc2095c 100644
-> --- a/drivers/virt/Kconfig
-> +++ b/drivers/virt/Kconfig
-
-drivers/virt does not have a maintainer and this code needs one.
-
-> @@ -13,6 +13,15 @@ menuconfig VIRT_DRIVERS
->
->  if VIRT_DRIVERS
->
-> +config VMGENID
-> +       tristate "Virtual Machine Generation ID driver"
-> +       default y
-
-Please make this default m - this code can run as a module and the
-feature it relies on is discoverable by udev
-
-> +       depends on ACPI
-> +       help
-> +         Say Y here to use the hypervisor-provided Virtual Machine Gener=
-ation ID
-> +         to reseed the RNG when the VM is cloned. This is highly recomme=
-nded if
-> +         you intend to do any rollback / cloning / snapshotting of VMs.
-> +
->  config FSL_HV_MANAGER
->         tristate "Freescale hypervisor management driver"
->         depends on FSL_SOC
-> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
-> index 3e272ea60cd9..108d0ffcc9aa 100644
-> --- a/drivers/virt/Makefile
-> +++ b/drivers/virt/Makefile
-> @@ -4,6 +4,7 @@
->  #
->
->  obj-$(CONFIG_FSL_HV_MANAGER)   +=3D fsl_hypervisor.o
-> +obj-$(CONFIG_VMGENID)          +=3D vmgenid.o
->  obj-y                          +=3D vboxguest/
->
->  obj-$(CONFIG_NITRO_ENCLAVES)   +=3D nitro_enclaves/
-> diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-> new file mode 100644
-> index 000000000000..5da4dc8f25e3
-> --- /dev/null
-> +++ b/drivers/virt/vmgenid.c
-> @@ -0,0 +1,121 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Virtual Machine Generation ID driver
-> + *
-> + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights R=
-eserved.
-> + * Copyright (C) 2020 Amazon. All rights reserved.
-> + * Copyright (C) 2018 Red Hat Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/acpi.h>
-> +#include <linux/random.h>
-> +
-> +ACPI_MODULE_NAME("vmgenid");
-> +
-> +enum { VMGENID_SIZE =3D 16 };
-> +
-> +static struct {
-> +       u8 this_id[VMGENID_SIZE];
-> +       u8 *next_id;
-> +} state;
-> +
-
-This state is singular
-
-
-> +static int vmgenid_acpi_add(struct acpi_device *device)
-> +{
-
-... whereas this may be called for multiple instances of the device.
-This likely makes no sense, so it is better to reject it here.
-
-Otherwise, the state should be allocated dynamically.
-
-> +       struct acpi_buffer buffer =3D { ACPI_ALLOCATE_BUFFER };
-> +       union acpi_object *pss;
-> +       phys_addr_t phys_addr;
-> +       acpi_status status;
-> +       int ret =3D 0;
-> +
-> +       if (!device)
-> +               return -EINVAL;
-> +
-> +       status =3D acpi_evaluate_object(device->handle, "ADDR", NULL, &bu=
-ffer);
-> +       if (ACPI_FAILURE(status)) {
-> +               ACPI_EXCEPTION((AE_INFO, status, "Evaluating ADDR"));
-> +               return -ENODEV;
-> +       }
-> +       pss =3D buffer.pointer;
-> +       if (!pss || pss->type !=3D ACPI_TYPE_PACKAGE || pss->package.coun=
-t !=3D 2 ||
-> +           pss->package.elements[0].type !=3D ACPI_TYPE_INTEGER ||
-> +           pss->package.elements[1].type !=3D ACPI_TYPE_INTEGER) {
-> +               ret =3D -EINVAL;
-> +               goto out;
-> +       }
-> +
-> +       phys_addr =3D (pss->package.elements[0].integer.value << 0) |
-> +                   (pss->package.elements[1].integer.value << 32);
-> +       state.next_id =3D acpi_os_map_memory(phys_addr, VMGENID_SIZE);
-
-No need to use acpi_os_map_memory() here, plain memremap() should be fine.
-
-> +       if (!state.next_id) {
-> +               ret =3D -ENOMEM;
-> +               goto out;
-> +       }
-> +       device->driver_data =3D &state;
-> +
-> +       memcpy(state.this_id, state.next_id, sizeof(state.this_id));
-> +       add_device_randomness(state.this_id, sizeof(state.this_id));
-> +
-> +out:
-> +       ACPI_FREE(buffer.pointer);
-> +       return ret;
-> +}
-> +
-> +static int vmgenid_acpi_remove(struct acpi_device *device)
-> +{
-> +       if (!device || acpi_driver_data(device) !=3D &state)
-> +               return -EINVAL;
-> +       device->driver_data =3D NULL;
-> +       if (state.next_id)
-> +               acpi_os_unmap_memory(state.next_id, VMGENID_SIZE);
-
-memunmap() here
-
-> +       state.next_id =3D NULL;
-> +       return 0;
-> +}
-> +
-> +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
-> +{
-> +       u8 old_id[VMGENID_SIZE];
-> +
-> +       if (!device || acpi_driver_data(device) !=3D &state)
-> +               return;
-> +       memcpy(old_id, state.this_id, sizeof(old_id));
-> +       memcpy(state.this_id, state.next_id, sizeof(state.this_id));
-> +       if (!memcmp(old_id, state.this_id, sizeof(old_id)))
-> +               return;
-
-Is this little dance really necessary? I.e., can we just do
-
-add_vmfork_randomness(state.next_id, VMGENID_SIZE)
-
-and be done with it?
-
-And if we cannot, is it ok to just return without some kind of
-diagnostic message?
-
-> +       add_vmfork_randomness(state.this_id, sizeof(state.this_id));
-> +}
-> +
-> +static const struct acpi_device_id vmgenid_ids[] =3D {
-> +       {"VMGENID", 0},
-> +       {"QEMUVGID", 0},
-> +       { },
-> +};
-> +
-> +static struct acpi_driver acpi_driver =3D {
-> +       .name =3D "vm_generation_id",
-> +       .ids =3D vmgenid_ids,
-> +       .owner =3D THIS_MODULE,
-> +       .ops =3D {
-> +               .add =3D vmgenid_acpi_add,
-> +               .remove =3D vmgenid_acpi_remove,
-> +               .notify =3D vmgenid_acpi_notify,
-> +       }
-> +};
-> +
-> +static int __init vmgenid_init(void)
-> +{
-> +       return acpi_bus_register_driver(&acpi_driver);
-> +}
-> +
-> +static void __exit vmgenid_exit(void)
-> +{
-> +       acpi_bus_unregister_driver(&acpi_driver);
-> +}
-> +
-> +module_init(vmgenid_init);
-> +module_exit(vmgenid_exit);
-> +
-> +MODULE_DEVICE_TABLE(acpi, vmgenid_ids);
-> +MODULE_DESCRIPTION("Virtual Machine Generation ID");
-> +MODULE_LICENSE("GPL v2");
-> --
-> 2.35.1
->
+RnJvbTogSsOpcsO0bWUgUG91aWxsZXIgPGplcm9tZS5wb3VpbGxlckBzaWxhYnMuY29tPgoKVGhl
+IGZsYWdzIGRlY2xhcmVkIGluIHRoZSBEVCB3ZXJlIG5vdCBmb3J3YXJkZWQgdG8gcmVxdWVzdF9p
+cnEoKS4KCkZpeGVzOiBhN2VmYjYyNTA5ZDggKCJzdGFnaW5nOiB3Zng6IHVzZSB0aHJlYWRlZCBJ
+UlEgd2l0aCBTUEkiKQpTaWduZWQtb2ZmLWJ5OiBKw6lyw7RtZSBQb3VpbGxlciA8amVyb21lLnBv
+dWlsbGVyQHNpbGFicy5jb20+Ci0tLQogZHJpdmVycy9zdGFnaW5nL3dmeC9idXNfc3BpLmMgfCAy
+ICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvd2Z4L2J1c19zcGkuYyBiL2RyaXZlcnMvc3RhZ2luZy93
+ZngvYnVzX3NwaS5jCmluZGV4IGEwYTk4YzA3NGNiNS4uYmIzMWY4YTAwNWJmIDEwMDY0NAotLS0g
+YS9kcml2ZXJzL3N0YWdpbmcvd2Z4L2J1c19zcGkuYworKysgYi9kcml2ZXJzL3N0YWdpbmcvd2Z4
+L2J1c19zcGkuYwpAQCAtMTYyLDcgKzE2Miw3IEBAIHN0YXRpYyBpbnQgd2Z4X3NwaV9pcnFfc3Vi
+c2NyaWJlKHZvaWQgKnByaXYpCiAJCWZsYWdzID0gSVJRRl9UUklHR0VSX0hJR0g7CiAJZmxhZ3Mg
+fD0gSVJRRl9PTkVTSE9UOwogCXJldHVybiBkZXZtX3JlcXVlc3RfdGhyZWFkZWRfaXJxKCZidXMt
+PmZ1bmMtPmRldiwgYnVzLT5mdW5jLT5pcnEsIE5VTEwsCi0JCQkJCSB3Znhfc3BpX2lycV9oYW5k
+bGVyLCBJUlFGX09ORVNIT1QsICJ3ZngiLCBidXMpOworCQkJCQkgd2Z4X3NwaV9pcnFfaGFuZGxl
+ciwgZmxhZ3MsICJ3ZngiLCBidXMpOwogfQogCiBzdGF0aWMgaW50IHdmeF9zcGlfaXJxX3Vuc3Vi
+c2NyaWJlKHZvaWQgKnByaXYpCi0tIAoyLjM0LjEKCg==

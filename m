@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF884C4F3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712A14C4F41
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235729AbiBYUCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S235758AbiBYUGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiBYUCW (ORCPT
+        with ESMTP id S229989AbiBYUGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:02:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D41AA061;
-        Fri, 25 Feb 2022 12:01:50 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PJhhQV016324;
-        Fri, 25 Feb 2022 20:01:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=5pPmbcYAkuzYVHh5IMiI//wK5akxlgR4+/kcgP2FE9U=;
- b=jJqTNYvE7zSNqE1phR8v46kk+JgKvw/lI38/BRTaxbC6rnZLMd58ZwReMdByDvCBm6sD
- z6JgaKA1K81cUqPelKTqPoxgz5Nf8WM0DZY4wA4STVM4dogrG1lmKTvbP5G2MuTyuofb
- rMz7Avoa07HbHnUpEkOiZUS+6Ud1n02p4706xStmNMWFMkHHPmmONszkAW7yvYFdE/yA
- 5Jqo7FoRXg+yL3RmnmHBAJ3cld7valbvpDyfjyCFi52GZqRPOyIwO4kor3zT/os/u7oj
- oR8EkehhtPmcS3wfrBevuy8K3tpoq+XzQj/zZNVahmOL8+5pDy9HT2QIFk6CyZlMMSQ0 jw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ef5h9gafc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 20:01:48 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PJm7CY004396;
-        Fri, 25 Feb 2022 20:01:46 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3ear69rdw6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 20:01:46 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PK1hYL19857868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Feb 2022 20:01:43 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB1E24203F;
-        Fri, 25 Feb 2022 20:01:43 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C84BE4204B;
-        Fri, 25 Feb 2022 20:01:42 +0000 (GMT)
-Received: from sig-9-65-82-248.ibm.com (unknown [9.65.82.248])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Feb 2022 20:01:42 +0000 (GMT)
-Message-ID: <c848c7a19d1557d9038d3bdd64a67385aa788c8f.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 4/8] ima: define a new template field 'd-type' and a
- new template 'ima-ngv2'
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 25 Feb 2022 15:01:37 -0500
-In-Reply-To: <YhfSgeldgCcnzszw@sol.localdomain>
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
-         <20220211214310.119257-5-zohar@linux.ibm.com>
-         <YhbSE/k4mElcehDN@sol.localdomain>
-         <b89ec5792da3c284f8e5e058c5568482beccf00d.camel@linux.ibm.com>
-         <YhfSgeldgCcnzszw@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3baPUHAscVM4coX-rxQfifQXK0NfEaqk
-X-Proofpoint-ORIG-GUID: 3baPUHAscVM4coX-rxQfifQXK0NfEaqk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_10,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0 phishscore=0
- adultscore=0 mlxlogscore=639 lowpriorityscore=0 bulkscore=0 mlxscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202250111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 15:06:13 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170A91D86ED;
+        Fri, 25 Feb 2022 12:05:40 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so7715552oos.10;
+        Fri, 25 Feb 2022 12:05:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pt2v58DVMNtnJGowbH5EvHKVW32wfgY0vO3q80Iq09k=;
+        b=IAHzAcoy38FChhpdVMJSLwCApYZ0Fn4JMRFjEN6308o1iO9PWvgk5eF0cI+/8Heu84
+         EiiW3sTudV3R3PiqLvJgY2avB+68Am0Kfm4g4D7FyGLoNoz5grDtw3vDd8ZeamfBfPhw
+         WXFaLMRWjcyRz6kJ+aU5S+1Bk9BQpGEl7SfP/cQQ7x05DStTfnHvwyaK8p6HEJ4bytRr
+         m7cpN1XeUVXGZH9Rcvfv69ccqBohkncPK2u6UHPB/TsQXU8Vlt5OwQ9Gvov6Uu2PpsrO
+         5b7xOfzMybiF9nbF1WkzFTvi/2DSD2wpYUdvRfYxaQJ1mv0EpyNFu3DZUnRMoDZYlXdf
+         IkdA==
+X-Gm-Message-State: AOAM531t26HilSuUWv//AwlqfsDnCEhKRpV5N2AC1k/r0ZVSnDism/6h
+        gkRrlTvSQHZTeg0WZQSXBQ==
+X-Google-Smtp-Source: ABdhPJxzyw7Udfv93wJdvGYw+MZTCJWRad+6vfmdFDmh3pGrt6GAHmmrW577IEiWdVkLZmqZp1fFlg==
+X-Received: by 2002:a05:6870:c6a2:b0:d1:60cf:2d66 with SMTP id cv34-20020a056870c6a200b000d160cf2d66mr2137886oab.54.1645819539381;
+        Fri, 25 Feb 2022 12:05:39 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm1906781oiv.21.2022.02.25.12.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 12:05:38 -0800 (PST)
+Received: (nullmailer pid 1344550 invoked by uid 1000);
+        Fri, 25 Feb 2022 20:05:36 -0000
+Date:   Fri, 25 Feb 2022 14:05:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Medad CChien <ctcchien@nuvoton.com>
+Subject: Re: [PATCH v1 2/3] dt-bindings: edac: npcm-edac.yaml
+Message-ID: <Yhk2kF1G74ndY60b@robh.at.kernel.org>
+References: <20220224074729.5206-1-ctcchien@nuvoton.com>
+ <20220224074729.5206-3-ctcchien@nuvoton.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224074729.5206-3-ctcchien@nuvoton.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-24 at 10:46 -0800, Eric Biggers wrote:
-> > Thanks, Eric.  I really like your suggestion.  Currently, type is
-> > defined as either "ima" or "verity".   Are you ok with prefixing each
-> > record with these strings?
-> > 
+On Thu, Feb 24, 2022 at 03:47:28PM +0800, Medad CChien wrote:
+> Add the device tree bindings for the EDAC driver npcm-edac.
 > 
-> As I mentioned before I think "full_hash" would be more descriptive than "ima".
-> (All of this is part of IMA.)  It's up to you though.
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> ---
+>  .../devicetree/bindings/edac/npcm-edac.yaml   | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/npcm-edac.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/npcm-edac.yaml b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
+> new file mode 100644
+> index 000000000000..228ace1025dc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/npcm-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Memory Controller EDAC
+> +
+> +maintainers:
+> +  - Medad CChien <ctcchien@nuvoton.com>
+> +
+> +description: |
+> +  EDAC node is defined to describe on-chip error detection and correction for
+> +  Nuvoton NPCM Memory Controller.
 
-Sorry, to me that doesn't sense.  Either we use "full_hash" and
-"Merkle-tree", or "ima" and "verity".
+The h/w unit is the memory controller. Describe that in your binding. 
+EDAC is a Linuxism.
 
--- 
-thanks,
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm8xx-edac
+> +      - nuvoton,npcm7xx-edac
 
-Mimi
+The h/w manual calls this block 'edac'?
 
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+
+You don't need these 2. You don't have a child node with an address.
+
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: uncorrectable error interrupt
+> +      - description: correctable error interrupt
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: ue
+> +      - const: ce
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    ahb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        mc: memory-controller@f0824000 {
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +            reg = <0x0 0xf0824000 0x0 0x1000>;
+> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +            compatible = "nuvoton,npcm7xx-edac";
+> +        };
+> +    };
+> +
+> -- 
+> 2.17.1
+> 
+> 

@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5774C3A53
+	by mail.lfdr.de (Postfix) with ESMTP id 876E04C3A54
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiBYA1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S236087AbiBYA2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiBYA1n (ORCPT
+        with ESMTP id S235581AbiBYA2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:27:43 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549771A276C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:27:12 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d187so3279422pfa.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:27:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cw+klcamA272Cb5ODXPvx6exJVMPsgC02NTpWPnz0OM=;
-        b=Ikdqgy/jVnfO2L3OLbVdKLMW8dEfP1zO5vRc8PFJNoknO1XoRQlBZP+flkXI8Mahch
-         XAO2z3nSEkZPYpX2Pe85cvXYC6MvpyCM5mPK96jtw09q9cxht/i9B0aMnLQgS1kFKMjA
-         n8Kqv7HKW0KieoOm/oh85MBBXF1fY0NwPyl18=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cw+klcamA272Cb5ODXPvx6exJVMPsgC02NTpWPnz0OM=;
-        b=Zyk2EhWeHXseYxcy/afXMEI70wbC64SLsCRFJEX0sUyS2w56oOcsreUJ+13B5I4jM2
-         y9zubkUxhqa6DiYsw/nuUGehXtlpL1xcwfBFSplKocflskcsHX7aLlKi7ESdPgW9ogGa
-         sbNdKI5enx23LFbeKuKArEgRwq+cK/9FDtaZbaEWGF9/qAJX0cqulvqxZriGS0knajz9
-         UoZHeH7DuNnlyQsheCm0MqXNzJWg+0SQZOaR+Vekh0iHLRJ4PGTW7rD/nr2ym4AzNPHQ
-         Tkag6SH865KEV+/ngYSXB+CSEKeALiwI16vflJIcq660oa3w+8qcmkDoK2sY8D7Vfhf2
-         Ij5g==
-X-Gm-Message-State: AOAM531y/2lsnRd5EZ70nr34cCU8Es88UMp6UwVJm0N41XoIKIH5Kunp
-        sBVFVFXbF0fe9Vmler346UIyjw==
-X-Google-Smtp-Source: ABdhPJx9Tq0nOY+LjkUD318qRA9/WOyOM4kzpCtQpV3PobzAcUHpHHEa9fSy8CvBhwyzIHtOp55Rsw==
-X-Received: by 2002:a05:6a00:2311:b0:4e1:52bf:e466 with SMTP id h17-20020a056a00231100b004e152bfe466mr4986889pfh.77.1645748831778;
-        Thu, 24 Feb 2022 16:27:11 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u12-20020a17090a890c00b001b8efcf8e48sm7316514pjn.14.2022.02.24.16.27.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:27:11 -0800 (PST)
-Date:   Thu, 24 Feb 2022 16:27:10 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 04/39] objtool: Add --dry-run
-Message-ID: <202202241627.82D924E72@keescook>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.248747148@infradead.org>
+        Thu, 24 Feb 2022 19:28:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C82E194A81;
+        Thu, 24 Feb 2022 16:27:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14A7CB82A2D;
+        Fri, 25 Feb 2022 00:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16209C340E9;
+        Fri, 25 Feb 2022 00:27:42 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 19:27:41 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Stefan Roesch <shr@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH][linux-next] fs: Fix lookup_flags in vfs_statx()
+Message-ID: <20220224192741.660cdacb@gandalf.local.home>
+In-Reply-To: <20220224191727.55b300c4@gandalf.local.home>
+References: <20220224191727.55b300c4@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224151322.248747148@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:42PM +0100, Peter Zijlstra wrote:
-> Add a --dry-run argument to skip writing the modifications. This is
-> convenient for debugging.
+[ Adding Stephen. This was on next-20220223 ]
+
+On Thu, 24 Feb 2022 19:17:27 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: Steven Rostedt (Google) <rostedt@goodmis.org>
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> I needed to test Linux next and it locked up at starting init.
+> 
+> I bisected it down to:
+> 
+> 30512d54fae35 ("fs: replace const char* parameter in vfs_statx and do_statx with struct filename")
+> 1e0561928e3ab ("io-uring: Copy path name during prepare stage for statx")
+> 
+> The first commit did not even compile, so I consider the two of the them
+> the same commit.
+> 
+> Looking at what was changed, I see that the lookup_flags were removed from
+> the filename_lookup() in the vfs_statx() function, and that the
+> lookup_flags that were used later on in the function, were never properly
+> updated either.
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> diff --git a/fs/stat.c b/fs/stat.c
+> index f0a9702cee67..2a2132670929 100644
+> --- a/fs/stat.c
+> +++ b/fs/stat.c
+> @@ -217,7 +217,7 @@ static int vfs_statx(int dfd, struct filename
+> *filename, int flags, struct kstat *stat, u32 request_mask)
+>  {
+>  	struct path path;
+> -	unsigned lookup_flags = 0;
+> +	unsigned lookup_flags = getname_statx_lookup_flags(flags);
+>  	int error;
+>  
+>  	if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
+> AT_EMPTY_PATH | @@ -225,7 +225,7 @@ static int vfs_statx(int dfd, struct
+> filename *filename, int flags, return -EINVAL;
+>  
+>  retry:
+> -	error = filename_lookup(dfd, filename, flags, &path, NULL);
+> +	error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
+>  	if (error)
+>  		goto out;
+>  
 
-Yes please. :)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook

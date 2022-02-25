@@ -2,112 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5EA4C3EE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B804C3EDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238086AbiBYHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S238051AbiBYHSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238076AbiBYHTq (ORCPT
+        with ESMTP id S232495AbiBYHSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:19:46 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D82556C0;
-        Thu, 24 Feb 2022 23:19:15 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id ay5so1244789plb.1;
-        Thu, 24 Feb 2022 23:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=E0+eJj0NPmwxnSMx1LXVXrNLUrIv19z+ZDO3nRYWhjc=;
-        b=k/pEWWW6X/hqR9vnSIx3bzWbSddiohoBL5Z9bYLhbkMAEaOZCaeLYuPXM7JTemYGBp
-         KK8t3lLu7nPAEMe8vez0Q6DfQyHAsLWD6lYrFfb3ixt2+Yh8pyjMVZa8SdNf0YGw6iDr
-         7q91IehIq+agA/FMKGdm+7mZUM4wfkwWPtTXj+7DprGCKl7YhCKAgXvvN0cI2SDj5U7k
-         BEE7trsIvpkOGWuoWcuqZIJMWQjKmYd4p7VO7hnAkhhQk3TRNr+54+XQUm3MKF6clJWe
-         DrBH92PXaYmgeFOwK0UjSk5YBalKm6ULRS4XAUmjOv/NpnAy2+ZDet8KbrCfcSBIm5Lh
-         +mmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E0+eJj0NPmwxnSMx1LXVXrNLUrIv19z+ZDO3nRYWhjc=;
-        b=eIhJByzknzv3lFMdJ/LjE4T6NAroitMndfMIJuXL8bq2cHTlP78pv01QoLHYVcMOnW
-         WVXiKMxBls3srfAccxx9lXVBZGwB6JQfJxY5NsjJ8o8jDTyLuW8FKhQVrHWjajZH8QaT
-         201E+j8TfXC2HtKD40zqb1RK4PaxypDGItB2R68YWedYbundLXDekRJmKuyonYm13Rj8
-         hL6E3q9w8zWAG9JXYGuQIbRr/lcKSIsGs/FlsrkFDq+N+rDtGUj7rRapscSTMqJteNoF
-         uyKKfDnSKQls7FmwXyebUUUlB6ADXmo/L1oeV3NqtDnYgWwMRA6uCeN47dJJRRgV5Ips
-         VL/w==
-X-Gm-Message-State: AOAM532H5cDTZh4EFTDYorHeMq/Vllxx6Udvc9ZRz80PcHSEyXHhPryA
-        04usHnoNdsfGNSLih8VDu9o=
-X-Google-Smtp-Source: ABdhPJx/GspNgT1HedneD8W+NwDS4/Mqz7t7PINI35XqkIYVCY0t4kSNPeGXkbyCq36t20SQt48Juw==
-X-Received: by 2002:a17:90b:4394:b0:1bc:e369:1f2b with SMTP id in20-20020a17090b439400b001bce3691f2bmr1912128pjb.92.1645773554889;
-        Thu, 24 Feb 2022 23:19:14 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.110])
-        by smtp.gmail.com with ESMTPSA id k20-20020a056a00135400b004ecc81067b8sm1970825pfu.144.2022.02.24.23.19.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 23:19:14 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        kuba@kernel.org, yoshfuji@linux-ipv6.org, imagedong@tencent.com,
-        edumazet@google.com, alobakin@pm.me, cong.wang@bytedance.com,
-        paulb@nvidia.com, talalahmad@google.com, keescook@chromium.org,
-        ilias.apalodimas@linaro.org, memxor@gmail.com,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        daniel@iogearbox.net, yajun.deng@linux.dev, roopa@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] net: neigh: add skb drop reasons to arp_error_report()
-Date:   Fri, 25 Feb 2022 15:17:39 +0800
-Message-Id: <20220225071739.1956657-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220225071739.1956657-1-imagedong@tencent.com>
-References: <20220225071739.1956657-1-imagedong@tencent.com>
+        Fri, 25 Feb 2022 02:18:36 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204B0239D5F;
+        Thu, 24 Feb 2022 23:18:04 -0800 (PST)
+Received: from kwepemi100026.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K4h0c6kkHzdZgJ;
+        Fri, 25 Feb 2022 15:16:48 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100026.china.huawei.com (7.221.188.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Fri, 25 Feb 2022 15:18:01 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 25 Feb 2022 15:18:01 +0800
+Subject: Re: [PATCH v9] block: cancel all throttled bios in del_gendisk()
+To:     <ming.lei@redhat.com>, <tj@kernel.org>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220210115637.1074927-1-yukuai3@huawei.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <c000951a-b304-4663-4752-4a2cf8a4cbbb@huawei.com>
+Date:   Fri, 25 Feb 2022 15:18:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20220210115637.1074927-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+friendly ping ...
 
-When neighbour become invalid or destroyed, neigh_invalidate() will be
-called. neigh->ops->error_report() will be called if the neighbour's
-state is NUD_FAILED, and seems here is the only use of error_report().
-So we can tell that the reason of skb drops in arp_error_report() is
-SKB_DROP_REASON_NEIGH_FAILED.
-
-Replace kfree_skb() used in arp_error_report() with kfree_skb_reason().
-
-Reviewed-by: Mengen Sun <mengensun@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
----
- net/ipv4/arp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ipv4/arp.c b/net/ipv4/arp.c
-index 4db0325f6e1a..8e4ca4738c43 100644
---- a/net/ipv4/arp.c
-+++ b/net/ipv4/arp.c
-@@ -293,7 +293,7 @@ static int arp_constructor(struct neighbour *neigh)
- static void arp_error_report(struct neighbour *neigh, struct sk_buff *skb)
- {
- 	dst_link_failure(skb);
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, SKB_DROP_REASON_NEIGH_FAILED);
- }
- 
- /* Create and send an arp packet. */
--- 
-2.35.1
-
+ÔÚ 2022/02/10 19:56, Yu Kuai Ð´µÀ:
+> Throttled bios can't be issued after del_gendisk() is done, thus
+> it's better to cancel them immediately rather than waiting for
+> throttle is done.
+> 
+> For example, if user thread is throttled with low bps while it's
+> issuing large io, and the device is deleted. The user thread will
+> wait for a long time for io to return.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+> Changes in v9:
+>   - some minor changes as suggested by Ming.
+> Changes in v8:
+>   - fold two patches into one
+> Changes in v7:
+>   - use the new solution as suggested by Ming.
+> 
+>   block/blk-throttle.c | 44 +++++++++++++++++++++++++++++++++++++++++---
+>   block/blk-throttle.h |  2 ++
+>   block/genhd.c        |  2 ++
+>   3 files changed, 45 insertions(+), 3 deletions(-)
+> 
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 7c462c006b26..ca92e5fa2769 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -43,8 +43,12 @@
+>   static struct workqueue_struct *kthrotld_workqueue;
+>   
+>   enum tg_state_flags {
+> -	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
+> -	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
+> +	/* on parent's pending tree */
+> +	THROTL_TG_PENDING	= 1 << 0,
+> +	/* bio_lists[] became non-empty */
+> +	THROTL_TG_WAS_EMPTY	= 1 << 1,
+> +	/* starts to cancel all bios, will be set if the disk is deleted */
+> +	THROTL_TG_CANCELING	= 1 << 2,
+>   };
+>   
+>   #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
+> @@ -871,7 +875,8 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
+>   	       bio != throtl_peek_queued(&tg->service_queue.queued[rw]));
+>   
+>   	/* If tg->bps = -1, then BW is unlimited */
+> -	if (bps_limit == U64_MAX && iops_limit == UINT_MAX) {
+> +	if ((bps_limit == U64_MAX && iops_limit == UINT_MAX) ||
+> +	    tg->flags & THROTL_TG_CANCELING) {
+>   		if (wait)
+>   			*wait = 0;
+>   		return true;
+> @@ -1763,6 +1768,39 @@ static bool throtl_hierarchy_can_upgrade(struct throtl_grp *tg)
+>   	return false;
+>   }
+>   
+> +void blk_throtl_cancel_bios(struct request_queue *q)
+> +{
+> +	struct cgroup_subsys_state *pos_css;
+> +	struct blkcg_gq *blkg;
+> +
+> +	spin_lock_irq(&q->queue_lock);
+> +	/*
+> +	 * queue_lock is held, rcu lock is not needed here technically.
+> +	 * However, rcu lock is still held to emphasize that following
+> +	 * path need RCU protection and to prevent warning from lockdep.
+> +	 */
+> +	rcu_read_lock();
+> +	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
+> +		struct throtl_grp *tg = blkg_to_tg(blkg);
+> +		struct throtl_service_queue *sq = &tg->service_queue;
+> +
+> +		/*
+> +		 * Set the flag to make sure throtl_pending_timer_fn() won't
+> +		 * stop until all throttled bios are dispatched.
+> +		 */
+> +		blkg_to_tg(blkg)->flags |= THROTL_TG_CANCELING;
+> +		/*
+> +		 * Update disptime after setting the above flag to make sure
+> +		 * throtl_select_dispatch() won't exit without dispatching.
+> +		 */
+> +		tg_update_disptime(tg);
+> +
+> +		throtl_schedule_pending_timer(sq, jiffies + 1);
+> +	}
+> +	rcu_read_unlock();
+> +	spin_unlock_irq(&q->queue_lock);
+> +}
+> +
+>   static bool throtl_can_upgrade(struct throtl_data *td,
+>   	struct throtl_grp *this_tg)
+>   {
+> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
+> index 175f03abd9e4..2ae467ac17ea 100644
+> --- a/block/blk-throttle.h
+> +++ b/block/blk-throttle.h
+> @@ -160,12 +160,14 @@ static inline void blk_throtl_exit(struct request_queue *q) { }
+>   static inline void blk_throtl_register_queue(struct request_queue *q) { }
+>   static inline void blk_throtl_charge_bio_split(struct bio *bio) { }
+>   static inline bool blk_throtl_bio(struct bio *bio) { return false; }
+> +static inline void blk_throtl_cancel_bios(struct request_queue *q) { }
+>   #else /* CONFIG_BLK_DEV_THROTTLING */
+>   int blk_throtl_init(struct request_queue *q);
+>   void blk_throtl_exit(struct request_queue *q);
+>   void blk_throtl_register_queue(struct request_queue *q);
+>   void blk_throtl_charge_bio_split(struct bio *bio);
+>   bool __blk_throtl_bio(struct bio *bio);
+> +void blk_throtl_cancel_bios(struct request_queue *q);
+>   static inline bool blk_throtl_bio(struct bio *bio)
+>   {
+>   	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
+> diff --git a/block/genhd.c b/block/genhd.c
+> index 9589d1d59afa..6acc98cd0365 100644
+> --- a/block/genhd.c
+> +++ b/block/genhd.c
+> @@ -29,6 +29,7 @@
+>   #include "blk.h"
+>   #include "blk-mq-sched.h"
+>   #include "blk-rq-qos.h"
+> +#include "blk-throttle.h"
+>   
+>   static struct kobject *block_depr;
+>   
+> @@ -625,6 +626,7 @@ void del_gendisk(struct gendisk *disk)
+>   
+>   	blk_mq_freeze_queue_wait(q);
+>   
+> +	blk_throtl_cancel_bios(disk->queue);
+>   	rq_qos_exit(q);
+>   	blk_sync_queue(q);
+>   	blk_flush_integrity();
+> 

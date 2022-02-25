@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DA94C4C1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F044C4C20
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242519AbiBYR2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S243701AbiBYR2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237520AbiBYR2k (ORCPT
+        with ESMTP id S239265AbiBYR2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 12:28:40 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78406398;
-        Fri, 25 Feb 2022 09:28:03 -0800 (PST)
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2051.outbound.protection.outlook.com [40.107.223.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9942F039;
+        Fri, 25 Feb 2022 09:28:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vn3s97WR2z9RSf0QZ9+Hc6rtfa4/1cf4jj30pja5O/evEAxIBy/UAiBtdAuhvh2V40cKKJW+t1BOf/6UbT1nYFG0HlVyTddzKE+BNvq0ekU2lASXo83Efz9BMUZ7HdBV59FZHbBp1GRyEg9BJ43M7NDJ5XC1B49fKPYtHwyNZuoutSiDuNEQ75HkpNmp2a3TY2voq+fVuPJQHg+/+0g+ZjIryo6uVavLzaq91VVfOJUMfcwYNvQBHxwgBrhUkIdGprjXAMDR7bFMUkBnk9eAGH5B4Y9FD/j1A+rP41AyX7wFhjGORXYE6y0gNpXZJTOUfbDyJcg9meIsOKqNq0lnug==
+ b=jZyOvcNanQtZ/9vfpKffP7lcoKpCsCKqpIz++jxz6J5B008M9Tpw7snPJ73NdOuwHAT9rc64WMoVsIVV565MFePozlWH1j+7oqHZVfOrsVc0sVBvdwxR2f26jvdOqlwogontNrKNN4kaHcuHnLpd5xHOTtdfwt6ML9V3lFSlza9Z7r1eLectkntulGqt/OhKxva23ympGkOI6QHR72xuxq/TFHB9xTLBKOX7UfHrLVkiKaOof5+P9lXRJYec3meAJuO0sepkFRBwYvnc5uX7aB2jJjE7ZULoMgqoL+ZVcV0p2U/ss2a9nzED9XGQJOWnKgYAvOE34i+edFQ1daRkTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QVrh7TyekaZB38fRcwQl1oB2rWJwtm0fd5oxQta97xw=;
- b=PeXdW5RyqbpYqLCHhEuMopBur7Ek1D9xRcocZkdr8ZdDUKDTCVZX2oVfZdc0heLvHty7y/fnYL5KXRXSh1vQvQIXEkVcgV4SpXq7LT1cLWejobLanMSttSUB81Pf16WlJTrQ3kRwWNM5UklovfWSnWiTUjb5fNL7A9BbBttqW/bfqeq7ZjxlWn1lRPq0UMdpNH5xLnHiTbuGOaAxIus+fNudh22wjg/LLCIY4f8KwFB4taMlAYhnMpJea6Gs2utbGAsm+h1EFdDXW9gLGJONekQ+ha9fDRMtqg9E8Q3Sp0YokJOsAM/xtwz0vhA6v3ZPVI1UlTgHl7QAqtLbCgF0YQ==
+ bh=0uKpWSVR8rT3fvg2Wgia0xB8EinHUgDHUxB3HvV4wdI=;
+ b=n4YwY+5qfko3Y//JG1rv75zJh6E/Jhy3ZKemeEB+sbxUY9tqTZx9G5352VJwtf5Pl+NvdLIah2teRn0YfGeDxve1/tjgMAr9JRRYuP5h9R3C6iyXm0Cfsb6L+tGk+1P8qOpM+KoM4n6M73hsZ+W9j9+HkOIoTAkM/aPy81i2aGMNCkAk9vJB8JGMLClMzNdxNH7J0eQh8XS5VPT1pbCtOghP0iUx2AD8fGa3X9En5/8MccNcEZDLm22ZfjqNag0bNUXgiFYIRb6HwgPE9zRrt/VZk6YZgXAFfuz6GpvTkMGHFvTmdoKVs9qhz8lYmBov2iWr/fmbkjfABXp6UjCrlw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=opensource.wdc.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QVrh7TyekaZB38fRcwQl1oB2rWJwtm0fd5oxQta97xw=;
- b=YYaphVpzVtVT1iupF7sjanCAeYrf4/YXaAQVfI+g82uw2nEOYEtlpwElnb7+2u2Kjgnfx9AQUCnus5Zgg5ytrtSqGl6rM5aYKOhr4WJ3lCY/SzKPA5eW5hB1TsnBfUX/2eNjrX08tG5Ji5qbc+7TRQXkX/27w0werbXxHgteYlI=
-Received: from DM5PR18CA0091.namprd18.prod.outlook.com (2603:10b6:3:3::29) by
- BY5PR12MB3969.namprd12.prod.outlook.com (2603:10b6:a03:195::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Fri, 25 Feb
- 2022 17:28:01 +0000
+ bh=0uKpWSVR8rT3fvg2Wgia0xB8EinHUgDHUxB3HvV4wdI=;
+ b=mm1WdjKTD3ejIu5jepOyQeE9l67hFn/epNQQlxae7gH2Xm+NlHauSAB2zAQjRI2c3AiDsX+oZlrg1g2LVPe8sUHRgnK+NXzguhOOBEvhAzvy0qcJRJtlTyPdhRO+i1FA8mu3b2XTN3LHxgjNTwEV3ojko6+6FQoirh6+04rmH7A=
+Received: from DM5PR18CA0088.namprd18.prod.outlook.com (2603:10b6:3:3::26) by
+ LV2PR12MB5822.namprd12.prod.outlook.com (2603:10b6:408:179::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.22; Fri, 25 Feb 2022 17:28:02 +0000
 Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:3:cafe::e8) by DM5PR18CA0091.outlook.office365.com
- (2603:10b6:3:3::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25 via Frontend
- Transport; Fri, 25 Feb 2022 17:28:01 +0000
+ (2603:10b6:3:3:cafe::ef) by DM5PR18CA0088.outlook.office365.com
+ (2603:10b6:3:3::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26 via Frontend
+ Transport; Fri, 25 Feb 2022 17:28:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +48,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 17:28:00 +0000
+ 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 17:28:01 +0000
 Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 25 Feb
- 2022 11:27:59 -0600
+ 2022 11:28:00 -0600
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
 CC:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
@@ -61,10 +60,12 @@ CC:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)"
         open list <linux-kernel@vger.kernel.org>,
         <pmenzel@molgen.mpg.de>, <hdegoede@redhat.com>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 1/3] ata: ahci: Rename board_ahci_mobile
-Date:   Fri, 25 Feb 2022 11:23:17 -0600
-Message-ID: <20220225172319.846891-1-mario.limonciello@amd.com>
+Subject: [PATCH v3 2/3] ata: ahci: Rename `AHCI_HFLAG_IS_MOBILE`
+Date:   Fri, 25 Feb 2022 11:23:18 -0600
+Message-ID: <20220225172319.846891-2-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220225172319.846891-1-mario.limonciello@amd.com>
+References: <20220225172319.846891-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -73,24 +74,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 827375a1-b43a-41ce-a773-08d9f8842c0a
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3969:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB3969DA63F117C9FF30D6CC51E23E9@BY5PR12MB3969.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 5f60ff2d-a0a5-441e-d8ba-08d9f8842ca0
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5822:EE_
+X-Microsoft-Antispam-PRVS: <LV2PR12MB5822F07454538D2933C05853E23E9@LV2PR12MB5822.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vUunby27Z/4t98qrs/P4v+p5D6qKbYaRvhgsZhSy0bXxSQfPSEYjE8vT1WPSrJyZGHJxoH4T6GjBkImnwNY9kbAb38sLgD9yOOWXBAx2F6k3VYDOr+s4es/hB5f3fxrF3xrPAkGY5SjfryiGnYH8tRcF3HxPYjQOgZIrEwRffGX3ar7fXYJpZOaFRsgfXdhOLIUG7+ghW/dO6GZHtmBJsgfW88fco9AvVO5Xxqc4KkIzrglAU0kyi8YQ5GFq3jMw4dFzhZ1IqsJ5BU0CsYdKh8j8E+f4R4+hJZZ5CnOuY6E6o7o7wX4ble/e+VwcA9Trj++vw+CO+Hk9/G7PExj3VboInYsynoQM/g7yVRPhwLdzZTyBAujx6W2t+P7dPr9YanGPmu9pmKRDywUMYJg+0OevFjS7g8v7iO8chACvCFokIIlhDN6DKlMcbPahL97KbJq/J3EZDAqZ3TdBBHsuoFfH4OwSNT/AArVv8cFxauIiLo6zgutjopniEMdlUCuBfvDtLMwObhx/P3GVu3dW3Z8/b0MEtOOfGofLXj+v0GweI8VdrN0cBmm3X6q99P7j26UOitl1nJ9inHc3DqzQCxySMmOgA878P/elHsqcdiNwnpEG0Tio71WFy8xR+2Pq2d0TAloyvSpAMlGWGK/NjEEBaaRhvbOabKlHowAV1a/H5H32+eHphur/VI8lrqpME1ZuRRdn99NOl7UsbMPwgg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(44832011)(36756003)(8936002)(356005)(5660300002)(81166007)(508600001)(86362001)(40460700003)(8676002)(70586007)(70206006)(47076005)(1076003)(6916009)(316002)(2616005)(336012)(426003)(186003)(26005)(2906002)(6666004)(36860700001)(83380400001)(4326008)(30864003)(16526019)(82310400004)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ThXUP9zJS4mVHPz/JV+cGQ4dpU8Y5eh9W/XiAuuuv3noe8Yrgh2VBPzcoTQQns6WD/O0cfNzodCNmTc+Bng7lpaRaHJM8SQf5WkOTq3mb8PrMVt2kVhjuLiiHUlKRPU01KVHVMUS/ol8uD6FkWhI7qk9r9l/1VOw9XuooFDJbJhM1Z8SZxWz9shHL/1N9xgTvidFCgg+yjcR+GPGVgEdhRrSzBi8E2m/mj6317fRR6abtBFNAGq5fktjIjx20Pq5YkNQsgu5d80Yy+cA7EUTEcv3rqey8apHEClBV7IYcdaUO18ZfQRiDe5+8cN1UNfeIPl7bUxrJuX1kA20/h1vsB9HBODRmDhWvLrPpfIyS9lBM+0H/BQ63dGEGO3tOXLgC/GsS5GS50Y9iHwULJKJEAGf20lTsUI8isLnQbRy/2pCEYAn1DB5U6Br4nySSYP0ceqeeSOExA8pcQFLy3COyKzJKwH9GNaFn0BOE8vX4eTcAgF30p3/+7PsteRq4JXt9Q5iDx7ScFAt/bwdQhF+QGJ0sjOOjtUJJ32i6+ltM2ita7k5dChSaOH2czLWceU/NeRfyLirHUYVg6d1v/cK9HqQBLSNWPk26EtFbSas7XcwAxAbyOSEalHjCwJDadsKXBsPkq1Mh2yuUUKVt4u+5SeryRITotfi8Z2nmKgRwKqNkZKOF5s1bG0NurU300Ve7g5Hwe+B6ezX1c8j6BsNvGn7aZOBdW3bjIAmEmzddAk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(336012)(426003)(70206006)(70586007)(36756003)(5660300002)(82310400004)(83380400001)(86362001)(40460700003)(2616005)(16526019)(186003)(26005)(4326008)(8936002)(1076003)(36860700001)(6666004)(8676002)(44832011)(47076005)(508600001)(356005)(81166007)(2906002)(6916009)(316002)(54906003)(81973001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 17:28:00.6809
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 17:28:01.6652
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 827375a1-b43a-41ce-a773-08d9f8842c0a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f60ff2d-a0a5-441e-d8ba-08d9f8842ca0
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3969
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5822
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -101,205 +102,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This board definition was originally created for mobile devices to
-designate default link power managmeent policy to influence runtime
-power consumption.
+`AHCI_HFLAG_IS_MOBILE` designates that a chipset should be using the
+default link power management policy from a kernel configuration item.
 
-As this is interesting for more than just mobile designs, rename the
-board to `board_ahci_low_power` to make it clear it is about default
-policy.
+As desktop chipsets may also be interested in this default policy
+configuration, rename the flag to `AHCI_HFLAG_USE_LPM_POLICY` to more
+accurately reflect that a chipset doesn't have to be mobile to adopt it.
 
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-changes from v2->v3
+Changes from v2->v3
  * Add tags
- * Move new board ID name to correct location in the enum
- drivers/ata/ahci.c | 96 +++++++++++++++++++++++-----------------------
- 1 file changed, 48 insertions(+), 48 deletions(-)
+ drivers/ata/ahci.c | 6 +++---
+ drivers/ata/ahci.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index ab5811ef5a53..8f38244eda23 100644
+index 8f38244eda23..3a6db73d28d0 100644
 --- a/drivers/ata/ahci.c
 +++ b/drivers/ata/ahci.c
-@@ -50,7 +50,7 @@ enum board_ids {
- 	/* board IDs by feature in alphabetical order */
- 	board_ahci,
- 	board_ahci_ign_iferr,
--	board_ahci_mobile,
-+	board_ahci_low_power,
- 	board_ahci_no_debounce_delay,
- 	board_ahci_nomsi,
- 	board_ahci_noncq,
-@@ -135,7 +135,7 @@ static const struct ata_port_info ahci_port_info[] = {
- 		.udma_mask	= ATA_UDMA6,
+@@ -136,7 +136,7 @@ static const struct ata_port_info ahci_port_info[] = {
  		.port_ops	= &ahci_ops,
  	},
--	[board_ahci_mobile] = {
-+	[board_ahci_low_power] = {
- 		AHCI_HFLAGS	(AHCI_HFLAG_IS_MOBILE),
+ 	[board_ahci_low_power] = {
+-		AHCI_HFLAGS	(AHCI_HFLAG_IS_MOBILE),
++		AHCI_HFLAGS	(AHCI_HFLAG_USE_LPM_POLICY),
  		.flags		= AHCI_FLAG_COMMON,
  		.pio_mask	= ATA_PIO4,
-@@ -275,13 +275,13 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x2924), board_ahci }, /* ICH9 */
- 	{ PCI_VDEVICE(INTEL, 0x2925), board_ahci }, /* ICH9 */
- 	{ PCI_VDEVICE(INTEL, 0x2927), board_ahci }, /* ICH9 */
--	{ PCI_VDEVICE(INTEL, 0x2929), board_ahci_mobile }, /* ICH9M */
--	{ PCI_VDEVICE(INTEL, 0x292a), board_ahci_mobile }, /* ICH9M */
--	{ PCI_VDEVICE(INTEL, 0x292b), board_ahci_mobile }, /* ICH9M */
--	{ PCI_VDEVICE(INTEL, 0x292c), board_ahci_mobile }, /* ICH9M */
--	{ PCI_VDEVICE(INTEL, 0x292f), board_ahci_mobile }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x2929), board_ahci_low_power }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x292a), board_ahci_low_power }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x292b), board_ahci_low_power }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x292c), board_ahci_low_power }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x292f), board_ahci_low_power }, /* ICH9M */
- 	{ PCI_VDEVICE(INTEL, 0x294d), board_ahci }, /* ICH9 */
--	{ PCI_VDEVICE(INTEL, 0x294e), board_ahci_mobile }, /* ICH9M */
-+	{ PCI_VDEVICE(INTEL, 0x294e), board_ahci_low_power }, /* ICH9M */
- 	{ PCI_VDEVICE(INTEL, 0x502a), board_ahci }, /* Tolapai */
- 	{ PCI_VDEVICE(INTEL, 0x502b), board_ahci }, /* Tolapai */
- 	{ PCI_VDEVICE(INTEL, 0x3a05), board_ahci }, /* ICH10 */
-@@ -291,9 +291,9 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x3b23), board_ahci }, /* PCH AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x3b24), board_ahci }, /* PCH RAID */
- 	{ PCI_VDEVICE(INTEL, 0x3b25), board_ahci }, /* PCH RAID */
--	{ PCI_VDEVICE(INTEL, 0x3b29), board_ahci_mobile }, /* PCH M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x3b29), board_ahci_low_power }, /* PCH M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x3b2b), board_ahci }, /* PCH RAID */
--	{ PCI_VDEVICE(INTEL, 0x3b2c), board_ahci_mobile }, /* PCH M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x3b2c), board_ahci_low_power }, /* PCH M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x3b2f), board_ahci }, /* PCH AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x19b0), board_ahci_pcs7 }, /* DNV AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x19b1), board_ahci_pcs7 }, /* DNV AHCI */
-@@ -316,9 +316,9 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x19cE), board_ahci_pcs7 }, /* DNV AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x19cF), board_ahci_pcs7 }, /* DNV AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1c02), board_ahci }, /* CPT AHCI */
--	{ PCI_VDEVICE(INTEL, 0x1c03), board_ahci_mobile }, /* CPT M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x1c03), board_ahci_low_power }, /* CPT M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1c04), board_ahci }, /* CPT RAID */
--	{ PCI_VDEVICE(INTEL, 0x1c05), board_ahci_mobile }, /* CPT M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x1c05), board_ahci_low_power }, /* CPT M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1c06), board_ahci }, /* CPT RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1c07), board_ahci }, /* CPT RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1d02), board_ahci }, /* PBG AHCI */
-@@ -327,29 +327,29 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x2826), board_ahci }, /* PBG/Lewisburg RAID*/
- 	{ PCI_VDEVICE(INTEL, 0x2323), board_ahci }, /* DH89xxCC AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1e02), board_ahci }, /* Panther Point AHCI */
--	{ PCI_VDEVICE(INTEL, 0x1e03), board_ahci_mobile }, /* Panther M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x1e03), board_ahci_low_power }, /* Panther M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1e04), board_ahci }, /* Panther Point RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1e05), board_ahci }, /* Panther Point RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1e06), board_ahci }, /* Panther Point RAID */
--	{ PCI_VDEVICE(INTEL, 0x1e07), board_ahci_mobile }, /* Panther M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x1e07), board_ahci_low_power }, /* Panther M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x1e0e), board_ahci }, /* Panther Point RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c02), board_ahci }, /* Lynx Point AHCI */
--	{ PCI_VDEVICE(INTEL, 0x8c03), board_ahci_mobile }, /* Lynx M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x8c03), board_ahci_low_power }, /* Lynx M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x8c04), board_ahci }, /* Lynx Point RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c05), board_ahci_mobile }, /* Lynx M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x8c05), board_ahci_low_power }, /* Lynx M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c06), board_ahci }, /* Lynx Point RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c07), board_ahci_mobile }, /* Lynx M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x8c07), board_ahci_low_power }, /* Lynx M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c0e), board_ahci }, /* Lynx Point RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c0f), board_ahci_mobile }, /* Lynx M RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c02), board_ahci_mobile }, /* Lynx LP AHCI */
--	{ PCI_VDEVICE(INTEL, 0x9c03), board_ahci_mobile }, /* Lynx LP AHCI */
--	{ PCI_VDEVICE(INTEL, 0x9c04), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c05), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c06), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c07), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c0e), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c0f), board_ahci_mobile }, /* Lynx LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9dd3), board_ahci_mobile }, /* Cannon Lake PCH-LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x8c0f), board_ahci_low_power }, /* Lynx M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c02), board_ahci_low_power }, /* Lynx LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x9c03), board_ahci_low_power }, /* Lynx LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x9c04), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c05), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c06), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c07), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c0e), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c0f), board_ahci_low_power }, /* Lynx LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9dd3), board_ahci_low_power }, /* Cannon Lake PCH-LP AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1f22), board_ahci }, /* Avoton AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1f23), board_ahci }, /* Avoton AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x1f24), board_ahci }, /* Avoton RAID */
-@@ -381,26 +381,26 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x8d66), board_ahci }, /* Wellsburg RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8d6e), board_ahci }, /* Wellsburg RAID */
- 	{ PCI_VDEVICE(INTEL, 0x23a3), board_ahci }, /* Coleto Creek AHCI */
--	{ PCI_VDEVICE(INTEL, 0x9c83), board_ahci_mobile }, /* Wildcat LP AHCI */
--	{ PCI_VDEVICE(INTEL, 0x9c85), board_ahci_mobile }, /* Wildcat LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c87), board_ahci_mobile }, /* Wildcat LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9c8f), board_ahci_mobile }, /* Wildcat LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c83), board_ahci_low_power }, /* Wildcat LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x9c85), board_ahci_low_power }, /* Wildcat LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c87), board_ahci_low_power }, /* Wildcat LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9c8f), board_ahci_low_power }, /* Wildcat LP RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c82), board_ahci }, /* 9 Series AHCI */
--	{ PCI_VDEVICE(INTEL, 0x8c83), board_ahci_mobile }, /* 9 Series M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x8c83), board_ahci_low_power }, /* 9 Series M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0x8c84), board_ahci }, /* 9 Series RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c85), board_ahci_mobile }, /* 9 Series M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x8c85), board_ahci_low_power }, /* 9 Series M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c86), board_ahci }, /* 9 Series RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c87), board_ahci_mobile }, /* 9 Series M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x8c87), board_ahci_low_power }, /* 9 Series M RAID */
- 	{ PCI_VDEVICE(INTEL, 0x8c8e), board_ahci }, /* 9 Series RAID */
--	{ PCI_VDEVICE(INTEL, 0x8c8f), board_ahci_mobile }, /* 9 Series M RAID */
--	{ PCI_VDEVICE(INTEL, 0x9d03), board_ahci_mobile }, /* Sunrise LP AHCI */
--	{ PCI_VDEVICE(INTEL, 0x9d05), board_ahci_mobile }, /* Sunrise LP RAID */
--	{ PCI_VDEVICE(INTEL, 0x9d07), board_ahci_mobile }, /* Sunrise LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x8c8f), board_ahci_low_power }, /* 9 Series M RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9d03), board_ahci_low_power }, /* Sunrise LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x9d05), board_ahci_low_power }, /* Sunrise LP RAID */
-+	{ PCI_VDEVICE(INTEL, 0x9d07), board_ahci_low_power }, /* Sunrise LP RAID */
- 	{ PCI_VDEVICE(INTEL, 0xa102), board_ahci }, /* Sunrise Point-H AHCI */
--	{ PCI_VDEVICE(INTEL, 0xa103), board_ahci_mobile }, /* Sunrise M AHCI */
-+	{ PCI_VDEVICE(INTEL, 0xa103), board_ahci_low_power }, /* Sunrise M AHCI */
- 	{ PCI_VDEVICE(INTEL, 0xa105), board_ahci }, /* Sunrise Point-H RAID */
- 	{ PCI_VDEVICE(INTEL, 0xa106), board_ahci }, /* Sunrise Point-H RAID */
--	{ PCI_VDEVICE(INTEL, 0xa107), board_ahci_mobile }, /* Sunrise M RAID */
-+	{ PCI_VDEVICE(INTEL, 0xa107), board_ahci_low_power }, /* Sunrise M RAID */
- 	{ PCI_VDEVICE(INTEL, 0xa10f), board_ahci }, /* Sunrise Point-H RAID */
- 	{ PCI_VDEVICE(INTEL, 0xa182), board_ahci }, /* Lewisburg AHCI*/
- 	{ PCI_VDEVICE(INTEL, 0xa186), board_ahci }, /* Lewisburg RAID*/
-@@ -413,13 +413,13 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0xa356), board_ahci }, /* Cannon Lake PCH-H RAID */
- 	{ PCI_VDEVICE(INTEL, 0x06d7), board_ahci }, /* Comet Lake-H RAID */
- 	{ PCI_VDEVICE(INTEL, 0xa386), board_ahci }, /* Comet Lake PCH-V RAID */
--	{ PCI_VDEVICE(INTEL, 0x0f22), board_ahci_mobile }, /* Bay Trail AHCI */
--	{ PCI_VDEVICE(INTEL, 0x0f23), board_ahci_mobile }, /* Bay Trail AHCI */
--	{ PCI_VDEVICE(INTEL, 0x22a3), board_ahci_mobile }, /* Cherry Tr. AHCI */
--	{ PCI_VDEVICE(INTEL, 0x5ae3), board_ahci_mobile }, /* ApolloLake AHCI */
--	{ PCI_VDEVICE(INTEL, 0x34d3), board_ahci_mobile }, /* Ice Lake LP AHCI */
--	{ PCI_VDEVICE(INTEL, 0x02d3), board_ahci_mobile }, /* Comet Lake PCH-U AHCI */
--	{ PCI_VDEVICE(INTEL, 0x02d7), board_ahci_mobile }, /* Comet Lake PCH RAID */
-+	{ PCI_VDEVICE(INTEL, 0x0f22), board_ahci_low_power }, /* Bay Trail AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x0f23), board_ahci_low_power }, /* Bay Trail AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x22a3), board_ahci_low_power }, /* Cherry Tr. AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x5ae3), board_ahci_low_power }, /* ApolloLake AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x34d3), board_ahci_low_power }, /* Ice Lake LP AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x02d3), board_ahci_low_power }, /* Comet Lake PCH-U AHCI */
-+	{ PCI_VDEVICE(INTEL, 0x02d7), board_ahci_low_power }, /* Comet Lake PCH RAID */
+ 		.udma_mask	= ATA_UDMA6,
+@@ -1595,8 +1595,8 @@ static void ahci_update_initial_lpm_policy(struct ata_port *ap,
+ 	int policy = CONFIG_SATA_MOBILE_LPM_POLICY;
  
- 	/* JMicron 360/1/3/5/6, match class to avoid IDE function */
- 	{ PCI_VENDOR_ID_JMICRON, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
-@@ -447,7 +447,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
- 	{ PCI_VDEVICE(AMD, 0x7801), board_ahci_no_debounce_delay }, /* AMD Hudson-2 (AHCI mode) */
- 	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
--	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
-+	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_low_power }, /* AMD Green Sardine */
- 	/* AMD is using RAID class only for ahci controllers */
- 	{ PCI_VENDOR_ID_AMD, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
- 	  PCI_CLASS_STORAGE_RAID << 8, 0xffffff, board_ahci },
+ 
+-	/* Ignore processing for non mobile platforms */
+-	if (!(hpriv->flags & AHCI_HFLAG_IS_MOBILE))
++	/* Ignore processing for chipsets that don't use policy */
++	if (!(hpriv->flags & AHCI_HFLAG_USE_LPM_POLICY))
+ 		return;
+ 
+ 	/* user modified policy via module param */
+diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+index eeac5482f1d1..1ad48e2fe573 100644
+--- a/drivers/ata/ahci.h
++++ b/drivers/ata/ahci.h
+@@ -235,7 +235,7 @@ enum {
+ 	AHCI_HFLAG_YES_ALPM		= (1 << 23), /* force ALPM cap on */
+ 	AHCI_HFLAG_NO_WRITE_TO_RO	= (1 << 24), /* don't write to read
+ 							only registers */
+-	AHCI_HFLAG_IS_MOBILE		= (1 << 25), /* mobile chipset, use
++	AHCI_HFLAG_USE_LPM_POLICY	= (1 << 25), /* chipset that should use
+ 							SATA_MOBILE_LPM_POLICY
+ 							as default lpm_policy */
+ 	AHCI_HFLAG_SUSPEND_PHYS		= (1 << 26), /* handle PHYs during
 -- 
 2.34.1
 

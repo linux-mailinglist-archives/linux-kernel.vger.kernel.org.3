@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9DD4C4D38
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BACF14C4D36
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiBYSEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S232682AbiBYSFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiBYSE2 (ORCPT
+        with ESMTP id S232720AbiBYSFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:04:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0F92782B2;
-        Fri, 25 Feb 2022 10:03:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3961B832FF;
-        Fri, 25 Feb 2022 18:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7175C340E7;
-        Fri, 25 Feb 2022 18:03:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eARxTiEQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645812230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JwnluJWh9ISVuCRz/Wj75ot5Xs+z8IJLVRCYYQrux4=;
-        b=eARxTiEQyoIuonpY6208HwR1fpAqO34IWhfQ8EI1ngd1X9p3yHCJILxhu31ItaHKHTCvCd
-        BD8oKak7n+UC6S5iy4W2NcYAjHEuWMy487QbYoQc70e4V/3ohd6LZNYQRrzhnjBc2YQAWO
-        Dsc27R2RUNY1SNtofKZ9DRLXiv/CF24=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 718e1f96 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 25 Feb 2022 18:03:50 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 19:03:45 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Alexander Graf <graf@amazon.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
-Message-ID: <YhkaAUQ/5ChlKlXt@zx2c4.com>
-References: <20220225155552.30636-1-graf@amazon.com>
- <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
- <YhkQKfE8ErtFBmSB@zx2c4.com>
- <CAMj1kXEtUUod8Hp6VhS6k7iDKYkFj_t_J=qS2XF1p2X_SFdTvg@mail.gmail.com>
- <CAHmME9oJpL_y4bDaLwrZZZ54p5_C0YF9=vW7Zz1iUhpBHx2TvA@mail.gmail.com>
+        Fri, 25 Feb 2022 13:05:13 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9526B1E6E91;
+        Fri, 25 Feb 2022 10:04:22 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id y189so7429840ybe.4;
+        Fri, 25 Feb 2022 10:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KojlstE2lgoa7NRwY6/3wf4IDjFuyhSCMnLIbiB/VXw=;
+        b=YsJOaByGxkVsWmlo3S060z6DNQE5Lpo0T52+WHe1QFVq1Np/PzH3I0i2xuV7aTMy/u
+         Q1kmPlvlBiL69lnqJu3XUV9IHW/Y6GcTXKhgAM1qqT6wqsIj5rTBMmRmp21nuQFG5MpD
+         iNDjQwEKh+b1yixh5b2jucpDw07D4LnYEuF4EtPK1iwjS7YEAgim+pnTWQT4rzvu5NL8
+         bCGymTsqjS6dXsUCatOsKzhYDnZN9c/0eSSoQEMulK5c5H8EhwhsC1SKteesQcz9uWMN
+         vazLu5uvqbP7OcmwtOu9xS+UARj3g9EIIvGU+mCXuoaLWkhMFQXOoBhGr1GnHmDWLZHl
+         qXwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KojlstE2lgoa7NRwY6/3wf4IDjFuyhSCMnLIbiB/VXw=;
+        b=kQLUpWTLKrkj92oFTMuFEFdeISYTIlNu1Vl+XDDEPMoKHj6iJoRxeVig54iq9qM9Um
+         5TxXq6CiFtL8mtPYs4B271rDpQj48wDVBIKxx5MsevNrmIiigVAwbKQfB77LfF7pPehK
+         cdUDcPvCO83EG4SDyifZ8cBV9k/aI/LfVpLdXrPU7TYz7n9vjo12yfAZ7daclHSAh9d9
+         DnpjD5pGqy/t5WTf10sIcsr68NbnDO1mRl2NSCo/Wb2JDSTQZCwQrDbIL1oPNhb1bGi9
+         nfwD9j8yTs21gyemfRM/qZ6TfKOD9x1+sArdQJwjNTjjN8T2gpHfjtw5nOxD1Cu1XU5C
+         qKMg==
+X-Gm-Message-State: AOAM532kpGQmDYS8sGmBN4PX7m4FGBygpNbfHwLWI5f2k0wS4ynz9IHd
+        MWj/HL4C3MofEHKwBdw0+9ApRfH7LzTqkF14Pck=
+X-Google-Smtp-Source: ABdhPJyqs/M2Em3/HU+NEY5CE3n65PJxyF06pbxASaTFZx+ohua2HRsbXo6S+rdEcQ6h3e4hUCuCMghFj0B5Kj/71MA=
+X-Received: by 2002:a25:5d0:0:b0:61d:932b:6fc0 with SMTP id
+ 199-20020a2505d0000000b0061d932b6fc0mr8506142ybf.585.1645812261673; Fri, 25
+ Feb 2022 10:04:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9oJpL_y4bDaLwrZZZ54p5_C0YF9=vW7Zz1iUhpBHx2TvA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220225145432.422130-1-pgwipeout@gmail.com> <20220225145432.422130-3-pgwipeout@gmail.com>
+ <5cca79dc-619c-a162-e850-b3efd4dc746d@gmail.com>
+In-Reply-To: <5cca79dc-619c-a162-e850-b3efd4dc746d@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 25 Feb 2022 13:04:10 -0500
+Message-ID: <CAMdYzYo81L5YnLr=whBbqde--e_DSuSwSPaXuDwtzeXN7pLMwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/8] dt-bindings: usb: dwc3: add description for rk3568
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,44 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 06:33:42PM +0100, Jason A. Donenfeld wrote:
-> Either way is fine by me. Looking at all the current users of
-> ACPI_ID_LEN, none of them really mind if it's >9. I can't see where
-> it'd change any behavior or performance or really anything at all,
-> anywhere. So I'm inclined to go with my original simpler solution. But
-> again, either way is fine.
-> 
-> Alex, do you want to pick one of these and submit a v2 based on it? Or
-> do you see a shortcoming in that approach?
+On Fri, Feb 25, 2022 at 11:07 AM Johan Jonker <jbx6244@gmail.com> wrote:
+>
+> Hi Peter,
+>
+> Lots of USB series all of a sudden.
+> Combine possible?
+>
+> On 2/25/22 15:54, Peter Geis wrote:
+> > The rk3568 dwc3 controllers are backwards compatible with the rk3399.
+> > Add the device tree description for it.
+> >
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > index 04077f2d7faf..e3044e81cc72 100644
+> > --- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > @@ -30,6 +30,7 @@ select:
+> >          enum:
+> >            - rockchip,rk3328-dwc3
+> >            - rockchip,rk3399-dwc3
+> > +          - rockchip,rk3568-dwc3
+> >    required:
+> >      - compatible
+> >
+> > @@ -39,6 +40,7 @@ properties:
+> >        - enum:
+> >            - rockchip,rk3328-dwc3
+> >            - rockchip,rk3399-dwc3
+> > +          - rockchip,rk3568-dwc3
+> >        - const: snps,dwc3
+> >
+> >    reg:
+> > @@ -75,7 +77,10 @@ properties:
+> >      maxItems: 1
+> >
+> he
+> >    reset-names:
+> > -    const: usb3-otg
+> > +    items:
+> > +      - enum:
+> > +          - usb3-otg
+> > +          - usb3-host
+>
+> The use of reset-names is "sort of" only related to the rk3399 legacy
+> node. Still using this sub node DT to not to break older existing boot
+> loaders.
+>
+> https://github.com/torvalds/linux/search?q=usb3-otg
+>
+> It's only mentioned as comment in dwc3-of-simple.c but not used:
+>
+>         simple->resets = of_reset_control_array_get(np, false, true,
+>                                                     true);
+> core.c uses something similar.
+>
+>         dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+>         if (IS_ERR(dwc->reset))
+>                 return PTR_ERR(dwc->reset);
+>
+>
+> Up to the maintainers, but I wouldn't add another variant/name for the
+> same thing as it also optional(= not required) and no longer needed.
 
-I can confirm from testing that the below trivial diff fixes the issue.
-I believe Ard is looking into the userspace/udev ramifications.
+I left these named separately since they are different reset signals,
+but if it isn't an issue I don't mind having them both be usb3-otg.
 
-diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-index b503c210c2d7..4542ebb68ae0 100644
---- a/drivers/virt/vmgenid.c
-+++ b/drivers/virt/vmgenid.c
-@@ -78,8 +78,7 @@ static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
- }
+>
+> Johan
+>
+> ===
+>
+> Maybe drop PCLK_PIPE as well to reduce notifications.
 
- static const struct acpi_device_id vmgenid_ids[] = {
--	{ "QEMUVGID", 0 },	/* QEMU */
--	{ "VMGENID", 0 },	/* Firecracker */
-+	{ "VM_GEN_COUNTER", 0 },
- 	{ },
- };
+I'll be conducting testing to determine if we need PCLK_PIPE here, and
+as long as it isn't working simply because it's enabled by someone
+else I'll drop it.
+Ideally, it would be nice to have a proper clock map for these chips,
+but currently that's not in the TRM.
 
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 4bb71979a8fd..5da5d990ff58 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -211,7 +211,7 @@ struct css_device_id {
- 	kernel_ulong_t driver_data;
- };
+>
+> See example:
+> https://lore.kernel.org/linux-rockchip/20220225131602.2283499-4-michael.riesch@wolfvision.net/T/#u
+>
+> >
+> >  unevaluatedProperties: false
+> >
 
--#define ACPI_ID_LEN	9
-+#define ACPI_ID_LEN	16
-
- struct acpi_device_id {
- 	__u8 id[ACPI_ID_LEN];
-
+Thanks for the review!

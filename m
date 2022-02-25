@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D440E4C43C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B124C43C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240166AbiBYLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S240201AbiBYLk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240165AbiBYLjp (ORCPT
+        with ESMTP id S240193AbiBYLky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:39:45 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC81B2AFD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id n14so4029608wrq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
+        Fri, 25 Feb 2022 06:40:54 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2A1C230B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:40:19 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id s14so7075967edw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
-        b=Z/g5gebrnBL0zB3qUQxBoIDeTt3F4vtwqF9rDI2nw3EtZkKT76If1gWmUgufJ+TLxY
-         6nTbIZ5+Z6EJ23+v+OaZF/xpJaY55g20UDoawIZrJoPGFbyoHjLEvYeapMmNZJBpveek
-         PPY5VkkfZ2ubNqIbgxyIR9y8VRwVRM/VsejJ3NUYqeOzQLickh1WLs5mrJVE///Nqq1M
-         xMJ1anI3wy9iQVFvee9ByunDawc/akfjPqmxYNnZoUTEW4HNsfNX0Okf8qIkcAWEe+sL
-         oLhO+JbwaxV1HZ6qWgSOJH98lIp2moHlLGvi2bFis2JD+L6Shj+BPgsGSXB/6W0glas4
-         xEtg==
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sh8KsV81M+QXoRNgVzknS/NXvNTFWAIyMGZLr+InVTw=;
+        b=WrbLRly4ilsY3GUV1h7mYr9Zt0Yzbo14uqQ5tTd6RFelch9hGFfbqoFRjTllLfAR6J
+         zJ1K+llds/xre5alZmbQaXSvNd3+7an7RSzJ/Cn8yJBV6BJFe2EoK/+p361Gmbk0lHy/
+         xzlps++u+zaO1SK5W1g3htuRMBOkM7vWX8yzM0sNngS+g/riKJu+x65PlphW3Za5BTzI
+         c+BLx2XV2YwPg+Uk7TYL0j3qRCRebWR1ZuOad21Z0srjZWwq8t3WFqxXiokb+IM4T6LM
+         pKsp0eVZag0RbTQ8x/MO2ZN9bisSqFunxAzHt7lnvuuiBc0BVMIdk4+38EjzIa7pmDx7
+         0xsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
-        b=vbx68t6A+DkrnP66o4gsPHXPpWOsasWAgmFWAbrF3n2Hl6HJgjuXAwJGvzOtAxGM8V
-         HDwf9+6apoUw87VIK4dze5T/rWSY9aQ1TQ5rv4ahS4Gl2lHnNU+x1bwJWMeq4C+Ht5T0
-         oTQqgmO3CCevPB5Mc78YoXyLlYmmxl+H5u+zo/Xk5WhEkhqJL9kkLac+C+DyyCF+22V6
-         EhFf38hszoas3MYOCrNhbGtAu9o+UBB0clMmePuEezbgUyFL4Tt3FYi3fvhWCzoxmDy/
-         rysOawbVclEKpxbNwnSPHNTn/HERl+X6IUeSYrsTmSrDmoTB49o3a59D1JpfxQEtTI5z
-         Tq8w==
-X-Gm-Message-State: AOAM533sBflqI32LzRIWjwXkgLSYrSsOF+UdF4VNRWGh+7UNKTl2e7y3
-        lzqItGEJs4hbWcosg1InjgrZVQ==
-X-Google-Smtp-Source: ABdhPJwCoD9+ESaqpN1tOSsKHyjc28t7oN0/oVgThSxndsT7mPr0tLHxqG+bnGT+WRRmi7xjDZtBtw==
-X-Received: by 2002:a5d:40cd:0:b0:1ee:a044:361f with SMTP id b13-20020a5d40cd000000b001eea044361fmr4479895wrq.235.1645789151291;
-        Fri, 25 Feb 2022 03:39:11 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id c4-20020adfed84000000b001e5b8d5b8dasm3046083wro.36.2022.02.25.03.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 03:39:10 -0800 (PST)
-Message-ID: <1aaf4f8f-d777-633a-a469-ebeee4f9704e@linaro.org>
-Date:   Fri, 25 Feb 2022 12:39:07 +0100
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=sh8KsV81M+QXoRNgVzknS/NXvNTFWAIyMGZLr+InVTw=;
+        b=X8XZGMbuaCHZLPZlI0Ue5/xIVmw1rEmWIGwhMjxnDic43UPGkW6v7LxUu+DRv7U2tg
+         k2STDItQwUp3+yZLRVY//zZbAEI7JLpaMOM43K/WlgemrBJTyc478IrZXu351KDpsqsL
+         25BIXOAyXM8gfKIYACdmVT0AuEovCVsm+WyKmI+60KZJyU7p1Jm2W1+SA31m6QylHAgT
+         EbGZvkApcFh0DhsZxUDY9w0dQTiobNeeJ+Oi4GJvDPfDjUKApfc8zLPHLL21wyvDdiCx
+         xYgessETE9rCYPui8nZwPqjoEixVtIyzApYbELILuWEU1p7YjjUVZRFiHm4nIjbNKn4U
+         qlig==
+X-Gm-Message-State: AOAM532p4yVNnBFY7Ws2n3I5W5KAhVERF8xR7qzJRkankbxoB+s3s1/Q
+        B9l6+24HS//w6v35Kw/HlGESM7N4DWFxCg==
+X-Google-Smtp-Source: ABdhPJxhaN6uQd+9OJcHWGjswRd28eblw5Yj+CkB3d6idqwuxuBf6gKYhuBZ366JduJlWDHGKOGbtQ==
+X-Received: by 2002:a50:fc81:0:b0:408:4c2d:bf69 with SMTP id f1-20020a50fc81000000b004084c2dbf69mr6776517edq.229.1645789217382;
+        Fri, 25 Feb 2022 03:40:17 -0800 (PST)
+Received: from localhost ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id n24-20020a509358000000b00410bedd9eb4sm1228299eda.88.2022.02.25.03.40.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 25 Feb 2022 03:40:16 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH] scripts: get_abi.pl: Fix typo in help message
+Date:   Fri, 25 Feb 2022 12:40:08 +0100
+Message-Id: <1ff3605db3dead41bbde33fbbff6754900eceead.1645789205.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 02/10] dt-bindings: thermal: tsens: Add msm8953
- compatible
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
- <20220220201909.445468-3-luca@z3ntu.xyz> <YhfmQFFCmb74dOvV@builder.lan>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YhfmQFFCmb74dOvV@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,24 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 21:10, Bjorn Andersson wrote:
-> On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
-> 
->> Document the compatible string for tsens found in msm8953.
->>
->> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> Acked-by: Amit Kucheria <amitk@kernel.org>
->> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> Daniel, can you please pick this patch through your tree?
+Fix misspelled word in the script. (s/COMAND/COMMAND/).
 
-Applied, thanks
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+---
 
+ scripts/get_abi.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/scripts/get_abi.pl b/scripts/get_abi.pl
+index 6212f58b69c6..1068cd0e3e90 100755
+--- a/scripts/get_abi.pl
++++ b/scripts/get_abi.pl
+@@ -987,7 +987,7 @@ abi_book.pl - parse the Linux ABI files and produce a ReST book.
+ B<abi_book.pl> [--debug <level>] [--enable-lineno] [--man] [--help]
+ 	       [--(no-)rst-source] [--dir=<dir>] [--show-hints]
+ 	       [--search-string <regex>]
+-	       <COMAND> [<ARGUMENT>]
++	       <COMMAND> [<ARGUMENT>]
+ 
+ Where B<COMMAND> can be:
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.35.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

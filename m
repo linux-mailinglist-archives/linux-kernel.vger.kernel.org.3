@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92734C4DB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574DA4C4DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiBYS1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S233174AbiBYSaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiBYS1l (ORCPT
+        with ESMTP id S233082AbiBYS35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:27:41 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9F2804F0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:27:08 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id c4so3240309qtx.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:27:08 -0800 (PST)
+        Fri, 25 Feb 2022 13:29:57 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117571B0BE7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:29:24 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z15so5390729pfe.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:29:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IWgV7lZSOskecB8FftJdoO6jo/oRZnqsypUi4ITY7uM=;
-        b=qDnE9GnaYo9KDapoTmEn1fAxOjGA7NzEMLuIEl4Cs2DwhE4tEBQguC6+zZ3Ib/OdeM
-         TyWfCxAxc/v30ll90mIKKAcFbsQO6W+Xq49qGlflehuOBK+ReYfOoY0CJzylgMRWRaDR
-         bx1TPxmK69qk0vBT1xmhnNF29TOdprcpsdpab31cjRnf8iqOk9VSbxWEjE8ciMfR2fCe
-         FTD5kqz8ER5fVxkUhsm1RMHu/b/wXxVCQkRzSadDovK154FIdZ7TI2LbzvDh33Ung1Ev
-         tKjtqeqpy2eKG5rzDrN49OdcJRKi7M5JeZivFz3DE14RPTGVMLSSxuE/8GKSnifNGLqa
-         GaCg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6BUYalwQMjirgBlHQVKIgL8ZyPGCrnEUiyDcldsxoIY=;
+        b=AGCSPe65i9gvyZVes9YkqYxlSUT09c4g9QsUY+xr5UT5x3dsjKGTLV0IbeOmX4BFvw
+         wOo7lX9BasDNJ6WAo3091vgmVM35mSo5SvO6BYN5tsXRzegeDzrfSUa7YCP3JFWAY43a
+         bPrLC4iJLagjOl/Yt3/AhorefHUD7PTHhQCXqt4RZy3WVMF3iFbNW9LSil7PQBQQ6bqN
+         nYNP58eHunpvpF/PcJ+Ivg0Hps1/5Dg/56g5nDxsh7D7U4rMW6k0j3LyCeFoIC94SLkV
+         ldY+YFi91OVa8PYLiNdaWM8RG8hJD8VBQBZ9Kwv+rkNpi38TLWe8h5udlkZKh9Igyyne
+         doWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IWgV7lZSOskecB8FftJdoO6jo/oRZnqsypUi4ITY7uM=;
-        b=kElK5aQOr0iykszJizRhqsCp3cKkBrttJrbrGvDq3t9QdRj+hFV7Jx8uSMmJoDW5P6
-         jJovYdQTFbtbBZbXRE0sP+RD38maqG843tAKbsGQMqFqLBKazRWLf73FLG7AwG5iyPum
-         64JDrXQjldMArGuDGTSEK0r+cHbYh3js4DRyW+hDuheN5T0bRsEchBvY7kYttTmJ19Pf
-         9MjrTdHofFKVgEWVZ19GBh8wVzc9WmcJHlCcuNhZbf8VGKQk4s9I1QZVyRIXHJkEhvG+
-         WXhVEGtvQNq9KTlfX4EV+xtPA0A3ntW6GgMLyECjjIzkR1oN8dJcucU+Gzrf7DXQYwUj
-         KtOA==
-X-Gm-Message-State: AOAM531qjgXzLgPH3liWqJkSNo2np6NnzmrxQ2yjvIwfOwjLBam4+fwd
-        NqR6ekjcT37O/h3WvXZIZ9bXESJju+dDicl81zUXA4WwOKw=
-X-Google-Smtp-Source: ABdhPJyQQxWe69MayrNuwG/VqqvlHeIKABPLkfvgMgtS8RUruqbzTAb0IN1UMjTr+2rSAjWrLRe9UWBXq3rX58woAIg=
-X-Received: by 2002:ac8:5cc9:0:b0:2de:8838:5888 with SMTP id
- s9-20020ac85cc9000000b002de88385888mr8325152qta.370.1645813627885; Fri, 25
- Feb 2022 10:27:07 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6BUYalwQMjirgBlHQVKIgL8ZyPGCrnEUiyDcldsxoIY=;
+        b=qMCTCuTugeDHBEJI+5fMhowojXVwskBsSuUPpzZK5I3FVuw3JN3tUUY825Gz/g+bVl
+         mj73fZLDHFpyLqzRXtsQYCTI+mR1mQf8n6BF5PoljBhKZu+Mg8R+fUkJfKWBlRYsk6Kh
+         ZlBm7Iii+2+EhVwxAbVQ8PrebPNVnfHvJhuL9QML0El46sxN/YgYGpzwsluOGJHqY8Ub
+         Zu7TtLE1yrFXzMuiuJAmZHX1Q15Wew+79+2CijJO6/M0QJWYQFUGHBCBPLJJg+D96P05
+         rdGAb/5oDfFJVn79Hg+Q3koUTpdm35/IsgE3Cwkga+PTjWjwE8+ngNkb0hDcu3yobcru
+         oOZA==
+X-Gm-Message-State: AOAM532dQX2wy1R6JDAhIyW9vjCEWbsB+yJfG4LOPrVruAhpWASrzcSY
+        HxRQLctzqycG0SJz8Z+DAEsYWw==
+X-Google-Smtp-Source: ABdhPJypmcBzZFJmNOY3PLAF8glZj7HrAMB+lj6ALtYq3OGeITCoz9OVOYTocmq3HoxZQzNj0hVejg==
+X-Received: by 2002:a63:d443:0:b0:364:51b7:c398 with SMTP id i3-20020a63d443000000b0036451b7c398mr7153349pgj.511.1645813763398;
+        Fri, 25 Feb 2022 10:29:23 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm4332692pfu.62.2022.02.25.10.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 10:29:22 -0800 (PST)
+Date:   Fri, 25 Feb 2022 18:29:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+Message-ID: <Yhkf/qJ1wpfbA3Fc@google.com>
+References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+ <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
+ <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com>
+ <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
+ <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
+ <CALMp9eQHKn=ApthER084vKGiQCMdVX7ztB5iLupBPdUY59WV_A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220225182321.GG274289@thinkpad>
-In-Reply-To: <20220225182321.GG274289@thinkpad>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 25 Feb 2022 21:26:56 +0300
-Message-ID: <CAA8EJprs9dvjm5R-hhrTKTwm9RxJd9GJy=eFFHC0y7110p_+ew@mail.gmail.com>
-Subject: Re: PCI: endpoint: Usage of atomic notifier chain
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kishon@ti.com, lorenzo.pieralisi@arm.com, omp@nvidia.com,
-        vidyas@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eQHKn=ApthER084vKGiQCMdVX7ztB5iLupBPdUY59WV_A@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 at 21:23, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> Hi,
->
-> While working with the PCI endpoint subsystem, I stumbled upon the sleeping
-> in atomic context bug during CORE_INIT phase. The issue seems to be due to the
-> usage of "epc lock" (mutex) in functions such as set_msi, set_msix,
-> write_header, etc...
->
-> These functions are supposed to be used in the atomic notifier chain by the
-> CORE_INIT notifier. While using the lock is necessary in these functions as
-> pci_epc_create() would've been called, I see two possible workarounds:
->
-> 1. Using non-atomic notifier chains such as blocking or raw.
-> 2. Modifying the EPF drivers to use workqueue in CORE_INIT notifier chain. But
-> this has the implication of missing the workqueue execution before hitting other
-> PCI events as there might be a delay in scheduling the work item.
+On Fri, Feb 25, 2022, Jim Mattson wrote:
+> On Fri, Feb 25, 2022 at 7:13 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >
+> > On 2/25/22 16:12, Xiaoyao Li wrote:
+> > >>>>
+> > >>>
+> > >>> I don't like the idea of making things up without notifying userspace
+> > >>> that this is fictional. How is my customer running nested VMs supposed
+> > >>> to know that L2 didn't actually shutdown, but L0 killed it because the
+> > >>> notify window was exceeded? If this information isn't reported to
+> > >>> userspace, I have no way of getting the information to the customer.
+> > >>
+> > >> Then, maybe a dedicated software define VM exit for it instead of
+> > >> reusing triple fault?
+> > >>
+> > >
+> > > Second thought, we can even just return Notify VM exit to L1 to tell L2
+> > > causes Notify VM exit, even thought Notify VM exit is not exposed to L1.
+> >
+> > That might cause NULL pointer dereferences or other nasty occurrences.
+> 
+> Could we synthesize a machine check? I haven't looked in detail at the
+> MCE MSRs, but surely there must be room in there for Intel to reserve
+> some encodings for synthesized machine checks.
 
-Just a note: using workqueue wouldn't help if one has to process link
-down events.
-The driver would expect that after dispatching the link down event it
-can disable the hardware, thus making worker access disabled hw
-instance.
-
-
-
--- 
-With best wishes
-Dmitry
+I don't think we have any choice but to synthesize SHUTDOWN until we get more
+details on the exact semantics of VM_CONTEXT_INVALID.  E.g. if GUEST_EFER or any
+other critical guest field is corrupted, attempting to re-enter the guest, even
+to (attempt to) inject a machine check, is risking undefined behavior in the guest.

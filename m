@@ -2,191 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088974C3A58
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751C14C3A5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiBYAaN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Feb 2022 19:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S232511AbiBYAcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiBYAaL (ORCPT
+        with ESMTP id S232278AbiBYAck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:30:11 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC4329F412;
-        Thu, 24 Feb 2022 16:29:41 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:42592)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOUI-001Ewm-DQ; Thu, 24 Feb 2022 17:29:34 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:56954 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOUH-000XdN-5K; Thu, 24 Feb 2022 17:29:34 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        Etienne Dechamps <etienne@edechamps.fr>,
-        Alexey Gladkov <legion@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Security Officers <security@kernel.org>,
-        Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        Linus Torvalds <linus@torvalds.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
-        <20220215101150.GD21589@blackbody.suse.cz>
-        <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
-        <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
-        <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-        <878ru1qcos.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wgW8+vmqhx4t+uFiZL==8Ac5VWTqCm_oshA0e47B73qPw@mail.gmail.com>
-        <87tucpko7d.fsf@email.froward.int.ebiederm.org>
-        <87sfs8jmpz.fsf_-_@email.froward.int.ebiederm.org>
-        <202202240826.E31BADF@keescook>
-Date:   Thu, 24 Feb 2022 18:29:24 -0600
-In-Reply-To: <202202240826.E31BADF@keescook> (Kees Cook's message of "Thu, 24
-        Feb 2022 08:28:41 -0800")
-Message-ID: <87y21zhjq3.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 24 Feb 2022 19:32:40 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53AA1B45DD;
+        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id q11so3337737pln.11;
+        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=tKC1TRHCBri+KzcoCYvPSpdvCg/HdwcBnsM6kDgfriM=;
+        b=aFvL07xt/0stKeZefxUZbUC+5wQ0c2t8VfgbSdA4KnIJogwafaubJUI86KN4/FvFV5
+         jbLhM+LrJv3ypnussHBfpu7uj5KI0PXVQ96Jdo+lCX3ypLIHQGZHtAkyVdAh4mtCu2qS
+         ap4TAiaH3AgnoAQmDOleF4kCeej300au8cAl/UdmZr0lqIgLVI2qY4xeiFfraLkMfPy+
+         3rauidoZEYE8aGNlxrQXELwdFr9QiuiKZh5bLLIvF73t45sBCn4jewpG/0Te1MH9Hphe
+         o/sRG6BxKY9eG6wcyZ3QNsOS/fLPbBIUJS5HWzi/+UPcL9L4idltFRILXZRMw5LpG4at
+         ebhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=tKC1TRHCBri+KzcoCYvPSpdvCg/HdwcBnsM6kDgfriM=;
+        b=b993J+MUOCdsdA+nS1VKIX/OClj8gche/Wk7PbQ9WeRroS1Xcm+3khHo6Fc9RCuWur
+         pAL90ZyXLV1nzgClSeJ7kgkpm1CAF6yba5n5hwrAESTcDd7re5BArrfig1j8W7NMt10b
+         Uy2QkiDxugL1+SjZuXHp1wwesuTt1GNz3A14I2ECcl+dxrxFqMiGmUcb+sN0wIWnrKZL
+         VGbYRarRCIv4djNzBRfQlnnaa04rYwSg3RrkFeqA2PfaNnaxcIJwEDdIKwwKT0zllE5d
+         icjqE0GPLmaiMrEHrfBupf/TlqPwwpU0/CeXCrT+jgbFRQR/TRipwzSZ8pXW/TBbFbtU
+         XM4Q==
+X-Gm-Message-State: AOAM530Gwwmsp07+wvWvwJV0IboDd60GtZv/38ZrezjvngFTl+a40mb9
+        EqcbpoP9qW50J9r4mChyMSDOlhSrCi4=
+X-Google-Smtp-Source: ABdhPJx6JkQFQ7K41lpXb/O0ach2L1AgRseaw/gapGt3TSCEZRFc8m8HvGMfvjmlWhxUObOSXiOjgw==
+X-Received: by 2002:a17:902:f701:b0:14d:7cea:82af with SMTP id h1-20020a170902f70100b0014d7cea82afmr4868065plo.71.1645749128161;
+        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
+Received: from localhost (115-64-212-59.static.tpgi.com.au. [115.64.212.59])
+        by smtp.gmail.com with ESMTPSA id g28-20020a63111c000000b00374646abc42sm602400pgl.36.2022.02.24.16.32.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 16:32:07 -0800 (PST)
+Date:   Fri, 25 Feb 2022 10:32:02 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        stable@vger.kernel.org
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+        <20220223135820.2252470-2-anders.roxell@linaro.org>
+        <1645670923.t0z533n7uu.astroid@bobo.none>
+        <1645678884.dsm10mudmp.astroid@bobo.none>
+        <20220224171207.GM614@gate.crashing.org>
+In-Reply-To: <20220224171207.GM614@gate.crashing.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nNOUH-000XdN-5K;;;mid=<87y21zhjq3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+tiJNf1YjykR+rfILbUT6/qjREErIq3zE=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Message-Id: <1645748601.idp48wexp9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 634 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.2 (0.7%), b_tie_ro: 2.9 (0.5%), parse: 0.92
-        (0.1%), extract_message_metadata: 15 (2.3%), get_uri_detail_list: 2.1
-        (0.3%), tests_pri_-1000: 21 (3.3%), tests_pri_-950: 0.99 (0.2%),
-        tests_pri_-900: 0.82 (0.1%), tests_pri_-90: 62 (9.8%), check_bayes: 61
-        (9.6%), b_tokenize: 9 (1.4%), b_tok_get_all: 12 (1.8%), b_comp_prob:
-        2.7 (0.4%), b_tok_touch_all: 33 (5.3%), b_finish: 0.80 (0.1%),
-        tests_pri_0: 392 (61.9%), check_dkim_signature: 0.44 (0.1%),
-        check_dkim_adsp: 1.87 (0.3%), poll_dns_idle: 121 (19.2%),
-        tests_pri_10: 2.3 (0.4%), tests_pri_500: 132 (20.8%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH] ucounts: Fix systemd LimigtNPROC with private users
- regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+Excerpts from Segher Boessenkool's message of February 25, 2022 3:12 am:
+> On Thu, Feb 24, 2022 at 03:05:28PM +1000, Nicholas Piggin wrote:
+>> + * gcc 10 started to emit a .machine directive at the beginning of gene=
+rated
+>> + * .s files, which overrides assembler -Wa,-m<cpu> options passed down.
+>> + * Unclear if this behaviour will be reverted.
+>=20
+> It will not be reverted.  If you need a certain .machine for some asm
+> code, you should write just that!
 
-> typo: Subject's LimigtNPROC -> LimitNPROC
->
-> On Thu, Feb 24, 2022 at 09:41:44AM -0600, Eric W. Biederman wrote:
->> 
->> Long story short recursively enforcing RLIMIT_NPROC when it is not
->> enforced on the process that creates a new user namespace, causes
->> currently working code to fail.  There is no reason to enforce
->> RLIMIT_NPROC recursively when we don't enforce it normally so update
->> the code to detect this case.
->> 
->> I would like to simply use capable(CAP_SYS_RESOURCE) to detect when
->> RLIMIT_NPROC is not enforced upon the caller.  Unfortunately because
->> RLIMIT_NPROC is charged and checked for enforcement based upon the
->> real uid, using capable() wich is euid based is inconsistent with reality.
->
-> typo: wich -> which
+It should be reverted because it breaks old binutils which did not have
+the workaround patch for this broken gcc behaviour. And it is just
+unnecessary because -m option can already be used to do the same thing.
 
-Ahh... Typos.
+Not that I expect gcc to revert it.
 
->> Come as close as possible to testing for capable(CAP_SYS_RESOURCE) by
->> testing for when the real uid would match the conditions when
->> CAP_SYS_RESOURCE would be present if the real uid was the effective
->> uid.
->> 
->> Reported-by: Etienne Dechamps <etienne@edechamps.fr>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215596
->> Link: https://lkml.kernel.org/r/e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr
->> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->> ---
->> 
->> The previous conversation has given me enough clarity that I can see
->> which tests I am comfortable with use for this pending regression fix.
->> 
->> I have tested this and it works for me.  Does anyone have any concerns
->> with this change?
->
-> I'd really love some kind of selftest that exercises the edge cases; do
-> you have your tests in some form that could be converted?
->
-> But otherwise, yes, this looks like the best option here.
+>=20
+>> +#ifdef CONFIG_CC_IS_GCC
+>> +#if (GCC_VERSION >=3D 100000)
+>> +#if (CONFIG_AS_VERSION =3D=3D 23800)
+>> +asm(".machine any");
+>> +#endif
+>> +#endif
+>> +#endif
+>> +#endif /* __ASSEMBLY__ */
+>=20
+> Abusing toplevel asm like this is broken and you *will* end up with
+> unhappiness all around.
 
-Let's start with Michal Koutný tests.  I keep forgetting to look at
-them.  This cold has really been kicking my butt.
+It actually unbreaks things and reduces my unhappiness. It's only done=20
+for broken compiler versions and only where as does not have the=20
+workaround for the breakage.
 
-For this issue the test case was a systemd unit file.  Which is simple
-and demonstrates the real-world regression but not really minimal in the
-way a kernel selftest should be.
-
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
->> 
->>  kernel/user_namespace.c | 14 +++++++++++++-
->>  1 file changed, 13 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
->> index 6b2e3ca7ee99..5481ba44a8d6 100644
->> --- a/kernel/user_namespace.c
->> +++ b/kernel/user_namespace.c
->> @@ -58,6 +58,18 @@ static void set_cred_user_ns(struct cred *cred, struct user_namespace *user_ns)
->>  	cred->user_ns = user_ns;
->>  }
->>  
->> +static unsigned long enforced_nproc_rlimit(void)
->> +{
->> +	unsigned long limit = RLIM_INFINITY;
->> +
->> +	/* Is RLIMIT_NPROC currently enforced? */
->> +	if (!uid_eq(current_uid(), GLOBAL_ROOT_UID) ||
->> +	    (current_user_ns() != &init_user_ns))
->> +		limit = rlimit(RLIMIT_NPROC);
->> +
->> +	return limit;
->> +}
->> +
->>  /*
->>   * Create a new user namespace, deriving the creator from the user in the
->>   * passed credentials, and replacing that user with the new root user for the
->> @@ -122,7 +134,7 @@ int create_user_ns(struct cred *new)
->>  	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++) {
->>  		ns->ucount_max[i] = INT_MAX;
->>  	}
->> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
->> +	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, enforced_nproc_rlimit());
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
->> -- 
->> 2.29.2
->> 
-
-Eric
+Thanks,
+Nick

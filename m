@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8534C3ED9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26ACB4C3EDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238041AbiBYHRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S238059AbiBYHTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238034AbiBYHRS (ORCPT
+        with ESMTP id S232495AbiBYHTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:17:18 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE1657F;
-        Thu, 24 Feb 2022 23:16:40 -0800 (PST)
+        Fri, 25 Feb 2022 02:19:31 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F96253BF6;
+        Thu, 24 Feb 2022 23:19:00 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id b22so4059408pls.7;
+        Thu, 24 Feb 2022 23:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645773400; x=1677309400;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Eha8UfFU5sTXgWjY6/4IUTMY/kkCOwxcj1l/44F5h+U=;
-  b=as9waMjut2vhMOAY3TXveAsWvwMzZkNvXC+CyIiUhA9mP8bYgYYtK8V1
-   AW9hAc3vLx2a8mSmVMK2VNPrF6/TfGdjO1Dj+S2fq6lKeHoY4vrAH85X0
-   IJiMqQxQ3bJyyWRY6qrzNoGZ7TB7KgHDaoanLZs7UEoejXmn2gzteitVw
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Feb 2022 23:16:39 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 23:16:39 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 24 Feb 2022 23:16:39 -0800
-Received: from [10.216.57.207] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
- 2022 23:16:35 -0800
-Message-ID: <b9205016-1f33-74fd-c314-c307412bfca3@quicinc.com>
-Date:   Fri, 25 Feb 2022 12:46:26 +0530
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aY+XddXjw7LZh1zdvBioaCOUGi5CQTdoKQ2E5MS97TU=;
+        b=Fdrw3FLu5zI4McxeGMrABkpROPrvt3P8COAeV2iufC74ESJPl3mrnrpRRrFIi2jmNN
+         W9VJIaI/ZthyfLewq3hxAJrCRQ+YCx961chWpnhcJRbOl8FTF2Tb9cWrtQG3NhtKH6al
+         qGc9jBMOziwwCC1l+alESVgfPV4VgniUtsiqgDfk59msmX9NISqG5zSKZur/NnrqeWTp
+         /IUgM79SBWa6Aa3fWeilRBK5dVpMCWlM/fHKH3kHmpFtFV98FMsZ9G1SfoGbdAlwPtvx
+         IOWFjve/FXWylwzrB8W/VXqj6E1XuHiVG6tnr0IDi/3f7qBwje4L240rBXFQREdKZYwF
+         LSow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aY+XddXjw7LZh1zdvBioaCOUGi5CQTdoKQ2E5MS97TU=;
+        b=u/yqWuSfIJQt9UFxlxXIsu+bx7/iLoWcFzx+tiH8CI6VxOJRBUD87C6kPMqcAi8nHf
+         6+HimP1E2tN3YPKomcEydDX6GfSAXHerjdKpdBFViO2EB7mQQgH6BgsOzNMAbUQJPAFn
+         lm79yJcvSwTL2nLxl+j1SC9Z3VBhnzZnA7v8MVkAgp1ybCZh5HvQ6hRLpcGayhd0P5A/
+         fZNgig+ynn2kIrK4cP9rxs6JJydS7QgESlFC75zY7E7MvoS3/Pgw+SR5Q9lyzwWlPqyW
+         xgbdqQKsisAYioV/t3bYQwGv115b39Anf2HCSIsPgf69rQZDYL1v7bYu5+FqKSnArXs9
+         M55A==
+X-Gm-Message-State: AOAM533ZOQ/i41PgenZ0ttGWETdKf3wZNMWuIGeNYdGybvNgAtjeVCLg
+        AhnZlFDHAY+RLjNJNgByVpg=
+X-Google-Smtp-Source: ABdhPJyfCWU3wBIcB12TbUXk4HqCL/V66Y5U0UL1FZ/m6hYgDgfrMhVlkHPZQmr++ZgMjvprpyg6Xw==
+X-Received: by 2002:a17:90a:578f:b0:1b9:b03f:c33c with SMTP id g15-20020a17090a578f00b001b9b03fc33cmr1925497pji.114.1645773539919;
+        Thu, 24 Feb 2022 23:18:59 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.110])
+        by smtp.gmail.com with ESMTPSA id k20-20020a056a00135400b004ecc81067b8sm1970825pfu.144.2022.02.24.23.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 23:18:59 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     dsahern@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        kuba@kernel.org, yoshfuji@linux-ipv6.org, imagedong@tencent.com,
+        edumazet@google.com, alobakin@pm.me, cong.wang@bytedance.com,
+        paulb@nvidia.com, talalahmad@google.com, keescook@chromium.org,
+        ilias.apalodimas@linaro.org, memxor@gmail.com,
+        flyingpeng@tencent.com, mengensun@tencent.com,
+        daniel@iogearbox.net, yajun.deng@linux.dev, roopa@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v2 0/3] net: use kfree_skb_reason() for ip/neighbour
+Date:   Fri, 25 Feb 2022 15:17:36 +0800
+Message-Id: <20220225071739.1956657-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] ARM: dts: qcom: Add chosen node information for SDX65.
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <robh+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1644574845-23248-1-git-send-email-quic_rohiagar@quicinc.com>
- <YhfgAL8z6rO+zU3w@builder.lan>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <YhfgAL8z6rO+zU3w@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
-On 2/25/2022 1:14 AM, Bjorn Andersson wrote:
-> On Fri 11 Feb 04:20 CST 2022, Rohit Agarwal wrote:
->
->> Add chosen node in the base dtsi file of SDX65.
->>
-> While this happens to be the same on most boards, it is still a
-> board-specific decision which UART is the debug uart, or if there is one
-> at all...
->
-> So this property should remain in the dts.
->
-> Thanks,
-> Bjorn
+In the series "net: use kfree_skb_reason() for ip/udp packet receive",
+reasons for skb drops are added to the packet receive process of IP
+layer. Link:
 
-Without the chosen node in base dtsi, the device is not booting up.
-Can we have an empty chosen node in the base dtsi and the board-specific 
-details
-updated in the respective dts file. The device boots up with this.
+https://lore.kernel.org/netdev/20220205074739.543606-1-imagedong@tencent.com/
 
-Thanks,
-Rohit
+And in the first patch of this series, skb drop reasons are added to
+the packet egress path of IP layer. As kfree_skb() is not used frequent,
+I commit these changes at once and didn't create a patch for every
+functions that involed. Following functions are handled:
 
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm/boot/dts/qcom-sdx65-mtp.dts | 4 ----
->>   arch/arm/boot/dts/qcom-sdx65.dtsi    | 4 ++++
->>   2 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> index 59457da..3a75c21 100644
->> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->> @@ -14,10 +14,6 @@
->>   	aliases {
->>   		serial0 = &blsp1_uart3;
->>   	};
->> -
->> -	chosen {
->> -		stdout-path = "serial0:115200n8";
->> -	};
->>   };
->>   
->>   &blsp1_uart3 {
->> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
->> index 796641d..653df15 100644
->> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
->> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
->> @@ -17,6 +17,10 @@
->>   	qcom,msm-id = <458 0x10000>, <483 0x10000>, <509 0x10000>;
->>   	interrupt-parent = <&intc>;
->>   
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +	};
->> +
->>   	memory {
->>   		device_type = "memory";
->>   		reg = <0 0>;
->> -- 
->> 2.7.4
->>
+__ip_queue_xmit()
+ip_finish_output()
+ip_mc_finish_output()
+ip6_output()
+ip6_finish_output()
+ip6_finish_output2()
+
+Following new drop reasons are introduced (what they mean can be seen
+in the document of them):
+
+SKB_DROP_REASON_IP_OUTNOROUTES
+SKB_DROP_REASON_BPF_CGROUP_EGRESS
+SKB_DROP_REASON_IPV6DSIABLED
+SKB_DROP_REASON_NEIGH_CREATEFAIL
+
+In the 2th and 3th patches, kfree_skb_reason() is used in neighbour
+subsystem instead of kfree_skb(). __neigh_event_send() and
+arp_error_report() are involed, and following new drop reasons are
+introduced:
+
+SKB_DROP_REASON_NEIGH_FAILED
+SKB_DROP_REASON_NEIGH_QUEUEFULL
+SKB_DROP_REASON_NEIGH_DEAD
+
+Changes since v1:
+- introduce SKB_DROP_REASON_NEIGH_CREATEFAIL for some path in the 1th
+  patch
+- introduce SKB_DROP_REASON_NEIGH_DEAD in the 2th patch
+- simplify the document for the new drop reasons, as David Ahern
+  suggested
+
+Menglong Dong (3):
+  net: ip: add skb drop reasons for ip egress path
+  net: neigh: use kfree_skb_reason() for __neigh_event_send()
+  net: neigh: add skb drop reasons to arp_error_report()
+
+ include/linux/skbuff.h     | 14 ++++++++++++++
+ include/trace/events/skb.h |  7 +++++++
+ net/core/neighbour.c       |  6 +++---
+ net/ipv4/arp.c             |  2 +-
+ net/ipv4/ip_output.c       |  8 ++++----
+ net/ipv6/ip6_output.c      |  6 +++---
+ 6 files changed, 32 insertions(+), 11 deletions(-)
+
+-- 
+2.35.1
+

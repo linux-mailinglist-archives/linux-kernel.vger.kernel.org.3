@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F215E4C4FD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9834C4FDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbiBYUmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S236853AbiBYUoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiBYUmk (ORCPT
+        with ESMTP id S229774AbiBYUoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:42:40 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437142177E8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:42:07 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j22so6119765wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:42:07 -0800 (PST)
+        Fri, 25 Feb 2022 15:44:05 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DCE154D12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:43:32 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id z15so3583944qtx.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CmSYa3kkJ/ViPa9xmpfA0cWei7k8n4ZCOH7gEssAD/I=;
-        b=EGk7/LDlXcRBEnL/ciXk8b6dZE+SwmeKuZyRM51k9wovsnq2pgZ2Q1eSm9WlPDgLju
-         cRN2w6KZVLyeXBYOar9Xz2aUxVaJxlqaMQzhi5usHRRoUlcvKQolgf8gC/pY8hgt9jag
-         JIedgUI6aIsL3t9JfHcYGiAyNyjxKZ4xgqzV+w8vF03ze8CJBfFvOYzoOVgOS3Ux2p4e
-         XB6KcgZqtVP4kZvOJy1dBrxiPMh92R/Z93Y0QUpAvKrGAAUbmauJLlK4IwkFA7XTfDV/
-         7KikjjM8axTlqCVf/idIwlunEUiJPtmJNpobcVK0znOnPgyKn9H2KP+zSrPPtOXeNZ1P
-         F3iw==
+        d=soleen.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0sTP7GDwptY8bNx87CNOI5Rdq6AzguIA/W9Y/8oT6f8=;
+        b=MFoC5VBmZ3jGwG60wzsi/T6z2BtuS+rvj2L1jxRcPe/3E5zsMeT9bjEakVZp9Jnsxd
+         tg4kSqlPzGlA0iyUQrY3CElDO+rbis9VxcDUHxSeSsFW3TRa388paIs3qbtKuCXgkx5+
+         7xECK5DaXmFD3LY1+sOvgivI+qff76NvPyshWHmNHnvvVdsqYBnpczFZLz3yFzP+Orfa
+         ZNSrBwGn88hdyaNa7CvOfyfQoyQCH9Oj0LnAlb5mHIuruh4MSpFq/799rPMISTacNcYV
+         ivt9ctgA35LgvVvZUTZVi6hufVwiRD/K+kx4igZsyJnYNaOjNt0J677oY6ITiFClSdq6
+         hm3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CmSYa3kkJ/ViPa9xmpfA0cWei7k8n4ZCOH7gEssAD/I=;
-        b=hkNRzfWaj/Wk3a5FcGd/9YUecrBXcfCQplOYymrB8wkmtVrWq2TNQ+V5F5TNxTYr1u
-         Nw5xYtWR2WBI4oYA59k7kYn+5ojELURUi8WMEusDUVKJhXlLFn+UiTq40Nv7de8bqVAw
-         DQ6ds9/+PZ+cheHdX406oQTxT4HXOoPIRwznwTVVmAPeHH/eszeHPQOUfAWWCQmLMxa8
-         +kbLPDuWrflp59NwVoaQtDqt1XVpZrzjpYycOiHMIGakatvDA+KitwPTaSl+8pFhFb7V
-         ovQD2KqyEY++YNZXggh9/yTbKWLxAq2yHlqCIY4P91Hytfxr+v3lDBit8druVtsySl1T
-         yqUg==
-X-Gm-Message-State: AOAM531okTC5jMY0s81ysH78+ghCIemOZsuYU9ptYSbLbl+ssGK2KUg5
-        l/SqoQ9OSCMSBlmKnN5JTaA6ecj2LZ1YoQ==
-X-Google-Smtp-Source: ABdhPJzR6KQ8n+yaCjgQutAdmLIinpHWmtD2vyqj+2z2MYnh4tl2xMFLcWengEbUfhc948/YVE7zug==
-X-Received: by 2002:a05:6000:8b:b0:1ee:1c9d:92a0 with SMTP id m11-20020a056000008b00b001ee1c9d92a0mr6352426wrx.677.1645821725706;
-        Fri, 25 Feb 2022 12:42:05 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c511000b0038141b4a4edsm960201wms.38.2022.02.25.12.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 12:42:05 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.17-rc6
-Date:   Fri, 25 Feb 2022 21:42:02 +0100
-Message-Id: <20220225204202.53415-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        bh=0sTP7GDwptY8bNx87CNOI5Rdq6AzguIA/W9Y/8oT6f8=;
+        b=lf90LAdtG56vB5taIeARATbfZdbCUGOgFyywzUF8AwbwGmaAZkmZ6ZU3yQj3lbpoOu
+         pgfSHm5AX/tiLdthNkn1cvOj2CbkgNRVqbunU7774dXxgA2rLellta+SigT1PtUVdx2T
+         HPVbCjgqrua3hsRt837x84xE/ZAycusZBYYT1cfFVNpjKEd4bVX2xyxDEeCPRqKQydGw
+         y7Ci3fUTFt1uPguoSC8y/4Kqxtlsf75l0VKCOWVp6CAEXLdIJ9h7Xg8LjENyBzvsRsRM
+         9Rx1+l/0RizlXJPzNtuX9hGRTZIs4T4aXHeXy8toP6bqJYco9plRtijNPHsUgF7Jbbg/
+         Q5qA==
+X-Gm-Message-State: AOAM5310/EfJxftNMh/RxyypAgmX0CLapROw8BpGVejU1Mym3DRgY84i
+        TqTt76H0RhEMbsW+HOt0AMm9cw==
+X-Google-Smtp-Source: ABdhPJzAV+ii4WYbFAl+R+9tZfWmW/IA2f9BQUUwP6auXL+OaWyHqFSrXjfWo5MVaMH9Ks9Zb6CIZg==
+X-Received: by 2002:a05:622a:1a81:b0:2ce:7959:d9a2 with SMTP id s1-20020a05622a1a8100b002ce7959d9a2mr8351037qtc.135.1645821811716;
+        Fri, 25 Feb 2022 12:43:31 -0800 (PST)
+Received: from [100.115.92.195] ([98.217.233.229])
+        by smtp.gmail.com with ESMTPSA id o13-20020ac87c4d000000b002dd2647f223sm2150705qtv.42.2022.02.25.12.43.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 12:43:31 -0800 (PST)
+Message-ID: <a7f26f93-c5f8-2abc-e186-5d179706ae8e@soleen.com>
+Date:   Fri, 25 Feb 2022 15:43:29 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
+Content-Language: en-US
+To:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg Thelen <gthelen@google.com>
+References: <20220224000531.1265030-1-haoluo@google.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+In-Reply-To: <20220224000531.1265030-1-haoluo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 2/23/22 19:05, Hao Luo wrote:
+> For binaries that are statically linked, consecutive stack frames are
+> likely to be in the same VMA and therefore have the same build id.
+> As an optimization for this case, we can cache the previous frame's
+> VMA, if the new frame has the same VMA as the previous one, reuse the
+> previous one's build id. We are holding the MM locks as reader across
+> the entire loop, so we don't need to worry about VMA going away.
+> 
+> Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
+> test_progs.
+> 
+> Suggested-by: Greg Thelen <gthelen@google.com>
+> Signed-off-by: Hao Luo <haoluo@google.com>
 
-Please pull the following two fixes for the next release cycle.
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Best Regards,
-Bartosz Golaszewski
-
-The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
-
-  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.17-rc6
-
-for you to fetch changes up to ae42f9288846353982e2eab181fb41e7fd8bf60f:
-
-  gpio: Return EPROBE_DEFER if gc->to_irq is NULL (2022-02-23 22:30:56 +0100)
-
-----------------------------------------------------------------
-gpio: fixes for v5.17-rc6
-
-- fix an bug generating spurious interrupts in gpio-rockchip
-- fix a race condition in gpiod_to_irq() called by GPIO consumers
-
-----------------------------------------------------------------
-Samuel Holland (1):
-      gpio: rockchip: Reset int_bothedge when changing trigger
-
-Shreeya Patel (1):
-      gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-
- drivers/gpio/gpio-rockchip.c | 56 +++++++++++++++++++++++---------------------
- drivers/gpio/gpiolib.c       | 10 ++++++++
- 2 files changed, 39 insertions(+), 27 deletions(-)
+Thanks,
+Pasha

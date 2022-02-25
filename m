@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526024C4D16
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEB34C4D14
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiBYR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S231779AbiBYR7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiBYR7V (ORCPT
+        with ESMTP id S231504AbiBYR7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:59:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DA21BF93A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:58:48 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg16-20020a05600c3c9000b00380f6f473b0so2166268wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TToHHhQ9e3UF7DAGb1X/L762Cx9ZwKjwgUki3iHq62w=;
-        b=b1l/w/YSXYX7+AXroPrKESOq2dTiEMdf9vimQ/VnLm62eIy2NGJVm3hk34x+wsIkOb
-         f6+CDfRjN3t53enSilCo6dy/7VqHLKdtw9atzEJPMJ72cXMXR6S4r8DvXFxcnaaog2+z
-         32+earhfFmLvPwkFwhDS4LLhzuu/me2zdDO8pVkg2+Spmyb1ZVdi5sc2bYqQiZicQswU
-         EnzA3Va4hOiejHsk+lXoW7nS84JFbfks0n25/hbFeWxpHrPEj2iSj2ZVf2lSppGDkx/S
-         L06LSbk4K/TFmKftG7fupA7EutWWsMU3GcHtTV0kJSzDOa+egw1Lh+tf3ytyAscbRqqb
-         zqvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TToHHhQ9e3UF7DAGb1X/L762Cx9ZwKjwgUki3iHq62w=;
-        b=iVrAgP32sddt/E8eZavmWJPjHY9C3pLvNL3rbrCNpvGBHyxvr3l9+4DLuGh4QeDar3
-         TwskCJQPr7ZN51LpcTQQgQXFfbPD7v1mZwa3ZnW+f3bTk+CPb7jcJl51Jc3ezV33l2JL
-         /hA/YXW/kyQPo1NJ98N2kgrNWY4QOliew00YrfH7NQCQlEFEwu8Et85fOXDeAMvkTpdD
-         8gIya1TnINku1fGETw9fSgWBFc2Z4HMcVwI7Yj9tM+eLXKPnu65A5D1J9MAADRxgZS8L
-         sRrooFaTWNb1pHn2JEXZNFm6b7NKSvdM0GZeG6ATUhpV9vP/KvubgG3JPaE1ad+ZggPd
-         vlkw==
-X-Gm-Message-State: AOAM532A2ED9joeR37kEGfpfgnQHlRGR8aBuzfhahABk9s+xRk4KRzs4
-        S8Y8PObS1aSgpLM+W69cOCCL2Q==
-X-Google-Smtp-Source: ABdhPJzIrSRHpSy3s2TEPlKdC96c8Ay/w1HBZW8pOPhVyk9/ZGKa99x9C3ugV7b3cxf64njV06CAJA==
-X-Received: by 2002:a7b:c932:0:b0:381:c66:fff2 with SMTP id h18-20020a7bc932000000b003810c66fff2mr3752039wml.42.1645811927147;
-        Fri, 25 Feb 2022 09:58:47 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id t8-20020a05600c2f8800b00381428ad88dsm74172wmn.15.2022.02.25.09.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 09:58:46 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/4] dt-bindings: nvmem: brcm,nvram: add basic NVMEM cells
-Date:   Fri, 25 Feb 2022 17:58:22 +0000
-Message-Id: <20220225175822.8293-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220225175822.8293-1-srinivas.kandagatla@linaro.org>
-References: <20220225175822.8293-1-srinivas.kandagatla@linaro.org>
+        Fri, 25 Feb 2022 12:59:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6FA1C65CA;
+        Fri, 25 Feb 2022 09:58:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4FDFB832F8;
+        Fri, 25 Feb 2022 17:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C71C340F0;
+        Fri, 25 Feb 2022 17:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645811931;
+        bh=aqgDe5f2aVWTB6yqlpW2kcmFhzYgvTF+iOufv2e9koA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uEnKDPmwYJntgyyIr8iVHCbSmFlv7ChMcb12YnGBy/QcSO4oQmowX/X8jfJbEcVcA
+         rPWsAgAZXqKHaRTXunjnOKgPgdok9YmzWcWycNsB0ZwD7pGALx7OQEPFAkjlI/MxrP
+         1G90hFmiw2Lh4Jo15ZT8zHjIEfFn2EG1wmLwRLQEidJ6wYezydrnHwYldFUkyTnNgC
+         oBHWFDFwlQq15eWQMF6oSvQnPSjmGXSS16PLWBTkRhdweQq2hOXGywPLEjlrpOvFbQ
+         bAK8UDFTyzB4nBUskdGSth8/uIYlLc3KXFcRtX3z2okRmjpRHQeY4PwCH7359PphA+
+         bXSA1f49JXdEw==
+Received: by pali.im (Postfix)
+        id 1CD487EF; Fri, 25 Feb 2022 18:58:48 +0100 (CET)
+Date:   Fri, 25 Feb 2022 18:58:47 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] PCI: Add function for parsing
+ 'slot-power-limit-milliwatt' DT property
+Message-ID: <20220225175847.gf6rvkamnyxjx2di@pali>
+References: <20220225123051.xlsv7fkesdf5upeh@pali>
+ <20220225155156.GA358965@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220225155156.GA358965@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,67 +68,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Friday 25 February 2022 09:51:56 Bjorn Helgaas wrote:
+> On Fri, Feb 25, 2022 at 01:30:51PM +0100, Pali Rohár wrote:
+> > On Thursday 24 February 2022 14:47:15 Bjorn Helgaas wrote:
+> > > On Tue, Feb 22, 2022 at 05:31:56PM +0100, Pali Rohár wrote:
+> > > > Add function of_pci_get_slot_power_limit(), which parses the
+> > > > 'slot-power-limit-milliwatt' DT property, returning the value in
+> > > > milliwatts and in format ready for the PCIe Slot Capabilities Register.
+> > > > 
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > Signed-off-by: Marek Behún <kabel@kernel.org>
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > > ---
+> > > >  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
+> > > >  drivers/pci/pci.h | 15 +++++++++++
+> > > >  2 files changed, 79 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > > > index cb2e8351c2cc..2b0c0a3641a8 100644
+> > > > --- a/drivers/pci/of.c
+> > > > +++ b/drivers/pci/of.c
+> > > > @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
+> > > >  	return max_link_speed;
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
+> > > > +
+> > > > +/**
+> > > > + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
+> > > > + *				 property.
+> > > > + *
+> > > > + * @node: device tree node with the slot power limit information
+> > > > + * @slot_power_limit_value: pointer where the value should be stored in PCIe
+> > > > + *			    Slot Capabilities Register format
+> > > > + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
+> > > > + *			    Slot Capabilities Register format
+> > > > + *
+> > > > + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
+> > > > + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
+> > > > + * scale in format used by PCIe Slot Capabilities Register.
+> > > > + *
+> > > > + * If the property is not found or is invalid, returns 0.
+> > > > + */
+> > > > +u32 of_pci_get_slot_power_limit(struct device_node *node,
+> > > > +				u8 *slot_power_limit_value,
+> > > > +				u8 *slot_power_limit_scale)
+> > > > +{
+> > > > +	u32 slot_power_limit;
+> > > 
+> > > Including "mw" or similar reference to the units would give a hint of
+> > > how to relate the code to the spec.
+> > > 
+> > > > +	u8 value, scale;
+> > > > +
+> > > > +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
+> > > > +				 &slot_power_limit))
+> > > > +		slot_power_limit = 0;
+> > > > +
+> > > > +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
+> > > 
+> > > Add a spec reference to PCIe r6.0, sec 7.5.3.9.  IIUC, this supports
+> > > up to 300W, which was what r5.0 defined, but r6.0 added values up to
+> > > 0xfe (600W).
+> > 
+> > I did not know about it and I have not seen/read r6.0.
+> > 
+> > It would be nice if somebody with access to r6.0 send a patch to lspci
+> > utility, so we could write support for 600W based on lspci parser.
+> 
+> Of course, sorry!  Obviously you would have implemented them all if
+> you had the spec!
+> 
+> Here's the info from r6.0, sec 7.5.3.9:
+> 
+>   Slot Power Limit Value - In combination with the Slot Power Limit
+>   Scale value, specifies the upper limit on power supplied by the slot
+>   (see § Section 6.9) or by other means to the adapter.
+> 
+>   Power limit (in Watts) is calculated by multiplying the value in
+>   this field by the value in the Slot Power Limit Scale field except
+>   when the Slot Power Limit Scale field equals 00b (1.0x) and Slot
+>   Power Limit Value exceeds EFh, the following alternative encodings
+>   are used:
+> 
+>     F0h   > 239 W and ≤ 250 W Slot Power Limit
+>     F1h   > 250 W and ≤ 275 W Slot Power Limit
+>     F2h   > 275 W and ≤ 300 W Slot Power Limit
+>     F3h   > 300 W and ≤ 325 W Slot Power Limit
+>     F4h   > 325 W and ≤ 350 W Slot Power Limit
+>     F5h   > 350 W and ≤ 375 W Slot Power Limit
+>     F6h   > 375 W and ≤ 400 W Slot Power Limit
+>     F7h   > 400 W and ≤ 425 W Slot Power Limit
+>     F8h   > 425 W and ≤ 450 W Slot Power Limit
+>     F9h   > 450 W and ≤ 475 W Slot Power Limit
+>     FAh   > 475 W and ≤ 500 W Slot Power Limit
+>     FBh   > 500 W and ≤ 525 W Slot Power Limit
+>     FCh   > 525 W and ≤ 550 W Slot Power Limit
+>     FDh   > 550 W and ≤ 575 W Slot Power Limit
+>     FEh   > 575 W and ≤ 600 W Slot Power Limit
+>     FFh   Reserved for Slot Power Limit Values above 600 W
+> 
+>   This register must be implemented if the Slot Implemented bit is Set.
+> 
+>   Writes to this register also cause the Port to send the
+>   Set_Slot_Power_Limit Message.
 
-NVRAM doesn't have cells at hardcoded addresses. They are stored in
-internal struct (custom & dynamic format). It's still important to
-define relevant cells in DT so NVMEM consumers can reference them.
+Ok, thank you!
 
-Update binding to allow including basic cells as NVMEM device subnodes.
+I will send also update for lspci.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- .../devicetree/bindings/nvmem/brcm,nvram.yaml | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+> > > > +	if (slot_power_limit == 0) {
+> > > > +		value = 0x00;
+> > > > +		scale = 0;
+> > > > +	} else if (slot_power_limit <= 255) {
+> > > > +		value = slot_power_limit;
+> > > > +		scale = 3;
+> > > > +	} else if (slot_power_limit <= 255*10) {
+> > > > +		value = slot_power_limit / 10;
+> > > > +		scale = 2;
+> > > > +	} else if (slot_power_limit <= 255*100) {
+> > > > +		value = slot_power_limit / 100;
+> > > > +		scale = 1;
+> > > > +	} else if (slot_power_limit <= 239*1000) {
+> > > > +		value = slot_power_limit / 1000;
+> > > > +		scale = 0;
+> > > > +	} else if (slot_power_limit <= 250*1000) {
+> > > > +		value = 0xF0;
+> > > > +		scale = 0;
+> > > > +	} else if (slot_power_limit <= 275*1000) {
+> > > > +		value = 0xF1;
+> > > > +		scale = 0;
+> > > > +	} else {
+> > > > +		value = 0xF2;
+> > > > +		scale = 0;
+> > > > +	}
+> > > > +
+> > > > +	if (slot_power_limit_value)
+> > > > +		*slot_power_limit_value = value;
+> > > > +
+> > > > +	if (slot_power_limit_scale)
+> > > > +		*slot_power_limit_scale = scale;
+> > > > +
+> > > > +	return slot_power_limit;
+> > > 
+> > > If "slot-power-limit-milliwatt" contains a value larger than can be
+> > > represented in "value" and "scale", the return value will not agree
+> > > with value/scale, will it?
+> > 
+> > In previous version 0xF2 was reserved for values above 275 W. So for me
+> > it looked like a correct solution.
+> > 
+> > > Currently you only use the return value for a log message, so no real
+> > > harm yet, other than the fact that we might print "Slot power limit
+> > > 1000.0W" when the hardware will only advertise 600W available.
+> > > 
+> > > Also, if "slot-power-limit-milliwatt" contains something like
+> > > 260000 mW (260 W), we'll return 0xF1/0, so the hardware will
+> > > advertise 275 W available.
+> > 
+> > There is no way how to encode 260 W. It is possible only 250 W or 275 W,
+> > and nothing between. I chose to round value to upper limit. What do you
+> > prefer in these cases? Upper or lower limit?
+> 
+> I think rounding down is better.  If we round up, the slot will
+> advertise more power than it can deliver, and if the device tries to
+> consume the amount of power advertised, it may not work reliably.
+> 
+> So I think we should return encoded values that are no higher than
+> what the slot can actually deliver, and the return value should match
+> what Slot Capabilities advertises.
+> 
+> Bjorn
 
-diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-index 8c3f0cd22821..25033de3ef6b 100644
---- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-@@ -14,6 +14,8 @@ description: |
-   NVRAM can be accessed on Broadcom BCM47xx MIPS and Northstar ARM Cortex-A9
-   devices usiong I/O mapped memory.
- 
-+  NVRAM variables can be defined as NVMEM device subnodes.
-+
- maintainers:
-   - Rafał Miłecki <rafal@milecki.pl>
- 
-@@ -27,11 +29,30 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  board_id:
-+    type: object
-+    description: Board identification name
-+
-+  et0macaddr:
-+    type: object
-+    description: First Ethernet interface's MAC address
-+
-+  et1macaddr:
-+    type: object
-+    description: Second Ethernet interface's MAC address
-+
-+  et2macaddr:
-+    type: object
-+    description: Third Ethernet interface's MAC address
-+
- unevaluatedProperties: false
- 
- examples:
-   - |
-     nvram@1eff0000 {
--            compatible = "brcm,nvram";
--            reg = <0x1eff0000 0x10000>;
-+        compatible = "brcm,nvram";
-+        reg = <0x1eff0000 0x10000>;
-+
-+        mac: et0macaddr {
-+        };
-     };
--- 
-2.21.0
-
+It makes sense.

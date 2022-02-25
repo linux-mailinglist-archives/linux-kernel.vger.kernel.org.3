@@ -2,146 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB784C42B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B494C42B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbiBYKra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S239789AbiBYKrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbiBYKr1 (ORCPT
+        with ESMTP id S239152AbiBYKrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:47:27 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D12655B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=X2IS+w8Tap35XsPPF35XLygTWfgyN1T/5BqmEqmAz8Q=; b=WLFBqwgMlwjKsG1V3m8CnYPzNm
-        P2G8f55YdlBc3F6bH3W7E0EEJS+rQ09VsnXIzP3kC75wRVZstONfQGODS90bom1IUmSnJssdNtHXN
-        NczCuXaYsZk3JAlWIarg2yg037ftwr3OrrSMI+JXLsyR5mhEO7Pk4sEr2sltKHD5zkKXa0l4EjFFC
-        ddv6BUyMXv8I74a1iJzHIs7mfkNOedv2+5KIjgtC7HhlYAO6CMHKHdUDVMSXVdiVMAYXvUkvuearY
-        60nCE0JVFvi/6HI+oWit7hhPWKYMtpwcBuYzcxEKj4Umuw4f+eqY8OJwuAC36gpJLei8lfpNHS+lN
-        iTZQx9kA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNY7E-00Cw0a-Tv; Fri, 25 Feb 2022 10:46:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6A459300472;
-        Fri, 25 Feb 2022 11:46:23 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 29CD32C69540B; Fri, 25 Feb 2022 11:46:23 +0100 (CET)
-Date:   Fri, 25 Feb 2022 11:46:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-ID: <YhizfwoddLwWWl2J@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.892372059@infradead.org>
- <20220225103215.77080de0b3edd0fa2839b8fa@kernel.org>
+        Fri, 25 Feb 2022 05:47:06 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549285F44
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:46:33 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id p8so4330214pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:46:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=w/XZsR5U4bk6AIH6QpADGOhv0TAfbBN64RGsc62N160=;
+        b=umPJ29rPDkbG8vd66olReKLLkSk60RSR9xtgVbjShAtqGoGGnVS3soe8k29hGbtseR
+         SQH/XWMxwNxYBb7+CYcfMBb3RpLdgN3zKDPTR+nFbT+R5slWMfykjlsIaLAwwaXnbJ+0
+         rtOIgqWmHDbZflADIvfvim74ZmwTgyJqyBzflFsm96LxYHW0bL71z771qiorQpWwyqjV
+         lPNZRhhv/M8Z0+NmcLShUUiHjD7I613PqWiOws7SyTxBpFTh9ExI9aFdWeWYO4VoCrwg
+         6PAK44lSb1j3ildqgolujuqR83SxyGTQt4QaiF/9XScFW6WDph2Fb6E27CwuU0aX1cVj
+         ugKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w/XZsR5U4bk6AIH6QpADGOhv0TAfbBN64RGsc62N160=;
+        b=ozRI9JOnsLh/cHteZtIBF7gg//ZKolX5hI69xjHRi7o/ryREXV+UpKFWAI6BS1ZLVn
+         0DUmMVh6tu9MXPiWVwFkvHQ6uGS2zXG9l8GtvdaGLHUMf11nrfDoNonaMCKLwQc14I+e
+         7+cJiODIDd3TVHR3USNCXTOUuHXyLyKIEjN/ouLiU+Awtwf/HTG1ObCV9u0Prq1IHsJ1
+         ADQktPx//qD3A7FbnERgI4veeLcMQgtXUEN9Oyp63QfrQE4epmEuNu9zNw68VDxqxYEL
+         E41fAYDJ5IR+CQMq6LosBQkukfgzLCYfaPJlW5sVJAwOaeHS7Fx//XLjNf9f/XgTaS34
+         lzCw==
+X-Gm-Message-State: AOAM531txwkSx6bSIngfIh1v0Lc207uNLwDvZTB5Z51FMVssg9hiXTwW
+        BmmcoCXaoDfXHatbruhKN6OSPg==
+X-Google-Smtp-Source: ABdhPJwxjvlqMi7cIZFcxGERhX1+e+n/eoefHIc8QBanJvz5GFTrwUAtFktxaVcr54T6Ei0IUwS0hQ==
+X-Received: by 2002:a05:6a00:148f:b0:4bc:fb2d:4b6f with SMTP id v15-20020a056a00148f00b004bcfb2d4b6fmr7036987pfu.62.1645785992824;
+        Fri, 25 Feb 2022 02:46:32 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id u37-20020a056a0009a500b004e1414d69besm2791022pfg.151.2022.02.25.02.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 02:46:32 -0800 (PST)
+Message-ID: <d4557587-b52c-049d-a0c8-e48aaa8a1c1e@bytedance.com>
+Date:   Fri, 25 Feb 2022 18:46:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225103215.77080de0b3edd0fa2839b8fa@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH 0/5] introduce sched-idle balancing
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
+References: <20220217154403.6497-1-wuyun.abel@bytedance.com>
+ <YheiT2pGNDggdFSu@hirez.programming.kicks-ass.net>
+ <9fe00f72-4e2e-38ff-d64a-4ae41e683316@bytedance.com>
+ <CAKfTPtD7U7=C8MTLLMtUrGxJFCjpxtU7a_S=HaBhCsZ6SBbVFA@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CAKfTPtD7U7=C8MTLLMtUrGxJFCjpxtU7a_S=HaBhCsZ6SBbVFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 10:32:15AM +0900, Masami Hiramatsu wrote:
-> Hi Peter,
+On 2/25/22 4:29 PM, Vincent Guittot Wrote:
+> On Fri, 25 Feb 2022 at 07:46, Abel Wu <wuyun.abel@bytedance.com> wrote:
+>>
+>> Hi Peter,
+>>
+>> On 2/24/22 11:20 PM, Peter Zijlstra Wrote:
+>>> On Thu, Feb 17, 2022 at 11:43:56PM +0800, Abel Wu wrote:
+>>>> Current load balancing is mainly based on cpu capacity
+>>>> and task util, which makes sense in the POV of overall
+>>>> throughput. While there still might be some improvement
+>>>> can be done by reducing number of overloaded cfs rqs if
+>>>> sched-idle or idle rq exists.
+>>>
+>>> I'm much confused, there is an explicit new-idle balancer and a periodic
+>>> idle balancer already there.
+>>
+>> The two balancers are triggered on the rqs that have no tasks on them,
+>> and load_balance() seems don't show a preference for non-idle tasks so
 > 
-> On Thu, 24 Feb 2022 15:51:53 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
+> The load balance will happen at the idle pace if a sched_idle task is
+> running on the cpu so you will have an ILB on each cpu that run a
+> sched-idle task
+
+I'm afraid I don't quite follow you, since sched-idle balancer doesn't
+touch the ILB part, can you elaborate on this? Thanks.
+
 > 
-> > With IBT on, sym+0 is no longer the __fentry__ site.
-> > 
-> > NOTE: the architecture has a special case and *does* allow placing an
-> > INT3 breakpoint over ENDBR in which case #BP has precedence over #CP
-> > and as such we don't need to disallow probing these instructions.
+>> there might be possibility that only idle tasks are pulled during load
+>> balance while overloaded rqs (rq->cfs.h_nr_running > 1) exist. As a
 > 
-> Does this mean we can still putting a probe on sym+0??
+> There is a LB_MIN feature (disable by default) that filters task with
+> very low load ( < 16) which includes sched-idle task which has a max
+> load of 3
 
-I'm not sure... Possibly not. I'm not sure if there's an ABI that
-by-passes kprobes_lookup_name(). Arguably you could give it a direct
-address instead of a name and still hit the ENDBR I think. But the ABI
-surface of this thing it too big for me to easily tell.
+This feature might not that friendly to the situation that only
+sched-idle tasks are running in the system. And this situation
+can last more than half a day in our co-location systems in which
+the training/batch tasks are placed under idle groups or directly
+assigned to SCHED_IDLE.
 
-> If so, NAK this patch, since the KPROBES_ON_FTRACE is not meaning
-> to accelerate the function entry probe, but just allows user to
-> put a probe on 'call _mcount' (which can be modified by ftrace).
 > 
-> func:
->   endbr  <- sym+0  : INT3 is used. (kp->addr = func+0)
->   nop5   <- sym+4? : ftrace is used. (kp->addr = func+4?)
->   ...
+>> result the normal tasks, mostly latency-critical ones in our case, on
+>> that overloaded rq still suffer waiting for each other. I observed this
+>> through perf sched.
+>>
+>> IOW the main difference from the POV of load_balance() between the
+>> latency-critical tasks and the idle ones is load.
+>>
+>> The sched-idle balancer is triggered on the sched-idle rqs periodically
+>> and the newly-idle ones. It does a 'fast' pull of non-idle tasks from
+>> the overloaded rqs to the sched-idle/idle ones to let the non-idle tasks
+>> make full use of cpu resources.
+>>
+>> The sched-idle balancer only focuses on non-idle tasks' performance, so
+>> it can introduce overall load imbalance, and that's why I put it before
+>> load_balance().
 > 
-> And anyway, in some case (e.g. perf probe) symbol will be a basement
-> symbol like '_text' and @offset will be the function addr - _text addr
-> so that we can put a probe on local-scope function.
+> According to the very low weight of a sched-idle task, I don't expect
+> much imbalance because of sched-idle tasks. But this also depends of
+> the number of sched-idle task.
 > 
-> If you think we should not probe on the endbr, we should treat the
-> pair of endbr and nop5 (or call _mcount) instructions as a virtual
-> single instruction. This means kp->addr should point sym+0, but use
-> ftrace to probe.
 > 
-> func:
->   endbr  <- sym+0  : ftrace is used. (kp->addr = func+0)
->   nop5   <- sym+4? : This is not able to be probed.
->   ...
-
-Well, it's all a bit crap :/
-
-This patch came from kernel/trace/trace_kprobe.c selftest failing at
-boot. That tries to set a kprobe on kprobe_trace_selftest_target which
-the whole kprobe machinery translates into
-kprobe_trace_selftest_target+0 and then not actually hitting the fentry.
-
-IOW, that selftest seems to hard-code/assume +0 matches __fentry__,
-which just isn't true in general (arm64, powerpc are architectures that
-come to mind) and now also might not be true on x86.
-
-Calling the selftest broken works for me and I'll drop the patch.
-
-
-Note that with these patches:
-
- - Not every function starts with ENDBR; the compiler is free to omit
-   this instruction if it can determine the function address is never
-   taken (and as such there's never an indirect call to it).
-
- - If there is an ENDBR, not every function entry will actually execute
-   it. This first instruction is used exclusively as an indirect entry
-   point. All direct calls should be to the next instruction.
-
- - If there was an ENDBR, it might be turned into a 4 byte UD1
-   instruction to ensure any indirect call *will* fail.
-
-Given all that, kprobe users are in a bit of a bind. Determining the
-__fentry__ point basically means they *have* to first read the function
-assembly to figure out where it is.
-
-This patch takes the approach that sym+0 means __fentry__, irrespective
-of where it might actually live. I *think* that's more or less
-consistent with what other architectures do; specifically see
-arch/powerpc/kernel/kprobes.c:kprobe_lookup_name(). I'm not quite sure
-what ARM64 does when it has BTI on (which is then very similar to what
-we have here).
-
-What do you think makes most sense here?
+>>
+>> Best Regards,
+>>          Abel

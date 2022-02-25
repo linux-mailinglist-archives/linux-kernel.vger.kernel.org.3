@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4CF4C42BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACB44C4294
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239807AbiBYKuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S239728AbiBYKkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiBYKuB (ORCPT
+        with ESMTP id S239709AbiBYKkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:50:01 -0500
-X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Feb 2022 02:49:30 PST
-Received: from mail.sysgo.com (mail.sysgo.com [IPv6:2a01:4f8:150:204a::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05088235315
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:49:29 -0800 (PST)
-From:   David Engraf <david.engraf@sysgo.com>
-To:     suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        broonie@kernel.org, mark.rutland@arm.com, elver@google.com,
-        ebiederm@xmission.com, seanjc@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Engraf <david.engraf@sysgo.com>
-Subject: [PATCH] arm64: signal: nofpsimd: Do not allocate fp/simd context when not available
-Date:   Fri, 25 Feb 2022 11:40:08 +0100
-Message-Id: <20220225104008.820289-1-david.engraf@sysgo.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 25 Feb 2022 05:40:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB568F8F;
+        Fri, 25 Feb 2022 02:40:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A6CE6171B;
+        Fri, 25 Feb 2022 10:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AEFA2C340F2;
+        Fri, 25 Feb 2022 10:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645785610;
+        bh=1Bj4E8jna9gv+7NmgSy2dvDNmaH/RWmUnYnExJ1EXXU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=naGEzD/RpkgtsDTe3JbpvxClxahzdvbXym5agxbwVk/p1LYOffGh3xFaC33lapix+
+         oUNVFd5208INQsRMIzfwZmVb3gw7bbFvQqQzeWTKQsvSkrXuNmNlYe7TWushWj5fPx
+         Afg6Iv4HP44YZcoF6kC5Je/Ulflv37WObaf7eDeB/l8LXdD8JJ4FjTCEj8Dwq9lJx8
+         APRLCfXLb76SCcK4WDQnRnxgnjd6aIgn+BhaxqAZaB5NkK8QO7nzfsblMaRYPVD+H6
+         ZWOkUzcizcAW2nYprgaEAc0qz/R+IWzSSHef4XdTTzAjF24WPbTxDC9bTSh+J8DpQn
+         7/tIvebdXOV+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E526EAC09B;
+        Fri, 25 Feb 2022 10:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v2] xen/netfront: destroy queues before real_num_tx_queues is
+ zeroed
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164578561057.13834.5994173770160348500.git-patchwork-notify@kernel.org>
+Date:   Fri, 25 Feb 2022 10:40:10 +0000
+References: <20220223211954.2506824-1-marmarek@invisiblethingslab.com>
+In-Reply-To: <20220223211954.2506824-1-marmarek@invisiblethingslab.com>
+To:     =?utf-8?q?Marek_Marczykowski-G=C3=B3recki_=3Cmarmarek=40invisiblethingslab?=@ci.codeaurora.org,
+        =?utf-8?q?=2Ecom=3E?=@ci.codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        atenart@kernel.org, xen-devel@lists.xenproject.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6d502b6ba1b2 ("arm64: signal: nofpsimd: Handle fp/simd context for
-signal frames") introduced saving the fp/simd context for signal handling
-only when support is available. But setup_sigframe_layout() always
-reserves memory for fp/simd context. The additional memory is not touched
-because preserve_fpsimd_context() is not called and thus the magic is
-invalid.
+Hello:
 
-This may lead to an error when parse_user_sigframe() checks the fp/simd
-area and does not find a valid magic number.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: David Engraf <david.engraf@sysgo.com>
----
- arch/arm64/kernel/signal.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+On Wed, 23 Feb 2022 22:19:54 +0100 you wrote:
+> xennet_destroy_queues() relies on info->netdev->real_num_tx_queues to
+> delete queues. Since d7dac083414eb5bb99a6d2ed53dc2c1b405224e5
+> ("net-sysfs: update the queue counts in the unregistration path"),
+> unregister_netdev() indirectly sets real_num_tx_queues to 0. Those two
+> facts together means, that xennet_destroy_queues() called from
+> xennet_remove() cannot do its job, because it's called after
+> unregister_netdev(). This results in kfree-ing queues that are still
+> linked in napi, which ultimately crashes:
+> 
+> [...]
 
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index d8aaf4b6f432..3d66fba69016 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -577,10 +577,12 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
- {
- 	int err;
- 
--	err = sigframe_alloc(user, &user->fpsimd_offset,
--			     sizeof(struct fpsimd_context));
--	if (err)
--		return err;
-+	if (system_supports_fpsimd()) {
-+		err = sigframe_alloc(user, &user->fpsimd_offset,
-+				     sizeof(struct fpsimd_context));
-+		if (err)
-+			return err;
-+	}
- 
- 	/* fault information, if valid */
- 	if (add_all || current->thread.fault_code) {
+Here is the summary with links:
+  - [v2] xen/netfront: destroy queues before real_num_tx_queues is zeroed
+    https://git.kernel.org/netdev/net/c/dcf4ff7a48e7
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513BB4C45C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F3E4C45CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241055AbiBYNRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S241078AbiBYNRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbiBYNRg (ORCPT
+        with ESMTP id S240950AbiBYNRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:17:36 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B41AE33BA
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gcLU/vg5cewrZSDPx6TyApuKFbZkoUXSLj0y9z6R8Vs=; b=kNwTCnRyfhWL3uD70G4U8KIVqz
-        sY9HFyXny7cGN6e54CjSPbSfbxlEtWUURwNO1LjWDjtBsj8W+qtz0UR/Y8LMiten7EdKb2uH8IHQ4
-        RGnpC50hYlMY6cuR3WTbLIrLn5wnVt/Rq35fZsX8xDGCXcsyiyOOOgqUte5rizwFHw0rWlwqxgg10
-        ShuhzQFN8R6y4fSTqVKH4N4YW/RnRKSVgtDXaXtRilLwH2IOoOaYjMWBfBqOW3DvBBZ63ZCXk9ilc
-        eJxaxestRjhZnZ41qXqPXDr+f7R2YOKDPnhzHk3bdpkOVfGJJRKZW22XZqM/3Uiak1S+RZZC/kZtJ
-        JD4WZDbA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNaSe-005nss-GQ; Fri, 25 Feb 2022 13:16:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8426C30081D;
-        Fri, 25 Feb 2022 14:16:39 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4552B235EF288; Fri, 25 Feb 2022 14:16:39 +0100 (CET)
-Date:   Fri, 25 Feb 2022 14:16:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 28/39] x86/ibt,xen: Sprinkle the ENDBR
-Message-ID: <YhjWt0vCva5Pd4BC@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151323.661210297@infradead.org>
- <20220225005440.mvz4jtxwq5ttcu77@treble>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225005440.mvz4jtxwq5ttcu77@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 25 Feb 2022 08:17:42 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A2F10529C
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:17:08 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so1707281wme.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=XTcx6NA+RQ7MrRz6erOyIo9MPO/gFX50RVxH9xCKjl0=;
+        b=TilwzgfHDxKOx/pX82iJYs6OJLFY4UDPTF+ZYP5IKGPFUaMDON+xOE0825j7T9YE8X
+         a2R9Uxm1yhjJl5IG/6s0fvarQFcsIb4HW5dhmafsqg/OuXWuKy5X5xNiLWUIoe3kBHDx
+         eVDb8sXoTuqdkn3fdcgNtHrvjBTXJq6+YNK8RHzhi8bRYJkNguNTDu6n7TO4pPQ0JyIL
+         uMbw2Tijh0n2PvZqsZFkxG3Byg1nQpSdBkH5DlKN2sbGMyOgfjCU5v94XL5DDM9kgeJR
+         y6H1M4dqSGcHjiIE4fSO9NiZakN559mhIgmE98QRnZtf6F77dQ/ubEYHDsWurek925wt
+         FZyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XTcx6NA+RQ7MrRz6erOyIo9MPO/gFX50RVxH9xCKjl0=;
+        b=wdd8ALcDjVK8x1bJ3PDAFnfHct51xyvNzY9cD3EB3fFEZVYvurMDa0/RbvEyEsZ0vt
+         YyNa4DKDta2id1cffoWuKsChDlE1TKjE6vWZS10R3BvIm9/Updz/D1ERYNJJjYu6dUbA
+         /vR3RxXeeIevlMURQkGndG9QtCXUCDM5uEgJR9hHnFDE/ct0XMPcPaiwS6hVAi4DbENH
+         bP28LfY8mVV1R4tqt3ATFXXYtbY1d4rMvA/SLFjx9LGrCMg/sPDu95a7GAF7hP80HQkq
+         QTC4H40GfZFqlub6Pb5z0zjNcG8UqjeGrvVD//GItJrkHbtbOk6q/2YL9SkKqRHa3Hy8
+         6pSw==
+X-Gm-Message-State: AOAM5320VOOSD9RCMmBomujYMHRWD4QsVSDHvJ5W14d83RzDlVWYnL1+
+        pKH+dDQ1vIuWpAhQaVqn1aw=
+X-Google-Smtp-Source: ABdhPJxAYkjJ40G8FdiQzxsRqYdXyS40BfhXptDhQECQEq3ENt/7NSjM/te1yvnNMfubRDVpAY9fPA==
+X-Received: by 2002:a7b:cd96:0:b0:381:201e:ba06 with SMTP id y22-20020a7bcd96000000b00381201eba06mr2739917wmj.78.1645795027288;
+        Fri, 25 Feb 2022 05:17:07 -0800 (PST)
+Received: from localhost.localdomain ([64.64.123.58])
+        by smtp.gmail.com with ESMTPSA id o3-20020a1c7503000000b0038100e2a1adsm2399355wmc.47.2022.02.25.05.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:17:06 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, AjitKumar.Pandey@amd.com,
+        vsujithkumar.reddy@amd.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] ALSA: acp: check the return value of devm_kzalloc() in acp_legacy_dai_links_create()
+Date:   Fri, 25 Feb 2022 05:16:45 -0800
+Message-Id: <20220225131645.27556-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 04:54:40PM -0800, Josh Poimboeuf wrote:
-> On Thu, Feb 24, 2022 at 03:52:06PM +0100, Peter Zijlstra wrote:
-> > +++ b/arch/x86/xen/xen-head.S
-> > @@ -25,8 +25,11 @@
-> >  SYM_CODE_START(hypercall_page)
-> >  	.rept (PAGE_SIZE / 32)
-> >  		UNWIND_HINT_FUNC
-> > -		.skip 31, 0x90
-> > -		RET
-> > +		ANNOTATE_NOENDBR
-> > +		/*
-> > +		 * Xen will write the hypercall page, and sort out ENDBR.
-> > +		 */
-> > +		.skip 32, 0xcc
-> 
-> I seem to remember this UNWIND_HINT_FUNC was only there to silence
-> warnings because of the ret.  With the ret gone, maybe the hint can be
-> dropped as well.
+The function devm_kzalloc() in acp_legacy_dai_links_create() can fail,
+so its return value should be checked.
 
-vmlinux.o: warning: objtool: xen_hypercall_iret()+0x0: stack state mismatch: cfa1=4+8 cfa2=-1+0
+Fixes: d4c750f2c7d4 ("ASoC: amd: acp: Add generic machine driver support for ACP cards")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ sound/soc/amd/acp/acp-mach-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-and back it goes ;-)
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index cd05ee2802c9..5247015e8b31 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -556,6 +556,8 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
+ 		num_links++;
+ 
+ 	links = devm_kzalloc(dev, sizeof(struct snd_soc_dai_link) * num_links, GFP_KERNEL);
++	if (!links)
++		return -ENOMEM;
+ 
+ 	if (drv_data->hs_cpu_id == I2S_SP) {
+ 		links[i].name = "acp-headset-codec";
+-- 
+2.17.1
+

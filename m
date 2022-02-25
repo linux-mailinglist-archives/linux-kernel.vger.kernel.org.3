@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6424C50C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCA64C50D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiBYVgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S235050AbiBYVjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiBYVgX (ORCPT
+        with ESMTP id S233777AbiBYVji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:36:23 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9C81BE0C5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:35:49 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id e5c00027-9682-11ec-9faa-0050568c148b;
-        Fri, 25 Feb 2022 21:35:48 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 90DCF194B1C;
-        Fri, 25 Feb 2022 22:35:50 +0100 (CET)
-Date:   Fri, 25 Feb 2022 22:35:42 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        freedreno <freedreno@lists.freedesktop.org>
-Subject: Re: [Freedreno] [PATCH 1/3] drm: Extend DEFINE_DRM_GEM_FOPS() for
- optional fops
-Message-ID: <YhlLrujgN2Ovv5JW@ravnborg.org>
-References: <20220225202614.225197-1-robdclark@gmail.com>
- <Yhk92RwhBqAAHcuT@intel.com>
- <CAF6AEGtiGA3TOtAvud66TOz_=ODHACS5jfsYPVQFvex-+1xBBA@mail.gmail.com>
+        Fri, 25 Feb 2022 16:39:38 -0500
+X-Greylist: delayed 148 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Feb 2022 13:39:02 PST
+Received: from mail1.med.uni-goettingen.de (mail1.med.uni-goettingen.de [134.76.103.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857211AE674
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:39:01 -0800 (PST)
+Received: from umg-exc-04.ads.local.med.uni-goettingen.de ([10.76.100.73]:12926)
+        by mail1.med.uni-goettingen.de with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <Martin.Uecker@med.uni-goettingen.de>)
+        id 1nNiGK-0001LQ-2t; Fri, 25 Feb 2022 22:36:28 +0100
+Received: from umg-exc-01.ads.local.med.uni-goettingen.de (10.76.100.74) by
+ umg-exc-04.ads.local.med.uni-goettingen.de (10.76.100.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Fri, 25 Feb 2022 22:36:28 +0100
+Received: from umg-exc-01.ads.local.med.uni-goettingen.de
+ ([fe80::2886:b6b:10e3:deea]) by umg-exc-01.ads.local.med.uni-goettingen.de
+ ([fe80::2886:b6b:10e3:deea%13]) with mapi id 15.01.2375.018; Fri, 25 Feb 2022
+ 22:36:28 +0100
+From:   "Uecker, Martin" <Martin.Uecker@med.uni-goettingen.de>
+To:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Topic: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Index: AQHYKosGsHPhjhvi7kSF9n6RY4a/rKykuaOA
+Date:   Fri, 25 Feb 2022 21:36:28 +0000
+Message-ID: <bd43bd47c8eaa4c22c1a1549cee66f7ef960b1fc.camel@med.uni-goettingen.de>
+References: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.76.100.66]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BA8A6EF5A8291A4CB71C50A05F543E11@med.uni-goettingen.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAF6AEGtiGA3TOtAvud66TOz_=ODHACS5jfsYPVQFvex-+1xBBA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-> > > diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> > > index 35e7f44c2a75..987e78b18244 100644
-> > > --- a/include/drm/drm_gem.h
-> > > +++ b/include/drm/drm_gem.h
-> > > @@ -327,7 +327,7 @@ struct drm_gem_object {
-> > >   * non-static version of this you're probably doing it wrong and will break the
-> > >   * THIS_MODULE reference by accident.
-> > >   */
-> > > -#define DEFINE_DRM_GEM_FOPS(name) \
-> > > +#define DEFINE_DRM_GEM_FOPS(name, ...) \
-> > >       static const struct file_operations name = {\
-> > >               .owner          = THIS_MODULE,\
-> > >               .open           = drm_open,\
-> > > @@ -338,6 +338,7 @@ struct drm_gem_object {
-> > >               .read           = drm_read,\
-> > >               .llseek         = noop_llseek,\
-> > >               .mmap           = drm_gem_mmap,\
-> > > +             ##__VA_ARGS__\
-> > >       }
-> >
-> > Would it not be less convoluted to make the macro only provide
-> > the initializers? So you'd get something like:
-> >
-> > static const struct file_operations foo = {
-> >         DRM_GEM_FOPS,
-> >         .my_stuff = whatever,
-> > };
-> >
-> 
-> Hmm, I like my color of the bikeshed, but I guess it is a matter of opinion ;-)
-Or less surprise. Most similar macros provides initializers only.
-
-Try "git grep DRM_.*OPS  | grep define" in include/drm
-and take a look at the hits.
-
-	Sam
+QW0gTWl0dHdvY2gsIGRlbiAyMy4wMi4yMDIyLCAyMDo1NCArMDAwMCBzY2hyaWViIExpbnVzIFRv
+cnZhbGRzOg0KPiBPbiBXZWQsIEZlYiAyMywgMjAyMiBhdCAxMjo0MyBQTSBMaW51cyBUb3J2YWxk
+cw0KPiA8dG9ydmFsZHNAbGludXgtZm91bmRhdGlvbi5vcmc+IHdyb3RlOg0KPiA+IE9mIGNvdXJz
+ZSwgdGhlIEMgc3RhbmRhcmQgYmVpbmcgdGhlIGJ1bmNoIG9mIGluY29tcGV0ZW50cyB0aGV5IGFy
+ZSwNCj4gPiB0aGV5IGluIHRoZSBwcm9jZXNzIGFwcGFyZW50bHkgbWFkZSBsZWZ0LXNoaWZ0cyB1
+bmRlZmluZWQgKHJhdGhlciB0aGFuDQo+ID4gaW1wbGVtZW50YXRpb24tZGVmaW5lZCkuIENocmlz
+dCwgdGhleSBrZWVwIG9uIG1ha2luZyB0aGUgc2FtZSBtaXN0YWtlcw0KPiA+IG92ZXIgYW5kIG92
+ZXIuIFdoYXQgd2FzIHRoZSBkZWZpbml0aW9uIG9mIGluc2FuaXR5IGFnYWluPw0KDQpJbXBsZW1l
+bnRhdGlvbi1kZWZpbmVkIG9ubHkgbWVhbnMgdGhhdCBpdCBuZWVkcyB0byBiZQ0KZG9jdW1lbnRl
+ZCAoYW5kIGNsYW5nIGRvZXMgbm90IGV2ZW4gZG8gdGhpcyksIHNvDQpJIGFtIG5vdCBzdXJlIHdo
+YXQgZGlmZmVyZW5jZSB0aGlzIHdvdWxkIG1ha2UuDQoNCj4gSGV5LCBzb21lIG1vcmUgZ29vZ2xp
+bmcgb24gbXkgcGFydCBzZWVtcyB0byBzYXkgdGhhdCBzb21lYm9keSBzYXcgdGhlDQo+IGxpZ2h0
+LCBhbmQgaXQncyBsaWtlbHkgZ2V0dGluZyBmaXhlZCBpbiBuZXdlciBDIHN0YW5kYXJkIHZlcnNp
+b24uDQoNCkkgZG9uJ3QgdGhpbmsgaXQgaXMgY2hhbmdlZC4gQnV0IEMyMyB3aWxsIHJlcXVpcmUN
+CmludGVnZXJzIHRvIGJlIHJlcHJlZXRlZCB1c2luZyB0d28ncyBjb21wbGVtZW50LA0Kc28gdGhl
+cmUgaXMgYSBiZXR0ZXIgY2hhbmNlIHRvIGZpeCB0aGluZ3MNCmxpa2UgdGhpcyBpbiB0aGUgZnV0
+dXJlLiANCg0KPiBTbyBpdCB3YXMganVzdCBhIG1pc3Rha2UsIG5vdCBhY3R1YWwgbWFsaWNlLiBN
+YXliZSB3ZSBjYW4gaG9wZSB0aGF0DQo+IHRoZSB0aWRlIGlzIHR1cm5pbmcgYWdhaW5zdCB0aGUg
+InVuZGVmaW5lZCIgY3Jvd2QgdGhhdCB1c2VkIHRvIHJ1bGUNCj4gdGhlIHJvb3N0IGluIHRoZSBD
+IHN0YW5kYXJkcyBib2RpZXMuIE1heWJlIHRoZSBmdW5kYW1lbnRhbCBzZWN1cml0eQ0KPiBpc3N1
+ZXMgd2l0aCB1bmRlZmluZWQgYmVoYXZpb3IgZmluYWxseSBjb252aW5jZWQgcGVvcGxlIGhvdyBi
+YWQgaXQNCj4gd2FzPw0KDQpUaGUgcmlnaHQgcGVvcGxlIHRvIGNvbXBsYWluIHRvIGFyZSB0aGUN
+CmNvbXBpbGVyIHZlbmRvcnMsIGJlY2F1c2UgdGhleSBkZWNpZGUgd2hhdA0KVUIgZG9lcyBpbiB0
+aGVpciBpbXBsZW1lbnRhdGlvbi4gIEluIHRoZQ0Kc3RhbmRhcmQgYm9keSB0aGUgc2FtZSBwZW9w
+bGUgYXJndWUgdGhhdA0KdGhlIHN0YW5kYXJkIGhhcyB0byBjb2RpZnkgZXhpc3RpbmcNCnByYWN0
+aWNlLiAgRXZlbiBpbiBjYXNlcyB3aGVyZSB0aGUgc3RhbmRhcmQNCmRlZmluZXMgYmVoYXZpb3Is
+IGNvbXBpbGVycyBzb21ldGltZXMgc2ltcGx5DQppZ25vcmUgdGhpcyAoZS5nLiBwb2ludGVyIGNv
+bXBhcmlzb24gb3INCnBvaW50ZXItdG8taW50ZWdlciByb3VuZCAgdHJpcHMpLiBTbyB0aGUNCnBv
+d2VyIGlzIHJlYWxseSB3aXRoIHRoZSBjb21waWxlciB3cml0ZXJzLg0KDQoNCk1hcnRpbiANCg0K
+DQo=

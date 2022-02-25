@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AAC4C4295
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BE24C429A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239680AbiBYKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S239695AbiBYKkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237219AbiBYKkP (ORCPT
+        with ESMTP id S239691AbiBYKkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:40:15 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7168F86
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645785583; x=1677321583;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DG3T4BbCTX7YBHk3EL4ymTUGC1G0GZFiorvp+JOiGqE=;
-  b=S+mjqqfxnvYuaGccSONN+AGMu97tuViUdB4NOO3Km57Jw7uH4Jvp73/c
-   18gdndAU7PofBLoBYuc7CiOlMlzOjj0LzgiojmVKk72z7r+p+cUqqRLeQ
-   c2x9ZAR+8d3gdX/cAHH3aZ5UWVqMjsiihN/neJyJKMeXq4Xpl5UL5DbaR
-   l29Q7gvW9oAI7EjwWO2me+S0MBZOAROY9laGlumMp8DlNN5/3U/gnT6mS
-   BhoTqyndGadMA7sjQxGR/kkslOjBezGKk5Ulpm9B7JT9SreDJc5qlxRpX
-   CzLVAH3kqHmjbe34/4m6yKIZAsslZYtsc3UxbCOqpgse7nm80AViv6lRl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="233097562"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="233097562"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 02:39:42 -0800
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="638198528"
-Received: from rcsacra-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.49.144])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 02:39:37 -0800
-Message-ID: <55a93cbf3bcbf3ec224885ead96b2adbc0ac445c.camel@intel.com>
-Subject: Re: [PATCHv4 03/30] x86/tdx: Provide common base for SEAMCALL and
- TDCALL C wrappers
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Feb 2022 23:39:35 +1300
-In-Reply-To: <bd62c848-0fb8-7876-8a92-3d316318a568@intel.com>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
-         <20220224155630.52734-4-kirill.shutemov@linux.intel.com>
-         <faeb3c16-55a9-912d-1222-9dab364f56c7@intel.com>
-         <20220224231011.c6mbmsj2ahtw4wmt@black.fi.intel.com>
-         <bd62c848-0fb8-7876-8a92-3d316318a568@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Fri, 25 Feb 2022 05:40:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F14868F9E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:39:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EA49221114;
+        Fri, 25 Feb 2022 10:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645785588; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ahs8xAWJnTUeFm8mayyoprYbMUR2xi8uypk5DkAI7Jk=;
+        b=li02W+4CVQaEnfPXLfd+rNHAW9NiRUJ9keX1sztepXJ/9vi+6SoZyAH2OWSHt7B5mOfMmz
+        VJnxpZMKAni6EBeJl5tSQa2rPsjtxn8ZoLudn6rGxaa2WS5rooI06DkuJaWgJRpLMRTOeE
+        Y8Djg+789HA/LUhOrfzyM+6sj5wOy8s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645785588;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ahs8xAWJnTUeFm8mayyoprYbMUR2xi8uypk5DkAI7Jk=;
+        b=Dyg22q9OODbCq/87IZuFouV9ej6aWXRNegKPYGtW3hn1IVrSH175qsaJEENlKapHVCfwdX
+        sQpMuw7bxCQHrzCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B721713ACB;
+        Fri, 25 Feb 2022 10:39:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r+IELPSxGGJ4eAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 25 Feb 2022 10:39:48 +0000
+Message-ID: <d7f56188-5512-1365-243a-1e70acddf5c1@suse.cz>
+Date:   Fri, 25 Feb 2022 11:39:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "mgorman@techsingularity.net" <mgorman@techsingularity.net>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "riel@surriel.com" <riel@surriel.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterz@infradead.org" <peterz@infradead.org>
+References: <20220218122019.130274-1-matenajakub@gmail.com>
+ <20220218122019.130274-5-matenajakub@gmail.com>
+ <20220218195729.oa5olrcsq6yox7hp@revolver>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [RFC PATCH 4/4] [PATCH 4/4] mm: add tracing for VMA merges
+In-Reply-To: <20220218195729.oa5olrcsq6yox7hp@revolver>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,72 +86,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-24 at 16:41 -0800, Dave Hansen wrote:
-> On 2/24/22 15:10, Kirill A. Shutemov wrote:
-> > +/*
-> > + * SW-defined error codes.
-> > + *
-> > + * Bits 47:40 == 0xFF indicate Reserved status code class that never used by
-> > + * TDX module.
-> > + */
-> > +#define TDX_SEAMCALL_VMFAILINVALID     0x8000FF00FFFF0000ULL
+On 2/18/22 20:57, Liam Howlett wrote:
+>>  	/*
+>>  	 * Can we merge both predecessor and successor?
+>>  	 */
+>> -	if (merge_prev && merge_next)
+>> +	if (merge_prev >= MERGE_OK && merge_next >= MERGE_OK) {
 > 
-> That's OK-ish.  But, it would be nice to make this a bit less magic.
-> While I'm sure plenty of us can do the bits 47:40 => hex math in our
-> heads, it might be nice to do it with a macro.  Maybe:
-> 
-> /*
->  * Bits 47:40 being set represent a reserved status class.
->  * The TDX module will never set these so they are safe to
->  * use for software error codes.
->  */
-> #define TDX_SW_ERR(code) ((code) | GENMASK_ULL(40, 47))
-> 
-> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0xFFFF0000ULL)
-> 
-> By the way, is the entire "0xFFFF0000ULL" thing up for grabs?  Or do the
-> the "0xFFFF...." bits _need_ to be set to represent an error somehow?
-> 
-> Would this work if it were:
-> 
-> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0ULL)
-> 
-> or
-> 
-> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(1ULL)
-> 
-> or
-> 
-> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0x12345678ULL)
-> 
-> ?
+> What happened to making vma_merge easier to read?  What does > MERGE_OK
+> mean?  I guess this answers why booleans were not used, but I don't like
 
-Perhaps we can just use -1 (0xFFFFFFFFFFFFFFFFULL) instead of above value for
-TDX_SEAMCALL_VMFAILINVALID.
+It's similar to e.g. enum compact_priority where specific values are defined
+as well as more abstract aliases.
 
-Actually this value will mainly be used when calling P-SEAMLDR's SEAMLDR.INFO
-SEAMCALL to detect whether P-SEAMLDR is loaded.  A success of this SEAMCALL
-returns the P-SEAMLDR information which further tells whether the TDX module
-is loaded or not (please refer to SEAMLDR sepc[1], chapter 4.1 SEAMLDR.INFO).
+> it.   Couldn't you just log the err/success and the value of
+> merge_prev/merge_next?  It's not like the code tries more than one way
+> of merging on failure..
 
-And P-SEAMLDR actually uses a different error code definition from TDX module
-(SEAMLDR spec, chapter 4.4 ERROR HANDLING"):
+An initial version had the "log" (trace point really) at multiple places and
+it was uglier than collecting details in the variables and having a single
+tracepoint call site.
 
-"The Intel P-SEAMLDR module returns error codes in the format
-0x80000000_cccceeee, where the value cccc specifies the error class, and the
-value eeee specifies the error code within that class"
+Note that the tracepoint is being provided as part of the series mainly to
+allow evaluation of the series. If it's deemed too specific to be included
+in mainline in the end, so be it.
 
-It doesn't make a lot sense to use TDX module's error code definition to
-define a value that is also supposed to cover P-SEAMLDR, although the chosen
-value happens to work.
-
-Instead, -1 works for both, as both error code definitions of P-SEAMLDR and
-TDX module have couple of bits reserved and will never be set to 1.
-
-[1]
-https://www.intel.com/content/dam/develop/external/us/en/documents-tps/intel-tdx-seamldr-interface-specification.pdf
-
-
-
-
+>>  		merge_both = is_mergeable_anon_vma(prev->anon_vma, next->anon_vma, NULL);
+>> +	}
+>>  
+>> -	if (merge_both) {	 /* cases 1, 6 */
+>> +	if (merge_both >= MERGE_OK) {	 /* cases 1, 6 */
+>>  		err = __vma_adjust(prev, prev->vm_start,
+>>  					next->vm_end, prev->vm_pgoff, NULL,
+>>  					prev);
+>>  		area = prev;
+>> -	} else if (merge_prev) {			/* cases 2, 5, 7 */
+>> +	} else if (merge_prev >= MERGE_OK) {			/* cases 2, 5, 7 */
+>>  		err = __vma_adjust(prev, prev->vm_start,
+>>  					end, prev->vm_pgoff, NULL, prev);
+>>  		area = prev;
+>> -	} else if (merge_next) {
+>> +	} else if (merge_next >= MERGE_OK) {
+>>  		if (prev && addr < prev->vm_end)	/* case 4 */
+>>  			err = __vma_adjust(prev, prev->vm_start,
+>>  					addr, prev->vm_pgoff, NULL, next);
+>> @@ -1252,7 +1255,7 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
+>>  	} else {
+>>  		err = -1;
+>>  	}
+>> -
+>> +	trace_vm_av_merge(err, merge_prev, merge_next, merge_both);
+>>  	/*
+>>  	 * Cannot merge with predecessor or successor or error in __vma_adjust?
+>>  	 */
+>> @@ -3359,6 +3362,8 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+>>  		/*
+>>  		 * Source vma may have been merged into new_vma
+>>  		 */
+>> +		trace_vm_pgoff_merge(vma, anon_pgoff_updated);
+>> +
+>>  		if (unlikely(vma_start >= new_vma->vm_start &&
+>>  			     vma_start < new_vma->vm_end)) {
+>>  			/*
+>> -- 
+>> 2.34.1
+>> 
 

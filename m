@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA384C4C78
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F8B4C4C79
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243809AbiBYRgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S235223AbiBYRgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243815AbiBYRg2 (ORCPT
+        with ESMTP id S243833AbiBYRgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:36:28 -0500
+        Fri, 25 Feb 2022 12:36:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA7B1DBAB9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:35:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A5D20DB3B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:35:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BF2E61DCF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 17:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B854C340F0;
-        Fri, 25 Feb 2022 17:35:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90BB261DD1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 17:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A167C340F3;
+        Fri, 25 Feb 2022 17:35:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645810555;
-        bh=60Aj97bhCy6GhcHiP/GEc6hAyHSIKtkMbp6raHwJd4A=;
+        s=k20201202; t=1645810557;
+        bh=qVI0tY3mXIJAD7LbgficgjWoICY03B7IiXWloXU6Ens=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=F16A1nFNWxF85bJAu6f10xr4xjBGEIUr2LqmsDSNLo7x8My+7YawxNYJoUVrD09ae
-         s3tx5oHe5/yedR5uxCzfu8PZmXo/Nf3nQ4zGk9Qopbd5qoJRQAbuXgyPpImFSESquO
-         +AJYdWXF2s63xgGSZhkG5AMQEsGHPdKcAU1cD7Ldnmy6ujONILs1eAFRRRAYzcqW4z
-         YrSmivQcSadKn8WCgtldTsAwCdBMp3h344N/kfzOE+rrA+3aBdP0baGS8aWpycBfxv
-         cOCrpFXC+2kKdVYPeoFcxaH4RcxnGnsduna3Sf1GAFglRVR3gN2zcdC46WmJNLItYW
-         PUGdckQP2MKIQ==
+        b=mU1kqIleufy7p1Q4BlouNh3VhI+wmYA+pAaGe5c4z/BuCepa4JrKL8xdGHsJKa5h4
+         ACH9h0hB04CyTCbuFgbNXYkF4dn6pJjO8RjkV1EtBsKo+cbwpfG5wC3WiaVxbpLyvw
+         vtSnnEQuAu5EKecWIP6AuBS2I45LSXxaieAg+0dPIu95beX6dF6ehjpJ3ggBvrgg5a
+         nkGvixkgXGhxanZahY4E9jveqjk8zSVHE2vrNuHoXVDURRQXzPh4DD7bEdHoK3kVWy
+         zwYsRKoBtoYG9+fihWZRQezOOfwTerS56L23Nz3C2ulPOuSdpqhy2M4KKc6qhWR6TL
+         F3kcHDLRS7S5A==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        AjitKumar.Pandey@amd.com, vsujithkumar.reddy@amd.com,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220225131645.27556-1-baijiaju1990@gmail.com>
-References: <20220225131645.27556-1-baijiaju1990@gmail.com>
-Subject: Re: [PATCH] ALSA: acp: check the return value of devm_kzalloc() in acp_legacy_dai_links_create()
-Message-Id: <164581055316.2548431.3373385373741114980.b4-ty@kernel.org>
-Date:   Fri, 25 Feb 2022 17:35:53 +0000
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        quic_srivasam@quicinc.com, alsa-devel@alsa-project.org
+In-Reply-To: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
+References: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
+Subject: Re: (subset) [PATCH v2 00/16] ASoC: codecs: add pm runtime support for Qualcomm codecs
+Message-Id: <164581055516.2548431.8597662663166708968.b4-ty@kernel.org>
+Date:   Fri, 25 Feb 2022 17:35:55 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,11 +55,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 05:16:45 -0800, Jia-Ju Bai wrote:
-> The function devm_kzalloc() in acp_legacy_dai_links_create() can fail,
-> so its return value should be checked.
+On Thu, 24 Feb 2022 11:17:02 +0000, Srinivas Kandagatla wrote:
+> This patchset adds support for runtime pm on tx/rx/wsa/wcd lpass macro, wsa881x
+> and wcd938x codecs that are wired up on SoundWire bus.
+> During pm testing it was also found that soundwire clks enabled by lpass macros
+> are not enabling all the required clocks correctly, so last 3 patches corrects them.
 > 
+> Tested this on SM8250 MTP along SoundWire In band Headset Button wakeup interrupts.
 > 
+> [...]
 
 Applied to
 
@@ -67,8 +71,36 @@ Applied to
 
 Thanks!
 
-[1/1] ALSA: acp: check the return value of devm_kzalloc() in acp_legacy_dai_links_create()
-      commit: 431f9a77a4a62694ce90742d1f4c5abe1b8b6612
+[01/16] ASoC: codecs: va-macro: move to individual clks from bulk
+        commit: bed17757521b8beee2b565ce7860808a6a6e37ed
+[02/16] ASoC: codecs: rx-macro: move clk provider to managed variants
+        commit: 70a5e96bad592145ba25365689a2d7d8dedb3bd9
+[03/16] ASoC: codecs: tx-macro: move clk provider to managed variants
+        commit: db8665a3e904f579840417f9414415c4dd54ac84
+[04/16] ASoC: codecs: rx-macro: move to individual clks from bulk
+        commit: 43b647d9940454263421f9a1c756680bdf1d443c
+[05/16] ASoC: codecs: tx-macro: move to individual clks from bulk
+        commit: 512864c4ffa70522b9c44d5b40c15273330ae9c7
+[06/16] ASoC: codecs: wsa-macro: move to individual clks from bulk
+        commit: e252801deb253581892ca6beba625d553d63d538
+[07/16] ASoC: codecs: wsa-macro: setup soundwire clks correctly
+        commit: 05a41340e56f716ef9f83006990f6eea153c5fe0
+[08/16] ASoC: codecs: tx-macro: setup soundwire clks correctly
+        commit: 31bd0db84c6010cd6cf38048570b51aaae26d91d
+[09/16] ASoC: codecs: rx-macro: setup soundwire clks correctly
+        commit: eaba113430d6c5e2c74fc8061fbd86efc000e99c
+[10/16] ASoC: codecs: va-macro: add runtime pm support
+        commit: 72ad25eabda0ac2b13ab8f418dc5d360aded172c
+[11/16] ASoC: codecs: wsa-macro: add runtime pm support
+        commit: c96baa2949b245da7e0d0e9e2a44cd4471c9f303
+[12/16] ASoC: codecs: rx-macro: add runtime pm support
+        commit: 366ff79ed5392ac518fd43cb44f82f63b87c313e
+[13/16] ASoC: codecs: tx-macro: add runtime pm support
+        commit: 1fb83bc5cf640c821910424cd237e2df1e81be6f
+[15/16] ASoC: codecs: wcd938x: add simple clk stop support
+        commit: 584a6301e1d548b2875a47b44f6aecb70a80ee53
+[16/16] ASoC: codecs: wcd-mbhc: add runtime pm support
+        commit: cc4d891f1876242400ef21d95ab9e9553e9d10b0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

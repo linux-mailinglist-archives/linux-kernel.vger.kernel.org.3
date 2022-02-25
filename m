@@ -2,169 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44FF4C4C22
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23734C4C06
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbiBYR25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S243718AbiBYRZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240627AbiBYR2l (ORCPT
+        with ESMTP id S235641AbiBYRZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:28:41 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2053.outbound.protection.outlook.com [40.107.96.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00503C73F;
-        Fri, 25 Feb 2022 09:28:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bFL1WKz2otNOnxDiFC3dtMkOJNWh9hZZGHZLHo0D4Z4gR+rTMV+0DQui1L3xlsyIVO0uCNp7+FpZsjSMjSeYECs+0ammc5W6uHFybS0QxaaaN7/d9Apzhhh2Y2u5HlE15cvtQNOZxF0k5kBYRA75Fycd4JubHI23zWfN5nmaKiv75HqmW2OhVVdUUS9QzDMW4mvrP/mifCbjXdAnIeVcOHzrzhIluU2AP8Sb4auc46q6Sv/jgqS0mVV2Y2h12z9K9hwOaO+4cSAL7oDvwS+Mx/CINqCPnmcMBItbejhksdVSFM5QVmumj4PtI5CrNavLKhpw4Bz3FttuiWPCwBWVaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tr/1XPFLbMW4ojzLqwNhUkn8i9Hz0OhA8OYCXVJaLto=;
- b=axFGL3781wIQZPtZ9qTl0lnEJhf1WHhc4xKvdr/PZeWCT3cm03htKCb7CfBkYmv7elGz0WQwvUeMC3xzKUsgaQda5pXXqaO3cLRpQBQFB+WM/RtxNoid77E1SJb5HV5z9OtM5LW8rawp7HDT9XH8I4oSiJtvHUWjpdwEojeoFfJhxLesRG4x21vTFisEdZPvMw7YsSKGZ99pFSte0uasZV0Mfc+O5whLSGhaaXWXKQHHNw/hasx2VF+YxTm5t5ZkJHe+2p4/jcq0Y1K1Jh6LVR7H0yu3a7QySanJVe3WOUrbigBNWpk0uwL3UgirLelLQIZEE3OdSqVmQqNOYeZMAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=opensource.wdc.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tr/1XPFLbMW4ojzLqwNhUkn8i9Hz0OhA8OYCXVJaLto=;
- b=ROQKug3tWccu6ztojyuL8Ak6O81bmYk8PiHohzDK2GzNsmBIWg2FZHOsqYXxE3oCYYX4Gfj6VdTlZulCQHq4nNN2I+XmDTpS4J7t86D7VR6JoJpBzhJ6DrhJx0KMwufwi6OvknqW0LKUj+oKJOqFaJVq+mXkvYsy6BcpNdnTp1o=
-Received: from DM5PR18CA0074.namprd18.prod.outlook.com (2603:10b6:3:3::12) by
- DM6PR12MB3836.namprd12.prod.outlook.com (2603:10b6:5:1c3::33) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5017.21; Fri, 25 Feb 2022 17:28:03 +0000
-Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:3:cafe::38) by DM5PR18CA0074.outlook.office365.com
- (2603:10b6:3:3::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26 via Frontend
- Transport; Fri, 25 Feb 2022 17:28:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 17:28:02 +0000
-Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 25 Feb
- 2022 11:28:00 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <pmenzel@molgen.mpg.de>, <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 3/3] ata: ahci: Rename CONFIG_SATA_LPM_MOBILE_POLICY configuration item
-Date:   Fri, 25 Feb 2022 11:23:19 -0600
-Message-ID: <20220225172319.846891-3-mario.limonciello@amd.com>
+        Fri, 25 Feb 2022 12:25:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF671AAA43;
+        Fri, 25 Feb 2022 09:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645809869; x=1677345869;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OlurqVaDNqAkiulsXHgdN0qyGkN75qpZRRBUn3kZErg=;
+  b=H66otDR65GatZVxkB1xllDxbIWgCj3bOVGWnoE7yLWDEJiFtWFzpx2FA
+   QsLtD9QlQNOw4u6LLle+pg2y4WenwDGXxCPCs9s01JwpG++fhu10zgzpu
+   CI3n4XB9vrnY8SmmrQXD8iwG9DjfXBDUxYP6AfgZMhgJj+kDA0w7wQSka
+   XtopMpZ90ViPQgAtsIGTswH7iNM9EM7rnEz4lvzPFjCdYF8sE2+70/QxZ
+   36eYbfLZtoVlkYsRlzx/vv5lUWQD9e33Ckw/LnEp4sS7Dj3SmZamwlEGu
+   ijhYbfylFuZtB/0FgGUrq7ZpewZSrWE+MBbNlB7fAudhVJg/QK1OXeeRL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252736969"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="252736969"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:24:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="707929863"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 25 Feb 2022 09:23:58 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9D20894; Fri, 25 Feb 2022 19:24:15 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 01/11] spi: pxa2xx-pci: Refactor CE4100 to use ->setup()
+Date:   Fri, 25 Feb 2022 19:23:40 +0200
+Message-Id: <20220225172350.69797-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220225172319.846891-1-mario.limonciello@amd.com>
-References: <20220225172319.846891-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe12e517-23e3-4eb3-4556-08d9f8842d32
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3836:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3836D36AB8B5DB064536D28AE23E9@DM6PR12MB3836.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aUk35o5yUQ0QEaVbaggVtISFvZVoA6L6bFN30GEWH10nC6GCwcTVm5TFYqrxaoSC3Qfif0y7kd6Gix1qi2SUbUkJmHmU6/+D7glisMu65X6VpiQSC/Z3bMpqVIlm6iRcXpkv7HnyLIJs6uEdp0IPBRD/87SfXKqkq4M9X+z14BZzMs+WTKcAZulYQf11WxxqRKTCUwQt7/dBQiyyffyzZmGnMc4bp8sZdBVlFOGkrmOgSMMqodlkzHNPbtBWl0imYZTe2UEkNd4ztLyAhYATEfZBvQGYL+ugmSodr0DuMI7oTkckV+YJUrZU0X97stS3sMFwvim7diRQ9e7PL0PA8naoV/9fMJmFLjMkzS+sUtcnr2AvEY8foa5j2+BOEArglgKMUH4zRxUktlOvHlaoLQSGecCR/CifD9a/ckFHyltg5DAIjuNnodFGQGe4FV6MkIIOSRVlRXhSS9Gd1c5BskcnPoR3q2etJywvRTu7zS+tFsiufZt3QkY/+7dUAFOHr5OizvBvsb+UXYZs04OpLKWTEk2aJ/Foiyn/gMCUd45o5YA5WVR7u5oPrduorZX3qHW/s9Z6lF6zCQcPw0hZ0/zSSxN6GQxArZ78REFcI4vayHvDGGIddkIttIghI+NP25/slE9FruGGfq1B0EKCzOAmHjndgtl3784NfsfE60108T75EVnNsk88X/oqLFaW9EDxQ4KRjmhbbU5vwcwMXg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(186003)(8676002)(16526019)(4326008)(36860700001)(36756003)(356005)(83380400001)(2906002)(44832011)(426003)(336012)(47076005)(40460700003)(6666004)(8936002)(54906003)(70206006)(6916009)(81166007)(26005)(70586007)(508600001)(1076003)(2616005)(82310400004)(316002)(86362001)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 17:28:02.6182
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe12e517-23e3-4eb3-4556-08d9f8842d32
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3836
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`CONFIG_SATA_LPM_MOBILE_POLICY` reflects a configuration to apply only to
-mobile chipsets.  As some desktop boards may want to use this policy by
-default as well, rename the configuration item to `SATA_LPM_POLICY`.
+Refactor CE4100 handling code to use ->setup() instead of spreading
+potentially confusing conditional.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Besides that, it will allow to refactor further to avoid intermediate
+storage for the used configuration parameters.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-Changes from v2->v3:
- * Add tags
- drivers/ata/Kconfig | 6 +++---
- drivers/ata/ahci.c  | 2 +-
- drivers/ata/ahci.h  | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/spi/spi-pxa2xx-pci.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index cb54631fd950..cb9e71b4ca4d 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -115,14 +115,14 @@ config SATA_AHCI
+diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
+index 6d60972e4e20..bd20379d9342 100644
+--- a/drivers/spi/spi-pxa2xx-pci.c
++++ b/drivers/spi/spi-pxa2xx-pci.c
+@@ -30,7 +30,7 @@ enum {
+ struct pxa_spi_info {
+ 	enum pxa_ssp_type type;
+ 	int port_id;
+-	int num_chipselect;
++	unsigned int num_chipselect;
+ 	unsigned long max_clk_rate;
  
- 	  If unsure, say N.
+ 	/* DMA channel request parameters */
+@@ -114,6 +114,14 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ 	return 0;
+ }
  
--config SATA_MOBILE_LPM_POLICY
--	int "Default SATA Link Power Management policy for mobile chipsets"
-+config SATA_LPM_POLICY
-+	int "Default SATA Link Power Management policy for low power chipsets"
- 	range 0 4
- 	default 0
- 	depends on SATA_AHCI
- 	help
- 	  Select the Default SATA Link Power Management (LPM) policy to use
--	  for mobile / laptop variants of chipsets / "South Bridges".
-+	  for chipsets / "South Bridges" designated as supporting low power.
- 
- 	  The value set has the following meanings:
- 		0 => Keep firmware settings
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 3a6db73d28d0..ffaad9eaa79d 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -1592,7 +1592,7 @@ static int ahci_init_msi(struct pci_dev *pdev, unsigned int n_ports,
- static void ahci_update_initial_lpm_policy(struct ata_port *ap,
- 					   struct ahci_host_priv *hpriv)
++static int ce4100_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
++{
++	c->num_chipselect = dev->devfn;
++	c->max_clk_rate = 3686400;
++
++	return 0;
++}
++
+ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
  {
--	int policy = CONFIG_SATA_MOBILE_LPM_POLICY;
-+	int policy = CONFIG_SATA_LPM_POLICY;
+ 	struct dw_dma_slave *tx, *rx;
+@@ -163,8 +171,7 @@ static struct pxa_spi_info spi_info_configs[] = {
+ 	[PORT_CE4100] = {
+ 		.type = PXA25x_SSP,
+ 		.port_id =  -1,
+-		.num_chipselect = -1,
+-		.max_clk_rate = 3686400,
++		.setup = ce4100_spi_setup,
+ 	},
+ 	[PORT_BYT] = {
+ 		.type = LPSS_BYT_SSP,
+@@ -248,7 +255,7 @@ static int pxa2xx_spi_pci_probe(struct pci_dev *dev,
+ 	}
  
- 
- 	/* Ignore processing for chipsets that don't use policy */
-diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-index 1ad48e2fe573..5badbaca05a0 100644
---- a/drivers/ata/ahci.h
-+++ b/drivers/ata/ahci.h
-@@ -236,7 +236,7 @@ enum {
- 	AHCI_HFLAG_NO_WRITE_TO_RO	= (1 << 24), /* don't write to read
- 							only registers */
- 	AHCI_HFLAG_USE_LPM_POLICY	= (1 << 25), /* chipset that should use
--							SATA_MOBILE_LPM_POLICY
-+							SATA_LPM_POLICY
- 							as default lpm_policy */
- 	AHCI_HFLAG_SUSPEND_PHYS		= (1 << 26), /* handle PHYs during
- 							suspend/resume */
+ 	memset(&spi_pdata, 0, sizeof(spi_pdata));
+-	spi_pdata.num_chipselect = (c->num_chipselect > 0) ? c->num_chipselect : dev->devfn;
++	spi_pdata.num_chipselect = c->num_chipselect;
+ 	spi_pdata.dma_filter = c->dma_filter;
+ 	spi_pdata.tx_param = c->tx_param;
+ 	spi_pdata.rx_param = c->rx_param;
 -- 
 2.34.1
 

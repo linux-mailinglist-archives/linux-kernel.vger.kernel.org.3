@@ -2,174 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032FD4C46C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E6D4C46CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241593AbiBYNl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S241604AbiBYNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238555AbiBYNlx (ORCPT
+        with ESMTP id S241134AbiBYNm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:41:53 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 526B5210D40
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:41:18 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 21PDeuvg019280;
-        Fri, 25 Feb 2022 14:40:56 +0100
-Date:   Fri, 25 Feb 2022 14:40:56 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     David Laight <David.Laight@aculab.com>,
+        Fri, 25 Feb 2022 08:42:27 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204F749F0B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:41:55 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id z66so4452505qke.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=V83goiqYyGQpz53d+mmf7MQS3t+Z9Y1WIlxPTksW/2k=;
+        b=WQEzx7ZUuhLiVdKdscZ2OVoRp/gF9KV90HiAYBYkFxtrc4+qo1zPxqpp2n5/peQNH+
+         8SkkGiKjue3ggp58s5Nb3rw27XIvQkSWKALxbMwwU3idTf1Xd5/40YISHMa9UuVNGvWM
+         bmbjYM82MkK9MuZteqwkCE3+9ytILhrBhwmVeI785OnfCZA5ThH/IKCKncDn87nQFITB
+         46y15sY6Xh5ta89t5QGVkqXrzj1pYAD1FDK0WaqZmhUMVsv8UgS/QsobddgMjOD6YLpJ
+         dCqXlMQ6K2PrrqR/S8PIIgZAhp3Y9Z9MYL2kbAvuRj7mAEYuU1/4tXl0hvYnYRIRZOtJ
+         huAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=V83goiqYyGQpz53d+mmf7MQS3t+Z9Y1WIlxPTksW/2k=;
+        b=ss6m1MZ8MG54P6z06C8OKfeRnqF4/CiEL3ZwTpqRFCDUebzesuTOp7HU0eSGK31v3S
+         40bw/O61GJ/0A3OKAY8t4IzOtMMk3tyM6GiNe4o3/cxq/e2jbver+K20/onC8SC7ADRH
+         EyYDbcQ4aUWPcEuzRyXPp+mJbLkcjamXXSUfK61BaxaLavX0xpNdCO93XlAzXORnzpNO
+         gMfNkPssbqgEx64EGJIORhIP5lDKepFzyF3/ov0gNTRYKmYC754mCoxdb7gGRInjeSr6
+         OAbsTarx5mV/ScHpnXE51qvquP+qLtmZlSE+gjCWa9b4hTPLNCIbIQsSYkmYJgfL3Evm
+         0pYA==
+X-Gm-Message-State: AOAM532tdEZ9OXRrveDsvdkjLfwzm7SO8OD3x2P3TbdTlEsjT3BHoZw1
+        b1WwVqAf9rrI5cThrkCkZk1eqw==
+X-Google-Smtp-Source: ABdhPJxhj+4Ta8cKetNhte+HxrNPD8zFxBlshZu89PiwziIqhFgzma7NtqO/yve/DOoELRIHSAGclw==
+X-Received: by 2002:a37:a38b:0:b0:506:bebf:f51b with SMTP id m133-20020a37a38b000000b00506bebff51bmr4709794qke.280.1645796514287;
+        Fri, 25 Feb 2022 05:41:54 -0800 (PST)
+Received: from sevai ([74.127.202.66])
+        by smtp.gmail.com with ESMTPSA id g1-20020ac87d01000000b002d5c8226f17sm1548447qtb.7.2022.02.25.05.41.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Feb 2022 05:41:53 -0800 (PST)
+From:   Roman Mashak <mrv@mojatatu.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Cong Wang <cong.wang@bytedance.com>, paulb@nvidia.com,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        flyingpeng@tencent.com, Mengen Sun <mengensun@tencent.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: Strange output on the console
-Message-ID: <20220225134056.GE18720@1wt.eu>
-References: <20220224230035.36547137@gandalf.local.home>
- <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
- <20220225063637.GA18039@1wt.eu>
- <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
- <20220225103239.GA18720@1wt.eu>
- <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
- <20220225122546.GB18720@1wt.eu>
- <20220225082850.2277179f@gandalf.local.home>
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/3] net: ip: add skb drop reasons for ip egress path
+References: <20220220155705.194266-1-imagedong@tencent.com>
+        <20220220155705.194266-2-imagedong@tencent.com>
+        <3183c3c9-6644-b2de-885e-9e3699138102@kernel.org>
+        <CADxym3apww2XEeTX=kU7gW5mbQ9STwVyQypK4Xbsmgid9s+2og@mail.gmail.com>
+Date:   Fri, 25 Feb 2022 08:41:28 -0500
+In-Reply-To: <CADxym3apww2XEeTX=kU7gW5mbQ9STwVyQypK4Xbsmgid9s+2og@mail.gmail.com>
+        (Menglong Dong's message of "Fri, 25 Feb 2022 14:05:08 +0800")
+Message-ID: <85v8x3xdvb.fsf@mojatatu.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225082850.2277179f@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 08:28:50AM -0500, Steven Rostedt wrote:
-> On another machine that has the same issue but with different characters, I
-> captured the output from the console, but also took the output from dmesg
-> (both are attached).
-> 
-> The console has:
-> 
-> [    5.886056] thermal LNXTHERM:00: registered as thermal_zone0
-> [    5.891773] ACPI: thermal: Thermal Zone [TZ00] (28 C)
-> [    5.897082] thermal LNXTHERM:01: registered as thermal_zone1
-> [    5.902800] ACPI: thermal: Thermal Zone [TZ01] (30 C)
-> [    5.908053] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> .0I 15
-> 10y0e 
-> 9No
->  Lt
-> 2t.d)
-> .t v
-> 6be
->  a20tp
-> 0a2ni 
->  s
->  s
-> 1s
->  s
-> [..]
-> 
-> 
-> and dmesg has:
-> 
-> [    5.897082] thermal LNXTHERM:01: registered as thermal_zone1
-> [    5.902800] ACPI: thermal: Thermal Zone [TZ01] (30 C)
-> [    5.908053] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> [    5.914461] 00:08: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> [    5.916204] 0000:00:16.3: ttyS1 at I/O 0xf0e0 (irq = 19, base_baud = 115200) is a 16550A
-> [    5.917161] Non-volatile memory driver v1.3
-> [    5.917617] Linux agpgart interface v0.103
-> [    5.922965] tpm_tis 00:09: 1.2 TPM (device-id 0xB, rev-id 16)
-> [    5.988960] tpm tpm0: TPM is disabled/deactivated (0x7)
-> [    6.001410] brd: module loaded
-> [    6.001865] ahci 0000:00:1f.2: version 3.0
-> [    6.012113] ahci 0000:00:1f.2: AHCI 0001.0300 32 slots 6 ports 6 Gbps 0x5 impl SATA mode
-> [    6.012804] ahci 0000:00:1f.2: flags: 64bit ncq pm led clo pio slum part ems apst 
-> [    6.016433] scsi host0: ahci
-> [    6.017170] scsi host1: ahci
-> [    6.017730] scsi host2: ahci
-> [    6.018326] scsi host3: ahci
-> [    6.018880] scsi host4: ahci
-> [    6.019469] scsi host5: ahci
-> [    6.019921] ata1: SATA max UDMA/133 abar m2048@0xf7c36000 port 0xf7c36100 irq 24
-> 
-> 
-> The ending has:
-> 
-> For console:
-> 
-> [..]
-> .Kp
-> 6Kt
-> [K-g
->  Ke
-> 1iah
-> 3inc
->  inc
-> 6inc
-> 1inc
-> 6inc
-> 6inc
-> 1inc
-> 6inc
-> 6itu
-> 6a 
-> .a c
-> 6Pe
-> 8tm
-> 6R r
-> [   16.841072] Freeing unused decrypted memory: 2036K
-> [   16.846604] Freeing unused kernel image (initmem) memory: 2372K
-> [   16.857905] Write protecting the kernel read-only data: 22528k
-> 
-> 
-> For dmesg:
-> 
-> [..]
-> [   16.624186] Key type fscrypt-provisioning registered
-> [   16.627743] Key type encrypted registered
-> [   16.628167] ima: Allocated hash algorithm: sha1
-> [   16.634951] ima: Error Communicating to TPM chip
-> [   16.645952] ima: Error Communicating to TPM chip
-> [   16.656946] ima: Error Communicating to TPM chip
-> [   16.667939] ima: Error Communicating to TPM chip
-> [   16.678937] ima: Error Communicating to TPM chip
-> [   16.689943] ima: Error Communicating to TPM chip
-> [   16.700938] ima: Error Communicating to TPM chip
-> [   16.710941] ima: Error Communicating to TPM chip
-> [   16.726787] ima: No architecture policies found
-> [   16.746928] alg: No test for 842 (842-scomp)
-> [   16.747440] alg: No test for 842 (842-generic)
-> [   16.838166] PM:   Magic number: 10:503:332
-> [   16.838607] tty tty53: hash matches
-> [   16.839099] RAS: Correctable Errors collector initialized.
-> [   16.841072] Freeing unused decrypted memory: 2036K
-> [   16.846604] Freeing unused kernel image (initmem) memory: 2372K
-> [   16.857905] Write protecting the kernel read-only data: 22528k
-> [   16.864836] Freeing unused kernel image (text/rodata gap) memory: 2036K
-> [   16.871969] Freeing unused kernel image (rodata/data gap) memory: 1180K
+Menglong Dong <menglong8.dong@gmail.com> writes:
 
-Interesting, it looks like the characters are rare samples from the
-expected output. I.e. many '1' or '6' and 'inc' for "16* communicating".
-But it looks like some chars help getting them resynced. A wrong bit
-count and/or stop bit count could somehow provoke this, with one char
-having the bits properly placed to be detected on the other side, then
-many being shifted, arriving without the proper start bit condition,
-and/or with the stop bit wrong causing them to be dropped, until some
-of the low-bit count chars (0x20 or 0x0A) making it easier and resyncing
-on end of lines.
+> On Tue, Feb 22, 2022 at 11:13 AM David Ahern <dsahern@kernel.org> wrote:
+>>
+>> On 2/20/22 8:57 AM, menglong8.dong@gmail.com wrote:
+>> > From: Menglong Dong <imagedong@tencent.com>
+>> >
+>> > Replace kfree_skb() with kfree_skb_reason() in the packet egress path of
+>> > IP layer (both IPv4 and IPv6 are considered).
+>> >
+>> > Following functions are involved:
+>> >
+>> > __ip_queue_xmit()
+>> > ip_finish_output()
+>> > ip_mc_finish_output()
+>> > ip6_output()
+>> > ip6_finish_output()
+>> > ip6_finish_output2()
+>> >
+>> > Following new drop reasons are introduced:
+>> >
+>> > SKB_DROP_REASON_IP_OUTNOROUTES
+>> > SKB_DROP_REASON_BPF_CGROUP_EGRESS
+>> > SKB_DROP_REASON_IPV6DSIABLED
 
-Maybe you could try to change the config on the receiver to try to resync
-with what it sent and see if you figure what setting is being used ? I
-would personally try to set it to 7 bit with 1 stop and no parity, same
-baud rate just to see.
+Is this a typo and should be SKB_DROP_REASON_IPV6DISABLED ?
 
-Willy
+[...]
+

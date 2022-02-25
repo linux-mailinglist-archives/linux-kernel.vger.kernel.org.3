@@ -2,129 +2,1159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4C34C3E12
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C914C3E14
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbiBYFyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 00:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S237660AbiBYFzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 00:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiBYFyF (ORCPT
+        with ESMTP id S232221AbiBYFzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 00:54:05 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2047.outbound.protection.outlook.com [40.107.236.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70DD1AA062;
-        Thu, 24 Feb 2022 21:53:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GZH+LoqSeMy7Nqlq9wTA6fsPUuf7TYvd5kJatIONTcMqFQDGWp3NSkgC6ZBQWipMrj1HnIfKHhsvHxqe5TtY6u9qmzcJqtnPcQm4j4agJxJl+yUOU7J7hZxFus2QZPeGVn4Xtk6Zzl8PhOYNOZHbA9C9lh6GUwtLCyD0gUe0TDKnFxPtgvzDjSFGe6APQbRB/Kc+st1yiIEIBLQgGpvUxAoi+C8yE7xF2fsGju6N5oT7belcjgsENe+YwIe7uEjDTvJhjR59LNz5xBJGL7ObHsiFPPwNpDhiy8zG9BUwuW4fc+WEjJkfWno0XJfrj5I3lzwvQXJXh7JCb/b+5hzHRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qZ+AlfLgI0UhBVGHhd8Tdze1khjMojD5wSv1JsOYwqE=;
- b=eICQHc7vvpk9Fl1CsvxDWW3MzyV47uh6R4w+K0Pryd+TYmzW8jLdHkgcWVzi7/Qhj58rB1/YQMaCbV3RavmrGBrIfSoP3c5+gruSo0t1HpRzGTQrzheCBKcNR03cT/sXP8A2AlYTJcWn2fWfNYqvWlQLfap9woqRBMIvDrlXzVN4z0PuajP8187B3FigCog38bA8WnNoZLCDdK4sEgQ4B3WVccCJ+DZ8KW391VixTNpqKozNbTC4RkbbHt9faLs92EJG/6bMpKUbRE3D7Iunp2ma9p6WEIsZT9jHXGSATNfjfvUjZlj1ZnVYU6xQBXOvJh0mzJbt5LlXie+lBxxIuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qZ+AlfLgI0UhBVGHhd8Tdze1khjMojD5wSv1JsOYwqE=;
- b=kgaiQB1Uhy5FhAtGRdwYeW2u86o6AnVSsoGJqr0sp/X4KFDtBCP+DYXJ0+i3G92y11Ui3eHzzLXleptQD/4VA/36YsAjU/xz6H5+3onpW+B3+fv0aFBgarR5gxBkSzYmltdslGKddl8dfHY+GQoeJM3UZy81wcHoUZ3/dcqQTVSCGi2Gbm7KMsMK47UqQN3ATfbWOazwD0NC0EGGl9uFAqE4dbfz2RUoJwgavc0WaR91KKsUQwJX98jyAXtcoLMxKcr5bjs6+i92Avw3fsnbI73bs6rIeHo4bqRKVtQjCGhT/SCoQXzfqO9y23Lf7FAFepIGkjb7NMgNggjwtthqgg==
-Received: from MWHPR20CA0039.namprd20.prod.outlook.com (2603:10b6:300:ed::25)
- by BYAPR12MB3302.namprd12.prod.outlook.com (2603:10b6:a03:12f::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.23; Fri, 25 Feb
- 2022 05:53:26 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:ed:cafe::14) by MWHPR20CA0039.outlook.office365.com
- (2603:10b6:300:ed::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26 via Frontend
- Transport; Fri, 25 Feb 2022 05:53:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 05:53:26 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 25 Feb
- 2022 05:53:25 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 24 Feb 2022
- 21:53:24 -0800
-Received: from henryl-vm.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Thu, 24 Feb 2022 21:53:23 -0800
-From:   Henry Lin <henryl@nvidia.com>
-To:     <mathias.nyman@intel.com>
-CC:     <henryl@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] xhci: fix runtime PM imbalance in USB2 resume
-Date:   Fri, 25 Feb 2022 13:53:11 +0800
-Message-ID: <20220225055311.92447-1-henryl@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Fri, 25 Feb 2022 00:55:07 -0500
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6041E2FDF;
+        Thu, 24 Feb 2022 21:54:34 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id d3so2860175wrf.1;
+        Thu, 24 Feb 2022 21:54:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MiVwtZ3CerEz3Y4zZbz+ufGQKbSu1vpDzCJy42ACYbU=;
+        b=BrUvrJsOPo9B94KGJgs8HArVp28VpXdy2JrQHLh0TJmUwe94U6lShH0eQCVe0NDLM5
+         MJxcm0wIGoKV+qo4OI+RHsa5x7Dxs9lIfCK15x1cCNKIMm3tNVQd6eXRpms0QHKT4M5o
+         5RUMfU2CrjxXtXVq9BQNxOR6R1ieI8qaK3WTlGeuipFEAHEiK8F7BCFRSsCaxjuFY+wR
+         nubv/06pDXWBHRa/Rg8MhDURB9T8w+Od6tKFGepBcX7bMb5LsKxnrMZKfwm6IgfLjQ8m
+         ZXbDsxkBcfa8RieJ/j3Ki7fx4iOYlnleCciuHJnc0FvhXJ9Nigi5w05HIqI9F9Kf//Wk
+         nPBA==
+X-Gm-Message-State: AOAM533sDyZMoVOjAv8uw+UFg3vF6LLYxl7FEAw0KgwPOr4TfAjT/WTl
+        /pB6R55DPMXH6a5gMsPSz1E=
+X-Google-Smtp-Source: ABdhPJzbdMgkES1pf++R75ryK3yQZjs/mkygJXN5whipeYg9D3LhSi8ISkP0yZsLdp0PSFSj4rx6dw==
+X-Received: by 2002:adf:cd8f:0:b0:1ed:af02:2295 with SMTP id q15-20020adfcd8f000000b001edaf022295mr4658432wrj.226.1645768472227;
+        Thu, 24 Feb 2022 21:54:32 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm4605803wmj.5.2022.02.24.21.54.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 21:54:31 -0800 (PST)
+Message-ID: <2ab1ca32-ba9a-a069-e4cd-338b4691ce4f@kernel.org>
+Date:   Fri, 25 Feb 2022 06:54:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8496e332-e047-46a3-43ae-08d9f823241b
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3302:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3302FBC5F1D0E25196458115AC3E9@BYAPR12MB3302.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YnwcGhVm9ZRzN7bCx7fD4/IrX2VyzII9A4QarH8mNjgp4mBbuFrEtF7aXdQc1RgjmqDgO6QECihBGZ5gSRcpe8pxpgVfZgMIfzdBJEqTybw+s+eJIOGOQoJvRkYQbcUWxbhJX2vA2QrNCikkn2odJumhfGRPtwr+0JOUjuJqtT6x2ox+XOQLBDhqWz6bZDYhBY73YPyTmc1Il4RaIHgFG78XBD+J0S7Ffcqml/DZa8SweSteYEPmdFNQbvvosCUhxB+9Sehe2p8wHK7cEI5MX3HOSUjA7+Uif9vIhLy2vfqKTkOW84n9Uq42Vp6oWS6//rciN70Szo7kqBlm9I6V2f43EKDpAEx76sKB3+WHUDajhGRZfjVuZCHhVBHLFMP5mOxS6b9k+paEZ8gVoF/nFLl5Dkebdu18jyJrKnCL0AG5MprbSxkjRoL1iy70XlpHOWGz5yNItXmaGrz3dQdm6WIS/ZSjBAJ5kKoAWprQSup9b6NimGR9ammTXyTCQ0nfvJRct5C8Bcvort6zdqSrVzN2aJzduUXMUi6dxgZ5s06XApWhH61hJEmCHTMynzxvoaQLrB2BQuY15BfBtTolKLzbZ6akQWcGhjuObrCe9kpHpYp2xlX10fST76K16d2NEITVZN/ef5JyVZqPAqVtonQhypuLdH0NaxHZNV54AOm1H10J+d8V6NZofrrhmZJxQiN2bW6+BSWWCdmFg/DlHA==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(81166007)(2906002)(8936002)(36860700001)(36756003)(40460700003)(5660300002)(47076005)(4744005)(2616005)(83380400001)(6666004)(86362001)(7696005)(4326008)(8676002)(426003)(336012)(316002)(54906003)(70586007)(70206006)(6916009)(82310400004)(356005)(508600001)(1076003)(186003)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 05:53:26.1696
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8496e332-e047-46a3-43ae-08d9f823241b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3302
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] serial: make uart_console_write->putchar()'s character
+ an unsigned char
+Content-Language: en-US
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20220223113355.30860-1-jslaby@suse.cz>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220223113355.30860-1-jslaby@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB2 resume starts with usb_hcd_start_port_resume() in port status
-change handling for RESUME link state. usb_hcd_end_port_resume() call is
-needed to keep runtime PM balance.
+On 23. 02. 22, 12:33, Jiri Slaby wrote:
+> Currently, uart_console_write->putchar's second parameter (the
+> character) is of type int. It makes little sense, provided uart_console_write()
+> accepts the input string as "const char *s" and passes its content -- the
+> characters -- to putchar(). So switch the character's type to unsigned
+> char.
+> 
+> We don't use char as that is signed on some platforms. That would cause
+> troubles for drivers which (implicitly) cast the char to u16 when
+> writing to the device. Sign extension would happen in that case and the
+> value written would be completely different to the provided char. DZ is
+> an example of such a driver -- on MIPS, it uses u16 for dz_out in
+> dz_console_putchar().
+> 
+> Note we do the char -> uchar conversion implicitly in
+> uart_console_write(). Provided we do not change size of the data type,
+> sign extension does not happen there, so the problem is void.
+> 
+> This makes the types consistent and unified with the rest of the uart
+> layer, which uses unsigned char in most places already. One exception is
+> xmit_buf, but that is going to be converted later.
 
-Signed-off-by: Henry Lin <henryl@nvidia.com>
----
- drivers/usb/host/xhci-hub.c | 2 ++
- 1 file changed, 2 insertions(+)
+And yet, kbuild thinks we need a v3, so please skip this for now:
+drivers/tty/serial/sunsab.c:869:45: error: passing argument 4 of 
+'uart_console_write' from incompatible pointer type
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index df3522dab31b..4a8b07b8ee01 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1090,6 +1090,8 @@ static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
- 		if (link_state == XDEV_U0) {
- 			bus_state->resume_done[portnum] = 0;
- 			clear_bit(portnum, &bus_state->resuming_ports);
-+			usb_hcd_end_port_resume(&port->rhub->hcd->self,
-+						portnum);
- 			if (bus_state->suspended_ports & (1 << portnum)) {
- 				bus_state->suspended_ports &= ~(1 << portnum);
- 				bus_state->port_c_suspend |= 1 << portnum;
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Acked-by: Richard Genoud <richard.genoud@gmail.com> [atmel_serial]
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: Tobias Klauser <tklauser@distanz.ch>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Vineet Gupta <vgupta@kernel.org>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: Alexander Shiyan <shc_work@mail.ru>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: Karol Gugala <kgugala@antmicro.com>
+> Cc: Mateusz Holenko <mholenko@antmicro.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
+> Cc: Takao Orito <orito.takao@socionext.com>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: "Andreas Färber" <afaerber@suse.de>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> ---
+> [v2]
+> * switch to unsigned (added reasoning to the commit log) -- Maciej
+> * fix sprd_serial too
+> 
+>   drivers/tty/goldfish.c                     | 2 +-
+>   drivers/tty/hvc/hvc_dcc.c                  | 2 +-
+>   drivers/tty/serial/21285.c                 | 2 +-
+>   drivers/tty/serial/8250/8250_early.c       | 2 +-
+>   drivers/tty/serial/8250/8250_ingenic.c     | 2 +-
+>   drivers/tty/serial/8250/8250_port.c        | 2 +-
+>   drivers/tty/serial/altera_jtaguart.c       | 4 ++--
+>   drivers/tty/serial/altera_uart.c           | 2 +-
+>   drivers/tty/serial/amba-pl010.c            | 2 +-
+>   drivers/tty/serial/amba-pl011.c            | 6 +++---
+>   drivers/tty/serial/apbuart.c               | 2 +-
+>   drivers/tty/serial/ar933x_uart.c           | 2 +-
+>   drivers/tty/serial/arc_uart.c              | 2 +-
+>   drivers/tty/serial/atmel_serial.c          | 2 +-
+>   drivers/tty/serial/bcm63xx_uart.c          | 2 +-
+>   drivers/tty/serial/clps711x.c              | 2 +-
+>   drivers/tty/serial/digicolor-usart.c       | 2 +-
+>   drivers/tty/serial/dz.c                    | 2 +-
+>   drivers/tty/serial/earlycon-arm-semihost.c | 2 +-
+>   drivers/tty/serial/earlycon-riscv-sbi.c    | 2 +-
+>   drivers/tty/serial/fsl_linflexuart.c       | 4 ++--
+>   drivers/tty/serial/fsl_lpuart.c            | 4 ++--
+>   drivers/tty/serial/imx.c                   | 2 +-
+>   drivers/tty/serial/imx_earlycon.c          | 2 +-
+>   drivers/tty/serial/ip22zilog.c             | 2 +-
+>   drivers/tty/serial/lantiq.c                | 2 +-
+>   drivers/tty/serial/liteuart.c              | 2 +-
+>   drivers/tty/serial/lpc32xx_hs.c            | 2 +-
+>   drivers/tty/serial/meson_uart.c            | 2 +-
+>   drivers/tty/serial/milbeaut_usio.c         | 2 +-
+>   drivers/tty/serial/mps2-uart.c             | 4 ++--
+>   drivers/tty/serial/mvebu-uart.c            | 4 ++--
+>   drivers/tty/serial/mxs-auart.c             | 2 +-
+>   drivers/tty/serial/omap-serial.c           | 4 ++--
+>   drivers/tty/serial/owl-uart.c              | 2 +-
+>   drivers/tty/serial/pch_uart.c              | 2 +-
+>   drivers/tty/serial/pic32_uart.c            | 2 +-
+>   drivers/tty/serial/pmac_zilog.c            | 2 +-
+>   drivers/tty/serial/pxa.c                   | 2 +-
+>   drivers/tty/serial/qcom_geni_serial.c      | 2 +-
+>   drivers/tty/serial/rda-uart.c              | 2 +-
+>   drivers/tty/serial/sa1100.c                | 2 +-
+>   drivers/tty/serial/samsung_tty.c           | 4 ++--
+>   drivers/tty/serial/sb1250-duart.c          | 2 +-
+>   drivers/tty/serial/sccnxp.c                | 2 +-
+>   drivers/tty/serial/serial_core.c           | 2 +-
+>   drivers/tty/serial/serial_txx9.c           | 2 +-
+>   drivers/tty/serial/sh-sci.c                | 2 +-
+>   drivers/tty/serial/sifive.c                | 4 ++--
+>   drivers/tty/serial/sprd_serial.c           | 4 ++--
+>   drivers/tty/serial/st-asc.c                | 2 +-
+>   drivers/tty/serial/stm32-usart.c           | 2 +-
+>   drivers/tty/serial/sunsu.c                 | 2 +-
+>   drivers/tty/serial/sunzilog.c              | 4 ++--
+>   drivers/tty/serial/uartlite.c              | 4 ++--
+>   drivers/tty/serial/vr41xx_siu.c            | 2 +-
+>   drivers/tty/serial/vt8500_serial.c         | 2 +-
+>   drivers/tty/serial/xilinx_uartps.c         | 2 +-
+>   drivers/tty/serial/zs.c                    | 2 +-
+>   include/linux/serial_core.h                | 2 +-
+>   60 files changed, 73 insertions(+), 73 deletions(-)
+> 
+> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+> index 5ed19a9857ad..ad13532e92fe 100644
+> --- a/drivers/tty/goldfish.c
+> +++ b/drivers/tty/goldfish.c
+> @@ -434,7 +434,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
+>   }
+>   
+>   #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
+> -static void gf_early_console_putchar(struct uart_port *port, int ch)
+> +static void gf_early_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	__raw_writel(ch, port->membase);
+>   }
+> diff --git a/drivers/tty/hvc/hvc_dcc.c b/drivers/tty/hvc/hvc_dcc.c
+> index 8e0edb7d93fd..bd61f9372d83 100644
+> --- a/drivers/tty/hvc/hvc_dcc.c
+> +++ b/drivers/tty/hvc/hvc_dcc.c
+> @@ -15,7 +15,7 @@
+>   #define DCC_STATUS_RX		(1 << 30)
+>   #define DCC_STATUS_TX		(1 << 29)
+>   
+> -static void dcc_uart_console_putchar(struct uart_port *port, int ch)
+> +static void dcc_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (__dcc_getstatus() & DCC_STATUS_TX)
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/21285.c b/drivers/tty/serial/21285.c
+> index 09baef4ccc39..7520cc02fd4d 100644
+> --- a/drivers/tty/serial/21285.c
+> +++ b/drivers/tty/serial/21285.c
+> @@ -403,7 +403,7 @@ static void serial21285_setup_ports(void)
+>   }
+>   
+>   #ifdef CONFIG_SERIAL_21285_CONSOLE
+> -static void serial21285_console_putchar(struct uart_port *port, int ch)
+> +static void serial21285_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (*CSR_UARTFLG & 0x20)
+>   		barrier();
+> diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
+> index c171ce6db691..e52585064565 100644
+> --- a/drivers/tty/serial/8250/8250_early.c
+> +++ b/drivers/tty/serial/8250/8250_early.c
+> @@ -86,7 +86,7 @@ static void serial8250_early_out(struct uart_port *port, int offset, int value)
+>   
+>   #define BOTH_EMPTY (UART_LSR_TEMT | UART_LSR_THRE)
+>   
+> -static void serial_putc(struct uart_port *port, int c)
+> +static void serial_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned int status;
+>   
+> diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+> index 65402d05eff9..cff91aa03f29 100644
+> --- a/drivers/tty/serial/8250/8250_ingenic.c
+> +++ b/drivers/tty/serial/8250/8250_ingenic.c
+> @@ -52,7 +52,7 @@ static void early_out(struct uart_port *port, int offset, uint8_t value)
+>   	writel(value, port->membase + (offset << 2));
+>   }
+>   
+> -static void ingenic_early_console_putc(struct uart_port *port, int c)
+> +static void ingenic_early_console_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	uint8_t lsr;
+>   
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 3b12bfc1ed67..6f24eeeb9050 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -3296,7 +3296,7 @@ EXPORT_SYMBOL_GPL(serial8250_set_defaults);
+>   
+>   #ifdef CONFIG_SERIAL_8250_CONSOLE
+>   
+> -static void serial8250_console_putchar(struct uart_port *port, int ch)
+> +static void serial8250_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_8250_port *up = up_to_u8250p(port);
+>   
+> diff --git a/drivers/tty/serial/altera_jtaguart.c b/drivers/tty/serial/altera_jtaguart.c
+> index 37bffe406b18..1c16345d0a1f 100644
+> --- a/drivers/tty/serial/altera_jtaguart.c
+> +++ b/drivers/tty/serial/altera_jtaguart.c
+> @@ -298,7 +298,7 @@ static struct altera_jtaguart altera_jtaguart_ports[ALTERA_JTAGUART_MAXPORTS];
+>   #if defined(CONFIG_SERIAL_ALTERA_JTAGUART_CONSOLE)
+>   
+>   #if defined(CONFIG_SERIAL_ALTERA_JTAGUART_CONSOLE_BYPASS)
+> -static void altera_jtaguart_console_putc(struct uart_port *port, int c)
+> +static void altera_jtaguart_console_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned long status;
+>   	unsigned long flags;
+> @@ -318,7 +318,7 @@ static void altera_jtaguart_console_putc(struct uart_port *port, int c)
+>   	spin_unlock_irqrestore(&port->lock, flags);
+>   }
+>   #else
+> -static void altera_jtaguart_console_putc(struct uart_port *port, int c)
+> +static void altera_jtaguart_console_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned long flags;
+>   
+> diff --git a/drivers/tty/serial/altera_uart.c b/drivers/tty/serial/altera_uart.c
+> index 64a352b40197..8b749ed557c6 100644
+> --- a/drivers/tty/serial/altera_uart.c
+> +++ b/drivers/tty/serial/altera_uart.c
+> @@ -438,7 +438,7 @@ static struct altera_uart altera_uart_ports[CONFIG_SERIAL_ALTERA_UART_MAXPORTS];
+>   
+>   #if defined(CONFIG_SERIAL_ALTERA_UART_CONSOLE)
+>   
+> -static void altera_uart_console_putc(struct uart_port *port, int c)
+> +static void altera_uart_console_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	while (!(altera_uart_readl(port, ALTERA_UART_STATUS_REG) &
+>   		 ALTERA_UART_STATUS_TRDY_MSK))
+> diff --git a/drivers/tty/serial/amba-pl010.c b/drivers/tty/serial/amba-pl010.c
+> index 47654073123d..896f66cacf8b 100644
+> --- a/drivers/tty/serial/amba-pl010.c
+> +++ b/drivers/tty/serial/amba-pl010.c
+> @@ -556,7 +556,7 @@ static struct uart_amba_port *amba_ports[UART_NR];
+>   
+>   #ifdef CONFIG_SERIAL_AMBA_PL010_CONSOLE
+>   
+> -static void pl010_console_putchar(struct uart_port *port, int ch)
+> +static void pl010_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_amba_port *uap =
+>   		container_of(port, struct uart_amba_port, port);
+> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+> index ba053a68529f..51ecb050ae40 100644
+> --- a/drivers/tty/serial/amba-pl011.c
+> +++ b/drivers/tty/serial/amba-pl011.c
+> @@ -2255,7 +2255,7 @@ static struct uart_amba_port *amba_ports[UART_NR];
+>   
+>   #ifdef CONFIG_SERIAL_AMBA_PL011_CONSOLE
+>   
+> -static void pl011_console_putchar(struct uart_port *port, int ch)
+> +static void pl011_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_amba_port *uap =
+>   	    container_of(port, struct uart_amba_port, port);
+> @@ -2471,7 +2471,7 @@ static struct console amba_console = {
+>   
+>   #define AMBA_CONSOLE	(&amba_console)
+>   
+> -static void qdf2400_e44_putc(struct uart_port *port, int c)
+> +static void qdf2400_e44_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	while (readl(port->membase + UART01x_FR) & UART01x_FR_TXFF)
+>   		cpu_relax();
+> @@ -2487,7 +2487,7 @@ static void qdf2400_e44_early_write(struct console *con, const char *s, unsigned
+>   	uart_console_write(&dev->port, s, n, qdf2400_e44_putc);
+>   }
+>   
+> -static void pl011_putc(struct uart_port *port, int c)
+> +static void pl011_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	while (readl(port->membase + UART01x_FR) & UART01x_FR_TXFF)
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/apbuart.c b/drivers/tty/serial/apbuart.c
+> index d8c937bdf3f9..9ef82d870ff2 100644
+> --- a/drivers/tty/serial/apbuart.c
+> +++ b/drivers/tty/serial/apbuart.c
+> @@ -413,7 +413,7 @@ static void apbuart_flush_fifo(struct uart_port *port)
+>   
+>   #ifdef CONFIG_SERIAL_GRLIB_GAISLER_APBUART_CONSOLE
+>   
+> -static void apbuart_console_putchar(struct uart_port *port, int ch)
+> +static void apbuart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	unsigned int status;
+>   	do {
+> diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar933x_uart.c
+> index 8cabe50c4a33..6269dbf93546 100644
+> --- a/drivers/tty/serial/ar933x_uart.c
+> +++ b/drivers/tty/serial/ar933x_uart.c
+> @@ -613,7 +613,7 @@ static void ar933x_uart_wait_xmitr(struct ar933x_uart_port *up)
+>   	} while ((status & AR933X_UART_DATA_TX_CSR) == 0);
+>   }
+>   
+> -static void ar933x_uart_console_putchar(struct uart_port *port, int ch)
+> +static void ar933x_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct ar933x_uart_port *up =
+>   		container_of(port, struct ar933x_uart_port, port);
+> diff --git a/drivers/tty/serial/arc_uart.c b/drivers/tty/serial/arc_uart.c
+> index 596217d10d5c..2a09e92ef9ed 100644
+> --- a/drivers/tty/serial/arc_uart.c
+> +++ b/drivers/tty/serial/arc_uart.c
+> @@ -508,7 +508,7 @@ static int arc_serial_console_setup(struct console *co, char *options)
+>   	return uart_set_options(port, co, baud, parity, bits, flow);
+>   }
+>   
+> -static void arc_serial_console_putchar(struct uart_port *port, int ch)
+> +static void arc_serial_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (!(UART_GET_STATUS(port) & TXEMPTY))
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+> index 2d09a89974a2..ab79128dbdb5 100644
+> --- a/drivers/tty/serial/atmel_serial.c
+> +++ b/drivers/tty/serial/atmel_serial.c
+> @@ -2541,7 +2541,7 @@ static int atmel_init_port(struct atmel_uart_port *atmel_port,
+>   }
+>   
+>   #ifdef CONFIG_SERIAL_ATMEL_CONSOLE
+> -static void atmel_console_putchar(struct uart_port *port, int ch)
+> +static void atmel_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (!(atmel_uart_readl(port, ATMEL_US_CSR) & ATMEL_US_TXRDY))
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/bcm63xx_uart.c b/drivers/tty/serial/bcm63xx_uart.c
+> index 6471a54b616b..53b43174aa40 100644
+> --- a/drivers/tty/serial/bcm63xx_uart.c
+> +++ b/drivers/tty/serial/bcm63xx_uart.c
+> @@ -681,7 +681,7 @@ static void wait_for_xmitr(struct uart_port *port)
+>   /*
+>    * output given char
+>    */
+> -static void bcm_console_putchar(struct uart_port *port, int ch)
+> +static void bcm_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmitr(port);
+>   	bcm_uart_writel(port, ch, UART_FIFO_REG);
+> diff --git a/drivers/tty/serial/clps711x.c b/drivers/tty/serial/clps711x.c
+> index 95abc6faa3d5..b9b66ad31a08 100644
+> --- a/drivers/tty/serial/clps711x.c
+> +++ b/drivers/tty/serial/clps711x.c
+> @@ -348,7 +348,7 @@ static const struct uart_ops uart_clps711x_ops = {
+>   };
+>   
+>   #ifdef CONFIG_SERIAL_CLPS711X_CONSOLE
+> -static void uart_clps711x_console_putchar(struct uart_port *port, int ch)
+> +static void uart_clps711x_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct clps711x_port *s = dev_get_drvdata(port->dev);
+>   	u32 sysflg = 0;
+> diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
+> index 13ac36e2da4f..6d70fea76bb3 100644
+> --- a/drivers/tty/serial/digicolor-usart.c
+> +++ b/drivers/tty/serial/digicolor-usart.c
+> @@ -381,7 +381,7 @@ static const struct uart_ops digicolor_uart_ops = {
+>   	.request_port	= digicolor_uart_request_port,
+>   };
+>   
+> -static void digicolor_uart_console_putchar(struct uart_port *port, int ch)
+> +static void digicolor_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (digicolor_uart_tx_full(port))
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
+> index e9edabc5a211..2e21acf39720 100644
+> --- a/drivers/tty/serial/dz.c
+> +++ b/drivers/tty/serial/dz.c
+> @@ -802,7 +802,7 @@ static void __init dz_init_ports(void)
+>    * restored.  Welcome to the world of PDP-11!
+>    * -------------------------------------------------------------------
+>    */
+> -static void dz_console_putchar(struct uart_port *uport, int ch)
+> +static void dz_console_putchar(struct uart_port *uport, unsigned char ch)
+>   {
+>   	struct dz_port *dport = to_dport(uport);
+>   	unsigned long flags;
+> diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-arm-semihost.c
+> index fa096c10b591..fcdec5f42376 100644
+> --- a/drivers/tty/serial/earlycon-arm-semihost.c
+> +++ b/drivers/tty/serial/earlycon-arm-semihost.c
+> @@ -21,7 +21,7 @@
+>   /*
+>    * Semihosting-based debug console
+>    */
+> -static void smh_putc(struct uart_port *port, int c)
+> +static void smh_putc(struct uart_port *port, unsigned char c)
+>   {
+>   #ifdef CONFIG_ARM64
+>   	asm volatile("mov  x1, %0\n"
+> diff --git a/drivers/tty/serial/earlycon-riscv-sbi.c b/drivers/tty/serial/earlycon-riscv-sbi.c
+> index ce81523c3113..27afb0b74ea7 100644
+> --- a/drivers/tty/serial/earlycon-riscv-sbi.c
+> +++ b/drivers/tty/serial/earlycon-riscv-sbi.c
+> @@ -10,7 +10,7 @@
+>   #include <linux/serial_core.h>
+>   #include <asm/sbi.h>
+>   
+> -static void sbi_putc(struct uart_port *port, int c)
+> +static void sbi_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	sbi_console_putchar(c);
+>   }
+> diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
+> index e72cba085743..98bb0c315e13 100644
+> --- a/drivers/tty/serial/fsl_linflexuart.c
+> +++ b/drivers/tty/serial/fsl_linflexuart.c
+> @@ -553,7 +553,7 @@ static const struct uart_ops linflex_pops = {
+>   static struct uart_port *linflex_ports[UART_NR];
+>   
+>   #ifdef CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE
+> -static void linflex_console_putchar(struct uart_port *port, int ch)
+> +static void linflex_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	unsigned long cr;
+>   
+> @@ -578,7 +578,7 @@ static void linflex_console_putchar(struct uart_port *port, int ch)
+>   	}
+>   }
+>   
+> -static void linflex_earlycon_putchar(struct uart_port *port, int ch)
+> +static void linflex_earlycon_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	unsigned long flags;
+>   	char *ret;
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index 7d90c5a530ee..87789872f400 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -2333,13 +2333,13 @@ static const struct uart_ops lpuart32_pops = {
+>   static struct lpuart_port *lpuart_ports[UART_NR];
+>   
+>   #ifdef CONFIG_SERIAL_FSL_LPUART_CONSOLE
+> -static void lpuart_console_putchar(struct uart_port *port, int ch)
+> +static void lpuart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	lpuart_wait_bit_set(port, UARTSR1, UARTSR1_TDRE);
+>   	writeb(ch, port->membase + UARTDR);
+>   }
+>   
+> -static void lpuart32_console_putchar(struct uart_port *port, int ch)
+> +static void lpuart32_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	lpuart32_wait_bit_set(port, UARTSTAT, UARTSTAT_TDRE);
+>   	lpuart32_write(port, ch, UARTDATA);
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index 0b467ce8d737..fd38e6ed4fda 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -1968,7 +1968,7 @@ static const struct uart_ops imx_uart_pops = {
+>   static struct imx_port *imx_uart_ports[UART_NR];
+>   
+>   #if IS_ENABLED(CONFIG_SERIAL_IMX_CONSOLE)
+> -static void imx_uart_console_putchar(struct uart_port *port, int ch)
+> +static void imx_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct imx_port *sport = (struct imx_port *)port;
+>   
+> diff --git a/drivers/tty/serial/imx_earlycon.c b/drivers/tty/serial/imx_earlycon.c
+> index 795606e1a22f..7aab38b2bd8c 100644
+> --- a/drivers/tty/serial/imx_earlycon.c
+> +++ b/drivers/tty/serial/imx_earlycon.c
+> @@ -16,7 +16,7 @@
+>   #define UTS_TXFULL (1<<4) /* TxFIFO full */
+>   #define IMX21_UTS 0xb4 /* UART Test Register on all other i.mx*/
+>   
+> -static void imx_uart_console_early_putchar(struct uart_port *port, int ch)
+> +static void imx_uart_console_early_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (readl_relaxed(port->membase + IMX21_UTS) & UTS_TXFULL)
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/ip22zilog.c b/drivers/tty/serial/ip22zilog.c
+> index f4dc5fe4ba92..655e64b26852 100644
+> --- a/drivers/tty/serial/ip22zilog.c
+> +++ b/drivers/tty/serial/ip22zilog.c
+> @@ -990,7 +990,7 @@ static struct zilog_layout * __init get_zs(int chip)
+>   #define ZS_PUT_CHAR_MAX_DELAY	2000	/* 10 ms */
+>   
+>   #ifdef CONFIG_SERIAL_IP22_ZILOG_CONSOLE
+> -static void ip22zilog_put_char(struct uart_port *port, int ch)
+> +static void ip22zilog_put_char(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct zilog_channel *channel = ZILOG_CHANNEL_FROM_PORT(port);
+>   	int loops = ZS_PUT_CHAR_MAX_DELAY;
+> diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+> index 3e324d3f0a6d..a3120c3347dd 100644
+> --- a/drivers/tty/serial/lantiq.c
+> +++ b/drivers/tty/serial/lantiq.c
+> @@ -598,7 +598,7 @@ static const struct uart_ops lqasc_pops = {
+>   
+>   #ifdef CONFIG_SERIAL_LANTIQ_CONSOLE
+>   static void
+> -lqasc_console_putchar(struct uart_port *port, int ch)
+> +lqasc_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	int fifofree;
+>   
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index 7f74bf7bdcff..328b50521f14 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -93,7 +93,7 @@ static void liteuart_timer(struct timer_list *t)
+>   	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+>   }
+>   
+> -static void liteuart_putchar(struct uart_port *port, int ch)
+> +static void liteuart_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (litex_read8(port->membase + OFF_TXFULL))
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
+> index 07c4161eb4cc..b7b489c68c36 100644
+> --- a/drivers/tty/serial/lpc32xx_hs.c
+> +++ b/drivers/tty/serial/lpc32xx_hs.c
+> @@ -122,7 +122,7 @@ static void wait_for_xmit_ready(struct uart_port *port)
+>   	}
+>   }
+>   
+> -static void lpc32xx_hsuart_console_putchar(struct uart_port *port, int ch)
+> +static void lpc32xx_hsuart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmit_ready(port);
+>   	writel((u32)ch, LPC32XX_HSUART_FIFO(port->membase));
+> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> index 45e00d928253..2bf1c57e0981 100644
+> --- a/drivers/tty/serial/meson_uart.c
+> +++ b/drivers/tty/serial/meson_uart.c
+> @@ -513,7 +513,7 @@ static void meson_uart_enable_tx_engine(struct uart_port *port)
+>   	writel(val, port->membase + AML_UART_CONTROL);
+>   }
+>   
+> -static void meson_console_putchar(struct uart_port *port, int ch)
+> +static void meson_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	if (!port->membase)
+>   		return;
+> diff --git a/drivers/tty/serial/milbeaut_usio.c b/drivers/tty/serial/milbeaut_usio.c
+> index 8f2cab7f66ad..347088bb380e 100644
+> --- a/drivers/tty/serial/milbeaut_usio.c
+> +++ b/drivers/tty/serial/milbeaut_usio.c
+> @@ -400,7 +400,7 @@ static const struct uart_ops mlb_usio_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_MILBEAUT_USIO_CONSOLE
+>   
+> -static void mlb_usio_console_putchar(struct uart_port *port, int c)
+> +static void mlb_usio_console_putchar(struct uart_port *port, unsigned char c)
+>   {
+>   	while (!(readb(port->membase + MLB_USIO_REG_SSR) & MLB_USIO_SSR_TDRE))
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
+> index 587b42f754cb..5e9429dcc51f 100644
+> --- a/drivers/tty/serial/mps2-uart.c
+> +++ b/drivers/tty/serial/mps2-uart.c
+> @@ -432,7 +432,7 @@ static const struct uart_ops mps2_uart_pops = {
+>   static DEFINE_IDR(ports_idr);
+>   
+>   #ifdef CONFIG_SERIAL_MPS2_UART_CONSOLE
+> -static void mps2_uart_console_putchar(struct uart_port *port, int ch)
+> +static void mps2_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (mps2_uart_read8(port, UARTn_STATE) & UARTn_STATE_TX_FULL)
+>   		cpu_relax();
+> @@ -484,7 +484,7 @@ static struct console mps2_uart_console = {
+>   
+>   #define MPS2_SERIAL_CONSOLE (&mps2_uart_console)
+>   
+> -static void mps2_early_putchar(struct uart_port *port, int ch)
+> +static void mps2_early_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (readb(port->membase + UARTn_STATE) & UARTn_STATE_TX_FULL)
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+> index ab226da75f7b..b5705da31878 100644
+> --- a/drivers/tty/serial/mvebu-uart.c
+> +++ b/drivers/tty/serial/mvebu-uart.c
+> @@ -598,7 +598,7 @@ static const struct uart_ops mvebu_uart_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_MVEBU_CONSOLE
+>   /* Early Console */
+> -static void mvebu_uart_putc(struct uart_port *port, int c)
+> +static void mvebu_uart_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned int st;
+>   
+> @@ -659,7 +659,7 @@ static void wait_for_xmite(struct uart_port *port)
+>   				  (val & STAT_TX_EMP), 1, 10000);
+>   }
+>   
+> -static void mvebu_uart_console_putchar(struct uart_port *port, int ch)
+> +static void mvebu_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmitr(port);
+>   	writel(ch, port->membase + UART_TSH(port));
+> diff --git a/drivers/tty/serial/mxs-auart.c b/drivers/tty/serial/mxs-auart.c
+> index ac45f3386e97..1944daf8593a 100644
+> --- a/drivers/tty/serial/mxs-auart.c
+> +++ b/drivers/tty/serial/mxs-auart.c
+> @@ -1305,7 +1305,7 @@ static const struct uart_ops mxs_auart_ops = {
+>   static struct mxs_auart_port *auart_port[MXS_AUART_PORTS];
+>   
+>   #ifdef CONFIG_SERIAL_MXS_AUART_CONSOLE
+> -static void mxs_auart_console_putchar(struct uart_port *port, int ch)
+> +static void mxs_auart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct mxs_auart_port *s = to_auart_port(port);
+>   	unsigned int to = 1000;
+> diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
+> index 0862941862c8..7074670cf81d 100644
+> --- a/drivers/tty/serial/omap-serial.c
+> +++ b/drivers/tty/serial/omap-serial.c
+> @@ -1194,7 +1194,7 @@ static void omap_serial_early_out(struct uart_port *port, int offset,
+>   	writew(value, port->membase + offset);
+>   }
+>   
+> -static void omap_serial_early_putc(struct uart_port *port, int c)
+> +static void omap_serial_early_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned int status;
+>   
+> @@ -1238,7 +1238,7 @@ static struct uart_omap_port *serial_omap_console_ports[OMAP_MAX_HSUART_PORTS];
+>   
+>   static struct uart_driver serial_omap_reg;
+>   
+> -static void serial_omap_console_putchar(struct uart_port *port, int ch)
+> +static void serial_omap_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_omap_port *up = to_uart_omap_port(port);
+>   
+> diff --git a/drivers/tty/serial/owl-uart.c b/drivers/tty/serial/owl-uart.c
+> index 91f1eb0058d7..5250bd7d390a 100644
+> --- a/drivers/tty/serial/owl-uart.c
+> +++ b/drivers/tty/serial/owl-uart.c
+> @@ -516,7 +516,7 @@ static const struct uart_ops owl_uart_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_OWL_CONSOLE
+>   
+> -static void owl_console_putchar(struct uart_port *port, int ch)
+> +static void owl_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	if (!port->membase)
+>   		return;
+> diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
+> index f0351e6f0ef6..affe71f8b50c 100644
+> --- a/drivers/tty/serial/pch_uart.c
+> +++ b/drivers/tty/serial/pch_uart.c
+> @@ -1600,7 +1600,7 @@ static const struct uart_ops pch_uart_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_PCH_UART_CONSOLE
+>   
+> -static void pch_console_putchar(struct uart_port *port, int ch)
+> +static void pch_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct eg20t_port *priv =
+>   		container_of(port, struct eg20t_port, port);
+> diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
+> index 0a12fb11e698..b7a3a1b959b1 100644
+> --- a/drivers/tty/serial/pic32_uart.c
+> +++ b/drivers/tty/serial/pic32_uart.c
+> @@ -691,7 +691,7 @@ static const struct uart_ops pic32_uart_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_PIC32_CONSOLE
+>   /* output given char */
+> -static void pic32_console_putchar(struct uart_port *port, int ch)
+> +static void pic32_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct pic32_sport *sport = to_pic32_sport(port);
+>   
+> diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
+> index 5359236b32d6..5d97c201ad88 100644
+> --- a/drivers/tty/serial/pmac_zilog.c
+> +++ b/drivers/tty/serial/pmac_zilog.c
+> @@ -1944,7 +1944,7 @@ static void __exit exit_pmz(void)
+>   
+>   #ifdef CONFIG_SERIAL_PMACZILOG_CONSOLE
+>   
+> -static void pmz_console_putchar(struct uart_port *port, int ch)
+> +static void pmz_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_pmac_port *uap =
+>   		container_of(port, struct uart_pmac_port, port);
+> diff --git a/drivers/tty/serial/pxa.c b/drivers/tty/serial/pxa.c
+> index 30b099746a75..5d7b7e56661f 100644
+> --- a/drivers/tty/serial/pxa.c
+> +++ b/drivers/tty/serial/pxa.c
+> @@ -619,7 +619,7 @@ static void wait_for_xmitr(struct uart_pxa_port *up)
+>   	}
+>   }
+>   
+> -static void serial_pxa_console_putchar(struct uart_port *port, int ch)
+> +static void serial_pxa_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_pxa_port *up = (struct uart_pxa_port *)port;
+>   
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index aedc38893e6c..1543a6028856 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -397,7 +397,7 @@ static void qcom_geni_serial_poll_put_char(struct uart_port *uport,
+>   #endif
+>   
+>   #ifdef CONFIG_SERIAL_QCOM_GENI_CONSOLE
+> -static void qcom_geni_serial_wr_char(struct uart_port *uport, int ch)
+> +static void qcom_geni_serial_wr_char(struct uart_port *uport, unsigned char ch)
+>   {
+>   	struct qcom_geni_private_data *private_data = uport->private_data;
+>   
+> diff --git a/drivers/tty/serial/rda-uart.c b/drivers/tty/serial/rda-uart.c
+> index d550d8fa2fab..e5f1fded423a 100644
+> --- a/drivers/tty/serial/rda-uart.c
+> +++ b/drivers/tty/serial/rda-uart.c
+> @@ -573,7 +573,7 @@ static const struct uart_ops rda_uart_ops = {
+>   
+>   #ifdef CONFIG_SERIAL_RDA_CONSOLE
+>   
+> -static void rda_console_putchar(struct uart_port *port, int ch)
+> +static void rda_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	if (!port->membase)
+>   		return;
+> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+> index 697b6a002a16..5fe6cccfc1ae 100644
+> --- a/drivers/tty/serial/sa1100.c
+> +++ b/drivers/tty/serial/sa1100.c
+> @@ -695,7 +695,7 @@ void __init sa1100_register_uart(int idx, int port)
+>   
+>   
+>   #ifdef CONFIG_SERIAL_SA1100_CONSOLE
+> -static void sa1100_console_putchar(struct uart_port *port, int ch)
+> +static void sa1100_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct sa1100_port *sport =
+>   		container_of(port, struct sa1100_port, port);
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index d002a4e48ed9..2bde7bde7116 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -2478,7 +2478,7 @@ static void s3c24xx_serial_put_poll_char(struct uart_port *port,
+>   #endif /* CONFIG_CONSOLE_POLL */
+>   
+>   static void
+> -s3c24xx_serial_console_putchar(struct uart_port *port, int ch)
+> +s3c24xx_serial_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	unsigned int ufcon = rd_regl(port, S3C2410_UFCON);
+>   
+> @@ -2965,7 +2965,7 @@ static void samsung_early_busyuart_fifo(struct uart_port *port)
+>   		;
+>   }
+>   
+> -static void samsung_early_putc(struct uart_port *port, int c)
+> +static void samsung_early_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	if (readl(port->membase + S3C2410_UFCON) & S3C2410_UFCON_FIFOMODE)
+>   		samsung_early_busyuart_fifo(port);
+> diff --git a/drivers/tty/serial/sb1250-duart.c b/drivers/tty/serial/sb1250-duart.c
+> index 738df6d9c0d9..2cf8533ef760 100644
+> --- a/drivers/tty/serial/sb1250-duart.c
+> +++ b/drivers/tty/serial/sb1250-duart.c
+> @@ -820,7 +820,7 @@ static void __init sbd_probe_duarts(void)
+>    * console output.  The console_lock is held by the caller, so we
+>    * shouldn't be interrupted for more console activity.
+>    */
+> -static void sbd_console_putchar(struct uart_port *uport, int ch)
+> +static void sbd_console_putchar(struct uart_port *uport, unsigned char ch)
+>   {
+>   	struct sbd_port *sport = to_sport(uport);
+>   
+> diff --git a/drivers/tty/serial/sccnxp.c b/drivers/tty/serial/sccnxp.c
+> index 10cc16a71f26..c56de2e104d4 100644
+> --- a/drivers/tty/serial/sccnxp.c
+> +++ b/drivers/tty/serial/sccnxp.c
+> @@ -828,7 +828,7 @@ static const struct uart_ops sccnxp_ops = {
+>   };
+>   
+>   #ifdef CONFIG_SERIAL_SCCNXP_CONSOLE
+> -static void sccnxp_console_putchar(struct uart_port *port, int c)
+> +static void sccnxp_console_putchar(struct uart_port *port, unsigned char c)
+>   {
+>   	int tryes = 100000;
+>   
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 846192a7b4bf..a1688a341411 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -1911,7 +1911,7 @@ static void uart_port_spin_lock_init(struct uart_port *port)
+>    */
+>   void uart_console_write(struct uart_port *port, const char *s,
+>   			unsigned int count,
+> -			void (*putchar)(struct uart_port *, int))
+> +			void (*putchar)(struct uart_port *, unsigned char))
+>   {
+>   	unsigned int i;
+>   
+> diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
+> index aaca4fe38486..b4d8c2733317 100644
+> --- a/drivers/tty/serial/serial_txx9.c
+> +++ b/drivers/tty/serial/serial_txx9.c
+> @@ -879,7 +879,7 @@ static void __init serial_txx9_register_ports(struct uart_driver *drv,
+>   
+>   #ifdef CONFIG_SERIAL_TXX9_CONSOLE
+>   
+> -static void serial_txx9_console_putchar(struct uart_port *port, int ch)
+> +static void serial_txx9_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_txx9_port *up = to_uart_txx9_port(port);
+>   
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index b610b27893a8..738093c7b255 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -2957,7 +2957,7 @@ static void sci_cleanup_single(struct sci_port *port)
+>   
+>   #if defined(CONFIG_SERIAL_SH_SCI_CONSOLE) || \
+>       defined(CONFIG_SERIAL_SH_SCI_EARLYCON)
+> -static void serial_console_putchar(struct uart_port *port, int ch)
+> +static void serial_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	sci_poll_put_char(port, ch);
+>   }
+> diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
+> index b79900d0e91a..f5ac14c384c4 100644
+> --- a/drivers/tty/serial/sifive.c
+> +++ b/drivers/tty/serial/sifive.c
+> @@ -756,7 +756,7 @@ static void sifive_serial_poll_put_char(struct uart_port *port,
+>    */
+>   
+>   #ifdef CONFIG_SERIAL_EARLYCON
+> -static void early_sifive_serial_putc(struct uart_port *port, int c)
+> +static void early_sifive_serial_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	while (__ssp_early_readl(port, SIFIVE_SERIAL_TXDATA_OFFS) &
+>   	       SIFIVE_SERIAL_TXDATA_FULL_MASK)
+> @@ -800,7 +800,7 @@ OF_EARLYCON_DECLARE(sifive, "sifive,fu540-c000-uart0",
+>   
+>   static struct sifive_serial_port *sifive_serial_console_ports[SIFIVE_SERIAL_MAX_PORTS];
+>   
+> -static void sifive_serial_console_putchar(struct uart_port *port, int ch)
+> +static void sifive_serial_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct sifive_serial_port *ssp = port_to_sifive_serial_port(port);
+>   
+> diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+> index 9a7ae6384edf..4329b9c9cbf0 100644
+> --- a/drivers/tty/serial/sprd_serial.c
+> +++ b/drivers/tty/serial/sprd_serial.c
+> @@ -984,7 +984,7 @@ static void wait_for_xmitr(struct uart_port *port)
+>   	} while (status & SPRD_TX_FIFO_CNT_MASK);
+>   }
+>   
+> -static void sprd_console_putchar(struct uart_port *port, int ch)
+> +static void sprd_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmitr(port);
+>   	serial_out(port, SPRD_TXD, ch);
+> @@ -1058,7 +1058,7 @@ console_initcall(sprd_serial_console_init);
+>   #define SPRD_CONSOLE	(&sprd_console)
+>   
+>   /* Support for earlycon */
+> -static void sprd_putc(struct uart_port *port, int c)
+> +static void sprd_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	unsigned int timeout = SPRD_TIMEOUT;
+>   
+> diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+> index 87e480cc8206..d7fd692286cf 100644
+> --- a/drivers/tty/serial/st-asc.c
+> +++ b/drivers/tty/serial/st-asc.c
+> @@ -854,7 +854,7 @@ static int asc_serial_resume(struct device *dev)
+>   /*----------------------------------------------------------------------*/
+>   
+>   #ifdef CONFIG_SERIAL_ST_ASC_CONSOLE
+> -static void asc_console_putchar(struct uart_port *port, int ch)
+> +static void asc_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	unsigned int timeout = 1000000;
+>   
+> diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+> index 1b3a611ac39e..87b5cd4c9743 100644
+> --- a/drivers/tty/serial/stm32-usart.c
+> +++ b/drivers/tty/serial/stm32-usart.c
+> @@ -1641,7 +1641,7 @@ static int stm32_usart_serial_remove(struct platform_device *pdev)
+>   }
+>   
+>   #ifdef CONFIG_SERIAL_STM32_CONSOLE
+> -static void stm32_usart_console_putchar(struct uart_port *port, int ch)
+> +static void stm32_usart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct stm32_port *stm32_port = to_stm32_port(port);
+>   	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
+> diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
+> index 98b2f4fb9a99..c31389114b86 100644
+> --- a/drivers/tty/serial/sunsu.c
+> +++ b/drivers/tty/serial/sunsu.c
+> @@ -1281,7 +1281,7 @@ static void wait_for_xmitr(struct uart_sunsu_port *up)
+>   	}
+>   }
+>   
+> -static void sunsu_console_putchar(struct uart_port *port, int ch)
+> +static void sunsu_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct uart_sunsu_port *up =
+>   		container_of(port, struct uart_sunsu_port, port);
+> diff --git a/drivers/tty/serial/sunzilog.c b/drivers/tty/serial/sunzilog.c
+> index b714b00d2dad..c14275d83b0b 100644
+> --- a/drivers/tty/serial/sunzilog.c
+> +++ b/drivers/tty/serial/sunzilog.c
+> @@ -100,7 +100,7 @@ struct uart_sunzilog_port {
+>   #endif
+>   };
+>   
+> -static void sunzilog_putchar(struct uart_port *port, int ch);
+> +static void sunzilog_putchar(struct uart_port *port, unsigned char ch);
+>   
+>   #define ZILOG_CHANNEL_FROM_PORT(PORT)	((struct zilog_channel __iomem *)((PORT)->membase))
+>   #define UART_ZILOG(PORT)		((struct uart_sunzilog_port *)(PORT))
+> @@ -1125,7 +1125,7 @@ static void sunzilog_free_tables(void)
+>   
+>   #define ZS_PUT_CHAR_MAX_DELAY	2000	/* 10 ms */
+>   
+> -static void __maybe_unused sunzilog_putchar(struct uart_port *port, int ch)
+> +static void __maybe_unused sunzilog_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	struct zilog_channel __iomem *channel = ZILOG_CHANNEL_FROM_PORT(port);
+>   	int loops = ZS_PUT_CHAR_MAX_DELAY;
+> diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+> index e1fa52d31474..007db67292a2 100644
+> --- a/drivers/tty/serial/uartlite.c
+> +++ b/drivers/tty/serial/uartlite.c
+> @@ -482,7 +482,7 @@ static void ulite_console_wait_tx(struct uart_port *port)
+>   			 "timeout waiting for TX buffer empty\n");
+>   }
+>   
+> -static void ulite_console_putchar(struct uart_port *port, int ch)
+> +static void ulite_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	ulite_console_wait_tx(port);
+>   	uart_out32(ch, ULITE_TX, port);
+> @@ -558,7 +558,7 @@ static struct console ulite_console = {
+>   	.data	= &ulite_uart_driver,
+>   };
+>   
+> -static void early_uartlite_putc(struct uart_port *port, int c)
+> +static void early_uartlite_putc(struct uart_port *port, unsigned char c)
+>   {
+>   	/*
+>   	 * Limit how many times we'll spin waiting for TX FIFO status.
+> diff --git a/drivers/tty/serial/vr41xx_siu.c b/drivers/tty/serial/vr41xx_siu.c
+> index 647198b1e2b9..6b303af5ee54 100644
+> --- a/drivers/tty/serial/vr41xx_siu.c
+> +++ b/drivers/tty/serial/vr41xx_siu.c
+> @@ -743,7 +743,7 @@ static void wait_for_xmitr(struct uart_port *port)
+>   	}
+>   }
+>   
+> -static void siu_console_putchar(struct uart_port *port, int ch)
+> +static void siu_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmitr(port);
+>   	siu_write(port, UART_TX, ch);
+> diff --git a/drivers/tty/serial/vt8500_serial.c b/drivers/tty/serial/vt8500_serial.c
+> index 9adfe3dc970f..6f08136ce78a 100644
+> --- a/drivers/tty/serial/vt8500_serial.c
+> +++ b/drivers/tty/serial/vt8500_serial.c
+> @@ -484,7 +484,7 @@ static void wait_for_xmitr(struct uart_port *port)
+>   	} while (status & 0x10);
+>   }
+>   
+> -static void vt8500_console_putchar(struct uart_port *port, int c)
+> +static void vt8500_console_putchar(struct uart_port *port, unsigned char c)
+>   {
+>   	wait_for_xmitr(port);
+>   	writeb(c, port->membase + VT8500_TXFIFO);
+> diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+> index d5e243908d9f..250a1d888eeb 100644
+> --- a/drivers/tty/serial/xilinx_uartps.c
+> +++ b/drivers/tty/serial/xilinx_uartps.c
+> @@ -1142,7 +1142,7 @@ static struct uart_driver cdns_uart_uart_driver;
+>    * @port: Handle to the uart port structure
+>    * @ch: Character to be written
+>    */
+> -static void cdns_uart_console_putchar(struct uart_port *port, int ch)
+> +static void cdns_uart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	while (readl(port->membase + CDNS_UART_SR) & CDNS_UART_SR_TXFULL)
+>   		cpu_relax();
+> diff --git a/drivers/tty/serial/zs.c b/drivers/tty/serial/zs.c
+> index 4b4f604646a7..70969bf9d82c 100644
+> --- a/drivers/tty/serial/zs.c
+> +++ b/drivers/tty/serial/zs.c
+> @@ -1124,7 +1124,7 @@ static int __init zs_probe_sccs(void)
+>   
+>   
+>   #ifdef CONFIG_SERIAL_ZS_CONSOLE
+> -static void zs_console_putchar(struct uart_port *uport, int ch)
+> +static void zs_console_putchar(struct uart_port *uport, unsigned char ch)
+>   {
+>   	struct zs_port *zport = to_zport(uport);
+>   	struct zs_scc *scc = zport->scc;
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index 31f7fe527395..14ae35f68abb 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -399,7 +399,7 @@ int uart_set_options(struct uart_port *port, struct console *co, int baud,
+>   struct tty_driver *uart_console_device(struct console *co, int *index);
+>   void uart_console_write(struct uart_port *port, const char *s,
+>   			unsigned int count,
+> -			void (*putchar)(struct uart_port *, int));
+> +			void (*putchar)(struct uart_port *, unsigned char));
+>   
+>   /*
+>    * Port/driver registration/removal
+
+
 -- 
-2.17.1
-
+js
+suse labs

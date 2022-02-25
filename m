@@ -2,117 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481074C5182
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078414C5192
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbiBYW1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S238357AbiBYWdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 17:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236906AbiBYW1n (ORCPT
+        with ESMTP id S236215AbiBYWdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:27:43 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AFB210443
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:27:10 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so8427408ooi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b/s03k0JRj2Hv4j2AKAsYfs0BBDQNjuiLF4Fr8g0nRc=;
-        b=BffcmKIbgoGIed35TW+fYLtAriHV/47WBC4+PB0zdqSOUZ6KPBKGLlrgOjGwR9iEHF
-         ekSUJQNRf97bM0ESf6ZR6i6mVK/E47Lpa6x2lC5lfIONTr8VVTV0DyMqtE52eiRAi8Vd
-         lHe4GBN4kZglA2s3egGPjVPnAx878+7tVhYilzobXN+2oD8yFCbO66i6Am3AX+9rOA4n
-         dkTeghAi4j1sGiZd3VkmS6TcsWnDt93dChUJuIBrhQKasPfyMyNYRlTGsoVzFlqV5Rou
-         7FMxmGWUP+TzZSdDX+XtntiH70oCEvK+6kzqdOMY3tAo1Elf26a7eTv/HlX8xJp6E8XD
-         2Mrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b/s03k0JRj2Hv4j2AKAsYfs0BBDQNjuiLF4Fr8g0nRc=;
-        b=Sz96u1yuy9uWsxaod2RZHu59ugbe7pKPIFwx5NuVQ7PshWb6hvbrzwgKWSxsM2D9t+
-         ubvf9TmHJ24KVE/n4DQwV3aAKjOTrTeS8xSE5HUXp0QQUaG2sFy2uIFCPuOCRZ6f38OY
-         d3Ax/CNHtuqcizweN+n9nruZbool1cVTTqn9lL1tW14RrnNB5QiPPd4Rs8q63/+M5ny8
-         QncL0PYV5/ub2HG7OVctaSdgCCEvtSiqUyiz1tQm6L6NsXWihnSEOdHMm6/6mq0yCalE
-         D2C15MEhgPMZiHX40Bznh+C4ZDCerwyl6fmmQxginP+mH3HpzPTTDjPWUmCwcHRADHqu
-         /QCw==
-X-Gm-Message-State: AOAM530Somj8AYroq1K5DfeW7a9vamuhtvzvECD3JtvI310vTaY4i79W
-        CUykt/frE1TKYjEqZicmkCtDpDXCcxWpEYfiCXGkBw==
-X-Google-Smtp-Source: ABdhPJyzEggs0p/6UpO52Lt4Qb/IvgvjdkOygSTvusYNKlp7hN+yataDsQD4LcDnomXSpOXH/IX8bi2laDooHffeLGg=
-X-Received: by 2002:a05:6870:6490:b0:d6:d161:6dbb with SMTP id
- cz16-20020a056870649000b000d6d1616dbbmr2311289oab.129.1645828029587; Fri, 25
- Feb 2022 14:27:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20211118130320.95997-1-likexu@tencent.com> <CALMp9eTONaviuz-NnPUP2=MEOb8ZBkZ7u_ZQBWBUne-i6cRUkA@mail.gmail.com>
- <dc14c98c-e35a-95c0-83dd-13b5f7cffc03@gmail.com>
-In-Reply-To: <dc14c98c-e35a-95c0-83dd-13b5f7cffc03@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 25 Feb 2022 14:26:58 -0800
-Message-ID: <CALMp9eSWJevnn3vs5==9ay5vRL_djfq28bawUEP3KzBft3FOrg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     David Dunn <daviddunn@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lotus Fenn <lotusf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 17:33:32 -0500
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2945B1712A7;
+        Fri, 25 Feb 2022 14:32:55 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21PMSgTF022182;
+        Fri, 25 Feb 2022 16:28:42 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21PMSfPH022181;
+        Fri, 25 Feb 2022 16:28:41 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 25 Feb 2022 16:28:41 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+Message-ID: <20220225222841.GS614@gate.crashing.org>
+References: <20220223135820.2252470-1-anders.roxell@linaro.org> <20220223135820.2252470-2-anders.roxell@linaro.org> <1645670923.t0z533n7uu.astroid@bobo.none> <1645678884.dsm10mudmp.astroid@bobo.none> <CAK8P3a28XEN7aH-WdR=doBQKGskiTAeNsjbfvaD5YqEZNM=v0g@mail.gmail.com> <1645694174.z03tip9set.astroid@bobo.none> <CAK8P3a1LgZkAV2wX03hAgx527MuiFt5ABWFp1bGdsTGc=8OmMg@mail.gmail.com> <1645700767.qxyu8a9wl9.astroid@bobo.none> <20220224172948.GN614@gate.crashing.org> <1645748553.sa2ewgy7dr.astroid@bobo.none>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645748553.sa2ewgy7dr.astroid@bobo.none>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:47 PM Like Xu <like.xu.linux@gmail.com> wrote:
->
-> On 12/2/2022 4:39 pm, Jim Mattson wrote:
-> >> -       pmu->reserved_bits = 0xffffffff00200000ull;
-> >> +       pmu->reserved_bits = 0xfffffff000280000ull;
-> > Bits 40 and 41 are guest mode and host mode. They cannot be reserved
-> > if the guest supports nested SVM.
-> >
->
-> Indeed, we need (some hands) to do more pmu tests on nested SVM.
+On Fri, Feb 25, 2022 at 10:23:07AM +1000, Nicholas Piggin wrote:
+> Excerpts from Segher Boessenkool's message of February 25, 2022 3:29 am:
+> > On Thu, Feb 24, 2022 at 09:13:25PM +1000, Nicholas Piggin wrote:
+> >> Excerpts from Arnd Bergmann's message of February 24, 2022 8:20 pm:
+> >> > Again, there should be a minimum number of those .machine directives
+> >> > in inline asm as well, which tends to work out fine as long as the
+> >> > entire kernel is built with the correct -march= option for the minimum
+> >> > supported CPU, and stays away from inline asm that requires a higher
+> >> > CPU level.
+> >> 
+> >> There's really no advantage to them, and they're ugly and annoying
+> >> and if we applied the concept consistently for all asm they would grow 
+> >> to a very large number.
+> > 
+> > The advantage is that you get machine code that *works*.  There are
+> > quite a few mnemonics that translate to different instructions with
+> > different machine options!  We like to get the intended instructions
+> > instead of something that depends on what assembler options the user
+> > has passed behind our backs.
+> > 
+> >> The idea they'll give you good static checking just doesn't really
+> >> pan out.
+> > 
+> > That never was a goal of this at all.
+> > 
+> > -many was very problematical for GCC itself.  We no longer use it.
+> 
+> You have the wrong context. We're not talking about -many vs .machine
+> here.
 
-Actually, it's not just nested SVM.
+Okay, so you have no idea what you are talking about?  Wow.
 
-When we enable vPMU for an Ubuntu guest that is incapable of nested
-SVM, we see errors like the following:
+The reason GCC uses .machine *itself* is because assembler -mmachine
+options *cannot work*, for many reasons.  We hit problems often enough
+that years ago we started moving away from it already.  The biggest
+problems are that on one hand there are mnemonics that encode to
+different instructions depending on target arch or cpu selected (like
+mftb, lxvx, wait, etc.), and on the other hand GCC needs to switch that
+target halfway through compilation (attribute((target(...)))).
 
-root@Ubuntu1804:~# perf stat -e r26 -a sleep 1
+Often these problems were hidden most of the time by us passing -many.
+But not all of the time, and over time, problems became more frequent
+and nasty.
 
- Performance counter stats for 'system wide':
+Passing assembler -m options is nasty when you have to mix it with
+.machine statements (and we need the latter no matter what), and it
+becomes completely unpredictable if the user passes other -m options
+manually.
 
-                 0      r26
+Inline assembler is inserted textually in the generated assembler code.
+This is a big part of the strength of inline assembler.  It does mean
+that if you need a different target selected for your assembler code
+then you need to arrange for that in your assembler code.
+
+So yes, this very much is about -many, other -m options, and .machine .
+I discourage the kernel (as well as any other project) from using -m
+options, especially -many, but that is your own choice of course.  I
+get sick and tired from you calling a deliberate design decision we
+arrived at after years of work and weighing alternatives a "bug" though.
 
 
-       1.001070977 seconds time elapsed
-
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379957] unchecked MSR access
-error: WRMSR to 0xc0010200 (tried to write 0x0000020000130026) at rIP:
-0xffffffff9b276a28 (native_write_msr+0x8/0x30)
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379958] Call Trace:
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379963]
-amd_pmu_disable_event+0x27/0x90
-
-If the standard Linux perf tool sets "exclude_guest" by default, even
-when EFER.SVME is clear, then amd_core_hw_config() in the guest kernel
-will set bit 41 (again, without checking EFER.SVME). This WRMSR should
-not raise #GP.
-
-Current AMD hardware doesn't raise #GP for any value written to a
-PerfEvtSeln MSR. I don't think KVM should ever synthesize a #GP
-either. Perhaps we should just mask off the bits that you have
-indicated as reserved, above.
+Segher

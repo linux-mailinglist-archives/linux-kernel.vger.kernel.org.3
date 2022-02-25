@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B434C4C1C
+	by mail.lfdr.de (Postfix) with ESMTP id 796F24C4C1B
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238531AbiBYR10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S239746AbiBYR2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236348AbiBYR1Z (ORCPT
+        with ESMTP id S240768AbiBYR1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:27:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD91322D650
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645810010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q7iDgyH7zvbk5G21Fe1v72evbUxvbyJHGswITdvg6rw=;
-        b=Twszzt/zLHLTUUTjLYxfMd14wQvnJ2KabeU9Q1YDmZezWXCWWb5aO8VZ1LhO8LoaQRte56
-        R4A+SiIQ/TJ8Z2abu98CPRKAKLNiW+J1GGbC9saxlbe5bxJ89n/mJoiWp0OJPdxZuFNNkT
-        MuyUQA+Yq0cQgSIHbJWo+5hbEghpNUE=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-JLOUwVO5PD6PPd01ucTbow-1; Fri, 25 Feb 2022 12:26:49 -0500
-X-MC-Unique: JLOUwVO5PD6PPd01ucTbow-1
-Received: by mail-ot1-f70.google.com with SMTP id 38-20020a9d0829000000b005afe328b01dso108095oty.16
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:26:49 -0800 (PST)
+        Fri, 25 Feb 2022 12:27:54 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D2927D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:27:21 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id y5so5265533pfe.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:27:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TgKDtZ0bO8Y1fwYCzfXljiMJckMItSBZo7l3LM6GcOc=;
+        b=a9Yn4qGa/0rCSNK1Vp7W+un1EJY8IPeLKL8wa4ZD4UES6xu5vLuBnU2FdJ8hR5SAd6
+         GxywGakYCPIygiwGZpIPzNirfPASu6kHFUfptB542rAxCn7SH6CaB/YEXuAfGg82jjyH
+         SUdkncrtGQvzP0xv3obSTxUVv5zxB+tzd0ZClAPzF53mxBkCFFo2G10o6TgAK+KE8VP/
+         oxjBHWRRkBQ60MqBf5pbQ6DhGmwPvoVFvIGf7sugJuW95Tude7DTNDVt89hz4vP6InIW
+         cyNHoMTN80adW1FwX0ADQprH4Z6AGA+SkqHmuyGFQgwfYgh+ODCVRig7mOfMHaxadCLF
+         lXdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=q7iDgyH7zvbk5G21Fe1v72evbUxvbyJHGswITdvg6rw=;
-        b=3m19b/u6vquycfONQyfmWLKwknGsMCC9yucsWqvp+0ihrNZmUZT35f9kJqeWG08kx2
-         84suMEKupGNs5MGZJxmJB6Obxh2Zm/mWhQLwIhNNpZDwdhId7XmXW8H8RljaBpceq8dj
-         TkFU/jLaqXZqAIUcdR/egLig5UEBlu59VX9oIuBfIh3fJlz2FSdDYWVc0quGYiE1cp0/
-         0gdc47OYW9X6oOZTlD0S+keJdrzeFCiPALKzk3SBNcbxFnHoQ+m0+7bd64u9AVF7S9Qg
-         7I+UTTy7Pbg8EJsZDqL+pEEd5ZXnlT/pa5lblZgRtQYVNwSfOvhi4tMtQ59vCTZAcCue
-         rtRQ==
-X-Gm-Message-State: AOAM532pCU4XDvd179Jzo0o3cB0EGf9eGua8dAmeYZqC3MEanT7UiCTG
-        n/9V78FtJamsZyPjgtBdukIct7pTJp0kYIEPi3/vhhcWzZPerEbdvZOyQOidcgO2PQGY1l9++uz
-        fhRIX/mwkEJ5QiuYEj0uGFkHK
-X-Received: by 2002:a05:6808:21a3:b0:2d4:68b6:e727 with SMTP id be35-20020a05680821a300b002d468b6e727mr2382849oib.112.1645810008790;
-        Fri, 25 Feb 2022 09:26:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxavgml8Ci3ATN5EgsD6z0NaQKeXXqvJw/Uydc6WYA4CBnf5U+eUXJQBnLMIsfOD/Cx8Gucsw==
-X-Received: by 2002:a05:6808:21a3:b0:2d4:68b6:e727 with SMTP id be35-20020a05680821a300b002d468b6e727mr2382829oib.112.1645810008542;
-        Fri, 25 Feb 2022 09:26:48 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id 62-20020a4a1d41000000b0031bf4df25a8sm1331424oog.8.2022.02.25.09.26.46
+        bh=TgKDtZ0bO8Y1fwYCzfXljiMJckMItSBZo7l3LM6GcOc=;
+        b=7MT1RYAaOFPDVngKJE5tCx5m8zcSPVAATV+GcRWFCoYlD7vAyWVfuszT7JwZAvDKQC
+         Lj6wJ5nXD8J9jdVWr1cJ5O0d7sc9cuKxow/w0LWvlMskt8kEDUFXZroqPfKgPX/el9zt
+         pSVU/Q0H9a5Tx6mEZfMh6PZs1d/+NHC3ME8QDdzP8g/P58Zo6j+Wp2XtpGcmYDH81bGU
+         yGQ2w0asSgppojvblBa+btTQurTQWXnitloe5vyTyUtx0RI4ntikqXDUUaHJqB8BaZ+B
+         gY4T8RgDCWnu2wjKfqNLfH2EeO/Zlw001Ag5+3GKTLZfcxR5yBinoaxoZ261+oBQv8yK
+         EOfg==
+X-Gm-Message-State: AOAM531DNuuXUYqY8N5ib2+uYfN6a9GxlaBpcoLY9kCQ3Q5uChxQ4Wl+
+        xYoD8de6A7m/7OkXitnCrz9AjA==
+X-Google-Smtp-Source: ABdhPJzDfKJptQd+IAjDEBgwX6SRfOPtxKZt935GDSKZl73taXkwubv64+BclmzHVuYstHfvSuglFg==
+X-Received: by 2002:a63:5911:0:b0:36c:4394:5bfa with SMTP id n17-20020a635911000000b0036c43945bfamr6815295pgb.519.1645810040554;
+        Fri, 25 Feb 2022 09:27:20 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 25-20020a631859000000b00373df766e76sm3145302pgy.16.2022.02.25.09.27.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 09:26:47 -0800 (PST)
-Date:   Fri, 25 Feb 2022 09:26:44 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 00/39] x86: Kernel IBT
-Message-ID: <20220225172644.76fyxjximjrcdbzt@treble>
-References: <20220224145138.952963315@infradead.org>
- <20220224202602.3gvz5tnxvwb4maod@treble>
- <Yhj1oFcTl2RnghBz@hirez.programming.kicks-ass.net>
- <Yhj5GKLfyxbNCGua@hirez.programming.kicks-ass.net>
+        Fri, 25 Feb 2022 09:27:19 -0800 (PST)
+Date:   Fri, 25 Feb 2022 17:27:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXTERNAL] [PATCH v2] KVM: Don't actually set a request when
+ evicting vCPUs for GFN cache invd
+Message-ID: <YhkRcK64Jya6YpA9@google.com>
+References: <20220223165302.3205276-1-seanjc@google.com>
+ <2547e9675d855449bc5cc7efb97251d6286a377c.camel@amazon.co.uk>
+ <YhkAJ+nw2lCzRxsg@google.com>
+ <915ddc7327585bbe8587b91b8cd208520d684db1.camel@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yhj5GKLfyxbNCGua@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <915ddc7327585bbe8587b91b8cd208520d684db1.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 04:43:20PM +0100, Peter Zijlstra wrote:
-> On Fri, Feb 25, 2022 at 04:28:32PM +0100, Peter Zijlstra wrote:
-> > +void *skip_endbr(void *addr)
-> > +{
-> > +	unsigned long size, offset;
-> > +
-> > +	if (is_endbr(*(unsigned int *)addr) &&
-> > +	    kallsyms_lookup_size_offset((unsigned long)addr, &size, &offset) &&
-> > +	    !offset)
-> > +		addr += 4;
-> > +
-> > +	return addr;
-> > +}
+On Fri, Feb 25, 2022, David Woodhouse wrote:
+> On Fri, 2022-02-25 at 16:13 +0000, Sean Christopherson wrote:
+> > On Fri, Feb 25, 2022, Woodhouse, David wrote:
+> > > Since we need an active vCPU context to do dirty logging (thanks, dirty
+> > > ring)... and since any time vcpu_run exits to userspace for any reason
+> > > might be the last time we ever get an active vCPU context... I think
+> > > that kind of fundamentally means that we must flush dirty state to the
+> > > log on *every* return to userspace, doesn't it?
+> > 
+> > I would rather add a variant of mark_page_dirty_in_slot() that takes a vCPU, which
+> > we whould have in all cases.  I see no reason to require use of kvm_get_running_vcpu().
 > 
-> Damn, I just realized this makes KERNEL_IBT hard depend on KALLSYMS :-(
+> We already have kvm_vcpu_mark_page_dirty(), but it can't use just 'some
+> vcpu' because the dirty ring is lockless. So if you're ever going to
+> use anything other than kvm_get_running_vcpu() we need to add locks.
 
-Why should the jump label patching code even care whether there's an
-ENDBR at the jump target?  It should never jump to the beginning of a
-function anyway, right?  And objtool presumably doesn't patch out ENDBRs
-in the middle of a function.
+Heh, actually, scratch my previous comment.  I was going to respond that
+kvm_get_running_vcpu() is mutually exclusive with all other ioctls() on the same
+vCPU by virtue of vcpu->mutex, but I had forgotten that kvm_get_running_vcpu()
+really should be "kvm_get_loaded_vcpu()".  I.e. as long as KVM is in a vCPU-ioctl
+path, kvm_get_running_vcpu() will be non-null.
 
--- 
-Josh
+> And while we *could* do that, I don't think it would negate the
+> fundamental observation that *any* time we return from vcpu_run to
+> userspace, that could be the last time. Userspace might read the dirty
+> log for the *last* time, and any internally-cached "oh, at some point
+> we need to mark <this> page dirty" is lost because by the time the vCPU
+> is finally destroyed, it's too late.
 
+Hmm, isn't that an existing bug?  I think the correct fix would be to flush all
+dirty vmcs12 pages to the memslot in vmx_get_nested_state().  Userspace _must_
+invoke that if it wants to migrated a nested vCPU.
+
+> I think I'm going to rip out the 'dirty' flag from the gfn_to_pfn_cache
+> completely and add a function (to be called with an active vCPU
+> context) which marks the page dirty *now*.
+
+Hrm, something like?
+
+  1. Drop @dirty from kvm_gfn_to_pfn_cache_init()
+  2. Rename @dirty => @old_dirty in kvm_gfn_to_pfn_cache_refresh()
+  3. Add an API to mark the associated slot dirty without unmapping
+
+I think that makes sense.
+
+> KVM_GUEST_USES_PFN users like nested VMX will be expected to do this
+> before returning from vcpu_run anytime it's in L2 guest mode. 
+
+As above, I think the correct thing to do is enlightent the flows that retrieve
+the state being cached.

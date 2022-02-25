@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197124C43FA
+	by mail.lfdr.de (Postfix) with ESMTP id B87094C43FD
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbiBYLz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S240299AbiBYLzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiBYLzX (ORCPT
+        with ESMTP id S240298AbiBYLzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:55:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF58F21D0A8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:54:50 -0800 (PST)
+        Fri, 25 Feb 2022 06:55:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03A2824776A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645790089;
+        s=mimecast20190719; t=1645790107;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t5OTJjVGSzfVZo0LlaA0N3es7e6jixcsuOulO2sU+rA=;
-        b=AQYVR86r6//rqVZtF99QZ0E+dohZ9iT2Lk5bM2yX3YVceXuSmaireyrq7PLIQvUNOoOZ3a
-        2jVxyrG69cfxuORQcH3A+sGMQ5mr3RP9D9vVtSXaFnvzjZB67vplFXbuSItNngLp583s32
-        CIiPF++G/27CWNFSXCrf1R+PwWg/apM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lUNVJXD1lz8UG2j9TwfXnUiNWI5WtClpcdiSs6wBp3w=;
+        b=MCCnrQGFQWlIb1w5NkmHmrTMDC8ABc0rg2em7QiARCJllq8Tkml0PcPHS0rO7J7G2absVT
+        E0r/jcZVhr2HbVE3jE7a7X+rNtYC5ZAJb4878kTp9MpZbTHgujhD0xga5PTiMAtTJigxb2
+        6/JmybgBuOQzpxnuvb0G2Gwsc8ag2sI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-cWjq1xbdOhKqBdJ7N7TZqw-1; Fri, 25 Feb 2022 06:54:48 -0500
-X-MC-Unique: cWjq1xbdOhKqBdJ7N7TZqw-1
-Received: by mail-wm1-f70.google.com with SMTP id r8-20020a05600c35c800b0038118108e71so1226697wmq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:54:48 -0800 (PST)
+ us-mta-538-oC4k3BBANcSys3aT_B-UzA-1; Fri, 25 Feb 2022 06:55:05 -0500
+X-MC-Unique: oC4k3BBANcSys3aT_B-UzA-1
+Received: by mail-wr1-f72.google.com with SMTP id g15-20020adfbc8f000000b001e9506e27ddso792757wrh.22
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:55:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=t5OTJjVGSzfVZo0LlaA0N3es7e6jixcsuOulO2sU+rA=;
-        b=uy8v+aAJepjKTbzqop1ZcuN8kMXEqq3KST7gXX8HUBI9N5/Sk11BcDRMzrhyUDfqY2
-         h6AZWTh+f7JqlvATzTYwPP9yzgBj6P+3uo6PEgyKRuNMB7UbNCOsj853dRsUsPiaNkOc
-         96GTKdmzuQcPpIi6nKdWF10T28LV0+roJe+8Vjw20XfYy1WqQIPvYvkU11BXKD8aoO+b
-         DxJC6gVgKdTppyto1SCsOgZa0ho4r8SLb6RS3TOREjpXp0F+e95t4sUkH6wX5jkVIkuQ
-         5JT7e2bqdjLiyKhosawR+zDKtl1mrWbooUm2liQbzzqhXh/Uzph7VlPlsMu7kjhJz1ho
-         08cQ==
-X-Gm-Message-State: AOAM5331JXIFhAOh3YWDHpWuAmJpu1Ohx+UD9LgdRcCxiZYhtBNU0rTO
-        f5rCRVQ+7yKh8ENkEAlvovOED0M02qV0iOkkLTzFmjKMEn5FtShcwRSwk3okb47o3fryv8RJdML
-        RvSo2DWAfY+MsBqWfDCXgZR7i
-X-Received: by 2002:adf:f583:0:b0:1ed:b63a:819a with SMTP id f3-20020adff583000000b001edb63a819amr5604887wro.104.1645790087505;
-        Fri, 25 Feb 2022 03:54:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx67U1WsbeuQteN9nrhAbsubtGnfNd/1oqIV+gK/6870hFcNOQHb1ZChGRuWDFLIWE1FHqSlw==
-X-Received: by 2002:adf:f583:0:b0:1ed:b63a:819a with SMTP id f3-20020adff583000000b001edb63a819amr5604867wro.104.1645790087246;
-        Fri, 25 Feb 2022 03:54:47 -0800 (PST)
+        bh=lUNVJXD1lz8UG2j9TwfXnUiNWI5WtClpcdiSs6wBp3w=;
+        b=ItjnyXtZsZkD3jeXnPPVaKRKtIHm9bolcpYN26bhvS7qXIruL1AfU1BYqjT8I1VZuL
+         FfImnQEUHUwC4QzunmgAdG2dVfcQEQL+/jNL/zdeC9sfwokv1Evyi2Oly41kO1fCFEOu
+         wGMTpXabUH6J3hBN+mY+qYZ6kmljyAddUlxpyiGUagkcMnFsf+Rb3JVhOmnsSXS1UDpp
+         hYxW3IxNbhnOTjgIcYKXFbvP2MoO/k6j35Iii2zgo7El19CcvMFevrHyUQ/QNC5NIXyn
+         76y97G9ZpOV4R0phV40jaIs3zuMrhEIzI0i6mN2fTSyXCIBaWkGFrDFlZFVj6NLZ0Olu
+         qzGg==
+X-Gm-Message-State: AOAM530QqROAU3T2OHCGi/nkfdJhvTWIIy9N9NEOOwPjRDVegVz/sZEc
+        sEBXlo7ocZ6gL64rV8MB2EHrQwvBLylAse3r/lQWD9Ze23DHpHZd9Rnd78iJ5xuhwfn0HTShv8l
+        2eHafKiwJuH4ivhxWkGoNsg23
+X-Received: by 2002:adf:e0ce:0:b0:1ef:706d:d6b9 with SMTP id m14-20020adfe0ce000000b001ef706dd6b9mr1582727wri.71.1645790104564;
+        Fri, 25 Feb 2022 03:55:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQFWVO7uVjQPqJRx7TR8N5IYfKnQ7QytJcaMLYtARr61zd3Vc2XOVv8scYuFxSx+ZQrhesqQ==
+X-Received: by 2002:adf:e0ce:0:b0:1ef:706d:d6b9 with SMTP id m14-20020adfe0ce000000b001ef706dd6b9mr1582710wri.71.1645790104274;
+        Fri, 25 Feb 2022 03:55:04 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id i15-20020a05600011cf00b001edc2966dd4sm2017169wrx.47.2022.02.25.03.54.46
+        by smtp.googlemail.com with ESMTPSA id h5-20020adffd45000000b001b36cba20adsm2038473wrs.42.2022.02.25.03.55.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 03:54:46 -0800 (PST)
-Message-ID: <c7681cf8-7b99-eb43-0195-d35adb011f21@redhat.com>
-Date:   Fri, 25 Feb 2022 12:54:45 +0100
+        Fri, 25 Feb 2022 03:55:03 -0800 (PST)
+Message-ID: <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
+Date:   Fri, 25 Feb 2022 12:55:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+Subject: Re: [PATCH 0/4] KVM: x86: hyper-v: XMM fast hypercalls fixes
 Content-Language: en-US
-To:     Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Tao Xu <tao3.xu@intel.com>, kvm@vger.kernel.org,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
         linux-kernel@vger.kernel.org
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220223062412.22334-1-chenyi.qiang@intel.com>
+In-Reply-To: <20220222154642.684285-1-vkuznets@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,73 +85,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 07:24, Chenyi Qiang wrote:
-> Nested handling
-> - Nested notify VM exits are not supported yet. Keep the same notify
->    window control in vmcs02 as vmcs01, so that L1 can't escape the
->    restriction of notify VM exits through launching L2 VM.
-> - When L2 VM is context invalid, synthesize a nested
->    EXIT_REASON_TRIPLE_FAULT to L1 so that L1 won't be killed due to L2's
->    VM_CONTEXT_INVALID happens.
+On 2/22/22 16:46, Vitaly Kuznetsov wrote:
+> While working on some Hyper-V TLB flush improvements and Direct TLB flush
+> feature for Hyper-V on KVM I experienced Windows Server 2019 crashes on
+> boot when XMM fast hypercall input feature is advertised. Turns out,
+> HVCALL_SEND_IPI_EX is also an XMM fast hypercall and returning an error
+> kills the guest. This is fixed in PATCH4. PATCH3 fixes erroneous capping
+> of sparse CPU banks for XMM fast TLB flush hypercalls. The problem should
+> be reproducible with >360 vCPUs.
 > 
-> Notify VM exit is defined in latest Intel Architecture Instruction Set
-> Extensions Programming Reference, chapter 9.2.
+> Vitaly Kuznetsov (4):
+>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
+>      kvm_hv_send_ipi()
+>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
+>      kvm_hv_flush_tlb()
+>    KVM: x86: hyper-v: Fix the maximum number of sparse banks for XMM fast
+>      TLB flush hypercalls
+>    KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
 > 
-> TODO: Allow to change the window size (to enable the feature) at runtime,
-> which can make it more flexible to do management.
+>   arch/x86/kvm/hyperv.c | 84 +++++++++++++++++++++++--------------------
+>   1 file changed, 45 insertions(+), 39 deletions(-)
+> 
 
-I only have a couple questions, any changes in response to the question
-I can do myself.
+Merging this in 5.18 is a bit messy.  Please check that the below
+patch against kvm/next makes sense:
 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 1dfe23963a9e..f306b642c3e1 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -2177,6 +2177,9 @@ static void prepare_vmcs02_constant_state(struct vcpu_vmx *vmx)
->   	if (cpu_has_vmx_encls_vmexit())
->   		vmcs_write64(ENCLS_EXITING_BITMAP, INVALID_GPA);
->   
-> +	if (notify_window >= 0)
-> +		vmcs_write32(NOTIFY_WINDOW, notify_window);
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 653e08c993c4..98fb998c31ce 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1770,9 +1770,11 @@ struct kvm_hv_hcall {
+  };
+  
+  static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
++				 int consumed_xmm_halves,
+  				 u64 *sparse_banks, gpa_t offset)
+  {
+  	u16 var_cnt;
++	int i;
+  
+  	if (hc->var_cnt > 64)
+  		return -EINVAL;
+@@ -1780,13 +1782,29 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+  	/* Ignore banks that cannot possibly contain a legal VP index. */
+  	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
+  
++	if (hc->fast) {
++		/*
++		 * Each XMM holds two sparse banks, but do not count halves that
++		 * have already been consumed for hypercall parameters.
++		 */
++		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
++			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		for (i = 0; i < var_cnt; i++) {
++			int j = i + consumed_xmm_halves;
++			if (j % 2)
++				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
++			else
++				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
++		}
++		return 0;
++	}
++
+  	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
+  			      var_cnt * sizeof(*sparse_banks));
+  }
+  
+-static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
++static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+  {
+-	int i;
+  	struct kvm *kvm = vcpu->kvm;
+  	struct hv_tlb_flush_ex flush_ex;
+  	struct hv_tlb_flush flush;
+@@ -1803,7 +1821,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+  	 */
+  	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
+  
+-	if (!ex) {
++	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
++	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
+  		if (hc->fast) {
+  			flush.address_space = hc->ingpa;
+  			flush.flags = hc->outgpa;
+@@ -1859,17 +1878,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+  		if (!hc->var_cnt)
+  			goto ret_success;
+  
+-		if (hc->fast) {
+-			if (hc->var_cnt > HV_HYPERCALL_MAX_XMM_REGISTERS - 1)
+-				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			for (i = 0; i < hc->var_cnt; i += 2) {
+-				sparse_banks[i] = sse128_lo(hc->xmm[i / 2 + 1]);
+-				sparse_banks[i + 1] = sse128_hi(hc->xmm[i / 2 + 1]);
+-			}
+-			goto do_flush;
+-		}
+-
+-		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
+  					  offsetof(struct hv_tlb_flush_ex,
+  						   hv_vp_set.bank_contents)))
+  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+@@ -1913,7 +1922,7 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+  	}
+  }
+  
+-static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
++static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+  {
+  	struct kvm *kvm = vcpu->kvm;
+  	struct hv_send_ipi_ex send_ipi_ex;
+@@ -1924,7 +1933,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+  	u32 vector;
+  	bool all_cpus;
+  
+-	if (!ex) {
++	if (hc->code == HVCALL_SEND_IPI) {
+  		if (!hc->fast) {
+  			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
+  						    sizeof(send_ipi))))
+@@ -1943,9 +1952,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+  
+  		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+  	} else {
+-		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+-					    sizeof(send_ipi_ex))))
+-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		if (!hc->fast) {
++			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
++						    sizeof(send_ipi_ex))))
++				return HV_STATUS_INVALID_HYPERCALL_INPUT;
++		} else {
++			send_ipi_ex.vector = (u32)hc->ingpa;
++			send_ipi_ex.vp_set.format = hc->outgpa;
++			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
++		}
+  
+  		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+  					 send_ipi_ex.vp_set.format,
+@@ -1964,7 +1979,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+  		if (!hc->var_cnt)
+  			goto ret_success;
+  
+-		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
+  					  offsetof(struct hv_send_ipi_ex,
+  						   vp_set.bank_contents)))
+  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+@@ -2126,6 +2141,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
++	case HVCALL_SEND_IPI_EX:
+  		return true;
+  	}
+  
+@@ -2283,46 +2299,43 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+  				kvm_hv_hypercall_complete_userspace;
+  		return 0;
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
+-		if (unlikely(!hc.rep_cnt || hc.rep_idx || hc.var_cnt)) {
++		if (unlikely(hc.var_cnt)) {
+  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+  			break;
+  		}
+-		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+-		break;
+-	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+-		if (unlikely(hc.rep || hc.var_cnt)) {
+-			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			break;
+-		}
+-		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+-		break;
++		fallthrough;
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+  		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
+  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+  			break;
+  		}
+-		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
++		ret = kvm_hv_flush_tlb(vcpu, &hc);
+  		break;
++	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
++		if (unlikely(hc.var_cnt)) {
++			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
++			break;
++		}
++		fallthrough;
+  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
+  		if (unlikely(hc.rep)) {
+  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+  			break;
+  		}
+-		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
++		ret = kvm_hv_flush_tlb(vcpu, &hc);
+  		break;
+  	case HVCALL_SEND_IPI:
+-		if (unlikely(hc.rep || hc.var_cnt)) {
++		if (unlikely(hc.var_cnt)) {
+  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+  			break;
+  		}
+-		ret = kvm_hv_send_ipi(vcpu, &hc, false);
+-		break;
++		fallthrough;
+  	case HVCALL_SEND_IPI_EX:
+-		if (unlikely(hc.fast || hc.rep)) {
++		if (unlikely(hc.rep)) {
+  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+  			break;
+  		}
+-		ret = kvm_hv_send_ipi(vcpu, &hc, true);
++		ret = kvm_hv_send_ipi(vcpu, &hc);
+  		break;
+  	case HVCALL_POST_DEBUG_DATA:
+  	case HVCALL_RETRIEVE_DEBUG_DATA:
 
-Is a value of 0 valid?  Should it be changed to the recommended value of
-128000 in hardware_setup()?
 
-> +	case EXIT_REASON_NOTIFY:
-> +		return nested_cpu_has2(vmcs12,
-> +			SECONDARY_EXEC_NOTIFY_VM_EXITING);
-
-This should be "return false" since you don't expose the secondary
-control to L1 (meaning, it will never be set).
-
-> +		 * L0 will synthensize a nested TRIPLE_FAULT to kill L2 when
-> +		 * notify VM exit occurred in L2 and NOTIFY_VM_CONTEXT_INVALID is
-> +		 * set in exit qualification. In this case, if notify VM exit
-> +		 * occurred incident to delivery of a vectored event, the IDT
-> +		 * vectoring info are recorded in VMCS. Drop the pending event
-> +		 * in vmcs12, otherwise L1 VMM will exit to userspace with
-> +		 * internal error due to delivery event.
->  		 */
-> -		vmcs12_save_pending_event(vcpu, vmcs12);
-> +		if (to_vmx(vcpu)->exit_reason.basic != EXIT_REASON_NOTIFY)
-> +			vmcs12_save_pending_event(vcpu, vmcs12);
-
-I would prefer to call out the triple fault here:
-
-                 /*
-                  * Transfer the event that L0 or L1 may have wanted to inject into
-                  * L2 to IDT_VECTORING_INFO_FIELD.
-                  *
-                  * Skip this if the exit is due to a NOTIFY_VM_CONTEXT_INVALID
-                  * exit; in that case, L0 will synthesize a nested TRIPLE_FAULT
-                  * vmexit to kill L2.  No IDT vectoring info is recorded for
-                  * triple faults, and __vmx_handle_exit does not expect it.
-                  */
-                 if (!(to_vmx(vcpu)->exit_reason.basic == EXIT_REASON_NOTIFY)
-                       && kvm_test_request(KVM_REQ_TRIPLE_FAULT, vcpu))
-                         vmcs12_save_pending_event(vcpu, vmcs12);
-
-What do you think?
+The resulting merge commit is already in kvm/queue shortly (which should
+become the next kvm/next as soon as tests complete).
 
 Paolo
 

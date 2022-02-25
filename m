@@ -2,223 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD334C4E1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0AB4C4E22
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiBYSzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S233795AbiBYSz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbiBYSz3 (ORCPT
+        with ESMTP id S230051AbiBYSz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:55:29 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ED11CABE0;
-        Fri, 25 Feb 2022 10:54:57 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id w3so8656554edu.8;
-        Fri, 25 Feb 2022 10:54:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5JCzyKO1UGfLV/7xsnb4oZePBiMZ1ZUia6iSNgCx/I8=;
-        b=fzybFQ1BUMKHTpsaJZmc2s3lMD0wZsKBh3JzpqlDdskF3BwjA/C/RoMdQrtIm0eZNV
-         B7G5iiaWtIKNfk8JYvJbWJTio/tz0SMH9cZMKLC0TqIBrlw3M6ydY22nqsrLlIFNaK2f
-         7PvJ7IowggLeRCeQiYTO3YkHxF7v/0NlxSPrukh+bTz+aJcNhaspB/0RskNqE7T74CHv
-         YyE20Ql/zysnRTK5kbBrX3hkj7jUSDtANJWd9NYmbfQ1z4IbisKH9+nTgRZWs9dtfZPL
-         M01BmzEU8XZZmGejTOwkLGPrfsU4VQYpChuf95yRLf4W1wShbHK3IxnERDoFyaBJMvcC
-         lAGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5JCzyKO1UGfLV/7xsnb4oZePBiMZ1ZUia6iSNgCx/I8=;
-        b=oyj61DGkM4AIrXf9Qd6YZsvI+wxzAOI2U3YVV8fw3uap5//W4Fkixn5Q8h9aX9V1Le
-         0YOn64bCz+16cr95tWUfe3d7247jI/tyEv22/3IvQMUu085EyiP/1WqCQCifZXmdoUAy
-         WxMTUf5A71nUAqy36kTs+xtawVH8y/EG01jEwMiyuevIhinxnE3bTr7GywmmfnBrcEQF
-         g6bc2fuGHCwXMZFGkmgj4C0fgstpQqQgk4czum6/FM+iXstM0V+czw/HxlGf4NHGoK9C
-         MPzsGhPkhkM3wCjxy+HNfH4eTIYRKHwHzz1qEQ7oW25Q/y5z/PNsOiugQzKII0SgWObG
-         kE7w==
-X-Gm-Message-State: AOAM531TQKUrqfRzCRixpnNDnpR/Qml80cc5BDr9ikcFg/VOljcJju9O
-        WVjq0sZ0Qg7jNAS0LvuwlR8=
-X-Google-Smtp-Source: ABdhPJyOIbYW6P4rt0+e7CKu4EGWteknSPX2AEuzYr7OOjJ4sWwL5/3OERE3gk57FgmZH01ETGoGCw==
-X-Received: by 2002:a05:6402:270b:b0:410:d71d:3f06 with SMTP id y11-20020a056402270b00b00410d71d3f06mr8256665edd.10.1645815295599;
-        Fri, 25 Feb 2022 10:54:55 -0800 (PST)
-Received: from heron.intern.cm-ag (p200300dc6f1cbe000000000000000fd2.dip0.t-ipconnect.de. [2003:dc:6f1c:be00::fd2])
-        by smtp.gmail.com with ESMTPSA id u19-20020a170906125300b006ceb043c8e1sm1328508eja.91.2022.02.25.10.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 10:54:55 -0800 (PST)
-From:   Max Kellermann <max.kellermann@gmail.com>
-To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Max Kellermann <max.kellermann@gmail.com>
-Subject: [PATCH 4/4] pipe_fs_i.h: add pipe_buf_init()
-Date:   Fri, 25 Feb 2022 19:54:31 +0100
-Message-Id: <20220225185431.2617232-4-max.kellermann@gmail.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20220225185431.2617232-1-max.kellermann@gmail.com>
-References: <20220225185431.2617232-1-max.kellermann@gmail.com>
+        Fri, 25 Feb 2022 13:55:56 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EDF1CABCE
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:55:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645815323; x=1677351323;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y60gl5XzQCq+fmeyaGBJHZqpd2XBH6eJ043j+RfHgT8=;
+  b=BxlYXkxl3nbeyExHXjDsBi8DoJXwRu3VeFtPuvsn5x8NgcMeAGUG7ibx
+   1lunJHEkhmEPESUdHqdqUlcpuAMAU9uDS3/HIn39SksjfeLrlZYwf2A7A
+   Cbsh8JXOkW0wwQmE5byb8mOKfUBA022BCc9Qwoi2A4+ub7vq7KS+fwilg
+   m+QLrhdhNY72QItCnSmCyvd4J35cEYYhlxnNnmX7zOMsAbDf/uxRGNcJy
+   W0jaJBhsA8iWM4HKykjgrZcGtY65r1yI5ubl7kdi96HMuSW/EZrwnSde8
+   AehLGyt+8dM+hmoSoAKLY3SPawS04Aizzfq2ZTu0DP+nTuTA0vfKddwR1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313277864"
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="313277864"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:55:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="574686174"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 10:55:22 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNfkP-0004cr-SQ; Fri, 25 Feb 2022 18:55:21 +0000
+Date:   Sat, 26 Feb 2022 02:54:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 14/25] ERROR: modpost:
+ "vfio_platform_ops" [drivers/vfio/platform/vfio-platform.ko] undefined!
+Message-ID: <202202260238.ppsRDcTe-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds one central function which shall be used to initialize a newly
-allocated struct pipe_buffer.  This shall make the pipe code more
-robust for the next time the pipe_buffer struct gets modified, to
-avoid leaving new members uninitialized.  Instead, adding new members
-should also add a new pipe_buf_init() parameter, which causes
-compile-time errors in call sites that were not adapted.
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   034a4f5bce51691aff0f8104f3e0b1f376c4f50d
+commit: 6c62a443fb8c1a82c6337b96e1d73949f616eef9 [14/25] vifo_platform: Use vfio_alloc/put_device()
+config: arc-randconfig-r003-20220225 (https://download.01.org/0day-ci/archive/20220226/202202260238.ppsRDcTe-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/6c62a443fb8c1a82c6337b96e1d73949f616eef9
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout 6c62a443fb8c1a82c6337b96e1d73949f616eef9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-This commit doesn't refactor fs/fuse/dev.c because this code looks
-obscure to me; it initializes pipe_buffers incrementally through a
-variety of functions, too complicated for me to understand.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-To: Alexander Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-To: linux-kernel@vger.kernel.org
-Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "vfio_platform_ops" [drivers/vfio/platform/vfio-platform.ko] undefined!
+
 ---
- fs/pipe.c                 | 11 +++--------
- fs/splice.c               |  9 ++++-----
- include/linux/pipe_fs_i.h | 20 ++++++++++++++++++++
- kernel/watch_queue.c      |  8 +++-----
- lib/iov_iter.c            | 13 +++----------
- 5 files changed, 33 insertions(+), 28 deletions(-)
-
-diff --git a/fs/pipe.c b/fs/pipe.c
-index b2075ecd4751..6da11ea9da49 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -518,14 +518,9 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 
- 			/* Insert it into the buffer array */
- 			buf = &pipe->bufs[head & mask];
--			buf->page = page;
--			buf->ops = &anon_pipe_buf_ops;
--			buf->offset = 0;
--			buf->len = 0;
--			if (is_packetized(filp))
--				buf->flags = PIPE_BUF_FLAG_PACKET;
--			else
--				buf->flags = PIPE_BUF_FLAG_CAN_MERGE;
-+			pipe_buf_init(buf, page, 0, 0,
-+				      &anon_pipe_buf_ops,
-+				      is_packetized(filp) ? PIPE_BUF_FLAG_PACKET : PIPE_BUF_FLAG_CAN_MERGE);
- 			pipe->tmp_page = NULL;
- 
- 			copied = copy_page_from_iter(page, 0, PAGE_SIZE, from);
-diff --git a/fs/splice.c b/fs/splice.c
-index 5dbce4dcc1a7..d2e4205acc46 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -200,12 +200,11 @@ ssize_t splice_to_pipe(struct pipe_inode_info *pipe,
- 	while (!pipe_full(head, tail, pipe->max_usage)) {
- 		struct pipe_buffer *buf = &pipe->bufs[head & mask];
- 
--		buf->page = spd->pages[page_nr];
--		buf->offset = spd->partial[page_nr].offset;
--		buf->len = spd->partial[page_nr].len;
-+		pipe_buf_init(buf, spd->pages[page_nr],
-+			      spd->partial[page_nr].offset,
-+			      spd->partial[page_nr].len,
-+			      spd->ops, 0);
- 		buf->private = spd->partial[page_nr].private;
--		buf->ops = spd->ops;
--		buf->flags = 0;
- 
- 		head++;
- 		pipe->head = head;
-diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
-index 0e36a58adf0e..61639682cc4e 100644
---- a/include/linux/pipe_fs_i.h
-+++ b/include/linux/pipe_fs_i.h
-@@ -179,6 +179,26 @@ static inline unsigned int pipe_space_for_user(unsigned int head, unsigned int t
- 	return p_space;
- }
- 
-+/**
-+ * Initialize a struct pipe_buffer.
-+ */
-+static inline void pipe_buf_init(struct pipe_buffer *buf,
-+				 struct page *page,
-+				 unsigned int offset, unsigned int len,
-+				 const struct pipe_buf_operations *ops,
-+				 unsigned int flags)
-+{
-+	buf->page = page;
-+	buf->offset = offset;
-+	buf->len = len;
-+	buf->ops = ops;
-+	buf->flags = flags;
-+
-+	/* not initializing the "private" member because it is only
-+	   used by pipe_buf_operations which inject it via struct
-+	   partial_page / struct splice_pipe_desc */
-+}
-+
- /**
-  * pipe_buf_get - get a reference to a pipe_buffer
-  * @pipe:	the pipe that the buffer belongs to
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 9c9eb20dd2c5..34720138cc22 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -106,12 +106,10 @@ static bool post_one_notification(struct watch_queue *wqueue,
- 	kunmap_atomic(p);
- 
- 	buf = &pipe->bufs[head & mask];
--	buf->page = page;
-+	pipe_buf_init(buf, page, offset, len,
-+		      &watch_queue_pipe_buf_ops,
-+		      PIPE_BUF_FLAG_WHOLE);
- 	buf->private = (unsigned long)wqueue;
--	buf->ops = &watch_queue_pipe_buf_ops;
--	buf->offset = offset;
--	buf->len = len;
--	buf->flags = PIPE_BUF_FLAG_WHOLE;
- 	pipe->head = head + 1;
- 
- 	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 6dd5330f7a99..289e96947fb5 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -413,12 +413,8 @@ static size_t copy_page_to_iter_pipe(struct page *page, size_t offset, size_t by
- 	if (pipe_full(i_head, p_tail, pipe->max_usage))
- 		return 0;
- 
--	buf->ops = &page_cache_pipe_buf_ops;
--	buf->flags = 0;
- 	get_page(page);
--	buf->page = page;
--	buf->offset = offset;
--	buf->len = bytes;
-+	pipe_buf_init(buf, page, offset, bytes, &page_cache_pipe_buf_ops, 0);
- 
- 	pipe->head = i_head + 1;
- 	i->iov_offset = offset + bytes;
-@@ -577,11 +573,8 @@ static size_t push_pipe(struct iov_iter *i, size_t size,
- 		if (!page)
- 			break;
- 
--		buf->ops = &default_pipe_buf_ops;
--		buf->flags = 0;
--		buf->page = page;
--		buf->offset = 0;
--		buf->len = min_t(ssize_t, left, PAGE_SIZE);
-+		pipe_buf_init(buf, page, 0, min_t(ssize_t, left, PAGE_SIZE),
-+			      &default_pipe_buf_ops, 0);
- 		left -= buf->len;
- 		iter_head++;
- 		pipe->head = iter_head;
--- 
-2.34.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3504C44BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4074C44BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiBYMlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S237806AbiBYMmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiBYMlb (ORCPT
+        with ESMTP id S230513AbiBYMmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:41:31 -0500
+        Fri, 25 Feb 2022 07:42:32 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369991E4820
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:40:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83216949E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:42:00 -0800 (PST)
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 11CA33FCAC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:40:58 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EEFEE3F1B6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645792858;
-        bh=PQyFtNV3tW1qRmwZ8HqaxvUDcyO7BHPqZZLC0geQ1k0=;
+        s=20210705; t=1645792918;
+        bh=5wR2inrb50SGryPV3ql5qm7RIRt9i7gNq/sby+Clcps=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=Ae6uwJoC7HFzBfCRFar5n4oo8URjTrhqDLUy+iEc11IBAdnXENDiWBeq0HdQzIx6O
-         JKgMxNIz31k2Mew4emurIYzwawPv9ApigXVoU8I02ZEUlflbvFssM0pewq75qziPwK
-         Fpvo3VOJkzq4ze0RbML8LpiFue7xYyjWaxrDtxxsixyf7sSZAYUs8ctumU4VXid72e
-         eKVNy4VvGF4iT0VMSVkbehNqX7ZljzmzqLh98pr0yQ8XPBM2o+hsMcFBz/yUeAUOun
-         G5BdTWqcoKX+Z0rsY6GafwqjatY1bTgQ3CrHg/5M0B8+EYJdlZsSy9Gcse7lMqljJv
-         82nOslOOxrEsA==
-Received: by mail-wm1-f72.google.com with SMTP id i131-20020a1c3b89000000b0037bb9f6feeeso1508042wma.5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:40:58 -0800 (PST)
+        b=FOvyzcUt7DvbL9/Vgde1Q4k4ZUGno96zyoj/3oJR1kJOj8jn1RpTHAInOTot2DEY3
+         rAmnZVWebB7uEZ2xX0QsRNnw7egvOM+kxs1VpIexclZGnbmGjOD/2A0XlXvg/LtQVX
+         tOFcriMXwbAtesIrhXwi3LoMkSg7yYdfPTIhqE63b7i7z5XExeBMbEkhKKTXYVW/mx
+         FPqGRPrusbYPRvWRx3tP/z0+Ie069tZDV4fBbkDS1T//CwgtKj0x/SlhY+hfgITDKO
+         FRbWo2uo0jqM3UAGyWz6qwirA+sAyGRINivzHE+sTjY1Ii3p2yc0ELfxD7AhfGsCCY
+         T7DKlRGyYyOyQ==
+Received: by mail-wm1-f72.google.com with SMTP id r206-20020a1c44d7000000b00380e36c6d34so1510302wma.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:41:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PQyFtNV3tW1qRmwZ8HqaxvUDcyO7BHPqZZLC0geQ1k0=;
-        b=t9yoZphzXm4qiJDAq2KDTkzGhW29tOxIMTiXIyfssRYNbN3CY3Ygmg8j4Elwc2HPGt
-         uPKygaBYxslS0J8G8+yHEpSu/EB6wWW3mfT6K5INASAn6vW1Lpf4+v6UUEl4CATjDDHv
-         lYooiTJqEvpJPyjrZtc5miEjtBOweyv8gjmbVj2bzWNt58lls1gWAnjBRuhrBwoBaZ8x
-         KFhcMWKo4Biy3bGDvS1K/CoAsEQCSzpfz9IvrqPK41nMJbm+MD//Iz7YPeT5HI3uFeIR
-         qmav9MWMzhp4ZIq/+PDN0y2nniTMQdULtCng3QIwTneqI5ZBXjcKRznp9Atg5TMfNSKP
-         L7EQ==
-X-Gm-Message-State: AOAM530MKou4eAPSa5zeX46oF2+OSvWy1A9Rq0j4REu3Sh8RjgSSlz3x
-        q6NJXafLEO/PTnf86Psy5aAfnW/iY5FQvDkXsS9rAlzlO/yt4KGasYOXGoGqr0r67hU2RMsJblx
-        GfDEd/5UE0AJQ8cyI+weXDaUHnWeD3IOhls8tzuhvNA==
-X-Received: by 2002:adf:a54c:0:b0:1ed:ab82:d5c with SMTP id j12-20020adfa54c000000b001edab820d5cmr5903436wrb.636.1645792857567;
-        Fri, 25 Feb 2022 04:40:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwT+su/PUtxfMPaEWHXQEsOYe5HRBKTe0eLxFb9GXFhSjzcIXlRc3bYFdCjzbmxa8WeOAipFA==
-X-Received: by 2002:adf:a54c:0:b0:1ed:ab82:d5c with SMTP id j12-20020adfa54c000000b001edab820d5cmr5903415wrb.636.1645792857391;
-        Fri, 25 Feb 2022 04:40:57 -0800 (PST)
+        bh=5wR2inrb50SGryPV3ql5qm7RIRt9i7gNq/sby+Clcps=;
+        b=tYJR5+wUKJlfsg3qAym1hWP1ffmwcMrBr5u8lSbhY6vODYhNU2A8B9eoX5XFpBpFab
+         O+gsbqr+gxqpL8lkYIfJAfOT+C/sHvSJYpXDNkwNPB5pw3oV7G2TaFeZySjSGkW8UeVr
+         FyfDFWgAUUlnI+qHEQ5EqFPZ1NvqcJSbpo3WiwmJfO1Da8fnW9wU1hNVqbi03qMV3UBB
+         ebjcVhAFI3lqcupUF0ds+bOPlpYJTaVlbnkP0SXxbwSW87o/VbduGQMUd57PHZSDTRgy
+         7EJoCX/JJR62qpssIdRcMAA95vHjOxr1eGRaFNoW4JXJmFYRoF3GsWUMR5/tfydpRt1t
+         8Xvw==
+X-Gm-Message-State: AOAM531sCTUL/yVsPgZCdD6tcunbf7yIzvD4RyTtOJ2/v4SOrFHXAmQR
+        VWzi6aYErlWzZuwVEn/sT99i9veWlgINNMzp/+vtyvvP3kbG8GsxHtcTnkEitHHeylZIna3ueJG
+        6dIW42SPcYIvVnRY6al/w4p2TQ+rgsi2lMlujkcP7cw==
+X-Received: by 2002:adf:80c2:0:b0:1e3:3b9e:ab6d with SMTP id 60-20020adf80c2000000b001e33b9eab6dmr6234414wrl.253.1645792918685;
+        Fri, 25 Feb 2022 04:41:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx83iJoyNT5BQRvq3mMRYqD931oXS9YXkhhT249/SBb5EDJpj7lWu/6JE6+IOyTRBie/j9F6Q==
+X-Received: by 2002:adf:80c2:0:b0:1e3:3b9e:ab6d with SMTP id 60-20020adf80c2000000b001e33b9eab6dmr6234407wrl.253.1645792918458;
+        Fri, 25 Feb 2022 04:41:58 -0800 (PST)
 Received: from localhost.localdomain (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d550a000000b001e551ce8a64sm3228332wrv.9.2022.02.25.04.40.56
+        by smtp.gmail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm2234860wrg.62.2022.02.25.04.41.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 04:40:57 -0800 (PST)
+        Fri, 25 Feb 2022 04:41:58 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -70,9 +70,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Nick Hu <nickhu@andestech.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com
-Subject: [PATCH -fixes v3 1/6] riscv: Fix is_linear_mapping with recent move of KASAN region
-Date:   Fri, 25 Feb 2022 13:39:48 +0100
-Message-Id: <20220225123953.3251327-2-alexandre.ghiti@canonical.com>
+Subject: [PATCH -fixes v3 2/6] riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
+Date:   Fri, 25 Feb 2022 13:39:49 +0100
+Message-Id: <20220225123953.3251327-3-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220225123953.3251327-1-alexandre.ghiti@canonical.com>
 References: <20220225123953.3251327-1-alexandre.ghiti@canonical.com>
@@ -88,44 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN region was recently moved between the linear mapping and the
-kernel mapping, is_linear_mapping used to check the validity of an
-address by using the start of the kernel mapping, which is now wrong.
+In order to get the pfn of a struct page* when sparsemem is enabled
+without vmemmap, the mem_section structures need to be initialized which
+happens in sparse_init.
 
-Fix this by using the maximum size of the physical memory.
+But kasan_early_init calls pfn_to_page way before sparse_init is called,
+which then tries to dereference a null mem_section pointer.
 
-Fixes: f7ae02333d13 ("riscv: Move KASAN mapping next to the kernel mapping")
+Fix this by removing the usage of this function in kasan_early_init.
+
+Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- arch/riscv/include/asm/page.h    | 2 +-
- arch/riscv/include/asm/pgtable.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/riscv/mm/kasan_init.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 160e3a1e8f8b..004372f8da54 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -119,7 +119,7 @@ extern phys_addr_t phys_ram_base;
- 	((x) >= kernel_map.virt_addr && (x) < (kernel_map.virt_addr + kernel_map.size))
+diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
+index f61f7ca6fe0f..85e849318389 100644
+--- a/arch/riscv/mm/kasan_init.c
++++ b/arch/riscv/mm/kasan_init.c
+@@ -202,8 +202,7 @@ asmlinkage void __init kasan_early_init(void)
  
- #define is_linear_mapping(x)	\
--	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < kernel_map.virt_addr))
-+	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+ 	for (i = 0; i < PTRS_PER_PTE; ++i)
+ 		set_pte(kasan_early_shadow_pte + i,
+-			mk_pte(virt_to_page(kasan_early_shadow_page),
+-			       PAGE_KERNEL));
++			pfn_pte(virt_to_pfn(kasan_early_shadow_page), PAGE_KERNEL));
  
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
- #define kernel_mapping_pa_to_va(y)	({						\
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 7e949f25c933..e3549e50de95 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -13,6 +13,7 @@
- 
- #ifndef CONFIG_MMU
- #define KERNEL_LINK_ADDR	PAGE_OFFSET
-+#define KERN_VIRT_SIZE		(UL(-1))
- #else
- 
- #define ADDRESS_SPACE_END	(UL(-1))
+ 	for (i = 0; i < PTRS_PER_PMD; ++i)
+ 		set_pmd(kasan_early_shadow_pmd + i,
 -- 
 2.32.0
 

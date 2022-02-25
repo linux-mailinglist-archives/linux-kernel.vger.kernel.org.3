@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACD94C51C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B344C51C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238841AbiBYWyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S238924AbiBYW4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 17:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiBYWye (ORCPT
+        with ESMTP id S229885AbiBYW4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:54:34 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2C81EF352;
-        Fri, 25 Feb 2022 14:54:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 849FC1F467FD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645829639;
-        bh=z3qh2ebyqlz3f5zcWAVAwa251mEJPQcuQVDkYC5qazU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i0+fdRVLpSihQ9Lvk2+OUwe0bzCpQVBUI58Me8jDXbOtH9eXiyBl1rziYfbZf4yCR
-         o/M7+WbaZvC4zgKGsXAiskg27Xjxq6hGL5VPcNbbC3w3n0dRuSbtJxHYEm9Hux5D0+
-         kV18GKHZNKhptAbyCY0rOImIA0VNVz4Kne6l1l977yO3Imt6jbrvJNtuaiGTj4ps0Y
-         JCxhH7xJLDdfrF6TiSK/VUnO1Dc3YuPfvcSnyHJahCpxMOOwKSqTdVoFSG6fGrCWvg
-         p9RmKQkXoK5SmJ4pFCXPYJgiasDrCaCkJ3GSgbrwi1Iv7YyE9ALeYOjrwntt+m/vFk
-         IN72WIcx5b4NA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v1] arm/arm64: dts: mediatek: Format mediatek,larbs as an array of phandles
-Date:   Fri, 25 Feb 2022 17:53:15 -0500
-Message-Id: <20220225225315.80220-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Feb 2022 17:56:39 -0500
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A45881EF354;
+        Fri, 25 Feb 2022 14:56:04 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 73FEF10E20E2;
+        Sat, 26 Feb 2022 09:56:01 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nNjVI-00GQUL-9I; Sat, 26 Feb 2022 09:56:00 +1100
+Date:   Sat, 26 Feb 2022 09:56:00 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Byron Stanoszek <gandalf@winds.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: Is it time to remove reiserfs?
+Message-ID: <20220225225600.GO3061737@dread.disaster.area>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
+ <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+ <20220222221614.GC3061737@dread.disaster.area>
+ <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
+ <YhfzUc8afuoQkx/U@casper.infradead.org>
+ <257dc4a9-dfa0-327e-f05a-71c0d9742e98@winds.org>
+ <20220225132300.GC18720@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225132300.GC18720@1wt.eu>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62195e83
+        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
+        a=_MjYSGqaCGpKE7YW:21 a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
+        a=i9EhDj85i3cWi9GefWwA:9 a=CjuIK1q_8ugA:10 a=aebnku51ZD03SSuSuSm5:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,121 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
-updated the mediatek,larbs property in the mediatek,iommu.yaml
-dt-binding to make it clearer that the phandles passed to the property
-are independent, rather than subsequent arguments to the first phandle.
+On Fri, Feb 25, 2022 at 02:23:00PM +0100, Willy Tarreau wrote:
+> On Fri, Feb 25, 2022 at 08:10:22AM -0500, Byron Stanoszek wrote:
+> > On Thu, 24 Feb 2022, Matthew Wilcox wrote:
+> > > On Wed, Feb 23, 2022 at 09:48:26AM -0500, Byron Stanoszek wrote:
+> > > > For what it's worth, I have a number of production servers still using
+> > > > Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
+> > > > annually (mostly to apply security patches). I figured this filesystem would
+> > > > still be available for several more years, since it's not quite y2038k yet.
+> > > 
+> > > Hey Byron, thanks for sharing your usage.
+> > > 
+> > > It's not entirely clear to me from your message whether you're aware
+> > > that our annual LTS release actually puts out new kernels every week (or
+> > > sometimes twice a week), and upgrades to the latest version are always
+> > > recommended.  Those LTS kernels typically get five years of support in
+> > > total; indeed we just retired the v4.4 series earlier this month which
+> > > was originally released in January 2016, so it got six years of support.
+> > > 
+> > > If we dropped reiserfs from the kernel today (and thanks to Edward, we
+> > > don't have to), you'd still be able to use a v5.15 based kernel with
+> > > regular updates until 2028.  If we drop it in two years, that should
+> > > take you through to 2030.  Is that enough for your usage?
+> > 
+> > I'm aware of the LTS releases, but I hadn't thought about them in relation to
+> > this issue. That's a good point, and so it sounds like I have nothing to worry
+> > about.
+> 
+> This just makes me think that instead of speaking about deprecation in
+> terms of version, speaking in terms of dates might be more suitable, as
+> it should help discouraging distros or products shipping LTS kernels
+> from enabling such deprecated features: when you're told the features
+> will disappear after, say, 5.20, some might think "OK 5.20 is the last
+> one and it happens to be LTS so I get the feature for 6 extra years
+> after it's EOL".
 
-Update the mediatek,larbs property in the Devicetrees to use the same
-formatting. This change doesn't impact any behavior: the compiled dtb is
-exactly the same. It does however fix the warnings generated by
-dtbs_check.
+This is exactly why the XFS deprecation schedules are dated while
+the actual removals record kernel releases. If it gets released in
+a kernel, then it technically is supported for the life of that
+kernel, even if it is a LTS kernel and the functionality no long
+exists upstream.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+That is, we know that once we've removed something from upstream,
+it's still going to be actively used in LTS kernels based on kernels
+that still have that functionality. Same goes for enterprise
+kernels. Hence deprecation policies need to first acknowledge the
+typical "no regressions" policies for LTS kernels...
 
----
+With that in mind, this is why we've already deprecated non-y2038k
+compliant functionality in XFS so that enterprise kernels can mark
+it deprecated in their next major (N + 1) release which will be
+supported for 10 years. They can then remove that support it in the
+N+2 major release after that (which is probably at least 5 years
+down the track) so that the support window for non-compliant
+functionality does not run past y2038k.
 
- arch/arm/boot/dts/mt2701.dtsi             | 2 +-
- arch/arm/boot/dts/mt7623n.dtsi            | 2 +-
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 6 +++---
- arch/arm64/boot/dts/mediatek/mt8167.dtsi  | 2 +-
- arch/arm64/boot/dts/mediatek/mt8173.dtsi  | 4 ++--
- arch/arm64/boot/dts/mediatek/mt8183.dtsi  | 4 ++--
- 6 files changed, 10 insertions(+), 10 deletions(-)
+We chose this specifically because most of the XFS developers are
+also responsible for maintaining enterprise distro kernels, and so
+we always thinking about how we are going to maintain the upstream
+code we release today because it will have a 10-15 year active
+support life.  This is also why the deprecation notice in
+Documentation/admin-guide/xfs.rst has this caveat:
 
-diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
-index 4776f85d6d5b..64722285228c 100644
---- a/arch/arm/boot/dts/mt2701.dtsi
-+++ b/arch/arm/boot/dts/mt2701.dtsi
-@@ -222,7 +222,7 @@ iommu: mmsys_iommu@10205000 {
- 		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb0 &larb1 &larb2>;
-+		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
- 		#iommu-cells = <1>;
- 	};
- 
-diff --git a/arch/arm/boot/dts/mt7623n.dtsi b/arch/arm/boot/dts/mt7623n.dtsi
-index bcb0846e29fd..f9e031621c80 100644
---- a/arch/arm/boot/dts/mt7623n.dtsi
-+++ b/arch/arm/boot/dts/mt7623n.dtsi
-@@ -107,7 +107,7 @@ iommu: mmsys_iommu@10205000 {
- 		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb0 &larb1 &larb2>;
-+		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
- 		#iommu-cells = <1>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-index de16c0d80c30..973c9beade0c 100644
---- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-@@ -329,8 +329,8 @@ iommu0: iommu@10205000 {
- 		interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb0 &larb1 &larb2
--				  &larb3 &larb6>;
-+		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
-+				 <&larb3>, <&larb6>;
- 		#iommu-cells = <1>;
- 	};
- 
-@@ -346,7 +346,7 @@ iommu1: iommu@1020a000 {
- 		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb4 &larb5 &larb7>;
-+		mediatek,larbs = <&larb4>, <&larb5>, <&larb7>;
- 		#iommu-cells = <1>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8167.dtsi b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-index 9029051624a6..54655f2feb04 100644
---- a/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-@@ -174,7 +174,7 @@ larb2: larb@16010000 {
- 		iommu: m4u@10203000 {
- 			compatible = "mediatek,mt8167-m4u";
- 			reg = <0 0x10203000 0 0x1000>;
--			mediatek,larbs = <&larb0 &larb1 &larb2>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
- 			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_LOW>;
- 			#iommu-cells = <1>;
- 		};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index 2b7d331a4588..042feaedda4a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -588,8 +588,8 @@ iommu: iommu@10205000 {
- 			interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_LOW>;
- 			clocks = <&infracfg CLK_INFRA_M4U>;
- 			clock-names = "bclk";
--			mediatek,larbs = <&larb0 &larb1 &larb2
--					  &larb3 &larb4 &larb5>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
-+					 <&larb3>, <&larb4>, <&larb5>;
- 			#iommu-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 00f2ddd245e1..523741150968 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -682,8 +682,8 @@ iommu: iommu@10205000 {
- 			compatible = "mediatek,mt8183-m4u";
- 			reg = <0 0x10205000 0 0x1000>;
- 			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larbs = <&larb0 &larb1 &larb2 &larb3
--					  &larb4 &larb5 &larb6>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>, <&larb3>,
-+					 <&larb4>, <&larb5>, <&larb6>;
- 			#iommu-cells = <1>;
- 		};
- 
+	Note: Distributors may choose to withdraw V4 format support earlier than
+	the dates listed above.
+
+Distros might chose to remove deprecated functionality immediately
+rather than rely on, say, LTS kernel support for functionality that
+upstream developers are clearly not focussing their efforts on
+developing further.
+
+Hence we have to acknowledge that fact that once upstream has
+deprecated a feature, it's up to distros to decide how they want to
+handle long term support for that feature. The upstream LTS kernel
+maintainers are going to have to decide on their own policy, too,
+because we cannot bind upstream maintenance decisions on random
+individual downstream support constraints. Downstream has to choose
+for itself how it handles upstream deprecation notices but, that
+said, upstream developers also need to listen to downstream distro
+support and deprecation requirements...
+
+Cheers,
+
+Dave.
 -- 
-2.35.1
-
+Dave Chinner
+david@fromorbit.com

@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68834C4BF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077E54C4BF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243611AbiBYRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S243627AbiBYRXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243599AbiBYRW1 (ORCPT
+        with ESMTP id S243616AbiBYRWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:22:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE0B22320A;
-        Fri, 25 Feb 2022 09:21:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0381B832AF;
-        Fri, 25 Feb 2022 17:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC609C340E7;
-        Fri, 25 Feb 2022 17:21:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="avzQXB0S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645809710;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yyp0XBR2LBG6ybQpSRV5Mk5rlFmokNbyKi7/2GKEXSM=;
-        b=avzQXB0Sz6ebvM/yT8r4bVRCQnlmoohAGQbJf/M8sVjbHOrx/UXxFZNihPoWCeeZrYWaEN
-        qbk23OIlhazsFJLjUT8kd3DcEo8ZCQWTEqRFeQhZKNzBMRDCrGfLmmm5pWnfgoUXQ7LkfT
-        FQxD44/UGXgZmE609kLiFcYDHelRr4E=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d56f47f5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 25 Feb 2022 17:21:49 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 18:21:45 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Alexander Graf <graf@amazon.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
-Message-ID: <YhkQKfE8ErtFBmSB@zx2c4.com>
-References: <20220225155552.30636-1-graf@amazon.com>
- <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
+        Fri, 25 Feb 2022 12:22:49 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9A9223204;
+        Fri, 25 Feb 2022 09:22:17 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id AF3891F464FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645809736;
+        bh=vRZrrE/MYE3yCl0TC9kgOrEfpCGgFVkg67K4UVbuhLM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Qx+Hc3b6kRJW0YO/JRuwx//SvYjkK8g9zQoi0prEf8lHFZasKm648AGmT72uT65ea
+         R+6o7+DsrtqWQdQyb31s4NDbKXh53Di8Rp9HDd0aTHoiq1RaLtCa7s9htuE1oH9gql
+         zvLLQe0lNqZCTAJTwlVe75GOrWCByCY7/2lnrR+VqTDIIesnDuDisg/CToVsZATPnc
+         QXhRoP7TN7AmYqyvgbC7I7HWKbXSEwvpcsEHcPCGJbqwiMJvC8zf30FVUkTltqRoT4
+         AgjhaE+ww/OuCm2Kn4JnlzB4hqXGwLbuY7D2oqM+Z8+GbXr+wyd54dwDDEPMuQDdmg
+         mun5B1+/yeulg==
+Message-ID: <46489cd9-fb7a-5a4b-7f36-1c9f6566bd93@collabora.com>
+Date:   Fri, 25 Feb 2022 22:22:08 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        kernelci@groups.io, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH V2] selftests: Fix build when $(O) points to a relative
+ path
+Content-Language: en-US
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+References: <20220216223817.1386745-1-usama.anjum@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220216223817.1386745-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 6:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> The device subsystem side of things already deals with this properly:
-> the modalias of the QEMU vmgenid device comes up as
-> 'acpi:QEMUVGID:VM_GEN_COUNTER', which means it already captures the
-> entire string, and exposes it in the correct way (modulo the all caps)
+Any thoughts about it?
 
-Ahh, so the userspace side of this won't work right. Shucks. That's what
-I was concerned about.
-
-> I don't like this hack. If we are going to accept the fact that CIDs
-> could be arbitrary length strings, we should handle them properly.
->
-> So what we need is a way for a module to describe its compatibility
-> with such a _CID, which shouldn't be that complicated.
-
-Can't we do something more boring and just...
-
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 4bb71979a8fd..5da5d990ff58 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -210,9 +210,9 @@ struct css_device_id {
- 	__u8 type; /* subchannel type */
- 	kernel_ulong_t driver_data;
- };
- 
--#define ACPI_ID_LEN	9
-+#define ACPI_ID_LEN	16
- 
- struct acpi_device_id {
- 	__u8 id[ACPI_ID_LEN];
- 	kernel_ulong_t driver_data;
-
-
-As you can see from the context, those additional 7 bytes were being
-wasted on padding anyway inside the acpi_device_id struct, so it's
-basically free, it would seem. This seems like the least convoluted way
-of solving this issue? If we ever encounter _more_ ACPI devices with
-weird names, we could revisit a fancy dynamic solution, but for now, why
-don't we keep it simple?
-
-Jason
+On 2/17/22 3:38 AM, Muhammad Usama Anjum wrote:
+> Build of bpf and tc-testing selftests fails when the relative path of
+> the build directory is specified.
+> 
+> make -C tools/testing/selftests O=build0
+> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
+> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
+> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+> 
+> Makefiles of bpf and tc-testing include scripts/Makefile.include file.
+> This file has sanity checking inside it which checks the output path.
+> The output path is not relative to the bpf or tc-testing. The sanity
+> check fails. Expand the output path to get rid of this error. The fix is
+> the same as mentioned in commit 150a27328b68 ("bpf, preload: Fix build
+> when $(O) points to a relative path").
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in V2:
+> Add more explaination to the commit message.
+> Support make install as well.
+> ---
+>  tools/testing/selftests/Makefile | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 4eda7c7c15694..6a5c25fcc9cfc 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -178,6 +178,7 @@ all: khdr
+>  		BUILD_TARGET=$$BUILD/$$TARGET;			\
+>  		mkdir $$BUILD_TARGET  -p;			\
+>  		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
+> +				O=$(abs_objtree)		\
+>  				$(if $(FORCE_TARGETS),|| exit);	\
+>  		ret=$$((ret * $$?));				\
+>  	done; exit $$ret;
+> @@ -185,7 +186,8 @@ all: khdr
+>  run_tests: all
+>  	@for TARGET in $(TARGETS); do \
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
+> +				O=$(abs_objtree);		    \
+>  	done;
+>  
+>  hotplug:
+> @@ -236,6 +238,7 @@ ifdef INSTALL_PATH
+>  	for TARGET in $(TARGETS); do \
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>  		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install \
+> +				O=$(abs_objtree)		\
+>  				$(if $(FORCE_TARGETS),|| exit);	\
+>  		ret=$$((ret * $$?));		\
+>  	done; exit $$ret;

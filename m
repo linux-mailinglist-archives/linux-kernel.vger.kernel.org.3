@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B0A4C4250
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278D34C427A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiBYKar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S239600AbiBYKgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236331AbiBYKaq (ORCPT
+        with ESMTP id S239591AbiBYKgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:30:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E45421D06F1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645785014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=fabrR9Y07x2C6d00U+jvuLpEcjfz0aarSaAQigIMBMHtJDlyT+K+zy0O7+1hR5l6YTUnDA
-        4PjWqvWVgxrhR88tHY9PowkgSr4FwoNzVk/0N03qulOotam3VtWZMiRxFgpd6S1mjLCLFz
-        GQhbTSWepNGMLF6VLCeujM/6XjD305M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-cVhSpfLgMaSCCOCgBV0vgQ-1; Fri, 25 Feb 2022 05:30:06 -0500
-X-MC-Unique: cVhSpfLgMaSCCOCgBV0vgQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2BAE801AAD;
-        Fri, 25 Feb 2022 10:30:04 +0000 (UTC)
-Received: from avogadro.lan (unknown [10.39.193.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0102173DA0;
-        Fri, 25 Feb 2022 10:30:01 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wanpeng Li <kernellwp@gmail.com>,
-        Lai Jiangshan <laijs@linux.alibaba.com>
-Subject: Re: [PATCH 0/2] KVM: VMX: Revert back to refreshing HOST_CR3 at ->run
-Date:   Fri, 25 Feb 2022 11:29:57 +0100
-Message-Id: <20220225102957.483137-1-pbonzini@redhat.com>
-In-Reply-To: 20220224191917.3508476-1-seanjc@google.com
-References: 
+        Fri, 25 Feb 2022 05:36:40 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Feb 2022 02:36:08 PST
+Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F52399FF;
+        Fri, 25 Feb 2022 02:36:08 -0800 (PST)
+IronPort-SDR: mF18xzTCaAF9LizDX+nLBTJqAkHxAuMIqcLxSk0viGbRNjnMM7Q4e7FzSMKi5AzkbBY4QyoLsG
+ ke91y1/gSqHpyu3ImsQap9BFetH/KjsUsqL9zXTfHMHjCTKNZ6TA6whir4+c7mEFweE93k1JNY
+ hZTe4shcAL5a4UyPpdzUuvtzk53Fnh2SY1GyKxkEfveOhfMrdSnm9dHnw7A9GwfQeTh9tCWyV5
+ kKNFA9NEYskKp09bGLsQ0P8SSNI3C9WSGwNW66mi6FExupn7qQXhdfrHcP4XRSpKu6+ACrRXIo
+ C8NmtOoJzEoP43z4Rh8O0lVr
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="64248419"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643641200"; 
+   d="scan'208";a="64248419"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 25 Feb 2022 19:35:03 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id A224BE8CF7;
+        Fri, 25 Feb 2022 19:35:01 +0900 (JST)
+Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id DD0EF14258;
+        Fri, 25 Feb 2022 19:35:00 +0900 (JST)
+Received: from localhost.localdomain (bakeccha.fct.css.fujitsu.com [10.126.195.136])
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id D810D40124EED;
+        Fri, 25 Feb 2022 19:35:00 +0900 (JST)
+From:   Shunsuke <nakamura.shun@fujitsu.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: [RFC PATCH 0/7] libperf: Add overflow detection of sampling events
+Date:   Fri, 25 Feb 2022 19:31:07 +0900
+Message-Id: <20220225103114.144239-1-nakamura.shun@fujitsu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+From: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
 
-Paolo
+This patch series adds sampling event overflow detection capability
+to libperf.
 
+First patch fixes a typo in the error message that I noticed.
+
+Second patch  adds a interface to set PERF_FLAG_FD_CLOEXEC
+
+Third patch adds a interface to perform IOC_REFRESH and IOC_PERIOD.
+
+Fourth patch adds a interface to set the signal handler.
+
+Fifth patch adds a interface to detect overflowed events.
+
+Sixth and seventh patch adds tests.
+
+Shunsuke Nakamura (7):
+  libperf tests: Fix typo in the error message "evsel" -> "evlist"
+  libperf: Add perf_evsel__set_close_on_exec() function
+  libperf: Add perf_evsel__refresh()/period() functions
+  libperf: Add perf_evsel__set_signal() functions
+  libperf: Add perf_evsel__check_fd() functions
+  libperf test: Add test_stat_overflow()
+  libperf test: Add test_detect_overflow_event()
+
+ tools/lib/perf/Documentation/libperf.txt |  12 ++
+ tools/lib/perf/evsel.c                   | 215 ++++++++++++++++++++++-
+ tools/lib/perf/include/internal/evsel.h  |   2 +
+ tools/lib/perf/include/perf/evsel.h      |  14 ++
+ tools/lib/perf/libperf.map               |   9 +
+ tools/lib/perf/tests/test-evlist.c       | 127 ++++++++++++-
+ tools/lib/perf/tests/test-evsel.c        | 110 ++++++++++++
+ tools/perf/util/evsel.c                  |  16 +-
+ tools/perf/util/evsel.h                  |   1 -
+ 9 files changed, 487 insertions(+), 19 deletions(-)
+
+-- 
+2.31.1
 

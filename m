@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DD64C4494
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C95E4C4495
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240628AbiBYMZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
+        id S240634AbiBYM0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238094AbiBYMZ3 (ORCPT
+        with ESMTP id S233526AbiBYMZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:25:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12C320E7AE;
-        Fri, 25 Feb 2022 04:24:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96CCFB82F7B;
-        Fri, 25 Feb 2022 12:24:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00583C340E7;
-        Fri, 25 Feb 2022 12:24:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645791895;
-        bh=cSQNpBISw0MlYXiiY3XgnX1pKxAMGAwP//OJtPfreTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TwGZUaoCOgsdUuXBm54rN2MROfbhe7Ixmm084Pw0jBXJyna/O+U1jQSHYm06O6XsI
-         ZjDDwyiDRgZ10heeyYGUj1hjK3QjZ2miuFKOv0WhLXW0Y69Jr0FpA4OA6rSWNs8LuZ
-         RossxCTPTzuTcqs/tFVhRTkvcrYCVvYWCe+Xp0X/48OzIyRybuJh9vlFx4hCdso88i
-         iWAf7mQt0a841UqiANX8P2Ew8SJRJLVX+ZlmvOHs++qTPIR/l23yCdHTvx3kkaBAg9
-         kWZ9CgRX/LI28ljzOivmW+CCdWBBhgvNJQdghuIGOqmKWih9aIOVAV4X/SAbG4API0
-         P+6c5feTQNTdw==
-Received: by pali.im (Postfix)
-        id 109B37EF; Fri, 25 Feb 2022 13:24:51 +0100 (CET)
-Date:   Fri, 25 Feb 2022 13:24:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] PCI: Add PCI_EXP_SLTCAP_*_SHIFT macros
-Message-ID: <20220225122451.fa2fiyzohwme2d66@pali>
-References: <20220222163158.1666-3-pali@kernel.org>
- <20220224202843.GA291544@bhelgaas>
+        Fri, 25 Feb 2022 07:25:58 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD8A214FAB
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:25:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wetlx8pI0yKHATB9ESKSriqsWC7CsRn5Xc7bxZta4Aw=; b=i77s9a6G8TM0KLbmJEc9D98PFB
+        z6kCJPCvfM4pTyk8TiOhyVyVWRothwMQB2PLT4uoPbrBag+aVohqxXu7+jqojpAA/MBSb6Y9uLP2g
+        kn/H9ZLS4hL1u78BTThg/WDilrlfD4iXHgsp6tvfEddBYEId6TG171m5hax2RO8lX+vB/d5bl3yPn
+        rNLR7y2aK0GsKRdkQU8LgesZbX7iGLCtMGl2cTQcAq4YuR8jtHM5r17Xg1HfvrGWZD+cslDZUqnTG
+        z7Kf2cEIBRzWkrkMfyomCWU1ScDezcKOQMU5Vu5v7cy5Yp0p8Dk2JBY3Ut2rGsWK9GuJyQAhr37R4
+        R9kGsjng==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNZef-00CxRJ-D4; Fri, 25 Feb 2022 12:25:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2AEE3300067;
+        Fri, 25 Feb 2022 13:24:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D45052D6F91B2; Fri, 25 Feb 2022 13:24:58 +0100 (CET)
+Date:   Fri, 25 Feb 2022 13:24:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 16/39] x86/bpf: Add ENDBR instructions to prologue and
+ trampoline
+Message-ID: <YhjKmgIMmx+0Rt19@hirez.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.950111925@infradead.org>
+ <20220224233731.7hdwbszv5c6fgx4y@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220224202843.GA291544@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220224233731.7hdwbszv5c6fgx4y@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 24 February 2022 14:28:43 Bjorn Helgaas wrote:
-> On Tue, Feb 22, 2022 at 05:31:54PM +0100, Pali Rohár wrote:
-> > These macros allows to easily compose and extract Slot Power Limit and
-> > Physical Slot Number values from Slot Capability Register.
-> >
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > Signed-off-by: Marek Behún <kabel@kernel.org>
-> > ---
-> >  include/uapi/linux/pci_regs.h | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-> > index 108f8523fa04..3fc9a4cac630 100644
-> > --- a/include/uapi/linux/pci_regs.h
-> > +++ b/include/uapi/linux/pci_regs.h
-> > @@ -591,10 +591,13 @@
-> >  #define  PCI_EXP_SLTCAP_HPS	0x00000020 /* Hot-Plug Surprise */
-> >  #define  PCI_EXP_SLTCAP_HPC	0x00000040 /* Hot-Plug Capable */
-> >  #define  PCI_EXP_SLTCAP_SPLV	0x00007f80 /* Slot Power Limit Value */
-> > +#define  PCI_EXP_SLTCAP_SPLV_SHIFT	7  /* Slot Power Limit Value shift */
+On Thu, Feb 24, 2022 at 03:37:31PM -0800, Josh Poimboeuf wrote:
+
+> > @@ -2028,10 +2052,11 @@ int arch_prepare_bpf_trampoline(struct b
+> >  		/* skip patched call instruction and point orig_call to actual
+> >  		 * body of the kernel function.
+> >  		 */
+> > -		orig_call += X86_PATCH_SIZE;
+> > +		orig_call += X86_PATCH_SIZE + 4*HAS_KERNEL_IBT;
 > 
-> Is there a way to use FIELD_PREP() and FIELD_GET() instead?  It seems
-> like that's what the cool kids are doing now.
+> All the "4*HAS_KERNEL_IBT" everywhere is cute, but you might as well
+> just have IBT_ENDBR_SIZE (here and in other patches).
 
-This is possible too.
+So there's two forms of this, only one has the 4 included:
 
-I have proposed a patch with _SHIFT macros as this is the way how are
-other macros in this file defined and used.
+  (x * (1 + HAS_KERNEL_IBT))
+  (x + 4*HAS_KERNEL_IBT)
 
-> At first I didn't really like them, but they do remove the need for
-> adding _SHIFT macros that have to be manually related to the other.
-> 
-> >  #define  PCI_EXP_SLTCAP_SPLS	0x00018000 /* Slot Power Limit Scale */
-> > +#define  PCI_EXP_SLTCAP_SPLS_SHIFT	15 /* Slot Power Limit Scale shift */
-> >  #define  PCI_EXP_SLTCAP_EIP	0x00020000 /* Electromechanical Interlock Present */
-> >  #define  PCI_EXP_SLTCAP_NCCS	0x00040000 /* No Command Completed Support */
-> >  #define  PCI_EXP_SLTCAP_PSN	0xfff80000 /* Physical Slot Number */
-> > +#define  PCI_EXP_SLTCAP_PSN_SHIFT	19 /* Physical Slot Number shift */
-> >  #define PCI_EXP_SLTCTL		0x18	/* Slot Control */
-> >  #define  PCI_EXP_SLTCTL_ABPE	0x0001	/* Attention Button Pressed Enable */
-> >  #define  PCI_EXP_SLTCTL_PFDE	0x0002	/* Power Fault Detected Enable */
-> > -- 
-> > 2.20.1
-> > 
+If I include the 4, then the first form would become something like:
+
+  (x * (1 + !!IBT_ENDBR_SIZE))
+
+that ok?

@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBB94C3A83
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C416B4C3A8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbiBYAwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S236170AbiBYAxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiBYAwM (ORCPT
+        with ESMTP id S236167AbiBYAxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:52:12 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6B836142
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645750301; x=1677286301;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=4cGPwk8l49YmYXLRDTUg1zx2OXM9J1CydnuLKRxRXKw=;
-  b=NL3iG6OjAQESCyAGj1HV35lA/inLdQJ4brPvyFwxMO+AiqVR6reI7NI6
-   uDHwwwO01ucWAS8B0KMxOAgvKLE9orlBQLu9Hih3wiLvy75toqonHNPx5
-   wNAMsAlfmXr2CkOzpuUjjGsezE9hp/yVK357jb9RfAdSlmmJFxLnVUqmx
-   h/r0E4oWn8pPn6jj8kQ2TmISXdPMvTPQUc4l4+23Q3j7qOMSq8g67dBMv
-   zqI+PGH4JIr2eHmQ3oY+d65Gcu07BltHWa5QEjeL9izRrf9OEp5xykfJY
-   0caluWFny88rUBwJeP3Qiu9TCdsHfTw5veOgXzzm0qO7thZPRyH9WI/XK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239788361"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="239788361"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 16:51:26 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="639938894"
-Received: from hthen-mobl2.amr.corp.intel.com (HELO [10.209.48.194]) ([10.209.48.194])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 16:51:25 -0800
-Message-ID: <4940a38f-282b-7ce6-4d4c-2db1072ed3ca@intel.com>
-Date:   Thu, 24 Feb 2022 16:51:22 -0800
+        Thu, 24 Feb 2022 19:53:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE62B6211C;
+        Thu, 24 Feb 2022 16:53:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 772D2B82A7B;
+        Fri, 25 Feb 2022 00:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140FFC340E9;
+        Fri, 25 Feb 2022 00:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645750384;
+        bh=WiU8eEovdrcQvzN/+8CTcDkJk87O1toyFK3+Ul8Gjb8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=X1YIG8CgztDg9F5f0ybeylBTdTUrK+zafUIqud9XcPsM3jDkPkqdorMHGP1L9xIpp
+         RPkhp5owG7Mx2z8HpR6BpCYOOrg/yDmSMUy3YFmYeXTPDYCEE20swn/eXS0BBxp1ZV
+         cMNwj1RFR6ojLFQPSuHTW87F00TNzZWsR26HZr97UP6+vrJ5zhEgrphCZxnu44OpTB
+         EyTR3un+hl1a9nWAJk18TW+6oQ445lAUNzMDG2JUFluJqPGlNrRcMXhx6LnyhBsVSh
+         e4G0CARftrojyHJVMsVZNmDsShiGfmMfxpSKtV8p5gVgiOOMcDqvEGrhS6WZBwgcsg
+         NA0IEEa5iSSSQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-6-kirill.shutemov@linux.intel.com>
- <d51dc9c2-61e5-c8dd-e358-e4ab3d5429ac@intel.com>
- <20220224235413.lrzczn7re4mfdkup@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 05/30] x86/tdx: Extend the confidential computing API to
- support TDX guests
-In-Reply-To: <20220224235413.lrzczn7re4mfdkup@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220224035902.1594253-1-davidgow@google.com>
+References: <20220224035902.1594253-1-davidgow@google.com>
+Subject: Re: [PATCH] clk: lan966x: Depend on CONFIG_IOMEM
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     David Gow <davidgow@google.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org
+To:     David Gow <davidgow@google.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Thu, 24 Feb 2022 16:53:02 -0800
+User-Agent: alot/0.10
+Message-Id: <20220225005304.140FFC340E9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 15:54, Kirill A. Shutemov wrote:
-> 
->> Second, why have the global 'td_info' instead of just declaring it on
->> the stack.  It is only used within a single function.  Having it on the
->> stack is *REALLY* nice because the code ends up looking like:
->>
->> 	struct foo foo;
->> 	get_info(&foo);
->> 	cc_set_bar(foo.bar);
->>
->> The dependencies and scope are just stupidly obvious if you do that.
-> Okay, I will rework it with plain gpa_width on stack and get_info(&gpa_width);
-> Attributes will be needed after core enabling, so I will drop it from
-> here.
+Quoting David Gow (2022-02-23 19:59:02)
+> The lan966x clk driver depends on IOMEM functions, in particular
+> devm_platform_ioremap_resource(), but doesn't state a formal dependency
+> on it in Kconfig.
+>=20
+> Add such a dependency, which prevents this driver from being enabled
+> on UML configurations without IOMEM.
+>=20
+> This fixes the following build failure:
+>=20
+> /usr/bin/ld: drivers/clk/clk-lan966x.o: in function `lan966x_clk_probe':
+> clk-lan966x.c:(.text+0x294): undefined reference to `devm_platform_iorema=
+p_resource'
+> /usr/bin/ld: clk-lan966x.c:(.text+0x3aa): undefined reference to `devm_io=
+remap_resource'
+> collect2: error: ld returned 1 exit status
+>=20
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  drivers/clk/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 3cdf33470a75..7b5db8a9eb4f 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -231,6 +231,7 @@ config COMMON_CLK_GEMINI
+> =20
+>  config COMMON_CLK_LAN966X
+>         bool "Generic Clock Controller driver for LAN966X SoC"
+> +       depends on IOMEM
 
-I don't mind the 'struct tdx_info' if there's going to be more stuff in
-it soon-ish.  Having a single member is fine for now.  Just make it
-clear that the seamcall returns a bunch of stuff and only a subset of it
-is used right now.
+What is CONFIG_IOMEM? This is superseded by
+https://lore.kernel.org/r/20220219141536.460812-1-horatiu.vultur@microchip.=
+com
+
+>         help
+>           This driver provides support for Generic Clock Controller(GCK) =
+on
+>           LAN966X SoC. GCK generates and supplies clock to various periph=
+erals

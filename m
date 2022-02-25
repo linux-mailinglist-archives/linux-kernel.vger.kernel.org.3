@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057B94C4BA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C014C4BA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbiBYRIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S243477AbiBYRKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbiBYRIw (ORCPT
+        with ESMTP id S237751AbiBYRKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:08:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5117B8A3;
-        Fri, 25 Feb 2022 09:08:19 -0800 (PST)
+        Fri, 25 Feb 2022 12:10:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816F31FED96;
+        Fri, 25 Feb 2022 09:09:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70383B82E51;
-        Fri, 25 Feb 2022 17:08:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03800C340E7;
-        Fri, 25 Feb 2022 17:08:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E86761CA5;
+        Fri, 25 Feb 2022 17:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CC3C340E7;
+        Fri, 25 Feb 2022 17:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645808897;
-        bh=hz+lH5qNUjVnCbRoevPcMCs+vilBSIywQyZBMPYFZE4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=J6iG1CiTd1gJ8dTRKFQs5BuMv+965CCZ5QT10FvqfnorcsRa+c8PyzUudIZfn8QJn
-         bBeDyPP3mXgBnf4JPBeOv9XNs8qsTP7veQYZXGnXKv9Oek7Cv/CGfWO3AIxqLPpgzS
-         v8Bpt6npCDD/MOd8qb2SkfqtMJb0rFmfvVxjr/yrCWwE6ZyOCDTN2+Hk5Pj6mlwIxi
-         twKPO0qogNY5eJFX5cJWvjpIMSkaDl6NTLrbMz0BYLZHs8vTisOEDy+EU22+7EXW3B
-         iUzc5yZdjH5hs+mIPnCrtlAQ0chWXYcGr0fhQGVlxhiII618BBgpeuIbl5JMvyAtES
-         C/7M0HdvYUuHA==
-From:   broonie@kernel.org
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with the drm-intel-fixes tree
-Date:   Fri, 25 Feb 2022 17:08:12 +0000
-Message-Id: <20220225170812.1523966-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1645808986;
+        bh=pfsSeunGbYdy2xtChHl6wxqKd0NM1HCTb8v7YAEz93Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SgkvroyE4REeIcoC+9m+Hin3Zid0Z+2OFpZG1YQBDd+KSYy3twIlnbJpy54bWxpzP
+         ibHl6AwYnzMbTAwylH8hrjl3Pic41JHYO+F17D/cwejouTrJKug54nxCAzLyye8hu3
+         VE2+b2/s67oe0qK16qyxVTA0WEEGIqcpAJby58URrVmeulp3MvQ9KdIKv3uhQ6L5XR
+         Cu/etSAQr2b1ERVAh3U09WHGS5BzlywVjbHJwrbGvAp/jEaP6+z2+Y+D1nBlPI5+3i
+         KXe3m38DMKLO4NsPa0b1YdQ1fIQoLgAdB31vpZ1+yCvHytc8jTFNgrCshJfMM+OwqM
+         eNlZzXh4XUXHQ==
+Date:   Fri, 25 Feb 2022 11:09:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Michael J. Ruhl" <michael.j.ruhl@intel.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhelgaas@google.com, logang@deltatee.com, dan.j.williams@intel.com
+Subject: Re: [PATCH] PCI/P2PDMA: Update device table with 3rd gen Xeon
+ platform information
+Message-ID: <20220225170944.GA364325@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209162801.7647-1-michael.j.ruhl@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,28 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Wed, Feb 09, 2022 at 11:28:01AM -0500, Michael J. Ruhl wrote:
+> In order to do P2P communication the bridge ID of the platform
+> must be in the P2P device table.
+> 
+> Update the P2P device table with a device id for the 3rd Gen
+> Intel Xeon Scalable Processors.
+> 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+Updated the commit log to match previous similar patches and applied
+as below to pci/p2pdma for v5.18, thanks!
 
-  drivers/gpu/drm/i915/display/intel_snps_phy.c
+Device ID 0x09a2 doesn't appear at https://pci-ids.ucw.cz/read/PC/8086
+which means "lspci" won't be able to display a human-readable name for
+these devices.  You can easily add a name at that same URL.
 
-between commit:
+Bjorn
 
-  28adef861233c ("drm/i915/dg2: Print PHY name properly on calibration error")
 
-from the drm-intel-fixes tree and commits:
+  commit feaea1fe8b36 ("PCI/P2PDMA: Add Intel 3rd Gen Intel Xeon Scalable Processors to whitelist")
+  Author: Michael J. Ruhl <michael.j.ruhl@intel.com>
+  Date:   Wed Feb 9 11:28:01 2022 -0500
 
-  84073e568eec7 ("drm/i915/dg2: Print PHY name properly on calibration error")
-  b4eb76d82a0ea ("drm/i915/dg2: Skip output init on PHY calibration failure")
+    PCI/P2PDMA: Add Intel 3rd Gen Intel Xeon Scalable Processors to whitelist
+    
+    In order to do P2P communication the bridge ID of the platform must be in
+    the P2P device table.
+    
+    Update the P2P device table with a device ID for the 3rd Gen Intel Xeon
+    Scalable Processors.
+    
+    Link: https://lore.kernel.org/r/20220209162801.7647-1-michael.j.ruhl@intel.com
+    Signed-off-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
-from the drm-intel tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-[Used drm-intel version]
+> ---
+>  drivers/pci/p2pdma.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+> index 1015274bd2fe..30b1df3c9d2f 100644
+> --- a/drivers/pci/p2pdma.c
+> +++ b/drivers/pci/p2pdma.c
+> @@ -321,6 +321,7 @@ static const struct pci_p2pdma_whitelist_entry {
+>  	{PCI_VENDOR_ID_INTEL,	0x2032, 0},
+>  	{PCI_VENDOR_ID_INTEL,	0x2033, 0},
+>  	{PCI_VENDOR_ID_INTEL,	0x2020, 0},
+> +	{PCI_VENDOR_ID_INTEL,	0x09a2, 0},
+>  	{}
+>  };
+>  
+> -- 
+> 2.31.1
+> 

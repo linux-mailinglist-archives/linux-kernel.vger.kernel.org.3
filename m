@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B8E4C3BAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AEF4C3BC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiBYCYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 21:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S236790AbiBYCc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 21:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236786AbiBYCYF (ORCPT
+        with ESMTP id S230028AbiBYCcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:24:05 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C02B1C74CA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:23:32 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-190-2jFGTaVFM_WwuUDWp3xhNw-1; Fri, 25 Feb 2022 02:23:29 +0000
-X-MC-Unique: 2jFGTaVFM_WwuUDWp3xhNw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 02:23:27 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 02:23:27 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>
-CC:     "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "knsathya@kernel.org" <knsathya@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "sdeep@vmware.com" <sdeep@vmware.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
-Thread-Topic: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
-Thread-Index: AQHYKbrRB70QltnCv0Of3lK/667WPqyjhr+A
-Date:   Fri, 25 Feb 2022 02:23:27 +0000
-Message-ID: <45b6e0b6ceec46849754402c3da03fed@AcuMS.aculab.com>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
- <af7df79f-02b8-3025-c9a3-929b7bdd33e0@intel.com>
-In-Reply-To: <af7df79f-02b8-3025-c9a3-929b7bdd33e0@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 24 Feb 2022 21:32:55 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8068D18887A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645756344; x=1677292344;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=Te4PHcJ/B1DO1cDp06aZcLXva0MLz3mhGNrCcZ9Dsz0=;
+  b=PJBlVr7vINRFPddenXJ3mjTg0bm2YooVqP58uH5s8AOI9C6dR0I4ppBq
+   xFyZRftht6tpW56/+wCaUTPGkcJNErJiRZijxyC7+aFjeurpsNPBsx5c6
+   2niwDlElVtCyrDbeARXf5Y2qqygVeKH8yHC9GiHtXhsz01Au4ybyQE5LR
+   9T4/R6kt/vGKbUDXy2dDvz3eZ0xBXOkZTE04day/L4zTxr+DmkUvnXmsZ
+   nJc/tCuvii1Kn4U4wWckC4F4811YxDie5JsPqvbWATTg5xFdsFnQhQjyy
+   +HSdFYWRTRkHiiHgYotyGYwbHGCpMs5sLemWi3Pz9VZkqbJM/u0D2xc5s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="277035410"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="277035410"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 18:32:24 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="628702227"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 18:32:21 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH -V11 2/9] mm/migrate: update node demotion order on
+ hotplug events
+References: <20210721063926.3024591-1-ying.huang@intel.com>
+        <20210721063926.3024591-2-ying.huang@intel.com>
+        <eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com>
+        <f5edb9dc-8b25-47c2-9905-09e88e41861b@intel.com>
+        <4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com>
+Date:   Fri, 25 Feb 2022 10:32:20 +0800
+In-Reply-To: <4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com>
+        (Abhishek Goel's message of "Fri, 25 Feb 2022 05:07:15 +0530")
+Message-ID: <87pmnb3ccr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,40 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMjQgRmVicnVhcnkgMjAyMiAyMDoxMg0KLi4uDQo+
-ID09PSBMaW1pdGF0aW9ucyBvZiB0aGlzIGFwcHJvYWNoID09PQ0KPiANCj4gPiBNTUlPIGFkZHJl
-c3NlcyBjYW4gYmUgdXNlZCB3aXRoIGFueSBDUFUgaW5zdHJ1Y3Rpb24gdGhhdCBhY2Nlc3Nlcw0K
-PiA+IG1lbW9yeS4gQWRkcmVzcyBvbmx5IE1NSU8gYWNjZXNzZXMgZG9uZSB2aWEgaW8uaCBoZWxw
-ZXJzLCBzdWNoIGFzDQo+ID4gJ3JlYWRsKCknIG9yICd3cml0ZXEoKScuDQo+IA0KPiBBbnkgQ1BV
-IGluc3RydWN0aW9uIHRoYXQgYWNjZXNzZXMgbWVtb3J5IGNhbiBhbHNvIGJlIHVzZWQgdG8gYWNj
-ZXNzDQo+IE1NSU8uICBIb3dldmVyLCBieSBjb252ZW50aW9uLCBNTUlPIGFjY2VzcyBhcmUgdHlw
-aWNhbGx5IHBlcmZvcm1lZCB2aWENCj4gaW8uaCBoZWxwZXJzIHN1Y2ggYXMgJ3JlYWRsKCknIG9y
-ICd3cml0ZXEoKScuDQo+IA0KPiA+IHJlYWRYKCkvd3JpdGVYKCkgaGVscGVycyBsaW1pdCB0aGUg
-cmFuZ2Ugb2YgaW5zdHJ1Y3Rpb25zIHdoaWNoIGNhbiB0cmlnZ2VyDQo+ID4gTU1JTy4gSXQgbWFr
-ZXMgTU1JTyBpbnN0cnVjdGlvbiBlbXVsYXRpb24gZmVhc2libGUuIFJhdyBhY2Nlc3MgdG8gYSBN
-TUlPDQo+ID4gcmVnaW9uIGFsbG93cyB0aGUgY29tcGlsZXIgdG8gZ2VuZXJhdGUgd2hhdGV2ZXIg
-aW5zdHJ1Y3Rpb24gaXQgd2FudHMuDQo+ID4gU3VwcG9ydGluZyBhbGwgcG9zc2libGUgaW5zdHJ1
-Y3Rpb25zIGlzIGEgdGFzayBvZiBhIGRpZmZlcmVudCBzY29wZS4NCj4gDQo+IFRoZSBpby5oIGhl
-bHBlcnMgaW50ZW50aW9uYWxseSB1c2UgYSBsaW1pdGVkIHNldCBvZiBpbnN0cnVjdGlvbnMgd2hl
-bg0KPiBhY2Nlc3NpbmcgTU1JTy4gIFRoaXMga25vd24sIGxpbWl0ZWQgc2V0IG9mIGluc3RydWN0
-aW9ucyBtYWtlcyBNTUlPDQo+IGluc3RydWN0aW9uIGRlY29kaW5nIGFuZCBlbXVsYXRpb24gZmVh
-c2libGUgaW4gS1ZNIGhvc3RzIGFuZCBTRVYgZ3Vlc3RzDQo+IHRvZGF5Lg0KPiANCj4gTU1JTyBh
-Y2Nlc3NlcyBhcmUgcGVyZm9ybWVkIHdpdGhvdXQgdGhlIGlvLmggaGVscGVycyBhcmUgYXQgdGhl
-IG1lcmN5IG9mDQo+IHRoZSBjb21waWxlci4gIENvbXBpbGVycyBjYW4gYW5kIHdpbGwgZ2VuZXJh
-dGUgYSBtdWNoIG1vcmUgYnJvYWQgc2V0IG9mDQo+IGluc3RydWN0aW9ucyB3aGljaCBjYW4gbm90
-IHByYWN0aWNhbGx5IGJlIGRlY29kZWQgYW5kIGVtdWxhdGVkLiAgVERYDQo+IGd1ZXN0cyB3aWxs
-IG9vcHMgaWYgdGhleSBlbmNvdW50ZXIgb25lIG9mIHRoZXNlIGRlY29kaW5nIGZhaWx1cmVzLg0K
-PiANCj4gVGhpcyBtZWFucyB0aGF0IFREWCBndWVzdHMgKm11c3QqIHVzZSB0aGUgaW8uaCBoZWxw
-ZXJzIHRvIGFjY2VzcyBNTUlPLg0KPiANCj4gVGhpcyByZXF1aXJlbWVudCBpcyBub3QgbmV3LiAg
-Qm90aCBLVk0gaG9zdHMgYW5kIEFNRCBTRVYgZ3Vlc3RzIGhhdmUgdGhlDQo+IHNhbWUgbGltaXRh
-dGlvbnMgb24gTU1JTyBhY2Nlc3MuDQoNCkFtIEkgcmVhZGluZyB0aGUgbGFzdCBzZW50ZW5jZSBj
-b3JyZWN0bHk/DQpOb3JtYWxseSAob24geDg2IGF0IGxlYXN0KSBhIGRyaXZlciBjYW4gbW1hcCgp
-IFBDSWUgYWRkcmVzc2VzIGRpcmVjdGx5DQppbnRvIGEgdXNlciBwcm9jZXNzLg0KVGhpcyBsZXRz
-IGEgdXNlciBwcm9jZXNzIGRpcmVjdGx5IGlzc3VlIFBDSWUgcmVhZC93cml0ZSBidXMgY3ljbGVz
-Lg0KVGhlc2UgY2FuIGJlIGFueSBpbnN0cnVjdGlvbnMgYXQgYWxsLg0KSSBkb24ndCB0aGluayB3
-ZSd2ZSBoYWQgYW55IGlzc3VlcyBkb2luZyB0aGF0IGluIG5vcm1hbCBWTXMuDQoNCk9yIGlzIHRo
-aXMgZW11bGF0aW9uIG9ubHkgYXBwbHlpbmcgdG8gc3BlY2lmaWMgUENJZSBzbGF2ZXM/DQoNCglE
-YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
-bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
-NzM4NiAoV2FsZXMpDQo=
+Hi, Abhishek,
+
+Abhishek Goel <huntbag@linux.vnet.ibm.com> writes:
+
+> On 24/02/22 05:35, Dave Hansen wrote:
+>> On 2/23/22 15:02, Abhishek Goel wrote:
+>>> If needed, I will provide experiment results and traces that were used
+>>> to conclude this.
+>> It would be great if you can provide some more info.  Even just a CPU
+>> time profile would be helpful.
+>
+> Average total time taken for SMT=8 to SMT=1 in v5.14 : 20s
+>
+> Average total time taken for SMT=8 to SMT=1 in v5.15 : 36s
+>
+> (Observed in system with 150+ CPUs )
+
+We have run into a memory hotplug regression before.  Let's check
+whether the problem is similar.  Can you try the below debug patch?
+
+Best Regards,
+Huang, Ying
+
+----------------------------8<------------------------------------------
+From 500c0b53436b7a697ed5d77241abbc0d5d3cfc07 Mon Sep 17 00:00:00 2001
+From: Huang Ying <ying.huang@intel.com>
+Date: Wed, 29 Sep 2021 10:57:19 +0800
+Subject: [PATCH] mm/migrate: Debug CPU hotplug regression
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+---
+ mm/migrate.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index c7da064b4781..c4805f15e616 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -3261,15 +3261,17 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
+  * The ordering is also currently dependent on which nodes have
+  * CPUs.  That means we need CPU on/offline notification too.
+  */
+-static int migration_online_cpu(unsigned int cpu)
++static int migration_cpu_hotplug(unsigned int cpu)
+ {
+-	set_migration_target_nodes();
+-	return 0;
+-}
++	static int nr_cpu_node_saved;
++	int nr_cpu_node;
++
++	nr_cpu_node = num_node_state(N_CPU);
++	if (nr_cpu_node != nr_cpu_node_saved) {
++		set_migration_target_nodes();
++		nr_cpu_node_saved = nr_cpu_node;
++	}
+ 
+-static int migration_offline_cpu(unsigned int cpu)
+-{
+-	set_migration_target_nodes();
+ 	return 0;
+ }
+ 
+@@ -3283,7 +3285,7 @@ static int __init migrate_on_reclaim_init(void)
+ 	WARN_ON(!node_demotion);
+ 
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
+-					NULL, migration_offline_cpu);
++					NULL, migration_cpu_hotplug);
+ 	/*
+ 	 * In the unlikely case that this fails, the automatic
+ 	 * migration targets may become suboptimal for nodes
+@@ -3292,7 +3294,7 @@ static int __init migrate_on_reclaim_init(void)
+ 	 */
+ 	WARN_ON(ret < 0);
+ 	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
+-				migration_online_cpu, NULL);
++				migration_cpu_hotplug, NULL);
+ 	WARN_ON(ret < 0);
+ 
+ 	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
+-- 
+2.30.2
 

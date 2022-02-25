@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BE24C45E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6315D4C45CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241100AbiBYNTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S241106AbiBYNS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241140AbiBYNR7 (ORCPT
+        with ESMTP id S241201AbiBYNSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:17:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE4B1BF91C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:17:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1F15B830AF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D25C340E7;
-        Fri, 25 Feb 2022 13:17:20 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 08:17:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     David Laight <David.Laight@aculab.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: Strange output on the console
-Message-ID: <20220225081719.7710f62e@gandalf.local.home>
-In-Reply-To: <20220225122546.GB18720@1wt.eu>
-References: <20220224230035.36547137@gandalf.local.home>
-        <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
-        <20220225063637.GA18039@1wt.eu>
-        <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
-        <20220225103239.GA18720@1wt.eu>
-        <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
-        <20220225122546.GB18720@1wt.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 25 Feb 2022 08:18:08 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD371BE0CC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:17:35 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w3so7362550edu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eNKQXBj9qgqKygRIGrvHkQo4UpK/y1wrxU/iY6fQwa4=;
+        b=TLWMNMXg4tI9HyRuBSlw/m+fQK50Om5wgQxH/qpNFsXth/BXV2zIl28u4w/vPzEkj5
+         dwgCc9Mm+6bikCp9wuvmGO4JuxC+S3nsbqpzBYVSrLhIGB3PxGTSbZZS8dOIxWBS/uKN
+         h9BeV2YOvqqyTEEJ6/c9q9WRfWQ2FnCAFcri1W2cwbEHKPFrAI1znS4X92nwsZKcDH92
+         UK9lNi9CPfSyxpwcLDQaF3CtNB9EgR+UGRRfmrstPVPO6+5gj9Ci6r8Vz7c5BWurFA9B
+         OwOtkX9IbGK8yqMkk8YTPcG6n8wQDEpoOY9EhgpSLRIALH9Q226KJEZeAhJMC8hglnmq
+         KKnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=eNKQXBj9qgqKygRIGrvHkQo4UpK/y1wrxU/iY6fQwa4=;
+        b=kqAb6j5gdNwknOfZcXEvqxwtDuI6XO8FwZORNq+6/AebQz7U0AOarQaAcge/MILTwj
+         YvOMNSt+rIEL3KgcpvwVkQEJwHw8FV9K/1zZ9HxnPRSRvJ73lgL0vkse6cmFHjAMZaQ3
+         yx+njvcXVkLIi3Hw9SI+74EBdJMdu3HjTIRlR/luSMahwna3tAuTwbmvkt+BsK+fFuS5
+         UZEGVFkRS0iMDqYYFDQTE9f1g6a7RdqJwvrMADGQDUTgssnuL3V2kU/DRuKiQMDYzZYX
+         N4NWMCmf96Y8N08ZovZkDbnUt6p4t1pYQ5lthkJvXYTrWN4YlShfBcy+hDVik1CNRE2h
+         kdrA==
+X-Gm-Message-State: AOAM5306G8MjB1gyb+q8EQx4HJmMWUi/w6Vz2Y76QyoMJwYpez5iNUs1
+        +yTOnk8BiiMl6U+mCw/bp0bVrY7vVxeXxg==
+X-Google-Smtp-Source: ABdhPJy8YUoBRzBYaUXWPgallFSz7v+ZMk5JhndQkknmdHjnmD9NQoxygXmjhi5f+RJmVzZ/pmxdEA==
+X-Received: by 2002:a05:6402:84f:b0:412:d1ef:c7df with SMTP id b15-20020a056402084f00b00412d1efc7dfmr7210532edz.210.1645795053952;
+        Fri, 25 Feb 2022 05:17:33 -0800 (PST)
+Received: from localhost ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id fd7-20020a1709072a0700b006d022741112sm969544ejc.204.2022.02.25.05.17.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 25 Feb 2022 05:17:33 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 0/2] microblaze: Add support for reserved memory
+Date:   Fri, 25 Feb 2022 14:17:29 +0100
+Message-Id: <cover.1645795048.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 13:25:46 +0100
-Willy Tarreau <w@1wt.eu> wrote:
+Hi,
 
-> > TnsTesOT s T sKTesOT sKTvsOTtsTtsKTtsT sKTesTesKT sKTesOT siT stTnsaTvsaTesKTnsOT s
-> > TesKTnsT s TvsKTeslT sOTesT sKTtseTnseTvs_Tts_T sOTes TnsOT s T spTespTesdTesdTeseTtseTeseTt_rTe_rTv_oTes:T s:Tes:TnfwOTvfrKT fwT frTefpuTefpKTefpTvf:TnsOTvsOTnsoTvs Tvs TvsTtssTnsT sKTesTnsTvsTtsoTesmTnsgTesiTeslTtsTvsKTnsTvsOTtsT s_Tnsu
-> > 
-> > which really doesn't have enough different characters in it to be a fifo problem.
-> > That looks like a UART struggling to find valid start and stop bits
-> > on a continuous data stream that doesn't match the baud rate.
-> > 
-> > It may also be that whatever 'terminal' is being used is masking off the 0x80 bit.  
-> 
-> That could be one option I thought about but still, that sounds quite
-> suspicious. You don't even get any #!:$/ etc. Or maybe the UART is
-> configured in 6-bit mode (most 16550 support 5-8 bits), and maybe even
-> the stop bit and/or parity participates.
+sending two patches for adding support for reserved memory nodes.
+Till now architecture ignores these nodes and normally use memory for own
+purpose.
+The first patch is memblock dump wiring to be able to confirm that
+reservation is working properly.
 
-One thing that's not easy to demonstrate here (I could try to video it), is
-that this output is the final result. It shows a bunch of other characters
-as it is displayed but then the cursor goes backwards and writes over it.
-
-But the characters that are deleted still do not make sense. When watching
-it, it reminds me of the Matrix characters, but running horizontal and not
-vertical.
-
-> 
-> > Another possibility is that the count of characters is about right.
-> > But the receiver is misaligned on the 10 bit async characters.
-> > Because these is no line idle, it never synchronises properly.
-> > ISTR a real async terminal behaving that way.
-> > But I think that gives a much wider range of characters - just the wrong ones.
-> >
-> > There is also a third error pattern:
-> > ^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[
-> > which might be an 'even more wrong' baud rate.  
-> 
-> This one just looks like the Up arrow, that Steven might have pressed at
-> some point during the capture.
-
-Yeah, sorry about that. That was the mouse wheel over my console window and
-I didn't quite hit "shift" in time. "shift-mouse-up" scrolls up the
-terminal window, but just "mouse-up" is the same as "up arrow", and caused
-that huge string of ^[[A to appear.
-
-> 
-> > So maybe we are both right - for different bits of the error.  
-> 
-> :-)
-> ... and Steven having fun reading our proposals after having made this
-> up entirely in preparation of the next April's fool :-)
+Thanks,
+Michal
 
 
-I was thinking the same thing, but this output being the joke. Someone
-planning on slipping in Matrix characters for printk?
+Michal Simek (2):
+  microblaze: Wire memblock_dump_all()
+  microblaze: Add support for reserved memory defined by DT
 
--- Steve
+ arch/microblaze/mm/init.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+2.35.1
+

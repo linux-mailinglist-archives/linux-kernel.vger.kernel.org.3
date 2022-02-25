@@ -2,81 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E444C50CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4F34C50DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiBYVin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S231640AbiBYVpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiBYVil (ORCPT
+        with ESMTP id S229922AbiBYVps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:38:41 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8E32793B7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:38:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-282-rsTMIwefMfiHyc_im_tfFA-1; Fri, 25 Feb 2022 21:38:03 +0000
-X-MC-Unique: rsTMIwefMfiHyc_im_tfFA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 21:38:01 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 21:38:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
-Thread-Topic: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
-Thread-Index: AQHYKniHz+vlDNOxwkeP2MprKgi3dqykyk5A
-Date:   Fri, 25 Feb 2022 21:38:01 +0000
-Message-ID: <006c160c1e0240df8a86cc679b2a6678@AcuMS.aculab.com>
-References: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
- <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
-In-Reply-To: <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Feb 2022 16:45:48 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE981EF35A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:45:15 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id x14so231597ill.12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GlfIBSqlGvtgBv75Rg1rA8MquMPJgcWiel0j8isuYbQ=;
+        b=HLrWX91wZAju9leNV7HFPStLOTDTKTykc0vJTupccN3o3/OiwP19YNo6Qzp1zeF9iD
+         ySamRLGUmUYo7kRYhJG/V0jfmkCyf0d/RpuJNgm+9j17cf7ewVM5FPh3eQ84me4uAq3l
+         S8XVO2DI41apmljHGwvmrhoJMRDM4MwtWny+c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GlfIBSqlGvtgBv75Rg1rA8MquMPJgcWiel0j8isuYbQ=;
+        b=fTqT89wLgVupfcBLje+f8QjLXsiGx9GanbWJ/H3uYmpP5IYjR0jndhtZU5fryLOqaz
+         48GKpw8yn8ORQZgxPOzXf8HAyCyWHehdW/KOp0Fy6C/EXL3GlcNN4cILTsbRdIXxFrSn
+         iO9vb5mKTkMEjvIZ0zxXvfgFfUi+oM1lHJGEV1ipz/NlTnDDjF+YU5SqPt6ZTtnfGNXs
+         Cd69BJEE+imiTEQ0Evgn74q7TqtkuPc5fw/FBaCYzg02HfmWMwfKBAvWkrxlkBvFl4sb
+         CwQxP0J2o3gJjZEPqP1anRP07sSprj56o15FQdoWylGTlWPQp1WC/VAx6eus2aQM1kVT
+         hX6w==
+X-Gm-Message-State: AOAM530rOrzOqawwsDzAdiXpH/A6yBOgZnChz31jc5tLwvK2r7uw0jYz
+        h/2F0AdygOFkkR/00pj+CIvZzx6GNxQ05w==
+X-Google-Smtp-Source: ABdhPJzjQSzxBomZ267t53/TYFeVaTmMzeMKuCTgGRpRcjfFDZWL3xDvV1iuoyl5WamEe6X7iVBpaA==
+X-Received: by 2002:a05:6e02:12c1:b0:2bf:2a61:9848 with SMTP id i1-20020a056e0212c100b002bf2a619848mr8166860ilm.109.1645825515032;
+        Fri, 25 Feb 2022 13:45:15 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o4-20020a92c044000000b002c1e884226asm2313784ilf.12.2022.02.25.13.45.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 13:45:14 -0800 (PST)
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: fix the description of
+ "-f"
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, corbet@lwn.net
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        weizhenliang@huawei.com, georgi.djakov@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hanshenghong2019@email.szu.edu.cn,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220225090824.2343-1-caoyixuan2019@email.szu.edu.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <73c74276-3c29-e662-cb96-c09fbba0d2b1@linuxfoundation.org>
+Date:   Fri, 25 Feb 2022 14:45:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <20220225090824.2343-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogR3VpbGxhdW1lIFR1Y2tlcg0KPiBTZW50OiAyNSBGZWJydWFyeSAyMDIyIDE4OjUwDQou
-Li4NCj4gPiAtaWYgIiRDQyIgLW8gL2Rldi9udWxsICIkVEVTVFBST0ciIC1PMCAiJEAiIDI+L2Rl
-di9udWxsOyB0aGVuDQo+ID4gK2lmICRDQyAtbyAvZGV2L251bGwgIiRURVNUUFJPRyIgLU8wICIk
-QCIgMj4vZGV2L251bGw7IHRoZW4NCj4gPiAgICAgIGVjaG8gMQ0KPiA+ICBlbHNlDQo+ID4gICAg
-ICBlY2hvIDANCj4gDQo+IEkgc2VlIHRoZSBjaGFuZ2UgaW4gY2hlY2tfY2Muc2ggaXMgYWxyZWFk
-eSBjb3ZlcmVkIGJ5IFVzYW1hJ3MgcGF0Y2g6DQo+IA0KPiAgIHNlbGZ0ZXN0cy94ODY6IEFkZCB2
-YWxpZGl0eSBjaGVjayBhbmQgYWxsb3cgZmllbGQgc3BsaXR0aW5nDQo+IA0KPiAtaWYgIiRDQyIg
-LW8gL2Rldi9udWxsICIkVEVTVFBST0ciIC1PMCAiJEAiIDI+L2Rldi9udWxsOyB0aGVuDQo+ICtp
-ZiBbIC1uICIkQ0MiIF0gJiYgJENDIC1vIC9kZXYvbnVsbCAiJFRFU1RQUk9HIiAtTzAgIiRAIiAy
-Pi9kZXYvbnVsbDsgdGhlbg0KDQpPcjoNCglpZiAke0NDOi1mYWxzZX0gLW8gL2Rldi9udWxsIC4u
-Li4NClRoZXJlJ3MgYWx3YXlzIG9uZSBtb3JlIHdheS4uLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
-ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
-ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 2/25/22 2:08 AM, Yixuan Cao wrote:
+> Few days ago,
+> I noticed that in tools/vm/page_owner_sort.c,
+> there is a comment that need to be fixed.
+> 
+> In function usage():
+> "-f Filter out the information of blocks whose memory has
+> not been released."
+> 
+> This comment does not match the actual function, the "not"
+> should be removed. As a result, I submitted a patch to fix it.
+> 
+> Similarly, this document should also do the same
+> modification, that's why I submit this patch.
+> 
 
+Please refer to a few change logs to write them so maintainers
+don't have to fix them. This can be written as:
+
+"Fix function usage information for -f option"
+
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+> ---
+>   Documentation/vm/page_owner.rst | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+> index aec1906976f4..32ca54757d3f 100644
+> --- a/Documentation/vm/page_owner.rst
+> +++ b/Documentation/vm/page_owner.rst
+> @@ -78,7 +78,7 @@ Usage
+>   
+>   2) Enable page owner: add "page_owner=on" to boot cmdline.
+>   
+> -3) Do the job what you want to debug
+> +3) Do the job what you want to debug.
+>   
+>   4) Analyze information from page owner::
+>   
+> @@ -126,4 +126,4 @@ Usage
+>   		-c		Cull by comparing stacktrace instead of total block.
+>   
+>   	Filter:
+> -		-f		Filter out the information of blocks whose memory has not been released.
+> +		-f		Filter out the information of blocks whose memory has been released.
+> 
+
+I can't find this in Linux 5.17-rc5 - is this patch based on linux-next?
+
+thanks,
+-- Shuah

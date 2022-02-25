@@ -2,144 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E64A4C447E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76A4C4483
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240582AbiBYMVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S240587AbiBYMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbiBYMV3 (ORCPT
+        with ESMTP id S231874AbiBYMVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:21:29 -0500
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00084.outbound.protection.outlook.com [40.107.0.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414311C3D13;
-        Fri, 25 Feb 2022 04:20:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OGPmCQHZ3zVXrXJpEp/EE14Jz0DwE/l2cbK1Xmbkq2tBtV5buinkREf4daE5uOqmktAewCvYYmVXR8+e0l92ZfGArA2Cww+5K6T6wCWthAFaAusaF0OCubXVxSRx7b2RbBNRKT0qa62HbfDDwo7bFlV//X68vDYd+5i7DzxxJIFlzQhhZuqCMIcBs/sURgsPp4P1IIawhAG11okO3SmXjUSbhdFDYUHexDtCnxwh+HgFIXF1AjoFSV8qUqEPNrTYnZe+l0XKPWdIj1ynbLjkN670cTHyIZimGW8oJUhdmPwFpQ4wtRHzXWKfHFAS3D5yvg0y8bO1RjJ82koWWxSwwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qj3GbyS3ci7+f5bRsdZocHmJhwiWXaTcQCiMegdZ4bY=;
- b=gvULrzf+xRxtwLGINWdlFTJStF+rjNOh0MibAonDnBkHzRAxU8fWrGWgOoPREIqrJPUayblI03oY6Il23ZRxRea0SIh4ZEhOEx/dAJ32zk9/OfunEbTdYWU/115T9aM2LEK/B93tPYQj2CIYGerQwGf/bCPxa/KGyB1ThBeXCatM0Id9uOw8qonHagjRxlxQUTlyCfCGOkh1Bhcsrs0PPXGfGnOEB0VcS9VxQaWLXGNKsEn8GiZj9w2P25DIJRtI6lxTvVjCsKfk3EHRRv+osfZuX2sG1KupUnVdffvM53aeTnpEqlIuP86uFDPCgLfG8hupXV5z8sfmP505j0coqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qj3GbyS3ci7+f5bRsdZocHmJhwiWXaTcQCiMegdZ4bY=;
- b=U1xNojoLcOrXIizLC1SIZThd1CKEiGWZ7QEhjMZYXjILaFdqJnbmSnxYzDU/0296fe4fvL6wjKcv7H5+HX06dr9LnFILwl89uOEMxT1aTjx8rz/fOaD0fFXwJzZwlDy6OAkLfD6rYL2Nx00RTACo5UyqZ4xaVWgYqhTVoTZrUGo=
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by AM0PR04MB4945.eurprd04.prod.outlook.com (2603:10a6:208:c5::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Fri, 25 Feb
- 2022 12:20:54 +0000
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::f92e:7648:49d2:d017]) by DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::f92e:7648:49d2:d017%5]) with mapi id 15.20.5017.024; Fri, 25 Feb 2022
- 12:20:54 +0000
-From:   Pankaj Gupta <pankaj.gupta@nxp.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Horia Geanta <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface
- for blob generator
-Thread-Topic: [EXT] Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface
- for blob generator
-Thread-Index: AQHYKMu29wEgG18aYk6KcocJX/sIp6yhUPGAgALbRkA=
-Date:   Fri, 25 Feb 2022 12:20:54 +0000
-Message-ID: <DU2PR04MB863084B70239A69E4DE9D65B953E9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
- <20220222195819.2313913-5-a.fatoum@pengutronix.de> <YhZVmBy3/nWbqf+/@iki.fi>
- <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
-In-Reply-To: <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c213e2c-4651-4ddf-7141-08d9f8594511
-x-ms-traffictypediagnostic: AM0PR04MB4945:EE_
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AM0PR04MB49452B6C99AB5885F8A7A373953E9@AM0PR04MB4945.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WCS4+wOgE5xWvCyHKhsBBmjTETGvf61Lg2zaJfRrTA+GaEk+ZgevkVanUze4HG8K0CVsQOdpIcY+P2SjeZ51d56iu1qIvRHSQy8JV6BplAlxoQJaUUgPzNbZYh94u5BbJM7/HeAYmshryEFhMl1sNYuizqguz3mJ2HuZSvteUMZ3kk3bvpL/4WnYg0ENTfol4uf5uX/M7sb3jl91esyhWvZpJRy6lHbG+Zush5COSmhPl95t92HCSufVUotXTnlScg3Wp1sgYQg7Qyo1pVFpwoBUcKR4J6llff5tJJXkk5lRsBVy+9MswI3n6oM7nGxg8oNlG5vVzyM3X2liQrV6GUQwiiRDRjXGvRF6YZi1+X/Ns01QO5xTOpolz3jrGhCP4140U9J6XWvO0ay3ZA9InDh8GnsUDpFBFnBOzmcgEXhniaYMXhjdZWhDKGlIBsVEyXt+xzsyldJzbT1Jd7W9TVkf+EStzKOD/iYnatnLtB56SDavSj5OUCIBBlLtfkEbMuCjvcMRNFMK8jetOZPz028bX62VVgIZNnds87jsHIv9H7KDA0QpPfdeHNyWwgZ/xLc6Rksxug0wOXxrTHS/3bueF9WMmiNF0qfptPoMN6o8dKpesfEmKimc/JVtVahzYAEl2Ea6PA1FyQSAIA5Kw9ki1s7nLpNH/gW/pBOEd9PkYDP3qhmHdJuOL6vVSSH1fgHP2rZLa+8/3zietqx2SqBMCcHicgXdsZWZRrkMxF/2IxopjWMyNgiwp08/K9dIWrUmxqyZmf9CM0MWH2JUMd0LaAYXcBDDciONjvCk5YY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(45080400002)(66446008)(66946007)(66556008)(66476007)(122000001)(86362001)(508600001)(38100700002)(316002)(76116006)(110136005)(966005)(54906003)(71200400001)(55016003)(6506007)(9686003)(7696005)(33656002)(8676002)(55236004)(38070700005)(44832011)(52536014)(7416002)(53546011)(5660300002)(26005)(186003)(83380400001)(2906002)(4326008)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?0x+3wklkru38YR/LcsKnUmGY6QOizIBRHShVmlry34rLKZofx2dD1O/jzH?=
- =?iso-8859-2?Q?erh463BzHgZO3mEcrub2Jhrj98qDbYkvefFy59ViTyxccSvhEgboYsZ5IW?=
- =?iso-8859-2?Q?scl+SGdK3JiL38Xi5jzfVj/xJBUJmLNfOun+/r0YO5EU1BeRDvpRVLeDS7?=
- =?iso-8859-2?Q?pZuqIzxIsyWAUeW69appidPuTN6bDqR+G+wPUFD+p0a30pibOCDEiuaiIC?=
- =?iso-8859-2?Q?vTY9xdP8FukA5/WE6Klyv/7SkP/Og5EpDrJGFtjWQ8aLa2AzS6dCMJd1o1?=
- =?iso-8859-2?Q?xoBbecwL2XhHz7OJzAdXQNncPkn5HXbEQU8qEH4MmM/auwLlSlDoml2QdH?=
- =?iso-8859-2?Q?uxaeF0PQ+82ArOygFpmXQyWpvHpeApf/OSokyc/VIPZtsUnh+RX+mX67x6?=
- =?iso-8859-2?Q?N3TMyRnQCReSdLsvXHlKePqLOIwVvR7YkrFyYT5zbhWsn6OpCt/aWd9dGe?=
- =?iso-8859-2?Q?Q/y09yZizzhG2ceMaz92I1BcdH1VwD7mKHdfkDM83wfmhfUkONslGqVzdB?=
- =?iso-8859-2?Q?bKGCnGoFWMkYTYWgN4ZtXsdSUdoJLj9eWSeaPWODPs1mwJsLmZi9tOepGW?=
- =?iso-8859-2?Q?/oJcQUoGYcDrF82s/PM4rXR7+7FlDOm83AuFcbFwP5L6MMSCetC4n2tEBu?=
- =?iso-8859-2?Q?8HjPzxl4OQlEeYDCjLcvyJ73r92ezvoyEVA3Hr32zgpihT0ky8QkQ9AcT8?=
- =?iso-8859-2?Q?a+A6aYwEWf2i3D7n1Ck+1TXpC46ULECGeJgf7QuF/zVm0F/NSw+MMtTOdq?=
- =?iso-8859-2?Q?lwAdxr/oCwRwUbzE+vbC4i0h0OqBKKpqmc3iik4PDAn8BqXPbTbw/7Lm3k?=
- =?iso-8859-2?Q?2r1jgdKhnGVV8oV4V8es5N/7nQeWOHvkQCIq4w/dgvJ7EocNPTuPcmSlWJ?=
- =?iso-8859-2?Q?HlyG1omgnDFN3WGaBJ5QtLKRmMho+1pvwnOmjYyS9P+T/50BsT/u+xSnZ5?=
- =?iso-8859-2?Q?4W05H0O1z2zD5J8Q47/cPQvJXtiRoLP2R0S2ya6LqNtHI9qW5m5MlT4sTo?=
- =?iso-8859-2?Q?yVno2T00h9CQnF3slWxrmS55b5x66bAqmkFjbPHqGq9WLI9vEJkvgIiB0X?=
- =?iso-8859-2?Q?OYnrEfavGW6M3A0EXDZw9fQBzKhFvm1yHbtqEsMfIYK2eXSmObYKZeWTP4?=
- =?iso-8859-2?Q?rTcpiZ9U61p+o0YvgsghBU72zaa0d7thfB9PE3aeRve9lhSLy+2ccB1FLV?=
- =?iso-8859-2?Q?fHBHLR43oViij5/yrdh3IIKABdE8sYGO/W16PyrokPY/svwBo+g2lahs+b?=
- =?iso-8859-2?Q?Tds0pYbaoNe/5tA3LKbP5+kcMB6b7i3TTLQZ01fyNcFNe7vxog4SEv74of?=
- =?iso-8859-2?Q?uBSTNMjh1V7LbWaUr6LThfKYqWOo/o9jpwzSXhs14igGmqpgESI7pVoKHA?=
- =?iso-8859-2?Q?jZLekeMrTOT0RHA/mjm+cSGzh0ck3T1zP7/58U8uF2oQe/y8dm9SrvcDVE?=
- =?iso-8859-2?Q?tR5xkr+lrQbry++I2RXP4uf/sW7MiOms7fcMRl0S8FQ3NjvVu0FiraCiFm?=
- =?iso-8859-2?Q?VFhBGs1l2q0QiLHUfRvCOXyujbe9DfNjHLeRAX1L9D2wqiGD6IYKXZ5mHI?=
- =?iso-8859-2?Q?8Tdm26dNj8+/jXvYHZSOjM7ULaxT8jEUzC1aCAvw1EMCFIXOtitUn8c0lx?=
- =?iso-8859-2?Q?NEI9j0d+OeRRj9qkNtieqTkIzDpYLSnxgBc1tq+VfOXelpV+qIVLs1+hA4?=
- =?iso-8859-2?Q?AlwYahhVadWKaUNCmP4=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 25 Feb 2022 07:21:51 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1211C3D1A;
+        Fri, 25 Feb 2022 04:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ftx1kSV4r3CUam/PHrvq9MjpPGBO7Q54mOdwu4QBLTk=; b=Pt1Tl/cBk6LZvFhL7qLcOBjF2z
+        pLX8hb1sWe06k+WAkjB3j3xntEJiVm8SERy1D3ph1bs73k0bHwEyKGHIxfZaTYnzlKu2sSIv9CU25
+        0YVEXiaxxEYq5YAt5y8nvqhB59FICgk+Wc8isP174DhxBiL9/HIhlc3Qxw4RJSN0hfkfDbYmmbSBS
+        L58hCJC5JVAUiumUBYiQqzb7G9AjD51CLdhx0MbU0VggOGCOScR3dKslRH8SsctrsAiJJhYabBJsO
+        w7WnZnrTWYHU3PZOCRKWfnwRJulk9phFvPSrJZUICwxrx02dNB84G2OYKE49zZoOUmnOrqzSoth7w
+        N1cs+Svg==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNZaj-005laW-6q; Fri, 25 Feb 2022 12:20:57 +0000
+Message-ID: <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
+Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
+ constant
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Anton Romanov <romanton@google.com>
+Date:   Fri, 25 Feb 2022 12:20:56 +0000
+In-Reply-To: <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+References: <20220225013929.3577699-1-seanjc@google.com>
+         <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-r+/xco7jnKFAhWbGj0EQ"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c213e2c-4651-4ddf-7141-08d9f8594511
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 12:20:54.2934
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xf5wirHgjxlMWyjb5ldb+cLXI0hF8OG0yI52RtJeh0QrUzDL8hQHaAY6SuNi3qkKgItX6LoSSGBScsqy5GHdtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4945
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -147,228 +61,144 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--=-r+/xco7jnKFAhWbGj0EQ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Sent: Wednesday, February 23, 2022 9:50 PM
-> To: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Horia Geanta <horia.geanta@nxp.com>; Aymen Sghaier
-> <aymen.sghaier@nxp.com>; Herbert Xu <herbert@gondor.apana.org.au>;
-> David S. Miller <davem@davemloft.net>; kernel@pengutronix.de; David Gstir
-> <david@sigma-star.at>; Pankaj Gupta <pankaj.gupta@nxp.com>;
-> tharvey@gateworks.com; Matthias Schiffer <matthias.schiffer@ew.tq-
-> group.com>; James Bottomley <jejb@linux.ibm.com>; Mimi Zohar
-> <zohar@linux.ibm.com>; David Howells <dhowells@redhat.com>; James Morris
-> <jmorris@namei.org>; Eric Biggers <ebiggers@kernel.org>; Serge E. Hallyn
-> <serge@hallyn.com>; Jan Luebbe <j.luebbe@pengutronix.de>; Richard
-> Weinberger <richard@nod.at>; Franck Lenormand
-> <franck.lenormand@nxp.com>; Sumit Garg <sumit.garg@linaro.org>; linux-
-> integrity@vger.kernel.org; keyrings@vger.kernel.org; linux-
-> crypto@vger.kernel.org; linux-kernel@vger.kernel.org; linux-security-
-> module@vger.kernel.org
-> Subject: [EXT] Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface =
-for blob
-> generator
+On Fri, 2022-02-25 at 13:10 +0100, Paolo Bonzini wrote:
 >=20
-> Caution: EXT Email
->=20
-> On 23.02.22 16:41, Jarkko Sakkinen wrote:
-> > On Tue, Feb 22, 2022 at 08:58:18PM +0100, Ahmad Fatoum wrote:
-> >> The NXP Cryptographic Acceleration and Assurance Module (CAAM) can be
-> >> used to protect user-defined data across system reboot:
-> >>
-> >>   - When the system is fused and boots into secure state, the master
-> >>     key is a unique never-disclosed device-specific key
-> >>   - random key is encrypted by key derived from master key
-> >>   - data is encrypted using the random key
-> >>   - encrypted data and its encrypted random key are stored alongside
-> >>   - This blob can now be safely stored in non-volatile memory
-> >>
-> >> On next power-on:
-> >>   - blob is loaded into CAAM
-> >>   - CAAM writes decrypted data either into memory or key register
-> >>
-> >> Add functions to realize encrypting and decrypting into memory
-> >> alongside the CAAM driver.
-> >>
-> >> They will be used in a later commit as a source for the trusted key
-> >> seal/unseal mechanism.
-> >>
-> >> Reviewed-by: David Gstir <david@sigma-star.at>
-> >> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> >> Tested-By: Tim Harvey <tharvey@gateworks.com>
-> >> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> >> Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-> >> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >> ---
-> >> To: "Horia Geant=E3" <horia.geanta@nxp.com>
-> >> To: Aymen Sghaier <aymen.sghaier@nxp.com>
-> >> To: Herbert Xu <herbert@gondor.apana.org.au>
-> >> To: "David S. Miller" <davem@davemloft.net>
-> >> Cc: James Bottomley <jejb@linux.ibm.com>
-> >> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> >> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> >> Cc: David Howells <dhowells@redhat.com>
-> >> Cc: James Morris <jmorris@namei.org>
-> >> Cc: Eric Biggers <ebiggers@kernel.org>
-> >> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> >> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> >> Cc: David Gstir <david@sigma-star.at>
-> >> Cc: Richard Weinberger <richard@nod.at>
-> >> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> >> Cc: Sumit Garg <sumit.garg@linaro.org>
-> >> Cc: Tim Harvey <tharvey@gateworks.com>
-> >> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> >> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
-> >> Cc: linux-integrity@vger.kernel.org
-> >> Cc: keyrings@vger.kernel.org
-> >> Cc: linux-crypto@vger.kernel.org
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Cc: linux-security-module@vger.kernel.org
-> >> ---
-> >>  drivers/crypto/caam/Kconfig    |   3 +
-> >>  drivers/crypto/caam/Makefile   |   1 +
-> >>  drivers/crypto/caam/blob_gen.c | 230
-> +++++++++++++++++++++++++++++++++
-> >>  include/soc/fsl/caam-blob.h    |  56 ++++++++
-> >>  4 files changed, 290 insertions(+)
-> >>  create mode 100644 drivers/crypto/caam/blob_gen.c  create mode
-> >> 100644 include/soc/fsl/caam-blob.h
-> >>
-> >> diff --git a/drivers/crypto/caam/Kconfig
-> >> b/drivers/crypto/caam/Kconfig index 84ea7cba5ee5..ea9f8b1ae981 100644
-> >> --- a/drivers/crypto/caam/Kconfig
-> >> +++ b/drivers/crypto/caam/Kconfig
-> >> @@ -151,6 +151,9 @@ config CRYPTO_DEV_FSL_CAAM_RNG_API
-> >>        Selecting this will register the SEC4 hardware rng to
-> >>        the hw_random API for supplying the kernel entropy pool.
-> >>
-> >> +config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
-> >> +    bool
-> >> +
-> >>  endif # CRYPTO_DEV_FSL_CAAM_JR
-> >>
-> >>  endif # CRYPTO_DEV_FSL_CAAM
-> >> diff --git a/drivers/crypto/caam/Makefile
-> >> b/drivers/crypto/caam/Makefile index 3570286eb9ce..25f7ae5a4642
-> >> 100644
-> >> --- a/drivers/crypto/caam/Makefile
-> >> +++ b/drivers/crypto/caam/Makefile
-> >> @@ -21,6 +21,7 @@ caam_jr-
-> $(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI)
-> >> +=3D caamalg_qi.o
-> >>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API) +=3D caamhash.o
-> >>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API) +=3D caamrng.o
-> >>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_PKC_API) +=3D caampkc.o
-> >> pkc_desc.o
-> >> +caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN) +=3D blob_gen.o
-> >>
-> >>  caam-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) +=3D qi.o  ifneq
-> >> ($(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI),)
-> >> diff --git a/drivers/crypto/caam/blob_gen.c
-> >> b/drivers/crypto/caam/blob_gen.c new file mode 100644 index
-> >> 000000000000..513d3f90e438
-> >> --- /dev/null
-> >> +++ b/drivers/crypto/caam/blob_gen.c
-> >> @@ -0,0 +1,230 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Copyright (C) 2015 Pengutronix, Steffen Trumtrar
-> >> +<kernel@pengutronix.de>
-> >> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum
-> >> +<kernel@pengutronix.de>  */
-> >> +
-> >> +#include <linux/device.h>
-> >> +#include <soc/fsl/caam-blob.h>
-> >> +
-> >> +#include "compat.h"
-> >> +#include "desc_constr.h"
-> >> +#include "desc.h"
-> >> +#include "error.h"
-> >> +#include "intern.h"
-> >> +#include "jr.h"
-> >> +#include "regs.h"
-> >> +
-> >> +struct caam_blob_priv {
-> >> +    struct device jrdev;
-> >> +};
-> >> +
-> >> +struct caam_blob_job_result {
-> >> +    int err;
-> >> +    struct completion completion;
-> >> +};
-> >> +
-> >> +static void caam_blob_job_done(struct device *dev, u32 *desc, u32
-> >> +err, void *context) {
-> >> +    struct caam_blob_job_result *res =3D context;
-> >> +    int ecode =3D 0;
-> >> +
-> >> +    dev_dbg(dev, "%s %d: err 0x%x\n", __func__, __LINE__, err);
-> >> +
-> >> +    if (err)
-> >> +            ecode =3D caam_jr_strstatus(dev, err);
-> >> +
-> >> +    res->err =3D ecode;
-> >> +
-> >> +    /*
-> >> +     * Upon completion, desc points to a buffer containing a CAAM job
-> >> +     * descriptor which encapsulates data into an externally-storable
-> >> +     * blob.
-> >> +     */
-> >> +    complete(&res->completion);
-> >> +}
-> >> +
-> >> +static u32 *caam_blob_alloc_desc(size_t keymod_len) {
-> >> +    size_t len;
-> >> +
-> >> +    /* header + (key mod immediate) + 2x pointers + op */
-> >> +    len =3D 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 +
-> >> + CAAM_PTR_SZ_MAX) + 4;
-> >
-> > Nit: the amount of magic numbers is overwhelming here. I neither
-> > understand the statement nor how that comment should help me to
-> understand it.
->=20
-> header              =3D  4
-> (key mod immediate) =3D (4 + ALIGN(keymod_len, 4))
-> 2x pointer          =3D  2 * (4 + 4 + CAAM_PTR_SZ_MAX)
-> op                  =3D  4
+> Queued, but I'd rather have a subject that calls out that max_tsc_khz=20
+> needs a replacement at vCPU creation time.  In fact, the real change=20
+> (and bug, and fix) is in kvm_arch_vcpu_create(), while the subject=20
+> mentions only the change in kvm_timer_init().
 
-Instead of the function caam_blob_alloc_desc(), it will be great if the cal=
-ler functions caam_encap_blob()/caam_encap_blob (), could add local array:
-uint32_t desc[CAAM_DESC_BYTES_MAX];
+In
+https://lore.kernel.org/kvm/e7be32b06676c7ebf415d9deea5faf50aa8c0785.camel@=
+infradead.org/T/
+last night I was coming round to the idea that we might want a KVM-wide=20
+default frequency which is settable from userspace and is used instead
+of max_tsc_khz anyway.
 
->=20
-> I haven't heard back from the CAAM maintainers yet since v1. Perhaps now =
-is a
-> good occasion to chime in? :-)
->=20
-> @Jarkko, could you take a look at patch 5? That's the gist of the series =
-and I
-> have yet to get maintainer feedback on that one.
->=20
-> Cheers,
-> Ahmad
->=20
->=20
-> >
-> > BR, Jarkko
-> >
->=20
->=20
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       |
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.pe=
-n
-> gutronix.de%2F&amp;data=3D04%7C01%7Cpankaj.gupta%40nxp.com%7Cc97e9d4
-> aaf304124407908d9f6e87101%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> 7C0%7C637812300459173929%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL
-> jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;s
-> data=3DCvnfIXR68DPRCaYrOYQKSv2eSBSNSSJYx2BQJee4yLg%3D&amp;reserved=3D0
-> |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
+I also have questions about the use case for the above patch.... if
+this is a clean boot and you're just starting to host guests, surely we
+can wait for the time it takes for the TSC synchronization to complete?
+
+And if this is a live update scenario, where we pause the guests, kexec
+into a new kernel, then resume the "migrated" guests again... why in
+$DEITY's name isn't the precise TSC frequency being handed over from
+kernel#1 to kernel#2 over the kexec so that it's known from the start?
+
+--=-r+/xco7jnKFAhWbGj0EQ
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMjI1MTIyMDU2WjAvBgkqhkiG9w0BCQQxIgQgjlIS6gxF
+teAfRYeOND/6oToh+kYyoSPVcTa5TIM9Ldkwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCV0721AAWmfBtc4+/UNnSVdO/jUS9aB4mO
+KL+ii1eiau1mclRtlgYqsQuoyNOXVymZFRosiXJsU1CId/qs1J99nCa8287MXhRczBAZaiwA80Km
+fy+ISE6ZtJEl8qIYG6qd55PHNaUoi+REEOvZ+xIbBF/R4JjbVSj41SaKCJLdc/PE+fKkRmrcsAWk
+XkkHHGijHMaiQnaz1mMFEgIYjxN4u0GTZOTF9iuQlVUWJ5iqWxaWFmvE30cD0qYbm8sr4wQmsN89
+OwxFUzo7ETZJElANhwR2ypBrZQa41RfOP2aQQPAv1kiN9FXTRxgN4O2dzPJ4S48k2/Y4pqvsCkZo
++kX0TYQ5M0EtrgwYXOmt/aRjsCi6srxKpTh+pGyyAH8q5ZAYB5B2iJC9Ob8Gg0YLthCulxkT2B1v
+9mossIyA0p9VSeAMmi5GE8AuPDB397vf79dqzFtEVzWkwdr0dXG0Ns/EwanIwqxj0slxKGT6srr+
+p8YUuQabXyL5npghmqOhJEXBvbpREju6DZTx6gs4m9+1ItPwHTRbtZzBqqJkeCiRfjh4wu5fzqrD
+tUZfGnS1Q8I+RftrPFO+DtFuaDQprS+pj9b84GMQPGqdCwNk4BfqSpzvz8z17iUjJE9HPCNDTqK6
+NPdBQ+UfpaozbrAMHHmQ1hns9wIgU6NU47g5goSXwQAAAAAAAA==
+
+
+--=-r+/xco7jnKFAhWbGj0EQ--
+

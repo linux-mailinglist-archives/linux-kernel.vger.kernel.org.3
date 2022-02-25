@@ -2,111 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6109A4C5013
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBE84C5017
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237705AbiBYUwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S237787AbiBYUwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiBYUwF (ORCPT
+        with ESMTP id S237721AbiBYUwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:52:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2122028BA;
-        Fri, 25 Feb 2022 12:51:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B586B83389;
-        Fri, 25 Feb 2022 20:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF336C340E7;
-        Fri, 25 Feb 2022 20:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645822290;
-        bh=F0J/fHQ4PH2PHbI5q93Nm/WbNth9O2hP5bMINbwsdqw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Eyc+zwquCZ/3IDTmwCbztdnSaf+0OTEgxtAnK98OsuCbT3GDEct8oNRwS3MewY3Nk
-         YMcaEs1KaiUsbEoBbnSGEdZDz+mhuyYwmTNspFkAR+EbrSuq8FLpM2WSKHn5GnP97F
-         xDaBrcBu9WBQaJyO3Qf0dURhIvP+eDaUe4DlOw7v1k5i9C024DfzK1Tx9cRKcGrR7F
-         ETmS1LfStzM59QDQ3l99HkE7q58zaldyDcrFxCwDlj04hJpFbbGdsP3QbnKdgHvq40
-         fPajHYlcbV00WyA1RilKx81Q41KPU/JKXkZv1voJMfZPhaGEJ0wP8xG1EP/aTBZHoS
-         UsrSUoTlOAMLA==
-Date:   Fri, 25 Feb 2022 12:51:28 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Fri, 25 Feb 2022 15:52:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F945210D4A;
+        Fri, 25 Feb 2022 12:51:40 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D7034212B8;
+        Fri, 25 Feb 2022 20:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645822298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o51rh/gy7Dq2VMeP0PYE4XhwEj0K93n8O4R2KIcCeoU=;
+        b=fkmq+OECyiKgrGbLObjt6oc3oIufyAIUqfuvh+448zJBQxlNqwFwl+ETKS9jiSPh8HiQi7
+        06Grq4nXaainwObvmpTN6/9Uea0R0nOPgtnCjOZoCSlM6u+zgqJH+gVRmJydzBrchaWp50
+        uCO4Pn5vcfNC9NBWQlCWs1vT+yQZZJw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645822298;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o51rh/gy7Dq2VMeP0PYE4XhwEj0K93n8O4R2KIcCeoU=;
+        b=yJgDB3xVx1b+BHxCC2Oj0ZmpBJENIJzgSBoYTNjG/Q7GUs0qGzStKFsrbDearDLjOwAMWW
+        cK9KuOsk+D22LdBQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 11A2CA3B88;
+        Fri, 25 Feb 2022 20:51:38 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Helge Deller <deller@gmx.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -v2] ext4: don't BUG if kernel subsystems dirty pages
- without asking ext4 first
-Message-ID: <YhlBUCi9O30szf6l@sol.localdomain>
-References: <Yg0m6IjcNmfaSokM@google.com>
- <Yhks88tO3Em/G370@mit.edu>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-video@atrey.karlin.mff.cuni.cz,
+        linux-efi@vger.kernel.org
+Subject: [PATCH v4 1/3] sysfb: Make config option dependencies explicit
+Date:   Fri, 25 Feb 2022 21:51:33 +0100
+Message-Id: <a0fa41e9186653e4c41ad0a28259e5cdc71b1f66.1645822213.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <1f13e6f2-a87c-83ac-7119-8632c8c8ac8e@redhat.com>
+References: <1f13e6f2-a87c-83ac-7119-8632c8c8ac8e@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yhks88tO3Em/G370@mit.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 02:24:35PM -0500, Theodore Ts'o wrote:
-> [un]pin_user_pages_remote is dirtying pages without properly warning
-> the file system in advance (or faulting in the file data if the page
-> is not yet in the page cache).  This was noted by Jan Kara in 2018[1]
-> and more recently has resulted in bug reports by Syzbot in various
-> Android kernels[2].
-> 
-> This is technically a bug in the mm/gup.c codepath, but arguably ext4
-> is fragile in that a buggy get_user_pages() implementation causes ext4
-> to crash, where as other file systems are not crashing (although in
-> some cases the user data will be lost since gup code is not properly
-> informing the file system to potentially allocate blocks or reserve
-> space when writing into a sparse portion of file).  I suspect in real
-> life it is rare that people are using RDMA into file-backed memory,
-> which is why no one has complained to ext4 developers except fuzzing
-> programs.
-> 
-> So instead of crashing with a BUG, issue a warning (since there may be
-> potential data loss) and just mark the page as clean to avoid
-> unprivileged denial of service attacks until the problem can be
-> properly fixed.  More discussion and background can be found in the
-> thread starting at [2].
-> 
-> [1] https://www.spinics.net/lists/linux-mm/msg142700.html
+efifb and vesafb requires sysfb implicitly but this is not stated in
+Kconfig. Add the dependency.
 
-Can you use a lore link
-(https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/T/#u)?
+With that all drivers that require sysfb depend on it so it can default
+to disabled.
 
-> +			/*
-> +			 * Should never happen but for buggy code in
-> +			 * other subsystemsa that call
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+v4: new patch
+---
+ drivers/firmware/Kconfig    | 5 ++---
+ drivers/video/fbdev/Kconfig | 2 ++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-subsystemsa => subsystems
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index 75cb91055c17..5265eca74ba1 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -218,12 +218,11 @@ config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
+ 
+ config SYSFB
+ 	bool
+-	default y
+-	depends on X86 || EFI
+ 
+ config SYSFB_SIMPLEFB
+ 	bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
+-	depends on SYSFB
++	depends on X86 || EFI
++	select SYSFB
+ 	help
+ 	  Firmwares often provide initial graphics framebuffers so the BIOS,
+ 	  bootloader or kernel can show basic video-output during boot for
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index 3cfce8dce8d9..907c305caf27 100644
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -628,6 +628,7 @@ config FB_VESA
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+ 	select FB_BOOT_VESA_SUPPORT
++	select SYSFB
+ 	help
+ 	  This is the frame buffer device driver for generic VESA 2.0
+ 	  compliant graphic cards. The older VESA 1.2 cards are not supported.
+@@ -641,6 +642,7 @@ config FB_EFI
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
++	select SYSFB
+ 	help
+ 	  This is the EFI frame buffer device driver. If the firmware on
+ 	  your platform is EFI 1.10 or UEFI 2.0, select Y to add support for
+-- 
+2.34.1
 
-> +			 * set_page_dirty() without properly warning
-> +			 * the file system first.  See [1] for more
-> +			 * information.
-> +			 *
-> +			 * [1] https://www.spinics.net/lists/linux-mm/msg142700.html
-
-Likewise, lore link here.
-
-- Eric

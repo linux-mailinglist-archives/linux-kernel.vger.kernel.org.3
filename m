@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B184C4F70
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9344C4F79
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiBYUSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S236155AbiBYUSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiBYUR7 (ORCPT
+        with ESMTP id S236108AbiBYUSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:17:59 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D88192B3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:17:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645820245; x=1677356245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IXZgevlMhgT/BuHMLe37co58F8OyfmDgE9AWiUWJPO0=;
-  b=B1XLDY8TyCF1DawpZSywOYXenCpJpIikZLABedSB29qkLNpbgPb8/s1H
-   u/s93+7yr9TSKIR1m0RhaIN+O3yoRmSR5q5T2pS51b7bAZOUdCSIOphh4
-   Xd9Ze9IIeBzI+u343Ki3JAsspLpN+ODLizvnJx0IVqeJYyrLbuLFAvY1p
-   ogaxMeCyoIM1bqPyXqyggHflMbJpe2nwwZJLfwyUkLtyfwghiJxy6n6NQ
-   4BNKlzg2uaBjzll7LpIWYtFBxPXETYkZvJm+8XWltyyv2FeVIEBQR+itY
-   0GAqQnETkKQAUFAqpWKElSc9u0lEosvrzsVMg/Uj7dUhMo6COyxrkaYIr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="251403679"
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="251403679"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 12:17:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="549406516"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 12:17:23 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNh1n-0004fh-7r; Fri, 25 Feb 2022 20:17:23 +0000
-Date:   Sat, 26 Feb 2022 04:16:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [at91:at91-dt-next 12/12] FATAL ERROR: Unable to parse input tree
-Message-ID: <202202260434.MSueBSc1-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 25 Feb 2022 15:18:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD6D2E692;
+        Fri, 25 Feb 2022 12:17:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39AAD61852;
+        Fri, 25 Feb 2022 20:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B257C340E7;
+        Fri, 25 Feb 2022 20:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645820250;
+        bh=hprxKo1mems9HtIZuPLBMknaY2V/I1MaW2suqmU8ECk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OFmE+6nCxn74yBaqSAQPBG6naOcxkGqDwGXWlqN6AZOvWnr8IASoBrFi8lmbuT7DK
+         f3QG95WgskguzAPWahinUyKLlYlej1ZptMpjiHX13feFddinvOVChSiAxsDgTl5muo
+         bOSlu7oKbfFFVAd4829aJaCz4F6inFDsLHyN44LtgcM09g15sBd+Wn2rIMWZLmnGf7
+         fmuZYwtvMvkHn5DhJwkvVJcVCVxvE4FiUqIGQPOlPIPy/9/BB905CpZFTOvk9aHbOI
+         lVneWUla0cw/QkvIzqapbaBfk0eG4bMn/LH1zG04mzjr7zTrrtLH/a/BTYNUYlBDxL
+         PlPhULBGgUXpA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86A49E6D4BB;
+        Fri, 25 Feb 2022 20:17:30 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.17-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YhjYDWv9q/44eWZu@kroah.com>
+References: <YhjYDWv9q/44eWZu@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YhjYDWv9q/44eWZu@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc6
+X-PR-Tracked-Commit-Id: 19eae24b76c27dedfb166dc06a8c48e052cbc814
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 548b1af45d1a10a6e2a04255c29d06cc14c10870
+Message-Id: <164582025054.12222.151194858760593130.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Feb 2022 20:17:30 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git at91-dt-next
-head:   2e7f2c599a614ea47067ec9d32354a56785bb460
-commit: 2e7f2c599a614ea47067ec9d32354a56785bb460 [12/12] ARM: dts: at91: sama7g5: Add NAND support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220226/202202260434.MSueBSc1-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git/commit/?id=2e7f2c599a614ea47067ec9d32354a56785bb460
-        git remote add at91 https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
-        git fetch --no-tags at91 at91-dt-next
-        git checkout 2e7f2c599a614ea47067ec9d32354a56785bb460
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+The pull request you sent on Fri, 25 Feb 2022 14:22:21 +0100:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc6
 
-All errors (new ones prefixed by >>):
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/548b1af45d1a10a6e2a04255c29d06cc14c10870
 
-   Error: arch/arm/boot/dts/sama7g5.dtsi:140.21-22 syntax error
->> FATAL ERROR: Unable to parse input tree
+Thank you!
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

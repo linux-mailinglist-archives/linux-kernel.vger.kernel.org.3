@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751C14C3A5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802654C3A65
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiBYAcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S235411AbiBYAfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiBYAck (ORCPT
+        with ESMTP id S229923AbiBYAft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:32:40 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53AA1B45DD;
-        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id q11so3337737pln.11;
-        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=tKC1TRHCBri+KzcoCYvPSpdvCg/HdwcBnsM6kDgfriM=;
-        b=aFvL07xt/0stKeZefxUZbUC+5wQ0c2t8VfgbSdA4KnIJogwafaubJUI86KN4/FvFV5
-         jbLhM+LrJv3ypnussHBfpu7uj5KI0PXVQ96Jdo+lCX3ypLIHQGZHtAkyVdAh4mtCu2qS
-         ap4TAiaH3AgnoAQmDOleF4kCeej300au8cAl/UdmZr0lqIgLVI2qY4xeiFfraLkMfPy+
-         3rauidoZEYE8aGNlxrQXELwdFr9QiuiKZh5bLLIvF73t45sBCn4jewpG/0Te1MH9Hphe
-         o/sRG6BxKY9eG6wcyZ3QNsOS/fLPbBIUJS5HWzi/+UPcL9L4idltFRILXZRMw5LpG4at
-         ebhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=tKC1TRHCBri+KzcoCYvPSpdvCg/HdwcBnsM6kDgfriM=;
-        b=b993J+MUOCdsdA+nS1VKIX/OClj8gche/Wk7PbQ9WeRroS1Xcm+3khHo6Fc9RCuWur
-         pAL90ZyXLV1nzgClSeJ7kgkpm1CAF6yba5n5hwrAESTcDd7re5BArrfig1j8W7NMt10b
-         Uy2QkiDxugL1+SjZuXHp1wwesuTt1GNz3A14I2ECcl+dxrxFqMiGmUcb+sN0wIWnrKZL
-         VGbYRarRCIv4djNzBRfQlnnaa04rYwSg3RrkFeqA2PfaNnaxcIJwEDdIKwwKT0zllE5d
-         icjqE0GPLmaiMrEHrfBupf/TlqPwwpU0/CeXCrT+jgbFRQR/TRipwzSZ8pXW/TBbFbtU
-         XM4Q==
-X-Gm-Message-State: AOAM530Gwwmsp07+wvWvwJV0IboDd60GtZv/38ZrezjvngFTl+a40mb9
-        EqcbpoP9qW50J9r4mChyMSDOlhSrCi4=
-X-Google-Smtp-Source: ABdhPJx6JkQFQ7K41lpXb/O0ach2L1AgRseaw/gapGt3TSCEZRFc8m8HvGMfvjmlWhxUObOSXiOjgw==
-X-Received: by 2002:a17:902:f701:b0:14d:7cea:82af with SMTP id h1-20020a170902f70100b0014d7cea82afmr4868065plo.71.1645749128161;
-        Thu, 24 Feb 2022 16:32:08 -0800 (PST)
-Received: from localhost (115-64-212-59.static.tpgi.com.au. [115.64.212.59])
-        by smtp.gmail.com with ESMTPSA id g28-20020a63111c000000b00374646abc42sm602400pgl.36.2022.02.24.16.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:32:07 -0800 (PST)
-Date:   Fri, 25 Feb 2022 10:32:02 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/3] powerpc: fix build errors
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        stable@vger.kernel.org
-References: <20220223135820.2252470-1-anders.roxell@linaro.org>
-        <20220223135820.2252470-2-anders.roxell@linaro.org>
-        <1645670923.t0z533n7uu.astroid@bobo.none>
-        <1645678884.dsm10mudmp.astroid@bobo.none>
-        <20220224171207.GM614@gate.crashing.org>
-In-Reply-To: <20220224171207.GM614@gate.crashing.org>
+        Thu, 24 Feb 2022 19:35:49 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E12D24FA2B;
+        Thu, 24 Feb 2022 16:35:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5Q66IT_1645749311;
+Received: from 192.168.193.153(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5Q66IT_1645749311)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 25 Feb 2022 08:35:12 +0800
+Message-ID: <d2c864c0-6535-acfd-6c2f-f1175ce8a719@linux.alibaba.com>
+Date:   Thu, 24 Feb 2022 16:34:08 -0800
 MIME-Version: 1.0
-Message-Id: <1645748601.idp48wexp9.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
+        akpm@linux-foundation.org, mark.rutland@arm.com,
+        samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
+        mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
+        elver@google.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+ <69d351c6-a69d-6ebb-53bc-b46dfe4da08a@linux.alibaba.com>
+ <YhZxVwoshSwwJkJO@dev-arch.archlinux-ax161>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <YhZxVwoshSwwJkJO@dev-arch.archlinux-ax161>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +53,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Segher Boessenkool's message of February 25, 2022 3:12 am:
-> On Thu, Feb 24, 2022 at 03:05:28PM +1000, Nicholas Piggin wrote:
->> + * gcc 10 started to emit a .machine directive at the beginning of gene=
-rated
->> + * .s files, which overrides assembler -Wa,-m<cpu> options passed down.
->> + * Unclear if this behaviour will be reverted.
->=20
-> It will not be reverted.  If you need a certain .machine for some asm
-> code, you should write just that!
 
-It should be reverted because it breaks old binutils which did not have
-the workaround patch for this broken gcc behaviour. And it is just
-unnecessary because -m option can already be used to do the same thing.
 
-Not that I expect gcc to revert it.
+On 2/23/22 09:39, Nathan Chancellor wrote:
+> On Wed, Feb 23, 2022 at 12:50:21AM -0800, Dan Li wrote:
+>> My intention is to remind users that this is a compiler feature.
+>> But since there is also a hint in CC_HAVE_SHADOW_CALL_STACK:
+>> +# Supported by clang >= 7.0 or GCC ...
+>>
+>> Removing the specific compiler here also looks fine to me.
+>> Would this look better?
+>>
+>> "This option enables Shadow Call Stack, which uses a ..."
+>>
+>> or maybe:
+>>
+>> "This option enables compiler's Shadow Call Stack, which uses a ..."
+> 
+> I do not honestly have a strong opinion around removing mention of the
+> compiler so either looks fine to me (might be better to say "the
+> compiler's Shadow ..." in the second one).
+> 
 
->=20
->> +#ifdef CONFIG_CC_IS_GCC
->> +#if (GCC_VERSION >=3D 100000)
->> +#if (CONFIG_AS_VERSION =3D=3D 23800)
->> +asm(".machine any");
->> +#endif
->> +#endif
->> +#endif
->> +#endif /* __ASSEMBLY__ */
->=20
-> Abusing toplevel asm like this is broken and you *will* end up with
-> unhappiness all around.
+Ah, yes, thanks :)
 
-It actually unbreaks things and reduces my unhappiness. It's only done=20
-for broken compiler versions and only where as does not have the=20
-workaround for the breakage.
-
-Thanks,
-Nick
+Dan.

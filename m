@@ -2,229 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E322D4C4327
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCA24C4325
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239960AbiBYLM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S239968AbiBYLMf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Feb 2022 06:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbiBYLMZ (ORCPT
+        with ESMTP id S239953AbiBYLM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:12:25 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEDA60D9D
+        Fri, 25 Feb 2022 06:12:26 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18FBF7E0A0
         for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:11:53 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PAIBJ9021201;
-        Fri, 25 Feb 2022 11:11:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=hcvTpBy/x5shNurAmWWK6P9i6O4+gs2ZmkPe3rZKF5s=;
- b=nzh6qnmQyaXIe3zacHIW7c3HrCeqyyK73/S+R7IkkA4B3u56uD7PtwsVM1EOilB8tcxI
- s5ItiYgicrewNStZFhiHISSFZrmV8uv0NGuNvKjERVKOkCedBt/d8fMgz4mIOhy21jFc
- sbkb9S8J4YWB9H3u/g799R4dZ5UkrO5COpUvqnKuDitWiCLiiRWuMBxuUM0T2TnejTFQ
- SZKD1E2kMC+kL/HhkvWjwht2/6wnpmIw9+uaKzxPA0U29+MPlzhKTSko5frA34ZSBzb0
- Bnm8E5gOKDjyMNwbpcpzRYu8NLrsKqZb4MxxDo/FJXhthansmj88Ozf/DmV5QWFlVLP9 Ug== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eew86s6qd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 11:11:34 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PB82fh024443;
-        Fri, 25 Feb 2022 11:11:32 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3eeg2s3rmy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 11:11:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PBBRrD37749246
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Feb 2022 11:11:28 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD0A7AE051;
-        Fri, 25 Feb 2022 11:11:27 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE673AE057;
-        Fri, 25 Feb 2022 11:11:24 +0000 (GMT)
-Received: from [9.43.44.169] (unknown [9.43.44.169])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 25 Feb 2022 11:11:24 +0000 (GMT)
-Message-ID: <d7945e63-4cd6-1947-ed9f-a81203226c47@linux.ibm.com>
-Date:   Fri, 25 Feb 2022 16:41:22 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v6 0/4] Add perf interface to expose nvdimm
-To:     kajoljain <kjain@linux.ibm.com>, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        dan.j.williams@intel.com, ira.weiny@intel.com,
-        vishal.l.verma@intel.com
-Cc:     santosh@fossix.org, maddy@linux.ibm.com,
-        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        vaibhav@linux.ibm.com, tglx@linutronix.de
-References: <20220217163357.276036-1-kjain@linux.ibm.com>
- <ddf18609-84ad-e263-7dff-7b2cc68557ef@linux.ibm.com>
- <ea6bc468-c7ae-c844-5111-8f0dc3207f89@linux.ibm.com>
-From:   Nageswara Sastry <rnsastry@linux.ibm.com>
-In-Reply-To: <ea6bc468-c7ae-c844-5111-8f0dc3207f89@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AtPbqZXfbZsrpl84U7JlwtAKWyPtg-Ud
-X-Proofpoint-GUID: AtPbqZXfbZsrpl84U7JlwtAKWyPtg-Ud
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-1-4tfOWMTSOPWvw-eAzJbEww-1; Fri, 25 Feb 2022 11:11:51 +0000
+X-MC-Unique: 4tfOWMTSOPWvw-eAzJbEww-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 11:11:49 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 25 Feb 2022 11:11:49 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Willy Tarreau' <w@1wt.eu>
+CC:     'Steven Rostedt' <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: RE: Strange output on the console
+Thread-Topic: Strange output on the console
+Thread-Index: AQHYKfxF0QTTTto/+k+8VsyEcwRQo6yjyM1ggAAHToCAADtxAIAABoGAgAAGDGA=
+Date:   Fri, 25 Feb 2022 11:11:49 +0000
+Message-ID: <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
+References: <20220224230035.36547137@gandalf.local.home>
+ <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
+ <20220225063637.GA18039@1wt.eu>
+ <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
+ <20220225103239.GA18720@1wt.eu>
+In-Reply-To: <20220225103239.GA18720@1wt.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_07,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
- phishscore=0 suspectscore=0 mlxscore=0 adultscore=0 impostorscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202250060
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Willy Tarreau
+> Sent: 25 February 2022 10:33
+> 
+> On Fri, Feb 25, 2022 at 10:11:43AM +0000, David Laight wrote:
+> > From: Willy Tarreau
+> > > Sent: 25 February 2022 06:37
+> > >
+> > > On Fri, Feb 25, 2022 at 06:12:35AM +0000, David Laight wrote:
+> > > > From: Steven Rostedt
+> > > > > Sent: 25 February 2022 04:01
+> > > > >
+> > > > > I've been noticing that my tests have been spitting out strange output on
+> > > > > the console. It would happen at boot up and then clear up. It looks like
+> > > > > something screwed up with the serial timing.
+> > > > >
+> > > > > Attached is a dmesg of one of my test runs as an example.
+> > > > >
+> > > > > I've noticed this on both 32 bit and 64 bit x86.
+> > > > >
+> > > > > I haven't had time to look deeper into this, but I figured I let you know
+> > > > > about it.
+> > > > >
+> > > > > And it always seems to happen right after:
+> > > > >
+> > > > >   Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> > > > >
+> > > > > Maybe this is a serial issue and not a printk one? :-/
+> > > >
+> > > > Looks very much like the serial baud rate is being reset.
+> > >
+> > > I don't think it's the baud rate, characters are still readable, it
+> > > looks more like a fifo being too short and causing lots of chars to
+> > > be dropped.
+> >
+> > Just before it recovers there is this output:
+> >     ATaitoscic nitahi tuPiet mfba Ae:   aD nCt AH0 nP0
+> > That is probably 'fifo not enabled'.
+> >
+> > But the earlier output doesn't have many different characters in it.
+> > Which is typical of the baud rate being wrong.
+> 
+> I don't think so, here's the beginning of the capture:
+> 
+>   Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+>   0SI 15Nto
+>   LgtAsri[dnei00ieC nm
+>   i:0eom:Soce
+>   [ad000Ade s:ii SSLtbueludAis002h00 1)ASrPn
+>   Ars004h00 7ARrPn
+> 
+> All of these chars are within the printable set, so there's a probability
+> of ~37% per char, so even for a short string of 9 chars like the first
+> line, that's a 0.01% chance of it respecting the set. That's why for me
+> it definitely doesn't correspond to a baud rate issue. With wrong baud
+> rates you get lots of garbage in the full 8-bit range.
+> 
+> In addition there are even upper case at the beginning of the lines which
+> probably correspond to the ones that are printed on these lines.
 
+Ok, that bit is probably output after the fifo is disabled.
 
-On 25/02/22 12:08 pm, kajoljain wrote:
-> 
-> 
-> On 2/25/22 11:25, Nageswara Sastry wrote:
->>
->>
->> On 17/02/22 10:03 pm, Kajol Jain wrote:
->>> Patchset adds performance stats reporting support for nvdimm.
->>> Added interface includes support for pmu register/unregister
->>> functions. A structure is added called nvdimm_pmu to be used for
->>> adding arch/platform specific data such as cpumask, nvdimm device
->>> pointer and pmu event functions like event_init/add/read/del.
->>> User could use the standard perf tool to access perf events
->>> exposed via pmu.
->>>
->>> Interface also defines supported event list, config fields for the
->>> event attributes and their corresponding bit values which are exported
->>> via sysfs. Patch 3 exposes IBM pseries platform nmem* device
->>> performance stats using this interface.
->>>
->>> Result from power9 pseries lpar with 2 nvdimm device:
->>>
->>> Ex: List all event by perf list
->>>
->>> command:# perf list nmem
->>>
->>>     nmem0/cache_rh_cnt/                                [Kernel PMU event]
->>>     nmem0/cache_wh_cnt/                                [Kernel PMU event]
->>>     nmem0/cri_res_util/                                [Kernel PMU event]
->>>     nmem0/ctl_res_cnt/                                 [Kernel PMU event]
->>>     nmem0/ctl_res_tm/                                  [Kernel PMU event]
->>>     nmem0/fast_w_cnt/                                  [Kernel PMU event]
->>>     nmem0/host_l_cnt/                                  [Kernel PMU event]
->>>     nmem0/host_l_dur/                                  [Kernel PMU event]
->>>     nmem0/host_s_cnt/                                  [Kernel PMU event]
->>>     nmem0/host_s_dur/                                  [Kernel PMU event]
->>>     nmem0/med_r_cnt/                                   [Kernel PMU event]
->>>     nmem0/med_r_dur/                                   [Kernel PMU event]
->>>     nmem0/med_w_cnt/                                   [Kernel PMU event]
->>>     nmem0/med_w_dur/                                   [Kernel PMU event]
->>>     nmem0/mem_life/                                    [Kernel PMU event]
->>>     nmem0/poweron_secs/                                [Kernel PMU event]
->>>     ...
->>>     nmem1/mem_life/                                    [Kernel PMU event]
->>>     nmem1/poweron_secs/                                [Kernel PMU event]
->>>
->>> Patch1:
->>>           Introduces the nvdimm_pmu structure
->>> Patch2:
->>>           Adds common interface to add arch/platform specific data
->>>           includes nvdimm device pointer, pmu data along with
->>>           pmu event functions. It also defines supported event list
->>>           and adds attribute groups for format, events and cpumask.
->>>           It also adds code for cpu hotplug support.
->>> Patch3:
->>>           Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
->>>           nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
->>>           capabilities, cpumask and event functions and then registers
->>>           the pmu by adding callbacks to register_nvdimm_pmu.
->>> Patch4:
->>>           Sysfs documentation patch
->>>
->>> Changelog
->>
->> Tested these patches with the automated tests at
->> avocado-misc-tests/perf/perf_nmem.py
->> URL:
->> https://github.com/avocado-framework-tests/avocado-misc-tests/blob/master/perf/perf_nmem.py
->>
->>
->> 1. On the system where target id and online id were different then not
->> seeing value in 'cpumask' and those tests failed.
->>
->> Example:
->> Log from dmesg
->> ...
->> papr_scm ibm,persistent-memory:ibm,pmemory@44100003: Region registered
->> with target node 1 and online node 0
->> ...
-> 
-> Hi Nageswara Sastry,
->         Thanks for testing the patch set. Yes you right, incase target
-> node id and online node id is different, it can happen when target
-> node is not online and hence can cause this issue, thanks for pointing
-> it.
-> 
-> Function dev_to_node will return node id for a given nvdimm device which
-> can be offline in some scenarios. We should use numa node id return by
-> numa_map_to_online_node function in that scenario. This function incase
-> given node is offline, it will lookup for next closest online node and
-> return that nodeid.
-> 
-> Can you try with below change and see, if you are still getting this
-> issue. Please let me know.
-> 
-> diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
-> b/arch/powerpc/platforms/pseries/papr_scm.c
-> index bdf2620db461..4dd513d7c029 100644
-> --- a/arch/powerpc/platforms/pseries/papr_scm.c
-> +++ b/arch/powerpc/platforms/pseries/papr_scm.c
-> @@ -536,7 +536,7 @@ static void papr_scm_pmu_register(struct
-> papr_scm_priv *p)
->                                  PERF_PMU_CAP_NO_EXCLUDE;
-> 
->          /*updating the cpumask variable */
-> -       nodeid = dev_to_node(&p->pdev->dev);
-> +       nodeid = numa_map_to_online_node(dev_to_node(&p->pdev->dev));
->          nd_pmu->arch_cpumask = *cpumask_of_node(nodeid);
-> 
-> Thanks,
-> Kajol Jain
-> 
+But a few lines later you get:
 
-With the above patch all the tests are passing on the system where 
-target id and online id were different. Here is the the result:
+TntiTet_TetkT t:TetyTvt:TntaTttTet TeteTvtnTntnTvtnT teT teTettTettKTeteTttnTnteTttaTttaTetKTttOTet:TvtnTvtltTntw Tnt:T tOTvt_Tnt:TvtKTntnT tsTvtsTttsTttsTttosTvtotTtt:TntrTntOTet T ttTvtKT tKT teTnttTettTntaTntdTttaT taTeteT tTtt TttrTntlTvt:TetkT tTtttTnteTttOTetkTvtsTeteT tlTttoTntoTetpTvtpTetsTvtvTvteTntOTet
+TttTetsTetsTntsTetKT t TttiTttT tnT tOTnt_TttrTtttTntKTetOTtteTnt:T tKTttpTvdoT dxTvdnTtd TedtTedoTvdiTedaTedT d Ttd:TedtTtd TeddTvdKTediTndgTednTtdgTtd TedKT snTesTtsOTesKTnstTvsOTvsTnsKTvs:Tts:TesTvs:Tns Tes T sdTts TtsoTesOTtslTesnTesKTesOTns
+TnsTesOT s T sKTesOT sKTvsOTtsTtsKTtsT sKTesTesKT sKTesOT siT stTnsaTvsaTesKTnsOT s
+TesKTnsT s TvsKTeslT sOTesT sKTtseTnseTvs_Tts_T sOTes TnsOT s T spTespTesdTesdTeseTtseTeseTt_rTe_rTv_oTes:T s:Tes:TnfwOTvfrKT fwT frTefpuTefpKTefpTvf:TnsOTvsOTnsoTvs Tvs TvsTtssTnsT sKTesTnsTvsTtsoTesmTnsgTesiTeslTtsTvsKTnsTvsOTtsT s_Tnsu
 
-(1/9) perf_nmem.py:perfNMEM.test_pmu_register_dmesg: PASS (3.47 s)
-(2/9) perf_nmem.py:perfNMEM.test_sysfs: PASS (1.15 s)
-(3/9) perf_nmem.py:perfNMEM.test_pmu_count: PASS (1.08 s)
-(4/9) perf_nmem.py:perfNMEM.test_all_events: PASS (18.15 s)
-(5/9) perf_nmem.py:perfNMEM.test_all_group_events: PASS (2.22 s)
-(6/9) perf_nmem.py:perfNMEM.test_mixed_events: CANCEL: With single PMU 
-mixed events test is not possible. (1.18 s)
-(7/9) perf_nmem.py:perfNMEM.test_pmu_cpumask: PASS (1.12 s)
-(8/9) perf_nmem.py:perfNMEM.test_cpumask: PASS (1.17 s)
-(9/9) perf_nmem.py:perfNMEM.test_cpumask_cpu_off: PASS (1.81 s)
+which really doesn't have enough different characters in it to be a fifo problem.
+That looks like a UART struggling to find valid start and stop bits
+on a continuous data stream that doesn't match the baud rate.
 
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+It may also be that whatever 'terminal' is being used is masking off the 0x80 bit.
 
--- 
-Thanks and Regards
-R.Nageswara Sastry
+Another possibility is that the count of characters is about right.
+But the receiver is misaligned on the 10 bit async characters.
+Because these is no line idle, it never synchronises properly.
+ISTR a real async terminal behaving that way.
+But I think that gives a much wider range of characters - just the wrong ones.
+
+There is also a third error pattern:
+^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[A^[[
+which might be an 'even more wrong' baud rate.
+
+So maybe we are both right - for different bits of the error.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,450 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424EA4C43EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EEA4C43F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240275AbiBYLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S240292AbiBYLwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240210AbiBYLuZ (ORCPT
+        with ESMTP id S240279AbiBYLwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:50:25 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C87414FFF9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:49:52 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so5793543oos.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=7CaoA3Uf3+S7DwsJUxaMYisyGapg8ps+3goNhqGa/U0=;
-        b=DVhPtupPS/+6Z5lginIeboI1WwHylZMKuVgFNOdBfO7daNAj/sjbh47fwogpg+jOT9
-         J8byvYivG6eEG3F368W857lJdP5y1ig08cNGVp4lT10mNo83BFCaODhRQNJo+XMq6zzs
-         WnNdCf6oy2F1p72lZPT/Y6VWcAJ+bSw44aqyEwjvaTNMEHC+k5Btme9ZPcGzDoBAjiuY
-         Q7K+0AZCMshTsq6+edJBdSiEJRKmR5HXEmIba1KF98RIBxFUBIh8k7c8iDvPwVyvd2g+
-         8bfrKndHbA5cQOSgeKPsrOnqmFYYsnXtk4N4nI+8n0JhXMWBCxBKXMcfnXyJZIpXOjl2
-         0BXw==
+        Fri, 25 Feb 2022 06:52:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 056A113D55D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645789924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TczmJXW3cf8MAYhPlLedjQbAu9sWmw7nekowqPG8i94=;
+        b=UBxsCvimpcqwrTpXIfqCoksIqYLkrrreeYE+zT5NClQ0E+/Ox15B010DmLIzeevo2sLvzv
+        z3KftHfCt6clAXO+HAVebUVxnYOfxDdcyYGsLc4uvp5UHj3vHWIsArJbjyW+ErA8pd9DNc
+        TY4qcdURlh+4yk07aKzogrAxWoxSnDQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-JJ-8a02rO_iaYwHqfFp0qg-1; Fri, 25 Feb 2022 06:52:03 -0500
+X-MC-Unique: JJ-8a02rO_iaYwHqfFp0qg-1
+Received: by mail-wr1-f72.google.com with SMTP id q12-20020adfbb8c000000b001ea938f79e9so780936wrg.23
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 03:52:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=7CaoA3Uf3+S7DwsJUxaMYisyGapg8ps+3goNhqGa/U0=;
-        b=j0zVorcHzWigXIOO8Iqyz5NSJO3ILe91K5m/xQYcu//voCfNzB6DIHkW6/zO7tWrFD
-         HMAR+Q64oRohPAXq+7ggsQM3AeaEE3n/Q8Iu0jsapkUbBS7hiwesIgpgpJuEEP2hz7mK
-         cW2ktoFzB0sJl0daZsAUgKNGbe3lSrO059pK1263+F5/GoJFHnNUQzCM7pzCLWWeZZ9V
-         MnX4e6NkkQ8s7yhFZxV0TkTAuUwwRFwNtQ2yOC0TR0uKhsE5tsnb5S2bXGZwDen32qZB
-         EIlUHoT+giNJJVmRtkGmHOtYndcxd9qYzKy3X1JtQsCTtmbT32HouU64x1fYRnwpyRU7
-         6tfQ==
-X-Gm-Message-State: AOAM530lfNd231n9AqN/Hbkrh8NcK5Oxq2vD+cOO3N3h9da3VtaxHpq4
-        RAbdSbpvmaR87OcVPV5dqLCelaQYsYg32381j9X62w==
-X-Google-Smtp-Source: ABdhPJym28jh6caShkcMZmecKjdgFCCt1cLlRid1IVYYv7gZMf+oUREfLjPQV+8p9HJOnPAGBxXlBM7gCV+NwXCRPCY=
-X-Received: by 2002:a05:6870:b486:b0:d6:f01f:41cc with SMTP id
- y6-20020a056870b48600b000d6f01f41ccmr286022oap.41.1645789791633; Fri, 25 Feb
- 2022 03:49:51 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 25 Feb 2022 03:49:51 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=TczmJXW3cf8MAYhPlLedjQbAu9sWmw7nekowqPG8i94=;
+        b=BDUEknSJa9FVViC/z3nNb9faeSN9slUxl5DZIivbsALeYxloq6HD9JzoItoQPPQn9V
+         WinDbCC/CCL5j31Pls68vfqv26oV5JkWxTgabOGDacVrR9bLjd0pEN/ieY8+pWNZWS1z
+         OAQ/Vq95wJIfEJJ79RPJqOcOUjDm67Bs0W0dVYeLPtyAqet4Sz+F16XwTC3FHBSuzIV2
+         F8KQXWM0B/OXJVzpId0I2qGV4UL7uBbLzv3/frmC6GrHvfUNeOW/wZRVFANccDOnXfbO
+         13HRcxrebmOYRcZn/SqFqkzduvy1LZ5XxFwSvqWFfx1tlBA/vMbUHls+xkt9xCfG7FFv
+         WAzQ==
+X-Gm-Message-State: AOAM532TWbq8BeG6FJZH+1PhnV+jmW/XDzBh9Tbou14m/Efiv/rL111r
+        X6w5dc49d8H7qNAyrMDesfL5nAxuksPP6r/Nb38E/AqHUeLBEiQmWPGwNiWfxgidQvL7cuiA4Cw
+        0U9FeSXKJKzmT1N+vP5lqCQWW
+X-Received: by 2002:a5d:4387:0:b0:1ed:a13a:ef0c with SMTP id i7-20020a5d4387000000b001eda13aef0cmr5798063wrq.62.1645789921677;
+        Fri, 25 Feb 2022 03:52:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzxdsOBZKB6TtVSCJiDjEoPKDv3L7GJlEpOUn3FGf1Qp9ppyCiHKrBp77TZNcXz9ACVbskxuQ==
+X-Received: by 2002:a5d:4387:0:b0:1ed:a13a:ef0c with SMTP id i7-20020a5d4387000000b001eda13aef0cmr5798045wrq.62.1645789921416;
+        Fri, 25 Feb 2022 03:52:01 -0800 (PST)
+Received: from redhat.com ([2.55.145.157])
+        by smtp.gmail.com with ESMTPSA id m10-20020adfe94a000000b001ef57f562ccsm2018112wrn.51.2022.02.25.03.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 03:52:00 -0800 (PST)
+Date:   Fri, 25 Feb 2022 06:51:55 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        adrian@parity.io, dwmw@amazon.co.uk,
+        Alexander Graf <graf@amazon.com>, colmmacc@amazon.com,
+        raduweis@amazon.com, berrange@redhat.com,
+        Laszlo Ersek <lersek@redhat.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Eduardo Habkost <ehabkost@redhat.com>, ben@skyportsystems.com,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>
+Subject: Re: [PATCH v3 2/2] virt: vmgenid: introduce driver for
+ reinitializing RNG on VM fork
+Message-ID: <20220225064445-mutt-send-email-mst@kernel.org>
+References: <20220224133906.751587-1-Jason@zx2c4.com>
+ <20220224133906.751587-3-Jason@zx2c4.com>
+ <CAMj1kXE-2sknZD7o72G-ZARpfm4Q0m+im1pTLuPhPu6TkqKOPQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <bdd867fe-3103-a99b-e9ec-02df6a18d385@collabora.com>
-References: <20220218145437.18563-1-granquet@baylibre.com> <20220218145437.18563-15-granquet@baylibre.com>
- <bdd867fe-3103-a99b-e9ec-02df6a18d385@collabora.com>
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: alot/0.10
-Date:   Fri, 25 Feb 2022 03:49:51 -0800
-Message-ID: <CABnWg9tfutasgiUaLBvb8CxTycLKf8Ry=9PMi2Vtu2JeB4a=dQ@mail.gmail.com>
-Subject: Re: [PATCH v8 14/19] phy: phy-mtk-dp: Add driver for DP phy
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMj1kXE-2sknZD7o72G-ZARpfm4Q0m+im1pTLuPhPu6TkqKOPQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2022-02-21 15:31:51)
-> Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri, Feb 25, 2022 at 12:24:05PM +0100, Ard Biesheuvel wrote:
+> On Thu, 24 Feb 2022 at 14:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 > >
-> > This is a new driver that supports the integrated DisplayPort phy for
-> > mediatek SoCs, especially the mt8195. The phy is integrated into the
-> > DisplayPort controller and will be created by the mtk-dp driver. This
-> > driver expects a struct regmap to be able to work on the same registers
-> > as the DisplayPort controller. It sets the device data to be the struct
-> > phy so that the DisplayPort controller can easily work with it.
+> > VM Generation ID is a feature from Microsoft, described at
+> > <https://go.microsoft.com/fwlink/?LinkId=260709>, and supported by
+> > Hyper-V and QEMU. Its usage is described in Microsoft's RNG whitepaper,
+> > <https://aka.ms/win10rng>, as:
 > >
-> > The driver does not have any devicetree bindings because the datasheet
-> > does not list the controller and the phy as distinct units.
+> >     If the OS is running in a VM, there is a problem that most
+> >     hypervisors can snapshot the state of the machine and later rewind
+> >     the VM state to the saved state. This results in the machine running
+> >     a second time with the exact same RNG state, which leads to serious
+> >     security problems.  To reduce the window of vulnerability, Windows
+> >     10 on a Hyper-V VM will detect when the VM state is reset, retrieve
+> >     a unique (not random) value from the hypervisor, and reseed the root
+> >     RNG with that unique value.  This does not eliminate the
+> >     vulnerability, but it greatly reduces the time during which the RNG
+> >     system will produce the same outputs as it did during a previous
+> >     instantiation of the same VM state.
 > >
-> > The interaction with the controller can be covered by the configure
-> > callback of the phy framework and its displayport parameters.
+> > Linux has the same issue, and given that vmgenid is supported already by
+> > multiple hypervisors, we can implement more or less the same solution.
+> > So this commit wires up the vmgenid ACPI notification to the RNG's newly
+> > added add_vmfork_randomness() function.
 > >
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > It can be used from qemu via the `-device vmgenid,guid=auto` parameter.
+> > After setting that, use `savevm` in the monitor to save the VM state,
+> > then quit QEMU, start it again, and use `loadvm`. That will trigger this
+> > driver's notify function, which hands the new UUID to the RNG. This is
+> > described in <https://git.qemu.org/?p=qemu.git;a=blob;f=docs/specs/vmgenid.txt>.
+> > And there are hooks for this in libvirt as well, described in
+> > <https://libvirt.org/formatdomain.html#general-metadata>.
+> >
+> > Note, however, that the treatment of this as a UUID is considered to be
+> > an accidental QEMU nuance, per
+> > <https://github.com/libguestfs/virt-v2v/blob/master/docs/vm-generation-id-across-hypervisors.txt>,
+> > so this driver simply treats these bytes as an opaque 128-bit binary
+> > blob, as per the spec. This doesn't really make a difference anyway,
+> > considering that's how it ends up when handed to the RNG in the end.
+> >
+> > This driver builds on prior work from Adrian Catangiu at Amazon, and it
+> > is my hope that that team can resume maintenance of this driver.
+> >
+> > Cc: Adrian Catangiu <adrian@parity.io>
+> > Cc: Laszlo Ersek <lersek@redhat.com>
+> > Cc: Daniel P. Berrangé <berrange@redhat.com>
+> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > > ---
-> >   MAINTAINERS                       |   1 +
-> >   drivers/phy/mediatek/Kconfig      |   8 ++
-> >   drivers/phy/mediatek/Makefile     |   1 +
-> >   drivers/phy/mediatek/phy-mtk-dp.c | 199 ++++++++++++++++++++++++++++++
-> >   4 files changed, 209 insertions(+)
-> >   create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
+> >  drivers/virt/Kconfig   |   9 +++
+> >  drivers/virt/Makefile  |   1 +
+> >  drivers/virt/vmgenid.c | 121 +++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 131 insertions(+)
+> >  create mode 100644 drivers/virt/vmgenid.c
 > >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index fca970a46e77a..33a05d396dd03 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -6467,6 +6467,7 @@ L:      linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-> >   S:  Supported
-> >   F:  Documentation/devicetree/bindings/display/mediatek/
-> >   F:  drivers/gpu/drm/mediatek/
-> > +F:   drivers/phy/mediatek/phy-mtk-dp.c
-> >   F:  drivers/phy/mediatek/phy-mtk-hdmi*
-> >   F:  drivers/phy/mediatek/phy-mtk-mipi*
+> > diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
+> > index 8061e8ef449f..d3276dc2095c 100644
+> > --- a/drivers/virt/Kconfig
+> > +++ b/drivers/virt/Kconfig
+> 
+> drivers/virt does not have a maintainer and this code needs one.
+> 
+> > @@ -13,6 +13,15 @@ menuconfig VIRT_DRIVERS
 > >
-> > diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
-> > index 55f8e6c048ab3..f7ec860590492 100644
-> > --- a/drivers/phy/mediatek/Kconfig
-> > +++ b/drivers/phy/mediatek/Kconfig
-> > @@ -55,3 +55,11 @@ config PHY_MTK_MIPI_DSI
-> >       select GENERIC_PHY
-> >       help
-> >         Support MIPI DSI for Mediatek SoCs.
+> >  if VIRT_DRIVERS
+> >
+> > +config VMGENID
+> > +       tristate "Virtual Machine Generation ID driver"
+> > +       default y
+> 
+> Please make this default m - this code can run as a module and the
+> feature it relies on is discoverable by udev
+
+Or don't supply a default - I don't see why this has any preference.
+
+> > +       depends on ACPI
+> > +       help
+> > +         Say Y here to use the hypervisor-provided Virtual Machine Generation ID
+> > +         to reseed the RNG when the VM is cloned. This is highly recommended if
+> > +         you intend to do any rollback / cloning / snapshotting of VMs.
 > > +
-> > +config PHY_MTK_DP
-> > +     tristate "MediaTek DP-PHY Driver"
-> > +     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +     depends on OF
-> > +     select GENERIC_PHY
-> > +     help
-> > +       Support DisplayPort PHY for Mediatek SoCs.
-> > diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
-> > index ace660fbed3a1..4ba1e06504346 100644
-> > --- a/drivers/phy/mediatek/Makefile
-> > +++ b/drivers/phy/mediatek/Makefile
-> > @@ -3,6 +3,7 @@
-> >   # Makefile for the phy drivers.
-> >   #
+> >  config FSL_HV_MANAGER
+> >         tristate "Freescale hypervisor management driver"
+> >         depends on FSL_SOC
+> > diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+> > index 3e272ea60cd9..108d0ffcc9aa 100644
+> > --- a/drivers/virt/Makefile
+> > +++ b/drivers/virt/Makefile
+> > @@ -4,6 +4,7 @@
+> >  #
 > >
-> > +obj-$(CONFIG_PHY_MTK_DP)             += phy-mtk-dp.o
-> >   obj-$(CONFIG_PHY_MTK_TPHY)          += phy-mtk-tphy.o
-> >   obj-$(CONFIG_PHY_MTK_UFS)           += phy-mtk-ufs.o
-> >   obj-$(CONFIG_PHY_MTK_XSPHY)         += phy-mtk-xsphy.o
-> > diff --git a/drivers/phy/mediatek/phy-mtk-dp.c b/drivers/phy/mediatek/phy-mtk-dp.c
+> >  obj-$(CONFIG_FSL_HV_MANAGER)   += fsl_hypervisor.o
+> > +obj-$(CONFIG_VMGENID)          += vmgenid.o
+> >  obj-y                          += vboxguest/
+> >
+> >  obj-$(CONFIG_NITRO_ENCLAVES)   += nitro_enclaves/
+> > diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
 > > new file mode 100644
-> > index 0000000000000..2841dd3f22543
+> > index 000000000000..5da4dc8f25e3
 > > --- /dev/null
-> > +++ b/drivers/phy/mediatek/phy-mtk-dp.c
-> > @@ -0,0 +1,199 @@
+> > +++ b/drivers/virt/vmgenid.c
+> > @@ -0,0 +1,121 @@
 > > +// SPDX-License-Identifier: GPL-2.0
 > > +/*
->
-> Would be nice to add:
->
->   * phy-mtk-dp.c - MediaTek DisplayPort PHY driver
->   *
->
-> > + * Copyright (c) 2021 BayLibre
-> > + * Author: Markus Schneider-Pargmann <msp@baylibre.com>
+> > + * Virtual Machine Generation ID driver
+> > + *
+> > + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> > + * Copyright (C) 2020 Amazon. All rights reserved.
+> > + * Copyright (C) 2018 Red Hat Inc. All rights reserved.
 > > + */
 > > +
-> > +#include <linux/delay.h>
-> > +#include <linux/io.h>
-> > +#include <linux/of.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/acpi.h>
+> > +#include <linux/random.h>
 > > +
-> > +#define PHY_OFFSET 0x1000
+> > +ACPI_MODULE_NAME("vmgenid");
 > > +
-> > +#define MTK_DP_PHY_DIG_PLL_CTL_1             (PHY_OFFSET + 0x014)
-> > +#define TPLL_SSC_EN                                  BIT(3)
+> > +enum { VMGENID_SIZE = 16 };
 > > +
-> > +#define MTK_DP_PHY_DIG_BIT_RATE              (PHY_OFFSET + 0x03C)
-> > +#define BIT_RATE_RBR                         0
-> > +#define BIT_RATE_HBR                         1
-> > +#define BIT_RATE_HBR2                                2
-> > +#define BIT_RATE_HBR3                                3
+> > +static struct {
+> > +       u8 this_id[VMGENID_SIZE];
+> > +       u8 *next_id;
+> > +} state;
 > > +
-> > +#define MTK_DP_PHY_DIG_SW_RST                (PHY_OFFSET + 0x038)
-> > +#define DP_GLB_SW_RST_PHYD                   BIT(0)
+> 
+> This state is singular
+> 
+> 
+> > +static int vmgenid_acpi_add(struct acpi_device *device)
+> > +{
+> 
+> ... whereas this may be called for multiple instances of the device.
+> This likely makes no sense, so it is better to reject it here.
+> 
+> Otherwise, the state should be allocated dynamically.
+> 
+> > +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER };
+> > +       union acpi_object *pss;
+> > +       phys_addr_t phys_addr;
+> > +       acpi_status status;
+> > +       int ret = 0;
 > > +
-> > +#define MTK_DP_LANE0_DRIVING_PARAM_3         (PHY_OFFSET + 0x138)
-> > +#define MTK_DP_LANE1_DRIVING_PARAM_3         (PHY_OFFSET + 0x238)
-> > +#define MTK_DP_LANE2_DRIVING_PARAM_3         (PHY_OFFSET + 0x338)
-> > +#define MTK_DP_LANE3_DRIVING_PARAM_3         (PHY_OFFSET + 0x438)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT    0x10
->
-> BIT(4)
->
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT    (0x14 << 8)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT    (0x18 << 16)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT    (0x20 << 24)
->
-> Please use the GENMASK() macro for these definitions.
->
-I will convert all the definitions to BIT() and GENMASK() for v9
-
-> > +#define DRIVING_PARAM_3_DEFAULT              (XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT)
+> > +       if (!device)
+> > +               return -EINVAL;
 > > +
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE0_DEFAULT    0x18
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE1_DEFAULT    (0x1e << 8)
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE2_DEFAULT    (0x24 << 16)
-> > +#define XTP_LN_TX_LCTXC0_SW2_PRE0_DEFAULT    (0x20 << 24)
-> > +#define DRIVING_PARAM_4_DEFAULT              (XTP_LN_TX_LCTXC0_SW1_PRE0_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW1_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW1_PRE2_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW2_PRE0_DEFAULT)
+> > +       status = acpi_evaluate_object(device->handle, "ADDR", NULL, &buffer);
+> > +       if (ACPI_FAILURE(status)) {
+> > +               ACPI_EXCEPTION((AE_INFO, status, "Evaluating ADDR"));
+> > +               return -ENODEV;
+> > +       }
+> > +       pss = buffer.pointer;
+> > +       if (!pss || pss->type != ACPI_TYPE_PACKAGE || pss->package.count != 2 ||
+> > +           pss->package.elements[0].type != ACPI_TYPE_INTEGER ||
+> > +           pss->package.elements[1].type != ACPI_TYPE_INTEGER) {
+> > +               ret = -EINVAL;
+> > +               goto out;
+> > +       }
 > > +
-> > +#define XTP_LN_TX_LCTXC0_SW2_PRE1_DEFAULT    0x28
-> > +#define XTP_LN_TX_LCTXC0_SW3_PRE0_DEFAULT    (0x30 << 8)
-> > +#define DRIVING_PARAM_5_DEFAULT              (XTP_LN_TX_LCTXC0_SW2_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXC0_SW3_PRE0_DEFAULT)
+> > +       phys_addr = (pss->package.elements[0].integer.value << 0) |
+> > +                   (pss->package.elements[1].integer.value << 32);
+> > +       state.next_id = acpi_os_map_memory(phys_addr, VMGENID_SIZE);
+> 
+> No need to use acpi_os_map_memory() here, plain memremap() should be fine.
+> 
+> > +       if (!state.next_id) {
+> > +               ret = -ENOMEM;
+> > +               goto out;
+> > +       }
+> > +       device->driver_data = &state;
 > > +
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE0_DEFAULT   0x00
->
-> This is just 0
->
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE1_DEFAULT   (0x04 << 8)
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE2_DEFAULT   (0x08 << 16)
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE3_DEFAULT   (0x10 << 24)
-> > +#define DRIVING_PARAM_6_DEFAULT              (XTP_LN_TX_LCTXCP1_SW0_PRE0_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW0_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW0_PRE2_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW0_PRE3_DEFAULT)
+> > +       memcpy(state.this_id, state.next_id, sizeof(state.this_id));
+> > +       add_device_randomness(state.this_id, sizeof(state.this_id));
 > > +
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE0_DEFAULT   0x00
->
-> ...just 0 again
->
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE1_DEFAULT   (0x06 << 8)
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE2_DEFAULT   (0x0c << 16)
-> > +#define XTP_LN_TX_LCTXCP1_SW2_PRE0_DEFAULT   (0x00 << 24)
->
-> zero shifted by a million bits is still zero, so this statement does not make sense
->
-> > +#define DRIVING_PARAM_7_DEFAULT              (XTP_LN_TX_LCTXCP1_SW1_PRE0_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW1_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW1_PRE2_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW2_PRE0_DEFAULT)
+> > +out:
+> > +       ACPI_FREE(buffer.pointer);
+> > +       return ret;
+> > +}
 > > +
-> > +#define XTP_LN_TX_LCTXCP1_SW2_PRE1_DEFAULT   0x08
-> > +#define XTP_LN_TX_LCTXCP1_SW3_PRE0_DEFAULT   (0x00 << 8)
->
-> Same here.
->
-> > +#define DRIVING_PARAM_8_DEFAULT              (XTP_LN_TX_LCTXCP1_SW2_PRE1_DEFAULT | \
-> > +                                              XTP_LN_TX_LCTXCP1_SW3_PRE0_DEFAULT)
+> > +static int vmgenid_acpi_remove(struct acpi_device *device)
+> > +{
+> > +       if (!device || acpi_driver_data(device) != &state)
+> > +               return -EINVAL;
+> > +       device->driver_data = NULL;
+> > +       if (state.next_id)
+> > +               acpi_os_unmap_memory(state.next_id, VMGENID_SIZE);
+> 
+> memunmap() here
+> 
+> > +       state.next_id = NULL;
+> > +       return 0;
+> > +}
 > > +
-> > +struct mtk_dp_phy {
-> > +     struct regmap *regs;
+> > +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
+> > +{
+> > +       u8 old_id[VMGENID_SIZE];
+> > +
+> > +       if (!device || acpi_driver_data(device) != &state)
+> > +               return;
+> > +       memcpy(old_id, state.this_id, sizeof(old_id));
+> > +       memcpy(state.this_id, state.next_id, sizeof(state.this_id));
+> > +       if (!memcmp(old_id, state.this_id, sizeof(old_id)))
+> > +               return;
+> 
+> Is this little dance really necessary? I.e., can we just do
+> 
+> add_vmfork_randomness(state.next_id, VMGENID_SIZE)
+> 
+> and be done with it?
+> 
+> And if we cannot, is it ok to just return without some kind of
+> diagnostic message?
+> 
+> > +       add_vmfork_randomness(state.this_id, sizeof(state.this_id));
+> > +}
+> > +
+> > +static const struct acpi_device_id vmgenid_ids[] = {
+> > +       {"VMGENID", 0},
+> > +       {"QEMUVGID", 0},
+> > +       { },
 > > +};
 > > +
-> > +static int mtk_dp_phy_init(struct phy *phy)
-> > +{
-> > +     struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +     u32 driving_params[] = {
-> > +             DRIVING_PARAM_3_DEFAULT,
-> > +             DRIVING_PARAM_4_DEFAULT,
-> > +             DRIVING_PARAM_5_DEFAULT,
-> > +             DRIVING_PARAM_6_DEFAULT,
-> > +             DRIVING_PARAM_7_DEFAULT,
-> > +             DRIVING_PARAM_8_DEFAULT
-> > +     };
-> > +
-> > +     regmap_bulk_write(dp_phy->regs, MTK_DP_LANE0_DRIVING_PARAM_3,
-> > +                       driving_params, ARRAY_SIZE(driving_params));
-> > +     regmap_bulk_write(dp_phy->regs, MTK_DP_LANE1_DRIVING_PARAM_3,
-> > +                       driving_params, ARRAY_SIZE(driving_params));
-> > +     regmap_bulk_write(dp_phy->regs, MTK_DP_LANE2_DRIVING_PARAM_3,
-> > +                       driving_params, ARRAY_SIZE(driving_params));
-> > +     regmap_bulk_write(dp_phy->regs, MTK_DP_LANE3_DRIVING_PARAM_3,
-> > +                       driving_params, ARRAY_SIZE(driving_params));
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int mtk_dp_phy_configure(struct phy *phy, union phy_configure_opts *opts)
-> > +{
-> > +     struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +     u32 val;
-> > +
-> > +     if (opts->dp.set_rate) {
-> > +             switch (opts->dp.link_rate) {
-> > +             default:
-> > +                     dev_err(&phy->dev,
-> > +                             "Implementation error, unknown linkrate %x\n",
-> > +                             opts->dp.link_rate);
-> > +                     return -EINVAL;
-> > +             case 1620:
-> > +                     val = BIT_RATE_RBR;
-> > +                     break;
-> > +             case 2700:
-> > +                     val = BIT_RATE_HBR;
-> > +                     break;
-> > +             case 5400:
-> > +                     val = BIT_RATE_HBR2;
-> > +                     break;
-> > +             case 8100:
-> > +                     val = BIT_RATE_HBR3;
-> > +                     break;
-> > +             }
-> > +             regmap_write(dp_phy->regs, MTK_DP_PHY_DIG_BIT_RATE, val);
-> > +     }
-> > +
-> > +     regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_PLL_CTL_1,
-> > +                        TPLL_SSC_EN, opts->dp.ssc ? TPLL_SSC_EN : 0);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int mtk_dp_phy_reset(struct phy *phy)
-> > +{
-> > +     struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +
-> > +     regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> > +                        DP_GLB_SW_RST_PHYD, 0);
->
-> Please, when you add delays/sleeps, add a comment explaining the reason for that.
->
-> To you.. and to me as well.. the reason is very much known and honestly obvious,
-> but let's be nice with people that don't know the MediaTek platforms :)
->
-It's sadly not obvious to me, I've asked mediatek engineers mutlple
-times for these
-kind of information, but I'm rather short on information... :-/
-
-> > +     usleep_range(50, 200);
-> > +     regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> > +                        DP_GLB_SW_RST_PHYD, 1);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct phy_ops mtk_dp_phy_dev_ops = {
-> > +     .init = mtk_dp_phy_init,
-> > +     .configure = mtk_dp_phy_configure,
-> > +     .reset = mtk_dp_phy_reset,
-> > +     .owner = THIS_MODULE,
+> > +static struct acpi_driver acpi_driver = {
+> > +       .name = "vm_generation_id",
+> > +       .ids = vmgenid_ids,
+> > +       .owner = THIS_MODULE,
+> > +       .ops = {
+> > +               .add = vmgenid_acpi_add,
+> > +               .remove = vmgenid_acpi_remove,
+> > +               .notify = vmgenid_acpi_notify,
+> > +       }
 > > +};
 > > +
-> > +static int mtk_dp_phy_probe(struct platform_device *pdev)
+> > +static int __init vmgenid_init(void)
 > > +{
-> > +     struct device *dev = &pdev->dev;
-> > +     struct mtk_dp_phy *dp_phy;
-> > +     struct phy *phy;
->
->         struct regmap *regs = (blah);
->
->         if (!dp_phy->regs)
->                 return -EINVAL;
->
-> Doing that before allocating the dp_phy struct seems sensible as, even
-> if it's unlikely that this platform data is not passed, we'd be sparing
-> some time around.
->
-> Besides - I think that the error message is not necessary here, but, if
-> you really want to keep it, please return dev_err_probe(): using it in
-> these cases is also allowed.
->
-You are right, it's logical to return as early as possible.
-
-> > +
-> > +     dp_phy = devm_kzalloc(dev, sizeof(*dp_phy), GFP_KERNEL);
-> > +     if (!dp_phy)
-> > +             return -ENOMEM;
-> > +
-> > +     dp_phy->regs = *(struct regmap **)dev->platform_data;
-> > +     if (!dp_phy->regs) {
-> > +             dev_err(dev, "No data passed, requires struct regmap**\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     phy = devm_phy_create(dev, NULL, &mtk_dp_phy_dev_ops);
->
->         if (IS_ERR(phy))
->                 return dev_err_probe(dev, PTR_ERR(phy), "Cannot create DP PHY\n");
->
-> > +     if (IS_ERR(phy)) {
-> > +             dev_err(dev, "Failed to create DP PHY: %ld\n", PTR_ERR(phy));
-> > +             return PTR_ERR(phy);
-> > +     }
-> > +     phy_set_drvdata(phy, dp_phy);
-> > +
-> > +     if (!dev->of_node)
->
-> This will never happen if you use DT to probe this driver - and please do!
->
-> An example device-tree binding would be:
->
-> dp_phy: phy@somewhere {
->         compatible = "mediatek,mt8195-dp-phy", "mediatek,dp-phy";
->         reg = <...>;
->         #phy-cells = <0>;
-> };
->
-> mtk_dp: displayport-controller@somewhere_else {
->         compatible = "mediatek,mt8195-edp-tx", "mediatek,edp-tx";
->         reg = <....>;
->         other-properties;
->
->         phys = <&dp_phy>;
->         phy-names = "dp";
-> };
->
-> Also, remember: since you're nicely using regmap, if you - for any reason - need
-> to share the same iospace between the two drivers, you can always use a
-> syscon node for that purpose.
->
-Sadly, I'm not using DT to prove this driver... and this driver will
-probably never
-be used with DT.
-This phy is actually an integral part of the dp ip, this driver is
-only a "logical"
-separation between the DP/phy functionnalities.
-It's probed from the DP driver with a call to `platform_register_device()`.
-Both the DP and phy driver share the same regmap struct.
-
-Markus tried to explain that in the commit message, please tell me if this needs
-a reword?
-The original discussion is here:
-https://lore.kernel.org/all/CAAOTY__cJMqcAieEraJ2sz4gi0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/
-
-I didn't know about syscon, I'll have a look... but it's definitively what
-I'm doing here...
-
-> > +             phy_create_lookup(phy, "dp", dev_name(dev));
-> > +
-> > +     return 0;
+> > +       return acpi_bus_register_driver(&acpi_driver);
 > > +}
 > > +
-> > +struct platform_driver mtk_dp_phy_driver = {
-> > +     .probe = mtk_dp_phy_probe,
-> > +     .driver = {
-> > +             .name = "mediatek-dp-phy",
-> > +     },
-> > +};
-> > +module_platform_driver(mtk_dp_phy_driver);
+> > +static void __exit vmgenid_exit(void)
+> > +{
+> > +       acpi_bus_unregister_driver(&acpi_driver);
+> > +}
 > > +
-> > +MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com>");
-> > +MODULE_DESCRIPTION("MediaTek DP PHY Driver");
+> > +module_init(vmgenid_init);
+> > +module_exit(vmgenid_exit);
+> > +
+> > +MODULE_DEVICE_TABLE(acpi, vmgenid_ids);
+> > +MODULE_DESCRIPTION("Virtual Machine Generation ID");
 > > +MODULE_LICENSE("GPL v2");
->
+> > --
+> > 2.35.1
+> >
+

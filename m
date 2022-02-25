@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA7D4C473D
+	by mail.lfdr.de (Postfix) with ESMTP id A36D24C473C
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241705AbiBYOQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S241717AbiBYOQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiBYOQm (ORCPT
+        with ESMTP id S229872AbiBYOQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:16:42 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A52177C0;
-        Fri, 25 Feb 2022 06:16:09 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id y7so7563499oih.5;
-        Fri, 25 Feb 2022 06:16:09 -0800 (PST)
+        Fri, 25 Feb 2022 09:16:46 -0500
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C125210473;
+        Fri, 25 Feb 2022 06:16:14 -0800 (PST)
+Received: by mail-oi1-f174.google.com with SMTP id 12so7510463oix.12;
+        Fri, 25 Feb 2022 06:16:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=dRIJc0Yk3FXYXz/Yh0SUlf/wEonYpjpvZAyiUC72gd0=;
-        b=d+8+Nvy2Zb04T/6bCKwgdBkKywjqy9iE7LXkjY4BpDFrSIgsHA+L2aMDftXmnpuzvM
-         NJ2BudlEJGBsrHW0tk//IWRhBPao98MdZZcQU5Tq20WOMYUwAiGLLh5YQeHyGN8CxX38
-         fVyfz9jdosDTDKSAyNqhHGlcLJBvDsm643jY0Zh6TL+oDAbLKDYiqaSawBApwPwA63Y9
-         UQ4Y6Z2Z6p3ocawwwbEjGCRJ8k7D7i5EU9dEODd70UTBqzMfcIJzE8hi39E/U4g3EtML
-         J9duYuRZenn06SWyDWrI2/rLuBCMXo2wNFoAX5JyoLl47t3rWFdfiV/WQ3wQxYUlgdPM
-         leSw==
-X-Gm-Message-State: AOAM533FrpQaFETy1hwN8XWqTRm/Rnua+Vvst65yO/dP/Q2ZeGulnmoR
-        hKlWsqq9lY5vIxIazuX8UAVUB1U0wg==
-X-Google-Smtp-Source: ABdhPJxSQW0T+fA1EUjigvVZ/2B3NsbrmJxB00stlugFweRHMzUXPV47lSjGLz5Z6t+WIOER0M4VkA==
-X-Received: by 2002:aca:5b45:0:b0:2bc:8362:b053 with SMTP id p66-20020aca5b45000000b002bc8362b053mr1612054oib.36.1645798569028;
-        Fri, 25 Feb 2022 06:16:09 -0800 (PST)
+        bh=u34k0AC5/CDX3ztycNN10YHu6FGX1mXLVB5DOobgxjQ=;
+        b=3mnk1oF+UiVL/vyBmvaRpyjANF41RKqyqDD0IGKhgkAgWF24RGaImqUndKubkH5r9S
+         wtLllIwBFfEjBka3glEcIRqTERAMP57PvFHzH4Tl2rumTzThe1sE8ECKoBnoMgybJkcb
+         3qrKycpVzobw2JGXW4ukveHqRtmHjKFdYm63asGXSNJb4VJf0LEN3Lyv2pSv0r5inc8h
+         t6TgCaLAhf2ndxT3pYSqgCwiKXe2mM2A0z0pg26fcI9T2dCJ1qoCyWW3XuyDaw9HH340
+         3yZVeuSz2G/YxTb/7lrF10lYvW16gt5iZKBhFmSBrgKZsiedrijxUTjQUN6o2FjOgK7A
+         uFFg==
+X-Gm-Message-State: AOAM532p+mKbBsdHT1dvf8/fgl9kBHZZ0c9ri74fb1dipgf7Vl4PT+JC
+        97cU5EuiQRMDbBQBnatzx0GVlLw4qA==
+X-Google-Smtp-Source: ABdhPJzzMZgmxUhR8u/KeuADsvTo8SJ96KMpPuaxyVoSa5xh1WmCWCIHDMCoHioPv/3JyFd0UWO5OQ==
+X-Received: by 2002:a05:6808:3027:b0:2cf:d108:b59 with SMTP id ay39-20020a056808302700b002cfd1080b59mr1592705oib.309.1645798573542;
+        Fri, 25 Feb 2022 06:16:13 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id lc4-20020a056871418400b000c8a240183csm1202630oab.25.2022.02.25.06.16.07
+        by smtp.gmail.com with ESMTPSA id eq37-20020a056870a92500b000c6699dad62sm1357189oab.41.2022.02.25.06.16.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 06:16:08 -0800 (PST)
-Received: (nullmailer pid 857884 invoked by uid 1000);
+        Fri, 25 Feb 2022 06:16:12 -0800 (PST)
+Received: (nullmailer pid 857895 invoked by uid 1000);
         Fri, 25 Feb 2022 14:16:07 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org, joel@jms.id.au,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220224225635.40538-2-eajames@linux.ibm.com>
-References: <20220224225635.40538-1-eajames@linux.ibm.com> <20220224225635.40538-2-eajames@linux.ibm.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: input: Add documentation for IBM Operation Panel
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+In-Reply-To: <20220225053257.2479279-1-bjorn.andersson@linaro.org>
+References: <20220225053257.2479279-1-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add sc8280xp TLMM binding
 Date:   Fri, 25 Feb 2022 08:16:07 -0600
-Message-Id: <1645798567.321012.857881.nullmailer@robh.at.kernel.org>
+Message-Id: <1645798567.343483.857894.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -60,20 +62,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 16:56:34 -0600, Eddie James wrote:
-> Document the bindings for the IBM Operation Panel, which provides
-> a simple interface to control a server. It has a display and three
-> buttons.
-> Also update MAINTAINERS for the new file.
+On Thu, 24 Feb 2022 21:32:56 -0800, Bjorn Andersson wrote:
+> The Qualcomm SC8280XP platform contains a single block of registers
+> for the TLMM block. This provides pinconf and pinmux for 228 GPIOs, 2
+> UFS_RESET pins and one SDC interface.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->  .../bindings/input/ibm,op-panel.yaml          | 49 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/ibm,op-panel.yaml
+>  .../pinctrl/qcom,sc8280xp-pinctrl.yaml        | 153 ++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -82,15 +80,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/input/ibm,op-panel.example.dts:27.35-36 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/input/ibm,op-panel.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
+Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.example.dt.yaml:0:0: /example-0/pinctrl@3100000: failed to match any schema with compatible: ['qcom,sc8280x-tlmm']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1597387
+See https://patchwork.ozlabs.org/patch/1597478
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

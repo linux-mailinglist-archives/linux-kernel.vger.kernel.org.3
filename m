@@ -2,162 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755CD4C40F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FC84C4115
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbiBYJK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 04:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S238948AbiBYJRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 04:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbiBYJK4 (ORCPT
+        with ESMTP id S237233AbiBYJRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 04:10:56 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BD2A252917;
-        Fri, 25 Feb 2022 01:10:23 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.43:41026.848260822
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.43 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 387FD1001B5;
-        Fri, 25 Feb 2022 17:10:21 +0800 (CST)
-Received: from  ([123.150.8.43])
-        by gateway-153622-dep-749df8664c-nmrf6 with ESMTP id 75c1cd44fa064a4c95e0a92083346293 for johan@kernel.org;
-        Fri, 25 Feb 2022 17:10:22 CST
-X-Transaction-ID: 75c1cd44fa064a4c95e0a92083346293
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.43
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, elder@ieee.org
-Cc:     Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v3] staging: greybus: introduce pwm_ops::apply
-Date:   Fri, 25 Feb 2022 17:16:01 +0800
-Message-Id: <1645780561-18481-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 04:17:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A863E4;
+        Fri, 25 Feb 2022 01:16:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83496B82C91;
+        Fri, 25 Feb 2022 09:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0730C340E7;
+        Fri, 25 Feb 2022 09:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645780602;
+        bh=8WxNMDgaDUho9As8RN3127St03EDjni/oYyOZGf/IRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1FY7UO4eCMCf/emTwM0S4YnXe7GCW02t4n8Op490yjbCpfZYY078xLuNXVlqLC1ua
+         a8tloH+atnymhub1XLbgiCuFVIOBII2Ma+5N8+6ZNEi8jXnbOxsVww+K3tmSTO4SEn
+         xiaQSfRtQzv3VL8ZL8lyVumGvSHSNYHFQ4b5AYGU=
+Date:   Fri, 25 Feb 2022 10:16:39 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Henry Lin <henryl@nvidia.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] xhci: fix runtime PM imbalance in USB2 resume
+Message-ID: <Yhied+G/K8MndRfk@kroah.com>
+References: <20220225055311.92447-1-henryl@nvidia.com>
+ <20220225071506.22012-1-henryl@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225071506.22012-1-henryl@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce apply in pwm_ops to replace legacy operations,
-like enable, disable, config and set_polarity.
+On Fri, Feb 25, 2022 at 03:15:06PM +0800, Henry Lin wrote:
+> USB2 resume starts with usb_hcd_start_port_resume() in port status
+> change handling for RESUME link state. usb_hcd_end_port_resume() call is
+> needed to keep runtime PM balance.
+> 
+> Fixes: a231ec41e6f6 ("xhci: refactor U0 link state handling in get_port_status")
+> Signed-off-by: Henry Lin <henryl@nvidia.com>
+> ---
+>  drivers/usb/host/xhci-hub.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index df3522dab31b..4a8b07b8ee01 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -1090,6 +1090,8 @@ static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
+>  		if (link_state == XDEV_U0) {
+>  			bus_state->resume_done[portnum] = 0;
+>  			clear_bit(portnum, &bus_state->resuming_ports);
+> +			usb_hcd_end_port_resume(&port->rhub->hcd->self,
+> +						portnum);
+>  			if (bus_state->suspended_ports & (1 << portnum)) {
+>  				bus_state->suspended_ports &= ~(1 << portnum);
+>  				bus_state->port_c_suspend |= 1 << portnum;
+> -- 
+> 2.17.1
+> 
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
+Hi,
 
----
-v2:
-1, define duty_cycle and period as u64 in gb_pwm_config_operation.
-2, define duty and period as u64 in gb_pwm_config_request.
-3, disable before configuring duty and period if the eventual goal
-   is a disabled state.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-v3:
-Regarding duty_cycle and period, I read more discussion in this thread,
-min, warn or -EINVAL, seems no perfect way acceptable for everyone.
-How about we limit their value to INT_MAX and throw a warning at the
-same time when they are wrong?
----
- drivers/staging/greybus/pwm.c | 66 +++++++++++++++++++++--------------
- 1 file changed, 40 insertions(+), 26 deletions(-)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-index 891a6a672378..3ec5bc54d616 100644
---- a/drivers/staging/greybus/pwm.c
-+++ b/drivers/staging/greybus/pwm.c
-@@ -204,43 +204,57 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
- 	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
- }
- 
--static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
--			 int duty_ns, int period_ns)
-+static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-+			const struct pwm_state *state)
- {
-+	int err;
-+	bool enabled = pwm->state.enabled;
-+	u64 period = state->period;
-+	u64 duty_cycle = state->duty_cycle;
- 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
- 
--	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
--};
--
--static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
--			       enum pwm_polarity polarity)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
--
--	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
--};
-+	/* set polarity */
-+	if (state->polarity != pwm->state.polarity) {
-+		if (enabled) {
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+			enabled = false;
-+		}
-+		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
-+		if (err)
-+			return err;
-+	}
- 
--static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	if (!state->enabled) {
-+		if (enabled)
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+		return 0;
-+	}
- 
--	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
--};
-+	/* set period and duty cycle*/
-+	if (period > INT_MAX) {
-+		period = INT_MAX;
-+		dev_warn(chip->dev, "period is %llu ns, out of range\n", state->period);
-+	}
-+	if (duty_cycle > INT_MAX) {
-+		duty_cycle = INT_MAX;
-+		dev_warn(chip->dev,
-+			 "duty cycle is %llu ns, out of range\n", state->duty_cycle);
-+	}
-+	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
-+	if (err)
-+		return err;
- 
--static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	/* enable/disable */
-+	if (!enabled)
-+		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
- 
--	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
--};
-+	return 0;
-+}
- 
- static const struct pwm_ops gb_pwm_ops = {
- 	.request = gb_pwm_request,
- 	.free = gb_pwm_free,
--	.config = gb_pwm_config,
--	.set_polarity = gb_pwm_set_polarity,
--	.enable = gb_pwm_enable,
--	.disable = gb_pwm_disable,
-+	.apply = gb_pwm_apply,
- 	.owner = THIS_MODULE,
- };
- 
--- 
-2.25.1
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

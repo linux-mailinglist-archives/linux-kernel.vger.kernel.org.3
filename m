@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE004C470E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CABA4C4711
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiBYOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S233707AbiBYOFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241385AbiBYODv (ORCPT
+        with ESMTP id S231136AbiBYOFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:03:51 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDBB1AA055
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:03:19 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id s1so7523362edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:03:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Qwa34n1xX547UDRROeteqbZyf3bNGYmzcwY9FotaJnE=;
-        b=Xdz6v0R2CfNCrV1tMFKpbzJWVvJSIZyNYMzG7OfaMQLxBApw/F2L2P3Fdl5UzNui2O
-         +DToqyVsyxT2HEN/fGLrcb1D3WjtPNhAVSf7UQNAJIWCsV+tJWOkSQ10vHRjCYmFrDiv
-         eRKfvD+zsuFrf8N4nwcKi9MhaeU32kLG4jwwPRdBBCKRR1NcPDyPPvOaxsa/bSF4bGbA
-         GrSbAuUJBPOokZOvlbTwdW03uOZA4MFThPmtMnktUi9BGJ1hTaGuzH6KUtqPcJPwswu0
-         Hz0401J7vFMX8wleYXALZtQ3b6kL4vg5YJgIABVoQYLTSbM1bK2cnJQC7CMrxTxWi031
-         /JYQ==
+        Fri, 25 Feb 2022 09:05:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61181AA069
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:04:31 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4966F3FCAD
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645797870;
+        bh=EdlAiChWlSjnHqMEl5+rYYw1D6uhL90FBdNameorEkY=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=m1l0dzVf8w1Zu+gnZs/TAnoE1EpMKEsbLzsyJK8jptGTHc6BXyRnAK3BX8Y6qqA0M
+         zWwVrfcaMZwOz50+cj056w97z3Bhiahn2+8LGSObf51pf8/V7gJ2FUmZvkNlk1XXDj
+         4x1pLEOLEPqVTBO3KlXNGya51fGV9DOFwskJk4eZwqv5nEpyxgcHYJSGawsQ2cQnyP
+         jC1olzt8mgPouZ7a03X9qdWnebpLyZ9wvrOB47afKRpBKvxr/SId9+Ak33M5Y4as/6
+         rj4+Uv0w7RkEKM7fFOf1k0jyzK+xuAKHLPD+CMSdXov6Z+5pUmpHWRkHC5cPtiC1I8
+         WhFnEFzYcKSSw==
+Received: by mail-ej1-f69.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso2687119ejc.22
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:04:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Qwa34n1xX547UDRROeteqbZyf3bNGYmzcwY9FotaJnE=;
-        b=3HvTB1f+K5Y7fSbbhlkGvMpP8IBO9PrFRkvsniN2X2ljkvHx3JiAMIlX5jzpV55RrY
-         deTsTWvdq1scQpBI0lv8SL+ji2HWUkHQiUxsE2LCt9DLFtJ7En0s7ogAAUht2tyN6Hyk
-         ebgHB09DdTYuIUXCFXLLM61SDTlyZhqTsRok7vPTs+5d18BULZg+3SxGUurZh8N742hu
-         eQ1rtzA6JlK/TfFvdyX04VnU/AZk7DWiEjTe1xehEOF/k2iJQMZaO65FMRAAXiyWd9+u
-         p+ouq6C4Kki+n47O9wKCupWyLmI0FZg/n2KjEoaivBaewV/8760U4zQHWgItELNmXOEs
-         Eaxg==
-X-Gm-Message-State: AOAM532N82y4WbiG3awPJBSfX3+fPgb9XKqBa4569wgSk+ImWfDOpttG
-        dstVU6EAm+kJqgkIdErGjqW4uA==
-X-Google-Smtp-Source: ABdhPJwZ2+6dirl+7TqqywrZ4TSyEYZzI1JXxX1OmXk62tAXcNh+oKliqHkUM08cnsHa275YSgjbgg==
-X-Received: by 2002:a50:ef09:0:b0:412:e8d5:5c9d with SMTP id m9-20020a50ef09000000b00412e8d55c9dmr7253184eds.57.1645797797515;
-        Fri, 25 Feb 2022 06:03:17 -0800 (PST)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id gb25-20020a170907961900b006ce423d43e1sm1033147ejc.13.2022.02.25.06.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 06:03:17 -0800 (PST)
-Message-ID: <cc0a9ec0-66b0-9c02-3adb-ea8ed19b6923@blackwall.org>
-Date:   Fri, 25 Feb 2022 16:03:15 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EdlAiChWlSjnHqMEl5+rYYw1D6uhL90FBdNameorEkY=;
+        b=OAgSlOwlXELaW/VdqffdrQj5N0je3eQREQf5Z5Mvh0gZe22erZ4uaE4+NwJoISuMJM
+         3+oc/7K6SdsIfsU5jDbHxpsqlmg01hpeOlkRQQpOHxvO8P3xrcUJeLhuwo38hGKHAzjq
+         yeJ9ijCazHk0vRByw8UNVu7rdJBWz9rvgB8VEIdekrpFanSoVzK/YwgW0UEKAqgBBhfX
+         9SjsC3pmt1j/bxo5jramsuGPyzRGhcbe+7Y1243x+G8SK/ABbs9hxjNq7L537SFptzkC
+         0eUxf73YEfM7XD+gocxPwJJY6EXSQXBzuR7tUyruz3tPLM2WNtJW5tBLIHKYEOvU3DqY
+         fZWw==
+X-Gm-Message-State: AOAM533WeypEfDr/ZJu2NPLqg8iao20Ck65RkDLlFehoNuw2uUiS54TD
+        Ye4JNcsQPK47r65tQctrrTbERg6oeazXPxg76bNgKuE/kesfgYmLft5H5/EaxADAMb6ciJG9Khh
+        7d9Tbly6+2eP8uQ1kZnxrPKy5j/5Gtp7dB5QECZM1z9qlNlZGwS/++kpLHQ==
+X-Received: by 2002:a17:906:80c7:b0:6cf:9c76:1404 with SMTP id a7-20020a17090680c700b006cf9c761404mr6139740ejx.207.1645797869862;
+        Fri, 25 Feb 2022 06:04:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy58ysZOvpIViio0ackgH6hqMa45e2gHNM9hRoMYG2+WXwxSh1SWsVVOz2IW4eWXRM5aQLW16HKIdbbE0nHQv0=
+X-Received: by 2002:a17:906:80c7:b0:6cf:9c76:1404 with SMTP id
+ a7-20020a17090680c700b006cf9c761404mr6139716ejx.207.1645797869620; Fri, 25
+ Feb 2022 06:04:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH iproute2-next 1/1] bridge: link: Add command to set port
- in locked mode
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220225114457.2386149-1-schultz.hans+netdev@gmail.com>
- <20220225114457.2386149-2-schultz.hans+netdev@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220225114457.2386149-2-schultz.hans+netdev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220225123953.3251327-1-alexandre.ghiti@canonical.com> <CANpmjNN304EZfFN2zobxKGXbXWXAfr92nP1KvtR7j-YqSFShvQ@mail.gmail.com>
+In-Reply-To: <CANpmjNN304EZfFN2zobxKGXbXWXAfr92nP1KvtR7j-YqSFShvQ@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Fri, 25 Feb 2022 15:04:18 +0100
+Message-ID: <CA+zEjCtuwnKdi8EuyGWaYNFa7KsYcH9B1mYke6YALo+C1Nq+Dw@mail.gmail.com>
+Subject: Re: [PATCH -fixes v3 0/6] Fixes KASAN and other along the way
+To:     Marco Elver <elver@google.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 13:44, Hans Schultz wrote:
-> Add support for setting a bridge port in locked mode to use with 802.1X,
-> so that only authorized clients are allowed access through the port.
-> 
-> Syntax: bridge link set dev DEV locked {on, off}
-> 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  bridge/link.c                | 13 +++++++++++++
->  include/uapi/linux/if_link.h |  1 +
->  2 files changed, 14 insertions(+)
-> 
+On Fri, Feb 25, 2022 at 2:06 PM Marco Elver <elver@google.com> wrote:
+>
+> On Fri, 25 Feb 2022 at 13:40, Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > As reported by Aleksandr, syzbot riscv is broken since commit
+> > 54c5639d8f50 ("riscv: Fix asan-stack clang build"). This commit actually
+> > breaks KASAN_INLINE which is not fixed in this series, that will come later
+> > when found.
+> >
+> > Nevertheless, this series fixes small things that made the syzbot
+> > configuration + KASAN_OUTLINE fail to boot.
+> >
+> > Note that even though the config at [1] boots fine with this series, I
+> > was not able to boot the small config at [2] which fails because
+> > kasan_poison receives a really weird address 0x4075706301000000 (maybe a
+> > kasan person could provide some hint about what happens below in
+> > do_ctors -> __asan_register_globals):
+>
+> asan_register_globals is responsible for poisoning redzones around
+> globals. As hinted by 'do_ctors', it calls constructors, and in this
+> case a compiler-generated constructor that calls
+> __asan_register_globals with metadata generated by the compiler. That
+> metadata contains information about global variables. Note, these
+> constructors are called on initial boot, but also every time a kernel
+> module (that has globals) is loaded.
+>
+> It may also be a toolchain issue, but it's hard to say. If you're
+> using GCC to test, try Clang (11 or later), and vice-versa.
 
-You should add man page documentation and update iplink_bridge_slave.c
-with the new option as well.
+I tried 3 different gcc toolchains already, but that did not fix the
+issue. The only thing that worked was setting asan-globals=0 in
+scripts/Makefile.kasan, but ok, that's not a fix.
+I tried to bisect this issue but our kasan implementation has been
+broken quite a few times, so it failed.
 
-Cheers,
- Nik
+I keep digging!
 
+Thanks for the tips,
 
+Alex

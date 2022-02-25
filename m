@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E1C4C4AAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF3A4C4AB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242975AbiBYQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S242973AbiBYQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbiBYQ1M (ORCPT
+        with ESMTP id S235397AbiBYQ2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:27:12 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA061CF098;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so6833757oot.11;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
+        Fri, 25 Feb 2022 11:28:55 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B612112B74F;
+        Fri, 25 Feb 2022 08:28:22 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id l25so7929364oic.13;
+        Fri, 25 Feb 2022 08:28:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X+JqfUsqraXHT66jiXxwdmiSs8aXoZzc7qj34oZ5zw0=;
-        b=anUy5naoZFfCvjPIj07QLnMDQq55ZURQjRjWedrUrZZdhYraLoXDaet4FMJvZAVM6P
-         CPepwoxeZ26+5yR2iPOhoMguyF995dVjUM+iD6sNkRq3DI14ULgvLs38oKyi1zEcTSCc
-         U/ghgefqlE9GNxbpyWi6vjoWmoq+V4ntWKUT+uY8sMTtY9VER5e1+SZbzzzgym+cKVvy
-         +qDwOGyMT+srp/ST9bofydPopG+Iyh29WHi1kJMlbC+DjCjBMSBQcH44asGGd2fiYF0m
-         2eMUl4oPVCahJI8N85koBEqB1P4ArlvCXS20lKx4Ry2YoeLmfhBz+0qr01Uslxr5s2Cb
-         XzBA==
-X-Gm-Message-State: AOAM530bgWHwVIrQNnEExjhz2ml8FRqK5XtRUweau/FlfDZ7Sj8siiXw
-        ZnCdhJWl55zru/0q4QLdaaH8xz2RJw==
-X-Google-Smtp-Source: ABdhPJw/vcrFI/CjF4cimyIVyp6KlPE/kC0dGCY0QDWKVaSEMQmUHALL39y0AM6WyQ4p/4kwWTKUHQ==
-X-Received: by 2002:a05:6870:88b:b0:d6:eac9:56d9 with SMTP id fx11-20020a056870088b00b000d6eac956d9mr1000147oab.56.1645806399005;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Yg7+VATWckSp/3QaQYWjzs95bNkFoPLYG5baR+5fkbM=;
+        b=IBICuxzTZc9DgZ5gUz8CN5tD6E+/OVqYBbad2J73hXnAh9GVxTQObt7YYEyDXEwX+U
+         E64kJPEK52bkuLmXNrP5Zfc4WyOqAIP6SF5ucN7G/ZpJ4fz/B92ebDLdT4yOo4Tnr4vM
+         5bWxKyz4VLEMRXm3/AUPJItfP+yoVFJKnYgi7B3Re+Fonh2Wr97497tXc4Nt64rcN0Qc
+         jWkKDhgCDMNpBMpcWx5s1lxWf/xTKTowwcTm0Jza4jvVygp2d35G97wKM6QyWGpWU64W
+         hWso36eyWWUYtD7pumVbwZAiUWxHoKX3ir3wvSsak3q/ESbYSGSLHCukApk3Z5twaEXL
+         F0Gg==
+X-Gm-Message-State: AOAM532kCUAXoL2gFMIlzabxEwZWCDPsNJDN5vC/GFKyME/H1qleWVcn
+        fkm1Y7NRu5EMOnpXuHBd6Q==
+X-Google-Smtp-Source: ABdhPJwCgzjsTtba8mO1fd7ZgtP5lvO9rBeAVcw8nxHLbJCpAgGhFJIwt+BOxGR1cOQyypKWgPr9Rg==
+X-Received: by 2002:a05:6808:1208:b0:2cf:48c1:bfb9 with SMTP id a8-20020a056808120800b002cf48c1bfb9mr2083672oil.15.1645806502078;
+        Fri, 25 Feb 2022 08:28:22 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f8-20020a4ab648000000b0031d1cf9aef6sm789502ooo.48.2022.02.25.08.26.37
+        by smtp.gmail.com with ESMTPSA id v6-20020a056830140600b005af1486cb20sm1305168otp.10.2022.02.25.08.28.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:26:38 -0800 (PST)
-Received: (nullmailer pid 1039466 invoked by uid 1000);
-        Fri, 25 Feb 2022 16:26:37 -0000
-Date:   Fri, 25 Feb 2022 10:26:37 -0600
+        Fri, 25 Feb 2022 08:28:21 -0800 (PST)
+Received: (nullmailer pid 1042117 invoked by uid 1000);
+        Fri, 25 Feb 2022 16:28:20 -0000
+Date:   Fri, 25 Feb 2022 10:28:20 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de, runyang.chen@mediatek.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [3/4] dt-bindings: reset: mt8186: add DSI reset bit for MMSYS
-Message-ID: <YhkDPe3KuaRW6b2Y@robh.at.kernel.org>
-References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
- <20220216014505.28428-4-rex-bc.chen@mediatek.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] dt-bindings: mfd: brcm,cru: rename pinctrl node
+Message-ID: <YhkDpJShgI/Ed8iH@robh.at.kernel.org>
+References: <20220216112928.5330-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220216014505.28428-4-rex-bc.chen@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220216112928.5330-1-zajec5@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 09:45:04AM +0800, Rex-BC Chen wrote:
-> Add DSI software reset bit which is controlled by MMSYS for MT8186.
+On Wed, 16 Feb 2022 12:29:28 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> This matches pinctrl.yaml requirement and fixes:
+> 
+> Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+>         From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  include/dt-bindings/reset/mt8186-resets.h | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/mfd/brcm,cru.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/dt-bindings/reset/mt8186-resets.h b/include/dt-bindings/reset/mt8186-resets.h
-> index 36e5764e2e6c..5f850370c42c 100644
-> --- a/include/dt-bindings/reset/mt8186-resets.h
-> +++ b/include/dt-bindings/reset/mt8186-resets.h
-> @@ -30,4 +30,7 @@
->  #define MT8186_TOPRGU_IMG2_SW_RST				22
->  #define MT8186_TOPRGU_SW_RST_NUM				23
->  
-> +/* MMSYS resets */
-> +#define MT8186_MMSYS_SW0_RST_B_DISP_DSI0			19
 
-This can just be squashed into the previous patch.
-
-> +
->  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8186 */
-> -- 
-> 2.18.0
-> 
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>

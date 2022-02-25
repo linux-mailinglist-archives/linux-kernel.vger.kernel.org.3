@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB7C4C4247
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3139B4C424A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbiBYK2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S239518AbiBYK2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239373AbiBYK2G (ORCPT
+        with ESMTP id S239492AbiBYK2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:28:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CEF6403C8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:27:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645784853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
-        b=Fgargy+4abgLRL7cgIsrhFft3hbVUmVVW0S2Dd8/MD7rmJmOoGN5oILsNCf5YUwHH/4c0/
-        vBhvxOBDWq5DPiZ6notfO+ZVxJ/KO/xTnc7JZcvkfUcjHjA53vFimkQFdWSrE9r+24o+TM
-        yx/oHUVlhslIGQvBmaLC1SThGrJAo6A=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-h2vWjvFXMqmHoKvuChewEQ-1; Fri, 25 Feb 2022 05:27:32 -0500
-X-MC-Unique: h2vWjvFXMqmHoKvuChewEQ-1
-Received: by mail-lf1-f72.google.com with SMTP id v24-20020a056512349800b0043f1c29459bso837982lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:27:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
-        b=LupZ3Wudd6RrAJscZXoRGVYDlNzVQk3nroeZkbN7ibXdkNdlvNhOwjjs/l4+nBiEH7
-         1YW8JV2QWoP7D5FqSvqbJTBmbbdV05zMH2+mZAv6jHpsUtOf7S5PZZOPa9q/cXyO90pE
-         RwQr0Hq3vOKuUv169U2qdDGYa69vfmMcz9JLBqzYmQVQj+vfLaI8dMv8PLdA44Ah46gO
-         aUIMN1KQZZ0cIpeucSWYAz/b5bLILDwpKtYr4BHOP2UKWXDfwwBRu4lIVvdUFkkq1KAo
-         6IFd6kiSUts6HrlmOcW1Mz8dC2jpnO3JxyyoAtCfamRyUD5VXHeOezopy268uk7k1ngv
-         8fLw==
-X-Gm-Message-State: AOAM532UB00zT1OU4LqBg29Umwo7U3A3/PCcEbLck0V73kQuui7L3rwp
-        JHJMlc2Mo+1YVd2FqhEIpsuiUyBdltNBv1ylQ3FjVcWzNGDyPElvuImuHttIg9z80/O3EPaEthl
-        l5A/+uHngjUoWzQXso8v5Q04U5Pby0auNmArK0EI=
-X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id z11-20020a056512308b00b004435f54dcaemr4846368lfd.79.1645784850337;
-        Fri, 25 Feb 2022 02:27:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6MuhF+6LgSmAzEnwAwFmkG/DIt24tdoXVZYwMo+3YeU7eVOth2LXsJ+KD91+fuf1AW9YgqMKzzAi1acqvL5Q=
-X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id
- z11-20020a056512308b00b004435f54dcaemr4846362lfd.79.1645784850156; Fri, 25
- Feb 2022 02:27:30 -0800 (PST)
+        Fri, 25 Feb 2022 05:28:36 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11CB673F7;
+        Fri, 25 Feb 2022 02:27:43 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 26B9E1F45BB1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645784862;
+        bh=wzxS9IYpPZYXwEBTYdvdnNqibFpihz4xflY5zMogAxw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VKWuyAqhuFnGiCvci1gV4hdzLXUNYnEG29UDYAHHmMJUGf/VplyVlC6hio64RgXVh
+         c2vi5rRzT/sNiMmNbJ034SbUkSMbPuEOnTGfQjiOIrZ6bEMjWFPHyeVb68a8KAgqY1
+         6sTseP/esTX73pONhiZ598BQM+oOpeBQhQUBslcCnDapx5P0ZCxzanByG3F4yKZ3No
+         o+aGuGXtQGthl8O9IbGliDLuIvtmuUgFs4sY04n45g853JvuqO6U5I3unNGVN9HaJA
+         zy9xWkWx3Js2KymGJvDXPGwGqUGio+a2jPy4qdhqmZGGeACNiS90wdd7Z5H4hu/gn+
+         77OEgtfUlcILQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] kselftest: add generated objects to .gitignore
+Date:   Fri, 25 Feb 2022 15:27:25 +0500
+Message-Id: <20220225102726.3231228-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220222141303.1392190-1-atomlin@redhat.com> <20220222141303.1392190-10-atomlin@redhat.com>
- <YhieKf9EcS3GQSXG@alley> <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu> <YhisWkgZCK8dz5fl@alley>
-In-Reply-To: <YhisWkgZCK8dz5fl@alley>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Fri, 25 Feb 2022 10:27:18 +0000
-Message-ID: <CANfR36gsRw26C3M0hXGGK2w_05pC0rzkhg0-3Q+8tr_XxLiqiw@mail.gmail.com>
-Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate file
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-02-25 11:15 +0100, Petr Mladek wrote:
-> rcu_dereference_sched() makes sparse happy. But lockdep complains
-> because the _rcu pointer is not accessed under:
->
->     rcu_read_lock_sched();
->     rcu_read_unlock_sched();
+Add kselftests_install directory and some other files to the
+.gitignore.
 
-Hi Petr,
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/.gitignore      | 1 +
+ tools/testing/selftests/exec/.gitignore | 2 ++
+ tools/testing/selftests/kvm/.gitignore  | 1 +
+ tools/testing/selftests/net/.gitignore  | 1 +
+ 4 files changed, 5 insertions(+)
 
->
-> This is not the case here. Note that module_mutex does not
-> disable preemtion.
->
-> Now, the code is safe. The RCU access makes sure that "mod"
-> can't be freed in the meantime:
->
->    + add_kallsyms() is called by the module loaded when the module
->      is being loaded. It could not get removed in parallel
->      by definition.
->
->    + module_kallsyms_on_each_symbol() takes module_mutex.
->      It means that the module could not get removed.
-
-Indeed, which is why I did not use rcu_read_lock_sched() and
-rcu_read_unlock_sched() with rcu_dereference_sched(). That being said, I
-should have mentioned this in the commit message.
-
-> IMHO, we have two possibilities here:
->
->    + Make sparse and lockdep happy by using rcu_dereference_sched()
->      and calling the code under rcu_read_lock_sched().
->
->    + Cast (struct mod_kallsyms *)mod->kallsyms when accessing
->      the value.
-
-I prefer the first option.
-
-> I do not have strong preference. I am fine with both.
->
-> Anyway, such a fix should be done in a separate patch!
-
-Agreed.
-
-
-Kind regards,
-
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 055a5019b13c..cb24124ac5b9 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -3,6 +3,7 @@ gpiogpio-event-mon
+ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
++kselftest_install/
+ tpm2/SpaceTest.log
+ 
+ # Python bytecode and cache
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index 9e2f00343f15..2f715782b076 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -12,3 +12,5 @@ execveat.denatured
+ xxxxxxxx*
+ pipe
+ S_I*.test
++non-regular
++null-argv
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 7903580a48ac..4d11adeac214 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -21,6 +21,7 @@
+ /x86_64/hyperv_clock
+ /x86_64/hyperv_cpuid
+ /x86_64/hyperv_features
++/x86_64/hyperv_svm_test
+ /x86_64/mmio_warning_test
+ /x86_64/mmu_role_test
+ /x86_64/platform_info_test
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 21a411b04890..c3a6dc45eff4 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -36,3 +36,4 @@ gro
+ ioam6_parser
+ toeplitz
+ cmsg_sender
++cmsg_so_mark
 -- 
-Aaron Tomlin
+2.30.2
 

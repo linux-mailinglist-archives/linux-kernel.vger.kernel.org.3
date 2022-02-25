@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8CF4C4D27
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FB64C4D2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiBYSCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        id S232338AbiBYSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiBYSCS (ORCPT
+        with ESMTP id S231883AbiBYSEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:02:18 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F5825F35C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:01:43 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id z7so4904948ilb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jmPNe5w2igTeTdG9i+t0C+LJ8u5o2P/TYchcIcjneOM=;
-        b=UAtesJgznmZkD5fCGtm7cVlSmUmJT0RNZpejtSXRc54OGmXFBgYOWb/Wup7KhHpZKC
-         6KWhHF8W1G1Ar4MY86dZ37zqxQGpS7toDNK1lTeVdbPXk6nEldKmki8uV/GjOhMvxQXK
-         Iv7jJ7uL0UjIyqHbsp9eAtA8Hy4HY5ToJCNJo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jmPNe5w2igTeTdG9i+t0C+LJ8u5o2P/TYchcIcjneOM=;
-        b=zT6OB+Nplj3br8PQKtuuQefSCb6QrNJL6Xn9+jsnUCdvmqrjBiRK46PZDLgcOnoel3
-         BC89Okhie6hOT4pWn1VzzSGN83mCc0nkOoojgSe76qBYR262oTKqgLFuSOzWyRWo79ez
-         C61/KAlFDviFzGGlVobJfAROjbv83paaIBaUOlLeCi7KIgS9xXYwUxAWKn2TgVm2zS3N
-         idra5ecdlis3slfeY3RtS4ntn0jWdHajbVygj18OI04xrL1B7CIIOX2Al649qQiC8qCZ
-         UYsab3Zx5zeilWHAmjXpX3bij61gVb+UkzxVPOIYyeyWFAvcZ7ePy9iAgivALi9MBHW6
-         xd3g==
-X-Gm-Message-State: AOAM530HrKK4MsfpbMSqowZF4TaJpU1sm4pGEkNftwmcnfva1g394Ij2
-        uBR4ZV2kDbeLLlNoYK/mWQcS6g==
-X-Google-Smtp-Source: ABdhPJyeoCYCoIZbD+oRa0e576ynpqdPVl3oq4IN0xpZ37BARybE4JvNHHYpQXh+IBx1zozXaExyNA==
-X-Received: by 2002:a05:6e02:178b:b0:2c2:81f5:3cbb with SMTP id y11-20020a056e02178b00b002c281f53cbbmr7469031ilu.296.1645812102498;
-        Fri, 25 Feb 2022 10:01:42 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id a2-20020a056e02120200b002c21a18437csm1932389ilq.40.2022.02.25.10.01.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 10:01:42 -0800 (PST)
-Subject: Re: [PATCH V2] selftests: Fix build when $(O) points to a relative
- path
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216223817.1386745-1-usama.anjum@collabora.com>
- <46489cd9-fb7a-5a4b-7f36-1c9f6566bd93@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <63870982-62ba-97f2-5ee2-d4457a7a5cdb@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 11:01:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 25 Feb 2022 13:04:25 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B2C2510ED
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:03:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 34D1E1F38D;
+        Fri, 25 Feb 2022 18:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645812231; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=A4/rQl3tq18iWBnpNxSNODMK+KHp/IyzTqksKPj3yNY=;
+        b=0/gABR4GV5MunslmpIWsHjyu4tyKJAyYu76tJS249RgGTcGDyCFi70riWxl9Ov5d2uBTMh
+        Kdqw4hlU1urqBBZvYnly7TfdIbXWovGZdlGevpW5Waaq1vM9Ybx/gmbZHKC3I5YDJfBw0C
+        YtzemmL1HiiRSyj34s8NU+UaAZgByGs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645812231;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=A4/rQl3tq18iWBnpNxSNODMK+KHp/IyzTqksKPj3yNY=;
+        b=jU0i+cFTNOB5gp2RO7cU6gFA7DdKmp1FGp6LrtKnfBTh+Wp3oKgUo3eQhzC5mSsgvKEKaA
+        eoRLawnX88wWGaCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0220213C17;
+        Fri, 25 Feb 2022 18:03:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id A6RCOwYaGWKSRQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 25 Feb 2022 18:03:50 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
+Date:   Fri, 25 Feb 2022 19:03:13 +0100
+Message-Id: <20220225180318.20594-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <46489cd9-fb7a-5a4b-7f36-1c9f6566bd93@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1659; h=from:subject; bh=7wwPXU515VXzTFQhi+Z7ay+IsgwNFlOHE+QlyVJRv0w=; b=owEBbQGS/pANAwAIAeAhynPxiakQAcsmYgBiGRnheS0dliAu4MteOLhQX7Og68SjckV01rHav/ln pW7FOUCJATMEAAEIAB0WIQSNS5MBqTXjGL5IXszgIcpz8YmpEAUCYhkZ4QAKCRDgIcpz8YmpEBj6CA CynvJCe2aNMVhwZqBM7dyo023A1PjHtuiVCQ2on0ah9ITaCEx19EafpJQkKZqI5HFd5kVrzjCsle49 84HK5oQJ/kzR4yg887e2KkyWsoQ/gaF/DCAEKxij/AfENV/daLafKzexJ41mw3S8pdBvGb7/tnN5WX ISSGtk0P4DunpWry3i8YVtyreyCXpX3lKJqqlTlzVl8SydeqXJv8Lnbt3sDyIQ0yHQLLUlewt9/P4u Rk6y/dnFb1uh5xJtTO7TaGIW5tx3JdhJE8jx12WYV1VyLmq2UpD1tbM2YmVcZfacqQZHb0hD4KRCLC zWfz3bsUFt16I9tbnqkZ69vn0rCPpY
+X-Developer-Key: i=vbabka@suse.cz; a=openpgp; fpr=A940D434992C2E8E99103D50224FA7E7CC82A664
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 10:22 AM, Muhammad Usama Anjum wrote:
-> Any thoughts about it?
-> 
+Hi,
 
-No to post please.
+this series combines and revives patches from Oliver's last year
+bachelor thesis (where I was the advisor) that make SLUB's debugfs
+files alloc_traces and free_traces more useful.
+The resubmission was blocked on stackdepot changes that are now merged,
+as explained in patch 2.
 
-> On 2/17/22 3:38 AM, Muhammad Usama Anjum wrote:
->> Build of bpf and tc-testing selftests fails when the relative path of
->> the build directory is specified.
->>
->> make -C tools/testing/selftests O=build0
->> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
->> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
->> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
->> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
->>
->> Makefiles of bpf and tc-testing include scripts/Makefile.include file.
->> This file has sanity checking inside it which checks the output path.
->> The output path is not relative to the bpf or tc-testing. The sanity
->> check fails. Expand the output path to get rid of this error. The fix is
->> the same as mentioned in commit 150a27328b68 ("bpf, preload: Fix build
->> when $(O) points to a relative path").
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes in V2:
->> Add more explaination to the commit message.
->> Support make install as well.
+Patch 1 is a new preparatory cleanup.
 
-Looks god to me. I can pull this in for Linux 5.18-rc1
+Patch 2 originally submitted here [1], was merged to mainline but
+reverted for stackdepot related issues as explained in the patch.
 
-thanks,
--- Shuah
+Patches 3-5 originally submitted as RFC here [2]. In this submission I
+have omitted the new file 'all_objects' (patch 3/3 in [2]) as it might
+be considered too intrusive so I will postpone it for later. The docs
+patch is adjusted accordingly.
+
+Also available in git, based on v5.17-rc1:
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v1
+
+I'd like to ask for some review before I add this to the slab tree.
+
+[1] https://lore.kernel.org/all/20210414163434.4376-1-glittao@gmail.com/
+[2] https://lore.kernel.org/all/20210521121127.24653-1-glittao@gmail.com/
+
+Oliver Glitta (4):
+  mm/slub: use stackdepot to save stack trace in objects
+  mm/slub: aggregate and print stack traces in debugfs files
+  mm/slub: sort debugfs output by frequency of stack traces
+  slab, documentation: add description of debugfs files for SLUB caches
+
+Vlastimil Babka (1):
+  mm/slub: move struct track init out of set_track()
+
+ Documentation/vm/slub.rst |  61 +++++++++++++++
+ init/Kconfig              |   1 +
+ mm/slub.c                 | 152 +++++++++++++++++++++++++-------------
+ 3 files changed, 162 insertions(+), 52 deletions(-)
+
+-- 
+2.35.1
+

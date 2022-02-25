@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F112F4C3F4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9254C3F1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238268AbiBYHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S238158AbiBYHhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiBYHva (ORCPT
+        with ESMTP id S238148AbiBYHhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:51:30 -0500
-X-Greylist: delayed 835 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 23:50:55 PST
-Received: from TWHMLLG3.macronix.com (twhmllg3.macronix.com [122.147.135.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837951AAFD9;
-        Thu, 24 Feb 2022 23:50:55 -0800 (PST)
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 21P7axKH033262;
-        Fri, 25 Feb 2022 15:36:59 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 21P7ZmSO032150;
-        Fri, 25 Feb 2022 15:35:48 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id C0D21930209A44DCA07D;
-        Fri, 25 Feb 2022 15:35:48 +0800 (CST)
-In-Reply-To: <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com> <44f655d027b49b87065915f6ba2744d2@walle.cc> <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com> <23fbbf2dde387e3832b4ca23d46816c0@walle.cc> <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com> <e39d06684b8f3a63103f40f0e99e030e@walle.cc> <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com> <20220223183849.xcwciv2ybnkdnauk@ti.com> <6eb179ec-0b12-de30-829e-83ec6b964f21@microchip.com> <779069a1-7389-ab70-9f03-81090d0600ba@microchip.com> <a85e2d1862cfff477e97c39509b2b74d@walle.cc> <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, michael@walle.cc,
-        miquel.raynal@bootlin.com, Nicolas.Ferre@microchip.com,
-        p.yadav@ti.com, richard@nod.at, vigneshr@ti.com
-Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
+        Fri, 25 Feb 2022 02:37:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FDFA23F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:37:05 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nNV9j-0006p5-Rk; Fri, 25 Feb 2022 08:36:47 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nNV9h-0003AS-UF; Fri, 25 Feb 2022 08:36:45 +0100
+Date:   Fri, 25 Feb 2022 08:36:45 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
+        abel.vesa@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V5 4/5] clk: imx: support fracn gppll
+Message-ID: <20220225073645.GA19585@pengutronix.de>
+References: <20220225014234.1766305-1-peng.fan@oss.nxp.com>
+ <20220225014234.1766305-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-X-KeepSent: 51615557:F936F0DA-482587F4:00215504;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF51615557.F936F0DA-ON482587F4.00215504-482587F4.0029BB12@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Fri, 25 Feb 2022 15:35:48 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2022/02/25 PM 03:35:48,
-        Serialize complete at 2022/02/25 PM 03:35:48
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG3.macronix.com 21P7ZmSO032150
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225014234.1766305-5-peng.fan@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:36:19 up 76 days, 16:21, 81 users,  load average: 0.34, 0.19,
+ 0.13
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,169 +60,409 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 25, 2022 at 09:42:33AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> This PLL module is a Fractional-N synthesizer,
+> supporting 30-bit numerator and denominator. Numerator is a signed
+> number. It has feature to adjust fractional portion of feedback
+> divider dynamically. This fracn gppll is used in i.MX93.
+> 
+> Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-SGkgYWxsLA0KDQo8VHVkb3IuQW1iYXJ1c0BtaWNyb2NoaXAuY29tPiB3cm90ZSBvbiAyMDIyLzAy
-LzI0IKRVpMggMDY6Mjc6NTc6DQoNCj4gPFR1ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbT4gDQo+
-IDIwMjIvMDIvMjQgpFWkyCAwNjoyOA0KPiANCj4gVG8NCj4gDQo+IDxtaWNoYWVsQHdhbGxlLmNj
-PiwgPHAueWFkYXZAdGkuY29tPiwgDQo+IA0KPiBjYw0KPiANCj4gPHAueWFkYXZAdGkuY29tPiwg
-PGJyb29uaWVAa2VybmVsLm9yZz4sIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPiwNCj4gPHJp
-Y2hhcmRAbm9kLmF0PiwgPHZpZ25lc2hyQHRpLmNvbT4sIDxsaW51eC0NCj4gbXRkQGxpc3RzLmlu
-ZnJhZGVhZC5vcmc+LCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz4sIDxsaW51eC0NCj4g
-c3BpQHZnZXIua2VybmVsLm9yZz4sIDxOaWNvbGFzLkZlcnJlQG1pY3JvY2hpcC5jb20+LCANCj4g
-PHpoZW5neHVubGlAbXhpYy5jb20udHc+LCA8amFpbWVsaWFvQG14aWMuY29tLnR3Pg0KPiANCj4g
-U3ViamVjdA0KPiANCj4gUmU6IFtQQVRDSCAwLzRdIHNwaS1tZW06IEFsbG93IHNwZWNpZnlpbmcg
-dGhlIGJ5dGUgb3JkZXIgaW4gRFRSIG1vZGUNCj4gDQo+IE9uIDIvMjQvMjIgMTE6MzcsIE1pY2hh
-ZWwgV2FsbGUgd3JvdGU6DQo+ID4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBv
-ciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgDQo+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2Fm
-ZQ0KPiA+IA0KPiA+IEFtIDIwMjItMDItMjQgMDc6MzcsIHNjaHJpZWIgVHVkb3IuQW1iYXJ1c0Bt
-aWNyb2NoaXAuY29tOg0KPiA+PiBPbiAyLzI0LzIyIDA4OjA4LCBUdWRvci5BbWJhcnVzQG1pY3Jv
-Y2hpcC5jb20gd3JvdGU6DQo+ID4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtz
-IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSANCmtub3cNCj4gPj4+IHRoZSBjb250ZW50
-IGlzIHNhZmUNCj4gPj4+DQo+ID4+PiBPbiAyLzIzLzIyIDIwOjM4LCBQcmF0eXVzaCBZYWRhdiB3
-cm90ZToNCj4gPj4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
-YXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0K
-PiA+Pj4+DQo+ID4+Pj4gSGkgVHVkb3IsDQo+ID4+Pj4NCj4gPj4+PiBPbiAyMi8wMi8yMiAwMjo0
-M1BNLCBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+ID4+Pj4+IE9uIDIvMjIv
-MjIgMTY6MjcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4+Pj4+PiBFWFRFUk5BTCBFTUFJTDog
-RG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+
-Pj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+ID4+Pj4+Pg0KPiA+Pj4+Pj4gQW0gMjAyMi0w
-Mi0yMiAxNToyMywgc2NocmllYiBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+
-Pj4gT24gMi8yMi8yMiAxNjoxMywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gPj4+Pj4+Pj4gRVhU
-RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
-cyANCnlvdQ0KPiA+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+IHRoZSBjb250ZW50IGlzIHNhZmUN
-Cj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gQW0gMjAyMi0wMi0yMiAxNDo1NCwgc2NocmllYiBUdWRv
-ci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+Pj4+PiBPbiAyLzIxLzIyIDA5OjQ0LCBN
-aWNoYWVsIFdhbGxlIHdyb3RlOg0KPiA+Pj4+Pj4+Pj4+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3Qg
-Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MNCj4gPj4+Pj4+Pj4+PiB5b3UN
-Cj4gPj4+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+Pj4gdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiA+
-Pj4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+Pj4gQW0gMjAyMi0wMi0xOCAxNTo1OCwgc2NocmllYiBUdWRv
-ciBBbWJhcnVzOg0KPiA+Pj4+Pj4+Pj4+PiBGb3J0dW5hdGVseSB0aGVyZSBhcmUgY29udHJvbGxl
-cnMNCj4gPj4+Pj4+Pj4+Pj4gdGhhdCBjYW4gc3dhcCBiYWNrIHRoZSBieXRlcyBhdCBydW50aW1l
-LCBmaXhpbmcgdGhlDQo+ID4+Pj4+Pj4+Pj4+IGVuZGlhbm5lc3Nlcy4NCj4gPj4+Pj4+Pj4+Pj4g
-UHJvdmlkZQ0KPiA+Pj4+Pj4+Pj4+PiBhIHdheSBmb3IgdGhlIHVwcGVyIGxheWVycyB0byBzcGVj
-aWZ5IHRoZSBieXRlIG9yZGVyIGluIERUUg0KPiA+Pj4+Pj4+Pj4+PiBtb2RlLg0KPiA+Pj4+Pj4+
-Pj4+DQo+ID4+Pj4+Pj4+Pj4gQXJlIHRoZXJlIGFueSBwYXRjaGVzIGZvciB0aGUgYXRtZWwtcXVh
-ZHNwaSB5ZXQ/IFdoYXQgaGFwcGVucw0KPiA+Pj4+Pj4+Pj4+IGlmDQo+ID4+Pj4+Pj4+Pg0KPiA+
-Pj4+Pj4+Pj4gbm90IHB1YmxpYywgYnV0IHdpbGwgcHVibGlzaCB0aGVtIHRoZXNlIGRheXMuDQo+
-ID4+Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4+IHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3VwcG9ydCBp
-dD8gV2lsbCB0aGVyZSBiZSBhIHNvZnR3YXJlDQo+ID4+Pj4+Pj4+Pj4gZmFsbGJhY2s/DQo+ID4+
-Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4gbm8gbmVlZCBmb3IgYSBmYWxsYmFjaywgdGhlIGNvbnRyb2xs
-ZXIgY2FuIGlnbm9yZQ0KPiA+Pj4+Pj4+Pj4gb3AtPmRhdGEuZHRyX2Jzd2FwMTYNCj4gPj4+Pj4+
-Pj4+IGlmDQo+ID4+Pj4+Pj4+PiBpdCBjYW4ndCBzd2FwIGJ5dGVzLg0KPiA+Pj4+Pj4+Pg0KPiA+
-Pj4+Pj4+PiBJIGRvbid0IHVuZGVyc3RhbmQuIElmIHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3dh
-cCB0aGUgMTZiaXQNCj4gPj4+Pj4+Pj4gdmFsdWVzLA0KPiA+Pj4+Pj4+PiB5b3Ugd2lsbCByZWFk
-IHRoZSB3cm9uZyBjb250ZW50LCBubz8NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4+
-IEluIGxpbnV4IG5vLCBiZWNhdXNlIG1hY3Jvbml4IHN3YXBzIGJ5dGVzIG9uIGEgMiBieXRlIGJv
-dW5kYXJ5DQo+ID4+Pj4+Pj4gYm90aCBvbg0KPiA+Pj4+Pj4+IHJlYWRzIGFuZCBvbiBwYWdlIHBy
-b2dyYW0uIFRoZSBwcm9ibGVtIGlzIHdoZW4geW91IG1peCA4RC04RC04RA0KPiA+Pj4+Pj4+IG1v
-ZGUNCj4gPj4+Pj4+PiBhbmQNCj4gPj4+Pj4+PiAxLTEtMSBtb2RlIGFsb25nIHRoZSBib290IHN0
-YWdlcy4gTGV0J3MgYXNzdW1lIHlvdSB3cml0ZSBhbGwgDQpib290DQo+ID4+Pj4+Pj4gYmluYXJp
-ZXMNCj4gPj4+Pj4+PiBpbiAxLTEtMSBtb2RlLiBXaGVuIHJlYWNoaW5nIHUtYm9vdCBpZiB5b3Ug
-ZW5hYmxlIDhELThELThEIG1vZGUsDQo+ID4+Pj4+Pj4gd2hlbg0KPiA+Pj4+Pj4+IHUtYm9vdA0K
-PiA+Pj4+Pj4+IHdpbGwgdHJ5IHRvIGdldCB0aGUga2VybmVsIGl0IHdpbGwgZmFpbCwgYXMgdGhl
-IGZsYXNoIHN3YXBzIHRoZQ0KPiA+Pj4+Pj4+IGJ5dGVzDQo+ID4+Pj4+Pj4gY29tcGFyZWQNCj4g
-Pj4+Pj4+PiB0byB3aGF0IHdhcyB3cml0dGVuIHdpdGggMS0xLTEgbW9kZS4gWW91IHdyaXRlIEQw
-IEQxIEQyIEQzIGluDQo+ID4+Pj4+Pj4gMS0xLTENCj4gPj4+Pj4+PiBtb2RlIGFuZA0KPiA+Pj4+
-Pj4+IHdoZW4gcmVhY2hpbmcgdS1ib290IHlvdSB3aWxsIHJlYWQgRDEgRDAgRDMgRDIgYW5kIGl0
-IHdpbGwgbWVzcw0KPiA+Pj4+Pj4+IHRoZQ0KPiA+Pj4+Pj4+IGtlcm5lbCBpbWFnZS4NCj4gPj4+
-Pj4+DQo+ID4+Pj4+PiBCdXQgeW91IGhhdmUgdG8gY29uc2lkZXIgYWxzbyAzcmQgcGFydGllcywg
-bGlrZSBhbiBleHRlcm5hbA0KPiA+Pj4+Pj4gcHJvZ3JhbW1lcg0KPiA+Pj4+Pj4gb3INCj4gPj4+
-Pj4NCj4gPj4+Pj4gV2h5PyBJZiB5b3UgdXNlIHRoZSBzYW1lIG1vZGUgd2hlbiByZWFkaW5nIGFu
-ZCB3cml0aW5nLCBldmVyeXRoaW5nDQo+ID4+Pj4+IGlzIGZpbmUuDQo+ID4+Pj4+IEknbSBub3Qg
-c3VyZSB3aGF0J3MgeW91ciBzdWdnZXN0aW9uIGhlcmUuDQo+ID4+Pj4NCj4gPj4+PiBTbyBvdXIg
-c3RhbmNlIGhlcmUgaXMgdGhhdCB3ZSBkb24ndCBjYXJlIGFib3V0IGV4dGVybmFsIHByb2dyYW1z
-Pz4NCj4gPj4+PiBJZiB0aGF0IGlzIHRoZSBjYXNlIHRoZW4gd2h5IGJvdGhlciB3aXRoIGFsbCB0
-aGlzIGFueXdheT8gU2luY2UgdGhlDQo+ID4+Pj4gc3dhcA0KPiA+Pj4+IGhhcHBlbnMgYXQgYm90
-aCBwYWdlIHByb2dyYW0gYW5kIHJlYWQsIHdoYXQgeW91IHdyaXRlIGlzIHdoYXQgeW91DQo+ID4+
-Pj4gcmVhZA0KPiA+Pj4+IGJhY2suIFdobyBjYXJlcyB0aGUgb3JkZXIgc3RvcmVkIGluIHRoZSBh
-Y3R1YWwgZmxhc2ggbWVtb3J5IGFzIGxvbmcNCj4gPj4+PiBhcw0KPiA+Pj4+IHRoZSBkYXRhIHJl
-YWQgaXMgY29ycmVjdD8NCj4gPj4+Pg0KPiA+Pj4+IElmIHdlIGRvIGNhcmUgYWJvdXQgZXh0ZXJu
-YWwgcHJvZ3JhbXMsIHRoZW4gd2hhdCB3b3VsZCBoYXBwZW4gaWYgDQp0aGUNCj4gPj4+PiBleHRl
-cm5hbCBwcm9ncmFtIHdyaXRlcyBkYXRhIGluIDhELThELThEIG1vZGUgX3dpdGhvdXRfIHN3YXBw
-aW5nIA0KdGhlDQo+ID4+Pj4gYnl0ZXM/IFRoaXMgd291bGQgYWxzbyBjYXVzZSBkYXRhIGNvcnJ1
-cHRpb24uIFlvdSBjYW4ndCBjb250cm9sIA0Kd2hhdA0KPiA+Pj4+IHRoZXkgbW9kZSB0aGV5IHVz
-ZSwgYW5kIHlvdSBjYW4ndCBkZXRlY3QgaXQgbGF0ZXIgZWl0aGVyLg0KPiA+Pj4+DQo+ID4+Pj4g
-SSB0aGluayB0aGVyZSBpcyBubyB3aW5uaW5nIGhlcmUuIFlvdSBqdXN0IGhhdmUgdG8gc2F5IHRo
-YXQgDQpleHRlcm5hbA0KPiA+Pj4+IHByb2dyYW1zIHNob3VsZCB3cml0ZSBpbiA4RC04RC04RCBt
-b2RlIG9yIGl0IHdvbid0IGJvb3QuDQo+ID4gDQo+ID4gSU1ITyBpdCBzaG91bGQganVzdCB3b3Jr
-IHRoYXQgeW91IGNhbiB1c2UgMVMtMVMtMVMgbW9kZSBhbmQgOEQtOEQtOEQgDQpvbg0KPiA+IHRo
-ZQ0KPiA+IHNhbWUgZmxhc2guIEFmdGVyIGFsbCwgdGhhdCBpcyBUdWRvcidzIHVzZSBjYXNlLiBU
-aGUgUk9NIGFjY2VzcyB0aGUNCj4gPiBmbGFzaA0KPiA+IGluIHNpbmdsZSBiaXQgbW9kZSBhbmQg
-bGludXggaW4gOEQtOEQtOEQgbW9kZS4gTWF5YmUgdS1ib290IHdpbGwgdXNlDQo+ID4gcXVhZA0K
-PiA+IG1vZGUgaW4gYmV0d2Vlbi4gQWxsIG9mIHRoZXNlIGFjY2Vzc2VzIHNob3VsZCByZXR1cm4g
-dGhlIHNhbWUgZmxhc2gNCj4gPiBjb250ZW50Lg0KPiA+IA0KPiA+Pj4gSG93IGFib3V0IHN3YXBw
-aW5nIHRoZSBieXRlcyBqdXN0IGF0IHVzZXIgcmVxdWVzdD8gTWF5YmUgd2l0aCBhDQo+ID4+PiBL
-Y29uZmlnDQo+ID4+PiBvcHRpb24uDQo+ID4+DQo+ID4+IE1pY2hhZWwgaGFzIHN1Z2dlc3RlZCBv
-biAjaXJjIHRvIGFsd2F5cyBzd2FwIHRoZSBieXRlczogaWYgdGhlIFNQSQ0KPiA+PiBjb250cm9s
-bGVyDQo+ID4+IGNhbid0IGRvIGl0LCB0byBkbyBpdCBpbiBzb2Z0d2FyZSBhdCBTUEkgTk9SIGxl
-dmVsLiBJIGRvbid0IGtub3cgd2hhdA0KPiA+PiB0byBzYXkNCj4gPj4gYWJvdXQgdGhpcywgYmVj
-YXVzZSBKRURFQzIxNiBqdXN0IGluZm9ybXMgdGhlIHJlYWRlciBJIGd1ZXNzOg0KPiA+PiAiQnl0
-ZSBvcmRlciBvZiAxNi1iaXQgd29yZHMgaXMgc3dhcHBlZCB3aGVuIHJlYWQgaW4gOEQtOEQtOEQg
-bW9kZQ0KPiA+PiBjb21wYXJlZCB0bw0KPiA+PiAxLTEtMSBtb2RlLiIsIHRoaXMgZG9lc24ndCBs
-b29rIGxpa2UgYSBoYXJkIHJlcXVlc3QuIFRoZSBkb3duc2lkZSB0bw0KPiA+PiBkb2luZw0KPiA+
-PiB0aGUgc3dhcHBpbmcgaW4gc29mdHdhcmUgaXMgcGVyZm9ybWFuY2UgcGVuYWx0eSB3aGljaCB3
-aWxsIG1ha2UNCj4gPj4gbWFjcm9uaXgNCj4gPj4gdXNlcnMgaGF2ZSBzZWNvbmQgdGhvdWdodHMu
-IEkgZG9uJ3QgaGF2ZSBhIHN0cm9uZyBvcGluaW9uLCBidXQgSSBsZWFuDQo+ID4+IHRvd2FyZHMN
-Cj4gPj4gZG9pbmcgdGhlIHN3YXAganVzdCBhdCB1c2VyIHJlcXVlc3QsIHJlZ2FyZGxlc3MgaWYg
-SSBkbyBpdCB2aWEgdGhlIA0KU1BJDQo+ID4+IGNvbnRyb2xsZXINCj4gPj4gb3IgaW4gc29mdHdh
-cmUuDQo+ID4gDQo+ID4gSnVzdCBoYXZpbmcgYW5kIG9wdC1pbiB3aWxsIGJlIGEgbWVzcyBpbiB0
-aGUgZnV0dXJlIHdpdGggZmxhc2hlcw0KPiA+IGNvbnRhaW5pbmcNCj4gPiBieXRlIHN3YXBwZWQg
-Y29udGVudCBhbmQgd2UgY2FuJ3QgZXZlbiBmaXggaXQgYW5kIHdlIHdpbGwgaGF2ZSB0byBsaXZl
-DQo+ID4gd2l0aA0KPiA+IHRoYXQgZm9yZXZlci4gSU1ITyByaWdodCBub3cgaXMgdGhlIGJlc3Qg
-dGltZSB0byBjaXJjdW12ZW50IHRoYXQNCj4gPiBzY2VuYXJpby4NCj4gPiBJIGRvbid0IGhhdmUg
-YW55dGhpbmcgYWdhaW5zdCBtYWtlIGl0IHVzZXIgY29uZmlndXJhYmxlLCBidXQgaXQgc2hvdWxk
-DQo+ID4gYmUNCj4gPiBhbiBvcHQtb3V0Lg0KPiA+IA0KPiANCj4gc291bmRzIGdvb2QgdG8gbWUN
-Cj4gDQo+ID4gSSBoYXZlbid0IGxvb2tlZCBhdCBhbnkgY29udHJvbGxlcnMgd2hvIGNhbiBkbyA4
-RC04RC04RCBhY2Nlc3NlcywgDQptYXliZQ0KPiA+IG1vc3QNCj4gPiBvZiB0aGVtIGNhbiBkbyB0
-aGUgc3dhcHBpbmcgb24gdGhlaXIgb3duPyBTbyBpZiB5b3UgZG9uJ3Qgd2FudCB0bw0KPiA+IHN1
-cHBvcnQgYQ0KPiA+IHNvZnR3YXJlIGZhbGxiYWNrLCB0aGVuIHdlIHNob3VsZCBqdXN0IHNheSB0
-aGlzIG1vZGUgaXNuJ3Qgc3VwcG9ydGVkIA0KaWYNCj4gPiB0aGUgY29udHJvbGxlciBjYW4ndCBk
-byB0aGUgYnl0ZSBzd2FwcGluZyBhbmQgd2UgZmFsbCBiYWNrIHRvIGEgc2xvd2VyDQo+ID4gbW9k
-ZS4NCj4gDQo+IFNvZnR3YXJlIGZhbGxiYWNrIG9yIG1vZGUgZG93bmdyYWRlIC0gYm90aCBhcmUg
-Z29vZCBpZGVhcy4NCj4gUHJhdHl1c2gsIGNhbiB5b3VyIE9jdGFsIFNQSSBjb250cm9sbGVyIHN3
-YXAgYnl0ZXMgb24gYSAxNiBiaXQgYm91bmRhcnk/DQo+IA0KPiBUaGUgb25seSBkZWJhdGUgdGhh
-dCB3ZSBoYXZlIGlzIHdoZXRoZXIgdG8gYWx3YXlzIHN3YXAgKG9yIGRvd25ncmFkZSksDQo+IHRo
-dXMgdG8gaGF2ZSB0aGUgc2FtZSBieXRlIG9yZGVyIGFzIGluIDEtMS0xLCBvciB0byBpbnRyb2R1
-Y2UgYSBLY29uZmlnIA0Kb3B0aW9uDQo+IHRoYXQgd2lsbCBvcHQtb3V0IHRoZSBzd2FwLCBpc24n
-dCBpdD8gS2NvbmZpZyBpcyBhIGJpdCB1Z2xpZXIsIGJ1dCANCj4gbW9yZSBmbGV4aWJsZSwNCj4g
-YW5kIHdlIHN0aWxsIGRvbid0IGtub3cgZm9yIHN1cmUgaWYgdGhlIHN3YXAgaXMgbWFuZGF0b3J5
-IG9yIG5vdC4gDQo+IENhbiBzb21lb25lIGZyb20NCj4gbWFjcm9uaXggc2hlZCBzb21lIGxpZ2h0
-IG9uIHRoaXMgdG9waWM/DQoNClRoZSBtYWNyb25peCBpbiA4RC04RC04RCBtb2RlIGFsd2F5cyBo
-YXMgdG8gc3dhcCBkYXRhIGR1cmluZyByZWFkIGFuZCANCnByb2dyYW0NCm9wZXJhdGlvbnMuIFVu
-Zm9ydHVuYXRlbHkgdGhpcyBpcyBvdXIgbGltaXRhdGlvbiwgc3dhcCBkYXRhIGF0IHRoZSBmbGFz
-aCANCmxheWVyDQpyZWR1Y2VzIHBlcmZvcm1hbmNlIGFuZCBkb2VzIG5vdCBzdXBwb3J0IGRpcm1h
-cCBtb2RlLiBJZiB0aGUgU1BJIA0KY29udHJvbGxlcnMNCmFsbCBzdXBwb3J0IHN3YXAgZGF0YSwg
-ZXZlcnl0aGluZyBpcyBmaW5lLCBidXQgYXMgZmFyIGFzIEkga25vdywgdGhpcyBpcyANCnJhcmUu
-DQoNCkFsbCBpbiBhbGwsIHlvdXIgb3BpbmlvbnMgYW5kIGNvbW1lbnRzIGFyZSB2YWx1YWJsZS4g
-TW9yZW92ZXIgdGhlIGxlYXJuZWQgDQpsZXNzb25zDQpjb3VsZCBiZSBpbnB1dCB0byBuZXh0IGdl
-bmVyYXRpb24gb2YgT2N0YUZsYXNoLg0KDQpUaGFua3MsDQpaaGVuZ3h1bg0KDQoNCkNPTkZJREVO
-VElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIG1heSBjb250
-YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGlj
-aCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUgDQpyZW1pbmRlZCB0
-aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlz
-IGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBvciBhbnkgcGFydCB0aGVyZW9mIGlz
-IHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFz
-ZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgDQp3ZWxsIGFz
-IGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2Ug
-YmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nlc3NpbmcsIGFuZC9vciB1c2Ugb2Yg
-cGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQg
-YnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0KVGhhbmsgeW91IGZvciB5b3VyIGF0
-dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBM
-dGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQpDT05GSURF
-TlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29u
-dGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29yIHBlcnNvbmFsIGRhdGEsIHdoaWNo
-IGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSByZW1pbmRlZCB0aGF0
-IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlzIGUt
-bWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9o
-aWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlm
-eSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyB3ZWxsIGFzIGl0cyBhdHRh
-Y2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2UgYmUgaW5mb3Jt
-ZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRh
-dGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBieSBwZXJzb25hbCBk
-YXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29v
-cGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQ0K
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 
+Sascha
+
+> ---
+>  drivers/clk/imx/Makefile          |   1 +
+>  drivers/clk/imx/clk-fracn-gppll.c | 324 ++++++++++++++++++++++++++++++
+>  drivers/clk/imx/clk.h             |  21 ++
+>  3 files changed, 346 insertions(+)
+>  create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
+> 
+> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+> index 36c04922d789..60c8a4bb7574 100644
+> --- a/drivers/clk/imx/Makefile
+> +++ b/drivers/clk/imx/Makefile
+> @@ -5,6 +5,7 @@ mxc-clk-objs += clk-busy.o
+>  mxc-clk-objs += clk-composite-7ulp.o
+>  mxc-clk-objs += clk-composite-8m.o
+>  mxc-clk-objs += clk-composite-93.o
+> +mxc-clk-objs += clk-fracn-gppll.o
+>  mxc-clk-objs += clk-cpu.o
+>  mxc-clk-objs += clk-divider-gate.o
+>  mxc-clk-objs += clk-fixup-div.o
+> diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
+> new file mode 100644
+> index 000000000000..57b38147f05a
+> --- /dev/null
+> +++ b/drivers/clk/imx/clk-fracn-gppll.c
+> @@ -0,0 +1,324 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2021 NXP
+> + */
+> +
+> +#include <asm/div64.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/err.h>
+> +#include <linux/export.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/slab.h>
+> +#include <linux/jiffies.h>
+> +
+> +#include "clk.h"
+> +
+> +#define PLL_CTRL		0x0
+> +#define CLKMUX_BYPASS		BIT(2)
+> +#define CLKMUX_EN		BIT(1)
+> +#define POWERUP_MASK		BIT(0)
+> +
+> +#define PLL_ANA_PRG		0x10
+> +#define PLL_SPREAD_SPECTRUM	0x30
+> +
+> +#define PLL_NUMERATOR		0x40
+> +#define PLL_MFN_MASK		GENMASK(31, 2)
+> +
+> +#define PLL_DENOMINATOR		0x50
+> +#define PLL_MFD_MASK		GENMASK(29, 0)
+> +
+> +#define PLL_DIV			0x60
+> +#define PLL_MFI_MASK		GENMASK(24, 16)
+> +#define PLL_RDIV_MASK		GENMASK(15, 13)
+> +#define PLL_ODIV_MASK		GENMASK(7, 0)
+> +
+> +#define PLL_DFS_CTRL(x)		(0x70 + (x) * 0x10)
+> +
+> +#define PLL_STATUS		0xF0
+> +#define LOCK_STATUS		BIT(0)
+> +
+> +#define DFS_STATUS		0xF4
+> +
+> +#define LOCK_TIMEOUT_US		200
+> +
+> +#define PLL_FRACN_GP(_rate, _mfi, _mfn, _mfd, _rdiv, _odiv)	\
+> +	{							\
+> +		.rate	=	(_rate),			\
+> +		.mfi	=	(_mfi),				\
+> +		.mfn	=	(_mfn),				\
+> +		.mfd	=	(_mfd),				\
+> +		.rdiv	=	(_rdiv),			\
+> +		.odiv	=	(_odiv),			\
+> +	}
+> +
+> +struct clk_fracn_gppll {
+> +	struct clk_hw			hw;
+> +	void __iomem			*base;
+> +	const struct imx_fracn_gppll_rate_table *rate_table;
+> +	int rate_count;
+> +};
+> +
+> +/*
+> + * Fvco = Fref * (MFI + MFN / MFD)
+> + * Fout = Fvco / (rdiv * odiv)
+> + */
+> +static const struct imx_fracn_gppll_rate_table fracn_tbl[] = {
+> +	PLL_FRACN_GP(650000000U, 81, 0, 0, 0, 3),
+> +	PLL_FRACN_GP(594000000U, 198, 0, 0, 0, 8),
+> +	PLL_FRACN_GP(560000000U, 70, 0, 0, 0, 3),
+> +	PLL_FRACN_GP(400000000U, 50, 0, 0, 0, 3),
+> +	PLL_FRACN_GP(393216000U, 81, 92, 100, 0, 5)
+> +};
+> +
+> +struct imx_fracn_gppll_clk imx_fracn_gppll = {
+> +	.rate_table = fracn_tbl,
+> +	.rate_count = ARRAY_SIZE(fracn_tbl),
+> +};
+> +EXPORT_SYMBOL_GPL(imx_fracn_gppll);
+> +
+> +static inline struct clk_fracn_gppll *to_clk_fracn_gppll(struct clk_hw *hw)
+> +{
+> +	return container_of(hw, struct clk_fracn_gppll, hw);
+> +}
+> +
+> +static const struct imx_fracn_gppll_rate_table *
+> +imx_get_pll_settings(struct clk_fracn_gppll *pll, unsigned long rate)
+> +{
+> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
+> +	int i;
+> +
+> +	for (i = 0; i < pll->rate_count; i++)
+> +		if (rate == rate_table[i].rate)
+> +			return &rate_table[i];
+> +
+> +	return NULL;
+> +}
+> +
+> +static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
+> +				       unsigned long *prate)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
+> +	int i;
+> +
+> +	/* Assuming rate_table is in descending order */
+> +	for (i = 0; i < pll->rate_count; i++)
+> +		if (rate >= rate_table[i].rate)
+> +			return rate_table[i].rate;
+> +
+> +	/* return minimum supported value */
+> +	return rate_table[pll->rate_count - 1].rate;
+> +}
+> +
+> +static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
+> +	u32 pll_numerator, pll_denominator, pll_div;
+> +	u32 mfi, mfn, mfd, rdiv, odiv;
+> +	u64 fvco = parent_rate;
+> +	long rate = 0;
+> +	int i;
+> +
+> +	pll_numerator = readl_relaxed(pll->base + PLL_NUMERATOR);
+> +	mfn = FIELD_GET(PLL_MFN_MASK, pll_numerator);
+> +
+> +	pll_denominator = readl_relaxed(pll->base + PLL_DENOMINATOR);
+> +	mfd = FIELD_GET(PLL_MFD_MASK, pll_denominator);
+> +
+> +	pll_div = readl_relaxed(pll->base + PLL_DIV);
+> +	mfi = FIELD_GET(PLL_MFI_MASK, pll_div);
+> +
+> +	rdiv = FIELD_GET(PLL_RDIV_MASK, pll_div);
+> +	rdiv = rdiv + 1;
+> +	odiv = FIELD_GET(PLL_ODIV_MASK, pll_div);
+> +	switch (odiv) {
+> +	case 0:
+> +		odiv = 2;
+> +		break;
+> +	case 1:
+> +		odiv = 3;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	/*
+> +	 * Sometimes, the recalculated rate has deviation due to
+> +	 * the frac part. So find the accurate pll rate from the table
+> +	 * first, if no match rate in the table, use the rate calculated
+> +	 * from the equation below.
+> +	 */
+> +	for (i = 0; i < pll->rate_count; i++) {
+> +		if (rate_table[i].mfn == mfn && rate_table[i].mfi == mfi &&
+> +		    rate_table[i].mfd == mfd && rate_table[i].rdiv == rdiv &&
+> +		    rate_table[i].odiv == odiv)
+> +			rate = rate_table[i].rate;
+> +	}
+> +
+> +	if (rate)
+> +		return (unsigned long)rate;
+> +
+> +	/* Fvco = Fref * (MFI + MFN / MFD) */
+> +	fvco = fvco * mfi * mfd + fvco * mfn;
+> +	do_div(fvco, mfd * rdiv * odiv);
+> +
+> +	return (unsigned long)fvco;
+> +}
+> +
+> +static int clk_fracn_gppll_wait_lock(struct clk_fracn_gppll *pll)
+> +{
+> +	u32 val;
+> +
+> +	return readl_poll_timeout(pll->base + PLL_STATUS, val,
+> +				  val & LOCK_STATUS, 0, LOCK_TIMEOUT_US);
+> +}
+> +
+> +static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
+> +				    unsigned long prate)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	const struct imx_fracn_gppll_rate_table *rate;
+> +	u32 tmp, pll_div, ana_mfn;
+> +	int ret;
+> +
+> +	rate = imx_get_pll_settings(pll, drate);
+> +
+> +	/* Disable output */
+> +	tmp = readl_relaxed(pll->base + PLL_CTRL);
+> +	tmp &= ~CLKMUX_EN;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Power Down */
+> +	tmp &= ~POWERUP_MASK;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Disable BYPASS */
+> +	tmp &= ~CLKMUX_BYPASS;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate->rdiv) | rate->odiv |
+> +		FIELD_PREP(PLL_MFI_MASK, rate->mfi);
+> +	writel_relaxed(pll_div, pll->base + PLL_DIV);
+> +	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
+> +	writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate->mfn), pll->base + PLL_NUMERATOR);
+> +
+> +	/* Wait for 5us according to fracn mode pll doc */
+> +	udelay(5);
+> +
+> +	/* Enable Powerup */
+> +	tmp |= POWERUP_MASK;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Wait Lock */
+> +	ret = clk_fracn_gppll_wait_lock(pll);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Enable output */
+> +	tmp |= CLKMUX_EN;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	ana_mfn = readl_relaxed(pll->base + PLL_STATUS);
+> +	ana_mfn = FIELD_GET(PLL_MFN_MASK, ana_mfn);
+> +
+> +	WARN(ana_mfn != rate->mfn, "ana_mfn != rate->mfn\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int clk_fracn_gppll_prepare(struct clk_hw *hw)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	u32 val;
+> +	int ret;
+> +
+> +	val = readl_relaxed(pll->base + PLL_CTRL);
+> +	if (val & POWERUP_MASK)
+> +		return 0;
+> +
+> +	val |= CLKMUX_BYPASS;
+> +	writel_relaxed(val, pll->base + PLL_CTRL);
+> +
+> +	val |= POWERUP_MASK;
+> +	writel_relaxed(val, pll->base + PLL_CTRL);
+> +
+> +	val |= CLKMUX_EN;
+> +	writel_relaxed(val, pll->base + PLL_CTRL);
+> +
+> +	ret = clk_fracn_gppll_wait_lock(pll);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val &= ~CLKMUX_BYPASS;
+> +	writel_relaxed(val, pll->base + PLL_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int clk_fracn_gppll_is_prepared(struct clk_hw *hw)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	u32 val;
+> +
+> +	val = readl_relaxed(pll->base + PLL_CTRL);
+> +
+> +	return (val & POWERUP_MASK) ? 1 : 0;
+> +}
+> +
+> +static void clk_fracn_gppll_unprepare(struct clk_hw *hw)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	u32 val;
+> +
+> +	val = readl_relaxed(pll->base + PLL_CTRL);
+> +	val &= ~POWERUP_MASK;
+> +	writel_relaxed(val, pll->base + PLL_CTRL);
+> +}
+> +
+> +static const struct clk_ops clk_fracn_gppll_ops = {
+> +	.prepare	= clk_fracn_gppll_prepare,
+> +	.unprepare	= clk_fracn_gppll_unprepare,
+> +	.is_prepared	= clk_fracn_gppll_is_prepared,
+> +	.recalc_rate	= clk_fracn_gppll_recalc_rate,
+> +	.round_rate	= clk_fracn_gppll_round_rate,
+> +	.set_rate	= clk_fracn_gppll_set_rate,
+> +};
+> +
+> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+> +				   const struct imx_fracn_gppll_clk *pll_clk)
+> +{
+> +	struct clk_fracn_gppll *pll;
+> +	struct clk_hw *hw;
+> +	struct clk_init_data init;
+> +	int ret;
+> +
+> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
+> +	if (!pll)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	init.name = name;
+> +	init.flags = pll_clk->flags;
+> +	init.parent_names = &parent_name;
+> +	init.num_parents = 1;
+> +	init.ops = &clk_fracn_gppll_ops;
+> +
+> +	pll->base = base;
+> +	pll->hw.init = &init;
+> +	pll->rate_table = pll_clk->rate_table;
+> +	pll->rate_count = pll_clk->rate_count;
+> +
+> +	hw = &pll->hw;
+> +
+> +	ret = clk_hw_register(NULL, hw);
+> +	if (ret) {
+> +		pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
+> +		kfree(pll);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return hw;
+> +}
+> +EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll);
+> diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
+> index 63eb7c53b123..a7cbbcd1a3f4 100644
+> --- a/drivers/clk/imx/clk.h
+> +++ b/drivers/clk/imx/clk.h
+> @@ -72,6 +72,27 @@ extern struct imx_pll14xx_clk imx_1416x_pll;
+>  extern struct imx_pll14xx_clk imx_1443x_pll;
+>  extern struct imx_pll14xx_clk imx_1443x_dram_pll;
+>  
+> +/* NOTE: Rate table should be kept sorted in descending order. */
+> +struct imx_fracn_gppll_rate_table {
+> +	unsigned int rate;
+> +	unsigned int mfi;
+> +	unsigned int mfn;
+> +	unsigned int mfd;
+> +	unsigned int rdiv;
+> +	unsigned int odiv;
+> +};
+> +
+> +struct imx_fracn_gppll_clk {
+> +	const struct imx_fracn_gppll_rate_table *rate_table;
+> +	int rate_count;
+> +	int flags;
+> +};
+> +
+> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+> +				   const struct imx_fracn_gppll_clk *pll_clk);
+> +
+> +extern struct imx_fracn_gppll_clk imx_fracn_gppll;
+> +
+>  #define imx_clk_cpu(name, parent_name, div, mux, pll, step) \
+>  	to_clk(imx_clk_hw_cpu(name, parent_name, div, mux, pll, step))
+>  
+> -- 
+> 2.25.1
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

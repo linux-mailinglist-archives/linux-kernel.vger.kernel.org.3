@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19A94C51BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BACD94C51C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238814AbiBYWsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S238841AbiBYWyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 17:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiBYWsK (ORCPT
+        with ESMTP id S229885AbiBYWye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:48:10 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC5563BCF;
-        Fri, 25 Feb 2022 14:47:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 380C7CE2738;
-        Fri, 25 Feb 2022 22:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E24C340E7;
-        Fri, 25 Feb 2022 22:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645829252;
-        bh=ZWAUhBJxg8NCTwiRaWSx+UQdJz9T7y5h3/hdV7NXs9U=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YIAkmATeuQzv7tkGWIScYHZZ6X2DrOIsvq4GuH4oBPUhEMCaj+zPL7ocfOhL/Fwxf
-         WnUOhkOkjTpC7oq++3Nb/TEkpy0mqSx75efEjSp8pJDoUHcIs+ZN1tq1htO5HJ/XBM
-         dofFrC4gabTV2DBBZ1CsOFovnCV1DDEFbxAILwbiHNEobym+SIVb50rH6BLVgCMjzs
-         XvQo+z8+GyqgL20Z9BnSWHQ43PoPs98NmRYyPPe52JU6y/bavi0eUU3RSdiF5xUC84
-         D20TAWbZm5vvIwE4pjzkjaBZwZ8j5+C+g3sJ4l5QLyaiFQ6zuS72k75CdbcqcCxPeX
-         o2TF/UsZBmsiQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 25 Feb 2022 17:54:34 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2C81EF352;
+        Fri, 25 Feb 2022 14:54:01 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 849FC1F467FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645829639;
+        bh=z3qh2ebyqlz3f5zcWAVAwa251mEJPQcuQVDkYC5qazU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i0+fdRVLpSihQ9Lvk2+OUwe0bzCpQVBUI58Me8jDXbOtH9eXiyBl1rziYfbZf4yCR
+         o/M7+WbaZvC4zgKGsXAiskg27Xjxq6hGL5VPcNbbC3w3n0dRuSbtJxHYEm9Hux5D0+
+         kV18GKHZNKhptAbyCY0rOImIA0VNVz4Kne6l1l977yO3Imt6jbrvJNtuaiGTj4ps0Y
+         JCxhH7xJLDdfrF6TiSK/VUnO1Dc3YuPfvcSnyHJahCpxMOOwKSqTdVoFSG6fGrCWvg
+         p9RmKQkXoK5SmJ4pFCXPYJgiasDrCaCkJ3GSgbrwi1Iv7YyE9ALeYOjrwntt+m/vFk
+         IN72WIcx5b4NA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com, Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v1] arm/arm64: dts: mediatek: Format mediatek,larbs as an array of phandles
+Date:   Fri, 25 Feb 2022 17:53:15 -0500
+Message-Id: <20220225225315.80220-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220222082140.2073629-1-abel.vesa@nxp.com>
-References: <20220222082140.2073629-1-abel.vesa@nxp.com>
-Subject: Re: [PATCH] dt-bindings: fsl: scu: add imx8dxl scu clock support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org
-To:     Abel Vesa <abel.vesa@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Rob Herring <robh@kernel.org>
-Date:   Fri, 25 Feb 2022 14:47:30 -0800
-User-Agent: alot/0.10
-Message-Id: <20220225224732.63E24C340E7@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,10 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abel Vesa (2022-02-22 00:21:40)
-> Add imx8dxl scu clock support.
->=20
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
+Commit 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
+updated the mediatek,larbs property in the mediatek,iommu.yaml
+dt-binding to make it clearer that the phandles passed to the property
+are independent, rather than subsequent arguments to the first phandle.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Update the mediatek,larbs property in the Devicetrees to use the same
+formatting. This change doesn't impact any behavior: the compiled dtb is
+exactly the same. It does however fix the warnings generated by
+dtbs_check.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+
+ arch/arm/boot/dts/mt2701.dtsi             | 2 +-
+ arch/arm/boot/dts/mt7623n.dtsi            | 2 +-
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 6 +++---
+ arch/arm64/boot/dts/mediatek/mt8167.dtsi  | 2 +-
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi  | 4 ++--
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi  | 4 ++--
+ 6 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
+index 4776f85d6d5b..64722285228c 100644
+--- a/arch/arm/boot/dts/mt2701.dtsi
++++ b/arch/arm/boot/dts/mt2701.dtsi
+@@ -222,7 +222,7 @@ iommu: mmsys_iommu@10205000 {
+ 		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
+-		mediatek,larbs = <&larb0 &larb1 &larb2>;
++		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
+ 		#iommu-cells = <1>;
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/mt7623n.dtsi b/arch/arm/boot/dts/mt7623n.dtsi
+index bcb0846e29fd..f9e031621c80 100644
+--- a/arch/arm/boot/dts/mt7623n.dtsi
++++ b/arch/arm/boot/dts/mt7623n.dtsi
+@@ -107,7 +107,7 @@ iommu: mmsys_iommu@10205000 {
+ 		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
+-		mediatek,larbs = <&larb0 &larb1 &larb2>;
++		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
+ 		#iommu-cells = <1>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+index de16c0d80c30..973c9beade0c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+@@ -329,8 +329,8 @@ iommu0: iommu@10205000 {
+ 		interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
+-		mediatek,larbs = <&larb0 &larb1 &larb2
+-				  &larb3 &larb6>;
++		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
++				 <&larb3>, <&larb6>;
+ 		#iommu-cells = <1>;
+ 	};
+ 
+@@ -346,7 +346,7 @@ iommu1: iommu@1020a000 {
+ 		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
+-		mediatek,larbs = <&larb4 &larb5 &larb7>;
++		mediatek,larbs = <&larb4>, <&larb5>, <&larb7>;
+ 		#iommu-cells = <1>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8167.dtsi b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+index 9029051624a6..54655f2feb04 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8167.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+@@ -174,7 +174,7 @@ larb2: larb@16010000 {
+ 		iommu: m4u@10203000 {
+ 			compatible = "mediatek,mt8167-m4u";
+ 			reg = <0 0x10203000 0 0x1000>;
+-			mediatek,larbs = <&larb0 &larb1 &larb2>;
++			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
+ 			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_LOW>;
+ 			#iommu-cells = <1>;
+ 		};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index 2b7d331a4588..042feaedda4a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -588,8 +588,8 @@ iommu: iommu@10205000 {
+ 			interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_LOW>;
+ 			clocks = <&infracfg CLK_INFRA_M4U>;
+ 			clock-names = "bclk";
+-			mediatek,larbs = <&larb0 &larb1 &larb2
+-					  &larb3 &larb4 &larb5>;
++			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
++					 <&larb3>, <&larb4>, <&larb5>;
+ 			#iommu-cells = <1>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 00f2ddd245e1..523741150968 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -682,8 +682,8 @@ iommu: iommu@10205000 {
+ 			compatible = "mediatek,mt8183-m4u";
+ 			reg = <0 0x10205000 0 0x1000>;
+ 			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_LOW>;
+-			mediatek,larbs = <&larb0 &larb1 &larb2 &larb3
+-					  &larb4 &larb5 &larb6>;
++			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>, <&larb3>,
++					 <&larb4>, <&larb5>, <&larb6>;
+ 			#iommu-cells = <1>;
+ 		};
+ 
+-- 
+2.35.1
+

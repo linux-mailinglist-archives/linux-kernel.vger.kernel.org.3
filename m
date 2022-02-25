@@ -2,147 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7320E4C49C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED934C49CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242453AbiBYP46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S242484AbiBYP5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237999AbiBYP44 (ORCPT
+        with ESMTP id S242468AbiBYP5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:56:56 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237941D8A82;
-        Fri, 25 Feb 2022 07:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1645804584; x=1677340584;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SWyuAuqtzwMzh5dusk1nwmrFDHzqhA5gzL9zdrzlblw=;
-  b=nxT/lWz5t/rOIFwsLbsG74pH+PZoN4XgwZdxmqDd8kAeax/xutL6lxDS
-   cvYkqcF3LgwHR7tkop9//Ku0kzu4oEZla5Sa12XN9t9AQk4XIPZ3gMXwG
-   0Rf1aaaUis3J5qQ7WInRsNFFF/2/JA/VrCVySaPUHVesqd/1WjHvJaWPC
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.90,136,1643673600"; 
-   d="scan'208";a="66236117"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-9a235a16.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 25 Feb 2022 15:56:06 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-9a235a16.us-east-1.amazon.com (Postfix) with ESMTPS id DEFF381488;
-        Fri, 25 Feb 2022 15:56:02 +0000 (UTC)
-Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 25 Feb 2022 15:56:02 +0000
-Received: from u79c5a0a55de558.ant.amazon.com (10.43.160.203) by
- EX13D20UWC001.ant.amazon.com (10.43.162.244) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 25 Feb 2022 15:56:00 +0000
-From:   Alexander Graf <graf@amazon.com>
-To:     <linux-acpi@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        "Greg KH" <gregkh@linuxfoundation.org>, <ardb@kernel.org>,
-        <dwmw@amazon.co.uk>
-Subject: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
-Date:   Fri, 25 Feb 2022 16:55:52 +0100
-Message-ID: <20220225155552.30636-1-graf@amazon.com>
-X-Mailer: git-send-email 2.28.0.394.ge197136389
+        Fri, 25 Feb 2022 10:57:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950281D8A87
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:56:49 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nNcxH-0003K9-Po; Fri, 25 Feb 2022 16:56:27 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-c8b7-5627-f914-a39f.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:c8b7:5627:f914:a39f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8C77E3D790;
+        Fri, 25 Feb 2022 15:56:21 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 16:56:21 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
+        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
+        paskripkin@gmail.com, thunder.leizhen@huawei.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: usb: fix a possible memory leak in
+ esd_usb2_start_xmit
+Message-ID: <20220225155621.7zmfukra63qcxjo5@pengutronix.de>
+References: <20220225060019.21220-1-hbh25y@gmail.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.43.160.203]
-X-ClientProxiedBy: EX13D16UWC004.ant.amazon.com (10.43.162.72) To
- EX13D20UWC001.ant.amazon.com (10.43.162.244)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pued4m6gminpxchp"
+Content-Disposition: inline
+In-Reply-To: <20220225060019.21220-1-hbh25y@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We create a list of ACPI "PNP" IDs which contains _HID, _CID and CLS
-entries of the respective devices. However, we squeeze them into
-struct acpi_device_id which only has 9 bytes space to store the identifier
-based on the ACPI spec:
 
-"""
-A _HID object evaluates to either a numeric 32-bit compressed EISA
-type ID or a string. If a string, the format must be an alphanumeric
-PNP or ACPI ID with no asterisk or other leading characters.
-A valid PNP ID must be of the form "AAA####" where A is an uppercase
-letter and # is a hex digit.
-A valid ACPI ID must be of the form "NNNN####" where N is an uppercase
-letter or a digit ('0'-'9') and # is a hex digit. This specification
-reserves the string "ACPI" for use only with devices defined herein.
-It further reserves all strings representing 4 HEX digits for
-exclusive use with PCI-assigned Vendor IDs.
-"""
+--pued4m6gminpxchp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-While most people adhere to the ACPI specs, Microsoft decided that its
-VM Generation Counter device [1] should only be identifiable by _CID with
-an value of "VM_Gen_Counter" - longer than 9 characters.
+On 25.02.2022 14:00:19, Hangyu Hua wrote:
+> As in case of ems_usb_start_xmit, dev_kfree_skb needs to be called when
+> usb_submit_urb fails to avoid possible refcount leaks.
 
-To still allow device drivers to match identifiers that exceed the 9 byte
-limit, without wasting memory for the unlikely case that you have long
-identifiers, let's match only the first 9 characters of the identifier.
+Thanks for your patch. Have you tested that there is actually a mem
+leak? Please have a look at the can_free_echo_skb() function that is
+called a few lines earlier.
 
-This patch is a prerequisite to add support for VMGenID in Linux [2].
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  drivers/net/can/usb/esd_usb2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb=
+2.c
+> index 286daaaea0b8..7b5e6c250d00 100644
+> --- a/drivers/net/can/usb/esd_usb2.c
+> +++ b/drivers/net/can/usb/esd_usb2.c
+> @@ -810,7 +810,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff=
+ *skb,
+>  		usb_unanchor_urb(urb);
+> =20
+>  		stats->tx_dropped++;
+> -
+> +		dev_kfree_skb(skb);
+>  		if (err =3D=3D -ENODEV)
+>  			netif_device_detach(netdev);
+>  		else
 
-[1] https://download.microsoft.com/download/3/1/C/31CFC307-98CA-4CA5-914C-D9772691E214/VirtualMachineGenerationID.docx
-[2] https://lore.kernel.org/lkml/20220225124848.909093-1-Jason@zx2c4.com/
+regards,
+Marc
 
-Signed-off-by: Alexander Graf <graf@amazon.com>
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
----
+--pued4m6gminpxchp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Alternatives to the approach above would be:
+-----BEGIN PGP SIGNATURE-----
 
-  1) Always set id[8] = '\0' in acpi_add_id()
-  2) Allocate the id in struct acpi_device_id dynamically
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIY/B0ACgkQrX5LkNig
+010abwf/bUMOxEyTJnGi9fpvefrrw+we+LekwHCyTh6UZtmlfpja5jCRUpVXrEoz
+OBhKFad/LqwDjKe29Tfzyh0m16rTo/khP0ZaGENZ7R26n2S2dqxtKKAzSsEu/WKC
+GXYcRZ+N9ZnITUDoskixvh2CN4YtU1jYgbnwBndWbmDAxk0gpWkfqxHKXprjwHrB
+rgwlWCp0s5zyubIDWPxb4D7dbgEEA7CEhRScOHVHdt01EFwqv6HdlquzkGR+X3n7
+mE4j12qffh8MAprRDjWQD//9v8suafQ++0gLoeNT88Tzy+46qoLhm9bp5fK5TyFD
+RCzY+6AhdKW2EGdmTe9GQM73rStQdg==
+=pavt
+-----END PGP SIGNATURE-----
 
-I'm happy to explore option 1 instead if people believe it's cleaner.
-Option 2 on the other hand seems overkill for the issue at hand. We don't
-have a lot of devices that exceed the 8 character threshold, so chance of
-collision is quite small. On the other hand, the extra overhead of
-maintaining the string allocation dynamically will quickly become a
-headache.
-
----
- drivers/acpi/bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 07f604832fd6..aba93171739f 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -829,7 +829,7 @@ static bool __acpi_match_device(struct acpi_device *device,
- 		/* First, check the ACPI/PNP IDs provided by the caller. */
- 		if (acpi_ids) {
- 			for (id = acpi_ids; id->id[0] || id->cls; id++) {
--				if (id->id[0] && !strcmp((char *)id->id, hwid->id))
-+				if (id->id[0] && !strncmp((char *)id->id, hwid->id, ACPI_ID_LEN))
- 					goto out_acpi_match;
- 				if (id->cls && __acpi_match_device_cls(id, hwid))
- 					goto out_acpi_match;
--- 
-2.16.4
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+--pued4m6gminpxchp--

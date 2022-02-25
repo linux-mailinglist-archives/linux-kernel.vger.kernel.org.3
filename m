@@ -2,187 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95564C490E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBFF4C4912
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242143AbiBYPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S242148AbiBYPdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiBYPdf (ORCPT
+        with ESMTP id S242145AbiBYPdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:33:35 -0500
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2574F17063;
-        Fri, 25 Feb 2022 07:32:59 -0800 (PST)
-Received: from [45.44.224.220] (port=57024 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1nNcaY-0002AP-EJ; Fri, 25 Feb 2022 10:32:58 -0500
-Message-ID: <2cedc9f21a1c89aa9fe1fa4dffc2ebeabeb761f5.camel@trillion01.com>
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     Hao Xu <haoxu@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 25 Feb 2022 10:32:57 -0500
-In-Reply-To: <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
-         <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
-         <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.4 
+        Fri, 25 Feb 2022 10:33:52 -0500
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE194181E77;
+        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id u3so6590446ybh.5;
+        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=eABu8QHBsdfkHA3w12JWmBEc2OZCUV76ZExfQivismc=;
+        b=ouie04PEWm6L1v9RlxcJAHW2NzEliePn7ocN1YUHFrRzlyNdcJpmX0BD/yOn8y3Mbh
+         sk8XVGjlAP5+TrK88b2K8zMt0+bTOW0jP5g0AZGwkl7WpjY1kQ5mGdeEStHGYR71MFqY
+         puWslGh60nf5r+rMUfmFF4V1HRhiAdmkb+5nZV/1bwc+WNI0fE7nhKJldcmBEOFgL6Jw
+         W/F86lrKbzNeUTMNKVR7zzzKXTgYPgy6VXAEXURGN8JRmpcUvQ+psk8Tv37sOzoIJLsx
+         qYRkHj7gWW0luaisppWwo1nkPranaisZSmZ4uo1FNE0gNoyYalHqYpublUqApoxBhdMN
+         1A2Q==
+X-Gm-Message-State: AOAM532yQ/dhkUf1NMMkcuNB/kSsM8w+NYcEgFCmWDrMm7Zms9VvW/0R
+        7J/wY4Rud1lQjRInoFC9p9HPfALc4wCcnorsW3SAWXmb/b4=
+X-Google-Smtp-Source: ABdhPJxsDqyFM8lHB1ww0LkZcf1spz1fbcJhFO7+5DEGzYZRLP8MjQ2NSomKv4l9/DlSpZ0uBgm2k0FloTFi7cxK+xM=
+X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
+ s127-20020a257785000000b00614c2832a3dmr7913179ybc.137.1645803199100; Fri, 25
+ Feb 2022 07:33:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Feb 2022 16:33:08 +0100
+Message-ID: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v5.17-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-25 at 00:32 -0500, Olivier Langlois wrote:
-> 
-> > > 
-> > > +#ifdef CONFIG_NET_RX_BUSY_POLL
-> > > +static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
-> > > +                                       struct io_wait_queue
-> > > *iowq)
-> > > +{
-> > > +       unsigned busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
-> > > +       struct timespec64 pollto = ns_to_timespec64(1000 *
-> > > (s64)busy_poll_to);
-> > > +
-> > > +       if (timespec64_compare(ts, &pollto) > 0) {
-> > > +               *ts = timespec64_sub(*ts, pollto);
-> > > +               iowq->busy_poll_to = busy_poll_to;
-> > > +       } else {
-> > > +               iowq->busy_poll_to = timespec64_to_ns(ts) / 1000;
-> > 
-> > How about timespec64_tons(ts) >> 10, since we don't need accurate
-> > number.
-> 
-> Fantastic suggestion! The kernel test robot did also detect an issue
-> with that statement. I did discover do_div() in the meantime but what
-> you suggest is better, IMHO...
+Hi Linus,
 
-After having seen Jens patch (io_uring: don't convert to jiffies for
-waiting on timeouts), I think that I'll stick with do_div().
+Please pull from the tag
 
-I have a hard time considering removing timing accuracy when effort is
-made to make the same function more accurate...
-> 
-> 
-> > > +                !io_busy_loop_end(iowq, start_time));
-> > > +}
-> > > +#endif /* CONFIG_NET_RX_BUSY_POLL */
-> > > +
-> > >   /*
-> > >    * Wait until events become available, if we don't already have
-> > > some. The
-> > >    * application must reap them itself, as they reside on the
-> > > shared cq ring.
-> > > @@ -7729,12 +7906,20 @@ static int io_cqring_wait(struct
-> > > io_ring_ctx *ctx, int min_events,
-> > >                 if (!io_run_task_work())
-> > >                         break;
-> > >         } while (1);
-> > > -
-> > > +#ifdef CONFIG_NET_RX_BUSY_POLL
-> > > +       iowq.busy_poll_to = 0;
-> > > +#endif
-> > >         if (uts) {
-> > >                 struct timespec64 ts;
-> > >   
-> > >                 if (get_timespec64(&ts, uts))
-> > >                         return -EFAULT;
-> > > +#ifdef CONFIG_NET_RX_BUSY_POLL
-> > > +               if (!(ctx->flags & IORING_SETUP_SQPOLL) &&
-> > > +                   !list_empty(&ctx->napi_list)) {
-> > > +                       io_adjust_busy_loop_timeout(&ts, &iowq);
-> > > +               }
-> > > +#endif
-> > >                 timeout = timespec64_to_jiffies(&ts);
-> > >         }
-> > >   
-> > > @@ -7759,6 +7944,10 @@ static int io_cqring_wait(struct
-> > > io_ring_ctx
-> > > *ctx, int min_events,
-> > >         iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) +
-> > > min_events;
-> > >   
-> > >         trace_io_uring_cqring_wait(ctx, min_events);
-> > > +#ifdef CONFIG_NET_RX_BUSY_POLL
-> > > +       if (iowq.busy_poll_to)
-> > > +               io_blocking_napi_busy_loop(ctx, &iowq);
-> > 
-> > We may not need locks for the napi_list, the reason is we don't
-> > need
-> > to
-> > poll an accurate list, the busy polling/NAPI itself is kind of
-> > speculation. So the deletion is not an emergency.
-> > To say the least, we can probably delay the deletion to some safe
-> > place
-> > like the original task's task work though this may cause other
-> > problems...
-> 
-> There are 2 concerns here.
-> 
-> 1. Iterating a list while another thread modify it is not thread-safe
-> unless you use a lock.
-> 
-> If we offer napi_busy_poll() without sqpoll with the modification in
-> io_cqring_wait(), this is a real possibility. A thread could call
-> io_uring_enter(IORING_ENTER_GETEVENTS) while another thread calls
-> io_uring_enter() to submit new sqes that could trigger a call to
-> io_add_napi().
-> 
-> If napi_busy_poll() is only offered through sqpoll thread, this
-> becomes
-> a non-issue since the only thread accessing/modifying the napi_list
-> field is the sqpoll thread.
-> 
-> Providing the patch benchmark result with v2 could help deciding what
-> to do with this choice.
-> 
-> 2. You are correct when you say that deletion is not an emergency. 
-> 
-> However, the design guideline that I did follow when writing the
-> patch
-> is that napi_busy_poll support should not impact users not using this
-> feature. Doing the deletion where that patch is doing it fullfill
-> this
-> goal.
-> 
-> Comparing a timeout value with the jiffies variable is very cheap and
-> will only be performed when napi_busy_poll is used.
-> 
-> The other option would be to add a refcount to each napi_entry and
-> decrement it if needed everytime a request is discarded. Doing that
-> that check for every requests that io_uring discards on completion, I
-> am very confident that this would negatively impact various
-> performance
-> benchmarks that Jens routinely perform...
-> 
-Another fact to consider, it is that I expect the content of napi_list
-to be extremely stable. Regular entry deletion should not be a thing.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.17-rc6
 
-postponing the deletion using task work is not an option too. How would
-io_busy_loop_end() discern between a pending list entry deletion and
-any other task work making the busy looping stop?
+with top-most commit 3abea10e6a8f0e7804ed4c124bea2d15aca977c8
 
+ thermal: int340x: fix memory leak in int3400_notify()
+
+on top of commit cfb92440ee71adcc2105b0890bb01ac3cddb8507
+
+ Linux 5.17-rc5
+
+to receive a thermal control fix for 5.17-rc6.
+
+This fixes a memory leak in the int340x thermal driver's ACPI notify
+handler (Chuansheng Liu).
+
+Thanks!
+
+
+---------------
+
+Chuansheng Liu (1):
+      thermal: int340x: fix memory leak in int3400_notify()
+
+---------------
+
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)

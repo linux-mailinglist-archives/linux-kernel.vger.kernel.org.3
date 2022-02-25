@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A592A4C5021
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452464C502B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237912AbiBYUxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S236843AbiBYUzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238233AbiBYUxM (ORCPT
+        with ESMTP id S233762AbiBYUzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:53:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D204A915;
-        Fri, 25 Feb 2022 12:52:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=mRnwsckpOZEOzJRp+vH/tiCdw3vZv2oJQwGWi1VkBT4=; b=cEM/a8HfVpJy36VpZLKcxxJOaN
-        qFA5LuqH8piOtvXPhXLvPAM9Q28Y3kHp8xkGYACDN47TIFPyCb5xPyhRRFGwCsKMV02Ww4340Dv1m
-        2hGbcwveUHKiyB+5wDzOxDVOygCZQG0U6H5F6D1cAZOq30wwGL0edDbYsAyy6oQSDfPlTF9PfdIH9
-        rd0fRVZMYUczjTM6hLHlJY4jDZkV4ha9J/A1wlY/FFH0+z0DE+BgoIRD0tfKrjXvdmkcHgKusHIUV
-        bNORt6aAUtdwkSRF7PiTMIIGXJEwpw3ujb3UM0ftD6+fe8ank+ueBXjUcxGiTtl2cAaF+DjgDL2Zg
-        aicWoXoA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNhZl-0067eL-2x; Fri, 25 Feb 2022 20:52:29 +0000
-Message-ID: <515e00ec-fdfb-0a45-f504-4dd2dce60254@infradead.org>
-Date:   Fri, 25 Feb 2022 12:52:16 -0800
+        Fri, 25 Feb 2022 15:55:35 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9471D793D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:54:59 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id a23so13117143eju.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:54:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5uRsrBukF/OaHklKeUPxgxH16ty4e2SknPEAhNIbuzI=;
+        b=Oj2UeHh27U1O4N7l5DBWuAtV67Ay3IpEleEp+o54d3CxEXDSMdqy6DaeA+FVZB28VP
+         wIIn8hgELwuOTwz6hOaeVZtlebfiuq3gyTf4EaQ6Ptcgp36l3GNy4BKzj98oUPVXqbOH
+         gElIpqL5novCm4oHdfP/9MAthJ3028EkXQoYQhUxfrXY0LYmRD4bIlikE4dSBajq45EX
+         dVAVsJS2CRwsKGD6LJW4W2dl/l5Jh4mRy2v+obEo3Dwi1agtVRiunAVTbAg1P6EPHGZZ
+         O+Bq6Nnjd3C4m0q/YAKHsgvk6yajs4u7OTkygvn5yYQB0CV3QVVbUQ5prDm2Lyoc50HM
+         HAoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5uRsrBukF/OaHklKeUPxgxH16ty4e2SknPEAhNIbuzI=;
+        b=Zcn3gVb4YFXvpnPugm6L8ZPPbjuxc+fMnnjSZA54YqMfbnEVk141E7nCoR9FHR4tOz
+         vOqA8Jmk7fiBWeAoH87jom3dHZNiYU8QhZ6o1TyXew3El3eLMME27lV91cgcQQd7GD33
+         hi/M5Oq5QdYHoP0naHYHxdF8XAjOfViznkM1ZwvebRhrCDfgrVn8ReYy2la1ieTs3cPD
+         dMTqke/GinWnpjGGVuIDYmlbodIrY4KwAB0O1BdVi2CbtIvDSB+dvPz6n8t3NB6WkYAU
+         yOuGV6V38gD8dkZj+/CX5H6ejChwXCjwg8X0iX08l8kN7bh6yRMLCkak3QCjOAyxsaVy
+         rA4g==
+X-Gm-Message-State: AOAM530OWNd92HefPCvJJnhrODkeJA2xhqCdtxcY8t9wQMWKwB8hk/c5
+        Ov6OfsSA1brjPs/I83IY007l0RSl4jS68HAzWlGN
+X-Google-Smtp-Source: ABdhPJy6ikiiG5Pgs8lsfgZefLhFTNca6qzZhUMHty1h0zpae8r/I4ovX2ynJs0741nV5ruzT5/eOwQ1CLGrCli+a3s=
+X-Received: by 2002:a17:907:2a54:b0:6d5:879d:aca4 with SMTP id
+ fe20-20020a1709072a5400b006d5879daca4mr7473197ejc.29.1645822497528; Fri, 25
+ Feb 2022 12:54:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH net] net: ipa: fix a build dependency
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>, davem@davemloft.net, kuba@kernel.org
-Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220225201530.182085-1-elder@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220225201530.182085-1-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224102417.42268-1-richard_c_haines@btinternet.com>
+ <CAHC9VhT4V=d8LtNT2mbiB6m1eUypi5WxPdRux_YNJ9iCV=WjWg@mail.gmail.com> <CAFqZXNtLw_c1V7MvQ=uVO9da1LH0dP64Vy3eEvL8Por_o6NQ5A@mail.gmail.com>
+In-Reply-To: <CAFqZXNtLw_c1V7MvQ=uVO9da1LH0dP64Vy3eEvL8Por_o6NQ5A@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 25 Feb 2022 15:54:46 -0500
+Message-ID: <CAHC9VhTW+zZQb6a2QE2iRYfyyUxjMphRYfSWt6bgp2JvodrTgQ@mail.gmail.com>
+Subject: Re: [PATCH V3] security/selinux: Always allow FIOCLEX and FIONCLEX
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Richard Haines <richard_c_haines@btinternet.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, demiobenour@gmail.com,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org,
+        Jeff Vander Stoep <jeffv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 25, 2022 at 5:02 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> (IMHO the POLICYDB_CAPABILITY_ prefix is ridiculously long for no
+> reason and we should simply shorten it (just POLCAP_ would be
+> perfectly fine, IMHO) instead of trying to abbreviate the rest. Of
+> course, this doesn't have to be done now - I'm taking a note to myself
+> to splice in such rename next time I add a new capability, if not
+> earlier.)
 
-
-On 2/25/22 12:15, Alex Elder wrote:
-> An IPA build problem arose in the linux-next tree the other day.
-> The problem is that a recent commit adds a new dependency on some
-> code, and the Kconfig file for IPA doesn't reflect that dependency.
-> As a result, some configurations can fail to build (particularly
-> when COMPILE_TEST is enabled).
-> 
-> The recent patch adds calls to qmp_get(), qmp_put(), and qmp_send(),
-> and those are built based on the QCOM_AOSS_QMP config option.  If
-> that symbol is not defined, stubs are defined, so we just need to
-> ensure QCOM_AOSS_QMP is compatible with QCOM_IPA, or it's not
-> defined.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Fixes: 34a081761e4e3 ("net: ipa: request IPA register values be retained")
-> Signed-off-by: Alex Elder <elder@linaro.org>
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-thanks.
-
-> ---
->  drivers/net/ipa/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ipa/Kconfig b/drivers/net/ipa/Kconfig
-> index d037682fb7adb..e0164a55c1e66 100644
-> --- a/drivers/net/ipa/Kconfig
-> +++ b/drivers/net/ipa/Kconfig
-> @@ -3,6 +3,7 @@ config QCOM_IPA
->  	depends on NET && QCOM_SMEM
->  	depends on ARCH_QCOM || COMPILE_TEST
->  	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
-> +	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
->  	select QCOM_MDT_LOADER if ARCH_QCOM
->  	select QCOM_SCM
->  	select QCOM_QMI_HELPERS
+Yeah, that prefix is probably longer than it needs to be.  Since we're
+at -rc5 right now, with -rc6 just a few days away, I'll go ahead and
+toss out a patch to shorten the names next week.  While I have very
+mixed feelings on style/formatting-only patches, things like this
+should go into selinux/next at the end of the -rcX cycle so as not to
+cause unnecessary conflicts for people making "real" changes :)
 
 -- 
-~Randy
+paul-moore.com

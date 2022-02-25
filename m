@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5CB4C4B09
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4B64C4B12
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243158AbiBYQl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S243167AbiBYQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiBYQlZ (ORCPT
+        with ESMTP id S243222AbiBYQni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:41:25 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6079C218CD2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:40:53 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i21so5106214pfd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:40:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LOzx1/1N7j/VHBirbjJ/dukmD8Mv3Gu9xYCoow9KxH0=;
-        b=sP6/wWn5Rt+NzeQShD4TUqG0VMxxRrtUpSglEEhW3zYXUGZgBE6gT8tHBL5pWZwyUJ
-         CLznrRYdUNQILkg1MCJaayNAW3w/OD30r5frhrGrfpyFL+65kNtUwRdnFtYaRjRkDA36
-         aZtASawYrpXcEzcCm6pl3Elcfh9xp5RK+e7LkB1OWSFb2B7O65OnWvr3gHZlp6MD8OkR
-         llt4uxaQ+EsjeE8SZ9yfDsofx+WPgh8saaQkRAlz7gK0i2YeQ7FwMIU3rg5uf7klvgIj
-         rOmVc09LquQLQhyeYOYbYtqEX/PeOcXqCQLmAmc+WyDq+9XLXh83xL1srhXY1NeH5uvP
-         LcvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LOzx1/1N7j/VHBirbjJ/dukmD8Mv3Gu9xYCoow9KxH0=;
-        b=KDOjfYl2OqK8nJPnNq5L1Fml8h8YCyFghuFXtP0d1EV/ZuMCdvi1pawkcCiTzX3bx0
-         muJQL4M9BMMuLzQthvpM3Tkm9KfLXCE/tgBzZBcqjaVjNzoYT2paS5TyFtJqPYQ7pDAx
-         9q1THda1rwmVGUSs7IyyS0EJCY0nPgQiyQi8u54XDXSovJUPd1K1f9I63FLWeRxv5kZ3
-         DFlKMZ4uaqC5RFszTo8KwxbY1CMxImEvo2sP9tN08r/j88rSDoFZeaDCUazxEUDRHu+O
-         CICKn2l17pHpCC2MYCvW+8QW1BM0VIir4a/6cpc7hRgL/wzbhkUew1H9qP99NGJ4GhGN
-         k4iQ==
-X-Gm-Message-State: AOAM532ciy/+eLdv/CU81NhyzsGUXVsze6G0HQOWhw+JYTmNvYQzxywq
-        k4Q2poj12kBCvs8x3xuIyJLSCA==
-X-Google-Smtp-Source: ABdhPJwIBGXNdggpuheOxLyfH7NwjiL6DzLmuNUj1w/+Y5ijV18kW3kXAA9KfhXeWTceTocEUSXaLg==
-X-Received: by 2002:a63:1651:0:b0:342:b566:57c4 with SMTP id 17-20020a631651000000b00342b56657c4mr6605303pgw.258.1645807252698;
-        Fri, 25 Feb 2022 08:40:52 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id pj12-20020a17090b4f4c00b001bc97c5b255sm3060349pjb.44.2022.02.25.08.40.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:40:52 -0800 (PST)
-Date:   Fri, 25 Feb 2022 16:40:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Anton Romanov <romanton@google.com>
-Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
- constant
-Message-ID: <YhkGkAJtMu0epKiT@google.com>
-References: <20220225013929.3577699-1-seanjc@google.com>
- <5b9e5a3f3d3c40afea0bc953e3967505251f3143.camel@infradead.org>
+        Fri, 25 Feb 2022 11:43:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0876475207;
+        Fri, 25 Feb 2022 08:43:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BEE261C1A;
+        Fri, 25 Feb 2022 16:43:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBE0C340E7;
+        Fri, 25 Feb 2022 16:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645807381;
+        bh=APXY3EnRpsBOupquCiWiXnjHHke28N5/pcJDyEoZ/UQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U/Ibm/gp6t9I+K0zJ8pjRvlOOUkTCoRp4vLm3L/rDBwerli1baLd0g/ZdU88LPdBy
+         RZ4d7Y2jBu/del2aMnr10HRGLH5u8IOuIW9/5AMzEudVp3LwC3U8mkSqyAjDgXMvON
+         HBPz0nA6WcKBDsnZO32sKJ2K7Xg6pULjiaRhDJETda0LhPM1KGZVg5aIQnKMW1JPSY
+         UHr+6AE2mSRh9IXr/b1zi1Rcbo13RxP7hGp0F3KFLBA3fycHF6yEFBsRZIkzP/y30g
+         KKzqGiqxA8eL3nSmc806TYft/Qv9BSCbsKVvrIxu94EfNCuaA3eHdzzkpzhOTA9ElV
+         Bq99ghUu2qnwA==
+From:   broonie@kernel.org
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Allen Chen <allen.chen@ite.com.tw>,
+        Hsin-yi Wang <hsinyi@chromium.org>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm tree
+Date:   Fri, 25 Feb 2022 16:42:31 +0000
+Message-Id: <20220225164231.904173-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b9e5a3f3d3c40afea0bc953e3967505251f3143.camel@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022, David Woodhouse wrote:
-> On Fri, 2022-02-25 at 01:39 +0000, Sean Christopherson wrote:
-> > @@ -11160,7 +11162,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> >         vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
-> >         kvm_vcpu_mtrr_init(vcpu);
-> >         vcpu_load(vcpu);
-> > -       kvm_set_tsc_khz(vcpu, max_tsc_khz);
-> > +       kvm_set_tsc_khz(vcpu, max_tsc_khz ? : tsc_khz);
-> >         kvm_vcpu_reset(vcpu, false);
-> >         kvm_init_mmu(vcpu);
-> >         vcpu_put(vcpu);
-> > 
-> 
-> Hm, now if you hit that race you end up potentially giving *different*
-> frequencies to different vCPUs in a single guest, depending on when
-> they were created.
+Hi all,
 
-Yep.  Though the race is much harder to hit (userspace vs TSC refinement).  The
-existing race being hit is essentially do_initcalls() vs. TSC refinement.  
+After merging the drm tree, today's linux-next build (x86 allmodconfig)
+failed like this:
 
-> How about this... (and as noted, I think I want to add an explicit KVM
-> ioctl to set kvm->arch.default_tsc_khz for subsequently created vCPUs).
+lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x10b: call to do_strncpy_from_user() with UACCESS enabled
+lib/strnlen_user.o: warning: objtool: strnlen_user()+0xbb: call to do_strnlen_user() with UACCESS enabled
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c: In function 'receive_timing_debugfs_show':
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
+ 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
+      |                       ^~~
+/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
+ 3076 |  u8 read_buf[READ_BUFFER_SIZE];
+      |     ^~~~~~~~
+cc1: all warnings being treated as errors
 
-This wouldn't necessarily help.  E.g. assuming userspace knows the actual TSC
-frequency, creating a vCPU before refinement completes might put the vCPU in
-"always catchup" purgatory.
+Caused by commit
 
-To really fix the race, KVM needs a notification that refinement completed (or
-failed).  KVM could simply refuse to create vCPUs until it got the notification.
-In the non-constant case, KVM would also need to refresh max_tsc_khz.
+  b5c84a9edcd418 ("drm/bridge: add it6505 driver")
+
+I have used the drm tree from yesterday instead.

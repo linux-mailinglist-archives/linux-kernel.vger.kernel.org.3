@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F804C4B64
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8DF4C4B62
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243183AbiBYQxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S243340AbiBYQxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243224AbiBYQwy (ORCPT
+        with ESMTP id S243218AbiBYQwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 11:52:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D590C22322B;
-        Fri, 25 Feb 2022 08:52:22 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE4E223209
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D81661D07;
-        Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA770C340F4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16CB061CFB
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E508FC340F2;
         Fri, 25 Feb 2022 16:52:20 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nNdpL-00B8N1-TD;
-        Fri, 25 Feb 2022 11:52:19 -0500
-Message-ID: <20220225165219.737025658@goodmis.org>
+        id 1nNdpM-00B8Na-32;
+        Fri, 25 Feb 2022 11:52:20 -0500
+Message-ID: <20220225165219.928332768@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 25 Feb 2022 11:52:00 -0500
+Date:   Fri, 25 Feb 2022 11:52:01 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Subject: [for-linus][PATCH 09/13] tracefs: Set the group ownership in apply_options() not
- parse_options()
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [for-linus][PATCH 10/13] tracing: Fix selftest config check for function graph start up test
 References: <20220225165151.824659113@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,44 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Al Viro brought it to my attention that the dentries may not be filled
-when the parse_options() is called, causing the call to set_gid() to
-possibly crash. It should only be called if parse_options() succeeds
-totally anyway.
+CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is required to test
+direct tramp.
 
-He suggested the logical place to do the update is in apply_options().
+Link: https://lkml.kernel.org/r/bdc7e594e13b0891c1d61bc8d56c94b1890eaed7.1640017960.git.christophe.leroy@csgroup.eu
 
-Cc: stable@vger.kernel.org
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- fs/tracefs/inode.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/trace/trace_selftest.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index bafc02bf8220..3638d330ff5a 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -264,7 +264,6 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
--			set_gid(tracefs_mount->mnt_root, gid);
- 			break;
- 		case Opt_mode:
- 			if (match_octal(&args[0], &option))
-@@ -293,6 +292,9 @@ static int tracefs_apply_options(struct super_block *sb)
- 	inode->i_uid = opts->uid;
- 	inode->i_gid = opts->gid;
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index afd937a46496..abcadbe933bb 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -784,9 +784,7 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+ 	.retfunc		= &trace_graph_return,
+ };
  
-+	if (tracefs_mount && tracefs_mount->mnt_root)
-+		set_gid(tracefs_mount->mnt_root, opts->gid);
-+
- 	return 0;
- }
+-#if defined(CONFIG_DYNAMIC_FTRACE) && \
+-    defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+-#define TEST_DIRECT_TRAMP
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ noinline __noclone static void trace_direct_tramp(void) { }
+ #endif
+ 
+@@ -849,7 +847,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 		goto out;
+ 	}
+ 
+-#ifdef TEST_DIRECT_TRAMP
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	tracing_reset_online_cpus(&tr->array_buffer);
+ 	set_graph_array(tr);
  
 -- 
 2.34.1

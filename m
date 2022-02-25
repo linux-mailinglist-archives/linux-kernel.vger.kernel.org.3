@@ -2,59 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671AA4C4ADC
+	by mail.lfdr.de (Postfix) with ESMTP id D40E14C4ADD
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243047AbiBYQfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S243043AbiBYQe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243038AbiBYQez (ORCPT
+        with ESMTP id S239870AbiBYQez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 11:34:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5641AEEDC;
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA881B3A5E;
+        Fri, 25 Feb 2022 08:34:21 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 27so5071751pgk.10;
+        Fri, 25 Feb 2022 08:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w9ONRF3LnEjzRXwDeX5/dgWHTBakSxQva8h6bFJPXRg=;
+        b=QuPO27RcxYGrxzbPYRlTKiJm/trQaVsIAYVTA4EzmEQWrAVc0i1y9ovgG+3gKwjy8T
+         i4QsAmrGCixaEPnxIXj84jZPYLgoPFrG6HIDgdfOtE2qsyh/ymJN2BzmUaxltS1lqFEX
+         Krpm+2VWaDQJpxf1p3xAaqMVSsXfWkVPzaGm7zrqzUWd9qbZbZTfJEhJMgXyby9OCNOh
+         LCbHu2ZRY+7vvcuKZNyLY+HaogXD9IXn1t1u6bUyl0nIsL05fstbKUshqEIuw6Bj/1mG
+         7SN2fDfdc88o2hF1PUWHhiC6DAjKtyhpzghutkyXxnKJ/B8/jXV62xX5oCM9oYXUaQNX
+         SR2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=w9ONRF3LnEjzRXwDeX5/dgWHTBakSxQva8h6bFJPXRg=;
+        b=4eB1MTyrNCxQS8nXneEgcM8ghsHL+7odeNwlK2XxUH3p+FJiZpqdvu7ex+Z5RiEkQs
+         Cx/gvWurVv+P1PRn+JCWhBZdR0VIqDVLD9R5XGVfhtxaNnJFpplJvzFwlmkgNjWj0cT2
+         ZpNqsm9HCTGjdk90Brs7gU4+7E45GTLvP1fcS3mO3oaqScamYwi1qRwIb9Vk4xLyIVKf
+         yurwLPwUMO0kZ+O6AWuduoTSdIIkpE+UTG2213Akf0xGbF/dzCpe92u0lZs0ktrEVTuH
+         QjQUQZvjUCyBE1mlstlepVCEmyHw5UDng5mhzBNpZjSQx7W3VIj4avlW0ZsrLK5snjIc
+         MqjQ==
+X-Gm-Message-State: AOAM533cz3gdlmBmC7vBoQpHf/kF60rd8lUq/O5dLIAFLge1q2VEtEhQ
+        j7QwT/+SmAowEA0hUsLM790=
+X-Google-Smtp-Source: ABdhPJy8ivjHdNQtpIfaHbaST89z2wqO+z9AIVnTkY8udajQgZHJHyvIfs1oFtwBp/XRgfgalpJ6Xw==
+X-Received: by 2002:a05:6a00:279e:b0:4ca:91aa:32ce with SMTP id bd30-20020a056a00279e00b004ca91aa32cemr8432848pfb.36.1645806860249;
+        Fri, 25 Feb 2022 08:34:20 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:a54b:cc05:819:d032])
+        by smtp.gmail.com with ESMTPSA id d4-20020a17090a8d8400b001bc386dc44bsm9907630pjo.23.2022.02.25.08.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 25 Feb 2022 08:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CjJ/pvULZ8qHqredqCBVppyq2Cz1aZBbUyIgsg9IYmA=; b=GjMbCpZQmec2RkYEuYmuPM7G40
-        h+UckYZxcyws6Vlmo/5aWofKUKSQl+BPIIS6Of3F+E3Zl1r6P9tvJlo8upZXlwTZhcoc+mUqvmC1a
-        NG3qOHXzHkQbGvvMMxL52LxnaA2bbTQXIwhokovtbmrNraCJ4BEnqrwBrPAkBHNkzbFgPi6rhey9m
-        wYsoZg57UxkKwtC5sqv/skhF3ht5we6HyumI49e/Rs68vUv2pwIRdHFiikUunHw/K2BnlvbtVXHd/
-        DZmIx47cbW81+juEx66Znhnn5eAONOd9L34obm17uPfmJ83+oECx1lmaVOThh3rMenma6uo7bk7XT
-        /UTGhH6A==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNdXd-005wPd-Cn; Fri, 25 Feb 2022 16:34:01 +0000
-Message-ID: <654a4070a547cf6a5dd4b2b42c41930a7900644a.camel@infradead.org>
-Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
- constant
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 25 Feb 2022 08:34:16 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
         Suleiman Souhlal <suleiman@google.com>,
-        Anton Romanov <romanton@google.com>
-Date:   Fri, 25 Feb 2022 16:34:00 +0000
-In-Reply-To: <YhkCBH9fsqrJYMca@google.com>
-References: <20220225013929.3577699-1-seanjc@google.com>
-         <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
-         <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
-         <YhkCBH9fsqrJYMca@google.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-E/wI6b2nLqqvl+huBIzT"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
+Message-ID: <YhkFCB736pMA0sel@google.com>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <20220208081902.3550911-5-yuzhao@google.com>
+ <YgV4lZXc6+jhUdsR@cmpxchg.org>
+ <Ygt1qaQM5YobEZK9@google.com>
+ <Ygwg9NXzQ+6U3RON@cmpxchg.org>
+ <YhNJ4LVWpmZgLh4I@google.com>
+ <CAOUHufbJuh1esDyhepAxX03GOqXeE4a1+1Z8QUsSqnznv7QAHw@mail.gmail.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOUHufbJuh1esDyhepAxX03GOqXeE4a1+1Z8QUsSqnznv7QAHw@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,144 +113,335 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 02:18:24PM -0700, Yu Zhao wrote:
+> .
+> On Mon, Feb 21, 2022 at 1:14 AM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Tue, Feb 15, 2022 at 04:53:56PM -0500, Johannes Weiner wrote:
+> > > Hi Yu,
+> > >
+> > > On Tue, Feb 15, 2022 at 02:43:05AM -0700, Yu Zhao wrote:
+> > > > On Thu, Feb 10, 2022 at 03:41:57PM -0500, Johannes Weiner wrote:
+> > > > > > +static inline bool lru_gen_is_active(struct lruvec *lruvec, int gen)
+> > > > > > +{
+> > > > > > +       unsigned long max_seq = lruvec->lrugen.max_seq;
+> > > > > > +
+> > > > > > +       VM_BUG_ON(gen >= MAX_NR_GENS);
+> > > > > > +
+> > > > > > +       /* see the comment on MIN_NR_GENS */
+> > > > > > +       return gen == lru_gen_from_seq(max_seq) || gen == lru_gen_from_seq(max_seq - 1);
+> > > > > > +}
+> > > > >
+> > > > > I'm still reading the series, so correct me if I'm wrong: the "active"
+> > > > > set is split into two generations for the sole purpose of the
+> > > > > second-chance policy for fresh faults, right?
+> > > >
+> > > > To be precise, the active/inactive notion on top of generations is
+> > > > just for ABI compatibility, e.g., the counters in /proc/vmstat.
+> > > > Otherwise, this function wouldn't be needed.
+> > >
+> > > Ah! would you mind adding this as a comment to the function?
+> >
+> > Will do.
+> >
+> > > But AFAICS there is the lru_gen_del_folio() callsite that maps it to
+> > > the PG_active flag - which in turn gets used by add_folio() to place
+> > > the thing back on the max_seq generation. So I suppose there is a
+> > > secondary purpose of the function for remembering the page's rough age
+> > > for non-reclaim isolation.>
+> >
+> > Yes, e.g., migration.
+> >
+> > > It would be good to capture that as well in a comment on the function.
+> >
+> > Will do.
+> >
+> > > > > > +static inline void lru_gen_update_size(struct lruvec *lruvec, enum lru_list lru,
+> > > > > > +                                      int zone, long delta)
+> > > > > > +{
+> > > > > > +       struct pglist_data *pgdat = lruvec_pgdat(lruvec);
+> > > > > > +
+> > > > > > +       lockdep_assert_held(&lruvec->lru_lock);
+> > > > > > +       WARN_ON_ONCE(delta != (int)delta);
+> > > > > > +
+> > > > > > +       __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, delta);
+> > > > > > +       __mod_zone_page_state(&pgdat->node_zones[zone], NR_ZONE_LRU_BASE + lru, delta);
+> > > > > > +}
+> > > > >
+> > > > > This is a duplicate of update_lru_size(), please use that instead.
+> > > > >
+> > > > > Yeah technically you don't need the mem_cgroup_update_lru_size() but
+> > > > > that's not worth sweating over, better to keep it simple.
+> > > >
+> > > > I agree we don't need the mem_cgroup_update_lru_size() -- let me spell
+> > > > out why:
+> > > >   this function is not needed here because it updates the counters used
+> > > >   only by the active/inactive lru code, i.e., get_scan_count().
+> > > >
+> > > > However, we can't reuse update_lru_size() because MGLRU can trip the
+> > > > WARN_ONCE() in mem_cgroup_update_lru_size().
+> > > >
+> > > > Unlike lru_zone_size[], lrugen->nr_pages[] is eventually consistent.
+> > > > To move a page to a different generation, the gen counter in page->flags
+> > > > is updated first, which doesn't require the LRU lock. The second step,
+> > > > i.e., the update of lrugen->nr_pages[], requires the LRU lock, and it
+> > > > usually isn't done immediately due to batching. Meanwhile, if this page
+> > > > is, for example, isolated, nr_pages[] becomes temporarily unbalanced.
+> > > > And this trips the WARN_ONCE().
+> > >
+> > > Good insight.
+> > >
+> > > But in that case, I'd still think it's better to use update_lru_size()
+> > > and gate the memcg update on lrugen-enabled, with a short comment
+> > > saying that lrugen has its own per-cgroup counts already. It's just a
+> > > bit too error prone to duplicate the stat updates.
+> > >
+> > > Even better would be:
+> > >
+> > > static __always_inline
+> > > void lruvec_add_folio(struct lruvec *lruvec, struct folio *folio)
+> > > {
+> > >       enum lru_list lru = folio_lru_list(folio);
+> > >
+> > >       update_lru_size(lruvec, lru, folio_zonenum(folio),
+> > >                       folio_nr_pages(folio));
+> > >       if (lrugen_enabled(lruvec))
+> > >               lrugen_add_folio(lruvec, folio);
+> > >       else
+> > >               list_add(&folio->lru, &lruvec->lists[lru]);
+> > > }
+> > >
+> > > But it does mean you'd have to handle unevictable pages. I'm reviewing
+> > > from the position that mglru is going to supplant the existing reclaim
+> > > algorithm in the long term, though, so being more comprehensive and
+> > > eliminating special cases where possible is all-positive, IMO.
+> > >
+> > > Up to you. I'd only insist on reusing update_lru_size() at least.
+> >
+> > Will do.
+> >
+> > > > > > +static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
+> > > > > > +{
+> > > > > > +       int gen;
+> > > > > > +       unsigned long old_flags, new_flags;
+> > > > > > +       int type = folio_is_file_lru(folio);
+> > > > > > +       int zone = folio_zonenum(folio);
+> > > > > > +       struct lru_gen_struct *lrugen = &lruvec->lrugen;
+> > > > > > +
+> > > > > > +       if (folio_test_unevictable(folio) || !lrugen->enabled)
+> > > > > > +               return false;
+> > > > >
+> > > > > These two checks should be in the callsite and the function should
+> > > > > return void. Otherwise you can't understand the callsite without
+> > > > > drilling down into lrugen code, even if lrugen is disabled.
+> > > >
+> > > > I agree it's a bit of nuisance this way. The alternative is we'd need
+> > > > ifdef or another helper at the call sites because lrugen->enabled is
+> > > > specific to lrugen.
+> > >
+> > > Coming from memcg, my experience has been that when you have a compile
+> > > time-optional MM extension like this, you'll sooner or later need a
+> > > config-independent helper to gate callbacks in generic code. So I
+> > > think it's a good idea to add one now.
+> > >
+> > > One of these?
+> > >
+> > > lruvec_on_lrugen()
+> >
+> > SGTM.
+> >
+> > Personally I'd reuse lru_gen_enabled(), by passing NULL/lruvec. But
+> > my guess is you wouldn't like it.
+> >
+> > > lruvec_using_lrugen()
+> > > lruvec_lrugen_enabled()
+> > >
+> > > lruvec_has_generations() :-)
+> > >
+> > > > > On that note, I think #1 is reintroducing a problem we have fixed
+> > > > > before, which is trashing the workingset with a flood of use-once
+> > > > > mmapped pages. It's the classic scenario where LFU beats LRU.
+> > > > >
+> > > > > Mapped streaming IO isn't very common, but it does happen. See these
+> > > > > commits:
+> > > > >
+> > > > > dfc8d636cdb95f7b792d5ba8c9f3b295809c125d
+> > > > > 31c0569c3b0b6cc8a867ac6665ca081553f7984c
+> > > > > 645747462435d84c6c6a64269ed49cc3015f753d
+> > > > >
+> > > > > From the changelog:
+> > > > >
+> > > > >     The used-once mapped file page detection patchset.
+> > > > >
+> > > > >     It is meant to help workloads with large amounts of shortly used file
+> > > > >     mappings, like rtorrent hashing a file or git when dealing with loose
+> > > > >     objects (git gc on a bigger site?).
+> > > > >
+> > > > >     Right now, the VM activates referenced mapped file pages on first
+> > > > >     encounter on the inactive list and it takes a full memory cycle to
+> > > > >     reclaim them again.  When those pages dominate memory, the system
+> > > > >     no longer has a meaningful notion of 'working set' and is required
+> > > > >     to give up the active list to make reclaim progress.  Obviously,
+> > > > >     this results in rather bad scanning latencies and the wrong pages
+> > > > >     being reclaimed.
+> > > > >
+> > > > >     This patch makes the VM be more careful about activating mapped file
+> > > > >     pages in the first place.  The minimum granted lifetime without
+> > > > >     another memory access becomes an inactive list cycle instead of the
+> > > > >     full memory cycle, which is more natural given the mentioned loads.
+> > > > >
+> > > > > Translating this to multigen, it seems fresh faults should really
+> > > > > start on the second oldest rather than on the youngest generation, to
+> > > > > get a second chance but without jeopardizing the workingset if they
+> > > > > don't take it.
+> > > >
+> > > > This is a good point, and I had worked on a similar idea but failed
+> > > > to measure its benefits. In addition to placing mmapped file pages in
+> > > > older generations, I also tried placing refaulted anon pages in older
+> > > > generations. My conclusion was that the initial LRU positions of NFU
+> > > > pages are not a bottleneck for workloads I've tested. The efficiency
+> > > > of testing/clearing the accessed bit is.
+> > >
+> > > The concern isn't the scan overhead, but jankiness from the workingset
+> > > being flooded out by streaming IO.
+> >
+> > Yes, MGLRU uses a different approach to solve this problem, and for
+> > its approach, the scan overhead is the concern.
+> >
+> > MGLRU detects (defines) the working set by scanning the entire memory
+> > for each generation, and it counters the flooding by accelerating the
+> > creation of generations. IOW, all mapped pages have an equal chance to
+> > get scanned, no matter which generation they are in. This is a design
+> > difference compared with the active/inactive LRU, which tries to scans
+> > the active/inactive lists less/more frequently.
+> >
+> > > The concrete usecase at the time was a torrent client hashing a
+> > > downloaded file and thereby kicking out the desktop environment, which
+> > > caused jankiness. The hashing didn't benefit from caching - the file
+> > > wouldn't have fit into RAM anyway - so this was pointless to boot.
+> > >
+> > > Essentially, the tradeoff is this:
+> > >
+> > > 1) If you treat new pages as hot, you accelerate workingset
+> > > transitions, but on the flipside you risk unnecessary refaults in
+> > > running applications when those new pages are one-off.
+> > >
+> > > 2) If you take new pages with a grain of salt, you protect existing
+> > > applications better from one-off floods, but risk refaults in NEW
+> > > application while they're trying to start up.
+> >
+> > Agreed.
+> >
+> > > There are two arguments for why 2) is preferable:
+> > >
+> > > 1) Users are tolerant of cache misses when applications first launch,
+> > >    much less so after they've been running for hours.
+> >
+> > Our CUJs (Critical User Journeys) respectfully disagree :)
+> >
+> > They are built on the observation that once users have moved onto
+> > another tab/app, they are more likely to stay with the new tab/app
+> > rather than go back to the old ones. Speaking for myself, this is
+> > generally the case.
+> >
+> > > 2) Workingset transitions (and associated jankiness) are bounded by
+> > >    the amount of RAM you need to repopulate. But streaming IO is
+> > >    bounded by storage, and datasets are routinely several times the
+> > >    amount of RAM. Uncacheable sets in excess of RAM can produce an
+> > >    infinite stream of "new" references; not protecting the workingset
+> > >    from that means longer or even sustained jankiness.
+> >
+> > I'd argue the opposite -- we shouldn't risk refaulting fresh hot pages
+> > just to accommodate this concrete yet minor use case, especially
+> > considering torrent has been given the means (MADV_SEQUENTIAL) to help
+> > itself.
+> >
+> > I appreciate all your points here. The bottom line is we agree this is
+> > a trade off. For what disagree about, we could be both right -- it
+> > comes down to what workloads we care about *more*.
+> >
+> > To move forward, I propose we look at it from a non-technical POV:
+> > would we want to offer users an alternative trade off so that they can
+> > have greater flexibility?
+> >
+> > > > And some applications are smart enough to leverage MADV_SEQUENTIAL.
+> > > > In this case, MGLRU does place mmapped file pages in the oldest
+> > > > generation.
+> > >
+> > > Yes, it makes sense to optimize when MADV_SEQUENTIAL is requested. But
+> > > that hint isn't reliably there, so it matters that we don't do poorly
+> > > when it's missing.
+> >
+> > Agreed.
+> >
+> > > > I have an oversimplified script that uses memcached to mimic a
+> > > > non-streaming workload and fio a (mmapped) streaming workload:
+> > >
+> > > Looking at the paramters and observed behavior, let me say up front
+> > > that this looks like a useful benchmark, but doesn't capture the
+> > > scenario I was talking about above.
+> > >
+> > > For one, the presence of swapping in both kernels suggests that the
+> > > "streaming IO" component actually has repeat access that could benefit
+> > > from caching. Second, I would expect memcache is accessing its memory
+> > > frequently and consistently, and so could withstand workingset
+> > > challenges from streaming IO better than, say, a desktop environment.
+> >
+> > The fio workload is a real streaming workload, but the memcached
+> > workload might have been too large to be a typical desktop workload.
+> >
+> > More below.
+> >
+> > > More on that below.
+> > >
+> > > >   1. With MADV_SEQUENTIAL, the non-streaming workload is about 5 times
+> > > >      faster when using MGLRU. Somehow the baseline (rc3) swapped a lot.
+> > > >      (It shouldn't, and I haven't figured out why.)
+> > >
+> > > Baseline swaps when there are cache refaults. This is regardless of
+> > > the hint: you may say you're accessing these pages sequentially, but
+> > > the refaults say you're reusing them, with a frequency that suggests
+> > > they might be cacheable. So it tries to cache them.
+> > >
+> > > I'd be curious if that results in fio being faster, or whether it's
+> > > all just pointless thrashing. Can you share the fio results too?
+> >
+> > More below.
+> >
+> > > We could patch baseline to prioritize MADV_SEQUENTIAL more, but...
+> > >
+> > > >   2. Without MADV_SEQUENTIAL, the non-streaming workload is about 1
+> > > >      time faster when using MGLRU. Both MGLRU and the baseline swapped
+> > > >      a lot.
+> > >
+> > > ...in practice I think this scenario will matter to a lot more users.
+> >
+> > I strongly feel we should prioritize what's advertised on a man page
+> > over an unspecified (performance) behavior.
+> >
+> > > I would again be interested in the fio results.
+> > >
+> > > >            MADV_SEQUENTIAL    non-streaming ops/sec (memcached)
+> > > >   rc3      yes                 292k
+> > > >   rc3      no                  203k
+> > > >   rc3+v7   yes                1967k
+> > > >   rc3+v7   no                  436k
+> 
+> Appending a few notes on the baseline results:
+> 1. Apparently FADV_DONTNEED rejects mmaped pages -- I found no reasons
+> from the man page or the original commit why it should. I propose we
+> remove the page_mapped() check in lru_deactivate_file_fn(). Adding
+> Minchan to see how he thinks about this.
 
---=-E/wI6b2nLqqvl+huBIzT
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Yu,
 
-On Fri, 2022-02-25 at 16:21 +0000, Sean Christopherson wrote:
-> > I also have questions about the use case for the above patch.... if
-> > this is a clean boot and you're just starting to host guests, surely we
-> > can wait for the time it takes for the TSC synchronization to complete?
->=20
-> KVM is built into the kernel in their case, the vmx_init() =3D> kvm_init(=
-) gets
-> automatically called during boot.  The VMs aren't started until well afte=
-r
-> synchronization has completed, but KVM has already snapshotted the "bad" =
-value.
+It's quite old code. I already forgot all the details. Maybe, I wanted t
+minimize behavior changes since invalidate_inode_page already fiter mapped
+pages out.
 
+I don't have any strong reason not to move mapped pages for deactivation
+but if we do, it would be better to move them into head of inactive list
+instead of tail to give a promote chance  since other processes are still
+mappping the page in their address space.
 
-Gotcha.
-
-So even when we put my patch in front, to snapshot a value into
-kvm->arch.default_tsc_khz, that's happening later at VM creation time
-so should also be snapshotting the *good* value.
-
-And at least if it snapshots the bad value, all the vCPUs will be
-*consistent*.
-
---=-E/wI6b2nLqqvl+huBIzT
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMjI1MTYzNDAwWjAvBgkqhkiG9w0BCQQxIgQgaQjdIdpC
-eEhVyZYP6UFvOzPCDc6NMCcKS+LgNa6RmVowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA9g0VXt7JlFx4vmK+vnvjzM6y0F7II56O9
-il3ohNZQJJCRvLwLM80y2RzbQt35QjwSgZOY+QP2ja4Wk2TmUxCBkojgahv2SnoBjJ98/sUXg4rk
-ZRWRZAkf/XA1Bgf8MAGaspf8ogh+hwTf59Yk2j+ueiWpFi4qLOWxmE5xfZTKBFiNkk5vZql7bH6v
-qbcViSou315vUqF2k3jx9D6vqsYpr+AdE3ANU4apQ0QU1CqYOV7SnluDcRzEtZATEcavrl4K68q4
-VM0TKlATMpzH22nFZbnK0BXwdOaqKf7vxLKIPMhGtjNIfk3ZMiJHlYV8PZi3pGtSqNW0WAtDqRvv
-zECn7cRo0+zN7UGKal2q3f/Opaxuddklae57OjraPAS2Cv0qd0ztfjyFNsFnnTcQ58p2e7LMFi9S
-GJ2iDZGlZdonaPSC74wTh6YKCKdXkaGDjXS3harqXbWU4H0Df5V09Ayfkv/F38bE5R5ofvLbTQEh
-2LDvRQT5Qz6iXX0Mi2T26hs5v0tjX8ofJ243kxVMyEbWQI5Tt2/G/CejlsrS2Ncn82vzXwxk30GC
-MvDOcOdT8cpcMXxUlqX2PNE//beHLzqxZb+L3jYOZe0KA5s3gJdnhNWjDlB1CnzYdCC1a8EXfuft
-ZESTwi6DejrozOv4+we7VN7e0F8UQsa9DPhXbWOA2QAAAAAAAA==
-
-
---=-E/wI6b2nLqqvl+huBIzT--
-
+Thanks.

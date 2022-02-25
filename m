@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CE64C461F
+	by mail.lfdr.de (Postfix) with ESMTP id 190EE4C461D
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbiBYNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S241194AbiBYNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbiBYNXL (ORCPT
+        with ESMTP id S241191AbiBYNX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:23:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC1B1A7D93;
-        Fri, 25 Feb 2022 05:22:36 -0800 (PST)
+        Fri, 25 Feb 2022 08:23:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB381FED9C;
+        Fri, 25 Feb 2022 05:22:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3674BB830AF;
-        Fri, 25 Feb 2022 13:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DB5C340E8;
-        Fri, 25 Feb 2022 13:22:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645795353;
-        bh=BE4hrEf++LTFDnQPp/ZoaVBPWw8PZwKwJBycLMFea9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NcFz/JrzExXH97+JJ7qlsESz+8CuhDSU/01BWfkr2ImhObWUjXNILKNFnuPBT3RYr
-         xQUTU069umQyMHFkRpY1lypH2KDkkdH74NhUmrGCkCgG2MqWGj4c2pLwFk6/3wO4NQ
-         kKuHUtMuKJXvSlv2NP4LODYTOA6KzwMfyDxF0IuUpm/CSidjJeciTDNVPH1fi6NEis
-         7XwSjgw7OvVT6Gpf+fzvGS6c8ilhPBaNUvePC8w0fjPUJB14Q4gASJ47oySeSZKv2n
-         GrqIzDNaTG5bKUXDVkXjhPAQgH6O7y8CobhbocBxxrcrUVmBJmGG2n0Bo3XtB6rAe3
-         b9QfbpHj6Toww==
-Date:   Fri, 25 Feb 2022 13:22:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Yun Zhou <yun.zhou@windriver.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ying.xue@windriver.com, richard.danter@windriver.com
-Subject: Re: [v2][PATCH] spi: use specific last_cs instead of last_cs_enable
-Message-ID: <YhjYFc2HaGjydMqO@sirena.org.uk>
-References: <20220217141234.72737-1-yun.zhou@windriver.com>
- <4d621283-2a48-35ec-2131-1471a6b94c51@windriver.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 15739CE25DB;
+        Fri, 25 Feb 2022 13:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD95DC340F1;
+        Fri, 25 Feb 2022 13:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645795363;
+        bh=XWek/szSTOMujrZPglTnUkBs8rI+Y1qoaG30+Wpgr2U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KOTXUpyW2ujktgI9QsV9iYiqkR7CfXvbAwb9RNdVzXROgS7bY1ibLme06aODqbXYw
+         Ra+KNYUaSRlX/RQjgc58wyAAQSwEURtEm7tGtTjVo2g41cOx059YPI7SBtU9PCl16d
+         RdOyB1fkqanO7R+JZYerR9zPC3hM+4SUkSx4wCio=
+Date:   Fri, 25 Feb 2022 14:22:40 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fixes for 5.17-rc6
+Message-ID: <YhjYIOQDvhJBBsIt@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M58BZv/y8CRnoqht"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d621283-2a48-35ec-2131-1471a6b94c51@windriver.com>
-X-Cookie: I smell a wumpus.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,43 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
 
---M58BZv/y8CRnoqht
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
 
-On Fri, Feb 25, 2022 at 04:22:01PM +0800, Yun Zhou wrote:
+are available in the Git repository at:
 
-> Do you have any comments on the new patch? It just fixes the
-> regression introduced by d40f0b6f2e21, and it no longer affect cs_change.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.17-rc6
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+for you to fetch changes up to eebb0f4e894f1e9577a56b337693d1051dd6ebfd:
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+  sc16is7xx: Fix for incorrect data being transmitted (2022-02-21 19:51:39 +0100)
 
---M58BZv/y8CRnoqht
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+TTY/Serial driver fixes for 5.17-rc6
 
------BEGIN PGP SIGNATURE-----
+Here are some small n_gsm and sc16is7xx serial driver fixes for
+5.17-rc6.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIY2BQACgkQJNaLcl1U
-h9Da7Af/XNWdUV3sNmp0eF542/LjeEc9cNbzIdfJkQyNhxi6m3W8ca3XHaQUTfLJ
-w/8G3q5uIw6vN0wjHSFkof0S0j6fSdONKL3t6z62o6mBcfPTtTCkZVnnmd5iSOAK
-yDWXG90BvorEMgp81w1DfEz7s0GYUOZOgaA8iZseNRnnnNyq8v3Dcj98nukbXQrr
-ou3RepnK31XKIOXN4yJwNyEaCIwPkz7knMdjbBSuBVQYxPxaIno3FC6CBxuDAqXV
-lTDKhQLdUFQlOT2QlpSMjXBQWzein7gi4W7fRRH12ES81M3qed9CcwH9uzF2WIvU
-5Jlet0uvsCoN6+IQuji3MnYz8XfuMQ==
-=7NE0
------END PGP SIGNATURE-----
+The n_gsm fixes are from Siemens as it seems they are using the line
+discipline and fixing up a number of issues they found in their testing.
+The sc16is7xx serial driver fix is for a reported problem with that
+chip.
 
---M58BZv/y8CRnoqht--
+All of these have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Phil Elwell (1):
+      sc16is7xx: Fix for incorrect data being transmitted
+
+daniel.starke@siemens.com (7):
+      tty: n_gsm: fix encoding of control signal octet bit DV
+      tty: n_gsm: fix encoding of command/response bit
+      tty: n_gsm: fix proper link termination after failed open
+      tty: n_gsm: fix NULL pointer access due to DLCI release
+      tty: n_gsm: fix wrong tty control line for flow control
+      tty: n_gsm: fix wrong modem processing in convergence layer type 2
+      tty: n_gsm: fix deadlock in gsmtty_open()
+
+ drivers/tty/n_gsm.c            | 61 +++++++++++++++++++++++++++---------------
+ drivers/tty/serial/sc16is7xx.c |  3 +++
+ 2 files changed, 42 insertions(+), 22 deletions(-)

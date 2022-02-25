@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49064C4286
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2BA4C4283
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239674AbiBYKjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S239681AbiBYKjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238953AbiBYKjO (ORCPT
+        with ESMTP id S239680AbiBYKjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:39:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 258C318BA47
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:38:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645785520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ait68bCLPZgU08GUtkMsgL4AE3KFDcmnrVIdep4pyvw=;
-        b=gtMiEhf7dBm1sBYjLvg8jPe4huFHlOe8W24/k4ZCX6rtY5bBB1AuZ3sjJcO8lWB6X2T36U
-        9oOZOXZlrs+uh7+oaU8bg9bPDiVmKywi92CWpHCv3jOPul/bfrORhaTPrFiPLV7rOUEiMo
-        ZGcU2yEwtl4eXUU5a8A8CHHnLMcTvtc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-79-7gF6m_XaN0CepHs2oHvxdg-1; Fri, 25 Feb 2022 05:38:36 -0500
-X-MC-Unique: 7gF6m_XaN0CepHs2oHvxdg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 71716180FD73;
-        Fri, 25 Feb 2022 10:38:33 +0000 (UTC)
-Received: from lacos-laptop-7.usersys.redhat.com (unknown [10.39.193.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3FD841053B16;
-        Fri, 25 Feb 2022 10:37:52 +0000 (UTC)
-Subject: Re: [PATCH v3 2/2] virt: vmgenid: introduce driver for reinitializing
- RNG on VM fork
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kernel@vger.kernel.org
-Cc:     adrian@parity.io, dwmw@amazon.co.uk, graf@amazon.com,
-        colmmacc@amazon.com, raduweis@amazon.com, berrange@redhat.com,
-        imammedo@redhat.com, ehabkost@redhat.com, ben@skyportsystems.com,
-        mst@redhat.com, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        linux@dominikbrodowski.net, ebiggers@kernel.org, ardb@kernel.org,
-        jannh@google.com, gregkh@linuxfoundation.org, tytso@mit.edu
-References: <20220224133906.751587-1-Jason@zx2c4.com>
- <20220224133906.751587-3-Jason@zx2c4.com>
-From:   Laszlo Ersek <lersek@redhat.com>
-Message-ID: <aedd310b-4583-37b3-3dde-c00a6d73ee4d@redhat.com>
-Date:   Fri, 25 Feb 2022 11:37:51 +0100
+        Fri, 25 Feb 2022 05:39:21 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB31CABD3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:38:48 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so5781493ooi.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=xZ4zjaBnvBmfIipJXsuhj1ZP+RFg/unPs4PTp2Z5ieY=;
+        b=yiQZqYII3sc13NjjIWXB18MkoyJYXTOkBrGG9g6xtnwDMS+IKf0QJGwiFsDu2eILzf
+         A6d3TFy72zl8E0B1RHUJoZTybOXn+AHRBlxvmwGl9FGpQgY6l17dqhGl9AQQViadNTbj
+         0wKUtFNrho/JVAk0b0XTP5tmAQJoi5bhzC3X7Wr0IPGzrHeXZ2bPnPjzfjqBYmjoaySx
+         0qREFcmejieCPGBJoQWWfUauQ4BDYDTPR818CHpBDFajp1aELdNmmolIzDVDDOXO9v4O
+         DFag+yzvCf3OpGKQPkeQXZTRILxB2h1015709bpGG9S9B1dUydKW3dRlQwGPhmATDDoN
+         DWgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=xZ4zjaBnvBmfIipJXsuhj1ZP+RFg/unPs4PTp2Z5ieY=;
+        b=UBnpmBxyGbnfPwCjGuei7FLtwah6yPpAjPdJU0VhhfsCiJ5Gph8ECxOn38rJWW5hSS
+         hGcLMgraNUiieteT9UiCV2IENImaDyNQGOceOmTHflNgmUcIIr+ipPeiznjpZvR58kF4
+         SPESqeRogiAyOgU5IIYmku1i1FRFesg3/QpXYvnadOfYYjpwVbqPK351AU+2tVgbQNln
+         oaVXNeKE0Hum08V4kJtgETdnP4aZym615ALOhDs+4OUBewI9M+0PEenS000xfTlQDjCz
+         +F7RxL/Q3A5WbadWtvlHiH22Pbzs5hbAvG3x+29i/JGVhftUTEwe1jhnZQtN22d4qjol
+         KS+A==
+X-Gm-Message-State: AOAM531HIRIX0QanQ0im83phBLs7W7qEO4dhP1s2mdQ5yEznPogKE7SF
+        S0eaZOtUiO9JK1vinuLkgRIVBp0STmQrHfTWlDErEw==
+X-Google-Smtp-Source: ABdhPJzKoOVyeE+Q0+YDcG+MhLAzrtOSeZ4qRlKcY1izzMw0S8O6ExkCYq91DUvdulYydl69odknNpE/qzy8Fdq6FIY=
+X-Received: by 2002:a05:6870:b486:b0:d6:f01f:41cc with SMTP id
+ y6-20020a056870b48600b000d6f01f41ccmr196276oap.41.1645785527660; Fri, 25 Feb
+ 2022 02:38:47 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 25 Feb 2022 02:38:47 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220224133906.751587-3-Jason@zx2c4.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <a7605c9f-55f9-c7cc-f2b9-89ddbffb4927@collabora.com>
+References: <20220218145437.18563-1-granquet@baylibre.com> <20220218145437.18563-5-granquet@baylibre.com>
+ <a7605c9f-55f9-c7cc-f2b9-89ddbffb4927@collabora.com>
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: alot/0.10
+Date:   Fri, 25 Feb 2022 02:38:47 -0800
+Message-ID: <CABnWg9v-gamMoex-CSLY9uOPKbcm3dBDvYLSRX9LHuhYua=wDQ@mail.gmail.com>
+Subject: Re: [PATCH v8 04/19] video/hdmi: Add audio_infoframe packing for DP
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, airlied@linux.ie,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
+        tzimmermann@suse.de, vkoul@kernel.org
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,228 +80,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/24/22 14:39, Jason A. Donenfeld wrote:
-> VM Generation ID is a feature from Microsoft, described at
-> <https://go.microsoft.com/fwlink/?LinkId=260709>, and supported by
-> Hyper-V and QEMU. Its usage is described in Microsoft's RNG whitepaper,
-> <https://aka.ms/win10rng>, as:
-> 
->     If the OS is running in a VM, there is a problem that most
->     hypervisors can snapshot the state of the machine and later rewind
->     the VM state to the saved state. This results in the machine running
->     a second time with the exact same RNG state, which leads to serious
->     security problems.  To reduce the window of vulnerability, Windows
->     10 on a Hyper-V VM will detect when the VM state is reset, retrieve
->     a unique (not random) value from the hypervisor, and reseed the root
->     RNG with that unique value.  This does not eliminate the
->     vulnerability, but it greatly reduces the time during which the RNG
->     system will produce the same outputs as it did during a previous
->     instantiation of the same VM state.
-> 
-> Linux has the same issue, and given that vmgenid is supported already by
-> multiple hypervisors, we can implement more or less the same solution.
-> So this commit wires up the vmgenid ACPI notification to the RNG's newly
-> added add_vmfork_randomness() function.
-> 
-> It can be used from qemu via the `-device vmgenid,guid=auto` parameter.
-> After setting that, use `savevm` in the monitor to save the VM state,
-> then quit QEMU, start it again, and use `loadvm`. That will trigger this
-> driver's notify function, which hands the new UUID to the RNG. This is
-> described in <https://git.qemu.org/?p=qemu.git;a=blob;f=docs/specs/vmgenid.txt>.
-> And there are hooks for this in libvirt as well, described in
-> <https://libvirt.org/formatdomain.html#general-metadata>.
-> 
-> Note, however, that the treatment of this as a UUID is considered to be
-> an accidental QEMU nuance, per
-> <https://github.com/libguestfs/virt-v2v/blob/master/docs/vm-generation-id-across-hypervisors.txt>,
-> so this driver simply treats these bytes as an opaque 128-bit binary
-> blob, as per the spec. This doesn't really make a difference anyway,
-> considering that's how it ends up when handed to the RNG in the end.
-> 
-> This driver builds on prior work from Adrian Catangiu at Amazon, and it
-> is my hope that that team can resume maintenance of this driver.
-> 
-> Cc: Adrian Catangiu <adrian@parity.io>
-> Cc: Laszlo Ersek <lersek@redhat.com>
-> Cc: Daniel P. Berrangé <berrange@redhat.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/virt/Kconfig   |   9 +++
->  drivers/virt/Makefile  |   1 +
->  drivers/virt/vmgenid.c | 121 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 131 insertions(+)
->  create mode 100644 drivers/virt/vmgenid.c
-> 
-> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
-> index 8061e8ef449f..d3276dc2095c 100644
-> --- a/drivers/virt/Kconfig
-> +++ b/drivers/virt/Kconfig
-> @@ -13,6 +13,15 @@ menuconfig VIRT_DRIVERS
->  
->  if VIRT_DRIVERS
->  
-> +config VMGENID
-> +	tristate "Virtual Machine Generation ID driver"
-> +	default y
-> +	depends on ACPI
-> +	help
-> +	  Say Y here to use the hypervisor-provided Virtual Machine Generation ID
-> +	  to reseed the RNG when the VM is cloned. This is highly recommended if
-> +	  you intend to do any rollback / cloning / snapshotting of VMs.
-> +
->  config FSL_HV_MANAGER
->  	tristate "Freescale hypervisor management driver"
->  	depends on FSL_SOC
-> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
-> index 3e272ea60cd9..108d0ffcc9aa 100644
-> --- a/drivers/virt/Makefile
-> +++ b/drivers/virt/Makefile
-> @@ -4,6 +4,7 @@
->  #
->  
->  obj-$(CONFIG_FSL_HV_MANAGER)	+= fsl_hypervisor.o
-> +obj-$(CONFIG_VMGENID)		+= vmgenid.o
->  obj-y				+= vboxguest/
->  
->  obj-$(CONFIG_NITRO_ENCLAVES)	+= nitro_enclaves/
-> diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-> new file mode 100644
-> index 000000000000..5da4dc8f25e3
-> --- /dev/null
-> +++ b/drivers/virt/vmgenid.c
-> @@ -0,0 +1,121 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Virtual Machine Generation ID driver
-> + *
-> + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> + * Copyright (C) 2020 Amazon. All rights reserved.
-> + * Copyright (C) 2018 Red Hat Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/acpi.h>
-> +#include <linux/random.h>
-> +
-> +ACPI_MODULE_NAME("vmgenid");
-> +
-> +enum { VMGENID_SIZE = 16 };
-> +
-> +static struct {
-> +	u8 this_id[VMGENID_SIZE];
-> +	u8 *next_id;
-> +} state;
-> +
-> +static int vmgenid_acpi_add(struct acpi_device *device)
-> +{
-> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER };
-> +	union acpi_object *pss;
-> +	phys_addr_t phys_addr;
-> +	acpi_status status;
-> +	int ret = 0;
-> +
-> +	if (!device)
-> +		return -EINVAL;
-> +
-> +	status = acpi_evaluate_object(device->handle, "ADDR", NULL, &buffer);
-> +	if (ACPI_FAILURE(status)) {
-> +		ACPI_EXCEPTION((AE_INFO, status, "Evaluating ADDR"));
-> +		return -ENODEV;
-> +	}
-> +	pss = buffer.pointer;
-> +	if (!pss || pss->type != ACPI_TYPE_PACKAGE || pss->package.count != 2 ||
-> +	    pss->package.elements[0].type != ACPI_TYPE_INTEGER ||
-> +	    pss->package.elements[1].type != ACPI_TYPE_INTEGER) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	phys_addr = (pss->package.elements[0].integer.value << 0) |
-> +		    (pss->package.elements[1].integer.value << 32);
-> +	state.next_id = acpi_os_map_memory(phys_addr, VMGENID_SIZE);
-> +	if (!state.next_id) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +	device->driver_data = &state;
-> +
-> +	memcpy(state.this_id, state.next_id, sizeof(state.this_id));
-> +	add_device_randomness(state.this_id, sizeof(state.this_id));
-> +
-> +out:
-> +	ACPI_FREE(buffer.pointer);
-> +	return ret;
-> +}
-> +
-> +static int vmgenid_acpi_remove(struct acpi_device *device)
-> +{
-> +	if (!device || acpi_driver_data(device) != &state)
-> +		return -EINVAL;
-> +	device->driver_data = NULL;
-> +	if (state.next_id)
-> +		acpi_os_unmap_memory(state.next_id, VMGENID_SIZE);
-> +	state.next_id = NULL;
-> +	return 0;
-> +}
-> +
-> +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
-> +{
-> +	u8 old_id[VMGENID_SIZE];
-> +
-> +	if (!device || acpi_driver_data(device) != &state)
-> +		return;
-> +	memcpy(old_id, state.this_id, sizeof(old_id));
-> +	memcpy(state.this_id, state.next_id, sizeof(state.this_id));
-> +	if (!memcmp(old_id, state.this_id, sizeof(old_id)))
-> +		return;
-> +	add_vmfork_randomness(state.this_id, sizeof(state.this_id));
-> +}
-> +
-> +static const struct acpi_device_id vmgenid_ids[] = {
-> +	{"VMGENID", 0},
-> +	{"QEMUVGID", 0},
-> +	{ },
-> +};
-> +
-> +static struct acpi_driver acpi_driver = {
-> +	.name = "vm_generation_id",
-> +	.ids = vmgenid_ids,
-> +	.owner = THIS_MODULE,
-> +	.ops = {
-> +		.add = vmgenid_acpi_add,
-> +		.remove = vmgenid_acpi_remove,
-> +		.notify = vmgenid_acpi_notify,
-> +	}
-> +};
-> +
-> +static int __init vmgenid_init(void)
-> +{
-> +	return acpi_bus_register_driver(&acpi_driver);
-> +}
-> +
-> +static void __exit vmgenid_exit(void)
-> +{
-> +	acpi_bus_unregister_driver(&acpi_driver);
-> +}
-> +
-> +module_init(vmgenid_init);
-> +module_exit(vmgenid_exit);
-> +
-> +MODULE_DEVICE_TABLE(acpi, vmgenid_ids);
-> +MODULE_DESCRIPTION("Virtual Machine Generation ID");
-> +MODULE_LICENSE("GPL v2");
-> 
+Quoting AngeloGioacchino Del Regno (2022-02-21 15:30:07)
+> Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> >
+> > Similar to HDMI, DP uses audio infoframes as well which are structured
+> > very similar to the HDMI ones.
+> >
+> > This patch adds a helper function to pack the HDMI audio infoframe for
+> > DP, called hdmi_audio_infoframe_pack_for_dp().
+> > hdmi_audio_infoframe_pack_only() is split into two parts. One of them
+> > packs the payload only and can be used for HDMI and DP.
+> >
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > ---
+> >   drivers/video/hdmi.c        | 83 ++++++++++++++++++++++++++++---------
+> >   include/drm/drm_dp_helper.h |  2 +
+> >   include/linux/hdmi.h        |  7 +++-
+> >   3 files changed, 72 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
+> > index 947be761dfa40..63e74d9fd210e 100644
+> > --- a/drivers/video/hdmi.c
+> > +++ b/drivers/video/hdmi.c
+> > @@ -21,6 +21,7 @@
+> >    * DEALINGS IN THE SOFTWARE.
+> >    */
+> >
+> > +#include <drm/drm_dp_helper.h>
+> >   #include <linux/bitops.h>
+> >   #include <linux/bug.h>
+> >   #include <linux/errno.h>
+> > @@ -381,12 +382,34 @@ static int hdmi_audio_infoframe_check_only(const struct hdmi_audio_infoframe *fr
+> >    *
+> >    * Returns 0 on success or a negative error code on failure.
+> >    */
+> > -int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame)
+> > +int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame)
+> >   {
+> >       return hdmi_audio_infoframe_check_only(frame);
+> >   }
+> >   EXPORT_SYMBOL(hdmi_audio_infoframe_check);
+> >
+> > +static void
+> > +hdmi_audio_infoframe_pack_payload(const struct hdmi_audio_infoframe *frame,
+> > +                               u8 *buffer)
+> > +{
+> > +     u8 channels;
+> > +
+> > +     if (frame->channels >= 2)
+> > +             channels = frame->channels - 1;
+> > +     else
+> > +             channels = 0;
+> > +
+> > +     buffer[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
+> > +     buffer[1] = ((frame->sample_frequency & 0x7) << 2) |
+> > +              (frame->sample_size & 0x3);
+> > +     buffer[2] = frame->coding_type_ext & 0x1f;
+> > +     buffer[3] = frame->channel_allocation;
+> > +     buffer[4] = (frame->level_shift_value & 0xf) << 3;
+> > +
+> > +     if (frame->downmix_inhibit)
+> > +             buffer[4] |= BIT(7);
+> > +}
+> > +
+> >   /**
+> >    * hdmi_audio_infoframe_pack_only() - write HDMI audio infoframe to binary buffer
+> >    * @frame: HDMI audio infoframe
+> > @@ -404,7 +427,6 @@ EXPORT_SYMBOL(hdmi_audio_infoframe_check);
+> >   ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
+> >                                      void *buffer, size_t size)
+> >   {
+> > -     unsigned char channels;
+> >       u8 *ptr = buffer;
+> >       size_t length;
+> >       int ret;
+> > @@ -420,28 +442,13 @@ ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
+> >
+> >       memset(buffer, 0, size);
+> >
+> > -     if (frame->channels >= 2)
+> > -             channels = frame->channels - 1;
+> > -     else
+> > -             channels = 0;
+> > -
+> >       ptr[0] = frame->type;
+> >       ptr[1] = frame->version;
+> >       ptr[2] = frame->length;
+> >       ptr[3] = 0; /* checksum */
+> >
+> > -     /* start infoframe payload */
+> > -     ptr += HDMI_INFOFRAME_HEADER_SIZE;
+> > -
+> > -     ptr[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
+> > -     ptr[1] = ((frame->sample_frequency & 0x7) << 2) |
+> > -              (frame->sample_size & 0x3);
+> > -     ptr[2] = frame->coding_type_ext & 0x1f;
+> > -     ptr[3] = frame->channel_allocation;
+> > -     ptr[4] = (frame->level_shift_value & 0xf) << 3;
+> > -
+> > -     if (frame->downmix_inhibit)
+> > -             ptr[4] |= BIT(7);
+> > +     hdmi_audio_infoframe_pack_payload(frame,
+> > +                                       ptr + HDMI_INFOFRAME_HEADER_SIZE);
+> >
+> >       hdmi_infoframe_set_checksum(buffer, length);
+> >
+> > @@ -479,6 +486,44 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
+> >   }
+> >   EXPORT_SYMBOL(hdmi_audio_infoframe_pack);
+> >
+> > +/**
+> > + * hdmi_audio_infoframe_pack_for_dp - Pack a HDMI Audio infoframe for
+> > + *                                    displayport
+>
+> This fits in one line (82 cols is ok)... but, anyway, please capitalize D and P
+> in the DisplayPort word.
+>
 
-I'm not an experienced reviewer for the kernel.
+Yeah, I ran clang-format and didn't want to contradict the tool :)
+I'll fix that for v9
 
-I've made an effort to check several -- although not all -- aspects of
-this patch, and it looks OK to me.
+> > + *
+> > + * @frame HDMI Audio infoframe
+>
+> You're almost there! You missed a colon after each description.
+> Also, I personally like seeing indented descriptions as, in my opinion, this
+> enhances human readability, as it's a bit more pleasing to the eye... but
+> it's not a requirement, so you be the judge.
+>
+> * @frame:      HDMI Audio infoframe
+> * @sdp:        Secondary data packet......
+> * @dp_version: DisplayPort version......
+>
+> Please fix.
+>
 
-Reviewed-by: Laszlo Ersek <lersek@redhat.com>
+I completly forgot to generate and check the kerneldoc.
+Sorry.
 
-Thanks
-Laszlo
+> > + * @sdp secondary data packet for display port. This is filled with the
+> > + * appropriate data
+> > + * @dp_version Display Port version to be encoded in the header
+> > + *
+> > + * Packs a HDMI Audio Infoframe to be sent over Display Port. This function
+> > + * fills the secondary data packet to be used for Display Port.
+> > + *
+> > + * Return: Number of total written bytes or a negative errno on failure.
+> > + */
+> > +ssize_t
+> > +hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
+> > +                              struct dp_sdp *sdp, u8 dp_version)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret = hdmi_audio_infoframe_check(frame);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     memset(sdp->db, 0, sizeof(sdp->db));
+> > +
+> > +     // Secondary-data packet header
+>
+> Please, C-style comments:
+>
+>         /* Secondary-data packet header */
+>
+> Thanks,
+> Angelo
 
+I think this is not the only case of C++ comment that slipped past me...
+I'll revise the whole series.
+
+Thx,
+Guillaume.

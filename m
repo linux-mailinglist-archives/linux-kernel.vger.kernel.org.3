@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7265E4C4CE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEB74C4CFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiBYRyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
+        id S230134AbiBYRyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiBYRx7 (ORCPT
+        with ESMTP id S230062AbiBYRym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:53:59 -0500
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C300575211
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:53:26 -0800 (PST)
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 1280E22362;
-        Fri, 25 Feb 2022 17:53:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id F0D6F20026;
-        Fri, 25 Feb 2022 17:53:13 +0000 (UTC)
-Message-ID: <cc8405c39037d1b63df3d901051118f9b12c36a9.camel@perches.com>
-Subject: Re: [PATCHv3 03/10] asm-generic: introduce be48 unaligned accessors
-From:   Joe Perches <joe@perches.com>
-To:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        martin.petersen@oracle.com, colyli@suse.de,
-        Hannes Reinecke <hare@suse.de>, Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Feb 2022 09:53:11 -0800
-In-Reply-To: <20220225160300.GC13610@lst.de>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
-         <20220222163144.1782447-4-kbusch@kernel.org>
-         <20220225160300.GC13610@lst.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 25 Feb 2022 12:54:42 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9FB1BAF29
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:54:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645811649; x=1677347649;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ftDuWc6MrY6q3MP1FYVTsDt8HeY9bTl9rroGTJ2zuzg=;
+  b=WyZGLvf3I1fuXB6XB11tRr+eiyojgHbQCf/iB6mNf55PcwMGz5bz7iGY
+   Ivgp7otZ+bnF/i8ISZJdMG5c0NbGQEDTRw0Kw9N4To04n2WMh4tI9Pqg3
+   K8H3arNOK6ezM/ghHQ7QEzT70gaU3murcz0WoBXGriLXiNVCh7skcfp7T
+   P6uJVNAco7O9OtPJUUlsUBlgLEPG10HT53SJCqE7c28Nry3OlKrTv9lQy
+   F4SLp3qSxuQlN2a4NIpY7U+axdPib6WdDymWYdhodbISIsOVwOX8Q+FXJ
+   1M6ipK58TjpPbr7rsKCpoVbbUziMNOEFwSSObrj3vpmvUn9+y9jXIe9Rm
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="251377205"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="251377205"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:54:09 -0800
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="533654431"
+Received: from wreed-mobl.amr.corp.intel.com (HELO [10.212.247.12]) ([10.212.247.12])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:54:09 -0800
+Message-ID: <62bb50e4-819b-a576-cfbe-e2878946de18@intel.com>
+Date:   Fri, 25 Feb 2022 09:54:04 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv4 30/30] Documentation/x86: Document TDX kernel
+ architecture
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-31-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220224155630.52734-31-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: spz4ukuecs8kzmbxa6om18zqso8poejr
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: F0D6F20026
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+7WrsVDd0XN45qTzKLE5sj7V3piTJ4Lf8=
-X-HE-Tag: 1645811593-962451
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-25 at 17:03 +0100, Christoph Hellwig wrote:
-> On Tue, Feb 22, 2022 at 08:31:37AM -0800, Keith Busch wrote:
-> > The NVMe protocol extended the data integrity fields with unaligned
-> > 48-bit reference tags. Provide some helper accessors in
-> > preparation for these.
-> > 
-> > Reviewed-by: Hannes Reinecke <hare@suse.de>
-> > Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Keith Busch <kbusch@kernel.org>
-> 
-> Looks good,
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+On 2/24/22 07:56, Kirill A. Shutemov wrote:
+> +List of instructions that can cause a #VE is,
+> +
+> +* String I/O (INS, OUTS), IN, OUT
 
-Perhaps for completeness this should also add the le48 variants
-like the 24 bit accessors above this.
+Also: String I/O != Port I/O
+
+I'm just going to throw this into a shared document and start rewriting it.
 

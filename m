@@ -2,165 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227D84C3A45
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E404C3A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiBYAYV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Feb 2022 19:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S236038AbiBYA0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiBYAYU (ORCPT
+        with ESMTP id S231464AbiBYA0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:24:20 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B201BBF78;
-        Thu, 24 Feb 2022 16:23:48 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:39456)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOOh-001EAc-6r; Thu, 24 Feb 2022 17:23:47 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:56788 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOOe-000We2-VS; Thu, 24 Feb 2022 17:23:46 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-References: <20220221084915.554151737@linuxfoundation.org>
-        <20220221084916.628257481@linuxfoundation.org>
-        <20220221234610.0d23e2e0@plasteblaster>
-        <87sfsa8nmf.fsf@email.froward.int.ebiederm.org>
-        <20220223234027.30566235@plasteblaster>
-Date:   Thu, 24 Feb 2022 18:23:13 -0600
-In-Reply-To: <20220223234027.30566235@plasteblaster> (Thomas Orgis's message
-        of "Wed, 23 Feb 2022 23:40:27 +0100")
-Message-ID: <87ee3riyku.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 24 Feb 2022 19:26:13 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E74275785
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:25:42 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id m3so5163551eda.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tEVqjxBsx+zdcxyuCP32PdgEl44+G4Pk6hPEa4sGMWI=;
+        b=L3xvgoPUdl+Mu+1xybfGSxGm/vUrl5/eYg+wVwayPTKOhBwqLL4nCkqokl+jP/mse+
+         iZsiJlVQ4tbNm+GKMVZHU7UzlQ/5Xk/ZuNm0hTnrXjLoRvoOqo/O5J+vj3oEL3pbelvw
+         F/alXMOoKIEni6Bv/uo2f7nIL6zF3tG5Y1Scobm0jrlhbNMujXKYDGpd0bC+IMrN/sOF
+         WwDtPJkzWYqs1/1ZGc/d6w695MUt+7VHCEzbrbA+fY8DLVUuI+vvRv/acm7p87GA8sIx
+         wjEBug9s/0P2LOnNnSD7n9P2eNLLpqJyLAEW4WegBneNCQxkiW2j8I5nsOw4SmYK/4/U
+         JYcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tEVqjxBsx+zdcxyuCP32PdgEl44+G4Pk6hPEa4sGMWI=;
+        b=Zx18C4jzEMOdP1tLci9PE+q4iZZ6hLowiIXhkvTj835kYFusv9M+4mzjjba8r0w9v6
+         s6l50dGpFcS1+myVWMarj8CGKBKRUFXKSUj2+IY27MKaYNWYnq59/qnTVdsz9DTsTyd4
+         2QtiCZR7KaRS31RouVVyyTDOX47+oQiA1no0E0FGoBAhl9ZRlQHaZ2z44C6+xPqnKKyK
+         4qcdCK3etDcIJuTEuzdIAq5xBaT/eEDXIDLGdXkVEza6luuTFO4/+GK4zMv+eN1hnXnd
+         gQv0al6vufo3iKz4OFR3QaiIHiomzTx2NLZWorNVV/khAMyDIpLllSlTPDnUQkbdR4oY
+         TR4g==
+X-Gm-Message-State: AOAM530jQTGpgXhnaalIxAzO9BblOZol7N0u10kSnyWZh5tENXHyobLZ
+        2sysvkD0aVMyJTqA8HuJ9WYc8vVYden1rWksShAo
+X-Google-Smtp-Source: ABdhPJxBJvCVWWSs7qkL+zhxKoux3jmICxuRptbAUzqKSMRF5gkiUfDgk/ukE5plqx25CTr7EHsJ8XaHiTx7vFYs1lE=
+X-Received: by 2002:a05:6402:2922:b0:40f:7241:74d4 with SMTP id
+ ee34-20020a056402292200b0040f724174d4mr4791988edb.43.1645748740824; Thu, 24
+ Feb 2022 16:25:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nNOOe-000We2-VS;;;mid=<87ee3riyku.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18uCExlTM8TG4mAl1nwHDJABZ9+OTQeHy0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220217143457.75229-1-cgzones@googlemail.com>
+In-Reply-To: <20220217143457.75229-1-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 24 Feb 2022 19:25:29 -0500
+Message-ID: <CAHC9VhRPwFGohkPT_PcFT=GXX66w2PYpRyXxY2p_hkcPx3j_jw@mail.gmail.com>
+Subject: Re: [PATCH] selinux: log anon inode class name
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;"Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1493 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (0.7%), b_tie_ro: 10 (0.6%), parse: 0.96
-        (0.1%), extract_message_metadata: 16 (1.1%), get_uri_detail_list: 2.5
-        (0.2%), tests_pri_-1000: 19 (1.2%), tests_pri_-950: 1.23 (0.1%),
-        tests_pri_-900: 1.00 (0.1%), tests_pri_-90: 83 (5.6%), check_bayes: 82
-        (5.5%), b_tokenize: 9 (0.6%), b_tok_get_all: 10 (0.7%), b_comp_prob:
-        3.1 (0.2%), b_tok_touch_all: 56 (3.8%), b_finish: 0.83 (0.1%),
-        tests_pri_0: 1123 (75.2%), check_dkim_signature: 0.88 (0.1%),
-        check_dkim_adsp: 3.3 (0.2%), poll_dns_idle: 24 (1.6%), tests_pri_10:
-        2.3 (0.2%), tests_pri_500: 233 (15.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 5.4 32/80] taskstats: Cleanup the use of task->exit_code
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de> writes:
-
-> Am Tue, 22 Feb 2022 17:53:12 -0600
-> schrieb "Eric W. Biederman" <ebiederm@xmission.com>: 
+On Thu, Feb 17, 2022 at 9:35 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
->> How do you figure?
+> Log the anonymous inode class name in the security hook
+> inode_init_security_anon.  This name is the key for name based type
+> transitions on the anon_inode security class on creation.  Example:
 >
-> I admit that I am struggling with understanding where exit codes come
-> from in the non-usual cases. During my taskstats tests, I played with
-> writing a multithreaded application that does call pthread_exit() in
-> the main thread (pid==tgid), for example. I slowly had to learn just
-> how messy this can be …
+>     type=3DAVC msg=3Daudit(02/16/22 22:02:50.585:216) : avc:  granted  { =
+create } for  pid=3D2136 comm=3Dmariadbd anonclass=3D"[io_uring]" dev=3D"an=
+on_inodefs" ino=3D6871 scontext=3Dsystem_u:system_r:mysqld_t:s0 tcontext=3D=
+system_u:system_r:mysqld_iouring_t:s0 tclass=3Danon_inode
 >
-> Is it clearly defined what the exitcode of a task as part of a process
-> is/should/can mean, as opposed to the process as a whole?
-
-In the code it is clearly defined.  The decoding is exactly the same
-as from an entire process and for a single threaded process there is no
-difference.
-
-Linux has a system 2 system calls "exit(2)" and "exit_group(2)" if a
-thread exits by itself whatever is passed to exit(2) is the exit code.
-
-What pthread_exit passes to exit(2) I don't know.  I have not been able
-to trace glibc that far, and I have not instrumented up a kernel to see.
-
-For threads that are alive when exit_group(2) is called they all get the
-same final exit code.
-
->> For single-threaded processes ac_exitcode would always be reasonable,
->> and be what userspace passed to exit(3).
+> Add a new LSM audit data type holding the inode and the class name.
 >
-> Yes. That is the one case where we all know what we are dealing with;-)
+> Also warn if the security hook gets called with no name set; currently
+> the only caller fs/anon_inodes.c:anon_inode_make_secure_inode() passes
+> one.
 >
->> For multi-threaded processes ac_exitcode before my change was set to
->> some completely arbitrary value for the thread whose tgid == tid.
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  include/linux/lsm_audit.h |  5 +++++
+>  security/lsm_audit.c      | 21 +++++++++++++++++++++
+>  security/selinux/hooks.c  |  7 +++++--
+>  3 files changed, 31 insertions(+), 2 deletions(-)
+
+...
+
+> diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+> index 17d02eda9538..8135a88d6d82 100644
+> --- a/include/linux/lsm_audit.h
+> +++ b/include/linux/lsm_audit.h
+> @@ -76,6 +76,7 @@ struct common_audit_data {
+>  #define LSM_AUDIT_DATA_IBENDPORT 14
+>  #define LSM_AUDIT_DATA_LOCKDOWN 15
+>  #define LSM_AUDIT_DATA_NOTIFICATION 16
+> +#define LSM_AUDIT_DATA_ANONINODE       17
+>         union   {
+>                 struct path path;
+>                 struct dentry *dentry;
+> @@ -96,6 +97,10 @@ struct common_audit_data {
+>                 struct lsm_ibpkey_audit *ibpkey;
+>                 struct lsm_ibendport_audit *ibendport;
+>                 int reason;
+> +               struct {
+> +                       struct inode *inode;
+> +                       const char *anonclass;
+> +               } anoninode_struct;
+>         } u;
+>         /* this union contains LSM specific data */
+>         union {
+> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+> index 1897cbf6fc69..5545fed35539 100644
+> --- a/security/lsm_audit.c
+> +++ b/security/lsm_audit.c
+> @@ -433,6 +433,27 @@ static void dump_common_audit_data(struct audit_buff=
+er *ab,
+>                 audit_log_format(ab, " lockdown_reason=3D\"%s\"",
+>                                  lockdown_reasons[a->u.reason]);
+>                 break;
+> +       case LSM_AUDIT_DATA_ANONINODE: {
+> +               struct dentry *dentry;
+> +               struct inode *inode;
+> +
+> +               rcu_read_lock();
+> +               inode =3D a->u.anoninode_struct.inode;
+> +               dentry =3D d_find_alias_rcu(inode);
+> +               if (dentry) {
+> +                       audit_log_format(ab, " name=3D");
+> +                       spin_lock(&dentry->d_lock);
+> +                       audit_log_untrustedstring(ab, dentry->d_name.name=
+);
+> +                       spin_unlock(&dentry->d_lock);
+> +               }
+
+I'm not sure we are ever going to get a useful dentry name for
+anonymous inodes, I think we can probably drop this.  The "anonclass=3D"
+field will likely be much more interesting and helpful.
+
+> +               audit_log_format(ab, " anonclass=3D");
+> +               audit_log_untrustedstring(ab, a->u.anoninode_struct.anonc=
+lass);
+> +               audit_log_format(ab, " dev=3D");
+> +               audit_log_untrustedstring(ab, inode->i_sb->s_id);
+
+I'm pretty sure this is always going to end up being "anon_inodefs"
+and thus not very useful.
+
+> +               audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+
+Similarly, I'm not sure how useful the inode number is in practice.
+I've never tried, but can a user lookup an anonymous inode via the
+inode number?
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index dafabb4dcc64..19c831d94d9b 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2932,6 +2932,8 @@ static int selinux_inode_init_security_anon(struct =
+inode *inode,
+>         if (unlikely(!selinux_initialized(&selinux_state)))
+>                 return 0;
 >
-> Isn't the only place where it really makes sense to set the exitcode
-> when the last task of the process exits? I guess that was the intention
-> of the earlier code — with the same wrong assumption that I fell victim
-> to for quite some time: That the group leader (first task, tgid == pid)
-> always exits last.
+> +       WARN_ON(!name);
+> +
+>         isec =3D selinux_inode(inode);
 >
-> I do not know in which cases group member threads have meaningful exit
-> codes different from the last one (which is the one returned for the
-> process in whole … ?). I'd love to see the exact reasoning on how
-> multithreading got mapped into kernel tasks which used to track only
-> single-threaded processes before.
-
-The internal model in the kernel is there are tasks (which pthreads are
-mapped to in a 1-1 fashion).  These tasks were the original process
-abstraction.  In the case of CLONE_THREAD these tasks are glued together
-into a POSIX process, with shared signal handling.
-
-So from a kernel standpoint as it basically the original process
-abstraction it is all well defined what happens when an individual task
-exits.
-
->> With my change the value returned
->> is at least well defined.
+>         /*
+> @@ -2965,8 +2967,9 @@ static int selinux_inode_init_security_anon(struct =
+inode *inode,
+>          * allowed to actually create this type of anonymous inode.
+>          */
 >
-> But defined to what?
+> -       ad.type =3D LSM_AUDIT_DATA_INODE;
+> -       ad.u.inode =3D inode;
+> +       ad.type =3D LSM_AUDIT_DATA_ANONINODE;
+> +       ad.u.anoninode_struct.inode =3D inode;
+> +       ad.u.anoninode_struct.anonclass =3D name ? (const char *)name->na=
+me : "unknown(null)";
 
-See above.
+This doesn't seem to match well with the newly added WARN_ON()
+assertion above.  I would suggest dropping the WARN_ON() assertion as
+security_transition_sid() can already handle that safely, and leaving
+the tertiary statement above; however I think we should probably
+change the anonclass string to "?" as that is the common unset field
+value used by audit.
 
->> Now maybe it would have been better to flag the bug fix with a version
->> number.  Unfortunately I did not even realize taskstats had a version
->> number.  I just know the code made no sense.
->
-> Well, fixing a bug that has been there from the beginning (of adding
-> multithreading, at least) is a significant change that one might want
-> to know about. And I do think that it fits to thouroughly fix these
-> issues that relate to identifying threads and processes (the shameless
-> plug of my taskstats patch that I'm working on since 2018, and only got
-> right in 2022, finally — I hope), while at that.
-
-It looks like the bug was in commit f3cef7a99469 ("[PATCH] csa: basic
-accounting over taskstats") in 2006 in 2.6.19-rc1 when taskstats were
-added.  That is long after CLONE_THREAD support was added in the 2.5
-development kernel.
-
-I have been working to get a single place that code can look to find the
-process exit status.  AKA so that the code can always set
-SIGNAL_GROUP_EXIT, and look at signal->group_exit_code.  Fixing this was
-just part of sorting out the misconceptions, and I didn't realize there
-was anyone that paying attention and cared.
-
-I will see if I can find some time to give your taskstats patch a
-review.
-
-Eric
+--=20
+paul-moore.com

@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9B34C4C9C
+	by mail.lfdr.de (Postfix) with ESMTP id 039B04C4C9B
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243839AbiBYRh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S243861AbiBYRiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiBYRh0 (ORCPT
+        with ESMTP id S243962AbiBYRh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:37:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3302D1CDDD7;
-        Fri, 25 Feb 2022 09:36:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C39BF61DCC;
-        Fri, 25 Feb 2022 17:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAFBC340F3;
-        Fri, 25 Feb 2022 17:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645810613;
-        bh=55H8QnkGyEAbQODvLLv1iG3nCue5egT78H9wUUdabyY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hMv88cuvWCQOH6mGcVBbEzK6DWIpYvK4DnMLDdnVesDTCJ2xSdl4tsjVtFy/3CPty
-         NewkLpFWycLmp2VHz6m054taatL1WcaIq3TWBuuTqlDuL2aEtaHZwT9z4JTlTQPSGF
-         UV+TWxc26verVUXZ/YOrSa2etLOLN+rh5npH/qFYu7cMK1ISTv7AJRzL4Dgx+9fh9E
-         SkVvVGG8ppsncrUALjroOF9SkbeHtw5AvZifOEvMLF7xo7i3hOBBLg3ng/8IqiVBok
-         0wTjksjdA7NMtHOo9CVIp80OuzcO2T/ffuInbagScXHCscJlU/oAkg+ehZr7mxn6ML
-         hMadthx1UJPvw==
-Date:   Fri, 25 Feb 2022 17:36:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org
-Subject: Re: [PATCH v4 0/2] Add power domains support for digital macro codecs
-Message-ID: <YhkTrflXM2aI1qOu@sirena.org.uk>
-References: <1645786624-12311-1-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 25 Feb 2022 12:37:58 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ECE140D5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:37:24 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id e6so3839481pgn.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:37:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=02IWQGflWXjYwUX29jDdu/P28RFJb4bHYd+IQuUew8g=;
+        b=kUgfr+BUSyJkVMN/Doh8ZyiibLenLl15zo6bOy4rWBJYX17usBgH/o8iJTHO5XKZdv
+         FIRoxVZBZpjCBE2RUff++qJBIi09y14ofiD3ly3QeSlZp5xJscoOCHa7IsD8lgTU/o1J
+         xO0CrtIahGKQzcczYaERI0DLYTA+5L/usaOtM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=02IWQGflWXjYwUX29jDdu/P28RFJb4bHYd+IQuUew8g=;
+        b=zXmZhEcYQBu0Cu2VSIFCQ4oJELyq//mYWbXYdLvfVvDFGyg8eWEH25NV3dWE8rTuid
+         4jmaB4qYwP2CkpthAStIXl9B8IytTWUwM2VJQDelsAhRWKGZ9q9cYdrWEai3eqokRr3l
+         YJ3R0hC+pBNi+mv4B2iDyG4XofuRNDhmXuYJqsnPj0lPY4v+r58RH52y9LxZwuzqX65x
+         bQObKKizwE7nNdyrwaAeq6GTWKujy+gnuWyzteRoa9oBpodMhJqNlwPsvH1ehgtcumk8
+         m70i9vnc9Dt77SP5Up1EyNlQLK2qoKIk3p8Xxzcjs6w8XnslA/Bk+cBVfOB9/BztDV9c
+         uLbw==
+X-Gm-Message-State: AOAM531FhdR/FE0y69lvjyh/IoI+3fctkntheQi3Z5jsgsledx1/2K3j
+        dDzsU6BC9gzdS1iOQCnhRZnZnqzBU7+hsg==
+X-Google-Smtp-Source: ABdhPJxa8cWp+caZT/XsGUM3pG14CnQKF4h0alaujNsw9OZoKX05Fs4iuNMYG7vu03MfC/TBygUB5w==
+X-Received: by 2002:a63:8543:0:b0:35e:3bd9:3798 with SMTP id u64-20020a638543000000b0035e3bd93798mr7089608pgd.73.1645810644059;
+        Fri, 25 Feb 2022 09:37:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id az22-20020a17090b029600b001bc6500625asm9681173pjb.45.2022.02.25.09.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 09:37:23 -0800 (PST)
+Date:   Fri, 25 Feb 2022 09:37:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH] m68k: Implement "current_stack_pointer"
+Message-ID: <202202250936.BA139C4@keescook>
+References: <20220224060448.1856091-1-keescook@chromium.org>
+ <CAMuHMdVioQLy_T2LimgWdfWM=j=fomfpayuS1mbXnBLZj4gGQA@mail.gmail.com>
+ <d75f1259c3e64387a161ebcb0448d594@AcuMS.aculab.com>
+ <CAMuHMdWtQ+B-01ZOwZNvgQ7pndNsP3V90_jHdR=RS4K7O3Vk9g@mail.gmail.com>
+ <95b9c3e8227a4892b26cc0384d1782c2@AcuMS.aculab.com>
+ <CAMuHMdU6msvi0j=mS28GFYbm+uMRk7PkYe+zOM4sDmOVxeibLQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="B9sA1yustykLxY/n"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1645786624-12311-1-git-send-email-quic_srivasam@quicinc.com>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAMuHMdU6msvi0j=mS28GFYbm+uMRk7PkYe+zOM4sDmOVxeibLQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,30 +74,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 24, 2022 at 10:56:09AM +0100, Geert Uytterhoeven wrote:
+> Hi David, Kees,
+> 
+> On Thu, Feb 24, 2022 at 10:54 AM David Laight <David.Laight@aculab.com> wrote:
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > Sent: 24 February 2022 09:17
+> > >
+> > > On Thu, Feb 24, 2022 at 10:12 AM David Laight <David.Laight@aculab.com> wrote:
+> > > > From: Geert Uytterhoeven
+> > > > > Sent: 24 February 2022 08:59
+> > > > ...
+> > > > > > +register unsigned long current_stack_pointer __asm__("sp");
+> > > > >
+> > > > > I don't know what HARDENED_USERCOPY does, so I don't know if you need
+> > > > > "usp" (see rdusp()) or "sp"?
+> > > >
+> > > > HARDENED_USERCOPY significantly slows down some systems calls
+> > > > (especially things like sendmsg()) by trying to run-time verify
+> > > > that the kernel buffer doesn't overrun a stack frame or kmalloc()ed
+> > >
+> > > Kernel stack frame of user stack frame?
+> >
+> > Kernel, the kernel doesn't care if the user stack gets trashed.
 
---B9sA1yustykLxY/n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Right, this is strictly a kernel-side check in mm/usercopy.c:
+https://lore.kernel.org/linux-hardening/20220225173345.3358109-1-keescook@chromium.org/
 
-On Fri, Feb 25, 2022 at 04:27:02PM +0530, Srinivasa Rao Mandadapu wrote:
-> This patch set is to add power domains support for RX, TX and VA macros.
+> 
+> OK.
+> 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> 
+> Kees: Do you want me to queue this in the m68k for-v5.18 branch, or do
+> you want to take it yourself, together with the HARDENED_USERCOPY work?
+> In case of the latter:
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> 
+> Please let me know. Thanks!
 
-This conflicts with some of the other work going on with these drivers
-which got merged, could you rebase please?
+Yeah, I'll take it via my tree, just so it's all together.
 
---B9sA1yustykLxY/n
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks!
 
------BEGIN PGP SIGNATURE-----
+-Kees
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIZE6wACgkQJNaLcl1U
-h9CTQgf+LVtyrqYcATwwJ43HX06LqU+W1JD8UoZhseiY/fovF4Sg5mRvGyw6pp7T
-es9X9DBynLKonb4b3h/hDFxbWkrvhXby2zJvQuWLe7qGajh0lMdXFGClAk0spXV/
-dxhBuQfeoQCeX6SdOTa81+7HSjfWADnMNQZuBe7Qr3RXPhtxAuBdWREzua9U3364
-cvzHZldWHYRVSrQkHMmDGYcf+iD09/aoix8KsnsHGt0c3sNtUcttViYYUyaZHK8n
-+NfT87FeTRKupxuwxrrlBGaP4F015+VX3AwIcSRxu6fLr2D8Iko4oc/M+HJQhXcN
-lSn+Mhv7UFP4TFzJaR/0Jx1obJ8iAw==
-=JP8I
------END PGP SIGNATURE-----
 
---B9sA1yustykLxY/n--
+-- 
+Kees Cook

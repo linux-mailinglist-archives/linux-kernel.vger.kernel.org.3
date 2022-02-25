@@ -2,318 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E159F4C4ECD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272664C4ED2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbiBYTb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S234830AbiBYTdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiBYTbY (ORCPT
+        with ESMTP id S234808AbiBYTcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:31:24 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B141D0365
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 11:30:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645817451; x=1677353451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7eSGW2s8PYnkBw6oqwH9GaI0esxFTjo1HeCAQwqxJa4=;
-  b=GxtCILqvBTZ5r4ils4qE9tGC6FwDOWAoLbGTMhYh/u8Pqpv/J2dLlb0J
-   h5bOYf1piwc8dRUyVBVrLeAcuVEBB2gBVUwVpgTTDzfLP7ooT1NJUz1BU
-   ZGCqWBjeqxk/taRWuScJ7TBCaYFLO6xLfS28fOEAHVU+G79zQzhDt8Zcx
-   agSUkafkUn6VNgVbDUkrE53fwbNN1DDM26UBE7C/7N/gK3GkdY2a0NNJw
-   +qilU3QrV/K52P7gkZlZNVCIDV5S2WXODVtnBzGTfNFnA809VcfHE4sna
-   OD5xbnfVhg5UfmzWxdareGMiTZtoMzBQj6mbTyby7Xl9k6MHcHCFirzST
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313284511"
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="313284511"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 11:30:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="592584070"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Feb 2022 11:30:42 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 9387E94; Fri, 25 Feb 2022 21:30:59 +0200 (EET)
-Date:   Fri, 25 Feb 2022 22:30:59 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCHv4 07/30] x86/traps: Add #VE support for TDX guest
-Message-ID: <20220225193059.6zn6owzpbggxfqqv@black.fi.intel.com>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-8-kirill.shutemov@linux.intel.com>
- <c6ad42a0-ab19-befd-5760-2bcc992df732@intel.com>
+        Fri, 25 Feb 2022 14:32:46 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA44B1D0365;
+        Fri, 25 Feb 2022 11:32:13 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so7570999oos.10;
+        Fri, 25 Feb 2022 11:32:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kRILqCarovlsZz7thgDDibtWJZEbIzmqyc2ox6LuLpY=;
+        b=Cm3D0xI4Yt+LUUrm5/sUCrpd33+npF9MlJLlZvbTR5xcFgxPB5Tjn2WkLQckkBPeLU
+         P3+87Tg6iBbcH65XgBTXng58T8iO+POj6tj7fdb6Bl/r5TP11ogVXLX0I66fEB2fwvgs
+         uh6a4six2iVyP1Syt6DTmgaluj2HP0tdkljkD3C1zs9WSstmrs/9Vi1KNq/zwzlhjgR+
+         1FdytNb52tU6MyFdSK+h8giw+8/T8xFM2M8v++qAmbY4qfeGytakJWQrU0lfPBdoyh3K
+         nRCfQ8CAYxoraPs554Aw6BIreffuBZNa4hTyxYsWpfC328+e/iHT6uJ8bd/7mw9axec7
+         7Jaw==
+X-Gm-Message-State: AOAM532z0u0el2JDZ1snmZswXjOLbgt/3k1JqeoAjaiTgi6te0BDCW/u
+        /Spacpou5X3wS2DJxhvKJg==
+X-Google-Smtp-Source: ABdhPJzwAL+432KfYz3I8h/Kv7X9CZCjqxcsRfm56jxdkR8gD0rIcbp3XoQRwtlfUGG0WF8u8xo2dg==
+X-Received: by 2002:a05:6870:9a85:b0:d6:fb74:eef9 with SMTP id hp5-20020a0568709a8500b000d6fb74eef9mr685677oab.50.1645817533317;
+        Fri, 25 Feb 2022 11:32:13 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id a10-20020a05687073ca00b000d128dfeebfsm1652359oan.2.2022.02.25.11.32.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 11:32:12 -0800 (PST)
+Received: (nullmailer pid 1296393 invoked by uid 1000);
+        Fri, 25 Feb 2022 19:32:11 -0000
+Date:   Fri, 25 Feb 2022 13:32:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Yaniv Gardi <ygardi@codeaurora.org>,
+        Nishanth Menon <nm@ti.com>, Avri Altman <avri.altman@wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, Li Wei <liwei213@huawei.com>,
+        devicetree@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        linux-samsung-soc@vger.kernel.org, Jan Kotas <jank@cadence.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wei Xu <xuwei5@hisilicon.com>, Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH v2 04/15] dt-bindings: ufs: drop unused/old ufs-qcom PHY
+ bindings
+Message-ID: <Yhkuu/cMDl0fMx/8@robh.at.kernel.org>
+References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
+ <20220222145854.358646-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c6ad42a0-ab19-befd-5760-2bcc992df732@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220222145854.358646-5-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 10:36:02AM -0800, Dave Hansen wrote:
-> On 2/24/22 07:56, Kirill A. Shutemov wrote:
-> > Virtualization Exceptions (#VE) are delivered to TDX guests due to
-> > specific guest actions which may happen in either user space or the
-> > kernel:
-> > 
-> >  * Specific instructions (WBINVD, for example)
-> >  * Specific MSR accesses
-> >  * Specific CPUID leaf accesses
-> >  * Access to unmapped pages (EPT violation)
+On Tue, 22 Feb 2022 15:58:43 +0100, Krzysztof Kozlowski wrote:
+> The Qualcomm UFS PHY bindings are documented in
+> bindings/phy/qcom,qmp-phy.yaml and the compatibles from separate file
+> bindings/ufs/ufs-qcom.txt are not used at all.
 > 
-> Considering that you're talking partly about userspace, it would be nice
-> to talk about what "unmapped" really means here.
-
-I'm not sure what you want to see here. Doesn't EPT violation describe it?
-
-It can happen to userspace too, but we don't expect it to be use used and
-SIGSEGV the process if it happens.
-
-> > In the settings that Linux will run in, virtualization exceptions are
-> > never generated on accesses to normal, TD-private memory that has been
-> > accepted.
-> 
-> This is getting into nit territory.  But, at this point a normal reader
-> has no idea what "accepted" memory is.
-
-I will add: "(prepared to be used in the TD)". Okay?
-
-> > @@ -58,6 +59,65 @@ static void get_info(void)
-> >  	td_info.attributes = out.rdx;
-> >  }
-> >  
-> > +void tdx_get_ve_info(struct ve_info *ve)
-> > +{
-> > +	struct tdx_module_output out;
-> > +
-> > +	/*
-> > +	 * Retrieve the #VE info from the TDX module, which also clears the "#VE
-> > +	 * valid" flag.  This must be done before anything else as any #VE that
-> > +	 * occurs while the valid flag is set, i.e. before the previous #VE info
-> > +	 * was consumed, is morphed to a #DF by the TDX module. 
-> 
-> 
-> That's a really weird sentence.  It doesn't really parse for me.  It
-> might be the misplaced comma after "consumed,".
-> 
-> For what it's worth, I think "i.e." and "e.g." have been over used in
-> the TDX text (sorry Sean).  They lead to really weird sentence structure.
-> 
-> 								 Note, the TDX
-> > +	 * module also treats virtual NMIs as inhibited if the #VE valid flag is
-> > +	 * set, e.g. so that NMI=>#VE will not result in a #DF.
-> > +	 */
-> 
-> Are we missing anything valuable if we just trim the comment down to
-> something like:
-> 
-> 	/*
-> 	 * Called during #VE handling to retrieve the #VE info from the
-> 	 * TDX module.
->  	 *
-> 	 * This should called done early in #VE handling.  A "nested"
-> 	 * #VE which occurs before this will raise a #DF and is not
-> 	 * recoverable.
-> 	 */
-
-This variant of the comment lost information about #VE-valid flag and
-doesn't describe how NMI is inhibited.
-
-Sean proposed this wording as reply to Thomas' questions:
-
-http://lore.kernel.org/r/YfmlnJ6LS935AMS4@google.com
-
-Do we need to keep the info?
-
-> For what it's worth, I don't think we care who "morphs" things.  We just
-> care about the fallout.
-> 
-> > +	tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out);
-> 
-> How about a one-liner below here:
-> 
-> 	/* Interrupts and NMIs can be delivered again. */
-> 
-> > +	ve->exit_reason = out.rcx;
-> > +	ve->exit_qual   = out.rdx;
-> > +	ve->gla         = out.r8;
-> > +	ve->gpa         = out.r9;
-> > +	ve->instr_len   = lower_32_bits(out.r10);
-> > +	ve->instr_info  = upper_32_bits(out.r10);
-> > +}
-> > +
-> > +/*
-> > + * Handle the user initiated #VE.
-> > + *
-> > + * For example, executing the CPUID instruction from user space
-> > + * is a valid case and hence the resulting #VE has to be handled.
-> > + *
-> > + * For dis-allowed or invalid #VE just return failure.
-> > + */
-> 
-> This is just insane to have in the series at this point.  It says that
-> the "#VE has to be handled" and then doesn't handle it!
-
-I can't see why it's a big deal, but okay.
-
-> > +static bool virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-> > +	return false;
-> > +}
-> > +
-> > +/* Handle the kernel #VE */
-> > +static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-> > +	return false;
-> > +}
-> > +
-> > +bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	bool ret;
-> > +
-> > +	if (user_mode(regs))
-> > +		ret = virt_exception_user(regs, ve);
-> > +	else
-> > +		ret = virt_exception_kernel(regs, ve);
-> > +
-> > +	/* After successful #VE handling, move the IP */
-> > +	if (ret)
-> > +		regs->ip += ve->instr_len;
-> > +
-> > +	return ret;
-> > +}
-> 
-> At this point in the series, these three functions can be distilled down to:
-> 
-> bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
-> {
-> 	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-> 
-> 	return false;
-> }
-
-I will do as you want, but I don't feel it is right.
-
-The patch adds a little more infrastructure that makes following patches
-cleaner.
-
-
-> > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > +
-> > +#define VE_FAULT_STR "VE fault"
-> > +
-> > +static void ve_raise_fault(struct pt_regs *regs, long error_code)
-> > +{
-> > +	if (user_mode(regs)) {
-> > +		gp_user_force_sig_segv(regs, X86_TRAP_VE, error_code, VE_FAULT_STR);
-> > +		return;
-> > +	}
-> > +
-> > +	if (gp_try_fixup_and_notify(regs, X86_TRAP_VE, error_code, VE_FAULT_STR))
-> > +		return;
-> > +
-> > +	die_addr(VE_FAULT_STR, regs, error_code, 0);
-> > +}
-> > +
-> > +/*
-> > + * Virtualization Exceptions (#VE) are delivered to TDX guests due to
-> > + * specific guest actions which may happen in either user space or the
-> > + * kernel:
-> > + *
-> > + *  * Specific instructions (WBINVD, for example)
-> > + *  * Specific MSR accesses
-> > + *  * Specific CPUID leaf accesses
-> > + *  * Access to unmapped pages (EPT violation)
-> > + *
-> > + * In the settings that Linux will run in, virtualization exceptions are
-> > + * never generated on accesses to normal, TD-private memory that has been
-> > + * accepted.
-> 
-> This actually makes a lot more sense as a code comment than changelog.
-> It would be really nice to circle back here and actually refer to the
-> functions that accept memory.
-
-We don't have such functions at this point in the patchset. Do you want
-the comment to be updated once we get them introduced?
-> 
-> > + * Syscall entry code has a critical window where the kernel stack is not
-> > + * yet set up. Any exception in this window leads to hard to debug issues
-> > + * and can be exploited for privilege escalation. Exceptions in the NMI
-> > + * entry code also cause issues. Returning from the exception handler with
-> > + * IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
-> > + *
-> > + * For these reasons, the kernel avoids #VEs during the syscall gap and
-> > + * the NMI entry code. Entry code paths do not access TD-shared memory,
-> > + * MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
-> > + * that might generate #VE. VMM can remove memory from TD at any point,
-> > + * but access to unaccepted (or missing) private memory leads to VM
-> > + * termination, not to #VE.
-> > + *
-> > + * Similarly to page faults and breakpoints, #VEs are allowed in NMI
-> > + * handlers once the kernel is ready to deal with nested NMIs.
-> > + *
-> > + * During #VE delivery, all interrupts, including NMIs, are blocked until
-> > + * TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
-> > + * the VE info.
-> > + *
-> > + * If a guest kernel action which would normally cause a #VE occurs in
-> > + * the interrupt-disabled region before TDGETVEINFO, a #DF (fault
-> > + * exception) is delivered to the guest which will result in an oops.
-> > + */
-> > +DEFINE_IDTENTRY(exc_virtualization_exception)
-> > +{
-> > +	struct ve_info ve;
-> > +
-> > +	/*
-> > +	 * NMIs/Machine-checks/Interrupts will be in a disabled state
-> > +	 * till TDGETVEINFO TDCALL is executed. This ensures that VE
-> > +	 * info cannot be overwritten by a nested #VE.
-> > +	 */
-> > +	tdx_get_ve_info(&ve);
-> > +
-> > +	cond_local_irq_enable(regs);
-> > +
-> > +	/*
-> > +	 * If tdx_handle_virt_exception() could not process
-> > +	 * it successfully, treat it as #GP(0) and handle it.
-> > +	 */
-> > +	if (!tdx_handle_virt_exception(regs, &ve))
-> > +		ve_raise_fault(regs, 0);
-> > +
-> > +	cond_local_irq_disable(regs);
-> > +}
-> > +
-> > +#endif
-> > +
-> >  #ifdef CONFIG_X86_32
-> >  DEFINE_IDTENTRY_SW(iret_error)
-> >  {
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../devicetree/bindings/ufs/ufs-qcom.txt      | 63 -------------------
+>  1 file changed, 63 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ufs/ufs-qcom.txt
 > 
 
--- 
- Kirill A. Shutemov
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,135 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73294C4A1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586A44C4A24
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiBYQIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S242658AbiBYQIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242636AbiBYQHv (ORCPT
+        with ESMTP id S242673AbiBYQH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:07:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EB21131F;
-        Fri, 25 Feb 2022 08:07:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE9AB83273;
-        Fri, 25 Feb 2022 16:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22393C340F2;
-        Fri, 25 Feb 2022 16:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645805236;
-        bh=KbJfW32hJ/F19yfN7A1bXil25wuVvtsMCViBmRGt63Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WkbIlFcJhtK50zmM1SUqT+c2BPoPb/PAsS5g6c6LqFS7dLJTZxLAPvig1x6SXi8te
-         l5Cx5rIlFRnbSFqV0Md2Gt99TvNmEAE85nc8zZkW2KAysaFXNYW8weU3KRSI1Joub1
-         XfgGa954+3/CiMxkbGo51ZitZf59ze3/G/mztC6h6fIENRXkrcAjUFFN1d6J+PDcBw
-         gx1uVRfyOgaOR4bZKjVcG7PIz/MCA3RNLoXSnngVfstymXQ0A55zH1r8rE0BbpfyBI
-         53H/HcqUiVVHaCBF70mR9z8l6owgUIz3VOsTGHF1gt/NgeAutWcTYSskkxOKLmnMHx
-         9rb/DOmJIf44g==
-Received: by mail-ua1-f46.google.com with SMTP id 4so2689384uaf.0;
-        Fri, 25 Feb 2022 08:07:16 -0800 (PST)
-X-Gm-Message-State: AOAM532qmB3RCzM2eOyjrm4h1R0Jocb2mLGQ2iLUY34AQqe43FcrxgKL
-        8xYBWINlULGTU8a+TQKYajEleFQ9L6CmhHkvOLQ=
-X-Google-Smtp-Source: ABdhPJzyFkCkLFwk2uiu55UbxfUmfSs3x9iDpfEO2XzZ1mh9E9zaiS00R4pCw1xb9Wsx0R973/NIBGmLnXTfXz/Q4Mk=
-X-Received: by 2002:ab0:1112:0:b0:33e:802f:e335 with SMTP id
- e18-20020ab01112000000b0033e802fe335mr3769822uab.57.1645805235064; Fri, 25
- Feb 2022 08:07:15 -0800 (PST)
+        Fri, 25 Feb 2022 11:07:57 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4DB40931;
+        Fri, 25 Feb 2022 08:07:24 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id vz16so11881669ejb.0;
+        Fri, 25 Feb 2022 08:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ts+FkTbShV4Wpp+wSNsd+uKmnjaetMFa029W72HjYZs=;
+        b=hRJtnxCADcNU3McONXvS4XWl7ATSSCg+T4M+vqVitzVmwhCTl6UxDXVwSfiDMTQbby
+         EH3CSYEa8Nklkze+TivabDlc+a6no0MmW8K5IMHF0u0qP3GrNbKpnXwH2G/2/Lbi4W48
+         NixueKemw0g/HvdGUfVCPXDA5J2P0cYf4YG1/Rraa8Ai2ltQ/gmLwZd2WWI9WmRmcqmF
+         nD6LnRE+MEyoBHgyS9RCkPbRkc5F2V+eKLqspIwdoDa36llbSKDVNtIM7hZMn6J+u4MZ
+         gS6kyR5GklbmcnkKEV2ANMOleSJ+7BO5ahwkhcP9zTOwqx9RE2N/f+6jNqntSz66Dpd1
+         b95w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ts+FkTbShV4Wpp+wSNsd+uKmnjaetMFa029W72HjYZs=;
+        b=bfpbtWMmy1CZCm7FtZhbtTzwl0El+ebOw9j8eNGlEP7+zhHd132Dc6L0oOCpyPU0pP
+         cWGa7cpK7qV07d+8rrGLsg29G0HRkSrU7VJgM/8YbY3NjcsV/vjgmebCED9dcJfrFRav
+         ldZefWKwu7SGIU0GA+il68e5wnxLXTZOolfAn8h/1954KEpYvXdjpAl58pudKGJUB338
+         0bwlxLbjwaJWXo0ezfaN6UzRnWwg41au39SJkyjUSvVecMhr97ReBGyOqmZ60PZ4ZVD+
+         /xkESFUCiUBauCevk1LMcQra1nshCx7RKETNSDV56z8ag2xFEJsSxhESAl8HovkJnr2b
+         RbgA==
+X-Gm-Message-State: AOAM531y/hQLaxBUQZ/D4fjnBfNZpnK9YcH1f1LDvwT6WJ9r1zoowrAB
+        ReCwnFPhFYtW1aPMAJjSgHo=
+X-Google-Smtp-Source: ABdhPJy9Rv6QkaL/cuO5EzUsXPf5Sxhe48gGqhncSPETom7hz7UYhj/+YcJrExMr8MC2rYnKRker8A==
+X-Received: by 2002:a17:906:a046:b0:6b9:20c:47c1 with SMTP id bg6-20020a170906a04600b006b9020c47c1mr6459495ejb.615.1645805242584;
+        Fri, 25 Feb 2022 08:07:22 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id q10-20020aa7cc0a000000b0040f826f09fdsm1506921edt.81.2022.02.25.08.07.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 08:07:22 -0800 (PST)
+Message-ID: <5cca79dc-619c-a162-e850-b3efd4dc746d@gmail.com>
+Date:   Fri, 25 Feb 2022 17:07:21 +0100
 MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
- <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
- <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com> <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 26 Feb 2022 00:07:04 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
-Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 2/8] dt-bindings: usb: dwc3: add description for rk3568
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20220225145432.422130-1-pgwipeout@gmail.com>
+ <20220225145432.422130-3-pgwipeout@gmail.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220225145432.422130-3-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 11:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > Hi Arnd & Palmer,
-> >
-> > Here is the new modified compat_vdso/Makefile, please have a look,
-> > first. Then I would update it to v7:
-> > ===========================================
-> > # SPDX-License-Identifier: GPL-2.0-only
-> > #
-> > # Makefile for compat_vdso
-> > #
-> >
-> > # Symbols present in the compat_vdso
-> > compat_vdso-syms  = rt_sigreturn
-> > compat_vdso-syms += getcpu
-> > compat_vdso-syms += flush_icache
-> >
-> > ifdef CROSS_COMPILE_COMPAT
-> >         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
-> >         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
-> > else
-> >         COMPAT_CC := $(CC)
-> >         COMPAT_LD := $(LD)
-> > endif
-> >
-> > COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
-> > COMPAT_LD_FLAGS := -melf32lriscv
->
-> Have you come across a case in which a separate cross toolchain
-> is required? If not, I would leave this out and just set the flags for the
-> normal toolchain.
-Okay
+Hi Peter,
 
->
-> I also think it would be a nicer split to build the two vdso variants
-> as vdso64/vdso32 rather than vdso/compat_vdso. That way,
-> the build procedure can be kept as close as possible to the
-> native 32-bit build.
-Yes, current native 32-bit vdso & 64-bit vdso use the same
-vdso/Makfile. So, I think it could be another patch for this cleanup.
+Lots of USB series all of a sudden.
+Combine possible?
 
->
->         Arnd
+On 2/25/22 15:54, Peter Geis wrote:
+> The rk3568 dwc3 controllers are backwards compatible with the rk3399.
+> Add the device tree description for it.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> index 04077f2d7faf..e3044e81cc72 100644
+> --- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> @@ -30,6 +30,7 @@ select:
+>          enum:
+>            - rockchip,rk3328-dwc3
+>            - rockchip,rk3399-dwc3
+> +          - rockchip,rk3568-dwc3
+>    required:
+>      - compatible
+>  
+> @@ -39,6 +40,7 @@ properties:
+>        - enum:
+>            - rockchip,rk3328-dwc3
+>            - rockchip,rk3399-dwc3
+> +          - rockchip,rk3568-dwc3
+>        - const: snps,dwc3
+>  
+>    reg:
+> @@ -75,7 +77,10 @@ properties:
+>      maxItems: 1
+>  
+he
+>    reset-names:
+> -    const: usb3-otg
+> +    items:
+> +      - enum:
+> +          - usb3-otg
+> +          - usb3-host
+
+The use of reset-names is "sort of" only related to the rk3399 legacy
+node. Still using this sub node DT to not to break older existing boot
+loaders.
+
+https://github.com/torvalds/linux/search?q=usb3-otg
+
+It's only mentioned as comment in dwc3-of-simple.c but not used:
+
+ 	simple->resets = of_reset_control_array_get(np, false, true,
+						    true);
+core.c uses something similar.
+
+	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+	if (IS_ERR(dwc->reset))
+		return PTR_ERR(dwc->reset);
 
 
+Up to the maintainers, but I wouldn't add another variant/name for the
+same thing as it also optional(= not required) and no longer needed.
 
--- 
-Best Regards
- Guo Ren
+Johan
 
-ML: https://lore.kernel.org/linux-csky/
+===
+
+Maybe drop PCLK_PIPE as well to reduce notifications.
+
+See example:
+https://lore.kernel.org/linux-rockchip/20220225131602.2283499-4-michael.riesch@wolfvision.net/T/#u
+
+>  
+>  unevaluatedProperties: false
+>  

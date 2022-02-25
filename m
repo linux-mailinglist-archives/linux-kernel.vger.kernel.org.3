@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4F34C50DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1224C50DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiBYVpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S232427AbiBYVqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiBYVps (ORCPT
+        with ESMTP id S229922AbiBYVqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:45:48 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE981EF35A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:45:15 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id x14so231597ill.12
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:45:15 -0800 (PST)
+        Fri, 25 Feb 2022 16:46:33 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA05D1EF35D;
+        Fri, 25 Feb 2022 13:45:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id d10so13280769eje.10;
+        Fri, 25 Feb 2022 13:45:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GlfIBSqlGvtgBv75Rg1rA8MquMPJgcWiel0j8isuYbQ=;
-        b=HLrWX91wZAju9leNV7HFPStLOTDTKTykc0vJTupccN3o3/OiwP19YNo6Qzp1zeF9iD
-         ySamRLGUmUYo7kRYhJG/V0jfmkCyf0d/RpuJNgm+9j17cf7ewVM5FPh3eQ84me4uAq3l
-         S8XVO2DI41apmljHGwvmrhoJMRDM4MwtWny+c=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WUC7V+O3XAxmaqtMnQJOVveRn6Cuhyncuw6K66dwUqc=;
+        b=J6IYE5vlhK+ylp2TLN0MIkJ7VkoKkzaDVW51e4oXPuRffwekpuI3j0SuhJhjDH4jsn
+         89fRNsbZdw3Ot4NJQOumfJyErzdw8HPeBfQE/mJCJeoh5WXAFkjbXgnNNnaVdtOatA91
+         MKxUDHPxaLo87a8hRWH+1IBRcx87385sFXAJ90X4+CPG4kgBOhuck4jmH1kkGcpxIU5o
+         c56KIutfl9wIRasS7xNDicqvtFS1gBoFF65niO4E9QkdwceCFfY0r/dC6kZnoM5kPmCc
+         TU/0E5jmqWIKBXK4Rs1vcla+Ma5rfVAfZQBmOQwRDzWKLv/E8MhUaI5OHCvYuSII83ga
+         5f2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=GlfIBSqlGvtgBv75Rg1rA8MquMPJgcWiel0j8isuYbQ=;
-        b=fTqT89wLgVupfcBLje+f8QjLXsiGx9GanbWJ/H3uYmpP5IYjR0jndhtZU5fryLOqaz
-         48GKpw8yn8ORQZgxPOzXf8HAyCyWHehdW/KOp0Fy6C/EXL3GlcNN4cILTsbRdIXxFrSn
-         iO9vb5mKTkMEjvIZ0zxXvfgFfUi+oM1lHJGEV1ipz/NlTnDDjF+YU5SqPt6ZTtnfGNXs
-         Cd69BJEE+imiTEQ0Evgn74q7TqtkuPc5fw/FBaCYzg02HfmWMwfKBAvWkrxlkBvFl4sb
-         CwQxP0J2o3gJjZEPqP1anRP07sSprj56o15FQdoWylGTlWPQp1WC/VAx6eus2aQM1kVT
-         hX6w==
-X-Gm-Message-State: AOAM530rOrzOqawwsDzAdiXpH/A6yBOgZnChz31jc5tLwvK2r7uw0jYz
-        h/2F0AdygOFkkR/00pj+CIvZzx6GNxQ05w==
-X-Google-Smtp-Source: ABdhPJzjQSzxBomZ267t53/TYFeVaTmMzeMKuCTgGRpRcjfFDZWL3xDvV1iuoyl5WamEe6X7iVBpaA==
-X-Received: by 2002:a05:6e02:12c1:b0:2bf:2a61:9848 with SMTP id i1-20020a056e0212c100b002bf2a619848mr8166860ilm.109.1645825515032;
-        Fri, 25 Feb 2022 13:45:15 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id o4-20020a92c044000000b002c1e884226asm2313784ilf.12.2022.02.25.13.45.14
+        bh=WUC7V+O3XAxmaqtMnQJOVveRn6Cuhyncuw6K66dwUqc=;
+        b=FvS/p3kr51E6qSs8McbQbkVMCw0zIMcPIbSSaOMO6juBRyVyZQwO31ZfR0sWHcJB7+
+         5NAzLMfgw+Nn0IHuPROWtK36cmRRqaDjwv6/KXFTLqie8biq3LO6h2oYHO64AocKWrFU
+         8lotjoUQanEotS2UfGqCZKGiSQVdBlbfBFqvoSLcgNk1bk769UUmz66bMzF/N22hwlKA
+         X7wVVcHId8c5WIpY8c2gKo5jfimicJJ7iCko4vXM5vH38CY1ijpNzByr2utHon8MfgqC
+         IIIIr5e+1TsTv1wQWdo3yGPiVwUHTY9L0n6e/BKfG7TU6hS6u5nofLRNMLulfMi8+TUJ
+         BPgA==
+X-Gm-Message-State: AOAM532huWXm7WrGPAfDCToi0D132HW+VMJ2xl9rV49a4XO8S/qbEooe
+        N/A7GB1cMUh6GPPgXTi5nP0=
+X-Google-Smtp-Source: ABdhPJwzHWtu2wcaSjUJUo74H7f7+j3BpIDWEyIIyY+Gn8nTEclUvyyXX2GyZNjkO0R+fazX83syow==
+X-Received: by 2002:a17:906:3bcb:b0:6cf:cf86:28d7 with SMTP id v11-20020a1709063bcb00b006cfcf8628d7mr7652814ejf.274.1645825558357;
+        Fri, 25 Feb 2022 13:45:58 -0800 (PST)
+Received: from [192.168.2.121] (p578f0c28.dip0.t-ipconnect.de. [87.143.12.40])
+        by smtp.gmail.com with ESMTPSA id h3-20020aa7cdc3000000b00410b90f3ffesm1892707edw.56.2022.02.25.13.45.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 13:45:14 -0800 (PST)
-Subject: Re: [PATCH] Documentation/vm/page_owner.rst: fix the description of
- "-f"
-To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, corbet@lwn.net
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        weizhenliang@huawei.com, georgi.djakov@linaro.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hanshenghong2019@email.szu.edu.cn,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220225090824.2343-1-caoyixuan2019@email.szu.edu.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <73c74276-3c29-e662-cb96-c09fbba0d2b1@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 14:45:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 25 Feb 2022 13:45:57 -0800 (PST)
+Message-ID: <15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com>
+Date:   Fri, 25 Feb 2022 22:45:27 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220225090824.2343-1-caoyixuan2019@email.szu.edu.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v9 00/11] Restructure the rpmsg_char driver and introduce
+ rpmsg_ctrl driver
 Content-Language: en-US
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
+References: <20220124102524.295783-1-arnaud.pouliquen@foss.st.com>
+ <ab97c2a5-7705-eae8-9bc2-908e7a9cb709@gmail.com>
+ <670ee336-9ad4-401e-e3b2-02531e975e51@foss.st.com>
+From:   Philipp Rossak <embed3d@gmail.com>
+In-Reply-To: <670ee336-9ad4-401e-e3b2-02531e975e51@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,54 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 2:08 AM, Yixuan Cao wrote:
-> Few days ago,
-> I noticed that in tools/vm/page_owner_sort.c,
-> there is a comment that need to be fixed.
+Hi Arnaud,
+
+On 24.02.22 09:29, Arnaud POULIQUEN wrote:
+> Hi Philipp,
 > 
-> In function usage():
-> "-f Filter out the information of blocks whose memory has
-> not been released."
+> On 2/23/22 22:28, Philipp Rossak wrote:
+>> Hi Arnaud,
+>>
+>> thanks for working on this! I'm currently testing/using this patch
+>> series on my imx7d project because it adds the capability that the
+>> remote processor can register it's endpoints dynamically (as mentioned
+>> in the objectives).
 > 
-> This comment does not match the actual function, the "not"
-> should be removed. As a result, I submitted a patch to fix it.
+> Thanks for your feedback on this work!
+> Don't hesitate to add your tested-by, this help maintainers for the reviews.
 > 
-> Similarly, this document should also do the same
-> modification, that's why I submit this patch.
+I will do this.
+>>
+>> After a few tests, debugging, and checking the openamp specification [1]
+>> I think that you missed the second ns_announcement that should be sent
+>> from linux master to the slave after it created the channel/endpoint.
+>> Without this second announcement the remote processor is not able to
+>> send messages to the linux master because it doesn't know the
+>> destination address until it receives a message from the linux master.
+> 
+> Yes I detected this issues, it is not related to the series
+> but to the remoteproc_virtio backend.
+> 
+> As you mentioned, after the ns announcement from Linux, the remote processor
+> send first messages. But the Linux virtio does not do the match between the
+> local channel created and the remote endpoint.
 > 
 
-Please refer to a few change logs to write them so maintainers
-don't have to fix them. This can be written as:
+I'm not sure if we talk about the same. I'm basically talking about the 
+dynamic binding, not dynamic endpoint creation.
+I think I already found the issue. I will try to get a bit more into detail.
 
-"Fix function usage information for -f option"
+1. Linux: starts co-processor via remoteproc
+2. co-processor: boots and reaches the point where it creates the 
+endpoint like it is done in this ST example[1].
+Be aware the src address is RPMSG_ADDR_ANY
+3. co-processor: reaches the point where it sends the ns_announcement to 
+linux ns endpoint
+4. linux: receives the ns announcment, creates the channel, bindes the 
+endpoint and checks here [2] if the source address is not RPMSG_ADDR_ANY 
+and in this case it is not sending a ns_announcement (that's the issue 
+when we use dynamic endpoints)
+5. linux: according the openamp spec [3] it should now send the 
+ns_announcement to the co-processor (slave)
+6. co-processor: should receive the ns announcement and binds now the 
+endpoint
+7. co-processor: can now send messages to linux
 
-> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-> ---
->   Documentation/vm/page_owner.rst | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+This is basically what I'm expecting.
+
+
+Do you think this is a bug or is the dynamic endpoint binding not 
+handled? This line is there since ever [4] ...
+
+Any other thoughts about this?
+
+> This is a feature that is missing in the rpmsg virtio, and perhaps in rpmsg protocol
+> itself (a ns annoucement ack message or something similar).
 > 
-> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-> index aec1906976f4..32ca54757d3f 100644
-> --- a/Documentation/vm/page_owner.rst
-> +++ b/Documentation/vm/page_owner.rst
-> @@ -78,7 +78,7 @@ Usage
->   
->   2) Enable page owner: add "page_owner=on" to boot cmdline.
->   
-> -3) Do the job what you want to debug
-> +3) Do the job what you want to debug.
->   
->   4) Analyze information from page owner::
->   
-> @@ -126,4 +126,4 @@ Usage
->   		-c		Cull by comparing stacktrace instead of total block.
->   
->   	Filter:
-> -		-f		Filter out the information of blocks whose memory has not been released.
-> +		-f		Filter out the information of blocks whose memory has been released.
 > 
+> A fix for the remoteproc virtio is available here:
+> https://github.com/arnopo/meta-st-stm32mp-oss/commit/3e57fe73bd19c9bb835ac5a118e50727758b0b96
+> 
+> Don't hesitate to give me feedback on the fix, if you test it.
 
-I can't find this in Linux 5.17-rc5 - is this patch based on linux-next?
+I added it to my branch and till now I don't see any side effects
+> 
+> I plan to propose the fix after this series.
+> 
+> Thanks,
+> Arnaud
+> 
+>>
+>> Cheers,
+>> Philipp
+>>
 
-thanks,
--- Shuah
+Cheers,
+Philipp
+
+[1]: 
+https://github.com/STMicroelectronics/STM32CubeMP1/blob/master/Projects/STM32MP157C-DK2/Applications/OpenAMP/OpenAMP_raw/Src/openamp.c#L242
+
+[2]: 
+https://elixir.bootlin.com/linux/v5.17-rc5/source/drivers/rpmsg/virtio_rpmsg_bus.c#L425
+
+[3]: 
+https://github.com/OpenAMP/open-amp/blob/main/docs/img/coprocessor-rpmsg-ns.png
+
+[4]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bcabbccabffe7326f046f25737ba1084f463c65c

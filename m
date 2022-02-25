@@ -2,164 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CCA4C3B66
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC3B4C3B6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236662AbiBYCHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 21:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S236668AbiBYCJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 21:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiBYCHl (ORCPT
+        with ESMTP id S236546AbiBYCJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:07:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34CBAF1FD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:07:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A58D614E7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1558C340E9;
-        Fri, 25 Feb 2022 02:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645754829;
-        bh=/rNQ7PbKEORHE5W8GJIvYASYkIGdvtgnf4kTnIWSLT8=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=St8PhKgwZ/GyOhZlZ3X5+XNwAIEq6ci5VE5YkA6vSDe36hxMbhS9vERuLk5tTqJ/C
-         i7J+1mvJedSea1EFwpe2hQ0sAn6VVmFi7rGfr3APAcPmdi0juTVOx7wGxIKCTacZQW
-         T83t3zQUqsI6rB7eei+1rdZu6IGLMKOYwdjTJirggVxDan1X8eWHA4ZJ9N2hKmSKnr
-         A4P0QWomTjsXZRKxu6ANRhFqt1PmqMFGUJma33okFcOSmhsgl1u78+1B2afPuFwJ6o
-         TmEa2w7PPsFqzaN2EfJncc90YXBfKRp7p5jmYL3aO4UhLvOc7fpVovx/XkmIy2AQnr
-         8HMbWsInYoOQA==
-Message-ID: <119d1f9e-7f2f-019f-6fdd-2bdb59d97bc6@kernel.org>
-Date:   Fri, 25 Feb 2022 10:07:05 +0800
+        Thu, 24 Feb 2022 21:09:18 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 130AD1AF8D6;
+        Thu, 24 Feb 2022 18:08:45 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxSMkrOhhi_bUGAA--.7957S3;
+        Fri, 25 Feb 2022 10:08:44 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Refactor early_parse_mem() to fix mem= parameter
+To:     Youling Tang <tangyouling@loongson.cn>
+References: <1645707132-10121-1-git-send-email-yangtiezhu@loongson.cn>
+ <20d9c6d4-7df4-8a26-4b0f-a5a192cae78d@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <49f2ebe6-406a-9646-3384-224d0be77b1c@loongson.cn>
+Date:   Fri, 25 Feb 2022 10:08:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [f2fs-dev] [PATCH 2/2 v2] f2fs: avoid an infinite loop in
- f2fs_sync_dirty_inodes
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220212142023.2508247-1-jaegeuk@kernel.org>
- <20220212142023.2508247-2-jaegeuk@kernel.org> <YgrlUzJyvgrFSREc@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YgrlUzJyvgrFSREc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20d9c6d4-7df4-8a26-4b0f-a5a192cae78d@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9DxSMkrOhhi_bUGAA--.7957S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCry8Wr18GF4fCw17Jr45trb_yoW5Zry7pw
+        4xAa4fKFs8JFnrZa4xtrn3XryrZwn7CFyIqa42kwn5Ar1qkr1xGF1IgF4ruryIqrW8A3W0
+        vF1qqF9Y939Fy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfU0GYLUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/15 7:27, Jaegeuk Kim wrote:
-> If one read IO is always failing, we can fall into an infinite loop in
-> f2fs_sync_dirty_inodes. This happens during xfstests/generic/475.
-> 
-> [  142.803335] Buffer I/O error on dev dm-1, logical block 8388592, async page read
-> ...
-> [  382.887210]  submit_bio_noacct+0xdd/0x2a0
-> [  382.887213]  submit_bio+0x80/0x110
-> [  382.887223]  __submit_bio+0x4d/0x300 [f2fs]
-> [  382.887282]  f2fs_submit_page_bio+0x125/0x200 [f2fs]
-> [  382.887299]  __get_meta_page+0xc9/0x280 [f2fs]
-> [  382.887315]  f2fs_get_meta_page+0x13/0x20 [f2fs]
-> [  382.887331]  f2fs_get_node_info+0x317/0x3c0 [f2fs]
-> [  382.887350]  f2fs_do_write_data_page+0x327/0x6f0 [f2fs]
-> [  382.887367]  f2fs_write_single_data_page+0x5b7/0x960 [f2fs]
-> [  382.887386]  f2fs_write_cache_pages+0x302/0x890 [f2fs]
-> [  382.887405]  ? preempt_count_add+0x7a/0xc0
-> [  382.887408]  f2fs_write_data_pages+0xfd/0x320 [f2fs]
-> [  382.887425]  ? _raw_spin_unlock+0x1a/0x30
-> [  382.887428]  do_writepages+0xd3/0x1d0
-> [  382.887432]  filemap_fdatawrite_wbc+0x69/0x90
-> [  382.887434]  filemap_fdatawrite+0x50/0x70
-> [  382.887437]  f2fs_sync_dirty_inodes+0xa4/0x270 [f2fs]
-> [  382.887453]  f2fs_write_checkpoint+0x189/0x1640 [f2fs]
-> [  382.887469]  ? schedule_timeout+0x114/0x150
-> [  382.887471]  ? ttwu_do_activate+0x6d/0xb0
-> [  382.887473]  ? preempt_count_add+0x7a/0xc0
-> [  382.887476]  kill_f2fs_super+0xca/0x100 [f2fs]
-> [  382.887491]  deactivate_locked_super+0x35/0xa0
-> [  382.887494]  deactivate_super+0x40/0x50
-> [  382.887497]  cleanup_mnt+0x139/0x190
-> [  382.887499]  __cleanup_mnt+0x12/0x20
-> [  382.887501]  task_work_run+0x64/0xa0
-> [  382.887505]  exit_to_user_mode_prepare+0x1b7/0x1c0
-> [  382.887508]  syscall_exit_to_user_mode+0x27/0x50
-> [  382.887510]  do_syscall_64+0x48/0xc0
-> [  382.887513]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
->   Change log from v1:
->    - fix a regression to report EIO too early
-> 
->   fs/f2fs/checkpoint.c | 13 ++++++++-----
->   fs/f2fs/f2fs.h       |  3 +++
->   2 files changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> index 203a1577942d..56c81c68ef71 100644
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@ -1059,13 +1059,13 @@ int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type)
->   	struct inode *inode;
->   	struct f2fs_inode_info *fi;
->   	bool is_dir = (type == DIR_INODE);
-> -	unsigned long ino = 0;
-> +	unsigned long ino = 0, retry_count = DEFAULT_RETRY_SYNC_DIR_COUNT;
->   
->   	trace_f2fs_sync_dirty_inodes_enter(sbi->sb, is_dir,
->   				get_pages(sbi, is_dir ?
->   				F2FS_DIRTY_DENTS : F2FS_DIRTY_DATA));
->   retry:
-> -	if (unlikely(f2fs_cp_error(sbi))) {
-> +	if (unlikely(f2fs_cp_error(sbi) || (is_dir && !retry_count))) {
->   		trace_f2fs_sync_dirty_inodes_exit(sbi->sb, is_dir,
->   				get_pages(sbi, is_dir ?
->   				F2FS_DIRTY_DENTS : F2FS_DIRTY_DATA));
-> @@ -1096,10 +1096,13 @@ int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type)
->   
->   		iput(inode);
->   		/* We need to give cpu to another writers. */
-> -		if (ino == cur_ino)
-> -			cond_resched();
-> -		else
-> +		if (ino == cur_ino) {
-> +			retry_count--;
-> +			io_schedule_timeout(DEFAULT_IO_TIMEOUT);
-> +		} else {
-> +			retry_count = DEFAULT_RETRY_SYNC_DIR_COUNT;
->   			ino = cur_ino;
-> +		}
->   	} else {
->   		/*
->   		 * We should submit bio, since it exists several
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index c9515c3c54fd..f40ef7b61965 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -577,6 +577,9 @@ enum {
->   /* maximum retry quota flush count */
->   #define DEFAULT_RETRY_QUOTA_FLUSH_COUNT		8
->   
-> +/* maximum retry sync dirty inodes */
-> +#define DEFAULT_RETRY_SYNC_DIR_COUNT	3000
 
-3000 * 20ms/round = 60sec
 
-How about just trying 5 or 10 sec?
+On 02/25/2022 09:12 AM, Youling Tang wrote:
+> Hi, Tiezhu
+>
+> On 02/24/2022 08:52 PM, Tiezhu Yang wrote:
+>> According to Documentation/admin-guide/kernel-parameters.txt,
+>> the kernel command-line parameter mem= means "Force usage of
+>> a specific amount of memory", but when add "mem=3G" to the
+>> command-line, kernel boot hangs in sparse_init().
+>>
+>> This commit is similar with the implementation of the other
+>> archs such as arm64, powerpc and riscv, refactor the function
+>> early_parse_mem() and then use memblock_enforce_memory_limit()
+>> to limit the memory size.
+>>
+>> With this patch, when add "mem=3G" to the command-line, the
+>> kernel boots successfully, we can see the following messages:
+>>
+>>    [    0.000000] Memory limited to 3072MB
+>>    ...
+>>    [    0.000000] Memory: 2991952K/3145728K available (...)
+>>
+>> After login, the output of free command is consistent with the
+>> above log.
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   arch/mips/kernel/setup.c | 25 ++++++++-----------------
+>>   1 file changed, 8 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index f979adf..2917412 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -339,27 +339,15 @@ static void __init bootmem_init(void)
+>>   #endif    /* CONFIG_SGI_IP27 */
+>>     static int usermem __initdata;
+>> +static phys_addr_t memory_limit;
+>>     static int __init early_parse_mem(char *p)
+>>   {
+>> -    phys_addr_t start, size;
+>> -
+>> -    /*
+>> -     * If a user specifies memory size, we
+>> -     * blow away any automatically generated
+>> -     * size.
+>> -     */
+>> -    if (usermem == 0) {
+>> -        usermem = 1;
+>> -        memblock_remove(memblock_start_of_DRAM(),
+>> -            memblock_end_of_DRAM() - memblock_start_of_DRAM());
+>> -    }
+>> -    start = 0;
+>> -    size = memparse(p, &p);
+>> -    if (*p == '@')
+>> -        start = memparse(p + 1, &p);
+>> +    if (!p)
+>> +        return 1;
+>>   -    memblock_add(start, size);
+>> +    memory_limit = memparse(p, &p) & PAGE_MASK;
+>> +    pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
+>>         return 0;
+>
+> After applying this patch, my guess is that the kdump operation will fail.
+>
+> In the MIPS architecture, when the kdump operation is performed, a
+> "mem=YM@XM" parameter will be added to the capture kernel (added by
+> kexec-tools), indicating that the available memory range of the
+> capture kernel is [X, X+Y).
+>
+> After the "mem" parameter is changed to the above, there will be only
+> a similar parsing function like "mem=3G", and the type like
+> "mem=128M@64M" cannot be correctly parsed.
+
+Hi Youling,
+
+Don't worry, it is another issue, I will take that into account
+once this patch is applied.
+
+This commit is the first step to fix the issue about mem=limit,
+I think it is possible to support mem=limit@base and I will do
+that later.
 
 Thanks,
+Tiezhu
 
-> +
->   #define F2FS_LINK_MAX	0xffffffff	/* maximum link count per file */
->   
->   #define MAX_DIR_RA_PAGES	4	/* maximum ra pages of dir */
+>
+> Thanks,
+> Youling.
+>>   }
+>> @@ -633,6 +621,9 @@ static void __init arch_mem_init(char **cmdline_p)
+>>         parse_early_param();
+>>   +    /* Limit the memory size via mem= command-line parameter */
+>> +    memblock_enforce_memory_limit(memory_limit);
+>> +
+>>       if (usermem)
+>>           pr_info("User-defined physical RAM map overwrite\n");
+>>
+

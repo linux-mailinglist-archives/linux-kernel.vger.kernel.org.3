@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C314C3E38
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC1E4C3E36
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbiBYGIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 01:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S237760AbiBYGIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 01:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiBYGHz (ORCPT
+        with ESMTP id S237749AbiBYGIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 01:07:55 -0500
+        Fri, 25 Feb 2022 01:08:02 -0500
 Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4620112B775
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:07:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5E816939B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:07:25 -0800 (PST)
 Received: from droid09-sz.software.amlogic (10.28.8.19) by mail-sz.amlogic.com
  (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 25 Feb 2022
- 13:52:09 +0800
+ 13:52:10 +0800
 From:   Qianggui Song <qianggui.song@amlogic.com>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 CC:     Qianggui Song <qianggui.song@amlogic.com>,
@@ -28,9 +28,9 @@ CC:     Qianggui Song <qianggui.song@amlogic.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>
-Subject: [PATCH v3 3/4] irqchip/meson-gpio: add select trigger type callback
-Date:   Fri, 25 Feb 2022 13:52:05 +0800
-Message-ID: <20220225055207.1048-4-qianggui.song@amlogic.com>
+Subject: [PATCH v3 4/4] irqchip/meson-gpio: Add support for meson s4 SoCs
+Date:   Fri, 25 Feb 2022 13:52:06 +0800
+Message-ID: <20220225055207.1048-5-qianggui.song@amlogic.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220225055207.1048-1-qianggui.song@amlogic.com>
 References: <20220225055207.1048-1-qianggui.song@amlogic.com>
@@ -47,86 +47,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to some chips may use different registers and offset, provide
-a set trigger type call back and add one for old controller.
+The meson s4 SoCs support 12 gpio irq lines compared with previous
+serial chips and have something different, details are as below.
+
+IRQ Number:
+- 80:68 13 pins on bank Z
+- 67:48 20 pins on bank X
+- 47:36 12 pins on bank H
+- 35:24 12 pins on bank D
+- 23:22 2  pins on bank E
+- 21:14 8  pins on bank C
+- 13:0  13 pins on bank B
 
 Signed-off-by: Qianggui Song <qianggui.song@amlogic.com>
 ---
- drivers/irqchip/irq-meson-gpio.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/irqchip/irq-meson-gpio.c | 67 ++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
 diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
-index 63841e1578f5..7b5863e36816 100644
+index 7b5863e36816..a7ddbcac9772 100644
 --- a/drivers/irqchip/irq-meson-gpio.c
 +++ b/drivers/irqchip/irq-meson-gpio.c
-@@ -51,11 +51,15 @@ static void meson_a1_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
- 				      unsigned int channel,
- 				      unsigned long hwirq);
+@@ -26,6 +26,8 @@
+ 
+ /* use for A1 like chips */
+ #define REG_PIN_A1_SEL	0x04
++/* Used for s4 chips */
++#define REG_EDGE_POL_S4	0x1c
+ 
+ /*
+  * Note: The S905X3 datasheet reports that BOTH_EDGE is controlled by
+@@ -53,6 +55,8 @@ static void meson_a1_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
  static void meson_a1_gpio_irq_init(struct meson_gpio_irq_controller *ctl);
-+static int meson8_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
-+				    unsigned int type, u32 *channel_hwirq);
+ static int meson8_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
+ 				    unsigned int type, u32 *channel_hwirq);
++static int meson_s4_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
++				      unsigned int type, u32 *channel_hwirq);
  
  struct irq_ctl_ops {
  	void (*gpio_irq_sel_pin)(struct meson_gpio_irq_controller *ctl,
- 				 unsigned int channel, unsigned long hwirq);
- 	void (*gpio_irq_init)(struct meson_gpio_irq_controller *ctl);
-+	int (*gpio_irq_set_type)(struct meson_gpio_irq_controller *ctl,
-+				 unsigned int type, u32 *channel_hwirq);
- };
+@@ -101,6 +105,17 @@ struct meson_gpio_irq_params {
+ 	.pin_sel_mask = 0x7f,					\
+ 	.nr_channels = 8,					\
  
- struct meson_gpio_irq_params {
-@@ -69,16 +73,18 @@ struct meson_gpio_irq_params {
- 	struct irq_ctl_ops ops;
- };
- 
--#define INIT_MESON_COMMON(irqs, init, sel)			\
-+#define INIT_MESON_COMMON(irqs, init, sel, type)		\
- 	.nr_hwirq = irqs,					\
- 	.ops = {						\
- 		.gpio_irq_init = init,				\
- 		.gpio_irq_sel_pin = sel,			\
-+		.gpio_irq_set_type = type,			\
- 	},
- 
- #define INIT_MESON8_COMMON_DATA(irqs)				\
- 	INIT_MESON_COMMON(irqs, meson_gpio_irq_init_dummy,	\
--			  meson8_gpio_irq_sel_pin)		\
-+			  meson8_gpio_irq_sel_pin,		\
-+			  meson8_gpio_irq_set_type)		\
- 	.edge_single_offset = 0,				\
- 	.pol_low_offset = 16,					\
- 	.pin_sel_mask = 0xff,					\
-@@ -86,7 +92,8 @@ struct meson_gpio_irq_params {
- 
- #define INIT_MESON_A1_COMMON_DATA(irqs)				\
- 	INIT_MESON_COMMON(irqs, meson_a1_gpio_irq_init,		\
--			  meson_a1_gpio_irq_sel_pin)		\
++#define INIT_MESON_S4_COMMON_DATA(irqs)				\
++	INIT_MESON_COMMON(irqs, meson_a1_gpio_irq_init,		\
 +			  meson_a1_gpio_irq_sel_pin,		\
-+			  meson8_gpio_irq_set_type)		\
- 	.support_edge_both = true,				\
- 	.edge_both_offset = 16,					\
- 	.edge_single_offset = 8,				\
-@@ -259,9 +266,8 @@ meson_gpio_irq_release_channel(struct meson_gpio_irq_controller *ctl,
- 	clear_bit(idx, ctl->channel_map);
++			  meson_s4_gpio_irq_set_type)		\
++	.support_edge_both = true,				\
++	.edge_both_offset = 0,					\
++	.edge_single_offset = 12,				\
++	.pol_low_offset = 0,					\
++	.pin_sel_mask = 0xff,					\
++	.nr_channels = 12,					\
++
+ static const struct meson_gpio_irq_params meson8_params = {
+ 	INIT_MESON8_COMMON_DATA(134)
+ };
+@@ -131,6 +146,10 @@ static const struct meson_gpio_irq_params a1_params = {
+ 	INIT_MESON_A1_COMMON_DATA(62)
+ };
+ 
++static const struct meson_gpio_irq_params s4_params = {
++	INIT_MESON_S4_COMMON_DATA(82)
++};
++
+ static const struct of_device_id meson_irq_gpio_matches[] = {
+ 	{ .compatible = "amlogic,meson8-gpio-intc", .data = &meson8_params },
+ 	{ .compatible = "amlogic,meson8b-gpio-intc", .data = &meson8b_params },
+@@ -140,6 +159,7 @@ static const struct of_device_id meson_irq_gpio_matches[] = {
+ 	{ .compatible = "amlogic,meson-g12a-gpio-intc", .data = &axg_params },
+ 	{ .compatible = "amlogic,meson-sm1-gpio-intc", .data = &sm1_params },
+ 	{ .compatible = "amlogic,meson-a1-gpio-intc", .data = &a1_params },
++	{ .compatible = "amlogic,meson-s4-gpio-intc", .data = &s4_params },
+ 	{ }
+ };
+ 
+@@ -308,6 +328,53 @@ static int meson8_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
+ 	return 0;
  }
  
--static int meson_gpio_irq_type_setup(struct meson_gpio_irq_controller *ctl,
--				     unsigned int type,
--				     u32 *channel_hwirq)
-+static int meson8_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
-+				    unsigned int type, u32 *channel_hwirq)
++/*
++ * gpio irq relative registers for s4
++ * -PADCTRL_GPIO_IRQ_CTRL0
++ * bit[31]:    enable/disable all the irq lines
++ * bit[12-23]: single edge trigger
++ * bit[0-11]:  polarity trigger
++ *
++ * -PADCTRL_GPIO_IRQ_CTRL[X]
++ * bit[0-16]: 7 bits to choose gpio source for irq line 2*[X] - 2
++ * bit[16-22]:7 bits to choose gpio source for irq line 2*[X] - 1
++ * where X = 1-6
++ *
++ * -PADCTRL_GPIO_IRQ_CTRL[7]
++ * bit[0-11]: both edge trigger
++ */
++static int meson_s4_gpio_irq_set_type(struct meson_gpio_irq_controller *ctl,
++				      unsigned int type, u32 *channel_hwirq)
++{
++	u32 val = 0;
++	unsigned int idx;
++	const struct meson_gpio_irq_params *params;
++
++	params = ctl->params;
++	idx = meson_gpio_irq_get_channel_idx(ctl, channel_hwirq);
++
++	type &= IRQ_TYPE_SENSE_MASK;
++
++	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4, BIT(idx), 0);
++
++	if (type == IRQ_TYPE_EDGE_BOTH) {
++		val |= BIT(ctl->params->edge_both_offset + idx);
++		meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4,
++					   BIT(ctl->params->edge_both_offset + idx), val);
++		return 0;
++	}
++
++	if (type & (IRQ_TYPE_LEVEL_LOW | IRQ_TYPE_EDGE_FALLING))
++		val |= BIT(ctl->params->pol_low_offset + idx);
++
++	if (type & (IRQ_TYPE_EDGE_RISING | IRQ_TYPE_EDGE_FALLING))
++		val |= BIT(ctl->params->edge_single_offset + idx);
++
++	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL,
++				   BIT(idx) | BIT(12 + idx), val);
++	return 0;
++};
++
+ static unsigned int meson_gpio_irq_type_output(unsigned int type)
  {
- 	u32 val = 0;
- 	unsigned int idx;
-@@ -326,7 +332,7 @@ static int meson_gpio_irq_set_type(struct irq_data *data, unsigned int type)
- 	u32 *channel_hwirq = irq_data_get_irq_chip_data(data);
- 	int ret;
- 
--	ret = meson_gpio_irq_type_setup(ctl, type, channel_hwirq);
-+	ret = ctl->params->ops.gpio_irq_set_type(ctl, type, channel_hwirq);
- 	if (ret)
- 		return ret;
- 
+ 	unsigned int sense = type & IRQ_TYPE_SENSE_MASK;
 -- 
 2.34.1
 

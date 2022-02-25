@@ -2,107 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAEA4C5083
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F164C5084
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238356AbiBYVVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S238397AbiBYVVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238279AbiBYVVU (ORCPT
+        with ESMTP id S238368AbiBYVVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:21:20 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD501F0818;
-        Fri, 25 Feb 2022 13:20:47 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id q17so9148238edd.4;
-        Fri, 25 Feb 2022 13:20:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4YlNvB7NrEBpJJE6cmb8mulZ18i+X9nsh0taaOhh5Pc=;
-        b=MVwDWvjTYS6eO/Y/InyGS/3FRGUUboW79CiOsz/G0Xoq00Ybodmb8j4qXGrUWvfz/W
-         fbCfauAn97Zm+VthvYQGx5ClfD7SsXYuMcKaItY1915fA5iha1EaPX3A6qF7k1ac+0Dh
-         dZRo6Jf3uH3djYL6DnBE5b4sVInTKWQg1Ogr6qQetmJubnF1QfNUjAxVuXPxWsS2QL9L
-         4n0bmDEXh9rAxIxQ5Gr+WGim8sHiiF0zveo9sL5LOotRSEgmpaq6yStzaye4jVaYIsJT
-         YM6lrdTzYXYzA13aBF0PexAdbXAw7Fk18yA/9n1B60LbMByzOrYOSlw/FKQYC59C44E0
-         pVWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4YlNvB7NrEBpJJE6cmb8mulZ18i+X9nsh0taaOhh5Pc=;
-        b=XpIpPvEH4URrJN/Ms4l2GRVyFzDlDvHKbb/fgIgto/JuxKCgnw76mGQriwHIhRgZWx
-         ZDDPYOYEczGPYH1BCtJtFY215dZnvMFUPfQqs2lwFJ9nx/yAtfsOxWJnLMRvXf0G1kXP
-         qlO+tGvHb4drImV2x0ibrKLo0BKR/LWoAaMjV8lQg74l1bfKcEMq5J41PW3p2zs0Waht
-         xBlOK29SGLwGHlLxt4c/PUO+ZprsSAP5TpjQi6wCcP+a3RwSu9E5gftYVpEBvo+DUwG7
-         Kw77u9PXcSdK2V3q7SDTZiUd89wD16kadetU32nIDMpSa+1bxb1iiiNf0Mye1gBn0soB
-         XZ4g==
-X-Gm-Message-State: AOAM531svbtZkEOaJoX1k40pFyMMsyAhkx46/8QSFPCmlyPkYdRrt5NE
-        E7PRHRu6AoTTVgKqKcfT7quDGaJ6Ips=
-X-Google-Smtp-Source: ABdhPJxsaUsO21GZYFT9xQF1vXhg7RW+orNSxj6ErLyaBTZZ4eYDUADQzxqB2dWli+Xuz26SXwyHQQ==
-X-Received: by 2002:a05:6402:90b:b0:412:a7cc:f5f9 with SMTP id g11-20020a056402090b00b00412a7ccf5f9mr8781718edz.136.1645824046394;
-        Fri, 25 Feb 2022 13:20:46 -0800 (PST)
-Received: from nlaptop.localdomain (178-117-137-225.access.telenet.be. [178.117.137.225])
-        by smtp.gmail.com with ESMTPSA id ey10-20020a1709070b8a00b006cee56b87b9sm1428959ejc.141.2022.02.25.13.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 13:20:46 -0800 (PST)
-From:   Niels Dossche <dossche.niels@gmail.com>
-X-Google-Original-From: Niels Dossche <niels.dossche@ugent.be>
-To:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        Niels Dossche <niels.dossche@ugent.be>,
-        Niels Dossche <dossche.niels@gmail.com>
-Subject: [PATCH] btrfs: extend locking to all space_info members accesses
-Date:   Fri, 25 Feb 2022 22:20:28 +0100
-Message-Id: <20220225212028.75021-1-niels.dossche@ugent.be>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Feb 2022 16:21:42 -0500
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955D71F0822;
+        Fri, 25 Feb 2022 13:21:07 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BE84D3E68A2;
+        Fri, 25 Feb 2022 16:21:06 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id dmcvhaBcIuw6; Fri, 25 Feb 2022 16:21:02 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3D3233E63FA;
+        Fri, 25 Feb 2022 16:21:02 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3D3233E63FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1645824062;
+        bh=bRaEeVVQaMjClWxRtEpX+2V+p2vFHfmPT7g2jJx2WJs=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=MvcttoXuNkDBxnUlHkcg4+DmCWaUO6cIFurJL83YNCwJRM19H1lMpMaBJLxm9/ajm
+         k+NGN5XEcjA0p3yyV/4Hvh9H/Ri24lvpK2Rsf27Wye+hZmlcW3rFAGF+Y7IFckyea2
+         bqfLpSbXLTRbysUYU+YShjpLkb6nl2qYBcYINaMQ5LnTMYn1menEyOJt0Cq0xuHpxj
+         DMO/RCZ/ASnhkmM55nncQ3I7N3dIaokZrlGf0rRNQptzsb0+EcygkOs/BIQklbIBN9
+         2153/b+AwoNGgIiF9auyYEkFFgsxKhwm2MtHmhs1GKKmi/5uhDWiqx6dU2L8DsgtuR
+         K0Qr0gBdcspGA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id tvXQ-QN8DIcu; Fri, 25 Feb 2022 16:21:02 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 26A423E63EE;
+        Fri, 25 Feb 2022 16:21:02 -0500 (EST)
+Date:   Fri, 25 Feb 2022 16:21:02 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
+Message-ID: <1136157594.109786.1645824062005.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1323451367.108396.1645811762372.JavaMail.zimbra@efficios.com>
+References: <20220218210633.23345-1-mathieu.desnoyers@efficios.com> <20220218210633.23345-10-mathieu.desnoyers@efficios.com> <87k0dikfxa.fsf@meer.lwn.net> <1323451367.108396.1645811762372.JavaMail.zimbra@efficios.com>
+Subject: Re: [RFC PATCH v2 09/11] sched: Introduce per memory space current
+ virtual cpu id
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
+Thread-Topic: sched: Introduce per memory space current virtual cpu id
+Thread-Index: lCW3kQh5ZH1hwRJzi/Qgd8U7jX6j3o6dldnR
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bytes_pinned is always accessed under space_info->lock, except in
-btrfs_preempt_reclaim_metadata_space, however the other members are
-accessed under that lock. The reserved member of the rsv's are also
-partially accessed under a lock and partially not. Move all these
-accesses into the same lock to ensure consistency.
+----- On Feb 25, 2022, at 12:56 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 
-Signed-off-by: Niels Dossche <niels.dossche@ugent.be>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
----
- fs/btrfs/space-info.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> ----- On Feb 25, 2022, at 12:35 PM, Jonathan Corbet corbet@lwn.net wrote:
+> 
+>> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+>> 
+>>> This feature allows the scheduler to expose a current virtual cpu id
+>>> to user-space. This virtual cpu id is within the possible cpus range,
+>>> and is temporarily (and uniquely) assigned while threads are actively
+>>> running within a memory space. If a memory space has fewer threads than
+>>> cores, or is limited to run on few cores concurrently through sched
+>>> affinity or cgroup cpusets, the virtual cpu ids will be values close
+>>> to 0, thus allowing efficient use of user-space memory for per-cpu
+>>> data structures.
+>> 
+>> So I have one possibly (probably) dumb question: if I'm writing a
+>> program to make use of virtual CPU IDs, how do I know what the maximum
+>> ID will be?  It seems like one of the advantages of this mechanism would
+>> be not having to be prepared for anything in the physical ID space, but
+>> is there any guarantee that the virtual-ID space will be smaller?
+>> Something like "no larger than the number of threads", say?
+> 
+> Hi Jonathan,
+> 
+> This is a very relevant question. Let me quote what I answered to Florian
+> on the last round of review for this series:
+> 
+> Some effective upper bounds for the number of vcpu ids observable in a process:
+> 
+> - sysconf(3) _SC_NPROCESSORS_CONF,
+> - the number of threads which exist concurrently in the process,
 
-diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
-index 294242c194d8..62382ae1eb02 100644
---- a/fs/btrfs/space-info.c
-+++ b/fs/btrfs/space-info.c
-@@ -1061,7 +1061,6 @@ static void btrfs_preempt_reclaim_metadata_space(struct work_struct *work)
- 			trans_rsv->reserved;
- 		if (block_rsv_size < space_info->bytes_may_use)
- 			delalloc_size = space_info->bytes_may_use - block_rsv_size;
--		spin_unlock(&space_info->lock);
- 
- 		/*
- 		 * We don't want to include the global_rsv in our calculation,
-@@ -1092,6 +1091,8 @@ static void btrfs_preempt_reclaim_metadata_space(struct work_struct *work)
- 			flush = FLUSH_DELAYED_REFS_NR;
- 		}
- 
-+		spin_unlock(&space_info->lock);
-+
- 		/*
- 		 * We don't want to reclaim everything, just a portion, so scale
- 		 * down the to_reclaim by 1/4.  If it takes us down to 0,
+One small detail I forgot to mention: on a NUMA system, a single-threaded
+process will observe (typically) vcpu_id=numa_node_id. So it can jump around
+between vcpu_id values depending on which numa node it runs on at the moment.
+
+So the vcpu_id is not strictly bound by the number of concurrently running
+threads.
+
+Thanks,
+
+Mathieu
+
+> - the number of cpus in the cpu affinity mask applied by sched_setaffinity,
+>  except in corner-case situations such as cpu hotplug removing all cpus from
+>  the affinity set,
+> - cgroup cpuset "partition" limits,
+> 
+> Note that AFAIR non-partition cgroup cpusets allow a cgroup to "borrow"
+> additional cores from the rest of the system if they are idle, therefore
+> allowing the number of concurrent threads to go beyond the specified limit.
+> 
+> AFAIR the sched affinity mask is tweaked independently of the cgroup cpuset.
+> Those are two mechanisms both affecting the scheduler task placement.
+> 
+> I would expect the user-space code to use some sensible upper bound as a
+> hint about how many per-vcpu data structure elements to expect (and how many
+> to pre-allocate), but have a "lazy initialization" fall-back in case the
+> vcpu id goes up to the number of configured processors - 1. And I suspect
+> that even the number of configured processors may change with CRIU.
+> 
+> If the above explanation makes sense (please let me know if I am wrong
+> or missed something), I suspect I should add it to the commit message.
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
 -- 
-2.35.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

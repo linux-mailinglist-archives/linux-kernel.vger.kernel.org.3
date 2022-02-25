@@ -2,205 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D039D4C4B17
+	by mail.lfdr.de (Postfix) with ESMTP id 853DA4C4B16
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243109AbiBYQnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:43:18 -0500
+        id S243188AbiBYQn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:43:26 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiBYQnR (ORCPT
+        with ESMTP id S243162AbiBYQnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:43:17 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D1F16F944;
-        Fri, 25 Feb 2022 08:42:44 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so6826276oop.13;
-        Fri, 25 Feb 2022 08:42:44 -0800 (PST)
+        Fri, 25 Feb 2022 11:43:19 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0511516F978;
+        Fri, 25 Feb 2022 08:42:47 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id z22so8231551edd.1;
+        Fri, 25 Feb 2022 08:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S8SL7rE8T9Den9dkGBlQpTedO4EN66ojHcp4IxiL2TY=;
+        b=X+IaxB/CALk6pahXiXUiNOX+jWZ48DJse2PS08TfmsykL+yrkf0pMzH+Wm/ZnLaMyx
+         kZ8E3e7hNdKZt/buRQwAZwF1Z8EvsJm4vo3QIEhnGLbWyOZ93upQDcnZ7wff24bGxK8h
+         bPal1Kp0gueh0fV0jZ3w/wyI2t+MDBWIYnE+gbHoyqxNFPshtlAo0xnkRMq4r0+gwowI
+         XSOYyd2fCmLmOA5pKagLZ48rH6zmtf4M2Gak+efIRuOGB6aBrxe73XxKclUhOM+nnrMx
+         sN+oaRc3tq5LOXslhLm0sm8FASkyOQdIzZoaGkUYq93rYAw+Vnkb9/fb6KIkonhyjtwv
+         IFJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZSX/mmN9jmdskm3j4TwmWh8AlFLR/YvOjRrOST7+5es=;
-        b=NrAtjAfwNjD1bNdaxweE9S9dh9S+qanqxxOm33njdiQKIO79SNQjIhAbiWbZG+S057
-         DFUjBgkSsvD3TRT46rfzXmJOREkPIYPfqC5JWLFCnSWWL6OBDs03fJEps1PX/MN9ML83
-         7BqFk+AQNtO08cZ1PlMUe3R4LlqIu/dDkGYAb6BnMxhi7K7KXWEn6uWzKHnCpzVNGevm
-         rUYWTmI6DhyWy2NPZymwJCJZ9r1mkpAFwF0uRKkV95bwM5h4hioxAAesYojmvhwjVs5A
-         E5mwIM0ZGWUdTAL1pBt77O7jrWXMTETcUi6DaCuIp6B/VVNSRtFC5Cix1kS3xelxkhvq
-         3xhg==
-X-Gm-Message-State: AOAM531AuNCyvbZqv0FrKiFnD1hltKV6U0Hn5M29j2NAlDCf33nRZgEX
-        qYU3eM1prRbNgP1mLGhagmZhk1sBYw==
-X-Google-Smtp-Source: ABdhPJwwhEUJZdpe4mMbjxVuFAy+Hz/bbfJEL+S3kPYGCL3TRqpYJkBhIs9KD2NMfnnHOVVa22Kv5Q==
-X-Received: by 2002:a4a:3b04:0:b0:31b:7524:ce2d with SMTP id s4-20020a4a3b04000000b0031b7524ce2dmr3049766oos.54.1645807363590;
-        Fri, 25 Feb 2022 08:42:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e12-20020a056870c0cc00b000d6bf3c0613sm1376697oad.43.2022.02.25.08.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:42:42 -0800 (PST)
-Received: (nullmailer pid 1063115 invoked by uid 1000);
-        Fri, 25 Feb 2022 16:42:41 -0000
-Date:   Fri, 25 Feb 2022 10:42:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Tom Rini <trini@konsulko.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ricardo Salveti <ricardo@foundries.io>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jorge Ramirez-Ortiz <jorge@foundries.io>,
-        Sean Anderson <seanga2@gmail.com>, devicetree@vger.kernel.org,
-        u-boot@lists.denx.de, linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V2] dt-bindings: nvmem: add U-Boot environment variables
- binding
-Message-ID: <YhkHAQclxNHqmBwO@robh.at.kernel.org>
-References: <20220217130235.7450-1-zajec5@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S8SL7rE8T9Den9dkGBlQpTedO4EN66ojHcp4IxiL2TY=;
+        b=5kTCihLMEAdThWBR1CJW5MV0q2mqSZs1lW57FWpZwFPBMrLwNpOu2jQcFdfO1JWes+
+         WglB6noPw0zE+VzL5KuvPXYRp3qZSJBe6DfS6aJSHmGJqvNPmjU2AmsTD0QBcKdSB/o2
+         JA9NqUBDbcRfc9sr6C22OiUnOKGXqn3Dh1BDLOYSOGF9ij9V7Xck3dQsxbTHYI7V+aup
+         qbE4pHYE7zZYlaMSmtHaAaUR89CJ9bw8+U3eDOdmAgYDNqVwJkzjAKNO5G8WWvWSuREW
+         qNvJs4zNRjdrJg5gTSdeX17PNTvTgcDOqR/izQZctw83nfh+b+Thf3DtaZYucarNXb+e
+         50FQ==
+X-Gm-Message-State: AOAM531eTiddFSBLpGX+mRRCifiSgQSR6dyBKfAT7Bc9NLsIk6M5xNfh
+        3UjBsrhiUU/KKCk+KuTFkfU=
+X-Google-Smtp-Source: ABdhPJzVekY5Q6L+YRXw49HZO/1wKiAFTfdXshcnDoen7ncUKqnFoPPqIOZVbdltr3saEk+SiLt7cw==
+X-Received: by 2002:a50:e004:0:b0:410:a39b:e30c with SMTP id e4-20020a50e004000000b00410a39be30cmr7738034edl.198.1645807365494;
+        Fri, 25 Feb 2022 08:42:45 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id lx9-20020a170906af0900b006d0d3179e11sm1197992ejb.105.2022.02.25.08.42.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 08:42:45 -0800 (PST)
+Message-ID: <f9488e93-6794-21bd-1e50-126c15dace1e@gmail.com>
+Date:   Fri, 25 Feb 2022 17:42:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220217130235.7450-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/4] arm64: dts: rockchip: move power domain PD_PIPE to
+ rk356x
+Content-Language: en-US
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+References: <20220225131602.2283499-1-michael.riesch@wolfvision.net>
+ <20220225131602.2283499-2-michael.riesch@wolfvision.net>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220225131602.2283499-2-michael.riesch@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:02:35PM +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> U-Boot uses environment variables for storing device setup data. It
-> usually needs to be accessed by a bootloader, kernel and often
-> user-space.
+Hi Michael,
 
-How much of this is already in use vs. proposed? I know I've seen 
-something, but that may have been a u-boot env string in 'label' and 
-that's it.
+Some more comments. Have a look if it's useful.
 
-> This binding allows describing environment data located in a raw flash
-> partition. It's treated as NVMEM device and can be reused later for
-> other storage devices.
+On 2/25/22 14:15, Michael Riesch wrote:
+> The power domain PD_PIPE was moved to the RK3568 specific dtsi but
+> is available on the RK3566 as well. Move it back to the shared dtsi.
 > 
-> Using DT should be cleaner than hardcoding & duplicating such info in
-> multiple places. Bootloader & kernel can share DTS and user-space can
-> try reading it too or just have correct data exposed by a kernel.
-> 
-> A custom "compatible" string allows system to automatically load
-> relevant NVMEM driver but phandle can be also used for reading raw
-> location.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 > ---
-> V2: Update descriptions to don't make this binding MTD (flash partition)
->     specific. Mention multiple possible storage ways.
-> ---
->  .../devicetree/bindings/nvmem/u-boot,env.yaml | 66 +++++++++++++++++++
->  MAINTAINERS                                   |  5 ++
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+>  arch/arm64/boot/dts/rockchip/rk3568.dtsi | 16 ----------------
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 14 ++++++++++++++
+>  2 files changed, 14 insertions(+), 16 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> new file mode 100644
-> index 000000000000..a53e34152c97
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: U-Boot environment variables
-> +
-> +description: |
-> +  U-Boot uses environment variables to store device parameters and
-> +  configuration. They may be used for booting process, setup or keeping end user
-> +  info.
-> +
-> +  Data is stored using U-Boot specific formats (variant specific header and NUL
-> +  separated key-value pairs).
-> +
-> +  Environment data can be stored on various storage entities, e.g.:
-> +  1. Raw flash partition
-> +  2. UBI volume
-> +
-> +  This binding allows marking storage device (as containing env data) and
-> +  specifying used format.
-> +
-> +  Right now only flash partition case is covered but it may be extended to e.g.
-> +  UBI volumes in the future.
-> +
-> +maintainers:
-> +  - Rafał Miłecki <rafal@milecki.pl>
-> +
-> +allOf:
-> +  - $ref: nvmem.yaml#
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> index 91a0b798b857..ecc0f3015915 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> @@ -100,19 +100,3 @@ opp-1992000000 {
+>  		opp-microvolt = <1150000 1150000 1150000>;
+>  	};
+>  };
 
-What exactly is used from nvmem.yaml? Based on the example, nothing.
+> -
+> -&power {
+> -	power-domain@RK3568_PD_PIPE {
+> -		reg = <RK3568_PD_PIPE>;
+> -		clocks = <&cru PCLK_PIPE>;
+
+Should contain a complete list of rk3568 clocks for which RK3568_PD_PIPE
+must be enabled.
+
+Could someone check which we need here?
+Same for rk3566 but then reduced.
+
+<&cru PCLK_PIPE>,
+
+<&cru PCLK_XPCS>,
+
+<&cru CLK_USB3OTG0_REF>,
+<&cru CLK_USB3OTG0_SUSPEND>,
+<&cru ACLK_USB3OTG0>,
+
+<&cru CLK_USB3OTG1_REF>,
+<&cru CLK_USB3OTG1_SUSPEND>,
+<&cru ACLK_USB3OTG1>,
+
+<&cru ACLK_SATA0>,
+<&cru CLK_SATA0_PMALIVE>,
+<&cru CLK_SATA0_RXOOB>
+
+<&cru ACLK_SATA1>,
+<&cru CLK_SATA1_PMALIVE>,
+<&cru CLK_SATA1_RXOOB>,
+
+<&cru ACLK_SATA2>,
+<&cru CLK_SATA2_PMALIVE>,
+<&cru CLK_SATA2_RXOOB>
+
+<&cru ACLK_PCIE20_MST>,
+<&cru ACLK_PCIE20_SLV>,
+<&cru ACLK_PCIE20_DBI>,
+<&cru PCLK_PCIE20>,
+<&cru CLK_PCIE20_AUX_NDFT>
+
+<&cru ACLK_PCIE30X1_MST>,
+<&cru ACLK_PCIE30X1_SLV>,
+<&cru ACLK_PCIE30X1_DBI>,
+<&cru PCLK_PCIE30X1>,
+<&cru CLK_PCIE30X1_AUX_NDFT>
+
+<&cru ACLK_PCIE30X2_MST>,
+<&cru ACLK_PCIE30X2_SLV>,
+<&cru ACLK_PCIE30X2_DBI>,
+<&cru PCLK_PCIE30X2>,
+<&cru CLK_PCIE30X2_AUX_NDFT>;
+
+> -		pm_qos = <&qos_pcie2x1>,
+> -			 <&qos_pcie3x1>,
+> -			 <&qos_pcie3x2>,
+> -			 <&qos_sata0>,
+> -			 <&qos_sata1>,
+> -			 <&qos_sata2>,
+> -			 <&qos_usb3_0>,
+> -			 <&qos_usb3_1>;
+> -		#power-domain-cells = <0>;
+> -	};
+
+Maybe keep it here for rk3568.
+
+> -};
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 8b9fae3d348a..742f5adcdf2b 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -490,6 +490,20 @@ power-domain@RK3568_PD_RKVENC {
+>  					 <&qos_rkvenc_wr_m0>;
+>  				#power-domain-cells = <0>;
+>  			};
 
 > +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - description: A standalone env data block
-> +        const: u-boot,env
+> +			power-domain@RK3568_PD_PIPE {
+> +				reg = <RK3568_PD_PIPE>;
 
-> +      - description: Two redundant blocks with active one flagged
-> +        const: u-boot,env-redundant-bool
-> +      - description: Two redundant blocks with active having higher counter
-> +        const: u-boot,env-redundant-count
+> +				clocks = <&cru PCLK_PIPE>;
+> +				pm_qos = <&qos_pcie2x1>,
+> +					 <&qos_pcie3x1>,
+> +					 <&qos_pcie3x2>,
+> +					 <&qos_sata0>,
+> +					 <&qos_sata1>,
+> +					 <&qos_sata2>,
+> +					 <&qos_usb3_0>,
+> +					 <&qos_usb3_1>;
+> +				#power-domain-cells = <0>;
+> +			};
 
-Aren't these 2 discoverable based on a flag or count property?
+rk3566 doesn't have a combphy0
+Already in rk3566.dtsi
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    partitions {
-> +        compatible = "fixed-partitions";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        partition@0 {
-> +            reg = <0x0 0x40000>;
-> +            label = "u-boot";
-> +            read-only;
-> +        };
-> +
-> +        env: partition@40000 {
-> +            compatible = "u-boot,env";
-> +            reg = <0x40000 0x10000>;
-> +            label = "u-boot-env";
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 66aa3a589f6a..55c56ce82856 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19905,6 +19905,11 @@ W:	http://linuxtv.org
->  T:	git git://linuxtv.org/media_tree.git
->  F:	drivers/media/pci/tw686x/
+&power {
+	power-domain@RK3568_PD_PIPE {
+		reg = <RK3568_PD_PIPE>;
+
+		clocks = <&cru PCLK_PIPE>;
+
+
+Should contain a complete list of rk3566 clocks for which RK3568_PD_PIPE
+must be enabled.
+
+		pm_qos = <&qos_pcie2x1>,
+			 <&qos_sata1>,
+			 <&qos_sata2>,
+
+			 <&qos_usb3_0>,
+
+Does rk3566 have a qos_usb3_0 ??
+See support list below.
+
+			 <&qos_usb3_1>;
+		#power-domain-cells = <0>;
+	};
+};
+
+===
+
+Rockchip RK3568 Datasheet V1.0-20201210.pdf page 16
+
+Multi-PHY0 support one of the following interfaces
+USB3.0 OTG
+SATA0
+
+Multi-PHY1 support one of the following interfaces
+USB3.0 Host
+SATA1
+QSGMII/SGMII
+
+Multi-PHY2 support one of the following interfaces
+PCIe2.1
+SATA2
+QSGMII/SGMII
+
+===
+
+Rockchip RK3566 Datasheet V1.0-20201210.pdf page 16
+
+Multi-PHY1 support one of the following interfaces
+USB3.0 Host
+SATA1
+
+Multi-PHY2 support one of the following interfaces
+PCIe2.1
+SATA2
+
+===
+
+https://eji4evk5kxx.exactdn.com/wp-content/uploads/2020/12/RK3568-multiplexed-sata-usb-3.0-pcie.jpg?lossy=1&ssl=1
+
+
+On rk3568:
+&usb_host0_xhci {
+	phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
+	phy-names = "usb2-phy", "usb3-phy";
+};
+
+Does this exists on rk3566?
+
+&usb_host0_xhci {
+	phys = <&usb2phy0_otg>;
+	phy-names = "usb2-phy";
+};
+
+If not then why is usb_host0_xhci in a common rk356x.dtsi ??
+Else fix rk3566.dtsi
+
+===
+
+Johan
+
+
+
+>  		};
+>  	};
 >  
-> +U-BOOT ENVIRONMENT VARIABLES
-> +M:	Rafał Miłecki <rafal@milecki.pl>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> +
->  UACCE ACCELERATOR FRAMEWORK
->  M:	Zhangfei Gao <zhangfei.gao@linaro.org>
->  M:	Zhou Wang <wangzhou1@hisilicon.com>
-> -- 
-> 2.34.1
-> 
-> 

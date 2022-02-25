@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534134C4A87
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A414C4A9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242922AbiBYQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S242941AbiBYQXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242907AbiBYQWB (ORCPT
+        with ESMTP id S242930AbiBYQXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:22:01 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D5375C07
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:21:29 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id m11so5237140pls.5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dCkOofuT+eKplJpKUyxcU7JCwWPLhe5vZbRj/rqU7Ek=;
-        b=CiXw6wJ/i76/Cqk2SEPO6Cr+eb1PpfDFsRw3P1RxPdQbc28gtVEPA6ayCEW8VwXr/7
-         pEWf6Vm9WSDlkfazp/KdPafVywfXQotF7wVnCX46tMiSAfpZaCb5pWk8gn3fv4Hvj5bw
-         yO8yUxO/H7Jatt2uh3HilCq12Ek1TXGRAZ6SXI8p5bh2EpuxoUH8vm2855cqiG1IfWf0
-         yFx8ObVlHVRzDwFSPzt7a2Wd7GeXtf8ITf+j1bA3wrjgCwGi4fdbbVEHFxdqz2HVz/Fr
-         /VJA86nEqwgTZab7UWS1IFrWSJDxyVFSd7t7YQSnCH7RE434PHReO618rqpxw1FVVUJy
-         mllQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dCkOofuT+eKplJpKUyxcU7JCwWPLhe5vZbRj/rqU7Ek=;
-        b=PX80MqT9zv27qDxb6RKpneKRrQc8yWZ1TK9BW3Q0aDyDHwjtN6TJdBpnAOCPPG1SOF
-         JH/fFCyFZ5KCGb95E7MzKan6LHUpk9XC6quggjGx9uxcTTDSp2q9sIZaLVI5jqjMzs27
-         2vVZeXsx+cL7HCXKVzyZ2oLUtPUqM9i7Te/iLHx9kbQvmRqpy4IXkJ32Vhn5K1kIf38i
-         lmMzy8jPqTCN8wKpRa/54v2UIaFZ3kAi6UVfAqQpZLEew/9UIpQLgMpROfEzHpo3ACOk
-         BCE3Ue/I7hUB2lIjTyJHt00815WjADQvJX3aZ+yzzuO8VrgKhvK2YS82tgRZDZx92NWH
-         MZZA==
-X-Gm-Message-State: AOAM530viQ4cpjA7NQ9o8wjYzMF6cRkw6t6As/10Kxbm36v8YSnjJf/B
-        MCKnz3u2Jm6Dt08yH9BbWN0cVQ==
-X-Google-Smtp-Source: ABdhPJx6OzZS+uLCUucPfcMPVbrXAeG1bsgoQvkUHxAV2WgwiZRVRbwww1JV+0eel38i6XP0m75ELQ==
-X-Received: by 2002:a17:902:e8d7:b0:149:3b5d:2b8b with SMTP id v23-20020a170902e8d700b001493b5d2b8bmr7990890plg.162.1645806088619;
-        Fri, 25 Feb 2022 08:21:28 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q13-20020aa7982d000000b004cb98a2ca35sm4097321pfl.211.2022.02.25.08.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:21:27 -0800 (PST)
-Date:   Fri, 25 Feb 2022 16:21:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Anton Romanov <romanton@google.com>
-Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
- constant
-Message-ID: <YhkCBH9fsqrJYMca@google.com>
-References: <20220225013929.3577699-1-seanjc@google.com>
- <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
- <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
+        Fri, 25 Feb 2022 11:23:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F78B3E41;
+        Fri, 25 Feb 2022 08:23:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DCF6B8326B;
+        Fri, 25 Feb 2022 16:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF6AC340E7;
+        Fri, 25 Feb 2022 16:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645806193;
+        bh=rkLjTIjcRR32zyhieMNFJ8Z8g6Br2JWE90YX1D0HpYQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PqQA6k5avulgzjLrXS55FBGglRzClfgITBEPzW/sIi1vhdrBB7DzHVsiiDyDC7tIS
+         pSJyavVbhEMdNfhtl/uhpJdcezZIRqUmOeqYedIhPPgDgQddEFuAVas3F4AFMbNZfZ
+         8MFDo8iejA7WO8GBInhG+K1elmW1Phxw0sSI3vRM=
+Date:   Fri, 25 Feb 2022 17:23:11 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@redhat.com>
+Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
+Message-ID: <YhkCbws+csQyIDKQ@kroah.com>
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <YhdsgokMMSEQ0Yc8@kroah.com>
+ <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
+ <YhjbzxxgxtSxFLe/@kroah.com>
+ <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022, David Woodhouse wrote:
-> On Fri, 2022-02-25 at 13:10 +0100, Paolo Bonzini wrote:
-> > 
-> > Queued, but I'd rather have a subject that calls out that max_tsc_khz 
-> > needs a replacement at vCPU creation time.  In fact, the real change 
-> > (and bug, and fix) is in kvm_arch_vcpu_create(), while the subject 
-> > mentions only the change in kvm_timer_init().
-> 
-> In
-> https://lore.kernel.org/kvm/e7be32b06676c7ebf415d9deea5faf50aa8c0785.camel@infradead.org/T/
-> last night I was coming round to the idea that we might want a KVM-wide 
-> default frequency which is settable from userspace and is used instead
-> of max_tsc_khz anyway.
-> 
-> I also have questions about the use case for the above patch.... if
-> this is a clean boot and you're just starting to host guests, surely we
-> can wait for the time it takes for the TSC synchronization to complete?
+HID selftests question for now:
 
-KVM is built into the kernel in their case, the vmx_init() => kvm_init() gets
-automatically called during boot.  The VMs aren't started until well after
-synchronization has completed, but KVM has already snapshotted the "bad" value.
+On Fri, Feb 25, 2022 at 05:00:53PM +0100, Benjamin Tissoires wrote:
+> > > I am not entirely clear on which plan I want to have for userspace.
+> > > I'd like to have libinput on board, but right now, Peter's stance is
+> > > "not in my garden" (and he has good reasons for it).
+> > > So my initial plan is to cook and hold the bpf programs in hid-tools,
+> > > which is the repo I am using for the regression tests on HID.
+> >
+> > Why isn't the hid regression tests in the kernel tree also?  That would
+> > allow all of the testers out there to test things much easier than
+> > having to suck down another test repo (like Linaro and 0-day and
+> > kernelci would be forced to do).
+> 
+> 2 years ago I would have argued that the ease of development of
+> gitlab.fd.o was more suited to a fast moving project.
+> 
+> Now... The changes in the core part of the code don't change much so
+> yes, merging it in the kernel might have a lot of benefits outside of
+> what you said. The most immediate one is that I could require fixes to
+> be provided with a test, and merge them together, without having to
+> hold them until Linus releases a new version.
+
+Yes, having a test be required for a fix is a great idea.  Many
+subsystems do this already and it helps a lot.
+
+> If nobody complains of having the regression tests in python with
+> pytest and some Python 3.6+ features, that is definitely something I
+> should look for.
+
+Look at the tools/testing/selftests/ directory today.  We already have
+python3 tests in there, and as long as you follow the proper TAP output
+format, all should be fine.  The tc-testing python code in the kernel
+trees seems to do that and no one has complained yet :)
+
+thanks,
+
+greg k-h

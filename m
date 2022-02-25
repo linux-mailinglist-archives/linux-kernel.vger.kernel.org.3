@@ -2,196 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537294C4C27
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417684C4C2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243570AbiBYRai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S243731AbiBYRbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237679AbiBYRag (ORCPT
+        with ESMTP id S235656AbiBYRa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:30:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D0A060D8B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645810203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojV+v8nU5UgxoBRpf2GOrPq7WAn6iAeXjWuAfgZUBsE=;
-        b=ZR07CEUPfzLTaJja7B5dmHrX04orjBOP74svMGoxtsIqNgP93gmeYPXjY/NhKjPWVMCZeK
-        rMdzgKPkcm6O78Da1vIGhj4XDw3mcarlCkuStzudOIP6xiKhz0VGb5aBkYzaj6j6WlC9Y+
-        BVw9CDyssOFcPUyosC8ucYAoZFqqn10=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-OnJVrDTmMeWgqctbBlz31w-1; Fri, 25 Feb 2022 12:30:00 -0500
-X-MC-Unique: OnJVrDTmMeWgqctbBlz31w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 25 Feb 2022 12:30:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72F652E4;
+        Fri, 25 Feb 2022 09:30:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A0C7E1006AA6;
-        Fri, 25 Feb 2022 17:29:57 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7EF3380009;
-        Fri, 25 Feb 2022 17:29:45 +0000 (UTC)
-Message-ID: <113db01c73b8fe061b8226e75849317bac7873a5.camel@redhat.com>
-Subject: Re: [PATCH v6 9/9] KVM: VMX: Optimize memory allocation for
- PID-pointer table
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
-Date:   Fri, 25 Feb 2022 19:29:39 +0200
-In-Reply-To: <20220225082223.18288-10-guang.zeng@intel.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
-         <20220225082223.18288-10-guang.zeng@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C59A61DB3;
+        Fri, 25 Feb 2022 17:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0B3C340F2;
+        Fri, 25 Feb 2022 17:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645810226;
+        bh=gcH32dGW4EZg7RhvfI9PxuB4WZ5SQvodrDrzUdNnKWg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p7TWQ+pL8SilFZ/W8gL6GZJkmwvlI7P3wrp1A68wtRh0+yEYlL2LbBn6ojgUIenrz
+         DWUJSiENv03fyffxS6/GLCmCBH1tVtxo3rrRMActUr+heDbYUwGIPRukx+lfR6r2BJ
+         C6maz7CX0e/YMbJWKYA465x6I5ylBSh0YLjQaLnqYXpn2opiTmauvg4BVjp3lgtwSp
+         wo09iI3ZknB/EhpPzj9X1b03A9l8EyyWLohPMgsfWTJW7s2UXIb7TKMKX4a49vL83R
+         NdfhcHwy9XsnJCEHxAU+RJW2ZMIpoXZQqKkMsh9lI86UIB9U8PjLAdbj9oJX8H3uYH
+         QVZLe1cPKUyxQ==
+Received: by mail-yb1-f174.google.com with SMTP id d21so7210596yba.11;
+        Fri, 25 Feb 2022 09:30:26 -0800 (PST)
+X-Gm-Message-State: AOAM530ZplcOyNb/FBSIZS8/P3ZpWeT2qt4sNzckB/j1n1Et2YhTiHJ/
+        OVjgrqFxndnm4jfBmmU/kc4k/zFgFYs3l3+220c=
+X-Google-Smtp-Source: ABdhPJz38V+iNaKLP6PxVSjf2Dw++J9wO+pfVO8AqgNDrTjTJT6JAfe/zvEIoqQhdtoe5zUJGa5VxUpfMz/deLHuYMw=
+X-Received: by 2002:a25:4214:0:b0:624:6215:4823 with SMTP id
+ p20-20020a254214000000b0062462154823mr8228722yba.432.1645810225527; Fri, 25
+ Feb 2022 09:30:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220225155552.30636-1-graf@amazon.com> <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
+ <YhkQKfE8ErtFBmSB@zx2c4.com>
+In-Reply-To: <YhkQKfE8ErtFBmSB@zx2c4.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 25 Feb 2022 18:30:14 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEtUUod8Hp6VhS6k7iDKYkFj_t_J=qS2XF1p2X_SFdTvg@mail.gmail.com>
+Message-ID: <CAMj1kXEtUUod8Hp6VhS6k7iDKYkFj_t_J=qS2XF1p2X_SFdTvg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Alexander Graf <graf@amazon.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-25 at 16:22 +0800, Zeng Guang wrote:
-> Current kvm allocates 8 pages in advance for Posted Interrupt Descriptor
-> pointer (PID-pointer) table to accommodate vCPUs with APIC ID up to
-> KVM_MAX_VCPU_IDS - 1. This policy wastes some memory because most of
-> VMs have less than 512 vCPUs and then just need one page.
-> 
-> If user hypervisor specify max practical vcpu id prior to vCPU creation,
-> IPIv can allocate only essential memory for PID-pointer table and reduce
-> the memory footprint of VMs.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 45 ++++++++++++++++++++++++++++--------------
->  1 file changed, 30 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 0cb141c277ef..22bfb4953289 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -230,9 +230,6 @@ static const struct {
+On Fri, 25 Feb 2022 at 18:21, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On Fri, Feb 25, 2022 at 6:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > The device subsystem side of things already deals with this properly:
+> > the modalias of the QEMU vmgenid device comes up as
+> > 'acpi:QEMUVGID:VM_GEN_COUNTER', which means it already captures the
+> > entire string, and exposes it in the correct way (modulo the all caps)
+>
+> Ahh, so the userspace side of this won't work right. Shucks. That's what
+> I was concerned about.
+>
+> > I don't like this hack. If we are going to accept the fact that CIDs
+> > could be arbitrary length strings, we should handle them properly.
+> >
+> > So what we need is a way for a module to describe its compatibility
+> > with such a _CID, which shouldn't be that complicated.
+>
+> Can't we do something more boring and just...
+>
+> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+> index 4bb71979a8fd..5da5d990ff58 100644
+> --- a/include/linux/mod_devicetable.h
+> +++ b/include/linux/mod_devicetable.h
+> @@ -210,9 +210,9 @@ struct css_device_id {
+>         __u8 type; /* subchannel type */
+>         kernel_ulong_t driver_data;
 >  };
->  
->  #define L1D_CACHE_ORDER 4
-> -
-> -/* PID(Posted-Interrupt Descriptor)-pointer table entry is 64-bit long */
-> -#define MAX_PID_TABLE_ORDER get_order(KVM_MAX_VCPU_IDS * sizeof(u64))
->  #define PID_TABLE_ENTRY_VALID 1
->  
->  static void *vmx_l1d_flush_pages;
-> @@ -4434,6 +4431,24 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
->  	return exec_control;
->  }
->  
-> +static int vmx_alloc_pid_table(struct kvm_vmx *kvm_vmx)
-> +{
-> +	struct page *pages;
-> +
-> +	if(kvm_vmx->pid_table)
-> +		return 0;
-> +
-> +	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO,
-> +			get_order(kvm_vmx->kvm.arch.max_vcpu_id * sizeof(u64)));
-> +
-> +	if (!pages)
-> +		return -ENOMEM;
-> +
-> +	kvm_vmx->pid_table = (void *)page_address(pages);
-> +	kvm_vmx->pid_last_index = kvm_vmx->kvm.arch.max_vcpu_id - 1;
-> +	return 0;
-> +}
-> +
->  #define VMX_XSS_EXIT_BITMAP 0
->  
->  static void init_vmcs(struct vcpu_vmx *vmx)
-> @@ -7159,6 +7174,16 @@ static int vmx_create_vcpu(struct kvm_vcpu *vcpu)
->  			goto free_vmcs;
->  	}
->  
-> +	if (enable_ipiv && kvm_vcpu_apicv_active(vcpu)) {
-> +		struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
-> +
-> +		mutex_lock(&vcpu->kvm->lock);
-> +		err = vmx_alloc_pid_table(kvm_vmx);
-> +		mutex_unlock(&vcpu->kvm->lock);
-> +		if (err)
-> +			goto free_vmcs;
-> +	}
+>
+> -#define ACPI_ID_LEN    9
+> +#define ACPI_ID_LEN    16
+>
+>  struct acpi_device_id {
+>         __u8 id[ACPI_ID_LEN];
+>         kernel_ulong_t driver_data;
+>
+>
+> As you can see from the context, those additional 7 bytes were being
+> wasted on padding anyway inside the acpi_device_id struct, so it's
+> basically free, it would seem. This seems like the least convoluted way
+> of solving this issue? If we ever encounter _more_ ACPI devices with
+> weird names, we could revisit a fancy dynamic solution, but for now, why
+> don't we keep it simple?
+>
 
-This could be dangerous. If APICv is temporary inhibited,
-this code won't run and we will end up without PID table.
+Yeah, good point. I think this is fine, although there are a few other
+uses of ACPI_ID_LEN in the tree. So perhaps this should be something
+like
 
-I think that kvm_vcpu_apicv_active should be just dropped
-from this condition.
+#define ACPI_ID_LEN    9
+#define ACPI_CID_LEN    16
 
-Best regards,
-	Maxim Levitsky
+/* explanation goes here */
 
+struct acpi_device_id {
+    __u8 id[ACPI_CID_LEN];
 
-> +
->  	return 0;
->  
->  free_vmcs:
-> @@ -7202,17 +7227,6 @@ static int vmx_vm_init(struct kvm *kvm)
->  		}
->  	}
->  
-> -	if (enable_ipiv) {
-> -		struct page *pages;
-> -
-> -		pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PID_TABLE_ORDER);
-> -		if (!pages)
-> -			return -ENOMEM;
-> -
-> -		to_kvm_vmx(kvm)->pid_table = (void *)page_address(pages);
-> -		to_kvm_vmx(kvm)->pid_last_index = KVM_MAX_VCPU_IDS - 1;
-> -	}
-> -
->  	return 0;
->  }
->  
-> @@ -7809,7 +7823,8 @@ static void vmx_vm_destroy(struct kvm *kvm)
->  	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
->  
->  	if (kvm_vmx->pid_table)
-> -		free_pages((unsigned long)kvm_vmx->pid_table, MAX_PID_TABLE_ORDER);
-> +		free_pages((unsigned long)kvm_vmx->pid_table,
-> +			get_order((kvm_vmx->pid_last_index + 1) * sizeof(u64)));
->  }
->  
->  static struct kvm_x86_ops vmx_x86_ops __initdata = {
-
-
-
-
+instead? At a quick glance, none of those ACPI_ID_LEN users seem
+related to the CID or the match metadata.

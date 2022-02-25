@@ -2,106 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9050B4C4B85
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA7E4C4B88
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243392AbiBYQ6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S243413AbiBYQ6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbiBYQ6F (ORCPT
+        with ESMTP id S243384AbiBYQ6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:58:05 -0500
+        Fri, 25 Feb 2022 11:58:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4D05BD26;
-        Fri, 25 Feb 2022 08:57:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005C5BD26;
+        Fri, 25 Feb 2022 08:57:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 454BC61CF5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A05A861990;
+        Fri, 25 Feb 2022 16:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9B1C340E7;
         Fri, 25 Feb 2022 16:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEACBC340E7;
-        Fri, 25 Feb 2022 16:57:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TDxbmhnd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645808249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Oko4i9ycomsYP38wIRGd+bBjhb7N3Fz+ZbyUitFcD8A=;
-        b=TDxbmhndZjIrUUsXHOnhjPRFR5G9gl/zqx7Y50i1YTdSz/jOqQPEdwI5b0wOhAeQ4B4yh6
-        LB7xD4sZkNj4K9P1b9V3yjLOcpJfXy6cWMK4FAh1HFfgaahkAW0yEWMa+2xrpT//4NZtEq
-        zSBteWtG1sBoEE7b1/A2US6AP8hw8Bs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ecbf4e30 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 25 Feb 2022 16:57:28 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 17:57:23 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Alexander Graf <graf@amazon.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, ardb@kernel.org,
-        dwmw@amazon.co.uk
-Subject: Re: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
-Message-ID: <YhkKc2fa8dSTA9pc@zx2c4.com>
-References: <20220225155552.30636-1-graf@amazon.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645808253;
+        bh=iCH8/YEMHwIbEozGPVz5OqJIjwYZKgpFso40Jg4sPYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VEBKOsXgRco/qftVWJ+hpOBEoFubIhEVf/Zi7lfAzAsSN3/Mhy6JdJs4VTGZ5dZJx
+         USzdb18ALSR2d65sbYC9PMZjKBv5/wTks7U5XhxpVl1q+zYxx8Vu3qDXn4Qj+kwbCw
+         KG0R2Ghf8Hg8ah4Bw0geIiK8e/Pz6M9bAF8FtOKuPt60LJDGKCLajDPbB/bfJ/W7oX
+         SmV73VH2EVobPBoUOgv8spDLeKkAG/ZVdcsbNEy7gydPF8ymfwbss4WRTicCYRYHW8
+         6Crc8QGLyB+BOjxdcv3DJosi1P5vOSmkmlr0WKuycoviFVA1VZIluOECYkKzPnRzuc
+         XmeCjY+2aFOhA==
+Date:   Fri, 25 Feb 2022 10:57:31 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
+ Set_Slot_Power_Limit message
+Message-ID: <20220225165731.GA359939@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220225155552.30636-1-graf@amazon.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220225125407.wglplhyisgges3zk@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On Fri, Feb 25, 2022 at 01:54:07PM +0100, Pali Rohár wrote:
+> On Thursday 24 February 2022 15:28:11 Bjorn Helgaas wrote:
+> > On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
+> > > This PCIe message is sent automatically by mvebu HW when link changes
+> > > status from down to up.
 
-Thanks for this.
+> > > +	 * Program Root Complex to automatically sends Set Slot Power Limit
+> > > +	 * PCIe Message when changing status from Dl-Down to Dl-Up and valid
+> > > +	 * slot power limit was specified.
+> > 
+> > s/Root Complex/Root Port/, right?  AFAIK the message would be sent by
+> > a Downstream Port, i.e., a Root Port in this case.
+> 
+> Yes!
+> 
+> I see that on more places that names "Root Port", "Root Bridge" and
+> "Root Complex" used as the one thing.
+> 
+> It is probably because HW has only one Root Port and is integrated into
+> same silicon as Root Complex and shares HW registers. And Root Port has
+> PCI class code "PCI Bridge", hence Root Bridge.
+> 
+> But I agree that correct name is "Root Port".
+> 
+> Moreover in Armada 38x Functional Specification is this register named
+> "Root Complex Set Slot Power Limit" and not Root "Port".
 
-I tested this out with the vmgenid driver, and I found a bug in this v1:
+Haha, yes, sounds like this stems from the knowledge that "of course
+this Root Complex only has one Root Port, so there's no real
+difference between them."
 
-On Fri, Feb 25, 2022 at 04:55:52PM +0100, Alexander Graf wrote:
-> -				if (id->id[0] && !strcmp((char *)id->id, hwid->id))
-> +				if (id->id[0] && !strncmp((char *)id->id, hwid->id, ACPI_ID_LEN))
+So I think it makes sense for #defines for device-specific registers
+like PCIE_SSPL_OFF to match the Armada spec, but I think it would be
+better if the comments and code structure did not have the assumption
+that there's only one Root Port baked into them.  For one thing, this
+can help make the driver structure more uniform across all the
+drivers.
 
-This only worked once I made that `ACPI_ID_LEN - 1`, because that length
-includes the null terminator. The below patch works fine. If you adjust
-that and send a quick v2 follow-up, I'm happy to ack it.
+> > s/sends/send/
+> > s/Set Slot Power Limit/Set_Slot_Power_Limit/ to match spec usage (also
+> > below)
+> > s/Dl-Down/DL_Down/ to match spec usage
+> > s/Dl-Up/DL_Up/ ditto
+> 
+> In Armada 38x Functional Specification spec it is called like I wrote
+> and some people told me to use "naming" as written in SoC/HW
+> specification to not confuse other people who are writing / developing
+> drivers according to official SoC/HW specification.
+> 
+> I see that both has pro and cons. Usage of terminology from PCIe spec is
+> what PCIe people expect and terminology from vendor SoC HW spec is what
+> people who develop that SoC expect.
+> 
+> I can update and change comments without issue to any variant which you
+> prefer. No problem with it. Just I wanted to write why I chose those
+> names.
 
-Regards,
-Jason
+All these concepts are purely PCIe.  There is no Armada-specific
+meaning because they have to behave as specified by the PCIe spec so
+they work across the Link with non-Armada devices on the other end.
+If the Armada spec spells them differently, I claim that's an editing
+mistake in that spec.
 
---------8<--------------------------
+My preference is to use the PCIe spec naming except for
+Armada-specific things.  The Armada spellings don't appear in the PCIe
+spec, so it's just an unnecessary irritant when trying to look them
+up.
 
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 07f604832fd6..f179ebf16f21 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -829,7 +829,7 @@ static bool __acpi_match_device(struct acpi_device *device,
- 		/* First, check the ACPI/PNP IDs provided by the caller. */
- 		if (acpi_ids) {
- 			for (id = acpi_ids; id->id[0] || id->cls; id++) {
--				if (id->id[0] && !strcmp((char *)id->id, hwid->id))
-+				if (id->id[0] && !strncmp((char *)id->id, hwid->id, ACPI_ID_LEN - 1))
- 					goto out_acpi_match;
- 				if (id->cls && __acpi_match_device_cls(id, hwid))
- 					goto out_acpi_match;
-diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-index b503c210c2d7..04751fc1d365 100644
---- a/drivers/virt/vmgenid.c
-+++ b/drivers/virt/vmgenid.c
-@@ -78,8 +78,7 @@ static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
- }
+> > > +	case PCI_EXP_SLTCTL:
+> > > +		if ((mask & PCI_EXP_SLTCTL_ASPL_DISABLE) &&
+> > > +		    port->slot_power_limit_value &&
+> > > +		    port->slot_power_limit_scale) {
+> > > +			u32 sspl = mvebu_readl(port, PCIE_SSPL_OFF);
+> > > +			if (new & PCI_EXP_SLTCTL_ASPL_DISABLE)
+> > > +				sspl &= ~PCIE_SSPL_ENABLE;
+> > > +			else
+> > > +				sspl |= PCIE_SSPL_ENABLE;
+> > > +			mvebu_writel(port, sspl, PCIE_SSPL_OFF);
+> > 
+> > IIUC, the behavior of PCI_EXP_SLTCTL_ASPL_DISABLE as observed by
+> > software that sets it and reads it back will depend on whether the DT
+> > contains "slot-power-limit-milliwatt".
+> > 
+> > If there is no DT property, port->slot_power_limit_value will be zero
+> > and PCIE_SSPL_ENABLE will never be set.  So if I clear
+> > PCI_EXP_SLTCTL_ASPL_DISABLE, then read it back, it looks like it will
+> > read as being set.
+> 
+> Yes.
+> 
+> > That's not what I would expect from the spec (PCIe r6.0, sec 7.5.3.10).
+> 
+> Ok. What you would expect here? That PCI_EXP_SLTCTL_ASPL_DISABLE is not
+> set even when Set_Slot_Power_Limit was never sent and would be never
+> sent (as it was not programmed by firmware = in DT)?
 
- static const struct acpi_device_id vmgenid_ids[] = {
--	{ "QEMUVGID", 0 },	/* QEMU */
--	{ "VMGENID", 0 },	/* Firecracker */
-+	{ "VM_GEN_C", 0 }, /* Truncated "VM_Gen_Counter" */
- 	{ },
- };
+Per spec, I would expect PCI_EXP_SLTCTL_ASPL_DISABLE to be either:
+
+  - Hardwired to 0, so writes have no effect and reads always return
+    0, or
+
+  - Writable, so a read always returns what was previously written.
+
+Here's the relevant text from r6.0, sec 7.5.3.10:
+
+  Auto Slot Power Limit Disable - When Set, this disables the
+  automatic sending of a Set_Slot_Power_Limit Message when a Link
+  transitions from a non-DL_Up status to a DL_Up status.
+
+  Downstream ports that don’t support DPC are permitted to hardwire
+  this bit to 0.
+
+  Default value of this bit is implementation specific.
+
+AFAICT, the Slot Power Control mechanism is required for all devices,
+but without "slot-power-limit-milliwatt", we don't know what limit to
+use.  Apparently the CEM specs specify minimum values, but they depend
+on the form factor.
+
+From r6.0, sec 6.9:
+
+  For Adapters:
+
+    - Until and unless a Set_Slot_Power_Limit Message is received
+      indicating a Slot Power Limit value greater than the lowest
+      value specified in the form factor specification for the
+      adapter's form factor, the adapter must not consume more than
+      the lowest value specified.
+
+    - An adapter must never consume more power than what was specified
+      in the most recently received Set_Slot_Power_Limit Message or
+      the minimum value specified in the corresponding form factor
+      specification, whichever is higher.
+
+If PCIE_SSPL_ENABLE is never set, Set_Slot_Power_Limit will never be
+sent, and the device is not allowed to consume more than the minimum
+power specified by its form factor spec.
+
+I'd say reading PCI_EXP_SLTCTL should return whatever
+PCI_EXP_SLTCTL_ASPL_DISABLE value was most recently written, but we
+should set PCIE_SSPL_ENABLE only when we have a
+"slot-power-limit-milliwatt" property AND
+PCI_EXP_SLTCTL_ASPL_DISABLE == 0.
+
+Does that make sense?
+
+Bjorn

@@ -2,157 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE54C451B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2974C451A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240834AbiBYM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S240848AbiBYM7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiBYM7l (ORCPT
+        with ESMTP id S237490AbiBYM7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:59:41 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E711EBAB9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:59:09 -0800 (PST)
+        Fri, 25 Feb 2022 07:59:43 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6232A22A254
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:59:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645793949; x=1677329949;
+  t=1645793950; x=1677329950;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zzyMkt+E/b9JWUhce81/inYC/zD/96uFg3dHfMLRRbM=;
-  b=mGzhhN237kmTaJQRKm7mhU9nuaK4fzBG5JuIdnHXIiCZrTrjfBZcuFtb
-   C554oXxO7nu//djMGSiw6+XdGB/S8RAGmM6/lkKkKOejE4MUbK7I95YBh
-   G/bhyqsLytKq8CRbOPWnYdaWs+31WfPWMDxybXiOWokqj7Ax8QHURzrOw
-   W+7KVBwz62rAp2teYLvZOO/RvZJseAcaswpiGMLDPShYLwZ0Pf7r051vX
-   1ek0jfzAMNdaZzcEgwrzjCFpm6Nynmu1giIWqiFq9aJJ4bURdXGUSGrMH
-   nCt3kO8USLBMW6iIJ6JL2F7xiUphLswksOFsTj/aAh8zaQf6RXz14PWxl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313207602"
+  bh=h7joErmJ9hJiLR5e+iXdapaHMHnj3XotV7UX/BfczP0=;
+  b=OPnGMzwSdFOVP9aeM5Tak1YJpufW9W61FVeDj7KWd/gndasva1778w/6
+   3NcRG6ia/Xs4HO8z05Ok3yM2263Nyly/3Ahsur9FKr4VEpzZLVtfZsYSw
+   uSA63VInjPFx2qEjtiuo1EAqUtjOBo+rJWhMNjNqasSIQaKv1mlSI/c+6
+   /k9ozXNqtvVdiD4IlEXnUKj2Zjqn6abfpy3P81IAAH/BBX8a5A9Tedsad
+   KRyGqEI9j2xE0teNszU0uMYVZQiKEGfBEaGRbgAALyyvJd2Nz9Xj9cnlg
+   oJukWfSSGWhDWIGLHQ6mmkCVMxqY0N/P5F0W1YzXmM92WB0DH+S8k1hCL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252219402"
 X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="313207602"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 04:59:09 -0800
+   d="scan'208";a="252219402"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 04:59:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="640106898"
+   d="scan'208";a="533562118"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Feb 2022 04:59:08 -0800
+  by orsmga007.jf.intel.com with ESMTP; 25 Feb 2022 04:59:08 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nNaBf-0004Jz-Fg; Fri, 25 Feb 2022 12:59:07 +0000
-Date:   Fri, 25 Feb 2022 20:58:06 +0800
+        id 1nNaBf-0004K1-Hs; Fri, 25 Feb 2022 12:59:07 +0000
+Date:   Fri, 25 Feb 2022 20:58:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [davidhildenbrand:cow_fixes_part_2_v1 14/29] mm/rmap.c:1193:39:
- sparse: sparse: incorrect type in argument 4 (different base types)
-Message-ID: <202202252038.ij1YGn0d-lkp@intel.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [dinguyen:nios2_for_v5.18 6/6] include/asm-generic/uaccess.h:225:24:
+ warning: passing argument 1 of '__access_ok' makes integer from pointer
+ without a cast
+Message-ID: <202202252055.gHgljVUp-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/davidhildenbrand/linux cow_fixes_part_2_v1
-head:   92edd2765af5ab60b1b596939ebbcb705f911a34
-commit: 1429b19ab48e137cbae1bc629e2afe47aab932c4 [14/29] mm/rmap: convert RMAP flags to proper a distinct rmap_t type
-config: sparc-randconfig-s031-20220225 (https://download.01.org/0day-ci/archive/20220225/202202252038.ij1YGn0d-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git nios2_for_v5.18
+head:   048b7695b48a3a4523a7a7fbfedc396b40ccf62f
+commit: 048b7695b48a3a4523a7a7fbfedc396b40ccf62f [6/6] uaccess: drop maining CONFIG_SET_FS users
+config: csky-defconfig (https://download.01.org/0day-ci/archive/20220225/202202252055.gHgljVUp-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/davidhildenbrand/linux/commit/1429b19ab48e137cbae1bc629e2afe47aab932c4
-        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
-        git fetch --no-tags davidhildenbrand cow_fixes_part_2_v1
-        git checkout 1429b19ab48e137cbae1bc629e2afe47aab932c4
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git/commit/?id=048b7695b48a3a4523a7a7fbfedc396b40ccf62f
+        git remote add dinguyen https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
+        git fetch --no-tags dinguyen nios2_for_v5.18
+        git checkout 048b7695b48a3a4523a7a7fbfedc396b40ccf62f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash arch/csky/kernel/ drivers/char/ fs/ kernel/ lib/ mm/ net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> mm/rmap.c:1193:39: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected int exclusive @@     got restricted rmap_t @@
-   mm/rmap.c:1193:39: sparse:     expected int exclusive
-   mm/rmap.c:1193:39: sparse:     got restricted rmap_t
-   mm/rmap.c: note: in included file (through include/linux/ksm.h):
-   include/linux/rmap.h:282:28: sparse: sparse: context imbalance in 'page_referenced_one' - unexpected unlock
-   include/linux/rmap.h:282:28: sparse: sparse: context imbalance in 'try_to_unmap_one' - unexpected unlock
-   include/linux/rmap.h:282:28: sparse: sparse: context imbalance in 'try_to_migrate_one' - unexpected unlock
-   include/linux/rmap.h:282:28: sparse: sparse: context imbalance in 'page_mlock_one' - unexpected unlock
+   In file included from include/linux/uaccess.h:11,
+                    from arch/csky/kernel/signal.c:4:
+   arch/csky/include/asm/uaccess.h: In function '__access_ok':
+   arch/csky/include/asm/uaccess.h:11:52: error: 'struct thread_info' has no member named 'addr_limit'
+      11 |         unsigned long limit = current_thread_info()->addr_limit.seg;
+         |                                                    ^~
+   In file included from arch/csky/include/asm/bug.h:6,
+                    from include/linux/bug.h:5,
+                    from include/linux/signal.h:5,
+                    from arch/csky/kernel/signal.c:3:
+   include/asm-generic/uaccess.h: In function 'clear_user':
+>> include/asm-generic/uaccess.h:225:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+     225 |         if (!access_ok(to, n))
+         |                        ^~
+         |                        |
+         |                        void *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   include/asm-generic/uaccess.h:225:14: note: in expansion of macro 'access_ok'
+     225 |         if (!access_ok(to, n))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from arch/csky/kernel/signal.c:4:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'void *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+   In file included from arch/csky/include/asm/bug.h:6,
+                    from include/linux/bug.h:5,
+                    from include/linux/signal.h:5,
+                    from arch/csky/kernel/signal.c:3:
+   arch/csky/kernel/signal.c: In function 'sys_rt_sigreturn':
+>> arch/csky/kernel/signal.c:80:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+      80 |         if (!access_ok(frame, sizeof(*frame)))
+         |                        ^~~~~
+         |                        |
+         |                        struct rt_sigframe *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   arch/csky/kernel/signal.c:80:14: note: in expansion of macro 'access_ok'
+      80 |         if (!access_ok(frame, sizeof(*frame)))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from arch/csky/kernel/signal.c:4:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'struct rt_sigframe *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+   In file included from arch/csky/include/asm/bug.h:6,
+                    from include/linux/bug.h:5,
+                    from include/linux/signal.h:5,
+                    from arch/csky/kernel/signal.c:3:
+   arch/csky/kernel/signal.c: In function 'setup_rt_frame':
+   arch/csky/kernel/signal.c:143:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+     143 |         if (!access_ok(frame, sizeof(*frame)))
+         |                        ^~~~~
+         |                        |
+         |                        struct rt_sigframe *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   arch/csky/kernel/signal.c:143:14: note: in expansion of macro 'access_ok'
+     143 |         if (!access_ok(frame, sizeof(*frame)))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from arch/csky/kernel/signal.c:4:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'struct rt_sigframe *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+   arch/csky/kernel/signal.c: At top level:
+   arch/csky/kernel/signal.c:257:17: warning: no previous prototype for 'do_notify_resume' [-Wmissing-prototypes]
+     257 | asmlinkage void do_notify_resume(struct pt_regs *regs,
+         |                 ^~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:697,
+                    from arch/csky/kernel/traps.c:7:
+   arch/csky/include/asm/uaccess.h: In function '__access_ok':
+   arch/csky/include/asm/uaccess.h:11:52: error: 'struct thread_info' has no member named 'addr_limit'
+      11 |         unsigned long limit = current_thread_info()->addr_limit.seg;
+         |                                                    ^~
+   In file included from arch/csky/include/asm/bug.h:6,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from arch/csky/kernel/traps.c:4:
+   include/asm-generic/uaccess.h: In function 'clear_user':
+>> include/asm-generic/uaccess.h:225:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+     225 |         if (!access_ok(to, n))
+         |                        ^~
+         |                        |
+         |                        void *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   include/asm-generic/uaccess.h:225:14: note: in expansion of macro 'access_ok'
+     225 |         if (!access_ok(to, n))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:697,
+                    from arch/csky/kernel/traps.c:7:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'void *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+   arch/csky/kernel/traps.c: At top level:
+   arch/csky/kernel/traps.c:57:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
+      57 | void __init trap_init(void)
+         |             ^~~~~~~~~
+   arch/csky/kernel/traps.c:150:15: warning: no previous prototype for 'do_trap_unknown' [-Wmissing-prototypes]
+     150 | DO_ERROR_INFO(do_trap_unknown,
+         |               ^~~~~~~~~~~~~~~
+   arch/csky/kernel/traps.c:145:27: note: in definition of macro 'DO_ERROR_INFO'
+     145 | asmlinkage __visible void name(struct pt_regs *regs)                    \
+         |                           ^~~~
+   arch/csky/kernel/traps.c:152:15: warning: no previous prototype for 'do_trap_zdiv' [-Wmissing-prototypes]
+     152 | DO_ERROR_INFO(do_trap_zdiv,
+         |               ^~~~~~~~~~~~
+   arch/csky/kernel/traps.c:145:27: note: in definition of macro 'DO_ERROR_INFO'
+     145 | asmlinkage __visible void name(struct pt_regs *regs)                    \
+         |                           ^~~~
+   arch/csky/kernel/traps.c:154:15: warning: no previous prototype for 'do_trap_buserr' [-Wmissing-prototypes]
+     154 | DO_ERROR_INFO(do_trap_buserr,
+         |               ^~~~~~~~~~~~~~
+   arch/csky/kernel/traps.c:145:27: note: in definition of macro 'DO_ERROR_INFO'
+     145 | asmlinkage __visible void name(struct pt_regs *regs)                    \
+         |                           ^~~~
+   arch/csky/kernel/traps.c:157:17: warning: no previous prototype for 'do_trap_misaligned' [-Wmissing-prototypes]
+     157 | asmlinkage void do_trap_misaligned(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/csky/kernel/traps.c:168:17: warning: no previous prototype for 'do_trap_bkpt' [-Wmissing-prototypes]
+     168 | asmlinkage void do_trap_bkpt(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~~
+   arch/csky/kernel/traps.c:187:17: warning: no previous prototype for 'do_trap_illinsn' [-Wmissing-prototypes]
+     187 | asmlinkage void do_trap_illinsn(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~~~~~
+   arch/csky/kernel/traps.c:210:17: warning: no previous prototype for 'do_trap_fpe' [-Wmissing-prototypes]
+     210 | asmlinkage void do_trap_fpe(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~
+   arch/csky/kernel/traps.c:220:17: warning: no previous prototype for 'do_trap_priv' [-Wmissing-prototypes]
+     220 | asmlinkage void do_trap_priv(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~~
+   arch/csky/kernel/traps.c:230:17: warning: no previous prototype for 'trap_c' [-Wmissing-prototypes]
+     230 | asmlinkage void trap_c(struct pt_regs *regs)
+         |                 ^~~~~~
+--
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:697,
+                    from arch/csky/kernel/vdso.c:7:
+   arch/csky/include/asm/uaccess.h: In function '__access_ok':
+   arch/csky/include/asm/uaccess.h:11:52: error: 'struct thread_info' has no member named 'addr_limit'
+      11 |         unsigned long limit = current_thread_info()->addr_limit.seg;
+         |                                                    ^~
+   In file included from arch/csky/include/asm/bug.h:6,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/binfmts.h:5,
+                    from arch/csky/kernel/vdso.c:4:
+   include/asm-generic/uaccess.h: In function 'clear_user':
+>> include/asm-generic/uaccess.h:225:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+     225 |         if (!access_ok(to, n))
+         |                        ^~
+         |                        |
+         |                        void *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   include/asm-generic/uaccess.h:225:14: note: in expansion of macro 'access_ok'
+     225 |         if (!access_ok(to, n))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:697,
+                    from arch/csky/kernel/vdso.c:7:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'void *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+--
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from arch/csky/kernel/syscall_table.c:4:
+   arch/csky/include/asm/uaccess.h: In function '__access_ok':
+   arch/csky/include/asm/uaccess.h:11:52: error: 'struct thread_info' has no member named 'addr_limit'
+      11 |         unsigned long limit = current_thread_info()->addr_limit.seg;
+         |                                                    ^~
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from arch/csky/kernel/syscall_table.c:4:
+   include/asm-generic/uaccess.h: In function 'clear_user':
+>> include/asm-generic/uaccess.h:225:24: warning: passing argument 1 of '__access_ok' makes integer from pointer without a cast [-Wint-conversion]
+     225 |         if (!access_ok(to, n))
+         |                        ^~
+         |                        |
+         |                        void *
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   include/asm-generic/uaccess.h:225:14: note: in expansion of macro 'access_ok'
+     225 |         if (!access_ok(to, n))
+         |              ^~~~~~~~~
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from arch/csky/kernel/syscall_table.c:4:
+   arch/csky/include/asm/uaccess.h:9:45: note: expected 'long unsigned int' but argument is of type 'void *'
+       9 | static inline int __access_ok(unsigned long addr, unsigned long size)
+         |                               ~~~~~~~~~~~~~~^~~~
+   include/uapi/asm-generic/unistd.h: At top level:
+   arch/csky/kernel/syscall_table.c:8:35: warning: initialized field overwritten [-Woverride-init]
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:29:37: note: in expansion of macro '__SYSCALL'
+      29 | #define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _sys)
+         |                                     ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:34:1: note: in expansion of macro '__SC_COMP'
+      34 | __SC_COMP(__NR_io_setup, sys_io_setup, compat_sys_io_setup)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: note: (near initialization for 'sys_call_table[0]')
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:29:37: note: in expansion of macro '__SYSCALL'
+      29 | #define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _sys)
+         |                                     ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:34:1: note: in expansion of macro '__SC_COMP'
+      34 | __SC_COMP(__NR_io_setup, sys_io_setup, compat_sys_io_setup)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: warning: initialized field overwritten [-Woverride-init]
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:36:1: note: in expansion of macro '__SYSCALL'
+      36 | __SYSCALL(__NR_io_destroy, sys_io_destroy)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: note: (near initialization for 'sys_call_table[1]')
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:36:1: note: in expansion of macro '__SYSCALL'
+      36 | __SYSCALL(__NR_io_destroy, sys_io_destroy)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: warning: initialized field overwritten [-Woverride-init]
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:29:37: note: in expansion of macro '__SYSCALL'
+      29 | #define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _sys)
+         |                                     ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:38:1: note: in expansion of macro '__SC_COMP'
+      38 | __SC_COMP(__NR_io_submit, sys_io_submit, compat_sys_io_submit)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: note: (near initialization for 'sys_call_table[2]')
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:29:37: note: in expansion of macro '__SYSCALL'
+      29 | #define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _sys)
+         |                                     ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:38:1: note: in expansion of macro '__SC_COMP'
+      38 | __SC_COMP(__NR_io_submit, sys_io_submit, compat_sys_io_submit)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: warning: initialized field overwritten [-Woverride-init]
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:40:1: note: in expansion of macro '__SYSCALL'
+      40 | __SYSCALL(__NR_io_cancel, sys_io_cancel)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: note: (near initialization for 'sys_call_table[3]')
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:40:1: note: in expansion of macro '__SYSCALL'
+      40 | __SYSCALL(__NR_io_cancel, sys_io_cancel)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: warning: initialized field overwritten [-Woverride-init]
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:20:34: note: in expansion of macro '__SYSCALL'
+      20 | #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+         |                                  ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:43:1: note: in expansion of macro '__SC_3264'
+      43 | __SC_3264(__NR_io_getevents, sys_io_getevents_time32, sys_io_getevents)
+         | ^~~~~~~~~
+   arch/csky/kernel/syscall_table.c:8:35: note: (near initialization for 'sys_call_table[4]')
+       8 | #define __SYSCALL(nr, call)[nr] = (call),
+         |                                   ^
+   include/uapi/asm-generic/unistd.h:20:34: note: in expansion of macro '__SYSCALL'
+      20 | #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+         |                                  ^~~~~~~~~
+   include/uapi/asm-generic/unistd.h:43:1: note: in expansion of macro '__SC_3264'
+      43 | __SC_3264(__NR_io_getevents, sys_io_getevents_time32, sys_io_getevents)
+..
 
-vim +1193 mm/rmap.c
 
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1145  
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1146  /*
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1147   * Special version of the above for do_swap_page, which often runs
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1148   * into pages that are exclusively owned by the current process.
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1149   * Everybody else should continue to use page_add_anon_rmap above.
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1150   */
-ad8c2ee801ad7a Rik van Riel            2010-08-09  1151  void do_page_add_anon_rmap(struct page *page,
-1429b19ab48e13 David Hildenbrand       2022-02-25  1152  	struct vm_area_struct *vma, unsigned long address, rmap_t flags)
-9617d95e6e9ffd Nicholas Piggin         2006-01-06  1153  {
-d281ee61451835 Kirill A. Shutemov      2016-01-15  1154  	bool compound = flags & RMAP_COMPOUND;
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1155  	bool first;
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1156  
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1157  	if (unlikely(PageKsm(page)))
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1158  		lock_page_memcg(page);
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1159  	else
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1160  		VM_BUG_ON_PAGE(!PageLocked(page), page);
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1161  
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1162  	if (compound) {
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1163  		atomic_t *mapcount;
-e9b61f19858a5d Kirill A. Shutemov      2016-01-15  1164  		VM_BUG_ON_PAGE(!PageLocked(page), page);
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1165  		VM_BUG_ON_PAGE(!PageTransHuge(page), page);
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1166  		mapcount = compound_mapcount_ptr(page);
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1167  		first = atomic_inc_and_test(mapcount);
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1168  	} else {
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1169  		first = atomic_inc_and_test(&page->_mapcount);
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1170  	}
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1171  
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1172  	if (first) {
-6c357848b44b40 Matthew Wilcox (Oracle  2020-08-14  1173) 		int nr = compound ? thp_nr_pages(page) : 1;
-bea04b073292b2 Jianyu Zhan             2014-06-04  1174  		/*
-bea04b073292b2 Jianyu Zhan             2014-06-04  1175  		 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
-bea04b073292b2 Jianyu Zhan             2014-06-04  1176  		 * these counters are not modified in interrupt context, and
-bea04b073292b2 Jianyu Zhan             2014-06-04  1177  		 * pte lock(a spinlock) is held, which implies preemption
-bea04b073292b2 Jianyu Zhan             2014-06-04  1178  		 * disabled.
-bea04b073292b2 Jianyu Zhan             2014-06-04  1179  		 */
-65c453778aea37 Kirill A. Shutemov      2016-07-26  1180  		if (compound)
-69473e5de87389 Muchun Song             2021-02-24  1181  			__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1182  		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
-79134171df2381 Andrea Arcangeli        2011-01-13  1183  	}
-5ad6468801d28c Hugh Dickins            2009-12-14  1184  
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1185  	if (unlikely(PageKsm(page))) {
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1186  		unlock_page_memcg(page);
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1187  		return;
-be5d0a74c62d8d Johannes Weiner         2020-06-03  1188  	}
-53f9263baba69f Kirill A. Shutemov      2016-01-15  1189  
-5dbe0af47f8a8f Hugh Dickins            2011-05-28  1190  	/* address might be in next vma when migration races vma_adjust */
-5ad6468801d28c Hugh Dickins            2009-12-14  1191  	if (first)
-d281ee61451835 Kirill A. Shutemov      2016-01-15  1192  		__page_set_anon_rmap(page, vma, address,
-d281ee61451835 Kirill A. Shutemov      2016-01-15 @1193  				flags & RMAP_EXCLUSIVE);
-69029cd550284e KAMEZAWA Hiroyuki       2008-07-25  1194  	else
-c97a9e10eaee32 Nicholas Piggin         2007-05-16  1195  		__page_check_anon_rmap(page, vma, address);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1196  }
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1197  
+vim +/__access_ok +225 include/asm-generic/uaccess.h
 
-:::::: The code at line 1193 was first introduced by commit
-:::::: d281ee6145183594788ab6d5b55f8d144e69eace rmap: add argument to charge compound page
+eed417ddd52146 Arnd Bergmann      2009-05-13  220  
+eed417ddd52146 Arnd Bergmann      2009-05-13  221  static inline __must_check unsigned long
+eed417ddd52146 Arnd Bergmann      2009-05-13  222  clear_user(void __user *to, unsigned long n)
+eed417ddd52146 Arnd Bergmann      2009-05-13  223  {
+e0acd0bd059416 Michael S. Tsirkin 2013-05-26  224  	might_fault();
+96d4f267e40f95 Linus Torvalds     2019-01-03 @225  	if (!access_ok(to, n))
+eed417ddd52146 Arnd Bergmann      2009-05-13  226  		return n;
+eed417ddd52146 Arnd Bergmann      2009-05-13  227  
+eed417ddd52146 Arnd Bergmann      2009-05-13  228  	return __clear_user(to, n);
+eed417ddd52146 Arnd Bergmann      2009-05-13  229  }
+eed417ddd52146 Arnd Bergmann      2009-05-13  230  
 
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+:::::: The code at line 225 was first introduced by commit
+:::::: 96d4f267e40f9509e8a66e2b39e8b95655617693 Remove 'type' argument from access_ok() function
+
+:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
 :::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---

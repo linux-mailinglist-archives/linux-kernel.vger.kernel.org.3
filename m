@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC12E4C4CFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CA34C4CFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiBYRz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S230262AbiBYRz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiBYRz1 (ORCPT
+        with ESMTP id S229967AbiBYRzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:55:27 -0500
-Received: from re-prd-fep-043.btinternet.com (mailomta8-re.btinternet.com [213.120.69.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241661EDA2D;
-        Fri, 25 Feb 2022 09:54:52 -0800 (PST)
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
-          by re-prd-fep-043.btinternet.com with ESMTP
-          id <20220225175451.URVU390.re-prd-fep-043.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Fri, 25 Feb 2022 17:54:51 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1645811691; 
-        bh=39nmR0dbbIAChSn6/FB5eq6Ny9952x+7sRkKsOS0TK8=;
-        h=From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version;
-        b=C2ioAWuYtUSD7VxUoI2WnqpxCdBK2rQ/jtM6DqIdbQLnuxyxs/Jvg+MsckKYTjc+G/cCy43R3Qgky9/R8+YY40dOItlJELwKtFNWnHKWiLySRFOIhI1909O+b8iTsoAsAYpgkcb5Tj9VbopbDQb5cRJXBwJMA+Yvl4YVWLOiHDhkgs4CQTFQ6IMfcshMVhlfg2SyXLf0N77HjKTBg0DZNSfuxS7b4MfXdGVzmIi4LJG9zFeHBEIm8SxK86nY3MJPy1fz38VJ8CoCbOAoC06DKvLiSBExiblZgPpcmSLNRr1Dh9eeaEW58+7ItdSeFNaS5cD+DidxCdTCJuM/ZgQnQQ==
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=richard_c_haines@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 613A8CC316349824
-X-Originating-IP: [217.43.180.152]
-X-OWM-Source-IP: 217.43.180.152 (GB)
-X-OWM-Env-Sender: richard_c_haines@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrleeggddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeftihgthhgrrhguucfjrghinhgvshcuoehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmqeenucggtffrrghtthgvrhhnpeelteffgeevveejheevhfetgfeuveduteetuddtffdvjeekieetgeehveefjedtfeenucfkphepvddujedrgeefrddukedtrdduhedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpedvudejrdegfedrudektddrudehvddpmhgrihhlfhhrohhmpehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepuggvmhhiohgsvghnohhurhesghhmrghilhdrtghomhdprhgtphhtthhopegvphgrrhhishesphgrrhhishhplhgrtggvrdhorhhgpdhrtghpthhtohepjhgvfhhfvhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgruhhlsehprghulhdqmhhoohhrvgdrtghomhdprhgt
-        phhtthhopehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhrtghpthhtohepshgvlhhinhhugidqrhgvfhhpohhlihgthiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghphhgvnhdrshhmrghllhgvhidrfihorhhksehgmhgrihhlrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-SNCR-hdrdom: btinternet.com
-Received: from localhost.localdomain (217.43.180.152) by re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
-        id 613A8CC316349824; Fri, 25 Feb 2022 17:54:51 +0000
-From:   Richard Haines <richard_c_haines@btinternet.com>
-To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, demiobenour@gmail.com
-Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        selinux-refpolicy@vger.kernel.org, jeffv@google.com,
-        Richard Haines <richard_c_haines@btinternet.com>
-Subject: [PATCH V4] security/selinux: Always allow FIOCLEX and FIONCLEX
-Date:   Fri, 25 Feb 2022 17:54:38 +0000
-Message-Id: <20220225175438.302365-1-richard_c_haines@btinternet.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Feb 2022 12:55:54 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885A2023BD;
+        Fri, 25 Feb 2022 09:55:21 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id j2so7459263ybu.0;
+        Fri, 25 Feb 2022 09:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CL3+gq5rRrQls4oOT5mVDFvzVfzctMAE8XSq+K4a63M=;
+        b=KsYxOpgIWN6IDwup3ypMUbXh+wW6AJ35cHgHYzvn+tAX4cDvlPL81+JVb+/kgoKLC8
+         fk4aHAa1RpNzeUq56hJU4o1VAG2kHnVBDnuKncwTWp0CqgnEdBYI2HnxiDjVCrajIl4J
+         QognCmryARR4V2jOf7jq7Vvdgv3kamJdq4gqU7q5Yq77Dn+X5YKs8IH7k63I1GB/E1wp
+         tFUhUL3/wiBpzNJwWxbPJcpAR1j1dqiEFdiFLiX1KwaRzNAGqf45eAuzlAyQV+3Uwxg3
+         i1BO32oc8aDjxz/KryfrDIcmnigwFdzFOclca79uNO/DQUOWc86d/e+xjO3TO/i3qUjb
+         x3Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CL3+gq5rRrQls4oOT5mVDFvzVfzctMAE8XSq+K4a63M=;
+        b=EI0ywDASrQZQyVUUCppurLfBQ62TLmkHSOafVWUs/VA92opGrvwST+p734Bs8/Efn7
+         rSLcty2o4hO73GMQ5vZxLsXfkA9qmwnoO/Sg4J/l365oQer2Skg1yAECZcj9eU96CbDh
+         2/b2b54ThpqLarns0lzM+Az9UKDnbTZXVeEHxIi3k0rcWb7yvsMQRVYPD3MsrhArNruq
+         Xjk0lE5mWnbtmNGU5dImU1EQd6/iSjaHE8xLxqlWAfVFflm+d3yWg7EPEYk00ECMTiIl
+         KzOyVIsiSa0b8lHsarMYAVj9l2TAEC02skXbuXxNe3Idk4N65Y8YMTA06ehY7P+9a8n8
+         Pqsw==
+X-Gm-Message-State: AOAM5322EPuu8+RKHcpEL+F8l4r2kIy/3MQ3YTw0VfV6DLlxYhoe+mcG
+        0VRKM2Cjg1JZ+PKRuTEv0GuuTShwIHXOSPjdKjlDp9FyK84=
+X-Google-Smtp-Source: ABdhPJwkgt4bvz9+XRFk0hwjy2XhoTLnHOdxNMkUuEz2T+/dbutGG1n3DqLl3nsa4UM6TNIuTMSJx2k6bkonxUMEWZ0=
+X-Received: by 2002:a25:8490:0:b0:624:5f70:142a with SMTP id
+ v16-20020a258490000000b006245f70142amr8292063ybk.173.1645811720591; Fri, 25
+ Feb 2022 09:55:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220225145432.422130-1-pgwipeout@gmail.com> <20220225145432.422130-5-pgwipeout@gmail.com>
+ <20220225171601.GF13801@jackp-linux.qualcomm.com>
+In-Reply-To: <20220225171601.GF13801@jackp-linux.qualcomm.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 25 Feb 2022 12:55:09 -0500
+Message-ID: <CAMdYzYpgECcG55pGFNrNDmhGZuuY19VOBK4uBZQQ0JSc0xu+1Q@mail.gmail.com>
+Subject: Re: [PATCH v1 4/8] usb: dwc3: core: do not use 3.0 clock when
+ operating in 2.0 mode
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Yang <yangbin@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
-always allows too.  Furthermore, a failed FIOCLEX could result in a file
-descriptor being leaked to a process that should not have access to it.
+On Fri, Feb 25, 2022 at 12:16 PM Jack Pham <quic_jackp@quicinc.com> wrote:
+>
+> +Thinh
+>
+> Hi Peter,
+>
+> On Fri, Feb 25, 2022 at 09:54:27AM -0500, Peter Geis wrote:
+> > From: Bin Yang <yangbin@rock-chips.com>
+> >
+> > In the 3.0 device core, if the core is programmed to operate in
+> > 2.0 only, then setting the GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK makes
+> > the internal 2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe)
+> > clock. Enabling this feature allows the pipe3 clock to be not-running
+> > when forcibly operating in 2.0 device mode.
+> >
+> > Signed-off-by: Bin Yang <yangbin@rock-chips.com>
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 4 ++++
+> >  drivers/usb/dwc3/core.h | 1 +
+> >  2 files changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 18adddfba3da..032d40794fae 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1167,6 +1167,10 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> >               if (dwc->parkmode_disable_ss_quirk)
+> >                       reg |= DWC3_GUCTL1_PARKMODE_DISABLE_SS;
+> >
+> > +             if (dwc->maximum_speed == USB_SPEED_HIGH ||
+> > +                 dwc->maximum_speed == USB_SPEED_FULL)
+> > +                     reg |= DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
+> > +
+>
+> I doubt this is applicable to all revisions of the DWC_usb3x IP cores?
+> For instance in the programming guide for DWC_usb31 1.90a bit 26 of
+> GUCTL1 is 'Reserved'.  While I do see it in the DWC_usb3 databook,
+> table 4-8 entry "Remove pipe_clk mux for 2.0 mode?" mentions this
+> feature was only added in v2.90a.
 
-As this patch removes access controls, a policy capability needs to be
-enabled in policy to always allow these ioctls.
+I was wondering about that, thanks for confirming for me.
+Is it possible to get a copy of this programming guide or is it closed?
 
-Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
-Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
----
-V2 Change: Control via a policy capability.
-V3 Change: Update switch check.
-V4 Change: Use POLICYDB_CAPABILITY_IOCTL_SKIP_CLOEXEC
+>
+> So this setting at least needs a revision check to make sure we're not
+> causing unexpected behavior.  Something like
+>
+>         DWC3_VER_IS_WITHIN(DWC3, 290A, ANY)
 
- security/selinux/hooks.c                   | 6 ++++++
- security/selinux/include/policycap.h       | 1 +
- security/selinux/include/policycap_names.h | 3 ++-
- security/selinux/include/security.h        | 7 +++++++
- 4 files changed, 16 insertions(+), 1 deletion(-)
+Will do, I appreciate it.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5b6895e4f..d369c2d82 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3745,6 +3745,12 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
- 					    CAP_OPT_NONE, true);
- 		break;
- 
-+	case FIOCLEX:
-+	case FIONCLEX:
-+		if (!selinux_policycap_ioctl_skip_cloexec())
-+			error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
-+		break;
-+
- 	/* default case assumes that the command will go
- 	 * to the file's ioctl() function.
- 	 */
-diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
-index 2ec038efb..a9e572ca4 100644
---- a/security/selinux/include/policycap.h
-+++ b/security/selinux/include/policycap.h
-@@ -11,6 +11,7 @@ enum {
- 	POLICYDB_CAPABILITY_CGROUPSECLABEL,
- 	POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
- 	POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
-+	POLICYDB_CAPABILITY_IOCTL_SKIP_CLOEXEC,
- 	__POLICYDB_CAPABILITY_MAX
- };
- #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
-diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
-index b89289f09..ebd64afe1 100644
---- a/security/selinux/include/policycap_names.h
-+++ b/security/selinux/include/policycap_names.h
-@@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
- 	"always_check_network",
- 	"cgroup_seclabel",
- 	"nnp_nosuid_transition",
--	"genfs_seclabel_symlinks"
-+	"genfs_seclabel_symlinks",
-+	"ioctl_skip_cloexec"
- };
- 
- #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index ac0ece013..c0d966020 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -219,6 +219,13 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
- 	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS]);
- }
- 
-+static inline bool selinux_policycap_ioctl_skip_cloexec(void)
-+{
-+	struct selinux_state *state = &selinux_state;
-+
-+	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_IOCTL_SKIP_CLOEXEC]);
-+}
-+
- struct selinux_policy_convert_data;
- 
- struct selinux_load_state {
--- 
-2.35.1
-
+>
+> Jack
+>
+> >               dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+> >       }
+> >
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index eb9c1efced05..ea3ca04406bb 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -259,6 +259,7 @@
+> >  /* Global User Control 1 Register */
+> >  #define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT    BIT(31)
+> >  #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS   BIT(28)
+> > +#define DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK      BIT(26)
+> >  #define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW                BIT(24)
+> >  #define DWC3_GUCTL1_PARKMODE_DISABLE_SS              BIT(17)
+> >
+> > --
+> > 2.25.1
+> >

@@ -2,176 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B1E4C3E20
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682084C3E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbiBYF6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 00:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S237692AbiBYF7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 00:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiBYF6N (ORCPT
+        with ESMTP id S237381AbiBYF7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 00:58:13 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB3270CED;
-        Thu, 24 Feb 2022 21:57:41 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id m13-20020a17090aab0d00b001bbe267d4d1so7066765pjq.0;
-        Thu, 24 Feb 2022 21:57:41 -0800 (PST)
+        Fri, 25 Feb 2022 00:59:16 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35478144F72
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 21:58:45 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id ay7so6312335oib.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 21:58:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rhANxfNQ/ituVJr7EmvsE6S1nIqGh/dAoPOGlDajFpg=;
-        b=gm10Ic/UODLwex0cfQchB973ESn47S707IXCtrZXmHq3gGwtQnE7FrTUcTccXRXIVG
-         jf8duKO2G2gIxuGeuj0P844SPN/1oN8113lT5Yha78UyCcvVpRQz5IYjbOqkKBkEmMUY
-         WcVkoqC5ygReWE88DxB4KsfYecE4dVA2oL9bbRCn1lFB8wMOJaG1x1thXKMrevWT0ms0
-         hpZruwydEfi0F9WxxMZpPac+GUthpOh8mHoHGrlf1AMan43rswW9kkN6thRUH7G0IBmm
-         e1HzqXYeflvzjqUPo7Wq+25k4lB41p3aY98kI7Mib+RyZqESnDRSDejIrbxTNXC9cJOX
-         Yxpw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CZ4Dx4EQ0hug6uJLkQP0eo9Eq36tGbxAPFdNvG/WOeY=;
+        b=zdzNOBZBBKx4BUzFjJUjY4t2Lmqpv3EPCLRATlog8g+gvfWbTjIl1EmxX96gPd+D0k
+         docq3B+u4Q5/RpHJmRYD+LBuJ07GMycSW3XnT4oL1JHtX6rqav5S2xyIjmQNKMasLED6
+         iWnWpvtdxBKmixrGraZ0SgPxWn+WVUKBrcupX/+Zbr0IlGAFdmxyrs+/5P9vwteS/eZX
+         xQtiDuKOBtuHkwrnqFEy1JRyrNl1/4AMVOz3SqJcHgRaejEPPWjCtcGYDLXXYufq/Svx
+         cmGr2BX1VGXWE86arTjf6qb+MgXAbauX+Ki2oqSdNTHLlUPzZib2vnpHayZ/S0ZBvUI9
+         kNcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rhANxfNQ/ituVJr7EmvsE6S1nIqGh/dAoPOGlDajFpg=;
-        b=XSRTHz9rCYzg/BJKeo/KFloJl/7t1OTR3Od+fowqTTnpxJEI5Te85dwwEz8qB6Y1rE
-         zfLwO8SLoqHdMdRdoFH6T2ROE9diCOLEwyOI0s2kdlfklVpBx1ApMo3LDaGWOsUy9JAg
-         WhTZ0eHs3nEFhRDqZhUL625hDdbGChOgUnEAB4u659X2OShhGherNIRKW0s7RWLgPMG/
-         +q1d4G3UOCvgHKc2C9YxPF2oSUPHFbUhaPGLRSPbxvXg8vbiQK9MrwkDHG5h++erv3UU
-         RL2od2zvKkRqqSEzfREvkTLoRjH75uCWdRiRX+P4ysGf4sV48xFRuRyLDCVOrPZBiIr2
-         O8TA==
-X-Gm-Message-State: AOAM53104w5urwDdtPSf/xYC1oYxiB9h27L2KT3G79DBYLjIDSfOaFAb
-        FwVIxqXbXmKsLnvMRGGgmyM=
-X-Google-Smtp-Source: ABdhPJyHkk8aJciMlteyB0UXe/jCYNAyj8D49iUOk0DxEfBRYt0rsz8ibbhdXiPo9t3nM2KsyeNJAQ==
-X-Received: by 2002:a17:903:310d:b0:14f:ef77:d685 with SMTP id w13-20020a170903310d00b0014fef77d685mr5696647plc.163.1645768660885;
-        Thu, 24 Feb 2022 21:57:40 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.114])
-        by smtp.gmail.com with ESMTPSA id m6-20020a62f206000000b004e152bc0527sm1493954pfh.153.2022.02.24.21.57.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CZ4Dx4EQ0hug6uJLkQP0eo9Eq36tGbxAPFdNvG/WOeY=;
+        b=m9mDB+UPdroX3U6igntfhdesREJ4f45Smm5K8N719Ztm7K2Vzo8GAr3TclYjJBip4v
+         3Dnan8IuZc85SaucjN0rJOQmXR/c/9J84HAe/zIoI6s6pi/WKGYeq5NQNikSzdslauxR
+         UKZIa6iqCgTlD+IAHH+iyesSQGX5PgsUG6LAqARvWTxoc16ovDjkE4XlyUo8tiCWZmzX
+         BwpgCYLtGEJltv0WjqYOviJveLOFK6/Ze6l89WbiIFiHbF5FrtjKNFvneHN1nzXpZ1nY
+         vmSSlQiRG2FDJsw7ceXlv+9umtNYDXJRW0xyodTW1Yh6wQFs8TGapG+Xs7ZwLHtYsk+a
+         Xybw==
+X-Gm-Message-State: AOAM531sCyUPZ9AUUawuZy+e5yW672cZTHPkQjo99bY+iRsa8FUUN2bi
+        PWK9N0DvBI+8+4DMIpmkpkO7iQ==
+X-Google-Smtp-Source: ABdhPJyr9Hg6TQKa+Ekd+SqimDmXPQD784++AIWctUeVA8wjzwDLjOY4QRJPLbSThA1Xx37TBi5anw==
+X-Received: by 2002:a05:6808:1707:b0:2ce:6a75:b883 with SMTP id bc7-20020a056808170700b002ce6a75b883mr779526oib.330.1645768724209;
+        Thu, 24 Feb 2022 21:58:44 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id a69-20020a4a4c48000000b0031bec1608fbsm704932oob.17.2022.02.24.21.58.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 21:57:40 -0800 (PST)
-From:   Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <imagedong@tencent.com>
-To:     dongli.zhang@oracle.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@gmail.com,
-        edumazet@google.com, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        netdev@vger.kernel.org, rostedt@goodmis.org
-Subject: [PATCH net-next v3 4/4] net: tun: track dropped skb via kfree_skb_reason()
-Date:   Fri, 25 Feb 2022 13:57:32 +0800
-Message-Id: <20220225055732.1830237-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <edddb6f9-70d1-4fcf-5630-cbdfe175e8ee@oracle.com>
-References: <edddb6f9-70d1-4fcf-5630-cbdfe175e8ee@oracle.com>
+        Thu, 24 Feb 2022 21:58:43 -0800 (PST)
+Date:   Thu, 24 Feb 2022 23:58:41 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: defconfig: Enable Qualcomm GPI DMA Driver
+Message-ID: <YhhwEaPdyUcHBL+V@builder.lan>
+References: <20220225044033.1376769-1-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225044033.1376769-1-vkoul@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Hi David,
->
->On 2/22/22 6:39 AM, David Ahern wrote:
->> On 2/21/22 9:45 PM, Dongli Zhang wrote:
->>> Hi David,
->>>
->>> On 2/21/22 7:28 PM, David Ahern wrote:
->>>> On 2/20/22 10:34 PM, Dongli Zhang wrote:
->>>>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
->>>>> index aa27268..bf7d8cd 100644
->>>>> --- a/drivers/net/tun.c
->>>>> +++ b/drivers/net/tun.c
->>>>> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->>>>>  	struct netdev_queue *queue;
->>>>>  	struct tun_file *tfile;
->>>>>  	int len = skb->len;
->>>>> +	enum skb_drop_reason drop_reason;
->>>>
->>>> this function is already honoring reverse xmas tree style, so this needs
->>>> to be moved up.
->>>
->>> I will move this up to before "int txq = skb->queue_mapping;".
->>>
->>>>
-[...]
->>>>
->>>
->>>
->>> While there is a diff between BPF_FILTER (here) and SOCKET_FILTER ...
->>>
->>> ... indeed the issue is: there is NO diff between BPF_FILTER (here) and
->>> DEV_FILTER (introduced by the patch).
->>>
->>>
->>> The run_ebpf_filter() is to run the bpf filter attached to the TUN device (not
->>> socket). This is similar to DEV_FILTER, which is to run a device specific filter.
->>>
->>> Initially, I would use DEV_FILTER at both locations. This makes trouble to me as
->>> there would be two places with same reason=DEV_FILTER. I will not be able to
->>> tell where the skb is dropped.
->>>
->>>
->>> I was thinking about to introduce a SKB_DROP_REASON_DEV_BPF. While I have
->>> limited experience in device specific bpf, the TUN is the only device I know
->>> that has a device specific ebpf filter (by commit aff3d70a07ff ("tun: allow to
->>> attach ebpf socket filter")). The SKB_DROP_REASON_DEV_BPF is not generic enough
->>> to be re-used by other drivers.
->>>
->>>
->>> Would you mind sharing your suggestion if I would re-use (1)
->>> SKB_DROP_REASON_DEV_FILTER or (2) introduce a new SKB_DROP_REASON_DEV_BPF, which
->>> is for sk_buff dropped by ebpf attached to device (not socket).
->>>
->>>
->>> To answer your question, the SOCKET_FILTER is for filter attached to socket, the
->>> BPF_FILTER was supposed for ebpf filter attached to device (tun->filter_prog).
->>>
->>>
->> 
->> tun/tap does have some unique filtering options. The other sets focused
->> on the core networking stack is adding a drop reason of
->> SKB_DROP_REASON_BPF_CGROUP_EGRESS for cgroup based egress filters.
->
->Thank you for the explanation!
->
->> 
->> For tun unique filters, how about using a shortened version of the ioctl
->> name used to set the filter.
->> 
->
->Although TUN is widely used in virtualization environment, it is only one of
->many drivers. I prefer to not introduce a reason that can be used only by a
->specific driver.
->
->In order to make it more generic and more re-usable (e.g., perhaps people may
->add ebpf filter to TAP driver as well), how about we create below reasons.
->
->SKB_DROP_REASON_DEV_FILTER,     /* dropped by filter attached to
->				 * or directly implemented by a
->				 * specific driver
->				 */
->SKB_DROP_REASON_BPF_DEV,	/* dropped by bpf directly
->				 * attached to a specific device,
->				 * e.g., via TUNSETFILTEREBPF
->				 */
+On Thu 24 Feb 22:40 CST 2022, Vinod Koul wrote:
 
-Aren't DEV_FILTER and BPF_DEV too generic? eBPF atached to netdev can
-be many kinds, such as XDP, TC, etc.
+> Qualcomm GPI DMA Driver is used for DMA transfers for Serial engines
+> like Geni I2C and SPI.
+> 
+> Enable this dma driver
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+> 
+> Changes in v2:
+>  - As dicussed with Bjorn GPI DMA is used by Serial engines SPI/I2C so we
+>    can make this a module rather than inbuilt
+> 
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 30516dc0b70e..d73913f082d7 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -948,6 +948,7 @@ CONFIG_PL330_DMA=y
+>  CONFIG_TEGRA20_APB_DMA=y
+>  CONFIG_TEGRA210_ADMA=m
+>  CONFIG_QCOM_BAM_DMA=y
+> +CONFIG_QCOM_GPI_DMA=y
 
-I think that use TAP_TXFILTER instaed of DEV_FILTER maybe better?
-and TAP_FILTER->BPF_DEV. Make them similar to the name in
-__tun_chr_ioctl() may be easier for user to understand.
+Would you like me to change this to =m as I apply the patch, just to
+make it match changelog? ;)
 
->
->We already use SKB_DROP_REASON_DEV_FILTER in this patchset. We will use
->SKB_DROP_REASON_BPF_DEV for the ebpf filter attached to TUN.
->
->Thank you very much!
->
->Dongli Zhang
+Regards,
+Bjorn
+
+>  CONFIG_QCOM_HIDMA_MGMT=y
+>  CONFIG_QCOM_HIDMA=y
+>  CONFIG_RCAR_DMAC=y
+> -- 
+> 2.34.1
+> 

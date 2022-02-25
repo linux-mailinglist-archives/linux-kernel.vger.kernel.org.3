@@ -2,139 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F65C4C47E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3234C47E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241872AbiBYOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
+        id S241905AbiBYOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237931AbiBYOwn (ORCPT
+        with ESMTP id S241418AbiBYOxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:52:43 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5967DAAB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:52:10 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v21so4901600wrv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:52:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kWNJFv+kMEnE9Dxh62unLUJ0LcsDnY4dVicW9EOH0i4=;
-        b=iZMhV5/QELmvIeOH2Qgx9n3aAlYGyRzw6kaLem4I7NHZibnbQNWq7ekm7teCLFhyEM
-         QWiyDMzasNIuIgPd7K54xumaEiLiXTQKy3aNY+WH6slTE2JtvOaPIaZ3rgig/mLPTz6K
-         oonmLPYnZkjUtjqzJbhBymwlMj/tYaGikGLwsGWPEAJgmoNxJ8WMiCtE2Wnth+uUx4A4
-         1xM2UN22xJljXMsS1gTkYfmx8U8pXo5PnF+4QaDMCCarCqGs02IZN1kK10pCyoRUEQpe
-         NcluEC/zbQV1cbGqxbMcKTVSzcuUjngBjnkNZBxucYUgKczwtOO5TqFnJWCdLWCRJqFm
-         QzZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kWNJFv+kMEnE9Dxh62unLUJ0LcsDnY4dVicW9EOH0i4=;
-        b=yAkw1EHRve6/zNGxjUgGYcVFu4zkvg/MqD2NdoYFptpywSAdnZo0nKN1gx6ZyEJq/N
-         63SG18uVu60YZwCRaA0Zngai2gDWw+CtyaRo8Gm1sw3tOhf0m7PUqsBQWO9rWq7ZNOnt
-         4OOI97yH266yAR1fCechOMN21rXDPQLcnkXcTFRFIa8DTFmIa86zA5f3ArOtUbmHF4Ef
-         GlJjfu30TkdXfai+OEcn3pS14v8TKA5zdcUgCgs+5zBuZjiw3AS+/4yCKzoAP+oXkBbI
-         hjvA6xnQldnTTJxSijP3MBFg90fkRUnIGZu3BWazkOGzCk4dFUhhyTnXF+feYIp9BbpU
-         TI+A==
-X-Gm-Message-State: AOAM530tb6bonZ8BMezKY137mIvua+rLsyjFwQUR2EPTrbFuGstTbkxv
-        wiSVlS8owGcSLomGEdqVuQ9Umv2tyy/JvQ==
-X-Google-Smtp-Source: ABdhPJzBkXlOmGJJ9f+XilDRbI4gd1rN8x8QBewSSUpIv1rpNiD1PWlxhirrYPz94vUXUi4e5N6MQw==
-X-Received: by 2002:a5d:5889:0:b0:1e3:3ef9:213 with SMTP id n9-20020a5d5889000000b001e33ef90213mr6392019wrf.324.1645800728589;
-        Fri, 25 Feb 2022 06:52:08 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm2527700wrh.87.2022.02.25.06.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 06:52:08 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Mobashshera Rasool <mobash.rasool.linux@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH net-next v2] net/ip6mr: Fix build with !CONFIG_IPV6_PIMSM_V2
-Date:   Fri, 25 Feb 2022 14:52:06 +0000
-Message-Id: <20220225145206.561409-1-dima@arista.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Feb 2022 09:53:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0828B16BCF3;
+        Fri, 25 Feb 2022 06:53:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=xaxOXBtujuW9uyicNAfeVnfUux3BVVJlbMbJqV3HFAc=; b=VuHHYHAfi9B30spmmkXXDYbDng
+        HOphZQvUkoXrx/0CQz8Utb4GII53ds/vaahlt7yV5hdMkTxusmuwgsCaY+Ob2icYLXwUeD9cGoqSp
+        eElxk2Emy+9zI1pNCWJjtVXfIM6ti9yUSoiFprfe1lhBwNVjSSgHF7FgPwUfAgO+WUXukyoTV2dUc
+        LcvY5PHG/dKlAGsruFyKDAzrEyDfvO4CKAOLIIfVUCPGzz6oAXe389vAOqjYeavzNdhmpq82gRDP8
+        8THoNyPR+cyMmb5YwchU/pHl/7n+3H6hdbluEKISw6SBb9Vxipaf8+EWt514Y/q8NCfsfBvqIls2u
+        pn3Oqk2A==;
+Received: from [2001:8b0:10b:1:85c4:81a:fb42:714d] (helo=i7.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNbxy-005rrz-IU; Fri, 25 Feb 2022 14:53:06 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNbxx-0009Pb-QK; Fri, 25 Feb 2022 14:53:05 +0000
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Anton Romanov <romanton@google.com>
+Subject: [PATCH 0/3] KVM: Reduce TSC scaling race condition mess
+Date:   Fri, 25 Feb 2022 14:53:01 +0000
+Message-Id: <20220225145304.36166-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following build-error on my config:
-net/ipv6/ip6mr.c: In function ‘ip6_mroute_setsockopt’:
-net/ipv6/ip6mr.c:1656:14: error: unused variable ‘do_wrmifwhole’ [-Werror=unused-variable]
- 1656 |         bool do_wrmifwhole;
-      |              ^
+As Sean says, we punt on a proper fix... but at least now I can create a
+bunch of vCPUs with a scaled TSC and their TSC synchronization isn't 
+*utterly* hosed, so the test case I posted last night is actually passing.
 
-Cc: Mobashshera Rasool <mobash.rasool.linux@gmail.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org
-Fixes: 4b340a5a726d
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
-v2: move the (v == MRT6MSG_WRMIFWHOLE) check under if (v != mrt->mroute_do_pim)
+It would still be nice for the original test case to work, where each
+vCPU thread creates its own vCPU, then sets the scale and the current
+TSC value. But this resolves most sane use cases.
 
- net/ipv6/ip6mr.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+David Woodhouse (2):
+      KVM: x86: Accept KVM_[GS]ET_TSC_KHZ as a VM ioctl.
+      KVM: x86: Test case for TSC scaling and offset sync
 
-diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
-index a9775c830194..9292f067c829 100644
---- a/net/ipv6/ip6mr.c
-+++ b/net/ipv6/ip6mr.c
-@@ -1653,7 +1653,6 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
- 	mifi_t mifi;
- 	struct net *net = sock_net(sk);
- 	struct mr_table *mrt;
--	bool do_wrmifwhole;
- 
- 	if (sk->sk_type != SOCK_RAW ||
- 	    inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
-@@ -1761,6 +1760,7 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
- #ifdef CONFIG_IPV6_PIMSM_V2
- 	case MRT6_PIM:
- 	{
-+		bool do_pim;
- 		int v;
- 
- 		if (optlen != sizeof(v))
-@@ -1768,14 +1768,14 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
- 		if (copy_from_sockptr(&v, optval, sizeof(v)))
- 			return -EFAULT;
- 
--		do_wrmifwhole = (v == MRT6MSG_WRMIFWHOLE);
--		v = !!v;
-+		do_pim = !!v;
-+
- 		rtnl_lock();
- 		ret = 0;
--		if (v != mrt->mroute_do_pim) {
--			mrt->mroute_do_pim = v;
--			mrt->mroute_do_assert = v;
--			mrt->mroute_do_wrvifwhole = do_wrmifwhole;
-+		if (do_pim != mrt->mroute_do_pim) {
-+			mrt->mroute_do_pim = do_pim;
-+			mrt->mroute_do_assert = do_pim;
-+			mrt->mroute_do_wrvifwhole = (v == MRT6MSG_WRMIFWHOLE);
- 		}
- 		rtnl_unlock();
- 		return ret;
--- 
-2.35.1
+Sean Christopherson (1):
+      KVM: x86: Don't snapshot "max" TSC if host TSC is constant
+
+ Documentation/virt/kvm/api.rst                        |  11 +++--
+ arch/x86/include/asm/kvm_host.h                       |   2 +
+ arch/x86/kvm/x86.c                                    |  54 ++++++++++++++++------
+ include/uapi/linux/kvm.h                              |   4 +-
+ tools/testing/selftests/kvm/Makefile                  |   1 +
+ tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c | 119 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 171 insertions(+), 20 deletions(-)
+
 

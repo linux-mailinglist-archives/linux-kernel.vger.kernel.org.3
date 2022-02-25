@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772804C4987
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED65F4C4996
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242317AbiBYPti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S242348AbiBYPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237967AbiBYPtg (ORCPT
+        with ESMTP id S235600AbiBYPui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:49:36 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F396BDD7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L8L89r0l8PrFsV/eyc4s6aWGL88ctKd06KB+sGThLfQ=; b=klb52YbyG7gTLcYbbwq6x/kM+C
-        l8AGsuEwRgk/tjTuDy8rSKrfURHU1o2DxjlcsU3CkoigdR8hPOMyfF7ep5NAjI6FeocqoVDcBH3Lw
-        axrQrQHwyREzqpTK8WxhQeqmE6Q973pUnN0vLrbr3wEJmVvMQhYdQvNUzM3j69qZSuP8XzwlmsxpK
-        T2dDVFWpeUDg0RUCtG17qeNNUuswgTdmUn5BX1OqABnQQQjamRosJ5xpECJA2smxAhYCPBVOrIWHd
-        QAY3RzQyup9dzgycyDgBbI58SB3CqH7Hr/X1pe2ZAHfBKXqAR7ioGjMwbVxfrhrV3jPph0siCIs2c
-        O01mOvtA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNcq2-005uK8-Eo; Fri, 25 Feb 2022 15:48:58 +0000
-Date:   Fri, 25 Feb 2022 15:48:58 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
-Message-ID: <Yhj6ap3uEl2xFE8G@casper.infradead.org>
-References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
- <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
- <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
- <20220222013121-mutt-send-email-mst@kernel.org>
- <8e60951973cab3a3d27a3c7f18d866cdb804e663.camel@infradead.org>
- <YhVvOsI0+xVAKHdr@casper.infradead.org>
+        Fri, 25 Feb 2022 10:50:38 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1296BDD7;
+        Fri, 25 Feb 2022 07:50:05 -0800 (PST)
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mtf7H-1oDw3g12Nz-00v42n; Fri, 25 Feb 2022 16:50:03 +0100
+Received: by mail-wr1-f48.google.com with SMTP id s1so5125752wrg.10;
+        Fri, 25 Feb 2022 07:50:03 -0800 (PST)
+X-Gm-Message-State: AOAM532T7Z2pc1YU+YopXLubdUeMfitJTxUPHucNwZM3+g/43QTOFdty
+        UFasBnUGe99F+tBA9K6Ow4GdDLxGkOiuVfoPwN8=
+X-Google-Smtp-Source: ABdhPJysyJQAyOWUBXwECRmjF7nJ/3KDCWU/jhvnP3qXA/ljoo2U2xK+NNU2HPSONjjfnno6VeVoMKIwA9lIuOaBaho=
+X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
+ p10-20020a5d59aa000000b001ed9f45c2ffmr6588564wrr.192.1645804202754; Fri, 25
+ Feb 2022 07:50:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhVvOsI0+xVAKHdr@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
+ <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com> <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com>
+In-Reply-To: <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 25 Feb 2022 16:49:46 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+Message-ID: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:VJmerkgNSVRaQs6ZdeKmfJ/UIRQqAkKTaskIAwrKr/BRXblvHF1
+ Q9ojRcsi00yiaKba6v+JD/RpfxY5jDkEe5Yy9SG4QgVFPJQG1/7Af//f6EJiofuGjY67KN/
+ owJqmXBrS36FZJJ5a7C/ePLaN+mWXGB5Mpl5GeK2mG7/XoKE5dA/TRrGsB+rMbq/DsG4oPE
+ kZuNrhloqf4bdqMgqSekw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AtbfbC+a71g=:JoPSHBClamW4vFn8Dbx4qD
+ JTdYG+rQH/rqTKOb3Vi9+abJqdQBhrB3+KpP5R1gK3CmCAVcAEswn4Iqjx4jC2ILsMEXdAAdK
+ vMP3gOpkKGKuxlp+ckY4zeaCtPU1YDanEPyBL8+5tmFb+rFxQG/iEfzyvQF4eCPvjTDL8BOBA
+ uUBt4ybyLndHcqDpxlsRaiaxR6URTeYqRy4G48IbA613ToXaEiDXnbZnobDfJx3sjvn0jtFAq
+ BGsJl3o06/QHJuu/uK9EwD5Fh5WSFzcqdVMBOR6bNkvy8zTS2cW9Dw5CYaV6H5yqjFT3RmLR1
+ 3xuTU3nx+0OykEigJNz0DVHQ7E5lxRkgwLbIMR339Fvq4DTiqBvZb7YAJbxhRoEfPsgfD27+K
+ M2AFSUTkNrgo6oNlyOGjf9zj2uLMMGz94eudWpQuyblzjUQLVkWRtI44cLpBOFmnN9keZ8FfC
+ 6XjaKJPloLtA2kvXREwWuNmc4XFvnyM0svwy1Gy9ZIWhdt/lzKgXWpMCArOpP/amBbHBcNjyz
+ N2DkRA49bJyH6XNWtdZCDrjeuEU8HfZd2tKrykqHYKGyYgTv5T4Ysm24bFuxSzm4IyTQ2jtJh
+ IaepGFNB2LBaS+aiS/TmU4cHxyv0D8OXpv5yoKQm6gPDFqEYBoPlYLu5K0gOpa9Wmzwik05hz
+ SoSnSsOZ+MokbJjo9pWCGDf1ggwA9eGdElxcDzj23/lV4k2xH//BFQLSX2yoD2vVILoO4rv0y
+ 3sJW2SijUswXNVAuyXSmOnSFKHmXUHJj2cPHx6kfO6FTrZBQjEjrTkKewCgG4GdhsHt/corwx
+ Dm3NaC8qUymw5Rf6HFOZN6NtpPV2gJ1vYH7IgDAOHSPkxBvKEg=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:18:18PM +0000, Matthew Wilcox wrote:
-> On Tue, Feb 22, 2022 at 07:58:33AM +0000, David Woodhouse wrote:
-> > On Tue, 2022-02-22 at 01:31 -0500, Michael S. Tsirkin wrote:
-> > > On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
-> > > > 
-> > > > [dwoodhou@i7 virtio]$ sudo ~/virtio_test
-> > > > Detected virtual address range 0x1000-0x7ffffffff000
-> > > > spurious wakeups: 0x0 started=0x100000 completed=0x100000
-> > > > 
-> > > > Although in some circumstances I also see a different build failure:
-> > > > 
-> > > > cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h   -c -o vringh_test.o vringh_test.c
-> 
-> Trying to test this myself ...
-> 
-> $ cd tools/virtio/
-> $ make
-> ...
-> cc -lpthread  virtio_test.o virtio_ring.o   -o virtio_test
-> /usr/bin/ld: virtio_ring.o: in function `spin_lock':
-> /home/willy/kernel/folio/tools/virtio/./linux/spinlock.h:16: undefined reference to `pthread_spin_lock'
-> 
-> So this is not the only problem here?
-> 
-> > > > In file included from ./linux/uio.h:3,
-> > > >                  from ./linux/../../../include/linux/vringh.h:15,
-> > > >                  from ./linux/vringh.h:1,
-> > > >                  from vringh_test.c:9:
-> > > > ./linux/../../../include/linux/uio.h:10:10: fatal error: linux/mm_types.h: No such file or directory
-> > > >    10 | #include <linux/mm_types.h>
-> > > >       |          ^~~~~~~~~~~~~~~~~~
-> > > > compilation terminated.
-> > > > make: *** [<builtin>: vringh_test.o] Error 1
-> > > 
-> > > Which tree has this build failure? In mine linux/uio.h does not
-> > > include linux/mm_types.h.
-> > 
-> > Strictly it's
-> > https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/xen-evtchn-kernel
-> > but I'm sure my part isn't relevant; it's just v5.17-rc5.
-> > 
-> >  $ git blame include/linux/uio.h | grep mm_types.h
-> > d9c19d32d86fa (Matthew Wilcox (Oracle) 2021-10-18 10:39:06 -0400  10) #include <linux/mm_types.h>
-> >  $ git describe --tags d9c19d32d86fa
-> > v5.16-rc4-37-gd9c19d32d86f
-> 
-> grr.  Originally, I had this doing a typebusting cast, but hch objected,
-> so I had to include mm_types.h.  This should fix it ...
+On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> Hi Arnd & Palmer,
+>
+> Here is the new modified compat_vdso/Makefile, please have a look,
+> first. Then I would update it to v7:
+> ===========================================
+> # SPDX-License-Identifier: GPL-2.0-only
+> #
+> # Makefile for compat_vdso
+> #
+>
+> # Symbols present in the compat_vdso
+> compat_vdso-syms  = rt_sigreturn
+> compat_vdso-syms += getcpu
+> compat_vdso-syms += flush_icache
+>
+> ifdef CROSS_COMPILE_COMPAT
+>         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
+>         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
+> else
+>         COMPAT_CC := $(CC)
+>         COMPAT_LD := $(LD)
+> endif
+>
+> COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
+> COMPAT_LD_FLAGS := -melf32lriscv
 
-ping?  Just noticed this one crop up in a "list of problems".  Should
-I submit it myself?
+Have you come across a case in which a separate cross toolchain
+is required? If not, I would leave this out and just set the flags for the
+normal toolchain.
 
-> $ git diff
-> diff --git a/tools/virtio/linux/mm_types.h b/tools/virtio/linux/mm_types.h
-> new file mode 100644
-> index 000000000000..3b0fc9bc5b8f
-> --- /dev/null
-> +++ b/tools/virtio/linux/mm_types.h
-> @@ -0,0 +1,3 @@
-> +struct folio {
-> +       struct page page;
-> +};
-> 
-> At least, it makes it compile for me.
+I also think it would be a nicer split to build the two vdso variants
+as vdso64/vdso32 rather than vdso/compat_vdso. That way,
+the build procedure can be kept as close as possible to the
+native 32-bit build.
+
+        Arnd

@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FB84C4977
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A174C4978
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239426AbiBYPqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S242145AbiBYPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbiBYPqc (ORCPT
+        with ESMTP id S233650AbiBYPrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:46:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DEE1FCC3;
-        Fri, 25 Feb 2022 07:46:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CC97B83253;
-        Fri, 25 Feb 2022 15:45:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815F5C340E7;
-        Fri, 25 Feb 2022 15:45:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DbUu57ez"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645803954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aXuTEAnaE0aPUjDR2q7+fL3WYM8X+IEQPCKcmMJb3HY=;
-        b=DbUu57ezzxPejz+zfBx1TQmqkahBb9aDLTCQTad2Lww+7tJ0meOvgVrM21yxrInKocw3wZ
-        +5YznIsBNOd+8/9KWpwTpoOt+Jd8q5buE2GzqjEicIF52FB0TmtxdmuWqJVmEIwrjB/acl
-        zAALZjfU+gvOO4jXeIuJ1BAFSjLODjA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c5031fcd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 25 Feb 2022 15:45:54 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 16:45:50 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Alexander Graf <graf@amazon.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, adrian@parity.io,
-        KVM list <kvm@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ben@skyportsystems.com,
-        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Laszlo Ersek <lersek@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        "Weiss, Radu" <raduweis@amazon.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v4] virt: vmgenid: introduce driver for reinitializing
- RNG on VM fork
-Message-ID: <Yhj5rg2Cgv+qRcjc@zx2c4.com>
-References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
- <20220225124848.909093-1-Jason@zx2c4.com>
- <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
- <YhjjuMOeV7+T7thS@zx2c4.com>
- <88ebdc32-2e94-ef28-37ed-1c927c12af43@amazon.com>
- <YhjoyIUv2+18BwiR@zx2c4.com>
- <9ac68552-c1fc-22c8-13e6-4f344f85a4fb@amazon.com>
- <CAMj1kXEue6cDCSG0N7WGTVF=JYZx3jwE7EK4tCdhO-HzMtWwVw@mail.gmail.com>
- <Yhj288aE5rW15Qpj@zx2c4.com>
- <b6c5c4d4-88a5-1ac5-a4d4-2f6895065834@amazon.com>
+        Fri, 25 Feb 2022 10:47:11 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3501FCD3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645803999; x=1677339999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w+VNIJrBliATBPQIEq9t/zjjHb5pQKkyjHD4i7W8pi8=;
+  b=MpQht58DTwcD44OvNEL3gNYzXAXAYLJo5xgP08lghhF5GFWJvPSM7ct3
+   SDX2YIAl/aAYMDoG3kPVu/yTUfIEPE4jDgePKDrJCDMDC52/jnfHfhNWM
+   dFHUnfEup7iMLSkAHErwGLoidjx3A1vROMB8bA8bGg1MVPZePt9DYn4M3
+   5RbNfKm8VmU6bSWVgMiplEra/alDWhtMTPsNxz+ebZKUyzjHYIfmpH0/+
+   U1/OdeAwg6ucIilqiZBMgJjn9yK4k/ZozOLIsCSL58Gx4YAMyb8YPoM3p
+   j+32qkoSYyXCDeS4HqED4mpAApxc3zmhO6fu9NpoRhnYiGj2cUb5NID4L
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="277154591"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="277154591"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 07:46:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="638273041"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Feb 2022 07:46:33 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 676B694; Fri, 25 Feb 2022 17:46:50 +0200 (EET)
+Date:   Fri, 25 Feb 2022 18:46:50 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 03/30] x86/tdx: Provide common base for SEAMCALL and
+ TDCALL C wrappers
+Message-ID: <20220225154650.2yfx3gtyrem3to7v@black.fi.intel.com>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-4-kirill.shutemov@linux.intel.com>
+ <faeb3c16-55a9-912d-1222-9dab364f56c7@intel.com>
+ <20220224231011.c6mbmsj2ahtw4wmt@black.fi.intel.com>
+ <bd62c848-0fb8-7876-8a92-3d316318a568@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b6c5c4d4-88a5-1ac5-a4d4-2f6895065834@amazon.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bd62c848-0fb8-7876-8a92-3d316318a568@intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On Thu, Feb 24, 2022 at 04:41:12PM -0800, Dave Hansen wrote:
+> On 2/24/22 15:10, Kirill A. Shutemov wrote:
+> > +/*
+> > + * SW-defined error codes.
+> > + *
+> > + * Bits 47:40 == 0xFF indicate Reserved status code class that never used by
+> > + * TDX module.
+> > + */
+> > +#define TDX_SEAMCALL_VMFAILINVALID     0x8000FF00FFFF0000ULL
+> 
+> That's OK-ish.  But, it would be nice to make this a bit less magic.
+> While I'm sure plenty of us can do the bits 47:40 => hex math in our
+> heads, it might be nice to do it with a macro.  Maybe:
+> 
+> /*
+>  * Bits 47:40 being set represent a reserved status class.
+>  * The TDX module will never set these so they are safe to
+>  * use for software error codes.
+>  */
+> #define TDX_SW_ERR(code) ((code) | GENMASK_ULL(40, 47))
 
-On Fri, Feb 25, 2022 at 04:37:43PM +0100, Alexander Graf wrote:
-> I believe "VMGENID" was for the firecracker prototype that Adrian built 
-> back then, yeah. Matching on _HID for this is a rat hole unfortunately, 
-> so let's see what the ACPI patch gets us :).
+Bit 63 also has to be set as it represents error (0 is success with
+possible warning).
 
-Thanks. I'll add a comment to the code about Firecracker. And indeed
-hopefully that'll all go away anyway.
+Bit 62 indicates if the error is recoverable. (0 is recoverable)
 
-Jason
+Bits 61:48 are reserved and must be 0. For this reason -1UL is not right.
+
+Bits 47:40 are class.
+
+Bits below that are up to grub.
+
+See Table 17.6 of TDX module 1.0 spec.
+
+So we can use 
+
+#define TDX_SW_CLASS(code)		((code) | GENMASK_ULL(40, 47))
+#define TDX_ERROR(code)			((code) | (1UL << 63))
+#define TDX_SEAMCALL_VMFAILINVALID	TDX_ERROR(TDX_SW_CLASS(0xFFFF0000ULL))
+
+But it looks silly to me. It brings more confusion than solves.
+
+Hm?
+
+> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0xFFFF0000ULL)
+> 
+> By the way, is the entire "0xFFFF0000ULL" thing up for grabs?  Or do the
+> the "0xFFFF...." bits _need_ to be set to represent an error somehow?
+> 
+> Would this work if it were:
+> 
+> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0ULL)
+> 
+> or
+> 
+> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(1ULL)
+> 
+> or
+> 
+> #define TDX_SEAMCALL_VMFAILINVALID	TDX_SW_ERR(0x12345678ULL)
+> 
+> ?
+
+Yes, it should work with any code.
+
+-- 
+ Kirill A. Shutemov

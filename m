@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B784C3AC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BC44C3ACB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiBYBL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 20:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S236308AbiBYBVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 20:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbiBYBLz (ORCPT
+        with ESMTP id S231347AbiBYBVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 20:11:55 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4254B1ED4EB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 17:11:25 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q11so3404590pln.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 17:11:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=88hkv3OSXeqX0vz3SW+Res2AknL0SrraTbrIeEDLRx0=;
-        b=I6iiifEovV+wuCY9SDP0FO7wFWxQqlJyQMG/0i/IFDzK/X0CZwUWvbj69bLqNiTd9W
-         fXAf7+UW6J9D56m+YUOKOsGYHv/aot1JZIsqzen1sQt9xu0fpim3CqGUDp1ZbTaLNNUA
-         QaGsBXVEPKZv1KMgXh0Cg13b3J/PPG+KtreCU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=88hkv3OSXeqX0vz3SW+Res2AknL0SrraTbrIeEDLRx0=;
-        b=ubfaPjGfK1jZKXbPfl9dGNq5MR6zJ5C0uCqOxaVXjoh5XrVHxrKiwZQiTUhKFKO7F3
-         TGM2PN3RR6DwjR/sE5wVpO3cgGRWbhIRu5G7vZR/jRF4RWK2aEp4xcQnWdsPodm/iqF3
-         AGGL/1m7HFt4NO8MvGnrIuuDsHuBnEZkMXHuUrR27c0SW2VLE1bQUfCkHVx8qWQYF4zw
-         JGSu1ZnOdLfwhTZGtNi+4Et36Fj0/9CJu1Ft4vjgxJ9AS3fsY7ErtpleKwF4dN4SpFcB
-         j63q5+/3Hq0H1ezqsQ2vk5olvVBQenESSsULoxYXNeVmm1hPL5e19c3q82GWxqJ0dQRn
-         kLZQ==
-X-Gm-Message-State: AOAM531Y99oNfbVUqftc/D31DydVwQFODdSczb/MoseaTiFgXhoSEwAd
-        vk70uwdn5XyiQsm+KLLfjRyzHA==
-X-Google-Smtp-Source: ABdhPJygTkHlkE/7Oii+EvOYy0K6/Ls92pEbgaUCEUdLGx3H0HrW37Wz0BmFrEukMgNhNTFdY18MjA==
-X-Received: by 2002:a17:90a:4682:b0:1bc:236:7e46 with SMTP id z2-20020a17090a468200b001bc02367e46mr744486pjf.212.1645751484785;
-        Thu, 24 Feb 2022 17:11:24 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y17-20020a63ce11000000b0036c96df445fsm652492pgf.53.2022.02.24.17.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 17:11:24 -0800 (PST)
-Date:   Thu, 24 Feb 2022 17:11:23 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 20/39] x86/bugs: Disable Retpoline when IBT
-Message-ID: <202202241710.B35CBB06@keescook>
-References: <20220224145138.952963315@infradead.org>
- <20220224151323.189353523@infradead.org>
+        Thu, 24 Feb 2022 20:21:10 -0500
+X-Greylist: delayed 476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 17:20:38 PST
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9AB720D538;
+        Thu, 24 Feb 2022 17:20:38 -0800 (PST)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxKMoGLRhih7AGAA--.12265S3;
+        Fri, 25 Feb 2022 09:12:39 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Refactor early_parse_mem() to fix mem= parameter
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <1645707132-10121-1-git-send-email-yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <20d9c6d4-7df4-8a26-4b0f-a5a192cae78d@loongson.cn>
+Date:   Fri, 25 Feb 2022 09:12:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224151323.189353523@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1645707132-10121-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxKMoGLRhih7AGAA--.12265S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF1UKw47Jry7Kr4Utw18Xwb_yoW5Xw4kpw
+        4Iv34SkrsrJF97ZayxtFn8urWrZw1vkFy0qa4Ikwn5A3Wqkr18Gr1IgF45ZryIgrW8A3W0
+        qF1qyasY939Fy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfU5kucDUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +61,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:58PM +0100, Peter Zijlstra wrote:
-> Retpoline and IBT are mutually exclusive. IBT relies on indirect
-> branches (JMP/CALL *%reg) while retpoline avoids them by design.
-> 
-> Demote to LFENCE on IBT enabled hardware.
+Hi, Tiezhu
 
-What's the expected perf impact of this?
+On 02/24/2022 08:52 PM, Tiezhu Yang wrote:
+> According to Documentation/admin-guide/kernel-parameters.txt,
+> the kernel command-line parameter mem= means "Force usage of
+> a specific amount of memory", but when add "mem=3G" to the
+> command-line, kernel boot hangs in sparse_init().
+>
+> This commit is similar with the implementation of the other
+> archs such as arm64, powerpc and riscv, refactor the function
+> early_parse_mem() and then use memblock_enforce_memory_limit()
+> to limit the memory size.
+>
+> With this patch, when add "mem=3G" to the command-line, the
+> kernel boots successfully, we can see the following messages:
+>
+>    [    0.000000] Memory limited to 3072MB
+>    ...
+>    [    0.000000] Memory: 2991952K/3145728K available (...)
+>
+> After login, the output of free command is consistent with the
+> above log.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   arch/mips/kernel/setup.c | 25 ++++++++-----------------
+>   1 file changed, 8 insertions(+), 17 deletions(-)
+>
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index f979adf..2917412 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -339,27 +339,15 @@ static void __init bootmem_init(void)
+>   #endif	/* CONFIG_SGI_IP27 */
+>   
+>   static int usermem __initdata;
+> +static phys_addr_t memory_limit;
+>   
+>   static int __init early_parse_mem(char *p)
+>   {
+> -	phys_addr_t start, size;
+> -
+> -	/*
+> -	 * If a user specifies memory size, we
+> -	 * blow away any automatically generated
+> -	 * size.
+> -	 */
+> -	if (usermem == 0) {
+> -		usermem = 1;
+> -		memblock_remove(memblock_start_of_DRAM(),
+> -			memblock_end_of_DRAM() - memblock_start_of_DRAM());
+> -	}
+> -	start = 0;
+> -	size = memparse(p, &p);
+> -	if (*p == '@')
+> -		start = memparse(p + 1, &p);
+> +	if (!p)
+> +		return 1;
+>   
+> -	memblock_add(start, size);
+> +	memory_limit = memparse(p, &p) & PAGE_MASK;
+> +	pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
+>   
+>   	return 0;
 
--Kees
+After applying this patch, my guess is that the kdump operation will fail.
 
--- 
-Kees Cook
+In the MIPS architecture, when the kdump operation is performed, a
+"mem=YM@XM" parameter will be added to the capture kernel (added by
+kexec-tools), indicating that the available memory range of the
+capture kernel is [X, X+Y).
+
+After the "mem" parameter is changed to the above, there will be only
+a similar parsing function like "mem=3G", and the type like
+"mem=128M@64M" cannot be correctly parsed.
+
+Thanks,
+Youling.
+>   }
+> @@ -633,6 +621,9 @@ static void __init arch_mem_init(char **cmdline_p)
+>   
+>   	parse_early_param();
+>   
+> +	/* Limit the memory size via mem= command-line parameter */
+> +	memblock_enforce_memory_limit(memory_limit);
+> +
+>   	if (usermem)
+>   		pr_info("User-defined physical RAM map overwrite\n");
+>   
+

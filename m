@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC24B4C48D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088934C48D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242064AbiBYP2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S242081AbiBYP3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiBYP2k (ORCPT
+        with ESMTP id S231340AbiBYP3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:28:40 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E512036EC;
-        Fri, 25 Feb 2022 07:28:08 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id v28so7854073ljv.9;
-        Fri, 25 Feb 2022 07:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9EAGZgY5SPdT1cVkvJoh2QfrN+7asBE1KRK8S40gaDQ=;
-        b=fRej6ns/ZWUEzUvxNGbQZNAT0BSw4zJppp4g8vJ12SjSS7/PKWYqWh+qGLnO51O8iL
-         xYfz41lSy7g9p5dFSX/Vhn9G1iI4DI42ZpPD98CNT4CIVD+KHqAMGHjPeFAxtW7r4OWJ
-         Bt24gJWuMtOlAENd3MxdHU1fclGI3Ej7waj6TqxJBGC+e5Plc8MWVww3O23yMZN5MEai
-         +v5oPQeRV/Ecda+PFN2Fi3sqCicKjkSIcXNayKhRTQKBSKzcFg6VPMXnJJl+dWQ+yZ2I
-         Us39X3Lp2huMeqYZOnP4q4WORoar2kNDCdTWI8b0htO7xg8iaNf+S0vFGZcd7nT8mqH5
-         YvuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9EAGZgY5SPdT1cVkvJoh2QfrN+7asBE1KRK8S40gaDQ=;
-        b=e/pMh0ERo9zeLe7Plgh6uI5/hPKEzI5VttLGDzkP2q4RgNNKM8RQvteO3sAY/9mefi
-         1eWNXUzgXbXnPi6kkQYDlRxiIlpl+oTAJowSbcgId2H5bPVUbT3GpX8/mT5KtHjN1sJp
-         mSQsDHrEG+HHkCeL1oG0t47zLX+Xs05Z59o6JNlYPUqw9A6IUuTw3vDTJ1my43xip37A
-         P+CCAov6mLEoXM2spSrd/a/JQhhSXFQVW7nNapjSGtyDtLhU2hr5HmmDFYiSXxBwHtmu
-         FlGeG9Zyc8T6jHRgZ8L5Z+MyQkvTn+mTU8AO72H4dvpAQmkkE2X6Uz7Xg/PpTIag5y06
-         hsyA==
-X-Gm-Message-State: AOAM532AZbdtveSY4Q7UY8n9VHmouzS1A8s4vyL8+KJaBns3Yltl3Qfr
-        BCoC80v2vrHSH6g2+t2kgVhCq+S0o9vyKDvaaqQ=
-X-Google-Smtp-Source: ABdhPJwxd5AOIZzj1xHVv9ZDVXsnGHmJoUs7e6+bgciCEyzgPU77fjeFtutgvognPrXU36YRHWEpujkFHRb8BSzbEgE=
-X-Received: by 2002:a2e:b014:0:b0:23c:9593:f7 with SMTP id y20-20020a2eb014000000b0023c959300f7mr5517803ljk.209.1645802886225;
- Fri, 25 Feb 2022 07:28:06 -0800 (PST)
+        Fri, 25 Feb 2022 10:29:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E4D51E44;
+        Fri, 25 Feb 2022 07:28:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33D27B83250;
+        Fri, 25 Feb 2022 15:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BC2C340F0;
+        Fri, 25 Feb 2022 15:28:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WRm6cOGF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645802913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AGc3HtA6A4VpWTuoF56TukEqyXDHbzPy+Zb56qBmVE4=;
+        b=WRm6cOGFOImn/aW/r2uMGAAnP99kIhA6KQkGrSddTUVxAkWVY9oezzK7F6YN6oeSPEX00v
+        XVn/gXm/ZD0Khupal1wI4/zPDplhrs4umww7//LN2a9PB1DjWjGzF4rwRukBQLnbj5EMHE
+        FRzEd8Ep4ZckCmimiThiqkYgmQENeqQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8a164ef4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 15:28:32 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 16:28:29 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Alexander Graf <graf@amazon.com>
+Cc:     kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        adrian@parity.io, ardb@kernel.org, ben@skyportsystems.com,
+        berrange@redhat.com, colmmacc@amazon.com, decui@microsoft.com,
+        dwmw@amazon.co.uk, ebiggers@kernel.org, ehabkost@redhat.com,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        imammedo@redhat.com, jannh@google.com, kys@microsoft.com,
+        lersek@redhat.com, linux@dominikbrodowski.net, mst@redhat.com,
+        qemu-devel@nongnu.org, raduweis@amazon.com, sthemmin@microsoft.com,
+        tytso@mit.edu, wei.liu@kernel.org
+Subject: Re: [PATCH v4] virt: vmgenid: introduce driver for reinitializing
+ RNG on VM fork
+Message-ID: <Yhj1nYHXmimPsqFd@zx2c4.com>
+References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
+ <20220225124848.909093-1-Jason@zx2c4.com>
+ <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
+ <YhjttNadaaJzVa5X@zx2c4.com>
+ <b3b9dd9b-c42c-f057-f546-3e390b50479f@amazon.com>
 MIME-Version: 1.0
-References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
- <Yhf+FemcQQToB5x+@redhat.com> <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
- <YhjYSMIE2NBZ/dGr@redhat.com> <YhjeX0HvXbED65IM@casper.infradead.org>
-In-Reply-To: <YhjeX0HvXbED65IM@casper.infradead.org>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 25 Feb 2022 09:27:55 -0600
-Message-ID: <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
- cluster fs
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Vivek Goyal <vgoyal@redhat.com>, lsf-pc@lists.linux-foundation.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ioannis Angelakopoulos <jaggel@bu.edu>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b3b9dd9b-c42c-f057-f546-3e390b50479f@amazon.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 7:49 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
-> > What about local events. I am assuming you want to supress local events
-> > and only deliver remote events. Because having both local and remote
-> > events delivered at the same time will be just confusing at best.
->
-> This paragraph confuses me.  If I'm writing, for example, a file manager
-> and I want it to update its display automatically when another task alters
-> the contents of a directory, I don't care whether the modification was
-> done locally or remotely.
->
-> If I understand the SMB protocol correctly, it allows the client to take
-> out a lease on a directory and not send its modifications back to the
-> server until the client chooses to (or the server breaks the lease).
-> So you wouldn't get any remote notifications because the client hasn't
-> told the server.
+Hi Alex,
 
-Directory leases would be broken by file create so the more important
-question is what happens when client 1 has a change notification on writes
-to files in a directory then client 2 opens a file in the same directory and is
-granted a file lease and starts writing to the file (which means the
-writes could get cached).   This is probably a minor point because when
-writes get flushed from client 2, client 1 (and any others with notifications
-requested) will get notified of the event (changes to files in a directory
-that they are watching).
+On Fri, Feb 25, 2022 at 04:15:59PM +0100, Alexander Graf wrote:
+> I'm not talking about a notification interface - we've gone through 
+> great length on that one in the previous submission. What I'm more 
+> interested in is *any* way for user space to read the current VM Gen ID. 
+> The same way I'm interested to see other device attributes of my system 
+> through sysfs.
 
-Local applications watching a file on a network or cluster mount in Linux
-(just as is the case with Windows, Macs etc.) should be able to be notified of
-local (cached) writes to a remote file or remote writes to the file from another
-client.  I don't think the change is large, and there was an earlier version of
-a patch circulated for this
+Again, no. Same basic objection: we can do this later and design it
+coherently with the rest. For example, maybe it's better to expose a
+generation counter rather than 16 byte blob, and expect userspace to
+call getrandom() subsequently to get something fresh. Or not! But maybe
+it should be hashed with a fixed prefix string before being exposed to
+userspace. Or not! I don't know, but that's not going to happen on this
+patchset. There is no reason at all why that needs to be done here and
+now. Trying to do too much at the same time is likely why the previous
+efforts from your team stalled out last year. Propose something later,
+in a new thread, and we can discuss then. One step at a time...
 
--- 
-Thanks,
-
-Steve
+Jason

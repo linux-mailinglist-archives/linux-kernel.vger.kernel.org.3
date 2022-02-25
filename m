@@ -2,147 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3574C4DA4
+	by mail.lfdr.de (Postfix) with ESMTP id CDAC34C4DA6
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbiBYSYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        id S230044AbiBYSYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbiBYSYC (ORCPT
+        with ESMTP id S233127AbiBYSYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:24:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C778F1A39EF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645813400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S1NmdYyRDaBXoSCp03484hlz5eKqc7q4f9y/0Zo2bME=;
-        b=YikD8NrimmYR5y1ZVym4TRzPR9SYmZQRG73ELAqHKAD+T6B2mulUeFcvGvsXFHubkapefX
-        bxllPw2wu7+PTb98REIPovTEQAab8YCKgDflGUpSjZjUZh/7pw5kqjzXYflD4u7JA2f7E7
-        UZJjpmSnXvQRH2As2ctUrEnTgqM+5Pg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-5VQhx3J0PUGYCSKJ_C8OoQ-1; Fri, 25 Feb 2022 13:23:16 -0500
-X-MC-Unique: 5VQhx3J0PUGYCSKJ_C8OoQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39CC0FC80;
-        Fri, 25 Feb 2022 18:23:15 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4021786C33;
-        Fri, 25 Feb 2022 18:22:53 +0000 (UTC)
-Message-ID: <f38c3bc0fab811220621b849592ca8e1fdfc6651.camel@redhat.com>
-Subject: Re: [PATCH 2/4] KVM: x86: hyper-v: Drop redundant 'ex' parameter
- from kvm_hv_flush_tlb()
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Feb 2022 20:22:52 +0200
-In-Reply-To: <20220222154642.684285-3-vkuznets@redhat.com>
-References: <20220222154642.684285-1-vkuznets@redhat.com>
-         <20220222154642.684285-3-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 25 Feb 2022 13:24:07 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D284A1B45D7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:26 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id d17so5423643pfl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=lw2tVDAuKEfg8bijjSTLHy0bAbafPvPmOe1XuQajp7A=;
+        b=mI06mSIHHJFfg1p5ZrLzTf8yyoeQ/rZigLingXhIVkNkFxDwrh1z/QmxkS/qL3b5D/
+         RMbxJ6xWTK5mWL5RcL+goD/fNZngB1FneyBJBmpMjEWiBRoDpx1goVON9wAgQJxx/RHC
+         IUemPeGZdgam1Lkno02aKlFhsbFvVZ7BGG4mkcYvA9H+lUfPA/7ZXDqZ1exm0BONLn+t
+         9YI2lXMEnc0EX6vpYe4yqzD/qUTz5QOXC6yvsZXhdoKCckXh9s9GO0IwRSCuaejZU6xx
+         KcFvynS1YgkPBmajOzq3i54ue16kgz0jPmH7PrsPBd22QFKP2MLla0GYnRdf8Xjyh+lL
+         fx9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=lw2tVDAuKEfg8bijjSTLHy0bAbafPvPmOe1XuQajp7A=;
+        b=XuplWsqnaehpSEGhuFNvaUwHNGxEDJdNaetidC601NZk3WoOSD8fsD3tVrysgJojKH
+         2eua3iOZ/UAT1dYd+zUIU5OR8k3QMf5S+85KQcCgihStf+vUd7CmAoqVcgrtaOMrhTOL
+         bO9g5/VWIM6RKX6eZKxtSWgUY1a+Q7vzfeRP7aGNTdlpLAAcxslz0YCwyUpl5qEjJxtv
+         wPchdduNNwk7he3SFQmCHpdtbLF/pxg4F1zHh+YokJ36Z2Tfh0Qn4Un+0jZNqS+cX9fe
+         EUr2zomCSaQxReU+M4p09TwLLEO1BkpiTpPkRm0UU8xfccsBKuzN5vVFEqIxSK9GaeSU
+         pl5w==
+X-Gm-Message-State: AOAM5317tn8BCg1jQOctMvEVSP4QUFJ4xF1dKmg6c0ALkNXBwObGbnC4
+        EDeTz11O68WAsAPlyMAgi2NcC9IcQYE+y54=
+X-Google-Smtp-Source: ABdhPJyMVviF/ifryo3SfljNP/FoVPf24sEk4F74H3nfQjxNlUpGcpxqW+61s2P7YKVfMLViHCmLsg==
+X-Received: by 2002:a63:7742:0:b0:374:7607:afa with SMTP id s63-20020a637742000000b0037476070afamr7178017pgc.391.1645813406296;
+        Fri, 25 Feb 2022 10:23:26 -0800 (PST)
+Received: from thinkpad ([220.158.159.72])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056a001acd00b004f0f9a967basm4181042pfv.100.2022.02.25.10.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 10:23:26 -0800 (PST)
+Date:   Fri, 25 Feb 2022 23:53:21 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@ti.com, lorenzo.pieralisi@arm.com
+Cc:     omp@nvidia.com, vidyas@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org
+Subject: PCI: endpoint: Usage of atomic notifier chain
+Message-ID: <20220225182321.GG274289@thinkpad>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 16:46 +0100, Vitaly Kuznetsov wrote:
-> 'struct kvm_hv_hcall' has all the required information already,
-> there's no need to pass 'ex' additionally.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 23 ++++++-----------------
->  1 file changed, 6 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 15b6a7bd2346..714af3b94f31 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1750,7 +1750,7 @@ struct kvm_hv_hcall {
->  	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
->  };
->  
-> -static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
-> +static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  {
->  	int i;
->  	gpa_t gpa;
-> @@ -1765,7 +1765,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->  	int sparse_banks_len;
->  	bool all_cpus;
->  
-> -	if (!ex) {
-> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
-> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
->  		if (hc->fast) {
->  			flush.address_space = hc->ingpa;
->  			flush.flags = hc->outgpa;
-> @@ -2247,32 +2248,20 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->  				kvm_hv_hypercall_complete_userspace;
->  		return 0;
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
-> -		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
-> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -			break;
-> -		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
-> -		break;
-> -	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
-> -		if (unlikely(hc.rep)) {
-> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -			break;
-> -		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
-> -		break;
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
->  		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
->  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->  			break;
->  		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
-> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
->  		break;
-> +	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
->  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
->  		if (unlikely(hc.rep)) {
->  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->  			break;
->  		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
-> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
->  		break;
->  	case HVCALL_SEND_IPI:
->  		if (unlikely(hc.rep)) {
+Hi,
 
+While working with the PCI endpoint subsystem, I stumbled upon the sleeping
+in atomic context bug during CORE_INIT phase. The issue seems to be due to the
+usage of "epc lock" (mutex) in functions such as set_msi, set_msix,
+write_header, etc...
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+These functions are supposed to be used in the atomic notifier chain by the
+CORE_INIT notifier. While using the lock is necessary in these functions as
+pci_epc_create() would've been called, I see two possible workarounds:
 
-Best regards,
-	Maxim Levitsky
+1. Using non-atomic notifier chains such as blocking or raw.
+2. Modifying the EPF drivers to use workqueue in CORE_INIT notifier chain. But
+this has the implication of missing the workqueue execution before hitting other
+PCI events as there might be a delay in scheduling the work item.
 
+I prefer 1st option but I'd like to hear other ideas also.
+
+Thanks,
+Mani

@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20474C496C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FB84C4977
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242316AbiBYPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S239426AbiBYPqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbiBYPoW (ORCPT
+        with ESMTP id S233650AbiBYPqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:44:22 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581191FCC9;
-        Fri, 25 Feb 2022 07:43:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645803829; x=1677339829;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f47cn1Kplw8bEVPU/7scXhOv3urE9BWf0pa3OAk5r0s=;
-  b=D9mZwrfeNpaNF5jqxJeF9sLMoIC+MkR45WWzbaH1WSNDxLZyDCB+Gqfj
-   xs8QvXrGC4im+VfgbO/IIkvg07WwuwoaAgjjVGBSDVu3qcwZE+zYrJ9PO
-   OSjyKbSS+iB+vGUutDh0uLle/zjSNG9jCmn3vUNDPdPLXXAveKnv3C9OV
-   Vk9LpihGwaG3yRAhI20PeT0onPnYEilfhP8gC+8UQSLc3i4iVkYgvNdwA
-   aSPFinvnZvdwxW97t7DfejnTU41t9N51z4RBeyzfs/6WOPGirQHz1qbK+
-   0CxY53X8DPpvAUA5er0T1f3LDWNT/hV7FmZQUtVeN2PhIe05lSDfwoy3r
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338954833"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="338954833"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 07:43:49 -0800
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="777438751"
-Received: from nnwogbe-mobl1.amr.corp.intel.com (HELO [10.212.101.231]) ([10.212.101.231])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 07:43:47 -0800
-Message-ID: <06650d56-eed3-73ad-d6b4-6b56a5a70669@linux.intel.com>
-Date:   Fri, 25 Feb 2022 09:43:47 -0600
+        Fri, 25 Feb 2022 10:46:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DEE1FCC3;
+        Fri, 25 Feb 2022 07:46:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CC97B83253;
+        Fri, 25 Feb 2022 15:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815F5C340E7;
+        Fri, 25 Feb 2022 15:45:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DbUu57ez"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645803954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXuTEAnaE0aPUjDR2q7+fL3WYM8X+IEQPCKcmMJb3HY=;
+        b=DbUu57ezzxPejz+zfBx1TQmqkahBb9aDLTCQTad2Lww+7tJ0meOvgVrM21yxrInKocw3wZ
+        +5YznIsBNOd+8/9KWpwTpoOt+Jd8q5buE2GzqjEicIF52FB0TmtxdmuWqJVmEIwrjB/acl
+        zAALZjfU+gvOO4jXeIuJ1BAFSjLODjA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c5031fcd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 15:45:54 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 16:45:50 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Alexander Graf <graf@amazon.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, adrian@parity.io,
+        KVM list <kvm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ben@skyportsystems.com,
+        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eduardo Habkost <ehabkost@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Laszlo Ersek <lersek@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v4] virt: vmgenid: introduce driver for reinitializing
+ RNG on VM fork
+Message-ID: <Yhj5rg2Cgv+qRcjc@zx2c4.com>
+References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
+ <20220225124848.909093-1-Jason@zx2c4.com>
+ <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
+ <YhjjuMOeV7+T7thS@zx2c4.com>
+ <88ebdc32-2e94-ef28-37ed-1c927c12af43@amazon.com>
+ <YhjoyIUv2+18BwiR@zx2c4.com>
+ <9ac68552-c1fc-22c8-13e6-4f344f85a4fb@amazon.com>
+ <CAMj1kXEue6cDCSG0N7WGTVF=JYZx3jwE7EK4tCdhO-HzMtWwVw@mail.gmail.com>
+ <Yhj288aE5rW15Qpj@zx2c4.com>
+ <b6c5c4d4-88a5-1ac5-a4d4-2f6895065834@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v2] soundwire: qcom: remove redundant wait for completion
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, yung-chuan.liao@linux.intel.com,
-        sanyog.r.kale@intel.com
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1645800257-27025-1-git-send-email-quic_srivasam@quicinc.com>
- <a99a59eb-cd59-f566-b98d-486c94f32eec@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <a99a59eb-cd59-f566-b98d-486c94f32eec@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b6c5c4d4-88a5-1ac5-a4d4-2f6895065834@amazon.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alex,
 
+On Fri, Feb 25, 2022 at 04:37:43PM +0100, Alexander Graf wrote:
+> I believe "VMGENID" was for the firecracker prototype that Adrian built 
+> back then, yeah. Matching on _HID for this is a rat hole unfortunately, 
+> so let's see what the ACPI patch gets us :).
 
-On 2/25/22 08:45, Srinivas Kandagatla wrote:
-> 
-> 
-> On 25/02/2022 14:44, Srinivasa Rao Mandadapu wrote:
->> Remove wait_for_completion_timeout from soundwire probe as it seems
->> unnecessary and device enumeration is anyway not happening here,
->> hence this api is blocking till it completes max wait time.
->> Also, as device enumeration event is dependent on wcd938x probe to be
->> completed, its of no use waiting here.
->> Waiting here increasing the boot time almost 4 seconds and impacting
->> other modules like touch screen.
->>
->> Fixes: 06dd96738d618 ("soundwire: qcom: wait for enumeration to be
->> complete in probe")
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> 
-> LGTM,
-> 
-> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Thanks. I'll add a comment to the code about Firecracker. And indeed
+hopefully that'll all go away anyway.
 
-I don't get the idea, sorry.
-
-If you look at the code, these are the cases where this 'struct
-completion' is used
-
-	struct completion enumeration;
-	complete(&ctrl->enumeration);
-	/* Enable Auto enumeration */
-	init_completion(&ctrl->enumeration);
-	wait_for_completion_timeout(&ctrl->enumeration,
-
-
-so if you remove the wait_for_completeion, then you might just as well
-remove the whole thing and revert 06dd96738d618
-
-what am I missing?
-
-
->> ---
->>   drivers/soundwire/qcom.c | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
->> index 5481341..9a32a24 100644
->> --- a/drivers/soundwire/qcom.c
->> +++ b/drivers/soundwire/qcom.c
->> @@ -1309,8 +1309,6 @@ static int qcom_swrm_probe(struct
->> platform_device *pdev)
->>       }
->>         qcom_swrm_init(ctrl);
->> -    wait_for_completion_timeout(&ctrl->enumeration,
->> -                    msecs_to_jiffies(TIMEOUT_MS));
->>       ret = qcom_swrm_register_dais(ctrl);
->>       if (ret)
->>           goto err_master_add;
+Jason

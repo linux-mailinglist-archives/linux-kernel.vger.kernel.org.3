@@ -2,345 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B744C45A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635BC4C45AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbiBYNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S232763AbiBYNPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiBYNOh (ORCPT
+        with ESMTP id S231822AbiBYNPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:14:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 707D01EDA28
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645794842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vhdaWsgc8pUfwK/nTPSWJVbbpkwucFw4giQzlRhkFMo=;
-        b=PXM9FWFL29QIgdODaV950tqeQfS9VJa45PNIdZ/I4zMJpA3THwqGkfzoLk6gccKrOPKluc
-        9NOOwZd4OEfLhvigIbgDX59UQ+onoIAhfuuZZD+lnjjjqOiOllBds7CNvHjJvOHdbutnb+
-        PoLb3bUwn0sUv3ZQMfFG3auGnrsPogk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-365-ICU3eu9lMialpVb-EUq3ag-1; Fri, 25 Feb 2022 08:14:01 -0500
-X-MC-Unique: ICU3eu9lMialpVb-EUq3ag-1
-Received: by mail-wr1-f69.google.com with SMTP id w8-20020a5d4b48000000b001ef708e7f71so388691wrs.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:14:00 -0800 (PST)
+        Fri, 25 Feb 2022 08:15:50 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649C41F983C
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:15:17 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id r20so7405770ljj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QlHbAj9RrieryzK6X4dfpMcrboYIb/l+Y5vjOM0ABOE=;
+        b=yaF6E6EGqUddMLTCj4JN8VxQJsH3Z6y6vCtUvxANVE224r5SedlOVPKrPRVw92s01b
+         GSu79T/ENkP5XLcN8n7syXBdFIaSJUbZoIxf6Z9xIT/pZjo/72bIsQoPEzr30yIMo7/U
+         EtCK1DZzstm6wmRdhk1ZSfV/q0p/2ioosWyolzI80P1WRlRKffgbLduhJ3QnE422k7w6
+         VRckoWmWdkaCOghfs0bsKSq8HcEMyW44+AOwXTEcJH/mL9CcaDm81vOONOP6Z65H/6os
+         vWHrsVRYj3XxJkmDmuK134tXL/i7Vf6koOQxSUccOWPIpvL1s0gSYuYw3XrJqc++Qw/o
+         8jfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=vhdaWsgc8pUfwK/nTPSWJVbbpkwucFw4giQzlRhkFMo=;
-        b=19AqGv6u0rHt6rG2FGyNNqIX8ESdgOwKLoxb0OnoLjG0zGWeTzDkVJYLgwfy2cIuw3
-         vsJ6S3UK7iR8qp3MMxqYZUBY4XevSf1DmTHUGmtF6/2gq6U3LXDujKJCvbF53UXxZB1H
-         O2nNMKi4Pc0Ed0mEJxxHGPGMVXMoRT6tm3OZlkDOpmRdzANISzt4DH1Dax9bpsl3d90X
-         KjHGr3J7YSkOaPJcXVVIw1XfFUVADAEd+GQMknFPjOUB4D9AtVtRHpZjLnktZy7Zss1L
-         Didh4E908uGK14YwuWymcS2RrrlZDVrzuO9Sz7MxWPUr4Lb6Y+BOVK090GqM1wdKj4ln
-         2u+g==
-X-Gm-Message-State: AOAM5315bGsFaRtXeP8DwdxTHcWFl1v/dcj3R9p3u21xNwd7rBSp6XqT
-        FMRvR25rylMmTEnU5+nrzTopF8pZVuyUb/+6GHsRqqJNTXZZH362RR0z0bWSmyA0vqVi8eZFumk
-        ENL6L47ZISni0JXFKb4Unj0+ObdI7q2q5eAu3CAjwcYhpBcxMlPXIwOMBb+9b2YjPi1N44Ejy1p
-        RX
-X-Received: by 2002:a5d:52c8:0:b0:1ed:e591:be70 with SMTP id r8-20020a5d52c8000000b001ede591be70mr5861911wrv.436.1645794839931;
-        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyD84loAXJxH22Clm2Yzp/r6WGj0EKjWQlqM3zf3yfaq29n1Q4opKpjCnUwONdMWNH5Ve4tOQ==
-X-Received: by 2002:a5d:52c8:0:b0:1ed:e591:be70 with SMTP id r8-20020a5d52c8000000b001ede591be70mr5861892wrv.436.1645794839589;
-        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id k4-20020adfe8c4000000b001e68c92af35sm2295773wrn.30.2022.02.25.05.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM: x86: hyper-v: XMM fast hypercalls fixes
-In-Reply-To: <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
-References: <20220222154642.684285-1-vkuznets@redhat.com>
- <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
-Date:   Fri, 25 Feb 2022 14:13:58 +0100
-Message-ID: <871qzrdr6x.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QlHbAj9RrieryzK6X4dfpMcrboYIb/l+Y5vjOM0ABOE=;
+        b=K29peIgnXFYCSW6OttSZY+mJo/n/f2typ23C4Z8Kr+Nu3c4eJlQKnRfDXZsKib0VQp
+         SGCdF6/DsBKwkrHxWXuJVOEix4OElpo9LL7WSgfMX8ltGiu14iyezETzEgvrZzFjBQbD
+         wOn+4b0YypAIa2WGqvbCmfFbhCSnbqHper9g/y1I2WtgFO+WhKsD6YjJxjYgZlLlU5ro
+         UDIRYa6ZK4EyHYoYTnELshQOobe6USi90f1CenrAnb1wEsRyHZZFMLYPvf1+x0M4uOXd
+         nYaHZY4MQozYjLj7YoQQf9t+PC7A/Eg7xfEoOPHT6Vmb0GnuekGXTGdu6uMiqE9y8wPp
+         XZyw==
+X-Gm-Message-State: AOAM531RAzoLwAV8ufIU8IBYYElQ0ct0he84V2ynUydMqcdHp5v+Mgjn
+        oTByhZ2TA+6Hm3W7J4ZVqiGITN38keSrxK3QZGG0Zw==
+X-Google-Smtp-Source: ABdhPJyi3R6se6gejtpuW+znM8v9nyMMU23FwuRxr0ssOTn95swJdzz/XXmSCdFy3Vcn7z1BvMPysKOKu9PpMeAPLbM=
+X-Received: by 2002:a05:651c:32d:b0:246:1293:854e with SMTP id
+ b13-20020a05651c032d00b002461293854emr5391704ljp.365.1645794915674; Fri, 25
+ Feb 2022 05:15:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220217154403.6497-1-wuyun.abel@bytedance.com>
+ <YheiT2pGNDggdFSu@hirez.programming.kicks-ass.net> <9fe00f72-4e2e-38ff-d64a-4ae41e683316@bytedance.com>
+ <CAKfTPtD7U7=C8MTLLMtUrGxJFCjpxtU7a_S=HaBhCsZ6SBbVFA@mail.gmail.com> <d4557587-b52c-049d-a0c8-e48aaa8a1c1e@bytedance.com>
+In-Reply-To: <d4557587-b52c-049d-a0c8-e48aaa8a1c1e@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 25 Feb 2022 14:15:04 +0100
+Message-ID: <CAKfTPtB9Dhg+4sQnFBu3qXiV3vwnfAjf-R2_4qvKXGAGS1pW-Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] introduce sched-idle balancing
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
-
-> On 2/22/22 16:46, Vitaly Kuznetsov wrote:
->> While working on some Hyper-V TLB flush improvements and Direct TLB flush
->> feature for Hyper-V on KVM I experienced Windows Server 2019 crashes on
->> boot when XMM fast hypercall input feature is advertised. Turns out,
->> HVCALL_SEND_IPI_EX is also an XMM fast hypercall and returning an error
->> kills the guest. This is fixed in PATCH4. PATCH3 fixes erroneous capping
->> of sparse CPU banks for XMM fast TLB flush hypercalls. The problem should
->> be reproducible with >360 vCPUs.
->> 
->> Vitaly Kuznetsov (4):
->>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
->>      kvm_hv_send_ipi()
->>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
->>      kvm_hv_flush_tlb()
->>    KVM: x86: hyper-v: Fix the maximum number of sparse banks for XMM fast
->>      TLB flush hypercalls
->>    KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
->> 
->>   arch/x86/kvm/hyperv.c | 84 +++++++++++++++++++++++--------------------
->>   1 file changed, 45 insertions(+), 39 deletions(-)
->> 
+On Fri, 25 Feb 2022 at 11:46, Abel Wu <wuyun.abel@bytedance.com> wrote:
 >
-> Merging this in 5.18 is a bit messy.  Please check that the below
-> patch against kvm/next makes sense:
-
-Something is wrong with the diff as it doesn't apply :-(
-
+> On 2/25/22 4:29 PM, Vincent Guittot Wrote:
+> > On Fri, 25 Feb 2022 at 07:46, Abel Wu <wuyun.abel@bytedance.com> wrote:
+> >>
+> >> Hi Peter,
+> >>
+> >> On 2/24/22 11:20 PM, Peter Zijlstra Wrote:
+> >>> On Thu, Feb 17, 2022 at 11:43:56PM +0800, Abel Wu wrote:
+> >>>> Current load balancing is mainly based on cpu capacity
+> >>>> and task util, which makes sense in the POV of overall
+> >>>> throughput. While there still might be some improvement
+> >>>> can be done by reducing number of overloaded cfs rqs if
+> >>>> sched-idle or idle rq exists.
+> >>>
+> >>> I'm much confused, there is an explicit new-idle balancer and a periodic
+> >>> idle balancer already there.
+> >>
+> >> The two balancers are triggered on the rqs that have no tasks on them,
+> >> and load_balance() seems don't show a preference for non-idle tasks so
+> >
+> > The load balance will happen at the idle pace if a sched_idle task is
+> > running on the cpu so you will have an ILB on each cpu that run a
+> > sched-idle task
 >
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 653e08c993c4..98fb998c31ce 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1770,9 +1770,11 @@ struct kvm_hv_hcall {
->   };
->   
->   static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
-> +				 int consumed_xmm_halves,
->   				 u64 *sparse_banks, gpa_t offset)
->   {
->   	u16 var_cnt;
-> +	int i;
->   
->   	if (hc->var_cnt > 64)
->   		return -EINVAL;
-> @@ -1780,13 +1782,29 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->   	/* Ignore banks that cannot possibly contain a legal VP index. */
->   	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
->   
-> +	if (hc->fast) {
-> +		/*
-> +		 * Each XMM holds two sparse banks, but do not count halves that
-> +		 * have already been consumed for hypercall parameters.
-> +		 */
-> +		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
-> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		for (i = 0; i < var_cnt; i++) {
-> +			int j = i + consumed_xmm_halves;
-> +			if (j % 2)
-> +				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
-> +			else
-> +				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
+> I'm afraid I don't quite follow you, since sched-idle balancer doesn't
+> touch the ILB part, can you elaborate on this? Thanks.
 
-Let's say we have 1 half of XMM0 consumed. Now:
-
- i = 0;
- j = 1;
- if (1) 
-     sparse_banks[0] = sse128_lo(hc->xmm[0]); 
-
- This doesn't look right as we need to get the upper half of XMM0.
-
- I guess it should be reversed, 
-
-     if (j % 2)
-         sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
-     else
-         sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
-
-> +		}
-> +		return 0;
-> +	}
-> +
->   	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
->   			      var_cnt * sizeof(*sparse_banks));
->   }
->   
-> -static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
-> +static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->   {
-> -	int i;
->   	struct kvm *kvm = vcpu->kvm;
->   	struct hv_tlb_flush_ex flush_ex;
->   	struct hv_tlb_flush flush;
-> @@ -1803,7 +1821,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   	 */
->   	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
->   
-> -	if (!ex) {
-> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
-> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
-
-In case you're trying to come up with a smaller patch for 5.18, we can
-certainly drop these 'ex'/'non-ex' changes as these are merely
-cosmetic.
-
->   		if (hc->fast) {
->   			flush.address_space = hc->ingpa;
->   			flush.flags = hc->outgpa;
-> @@ -1859,17 +1878,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   		if (!hc->var_cnt)
->   			goto ret_success;
->   
-> -		if (hc->fast) {
-> -			if (hc->var_cnt > HV_HYPERCALL_MAX_XMM_REGISTERS - 1)
-> -				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -			for (i = 0; i < hc->var_cnt; i += 2) {
-> -				sparse_banks[i] = sse128_lo(hc->xmm[i / 2 + 1]);
-> -				sparse_banks[i + 1] = sse128_hi(hc->xmm[i / 2 + 1]);
-> -			}
-> -			goto do_flush;
-> -		}
-> -
-> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
-> +		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
->   					  offsetof(struct hv_tlb_flush_ex,
->   						   hv_vp_set.bank_contents)))
-
-I like your idea to put 'consumed_xmm_halves' into
-kvm_get_sparse_vp_set() as kvm_hv_flush_tlb is getting too big.
-
->   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> @@ -1913,7 +1922,7 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
->   	}
->   }
->   
-> -static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
-> +static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->   {
->   	struct kvm *kvm = vcpu->kvm;
->   	struct hv_send_ipi_ex send_ipi_ex;
-> @@ -1924,7 +1933,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   	u32 vector;
->   	bool all_cpus;
->   
-> -	if (!ex) {
-> +	if (hc->code == HVCALL_SEND_IPI) {
->   		if (!hc->fast) {
->   			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
->   						    sizeof(send_ipi))))
-> @@ -1943,9 +1952,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   
->   		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
->   	} else {
-> -		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-> -					    sizeof(send_ipi_ex))))
-> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		if (!hc->fast) {
-> +			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-> +						    sizeof(send_ipi_ex))))
-> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		} else {
-> +			send_ipi_ex.vector = (u32)hc->ingpa;
-> +			send_ipi_ex.vp_set.format = hc->outgpa;
-> +			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
-> +		}
->   
->   		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
->   					 send_ipi_ex.vp_set.format,
-> @@ -1964,7 +1979,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   		if (!hc->var_cnt)
->   			goto ret_success;
->   
-> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
-> +		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
->   					  offsetof(struct hv_send_ipi_ex,
->   						   vp_set.bank_contents)))
->   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> @@ -2126,6 +2141,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
-> +	case HVCALL_SEND_IPI_EX:
->   		return true;
->   	}
->   
-> @@ -2283,46 +2299,43 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->   				kvm_hv_hypercall_complete_userspace;
->   		return 0;
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
-> -		if (unlikely(!hc.rep_cnt || hc.rep_idx || hc.var_cnt)) {
-> +		if (unlikely(hc.var_cnt)) {
->   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->   			break;
->   		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
-> -		break;
-> -	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
-> -		if (unlikely(hc.rep || hc.var_cnt)) {
-> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -			break;
-> -		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
-> -		break;
-> +		fallthrough;
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
->   		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
->   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->   			break;
->   		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
-> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
->   		break;
-> +	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
-> +		if (unlikely(hc.var_cnt)) {
-> +			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +			break;
-> +		}
-> +		fallthrough;
->   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
->   		if (unlikely(hc.rep)) {
->   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->   			break;
->   		}
-> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
-> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
->   		break;
->   	case HVCALL_SEND_IPI:
-> -		if (unlikely(hc.rep || hc.var_cnt)) {
-> +		if (unlikely(hc.var_cnt)) {
->   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->   			break;
->   		}
-> -		ret = kvm_hv_send_ipi(vcpu, &hc, false);
-> -		break;
-> +		fallthrough;
->   	case HVCALL_SEND_IPI_EX:
-> -		if (unlikely(hc.fast || hc.rep)) {
-> +		if (unlikely(hc.rep)) {
->   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->   			break;
->   		}
-> -		ret = kvm_hv_send_ipi(vcpu, &hc, true);
-> +		ret = kvm_hv_send_ipi(vcpu, &hc);
->   		break;
->   	case HVCALL_POST_DEBUG_DATA:
->   	case HVCALL_RETRIEVE_DEBUG_DATA:
-
-I've smoke tested this (with the change I've mentioned above) and WS2019
-booted with 65 vCPUs. This is a good sign)
+I was referring to your sentence " The two balancers are triggered on
+the rqs that have no tasks on them". When there is only sched-idle
+tasks on a rq, the load_balance behave like the Idle Load Balance when
+there is no task i.e. as often
 
 >
+> >
+> >> there might be possibility that only idle tasks are pulled during load
+> >> balance while overloaded rqs (rq->cfs.h_nr_running > 1) exist. As a
+> >
+> > There is a LB_MIN feature (disable by default) that filters task with
+> > very low load ( < 16) which includes sched-idle task which has a max
+> > load of 3
+
+but we could easily change this like if !sched_idle_cpus then LB can
+migrate only cfs tasks otherwise can migrate sched_idle task as well.
+Instead of creating another side channel
+
 >
-> The resulting merge commit is already in kvm/queue shortly (which should
-> become the next kvm/next as soon as tests complete).
+> This feature might not that friendly to the situation that only
+> sched-idle tasks are running in the system. And this situation
+> can last more than half a day in our co-location systems in which
+> the training/batch tasks are placed under idle groups or directly
+> assigned to SCHED_IDLE.
 >
-
-I see, please swap sse128_lo()/sse128_hi() there too :-)
-
--- 
-Vitaly
-
+> >
+> >> result the normal tasks, mostly latency-critical ones in our case, on
+> >> that overloaded rq still suffer waiting for each other. I observed this
+> >> through perf sched.
+> >>
+> >> IOW the main difference from the POV of load_balance() between the
+> >> latency-critical tasks and the idle ones is load.
+> >>
+> >> The sched-idle balancer is triggered on the sched-idle rqs periodically
+> >> and the newly-idle ones. It does a 'fast' pull of non-idle tasks from
+> >> the overloaded rqs to the sched-idle/idle ones to let the non-idle tasks
+> >> make full use of cpu resources.
+> >>
+> >> The sched-idle balancer only focuses on non-idle tasks' performance, so
+> >> it can introduce overall load imbalance, and that's why I put it before
+> >> load_balance().
+> >
+> > According to the very low weight of a sched-idle task, I don't expect
+> > much imbalance because of sched-idle tasks. But this also depends of
+> > the number of sched-idle task.
+> >
+> >
+> >>
+> >> Best Regards,
+> >>          Abel

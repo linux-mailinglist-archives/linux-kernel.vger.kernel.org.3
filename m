@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9801B4C3C86
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1DB4C3CB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbiBYDmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 22:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S237161AbiBYDx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237090AbiBYDl4 (ORCPT
+        with ESMTP id S232996AbiBYDx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 22:41:56 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007B820D50B;
-        Thu, 24 Feb 2022 19:41:24 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id n13-20020a05600c3b8d00b0037bff8a24ebso920760wms.4;
-        Thu, 24 Feb 2022 19:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=J/nu9vWTGLRLTdhdlJjq+UypSbechtdAVlD7yNR3Zc0=;
-        b=BCZB8c7e/DHEUGemalwooiy98uSSrMhSJneLrKy6WlgeP7fnXG5IClsGWSzgU96ve6
-         W93b8XVX0g1c4z2hELN5fFfMqSZPALvQC/MsC7xBLFjzJyHx++dFeTNEiaA2//JO0eks
-         sjPOArGCgQjRYP7tiMqlr4Cq/khUHc0gAzpOQjTu+eQLFYjvysvTlQ0gJspkFM2W/yKf
-         Y6fDYXy2/NnvJ4bHfQD9TDNA6fMntJzCLyFml56syUVgMktLBVNx4URP7oVdMSvr3gmb
-         805BMZYJ7Wn4QS8TAFiqvZyz5i5swK0SIoUaHJzSZbVSjQiH2B4Ouw9Chm0UYLOUPOFE
-         POTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=J/nu9vWTGLRLTdhdlJjq+UypSbechtdAVlD7yNR3Zc0=;
-        b=AEyMX0rcILvRCtEpT0WKbF5HH5vehCdbvowD9a6qH4RTsfVrT4IFlT9+Ee6ah46dGe
-         mbpoNa0EaeNy0bMRtbC1DAbdeaDWS2r89qWJBuESHdWUwHf8LoYmb39W8yXlIJn17uim
-         XEAZy3oyX9KOGY9a3flDBUmEQoHPf0Edgh6US00UGNqmbXwHB+NOpWh8CiT5an2Ph/+8
-         fsPW1+7ofMfImz5WQQZkZho7LbwXVSyjIgzdDSGrECXkqnrwL80NsrrMvJLnSne44fzN
-         ju5CGF/XQXS5lhlXmcZLb8V/js9dJmkkVIX6mYKXOa58G64CXvE8p5Xl6OurXzuzocQ3
-         S8HA==
-X-Gm-Message-State: AOAM532GsEPBeZia2V03R6tV5jY3DcN2WkWm4mJOjjyQDZAm3qNdRTB8
-        MyivoSyqPLmVejdjM+R4Z8M=
-X-Google-Smtp-Source: ABdhPJz5LudkEbRthTuHn7YqZ9Xci1TUSOFUF9uXdTmFeJGCA/TFreHf6pemzbtooj4/rHt3MrNadQ==
-X-Received: by 2002:a05:600c:c4:b0:381:14cb:88bc with SMTP id u4-20020a05600c00c400b0038114cb88bcmr893772wmm.132.1645760483226;
-        Thu, 24 Feb 2022 19:41:23 -0800 (PST)
-Received: from localhost.localdomain ([64.64.123.58])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b00352d0e1de62sm1047226wmd.24.2022.02.24.19.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 19:41:22 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     djogorchock@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] hid: hid-nintendo: check the return value of alloc_workqueue()
-Date:   Thu, 24 Feb 2022 19:41:10 -0800
-Message-Id: <20220225034110.13341-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 22:53:28 -0500
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0BD187BA3;
+        Thu, 24 Feb 2022 19:52:55 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3889D2011FC;
+        Fri, 25 Feb 2022 04:52:54 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C1759201161;
+        Fri, 25 Feb 2022 04:52:53 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 2B3B7183AC97;
+        Fri, 25 Feb 2022 11:52:52 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com, broonie@kernel.org,
+        lorenzo.pieralisi@arm.com, jingoohan1@gmail.com,
+        festevam@gmail.com, francesco.dolcini@toradex.com
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v8 0/8] PCI: imx6: refine codes and add compliance tests mode support 
+Date:   Fri, 25 Feb 2022 11:44:19 +0800
+Message-Id: <1645760667-10510-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function alloc_workqueue() in nintendo_hid_probe() can fail, but
-there is no check of its return value. To fix this bug, its return value
-should be checked with new error handling code.
+This series patches refine pci-imx6 driver and do the following changes.
+- Encapsulate the clock enable into one standalone function
+- Add the error propagation from host_init
+- Disable the regulators and clocks when link never comes up
+- Add the compliance tests mode support
 
-Fixes: c4eae84feff3e ("HID: nintendo: add rumble support")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
- drivers/hid/hid-nintendo.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Main changes from v7 to v8:
+Regarding Bjorn's review comments.
+- Align the format of the dev_info message and refine commit log of
+  #6/7/8 patches.
+- Rename the err_reset_phy label, since there is no PHY reset in the out.
 
-diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-index b6a9a0f3966e..2204de889739 100644
---- a/drivers/hid/hid-nintendo.c
-+++ b/drivers/hid/hid-nintendo.c
-@@ -2128,6 +2128,10 @@ static int nintendo_hid_probe(struct hid_device *hdev,
- 	spin_lock_init(&ctlr->lock);
- 	ctlr->rumble_queue = alloc_workqueue("hid-nintendo-rumble_wq",
- 					     WQ_FREEZABLE | WQ_MEM_RECLAIM, 0);
-+	if (!ctlr->rumble_queue) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
- 	INIT_WORK(&ctlr->rumble_worker, joycon_rumble_worker);
- 
- 	ret = hid_parse(hdev);
--- 
-2.17.1
+Main changes from v6 to v7:
+- Keep the regulator usage counter balance in the #5 patch of v6 series.
 
+Main changes from v5 to v6:
+- Refer to the following discussion with Fabio, fix the dump by his patch.
+  https://patchwork.kernel.org/project/linux-pci/patch/1641368602-20401-6-git-send-email-hongxing.zhu@nxp.com/
+  Refine and rebase this patch-set after Fabio' dump fix patch is merged.
+- Add one new #4 patch to disable i.MX6QDL REF clock too when disable clocks
+- Split the regulator refine codes into one standalone patch #5 in this version.
+
+Main changes from v4 to v5:
+- Since i.MX8MM PCIe support had been merged. Based on Lorenzo's git repos,
+  resend the patch-set after rebase.
+
+Main changes from v3 to v4:
+- Regarding Mark's comments, delete the regulator_is_enabled() check.
+- Squash #3 and #6 of v3 patch into #5 patch of v4 set.
+
+Main changes from v2 to v3:
+- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into
+  first two patches.
+- Add a Fixes tag into #3 patch.
+- Split the #4 of v2 to two patches, one is clock disable codes move,
+  the other one is the acutal clock unbalance fix.
+- Add a new host_exit() callback into dw_pcie_host_ops, then it could be
+  invoked to handle the unbalance issue in the error handling after
+  host_init() function when link is down.
+- Add a new host_exit() callback for i.MX PCIe driver to handle this case
+  in the error handling after host_init.
+
+Main changes from v1 to v2:
+Regarding Lucas' comments.
+  - Move the placement of the new imx6_pcie_clk_enable() to avoid the
+    forward declarition.
+  - Seperate the second patch of v1 patch-set to three patches.
+  - Use the module_param to replace the kernel command line.
+Regarding Bjorn's comments:
+  - Use the cover-letter for a multi-patch series.
+  - Correct the subject line, and refine the commit logs. For example,
+    remove the timestamp of the logs.
+
+drivers/pci/controller/dwc/pci-imx6.c             | 223 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+drivers/pci/controller/dwc/pcie-designware-host.c |   5 ++-
+drivers/pci/controller/dwc/pcie-designware.h      |   1 +
+3 files changed, 150 insertions(+), 79 deletions(-)
+
+[PATCH v8 1/8] PCI: imx6: Encapsulate the clock enable into one
+[PATCH v8 2/8] PCI: imx6: Add the error propagation from host_init
+[PATCH v8 3/8] PCI: imx6: Move imx6_pcie_clk_disable() earlier
+[PATCH v8 4/8] PCI: imx6: Disable iMX6QDL PCIe REF clock when disable
+[PATCH v8 5/8] PCI: imx6: Refine the regulator usage
+[PATCH v8 6/8] PCI: dwc: Add dw_pcie_host_ops.host_exit() callback
+[PATCH v8 7/8] PCI: imx6: Disable clocks and regulators after link is
+[PATCH v8 8/8] PCI: imx6: Add compliance tests mode support

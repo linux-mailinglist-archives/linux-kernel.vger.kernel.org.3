@@ -2,49 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DBD4C4EC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEFA4C4ECB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiBYT3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S234780AbiBYTa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiBYT3b (ORCPT
+        with ESMTP id S232959AbiBYTa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:29:31 -0500
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26D91D8A85;
-        Fri, 25 Feb 2022 11:28:56 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru CCB7720A6E80
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>
-References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
- <63f06bf0-fc7b-3c5c-8af9-5adfd7628354@omp.ru>
- <dde846f0-1324-7fde-ef92-eb72d4200b50@physik.fu-berlin.de>
- <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <9671b75b-d0c4-7967-a543-5eebdf942b35@omp.ru>
-Date:   Fri, 25 Feb 2022 22:28:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 25 Feb 2022 14:30:56 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE791D8A85;
+        Fri, 25 Feb 2022 11:30:23 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id j22so5911012wrb.13;
+        Fri, 25 Feb 2022 11:30:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R8shBGs0xvbEf4vx5NZReydgFypsbc3de/+ZCzaiR2E=;
+        b=VVM/8a75ABhkKmRJJIwhaXEvArZfMt3dvbS7CqOdKCBVVBt1qzeWi55V4ss0vRqr14
+         aN2ImDbOdmMiXQvl4ARuc0DFlCWkS4tiFSWRTtFRCTDxZEj3+axfRiDLrurte3bpA79S
+         hdTJxjaeQe/nZj9J559sPvQO/w3inwrDv9WV3hKmCkdyJ101fMXUJ/epCyMD7BeJCyAv
+         zPC8KZVX5kmad7qLe1ovmClvmeqK/TtA+VIahV6l8wAEXdRKB6PIc9FvgBfF7AlELkBf
+         OXs8mmok8IgvZKdlrNKXHu/l8wjxETL45m+Qqy+9JWkV5RNiI0YdjYE019N4DJRewquA
+         kDLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R8shBGs0xvbEf4vx5NZReydgFypsbc3de/+ZCzaiR2E=;
+        b=5NGu1oIHH+hIchFgtIBii/SSPMGjoVrg8qBsgpzDtLeO/F54qNWJ2k4MGsY5S02Ybh
+         pKKdTDMkUCbedX38YPm9bA7l1EW5YOnh6h5znS7QTrHWKltncc0QxsHCFfTG8na3/AlK
+         wx3O6Sa6Ga6VeXBXebHAgX/+oAm4X3DLYqWBlJYFiTvKibX/Ft4SxmMc+piP71dIVP6B
+         2bVFoVcCdsQfMgg8b4ojC8TSMGYwldVAW6nVHdbyDEWs0iXgjvQhDIxaXtWIkVVpNmts
+         dK5D5BNm5YWog67hR2JWj8B74xvWKI+mFbx+Gd+njjHhATryAfBoRPw2fj4rkjC9czBs
+         bJYQ==
+X-Gm-Message-State: AOAM530PyTBosESnKvWdkD9/UTj9KDpkb66lcWIPXdE/raqbtkiDVvzk
+        f2GwqeZ7pSM5yktMuNCPONE=
+X-Google-Smtp-Source: ABdhPJzBJzujrOY+0fy4FstovGsWmv/slnYe1nePTYS/NXxZTWP+cPUiFaU7gMm22CSae8z2/Eet+g==
+X-Received: by 2002:a5d:6241:0:b0:1ed:b534:e04e with SMTP id m1-20020a5d6241000000b001edb534e04emr7505916wrv.68.1645817422236;
+        Fri, 25 Feb 2022 11:30:22 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c410500b0037bc3e4b526sm6591199wmi.7.2022.02.25.11.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 11:30:21 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jonas@kwiboo.se, nicolas@ndufresne.ca,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v3 09/14] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+Date:   Fri, 25 Feb 2022 20:30:20 +0100
+Message-ID: <4378293.LvFx2qVVIh@kista>
+In-Reply-To: <20220225164600.1044663-10-benjamin.gaignard@collabora.com>
+References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com> <20220225164600.1044663-10-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,49 +77,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 11:46 PM, Sergey Shtylyov wrote:
+Hi!
 
-[...]
->>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
->>>> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
->>>> that code to start the IRQ #s from 16 instead.
->>>>
->>>> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
->>>>
->>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>>>
->>>> ---
->>>> The patch is against Linus Torvalds' 'linux.git' repo.
->>>>
->>>>  arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
->>>>  include/linux/sh_intc.h        |    6 +++---
->>>>  2 files changed, 5 insertions(+), 5 deletions(-)
->>>>
->>>> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
->>>> ===================================================================
->>>> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
->>>> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
->>>> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
->>>>  	mov	r4, r0		! save vector->jmp table offset for later
->>>>  
->>>>  	shlr2	r4		! vector to IRQ# conversion
->>>> -	add	#-0x10, r4
->>>>  
->>>> -	cmp/pz	r4		! is it a valid IRQ?
->>>> +	mov	#0x10, r5
->>>> +	cmp/ge	r5, r4		! is it a valid IRQ?
->>>
->>>    Maybe I should've used cmp/hs... my 1st try at SH assembly! :-)
+Dne petek, 25. februar 2022 ob 17:45:55 CET je Benjamin Gaignard napisal(a):
+> The number of 'entry point offset' could be very variable.
+> Rather than use a large static array define a v4l2 dynamic array
+> of integer control.
+
+I suggest we should be more specific and say U32 (V4L2_CTRL_TYPE_U32).
+
+> The number of entry point offsets is reported by the elems field.
 > 
->    Yeah, cmp/hs seems m ore correct as we don't subtract any more...
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst          | 9 +++++++++
+>  include/media/hevc-ctrls.h                               | 1 +
+>  2 files changed, 10 insertions(+)
 > 
->> I can test your revised patch next week on my SH7785LCR.
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
+Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 44a268a948c0..71f7dc1c1ccd 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -3128,6 +3128,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>  
+>      \normalsize
+>  
+> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+
+Here you have OFFSETS (plural) ...
+
+> +    Specifies the i-th entry point offset in bytes and is represented by
+> +    offset_len_minus1 plus 1 bits.
+
+You probably mean entry_point_offset_minus1? offset_len_minus1 just tells how 
+much bits need to be read for each element and it's not important for actual 
+decoding.
+
+> +    This control is a dynamically sized array. The number of entry point
+> +    offsets is reported by the ``elems`` field.
+> +    This bitstream parameter is defined according to :ref:`hevc`.
+> +    They are described in section 7.4.7.1 "General slice segment header
+> +    semantics" of the specification.
+> +
+>  ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+>      Specifies the HEVC scaling matrix parameters used for the scaling 
+process
+>      for transform coefficients.
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 3016c1abb1d0..3f8a67924df3 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -20,6 +20,7 @@
+>  #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE + 
+1012)
+>  #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 
+1015)
+>  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET (V4L2_CID_CODEC_BASE + 
+1017)
+
+... and here you have OFFSET (singlular). I suggest plural form to be used in 
+all places, including subject line of this commit.
+
+Additionally, it would be nice if control is initialized, like so:
+https://github.com/jernejsk/linux-1/commit/
+f938e162cd8dd77c9f6f1b248d80144840a37bce
+
+Best regards,
+Jernej
+
+>  
+>  /* enum v4l2_ctrl_type type values */
+>  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> -- 
+> 2.32.0
 > 
->    Please do, although testing on the AP-SH4A* bords would be a bit more
-> interesting, as they actually use IRQ0 for the SMSC911x chip...
+> 
 
-   So, were you finally able to test it?
 
-[...]
-
-MBR, Sergey

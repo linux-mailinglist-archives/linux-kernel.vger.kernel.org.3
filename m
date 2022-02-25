@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFCF4C3ADD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11DB4C3ADA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiBYBZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 20:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        id S236349AbiBYB0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 20:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbiBYBZb (ORCPT
+        with ESMTP id S229658AbiBYB0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 20:25:31 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3712692D8;
-        Thu, 24 Feb 2022 17:24:59 -0800 (PST)
+        Thu, 24 Feb 2022 20:26:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377A223127;
+        Thu, 24 Feb 2022 17:25:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645752299; x=1677288299;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
+  t=1645752348; x=1677288348;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0wutWA/lmMAPxa4yjGC9r50Auvd0z+7McW7AjO8HBZg=;
-  b=gI5NxsCNYCvKC0QQSQ5mQGT9Lemk7iLfU9enGDn2MGhk8ApSTmeBRzDp
-   b26X2ESvi+Kkk8h4Npc7cWO00t19bzHc3162nTcYji0Kksr9yrnp8bxEG
-   ymXUjdO50K6XKKTTCSrokOCxj6r+oqbCO/0Pl/rYs07UHSiYNopQ5glY2
-   rQydJz8lJvBjA1rcRgenrPN4z8IN4/jKu1Z9l7gCLGZnzfQlJJObZL1tk
-   B3vlQTInwUL1NCzPUy0YDAs7GX8ikpjOtIPsKR1GXfU9KiYIESWIT6Pks
-   TfFd05sMaoNU1mzUwUBegemI505bqr+S2qv6WCz3DExx2RS1SeZ7L667R
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="315612254"
+  bh=AHywceCH61a0uC6jFQg+vmedTy7sSvp1pQ8B9HZ+b3E=;
+  b=M7SoZXqKtwIe+e0yYRNL56zq2g2X0VQl5QSU430UA1aiASQMnBJXL4NV
+   rc2iSMPeP76YvRbTaj1weZgf4HsUWjMJYxOLHv6hoF8t6EkTJrpehb4RR
+   7nZwgRBh116VW8X1xDuyQ/VRRxL5TqJnm87fJnxsCYvyr8KsgmnhIInC0
+   mn4lDcChJBCEb4wIpRbLpAarPb1KvjVK+NPaGl0WibUlece3mDIBBQqIr
+   Z0WLKdHdrGYxeM6HLqFCpCYdUtsVY4me0fSxw3gZBGKLUh4m6GbOHJWNJ
+   OsKkuoRBXDbPcgx2tfafQjYmlu0Pyf/fbdDj/SF35N4qYigT0Fu6lwelu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="233016891"
 X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="315612254"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 17:24:59 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="233016891"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 17:25:48 -0800
 X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="638057992"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Feb 2022 17:24:58 -0800
-Received: from debox1-desk4.intel.com (tjmaciei-mobl5.ger.corp.intel.com [10.255.228.125])
-        by linux.intel.com (Postfix) with ESMTP id 41C14580CDA;
-        Thu, 24 Feb 2022 17:24:58 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     hdegoede@redhat.com, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, gayatri.kammela@intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        "David E . Box" <david.e.box@linux.intel.com>
-Subject: [PATCH V9 2/2] selftests: sdsi: test sysfs setup
-Date:   Thu, 24 Feb 2022 17:24:57 -0800
-Message-Id: <20220225012457.1661574-2-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220225012457.1661574-1-david.e.box@linux.intel.com>
-References: <20220225012457.1661574-1-david.e.box@linux.intel.com>
+   d="scan'208";a="549026403"
+Received: from rjfenger-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.48.94])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 17:25:47 -0800
+Message-ID: <111b378d22a7c5353bbd4537e0219a4d07d015ff.camel@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] Thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Thu, 24 Feb 2022 17:25:47 -0800
+In-Reply-To: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+         <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,314 +60,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests file configuration and error handling of the Intel Software
-Defined Silicon sysfs ABI.
+Hi Daniel,
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-V9
-  - Add long options with getopt_long
-  - Add error messages for cmdline parsing errors
-  - Fix "may be used uninitialized" warning
-V8
-  - Skip if python3 or pytest aren't installed
-  - Do not remove driver after test is run
-V7
-  - No changes.
-V6
-  - No changes.
-V5
-  - No changes.
-V4
-  - No changes.
-V3
-  - Add tests to check PCI device removal handling and to check for
-    driver memory leaks.
-V2
-  - New patch.
+On Thu, 2022-02-24 at 22:41 +0100, Daniel Lezcano wrote:
+> 
+> Hi,
+> 
+> What shall I do with this series? Is everyone ok with it?
+> 
+Want to try out on a system and check. But unfortunately couldn't get
+to it yet. Hope to get to it next week. Is that OK?
 
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/drivers/sdsi/sdsi.sh  |  25 ++
- .../selftests/drivers/sdsi/sdsi_test.py       | 226 ++++++++++++++++++
- 3 files changed, 252 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
- create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
+Thanks,
+Srinivas
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b1281f44a5a2..a09e383d9d11 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9882,6 +9882,7 @@ M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
- F:	tools/arch/x86/intel_sdsi/
-+F:	tools/testing/selftests/drivers/sdsi/
- 
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi.sh b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-new file mode 100755
-index 000000000000..9b84b9b82b49
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the intel_sdsi driver
-+
-+if ! command -v python3 > /dev/null 2>&1; then
-+	echo "drivers/sdsi: [SKIP] python3 not installed"
-+	exit 77
-+fi
-+
-+if ! python3 -c "import pytest" > /dev/null 2>&1; then
-+	echo "drivers/sdsi: [SKIP] pytest module not installed"
-+	exit 77
-+fi
-+
-+if ! /sbin/modprobe -q -r intel_sdsi; then
-+	echo "drivers/sdsi: [SKIP]"
-+	exit 77
-+fi
-+
-+if /sbin/modprobe -q intel_sdsi && python3 -m pytest sdsi_test.py; then
-+	echo "drivers/sdsi: [OK]"
-+else
-+	echo "drivers/sdsi: [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi_test.py b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-new file mode 100644
-index 000000000000..5efb29feee70
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-@@ -0,0 +1,226 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from struct import pack
-+from time import sleep
-+
-+import errno
-+import glob
-+import os
-+import subprocess
-+
-+try:
-+    import pytest
-+except ImportError:
-+    print("Unable to import pytest python module.")
-+    print("\nIf not already installed, you may do so with:")
-+    print("\t\tpip3 install pytest")
-+    exit(1)
-+
-+SOCKETS = glob.glob('/sys/bus/auxiliary/devices/intel_vsec.sdsi.*')
-+NUM_SOCKETS = len(SOCKETS)
-+
-+MODULE_NAME = 'intel_sdsi'
-+DEV_PREFIX = 'intel_vsec.sdsi'
-+CLASS_DIR = '/sys/bus/auxiliary/devices'
-+GUID = "0x6dd191"
-+
-+def read_bin_file(file):
-+    with open(file, mode='rb') as f:
-+        content = f.read()
-+    return content
-+
-+def get_dev_file_path(socket, file):
-+    return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/' + file
-+
-+def kmemleak_enabled():
-+    kmemleak = "/sys/kernel/debug/kmemleak"
-+    return os.path.isfile(kmemleak)
-+
-+class TestSDSiDriver:
-+    def test_driver_loaded(self):
-+        lsmod_p = subprocess.Popen(('lsmod'), stdout=subprocess.PIPE)
-+        result = subprocess.check_output(('grep', '-q', MODULE_NAME), stdin=lsmod_p.stdout)
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiFilesClass:
-+
-+    def read_value(self, file):
-+        f = open(file, "r")
-+        value = f.read().strip("\n")
-+        return value
-+
-+    def get_dev_folder(self, socket):
-+        return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/'
-+
-+    def test_sysfs_files_exist(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        print (folder)
-+        assert os.path.isfile(folder + "guid") == True
-+        assert os.path.isfile(folder + "provision_akc") == True
-+        assert os.path.isfile(folder + "provision_cap") == True
-+        assert os.path.isfile(folder + "state_certificate") == True
-+        assert os.path.isfile(folder + "registers") == True
-+
-+    def test_sysfs_file_permissions(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        mode = os.stat(folder + "guid").st_mode & 0o777
-+        assert mode == 0o444    # Read all
-+        mode = os.stat(folder + "registers").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+        mode = os.stat(folder + "provision_akc").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "provision_cap").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "state_certificate").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+
-+    def test_sysfs_file_ownership(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        st = os.stat(folder + "guid")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "registers")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+    def test_sysfs_file_sizes(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        if self.read_value(folder + "guid") == GUID:
-+            st = os.stat(folder + "registers")
-+            assert st.st_size == 72
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_size == 4096
-+
-+    def test_no_seek_allowed(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(folder + "provision_cap", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_akc", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+    def test_registers_seek(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        # Check that the value read from an offset of the entire
-+        # file is none-zero and the same as the value read
-+        # from seeking to the same location
-+        f = open(folder + "registers", "rb")
-+        data = f.read()
-+        f.seek(64)
-+        id = f.read()
-+        assert id != bytes(0)
-+        assert data[64:] == id
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiMailboxCmdsClass:
-+    def test_provision_akc_eoverflow_1017_bytes(self, socket):
-+
-+        # The buffer for writes is 1k, of with 8 bytes must be
-+        # reserved for the command, leaving 1016 bytes max.
-+        # Check that we get an overflow error for 1017 bytes.
-+        node = get_dev_file_path(socket, "provision_akc")
-+        rand_file = bytes(os.urandom(1017))
-+
-+        f = open(node, 'wb', 0)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.EOVERFLOW
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSdsiDriverLocksClass:
-+    def test_enodev_when_pci_device_removed(self, socket):
-+        node = get_dev_file_path(socket, "provision_akc")
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(node, 'wb', 0)
-+        g = open(node, 'wb', 0)
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        with pytest.raises(OSError) as error:
-+            g.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        f.close()
-+        g.close()
-+
-+        # Short wait needed to allow file to close before pulling driver
-+        sleep(1)
-+
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_sdsi'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_vsec'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', 'intel_vsec'))
-+        p.wait()
-+
-+        # Short wait needed to allow driver time to get inserted
-+        # before continuing tests
-+        sleep(1)
-+
-+    def test_memory_leak(self, socket):
-+        if not kmemleak_enabled():
-+            pytest.skip("kmemleak not enabled in kernel")
-+
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        sleep(1)
-+
-+        subprocess.check_output(('modprobe', '-r', 'intel_sdsi'))
-+        subprocess.check_output(('modprobe', '-r', 'intel_vsec'))
-+
-+        with open('/sys/kernel/debug/kmemleak', 'w') as f:
-+            print('scan', file = f)
-+        sleep(5)
-+
-+        assert os.stat('/sys/kernel/debug/kmemleak').st_size == 0
-+
-+        subprocess.check_output(('modprobe', 'intel_vsec'))
-+        sleep(1)
--- 
-2.25.1
+
+> 
+> 
+> On 18/02/2022 13:53, Daniel Lezcano wrote:
+> > This series provides a thermal library providing the basic callback
+> > oriented
+> > netlink communication and events with the thermal framework, a
+> > temperature
+> > capture tool and a thermal monitoring skeleton using the thermal
+> > library.
+> > 
+> > Changelog:
+> >   - V1:
+> >      - Took into account RFC comments (unsubscribe, error enum,
+> > thermal daemon
+> >        renamed to thermal-engine)
+> > 
+> > Daniel Lezcano (4):
+> >    tools/lib/thermal: Add a thermal library
+> >    tools/thermal: Add util library
+> >    tools/thermal: A temperature capture tool
+> >    tools/thermal: Add thermal daemon skeleton
+> > 
+> >   tools/Makefile                                |  36 +-
+> >   tools/lib/thermal/.gitignore                  |   2 +
+> >   tools/lib/thermal/Build                       |   5 +
+> >   tools/lib/thermal/Makefile                    | 165 ++++++++
+> >   tools/lib/thermal/commands.c                  | 351
+> > ++++++++++++++++
+> >   tools/lib/thermal/events.c                    | 164 ++++++++
+> >   tools/lib/thermal/include/thermal.h           | 141 +++++++
+> >   tools/lib/thermal/libthermal.map              |  25 ++
+> >   tools/lib/thermal/libthermal.pc.template      |  12 +
+> >   tools/lib/thermal/sampling.c                  |  75 ++++
+> >   tools/lib/thermal/thermal.c                   | 126 ++++++
+> >   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
+> >   tools/lib/thermal/thermal_nl.h                |  46 ++
+> >   tools/thermal/lib/Build                       |   3 +
+> >   tools/thermal/lib/Makefile                    | 158 +++++++
+> >   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> >   tools/thermal/lib/log.c                       |  77 ++++
+> >   tools/thermal/lib/log.h                       |  31 ++
+> >   tools/thermal/lib/mainloop.c                  | 135 ++++++
+> >   tools/thermal/lib/mainloop.h                  |  14 +
+> >   tools/thermal/lib/thermal-tools.h             |  10 +
+> >   tools/thermal/lib/uptimeofday.c               |  40 ++
+> >   tools/thermal/lib/uptimeofday.h               |  12 +
+> >   tools/thermal/thermal-engine/Build            |   2 +
+> >   tools/thermal/thermal-engine/Makefile         |  27 ++
+> >   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
+> >   tools/thermal/thermometer/Build               |   2 +
+> >   tools/thermal/thermometer/Makefile            |  23 +
+> >   tools/thermal/thermometer/thermometer.c       | 393
+> > ++++++++++++++++++
+> >   tools/thermal/thermometer/thermometer.conf    |   5 +
+> >   30 files changed, 2591 insertions(+), 3 deletions(-)
+> >   create mode 100644 tools/lib/thermal/.gitignore
+> >   create mode 100644 tools/lib/thermal/Build
+> >   create mode 100644 tools/lib/thermal/Makefile
+> >   create mode 100644 tools/lib/thermal/commands.c
+> >   create mode 100644 tools/lib/thermal/events.c
+> >   create mode 100644 tools/lib/thermal/include/thermal.h
+> >   create mode 100644 tools/lib/thermal/libthermal.map
+> >   create mode 100644 tools/lib/thermal/libthermal.pc.template
+> >   create mode 100644 tools/lib/thermal/sampling.c
+> >   create mode 100644 tools/lib/thermal/thermal.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.h
+> >   create mode 100644 tools/thermal/lib/Build
+> >   create mode 100644 tools/thermal/lib/Makefile
+> >   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+> >   create mode 100644 tools/thermal/lib/log.c
+> >   create mode 100644 tools/thermal/lib/log.h
+> >   create mode 100644 tools/thermal/lib/mainloop.c
+> >   create mode 100644 tools/thermal/lib/mainloop.h
+> >   create mode 100644 tools/thermal/lib/thermal-tools.h
+> >   create mode 100644 tools/thermal/lib/uptimeofday.c
+> >   create mode 100644 tools/thermal/lib/uptimeofday.h
+> >   create mode 100644 tools/thermal/thermal-engine/Build
+> >   create mode 100644 tools/thermal/thermal-engine/Makefile
+> >   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+> >   create mode 100644 tools/thermal/thermometer/Build
+> >   create mode 100644 tools/thermal/thermometer/Makefile
+> >   create mode 100644 tools/thermal/thermometer/thermometer.c
+> >   create mode 100644 tools/thermal/thermometer/thermometer.conf
+> > 
+> 
+> 
 

@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEB14C4242
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0104C423E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239495AbiBYK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:27:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S239472AbiBYK0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiBYK1O (ORCPT
+        with ESMTP id S231214AbiBYK0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:27:14 -0500
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC32384;
-        Fri, 25 Feb 2022 02:26:37 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id 8358946002C;
-        Fri, 25 Feb 2022 12:26:33 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
-        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aPS1rS0NMg1h; Fri, 25 Feb 2022 12:26:31 +0200 (EET)
-Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id 6D87C46001C;
-        Fri, 25 Feb 2022 12:26:31 +0200 (EET)
-From:   Anssi Hannula <anssi.hannula@bitwise.fi>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2 v2] xhci: fix garbage USBSTS being logged in some cases
-Date:   Fri, 25 Feb 2022 12:26:02 +0200
-Message-Id: <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
-References: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
+        Fri, 25 Feb 2022 05:26:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216BE1DDFEF;
+        Fri, 25 Feb 2022 02:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645784778; x=1677320778;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Od2Q0PrAzsRZXZ0/z1Qgjp51QpoNvxr0jp+QIqhly54=;
+  b=1N2xLO06AH5D+xfj4zQjH/E2qM4Lf8HyqCLW1M11IF+wXf1k6KT6r3Rf
+   IdIQmRdH2wYHvcfy5P4LEaeYUt9UpCy4aAOhWRFdleKpycvPF4tAQHhyU
+   R7odGBCRSwrmV/RRmetGUlVwgL6absWITu8Qw0zK0foFfEJdm9DRQg88Y
+   zoV8Qa+qTJFkW/HpvO2GLdrmq35hCGmXNVXiDFQJXhb+392mA5BD8qNGu
+   GXv8Xm0P2D/vNRC6HL8O4bpW8Z7P87bLWkFyrPqZvF9lydqw9RY/4BkwQ
+   VGyNPvoMZmJHXYKzjQQcVTe7MTIUsqWCdgn5Bw8TZiBK7Sz1U/xn7hD0U
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
+   d="scan'208";a="154399769"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 03:26:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 25 Feb 2022 03:26:16 -0700
+Received: from [10.12.72.56] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 25 Feb 2022 03:26:13 -0700
+Message-ID: <3f5fdfca-1bbc-d6aa-4649-c50a9cd92052@microchip.com>
+Date:   Fri, 25 Feb 2022 11:26:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v7] ARM: dts: add DT for lan966 SoC and 2-port board
+ pcb8291
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+CC:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        <arnd@arndb.de>, <alexandre.belloni@bootlin.com>, <olof@lixom.net>,
+        <soc@kernel.org>, <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <Manohar.Puri@microchip.com>
+References: <20220221080858.14233-1-kavyasree.kotagiri@microchip.com>
+ <3b4c56201a478876783e69243c901cd8@walle.cc>
+ <85566f97-dcfc-f477-1ebb-5cac955b791a@microchip.com>
+ <413b29b8a2e7a73561f942d4b7c78b9b@walle.cc>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <413b29b8a2e7a73561f942d4b7c78b9b@walle.cc>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xhci_decode_usbsts() is expected to return a zero-terminated string by
-its only caller, xhci_stop_endpoint_command_watchdog(), which directly
-logs the return value:
+On 24/02/2022 at 15:55, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> Hi,
+> 
+> Am 2022-02-24 15:51, schrieb Nicolas Ferre:
+>>>> +/ {
+>>>> +     model = "Microchip LAN966 family SoC";
+>>>> +     compatible = "microchip,lan966";
+>>>
+>>> As mentioned earlier, this isn't a documented compatible string. So,
+>>> I guess without overwriting this in the board dts it will throw an
+>>> error with the dt schema validator. OTOH, there are many dtsi files
+>>> in arch/arm/boot/dts/ doing this. I don't know what is correct here.
+>>
+>> I see it documented here:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/atmel-at91.yaml#n165
+>>
+>> Isn't it what is expected?
+> 
+> That only documents
+>     compatible = "microchip,lan9662-pcb8291", "microchip,lan9662",
+> "microchip,lan966";
+> 
+> But not the one above.
 
-  xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
+Oh, you mean the "microchip,lan966" string alone in the compatibility 
+string and not with the other ones before it...
+I didn't know it could be different in yaml syntax. Thanks for 
+highlighting that.
 
-However, if no recognized bits are set in usbsts, the function will
-return without having called any sprintf() and therefore return an
-untouched non-zero-terminated caller-provided buffer, causing garbage
-to be output to log.
+Best regards,
+   Nicolas
 
-Fix that by always including the raw value in the output.
-
-Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
-in xhci tracing") the result effect in the failure case was different as
-a static buffer was used here, but the code still worked incorrectly.
-
-Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
----
-
-Mathias Nyman wrote:
-> Maybe this could be the first thing printed out, something like (untested):
-[...]
-
-Heh, that's actually pretty close to what I had at one point, not sure
-why I didn't go with it. I agree it looks better.
-
-Changed and tested on real HW:
-
-[   11.998832] xhci-hcd xhci-hcd.1.auto: xHCI host not responding to stop endpoint command.
-[   12.006925] xhci-hcd xhci-hcd.1.auto: USBSTS: 0x00000000
+> 
+>>
+>>> Everthing else looks good.
+>>
+>> Thanks a lot for your reviews.
+>>
+>>> Reviewed-by: Michael Walle <michael@walle.cc>
+>>
+>> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+>> I'm queuing it to at91-dt branch for reaching arm-soc in 5.18 merge
+>> window.
+> 
+> Nice, then I'm good to go for my patches on top of this :)
+> 
+> -michael
 
 
-v2: Improve print format on Mathias Nyman's suggestion.
-
- drivers/usb/host/xhci.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8a0026ee9524..dd24c09927bd 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2622,8 +2622,11 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
- {
- 	int ret = 0;
- 
-+	ret = sprintf(str, " 0x%08x", usbsts);
-+
- 	if (usbsts == ~(u32)0)
--		return " 0xffffffff";
-+		return str;
-+
- 	if (usbsts & STS_HALT)
- 		ret += sprintf(str + ret, " HCHalted");
- 	if (usbsts & STS_FATAL)
 -- 
-2.34.1
-
+Nicolas Ferre

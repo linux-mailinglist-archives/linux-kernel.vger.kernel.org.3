@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6253A4C3E4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F944C3E3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbiBYGQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 01:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S235737AbiBYGKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 01:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiBYGQi (ORCPT
+        with ESMTP id S231511AbiBYGKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 01:16:38 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BE61C6EF3;
-        Thu, 24 Feb 2022 22:16:06 -0800 (PST)
-X-UUID: 0d2856bb4180414badd3a37ee335b04f-20220225
-X-UUID: 0d2856bb4180414badd3a37ee335b04f-20220225
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <lena.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 809528167; Fri, 25 Feb 2022 14:15:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 25 Feb 2022 14:15:19 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 25 Feb 2022 14:15:19 +0800
-From:   Lena Wang <lena.wang@mediatek.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <wsd_upstream@mediatek.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lena.wang@mediatek.com>,
-        <hao.lin@mediatek.com>
-Subject: [PATCH] net:fix up skbs delta_truesize in UDP GRO frag_list
-Date:   Fri, 25 Feb 2022 14:09:13 +0800
-Message-ID: <1645769353-7171-2-git-send-email-lena.wang@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1645769353-7171-1-git-send-email-lena.wang@mediatek.com>
-References: <1645769353-7171-1-git-send-email-lena.wang@mediatek.com>
+        Fri, 25 Feb 2022 01:10:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3F47305E;
+        Thu, 24 Feb 2022 22:10:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C238F619E8;
+        Fri, 25 Feb 2022 06:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A499DC340E7;
+        Fri, 25 Feb 2022 06:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645769415;
+        bh=KjHqun70ceY4y9Hq5jQPzKS0oEJN18YZnI/4cs6MxCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=du/UUF+lpOkb1Cx5KQhNkeTYU4QJyT/NpkImGREqcGTMUF6quJEoU5Ut92Zb8kK9R
+         RRCFDqJJWGkXRZ915EmkdZFlTVqrE4QrquwTq9TVs27NzoOQ8j9syqzYceM5tAnWGI
+         D+zLdw5SMEglCWL4ZthlVudiEPiE0jTP0jQZuriqvGOwICJi8N/CsvIY093BjU77le
+         h6ssdkSzjilAc7Zhadwqxz9h5HmIf8Fq5yBtwkwEHF+XZoHx91RrpVSTWV1XpfuzfA
+         4lK3zPCjy6dtj0gt3tjZSiRfxLHBLLiQ+aAlduVzTWiI15g9TuvXbmgGhr8QCSK7UM
+         z9GkvqSc9bieg==
+Date:   Fri, 25 Feb 2022 11:40:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: defconfig: Enable Qualcomm GPI DMA Driver
+Message-ID: <Yhhywyf2ms44Lec2@matsya>
+References: <20220225044033.1376769-1-vkoul@kernel.org>
+ <YhhwEaPdyUcHBL+V@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhhwEaPdyUcHBL+V@builder.lan>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,57 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lena wang <lena.wang@mediatek.com>
+On 24-02-22, 23:58, Bjorn Andersson wrote:
+> On Thu 24 Feb 22:40 CST 2022, Vinod Koul wrote:
+> 
+> > Qualcomm GPI DMA Driver is used for DMA transfers for Serial engines
+> > like Geni I2C and SPI.
+> > 
+> > Enable this dma driver
+> > 
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> > 
+> > Changes in v2:
+> >  - As dicussed with Bjorn GPI DMA is used by Serial engines SPI/I2C so we
+> >    can make this a module rather than inbuilt
+> > 
+> >  arch/arm64/configs/defconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> > index 30516dc0b70e..d73913f082d7 100644
+> > --- a/arch/arm64/configs/defconfig
+> > +++ b/arch/arm64/configs/defconfig
+> > @@ -948,6 +948,7 @@ CONFIG_PL330_DMA=y
+> >  CONFIG_TEGRA20_APB_DMA=y
+> >  CONFIG_TEGRA210_ADMA=m
+> >  CONFIG_QCOM_BAM_DMA=y
+> > +CONFIG_QCOM_GPI_DMA=y
+> 
+> Would you like me to change this to =m as I apply the patch, just to
+> make it match changelog? ;)
 
-The truesize for a UDP GRO packet is added by main skb and skbs in main
-skb's frag_list:
-skb_gro_receive_list
-        p->truesize += skb->truesize;
+:(
 
-When uncloning skb, it will call pskb_expand_head and trusesize for
-frag_list skbs may increase. This can occur when allocators uses
-__netdev_alloc_skb and not jump into __alloc_skb. This flow does not
-use ksize(len) to calculate truesize while pskb_expand_head uses.
-skb_segment_list
-err = skb_unclone(nskb, GFP_ATOMIC);
-pskb_expand_head
-        if (!skb->sk || skb->destructor == sock_edemux)
-                skb->truesize += size - osize;
+Crap, looks like i forgot to add and did the amend, would be great if
+you can, or I can send a v3...
 
-If we uses increased truesize adding as delta_truesize, it will be
-larger than before and even larger than previous total truesize value
-if skbs in frag_list are abundant. The main skb truesize will become
-smaller and even a minus value or a huge value for an unsigned int
-parameter. Then the following memory check will drop this abnormal skb.
-
-To avoid this error we should use the original truesize to segment the
-main skb.
-
-Signed-off-by: lena wang <lena.wang@mediatek.com>
----
- net/core/skbuff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 9d0388be..8b7356c 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -3876,6 +3876,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
- 		list_skb = list_skb->next;
- 
- 		err = 0;
-+		delta_truesize += nskb->truesize;
- 		if (skb_shared(nskb)) {
- 			tmp = skb_clone(nskb, GFP_ATOMIC);
- 			if (tmp) {
-@@ -3900,7 +3901,6 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
- 		tail = nskb;
- 
- 		delta_len += nskb->len;
--		delta_truesize += nskb->truesize;
- 
- 		skb_push(nskb, -skb_network_offset(nskb) + offset);
- 
 -- 
-1.9.1
-
+~Vinod

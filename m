@@ -2,118 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0DD4C3C0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3E14C3C1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiBYC7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 21:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S236884AbiBYDBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbiBYC7K (ORCPT
+        with ESMTP id S231855AbiBYDBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:59:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF6441EC255
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:58:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645757918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CauoURgUZ4v50QCANyExBUMWNUuGIGlFYqjgg6YLGL0=;
-        b=FCDgNJCd/rG0tQzOcYySSapjWxF3ydBGnQB5bUSbCU7GAzInT25SFDBdwtzPakPKktCLcE
-        NNlRmvtZIL+xUrHpD+wKUB03q0fauSgBxwDFZuZX34feRvCI9LFr0GdsStGY0kgQjcM64u
-        YPurK4obn7lq4vmIQPLKnzFVJ4UShQY=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-342-5KJyPtwnPpq2tbcYy7-Ibw-1; Thu, 24 Feb 2022 21:58:37 -0500
-X-MC-Unique: 5KJyPtwnPpq2tbcYy7-Ibw-1
-Received: by mail-pg1-f198.google.com with SMTP id u74-20020a63794d000000b00373efe2ac5aso1953712pgc.14
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:58:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CauoURgUZ4v50QCANyExBUMWNUuGIGlFYqjgg6YLGL0=;
-        b=G1NjSI1uWc8fXkp0/p4ngxGVt9b38h5C7TWM7KuqD2mhNVsCaMUujPgoQS+wJ45sTo
-         +TuK+hAfO9eMdILhIfTtpbJL/ta5qmdpzCOmdHhXcetbVthHIh1KjHC6uShn9ptqmkzs
-         YfWjLO2ppAbEHKG1lldx3m8R8HiBsG2wh8XMubjFaj/DcvyWdpGZTz0ni14E2D/nzcUs
-         FhgR5M/e/P2GVI+RwnIMX9pqPQ5+OlYRKncVPEyvm/8VoUcb6mswDmciJvhAx9SpbMNJ
-         0CU8yqcenZY9nuU9rLJTPL7m7VXF8ap673o4SZv/v3UElPvgA7uiltvHNAqPUxOxMgeR
-         aN9Q==
-X-Gm-Message-State: AOAM533aTgAk0D5IXZXo3A98ZGLYxpkudoJ0nDnZzkIlocMa85mu/yEN
-        0r+7bJBmph9rUiCB/egfLVvF592oyPYO+I2wNDmitGVMb7DP2s6jPw0r0+pJTV6ERvUymIX1qKI
-        cSJTj0qEdanmVuRuGvHpQxNz0
-X-Received: by 2002:a17:903:244a:b0:150:25d1:d2ff with SMTP id l10-20020a170903244a00b0015025d1d2ffmr1997046pls.70.1645757916653;
-        Thu, 24 Feb 2022 18:58:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzOGBViVIjSEs20HiGON+uKIVzSeyomY20qDxZXbhJhU+z/NsaHHhe2vINl/rCk0vkgrzDJ8Q==
-X-Received: by 2002:a17:903:244a:b0:150:25d1:d2ff with SMTP id l10-20020a170903244a00b0015025d1d2ffmr1997024pls.70.1645757916338;
-        Thu, 24 Feb 2022 18:58:36 -0800 (PST)
-Received: from xz-m1.local ([94.177.118.52])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm891513pfh.83.2022.02.24.18.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 18:58:35 -0800 (PST)
-Date:   Fri, 25 Feb 2022 10:58:26 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Serge Hallyn <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH] userfaultfd, capability: introduce CAP_USERFAULTFD
-Message-ID: <YhhF0jEeytTO32yt@xz-m1.local>
-References: <20220224181953.1030665-1-axelrasmussen@google.com>
- <fd265bb6-d9be-c8a3-50a9-4e3bf048c0ef@schaufler-ca.com>
- <CAJHvVcgbCL7+4bBZ_5biLKfjmz_DKNBV8H6NxcLcFrw9Fbu7mw@mail.gmail.com>
- <0f74f1e4-6374-0e00-c5cb-04eba37e4ee3@schaufler-ca.com>
+        Thu, 24 Feb 2022 22:01:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109D027DF09;
+        Thu, 24 Feb 2022 19:00:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D9CD61683;
+        Fri, 25 Feb 2022 03:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFCBC340E9;
+        Fri, 25 Feb 2022 03:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645758044;
+        bh=AM7WkNQ/J9ykSGikSjl3kMHphOyMvG64ZQ99q8mtEvs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uo+h5JiA6aUw89qkWCkkOe6hWWpu63MemUZwuMwHPM7YSGAk65aH736HTVMQz5hB4
+         21xXozHk/k+D3GDH/NjTivTJmKC3jKHMPE3gkaHBiQ+X1yOzBYJH0Lq4TZcfklo8N9
+         UncPm9zbvKGV35/yeduK+Hi9YoFskXwOJDDH4YZFXvi6snQQqOOui9RHQ/y24JDGo9
+         vNrT285Hpc2VWxHkT8ZlfQpaRf9ow40NCyZqkrxv4/9cn0be7m4vfjbo9KHxH1uQlo
+         H1ccetnpkSByT7PgsHiHdQVx3918OMCttrJvMQuogAqZBpT249Heq99IXstoKBTiyO
+         aQhpUfzNCaT+w==
+Message-ID: <ed3e1f08-045c-1a9e-9319-5789faddc473@kernel.org>
+Date:   Thu, 24 Feb 2022 20:00:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0f74f1e4-6374-0e00-c5cb-04eba37e4ee3@schaufler-ca.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next] net/ip6mr: Fix build with !CONFIG_IPV6_PIMSM_V2
+Content-Language: en-US
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Mobashshera Rasool <mobash.rasool.linux@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+References: <20220223121721.421247-1-dima@arista.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220223121721.421247-1-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 04:39:44PM -0800, Casey Schaufler wrote:
-> What I'd want to see is multiple users where the use of CAP_USERFAULTD
-> is independent of the use of CAP_SYS_PTRACE. That is, the programs would
-> never require CAP_SYS_PTRACE. There should be demonstrated real value.
-> Not just that a compromised program with CAP_SYS_PTRACE can do bad things,
-> but that the programs with CAP_USERFAULTDD are somehow susceptible to
-> being exploited to doing those bad things. Hypothetical users are just
-> that, and often don't materialize.
+On 2/23/22 5:17 AM, Dmitry Safonov wrote:
+> diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+> index a9775c830194..4e74bc61a3db 100644
+> --- a/net/ipv6/ip6mr.c
+> +++ b/net/ipv6/ip6mr.c
+> @@ -1653,7 +1653,6 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+>  	mifi_t mifi;
+>  	struct net *net = sock_net(sk);
+>  	struct mr_table *mrt;
+> -	bool do_wrmifwhole;
+>  
+>  	if (sk->sk_type != SOCK_RAW ||
+>  	    inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
+> @@ -1761,6 +1760,7 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+>  #ifdef CONFIG_IPV6_PIMSM_V2
+>  	case MRT6_PIM:
+>  	{
+> +		bool do_wrmifwhole;
+>  		int v;
+>  
+>  		if (optlen != sizeof(v))
+> 
+> base-commit: 922ea87ff6f2b63f413c6afa2c25b287dce76639
 
-I kind of have the same question indeed..
+you could do one better and move it under the
+'if (v != mrt->mroute_do_pim) {'
 
-The use case we're talking about is VM migration, and the in-question
-subject is literally the migration process or thread.  Isn't that a trusted
-piece of software already?
-
-Then the question is why the extra capability (in CAP_PTRACE but not in
-CAP_UFFD) could bring much risk to the system.  Axel, did I miss something
-important?
-
-Thanks,
-
--- 
-Peter Xu
-
+so that the do_wrmifwhole check is only done when needed

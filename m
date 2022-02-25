@@ -2,227 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058964C3FBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A324C3FC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbiBYIFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 03:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S238372AbiBYIJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 03:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiBYIFu (ORCPT
+        with ESMTP id S238366AbiBYIJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:05:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5919F460;
-        Fri, 25 Feb 2022 00:05:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8710261BA7;
-        Fri, 25 Feb 2022 08:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156CBC340E7;
-        Fri, 25 Feb 2022 08:05:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645776318;
-        bh=R8Z4PS4bqFbVj1m0cBD53CKo7jMpJ9THvKAGLBQf9oM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=SPkRrLaOLKMIxxH9f9JcRA6CW6sx836DiPSgqMMrnYIvCE/O5XlpRLSzNRyKOCgFR
-         khzLwdIlspdVyx9yDgJwzbLTpXRqEcsrOYbKPCXz2VvPsj+ga4/HZEiGa8SIdcPso/
-         VCdGejyWK5f2jPvWuq7vNh8gtCGjBdS9Qa8VrGq27sZqrP6wBKx2cHxXGswpu/NjDV
-         XUL5Aml+wxOZuOQyf2/NA/XvOt6TJPdwKZDxQkACB+O6GlFuYLtGnP3HdpQPp5SRUT
-         XLHcrVXLQxD6CVPevUf0oWCafdt0LwLKo1xU3jbkrhmLIyHRYSuQHJHm1oR2c81jmc
-         m4Jy9WNn8uSmg==
-From:   SeongJae Park <sj@kernel.org>
-To:     xhao@linux.alibaba.com
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/12] Introduce DAMON sysfs interface
-Date:   Fri, 25 Feb 2022 08:05:13 +0000
-Message-Id: <20220225080513.1908-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Fri, 25 Feb 2022 03:09:37 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Feb 2022 00:09:03 PST
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612A82D1D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 00:09:03 -0800 (PST)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 2022022508075884706c0963ab344f05
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 25 Feb 2022 09:07:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=/4YsYMzxGvUqIQBjTEP/XQJ98gM/OKteuKxCDp9Dg40=;
+ b=RuPWmdOKnZmPnTz3nAA0N/4wXomoRHUZOFCuf9m7vWEE4ZSOWckAJuG7LNg9WQ4iqgfLW5
+ 9q1wjTrksQCeIBrtnD2tw9LAgWKqwKKww2z9/xubuwq+Q44awYiezZufmPK7w3hPG0eFGgGY
+ Br4i2uPT/P+Gaz5IFxpsJ8BrP2QKo=;
+From:   Daniel Starke <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [RFC 0/1] tty: n_gsm: improve standard compliance and feature completeness
+Date:   Fri, 25 Feb 2022 00:07:57 -0800
+Message-Id: <20220225080758.2869-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-In-Reply-To: <1dbf6a7e-0805-bc44-ec4b-379405d619d1@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-118192:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+We as Siemens Mobility GmbH are using the n_gsm module as specified by
+3GPP 27.010 and required by UNISIG SUBSET-037 chapter 6 of the European
+train control system standard to establish multiple parallel connections to
+GSM-R radio mobiles as used in our communication system.
+This is needed to handle CS (circuit switched) and PS (packet switched)
+services and functions in parallel. It requires at least four multiplexed
+data link connections (DLCs), including the control channel. It also
+requires the use of convergence layer type 2 in advanced option mode.
 
-On Fri, 25 Feb 2022 15:32:47 +0800 xhao@linux.alibaba.com wrote:
+We have improved support for this use case and the overall stability of the
+driver to achieve this. The modified driver was extensively tested and is
+already included in our productive system. We have integrated it with
+mobiles from Funkwerk Systems GmbH and Triorail Bahnfunk GmbH.
+A rough summary of changes made can be found below. The patch presented
+here shall provide a first impression of the planned upcoming commits and
+allow others to test and comment on these at an early stage. We plan to
+separate these changes and commit smaller change sets of this. But this
+is still work in progress.
 
-> Hi SeongJae:
-> 
-> On 2/23/22 11:20 PM, SeongJae Park wrote:
-[...]
-> > Introduction
-> > ============
-> >
-> > DAMON's debugfs-based user interface (DAMON_DBGFS) served very well, so far.
-> > However, it unnecessarily depends on debugfs, while DAMON is not aimed to be
-> > used for only debugging.  Also, the interface receives multiple values via one
-> > file.  For example, schemes file receives 18 values.  As a result, it is
-> > inefficient, hard to be used, and difficult to be extended.  Especially,
-> > keeping backward compatibility of user space tools is getting only challenging.
-> > It would be better to implement another reliable and flexible interface and
-> > deprecate DAMON_DBGFS in long term.
-> >
-> > For the reason, this patchset introduces a sysfs-based new user interface of
-> > DAMON.  The idea of the new interface is, using directory hierarchies and
-> > having one dedicated file for each value.  For a short example, users can do
-> > the virtual address monitoring via the interface as below:
-> >
-> >      # cd /sys/kernel/mm/damon/admin/
-> >      # echo 1 > kdamonds/nr
-> >      # echo 1 > kdamonds/0/contexts/nr
-> >      # echo vaddr > kdamonds/0/contexts/0/operations
-> >      # echo 1 > kdamonds/0/contexts/0/targets/nr
-> >      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
-> >      # echo on > kdamonds/0/state
-> >
-> > A brief representation of the files hierarchy of DAMON sysfs interface is as
-> > below.  Childs are represented with indentation, directories are having '/'
-> > suffix, and files in each directory are separated by comma.
-> >
-> >      /sys/kernel/mm/damon/admin
-> >      │ kdamonds/nr
-> >      │ │ 0/state,pid
-> >      │ │ │ contexts/nr
-> >      │ │ │ │ 0/operations
-> >      │ │ │ │ │ monitoring_attrs/
-> >      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
-> >      │ │ │ │ │ │ nr_regions/min,max
-> >      │ │ │ │ │ targets/nr
-> >      │ │ │ │ │ │ 0/pid
-> >      │ │ │ │ │ │ │ regions/nr
-> >      │ │ │ │ │ │ │ │ 0/start,end
-> >      │ │ │ │ │ │ │ │ ...
-> >      │ │ │ │ │ │ ...
-> >      │ │ │ │ │ schemes/nr
-> >      │ │ │ │ │ 0/action
-> >      │ │ │ │ │ │ access_pattern/
-> >      │ │ │ │ │ │ │ sz/min,max
-> >      │ │ │ │ │ │ │ nr_accesses/min,max
-> >      │ │ │ │ │ │ │ age/min,max
-> >      │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
-> >      │ │ │ │ │ │ │ weights/sz,nr_accesses,age
-> >      │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
-> >      │ │ │ │ │ │ stats/nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
-> >      │ │ │ │ │ ...
-> >      │ │ ...
-> >
-> > Detailed usage of the files will be described in the final Documentation patch
-> > of this patchset.
-> 
-> The introduction of the sys DAMON interface makes DAMON seem more 
-> hierarchical, but it brings a problem. From a user's perspective,
-> 
-> I find it difficult to operate. For example:
-> 
-> step one:
-> 
-> echo xxx > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr
-> 
-> step two:
-> 
-> echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/1/pid
-> 
-> echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/0/pid
-> 
-> .........
-> 
-> Alas, it is really too troublesome to operate, can you make it as simple 
-> as possible, perhaps by referring to the implementation of cgroup.
+Our motivation of this commitment to the community lies in a smoother
+migration to upcoming kernel versions, a broader use for a better test
+coverage and an overall better quality of the driver. In a first step a set
+of bug fixes unrelated to the new functions has already been committed.
 
-Thank you very much for the great comments.  I agree that this interface
-requires quite a redundant works.  Nevertheless, this interface is not aimed to
-be used by human hand but user space tools.  We provide the DAMON user-space
-tool, damo, for the purpose.  Damo already supports this interface while
-introducing nearly-zero change to the end user interface.  All you need to do
-to use sysfs in background with damo is adding '--damon_interface sysfs' to the
-command.
+[CR] Changes included:
+[1] added: proper n_gsm Kernel module information fields and module version
+[2] added: optional start-of-frame flag skipping in advanced option mode
+[3] added: UI (unnumbered information) frame support
+[4] added: PN (parameter negotiation) message handling and function support
+[5] added: optional keep-alive control link supervision via Test messages
+[6] added: proc fs files to provide meta data for the n_gsm instances
+[7] added: various parameter gated kernel debug messages
+[8] added: option for strict mode to reject non-standard compliant behavior
+[9] added: TIOCM_OUT1 and TIOCM_OUT2 to allow responder to operate as modem
+[10] added: TIOCMIWAIT support on virtual ttys
+[11] added: additional ioctls and parameters to configure the new functions
+[12] added: more function comments and aligned all to the coding guidelines
+[13] changed: overall locking mechanism to avoid data race conditions
+[14] changed: outgoing data flow to decouple physical from virtual tty
+     handling for better performance and to avoid dead-locks
+[15] fixed: advanced option mode implementation
+[16] fixed: convergence layer type 2 implementation
+[17] fixed: handling of CLD (multiplexer close down) messages
+[18] fixed: broken muxer close down procedure
 
-I guess someone might still want low level sysfs control for development and
-testing purpose.  For the case, damo is providing a new subcommand, fs[1], for
-more low level sysfs control with better interface.  It allows users to
-read/write all hierarchies and values in DAMON sysfs via json format.  For
-example:
+[NO] Points that remain open and are out of scope here:
+[1] DLCI priority handling according to the configured values. The priority
+    is currently only handled according to the DLCI number.
+[2] correct flow control handling (the standard is ambiguous, ch. 5.4.8.1)
+[3] combined opening and closing flag handling in basic option mode
+    (ch. 5.2.6.1; the data can be ambiguous)
+[4] power control services (ch. 5.1.5 and 5.4.7)
+[5] error recovery mode option (ch. 6)
+[6] convergence layer type 3 and 4 (ch. 5.5.3 and 5.5.4)
+[7] remote port negotiation (ch. 5.1.8.2.1 and 5.4.6.3.9)
+[8] service negotiation (ch. 5.1.8.1.2 and 5.4.6.3.11)
 
-    # ./damo/damo fs --damon_interface sysfs read
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "nr_contexts": "0\n"
-                },
-                "pid": "-1\n",
-                "state": "off\n"
-            },
-            "nr_kdamonds": "1\n"
-        }
-    }
-    # cat content.json
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "nr_contexts": "1\n"
-                }
-            }
-        }
-    }
-    # ./damo/damo fs --damon_interface sysfs write --content "$(cat content.json)"
-    # ./damo/damo fs --damon_interface sysfs read
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "0": {
-                        "monitoring_attrs": {
-                            "intervals": {
-                                "aggr_us": "100000\n",
-                                "sample_us": "5000\n",
-                                "update_us": "60000000\n"
-                            },
-                            "nr_regions": {
-                                "max": "1000\n",
-                                "min": "10\n"
-                            }
-                        },
-                        "operations": "vaddr\n",
-                        "schemes": {
-                            "nr_schemes": "0\n"
-                        },
-                        "targets": {
-                            "nr_targets": "0\n"
-                        }
-                    },
-                    "nr_contexts": "1\n"
-                },
-                "pid": "-1\n",
-                "state": "off\n"
-            },
-            "nr_kdamonds": "1\n"
-        }
-    }
+The referenced chapters can be found in 3GPP TS 27.010. See link below.
 
-I admit damo interface is still not perfect.  It has many rooms for
-improvement.
+[X] Furthermore, the following commits conflict with this implementation:
+[1] commit 509067bbd264 ("tty: n_gsm: Delete gsm_disconnect when config requester")
+[2] commit 5b87686e3203 ("tty: n_gsm: Modify gsmtty driver register method when config requester")
+[3] commit 0b91b5332368 ("tty: n_gsm: Save dlci address open status when config requester")
+[4] commit 46292622ad73 ("tty: n_gsm: clean up indenting in gsm_queue()")
 
-If even damo is too heavyweight for you, you could use some general scripts
-that can do above work in similar manner:
-https://github.com/sjp38/lazybox/blob/master/scripts/fs.py
+[X1] conflicts with the new implementation for parameter negotiation.
+[X2], [X3] and [X4] implement dynamic virtual tty registration to allow
+uevents on the responder side. However, on responder side an application
+may first want to configure the link before it is established. That is why
+the virtual ttys need to be available directly after the control channel
+establishment. The responder still gets informed about a line open by
+waiting for DTR (data terminal ready) to be set. Just like on a physical
+serial interface.
 
+Please provide comments and hints for the integration of these changes into
+the upcoming Linux kernel. Feel free to refer to specific points by the
+given identifier (e.g. CR11 for TIOCMIWAIT support).
 
-Thanks,
-SJ
+With best regards,
+Daniel Starke
+
+Link: https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+Link: https://www.era.europa.eu/sites/default/files/filesystem/ertms/ccs_tsi_annex_a_-_mandatory_specifications/set_of_specifications_3_etcs_b3_r2_gsm-r_b1/index010_-_subset-037_v320.pdf
+
+Daniel Starke (1):
+  tty: n_gsm: improve standard compliance and feature completeness
+
+ drivers/tty/n_gsm.c         | 4523 +++++++++++++++++++++++++----------
+ include/uapi/linux/gsmmux.h |   70 +-
+ 2 files changed, 3364 insertions(+), 1229 deletions(-)
+
+-- 
+2.25.1
+

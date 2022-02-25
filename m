@@ -2,141 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C574C484F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6068A4C485A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239624AbiBYPIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S240889AbiBYPMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiBYPIT (ORCPT
+        with ESMTP id S233681AbiBYPL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:08:19 -0500
+        Fri, 25 Feb 2022 10:11:58 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 196175F8DD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:07:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 222C342EE3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645801664;
+        s=mimecast20190719; t=1645801885;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZXzg+KGWwllNSUCsWeeWB7MRsMJhSltnLNe0hU0M5/I=;
-        b=Rd2cejM8e3m/g/pQCfrWLF37/svv9CZbY9EpslhY2Mld5gvrsU4aOQx6QGkxzakFMbeQSe
-        5bbAs+RBk4v8HZUc1gGlv/l8bQtEXnyitN9sls8rZ4bAi1hXXZA00O9henpfI0we+Thve4
-        2kdC0QQvX0oE/CNG6JTtEy+fd45ROfI=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+vDSd3MfJiVJ9pM7iY8KPAaFiAK18v4PIHfNY77Ls7M=;
+        b=IxuKd3DWsAauMCGyZbWwr+waPQXF9DRZHnfvZO2yDhcxTmP4Jr3GeggsIfVCEkitB5jJAT
+        /QfIxbfqEJ2m6T5t25DuFt+/aO66uGsZ5x1UJJKHsrfkHkIhRddvSyQsKahVzRuYNRf5XE
+        QGZcstyWiVirGks59pR3TIziC6O0H3U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-S9f_2QIBNVaTvWwzPoRLlg-1; Fri, 25 Feb 2022 10:07:42 -0500
-X-MC-Unique: S9f_2QIBNVaTvWwzPoRLlg-1
-Received: by mail-wr1-f70.google.com with SMTP id u9-20020adfae49000000b001e89793bcb0so987512wrd.17
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:07:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZXzg+KGWwllNSUCsWeeWB7MRsMJhSltnLNe0hU0M5/I=;
-        b=uq3FzSXHPd8sw0nVuN1Bdr/p/3Lii73qi4JyI9R+QMTtJ75gijqR7JvGmHDpqlhKt+
-         4oX+kyc/p4qxXNPF4SE2CxAwpqEAfgJ5uA1M5WRQYFE3a1QaTwzq2UZTlIZ1sGKEQ9PJ
-         vtBLp0pkWyj3XcqrTPK1Xv3RdP9gogicoLxCCRWlIlPZ9dKU+Is7dpeIS71wP+obMW5H
-         m0i7Km9CwGpuoPEAQI+QdEQO970bC0WQWAuFNzK8vsMgBEYS8vAQYOD+ovNcSu28OHC1
-         eb1chqPyZ4KvgWcL1rUmjxcGnu06MqU7iR3mOvtmU3dUuntLwklrtz18mjMRSFkeRC+o
-         GQaA==
-X-Gm-Message-State: AOAM531U6K0DxwprwUrPG+Fnzo8FoP9e/mstX1/PQds9+BZGjweCALuo
-        oQC4lb/YxgYtrf9uPLCF5/xvweqACvzU8FtWjvOSO5UZgGQsiBvS2P/qbKK3ohA/fdjaEpIKHDH
-        4oSuZ6osjbz57DH41DK6JV96h
-X-Received: by 2002:a05:600c:500a:b0:37b:ec27:1a2c with SMTP id n10-20020a05600c500a00b0037bec271a2cmr3059013wmr.179.1645801661629;
-        Fri, 25 Feb 2022 07:07:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxrSki4Vsp6ZUikRWQRUZNBuGhi0p8ZD93QRZt7+iDH2WTTx9q7DHDK2VxAukY6SBi8ZBxrJw==
-X-Received: by 2002:a05:600c:500a:b0:37b:ec27:1a2c with SMTP id n10-20020a05600c500a00b0037bec271a2cmr3058983wmr.179.1645801661377;
-        Fri, 25 Feb 2022 07:07:41 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id f17-20020adffcd1000000b001edbf438d83sm2559168wrs.32.2022.02.25.07.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 07:07:40 -0800 (PST)
-Message-ID: <4896c092-a5cb-7ed0-a5d0-32b3abc352c4@redhat.com>
-Date:   Fri, 25 Feb 2022 16:07:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/3] KVM: x86/emulator: Move the unhandled outer
- privilege level logic of far return into __load_segment_descriptor()
-Content-Language: en-US
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
+ us-mta-639-Uu84fDVSNvicbHA8zeGW2A-1; Fri, 25 Feb 2022 10:11:21 -0500
+X-MC-Unique: Uu84fDVSNvicbHA8zeGW2A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 051351006AA6;
+        Fri, 25 Feb 2022 15:11:19 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C2C78659F;
+        Fri, 25 Feb 2022 15:11:12 +0000 (UTC)
+Message-ID: <b9638fe3383d7b36846255e1d05afa9c1bfc7a0f.camel@redhat.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <cover.1644292363.git.houwenlong.hwl@antgroup.com>
- <5b7188e6388ac9f4567d14eab32db9adf3e00119.1644292363.git.houwenlong.hwl@antgroup.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <5b7188e6388ac9f4567d14eab32db9adf3e00119.1644292363.git.houwenlong.hwl@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
+Date:   Fri, 25 Feb 2022 17:11:11 +0200
+In-Reply-To: <eb849245c98ea7f5d5e9320ee6ee6b0d1851b439.camel@infradead.org>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+         <20220225082223.18288-7-guang.zeng@intel.com>
+         <79f5ce60c65280f4fb7cba0ceedaca0ff5595c48.camel@redhat.com>
+         <eb849245c98ea7f5d5e9320ee6ee6b0d1851b439.camel@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/22 10:34, Hou Wenlong wrote:
-> Outer-privilege level return is not implemented in emulator,
-> move the unhandled logic into __load_segment_descriptor to
-> make it easier to understand why the checks for RET are
-> incomplete.
+On Fri, 2022-02-25 at 14:56 +0000, David Woodhouse wrote:
+> On Fri, 2022-02-25 at 16:46 +0200, Maxim Levitsky wrote:
+> > On Fri, 2022-02-25 at 16:22 +0800, Zeng Guang wrote:
+> > > From: Maxim Levitsky <
+> > > mlevitsk@redhat.com
+> > > 
+> > > No normal guest has any reason to change physical APIC IDs, and
+> > > allowing this introduces bugs into APIC acceleration code.
+> > > 
+> > > And Intel recent hardware just ignores writes to APIC_ID in
+> > > xAPIC mode. More background can be found at:
+> > > https://lore.kernel.org/lkml/Yfw5ddGNOnDqxMLs@google.com/
+> > > 
+> > > 
+> > > Looks there is no much value to support writable xAPIC ID in
+> > > guest except supporting some old and crazy use cases which
+> > > probably would fail on real hardware. So, make xAPIC ID
+> > > read-only for KVM guests.
+> > > 
+> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> > 
+> > Assuming that this is approved and accepted upstream,
+> > that is even better that my proposal of doing this
+> > when APICv is enabled.
+> > 
+> > Since now apic id is always read only, now we should not 
+> > forget to clean up some parts of kvm like kvm_recalculate_apic_map,
+> > which are not needed anymore
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> ---
->   arch/x86/kvm/emulate.c | 14 ++++++++------
->   1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index 37c4213bdcc1..bd91b952eb0a 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -1631,9 +1631,14 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
->   		if (!(seg_desc.type & 8))
->   			goto exception;
->   
-> -		/* RET can never return to an inner privilege level. */
-> -		if (transfer == X86_TRANSFER_RET && rpl < cpl)
-> -			goto exception;
-> +		if (transfer == X86_TRANSFER_RET) {
-> +			/* RET can never return to an inner privilege level. */
-> +			if (rpl < cpl)
-> +				goto exception;
-> +			/* Outer-privilege level return is not implemented */
-> +			if (rpl > cpl)
-> +				return X86EMUL_UNHANDLEABLE;
-> +		}
->   		if (transfer == X86_TRANSFER_RET || transfer == X86_TRANSFER_TASK_SWITCH) {
->   			if (seg_desc.type & 4) {
->   				/* conforming */
-> @@ -2228,9 +2233,6 @@ static int em_ret_far(struct x86_emulate_ctxt *ctxt)
->   	rc = emulate_pop(ctxt, &cs, ctxt->op_bytes);
->   	if (rc != X86EMUL_CONTINUE)
->   		return rc;
-> -	/* Outer-privilege level return is not implemented */
-> -	if (ctxt->mode >= X86EMUL_MODE_PROT16 && (cs & 3) > cpl)
-> -		return X86EMUL_UNHANDLEABLE;
->   	rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
->   				       X86_TRANSFER_RET,
->   				       &new_desc);
+> Can we also now optimise kvm_get_vcpu_by_id() so it doesn't have to do
+> a linear search over all the vCPUs when there isn't a 1:1
+> correspondence with the vCPU index?
 
-Queued all three, thanks!
+I don't think so since vcpu id can still be set by userspace to anything,
+and this is even used to encode topology in it.
 
-Paolo
+
+However a hash table can still be used there to speed it up regardless of
+read-only apic id IMHO.
+
+Or, even better than a hash table, I see that KVM already 
+limits vcpu_id to KVM_MAX_VCPUS * 4 with a comment that only two extra
+bits of topology are used:
+
+"In the worst case, we'll need less than one extra bit for the
+ * Core ID, and less than one extra bit for the Package (Die) ID,
+ * so ratio of 4 should be enough"
+
+Thus, we could in theory standardize location of those bits in apic_id 
+(even with a new KVM extension and do linear search for legacy userspace), 
+and then just mask/shift the topology bits.
+
+The kvm extension would be defining how many low (or high?) bits of vcpu_id
+are topology bits.
+
+Best regards,
+	Maxim Levitsky
 

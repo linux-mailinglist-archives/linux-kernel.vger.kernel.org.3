@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D634C4B63
+	by mail.lfdr.de (Postfix) with ESMTP id E2F804C4B64
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243379AbiBYQxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S243183AbiBYQxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243217AbiBYQwy (ORCPT
+        with ESMTP id S243224AbiBYQwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 11:52:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F006223219
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:22 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D590C22322B;
+        Fri, 25 Feb 2022 08:52:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3546361CF7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B1DC34104;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D81661D07;
+        Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA770C340F4;
         Fri, 25 Feb 2022 16:52:20 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nNdpL-00B8MT-N2;
+        id 1nNdpL-00B8N1-TD;
         Fri, 25 Feb 2022 11:52:19 -0500
-Message-ID: <20220225165219.547132100@goodmis.org>
+Message-ID: <20220225165219.737025658@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 25 Feb 2022 11:51:59 -0500
+Date:   Fri, 25 Feb 2022 11:52:00 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-linus][PATCH 08/13] tracing/osnoise: Make osnoise_main to sleep for microseconds
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+Subject: [for-linus][PATCH 09/13] tracefs: Set the group ownership in apply_options() not
+ parse_options()
 References: <20220225165151.824659113@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,97 +48,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-osnoise's runtime and period are in the microseconds scale, but it is
-currently sleeping in the millisecond's scale. This behavior roots in the
-usage of hwlat as the skeleton for osnoise.
+Al Viro brought it to my attention that the dentries may not be filled
+when the parse_options() is called, causing the call to set_gid() to
+possibly crash. It should only be called if parse_options() succeeds
+totally anyway.
 
-Make osnoise to sleep in the microseconds scale. Also, move the sleep to
-a specialized function.
+He suggested the logical place to do the update is in apply_options().
 
-Link: https://lkml.kernel.org/r/302aa6c7bdf2d131719b22901905e9da122a11b2.1645197336.git.bristot@kernel.org
-
-Cc: Ingo Molnar <mingo@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: stable@vger.kernel.org
+Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_osnoise.c | 53 ++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 21 deletions(-)
+ fs/tracefs/inode.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 870a08da5b48..cfddb30e65ab 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1436,6 +1436,37 @@ static int run_osnoise(void)
- static struct cpumask osnoise_cpumask;
- static struct cpumask save_cpumask;
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index bafc02bf8220..3638d330ff5a 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -264,7 +264,6 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ 			if (!gid_valid(gid))
+ 				return -EINVAL;
+ 			opts->gid = gid;
+-			set_gid(tracefs_mount->mnt_root, gid);
+ 			break;
+ 		case Opt_mode:
+ 			if (match_octal(&args[0], &option))
+@@ -293,6 +292,9 @@ static int tracefs_apply_options(struct super_block *sb)
+ 	inode->i_uid = opts->uid;
+ 	inode->i_gid = opts->gid;
  
-+/*
-+ * osnoise_sleep - sleep until the next period
-+ */
-+static void osnoise_sleep(void)
-+{
-+	u64 interval;
-+	ktime_t wake_time;
++	if (tracefs_mount && tracefs_mount->mnt_root)
++		set_gid(tracefs_mount->mnt_root, opts->gid);
 +
-+	mutex_lock(&interface_lock);
-+	interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
-+	mutex_unlock(&interface_lock);
-+
-+	/*
-+	 * differently from hwlat_detector, the osnoise tracer can run
-+	 * without a pause because preemption is on.
-+	 */
-+	if (!interval) {
-+		/* Let synchronize_rcu_tasks() make progress */
-+		cond_resched_tasks_rcu_qs();
-+		return;
-+	}
-+
-+	wake_time = ktime_add_us(ktime_get(), interval);
-+	__set_current_state(TASK_INTERRUPTIBLE);
-+
-+	while (schedule_hrtimeout_range(&wake_time, 0, HRTIMER_MODE_ABS)) {
-+		if (kthread_should_stop())
-+			break;
-+	}
-+}
-+
- /*
-  * osnoise_main - The osnoise detection kernel thread
-  *
-@@ -1444,30 +1475,10 @@ static struct cpumask save_cpumask;
-  */
- static int osnoise_main(void *data)
- {
--	u64 interval;
- 
- 	while (!kthread_should_stop()) {
--
- 		run_osnoise();
--
--		mutex_lock(&interface_lock);
--		interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
--		mutex_unlock(&interface_lock);
--
--		do_div(interval, USEC_PER_MSEC);
--
--		/*
--		 * differently from hwlat_detector, the osnoise tracer can run
--		 * without a pause because preemption is on.
--		 */
--		if (interval < 1) {
--			/* Let synchronize_rcu_tasks() make progress */
--			cond_resched_tasks_rcu_qs();
--			continue;
--		}
--
--		if (msleep_interruptible(interval))
--			break;
-+		osnoise_sleep();
- 	}
- 
  	return 0;
+ }
+ 
 -- 
 2.34.1

@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB614C4B6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD374C4B69
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243411AbiBYQyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S242600AbiBYQyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243265AbiBYQw4 (ORCPT
+        with ESMTP id S243263AbiBYQw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 11:52:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57DB1AF0E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C0E1A82A
         for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8057261D01
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD02661D18
         for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5BDC3410A;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B30C340F3;
         Fri, 25 Feb 2022 16:52:21 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nNdpM-00B8Ok-FG;
+        id 1nNdpM-00B8PJ-LI;
         Fri, 25 Feb 2022 11:52:20 -0500
-Message-ID: <20220225165220.299987881@goodmis.org>
+Message-ID: <20220225165220.494252223@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 25 Feb 2022 11:52:03 -0500
+Date:   Fri, 25 Feb 2022 11:52:04 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-linus][PATCH 12/13] rtla/osnoise: Free params at the exit
+Subject: [for-linus][PATCH 13/13] rtla/osnoise: Fix error message when failing to enable trace instance
 References: <20220225165151.824659113@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,32 +50,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-The variable that stores the parsed command line arguments are not
-being free()d at the rtla osnoise top exit path.
+When a trace instance creation fails, tools are printing:
 
-Free params variable before exiting.
+	Could not enable -> osnoiser <- tracer for tracing
 
-Link: https://lkml.kernel.org/r/0be31d8259c7c53b98a39769d60cfeecd8421785.1645206561.git.bristot@kernel.org
+Print the actual (and correct) name of the tracer it fails to enable.
 
-Fixes: 1eceb2fc2ca5 ("rtla/osnoise: Add osnoise top mode")
+Link: https://lkml.kernel.org/r/53ef0582605af91eca14b19dba9fc9febb95d4f9.1645206561.git.bristot@kernel.org
+
+Fixes: b1696371d865 ("rtla: Helper functions for rtla")
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- tools/tracing/rtla/src/osnoise_top.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/tracing/rtla/src/osnoise.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index c67dc28ef716..7af769b9c0de 100644
---- a/tools/tracing/rtla/src/osnoise_top.c
-+++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -573,6 +573,7 @@ int osnoise_top_main(int argc, char **argv)
- 	osnoise_free_top(tool->data);
- 	osnoise_destroy_tool(record);
- 	osnoise_destroy_tool(tool);
-+	free(params);
- out_exit:
- 	exit(return_value);
- }
+diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
+index 5648f9252e58..e60f1862bad0 100644
+--- a/tools/tracing/rtla/src/osnoise.c
++++ b/tools/tracing/rtla/src/osnoise.c
+@@ -810,7 +810,7 @@ struct osnoise_tool *osnoise_init_trace_tool(char *tracer)
+ 
+ 	retval = enable_tracer_by_name(trace->trace.inst, tracer);
+ 	if (retval) {
+-		err_msg("Could not enable osnoiser tracer for tracing\n");
++		err_msg("Could not enable %s tracer for tracing\n", tracer);
+ 		goto out_err;
+ 	}
+ 
 -- 
 2.34.1

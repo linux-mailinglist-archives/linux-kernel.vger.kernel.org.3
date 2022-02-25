@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E792A4C48BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF414C48D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242039AbiBYPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S242055AbiBYP2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiBYPYi (ORCPT
+        with ESMTP id S234823AbiBYP2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:24:38 -0500
-Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD9052E7B;
-        Fri, 25 Feb 2022 07:24:02 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 2DD2D443B971;
-        Fri, 25 Feb 2022 16:23:59 +0100 (CET)
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id w5frC7GqIgB7; Fri, 25 Feb 2022 16:23:58 +0100 (CET)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 85E04443813E;
-        Fri, 25 Feb 2022 16:23:58 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 85E04443813E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
-        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645802638;
-        bh=iD0jBu37ZJr9EscfZ+evIV/HBHbE8EFNFF4helr1Mt8=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=FW6BvRlvWP6FdiwJLoU9yE36O6SVnhAPoKMnhIHObYWEPqrmrZn+evVTXtzvqw3ak
-         cx4iTsx58Q6ljV0EdlEBG7hOiqxuw6ssbmZ7+dm2Qy9yhsOKQpfkK/E01FaD59kiNA
-         qShOihCn/O7s3YmfHGrqommDhD1DCooR105RwYS0=
-X-Virus-Scanned: amavisd-new at mail.tintel.eu
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id KOsuI6pEIIqM; Fri, 25 Feb 2022 16:23:58 +0100 (CET)
-Received: from taz.sof.bg.adlevio.net (unknown [IPv6:2001:67c:21bc:20::10])
-        by mail.tintel.eu (Postfix) with ESMTPS id 39FAB42A43B9;
-        Fri, 25 Feb 2022 16:23:58 +0100 (CET)
-From:   Stijn Tintel <stijn@linux-ipv6.be>
-To:     bpf@vger.kernel.org, songliubraving@fb.com, andrii@kernel.org,
-        toke@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kpsingh@kernel.org, yhs@fb.com, kafai@fb.com, daniel@iogearbox.net,
-        ast@kernel.org
-Subject: [PATCH v2] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
-Date:   Fri, 25 Feb 2022 17:23:55 +0200
-Message-Id: <20220225152355.315204-1-stijn@linux-ipv6.be>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Rspamd-Pre-Result: action=no action;
-        module=multimap;
-        Matched map: IP_WHITELIST
-X-Rspamd-Queue-Id: 39FAB42A43B9
-X-Rspamd-Pre-Result: action=no action;
-        module=multimap;
-        Matched map: IP_WHITELIST
-X-Spamd-Result: default: False [0.00 / 15.00];
-        IP_WHITELIST(0.00)[2001:67c:21bc:20::10];
-        ASN(0.00)[asn:200533, ipnet:2001:67c:21bc::/48, country:BG]
-X-Rspamd-Server: skulls
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Fri, 25 Feb 2022 10:28:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF033EB99;
+        Fri, 25 Feb 2022 07:27:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF92611CB;
+        Fri, 25 Feb 2022 15:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49A7C340E7;
+        Fri, 25 Feb 2022 15:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645802851;
+        bh=GchGfchhQ7WZ/NePHJUvIbF37Uwesc1jKSg3sKSQ77g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XEkgTN4tjcJNe2GGfNsBi6FBRH2Z1Us6IOVNk7z6miXcHmfESrALYlgbWiklNnBJD
+         bH2e6VIOIywHUU5CjFOPNl9z+CTJEhUFmCw34b4bcjW675XuioctQyc4SDbmlWvpy8
+         LvZOsyE0aVFW3+FcpE/XbVYngGsY51mZWbp/La3niPmtkgH+gsLgNCHapz2xCPINOg
+         6xmzLakgdjZNSlzKPIi/PKRnnYaDrdtz671xI2h6nGWFY67z70a59YCtwl6ly2Ps15
+         4xPl5BsBHT1satr/3RnMrcITuIl5MDztt8/xJmPq8yRuVYl1dsbQpH3kttyO3V1wPu
+         Ob/IPmLF/j4Ew==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nNcVF-00AYqQ-6f; Fri, 25 Feb 2022 15:27:29 +0000
+Date:   Fri, 25 Feb 2022 15:27:28 +0000
+Message-ID: <87lexz2cgv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] irqchip/apple-aic: Add support for AICv2
+In-Reply-To: <20220224130741.63924-8-marcan@marcan.st>
+References: <20220224130741.63924-1-marcan@marcan.st>
+        <20220224130741.63924-8-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,138 +71,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
-max_entries parameter set, the map will be created with max_entries set
-to the number of available CPUs. When we try to reuse such a pinned map,
-map_is_reuse_compat will return false, as max_entries in the map
-definition differs from max_entries of the existing map, causing the
-following error:
+On Thu, 24 Feb 2022 13:07:41 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> Introduce support for the new AICv2 hardware block in t6000/t6001 SoCs.
+> 
+> It seems these blocks are missing the information required to compute
+> the event register offset in the capability registers, so we specify
+> that in the DT.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/irqchip/irq-apple-aic.c | 148 ++++++++++++++++++++++++++++----
+>  1 file changed, 129 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index 93c622435ba2..602c8b274170 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -103,6 +103,57 @@
+>  
+>  #define AIC_MAX_IRQ		0x400
+>  
+> +/*
+> + * AIC v2 registers (MMIO)
+> + */
+> +
+> +#define AIC2_VERSION		0x0000
+> +#define AIC2_VERSION_VER	GENMASK(7, 0)
+> +
+> +#define AIC2_INFO1		0x0004
+> +#define AIC2_INFO1_NR_IRQ	GENMASK(15, 0)
+> +#define AIC2_INFO1_LAST_DIE	GENMASK(27, 24)
+> +
+> +#define AIC2_INFO2		0x0008
+> +
+> +#define AIC2_INFO3		0x000c
+> +#define AIC2_INFO3_MAX_IRQ	GENMASK(15, 0)
+> +#define AIC2_INFO3_MAX_DIE	GENMASK(27, 24)
+> +
+> +#define AIC2_RESET		0x0010
+> +#define AIC2_RESET_RESET	BIT(0)
+> +
+> +#define AIC2_CONFIG		0x0014
+> +#define AIC2_CONFIG_ENABLE	BIT(0)
+> +#define AIC2_CONFIG_PREFER_PCPU	BIT(28)
+> +
+> +#define AIC2_TIMEOUT		0x0028
+> +#define AIC2_CLUSTER_PRIO	0x0030
+> +#define AIC2_DELAY_GROUPS	0x0100
+> +
+> +#define AIC2_IRQ_CFG		0x2000
+> +
+> +/*
+> + * AIC2 registers are laid out like this, starting at AIC2_IRQ_CFG:
+> + *
+> + * Repeat for each die:
+> + *   IRQ_CFG: u32 * MAX_IRQS
+> + *   SW_SET: u32 * (MAX_IRQS / 32)
+> + *   SW_CLR: u32 * (MAX_IRQS / 32)
+> + *   MASK_SET: u32 * (MAX_IRQS / 32)
+> + *   MASK_CLR: u32 * (MAX_IRQS / 32)
+> + *   HW_STATE: u32 * (MAX_IRQS / 32)
+> + *
+> + * This is followed by a set of event registers, each 16K page aligned.
+> + * The first one is the AP event register we will use. Unfortunately,
+> + * the actual implemented die count is not specified anywhere in the
+> + * capability registers, so we have to explicitly specify the event
+> + * register offset in the device tree to remain forward-compatible.
+> + */
+> +
+> +#define AIC2_IRQ_CFG_TARGET	GENMASK(3, 0)
+> +#define AIC2_IRQ_CFG_DELAY_IDX	GENMASK(7, 5)
+> +
+>  #define MASK_REG(x)		(4 * ((x) >> 5))
+>  #define MASK_BIT(x)		BIT((x) & GENMASK(4, 0))
+>  
+> @@ -193,6 +244,7 @@ struct aic_info {
+>  	/* Register offsets */
+>  	u32 event;
+>  	u32 target_cpu;
+> +	u32 irq_cfg;
+>  	u32 sw_set;
+>  	u32 sw_clr;
+>  	u32 mask_set;
+> @@ -220,6 +272,14 @@ static const struct aic_info aic1_fipi_info = {
+>  	.fast_ipi	= true,
+>  };
+>  
+> +static const struct aic_info aic2_info = {
+> +	.version	= 2,
+> +
+> +	.irq_cfg	= AIC2_IRQ_CFG,
+> +
+> +	.fast_ipi	= true,
+> +};
+> +
+>  static const struct of_device_id aic_info_match[] = {
+>  	{
+>  		.compatible = "apple,t8103-aic",
+> @@ -229,6 +289,10 @@ static const struct of_device_id aic_info_match[] = {
+>  		.compatible = "apple,aic",
+>  		.data = &aic1_info,
+>  	},
+> +	{
+> +		.compatible = "apple,aic2",
+> +		.data = &aic2_info,
+> +	},
+>  	{}
+>  };
+>  
+> @@ -373,6 +437,14 @@ static struct irq_chip aic_chip = {
+>  	.irq_set_type = aic_irq_set_type,
+>  };
+>  
+> +static struct irq_chip aic2_chip = {
+> +	.name = "AIC2",
+> +	.irq_mask = aic_irq_mask,
+> +	.irq_unmask = aic_irq_unmask,
+> +	.irq_eoi = aic_irq_eoi,
+> +	.irq_set_type = aic_irq_set_type,
+> +};
+> +
+>  /*
+>   * FIQ irqchip
+>   */
+> @@ -529,10 +601,15 @@ static struct irq_chip fiq_chip = {
+>  static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
+>  			      irq_hw_number_t hw)
+>  {
+> +	struct aic_irq_chip *ic = id->host_data;
+>  	u32 type = FIELD_GET(AIC_EVENT_TYPE, hw);
+> +	struct irq_chip *chip = &aic_chip;
+> +
+> +	if (ic->info.version == 2)
+> +		chip = &aic2_chip;
+>  
+>  	if (type == AIC_EVENT_TYPE_IRQ) {
+> -		irq_domain_set_info(id, irq, hw, &aic_chip, id->host_data,
+> +		irq_domain_set_info(id, irq, hw, chip, id->host_data,
+>  				    handle_fasteoi_irq, NULL, NULL);
+>  		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
+>  	} else {
+> @@ -888,24 +965,26 @@ static int aic_init_cpu(unsigned int cpu)
+>  	/* Commit all of the above */
+>  	isb();
+>  
+> -	/*
+> -	 * Make sure the kernel's idea of logical CPU order is the same as AIC's
+> -	 * If we ever end up with a mismatch here, we will have to introduce
+> -	 * a mapping table similar to what other irqchip drivers do.
+> -	 */
+> -	WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
+> +	if (aic_irqc->info.version == 1) {
+> +		/*
+> +		 * Make sure the kernel's idea of logical CPU order is the same as AIC's
+> +		 * If we ever end up with a mismatch here, we will have to introduce
+> +		 * a mapping table similar to what other irqchip drivers do.
+> +		 */
+> +		WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
 
-libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter m=
-ismatch
+Don't you have a similar issue with AICv2?  Or is it that AICv2
+doesn't have this register?
 
-Fix this by overwriting max_entries in the map definition. For this to
-work, we need to do this in bpf_object__create_maps, before calling
-bpf_object__reuse_map.
+Thanks,
 
-Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF o=
-bjects")
-Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
----
-v2: overwrite max_entries in the map definition instead of adding an
-    extra check in map_is_reuse_compat, and introduce a helper function
-    for this as suggested by Song.
----
- tools/lib/bpf/libbpf.c | 44 ++++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 19 deletions(-)
+	M.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7f10dd501a52..133462637b09 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4854,7 +4854,6 @@ static int bpf_object__create_map(struct bpf_object=
- *obj, struct bpf_map *map, b
- 	LIBBPF_OPTS(bpf_map_create_opts, create_attr);
- 	struct bpf_map_def *def =3D &map->def;
- 	const char *map_name =3D NULL;
--	__u32 max_entries;
- 	int err =3D 0;
-=20
- 	if (kernel_supports(obj, FEAT_PROG_NAME))
-@@ -4864,21 +4863,6 @@ static int bpf_object__create_map(struct bpf_objec=
-t *obj, struct bpf_map *map, b
- 	create_attr.numa_node =3D map->numa_node;
- 	create_attr.map_extra =3D map->map_extra;
-=20
--	if (def->type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !def->max_entries=
-) {
--		int nr_cpus;
--
--		nr_cpus =3D libbpf_num_possible_cpus();
--		if (nr_cpus < 0) {
--			pr_warn("map '%s': failed to determine number of system CPUs: %d\n",
--				map->name, nr_cpus);
--			return nr_cpus;
--		}
--		pr_debug("map '%s': setting size to %d\n", map->name, nr_cpus);
--		max_entries =3D nr_cpus;
--	} else {
--		max_entries =3D def->max_entries;
--	}
--
- 	if (bpf_map__is_struct_ops(map))
- 		create_attr.btf_vmlinux_value_type_id =3D map->btf_vmlinux_value_type_=
-id;
-=20
-@@ -4928,7 +4912,7 @@ static int bpf_object__create_map(struct bpf_object=
- *obj, struct bpf_map *map, b
-=20
- 	if (obj->gen_loader) {
- 		bpf_gen__map_create(obj->gen_loader, def->type, map_name,
--				    def->key_size, def->value_size, max_entries,
-+				    def->key_size, def->value_size, def->max_entries,
- 				    &create_attr, is_inner ? -1 : map - obj->maps);
- 		/* Pretend to have valid FD to pass various fd >=3D 0 checks.
- 		 * This fd =3D=3D 0 will not be used with any syscall and will be rese=
-t to -1 eventually.
-@@ -4937,7 +4921,7 @@ static int bpf_object__create_map(struct bpf_object=
- *obj, struct bpf_map *map, b
- 	} else {
- 		map->fd =3D bpf_map_create(def->type, map_name,
- 					 def->key_size, def->value_size,
--					 max_entries, &create_attr);
-+					 def->max_entries, &create_attr);
- 	}
- 	if (map->fd < 0 && (create_attr.btf_key_type_id ||
- 			    create_attr.btf_value_type_id)) {
-@@ -4954,7 +4938,7 @@ static int bpf_object__create_map(struct bpf_object=
- *obj, struct bpf_map *map, b
- 		map->btf_value_type_id =3D 0;
- 		map->fd =3D bpf_map_create(def->type, map_name,
- 					 def->key_size, def->value_size,
--					 max_entries, &create_attr);
-+					 def->max_entries, &create_attr);
- 	}
-=20
- 	err =3D map->fd < 0 ? -errno : 0;
-@@ -5058,6 +5042,24 @@ static int bpf_object_init_prog_arrays(struct bpf_=
-object *obj)
- 	return 0;
- }
-=20
-+static int map_set_def_max_entries(struct bpf_map *map)
-+{
-+	if (map->def.type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !map->def.max=
-_entries) {
-+		int nr_cpus;
-+
-+		nr_cpus =3D libbpf_num_possible_cpus();
-+		if (nr_cpus < 0) {
-+			pr_warn("map '%s': failed to determine number of system CPUs: %d\n",
-+				map->name, nr_cpus);
-+			return nr_cpus;
-+		}
-+		pr_debug("map '%s': setting size to %d\n", map->name, nr_cpus);
-+		map->def.max_entries =3D nr_cpus;
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__create_maps(struct bpf_object *obj)
- {
-@@ -5090,6 +5092,10 @@ bpf_object__create_maps(struct bpf_object *obj)
- 			continue;
- 		}
-=20
-+		err =3D map_set_def_max_entries(map);
-+		if (err)
-+			goto err_out;
-+
- 		retried =3D false;
- retry:
- 		if (map->pin_path) {
---=20
-2.34.1
-
+-- 
+Without deviation from the norm, progress is not possible.

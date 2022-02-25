@@ -2,240 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDD04C3F14
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F112F4C3F4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbiBYHdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S238268AbiBYHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiBYHdY (ORCPT
+        with ESMTP id S233813AbiBYHva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:33:24 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2902556EB;
-        Thu, 24 Feb 2022 23:32:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V5S64K8_1645774367;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V5S64K8_1645774367)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 25 Feb 2022 15:32:48 +0800
-From:   xhao@linux.alibaba.com
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH 00/12] Introduce DAMON sysfs interface
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220223152051.22936-1-sj@kernel.org>
-Message-ID: <1dbf6a7e-0805-bc44-ec4b-379405d619d1@linux.alibaba.com>
-Date:   Fri, 25 Feb 2022 15:32:47 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Fri, 25 Feb 2022 02:51:30 -0500
+X-Greylist: delayed 835 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 23:50:55 PST
+Received: from TWHMLLG3.macronix.com (twhmllg3.macronix.com [122.147.135.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837951AAFD9;
+        Thu, 24 Feb 2022 23:50:55 -0800 (PST)
+Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
+        by TWHMLLG3.macronix.com with ESMTP id 21P7axKH033262;
+        Fri, 25 Feb 2022 15:36:59 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id 21P7ZmSO032150;
+        Fri, 25 Feb 2022 15:35:48 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id C0D21930209A44DCA07D;
+        Fri, 25 Feb 2022 15:35:48 +0800 (CST)
+In-Reply-To: <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com> <44f655d027b49b87065915f6ba2744d2@walle.cc> <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com> <23fbbf2dde387e3832b4ca23d46816c0@walle.cc> <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com> <e39d06684b8f3a63103f40f0e99e030e@walle.cc> <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com> <20220223183849.xcwciv2ybnkdnauk@ti.com> <6eb179ec-0b12-de30-829e-83ec6b964f21@microchip.com> <779069a1-7389-ab70-9f03-81090d0600ba@microchip.com> <a85e2d1862cfff477e97c39509b2b74d@walle.cc> <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
+To:     <Tudor.Ambarus@microchip.com>
+Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, michael@walle.cc,
+        miquel.raynal@bootlin.com, Nicolas.Ferre@microchip.com,
+        p.yadav@ti.com, richard@nod.at, vigneshr@ti.com
+Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
 MIME-Version: 1.0
-In-Reply-To: <20220223152051.22936-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KeepSent: 51615557:F936F0DA-482587F4:00215504;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OF51615557.F936F0DA-ON482587F4.00215504-482587F4.0029BB12@mxic.com.tw>
+From:   zhengxunli@mxic.com.tw
+Date:   Fri, 25 Feb 2022 15:35:48 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2022/02/25 PM 03:35:48,
+        Serialize complete at 2022/02/25 PM 03:35:48
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG3.macronix.com 21P7ZmSO032150
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SeongJae:
 
-On 2/23/22 11:20 PM, SeongJae Park wrote:
-> Chages from Previous Version (RFC)
-> ==================================
->
-> Compared to the RFC version of this patchset
-> (https://lore.kernel.org/linux-mm/20220217161938.8874-1-sj@kernel.org/), this
-> version contains below changes.
->
-> - Implement all DAMON debugfs interface providing features
-> - Writeup documents
-> - Add more selftests
->
-> Introduction
-> ============
->
-> DAMON's debugfs-based user interface (DAMON_DBGFS) served very well, so far.
-> However, it unnecessarily depends on debugfs, while DAMON is not aimed to be
-> used for only debugging.  Also, the interface receives multiple values via one
-> file.  For example, schemes file receives 18 values.  As a result, it is
-> inefficient, hard to be used, and difficult to be extended.  Especially,
-> keeping backward compatibility of user space tools is getting only challenging.
-> It would be better to implement another reliable and flexible interface and
-> deprecate DAMON_DBGFS in long term.
->
-> For the reason, this patchset introduces a sysfs-based new user interface of
-> DAMON.  The idea of the new interface is, using directory hierarchies and
-> having one dedicated file for each value.  For a short example, users can do
-> the virtual address monitoring via the interface as below:
->
->      # cd /sys/kernel/mm/damon/admin/
->      # echo 1 > kdamonds/nr
->      # echo 1 > kdamonds/0/contexts/nr
->      # echo vaddr > kdamonds/0/contexts/0/operations
->      # echo 1 > kdamonds/0/contexts/0/targets/nr
->      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
->      # echo on > kdamonds/0/state
->
-> A brief representation of the files hierarchy of DAMON sysfs interface is as
-> below.  Childs are represented with indentation, directories are having '/'
-> suffix, and files in each directory are separated by comma.
->
->      /sys/kernel/mm/damon/admin
->      │ kdamonds/nr
->      │ │ 0/state,pid
->      │ │ │ contexts/nr
->      │ │ │ │ 0/operations
->      │ │ │ │ │ monitoring_attrs/
->      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
->      │ │ │ │ │ │ nr_regions/min,max
->      │ │ │ │ │ targets/nr
->      │ │ │ │ │ │ 0/pid
->      │ │ │ │ │ │ │ regions/nr
->      │ │ │ │ │ │ │ │ 0/start,end
->      │ │ │ │ │ │ │ │ ...
->      │ │ │ │ │ │ ...
->      │ │ │ │ │ schemes/nr
->      │ │ │ │ │ 0/action
->      │ │ │ │ │ │ access_pattern/
->      │ │ │ │ │ │ │ sz/min,max
->      │ │ │ │ │ │ │ nr_accesses/min,max
->      │ │ │ │ │ │ │ age/min,max
->      │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
->      │ │ │ │ │ │ │ weights/sz,nr_accesses,age
->      │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
->      │ │ │ │ │ │ stats/nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
->      │ │ │ │ │ ...
->      │ │ ...
->
-> Detailed usage of the files will be described in the final Documentation patch
-> of this patchset.
-
-The introduction of the sys DAMON interface makes DAMON seem more 
-hierarchical, but it brings a problem. From a user's perspective,
-
-I find it difficult to operate. For example:
-
-step one:
-
-echo xxx > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr
-
-step two:
-
-echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/1/pid
-
-echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/0/pid
-
-.........
-
-Alas, it is really too troublesome to operate, can you make it as simple 
-as possible, perhaps by referring to the implementation of cgroup.
-
-> Main Difference Between DAMON_DBGFS and DAMON_SYSFS
-> ---------------------------------------------------
->
-> At the moment, DAMON_DBGFS and DAMON_SYSFS provides same features.  One
-> important difference between them is their exclusiveness.  DAMON_DBGFS works in
-> an exclusive manner, so that no DAMON worker thread (kdamond) in the system can
-> run concurrently and interfere somehow.  For the reason, DAMON_DBGFS asks users
-> to construct all monitoring contexts and start them at once.  It's not a big
-> problem but makes the operation a little bit complex and unflexible.
->
-> For more flexible usage, DAMON_SYSFS moves the responsibility of preventing any
-> possible interference to the admins and work in a non-exclusive manner.  That
-> is, users can configure and start contexts one by one.  Note that DAMON
-> respects both exclusive groups and non-exclusive groups of contexts, in a
-> manner similar to that of reader-writer locks.  That is, if any exclusive
-> monitoring contexts (e.g., contexts that started via DAMON_DBGFS) are running,
-> DAMON_SYSFS does not start new contexts, and vice versa.
->
-> Future Plan of DAMON_DBGFS Deprecation
-> ======================================
->
-> Once this patchset is merged, DAMON_DBGFS development will be frozen.  That is,
-> we will maintain it to work as is now so that no users will be break.  But, it
-> will not be extended to provide any new feature of DAMON.  The support will be
-> continued only until next LTS release.  After that, we will drop DAMON_DBGFS.
->
-> User-space Tooling Compatibility
-> --------------------------------
->
-> As DAMON_SYSFS provides all features of DAMON_DBGFS, all user space tooling can
-> move to DAMON_SYSFS.  As we will continue supporting DAMON_DBGFS until next LTS
-> kernel release, user space tools would have enough time to move to DAMON_SYSFS.
->
-> The official user space tool, damo[1], is already supporting both DAMON_SYSFS
-> and DAMON_DBGFS.  Both correctness tests[2] and performance tests[3] of DAMON
-> using DAMON_SYSFS also passed.
->
-> [1] https://github.com/awslabs/damo
-> [2] https://github.com/awslabs/damon-tests/tree/master/corr
-> [3] https://github.com/awslabs/damon-tests/tree/master/perf
->
-> Complete Git Tree
-> =================
->
-> You can get the complete git tree from
-> https://git.kernel.org/sj/h/damon/sysfs/patches/v1.
->
-> Sequence of Patches
-> ===================
->
-> First two patches (patches 1-2) make core changes for DAMON_SYSFS.  The first
-> one (patch 1) allows non-exclusive DAMON contexts so that DAMON_SYSFS can work
-> in non-exclusive mode, while the second one (patch 2) adds size of DAMON enum
-> types so that DAMON API users can safely iterate the enums.
->
-> Third patch (patch 3) implements basic sysfs stub for virtual address spaces
-> monitoring.  Note that this implements only sysfs files and DAMON is not
-> linked.  Fourth patch (patch 4) links the DAMON_SYSFS to DAMON so that users
-> can control DAMON using the sysfs files.
->
-> Following six patches (patches 5-10) implements other DAMON features that
-> DAMON_DBGFS supports one by one (physical address space monitoring, DAMON-based
-> operation schemes, schemes quotas, schemes prioritization weights, schemes
-> watermarks, and schemes stats).
->
-> Following patch (patch 11) adds a simple selftest for DAMON_SYSFS, and the
-> final one (patch 12) documents DAMON_SYSFS.
->
-> SeongJae Park (12):
->    mm/damon/core: Allow non-exclusive DAMON start/stop
->    mm/damon/core: Add number of each enum type values
->    mm/damon: Implement a minimal stub for sysfs-based DAMON interface
->    mm/damon/sysfs: Link DAMON for virtual address spaces monitoring
->    mm/damon/sysfs: Support physical address space monitoring
->    mm/damon/sysfs: Support DAMON-based Operation Schemes
->    mm/damon/sysfs: Support DAMOS quotas
->    mm/damon/sysfs: Support schemes prioritization weights
->    mm/damon/sysfs: Support DAMOS watermarks
->    mm/damon/sysfs: Support DAMOS stats
->    selftests/damon: Add a test for DAMON sysfs interface
->    Docs/admin-guide/mm/damon/usage: Document DAMON sysfs interface
->
->   Documentation/admin-guide/mm/damon/usage.rst |  349 ++-
->   include/linux/damon.h                        |    6 +-
->   mm/damon/Kconfig                             |    7 +
->   mm/damon/Makefile                            |    1 +
->   mm/damon/core.c                              |   23 +-
->   mm/damon/dbgfs.c                             |    2 +-
->   mm/damon/reclaim.c                           |    2 +-
->   mm/damon/sysfs.c                             | 2684 ++++++++++++++++++
->   tools/testing/selftests/damon/Makefile       |    1 +
->   tools/testing/selftests/damon/sysfs.sh       |  306 ++
->   10 files changed, 3364 insertions(+), 17 deletions(-)
->   create mode 100644 mm/damon/sysfs.c
->   create mode 100755 tools/testing/selftests/damon/sysfs.sh
->
--- 
-Best Regards!
-Xin Hao
+SGkgYWxsLA0KDQo8VHVkb3IuQW1iYXJ1c0BtaWNyb2NoaXAuY29tPiB3cm90ZSBvbiAyMDIyLzAy
+LzI0IKRVpMggMDY6Mjc6NTc6DQoNCj4gPFR1ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbT4gDQo+
+IDIwMjIvMDIvMjQgpFWkyCAwNjoyOA0KPiANCj4gVG8NCj4gDQo+IDxtaWNoYWVsQHdhbGxlLmNj
+PiwgPHAueWFkYXZAdGkuY29tPiwgDQo+IA0KPiBjYw0KPiANCj4gPHAueWFkYXZAdGkuY29tPiwg
+PGJyb29uaWVAa2VybmVsLm9yZz4sIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPiwNCj4gPHJp
+Y2hhcmRAbm9kLmF0PiwgPHZpZ25lc2hyQHRpLmNvbT4sIDxsaW51eC0NCj4gbXRkQGxpc3RzLmlu
+ZnJhZGVhZC5vcmc+LCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz4sIDxsaW51eC0NCj4g
+c3BpQHZnZXIua2VybmVsLm9yZz4sIDxOaWNvbGFzLkZlcnJlQG1pY3JvY2hpcC5jb20+LCANCj4g
+PHpoZW5neHVubGlAbXhpYy5jb20udHc+LCA8amFpbWVsaWFvQG14aWMuY29tLnR3Pg0KPiANCj4g
+U3ViamVjdA0KPiANCj4gUmU6IFtQQVRDSCAwLzRdIHNwaS1tZW06IEFsbG93IHNwZWNpZnlpbmcg
+dGhlIGJ5dGUgb3JkZXIgaW4gRFRSIG1vZGUNCj4gDQo+IE9uIDIvMjQvMjIgMTE6MzcsIE1pY2hh
+ZWwgV2FsbGUgd3JvdGU6DQo+ID4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBv
+ciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgDQo+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2Fm
+ZQ0KPiA+IA0KPiA+IEFtIDIwMjItMDItMjQgMDc6MzcsIHNjaHJpZWIgVHVkb3IuQW1iYXJ1c0Bt
+aWNyb2NoaXAuY29tOg0KPiA+PiBPbiAyLzI0LzIyIDA4OjA4LCBUdWRvci5BbWJhcnVzQG1pY3Jv
+Y2hpcC5jb20gd3JvdGU6DQo+ID4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtz
+IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSANCmtub3cNCj4gPj4+IHRoZSBjb250ZW50
+IGlzIHNhZmUNCj4gPj4+DQo+ID4+PiBPbiAyLzIzLzIyIDIwOjM4LCBQcmF0eXVzaCBZYWRhdiB3
+cm90ZToNCj4gPj4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
+YXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0K
+PiA+Pj4+DQo+ID4+Pj4gSGkgVHVkb3IsDQo+ID4+Pj4NCj4gPj4+PiBPbiAyMi8wMi8yMiAwMjo0
+M1BNLCBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+ID4+Pj4+IE9uIDIvMjIv
+MjIgMTY6MjcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4+Pj4+PiBFWFRFUk5BTCBFTUFJTDog
+RG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+
+Pj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+ID4+Pj4+Pg0KPiA+Pj4+Pj4gQW0gMjAyMi0w
+Mi0yMiAxNToyMywgc2NocmllYiBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+
+Pj4gT24gMi8yMi8yMiAxNjoxMywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gPj4+Pj4+Pj4gRVhU
+RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
+cyANCnlvdQ0KPiA+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+IHRoZSBjb250ZW50IGlzIHNhZmUN
+Cj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gQW0gMjAyMi0wMi0yMiAxNDo1NCwgc2NocmllYiBUdWRv
+ci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+Pj4+PiBPbiAyLzIxLzIyIDA5OjQ0LCBN
+aWNoYWVsIFdhbGxlIHdyb3RlOg0KPiA+Pj4+Pj4+Pj4+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3Qg
+Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MNCj4gPj4+Pj4+Pj4+PiB5b3UN
+Cj4gPj4+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+Pj4gdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiA+
+Pj4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+Pj4gQW0gMjAyMi0wMi0xOCAxNTo1OCwgc2NocmllYiBUdWRv
+ciBBbWJhcnVzOg0KPiA+Pj4+Pj4+Pj4+PiBGb3J0dW5hdGVseSB0aGVyZSBhcmUgY29udHJvbGxl
+cnMNCj4gPj4+Pj4+Pj4+Pj4gdGhhdCBjYW4gc3dhcCBiYWNrIHRoZSBieXRlcyBhdCBydW50aW1l
+LCBmaXhpbmcgdGhlDQo+ID4+Pj4+Pj4+Pj4+IGVuZGlhbm5lc3Nlcy4NCj4gPj4+Pj4+Pj4+Pj4g
+UHJvdmlkZQ0KPiA+Pj4+Pj4+Pj4+PiBhIHdheSBmb3IgdGhlIHVwcGVyIGxheWVycyB0byBzcGVj
+aWZ5IHRoZSBieXRlIG9yZGVyIGluIERUUg0KPiA+Pj4+Pj4+Pj4+PiBtb2RlLg0KPiA+Pj4+Pj4+
+Pj4+DQo+ID4+Pj4+Pj4+Pj4gQXJlIHRoZXJlIGFueSBwYXRjaGVzIGZvciB0aGUgYXRtZWwtcXVh
+ZHNwaSB5ZXQ/IFdoYXQgaGFwcGVucw0KPiA+Pj4+Pj4+Pj4+IGlmDQo+ID4+Pj4+Pj4+Pg0KPiA+
+Pj4+Pj4+Pj4gbm90IHB1YmxpYywgYnV0IHdpbGwgcHVibGlzaCB0aGVtIHRoZXNlIGRheXMuDQo+
+ID4+Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4+IHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3VwcG9ydCBp
+dD8gV2lsbCB0aGVyZSBiZSBhIHNvZnR3YXJlDQo+ID4+Pj4+Pj4+Pj4gZmFsbGJhY2s/DQo+ID4+
+Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4gbm8gbmVlZCBmb3IgYSBmYWxsYmFjaywgdGhlIGNvbnRyb2xs
+ZXIgY2FuIGlnbm9yZQ0KPiA+Pj4+Pj4+Pj4gb3AtPmRhdGEuZHRyX2Jzd2FwMTYNCj4gPj4+Pj4+
+Pj4+IGlmDQo+ID4+Pj4+Pj4+PiBpdCBjYW4ndCBzd2FwIGJ5dGVzLg0KPiA+Pj4+Pj4+Pg0KPiA+
+Pj4+Pj4+PiBJIGRvbid0IHVuZGVyc3RhbmQuIElmIHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3dh
+cCB0aGUgMTZiaXQNCj4gPj4+Pj4+Pj4gdmFsdWVzLA0KPiA+Pj4+Pj4+PiB5b3Ugd2lsbCByZWFk
+IHRoZSB3cm9uZyBjb250ZW50LCBubz8NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4+
+IEluIGxpbnV4IG5vLCBiZWNhdXNlIG1hY3Jvbml4IHN3YXBzIGJ5dGVzIG9uIGEgMiBieXRlIGJv
+dW5kYXJ5DQo+ID4+Pj4+Pj4gYm90aCBvbg0KPiA+Pj4+Pj4+IHJlYWRzIGFuZCBvbiBwYWdlIHBy
+b2dyYW0uIFRoZSBwcm9ibGVtIGlzIHdoZW4geW91IG1peCA4RC04RC04RA0KPiA+Pj4+Pj4+IG1v
+ZGUNCj4gPj4+Pj4+PiBhbmQNCj4gPj4+Pj4+PiAxLTEtMSBtb2RlIGFsb25nIHRoZSBib290IHN0
+YWdlcy4gTGV0J3MgYXNzdW1lIHlvdSB3cml0ZSBhbGwgDQpib290DQo+ID4+Pj4+Pj4gYmluYXJp
+ZXMNCj4gPj4+Pj4+PiBpbiAxLTEtMSBtb2RlLiBXaGVuIHJlYWNoaW5nIHUtYm9vdCBpZiB5b3Ug
+ZW5hYmxlIDhELThELThEIG1vZGUsDQo+ID4+Pj4+Pj4gd2hlbg0KPiA+Pj4+Pj4+IHUtYm9vdA0K
+PiA+Pj4+Pj4+IHdpbGwgdHJ5IHRvIGdldCB0aGUga2VybmVsIGl0IHdpbGwgZmFpbCwgYXMgdGhl
+IGZsYXNoIHN3YXBzIHRoZQ0KPiA+Pj4+Pj4+IGJ5dGVzDQo+ID4+Pj4+Pj4gY29tcGFyZWQNCj4g
+Pj4+Pj4+PiB0byB3aGF0IHdhcyB3cml0dGVuIHdpdGggMS0xLTEgbW9kZS4gWW91IHdyaXRlIEQw
+IEQxIEQyIEQzIGluDQo+ID4+Pj4+Pj4gMS0xLTENCj4gPj4+Pj4+PiBtb2RlIGFuZA0KPiA+Pj4+
+Pj4+IHdoZW4gcmVhY2hpbmcgdS1ib290IHlvdSB3aWxsIHJlYWQgRDEgRDAgRDMgRDIgYW5kIGl0
+IHdpbGwgbWVzcw0KPiA+Pj4+Pj4+IHRoZQ0KPiA+Pj4+Pj4+IGtlcm5lbCBpbWFnZS4NCj4gPj4+
+Pj4+DQo+ID4+Pj4+PiBCdXQgeW91IGhhdmUgdG8gY29uc2lkZXIgYWxzbyAzcmQgcGFydGllcywg
+bGlrZSBhbiBleHRlcm5hbA0KPiA+Pj4+Pj4gcHJvZ3JhbW1lcg0KPiA+Pj4+Pj4gb3INCj4gPj4+
+Pj4NCj4gPj4+Pj4gV2h5PyBJZiB5b3UgdXNlIHRoZSBzYW1lIG1vZGUgd2hlbiByZWFkaW5nIGFu
+ZCB3cml0aW5nLCBldmVyeXRoaW5nDQo+ID4+Pj4+IGlzIGZpbmUuDQo+ID4+Pj4+IEknbSBub3Qg
+c3VyZSB3aGF0J3MgeW91ciBzdWdnZXN0aW9uIGhlcmUuDQo+ID4+Pj4NCj4gPj4+PiBTbyBvdXIg
+c3RhbmNlIGhlcmUgaXMgdGhhdCB3ZSBkb24ndCBjYXJlIGFib3V0IGV4dGVybmFsIHByb2dyYW1z
+Pz4NCj4gPj4+PiBJZiB0aGF0IGlzIHRoZSBjYXNlIHRoZW4gd2h5IGJvdGhlciB3aXRoIGFsbCB0
+aGlzIGFueXdheT8gU2luY2UgdGhlDQo+ID4+Pj4gc3dhcA0KPiA+Pj4+IGhhcHBlbnMgYXQgYm90
+aCBwYWdlIHByb2dyYW0gYW5kIHJlYWQsIHdoYXQgeW91IHdyaXRlIGlzIHdoYXQgeW91DQo+ID4+
+Pj4gcmVhZA0KPiA+Pj4+IGJhY2suIFdobyBjYXJlcyB0aGUgb3JkZXIgc3RvcmVkIGluIHRoZSBh
+Y3R1YWwgZmxhc2ggbWVtb3J5IGFzIGxvbmcNCj4gPj4+PiBhcw0KPiA+Pj4+IHRoZSBkYXRhIHJl
+YWQgaXMgY29ycmVjdD8NCj4gPj4+Pg0KPiA+Pj4+IElmIHdlIGRvIGNhcmUgYWJvdXQgZXh0ZXJu
+YWwgcHJvZ3JhbXMsIHRoZW4gd2hhdCB3b3VsZCBoYXBwZW4gaWYgDQp0aGUNCj4gPj4+PiBleHRl
+cm5hbCBwcm9ncmFtIHdyaXRlcyBkYXRhIGluIDhELThELThEIG1vZGUgX3dpdGhvdXRfIHN3YXBw
+aW5nIA0KdGhlDQo+ID4+Pj4gYnl0ZXM/IFRoaXMgd291bGQgYWxzbyBjYXVzZSBkYXRhIGNvcnJ1
+cHRpb24uIFlvdSBjYW4ndCBjb250cm9sIA0Kd2hhdA0KPiA+Pj4+IHRoZXkgbW9kZSB0aGV5IHVz
+ZSwgYW5kIHlvdSBjYW4ndCBkZXRlY3QgaXQgbGF0ZXIgZWl0aGVyLg0KPiA+Pj4+DQo+ID4+Pj4g
+SSB0aGluayB0aGVyZSBpcyBubyB3aW5uaW5nIGhlcmUuIFlvdSBqdXN0IGhhdmUgdG8gc2F5IHRo
+YXQgDQpleHRlcm5hbA0KPiA+Pj4+IHByb2dyYW1zIHNob3VsZCB3cml0ZSBpbiA4RC04RC04RCBt
+b2RlIG9yIGl0IHdvbid0IGJvb3QuDQo+ID4gDQo+ID4gSU1ITyBpdCBzaG91bGQganVzdCB3b3Jr
+IHRoYXQgeW91IGNhbiB1c2UgMVMtMVMtMVMgbW9kZSBhbmQgOEQtOEQtOEQgDQpvbg0KPiA+IHRo
+ZQ0KPiA+IHNhbWUgZmxhc2guIEFmdGVyIGFsbCwgdGhhdCBpcyBUdWRvcidzIHVzZSBjYXNlLiBU
+aGUgUk9NIGFjY2VzcyB0aGUNCj4gPiBmbGFzaA0KPiA+IGluIHNpbmdsZSBiaXQgbW9kZSBhbmQg
+bGludXggaW4gOEQtOEQtOEQgbW9kZS4gTWF5YmUgdS1ib290IHdpbGwgdXNlDQo+ID4gcXVhZA0K
+PiA+IG1vZGUgaW4gYmV0d2Vlbi4gQWxsIG9mIHRoZXNlIGFjY2Vzc2VzIHNob3VsZCByZXR1cm4g
+dGhlIHNhbWUgZmxhc2gNCj4gPiBjb250ZW50Lg0KPiA+IA0KPiA+Pj4gSG93IGFib3V0IHN3YXBw
+aW5nIHRoZSBieXRlcyBqdXN0IGF0IHVzZXIgcmVxdWVzdD8gTWF5YmUgd2l0aCBhDQo+ID4+PiBL
+Y29uZmlnDQo+ID4+PiBvcHRpb24uDQo+ID4+DQo+ID4+IE1pY2hhZWwgaGFzIHN1Z2dlc3RlZCBv
+biAjaXJjIHRvIGFsd2F5cyBzd2FwIHRoZSBieXRlczogaWYgdGhlIFNQSQ0KPiA+PiBjb250cm9s
+bGVyDQo+ID4+IGNhbid0IGRvIGl0LCB0byBkbyBpdCBpbiBzb2Z0d2FyZSBhdCBTUEkgTk9SIGxl
+dmVsLiBJIGRvbid0IGtub3cgd2hhdA0KPiA+PiB0byBzYXkNCj4gPj4gYWJvdXQgdGhpcywgYmVj
+YXVzZSBKRURFQzIxNiBqdXN0IGluZm9ybXMgdGhlIHJlYWRlciBJIGd1ZXNzOg0KPiA+PiAiQnl0
+ZSBvcmRlciBvZiAxNi1iaXQgd29yZHMgaXMgc3dhcHBlZCB3aGVuIHJlYWQgaW4gOEQtOEQtOEQg
+bW9kZQ0KPiA+PiBjb21wYXJlZCB0bw0KPiA+PiAxLTEtMSBtb2RlLiIsIHRoaXMgZG9lc24ndCBs
+b29rIGxpa2UgYSBoYXJkIHJlcXVlc3QuIFRoZSBkb3duc2lkZSB0bw0KPiA+PiBkb2luZw0KPiA+
+PiB0aGUgc3dhcHBpbmcgaW4gc29mdHdhcmUgaXMgcGVyZm9ybWFuY2UgcGVuYWx0eSB3aGljaCB3
+aWxsIG1ha2UNCj4gPj4gbWFjcm9uaXgNCj4gPj4gdXNlcnMgaGF2ZSBzZWNvbmQgdGhvdWdodHMu
+IEkgZG9uJ3QgaGF2ZSBhIHN0cm9uZyBvcGluaW9uLCBidXQgSSBsZWFuDQo+ID4+IHRvd2FyZHMN
+Cj4gPj4gZG9pbmcgdGhlIHN3YXAganVzdCBhdCB1c2VyIHJlcXVlc3QsIHJlZ2FyZGxlc3MgaWYg
+SSBkbyBpdCB2aWEgdGhlIA0KU1BJDQo+ID4+IGNvbnRyb2xsZXINCj4gPj4gb3IgaW4gc29mdHdh
+cmUuDQo+ID4gDQo+ID4gSnVzdCBoYXZpbmcgYW5kIG9wdC1pbiB3aWxsIGJlIGEgbWVzcyBpbiB0
+aGUgZnV0dXJlIHdpdGggZmxhc2hlcw0KPiA+IGNvbnRhaW5pbmcNCj4gPiBieXRlIHN3YXBwZWQg
+Y29udGVudCBhbmQgd2UgY2FuJ3QgZXZlbiBmaXggaXQgYW5kIHdlIHdpbGwgaGF2ZSB0byBsaXZl
+DQo+ID4gd2l0aA0KPiA+IHRoYXQgZm9yZXZlci4gSU1ITyByaWdodCBub3cgaXMgdGhlIGJlc3Qg
+dGltZSB0byBjaXJjdW12ZW50IHRoYXQNCj4gPiBzY2VuYXJpby4NCj4gPiBJIGRvbid0IGhhdmUg
+YW55dGhpbmcgYWdhaW5zdCBtYWtlIGl0IHVzZXIgY29uZmlndXJhYmxlLCBidXQgaXQgc2hvdWxk
+DQo+ID4gYmUNCj4gPiBhbiBvcHQtb3V0Lg0KPiA+IA0KPiANCj4gc291bmRzIGdvb2QgdG8gbWUN
+Cj4gDQo+ID4gSSBoYXZlbid0IGxvb2tlZCBhdCBhbnkgY29udHJvbGxlcnMgd2hvIGNhbiBkbyA4
+RC04RC04RCBhY2Nlc3NlcywgDQptYXliZQ0KPiA+IG1vc3QNCj4gPiBvZiB0aGVtIGNhbiBkbyB0
+aGUgc3dhcHBpbmcgb24gdGhlaXIgb3duPyBTbyBpZiB5b3UgZG9uJ3Qgd2FudCB0bw0KPiA+IHN1
+cHBvcnQgYQ0KPiA+IHNvZnR3YXJlIGZhbGxiYWNrLCB0aGVuIHdlIHNob3VsZCBqdXN0IHNheSB0
+aGlzIG1vZGUgaXNuJ3Qgc3VwcG9ydGVkIA0KaWYNCj4gPiB0aGUgY29udHJvbGxlciBjYW4ndCBk
+byB0aGUgYnl0ZSBzd2FwcGluZyBhbmQgd2UgZmFsbCBiYWNrIHRvIGEgc2xvd2VyDQo+ID4gbW9k
+ZS4NCj4gDQo+IFNvZnR3YXJlIGZhbGxiYWNrIG9yIG1vZGUgZG93bmdyYWRlIC0gYm90aCBhcmUg
+Z29vZCBpZGVhcy4NCj4gUHJhdHl1c2gsIGNhbiB5b3VyIE9jdGFsIFNQSSBjb250cm9sbGVyIHN3
+YXAgYnl0ZXMgb24gYSAxNiBiaXQgYm91bmRhcnk/DQo+IA0KPiBUaGUgb25seSBkZWJhdGUgdGhh
+dCB3ZSBoYXZlIGlzIHdoZXRoZXIgdG8gYWx3YXlzIHN3YXAgKG9yIGRvd25ncmFkZSksDQo+IHRo
+dXMgdG8gaGF2ZSB0aGUgc2FtZSBieXRlIG9yZGVyIGFzIGluIDEtMS0xLCBvciB0byBpbnRyb2R1
+Y2UgYSBLY29uZmlnIA0Kb3B0aW9uDQo+IHRoYXQgd2lsbCBvcHQtb3V0IHRoZSBzd2FwLCBpc24n
+dCBpdD8gS2NvbmZpZyBpcyBhIGJpdCB1Z2xpZXIsIGJ1dCANCj4gbW9yZSBmbGV4aWJsZSwNCj4g
+YW5kIHdlIHN0aWxsIGRvbid0IGtub3cgZm9yIHN1cmUgaWYgdGhlIHN3YXAgaXMgbWFuZGF0b3J5
+IG9yIG5vdC4gDQo+IENhbiBzb21lb25lIGZyb20NCj4gbWFjcm9uaXggc2hlZCBzb21lIGxpZ2h0
+IG9uIHRoaXMgdG9waWM/DQoNClRoZSBtYWNyb25peCBpbiA4RC04RC04RCBtb2RlIGFsd2F5cyBo
+YXMgdG8gc3dhcCBkYXRhIGR1cmluZyByZWFkIGFuZCANCnByb2dyYW0NCm9wZXJhdGlvbnMuIFVu
+Zm9ydHVuYXRlbHkgdGhpcyBpcyBvdXIgbGltaXRhdGlvbiwgc3dhcCBkYXRhIGF0IHRoZSBmbGFz
+aCANCmxheWVyDQpyZWR1Y2VzIHBlcmZvcm1hbmNlIGFuZCBkb2VzIG5vdCBzdXBwb3J0IGRpcm1h
+cCBtb2RlLiBJZiB0aGUgU1BJIA0KY29udHJvbGxlcnMNCmFsbCBzdXBwb3J0IHN3YXAgZGF0YSwg
+ZXZlcnl0aGluZyBpcyBmaW5lLCBidXQgYXMgZmFyIGFzIEkga25vdywgdGhpcyBpcyANCnJhcmUu
+DQoNCkFsbCBpbiBhbGwsIHlvdXIgb3BpbmlvbnMgYW5kIGNvbW1lbnRzIGFyZSB2YWx1YWJsZS4g
+TW9yZW92ZXIgdGhlIGxlYXJuZWQgDQpsZXNzb25zDQpjb3VsZCBiZSBpbnB1dCB0byBuZXh0IGdl
+bmVyYXRpb24gb2YgT2N0YUZsYXNoLg0KDQpUaGFua3MsDQpaaGVuZ3h1bg0KDQoNCkNPTkZJREVO
+VElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIG1heSBjb250
+YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGlj
+aCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUgDQpyZW1pbmRlZCB0
+aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlz
+IGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBvciBhbnkgcGFydCB0aGVyZW9mIGlz
+IHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFz
+ZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgDQp3ZWxsIGFz
+IGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2Ug
+YmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nlc3NpbmcsIGFuZC9vciB1c2Ugb2Yg
+cGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQg
+YnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0KVGhhbmsgeW91IGZvciB5b3VyIGF0
+dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBM
+dGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQpDT05GSURF
+TlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29u
+dGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29yIHBlcnNvbmFsIGRhdGEsIHdoaWNo
+IGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSByZW1pbmRlZCB0aGF0
+IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlzIGUt
+bWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9o
+aWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlm
+eSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyB3ZWxsIGFzIGl0cyBhdHRh
+Y2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2UgYmUgaW5mb3Jt
+ZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRh
+dGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBieSBwZXJzb25hbCBk
+YXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29v
+cGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PQ0K
 

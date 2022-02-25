@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCF34C4507
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D71F4C4509
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbiBYMzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S240806AbiBYM4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbiBYMzI (ORCPT
+        with ESMTP id S235676AbiBYM4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:55:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C2C21D084
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:54:33 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nNa7D-0008N1-I1; Fri, 25 Feb 2022 13:54:31 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nNa7C-0007ew-BD; Fri, 25 Feb 2022 13:54:30 +0100
-Date:   Fri, 25 Feb 2022 13:54:30 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 1/1] net: dsa: microchip: ksz9477: implement
- MTU configuration
-Message-ID: <20220225125430.GB27407@pengutronix.de>
-References: <20220223084055.2719969-1-o.rempel@pengutronix.de>
- <20220223233833.mjknw5ko7hpxj3go@skbuf>
- <20220224045936.GB4594@pengutronix.de>
- <20220224093329.hssghouq7hmgxvwb@skbuf>
- <20220224093827.GC4594@pengutronix.de>
- <20220224094657.jzhvi67ryhuipor4@skbuf>
- <20220225114740.GA27407@pengutronix.de>
- <20220225115802.bvjd54cwwk6hjyfa@skbuf>
+        Fri, 25 Feb 2022 07:56:40 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2630518E3EC;
+        Fri, 25 Feb 2022 04:56:09 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m22so4734871pja.0;
+        Fri, 25 Feb 2022 04:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b1LY+l/NhS0rChpc29wsrXNSMavIR38WPUl22nfsuvU=;
+        b=FBB5YaQVsr71kHT0ENiNVfU6OGDF9TnfU/WMi99/CQy2hlG2Dt3C5HYlCbJayyf8pN
+         31R0d+ffI7YqRmEuza3CVfzYWXXUviswU+cTgIOzoacn54iyWfrS9wPls3WgehdztAFD
+         lT8JTA27ZfsRluDBwHoeCWgbk4/3RVqmz6sQx0Ldzoap0XzaaqINL/h+mzM98O4TOp1U
+         7WcC1dj0PYaeY5kYQ8pDr3xv4emVha3Z7penypSX8o5QKnZw1YHtc4cIepLXDoG2kYs0
+         X4KA/PwvK3Gz/inZ9ewz8dH3zb1Pd6eCfywRXdJKlyw3dhPxRaHuKwHP74jtiQLtM+WW
+         NtgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b1LY+l/NhS0rChpc29wsrXNSMavIR38WPUl22nfsuvU=;
+        b=pjUwk7ELEMzfnYs0XxqezQFep+CyaO14DCw6/FpDIQNC/laWzz3dRIiYysR1uCcI+C
+         AX3kLGWdunF4xVzPW8BP/DVWejDzohPNSJr/3+JDhtE0jYYe4w5+pVP0viSL/KtvNZZZ
+         xqyFziyUkekn5J80riAPJXGxQe0lpkq+u7Dq/YbEVUtj6sXuXmjKrdtgkh9I3Pesb6+S
+         gzWw5omb5+C2cb5t5ZsBwJ3qi/QnW1Wvsmv/pI5EI36WHjeOx8cNkY+2bRrje1ArC8m7
+         CFNDqMfQ/wlx4wadaZptu+St7A3QbrfME7l5kQ0Uy+0wrHNPRdgSL95j9G4FlUwrhk+W
+         Ojng==
+X-Gm-Message-State: AOAM530hxhM+XpFjD3xD2jOF5YUmRTFPSLda50F7kFx85nc1/MZLNdaV
+        +nnOcFKmAB9mgK+Kcx3ePsDFvd3ZJV8=
+X-Google-Smtp-Source: ABdhPJyUW+a6X5XbT5h4hQJEf0D/i83NGP8nBDY3RWNGq06Z/4zWqK37bO5KcYC4lhf/oIbYMsKGjQ==
+X-Received: by 2002:a17:90a:6c8f:b0:1bc:f040:632c with SMTP id y15-20020a17090a6c8f00b001bcf040632cmr2791249pjj.215.1645793768428;
+        Fri, 25 Feb 2022 04:56:08 -0800 (PST)
+Received: from arch-pc.genesyslogic.com.tw (60-251-58-169.hinet-ip.hinet.net. [60.251.58.169])
+        by smtp.gmail.com with ESMTPSA id t27-20020aa7939b000000b004ce11b956absm2994660pfe.186.2022.02.25.04.56.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 04:56:08 -0800 (PST)
+From:   Ben Chuang <benchuanggli@gmail.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
+        SeanHY.Chen@genesyslogic.com.tw,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Kevin Chang <kevin.chang@lcfuturecenter.com>
+Subject: [PATCH] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+Date:   Fri, 25 Feb 2022 20:55:52 +0800
+Message-Id: <20220225125553.1185108-1-benchuanggli@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220225115802.bvjd54cwwk6hjyfa@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 13:01:41 up 76 days, 20:47, 89 users,  load average: 0.73, 0.65,
- 0.38
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:58:02PM +0200, Vladimir Oltean wrote:
-> On Fri, Feb 25, 2022 at 12:47:40PM +0100, Oleksij Rempel wrote:
-> > On Thu, Feb 24, 2022 at 11:46:57AM +0200, Vladimir Oltean wrote:
-> >  
-> > > So where is it failing exactly? Here I guess, because mtu_limit will be
-> > > negative?
-> > > 
-> > > 	mtu_limit = min_t(int, master->max_mtu, dev->max_mtu);
-> > > 	old_master_mtu = master->mtu;
-> > > 	new_master_mtu = largest_mtu + dsa_tag_protocol_overhead(cpu_dp->tag_ops);
-> > > 	if (new_master_mtu > mtu_limit)
-> > > 		return -ERANGE;
-> > > 
-> > > I don't think we can work around it in DSA, it's garbage in, garbage out.
-> > > 
-> > > In principle, I don't have such a big issue with writing the MTU
-> > > register as part of the switch initialization, especially if it's global
-> > > and not per port. But tell me something else. You pre-program the MTU
-> > > with VLAN_ETH_FRAME_LEN + ETH_FCS_LEN, but in the MTU change procedure,
-> > > you also add KSZ9477_INGRESS_TAG_LEN (2) to that. Is that needed at all?
-> > > I expect that if it's needed, it's needed in both places. Can you
-> > > sustain an iperf3 tcp session over a VLAN upper of a ksz9477 port?
-> > > I suspect that the missing VLAN_HLEN is masking a lack of KSZ9477_INGRESS_TAG_LEN.
-> > 
-> > Hm... I assume I need to do something like this:
-> > - build kernel with BRIDGE_VLAN_FILTERING
-> > - |
-> >   ip l a name br0 type bridge vlan_filtering 1
-> >   ip l s dev br0 up
-> >   ip l s lan1 master br0
-> >   ip l s dev lan1 up
-> >   bridge vlan add dev lan1 vid 5 pvid untagged
-> >   ip link add link br0 name vlan5 type vlan id 5
-> > 
-> > I use lan5@ksz for net boot. As soon as i link lan1@ksz to the br0 with
-> > vlan_filtering enabled, the nfs on lan5 will be broken. Currently I have
-> > no time to investigate it. I'll try to fix VLAN support in a separate
-> > task. What will is acceptable way to proceed with MTU patch?
-> 
-> No bridge, why create a bridge? And even if you do, why add lan5 to it?
-> The expectation is that standalone ports still remain functional when
-> other ports join a bridge.
+From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 
-No, lan5 is not added to the bridge, but stops functioning after creating
-br with lan1 or any other lanX
+Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
+gated of upstream port can be enabled.
 
-> I was saying:
-> 
-> ip link set lan1 up
-> ip link add link lan1 name lan1.5 type vlan id 5
-> ip addr add 172.17.0.2/24 dev lan1.5 && ip link set lan1.5 up
-> iperf3 -c 172.17.0.10
+Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
+---
+ drivers/mmc/host/sdhci-pci-gli.c | 54 ++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-It works.
-
-Regards,
-Oleksij
+diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+index 97035d77c18c..cf99b6af792d 100644
+--- a/drivers/mmc/host/sdhci-pci-gli.c
++++ b/drivers/mmc/host/sdhci-pci-gli.c
+@@ -873,6 +873,55 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+ 	pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
+ }
+ 
++#ifdef CONFIG_PM
++static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
++{
++	struct sdhci_pci_slot *slot = chip->slots[0];
++	struct sdhci_host *host = slot->host;
++	u16 clock;
++
++	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	return 0;
++}
++
++static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
++{
++	struct sdhci_pci_slot *slot = chip->slots[0];
++	struct sdhci_host *host = slot->host;
++	ktime_t timeout;
++	u16 clock;
++
++	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++
++	clock |= SDHCI_CLOCK_PLL_EN;
++	clock &= ~SDHCI_CLOCK_INT_STABLE;
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	timeout = ktime_add_ms(ktime_get(), 150);
++	while (1) {
++		bool timedout = ktime_after(ktime_get(), timeout);
++
++		clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++		if (clock & SDHCI_CLOCK_INT_STABLE)
++			break;
++		if (timedout) {
++			pr_err("%s: PLL clock never stabilised.\n",
++			       mmc_hostname(host->mmc));
++			sdhci_dumpregs(host);
++			break;
++		}
++		udelay(10);
++	}
++	clock |= SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	return 0;
++}
++#endif
++
+ static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+ {
+ 	struct pci_dev *pdev = slot->chip->pdev;
+@@ -982,6 +1031,11 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
+ #ifdef CONFIG_PM_SLEEP
+ 	.resume		= sdhci_cqhci_gli_resume,
+ 	.suspend	= sdhci_cqhci_gli_suspend,
++#endif
++#ifdef CONFIG_PM
++	.runtime_suspend = gl9763e_runtime_suspend,
++	.runtime_resume  = gl9763e_runtime_resume,
++	.allow_runtime_pm = true,
+ #endif
+ 	.add_host       = gl9763e_add_host,
+ };
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.1
+

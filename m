@@ -2,153 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A094C4663
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702074C4688
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241380AbiBYNbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S241412AbiBYNdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241369AbiBYNbP (ORCPT
+        with ESMTP id S241370AbiBYNdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:31:15 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFA72275A5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:30:41 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id y5so1682225wmi.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iCYug2uN0yJ0h5qzrzM0t/ZXG7y0pW69zdo3//wJ5Mc=;
-        b=Iz/C4kfIg+QU3WpdVAdERt4dHyjlNNmL0wic5dOiAa2/KqYsxtSwe/Xosjkk2QmiZU
-         8ryyBpvt8iNhB254uJeBq90QEsX8cWGXS8YcWBMjUH2iWu/2UItIYU0qDGVKCdEObZo4
-         426WHxKm1HRvHqkWld/rVUJ4k43SvcEkPjifb6JeKZUzRmifV18ZJYgQTfQGC59Ewh/f
-         5kQQWOMynPpZOME2jygah+5n4SJ8rRBuRMf96P3q4s38/eob6pzdWzH4I1pbPxun86su
-         PylozFcPJ87NWL7Stzbx/8tmSSJCD2qL49xvM7G77NOhRLt4UQEq8HqsPW0LUKlFLn/a
-         v8tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iCYug2uN0yJ0h5qzrzM0t/ZXG7y0pW69zdo3//wJ5Mc=;
-        b=uWVapzcE+i70nB18WtWcbc8BMtQW5mvmK++WYVzb8g1s4pzOPloitewinFBI5QOCf5
-         S/EZHsSb+DG337+TEK8xFf/VLwgYIz3zfz1yvFnpMIEK6d0RxjaVdKHRJz4m2c/lQi6Q
-         R1pnqt5hCBIEXE8ag45sC8/yF4nLVKnGhh5E4cuyFzTA1O4VFp8mI8Mah8sFySm0DjN4
-         Ttnu9UWj/hLmuFrhMpNITBezxCiL0kuzVV5koToK9uBj3364FRUNJiFED6O+bc+pjkch
-         nsBZ/wEW3GQXSfESsxzVsUHScoSSSSpCCBI3b8H88tIYxx6DdLPA4yQv5UnF061OT+IJ
-         GzmA==
-X-Gm-Message-State: AOAM532BKACe4TO/ZCfL9eUTEiISj38w+mfxZiYeJEXo23h3G0K6ed+2
-        bdhmqDcZZp3AEGM8cGo0gG0z9w==
-X-Google-Smtp-Source: ABdhPJxNOwK0M2yG7dyNvpA4W4t769Dz57u4tDUZ5Yawlwr+ZqoHjyWnaBVu9T+EYcXrNna7M8ECuA==
-X-Received: by 2002:a05:600c:211a:b0:380:d7b5:6e3a with SMTP id u26-20020a05600c211a00b00380d7b56e3amr2732823wml.125.1645795839794;
-        Fri, 25 Feb 2022 05:30:39 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id a8-20020a056000100800b001e30ef6f9basm3305843wrx.18.2022.02.25.05.30.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 05:30:39 -0800 (PST)
-Message-ID: <852e35f6-ec8b-ddc6-f81f-f666e899b543@linaro.org>
-Date:   Fri, 25 Feb 2022 13:30:38 +0000
+        Fri, 25 Feb 2022 08:33:05 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879B71C2F68;
+        Fri, 25 Feb 2022 05:32:33 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21PD9HH7031562;
+        Fri, 25 Feb 2022 14:32:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=snC15qVtSfEctH62wvfOLmhzFjohjErLAZqhaquNmjM=;
+ b=e9hvAVSWsuN6FyjL2cxPf4MzvFoI/7rG2az1JRFEpe4Dd+ZKSqiBLSg9vpL19C1N4wvB
+ xfEX0pUVhVIwAPLVtm/ERRYW/4QM7YTf1Kqx8ICvWN5VfCDyle3kjUmYU5cwzt3RrwEF
+ pEfuFoKw80PpLq1ZEQL7hCdNYocqH+eFzbFr6yB2GvNR9UJUSe5buryyVxZybvTWxuPc
+ zvvc9mw6FwRIoMrCO5s58LzROwSnm3H6LqOz8tmPhkr5E4GrUjbYI+UMsrd3BNTND+lg
+ mkZ9ipMMMBQcVoq52kMkXNpy8r7LtJHM0e96WgPpXZkwttvCHVyJve93TARwuOIYcz9V hg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eetrf27na-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 14:32:09 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 840C210002A;
+        Fri, 25 Feb 2022 14:32:08 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7AE5B22788D;
+        Fri, 25 Feb 2022 14:32:08 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 25 Feb 2022 14:32:08
+ +0100
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 00/13] Introduction of STM32MP13 RCC driver (Reset Clock Controller)
+Date:   Fri, 25 Feb 2022 14:31:24 +0100
+Message-ID: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3 2/3] dt-bindings: nvmem: brcm,nvram: add basic NVMEM
- cells
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220124160300.25131-1-zajec5@gmail.com>
- <20220218070729.3256-1-zajec5@gmail.com>
- <20220218070729.3256-3-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220218070729.3256-3-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-25_08,2022-02-25_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
+This patchset introduce the reset and clock driver of STM32MP13 SoC.
+It uses a clk-stm32-core module to manage stm32 gate, mux and divider
+for STM32MP13 and for new future STMP32 SoC.
 
-On 18/02/2022 07:07, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> NVRAM doesn't have cells at hardcoded addresses. They are stored in
-> internal struct (custom & dynamic format). It's still important to
-> define relevant cells in DT so NVMEM consumers can reference them.
-> 
-> Update binding to allow including basic cells as NVMEM device subnodes.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+v2:
+  - Resend because patch 9,10,12,13 has not been sent
+  - add Reviewed by Krzysztof Kozlowski for patch 1
 
-Applied thanks,
+Gabriel Fernandez (13):
+  dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+  clk: stm32: Introduce STM32MP13 RCC drivers (Reset Clock Controller)
+  clk: stm32mp13: add stm32_mux clock management
+  clk: stm32mp13: add stm32_gate management
+  clk: stm32mp13: add stm32 divider clock
+  clk: stm32mp13: add composite clock
+  clk: stm32mp13: manage secured clocks
+  clk: stm32mp13: add all STM32MP13 peripheral clocks
+  clk: stm32mp13: add all STM32MP13 kernel clocks
+  clk: stm32mp13: add multi mux function
+  clk: stm32mp13: add safe mux management
+  ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+  ARM: dts: stm32: add RCC on STM32MP13x SoC family
 
---srini
+ .../bindings/clock/st,stm32mp1-rcc.yaml       |    2 +
+ arch/arm/boot/dts/stm32mp131.dtsi             |  128 +-
+ arch/arm/boot/dts/stm32mp133.dtsi             |    4 +-
+ arch/arm/boot/dts/stm32mp13xf.dtsi            |    3 +-
+ drivers/clk/Kconfig                           |    5 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |  707 +++++++
+ drivers/clk/stm32/clk-stm32-core.h            |  239 +++
+ drivers/clk/stm32/clk-stm32mp13.c             | 1580 +++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |  122 ++
+ drivers/clk/stm32/reset-stm32.h               |    8 +
+ drivers/clk/stm32/stm32mp13_rcc.h             | 1748 +++++++++++++++++
+ include/dt-bindings/clock/stm32mp13-clks.h    |  229 +++
+ include/dt-bindings/reset/stm32mp13-resets.h  |  100 +
+ 15 files changed, 4817 insertions(+), 60 deletions(-)
+ create mode 100644 drivers/clk/stm32/Makefile
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.c
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.h
+ create mode 100644 drivers/clk/stm32/clk-stm32mp13.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.h
+ create mode 100644 drivers/clk/stm32/stm32mp13_rcc.h
+ create mode 100644 include/dt-bindings/clock/stm32mp13-clks.h
+ create mode 100644 include/dt-bindings/reset/stm32mp13-resets.h
 
-> ---
-> V2: Add children nodes description per Rob's request
-> V3: Document NVMEM cells as properties
-> ---
->   .../devicetree/bindings/nvmem/brcm,nvram.yaml | 25 +++++++++++++++++--
->   1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> index 8c3f0cd22821..25033de3ef6b 100644
-> --- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> @@ -14,6 +14,8 @@ description: |
->     NVRAM can be accessed on Broadcom BCM47xx MIPS and Northstar ARM Cortex-A9
->     devices usiong I/O mapped memory.
->   
-> +  NVRAM variables can be defined as NVMEM device subnodes.
-> +
->   maintainers:
->     - Rafał Miłecki <rafal@milecki.pl>
->   
-> @@ -27,11 +29,30 @@ properties:
->     reg:
->       maxItems: 1
->   
-> +  board_id:
-> +    type: object
-> +    description: Board identification name
-> +
-> +  et0macaddr:
-> +    type: object
-> +    description: First Ethernet interface's MAC address
-> +
-> +  et1macaddr:
-> +    type: object
-> +    description: Second Ethernet interface's MAC address
-> +
-> +  et2macaddr:
-> +    type: object
-> +    description: Third Ethernet interface's MAC address
-> +
->   unevaluatedProperties: false
->   
->   examples:
->     - |
->       nvram@1eff0000 {
-> -            compatible = "brcm,nvram";
-> -            reg = <0x1eff0000 0x10000>;
-> +        compatible = "brcm,nvram";
-> +        reg = <0x1eff0000 0x10000>;
-> +
-> +        mac: et0macaddr {
-> +        };
->       };
+-- 
+2.25.1
+

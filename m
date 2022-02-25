@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D924C4B65
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0FE4C4B67
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243241AbiBYQxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
+        id S243285AbiBYQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242759AbiBYQwx (ORCPT
+        with ESMTP id S242788AbiBYQwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 11:52:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBDD1A82A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1271AF0E;
+        Fri, 25 Feb 2022 08:52:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E690F61CB5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58473C340E7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2226161CF2;
+        Fri, 25 Feb 2022 16:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80642C340F5;
         Fri, 25 Feb 2022 16:52:19 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nNdpK-00B8IZ-D2;
+        id 1nNdpK-00B8J8-J9;
         Fri, 25 Feb 2022 11:52:18 -0500
-Message-ID: <20220225165218.234313520@goodmis.org>
+Message-ID: <20220225165218.424446548@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 25 Feb 2022 11:51:52 -0500
+Date:   Fri, 25 Feb 2022 11:51:53 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>,
         Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-linus][PATCH 01/13] rtla: Fix systme -> system typo on man page
+Subject: [for-linus][PATCH 02/13] tracing: Dump stacktrace trigger to the corresponding instance
 References: <20220225165151.824659113@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,30 +48,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Link: https://lkml.kernel.org/r/YhZsZxqk+IaFxorj@kernel.org
+The stacktrace event trigger is not dumping the stacktrace to the instance
+where it was enabled, but to the global "instance."
 
-Fixes: 496082df01bb08a4 ("rtla: Add rtla osnoise man page")
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Use the private_data, pointing to the trigger file, to figure out the
+corresponding trace instance, and use it in the trigger action, like
+snapshot_trigger does.
+
+Link: https://lkml.kernel.org/r/afbb0b4f18ba92c276865bc97204d438473f4ebc.1645396236.git.bristot@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Tested-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- Documentation/tools/rtla/common_osnoise_description.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_events_trigger.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/tools/rtla/common_osnoise_description.rst b/Documentation/tools/rtla/common_osnoise_description.rst
-index 8973c5df888f..d5d61615b967 100644
---- a/Documentation/tools/rtla/common_osnoise_description.rst
-+++ b/Documentation/tools/rtla/common_osnoise_description.rst
-@@ -1,7 +1,7 @@
- The **rtla osnoise** tool is an interface for the *osnoise* tracer. The
- *osnoise* tracer dispatches a kernel thread per-cpu. These threads read the
- time in a loop while with preemption, softirq and IRQs enabled, thus
--allowing all the sources of operating systme noise during its execution.
-+allowing all the sources of operating system noise during its execution.
- The *osnoise*'s tracer threads take note of the delta between each time
- read, along with an interference counter of all sources of interference.
- At the end of each period, the *osnoise* tracer displays a summary of
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index d00fee705f9c..e0d50c9577f3 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -1540,7 +1540,12 @@ stacktrace_trigger(struct event_trigger_data *data,
+ 		   struct trace_buffer *buffer,  void *rec,
+ 		   struct ring_buffer_event *event)
+ {
+-	trace_dump_stack(STACK_SKIP);
++	struct trace_event_file *file = data->private_data;
++
++	if (file)
++		__trace_stack(file->tr, tracing_gen_ctx(), STACK_SKIP);
++	else
++		trace_dump_stack(STACK_SKIP);
+ }
+ 
+ static void
 -- 
 2.34.1

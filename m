@@ -2,305 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7054C4633
+	by mail.lfdr.de (Postfix) with ESMTP id 675AF4C4634
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241251AbiBYNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S241261AbiBYN0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241241AbiBYNZO (ORCPT
+        with ESMTP id S240999AbiBYN0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:25:14 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539DC1FEDB5;
-        Fri, 25 Feb 2022 05:24:41 -0800 (PST)
-X-UUID: 33a51f6908e948609788d4b92273dec7-20220225
-X-UUID: 33a51f6908e948609788d4b92273dec7-20220225
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2048023045; Fri, 25 Feb 2022 21:24:32 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 25 Feb 2022 21:24:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 25 Feb 2022 21:24:31 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Jassi Brar <jaswinder.singh@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>, <tzungbi@google.com>,
-        <cujomalainey@google.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <sound-open-firmware@alsa-project.org>,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v18 2/2] mailbox: mediatek: add support for adsp mailbox controller
-Date:   Fri, 25 Feb 2022 21:24:27 +0800
-Message-ID: <20220225132427.29152-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220225132427.29152-1-allen-kh.cheng@mediatek.com>
-References: <20220225132427.29152-1-allen-kh.cheng@mediatek.com>
+        Fri, 25 Feb 2022 08:26:05 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000D2223100;
+        Fri, 25 Feb 2022 05:25:31 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id hw13so10836615ejc.9;
+        Fri, 25 Feb 2022 05:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=gcLAgFJ6UAC+wlMRiqdskTKEQNruEzHTuhKZh7vzXzE=;
+        b=JOg+gainHqPmDqDsMWlfMvMPI7nQFxRwZSseTHbohGOWpvKQwmEIGYAXml+KhJEoBd
+         W0PGOzoResYq2xmiHVS0NHJg/JFnI5xRB71+lKmAs+QW3qoD4hE6YupuCqzAxyaWE1nE
+         eOP4gdKs6F/2ouFqIkOKxDnvqJLhqyVsb8V9Y+X5AXtvcDZgCU+L6s24+1OEKeK6+4Qr
+         0hUHdNSiLSFeqxUPyqwqkkpZgqN90Ir0mfQ99Ge/yuWzunY8/QJV41U9uYsvl7Z5oj0/
+         Pvg65r0W2XadFR/YX4IfIX5QiuMUrC02VA6tjm2RM30vbrWMf7OF5qAfymqoqbuK837v
+         hLRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=gcLAgFJ6UAC+wlMRiqdskTKEQNruEzHTuhKZh7vzXzE=;
+        b=7vVZniMxZiI1LLAeMoP/xUaFqIGtNdbI+4yBjmCf6pJq/3Bak5gQIUQD6tMhTrRGhf
+         xxElaaOQuB5m09aVLxgVa2AN/7/ij2MF6cav60v7dnsxRlDSE59KhWrxOzHke6VJlLLM
+         WTs7NlHRwwrvZIpvey+W6Id4yC37905AxrU/UCkpvdHKlTiE8PqdXdonsxRUBFyHLQDV
+         odJBwTs/6C9i9PxdmYAWLn9Z6zP1ZjER1IjG8v/avFAZ3GNbeCZiDuVYMxj3ssB48th1
+         YU9oEtChBhTJXO1H6cNgTMB15Xt+ZZj0LUw4RdHjtO2+vL001NXOKuOY5DtqGwYipgo/
+         wUWw==
+X-Gm-Message-State: AOAM532gdhpmhJFJ38xWeoVrFhR2CNV716iFUg/NJhrmlku9NxRZ5nsH
+        8tzktyxNnQpXX2aOeWIe1TefI4EVp3HwLnnCaqT8BHbF
+X-Google-Smtp-Source: ABdhPJz8Djbty/w23wxvUK4n9BlOZFJePoyKwaBXcOyMZVw44qnK1bcgHTr/TdtuuhN1divdYsKuxlZbJcoV4c8XIls=
+X-Received: by 2002:a17:906:2695:b0:6ce:b94d:9f07 with SMTP id
+ t21-20020a170906269500b006ceb94d9f07mr6349508ejc.297.1645795530367; Fri, 25
+ Feb 2022 05:25:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220221115234.2544665-1-clabbe@baylibre.com>
+In-Reply-To: <20220221115234.2544665-1-clabbe@baylibre.com>
+Reply-To: jglauber@digitalocean.com
+From:   Jan Glauber <jan.glauber@gmail.com>
+Date:   Fri, 25 Feb 2022 14:25:18 +0100
+Message-ID: <CAEiAFz30J_C2GbbObL2E7Y=YB3FkRSB+S8Ce2WU73CqifueWxQ@mail.gmail.com>
+Subject: Re: [PATCH] crypto: cavium: zip: register algorithm only if hardware
+ is present
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jan Glauber <jglauber@cavium.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Hi Corentin,
+your patch looks good to me, but I also lost access to the hardware.
 
-This patch is to for MediaTek ADSP IPC mailbox controller driver
-It is used to send short messages between processors with adsp
+-- Jan
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-Reviewed-by: YC Hung <yc.hung@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/mailbox/Kconfig            |   9 ++
- drivers/mailbox/Makefile           |   2 +
- drivers/mailbox/mtk-adsp-mailbox.c | 176 +++++++++++++++++++++++++++++
- 3 files changed, 187 insertions(+)
- create mode 100644 drivers/mailbox/mtk-adsp-mailbox.c
-
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index d9cd3606040e..05d6fae800e3 100644
---- a/drivers/mailbox/Kconfig
-+++ b/drivers/mailbox/Kconfig
-@@ -238,6 +238,15 @@ config STM32_IPCC
- 	  with hardware for Inter-Processor Communication Controller (IPCC)
- 	  between processors. Say Y here if you want to have this support.
- 
-+config MTK_ADSP_MBOX
-+	tristate "MediaTek ADSP Mailbox Controller"
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	help
-+          Say yes here to add support for "MediaTek ADSP Mailbox Controller.
-+          This mailbox driver is used to send notification or short message
-+          between processors with ADSP. It will place the message to share
-+	  buffer and will access the ipc control.
-+
- config MTK_CMDQ_MBOX
- 	tristate "MediaTek CMDQ Mailbox Support"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index 338cc05e5431..fc9376117111 100644
---- a/drivers/mailbox/Makefile
-+++ b/drivers/mailbox/Makefile
-@@ -49,6 +49,8 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
- 
- obj-$(CONFIG_STM32_IPCC) 	+= stm32-ipcc.o
- 
-+obj-$(CONFIG_MTK_ADSP_MBOX)	+= mtk-adsp-mailbox.o
-+
- obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
- 
- obj-$(CONFIG_ZYNQMP_IPI_MBOX)	+= zynqmp-ipi-mailbox.o
-diff --git a/drivers/mailbox/mtk-adsp-mailbox.c b/drivers/mailbox/mtk-adsp-mailbox.c
-new file mode 100644
-index 000000000000..5e7378090c7b
---- /dev/null
-+++ b/drivers/mailbox/mtk-adsp-mailbox.c
-@@ -0,0 +1,176 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 MediaTek Corporation. All rights reserved.
-+ * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-+ */
-+
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/mailbox_controller.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/slab.h>
-+
-+struct mtk_adsp_mbox_priv {
-+	struct device *dev;
-+	struct mbox_controller mbox;
-+	void __iomem *va_mboxreg;
-+	const struct mtk_adsp_mbox_cfg *cfg;
-+};
-+
-+struct mtk_adsp_mbox_cfg {
-+	u32 set_in;
-+	u32 set_out;
-+	u32 clr_in;
-+	u32 clr_out;
-+};
-+
-+static inline struct mtk_adsp_mbox_priv *get_mtk_adsp_mbox_priv(struct mbox_controller *mbox)
-+{
-+	return container_of(mbox, struct mtk_adsp_mbox_priv, mbox);
-+}
-+
-+static irqreturn_t mtk_adsp_mbox_irq(int irq, void *data)
-+{
-+	struct mbox_chan *chan = data;
-+	struct mtk_adsp_mbox_priv *priv = get_mtk_adsp_mbox_priv(chan->mbox);
-+	u32 op = readl(priv->va_mboxreg + priv->cfg->set_out);
-+
-+	writel(op, priv->va_mboxreg + priv->cfg->clr_out);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t mtk_adsp_mbox_isr(int irq, void *data)
-+{
-+	struct mbox_chan *chan = data;
-+
-+	mbox_chan_received_data(chan, NULL);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static struct mbox_chan *mtk_adsp_mbox_xlate(struct mbox_controller *mbox,
-+					     const struct of_phandle_args *sp)
-+{
-+	return mbox->chans;
-+}
-+
-+static int mtk_adsp_mbox_startup(struct mbox_chan *chan)
-+{
-+	struct mtk_adsp_mbox_priv *priv = get_mtk_adsp_mbox_priv(chan->mbox);
-+
-+	/* Clear ADSP mbox command */
-+	writel(0xFFFFFFFF, priv->va_mboxreg + priv->cfg->clr_in);
-+	writel(0xFFFFFFFF, priv->va_mboxreg + priv->cfg->clr_out);
-+
-+	return 0;
-+}
-+
-+static void mtk_adsp_mbox_shutdown(struct mbox_chan *chan)
-+{
-+	struct mtk_adsp_mbox_priv *priv = get_mtk_adsp_mbox_priv(chan->mbox);
-+
-+	/* Clear ADSP mbox command */
-+	writel(0xFFFFFFFF, priv->va_mboxreg + priv->cfg->clr_in);
-+	writel(0xFFFFFFFF, priv->va_mboxreg + priv->cfg->clr_out);
-+}
-+
-+static int mtk_adsp_mbox_send_data(struct mbox_chan *chan, void *data)
-+{
-+	struct mtk_adsp_mbox_priv *priv = get_mtk_adsp_mbox_priv(chan->mbox);
-+	u32 *msg = data;
-+
-+	writel(*msg, priv->va_mboxreg + priv->cfg->set_in);
-+
-+	return 0;
-+}
-+
-+static bool mtk_adsp_mbox_last_tx_done(struct mbox_chan *chan)
-+{
-+	struct mtk_adsp_mbox_priv *priv = get_mtk_adsp_mbox_priv(chan->mbox);
-+
-+	return readl(priv->va_mboxreg + priv->cfg->set_in) == 0;
-+}
-+
-+static const struct mbox_chan_ops mtk_adsp_mbox_chan_ops = {
-+	.send_data	= mtk_adsp_mbox_send_data,
-+	.startup	= mtk_adsp_mbox_startup,
-+	.shutdown	= mtk_adsp_mbox_shutdown,
-+	.last_tx_done	= mtk_adsp_mbox_last_tx_done,
-+};
-+
-+static int mtk_adsp_mbox_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_adsp_mbox_priv *priv;
-+	const struct mtk_adsp_mbox_cfg *cfg;
-+	struct mbox_controller *mbox;
-+	int ret, irq;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	mbox = &priv->mbox;
-+	mbox->dev = dev;
-+	mbox->ops = &mtk_adsp_mbox_chan_ops;
-+	mbox->txdone_irq = false;
-+	mbox->txdone_poll = true;
-+	mbox->of_xlate = mtk_adsp_mbox_xlate;
-+	mbox->num_chans = 1;
-+	mbox->chans = devm_kzalloc(dev, sizeof(*mbox->chans), GFP_KERNEL);
-+	if (!mbox->chans)
-+		return -ENOMEM;
-+
-+	priv->va_mboxreg = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->va_mboxreg))
-+		return PTR_ERR(priv->va_mboxreg);
-+
-+	cfg = of_device_get_match_data(dev);
-+	if (!cfg)
-+		return -EINVAL;
-+	priv->cfg = cfg;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_threaded_irq(dev, irq, mtk_adsp_mbox_irq,
-+					mtk_adsp_mbox_isr, IRQF_TRIGGER_NONE,
-+					dev_name(dev), mbox->chans);
-+	if (ret < 0)
-+		return ret;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	return devm_mbox_controller_register(dev, &priv->mbox);
-+}
-+
-+static const struct mtk_adsp_mbox_cfg mt8195_adsp_mbox_cfg = {
-+	.set_in		= 0x00,
-+	.set_out	= 0x1c,
-+	.clr_in		= 0x04,
-+	.clr_out	= 0x20,
-+};
-+
-+static const struct of_device_id mtk_adsp_mbox_of_match[] = {
-+	{ .compatible = "mediatek,mt8195-adsp-mbox", .data = &mt8195_adsp_mbox_cfg },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mtk_adsp_mbox_of_match);
-+
-+static struct platform_driver mtk_adsp_mbox_driver = {
-+	.probe		= mtk_adsp_mbox_probe,
-+	.driver = {
-+		.name	= "mtk_adsp_mbox",
-+		.of_match_table = mtk_adsp_mbox_of_match,
-+	},
-+};
-+module_platform_driver(mtk_adsp_mbox_driver);
-+
-+MODULE_AUTHOR("Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>");
-+MODULE_DESCRIPTION("MTK ADSP Mailbox Controller");
-+MODULE_LICENSE("GPL v2");
--- 
-2.18.0
-
+Am Di., 22. Feb. 2022 um 05:34 Uhr schrieb Corentin Labbe <clabbe@baylibre.com>:
+>
+> On my renesas salavator-X, I saw some cavium driver failing crypto
+> self-tests.
+> But salvator does not have such hardware.
+> This is due to cavium/zip driver registering algorithms even if hardware
+> is not present.
+> The solution is to move algorithm registration in the probe function.
+> This permits also to simplify module init/exit by using
+> module_pci_driver.
+>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>
+> WARNING: this is boot tested only on salvator-X to be sure that the
+> cavium/zip driver no longer registers algorithms.
+> I do not have any cavium hardware unfortunatly.
+>
+>  drivers/crypto/cavium/zip/zip_main.c | 83 ++++++++++++----------------
+>  1 file changed, 35 insertions(+), 48 deletions(-)
+>
+> diff --git a/drivers/crypto/cavium/zip/zip_main.c b/drivers/crypto/cavium/zip/zip_main.c
+> index 812b4ac9afd6..dc5b7bf7e1fd 100644
+> --- a/drivers/crypto/cavium/zip/zip_main.c
+> +++ b/drivers/crypto/cavium/zip/zip_main.c
+> @@ -55,6 +55,11 @@ static const struct pci_device_id zip_id_table[] = {
+>         { 0, }
+>  };
+>
+> +static void zip_debugfs_init(void);
+> +static void zip_debugfs_exit(void);
+> +static int zip_register_compression_device(void);
+> +static void zip_unregister_compression_device(void);
+> +
+>  void zip_reg_write(u64 val, u64 __iomem *addr)
+>  {
+>         writeq(val, addr);
+> @@ -235,6 +240,15 @@ static int zip_init_hw(struct zip_device *zip)
+>         return 0;
+>  }
+>
+> +static void zip_reset(struct zip_device *zip)
+> +{
+> +       union zip_cmd_ctl cmd_ctl;
+> +
+> +       cmd_ctl.u_reg64 = 0x0ull;
+> +       cmd_ctl.s.reset = 1;  /* Forces ZIP cores to do reset */
+> +       zip_reg_write(cmd_ctl.u_reg64, (zip->reg_base + ZIP_CMD_CTL));
+> +}
+> +
+>  static int zip_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  {
+>         struct device *dev = &pdev->dev;
+> @@ -282,8 +296,21 @@ static int zip_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>         if (err)
+>                 goto err_release_regions;
+>
+> +       /* Register with the Kernel Crypto Interface */
+> +       err = zip_register_compression_device();
+> +       if (err < 0) {
+> +               zip_err("ZIP: Kernel Crypto Registration failed\n");
+> +               goto err_register;
+> +       }
+> +
+> +       /* comp-decomp statistics are handled with debugfs interface */
+> +       zip_debugfs_init();
+> +
+>         return 0;
+>
+> +err_register:
+> +       zip_reset(zip);
+> +
+>  err_release_regions:
+>         if (zip->reg_base)
+>                 iounmap(zip->reg_base);
+> @@ -305,16 +332,17 @@ static int zip_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  static void zip_remove(struct pci_dev *pdev)
+>  {
+>         struct zip_device *zip = pci_get_drvdata(pdev);
+> -       union zip_cmd_ctl cmd_ctl;
+>         int q = 0;
+>
+>         if (!zip)
+>                 return;
+>
+> +       zip_debugfs_exit();
+> +
+> +       zip_unregister_compression_device();
+> +
+>         if (zip->reg_base) {
+> -               cmd_ctl.u_reg64 = 0x0ull;
+> -               cmd_ctl.s.reset = 1;  /* Forces ZIP cores to do reset */
+> -               zip_reg_write(cmd_ctl.u_reg64, (zip->reg_base + ZIP_CMD_CTL));
+> +               zip_reset(zip);
+>                 iounmap(zip->reg_base);
+>         }
+>
+> @@ -585,7 +613,7 @@ DEFINE_SHOW_ATTRIBUTE(zip_regs);
+>  /* Root directory for thunderx_zip debugfs entry */
+>  static struct dentry *zip_debugfs_root;
+>
+> -static void __init zip_debugfs_init(void)
+> +static void zip_debugfs_init(void)
+>  {
+>         if (!debugfs_initialized())
+>                 return;
+> @@ -604,7 +632,7 @@ static void __init zip_debugfs_init(void)
+>
+>  }
+>
+> -static void __exit zip_debugfs_exit(void)
+> +static void zip_debugfs_exit(void)
+>  {
+>         debugfs_remove_recursive(zip_debugfs_root);
+>  }
+> @@ -615,48 +643,7 @@ static void __exit zip_debugfs_exit(void) { }
+>  #endif
+>  /* debugfs - end */
+>
+> -static int __init zip_init_module(void)
+> -{
+> -       int ret;
+> -
+> -       zip_msg("%s\n", DRV_NAME);
+> -
+> -       ret = pci_register_driver(&zip_driver);
+> -       if (ret < 0) {
+> -               zip_err("ZIP: pci_register_driver() failed\n");
+> -               return ret;
+> -       }
+> -
+> -       /* Register with the Kernel Crypto Interface */
+> -       ret = zip_register_compression_device();
+> -       if (ret < 0) {
+> -               zip_err("ZIP: Kernel Crypto Registration failed\n");
+> -               goto err_pci_unregister;
+> -       }
+> -
+> -       /* comp-decomp statistics are handled with debugfs interface */
+> -       zip_debugfs_init();
+> -
+> -       return ret;
+> -
+> -err_pci_unregister:
+> -       pci_unregister_driver(&zip_driver);
+> -       return ret;
+> -}
+> -
+> -static void __exit zip_cleanup_module(void)
+> -{
+> -       zip_debugfs_exit();
+> -
+> -       /* Unregister from the kernel crypto interface */
+> -       zip_unregister_compression_device();
+> -
+> -       /* Unregister this driver for pci zip devices */
+> -       pci_unregister_driver(&zip_driver);
+> -}
+> -
+> -module_init(zip_init_module);
+> -module_exit(zip_cleanup_module);
+> +module_pci_driver(zip_driver);
+>
+>  MODULE_AUTHOR("Cavium Inc");
+>  MODULE_DESCRIPTION("Cavium Inc ThunderX ZIP Driver");
+> --
+> 2.34.1
+>

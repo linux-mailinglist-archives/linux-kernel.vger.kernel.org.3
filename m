@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8E14C3A3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802184C3A43
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235997AbiBYAWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S236011AbiBYAXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbiBYAWJ (ORCPT
+        with ESMTP id S231464AbiBYAXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:22:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D460D26134;
-        Thu, 24 Feb 2022 16:21:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F40F61CE5;
-        Fri, 25 Feb 2022 00:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4277C340E9;
-        Fri, 25 Feb 2022 00:21:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645748496;
-        bh=zL7K5H0gG9i3MojJhvMFQOdtVRIDLw7kDEqM24zLUlA=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dUfqYmeiNZpNTuzZiH/9xYLYzlWiB4P+/auqvVlPa1U+gKz5qhfFBVwj9UZ6LMYQx
-         vgeM1YWVAWtz1xOeeXZ6z9dGQoDigFZzzxCEll27gpvgN6mDTtiATjXZRG05uQ8lby
-         oMpky7ylgWVr8jY5UeKL/0+TFKV/HinmxsqAhf/rxUU/VmUB5onQ3BwOdTqHqx2Zgo
-         pq9LG0+SIhHwFTFsouc26LuFSxSJ8mlo+ozcg5qPuGZ32lQ2VkzEDiGm5zHB/p+rKg
-         2Bm1X9/3DZIUWhuIhi7nmiqvH78+v5RV2N7Grt8OvlQnZAxPlncSP2Yy9d1bnPGURK
-         cKT4DzX3hqhkQ==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220223185606.3941-2-tdas@codeaurora.org>
-References: <20220223185606.3941-1-tdas@codeaurora.org> <20220223185606.3941-2-tdas@codeaurora.org>
-Subject: Re: [v2 2/2] clk: qcom: dispcc: Update the transition delay for MDSS GDSC
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Thu, 24 Feb 2022 16:21:35 -0800
-User-Agent: alot/0.10
-Message-Id: <20220225002136.C4277C340E9@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 24 Feb 2022 19:23:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1854181E7C;
+        Thu, 24 Feb 2022 16:22:47 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21P040um005357;
+        Fri, 25 Feb 2022 00:22:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=e37v2GGU0I/ORobayoE//gNcdIQqEbFUPLKvwzSTUcs=;
+ b=ToxcDVZYs1RBgdqKn5XErLBdgZhyajrqeHlttLi1QTukmwFv1MsDb0lpPVfkE4ZYF8sK
+ ojf0DildiscwC+C1fKnzJwIr883uSI9eEJYGKn2lgFzHBAZ8RtkTphXhgAXVSK39R15p
+ 231cr3R9pBcPeV0cSxrkxBE6BG94busD2VXLNDNiIvrkxxAXAeUO3GVsAlRxyMsjjljf
+ DV08QllHvVuOxDtRpd/NGIc/HM2wWvKORczqfVgGSOKWYFjFlRY84tiGO4zNEe8Vrr8d
+ q/M+DW47yTvSkK9ZYw8gXs/xbnGOvQXs4EE7jiEKMQ/JVDtGzjOEFk75zFbEnv6LTSU0 Ow== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3edwkex1gt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 00:22:24 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21P0C64p032409;
+        Fri, 25 Feb 2022 00:22:21 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ear69n2vx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 00:22:21 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21P0MJrp54854090
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Feb 2022 00:22:19 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34C2452050;
+        Fri, 25 Feb 2022 00:22:19 +0000 (GMT)
+Received: from sig-9-65-86-89.ibm.com (unknown [9.65.86.89])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9D81B5204E;
+        Fri, 25 Feb 2022 00:22:17 +0000 (GMT)
+Message-ID: <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, revest@chromium.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 24 Feb 2022 19:22:17 -0500
+In-Reply-To: <20220215124042.186506-1-roberto.sassu@huawei.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hA114obf-THotzvqlZ7wCVGc3u1_A-VZ
+X-Proofpoint-ORIG-GUID: hA114obf-THotzvqlZ7wCVGc3u1_A-VZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-24_06,2022-02-24_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=821 priorityscore=1501 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202240131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,22 +86,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2022-02-23 10:56:06)
-> On SC7180 we observe black screens because the gdsc is being
-> enabled/disabled very rapidly and the GDSC FSM state does not work as
-> expected. This is due to the fact that the GDSC reset value is being
-> updated from SW.
->=20
-> The recommended transition delay for mdss core gdsc updated for
-> SC7180/SC7280/SM8250.
->=20
-> Fixes: dd3d06622138 ("clk: qcom: Add display clock controller driver for =
-SC7180")
-> Fixes: 1a00c962f9cd ("clk: qcom: Add display clock controller driver for =
-SC7280")
-> Fixes: 80a18f4a8567 ("clk: qcom: Add display clock controller driver for =
-SM8150 and SM8250")
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
+Hi Roberto,
 
-Applied to clk-fixes
+On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> Extend the interoperability with IMA, to give wider flexibility for the
+> implementation of integrity-focused LSMs based on eBPF.
+
+I've previously requested adding eBPF module measurements and signature
+verification support in IMA.  There seemed to be some interest, but
+nothing has been posted.
+
+thanks,
+
+Mimi
+

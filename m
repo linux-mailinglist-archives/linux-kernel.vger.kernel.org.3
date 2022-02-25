@@ -2,478 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885704C4BE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68834C4BF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243580AbiBYRUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S243611AbiBYRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243568AbiBYRU2 (ORCPT
+        with ESMTP id S243599AbiBYRW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:20:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6707B1C2D9B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645809594;
+        Fri, 25 Feb 2022 12:22:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE0B22320A;
+        Fri, 25 Feb 2022 09:21:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0381B832AF;
+        Fri, 25 Feb 2022 17:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC609C340E7;
+        Fri, 25 Feb 2022 17:21:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="avzQXB0S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645809710;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0bdBwNSnrD7yysUHd564/dKTLnPvhau29Bt+Q9jstDU=;
-        b=cYV20tyKciv68POq/kdH+lAYSkS13oSDXC5iz3RvJt11ceSY+tgHCAFmgqRy2ISQp5mvCR
-        Vi8nQuuGCZMdmxbS4Nr9AMDI6Jd9cCG2qOqoshp63uwlO2CLBogfZAlnJLGPSXKW60XNmp
-        so9/61ODnGhMMg9tB2ZJrHNwbQPJVwE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-I5C8UVqENE6b8OLJbAh-2A-1; Fri, 25 Feb 2022 12:19:49 -0500
-X-MC-Unique: I5C8UVqENE6b8OLJbAh-2A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 02B27800425;
-        Fri, 25 Feb 2022 17:19:42 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9983F1073025;
-        Fri, 25 Feb 2022 17:19:33 +0000 (UTC)
-Message-ID: <0e9a22e90256ed289d90956f720f36d870c92d2a.camel@redhat.com>
-Subject: Re: [PATCH v6 7/9] KVM: VMX: enable IPI virtualization
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
-Date:   Fri, 25 Feb 2022 19:19:32 +0200
-In-Reply-To: <20220225082223.18288-8-guang.zeng@intel.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
-         <20220225082223.18288-8-guang.zeng@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        bh=yyp0XBR2LBG6ybQpSRV5Mk5rlFmokNbyKi7/2GKEXSM=;
+        b=avzQXB0Sz6ebvM/yT8r4bVRCQnlmoohAGQbJf/M8sVjbHOrx/UXxFZNihPoWCeeZrYWaEN
+        qbk23OIlhazsFJLjUT8kd3DcEo8ZCQWTEqRFeQhZKNzBMRDCrGfLmmm5pWnfgoUXQ7LkfT
+        FQxD44/UGXgZmE609kLiFcYDHelRr4E=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d56f47f5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Feb 2022 17:21:49 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 18:21:45 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Alexander Graf <graf@amazon.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>
+Subject: Re: [PATCH] ACPI: bus: Match first 9 bytes of device IDs
+Message-ID: <YhkQKfE8ErtFBmSB@zx2c4.com>
+References: <20220225155552.30636-1-graf@amazon.com>
+ <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGtANm3SMoREymDSyx+wpn3L=Ex5q5mpgQigOwmEp33Lg@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-25 at 16:22 +0800, Zeng Guang wrote:
-> From: Gao Chao <chao.gao@intel.com>
-> 
-> With IPI virtualization enabled, the processor emulates writes to
-> APIC registers that would send IPIs. The processor sets the bit
-> corresponding to the vector in target vCPU's PIR and may send a
-> notification (IPI) specified by NDST and NV fields in target vCPU's
-> Posted-Interrupt Descriptor (PID). It is similar to what IOMMU
-> engine does when dealing with posted interrupt from devices.
-> 
-> A PID-pointer table is used by the processor to locate the PID of a
-> vCPU with the vCPU's APIC ID.
-> 
-> Like VT-d PI, if a vCPU goes to blocked state, VMM needs to switch its
-> notification vector to wakeup vector. This can ensure that when an IPI
-> for blocked vCPUs arrives, VMM can get control and wake up blocked
-> vCPUs. And if a VCPU is preempted, its posted interrupt notification
-> is suppressed.
-> 
-> Note that IPI virtualization can only virualize physical-addressing,
-> flat mode, unicast IPIs. Sending other IPIs would still cause a
-> trap-like APIC-write VM-exit and need to be handled by VMM.
-> 
-> Signed-off-by: Gao Chao <chao.gao@intel.com>
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> ---
->  arch/x86/include/asm/vmx.h         |  8 ++++
->  arch/x86/include/asm/vmxfeatures.h |  2 +
->  arch/x86/kvm/vmx/capabilities.h    |  6 +++
->  arch/x86/kvm/vmx/posted_intr.c     | 12 ++++-
->  arch/x86/kvm/vmx/vmx.c             | 74 +++++++++++++++++++++++++++---
->  arch/x86/kvm/vmx/vmx.h             |  3 ++
->  6 files changed, 97 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> index 8c929596a299..b79b6438acaa 100644
-> --- a/arch/x86/include/asm/vmx.h
-> +++ b/arch/x86/include/asm/vmx.h
-> @@ -76,6 +76,11 @@
->  #define SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE	VMCS_CONTROL_BIT(USR_WAIT_PAUSE)
->  #define SECONDARY_EXEC_BUS_LOCK_DETECTION	VMCS_CONTROL_BIT(BUS_LOCK_DETECTION)
->  
-> +/*
-> + * Definitions of Tertiary Processor-Based VM-Execution Controls.
-> + */
-> +#define TERTIARY_EXEC_IPI_VIRT			VMCS_CONTROL_BIT(IPI_VIRT)
-> +
->  #define PIN_BASED_EXT_INTR_MASK                 VMCS_CONTROL_BIT(INTR_EXITING)
->  #define PIN_BASED_NMI_EXITING                   VMCS_CONTROL_BIT(NMI_EXITING)
->  #define PIN_BASED_VIRTUAL_NMIS                  VMCS_CONTROL_BIT(VIRTUAL_NMIS)
-> @@ -159,6 +164,7 @@ static inline int vmx_misc_mseg_revid(u64 vmx_misc)
->  enum vmcs_field {
->  	VIRTUAL_PROCESSOR_ID            = 0x00000000,
->  	POSTED_INTR_NV                  = 0x00000002,
-> +	LAST_PID_POINTER_INDEX		= 0x00000008,
->  	GUEST_ES_SELECTOR               = 0x00000800,
->  	GUEST_CS_SELECTOR               = 0x00000802,
->  	GUEST_SS_SELECTOR               = 0x00000804,
-> @@ -224,6 +230,8 @@ enum vmcs_field {
->  	TSC_MULTIPLIER_HIGH             = 0x00002033,
->  	TERTIARY_VM_EXEC_CONTROL	= 0x00002034,
->  	TERTIARY_VM_EXEC_CONTROL_HIGH	= 0x00002035,
-> +	PID_POINTER_TABLE		= 0x00002042,
-> +	PID_POINTER_TABLE_HIGH		= 0x00002043,
->  	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
->  	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
->  	VMCS_LINK_POINTER               = 0x00002800,
-> diff --git a/arch/x86/include/asm/vmxfeatures.h b/arch/x86/include/asm/vmxfeatures.h
-> index ff20776dc83b..7ce616af2db2 100644
-> --- a/arch/x86/include/asm/vmxfeatures.h
-> +++ b/arch/x86/include/asm/vmxfeatures.h
-> @@ -86,4 +86,6 @@
->  #define VMX_FEATURE_ENCLV_EXITING	( 2*32+ 28) /* "" VM-Exit on ENCLV (leaf dependent) */
->  #define VMX_FEATURE_BUS_LOCK_DETECTION	( 2*32+ 30) /* "" VM-Exit when bus lock caused */
->  
-> +/* Tertiary Processor-Based VM-Execution Controls, word 3 */
-> +#define VMX_FEATURE_IPI_VIRT		(3*32 +  4) /* "" Enable IPI virtualization */
->  #endif /* _ASM_X86_VMXFEATURES_H */
-> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> index 31f3d88b3e4d..5f656c9e33be 100644
-> --- a/arch/x86/kvm/vmx/capabilities.h
-> +++ b/arch/x86/kvm/vmx/capabilities.h
-> @@ -13,6 +13,7 @@ extern bool __read_mostly enable_ept;
->  extern bool __read_mostly enable_unrestricted_guest;
->  extern bool __read_mostly enable_ept_ad_bits;
->  extern bool __read_mostly enable_pml;
-> +extern bool __read_mostly enable_ipiv;
->  extern int __read_mostly pt_mode;
->  
->  #define PT_MODE_SYSTEM		0
-> @@ -283,6 +284,11 @@ static inline bool cpu_has_vmx_apicv(void)
->  		cpu_has_vmx_posted_intr();
->  }
->  
-> +static inline bool cpu_has_vmx_ipiv(void)
-> +{
-> +	return vmcs_config.cpu_based_3rd_exec_ctrl & TERTIARY_EXEC_IPI_VIRT;
-> +}
-> +
->  static inline bool cpu_has_vmx_flexpriority(void)
->  {
->  	return cpu_has_vmx_tpr_shadow() &&
-> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> index aa1fe9085d77..90124a30c074 100644
-> --- a/arch/x86/kvm/vmx/posted_intr.c
-> +++ b/arch/x86/kvm/vmx/posted_intr.c
-> @@ -177,11 +177,21 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
->  	local_irq_restore(flags);
->  }
->  
-> +static bool vmx_can_use_ipiv_pi(struct kvm *kvm)
-> +{
-> +	return irqchip_in_kernel(kvm) && enable_ipiv;
-> +}
-> +
-> +static bool vmx_can_use_posted_interrupts(struct kvm *kvm)
-> +{
-> +	return vmx_can_use_ipiv_pi(kvm) || vmx_can_use_vtd_pi(kvm);
+On Fri, Feb 25, 2022 at 6:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> The device subsystem side of things already deals with this properly:
+> the modalias of the QEMU vmgenid device comes up as
+> 'acpi:QEMUVGID:VM_GEN_COUNTER', which means it already captures the
+> entire string, and exposes it in the correct way (modulo the all caps)
 
-It took me a while to figure that out.
+Ahh, so the userspace side of this won't work right. Shucks. That's what
+I was concerned about.
+
+> I don't like this hack. If we are going to accept the fact that CIDs
+> could be arbitrary length strings, we should handle them properly.
+>
+> So what we need is a way for a module to describe its compatibility
+> with such a _CID, which shouldn't be that complicated.
+
+Can't we do something more boring and just...
+
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index 4bb71979a8fd..5da5d990ff58 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -210,9 +210,9 @@ struct css_device_id {
+ 	__u8 type; /* subchannel type */
+ 	kernel_ulong_t driver_data;
+ };
  
-vmx_can_use_vtd_pi returns true when the VM can be targeted by posted
-interrupts from the IOMMU, which leads to
+-#define ACPI_ID_LEN	9
++#define ACPI_ID_LEN	16
  
-1. update of the NV vector and SN bit on vcpu_load/vcpu_put to let
-IOMMU knows where the vCPU really runs.
- 
-2. in vmx_pi_update_irte to configure the posted interrupts.
- 
- 
-Now IPIv will also use the same NV vector and SN bit for IPI virtualization,
-thus they have to be kept up to date on vcpu load/put.
- 
-I would appreciate a comment about this in vmx_can_use_posted_interrupts
-because posted interrupts can mean too many things, like a host->guest
-posted interrupt which is sent by just interrupt.
- 
-Maybe also rename the function to something like
- 
-vmx_need_up_to_date_nv_sn(). Sounds silly to me so
-maybe something else.
+ struct acpi_device_id {
+ 	__u8 id[ACPI_ID_LEN];
+ 	kernel_ulong_t driver_data;
 
 
-> +}
-> +
->  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
->  {
->  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
->  
-> -	if (!vmx_can_use_vtd_pi(vcpu->kvm))
-> +	if (!vmx_can_use_posted_interrupts(vcpu->kvm))
-I see here it is used.
->  		return;
->  
->  	if (kvm_vcpu_is_blocking(vcpu) && !vmx_interrupt_blocked(vcpu))
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 7beba7a9f247..0cb141c277ef 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -105,6 +105,9 @@ module_param(fasteoi, bool, S_IRUGO);
->  
->  module_param(enable_apicv, bool, S_IRUGO);
->  
-> +bool __read_mostly enable_ipiv = true;
-> +module_param(enable_ipiv, bool, 0444);
-> +
->  /*
->   * If nested=1, nested virtualization is supported, i.e., guests may use
->   * VMX and be a hypervisor for its own guests. If nested=0, guests may not
-> @@ -227,6 +230,11 @@ static const struct {
->  };
->  
->  #define L1D_CACHE_ORDER 4
-> +
-> +/* PID(Posted-Interrupt Descriptor)-pointer table entry is 64-bit long */
-> +#define MAX_PID_TABLE_ORDER get_order(KVM_MAX_VCPU_IDS * sizeof(u64))
-> +#define PID_TABLE_ENTRY_VALID 1
-> +
->  static void *vmx_l1d_flush_pages;
->  
->  static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
-> @@ -2543,7 +2551,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->  	}
->  
->  	if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
-> -		u64 opt3 = 0;
-> +		u64 opt3 = TERTIARY_EXEC_IPI_VIRT;
->  		u64 min3 = 0;
->  
->  		if (adjust_vmx_controls_64(min3, opt3,
-> @@ -3898,6 +3906,8 @@ static void vmx_update_msr_bitmap_x2apic(struct kvm_vcpu *vcpu)
->  		vmx_enable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_TMCCT), MSR_TYPE_RW);
->  		vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_EOI), MSR_TYPE_W);
->  		vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_SELF_IPI), MSR_TYPE_W);
-> +		if (enable_ipiv)
-> +			vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_ICR),MSR_TYPE_RW);
->  	}
->  }
->  
-> @@ -4219,14 +4229,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->  
->  	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
->  	if (cpu_has_secondary_exec_ctrls()) {
-> -		if (kvm_vcpu_apicv_active(vcpu))
-> +		if (kvm_vcpu_apicv_active(vcpu)) {
->  			secondary_exec_controls_setbit(vmx,
->  				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
->  				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> -		else
-> +			if (cpu_has_tertiary_exec_ctrls() && enable_ipiv)
-> +				tertiary_exec_controls_setbit(vmx,
-> +						TERTIARY_EXEC_IPI_VIRT);
-> +		} else {
->  			secondary_exec_controls_clearbit(vmx,
->  					SECONDARY_EXEC_APIC_REGISTER_VIRT |
->  					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> +			if (cpu_has_tertiary_exec_ctrls())
-> +				tertiary_exec_controls_clearbit(vmx,
-> +						TERTIARY_EXEC_IPI_VIRT);
-> +		}
+As you can see from the context, those additional 7 bytes were being
+wasted on padding anyway inside the acpi_device_id struct, so it's
+basically free, it would seem. This seems like the least convoluted way
+of solving this issue? If we ever encounter _more_ ACPI devices with
+weird names, we could revisit a fancy dynamic solution, but for now, why
+don't we keep it simple?
 
-Why check for cpu_has_tertiary_exec_ctrls()? wouldn't it be always true
-(enable_ipiv has to be turned to false if CPU doesn't support IPIv,
-and if it does it will support tertiary exec controls).
-
-I don't mind this as a precaution + consistency with other code.
-
-
->  	}
->  
->  	vmx_update_msr_bitmap_x2apic(vcpu);
-> @@ -4260,7 +4277,16 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->  
->  static u64 vmx_tertiary_exec_control(struct vcpu_vmx *vmx)
->  {
-> -	return vmcs_config.cpu_based_3rd_exec_ctrl;
-> +	u64 exec_control = vmcs_config.cpu_based_3rd_exec_ctrl;
-> +
-> +	/*
-> +	 * IPI virtualization relies on APICv. Disable IPI
-> +	 * virtualization if APICv is inhibited.
-> +	 */
-> +	if (!enable_ipiv || !kvm_vcpu_apicv_active(&vmx->vcpu))
-> +		exec_control &= ~TERTIARY_EXEC_IPI_VIRT;
-
-I am not 100% sure, but kvm_vcpu_apicv_active might not be the
-best thing to check here, as it reflects per-cpu dynamic APICv inhibit.
-
-It probably works, but it might be better to use enable_apicv
-here and rely on normal APICv inhibit, and there inibit IPIv  as well
-as you do in vmx_refresh_apicv_exec_ctrl/
-
-
-
-> +
-> +	return exec_control;
->  }
->  
->  /*
-> @@ -4412,6 +4438,9 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
->  
->  static void init_vmcs(struct vcpu_vmx *vmx)
->  {
-> +	struct kvm_vcpu *vcpu = &vmx->vcpu;
-> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
-> +
->  	if (nested)
->  		nested_vmx_set_vmcs_shadowing_bitmap();
->  
-> @@ -4431,7 +4460,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  	if (cpu_has_tertiary_exec_ctrls())
->  		tertiary_exec_controls_set(vmx, vmx_tertiary_exec_control(vmx));
->  
-> -	if (kvm_vcpu_apicv_active(&vmx->vcpu)) {
-> +	if (kvm_vcpu_apicv_active(vcpu)) {
-
-here too (pre-existing), I also not 100% sure that kvm_vcpu_apicv_active
-should be used. I haven't studied APICv code that much to be 100% sure.
-
-
->  		vmcs_write64(EOI_EXIT_BITMAP0, 0);
->  		vmcs_write64(EOI_EXIT_BITMAP1, 0);
->  		vmcs_write64(EOI_EXIT_BITMAP2, 0);
-> @@ -4441,6 +4470,13 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  
->  		vmcs_write16(POSTED_INTR_NV, POSTED_INTR_VECTOR);
->  		vmcs_write64(POSTED_INTR_DESC_ADDR, __pa((&vmx->pi_desc)));
-> +
-> +		if (enable_ipiv) {
-> +			WRITE_ONCE(kvm_vmx->pid_table[vcpu->vcpu_id],
-> +				__pa(&vmx->pi_desc) | PID_TABLE_ENTRY_VALID);
-> +			vmcs_write64(PID_POINTER_TABLE, __pa(kvm_vmx->pid_table));
-> +			vmcs_write16(LAST_PID_POINTER_INDEX, kvm_vmx->pid_last_index);
-> +		}
->  	}
->  
->  	if (!kvm_pause_in_guest(vmx->vcpu.kvm)) {
-> @@ -4492,7 +4528,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  		vmcs_write16(GUEST_PML_INDEX, PML_ENTITY_NUM - 1);
->  	}
->  
-> -	vmx_write_encls_bitmap(&vmx->vcpu, NULL);
-> +	vmx_write_encls_bitmap(vcpu, NULL);
-
-I might have separated the refactoring of using vcpu instead of &vmx->vcpu
-in a separate patch, but I don't mind that that much.
-
->  
->  	if (vmx_pt_mode_is_host_guest()) {
->  		memset(&vmx->pt_desc, 0, sizeof(vmx->pt_desc));
-> @@ -4508,7 +4544,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  
->  	if (cpu_has_vmx_tpr_shadow()) {
->  		vmcs_write64(VIRTUAL_APIC_PAGE_ADDR, 0);
-> -		if (cpu_need_tpr_shadow(&vmx->vcpu))
-> +		if (cpu_need_tpr_shadow(vcpu))
->  			vmcs_write64(VIRTUAL_APIC_PAGE_ADDR,
->  				     __pa(vmx->vcpu.arch.apic->regs));
->  		vmcs_write32(TPR_THRESHOLD, 0);
-> @@ -7165,6 +7201,18 @@ static int vmx_vm_init(struct kvm *kvm)
->  			break;
->  		}
->  	}
-> +
-> +	if (enable_ipiv) {
-> +		struct page *pages;
-> +
-> +		pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PID_TABLE_ORDER);
-> +		if (!pages)
-> +			return -ENOMEM;
-> +
-> +		to_kvm_vmx(kvm)->pid_table = (void *)page_address(pages);
-> +		to_kvm_vmx(kvm)->pid_last_index = KVM_MAX_VCPU_IDS - 1;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -7756,6 +7804,14 @@ static bool vmx_check_apicv_inhibit_reasons(ulong bit)
->  	return supported & BIT(bit);
->  }
->  
-> +static void vmx_vm_destroy(struct kvm *kvm)
-> +{
-> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
-> +
-> +	if (kvm_vmx->pid_table)
-> +		free_pages((unsigned long)kvm_vmx->pid_table, MAX_PID_TABLE_ORDER);
-
-Maybe add a warning checking that ipiv was actually enabled.
-Maybe this is overkill.
-
-
-> +}
-> +
->  static struct kvm_x86_ops vmx_x86_ops __initdata = {
->  	.name = "kvm_intel",
->  
-> @@ -7768,6 +7824,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->  
->  	.vm_size = sizeof(struct kvm_vmx),
->  	.vm_init = vmx_vm_init,
-> +	.vm_destroy = vmx_vm_destroy,
->  
->  	.vcpu_create = vmx_create_vcpu,
->  	.vcpu_free = vmx_free_vcpu,
-> @@ -8022,6 +8079,9 @@ static __init int hardware_setup(void)
->  	if (!enable_apicv)
->  		vmx_x86_ops.sync_pir_to_irr = NULL;
->  
-> +	if (!enable_apicv || !cpu_has_vmx_ipiv())
-> +		enable_ipiv = false;
-> +
->  	if (cpu_has_vmx_tsc_scaling()) {
->  		kvm_has_tsc_control = true;
->  		kvm_max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index d4a647d3ed4a..e7b0c00c9d43 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -365,6 +365,9 @@ struct kvm_vmx {
->  	unsigned int tss_addr;
->  	bool ept_identity_pagetable_done;
->  	gpa_t ept_identity_map_addr;
-> +	/* PID table for IPI virtualization */
-> +	u64 *pid_table;
-> +	u16 pid_last_index;
->  };
->  
->  bool nested_vmx_allowed(struct kvm_vcpu *vcpu);
-
-
-I might have missed something, but overall looks good.
-
-Best regards,
-	Maxim Levitsky
-
+Jason

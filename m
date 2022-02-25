@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA6B4C3E08
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA414C3E0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 06:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237620AbiBYFuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 00:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S237639AbiBYFvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 00:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiBYFuJ (ORCPT
+        with ESMTP id S237644AbiBYFvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 00:50:09 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06D0B458A;
-        Thu, 24 Feb 2022 21:49:36 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aee37.dynamic.kabel-deutschland.de [95.90.238.55])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1675D61EA1939;
-        Fri, 25 Feb 2022 06:49:33 +0100 (CET)
-Message-ID: <bfab82a0-bf21-7782-f6fb-3adaf827ad25@molgen.mpg.de>
-Date:   Fri, 25 Feb 2022 06:49:32 +0100
+        Fri, 25 Feb 2022 00:51:39 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8861F03B4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 21:51:07 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id v186so3885438ybg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 21:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Girgga9Ci+5xd+8kHR+4MAPMnZRC/qWzFHzhTjkouU=;
+        b=APbEdw9DCoq4YO9CPnVxJaCcGKIrX5WNvB8CrAqLgW+g9afQj3tz1pMqKsE7u7rh7h
+         0UDFDhDrmI5J7WRYMtG6H+2tUzTSpk8XSYa5DMqtnvxRNb6qLNLxct/uP31Kfc7VPOCY
+         c/wAxEXw0nNmvElPJL52UhKlpywF0hxptGEbE8YjqhZjJd89+enNUTK63m7plns1Bk5R
+         EE252+R7LSROnt1LAG7IJwOK5ysyLmIhQHZgBE1nYxkJvrlHhH6ERS7u0FQjak2Gkfe+
+         +DpeMk9dZ+9Xzileze/aRznlewvT/WmgWaaGEg0yGybKNuX60TmW0AL7lmBwkTYDPqSy
+         AOaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Girgga9Ci+5xd+8kHR+4MAPMnZRC/qWzFHzhTjkouU=;
+        b=HX3K8/M38GOxz7MBaV8SQMK2kX30ZW3LfyRq0IGJqoWQxiTrdOyI4vVpFIvoGnVDYl
+         Sita8epPuiWOSj+PtXY9DXEjhyUdtgBfyhXXWr9IeuzCYXzWFIjb9RcL3TdUBbh9N01m
+         zczEttR130Rcv7gub4X10AwpiBB9f+p8Tn+Wex/a2/XrekNU4yzRxIiNhxA49Yb+fhnp
+         RD08pYc1vCNJekdpczSIfvVOTdLe7pRM//V/HQRLjJX6rwnJ0QKC7f51WFjSb2lN1Py+
+         hBtUbH6RU4pjUWibbKu9Uf9CiOaE19QQ9rUFsZJmz+mHAiWvn+LWQGzgOBLFhowOthLp
+         VzHg==
+X-Gm-Message-State: AOAM532uF5OhT1yKWgoL+2BM2LGx1lcWrIB/EUyWRP/UIrgzlLjCOo6m
+        aw4j98S2/sAv6la6/3ZkUl1vUFuFXDCZKQlzgFd1nQ==
+X-Google-Smtp-Source: ABdhPJyg1MamSYunzsREevAh9ocOCGsMKrLpiB38putz2JxBhuE88oIZqQN7LkJKrDAj1wsPekXhQPxtDa0vVMN/crY=
+X-Received: by 2002:a25:da47:0:b0:61d:9af4:c834 with SMTP id
+ n68-20020a25da47000000b0061d9af4c834mr5853645ybf.441.1645768266299; Thu, 24
+ Feb 2022 21:51:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 2/2] torture: Make thread detection more robust by using
- lspcu
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
- <20220222120718.17141-2-pmenzel@molgen.mpg.de>
- <20220222174328.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <1084da08-f67d-b5d7-add4-580e9246b7b7@molgen.mpg.de>
- <20220224205617.GY4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220224205617.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220215201922.1908156-1-surenb@google.com> <20220224201859.a38299b6c9d52cb51e6738ea@linux-foundation.org>
+ <YhhZsv+czqQPKvvN@casper.infradead.org>
+In-Reply-To: <YhhZsv+czqQPKvvN@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 24 Feb 2022 21:50:54 -0800
+Message-ID: <CAJuCfpEUro2jxmx-AB2A-mVcNxz6s3oAyow1sEXY5RyPP+83dA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: fix use-after-free bug when mm->mmap is reused
+ after being freed
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, mhocko@kernel.org,
+        mhocko@suse.com, shy828301@gmail.com, rientjes@google.com,
+        hannes@cmpxchg.org, guro@fb.com, riel@surriel.com,
+        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
+        brauner@kernel.org, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com,
+        syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com,
+        Liam Howlett <liam.howlett@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,127 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul,
+On Thu, Feb 24, 2022 at 8:23 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Thu, Feb 24, 2022 at 08:18:59PM -0800, Andrew Morton wrote:
+> > On Tue, 15 Feb 2022 12:19:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > > After exit_mmap frees all vmas in the mm, mm->mmap needs to be reset,
+> > > otherwise it points to a vma that was freed and when reused leads to
+> > > a use-after-free bug.
+> > >
+> > > ...
+> > >
+> > > --- a/mm/mmap.c
+> > > +++ b/mm/mmap.c
+> > > @@ -3186,6 +3186,7 @@ void exit_mmap(struct mm_struct *mm)
+> > >             vma = remove_vma(vma);
+> > >             cond_resched();
+> > >     }
+> > > +   mm->mmap = NULL;
+> > >     mmap_write_unlock(mm);
+> > >     vm_unacct_memory(nr_accounted);
+> > >  }
+> >
+> > After the Maple tree patches, mm_struct.mmap doesn't exist.  So I'll
+> > revert this fix as part of merging the maple-tree parts of linux-next.
+> > I'll be sending this fix to Linus this week.
+> >
+> > All of which means that the thusly-resolved Maple tree patches might
+> > reintroduce this use-after-free bug.
+>
+> I don't think so?  The problem is that VMAs are (currently) part of
+> two data structures -- the rbtree and the linked list.  remove_vma()
+> only removes VMAs from the rbtree; it doesn't set mm->mmap to NULL.
+>
+> With maple tree, the linked list goes away.  remove_vma() removes VMAs
+> from the maple tree.  So anyone looking to iterate over all VMAs has to
+> go and look in the maple tree for them ... and there's nothing there.
 
+Yes, I think you are right. With maple trees we don't need this fix.
 
-Am 24.02.22 um 21:56 schrieb Paul E. McKenney:
-> On Thu, Feb 24, 2022 at 09:24:11AM +0100, Paul Menzel wrote:
-
->> Am 22.02.22 um 18:43 schrieb Paul E. McKenney:
->>> On Tue, Feb 22, 2022 at 01:07:17PM +0100, Paul Menzel wrote:
->>>> For consecutive numbers *lscpu* collapses the output and just shows the
->>>> range with start and end. The processors are numbered that way on POWER8.
->>>>
->>>>       $ sudo ppc64_cpu --smt=8
->>>>       $ lscpu | grep '^NUMA node'
->>>>       NUMA node(s):                    2
->>>>       NUMA node0 CPU(s):               0-79
->>>>       NUMA node8 CPU(s):               80-159
->>>>
->>>> This causes the heuristic to detect the number threads per core, looking
->>>> for the number after the first comma, to fail, and QEMU aborts because of
->>>> invalid arguments.
->>>>
->>>>       $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
->>>>       $
->>>>
->>>> (Before the last patch, the whole line was returned.)
->>>>
->>>>       $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
->>>>       NUMA node0 CPU(s):               0-79
->>>>
->>>> *lscpu* shows the number of threads per core, so use that value directly.
->>>>
->>>>       $ sudo ppc64_cpu --smt=8
->>>>       $ lscpu | grep 'Thread(s) per core'
->>>>       Thread(s) per core:              8
->>>>       $ sudo ppc64_cpu --smt=off
->>>>       $ lscpu | grep 'Thread(s) per core'
->>>>       Thread(s) per core:              1
->>>>
->>>> Note, the replaced heuristic is also incorrect for that case, where the
->>>> threads per core are disabled.
->>>>
->>>>       $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
->>>>       8
->>>>
->>>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->>>
->>> Makes sense, and thank you for chasing this down and for the fix!
->>>
->>> But should this patch and 1/2 be merged?  Or am I confused and they
->>> are somehow affecting two different lines of scripting?
->>
->> You are right. I guess with 1/2 I just wanted to document clearly, what I
->> learned in #sed@irc.libera.chat, that means, how to avoid using grep, when
->> sed is used.
-> 
-> Nothing wrong with that!
-> 
-> I have merged the two patches as shown below.  Does this work for you?
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> commit 9f0daba62e958c31326c7a9eae33651e3a3cc6b4
-> Author: Paul Menzel <pmenzel@molgen.mpg.de>
-> Date:   Tue Feb 22 13:07:16 2022 +0100
-> 
->      torture: Make thread detection more robust by using lspcu
->      
->      For consecutive numbers the lscpu command collapses the output and just
->      shows the range with start and end. The processors are numbered that
->      way on POWER8.
->      
->          $ sudo ppc64_cpu --smt=8
->          $ lscpu | grep '^NUMA node'
->          NUMA node(s):                    2
->          NUMA node0 CPU(s):               0-79
->          NUMA node8 CPU(s):               80-159
->      
->      This causes the heuristic to detect the number threads per core, looking
->      for the number after the first comma, to fail, and QEMU aborts because of
->      invalid arguments.
->      
->          $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
->          NUMA node0 CPU(s):               0-79
->      
->      But the lscpu command shows the number of threads per core:
->      
->          $ sudo ppc64_cpu --smt=8
->          $ lscpu | grep 'Thread(s) per core'
->          Thread(s) per core:              8
->          $ sudo ppc64_cpu --smt=off
->          $ lscpu | grep 'Thread(s) per core'
->          Thread(s) per core:              1
->      
->      This commit therefore directly uses that value.
-
-Maybe extend: …, and replaces `grep` by using using sed’s switch `-n` 
-and the command p.
-
->      
->      Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-> index c35ba24f994c3..66d0414d8e4bc 100644
-> --- a/tools/testing/selftests/rcutorture/bin/functions.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-> @@ -301,7 +301,7 @@ specify_qemu_cpus () {
->   			echo $2 -smp $3
->   			;;
->   		qemu-system-ppc64)
-> -			nt="`lscpu | grep '^NUMA node0' | sed -e 's/^[^,]*,\([0-9]*\),.*$/\1/'`"
-> +			nt="`lscpu | sed -n 's/^Thread(s) per core:\s*//p'`"
->   			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
->   			;;
->   		esac
-
-Thank you for doing that, and sorry for the extra work.
-
-
-Kind regards,
-
-Paul
+>
+> But maybe I misunderstood the bug that's being solved here.

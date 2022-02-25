@@ -2,184 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0434C4A1E
+	by mail.lfdr.de (Postfix) with ESMTP id C73294C4A1F
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242629AbiBYQHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S242638AbiBYQIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242620AbiBYQHU (ORCPT
+        with ESMTP id S242636AbiBYQHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:07:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00F75211320
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645805206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
-        b=EvriBeJmaKA9toWJMbVMuqAfxqoSfBrtIM4qzuETChFtVohuFJS+6d5EnlEeYoaHr08LXw
-        P8iNNd0z262mnqlm0ljVnGszJsogvmlJHk8lkEMi7IP91a16U3YITDbqlRUkdOa+6psCMA
-        3Ir7MxKR/xGDNsY3GIl87QQmWwxC5dQ=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-978ktIK7N7iHSodVq-ZZPQ-1; Fri, 25 Feb 2022 11:06:44 -0500
-X-MC-Unique: 978ktIK7N7iHSodVq-ZZPQ-1
-Received: by mail-pl1-f200.google.com with SMTP id z14-20020a170902ccce00b0014d7a559635so3218500ple.16
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:06:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
-        b=rxcojd5Wwy8Y6Ytw1vv+yzCmyJksLdDDNLELUZA2HZdUOE+QQjDmaYMEQ9q4RBljB/
-         rxHTRIhYSpNim23uNHUK6EgBgm4eIHK5ltCqHjfP3m4yArgmfjswWwTvOgXvyMif18mI
-         DpRz+Amra1fg6U9yGY02w9VMgIrdw88Xa4c6ejcHo5DUVCwGz2/Noi3ghHzT7yGZYO4Q
-         y8vOzg16BiE1wJrY6CJVjYO/GqKjIdx/HNdgPTsPxYCCfOqNmjj7i0do2C6C5mP/GPls
-         g9MW3O/eDf8+A8LcaVWAiL+0y1Xynq7M+TjHcX/qb97uD7bNLdUImjyuDwf4CCZoH9In
-         u3HQ==
-X-Gm-Message-State: AOAM530bTQoNC5Jpd529A+15Cz5SuuhF1fIUIEWujRmLlXsLTE1K5SWH
-        GtJ72ArOgMPRw99nawkJYpotFBME0ZEI+ne37wN+0m6yMtE4+haSn46a3fjNoqtGAOX6wjoZpfO
-        Fvjd1OhUL+qD8fCSooc6zbUNplkM4VSzfiEasiNKo
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr8295942plb.73.1645805203631;
-        Fri, 25 Feb 2022 08:06:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwUIpWXteQHikzWnedR/pQmtGNKJt81L52dh8Zvx5yBKuSs0mA4pDWiMKp+ELlQrYIZ5T2VI/o7I3Fd2NGvn7E=
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id
- bc8-20020a170902930800b0014edef5e6b5mr8295906plb.73.1645805203288; Fri, 25
- Feb 2022 08:06:43 -0800 (PST)
+        Fri, 25 Feb 2022 11:07:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EB21131F;
+        Fri, 25 Feb 2022 08:07:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE9AB83273;
+        Fri, 25 Feb 2022 16:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22393C340F2;
+        Fri, 25 Feb 2022 16:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645805236;
+        bh=KbJfW32hJ/F19yfN7A1bXil25wuVvtsMCViBmRGt63Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WkbIlFcJhtK50zmM1SUqT+c2BPoPb/PAsS5g6c6LqFS7dLJTZxLAPvig1x6SXi8te
+         l5Cx5rIlFRnbSFqV0Md2Gt99TvNmEAE85nc8zZkW2KAysaFXNYW8weU3KRSI1Joub1
+         XfgGa954+3/CiMxkbGo51ZitZf59ze3/G/mztC6h6fIENRXkrcAjUFFN1d6J+PDcBw
+         gx1uVRfyOgaOR4bZKjVcG7PIz/MCA3RNLoXSnngVfstymXQ0A55zH1r8rE0BbpfyBI
+         53H/HcqUiVVHaCBF70mR9z8l6owgUIz3VOsTGHF1gt/NgeAutWcTYSskkxOKLmnMHx
+         9rb/DOmJIf44g==
+Received: by mail-ua1-f46.google.com with SMTP id 4so2689384uaf.0;
+        Fri, 25 Feb 2022 08:07:16 -0800 (PST)
+X-Gm-Message-State: AOAM532qmB3RCzM2eOyjrm4h1R0Jocb2mLGQ2iLUY34AQqe43FcrxgKL
+        8xYBWINlULGTU8a+TQKYajEleFQ9L6CmhHkvOLQ=
+X-Google-Smtp-Source: ABdhPJzyFkCkLFwk2uiu55UbxfUmfSs3x9iDpfEO2XzZ1mh9E9zaiS00R4pCw1xb9Wsx0R973/NIBGmLnXTfXz/Q4Mk=
+X-Received: by 2002:ab0:1112:0:b0:33e:802f:e335 with SMTP id
+ e18-20020ab01112000000b0033e802fe335mr3769822uab.57.1645805235064; Fri, 25
+ Feb 2022 08:07:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
- <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
- <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
-In-Reply-To: <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 25 Feb 2022 17:06:32 +0100
-Message-ID: <CAO-hwJ+CJkPqdOE+OpZHOscMk3HHZb4qVtXjF-bkOweU0QjppA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@redhat.com>
+References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
+ <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
+ <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com> <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 26 Feb 2022 00:07:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
+Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
+Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 6:21 PM Yonghong Song <yhs@fb.com> wrote:
+On Fri, Feb 25, 2022 at 11:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
+> On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > Hi Arnd & Palmer,
+> >
+> > Here is the new modified compat_vdso/Makefile, please have a look,
+> > first. Then I would update it to v7:
+> > ===========================================
+> > # SPDX-License-Identifier: GPL-2.0-only
+> > #
+> > # Makefile for compat_vdso
+> > #
+> >
+> > # Symbols present in the compat_vdso
+> > compat_vdso-syms  = rt_sigreturn
+> > compat_vdso-syms += getcpu
+> > compat_vdso-syms += flush_icache
+> >
+> > ifdef CROSS_COMPILE_COMPAT
+> >         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
+> >         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
+> > else
+> >         COMPAT_CC := $(CC)
+> >         COMPAT_LD := $(LD)
+> > endif
+> >
+> > COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
+> > COMPAT_LD_FLAGS := -melf32lriscv
 >
->
-> On 2/24/22 5:49 AM, Benjamin Tissoires wrote:
-> > Hi Greg,
-> >
-> > Thanks for the quick answer :)
-> >
-> > On Thu, Feb 24, 2022 at 12:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
-> >>> Hi there,
-> >>>
-> >>> This series introduces support of eBPF for HID devices.
-> >>>
-> >>> I have several use cases where eBPF could be interesting for those
-> >>> input devices:
-> >>>
-> >>> - simple fixup of report descriptor:
-> >>>
-> >>> In the HID tree, we have half of the drivers that are "simple" and
-> >>> that just fix one key or one byte in the report descriptor.
-> >>> Currently, for users of such devices, the process of fixing them
-> >>> is long and painful.
-> >>> With eBPF, we could externalize those fixups in one external repo,
-> >>> ship various CoRe bpf programs and have those programs loaded at boot
-> >>> time without having to install a new kernel (and wait 6 months for the
-> >>> fix to land in the distro kernel)
-> >>
-> >> Why would a distro update such an external repo faster than they update
-> >> the kernel?  Many sane distros update their kernel faster than other
-> >> packages already, how about fixing your distro?  :)
-> >
-> > Heh, I'm going to try to dodge the incoming rhel bullet :)
-> >
-> > It's true that thanks to the work of the stable folks we don't have to
-> > wait 6 months for a fix to come in. However, I think having a single
-> > file to drop in a directory would be easier for development/testing
-> > (and distribution of that file between developers/testers) than
-> > requiring people to recompile their kernel.
-> >
-> > Brain fart: is there any chance we could keep the validated bpf
-> > programs in the kernel tree?
->
-> Yes, see kernel/bpf/preload/iterators/iterators.bpf.c.
-
-Thanks. This is indeed interesting.
-I am not sure the exact usage of it though :)
-
-One thing I wonder too while we are on this topic, is it possible to
-load a bpf program from the kernel directly, in the same way we can
-request firmwares?
-
-Because if we can do that, in my HID use case we could replace simple
-drivers with bpf programs entirely and reduce the development cycle to
-a bare minimum.
-
-Cheers,
-Benjamin
-
+> Have you come across a case in which a separate cross toolchain
+> is required? If not, I would leave this out and just set the flags for the
+> normal toolchain.
+Okay
 
 >
-> >
-> >>
-> >> I'm all for the idea of using ebpf for HID devices, but now we have to
-> >> keep track of multiple packages to be in sync here.  Is this making
-> >> things harder overall?
-> >
-> > Probably, and this is also maybe opening a can of worms. Vendors will
-> > be able to say "use that bpf program for my HID device because the
-> > firmware is bogus".
-> >
-> > OTOH, as far as I understand, you can not load a BPF program in the
-> > kernel that uses GPL-declared functions if your BPF program is not
-> > GPL. Which means that if firmware vendors want to distribute blobs
-> > through BPF, either it's GPL and they have to provide the sources, or
-> > it's not happening.
-> >
-> > I am not entirely clear on which plan I want to have for userspace.
-> > I'd like to have libinput on board, but right now, Peter's stance is
-> > "not in my garden" (and he has good reasons for it).
-> > So my initial plan is to cook and hold the bpf programs in hid-tools,
-> > which is the repo I am using for the regression tests on HID.
-> >
-> > I plan on building a systemd intrinsic that would detect the HID
-> > VID/PID and then load the various BPF programs associated with the
-> > small fixes.
-> > Note that everything can not be fixed through eBPF, simply because at
-> > boot we don't always have the root partition mounted.
-> [...]
->
+> I also think it would be a nicer split to build the two vdso variants
+> as vdso64/vdso32 rather than vdso/compat_vdso. That way,
+> the build procedure can be kept as close as possible to the
+> native 32-bit build.
+Yes, current native 32-bit vdso & 64-bit vdso use the same
+vdso/Makfile. So, I think it could be another patch for this cleanup.
 
+>
+>         Arnd
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

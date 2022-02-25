@@ -2,186 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A3C4C4DE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D634C4DF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiBYSf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
+        id S231217AbiBYSjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiBYSf0 (ORCPT
+        with ESMTP id S229536AbiBYSjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:35:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973C71C57D6;
-        Fri, 25 Feb 2022 10:34:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CE1461E7A;
-        Fri, 25 Feb 2022 18:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68290C340E7;
-        Fri, 25 Feb 2022 18:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645814092;
-        bh=TVmbNKyXM5tr3OV/MfK1q8iiXyx+5ewnxH4+yo4YrAk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sfCYPwMm5KHKsjxYaH46kkEk3v6RbpCiN/dPraqbj1tQmplyraTv4HVn/l3g20Ctu
-         m7J0LFPUl9uo+wy8305wlYbO7KoE1ysubMllgdKiWCXtvKSySdq6sqN39i6KS56FtL
-         38kgrp/e3evOP8vVZsBOiTsg8pZzeuv5aEodknNvEzfvmlbzRgksPT09PeYKQkVJ+q
-         cahevypVsrv4qm6v4rOmZDq31oh6BLePFOQg6PQeBSHFuKujIUS4JdhHpOoPQsNA1p
-         4vs3RsDs1trGHAWEul8prDxvV171oCVVK2NGUGfv63WE3Q81r5iAnKG6XRWkAJoN4X
-         IwM0HITTWEuJA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5901A403C8; Fri, 25 Feb 2022 15:34:49 -0300 (-03)
-Date:   Fri, 25 Feb 2022 15:34:49 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Qi Liu <liuqi115@huawei.com>
-Cc:     will@kernel.org, mark.rutland@arm.com, john.garry@huawei.com,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v2 2/2] perf jevents: Add support for HiSilicon CPA PMU
- aliasing
-Message-ID: <YhkhSZp+a715Ldzr@kernel.org>
-References: <20220224111129.41416-1-liuqi115@huawei.com>
- <20220224111129.41416-3-liuqi115@huawei.com>
+        Fri, 25 Feb 2022 13:39:54 -0500
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0FE574A3;
+        Fri, 25 Feb 2022 10:39:21 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id DC7273E55F8;
+        Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 0o3zchip163a; Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 545D83E527A;
+        Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 545D83E527A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1645814360;
+        bh=a2w4lmWbmq0mOVG90UVy28DB6ZZPatk+XVMbEl8SRLA=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=doD4rEhsUHLA4EXFaRuPa0LIqLvW82SrLaMMqM/cDvZYa/Yq2YADm8EdMLNDqtPi0
+         rH0CBL5y8HXxIXPzuj7R2b/g3ce7CiTGWLy2LqDiY17FT4kEVpY6Bh8JRtzQhGyQ4F
+         bNjGqctJOAmnyqMn+buZAVWED9Tzzfj4ojXS8vka1sgGGsbIfviK/qBldaGKbP7edz
+         SAfbaCXBVl2pqcrHOPk6dyeCgGjUMQkGKkYmGxEujus1yY8vw5fvbvz9XHBKpWH3u3
+         2ylUJInU1lwyhsEM5qAUQQZvxCd2ULVVrtG+veX/fvbZgDxZVoIKt/WPDOPDfnJ8PL
+         JcdCelL4NF2jw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VMcpw5CecI2E; Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 3C6583E5279;
+        Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+Date:   Fri, 25 Feb 2022 13:39:20 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        linux-man <linux-man@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
+Message-ID: <1317699329.108531.1645814360159.JavaMail.zimbra@efficios.com>
+In-Reply-To: <8735k6ke34.fsf@meer.lwn.net>
+References: <20220218210633.23345-1-mathieu.desnoyers@efficios.com> <20220218210633.23345-10-mathieu.desnoyers@efficios.com> <87k0dikfxa.fsf@meer.lwn.net> <1323451367.108396.1645811762372.JavaMail.zimbra@efficios.com> <8735k6ke34.fsf@meer.lwn.net>
+Subject: Re: [RFC PATCH v2 09/11] sched: Introduce per memory space current
+ virtual cpu id
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224111129.41416-3-liuqi115@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
+Thread-Topic: sched: Introduce per memory space current virtual cpu id
+Thread-Index: CaZeshN6ehwBX8NrJ0kfTDw8fz7SwQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 24, 2022 at 07:11:29PM +0800, Qi Liu escreveu:
-> Add support for HiSilicon CPA PMU aliasing.
+----- On Feb 25, 2022, at 1:15 PM, Jonathan Corbet corbet@lwn.net wrote:
+
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
 > 
-> The kernel driver is in drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-
-Thanks, applied the tools/perf part, the drivers/perf/ should go via the
-kernel maintainer for this area. From what I see its not yet merged.
-
-- Arnaldo
-
- 
-> Reviewed-by: John Garry <john.garry@huawei.com>
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> ---
->  .../arm64/hisilicon/hip09/sys/uncore-cpa.json | 81 +++++++++++++++++++
->  tools/perf/pmu-events/jevents.c               |  1 +
->  2 files changed, 82 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/arm64/hisilicon/hip09/sys/uncore-cpa.json
+>> Some effective upper bounds for the number of vcpu ids observable in a process:
+>>
+>> - sysconf(3) _SC_NPROCESSORS_CONF,
+>> - the number of threads which exist concurrently in the process,
+>> - the number of cpus in the cpu affinity mask applied by sched_setaffinity,
+>>   except in corner-case situations such as cpu hotplug removing all cpus from
+>>   the affinity set,
+>> - cgroup cpuset "partition" limits,
+>>
+>> Note that AFAIR non-partition cgroup cpusets allow a cgroup to "borrow"
+>> additional cores from the rest of the system if they are idle, therefore
+>> allowing the number of concurrent threads to go beyond the specified limit.
+>>
+>> AFAIR the sched affinity mask is tweaked independently of the cgroup cpuset.
+>> Those are two mechanisms both affecting the scheduler task placement.
+>>
+>> I would expect the user-space code to use some sensible upper bound as a
+>> hint about how many per-vcpu data structure elements to expect (and how many
+>> to pre-allocate), but have a "lazy initialization" fall-back in case the
+>> vcpu id goes up to the number of configured processors - 1. And I suspect
+>> that even the number of configured processors may change with CRIU.
+>>
+>> If the above explanation makes sense (please let me know if I am wrong
+>> or missed something), I suspect I should add it to the commit message.
 > 
-> diff --git a/tools/perf/pmu-events/arch/arm64/hisilicon/hip09/sys/uncore-cpa.json b/tools/perf/pmu-events/arch/arm64/hisilicon/hip09/sys/uncore-cpa.json
-> new file mode 100644
-> index 000000000000..7bcddec8a84f
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/hisilicon/hip09/sys/uncore-cpa.json
-> @@ -0,0 +1,81 @@
-> +[
-> +	{
-> +		"ConfigCode": "0x00",
-> +		"EventName": "cpa_cycles",
-> +		"BriefDescription": "count of CPA cycles",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x61",
-> +		"EventName": "cpa_p1_wr_dat",
-> +		"BriefDescription": "Number of write ops transmitted by the P1 port",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x62",
-> +		"EventName": "cpa_p1_rd_dat",
-> +		"BriefDescription": "Number of read ops transmitted by the P1 port",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x3",
-> +		"EventName": "cpa_p1_rd_dat_64b",
-> +		"BriefDescription": "Number of read ops transmitted by the P1 port which size is 64 bytes",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x4",
-> +		"EventName": "cpa_p1_rd_dat_32b",
-> +		"BriefDescription": "Number of read ops transmitted by the P1 port which size is 32 bytes",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0xE1",
-> +		"EventName": "cpa_p0_wr_dat",
-> +		"BriefDescription": "Number of write ops transmitted by the P0 port",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0xE2",
-> +		"EventName": "cpa_p0_rd_dat",
-> +		"BriefDescription": "Number of read ops transmitted by the P0 port",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x83",
-> +		"EventName": "cpa_p0_rd_dat_64b",
-> +		"BriefDescription": "Number of read ops transmitted by the P0 port which size is 64 bytes",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"ConfigCode": "0x84",
-> +		"EventName": "cpa_p0_rd_dat_32b",
-> +		"BriefDescription": "Number of read ops transmitted by the P0 port which size is 32 bytes",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"MetricExpr": "(cpa_p1_wr_dat * 64 + cpa_p1_rd_dat_64b * 64 + cpa_p1_rd_dat_32b * 32) / cpa_cycles",
-> +		"BriefDescription": "Average bandwidth of CPA Port 1",
-> +		"MetricGroup": "CPA",
-> +		"MetricName": "cpa_p1_avg_bw",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	},
-> +	{
-> +		"MetricExpr": "(cpa_p0_wr_dat * 64 + cpa_p0_rd_dat_64b * 64 + cpa_p0_rd_dat_32b * 32) / cpa_cycles",
-> +		"BriefDescription": "Average bandwidth of CPA Port 0",
-> +		"MetricGroup": "CPA",
-> +		"MetricName": "cpa_p0_avg_bw",
-> +		"Compat": "0x00000030",
-> +		"Unit": "hisi_sicl,cpa"
-> +	}
-> +]
-> diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-> index 1a57c3f81dd4..159d9eab6e79 100644
-> --- a/tools/perf/pmu-events/jevents.c
-> +++ b/tools/perf/pmu-events/jevents.c
-> @@ -277,6 +277,7 @@ static struct map {
->  	{ "CPU-M-CF", "cpum_cf" },
->  	{ "CPU-M-SF", "cpum_sf" },
->  	{ "UPI LL", "uncore_upi" },
-> +	{ "hisi_sicl,cpa", "hisi_sicl,cpa"},
->  	{ "hisi_sccl,ddrc", "hisi_sccl,ddrc" },
->  	{ "hisi_sccl,hha", "hisi_sccl,hha" },
->  	{ "hisi_sccl,l3c", "hisi_sccl,l3c" },
-> -- 
-> 2.24.0
+> That helps, thanks.  I do think that something like this belongs in the
+> changelog - or, even better, in the upcoming restartable-sequences
+> section in the userspace-api documentation :)
+
+Just to confirm, when you say "userspace-api documentation" do you refer to
+man pages ?
+
+I did a few attempts at upstreaming a rseq.2 man page in 2020, but I have been
+stuck waiting for feedback from Michael Kerrisk since then.
+
+So for the moment I'm maintaining a rseq.2 man page here:
+
+https://git.kernel.org/pub/scm/libs/librseq/librseq.git/tree/doc/man/rseq.2
+
+I'd gladly accept some help to improve the documentation of rseq.
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> 
+> jon
 
 -- 
-
-- Arnaldo
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0743E4C4ED7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0674C4EDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234862AbiBYTdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S234991AbiBYTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbiBYTds (ORCPT
+        with ESMTP id S234955AbiBYTec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:33:48 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113941986F0;
-        Fri, 25 Feb 2022 11:33:15 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d17so5942618wrc.9;
-        Fri, 25 Feb 2022 11:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mTabVBpdhiK8UZ6gYY0q0CbgdkcTzXpvDDahteadHtk=;
-        b=KqEfD0QFY48L5w9MBf4PJotkLP+NQN3xHmZQkR/HYQfcDqhuBk/QSn0Zyc4vZOsRvd
-         XqkzUYrkLvkyTkQPBAmA5aT28iuddvEajLv8Bcw38sfLscC4/I3Q90AWOWIyC6E2csW9
-         VqsIJausYk4BR8HMZgPd7G9EVuEPOBoMegz1lEfLVsFTbgs6TPFUJAt+zWcu6vsc2+Ab
-         mYU+UPAVgzwb5ki5lfDIkSUglJZQpsUBeKI0F1qKYqB8rXHdmt+8NtHC4OHT1dSKQfz6
-         z9JHi+2Kpm+ZbbCzq3U4aby39rvc8qSdwtkd1QfaZD65Uumb9VMs4+nFjxihf43YmPIL
-         MOLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mTabVBpdhiK8UZ6gYY0q0CbgdkcTzXpvDDahteadHtk=;
-        b=JyoIHsTwI3Aj2DdUgbAXJ6iPbf9C70cbn2hCXMx7EBAfMO/f7Pj+HlyCFWzvUQk9hT
-         F2K5UFDXLHoIuUzdzdKNajP02HTiTfkZFx0Zm2G/apE4otowReoYzJKrlFohqdcy+4kZ
-         l9ZQ/9gauH4Gmn5rj50SX9s47rykEE2cRzBHibc+PR/b+DswPtKcXilWDxEhnWiQSJMU
-         aToKEXgmBCw7J85cfjxLsxWfA9QQpomT3Ikr8/gCPGzcJJbVBpVtdwWZNTH3WcaPu/o1
-         1tHBu6uMVy4wljQWX0TQoezvikr5krexs4wgPLs1NLtDdO7NITOqbiQd3FXq+ALpyFny
-         CMeA==
-X-Gm-Message-State: AOAM532vKvUucHfpQqnPF/OKPBcYI9nzCifDZ49DwidwB76TOZHa7IYr
-        OsgYKkfBuLBmkxQ80VNNlDM=
-X-Google-Smtp-Source: ABdhPJyGFJ0ColLkne3T6BJpK+32d8j6YcS3hAhC7NRH0q1U0DWrDs5cqK3liozxoNnjPv3lwXBTMA==
-X-Received: by 2002:a5d:4d4a:0:b0:1ec:fab3:61bb with SMTP id a10-20020a5d4d4a000000b001ecfab361bbmr5128965wru.50.1645817593652;
-        Fri, 25 Feb 2022 11:33:13 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id w26-20020a7bc11a000000b0037bf8fa8c02sm3240281wmi.13.2022.02.25.11.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 11:33:13 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jonas@kwiboo.se, nicolas@ndufresne.ca,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v3 00/14] Move HEVC stateless controls out of staging
-Date:   Fri, 25 Feb 2022 20:33:12 +0100
-Message-ID: <1807725.tdWV9SEqCh@kista>
-In-Reply-To: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
-References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
+        Fri, 25 Feb 2022 14:34:32 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2053.outbound.protection.outlook.com [40.107.237.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3C51AAFF8;
+        Fri, 25 Feb 2022 11:33:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CEMk03BZQe67r53HWoFHCLoLYS+4zRATtukxGwO3vn/+2YkkQKq4WCks/tNNm95/ao5kLx+mnS+4t9fD/ZaHgxwSTOySDXBHuqXR3afLBaAQPR+3jWaSxe1s4K2S70olwLdb2fk2r9KPttQZ/oXMXMK+uaS19aV5WU7TnaIKDgoejKmWme5h+NjIbxe+OUP3Ts39U9gK141e2XVJ/KzRMiAnkHWUsyEGrtKXP+p8Uoqr8adNTAWOLiqit4ElrPQQVghmAtfty9iV/AlvNcujybf/w9MUr7CQ7zC9AgB0YouZSwH85cWY0INBKx/IsQvZG4rxB5hajd5frUQU/emSwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o7yKMABXxPpKvxXaRqp5aI/TBJJ+C05ER1L2I1lWVbc=;
+ b=h543PgptTATuzzZdtc/1z5zcqCwZ/ZlDQ25DwSoqzplak9RSihPB0GleoMt7zq/5htC3rbzJC2nN5LGph/67FVDpGLB49L1Njwnv2fl0YdWS5ltaVu/qwQafHaoFku+FaLqeQuORSst6ypWy/DUApC3xl5uKbHmRJT32LY2NVXiwcv5rePl6clxzVIREeM6WeCWg5QZgELUNB00M6FfQMqvfpmOPD2FZGVtFS4w3C1NpYpTP3Ja1QL4nwQhG+JDkgD/hO9HQzXlqdKG7eHsTBrEU8FH5AOam2DsaX+bbYsJUStdxZ8kgskJxniTe86stTbuwi9YPQB1M2IKiutISxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o7yKMABXxPpKvxXaRqp5aI/TBJJ+C05ER1L2I1lWVbc=;
+ b=rTYwGLGRTJtu4c9fz5Xx557Ocn6U4KE9NelpFfMRbokbm3gOVqgzx21XOlX446TjDYAKy0eJaZ53XNFL8s+PS8SFOWL4IyTm6ogH2jPcJFypseShG89KvpoNi6/LUZqx4USY2DRC/wB6v8Pd4vDFYBTNqXsXWPIpmvUvhl63Of8=
+Received: from MW4PR04CA0203.namprd04.prod.outlook.com (2603:10b6:303:86::28)
+ by BY5PR12MB3956.namprd12.prod.outlook.com (2603:10b6:a03:1ab::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 25 Feb
+ 2022 19:33:56 +0000
+Received: from CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:86:cafe::60) by MW4PR04CA0203.outlook.office365.com
+ (2603:10b6:303:86::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24 via Frontend
+ Transport; Fri, 25 Feb 2022 19:33:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT055.mail.protection.outlook.com (10.13.175.129) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 19:33:55 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 25 Feb
+ 2022 13:33:54 -0600
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>, "H . Peter Anvin" <hpa@zytor.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH v4 0/3] x86/mce: Support extended MCA_ADDR address on SMCA systems
+Date:   Fri, 25 Feb 2022 13:33:39 -0600
+Message-ID: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 26ec3fcd-a1d1-4d80-fa6b-08d9f895c362
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3956:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB39568CCB3093AA3D0823C390903E9@BY5PR12MB3956.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i04IAXOn2cIXUIZLy0Uk78jhNVRQo2VwO/LeH4+Pd1siXlRMzgB1WoJYtw5++jJnIIviTVWoWgohBmrCPyCG4D01W8RxV2ttasR3YN7W9+9bNaQMviYavB81tGWBa0DMWZqH9YG2nAp8KGvChIZAsZgxOXMQxkyzscG1ElkGKVa1hYGHlf8tQ4nlWEHMHFHf0AbyVL3SfckEQ9YLBHBsQsNbEeCCgeAH7B0/G1bOGSKwKmOmGar1lj25Tu7xBwOKPNlVF11P0qyef7CKZ9X6TtfSB4QFGqTCLsNXFe/0aiPUxmQkV8dp0m+a/oDHqlYG9r4qkOVaWtu3oujdKj/Nw9tlNEqoSngbY0MaXwoTtK1sEzQzKeGuu0l7D/YDtsdq0dTk8rqfnbJqpXWx/yxaGl7UjD82m8fzdBhq1d2BFw0qlcC8xwjRe8Df54EHVlhvdXEBcsRQSshRexGk3SF2up8ZcW0KmgXIDAPklMPDMqwI23mE4x55kEsl1C1PZVRrf5VzP5XXJzgqmeazJMpZOXJFNEVWG6EANYxj+2uA6gtei+iXKP2kXm0TPDq+77LRdYJPgRnHGwoQwOnusKOEOtaWrD8phU7TWFCIyON4iSoKODlE6c1pvEtaVIEvq0cyAv511aZZOjwmrq6cYBfl+WJ3bS/Rsj146M+yNooMaplHmbgK0h5CrYvu+vII6xvowYXkRZj2JZxfHxIAzcs+BNypiPNY4TxQaprTtpF4lkMlTFCwOynbcnzZIP2Y8a3Q1kWSh1UGVWZ0GtY9QkQJAt1tB3g4rk1q3rwnVAnfRyE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(1076003)(336012)(426003)(186003)(26005)(2616005)(4744005)(36860700001)(2906002)(83380400001)(16526019)(8676002)(8936002)(70586007)(508600001)(70206006)(316002)(82310400004)(86362001)(40460700003)(110136005)(54906003)(4326008)(356005)(36756003)(81166007)(6666004)(7696005)(966005)(5660300002)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 19:33:55.9463
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26ec3fcd-a1d1-4d80-fa6b-08d9f895c362
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3956
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,84 +102,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin!
+This series of patches adds support for extended physical address on newer
+AMD processors such as AMD 'Milan'.
 
-Dne petek, 25. februar 2022 ob 17:45:46 CET je Benjamin Gaignard napisal(a):
-> This series aims to make HEVC uapi stable and usable for hardware
-> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> and 2 out of the tree drivers (rkvdec and RPI).
-> 
-> After the remarks done on version 2, I have completely reworked to patches 
-> split so changelogs are meaningless. I have also drop "RFC" from the
-> titles.
-> 
-> In this v3 I do all the changes (new controls, documentation, etc..)
-> in the staging directory before moving the HEVC uAPI to stable 
-> steps by steps (unlike the big one patch in v2).
-> 
-> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
+The first patch provides a fix to avoid unnecessary padding in mce_bank
+struct.
 
-I'm working on PoC code for V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET on 
-Cedrus, which should be finished over weekend.
+The second patch defines a separate helper function to extract
+MCA_ADDR[ErrorAddr].
 
-Note: git am complained about trailing spaces. Run scripts/checkpatch.pl --
-strict on patches before sending next round.
+Finally, the last patch adds support for extended ErrorAddr bits in
+MCA_ADDR.
 
-Best regards,
-Jernej
+Link:
+https://lkml.kernel.org/r/20220211223442.254489-1-Smita.KoralahalliChannabasappa@amd.com
 
-> 
-> Benjamin
-> 
-> Benjamin Gaignard (11):
->   media: uapi: HEVC: Add missing fields in HEVC controls
->   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->     prefix
->   media: uapi: HEVC: Add document uAPI structure
->   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
->     dynamic array
->   media: uapi: Move parsed HEVC pixel format out of staging
->   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
->   media: uapi: Move the HEVC stateless control type out of staging
->   media: controls: Log HEVC stateless control in .std_log
->   media: uapi: Create a dedicated header for Hantro control
->   media: uapi: HEVC: fix padding in v4l2 control structures
->   media: uapi: move HEVC stateless controls out of staging
-> 
-> Hans Verkuil (3):
->   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->   v4l2-ctrls: add support for dynamically allocated arrays.
->   vivid: add dynamic array test control
-> 
->  .../userspace-api/media/drivers/hantro.rst    |   5 -
->  .../media/v4l/ext-ctrls-codec-stateless.rst   | 831 ++++++++++++++++++
->  .../media/v4l/ext-ctrls-codec.rst             | 780 ----------------
->  .../media/v4l/pixfmt-compressed.rst           |   7 +-
->  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->  .../media/v4l/vidioc-queryctrl.rst            |   8 +
->  .../media/videodev2.h.rst.exceptions          |   5 +
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +-
->  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  27 +-
->  drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  include/media/hevc-ctrls.h                    | 250 ------
->  include/media/v4l2-ctrls.h                    |  48 +-
->  include/uapi/linux/hantro-media.h             |  19 +
->  include/uapi/linux/v4l2-controls.h            | 436 +++++++++
->  include/uapi/linux/videodev2.h                |  13 +
->  22 files changed, 1686 insertions(+), 1169 deletions(-)
->  delete mode 100644 include/media/hevc-ctrls.h
->  create mode 100644 include/uapi/linux/hantro-media.h
-> 
-> -- 
-> 2.32.0
-> 
-> 
+Smita Koralahalli (3):
+  x86/mce: Avoid unnecessary padding in struct mce_bank
+  x86/mce: Define function to extract ErrorAddr from MCA_ADDR
+  x86/mce: Add support for Extended Physical Address MCA changes
 
+ arch/x86/include/asm/mce.h         |  4 ++++
+ arch/x86/kernel/cpu/mce/amd.c      | 35 ++++++++++++++++++++++--------
+ arch/x86/kernel/cpu/mce/core.c     | 20 +++++------------
+ arch/x86/kernel/cpu/mce/internal.h | 16 ++++++++++++++
+ 4 files changed, 52 insertions(+), 23 deletions(-)
+
+-- 
+2.17.1
 

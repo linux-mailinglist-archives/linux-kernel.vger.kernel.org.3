@@ -2,111 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574DA4C4DBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CF54C4DC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbiBYSaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S233210AbiBYSba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiBYS35 (ORCPT
+        with ESMTP id S231935AbiBYSb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:29:57 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117571B0BE7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:29:24 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z15so5390729pfe.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:29:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6BUYalwQMjirgBlHQVKIgL8ZyPGCrnEUiyDcldsxoIY=;
-        b=AGCSPe65i9gvyZVes9YkqYxlSUT09c4g9QsUY+xr5UT5x3dsjKGTLV0IbeOmX4BFvw
-         wOo7lX9BasDNJ6WAo3091vgmVM35mSo5SvO6BYN5tsXRzegeDzrfSUa7YCP3JFWAY43a
-         bPrLC4iJLagjOl/Yt3/AhorefHUD7PTHhQCXqt4RZy3WVMF3iFbNW9LSil7PQBQQ6bqN
-         nYNP58eHunpvpF/PcJ+Ivg0Hps1/5Dg/56g5nDxsh7D7U4rMW6k0j3LyCeFoIC94SLkV
-         ldY+YFi91OVa8PYLiNdaWM8RG8hJD8VBQBZ9Kwv+rkNpi38TLWe8h5udlkZKh9Igyyne
-         doWw==
+        Fri, 25 Feb 2022 13:31:27 -0500
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5412261C6;
+        Fri, 25 Feb 2022 10:30:52 -0800 (PST)
+Received: by mail-oo1-f47.google.com with SMTP id x6-20020a4a4106000000b003193022319cso7439937ooa.4;
+        Fri, 25 Feb 2022 10:30:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6BUYalwQMjirgBlHQVKIgL8ZyPGCrnEUiyDcldsxoIY=;
-        b=qMCTCuTugeDHBEJI+5fMhowojXVwskBsSuUPpzZK5I3FVuw3JN3tUUY825Gz/g+bVl
-         mj73fZLDHFpyLqzRXtsQYCTI+mR1mQf8n6BF5PoljBhKZu+Mg8R+fUkJfKWBlRYsk6Kh
-         ZlBm7Iii+2+EhVwxAbVQ8PrebPNVnfHvJhuL9QML0El46sxN/YgYGpzwsluOGJHqY8Ub
-         Zu7TtLE1yrFXzMuiuJAmZHX1Q15Wew+79+2CijJO6/M0QJWYQFUGHBCBPLJJg+D96P05
-         rdGAb/5oDfFJVn79Hg+Q3koUTpdm35/IsgE3Cwkga+PTjWjwE8+ngNkb0hDcu3yobcru
-         oOZA==
-X-Gm-Message-State: AOAM532dQX2wy1R6JDAhIyW9vjCEWbsB+yJfG4LOPrVruAhpWASrzcSY
-        HxRQLctzqycG0SJz8Z+DAEsYWw==
-X-Google-Smtp-Source: ABdhPJypmcBzZFJmNOY3PLAF8glZj7HrAMB+lj6ALtYq3OGeITCoz9OVOYTocmq3HoxZQzNj0hVejg==
-X-Received: by 2002:a63:d443:0:b0:364:51b7:c398 with SMTP id i3-20020a63d443000000b0036451b7c398mr7153349pgj.511.1645813763398;
-        Fri, 25 Feb 2022 10:29:23 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm4332692pfu.62.2022.02.25.10.29.22
+        bh=nO46MVOxeBfrtpgtlpU0KanUna9yJ6hZKlTky8BlctQ=;
+        b=YpqbsMG8rmnCi7wV84vccmWgr1YPtz7FZEX6KFVKU4XIKJtRJTo1uhIgP6RkKhWimb
+         ZjzHdYmyPwfiQAhsRUllhhlk9zj3d2kKlCZErwbU7EJqdNz1sANIg9hEKKhTWofl/WIU
+         yvEnE1filsAsOnx8fhS9CktEXysErYcdQDby8WGYssYYhRjU9vMl54+b8IpqZqlqKzIv
+         ysMECoqZO1S4kR8VVZOab5Qr0Q2/GyPurYTBzcOy+ZiKbLs+fXN/jm16BQ/+VHh7skDo
+         qV9MilE+/SRSAoGWSC7MsAXrkWiCrUHa0rtYlhNNxlR++aQ6iPtT092dpg7/SrjgAId5
+         xRuw==
+X-Gm-Message-State: AOAM530TDEPkAN6eqaIyMSkXcHidwddQZdVS1UuoHWKLkybEfl4CeAKT
+        +3ZnRMDqHLu6Stk6M6lFKw==
+X-Google-Smtp-Source: ABdhPJwze7ScTwIWh5otCQGWo8AuNWqBADfUNufKuQfg4u37IUgUudm8gG9CpH7NlIUPHuoaXkQGjg==
+X-Received: by 2002:a05:6870:3048:b0:c4:7dc0:d758 with SMTP id u8-20020a056870304800b000c47dc0d758mr1983376oau.299.1645813851685;
+        Fri, 25 Feb 2022 10:30:51 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bx10-20020a0568081b0a00b002d70da1ac54sm1765902oib.19.2022.02.25.10.30.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 10:29:22 -0800 (PST)
-Date:   Fri, 25 Feb 2022 18:29:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
-Message-ID: <Yhkf/qJ1wpfbA3Fc@google.com>
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
- <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
- <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com>
- <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
- <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
- <CALMp9eQHKn=ApthER084vKGiQCMdVX7ztB5iLupBPdUY59WV_A@mail.gmail.com>
+        Fri, 25 Feb 2022 10:30:51 -0800 (PST)
+Received: (nullmailer pid 1208822 invoked by uid 1000);
+        Fri, 25 Feb 2022 18:30:48 -0000
+Date:   Fri, 25 Feb 2022 12:30:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rex Nie <rexnie3@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        hsinyi@chromium.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH 2/2] dt-bindings: display: simple: Add InnoLux
+ n140hca-eac panel
+Message-ID: <YhkgWH1Q1T3vA7BG@robh.at.kernel.org>
+References: <20220218102815.1634561-1-rexnie3@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALMp9eQHKn=ApthER084vKGiQCMdVX7ztB5iLupBPdUY59WV_A@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220218102815.1634561-1-rexnie3@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022, Jim Mattson wrote:
-> On Fri, Feb 25, 2022 at 7:13 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > On 2/25/22 16:12, Xiaoyao Li wrote:
-> > >>>>
-> > >>>
-> > >>> I don't like the idea of making things up without notifying userspace
-> > >>> that this is fictional. How is my customer running nested VMs supposed
-> > >>> to know that L2 didn't actually shutdown, but L0 killed it because the
-> > >>> notify window was exceeded? If this information isn't reported to
-> > >>> userspace, I have no way of getting the information to the customer.
-> > >>
-> > >> Then, maybe a dedicated software define VM exit for it instead of
-> > >> reusing triple fault?
-> > >>
-> > >
-> > > Second thought, we can even just return Notify VM exit to L1 to tell L2
-> > > causes Notify VM exit, even thought Notify VM exit is not exposed to L1.
-> >
-> > That might cause NULL pointer dereferences or other nasty occurrences.
+On Fri, 18 Feb 2022 18:28:15 +0800, Rex Nie wrote:
+> Add support for InnoLux n140hca-eac display panel. It is a 14" eDP panel
+> with 1920x1080 display resolution.
 > 
-> Could we synthesize a machine check? I haven't looked in detail at the
-> MCE MSRs, but surely there must be room in there for Intel to reserve
-> some encodings for synthesized machine checks.
+> Signed-off-by: Rex Nie <rexnie3@gmail.com>
+> ---
+>  .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-I don't think we have any choice but to synthesize SHUTDOWN until we get more
-details on the exact semantics of VM_CONTEXT_INVALID.  E.g. if GUEST_EFER or any
-other critical guest field is corrupted, attempting to re-enter the guest, even
-to (attempt to) inject a machine check, is risking undefined behavior in the guest.
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687834C4FBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BF34C4FC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiBYUiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S236694AbiBYUkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiBYUiq (ORCPT
+        with ESMTP id S231500AbiBYUkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:38:46 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DFB1768EA;
-        Fri, 25 Feb 2022 12:38:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 59CCA1F46676
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645821491;
-        bh=GRjW8l7YFs9I63NHiDMM0zXU7yqNHLmPi/NdZK9uZMQ=;
+        Fri, 25 Feb 2022 15:40:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA6D20B38C;
+        Fri, 25 Feb 2022 12:40:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AD1D619B0;
+        Fri, 25 Feb 2022 20:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0684FC340E7;
+        Fri, 25 Feb 2022 20:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645821605;
+        bh=zxDATE5T4nAxC32Whq1+k2Ts5ipceAvf6DKKgR9mfUQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sgv6tAZCt63KpQGsQ6MjbY8+Eg0hjF3u8RZxljuhM7GeGlwnHTy/xFzLa7uXpOEh1
-         zaiqxJiOey9dOPHl56LaP/rLhtkXvZL8j8VaA1IklBT2PKiDhqUar57g2nHfZFZI0U
-         lzS+1qHP0IDOm74OMrYBvE7A3ZIteKH5Lgl2xdYASzinXu2WRL5VsmeE+WlQMUOEcT
-         dKAd1werFHy26nAbHbvlw7yjo1oFS1g92McSqdKABcAcI0PLuelxlCGHjZQyTi5sUK
-         GU3mQo6pYuVVrRz5k9wfKEu06r1y28nAqcyW6aeJdQrxLClFnIaEZS87sUp0UKqJ2i
-         vX5GeU9G/Mqtw==
-Date:   Fri, 25 Feb 2022 15:38:05 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-Subject: Re: [PATCH v2 14/23] arm64: dts: mt8192: Add mipi_tx node
-Message-ID: <20220225203805.xv3sxwi6ucfp6zdq@notapiano>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-15-allen-kh.cheng@mediatek.com>
- <20220222212658.xuau6t3xcvu7m4uz@notapiano>
+        b=hrpQ7YwSeh5sscihYcV+TYDt1O1t3NgWkx5jOWu+WSlXp+Glrz/YlfV/x9AGEUQg6
+         KW9W50yPmmkhpl2dCQJ0UDYT7ii7otMq7bmriBAqifVREs7SPVMS23+SEdHRrtZje3
+         z9M2gTLBRQM8x7BKzkHa0SNpLuxLbHVHOp2TplWn22MqP2g5SVymEik2ZlDYeeaVWU
+         Q7aIfqk04dAzRpjaf0i4035gtcx9EXtZF4e8pC0GxOyG57/2iwlZMdTioq4R+5bOOx
+         JquN1ANWyZ5kGRSBF5Co235A8oZWLEDB+br1bEpCLNuZzPbjenRGpAOyp44sFk89Xr
+         YzoaR6mZz0L4A==
+Date:   Fri, 25 Feb 2022 20:40:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     Rob Herring <robh@kernel.org>, kuninori.morimoto.gx@renesas.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH V2 1/2] ASoC: dt-bindings: audio-graph-port: Add
+ dai-tdm-slot-width-map
+Message-ID: <Yhk+oFJBMAqYNc6r@sirena.org.uk>
+References: <20220217134835.282389-1-rf@opensource.cirrus.com>
+ <20220217134835.282389-2-rf@opensource.cirrus.com>
+ <YhgCbKzfPXEVauwW@robh.at.kernel.org>
+ <7d11f36e-4b56-8c17-a114-d024f76f3b9e@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/T0XV2S4I1DB6qKN"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222212658.xuau6t3xcvu7m4uz@notapiano>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <7d11f36e-4b56-8c17-a114-d024f76f3b9e@opensource.cirrus.com>
+X-Cookie: I smell a wumpus.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,46 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 04:27:03PM -0500, Nícolas F. R. A. Prado wrote:
-> On Fri, Feb 18, 2022 at 05:16:24PM +0800, Allen-KH Cheng wrote:
-> > Add mipi_tx node for mt8192 SoC.
-> > 
-> > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > index cfc2db501108..f5e5af949f19 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > @@ -1114,6 +1114,16 @@
-> >  			};
-> >  		};
-> >  
-> > +		mipi_tx0: mipi-dphy@11e50000 {
-> 
-> According to Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml, this
-> node's name should be dsi-phy, not mipi-dphy.
-> 
-> > +			compatible = "mediatek,mt8183-mipi-tx";
-> > +			reg = <0 0x11e50000 0 0x1000>;
-> > +			clocks = <&apmixedsys CLK_APMIXED_MIPID26M>;
-> > +			clock-names = "ref_clk";
 
-Also, this clock-names should be dropped [1].
+--/T0XV2S4I1DB6qKN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1] https://lore.kernel.org/all/CAAOTY_84OF71QK6M5JT1M5YAFKED_xWVpx8B8t859OsVxE0cfQ@mail.gmail.com/
+On Fri, Feb 25, 2022 at 12:08:00PM +0000, Richard Fitzgerald wrote:
+> On 24/02/2022 22:10, Rob Herring wrote:
 
-> > +			#clock-cells = <0>;
-> > +			#phy-cells = <0>;
-> > +			clock-output-names = "mipi_tx0_pll";
-> > +		};
-> > +
-> >  		i2c0: i2c@11f00000 {
-> >  			compatible = "mediatek,mt8192-i2c";
-> >  			reg = <0 0x11f00000 0 0x1000>,
-> > -- 
-> > 2.18.0
-> > 
-> > 
+> > Is there a need for specifying where in the slot the data is?
+
+> I don't believe so, all the protocols I know of have the data bits
+> transmitted first followed by padding. There's no harm adding a
+> reserved field to allow for this info if it is ever needed, but it would
+> be unused at present as there's no kernel API to do this.
+
+It's part of the general format for the bus I'd say.
+
+--/T0XV2S4I1DB6qKN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIZPqAACgkQJNaLcl1U
+h9Ajhwf+J82kl/TOlVA+wFKSsRgst+nXorJvUGgpk40srNqnLsDbtFdEl0VhpVMb
+9dQGF5YwjfvOI52ERTvwRrlYrAcUZom76BY2nCDuPclvHmpKkL1WF9CVPfLPszpc
+NOcd8gYtM3M52wSSgroFI2crtlFuY6G+qCsrp9+p/7oMyzALrt4kjmrksAAmb4lv
+92Q974Uc2MX9t0meFmZFKUqYuJFsn7FzNlVjuFZbpPEM8i4GVbdjEfkMr3cMrQMy
+JaZmgPVoEdsM609PprJ4LxbUHwNrEVIXMecDZ1L/GU/SMVYYC6gKlxUEeJs3Arcv
+gfInPtVf4G9xCM6SdPWqFtTGzIcmtQ==
+=/qfj
+-----END PGP SIGNATURE-----
+
+--/T0XV2S4I1DB6qKN--

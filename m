@@ -2,129 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0754E4C3C2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0198F4C3C30
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbiBYDLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 22:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S236930AbiBYDMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiBYDLQ (ORCPT
+        with ESMTP id S230117AbiBYDMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 22:11:16 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C50B42C032D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:10:44 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-11-gsizBZWLM-SoXgpS98dsAw-1; Fri, 25 Feb 2022 03:10:41 +0000
-X-MC-Unique: gsizBZWLM-SoXgpS98dsAw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 03:10:39 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 03:10:39 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        "'Kirill A. Shutemov'" <kirill.shutemov@linux.intel.com>,
-        "'tglx@linutronix.de'" <tglx@linutronix.de>,
-        "'mingo@redhat.com'" <mingo@redhat.com>,
-        "'bp@alien8.de'" <bp@alien8.de>,
-        "'luto@kernel.org'" <luto@kernel.org>,
-        "'peterz@infradead.org'" <peterz@infradead.org>
-CC:     "'sathyanarayanan.kuppuswamy@linux.intel.com'" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "'aarcange@redhat.com'" <aarcange@redhat.com>,
-        "'ak@linux.intel.com'" <ak@linux.intel.com>,
-        "'dan.j.williams@intel.com'" <dan.j.williams@intel.com>,
-        "'david@redhat.com'" <david@redhat.com>,
-        "'hpa@zytor.com'" <hpa@zytor.com>,
-        "'jgross@suse.com'" <jgross@suse.com>,
-        "'jmattson@google.com'" <jmattson@google.com>,
-        "'joro@8bytes.org'" <joro@8bytes.org>,
-        "'jpoimboe@redhat.com'" <jpoimboe@redhat.com>,
-        "'knsathya@kernel.org'" <knsathya@kernel.org>,
-        "'pbonzini@redhat.com'" <pbonzini@redhat.com>,
-        "'sdeep@vmware.com'" <sdeep@vmware.com>,
-        "'seanjc@google.com'" <seanjc@google.com>,
-        "'tony.luck@intel.com'" <tony.luck@intel.com>,
-        "'vkuznets@redhat.com'" <vkuznets@redhat.com>,
-        "'wanpengli@tencent.com'" <wanpengli@tencent.com>,
-        "'thomas.lendacky@amd.com'" <thomas.lendacky@amd.com>,
-        "'brijesh.singh@amd.com'" <brijesh.singh@amd.com>,
-        "'x86@kernel.org'" <x86@kernel.org>,
-        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
-Thread-Topic: [PATCHv4 11/30] x86/tdx: Handle in-kernel MMIO
-Thread-Index: AQHYKbrRB70QltnCv0Of3lK/667WPqyjhr+AgAAP+sA=
-Date:   Fri, 25 Feb 2022 03:10:39 +0000
-Message-ID: <7c536496125844ccaca50aa0740c8585@AcuMS.aculab.com>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-12-kirill.shutemov@linux.intel.com>
- <af7df79f-02b8-3025-c9a3-929b7bdd33e0@intel.com>
- <45b6e0b6ceec46849754402c3da03fed@AcuMS.aculab.com>
-In-Reply-To: <45b6e0b6ceec46849754402c3da03fed@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 24 Feb 2022 22:12:40 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE74E4BBB2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:12:08 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j22so2376806wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2tXA6AeT/n84QHis5S/egaFq21pdbXEw9XfX//TKVfM=;
+        b=c7GYzBUZ9xR/BVJG5gvZgCEJWk3vhp6OQX6HWlS9iuFRLcxYPGbKRSEHM+64LlVY1g
+         8xIbBZr9zBJEu7O0NERNKR5d52ZiltX0nnRUgH6OAgMUPcQivl9IpnKHLQGvN62wGriA
+         kaUUenhCahjCZ9/EhzF+CSapnzjWiiPFc2iltfDulLHS1VY2pkUuHv8b5rInK+IusWXU
+         SVhF1Gmh1MfaLf+S62E0LFzQGLSnTxV2EPxsWoTGrPcFP95/JgZ7mcxX/3PoPAFif7Ro
+         qyu9JeOC94XiTIrVVFdNtmrBGN2vNFmJnpxfnWKUnxKVGmb9jS3EdJNWec8tPVaN4ArF
+         Q8Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2tXA6AeT/n84QHis5S/egaFq21pdbXEw9XfX//TKVfM=;
+        b=l5M4xWVL4DY30Poa9zAudbe+FlMweLDrU9S7NPGW8QlsRsH0uBHSL14vcBwSqO5i8B
+         iTT9WgClmHEYJ+O+5TUMduA8mFVohImqlIyweGQNPw91aebD8cEMokhEBo4Tt3iV6mR2
+         kbEHCtW5AnTyJFs50KS8kE8VK4bbJVbvvSt+iQHc0kcRBuvftLiDQlcu9G5WdGqAR/l5
+         tvpJWbV3+NlRaedZHpVvY01K/8KBu6uyYIUPyrJH9HIyFSbciyLymCDuPKY8LUODl37W
+         gHMT4zMbbt+c4/oN/OY2YL1B0gcBo06ymPWePQxQxhdh8ZFDvj9RSAlhpwx27pZRvIX8
+         mV1w==
+X-Gm-Message-State: AOAM532wrZppFD2mEkJsNjZf6Xcae1sjm0r3k9SPLNT79l82MsNMdqyw
+        qw+dDQ6h8Db+yOQ7cs+3lsPrvz+E+73DPyqlwrbmaw==
+X-Google-Smtp-Source: ABdhPJxpp13+Gj6zLNHG/fdOzoKqtaJB14AbGDQVpFLIsU1SU8SdTUT1E0oKQs51V54e00SfilVyzOkbf0DXzqyfito=
+X-Received: by 2002:adf:ca08:0:b0:1ed:c0bc:c212 with SMTP id
+ o8-20020adfca08000000b001edc0bcc212mr4359347wrh.577.1645758727122; Thu, 24
+ Feb 2022 19:12:07 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
+ <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
+ <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+ <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org> <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
+In-Reply-To: <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 24 Feb 2022 19:11:55 -0800
+Message-ID: <CAC_TJvd2a4DJUgvFLAHyBJT-eZNWwwohuTG=NOfvaOpyTTd3oA@mail.gmail.com>
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDI1IEZlYnJ1YXJ5IDIwMjIgMDI6MjMNCj4gDQo+
-IEZyb206IERhdmUgSGFuc2VuDQo+ID4gU2VudDogMjQgRmVicnVhcnkgMjAyMiAyMDoxMg0KPiAu
-Li4NCj4gPiA9PT0gTGltaXRhdGlvbnMgb2YgdGhpcyBhcHByb2FjaCA9PT0NCj4gPg0KPiA+ID4g
-TU1JTyBhZGRyZXNzZXMgY2FuIGJlIHVzZWQgd2l0aCBhbnkgQ1BVIGluc3RydWN0aW9uIHRoYXQg
-YWNjZXNzZXMNCj4gPiA+IG1lbW9yeS4gQWRkcmVzcyBvbmx5IE1NSU8gYWNjZXNzZXMgZG9uZSB2
-aWEgaW8uaCBoZWxwZXJzLCBzdWNoIGFzDQo+ID4gPiAncmVhZGwoKScgb3IgJ3dyaXRlcSgpJy4N
-Cj4gPg0KPiA+IEFueSBDUFUgaW5zdHJ1Y3Rpb24gdGhhdCBhY2Nlc3NlcyBtZW1vcnkgY2FuIGFs
-c28gYmUgdXNlZCB0byBhY2Nlc3MNCj4gPiBNTUlPLiAgSG93ZXZlciwgYnkgY29udmVudGlvbiwg
-TU1JTyBhY2Nlc3MgYXJlIHR5cGljYWxseSBwZXJmb3JtZWQgdmlhDQo+ID4gaW8uaCBoZWxwZXJz
-IHN1Y2ggYXMgJ3JlYWRsKCknIG9yICd3cml0ZXEoKScuDQo+ID4NCj4gPiA+IHJlYWRYKCkvd3Jp
-dGVYKCkgaGVscGVycyBsaW1pdCB0aGUgcmFuZ2Ugb2YgaW5zdHJ1Y3Rpb25zIHdoaWNoIGNhbiB0
-cmlnZ2VyDQo+ID4gPiBNTUlPLiBJdCBtYWtlcyBNTUlPIGluc3RydWN0aW9uIGVtdWxhdGlvbiBm
-ZWFzaWJsZS4gUmF3IGFjY2VzcyB0byBhIE1NSU8NCj4gPiA+IHJlZ2lvbiBhbGxvd3MgdGhlIGNv
-bXBpbGVyIHRvIGdlbmVyYXRlIHdoYXRldmVyIGluc3RydWN0aW9uIGl0IHdhbnRzLg0KPiA+ID4g
-U3VwcG9ydGluZyBhbGwgcG9zc2libGUgaW5zdHJ1Y3Rpb25zIGlzIGEgdGFzayBvZiBhIGRpZmZl
-cmVudCBzY29wZS4NCj4gPg0KPiA+IFRoZSBpby5oIGhlbHBlcnMgaW50ZW50aW9uYWxseSB1c2Ug
-YSBsaW1pdGVkIHNldCBvZiBpbnN0cnVjdGlvbnMgd2hlbg0KPiA+IGFjY2Vzc2luZyBNTUlPLiAg
-VGhpcyBrbm93biwgbGltaXRlZCBzZXQgb2YgaW5zdHJ1Y3Rpb25zIG1ha2VzIE1NSU8NCj4gPiBp
-bnN0cnVjdGlvbiBkZWNvZGluZyBhbmQgZW11bGF0aW9uIGZlYXNpYmxlIGluIEtWTSBob3N0cyBh
-bmQgU0VWIGd1ZXN0cw0KPiA+IHRvZGF5Lg0KPiA+DQo+ID4gTU1JTyBhY2Nlc3NlcyBhcmUgcGVy
-Zm9ybWVkIHdpdGhvdXQgdGhlIGlvLmggaGVscGVycyBhcmUgYXQgdGhlIG1lcmN5IG9mDQo+ID4g
-dGhlIGNvbXBpbGVyLiAgQ29tcGlsZXJzIGNhbiBhbmQgd2lsbCBnZW5lcmF0ZSBhIG11Y2ggbW9y
-ZSBicm9hZCBzZXQgb2YNCj4gPiBpbnN0cnVjdGlvbnMgd2hpY2ggY2FuIG5vdCBwcmFjdGljYWxs
-eSBiZSBkZWNvZGVkIGFuZCBlbXVsYXRlZC4gIFREWA0KPiA+IGd1ZXN0cyB3aWxsIG9vcHMgaWYg
-dGhleSBlbmNvdW50ZXIgb25lIG9mIHRoZXNlIGRlY29kaW5nIGZhaWx1cmVzLg0KPiA+DQo+ID4g
-VGhpcyBtZWFucyB0aGF0IFREWCBndWVzdHMgKm11c3QqIHVzZSB0aGUgaW8uaCBoZWxwZXJzIHRv
-IGFjY2VzcyBNTUlPLg0KPiA+DQo+ID4gVGhpcyByZXF1aXJlbWVudCBpcyBub3QgbmV3LiAgQm90
-aCBLVk0gaG9zdHMgYW5kIEFNRCBTRVYgZ3Vlc3RzIGhhdmUgdGhlDQo+ID4gc2FtZSBsaW1pdGF0
-aW9ucyBvbiBNTUlPIGFjY2Vzcy4NCj4gDQo+IEFtIEkgcmVhZGluZyB0aGUgbGFzdCBzZW50ZW5j
-ZSBjb3JyZWN0bHk/DQo+IE5vcm1hbGx5IChvbiB4ODYgYXQgbGVhc3QpIGEgZHJpdmVyIGNhbiBt
-bWFwKCkgUENJZSBhZGRyZXNzZXMgZGlyZWN0bHkNCj4gaW50byBhIHVzZXIgcHJvY2Vzcy4NCj4g
-VGhpcyBsZXRzIGEgdXNlciBwcm9jZXNzIGRpcmVjdGx5IGlzc3VlIFBDSWUgcmVhZC93cml0ZSBi
-dXMgY3ljbGVzLg0KPiBUaGVzZSBjYW4gYmUgYW55IGluc3RydWN0aW9ucyBhdCBhbGwuDQo+IEkg
-ZG9uJ3QgdGhpbmsgd2UndmUgaGFkIGFueSBpc3N1ZXMgZG9pbmcgdGhhdCBpbiBub3JtYWwgVk1z
-Lg0KDQpBY3R1YWxseSB3ZSB3b24ndCBoYXZlIGJlZW4gZXhwb3NpbmcgUENJZSBkZXZpY2VzIHRv
-IFZNcy4NCg0KPiBPciBpcyB0aGlzIGVtdWxhdGlvbiBvbmx5IGFwcGx5aW5nIHRvIHNwZWNpZmlj
-IFBDSWUgc2xhdmVzPw0KPiANCj4gCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
-c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
-Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Thu, Feb 24, 2022 at 6:12 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
+>
+>
+>
+> On 2/24/2022 6:39 PM, Marc Zyngier wrote:
+> > On 2022-02-23 12:56, Ard Biesheuvel wrote:
+> >> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
+> >>>
+> >>> On 2022-02-23 12:34, Philip Li wrote:
+> >>> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+> >>> >> On Wed, 23 Feb 2022 09:05:18 +0000,
+> >>> >> kernel test robot <lkp@intel.com> wrote:
+> >>> >> >
+> >>> >> > Hi Kalesh,
+> >>> >> >
+> >>> >> > Thank you for the patch! Perhaps something to improve:
+> >>> >> >
+> >>> >> > [auto build test WARNING on
+> >>> cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+> >>> >> >
+> >>> >> > url:
+> >>> https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+> >>>
+> >>> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+> >>> >> > config: arm64-randconfig-r011-20220221
+> >>> (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
+> >>>
+> >>> >> > compiler: clang version 15.0.0
+> >>> (https://github.com/llvm/llvm-project
+> >>> d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> >>> >> > reproduce (this is a W=1 build):
+> >>> >> >         wget
+> >>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> >>> -O ~/bin/make.cross
+> >>> >> >         chmod +x ~/bin/make.cross
+> >>> >> >         # install arm64 cross compiling tool for clang build
+> >>> >> >         # apt-get install binutils-aarch64-linux-gnu
+> >>> >> >         #
+> >>> https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+> >>>
+> >>> >> >         git remote add linux-review
+> >>> https://github.com/0day-ci/linux
+> >>> >> >         git fetch --no-tags linux-review
+> >>> Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+> >>> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+> >>> >> >         # save the config file to linux build tree
+> >>> >> >         mkdir build_dir
+> >>> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+> >>> make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+> >>> >> >
+> >>> >> > If you fix the issue, kindly add following tag as appropriate
+> >>> >> > Reported-by: kernel test robot <lkp@intel.com>
+> >>> >> >
+> >>> >> > All warnings (new ones prefixed by >>):
+> >>> >> >
+> >>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+> >>> >> >    #define NULL ((void *)0)
+> >>> >> >                 ^~~~~~~~~~~
+> >>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer
+> >>> overrides prior initialization of this subobject
+> >>> [-Winitializer-overrides]
+> >>> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+> >>> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
+> >>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous
+> >>> initialization is here
+> >>> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+> >>> >> >                                              ^~~~
+> >>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+> >>> >> >    #define NULL ((void *)0)
+> >>> >> >                 ^~~~~~~~~~~
+> >>> >>
+> >>> >> Kalesh, please ignore this nonsense. There may be things to improve,
+> >>> >> but this is *NOT* one of them.
+> >>> >>
+> >>> >> These reports are pretty useless, and just lead people to ignore real
+> >>> >> bug reports.
+> >>> >
+> >>> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+> >>> > kindly ignore them. And the valuable ones are the new ones that
+> >>> > prefixed by >>, as the below one in original report.
+> >>> >
+> >>> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
+> >>> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+> >>> >    void __noreturn hyp_panic_bad_stack(void)
+> >>> >                    ^
+> >>>
+> >>> This is only called from assembly code, so a prototype wouldn't bring
+> >>> much.
+> >>>
+> >>
+> >> Should probably be marked as 'asmlinkage' then. I've suggested many
+> >> times already that this bogus diagnostic should either be disabled, or
+> >> disregard 'asmlinkage' symbols.
+> >
+> > Yes, asmlinkage is definitely missing.
+> >
+> > But it is pretty obvious that the robot people aren't interested in
+> > fixing this particular issue, given how long we have been suggesting
+> > this...
+> >
+> >          M.
+>
+> Hi Marc, Ard,
+>
+> We have ignored the warning related to asmlinkage according to the below
+> advice:
+>
+> https://lore.kernel.org/lkml/CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com/
+>
+> do you want the bot ignore such warning if asmlinkage not specified?
 
+Hi Rong,
+
+I have added asmlinkage to the functions without a prototype in later
+versions of the patch.
+
+Perhaps the report should be updated to say "functions only called
+from assembly code should be annotated with the asmlinkage attribute"
+if the error is a missing prototype
+
+Thanks,
+Kalesh
+>
+> Best Regards,
+> Rong Chen
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

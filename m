@@ -2,136 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E494C4D7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BA54C4D7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiBYSSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S230461AbiBYSSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiBYSSS (ORCPT
+        with ESMTP id S230345AbiBYSSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:18:18 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD53CCC60
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:45 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id d3so4924601ilr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:45 -0800 (PST)
+        Fri, 25 Feb 2022 13:18:24 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787C7DE2C7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:51 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so7345661oot.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nm1eERrg8QDTPCsLNsG13mocNpZXJWrPQxbp3Pqr/O0=;
-        b=LrlfXrTX+QxWh8wUSC0Vc6h1EJHK8bDM+gv9X0431xQynF9lp/x7PAVokMD9j9c7np
-         UpM9S/YUQnAZWuVcCIBSDeoxxgHir0vY4shQLn0dWHdHsNdfsb6hKR8aw8KMVOX453eu
-         6GlgE6hoCl/WfP364bdXe4EkcrDYVi4fIm+y1rB7TrO0VHw3RlqEAXi8VWj6NrK3ajJc
-         8fSvFfItHAf4DZRE6ebcNofroeIeFT9MjUcMA1wJ7y8FG8scMNInxCZJ+TN2ENFhGLAf
-         wlYGLhNIhujG0fEtqgY86K+WGMNHA2tFAhTAwFTVPuoLTkfRkHWbrIB64vKnKysMf96D
-         aJXA==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=wxzgaXVTKy5EES1TRJ7ejkTF/2tYnEDDcA0Li/fS4aE=;
+        b=mYVpuGrtEWbchzTcq8SzisB3Dmr81a3xOW3aHe6d4yX24JJ3Vr+Th2CqS0G1Je67B1
+         Iu19HV1xT6cHIE8Z0VjU74wriirnietFRbihvYJrPGUzbgXHhiHBz+A9qP0pELuWp5RB
+         bRnr+UhecER3aTJWhtvbTKocdkStd3ogbRpzs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nm1eERrg8QDTPCsLNsG13mocNpZXJWrPQxbp3Pqr/O0=;
-        b=VyTUPnLp63BPunavPrba7D1IlvChigLEQcvs2sW9kc4B/S1msDFlkvh0DqZ8rs4MMf
-         nxHGnTkXKedxMKcO93c2BsGWPHP/iUY1hxoSRqXp2V7MHq+Sqyz0OJHQ9BSzm5nEQmjW
-         JMWxs6FBh8dSI0muhQX36qI4Dtj6PmL1ogKkuLO/esEHcqZE9T4T7eh1fK0vydheKdL+
-         oriM5BfMLUnCFumySGr+2E0vFzH16Zo2nwp82ssybKQOzlQtuRhvAUGjy9g1qHoGRspw
-         MYO/vN65cYFW7hGxTtujntGg41V3Fes5AiCRcL0UrnZOTJBF4Cus7B+sRE62VJGLqdVZ
-         SAPQ==
-X-Gm-Message-State: AOAM5330YULZLICvxbzyJ1N0JrK8odr2F8+CeTn8Aw99x8sXvcM/60Wg
-        xphjkyRWRiSzZCQcZmqg72uIOCpJFWmOBgHnu1C+jQ==
-X-Google-Smtp-Source: ABdhPJxsTPK5RtHCNw8uXoUXlBNjPtA2SXEwcUKP5Iehw0GUHKTdV9i+YhCq+TbSg+5YUrbwKP1QG2EYv/sjXRYCwyY=
-X-Received: by 2002:a05:6e02:dd4:b0:2bd:ef9f:cf99 with SMTP id
- l20-20020a056e020dd400b002bdef9fcf99mr7188195ilj.275.1645813064833; Fri, 25
- Feb 2022 10:17:44 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=wxzgaXVTKy5EES1TRJ7ejkTF/2tYnEDDcA0Li/fS4aE=;
+        b=k4zWx1uZETgJSOOkdWUD9uJbMugs7KhIzraz0ykRxd0JkevTZeCB2q3qDrZAQu0pTV
+         CVf3ZzGSqtr4yx1DKREdNouZpRmnkOdgxhCS54gWEC4NB18YCiHOtrVc/GIB2K2krV3T
+         kAUjiw0Op8V0HnH4lXbR9/5bauIKEbkHniW7sgK1iEgCHGa7p45Klx+DjpYYp83TSzPi
+         RctadWpxLgwCoIp3YM4EQvdSdTeXeS73MkztyIIPqUjOcG3j2SS8IYOejUjpHyfc79p+
+         vGGIjHv5pdq+V2H0zczYv4+xUyAL2x/CEJD2yck4QMNs76zorjkcHsiVdsSMf4xX2cgs
+         APSA==
+X-Gm-Message-State: AOAM5321ix9Huz/Gdx/kERWFRnMBDHgB/tU6SRDmZAZnbHitasjYuBXw
+        shB7ek3Bo95JRZxlVKWoin5bDVEVHvbWGDz2ybEKgQ==
+X-Google-Smtp-Source: ABdhPJwfMBN5RkiK03guTIfAYSQ9o6xUbKeaGtFGCKz0ZfpXn/qVV5a+Aj+7sZkaSz+fl2A+/TOH2UtDw3hJRPtW/Dw=
+X-Received: by 2002:a05:6870:631a:b0:d1:7d97:806 with SMTP id
+ s26-20020a056870631a00b000d17d970806mr1859018oao.8.1645813070807; Fri, 25 Feb
+ 2022 10:17:50 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 25 Feb 2022 10:17:50 -0800
 MIME-Version: 1.0
-References: <20220224181953.1030665-1-axelrasmussen@google.com>
- <fd265bb6-d9be-c8a3-50a9-4e3bf048c0ef@schaufler-ca.com> <CAJHvVcgbCL7+4bBZ_5biLKfjmz_DKNBV8H6NxcLcFrw9Fbu7mw@mail.gmail.com>
- <0f74f1e4-6374-0e00-c5cb-04eba37e4ee3@schaufler-ca.com> <YhhF0jEeytTO32yt@xz-m1.local>
-In-Reply-To: <YhhF0jEeytTO32yt@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 25 Feb 2022 10:17:06 -0800
-Message-ID: <CAJHvVciO1GUbmL+Rxi-psGT8V=LyTfGT-Hyigtaebx1Xf+z6fw@mail.gmail.com>
-Subject: Re: [PATCH] userfaultfd, capability: introduce CAP_USERFAULTFD
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Serge Hallyn <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
+In-Reply-To: <1645576060-3046-5-git-send-email-quic_khsieh@quicinc.com>
+References: <1645576060-3046-1-git-send-email-quic_khsieh@quicinc.com> <1645576060-3046-5-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 25 Feb 2022 10:17:50 -0800
+Message-ID: <CAE-0n53Vcvw+mjbKByWE2PqRAiqHuJWVngiH-8AbJAVrc3Ph4w@mail.gmail.com>
+Subject: Re: [PATCH v10 4/4] drm/msm/dp: enable widebus feature for display port
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the detailed explanation Casey!
-
-On Thu, Feb 24, 2022 at 6:58 PM Peter Xu <peterx@redhat.com> wrote:
+Quoting Kuogee Hsieh (2022-02-22 16:27:40)
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 6ae9b29..c789f4e 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -483,6 +485,22 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+>  }
 >
-> On Thu, Feb 24, 2022 at 04:39:44PM -0800, Casey Schaufler wrote:
-> > What I'd want to see is multiple users where the use of CAP_USERFAULTD
-> > is independent of the use of CAP_SYS_PTRACE. That is, the programs would
-> > never require CAP_SYS_PTRACE. There should be demonstrated real value.
-> > Not just that a compromised program with CAP_SYS_PTRACE can do bad things,
-> > but that the programs with CAP_USERFAULTDD are somehow susceptible to
-> > being exploited to doing those bad things. Hypothetical users are just
-> > that, and often don't materialize.
+>  /**
+> + * dp_catalog_hw_revision() - retrieve DP hw revision
+> + *
+> + * @dp_catalog: DP catalog structure
+> + *
+> + * Return: DP controller hw revision
+> + *
+> + */
+> +u32 dp_catalog_hw_revision(struct dp_catalog *dp_catalog)
+
+Could be const
+
+> +{
+> +       struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +                               struct dp_catalog_private, dp_catalog);
+> +
+> +       return dp_read_ahb(catalog, REG_DP_HW_VERSION);
+
+If dp_read_ahb() took a const catalog, which it could.
+
+> +}
+> +
+> +/**
+>   * dp_catalog_ctrl_reset() - reset DP controller
+>   *
+>   * @dp_catalog: DP catalog structure
+> @@ -743,6 +761,7 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>  {
+>         struct dp_catalog_private *catalog = container_of(dp_catalog,
+>                                 struct dp_catalog_private, dp_catalog);
+> +       u32 reg;
 >
-> I kind of have the same question indeed..
+>         dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
+>                                 dp_catalog->total);
+> @@ -751,7 +770,18 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>         dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
+>                                 dp_catalog->width_blanking);
+>         dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, dp_catalog->dp_active);
+> -       dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
+> +
+> +       reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
+> +
+> +       if (dp_catalog->wide_bus_en)
+> +               reg |= DP_INTF_CONFIG_DATABUS_WIDEN;
+> +       else
+> +               reg &= ~DP_INTF_CONFIG_DATABUS_WIDEN;
+> +
+> +
+> +       DRM_DEBUG_DP("wide_bus_en=%d reg=%x\n", dp_catalog->wide_bus_en, reg);
+
+Use %#x to get 0x prefix on the hex please.
+
+> +
+> +       dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
+>         return 0;
+>  }
 >
-> The use case we're talking about is VM migration, and the in-question
-> subject is literally the migration process or thread.  Isn't that a trusted
-> piece of software already?
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> index 2363a2d..a0a5fbb 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> @@ -17,6 +17,7 @@ struct dp_ctrl {
+>         bool orientation;
+>         atomic_t aborted;
+>         u32 pixel_rate;
+> +       bool wide_bus_en;
+>  };
 >
-> Then the question is why the extra capability (in CAP_PTRACE but not in
-> CAP_UFFD) could bring much risk to the system.  Axel, did I miss something
-> important?
-
-For me it's just a matter of giving the live migration process as
-little power as I can while still letting it do its job.
-
-Live migration is somewhat trusted, and certainly if it can mess with
-the memory contents of its own VM, that's no concern. But there are
-other processes or threads running alongside it to manage other parts
-of the VM, like attached virtual disks. Also it's probably running on
-a server which also hosts other VMs, and I think it's a common design
-to have them all run as the same user (although, they may be running
-in other containers).
-
-So, it seems unfortunate to me that the live migration process can
-just ptrace() any of these other things running alongside it.
-
-Casey is right that we can restrict what it can do with e.g. SELinux
-or seccomp-ebpf or whatever else. But it seems to me a more fragile
-design to give the permissions and then restrict them, vs. just never
-giving those permissions in the first place.
-
-In any case though, it sounds like folks are more amenable to the
-device node approach. Honestly, I got that impression from Andrea as
-well when we first talked about this some months ago. So, I can pursue
-that approach instead.
-
+>  int dp_ctrl_host_init(struct dp_ctrl *dp_ctrl, bool flip, bool reset);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 7cc4d21..ba76358 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1437,6 +1445,15 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>         dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>  }
 >
-> Thanks,
+> +bool msm_dp_wide_bus_available(struct msm_dp *dp_display)
 
+const?
+
+> +{
+> +       struct dp_display_private *dp;
+> +
+> +       dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +
+> +       return dp->wide_bus_en;
+> +}
+> +
+>  void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>  {
+>         struct dp_display_private *dp;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> index e3adcd5..b718cc9 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> @@ -24,6 +24,8 @@ struct msm_dp {
 >
+>         hdmi_codec_plugged_cb plugged_cb;
+>
+> +       bool wide_bus_en;
+> +
+>         u32 max_pclk_khz;
+>
+>         u32 max_dp_lanes;
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index d7574e6..d413deb 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -399,6 +399,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display);
+>  void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_display);
+>
+>  void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor);
+> +bool msm_dp_wide_bus_available(struct msm_dp *dp_display);
+>
+>  #else
+>  static inline int __init msm_dp_register(void)
+> @@ -449,6 +450,11 @@ static inline void msm_dp_debugfs_init(struct msm_dp *dp_display,
+>  {
+>  }
+>
+> +static inline bool msm_dp_wide_bus_available(struct msm_dp *dp_display)
+
+const?
+
+> +{
+> +       return false;
+> +}
+> +
+>  #endif
+>
+>  void __init msm_mdp_register(void);
 > --
-> Peter Xu
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
 >

@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75934C3B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37DA4C3B7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiBYCMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 21:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S236720AbiBYCNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 21:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbiBYCME (ORCPT
+        with ESMTP id S232225AbiBYCNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:12:04 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A967658;
-        Thu, 24 Feb 2022 18:11:32 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id d17so3504244pfl.0;
-        Thu, 24 Feb 2022 18:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cMIbfsx8xhlhlO0rypyks70MaXjDJamppwKLSs70zXg=;
-        b=agWfV/KneIzXmyRrz9MpUkEGgtLQ5KieS3r1T3hSsxxTTjGHJaicT4V4kxEGKONjVE
-         Wh9CgIJBTHvaGQ1v7gf9NEIe9gZYcqGNOsHaaSCmxYOJIXCNOGxp76w8CbxJqcO6T134
-         qAVaYVuyz3CVRipALOty+jj9f8rTzFIDx+uHOUmgywNiXZHQ2sHCgRoQUqWF2p85L3iO
-         xHLYhKcDdQA4d+4B3ipOQwbYvkLjSoAuNv8FHbi7MVmnTNSKXZ+CZUUcknxIhTwIVsgb
-         UrlgGSHZX4lw8ZUUmbJ0ZtgJbtse6r5WLZC+Fr83Uo2Us7l75FA76Pzc3QyxQPHsZn8R
-         nvxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cMIbfsx8xhlhlO0rypyks70MaXjDJamppwKLSs70zXg=;
-        b=fkSd/cs//mDToW2GtMB/HWyU3Icz0omhULs9lDCHVdk0f6F0w73AQFmlG2tJ8nPWCZ
-         DNjqTYq55GPNWj0JLZZg5K6lkdcVRbZNWaBb0kNZfNwJQblIYmzdlQ/4YqnXvoKF46Yg
-         zCqHU4wB8j+ReLAdguqX+AYXIzLDfaYlJstIVwRYGcygUX88HF4Y1RRvucy5qTknpXHM
-         6stlTqhF8BeWkNDCvnqB1BczgIivJFxiNzCpi887+mtgO69xxpue+MLRFCVdlcMm1tXW
-         xHG/TS3+2y/fB2i88f7ShhWRnqjr+cMEmmodXVpqVXK0ZJMH8NO+Mvq69Nf+9Ma/1vch
-         Fv2A==
-X-Gm-Message-State: AOAM530V9O/MyT4toVQ0HercQsfocZSGV0ATiAsDx5Jn9G1RfnLgj//V
-        zfahBpVAgPA8wLDMdgFEIcP41QALa71Mdg==
-X-Google-Smtp-Source: ABdhPJxFcvdnn/j15+geNn7yyDWNYYaTArNomqCKM6Cn4Z8bJTS3viCvPilmLH4a3DbEyOErUhCO7g==
-X-Received: by 2002:a63:d201:0:b0:372:c882:210f with SMTP id a1-20020a63d201000000b00372c882210fmr4418862pgg.198.1645755092437;
-        Thu, 24 Feb 2022 18:11:32 -0800 (PST)
-Received: from [172.20.119.15] ([162.219.34.248])
-        by smtp.gmail.com with ESMTPSA id f4-20020a63f744000000b00373855b7cf2sm745316pgk.22.2022.02.24.18.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 18:11:32 -0800 (PST)
-Message-ID: <99ff40cc-8e56-3dff-ccc5-095844734818@gmail.com>
-Date:   Fri, 25 Feb 2022 10:11:29 +0800
+        Thu, 24 Feb 2022 21:13:12 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5DD16FDD7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:12:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645755161; x=1677291161;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=OjwBjKUhnyQUaR178VPG79ZiTP2RcSZHYXmNw8T4lRs=;
+  b=kreVgetDWUuDrk3j/29lgeEMzTxzI9XRT957pYqrB6petQ6d3IqHZtVY
+   ifrVPTYwNrBw19pbN3nK9/jxzpuoaYwwvtlgxSfJ3Tq0HCm7N57bPJo6L
+   Ss0s/BlOqjTDkacBetFWV1Och/R70cMet8k4pAcvv6aw4dQSlcB1fCIJj
+   ff4KP0DLozE876UvJHQCmROaw/T7I476K4aSK9OKKcKrkiMSXcx5VjvY9
+   NpP7iWhmySRTHRbXQ9Ze2iL4PTGMeHKEQnNIpYOT0oWelhR9MYciYcUig
+   4wLSfOAVlOn3+cpiytAACveqBzsMB5kCAC9pXXT+oiCKhxlDGRz8bsX9K
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313118146"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="313118146"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 18:12:41 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="639958422"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.203]) ([10.255.31.203])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 18:12:34 -0800
+Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
+ hypervisor stack overflows
+To:     Marc Zyngier <maz@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>, surenb@google.com,
+        Android Kernel Team <kernel-team@android.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
+ <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
+ <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
+ <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
+ <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <16f47fa9-90b4-0b5c-33cb-cb004fc39266@intel.com>
+Date:   Fri, 25 Feb 2022 10:12:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [RFC V5 01/16] blk: make the whole blk_mq_submit_bio under
- q_usage_counter
+In-Reply-To: <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
-        Tejun Heo <tj@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220224090654.54671-1-jianchao.wan9@gmail.com>
- <20220224090654.54671-2-jianchao.wan9@gmail.com>
- <YheKOdJdibfxSr5R@infradead.org>
-From:   Wang Jianchao <jianchao.wan9@gmail.com>
-In-Reply-To: <YheKOdJdibfxSr5R@infradead.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,16 +87,112 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/2/24 9:38 下午, Christoph Hellwig wrote:
-> On Thu, Feb 24, 2022 at 05:06:39PM +0800, Wang Jianchao (Kuaishou) wrote:
->> This is to protect the rqos list against the rqos open/close. We
->> need to drain all of the caller of blk_mq_submit_bio() before
->> we can operate the rqos list.
+On 2/24/2022 6:39 PM, Marc Zyngier wrote:
+> On 2022-02-23 12:56, Ard Biesheuvel wrote:
+>> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
+>>>
+>>> On 2022-02-23 12:34, Philip Li wrote:
+>>> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
+>>> >> On Wed, 23 Feb 2022 09:05:18 +0000,
+>>> >> kernel test robot <lkp@intel.com> wrote:
+>>> >> >
+>>> >> > Hi Kalesh,
+>>> >> >
+>>> >> > Thank you for the patch! Perhaps something to improve:
+>>> >> >
+>>> >> > [auto build test WARNING on 
+>>> cfb92440ee71adcc2105b0890bb01ac3cddb8507]
+>>> >> >
+>>> >> > url:    
+>>> https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522 
+>>>
+>>> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+>>> >> > config: arm64-randconfig-r011-20220221 
+>>> (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config) 
+>>>
+>>> >> > compiler: clang version 15.0.0 
+>>> (https://github.com/llvm/llvm-project 
+>>> d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+>>> >> > reproduce (this is a W=1 build):
+>>> >> >         wget 
+>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>>> -O ~/bin/make.cross
+>>> >> >         chmod +x ~/bin/make.cross
+>>> >> >         # install arm64 cross compiling tool for clang build
+>>> >> >         # apt-get install binutils-aarch64-linux-gnu
+>>> >> >         # 
+>>> https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1 
+>>>
+>>> >> >         git remote add linux-review 
+>>> https://github.com/0day-ci/linux
+>>> >> >         git fetch --no-tags linux-review 
+>>> Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+>>> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+>>> >> >         # save the config file to linux build tree
+>>> >> >         mkdir build_dir
+>>> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang 
+>>> make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+>>> >> >
+>>> >> > If you fix the issue, kindly add following tag as appropriate
+>>> >> > Reported-by: kernel test robot <lkp@intel.com>
+>>> >> >
+>>> >> > All warnings (new ones prefixed by >>):
+>>> >> >
+>>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>>> >> >    #define NULL ((void *)0)
+>>> >> >                 ^~~~~~~~~~~
+>>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer 
+>>> overrides prior initialization of this subobject 
+>>> [-Winitializer-overrides]
+>>> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+>>> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
+>>> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous 
+>>> initialization is here
+>>> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
+>>> >> >                                              ^~~~
+>>> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>>> >> >    #define NULL ((void *)0)
+>>> >> >                 ^~~~~~~~~~~
+>>> >>
+>>> >> Kalesh, please ignore this nonsense. There may be things to improve,
+>>> >> but this is *NOT* one of them.
+>>> >>
+>>> >> These reports are pretty useless, and just lead people to ignore real
+>>> >> bug reports.
+>>> >
+>>> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
+>>> > kindly ignore them. And the valuable ones are the new ones that
+>>> > prefixed by >>, as the below one in original report.
+>>> >
+>>> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
+>>> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+>>> >    void __noreturn hyp_panic_bad_stack(void)
+>>> >                    ^
+>>>
+>>> This is only called from assembly code, so a prototype wouldn't bring
+>>> much.
+>>>
+>>
+>> Should probably be marked as 'asmlinkage' then. I've suggested many
+>> times already that this bogus diagnostic should either be disabled, or
+>> disregard 'asmlinkage' symbols.
 > 
-> This means ever I/O now has to d an extra refcount roundtrip.
+> Yes, asmlinkage is definitely missing.
+> 
+> But it is pretty obvious that the robot people aren't interested in
+> fixing this particular issue, given how long we have been suggesting
+> this...
+> 
+>          M.
 
-If we want to save cpu cycles for the very fast device, why not introduce
-another blk_mq_submit_bio_fast() which can reduce the code drastically.
+Hi Marc, Ard,
 
-Thanks
-Jianchao 
+We have ignored the warning related to asmlinkage according to the below 
+advice:
+ 
+https://lore.kernel.org/lkml/CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com/
+
+do you want the bot ignore such warning if asmlinkage not specified?
+
+Best Regards,
+Rong Chen

@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCBF4C3CC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BA54C3CCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbiBYD4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 22:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S237257AbiBYD4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237170AbiBYD4O (ORCPT
+        with ESMTP id S229905AbiBYD4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 22:56:14 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BBEE338C;
-        Thu, 24 Feb 2022 19:55:43 -0800 (PST)
+        Thu, 24 Feb 2022 22:56:45 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BBE3391
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:56:15 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3775404pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645761343; x=1677297343;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7bNqhz0mQyZAE8fDoMqXVFB3mxjRItk/hMbBOLGdooE=;
-  b=CdqyAOlFATjoWyCG1brZhW5cgPP+GQeOGgTjGQ7/lXMVyYBcNDtEhghY
-   oDMYc4kRclnHjSq9rnsdFYt4N09AODvOqZpZ+X8p5pquwbhWUABnzOjNT
-   YUr6OJon+8MvS5fCOPcz6uwCKB8E631VdES6yAWXGFmyrNt3sIvmJWivX
-   o=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Feb 2022 19:55:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 19:55:42 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 24 Feb 2022 19:55:42 -0800
-Received: from [10.50.41.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
- 2022 19:55:37 -0800
-Message-ID: <8ab2db1c-ba63-e184-e27b-aaf17843bceb@quicinc.com>
-Date:   Fri, 25 Feb 2022 09:25:33 +0530
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9EL9VRrPBu3az25e2ybIauwEmEdCvI/qWzhGi/e6E5Y=;
+        b=jcSFxySYSYdj4BZD63nO0EbhxamC376oNbineqS36uKRwh9Buzq62WyKxAtoxOeaav
+         9v1jABoix2QKwwyzDytesOlugbsEVZLu8HuKgUwGjeMAQqUZPOSZV8sv5iCDzLUFHa2f
+         nbj7QUigSrMOqlhNT0263Oq4BoU39MfL89xLg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9EL9VRrPBu3az25e2ybIauwEmEdCvI/qWzhGi/e6E5Y=;
+        b=aPExuBJchQFgafhtLXltje5tqPKTjcPD0OStZqO100oPODKGuxPwrmcj6sSi7qz0yc
+         mWS5EkFl5tQO/iPHvNX5s6LTtZCfNAii9PTrzf+Xwao2f7NzEptVO592QDUxCai+7uaS
+         3ErKGRoLjsXcvKf3A+Kg24YI2heJXmeEhPXFsYvSHhxQ6bI14UpX8KZijNryh8GZFnUK
+         GQ3fpKivs1mepKT/6SqslVUWZObZC2/NtorxcFvBmj9M1on0WwfA219bUjxqiCkX1s2y
+         9GPciWpqGM9juMF+piLjSdvW9QXqehOZkoWP7bZAEYoiRw5It+wAr4C7sVTU4w/uhNDn
+         YsTQ==
+X-Gm-Message-State: AOAM532P0L2/sruKpdxuTdv171lKjJtbImKsz2aPEQ/98rOXDCldD/iK
+        uWeJR2KmBHDp/r+n1B8DpRsGDg==
+X-Google-Smtp-Source: ABdhPJz4XEl+dLLGOfRROoPWM4zEB50843UCWkcV9Myxwze9zuT7lnhfAPYHX+lJLKs/8Kyb0lahLw==
+X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr1327748pjj.46.1645761374562;
+        Thu, 24 Feb 2022 19:56:14 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm897373pgt.17.2022.02.24.19.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 19:56:14 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Dave Airlie <airlied@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/2] drm/dp: Fix out-of-bounds reads
+Date:   Thu, 24 Feb 2022 19:56:08 -0800
+Message-Id: <20220225035610.2552144-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCHv10 5/6] lib: Add register read/write tracing support
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, gregkh <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        "Prasad Sodagudi" <psodagud@codeaurora.org>
-References: <cover.1644824638.git.quic_saipraka@quicinc.com>
- <8cf9304d9941c25d920c4835cbc624ff5c2ac2cb.1644824638.git.quic_saipraka@quicinc.com>
- <20220224085718.2e0b8b46@gandalf.local.home>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20220224085718.2e0b8b46@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=810; h=from:subject; bh=bU37iCBLJ7Q70x0XEhd7PjOmH28YCUaT+vra8oA4uZo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiGFNZdsEw9YGr2OGD24Hf0kq+QV8dh1Tl0BsSDlLS Qa8/sVWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhhTWQAKCRCJcvTf3G3AJonKD/ 9dwPGSsOpHqQ5De1f9MxlBVJY6fcHLK5tsekzkp7Nkho9GLFcV/wCa4odTI+ek/3p+TAAuY06YNpPY e2GtXNN2k1N/ScNeCVQ9tRgmqRwEVg8hkmhgTkI6cMdDVSnyWOMZpiXgGJfWshuo9yT4kAnnrL9T35 NuonIO45jrGXry/WROkxa4UTu0HNUqyfI36hke71TFsWNhMBWFBdsaUHcFw3CdNwLofm6yWegvdL6k upXRIp4OJlWrdNvpTRIn9LGq4+p6RlHibE17dzqMBAhkZqvqr9JSMAD/HXba24aIYnDtHGGdMR3rBW QrB6UmqP7HO93A2BGUkx/WnzxHJuF1ClR6XNUKghGz8ZBPdbBGehd/JzCQuJQghhS2IyrpJ2N4CiLk ckG5Mlse+9Nlon9Zr0UD4nmFHVBDLz+5CO0auzsrO93TvM3Brbj5ZsP9/6mv3xCj18QYFIXV2f/z8R m22ovOL5xu0SG2uLEPoXZRD3kLDzB6rb5RRQt6PozL4fRFufF4Pchl24Fh4yTRYaFhnTNVLCvSY+e4 CnqhcHhjE+X+n43xaOAuGZtnTxWrh20mUwWndVPSD7Cx/B4rXTCqesrZJF+s8m06eA0tuisE7j+nxb /Zggztye4Wb/Vo79hwmtVA42S20mTnykG1zZA30JuAQAyR4jKY8a/B/QOR6g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,219 +83,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/2022 7:27 PM, Steven Rostedt wrote:
-> On Thu, 24 Feb 2022 11:37:07 +0530
-> Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
->
->
->> --- /dev/null
->> +++ b/include/trace/events/rwmmio.h
->> @@ -0,0 +1,97 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +#undef TRACE_SYSTEM
->> +#define TRACE_SYSTEM rwmmio
->> +
->> +#if !defined(_TRACE_RWMMIO_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_RWMMIO_H
->> +
->> +#include <linux/tracepoint.h>
->> +
->> +DECLARE_EVENT_CLASS(rwmmio_rw_template,
->> +
->> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
->> +
->> +	TP_ARGS(caller, val, width, addr),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(u64, caller)
->> +		__field(u64, val)
->> +		__field(u64, addr)
-> So caller and addr are both pointers. Why not define them as unsigned long?
-> That will save 8 bytes on 32 bit machines.
->
-> 		__field(unsigned long, caller)
-> 		__field(unsigned long, addr)
-> 		__feild(u64, val)
->
-> to keep the longs together as on 32 bit, it will be better aligned.
->
-> The tracing tools can handle the difference from user space. Even when
-> reading trace files from 32 bit architectures on 64 bit machines, and vise
-> versa.
+Hi,
 
-Sure, I'll change them to unsigned long. Thanks for the suggestion.
+I'm sending these again, as they still need fixing. They have been
+rebased due to the drm_dp_helper code being moved into a subdirectory.
 
->> +		__field(u8, width)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->caller = caller;
->> +		__entry->val = val;
->> +		__entry->addr = (unsigned long)(void *)addr;
->> +		__entry->width = width;
->> +	),
->> +
->> +	TP_printk("%pS width=%d val=%#llx addr=%#llx",
->> +		(void *)(unsigned long)__entry->caller, __entry->width,
->> +		__entry->val, __entry->addr)
->> +);
->> +
->> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_write,
->> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
->> +	TP_ARGS(caller, val, width, addr)
->> +);
->> +
->> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_post_write,
->> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
->> +	TP_ARGS(caller, val, width, addr)
->> +);
->> +
->> +TRACE_EVENT(rwmmio_read,
->> +
->> +	TP_PROTO(unsigned long caller, u8 width, const volatile void __iomem *addr),
->> +
->> +	TP_ARGS(caller, width, addr),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(u64, caller)
->> +		__field(u64, addr)
-> Same here.
->
-> -- Steve
+Can someone please apply these? :)
 
-Sure.
+Thanks!
 
-Thanks,
-Sai
+-Kees
 
->
->> +		__field(u8, width)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->caller = caller;
->> +		__entry->addr = (unsigned long)(void *)addr;
->> +		__entry->width = width;
->> +	),
->> +
->> +	TP_printk("%pS width=%d addr=%#llx",
->> +		 (void *)(unsigned long)__entry->caller, __entry->width, __entry->addr)
->> +);
->> +
->> +TRACE_EVENT(rwmmio_post_read,
->> +
->> +	TP_PROTO(unsigned long caller, u64 val, u8 width, const volatile void __iomem *addr),
->> +
->> +	TP_ARGS(caller, val, width, addr),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(u64, caller)
->> +		__field(u64, val)
->> +		__field(u64, addr)
->> +		__field(u8, width)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->caller = caller;
->> +		__entry->val = val;
->> +		__entry->addr = (unsigned long)(void *)addr;
->> +		__entry->width = width;
->> +	),
->> +
->> +	TP_printk("%pS width=%d val=%#llx addr=%#llx",
->> +		 (void *)(unsigned long)__entry->caller, __entry->width,
->> +		 __entry->val, __entry->addr)
->> +);
->> +
->> +#endif /* _TRACE_RWMMIO_H */
->> +
->> +#include <trace/define_trace.h>
->> diff --git a/lib/Kconfig b/lib/Kconfig
->> index c80fde816a7e..ea520c315c0f 100644
->> --- a/lib/Kconfig
->> +++ b/lib/Kconfig
->> @@ -119,6 +119,13 @@ config INDIRECT_IOMEM_FALLBACK
->>   	  mmio accesses when the IO memory address is not a registered
->>   	  emulated region.
->>   
->> +config TRACE_MMIO_ACCESS
->> +	bool "Register read/write tracing"
->> +	depends on TRACING && ARCH_HAVE_TRACE_MMIO_ACCESS
->> +	help
->> +	  Create tracepoints for MMIO read/write operations. These trace events
->> +	  can be used for logging all MMIO read/write operations.
->> +
->>   source "lib/crypto/Kconfig"
->>   
->>   config CRC_CCITT
->> diff --git a/lib/Makefile b/lib/Makefile
->> index 300f569c626b..43813b0061cd 100644
->> --- a/lib/Makefile
->> +++ b/lib/Makefile
->> @@ -152,6 +152,8 @@ lib-y += logic_pio.o
->>   
->>   lib-$(CONFIG_INDIRECT_IOMEM) += logic_iomem.o
->>   
->> +obj-$(CONFIG_TRACE_MMIO_ACCESS) += trace_readwrite.o
->> +
->>   obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
->>   
->>   obj-$(CONFIG_BTREE) += btree.o
->> diff --git a/lib/trace_readwrite.c b/lib/trace_readwrite.c
->> new file mode 100644
->> index 000000000000..88637038b30c
->> --- /dev/null
->> +++ b/lib/trace_readwrite.c
->> @@ -0,0 +1,47 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Register read and write tracepoints
->> + *
->> + * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/ftrace.h>
->> +#include <linux/module.h>
->> +#include <asm-generic/io.h>
->> +
->> +#define CREATE_TRACE_POINTS
->> +#include <trace/events/rwmmio.h>
->> +
->> +#ifdef CONFIG_TRACE_MMIO_ACCESS
->> +void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
->> +		    unsigned long caller_addr)
->> +{
->> +	trace_rwmmio_write(caller_addr, val, width, addr);
->> +}
->> +EXPORT_SYMBOL_GPL(log_write_mmio);
->> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_write);
->> +
->> +void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
->> +			 unsigned long caller_addr)
->> +{
->> +	trace_rwmmio_post_write(caller_addr, val, width, addr);
->> +}
->> +EXPORT_SYMBOL_GPL(log_post_write_mmio);
->> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_write);
->> +
->> +void log_read_mmio(u8 width, const volatile void __iomem *addr,
->> +		   unsigned long caller_addr)
->> +{
->> +	trace_rwmmio_read(caller_addr, width, addr);
->> +}
->> +EXPORT_SYMBOL_GPL(log_read_mmio);
->> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_read);
->> +
->> +void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
->> +			unsigned long caller_addr)
->> +{
->> +	trace_rwmmio_post_read(caller_addr, val, width, addr);
->> +}
->> +EXPORT_SYMBOL_GPL(log_post_read_mmio);
->> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_read);
->> +#endif /* CONFIG_TRACE_MMIO_ACCESS */
+v1: https://patchwork.freedesktop.org/patch/465200/
+    https://patchwork.freedesktop.org/patch/465201/
+v2: https://patchwork.freedesktop.org/patch/468350/
+    https://patchwork.freedesktop.org/patch/468351/
+v3:
+ - add review tags
+ - rebase to drm/drm-next
 
+Kees Cook (2):
+  drm/dp: Fix off-by-one in register cache size
+  drm/dp: Fix OOB read when handling Post Cursor2 register
+
+ drivers/gpu/drm/dp/drm_dp.c    | 10 ----------
+ drivers/gpu/drm/tegra/dp.c     | 11 ++++++++++-
+ include/drm/dp/drm_dp_helper.h |  4 +---
+ 3 files changed, 11 insertions(+), 14 deletions(-)
+
+-- 
+2.30.2
 

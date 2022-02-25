@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0D44C4B06
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5CB4C4B09
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243140AbiBYQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S243158AbiBYQl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiBYQkz (ORCPT
+        with ESMTP id S235766AbiBYQlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:40:55 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F41218CCD;
-        Fri, 25 Feb 2022 08:40:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 239732114D;
-        Fri, 25 Feb 2022 16:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645807222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWMIUHa0fBAb1sjWcQulU95T21ZKZnSq9Doda166V14=;
-        b=JuAs0dtW2wKpx+bssg4WCSeHc5mfMUwNAAGWi8XDNYurKR3sLARj4hsjyn2H0iFs+IYOr6
-        RFR2U763fOXe3DBAGG27SkFLlNUyTw0ZQJN4ojIxuCk7xv0Cl25kk01aNJG63nm+W/Rft1
-        v+t0yk988AO+naiNi2oLsRFYna6Eo4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645807222;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWMIUHa0fBAb1sjWcQulU95T21ZKZnSq9Doda166V14=;
-        b=fpmsJkUoh+jPBaKF+/CqprBoDi2xs0cypb+JYPL6ZNxz8ceCCtHITK0r9Kk6gHWNGae0/z
-        1mCd7CFTzPJSPHBA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E1463A3B83;
-        Fri, 25 Feb 2022 16:40:21 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 0352FA05D9; Fri, 25 Feb 2022 17:40:15 +0100 (CET)
-Date:   Fri, 25 Feb 2022 17:40:15 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/7] block, fs: convert Direct IO to FOLL_PIN
-Message-ID: <20220225164015.sriu6rz4hnqz25s5@quack3.lan>
-References: <20220225085025.3052894-1-jhubbard@nvidia.com>
- <20220225120522.6qctxigvowpnehxl@quack3.lan>
- <1d31ce1f-d307-fef0-8fce-84d6d96c6968@nvidia.com>
+        Fri, 25 Feb 2022 11:41:25 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6079C218CD2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:40:53 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id i21so5106214pfd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LOzx1/1N7j/VHBirbjJ/dukmD8Mv3Gu9xYCoow9KxH0=;
+        b=sP6/wWn5Rt+NzeQShD4TUqG0VMxxRrtUpSglEEhW3zYXUGZgBE6gT8tHBL5pWZwyUJ
+         CLznrRYdUNQILkg1MCJaayNAW3w/OD30r5frhrGrfpyFL+65kNtUwRdnFtYaRjRkDA36
+         aZtASawYrpXcEzcCm6pl3Elcfh9xp5RK+e7LkB1OWSFb2B7O65OnWvr3gHZlp6MD8OkR
+         llt4uxaQ+EsjeE8SZ9yfDsofx+WPgh8saaQkRAlz7gK0i2YeQ7FwMIU3rg5uf7klvgIj
+         rOmVc09LquQLQhyeYOYbYtqEX/PeOcXqCQLmAmc+WyDq+9XLXh83xL1srhXY1NeH5uvP
+         LcvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LOzx1/1N7j/VHBirbjJ/dukmD8Mv3Gu9xYCoow9KxH0=;
+        b=KDOjfYl2OqK8nJPnNq5L1Fml8h8YCyFghuFXtP0d1EV/ZuMCdvi1pawkcCiTzX3bx0
+         muJQL4M9BMMuLzQthvpM3Tkm9KfLXCE/tgBzZBcqjaVjNzoYT2paS5TyFtJqPYQ7pDAx
+         9q1THda1rwmVGUSs7IyyS0EJCY0nPgQiyQi8u54XDXSovJUPd1K1f9I63FLWeRxv5kZ3
+         DFlKMZ4uaqC5RFszTo8KwxbY1CMxImEvo2sP9tN08r/j88rSDoFZeaDCUazxEUDRHu+O
+         CICKn2l17pHpCC2MYCvW+8QW1BM0VIir4a/6cpc7hRgL/wzbhkUew1H9qP99NGJ4GhGN
+         k4iQ==
+X-Gm-Message-State: AOAM532ciy/+eLdv/CU81NhyzsGUXVsze6G0HQOWhw+JYTmNvYQzxywq
+        k4Q2poj12kBCvs8x3xuIyJLSCA==
+X-Google-Smtp-Source: ABdhPJwIBGXNdggpuheOxLyfH7NwjiL6DzLmuNUj1w/+Y5ijV18kW3kXAA9KfhXeWTceTocEUSXaLg==
+X-Received: by 2002:a63:1651:0:b0:342:b566:57c4 with SMTP id 17-20020a631651000000b00342b56657c4mr6605303pgw.258.1645807252698;
+        Fri, 25 Feb 2022 08:40:52 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id pj12-20020a17090b4f4c00b001bc97c5b255sm3060349pjb.44.2022.02.25.08.40.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 08:40:52 -0800 (PST)
+Date:   Fri, 25 Feb 2022 16:40:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Anton Romanov <romanton@google.com>
+Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
+ constant
+Message-ID: <YhkGkAJtMu0epKiT@google.com>
+References: <20220225013929.3577699-1-seanjc@google.com>
+ <5b9e5a3f3d3c40afea0bc953e3967505251f3143.camel@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1d31ce1f-d307-fef0-8fce-84d6d96c6968@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5b9e5a3f3d3c40afea0bc953e3967505251f3143.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 25-02-22 16:14:14, Chaitanya Kulkarni wrote:
-> On 2/25/22 04:05, Jan Kara wrote:
-> > On Fri 25-02-22 00:50:18, John Hubbard wrote:
-> >> Hi,
-> >>
-> >> Summary:
-> >>
-> >> This puts some prerequisites in place, including a CONFIG parameter,
-> >> making it possible to start converting and testing the Direct IO part of
-> >> each filesystem, from get_user_pages_fast(), to pin_user_pages_fast().
-> >>
-> >> It will take "a few" kernel releases to get the whole thing done.
-> >>
-> >> Details:
-> >>
-> >> As part of fixing the "get_user_pages() + file-backed memory" problem
-> >> [1], and to support various COW-related fixes as well [2], we need to
-> >> convert the Direct IO code from get_user_pages_fast(), to
-> >> pin_user_pages_fast(). Because pin_user_pages*() calls require a
-> >> corresponding call to unpin_user_page(), the conversion is more
-> >> elaborate than just substitution.
-> >>
-> >> Further complicating the conversion, the block/bio layers get their
-> >> Direct IO pages via iov_iter_get_pages() and iov_iter_get_pages_alloc(),
-> >> each of which has a large number of callers. All of those callers need
-> >> to be audited and changed so that they call unpin_user_page(), rather
-> >> than put_page().
-> >>
-> >> After quite some time exploring and consulting with people as well, it
-> >> is clear that this cannot be done in just one patchset. That's because,
-> >> not only is this large and time-consuming (for example, Chaitanya
-> >> Kulkarni's first reaction, after looking into the details, was, "convert
-> >> the remaining filesystems to use iomap, *then* convert to FOLL_PIN..."),
-> >> but it is also spread across many filesystems.
+On Fri, Feb 25, 2022, David Woodhouse wrote:
+> On Fri, 2022-02-25 at 01:39 +0000, Sean Christopherson wrote:
+> > @@ -11160,7 +11162,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >         vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
+> >         kvm_vcpu_mtrr_init(vcpu);
+> >         vcpu_load(vcpu);
+> > -       kvm_set_tsc_khz(vcpu, max_tsc_khz);
+> > +       kvm_set_tsc_khz(vcpu, max_tsc_khz ? : tsc_khz);
+> >         kvm_vcpu_reset(vcpu, false);
+> >         kvm_init_mmu(vcpu);
+> >         vcpu_put(vcpu);
 > > 
-> > With having modified fs/direct-io.c and fs/iomap/direct-io.c which
-> > filesystems do you know are missing conversion? Or is it that you just want
-> > to make sure with audit everything is fine? The only fs I could find
-> > unconverted by your changes is ceph. Am I missing something?
 > 
-> if I understand your comment correctly file systems which are listed in
-> the list see [1] (all the credit goes to John to have a complete list)
-> that are not using iomap but use XXX_XXX_direct_IO() should be fine,
-> since in the callchain going from :-
-> 
-> XXX_XXX_direct_io()
->   __blkdev_direct_io()
->    do_direct_io()
-> 
->    ...
-> 
->      submit_page_selection()
->       get/put_page() <---
-> 
-> will take care of itself ?
+> Hm, now if you hit that race you end up potentially giving *different*
+> frequencies to different vCPUs in a single guest, depending on when
+> they were created.
 
-Yes, John's changes to fs/direct-io.c should take care of these
-filesystems using __blkdev_direct_io().
+Yep.  Though the race is much harder to hit (userspace vs TSC refinement).  The
+existing race being hit is essentially do_initcalls() vs. TSC refinement.  
 
-								Honza
+> How about this... (and as noted, I think I want to add an explicit KVM
+> ioctl to set kvm->arch.default_tsc_khz for subsequently created vCPUs).
 
-> [1]
-> 
-> jfs_direct_IO()
-> nilfs_direct_IO()
-> ntfs_dirct_IO()
-> reiserfs_direct_IO()
-> udf_direct_IO()
-> ocfs2_dirct_IO()
-> affs_direct_IO()
-> exfat_direct_IO()
-> ext2_direct_IO()
-> fat_direct_IO()
-> hfs_direct_IO()
-> hfs_plus_direct_IO()
-> 
-> -ck
-> 
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+This wouldn't necessarily help.  E.g. assuming userspace knows the actual TSC
+frequency, creating a vCPU before refinement completes might put the vCPU in
+"always catchup" purgatory.
+
+To really fix the race, KVM needs a notification that refinement completed (or
+failed).  KVM could simply refuse to create vCPUs until it got the notification.
+In the non-constant case, KVM would also need to refresh max_tsc_khz.

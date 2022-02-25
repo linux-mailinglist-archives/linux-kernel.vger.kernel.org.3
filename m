@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5BB4C3B97
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013EE4C3B95
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 03:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbiBYCXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 21:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
+        id S236746AbiBYCWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 21:22:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236265AbiBYCXW (ORCPT
+        with ESMTP id S236737AbiBYCWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:23:22 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601218F20A;
-        Thu, 24 Feb 2022 18:22:51 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id c23so5022576ioi.4;
-        Thu, 24 Feb 2022 18:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fqT7xMVhlkuYITxIP6wUnF7YOQBx/icOOIa7N5wif0A=;
-        b=gnlGb05yXUIE56zjJKjuuBAWsC/Cgdmwdqc05R/voHdgesiQq+mhWw3NpP/codOHNi
-         WJuDHuVi33I+szk4tje1azz8i7r9xs1rySdJ7bpPKrvYr949RR/ggEc6KW2ZjTajgfpw
-         YPwLtQ947hdrrJf4tIut02wnS1WotS4bEzfsyJLUZbMxVhZ0BV/lOkaQNsLfqagHp/7R
-         2yG+QummpeMrl/QUSLA0gz96YRv7rPuyrl0gRuWItBqY1faWQIauoQJVG3XqfS6BjZqX
-         uAsDD+GIamq1IgYyAV8ANx/mOZKWQLL0AkHSpTlZq3KcXNEsOnSGLIp858U+oWrpuZiO
-         jPow==
+        Thu, 24 Feb 2022 21:22:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FC49FCB57
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645755731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iwRliaBz8XVBCbo8ZYm3d/1wV8xOYEP0VEbSvQZXIL0=;
+        b=gIebw7ALS+ivLGLueP/vUWmwOE1wB9F11Ho1+mfRfizsqyLDgVA+z/nCUMA1DKjaxK+PxY
+        02ekUH+64hiwFqm94pdKfgsHZlBGqqxcQ8nTNcx6QKW/Wko4iLroVlzmrtcJ50pg7gJko3
+        LpRaFaxq7FnLjOePq8Kjb6ow3heclAk=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-426-LCiulT48NKeiroXIGhRzOQ-1; Thu, 24 Feb 2022 21:22:10 -0500
+X-MC-Unique: LCiulT48NKeiroXIGhRzOQ-1
+Received: by mail-qv1-f69.google.com with SMTP id cg14-20020a05621413ce00b0042c2706a4beso4617665qvb.23
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:22:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fqT7xMVhlkuYITxIP6wUnF7YOQBx/icOOIa7N5wif0A=;
-        b=3PG8JcD+r4+edTEPzOexSN8OwdIprvGLy6UlqW1EDI8W4YYjtrgB1tIbjIC3/uOLsn
-         MYvrpLFNOgCHCaDPI4/BJa6bWEhZGnO/uwg4b70iREDb6XG/dtIvCavhNXrPmgY3MCRg
-         eDJ9P9hGcOo8TCZVAhih1Fi0EfScYPliTSUw1a0R3Xe6hQNPWSD8Qk5q/hfI3fYOLMvD
-         R1ghem17tDUWYH4LptoLX4HVR3eKNjJ6WmBWDs1K6HA9I1HnDdSLJVlAjN/jxLbk009g
-         TooFS3XvdQI6L5atcgtUeGm545TzCnvtQtqgiufsMSrQcALhOj/ocdb5ULhPVVUa+UmY
-         1IJg==
-X-Gm-Message-State: AOAM531hE5TO90w+qHGVRfplBVFILnLhBCXrz7y1D+kjm149eaGCH/u/
-        CKP0WkmliAkyCxs73ZdhJBBULeoA11k=
-X-Google-Smtp-Source: ABdhPJy1y/FaYJjQbixlh+TYdSr5O6kFJrbYX26H+xQ8ENN0LB5QEwIEZ1zNSUuyRsIa9eVzU/CEkQ==
-X-Received: by 2002:a05:6638:304:b0:314:cffb:6b5 with SMTP id w4-20020a056638030400b00314cffb06b5mr4448153jap.34.1645755771128;
-        Thu, 24 Feb 2022 18:22:51 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id y3-20020a920903000000b002be151ee1e6sm844332ilg.30.2022.02.24.18.22.49
+        bh=iwRliaBz8XVBCbo8ZYm3d/1wV8xOYEP0VEbSvQZXIL0=;
+        b=NxuBXzLOOz9CYeGvAR0+awh9HgK0OkSYSsgv4fnY+O/qWy4tZZhz+p1z0ZjzcnmZqj
+         3mqU1e4gJgJerORmDpLl2KMn79oxSgoQGFtau0Cvw0TxD52zYXNVN8KpiJmtO+6DIzDP
+         /HrVWyjB0JtZkhlqNE73kj6Z3OVxTpc4BklzUiWes8fKjQloNYAbpRfAXhidp0csnErE
+         tj2lvZB57n6Bx+ySsCcEISbjIvEy1HR1zLuWlE23JpVvl1T58w62BA3zeUUziQi6bOGi
+         khh0eNasD3AzMR11pUmRnOI/91/XFyNcXlysjbE++/VbnOrKSZEbG9cGNR27V+Nxc/uw
+         30yA==
+X-Gm-Message-State: AOAM532w+Dd0brTyNeAdmcL3pvcled7Q2M6GaiDc1wlw+3yBjshBGN32
+        3OAqWc/Ti9XpFA5O2xrwyU2Qr6OeGyBNWnDi9g73D4Uj6dUWUVEc156zk0Bu93tE4S7S+ocPG8L
+        BeOu/4uPVF3QYZN6zTUClS1Ux
+X-Received: by 2002:ad4:5ca5:0:b0:421:6335:89 with SMTP id q5-20020ad45ca5000000b0042163350089mr4318931qvh.89.1645755729945;
+        Thu, 24 Feb 2022 18:22:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxV6sJA9MH11XO+AqJqJXLGPXYhUrWls90+6cuZfoIbS5FjdCJFhRi1NDRKvi5DNwAqt2NESA==
+X-Received: by 2002:ad4:5ca5:0:b0:421:6335:89 with SMTP id q5-20020ad45ca5000000b0042163350089mr4318915qvh.89.1645755729762;
+        Thu, 24 Feb 2022 18:22:09 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05622a179200b002de9529450csm665452qtk.85.2022.02.24.18.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 18:22:50 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 5D4C727C0054;
-        Thu, 24 Feb 2022 21:22:49 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 24 Feb 2022 21:22:49 -0500
-X-ME-Sender: <xms:eD0YYoX9qojkq15d1ZH8PiPucx5Ab8vIdZaehgi9koqwDevJNCw5_A>
-    <xme:eD0YYsmLJSXVGxvUmQDdVMqt8SCazLatkyrMYWDEBNCnpRRZKj6Hsi9GhFbSbKjww
-    XytNSGYpsAPB8r-gg>
-X-ME-Received: <xmr:eD0YYsZyP6_oNm1quC05uF9F_0BNOU0c-nCS6UeYWMXdjDFmdvCPaO3plhCkPw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleefgdeflecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:eT0YYnUujWbQNcf217XiAoACKv7aA6GFoLTro5D9-CfhxB66XxKxzA>
-    <xmx:eT0YYimq-QcXJ50ffl8Y0WqgK8L-4mqsmFc0nHZOLur5NFDLVCKmVA>
-    <xmx:eT0YYsfl4KA-quRKq21VtvdTkHdD2e_lX6o4t7tSV03SE0W_3PcOVg>
-    <xmx:eT0YYs6YaHcJTyiLK16sY98PKM5WHLwXwd-mEHoZT7xdmWLoFyXENg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Feb 2022 21:22:48 -0500 (EST)
-Date:   Fri, 25 Feb 2022 10:22:01 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     corbet@lwn.net, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Leah Leshchinsky <lleshchi@redhat.com>
-Subject: Re: [PATCH] Documentation/locking/locktypes: Fix PREEMPT_RT _bh()
- description
-Message-ID: <Yhg9SU353e+Gh5Jg@boqun-archlinux>
-References: <20220224212312.2601153-1-ahalaney@redhat.com>
+        Thu, 24 Feb 2022 18:22:09 -0800 (PST)
+Date:   Thu, 24 Feb 2022 18:22:05 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 20/39] x86/bugs: Disable Retpoline when IBT
+Message-ID: <20220225022205.yfvpfq5qwpcvrxux@treble>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151323.189353523@infradead.org>
+ <202202241710.B35CBB06@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220224212312.2601153-1-ahalaney@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202202241710.B35CBB06@keescook>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:23:12PM -0600, Andrew Halaney wrote:
-> With PREEMPT_RT the _bh() version of a spinlock leaves preemption
-> enabled, align the doc to say that instead of the opposite.
+On Thu, Feb 24, 2022 at 05:11:23PM -0800, Kees Cook wrote:
+> On Thu, Feb 24, 2022 at 03:51:58PM +0100, Peter Zijlstra wrote:
+> > Retpoline and IBT are mutually exclusive. IBT relies on indirect
+> > branches (JMP/CALL *%reg) while retpoline avoids them by design.
+> > 
+> > Demote to LFENCE on IBT enabled hardware.
 > 
-> Reported-by: Leah Leshchinsky <lleshchi@redhat.com>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> What's the expected perf impact of this?
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Should make it faster...
 
-Regards,
-Boqun
+-- 
+Josh
 
-> ---
->  Documentation/locking/locktypes.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/locking/locktypes.rst b/Documentation/locking/locktypes.rst
-> index 4fd7b70fcde1..bfa75ea1b66a 100644
-> --- a/Documentation/locking/locktypes.rst
-> +++ b/Documentation/locking/locktypes.rst
-> @@ -247,7 +247,7 @@ based on rt_mutex which changes the semantics:
->     Non-PREEMPT_RT kernels disable preemption to get this effect.
->  
->     PREEMPT_RT kernels use a per-CPU lock for serialization which keeps
-> -   preemption disabled. The lock disables softirq handlers and also
-> +   preemption enabled. The lock disables softirq handlers and also
->     prevents reentrancy due to task preemption.
->  
->  PREEMPT_RT kernels preserve all other spinlock_t semantics:
-> -- 
-> 2.35.1
-> 

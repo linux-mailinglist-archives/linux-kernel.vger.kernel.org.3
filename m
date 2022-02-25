@@ -2,103 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3AF4C4E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453F84C4E50
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 20:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiBYTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 14:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S234170AbiBYTJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 14:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbiBYTIS (ORCPT
+        with ESMTP id S232633AbiBYTI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 14:08:18 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE86076E0F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 11:07:44 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso9250329pjk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 11:07:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:cc:from:to:message-id;
-        bh=zpMabozdXcRokZfdlJzt+ws6ExMNsrdAdHkkZUquN1w=;
-        b=VRLzrXR32w6gT3MUs9irseczDlJWURgLmHvrMkOITutuSwWerF9SJmRkCpeA5pbW0n
-         TOyo2grAI1ji5iAXM0kTHr0d0fy7gRpkjkuMWgZkwN6lVNjOBMKnIsxvO51Ejgj+2mpF
-         mpNnItqN0xinJ6RvcaDAPYaZVBClhdr3JFlATqXN7lE5cx7q0p6jU9sRx9uNB9MLPqoC
-         QUun37HOMOaKIS/pmNwxw72OxUY+F0yPLdasDEoNBmdIESYVNdXkLQWpu3rMTtbbGpog
-         qKNYFWvbQxBuTZGOsZBsO7U/H+zjtct/T0a4qleYvtcej3/ZcztnuUrt/NwL8ciOQQUC
-         7tQw==
+        Fri, 25 Feb 2022 14:08:59 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6D7194149;
+        Fri, 25 Feb 2022 11:08:26 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so7485797oop.13;
+        Fri, 25 Feb 2022 11:08:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:cc:from:to:message-id;
-        bh=zpMabozdXcRokZfdlJzt+ws6ExMNsrdAdHkkZUquN1w=;
-        b=qQM1D/PvNatIhOfN0xSUhLmZKTyQZoUXNewlGJzAXH0yk9J1SZdKAtUtQ1p+GfK1mQ
-         Bv3QeJ+HFDPsjI1mX8iJxfK2QCXNetbRNaLlHxu01LYau3kkN79tOCDg0xdTIOV/1YGC
-         mMRTuFAdYRazfVDsQEEsKeoBo+4SksF4BBjhxes3jcXwdBqLs0XxsNvK2dbjuwFyPi82
-         BcPczL77F9p+JAJQiEqgWMc+KpJ8mo5VK/q13e2PkVLRnILeeo+cDG8/IOQ5zPOKCc2U
-         r4pvBfKMyJJ6DncfP28yeomlwp+Ov6V8EFuvRij9OqKqmmPLJl9ThZ+QSChFos/WaEAo
-         VkTg==
-X-Gm-Message-State: AOAM531nFp0c0WVr2ZAtA+IPkkZObQPqmGdA2MEf2sF+3RamsrnkHc5e
-        MEW72H6NO6xx4VumdsHXWSfnnBH9n8tjFA==
-X-Google-Smtp-Source: ABdhPJwby3wVdcaCbcaIUzrzguXTNnOLQykwmZ+ciJKkvT7LpNhT5ch915A+NG0cvJNsJpw2UdHqHA==
-X-Received: by 2002:a17:902:ee42:b0:14f:c36e:6558 with SMTP id 2-20020a170902ee4200b0014fc36e6558mr9089122plo.118.1645816064184;
-        Fri, 25 Feb 2022 11:07:44 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm3203024pgn.72.2022.02.25.11.07.43
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gLaPPylCSRSRt4wztREpwI4m1e+FOfbTqnD+bNNy18I=;
+        b=kL9NxMiS1LVbbdKX+GR0T/uG7CddPaelVkJGwB4iBIygLacZTv6DKPxnzPXGyBobRs
+         dzftPpYXo2shLcjXVn2nrl63dP35xidAOsXu07HFMtHpGrFQyssADaQ+28uTIEdDrUTG
+         IMhxAuxXRz3k6SRkomOcvRZDgCECY1vlFl2esG9iOPJOG8Nt25HbCtIVAewZEBfXJely
+         bRQnYi0y7sJgaNafyPiKH7/9Vzr3wFFW1kRugBX35pVQbTn/tPkiLBQ7JU9HWlveMvwb
+         HCEniL1TxKhOjdxqaz1/lejXP2Hff7LacMRMqsj3DSoX2HVK/5uqeIvJP2Ul+BxtVpbk
+         TccA==
+X-Gm-Message-State: AOAM533wqrijLKKuGkvVQBcxDOr4fLzde+QCn4GtUuZyNm7sABWfczkP
+        gdYjTwiJKUs5bElMaEXDbOU1sdv0pw==
+X-Google-Smtp-Source: ABdhPJwjQqWTZ60aOvX3GXryd3E9kdB2g5bch4rI35l6Axo2X1+NCXqYiukhpG/7sn59PDrE+LlA5Q==
+X-Received: by 2002:a05:6870:5b9e:b0:cf:f6de:3e89 with SMTP id em30-20020a0568705b9e00b000cff6de3e89mr1919572oab.94.1645816105917;
+        Fri, 25 Feb 2022 11:08:25 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 23-20020a9d0b97000000b005ad33994e93sm1495550oth.31.2022.02.25.11.08.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 11:07:43 -0800 (PST)
-Date:   Fri, 25 Feb 2022 11:07:43 -0800 (PST)
-X-Google-Original-Date: Fri, 25 Feb 2022 11:07:39 PST (-0800)
-Subject: [GIT PULL] RISC-V Fixes for 5.17-rc6
-CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-673458fa-1596-4318-ae4b-b0275abc5d23@palmer-mbp2014>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 11:08:25 -0800 (PST)
+Received: (nullmailer pid 1262255 invoked by uid 1000);
+        Fri, 25 Feb 2022 19:08:24 -0000
+Date:   Fri, 25 Feb 2022 13:08:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: Add AVM
+Message-ID: <YhkpKI7scFKaqAqC@robh.at.kernel.org>
+References: <20220221135259.GA7306@ubuntu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221135259.GA7306@ubuntu>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 5feef64f4c67068c49f5409d43c67cabf2327f66:
+On Mon, 21 Feb 2022 14:52:59 +0100, Daniel Kestrel wrote:
+> Add vendor prefix for AVM Computersysteme Vertriebs GmbH (http://www.avm.de/en)
+> 
+> Signed-off-by: Daniel Kestrel <kestrelseventyfour@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-  RISC-V: Fix IPI/RFENCE hmask on non-monotonic hartid ordering (2022-02-14 12:27:45 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc6
-
-for you to fetch changes up to 22e2100b1b07d6f5acc71cc1acb53f680c677d77:
-
-  riscv: fix oops caused by irqsoff latency tracer (2022-02-24 20:30:30 -0800)
-
-----------------------------------------------------------------
-RISC-V Fixes for 5.17-rc6
-
-* A fix for the K210 sdcard defconfig, to avoid using a fixed delay for
-  the root FS.
-* A fix to make sure there's a proper call frame for
-  trace_hardirqs_{on,off}().
-
----
-
-There are a handful of additional fixes in flight, but not for this
-week.
-
-----------------------------------------------------------------
-Changbin Du (1):
-      riscv: fix oops caused by irqsoff latency tracer
-
-Damien Le Moal (1):
-      riscv: fix nommu_k210_sdcard_defconfig
-
- arch/riscv/configs/nommu_k210_sdcard_defconfig |  2 +-
- arch/riscv/kernel/Makefile                     |  2 ++
- arch/riscv/kernel/entry.S                      | 10 +++++-----
- arch/riscv/kernel/trace_irq.c                  | 27 ++++++++++++++++++++++++++
- arch/riscv/kernel/trace_irq.h                  | 11 +++++++++++
- 5 files changed, 46 insertions(+), 6 deletions(-)
- create mode 100644 arch/riscv/kernel/trace_irq.c
- create mode 100644 arch/riscv/kernel/trace_irq.h
+Acked-by: Rob Herring <robh@kernel.org>

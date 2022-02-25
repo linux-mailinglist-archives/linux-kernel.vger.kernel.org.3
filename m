@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA2D4C4580
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94634C457C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiBYNKP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Feb 2022 08:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S240088AbiBYNKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbiBYNKN (ORCPT
+        with ESMTP id S235751AbiBYNKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:10:13 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF2901E7A42
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:09:39 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-193-m8Ucn2YQO66D-19VMlzn2A-1; Fri, 25 Feb 2022 13:09:36 +0000
-X-MC-Unique: m8Ucn2YQO66D-19VMlzn2A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 13:09:34 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 13:09:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
-Subject: RE: [PATCH v2 11/39] x86/ibt,kvm: Add ENDBR to fastops
-Thread-Topic: [PATCH v2 11/39] x86/ibt,kvm: Add ENDBR to fastops
-Thread-Index: AQHYKjHx/OqvS/l8EkSgTXDB8+1fEqykPQ7w
-Date:   Fri, 25 Feb 2022 13:09:34 +0000
-Message-ID: <88414f3498d84e76ba358119d633d62a@AcuMS.aculab.com>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.656194153@infradead.org> <202202241651.B5FB7DBE@keescook>
- <YhiuZJpwq/bMZYgn@hirez.programming.kicks-ass.net>
-In-Reply-To: <YhiuZJpwq/bMZYgn@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Feb 2022 08:10:30 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838CC1E7A43;
+        Fri, 25 Feb 2022 05:09:58 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id bg16-20020a05600c3c9000b00380f6f473b0so1662916wmb.1;
+        Fri, 25 Feb 2022 05:09:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2vH+wdo1zZSlCkX6ymcEDv0Mvliw9n+m3623hvmf1xs=;
+        b=cScqFsKxDDQbkO4dyvsF3zUzh0LrQ34YStyHEtoe1If6m2XxgehSmIVZsnjn6N0eTQ
+         6dQp9wYI7kzmDm3eSngRjcWGq/sVEZrbQMtaFwibvq6TK9orwbE6AxGBcXQ/mdOCvH3y
+         7vzS+OBtdHSkR7K6DhZFJHThbPb4xiY7bW32SBD/4pJEd0M6e9GDU3LbVDMc8sDxrTeP
+         1eGcnwrNndb7I/jVrkfYxUogCpucGMFE4uwmMyMT8ZItXV8grR5jIyRNy7jUZ0z/jzZR
+         csaYo32EVaPgXubZgYcQyAIDGaEzE6fiu7ta52oOPE4+mYOroi/dEiN7C0Qt18ZhAi6N
+         MNyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2vH+wdo1zZSlCkX6ymcEDv0Mvliw9n+m3623hvmf1xs=;
+        b=IcbkcvO/Ia9px8t5IiACNsLyfVTv2Ske/cCXtnGhfLYEVXiT0h2y0TVXDRIvTmyuD/
+         DEiPd+wnV2IHnfQ4cO63Mu1JyRaaPff9eKiyLt1KbhJGBloLoKJCuj/bzR+ioze2BtKK
+         Re0FSpfS937TSKFKReeMqMoaZYlB1epox3Z5TZOWydZEwQ3DVHs2j6sEdQtW2riLxec5
+         Efnm16zkj2ww2/YSO7syj561V30/JRKs3sBfrXqHRFXTMY/jUlTNNom9YKp+6qqm2rGu
+         j7KXlMzcVdOfL4SAeQAT3FN0McDB+EZWmttByWMexfPo6/dCo839UFJ9Aa0V4x916R3p
+         V3RA==
+X-Gm-Message-State: AOAM5306+Rk4+TWStLJODV4dMkxFYYYQqgP6SUgmZMO0+jA60eOk09WG
+        OjTNtRlB0DUJHRfalsS9rVg=
+X-Google-Smtp-Source: ABdhPJwaW4mB1jJYszYmVuf/mOCBDH8wKGGL9kiPQxaRbyxQLUeYh+XqR4e11x74+/qykGlDVLzJaw==
+X-Received: by 2002:a05:600c:2319:b0:380:e369:83ea with SMTP id 25-20020a05600c231900b00380e36983eamr2674993wmo.45.1645794596964;
+        Fri, 25 Feb 2022 05:09:56 -0800 (PST)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id e6-20020a056000120600b001ea9414f2c3sm2236362wrx.12.2022.02.25.05.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:09:56 -0800 (PST)
+Date:   Fri, 25 Feb 2022 14:09:54 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Kartik <kkartik@nvidia.com>
+Cc:     jonathanh@nvidia.com, digetx@gmail.com, ulf.hansson@linaro.org,
+        christophe.jaillet@wanadoo.fr, andriy.shevchenko@linux.intel.com,
+        jckuo@nvidia.com, caihuoqing@baidu.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc/tegra: pmc: Add Tegra234 wake events
+Message-ID: <YhjVItNqI2QpUQs/@orome>
+References: <1643090262-26127-1-git-send-email-kkartik@nvidia.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="uE4ihRcxPjwmpkFm"
+Content-Disposition: inline
+In-Reply-To: <1643090262-26127-1-git-send-email-kkartik@nvidia.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 25 February 2022 10:25
-> 
-> On Thu, Feb 24, 2022 at 04:54:04PM -0800, Kees Cook wrote:
-> > On Thu, Feb 24, 2022 at 03:51:49PM +0100, Peter Zijlstra wrote:
-> > >
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >  arch/x86/kvm/emulate.c |    6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > --- a/arch/x86/kvm/emulate.c
-> > > +++ b/arch/x86/kvm/emulate.c
-> > > @@ -189,7 +189,7 @@
-> > >  #define X16(x...) X8(x), X8(x)
-> > >
-> > >  #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
-> > > -#define FASTOP_SIZE 8
-> > > +#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
 
-Defining as:
-		(8 + HAS_KERNEL_IBT * 8)
-would probably be easier to read when half asleep.
+--uE4ihRcxPjwmpkFm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	David
+On Tue, Jan 25, 2022 at 11:27:42AM +0530, Kartik wrote:
+> From: kartik <kkartik@nvidia.com>
+>=20
+> Enable the Tegra RTC alarm and power key wake-ups for Tegra234
+>=20
+> Signed-off-by: kartik <kkartik@nvidia.com>
+> ---
+>  drivers/soc/tegra/pmc.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 
-> >
-> > Err, is this right? FASTOP_SIZE is used both as a size and an alignment.
-> > But the ENDBR instruction is 4 bytes? Commit log maybe needed to
-> > describe this.
-> 
-> Note how that comes out as 8*1 or 8*2, iow 8 or 16. Does that clarify?
-> That is, 8+4 being 12 is ovbiuosly a fail for alignment.
+Applied, thanks.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Thierry
 
+--uE4ihRcxPjwmpkFm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY1SEACgkQ3SOs138+
+s6ELNg//R/Jd7IYNPAHQ+SZSJyl2uFUbGtSNrT46r/OqGyCETQSF5zzJqltghtIT
+ASYZyO94Y1PcoK1AvQksFI7wWIAuGz/qCxjvcwdi/84OaGkO7E3pok5/xJxKHpxH
+lcSKqIBVNtOiQpQLpUauoaBktXgvfDCUJ40Zky1KXTQxpDgi2Eq3lx2GTFtAKMPy
+8uEmIuAkOLWr0gPJKwuCgPlAoJlmntTUJy/K6RzTcezQhayyqltGkimiysvtYxfr
+sVOxcKZSvcZuq4CgF0HfhtSuR2h6LeWN6W27lrE/eKg5wHIE7pfShxPH7FV3AmI1
+cizzim1WtZcO8A0+U2gSWmOkL70KVd2fqfJYOlO5S0jVASO8kjDe8GPIqTH7Wo9U
+Kgtrph8Atwrqj/zJ7GV6Vc1OTdOjP09GAyCOdPMS5J6Zsfyn573nQxvYfvw4lWXP
+QOqhF/UGEdhWkym0r5BpNkKfTWEMtFjfGnOznqcV7Oom66C0LNdGFK9XflxQoZ80
+PmJLn5DJzy3cG8ApFcxR6YR2OcMQt0iNY4ggvTX+rBWEh/lLtenV6cRErzhmoBK+
+bNnQ5k+pab3K6wBrMlYSTsMnsBYC4U4g9GMKZBy2DakjX2B+dt94AxSzQGCOrlb+
+nj3hSNWCvEHTUYj7QSsJCgxn0JtDU7L0pi/fgJwSmfnIQK41cys=
+=Xr/P
+-----END PGP SIGNATURE-----
+
+--uE4ihRcxPjwmpkFm--

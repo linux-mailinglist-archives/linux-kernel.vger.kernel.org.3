@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899F34C3A87
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F724C3A94
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236198AbiBYAyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S236207AbiBYAzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbiBYAyh (ORCPT
+        with ESMTP id S233523AbiBYAzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:54:37 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887CB150415
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:06 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id d15so104188pjg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=arleATP5kW7wyYGHooV473HnyxLZGbKklPsBufv8eRI=;
-        b=bR3EbXpzYvJ6cwg3PLr2AUkX1uESfQTkRVu9vmdx1aQtJDsldu+Ap5dY07ATI/jVER
-         sYElMIQIXlyfEuN8+fR6wxCgui7KN47EQF9ugdjgNSX40RqGJ6Pym/coO69vn7mMswWK
-         m6Q1x75EGHqdSrDqWOfVb0bZKuXekoUdvgFP0=
+        Thu, 24 Feb 2022 19:55:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A6D314CCA9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645750486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HZZC/VJ0/U6Alzt/tPjFfBFIWup+/Y72n0Vs/ZXQ44w=;
+        b=MuOP9QYasqSulAxj5SS5zkR3kgtR9IleOiSFMC/y7bMuvpuS2UlRploP6AwQw0/uFKD9Hq
+        f87rBbFAiCtQ7kKFB+jwrZ5M+jR5prh7YrdUiafbkO8mr2I2vafH5MgohdtKPjQHe8FWnE
+        /v//lg4Zdn4l/4SCl5gLBSmLXBVU7mI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-rXuppIh8Pp-_OHdq8npOOA-1; Thu, 24 Feb 2022 19:54:45 -0500
+X-MC-Unique: rXuppIh8Pp-_OHdq8npOOA-1
+Received: by mail-qv1-f71.google.com with SMTP id hu9-20020a056214234900b0042c4017aeb3so4523141qvb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=arleATP5kW7wyYGHooV473HnyxLZGbKklPsBufv8eRI=;
-        b=WHoHfQ09UcC0OKgVRyrzuNdy5oajdP9/lKHh0AhRC6Jc4FJ/zR56rvet+dvg284ein
-         xbH9SStJY9l8RuYzI9lrJ6e78hc/SNDaJbG7Y3wnWAM9dZEWZtyN/90rzIPeUNdhIvYL
-         xTyYDPrwe91+yEd2d/7kQezaOBim3LihJ5+e512bxND/qZN1gDj4fBt5owoI8q5RF4S9
-         s6EO21YQY5OEu2EteeKAP1wXLTyPMznf6BKCuzgnq0hdb7lgmBW4NUpIcYZ0lZ1RaXK3
-         qCEO+nr9pnuOk2mBhEGOtxsgSSf3AadEyXvm0ltausMpz7T1UBJ9w7rbMQ7cx1xmXfjM
-         quOg==
-X-Gm-Message-State: AOAM532c8Od1evsNtmiCfIl1n7/499fpYAi6a+U9LWcAR4nFE2VtgUJ8
-        OX/lM/3VYJC91xMXYVqidahEvw==
-X-Google-Smtp-Source: ABdhPJxjDUQU4W1vH85mj/uxM4etnm6FLc/dttTyz80ozroHUMPQ3vkX6egkTBJzanvPc+qufEBOuw==
-X-Received: by 2002:a17:90a:2d6:b0:1b8:cd70:697d with SMTP id d22-20020a17090a02d600b001b8cd70697dmr720816pjd.78.1645750445691;
-        Thu, 24 Feb 2022 16:54:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o17-20020a056a0015d100b004e1c11d833fsm728217pfu.90.2022.02.24.16.54.05
+        bh=HZZC/VJ0/U6Alzt/tPjFfBFIWup+/Y72n0Vs/ZXQ44w=;
+        b=aT9fGzAX/yYc8IxVZAdnRgkx0Nq1m383LrhHw3AlN3bxmJpyk1AMkBFscNTazKvwXK
+         m9u11H7aCHb2taU5LLZINxC0x6grA52Ft0wnXn0A92VhzdTy2SycFCmHkwiqLUIl7Jbg
+         48HjsTm8tGpXzJSJYREA7aQTeKAmPRdqNJcu9N+pHQwk4HinBuO8ZzogOPY1COqPws3B
+         V/l1JT6UPmvW1f5uhkpkh96CL3/21W9QNH0I1yZTxac2XG6kJdNHnTpbQBMqhDjUNoHZ
+         4agG8XlChyHuGP9UR2y7sHMcMzBjlOlDlW4f25t3k+a/FgLAI3MKXt5d9CoL+oBU+iW+
+         ngoQ==
+X-Gm-Message-State: AOAM532suXRP/Km+JFjznCfA/8oCmK0LjpMrW6ScHl5IW98sM+Fw12ux
+        tGRljqjwKiW4lKnm3zzfzTWdiBLC+D2uL4YgUtii00VVqctDjCyGgLhPAE62/gJdQa8izKsFp19
+        H/ScAjbtQKAc58A/YDIt+ylFw
+X-Received: by 2002:ac8:5e06:0:b0:2de:8f67:b390 with SMTP id h6-20020ac85e06000000b002de8f67b390mr5056239qtx.72.1645750485150;
+        Thu, 24 Feb 2022 16:54:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyHL5ypnpOBdbKlEadNj3NpV0V0yxHI7NQmDYM/M5NzZzcb0yZBe5/IypYIbkAxN+rYIGredA==
+X-Received: by 2002:ac8:5e06:0:b0:2de:8f67:b390 with SMTP id h6-20020ac85e06000000b002de8f67b390mr5056216qtx.72.1645750484939;
+        Thu, 24 Feb 2022 16:54:44 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id x26-20020ae9f81a000000b005f1916fc61fsm522101qkh.106.2022.02.24.16.54.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:54:05 -0800 (PST)
-Date:   Thu, 24 Feb 2022 16:54:04 -0800
-From:   Kees Cook <keescook@chromium.org>
+        Thu, 24 Feb 2022 16:54:44 -0800 (PST)
+Date:   Thu, 24 Feb 2022 16:54:40 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 11/39] x86/ibt,kvm: Add ENDBR to fastops
-Message-ID: <202202241651.B5FB7DBE@keescook>
+Subject: Re: [PATCH v2 28/39] x86/ibt,xen: Sprinkle the ENDBR
+Message-ID: <20220225005440.mvz4jtxwq5ttcu77@treble>
 References: <20220224145138.952963315@infradead.org>
- <20220224151322.656194153@infradead.org>
+ <20220224151323.661210297@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220224151322.656194153@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220224151323.661210297@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:49PM +0100, Peter Zijlstra wrote:
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/kvm/emulate.c |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -189,7 +189,7 @@
->  #define X16(x...) X8(x), X8(x)
->  
->  #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
-> -#define FASTOP_SIZE 8
-> +#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
+On Thu, Feb 24, 2022 at 03:52:06PM +0100, Peter Zijlstra wrote:
+> +++ b/arch/x86/xen/xen-head.S
+> @@ -25,8 +25,11 @@
+>  SYM_CODE_START(hypercall_page)
+>  	.rept (PAGE_SIZE / 32)
+>  		UNWIND_HINT_FUNC
+> -		.skip 31, 0x90
+> -		RET
+> +		ANNOTATE_NOENDBR
+> +		/*
+> +		 * Xen will write the hypercall page, and sort out ENDBR.
+> +		 */
+> +		.skip 32, 0xcc
 
-Err, is this right? FASTOP_SIZE is used both as a size and an alignment.
-But the ENDBR instruction is 4 bytes? Commit log maybe needed to
-describe this.
+I seem to remember this UNWIND_HINT_FUNC was only there to silence
+warnings because of the ret.  With the ret gone, maybe the hint can be
+dropped as well.
 
 -- 
-Kees Cook
+Josh
+

@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38B74C4AE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBACE4C4AEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243062AbiBYQgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:36:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S243073AbiBYQg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240475AbiBYQgS (ORCPT
+        with ESMTP id S243069AbiBYQg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:36:18 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D501E747A;
-        Fri, 25 Feb 2022 08:35:46 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gb39so11975254ejc.1;
-        Fri, 25 Feb 2022 08:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZRNZT/kowwKFbrtkcGjf3tdrcz+Mmx/9iZgGvPBsCm4=;
-        b=BKTqYeU9PLTm12alisyOJRsh0ywv0HwGWvsGpmSCfdxAKPE5MI/mbdISUWad/EiBdy
-         /oUPfdUu7Duc+HqzB5KEX5viPpiBEeKO+Z+ox5PxT11FMQB4F0r1e752jivmKNkiM1fm
-         CKax+MQcWywclExu3rW0xzB38Mm/oJsKY84XSP4eFyKSWxVxnprknG8jdd/I+Sgsj1wU
-         zSrlUEyjkzhvTofqRcVctR9LVWwPWSmlZAo6/zEbQM1PIt6saJc/U8nBw+xqOIpGGGwt
-         ukDHFs2PKQqdz2NPDA2I83v0pKPZ/goM2f9DDuznUafKrxAj2cRQJ2qZbTxAa+zk3jP4
-         rMuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZRNZT/kowwKFbrtkcGjf3tdrcz+Mmx/9iZgGvPBsCm4=;
-        b=IwVvKi/i6pmH5P97KglHC1p0XnYFEl4ddNKMuCX1DlAw1K5AxzCeWBnWiiNNSTzUOy
-         rWKg3AHP9ERNOQkUlkJm/eks466oo8CoVgqOF80mSvfokX1/trdd1bsUK9DdrUGZnyW2
-         JTJC12lESfaMkP22en0Is2Pkh7A16I6RnPeSYUaYneh4h63GKGZwFPM2GR8b+S80Tag/
-         iNFwZSRw+eynT43hiCyp3oBv+6SuW5UgvO17GFkZqLBt5qHUnMfRcEmMDxazuTKc7zy5
-         yK4JCK8rA7j2qIy1vNHcuIqjpmge2tGaxOAShvsuwEM7m7GT9avgAy6Z4NKUISx/yTTr
-         DJDw==
-X-Gm-Message-State: AOAM531WwyGLNJHtqHOr2d32r5N3aIWwdVh6/7Yvn5iTFjVxSL/npmzy
-        uWOnPUoUbSHEI6J0MYMHwxnLs5tVhCQ=
-X-Google-Smtp-Source: ABdhPJyM3B+XrHSke+4GeQQxWGIFbeMRZJFDjiG9MhYzMWOCyK7uaneWuM0uqFE3d9Yh27m3UnvfFQ==
-X-Received: by 2002:a17:907:1183:b0:6cf:ce2f:51c1 with SMTP id uz3-20020a170907118300b006cfce2f51c1mr6711909ejb.209.1645806945180;
-        Fri, 25 Feb 2022 08:35:45 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id vw19-20020a170907059300b006ba4e0f2046sm1169885ejb.137.2022.02.25.08.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:35:44 -0800 (PST)
-Date:   Fri, 25 Feb 2022 18:35:43 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 1/1] net: dsa: microchip: ksz9477: implement
- MTU configuration
-Message-ID: <20220225163543.vnqlkltgmwf4vlmm@skbuf>
-References: <20220223084055.2719969-1-o.rempel@pengutronix.de>
- <20220223233833.mjknw5ko7hpxj3go@skbuf>
- <20220224045936.GB4594@pengutronix.de>
- <20220224093329.hssghouq7hmgxvwb@skbuf>
- <20220224093827.GC4594@pengutronix.de>
- <20220224094657.jzhvi67ryhuipor4@skbuf>
- <20220225114740.GA27407@pengutronix.de>
- <20220225115802.bvjd54cwwk6hjyfa@skbuf>
- <20220225125430.GB27407@pengutronix.de>
+        Fri, 25 Feb 2022 11:36:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCF0220429B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645806954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fqYY7w88iLzBzKsxm+iVgsvPAyDnq+ffNP0ORFfBhSI=;
+        b=I7qqpsCJXIWLWDoN5f3tnXIYgZcgQxCnZ5+TjpVUuguJ4RfzrN/ce9GwTgKjy9AzmnVDpk
+        56DUdSI51yQUMIXlkY79Ekj71WcFx+87Xjyf96cNJ0pejitbIeALJq1aOw/UpqjFN5XDhu
+        dv2vlX1L6+OuYOjMPu27EB3AaLaQHJ8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648--e9CF4UpMz-0XyEgup1qLg-1; Fri, 25 Feb 2022 11:35:50 -0500
+X-MC-Unique: -e9CF4UpMz-0XyEgup1qLg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3967F51A8;
+        Fri, 25 Feb 2022 16:35:49 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.17.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D730A7C04A;
+        Fri, 25 Feb 2022 16:35:48 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 446602237E9; Fri, 25 Feb 2022 11:35:48 -0500 (EST)
+Date:   Fri, 25 Feb 2022 11:35:48 -0500
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        lsf-pc@lists.linux-foundation.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ioannis Angelakopoulos <jaggel@bu.edu>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
+ cluster fs
+Message-ID: <YhkFZE8wUWhycwX2@redhat.com>
+References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
+ <Yhf+FemcQQToB5x+@redhat.com>
+ <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
+ <YhjYSMIE2NBZ/dGr@redhat.com>
+ <YhjeX0HvXbED65IM@casper.infradead.org>
+ <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220225125430.GB27407@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:54:30PM +0100, Oleksij Rempel wrote:
-> > No bridge, why create a bridge? And even if you do, why add lan5 to it?
-> > The expectation is that standalone ports still remain functional when
-> > other ports join a bridge.
+On Fri, Feb 25, 2022 at 09:27:55AM -0600, Steve French wrote:
+> On Fri, Feb 25, 2022 at 7:49 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
+> > > What about local events. I am assuming you want to supress local events
+> > > and only deliver remote events. Because having both local and remote
+> > > events delivered at the same time will be just confusing at best.
+> >
+> > This paragraph confuses me.  If I'm writing, for example, a file manager
+> > and I want it to update its display automatically when another task alters
+> > the contents of a directory, I don't care whether the modification was
+> > done locally or remotely.
+> >
+> > If I understand the SMB protocol correctly, it allows the client to take
+> > out a lease on a directory and not send its modifications back to the
+> > server until the client chooses to (or the server breaks the lease).
+> > So you wouldn't get any remote notifications because the client hasn't
+> > told the server.
 > 
-> No, lan5 is not added to the bridge, but stops functioning after creating
-> br with lan1 or any other lanX
-
-Please take time to investigate the problem and fix it.
-
-> > I was saying:
-> > 
-> > ip link set lan1 up
-> > ip link add link lan1 name lan1.5 type vlan id 5
-> > ip addr add 172.17.0.2/24 dev lan1.5 && ip link set lan1.5 up
-> > iperf3 -c 172.17.0.10
+> Directory leases would be broken by file create so the more important
+> question is what happens when client 1 has a change notification on writes
+> to files in a directory then client 2 opens a file in the same directory and is
+> granted a file lease and starts writing to the file (which means the
+> writes could get cached).   This is probably a minor point because when
+> writes get flushed from client 2, client 1 (and any others with notifications
+> requested) will get notified of the event (changes to files in a directory
+> that they are watching).
 > 
-> It works.
+> Local applications watching a file on a network or cluster mount in Linux
+> (just as is the case with Windows, Macs etc.) should be able to be notified of
+> local (cached) writes to a remote file or remote writes to the file from another
+> client.  I don't think the change is large, and there was an earlier version of
+> a patch circulated for this
 
-This is akin to saying that without any calls to ksz9477_change_mtu(),
-just writing VLAN_ETH_FRAME_LEN + ETH_FCS_LEN into REG_SW_MTU__2 is
-sufficient to get VLAN-tagged MTU-sized packets to pass through the CPU
-port and the lan1 user port.
+So local notifications are generated by filesystem code as needed?
 
-So my question is: is this necessary?
+IOW, in general disable all local events and let filesystems decide which
+local events to generate? And locally cached write is one such example?
 
-	if (dsa_is_cpu_port(ds, port))
-		new_mtu += KSZ9477_INGRESS_TAG_LEN;
+Thanks
+Vivek
+

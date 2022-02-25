@@ -2,72 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51D14C46E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24D14C46E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiBYNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        id S233387AbiBYNvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiBYNt5 (ORCPT
+        with ESMTP id S231828AbiBYNvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:49:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514191D9B67;
-        Fri, 25 Feb 2022 05:49:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MPuHGeakBb0lLUUKu9y63JbVCmoE2AOMbAVttJ8N+D4=; b=N3m/G9CCBBYsgc6DJ6SRSE6WeG
-        PZE/NCL8X/mwWkFXKq7t3UbaBpUKAGhesV34TPVmsAMSUA14Uw8fsP72abrKyQDMIlpm4ENFPxNTs
-        TP873xRVtUIwcFDsn2M2vkYJNwJO5cTRix/2+k1XFF5bIkCwep7ELlx1l8lpKQsGjS6bHy0xTmYmK
-        OqTZe+EQi+/tn8vZf9SpVxgnovHHZLS3AU7iv+l5arfMKLmf7hT4R1eHf+RQKTbuPXwOCK6R4VW/v
-        H2SAhIN343LuD1tQtBcHSNV/IdFNmwTLUSnSt7tdeOyJELtqOj0FCh+5UiXCVgOVTcFrIfZaEqtFp
-        Q8rOYz2w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNayF-005pPJ-0t; Fri, 25 Feb 2022 13:49:19 +0000
-Date:   Fri, 25 Feb 2022 13:49:19 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        lsf-pc@lists.linux-foundation.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ioannis Angelakopoulos <jaggel@bu.edu>
-Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
- cluster fs
-Message-ID: <YhjeX0HvXbED65IM@casper.infradead.org>
-References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
- <Yhf+FemcQQToB5x+@redhat.com>
- <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
- <YhjYSMIE2NBZ/dGr@redhat.com>
+        Fri, 25 Feb 2022 08:51:01 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291631DA440
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:50:29 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d3so4671826wrf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VkNCX+lIAf7Yd75ITkXB1i7sYuA9EWWkYAIfdUFPMio=;
+        b=PLOhf6DTDfANHg1DrFIbOCgA2YIKq5CmFD9eWLd3Zvx9JKuNevzFbEIOzCXTvnxKc8
+         Yq0itCHLyrATx+oYWbzRCvhkkNz/y2ke28gqsvJxjLYvsltiAXaje0TnoXYbyQvZc2/T
+         hujYboNeTUKh50rugo5jE8OA1HdMmFuHIQkgwD1e8iFZG4hA7OgrKabYCZ2HbHmTxqaL
+         RxkjxvLmhvzhDYvJh81+pTFN1fwOei3UyIsC05IvM36v4OfhMwmwey6yEeBVjYTofAy7
+         2jTb45dMHyXPmTnR8uraKnO5y6o3jy0Gnl4TWCJ0gypeYzKEaytXx+khXRfXVBlQd3p+
+         SCPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=VkNCX+lIAf7Yd75ITkXB1i7sYuA9EWWkYAIfdUFPMio=;
+        b=DQpbXiH7NpjL2EQNsJio0JDK71hg3FiZLWipcvAn/+LS5tQk8LkPiqrH1ZZ0oCKWCq
+         H8eRgGOBoGLzpGiikl+sMDiarhAsFw2q39RcMKB2P0TxLFVoEBvcnhHvVHphub/WUCch
+         3jGOSw7XC6F6PZil8gCItq2r5fi0etbHHXtiAAVqPU1NVM0OuKSI34t/kkYgSa2+Tgcw
+         KECOb7I2ySAu5uuwi/2mZvW/ZKOtUMYV7pK3fi9vLPsm0EOp7ZG+jtOedlxpyKysOAG+
+         z6Iqi2MSbLwSnGlnRksiIZAv+YBftx5RWlfVA5hgfj+XyzhAVVP3ib2Qszz+ieJXbujg
+         pyYg==
+X-Gm-Message-State: AOAM530xSsyTqwpRsHtmmztNNiZHoCR6IpjCx0c2VLlEMDZFhCyN1hrG
+        B5A5kA3IFzw9ahJ8icQTJ4KkFnh6Km1itw==
+X-Google-Smtp-Source: ABdhPJzyaZ4XaDW6SSc/elFUIccxixDAYELf3UPMmPM7MA0yvu6nYV6CtDCQOhNmsIJ0WVqSf5FZNQ==
+X-Received: by 2002:adf:e54e:0:b0:1ea:9746:16d5 with SMTP id z14-20020adfe54e000000b001ea974616d5mr6218619wrm.186.1645797027448;
+        Fri, 25 Feb 2022 05:50:27 -0800 (PST)
+Received: from localhost ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id x1-20020a05600c420100b003811fb95734sm3295346wmh.37.2022.02.25.05.50.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 25 Feb 2022 05:50:26 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Mahesh Bodapati <mbodapat@xilinx.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH 0/1] microblaze: Fix issues with freestanding
+Date:   Fri, 25 Feb 2022 14:50:24 +0100
+Message-Id: <cover.1645797022.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhjYSMIE2NBZ/dGr@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
-> What about local events. I am assuming you want to supress local events
-> and only deliver remote events. Because having both local and remote
-> events delivered at the same time will be just confusing at best.
+Hi,
 
-This paragraph confuses me.  If I'm writing, for example, a file manager
-and I want it to update its display automatically when another task alters
-the contents of a directory, I don't care whether the modification was
-done locally or remotely.
+with GCC 10 there is issue with simple memset implementation which is
+called recursively. There are couple of discussions about it and the first
+two patches are trying to workaround this.
+The third patch only removes simple implementations from arch code and use
+generic one which is the same.
 
-If I understand the SMB protocol correctly, it allows the client to take
-out a lease on a directory and not send its modifications back to the
-server until the client chooses to (or the server breaks the lease).
-So you wouldn't get any remote notifications because the client hasn't
-told the server.
+Thanks,
+Michal
+
+
+Michal Simek (1):
+  microblaze: Use simple memmove/memcpy implementation from lib/string.c
+
+ arch/microblaze/include/asm/string.h |  2 +-
+ arch/microblaze/lib/memcpy.c         | 18 ++---------------
+ arch/microblaze/lib/memmove.c        | 29 ++--------------------------
+ 3 files changed, 5 insertions(+), 44 deletions(-)
+
+-- 
+2.35.1
+

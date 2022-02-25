@@ -2,162 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBD94C4CB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FC24C4CB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243923AbiBYRks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S243934AbiBYRl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237979AbiBYRkq (ORCPT
+        with ESMTP id S229674AbiBYRlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:40:46 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F23C1D86FD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:40:14 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id y5so5293802pfe.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:40:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JKmtUKkJOpl+v2eHp7fJRZP6Qu4r5idk637CbvNmIJE=;
-        b=XJrHLexybOF81adHa9QpIxpDlqyPy6E9dafkesOlkXEerQddnkfnHBTUPTx/lZH/uy
-         kz4B7IBD6BT1VqDmxyb+qmliXxlQqXy7TGHIw6VyIiigb5mDRob/+65ZQtF8qzOLk7+i
-         Lmxm+bdGudUryCrcMgfblvDcOZRQtkBtx0x5u3IZQLZHNnyLUAh9Hp+sSdUpmQC4qeNu
-         WXUZSTl54B50BDze87x8BwToENnSVx9sT4HAnKtGFZt18tOPpKswDJ78hdcL7zUyGDtE
-         n1t8HHry5/Mbf7+9zKFmlN2UvG2glFyhdY3ExtZzjCuFVPm6ESlRpezDkcHBCFn1+2vK
-         2VpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JKmtUKkJOpl+v2eHp7fJRZP6Qu4r5idk637CbvNmIJE=;
-        b=ujC21IY0TiO0csE85fqURK0qmmeT1VypX7lMd5b9zgiNrEJAiJ2A21JXmgaBZLEnGk
-         RmpaDnpaNaoyn5pM+JpeshYHplCLePw3SffMoUVGw8+C0eHBj/sVUA/WSJHs3g96c2wP
-         6GohtuRZk93QMzZHTEUR5+MMWqHFdIfPZTqWsOsIDaWVyACBDI/7Y75bt3exoKFed5dI
-         7ZBsnKaEf8ZisOsyxVhSPfGNZc5Xf/UX5LFQxobmpFkQi0uz0Kss+DnLNgUJa/DFLrIa
-         /qIrtxJ2vObERt0EQAv3CcAoeg74/xybWAZlnZ0XF1Kws0cO8m3KyXWw7i6LwFWfDzpm
-         ilBw==
-X-Gm-Message-State: AOAM532TDYAjdfFg08dzQaNXHgRj6H1TBUVznsoClPZAaP5AcLkOq/DH
-        SLWysD4gH5u/607yYA2JWKNIoA==
-X-Google-Smtp-Source: ABdhPJxxiBihs1m/m4HNlrzFLrStjOnrnLaQW5JlyvbOiThUFoeNDEtrFxgOUxxR4fwQf99byGmcEw==
-X-Received: by 2002:a65:64d1:0:b0:374:9f3f:d8f5 with SMTP id t17-20020a6564d1000000b003749f3fd8f5mr6969168pgv.186.1645810813494;
-        Fri, 25 Feb 2022 09:40:13 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id nl12-20020a17090b384c00b001bc1bb5449bsm3191989pjb.2.2022.02.25.09.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 09:40:12 -0800 (PST)
-Date:   Fri, 25 Feb 2022 17:40:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v2 15/18] KVM: x86/mmu: rename kvm_mmu_new_pgd, introduce
- variant that calls get_guest_pgd
-Message-ID: <YhkUeNbnbDvTsmNA@google.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
- <20220217210340.312449-16-pbonzini@redhat.com>
- <ae3002da-e931-1e08-7a23-8cd296bf8313@redhat.com>
- <YhAI2rq9ms+rhFy5@google.com>
- <667adbb56835c359fbdbacefe4ecdf1153b0c126.camel@redhat.com>
+        Fri, 25 Feb 2022 12:41:55 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6001EBA98;
+        Fri, 25 Feb 2022 09:41:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B90521F46598
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645810882;
+        bh=g0A6Uimeahydl9ph1AOCmp+Nlt9LsBikz3PaHAbqQik=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=XSq27hNWEmg+dff4RWcqF8uRjKG41+rebGEt6dY+bVLIfhgB+/s8dF0ew02+wVCdk
+         ImnWiIpzlCJ2dwbhkJdxIVhdOijT52QuSb0hQJi8SKJ5CN+WUN453G3UGp+tGrPfyp
+         KKJbcfr6e/bm5/DN4G7Y2UhloQAFDkuHGRT9+N7HQL1EdvBvfXIB5nz2WcC57NZG1r
+         eIRkDZpyCmBVQeSR1lRZff/YAu8P35X3CZAa7P4t1TW91vN0F6512w52raITKS7uoY
+         0Iz3cf7kzwuuAfx4xe2DOoYXIfQ3mge13nLFrPSsrc+/boy69ArNkgOCz1V7iMWFmF
+         O5BFwY9hygLXg==
+Message-ID: <98ef3e84-e17e-d1b9-5109-ec631d77905e@collabora.com>
+Date:   Fri, 25 Feb 2022 22:41:14 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <667adbb56835c359fbdbacefe4ecdf1153b0c126.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH V2] media: imx: imx8mq-mipi_csi2: Remove unneeded code
+Content-Language: en-US
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:MEDIA DRIVERS FOR FREESCALE IMX" 
+        <linux-media@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, mkl@pengutronix.de,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+References: <20220128170722.1624767-1-usama.anjum@collabora.com>
+ <cb4db484-c4e6-9cf9-baa5-0be454947ed5@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <cb4db484-c4e6-9cf9-baa5-0be454947ed5@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022, Maxim Levitsky wrote:
-> On Fri, 2022-02-18 at 21:00 +0000, Sean Christopherson wrote:
-> > On Fri, Feb 18, 2022, Paolo Bonzini wrote:
-> > > On 2/17/22 22:03, Paolo Bonzini wrote:
-> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > > index adcee7c305ca..9800c8883a48 100644
-> > > > --- a/arch/x86/kvm/x86.c
-> > > > +++ b/arch/x86/kvm/x86.c
-> > > > @@ -1189,7 +1189,7 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-> > > >   		return 1;
-> > > >   	if (cr3 != kvm_read_cr3(vcpu))
-> > > > -		kvm_mmu_new_pgd(vcpu, cr3);
-> > > > +		kvm_mmu_update_root(vcpu);
-> > > >   	vcpu->arch.cr3 = cr3;
-> > > >   	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
-> > > 
-> > > Uh-oh, this has to become:
-> > > 
-> > >  	vcpu->arch.cr3 = cr3;
-> > >  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
-> > > 	if (!is_pae_paging(vcpu))
-> > > 		kvm_mmu_update_root(vcpu);
-> > > 
-> > > The regression would go away after patch 16, but this is more tidy apart
-> > > from having to check is_pae_paging *again*.
-> > > 
-> > > Incremental patch:
-> > > 
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index adcee7c305ca..0085e9fba372 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -1188,11 +1189,11 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-> > >  	if (is_pae_paging(vcpu) && !load_pdptrs(vcpu, cr3))
-> > >  		return 1;
-> > > -	if (cr3 != kvm_read_cr3(vcpu))
-> > > -		kvm_mmu_update_root(vcpu);
-> > > -
-> > >  	vcpu->arch.cr3 = cr3;
-> > >  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
-> > > +	if (!is_pae_paging(vcpu))
-> > > +		kvm_mmu_update_root(vcpu);
-> > > +
-> > >  	/* Do not call post_set_cr3, we do not get here for confidential guests.  */
-> > > 
-> > > An alternative is to move the vcpu->arch.cr3 update in load_pdptrs.
-> > > Reviewers, let me know if you prefer that, then I'll send v3.
-> > 
-> >   c) None of the above.
-> > 
-> > MOV CR3 never requires a new root if TDP is enabled, and the guest_mmu is used if
-> > and only if TDP is enabled.  Even when KVM intercepts CR3 when EPT=1 && URG=0, it
-> > does so only to snapshot vcpu->arch.cr3, there's no need to get a new PGD.
-> > 
-> > Unless I'm missing something, your original suggestion of checking tdp_enabled is
-> > the way to go.
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 6e0f7f22c6a7..2b02029c63d0 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -1187,7 +1187,7 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-> >         if (is_pae_paging(vcpu) && !load_pdptrs(vcpu, cr3))
-> >                 return 1;
-> > 
-> > -       if (cr3 != kvm_read_cr3(vcpu))
-> > +       if (!tdp_enabled && cr3 != kvm_read_cr3(vcpu))
-> >                 kvm_mmu_new_pgd(vcpu, cr3);
-> > 
-> >         vcpu->arch.cr3 = cr3;
-> > 
-> > 
+From:
+https://patchwork.linuxtv.org/project/linux-media/patch/20220128170722.1624767-1-usama.anjum@collabora.com/
+
+State	Under Review
+Delegated to:	Hans Verkuil
+
+On 2/18/22 4:08 PM, Muhammad Usama Anjum wrote:
+> Reminder.
 > 
-> Is this actually related to the discussion? The original issue that Paolo
-> found in his patch was that kvm_mmu_update_root now reads _current_ cr3, thus
-> it has to be set before calling it.
-
-Yes, if we instead do the above, then replacing kvm_mmu_new_pgd() with
-kvm_mmu_update_root() is unnecessary.  Paolo is trying to fix the case where
-kvm_mmu_new_pgd() does the wrong thing for guest_mmu.  My point is that we
-should never call kvm_mmu_new_pgd() if mmu == guest_mmu in the first place, and
-adding the tdp_enabled checks fixes that bug.
-
-I'm ok with kvm_mmu_new_pgd() acting on a pre-computed role, assuming we actually
-get sanity checks.  Deliberately ignoring the pgd/cr3 we already have is silly.
+> On 1/28/22 10:07 PM, Muhammad Usama Anjum wrote:
+>> ret is constant in imx8mq_mipi_csi_pm_suspend(). This function cannot
+>> return error. Remove the return variable. Simplify other functions which
+>> are using this function.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes in V2:
+>> Removed fixes tag
+>> ---
+>>  drivers/staging/media/imx/imx8mq-mipi-csi2.c | 16 ++++------------
+>>  1 file changed, 4 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+>> index 3b9fa75efac6b..c992b845e63d1 100644
+>> --- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+>> +++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+>> @@ -693,11 +693,10 @@ static int imx8mq_mipi_csi_async_register(struct csi_state *state)
+>>   * Suspend/resume
+>>   */
+>>  
+>> -static int imx8mq_mipi_csi_pm_suspend(struct device *dev)
+>> +static void imx8mq_mipi_csi_pm_suspend(struct device *dev)
+>>  {
+>>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>>  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+>> -	int ret = 0;
+>>  
+>>  	mutex_lock(&state->lock);
+>>  
+>> @@ -708,8 +707,6 @@ static int imx8mq_mipi_csi_pm_suspend(struct device *dev)
+>>  	}
+>>  
+>>  	mutex_unlock(&state->lock);
+>> -
+>> -	return ret ? -EAGAIN : 0;
+>>  }
+>>  
+>>  static int imx8mq_mipi_csi_pm_resume(struct device *dev)
+>> @@ -742,15 +739,12 @@ static int __maybe_unused imx8mq_mipi_csi_suspend(struct device *dev)
+>>  {
+>>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>>  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+>> -	int ret;
+>>  
+>> -	ret = imx8mq_mipi_csi_pm_suspend(dev);
+>> -	if (ret)
+>> -		return ret;
+>> +	imx8mq_mipi_csi_pm_suspend(dev);
+>>  
+>>  	state->state |= ST_SUSPENDED;
+>>  
+>> -	return ret;
+>> +	return 0;
+>>  }
+>>  
+>>  static int __maybe_unused imx8mq_mipi_csi_resume(struct device *dev)
+>> @@ -770,9 +764,7 @@ static int __maybe_unused imx8mq_mipi_csi_runtime_suspend(struct device *dev)
+>>  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+>>  	int ret;
+>>  
+>> -	ret = imx8mq_mipi_csi_pm_suspend(dev);
+>> -	if (ret)
+>> -		return ret;
+>> +	imx8mq_mipi_csi_pm_suspend(dev);
+>>  
+>>  	ret = icc_set_bw(state->icc_path, 0, 0);
+>>  	if (ret)

@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178634C4533
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C494C4535
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240875AbiBYNEc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Feb 2022 08:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S240895AbiBYNEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbiBYNE3 (ORCPT
+        with ESMTP id S240846AbiBYNEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:04:29 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 202561E2FFE
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:03:56 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-238-3PwpcQMaNcGeF_-ybm3OzQ-1; Fri, 25 Feb 2022 13:03:54 +0000
-X-MC-Unique: 3PwpcQMaNcGeF_-ybm3OzQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 13:03:52 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 13:03:52 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willy Tarreau' <w@1wt.eu>
-CC:     'Steven Rostedt' <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Sergey Senozhatsky" <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: RE: Strange output on the console
-Thread-Topic: Strange output on the console
-Thread-Index: AQHYKfxF0QTTTto/+k+8VsyEcwRQo6yjyM1ggAAHToCAADtxAIAABoGAgAAGDGCAABmPAIAACcBQ
-Date:   Fri, 25 Feb 2022 13:03:51 +0000
-Message-ID: <daa9769e1710410d9679e174cf8d3f41@AcuMS.aculab.com>
-References: <20220224230035.36547137@gandalf.local.home>
- <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
- <20220225063637.GA18039@1wt.eu>
- <1dcb185901f04a5ea2476a449e371167@AcuMS.aculab.com>
- <20220225103239.GA18720@1wt.eu>
- <32a7af26f4494f47a03a6d965ac7c99a@AcuMS.aculab.com>
- <20220225122546.GB18720@1wt.eu>
-In-Reply-To: <20220225122546.GB18720@1wt.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Feb 2022 08:04:31 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848AC1E374D;
+        Fri, 25 Feb 2022 05:03:59 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id x15so4403484wrg.8;
+        Fri, 25 Feb 2022 05:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FiLW0R7L/dZRfqfxW28BOR12U87eLnNRWa67PzOy/CI=;
+        b=HHrWK7ne97eI6fFX7Fv835jZNK5hk+zS0o37dYh4zMpZ48ZCsoXwSBrbFhU31sgYQi
+         lAUmjiRExX2V5fdeAloRqNXELDIpBAxEbWOWpAGphmSnP8L8jdKvBF3DAY1auH6V13Pn
+         CHETEmfIKf+kEuXvDei7y3d/AwbzD1BHsDrtOSAd/wnIClLCgO+kg9GpTIweShTsb9Tp
+         4EZULZf4/o4Lh/+ETyx5qscnWrmt0HyafLeqaJY2QSNNSrifH1UTDS+1bZ1hJNnWwa40
+         UQRQpmORxDXiJOuy7DYefgqqgDJdS/qMATk3j20ycljtYTPEwdBtef4QQD50dWwYPmhO
+         UBbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FiLW0R7L/dZRfqfxW28BOR12U87eLnNRWa67PzOy/CI=;
+        b=jEjCSBqp7ZZ8S7KdxuhY0LWPIBeWenfWfBn+HUKbjKcbAv7kjNUL4KAUEVCSw5EXbq
+         5l+3a+50LIcPc1draTneONLS9BNY37iUw5mAwhot/pbWZCq8dVN+I5za/t5+hU7OGK9p
+         +YmCOA/n7nD2qkIUq0oxD2ApGvtrBzmV5FmktlHhS31K+6T3n5/RSdhfkEI6/mZQtFM7
+         i5GFwlewm4FSku1uHkjf0NLK9y5gASfNOqio27PwJfq5N12GhcknJ+WfjZNWrYaQt8bg
+         GxxMdsU3DRszwEdN7j08K62Tidru6UwDd6VuSyDTQ9StXN9w9GywyV4K1PaQYREsQ+U4
+         qtnQ==
+X-Gm-Message-State: AOAM532IbLJgBrsqPwSOo6Uv0f4VGGhKvdBMxCYe1RpxcydFKBaU29NB
+        OGsHNcSCwzXi+8gx+dRc8Ws=
+X-Google-Smtp-Source: ABdhPJyz0Q8QDhOWS3XCU+i92LkHDxlAgtGQ8dY8haf/uZWkN5FsPOJpWFC2E/2dJxW+SQiXbc6W1w==
+X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr6182784wri.520.1645794237992;
+        Fri, 25 Feb 2022 05:03:57 -0800 (PST)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id b10-20020a5d550a000000b001e30e81afd1sm2293641wrv.2.2022.02.25.05.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:03:56 -0800 (PST)
+Date:   Fri, 25 Feb 2022 14:03:54 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        mperttunen@nvidia.com, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org
+Subject: Re: [PATCH RESEND] i2c: tegra: Add SMBus block read function
+Message-ID: <YhjTum2zWhRF3Ya4@orome>
+References: <20220210153603.61894-1-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lWAEqUEAsHWaCsS8"
+Content-Disposition: inline
+In-Reply-To: <20220210153603.61894-1-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau
-> Sent: 25 February 2022 12:26
-...
-> That could be one option I thought about but still, that sounds quite
-> suspicious. You don't even get any #!:$/ etc. Or maybe the UART is
-> configured in 6-bit mode (most 16550 support 5-8 bits), and maybe even
-> the stop bit and/or parity participates.
 
-I've been known to resort to an oscilloscope to get an async link
-working :-)
+--lWAEqUEAsHWaCsS8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	David
+On Thu, Feb 10, 2022 at 09:06:03PM +0530, Akhil R wrote:
+> Emulate SMBus block read using ContinueXfer to read the length byte
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Acked-by: Thierry Reding <treding@nvidia.com>
 
+--lWAEqUEAsHWaCsS8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY07oACgkQ3SOs138+
+s6GwVhAAmLZXYPEtR5O+sa6Wbv/sGE5ainR5eQ4QkP3KEsBu65zUsivQF0e/gL51
+nU3UWLjbgW6r+KL+0rlb/p55E5n6OwFPHsXZM9oSBtBfg75TuhJT8JCqvEnV8oKS
+edblc5WW2X32hhYpZOo5/EInl2kXM6gzluasrC+ZAjz8dIcF6ynuNa6uotFMcujI
+ZG+iOtPt7AaVEP0u8MBJU1u+Ni4UXUw8tMaJ+5QoiXqVI4dtnbsNr/3fGEE4lc/O
+jVIbKXM0fwMfcGuNxfBoM8Yq5vIJshpnNsyJUjTyiWNteeZkTqAA8OcDXejoh6x9
+En8QxZjO8s/l8DAW5u1ZiUvqLSYBZoJG8NrhjnHLb6GPbN5JtbCCyMo8YeOD2lG8
+prCLh9LVSbcM0zo9xoBFIC2N3alybgH2THZ3IeQCMW7/2ITnZwk0FISOoXnEFOmp
+98hZNgPQ436PHB15iSwF2FuaWq95Tfoinnrf0qWedMGCkOY0CdocvPiOnuMLW9o1
+2XYXEagCwLKO3H0SJdsofPvGLPx5tuWqu2sXL/yyzy4dhwcmtMqjywkIuSkF8aHD
+6UpZMqApcaE82shB3jtFIfX4rqDD0oOos6JRvVskesLhlXxoGck0fdBE7POLOCwA
+ZTjRhKuFZLmOEGPBUyOHrBQSvx3lSiur8Rqus+/6hR5ke2mxmlE=
+=PNMy
+-----END PGP SIGNATURE-----
+
+--lWAEqUEAsHWaCsS8--

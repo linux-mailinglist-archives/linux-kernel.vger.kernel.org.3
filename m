@@ -2,332 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0013A4C489D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6534C48A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241921AbiBYPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S241998AbiBYPUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbiBYPUk (ORCPT
+        with ESMTP id S233524AbiBYPUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:20:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA2182D84
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:20:07 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nNcNy-0006uc-As; Fri, 25 Feb 2022 16:19:58 +0100
-Message-ID: <c1f0cd5d-928b-8281-76cd-c3ea751207b3@pengutronix.de>
-Date:   Fri, 25 Feb 2022 16:19:54 +0100
+        Fri, 25 Feb 2022 10:20:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EEC8C7DF;
+        Fri, 25 Feb 2022 07:20:17 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 20E541F380;
+        Fri, 25 Feb 2022 15:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645802416; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=76D+b8ZUFKHayJqezaXTrIOKH/+w6Mr9BDaG1qJPaqM=;
+        b=uiwU9753hHXtDfEByGOp/4k3/mpSpC2iPS5R74LN2olK1KIV4kIuD6y8ARyLKPI+57XebW
+        laXnAzMwXNXHJgSFsi5gA5ifwF1cCKT2ypgNk9DHv/UzKegXnyQUGwO9FQLe7NALffYOqs
+        LFAeojvzfBLhLsnUVHoCuDy01kc+AaU=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 81174A3B83;
+        Fri, 25 Feb 2022 15:20:15 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 16:20:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, davem@davemloft.net,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Julien Thierry <jthierry@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wang Qing <wangqing@vivo.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, sumit.garg@linaro.org,
+        kernelfans@gmail.com, yj.chiang@mediatek.com
+Subject: Re: [PATCH 4/5] kernel/watchdog: Adapt the watchdog_hld interface
+ for async model
+Message-ID: <Yhjzr8geK7dTXXd2@alley>
+References: <20220212104349.14266-1-lecopzer.chen@mediatek.com>
+ <20220212104349.14266-5-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [Linux-stm32] [PATCH v2 07/13] clk: stm32mp13: manage secured
- clocks
-Content-Language: en-US
-To:     gabriel.fernandez@foss.st.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
- <20220225133137.813919-8-gabriel.fernandez@foss.st.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220225133137.813919-8-gabriel.fernandez@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220212104349.14266-5-lecopzer.chen@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.02.22 14:31, gabriel.fernandez@foss.st.com wrote:
-> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+On Sat 2022-02-12 18:43:48, Lecopzer Chen wrote:
+> From: Pingfan Liu <kernelfans@gmail.com>
 > 
-> Don't register a clock if this clock is secured.
+> from: Pingfan Liu <kernelfans@gmail.com>
 > 
-> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> When lockup_detector_init()->watchdog_nmi_probe(), PMU may be not ready
+> yet. E.g. on arm64, PMU is not ready until
+> device_initcall(armv8_pmu_driver_init).  And it is deeply integrated
+> with the driver model and cpuhp. Hence it is hard to push this
+> initialization before smp_init().
+> 
+> But it is easy to take an opposite approach by enabling watchdog_hld to
+> get the capability of PMU async.
+> 
+> The async model is achieved by expanding watchdog_nmi_probe() with
+> -EBUSY, and a re-initializing work_struct which waits on a wait_queue_head.
+> 
+> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> Co-developed-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
 > ---
->  drivers/clk/stm32/clk-stm32-core.c |   4 +
->  drivers/clk/stm32/clk-stm32-core.h |  22 +++--
->  drivers/clk/stm32/clk-stm32mp13.c  | 152 ++++++++++++++++++++++++++++-
->  3 files changed, 164 insertions(+), 14 deletions(-)
+>  kernel/watchdog.c | 56 +++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 54 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
-> index 3b00918d0753..fc32e62e0b44 100644
-> --- a/drivers/clk/stm32/clk-stm32-core.c
-> +++ b/drivers/clk/stm32/clk-stm32-core.c
-> @@ -46,6 +46,10 @@ static int stm32_rcc_clock_init(struct device *dev,
->  		const struct clock_config *cfg_clock = &data->tab_clocks[n];
->  		struct clk_hw *hw = ERR_PTR(-ENOENT);
+> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+> index b71d434cf648..fa8490cfeef8 100644
+> --- a/kernel/watchdog.c
+> +++ b/kernel/watchdog.c
+> @@ -839,16 +843,64 @@ static void __init watchdog_sysctl_init(void)
+>  #define watchdog_sysctl_init() do { } while (0)
+>  #endif /* CONFIG_SYSCTL */
 >  
-> +		if (data->check_security &&
-> +		    data->check_security(base, cfg_clock))
-> +			continue;
-> +
->  		if (cfg_clock->func)
->  			hw = (*cfg_clock->func)(dev, data, base, &rlock,
->  						cfg_clock);
-> diff --git a/drivers/clk/stm32/clk-stm32-core.h b/drivers/clk/stm32/clk-stm32-core.h
-> index 846d063ecc6f..8ffa700323b8 100644
-> --- a/drivers/clk/stm32/clk-stm32-core.h
-> +++ b/drivers/clk/stm32/clk-stm32-core.h
-> @@ -46,6 +46,7 @@ struct stm32_composite_cfg {
->  
->  struct clock_config {
->  	unsigned long	id;
-> +	int		sec_id;
->  	void		*clock_cfg;
->  
->  	struct clk_hw *(*func)(struct device *dev,
-> @@ -69,6 +70,8 @@ struct stm32_rcc_match_data {
->  	unsigned int			maxbinding;
->  	struct clk_stm32_clock_data	*clock_data;
->  	u32				clear_offset;
-> +	int (*check_security)(void __iomem *base,
-> +			      const struct clock_config *cfg);
->  };
->  
->  int stm32_rcc_reset_init(struct device *dev, const struct of_device_id *match,
-> @@ -208,25 +211,26 @@ struct clk_hw *clk_stm32_composite_register(struct device *dev,
->  					    spinlock_t *lock,
->  					    const struct clock_config *cfg);
->  
-> -#define STM32_CLOCK_CFG(_binding, _clk, _struct, _register)\
-> +#define STM32_CLOCK_CFG(_binding, _clk, _sec_id, _struct, _register)\
->  {\
->  	.id		= (_binding),\
-> +	.sec_id		= (_sec_id),\
->  	.clock_cfg	= (_struct) {_clk},\
->  	.func		= (_register),\
->  }
->  
-> -#define STM32_GATE_CFG(_binding, _clk)\
-> -	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_gate *,\
-> +#define STM32_GATE_CFG(_binding, _clk, _sec_id)\
-> +	STM32_CLOCK_CFG(_binding, &(_clk), _sec_id, struct clk_stm32_gate *,\
->  			&clk_stm32_gate_register)
->  
-> -#define STM32_DIV_CFG(_binding, _clk)\
-> -	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_div *,\
-> +#define STM32_DIV_CFG(_binding, _clk, _sec_id)\
-> +	STM32_CLOCK_CFG(_binding, &(_clk), _sec_id, struct clk_stm32_div *,\
->  			&clk_stm32_div_register)
->  
-> -#define STM32_MUX_CFG(_binding, _clk)\
-> -	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_mux *,\
-> +#define STM32_MUX_CFG(_binding, _clk, _sec_id)\
-> +	STM32_CLOCK_CFG(_binding, &(_clk), _sec_id, struct clk_stm32_mux *,\
->  			&clk_stm32_mux_register)
->  
-> -#define STM32_COMPOSITE_CFG(_binding, _clk)\
-> -	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_composite *,\
-> +#define STM32_COMPOSITE_CFG(_binding, _clk, _sec_id)\
-> +	STM32_CLOCK_CFG(_binding, &(_clk), _sec_id, struct clk_stm32_composite *,\
->  			&clk_stm32_composite_register)
-> diff --git a/drivers/clk/stm32/clk-stm32mp13.c b/drivers/clk/stm32/clk-stm32mp13.c
-> index 1b27c5d4b97d..7e83204dd405 100644
-> --- a/drivers/clk/stm32/clk-stm32mp13.c
-> +++ b/drivers/clk/stm32/clk-stm32mp13.c
-> @@ -400,6 +400,131 @@ static const struct stm32_mux_cfg stm32mp13_muxes[] = {
->  	CFG_MUX(MUX_SDMMC2,	RCC_SDMMC12CKSELR,	3, 3),
->  };
->  
-> +struct clk_stm32_securiy {
-> +	u32	offset;
-> +	u8	bit_idx;
-> +	unsigned long scmi_id;
-> +};
-> +
-> +enum securit_clk {
+> +static void lockup_detector_delay_init(struct work_struct *work);
+> +enum hld_detector_state detector_delay_init_state __initdata;
 
-s/securit/security/ ?
+I would call this "lockup_detector_init_state" to use the same
+naming scheme everywhere.
 
-> +	SECF_NONE,
-> +	SECF_LPTIM2,
-> +	SECF_LPTIM3,
-> +	SECF_VREF,
-> +	SECF_DCMIPP,
-> +	SECF_USBPHY,
-> +	SECF_TZC,
-> +	SECF_ETZPC,
-> +	SECF_IWDG1,
-> +	SECF_BSEC,
-> +	SECF_STGENC,
-> +	SECF_STGENRO,
-> +	SECF_USART1,
-> +	SECF_USART2,
-> +	SECF_SPI4,
-> +	SECF_SPI5,
-> +	SECF_I2C3,
-> +	SECF_I2C4,
-> +	SECF_I2C5,
-> +	SECF_TIM12,
-> +	SECF_TIM13,
-> +	SECF_TIM14,
-> +	SECF_TIM15,
-> +	SECF_TIM16,
-> +	SECF_TIM17,
-> +	SECF_DMA3,
-> +	SECF_DMAMUX2,
-> +	SECF_ADC1,
-> +	SECF_ADC2,
-> +	SECF_USBO,
-> +	SECF_TSC,
-> +	SECF_PKA,
-> +	SECF_SAES,
-> +	SECF_CRYP1,
-> +	SECF_HASH1,
-> +	SECF_RNG1,
-> +	SECF_BKPSRAM,
-> +	SECF_MCE,
-> +	SECF_FMC,
-> +	SECF_QSPI,
-> +	SECF_SDMMC1,
-> +	SECF_SDMMC2,
-> +	SECF_ETH1CK,
-> +	SECF_ETH1TX,
-> +	SECF_ETH1RX,
-> +	SECF_ETH1MAC,
-> +	SECF_ETH1STP,
-> +	SECF_ETH2CK,
-> +	SECF_ETH2TX,
-> +	SECF_ETH2RX,
-> +	SECF_ETH2MAC,
-> +	SECF_ETH2STP,
-> +	SECF_MCO1,
-> +	SECF_MCO2
-> +};
 > +
-> +#define SECF(_sec_id, _offset, _bit_idx)[_sec_id] = {\
-> +	.offset	= _offset,\
-> +	.bit_idx	= _bit_idx,\
-> +	.scmi_id	= -1,\
+> +struct wait_queue_head hld_detector_wait __initdata =
+> +		__WAIT_QUEUE_HEAD_INITIALIZER(hld_detector_wait);
+> +
+> +static struct work_struct detector_work __initdata =
+
+I would call this "lockup_detector_work" to use the same naming scheme
+everywhere.
+
+> +		__WORK_INITIALIZER(detector_work, lockup_detector_delay_init);
+> +
+> +static void __init lockup_detector_delay_init(struct work_struct *work)
+> +{
+> +	int ret;
+> +
+> +	wait_event(hld_detector_wait,
+> +			detector_delay_init_state == DELAY_INIT_READY);
+
+DELAY_INIT_READY is defined in the 5th patch.
+
+There are many other build errors because this patch uses something
+that is defined in the 5th patch.
+
+> +	ret = watchdog_nmi_probe();
+> +	if (!ret) {
+> +		nmi_watchdog_available = true;
+> +		lockup_detector_setup();
+> +	} else {
+> +		WARN_ON(ret == -EBUSY);
+
+Why WARN_ON(), please?
+
+Note that it might cause panic() when "panic_on_warn" command line
+parameter is used.
+
+Also the backtrace will not help much. The context is well known.
+This code is called from a workqueue worker.
+
+
+> +		pr_info("Perf NMI watchdog permanently disabled\n");
+> +	}
 > +}
 > +
-> +static const struct clk_stm32_securiy stm32mp13_security[] = {
-> +	SECF(SECF_LPTIM2, RCC_APB3SECSR, RCC_APB3SECSR_LPTIM2SECF),
-> +	SECF(SECF_LPTIM3, RCC_APB3SECSR, RCC_APB3SECSR_LPTIM3SECF),
-> +	SECF(SECF_VREF, RCC_APB3SECSR, RCC_APB3SECSR_VREFSECF),
-> +	SECF(SECF_DCMIPP, RCC_APB4SECSR, RCC_APB4SECSR_DCMIPPSECF),
-> +	SECF(SECF_USBPHY, RCC_APB4SECSR, RCC_APB4SECSR_USBPHYSECF),
-> +	SECF(SECF_TZC, RCC_APB5SECSR, RCC_APB5SECSR_TZCSECF),
-> +	SECF(SECF_ETZPC, RCC_APB5SECSR, RCC_APB5SECSR_ETZPCSECF),
-> +	SECF(SECF_IWDG1, RCC_APB5SECSR, RCC_APB5SECSR_IWDG1SECF),
-> +	SECF(SECF_BSEC, RCC_APB5SECSR, RCC_APB5SECSR_BSECSECF),
-> +	SECF(SECF_STGENC, RCC_APB5SECSR, RCC_APB5SECSR_STGENCSECF),
-> +	SECF(SECF_STGENRO, RCC_APB5SECSR, RCC_APB5SECSR_STGENROSECF),
-> +	SECF(SECF_USART1, RCC_APB6SECSR, RCC_APB6SECSR_USART1SECF),
-> +	SECF(SECF_USART2, RCC_APB6SECSR, RCC_APB6SECSR_USART2SECF),
-> +	SECF(SECF_SPI4, RCC_APB6SECSR, RCC_APB6SECSR_SPI4SECF),
-> +	SECF(SECF_SPI5, RCC_APB6SECSR, RCC_APB6SECSR_SPI5SECF),
-> +	SECF(SECF_I2C3, RCC_APB6SECSR, RCC_APB6SECSR_I2C3SECF),
-> +	SECF(SECF_I2C4, RCC_APB6SECSR, RCC_APB6SECSR_I2C4SECF),
-> +	SECF(SECF_I2C5, RCC_APB6SECSR, RCC_APB6SECSR_I2C5SECF),
-> +	SECF(SECF_TIM12, RCC_APB6SECSR, RCC_APB6SECSR_TIM12SECF),
-> +	SECF(SECF_TIM13, RCC_APB6SECSR, RCC_APB6SECSR_TIM13SECF),
-> +	SECF(SECF_TIM14, RCC_APB6SECSR, RCC_APB6SECSR_TIM14SECF),
-> +	SECF(SECF_TIM15, RCC_APB6SECSR, RCC_APB6SECSR_TIM15SECF),
-> +	SECF(SECF_TIM16, RCC_APB6SECSR, RCC_APB6SECSR_TIM16SECF),
-> +	SECF(SECF_TIM17, RCC_APB6SECSR, RCC_APB6SECSR_TIM17SECF),
-> +	SECF(SECF_DMA3, RCC_AHB2SECSR, RCC_AHB2SECSR_DMA3SECF),
-> +	SECF(SECF_DMAMUX2, RCC_AHB2SECSR, RCC_AHB2SECSR_DMAMUX2SECF),
-> +	SECF(SECF_ADC1, RCC_AHB2SECSR, RCC_AHB2SECSR_ADC1SECF),
-> +	SECF(SECF_ADC2, RCC_AHB2SECSR, RCC_AHB2SECSR_ADC2SECF),
-> +	SECF(SECF_USBO, RCC_AHB2SECSR, RCC_AHB2SECSR_USBOSECF),
-> +	SECF(SECF_TSC, RCC_AHB4SECSR, RCC_AHB4SECSR_TSCSECF),
-> +	SECF(SECF_PKA, RCC_AHB5SECSR, RCC_AHB5SECSR_PKASECF),
-> +	SECF(SECF_SAES, RCC_AHB5SECSR, RCC_AHB5SECSR_SAESSECF),
-> +	SECF(SECF_CRYP1, RCC_AHB5SECSR, RCC_AHB5SECSR_CRYP1SECF),
-> +	SECF(SECF_HASH1, RCC_AHB5SECSR, RCC_AHB5SECSR_HASH1SECF),
-> +	SECF(SECF_RNG1, RCC_AHB5SECSR, RCC_AHB5SECSR_RNG1SECF),
-> +	SECF(SECF_BKPSRAM, RCC_AHB5SECSR, RCC_AHB5SECSR_BKPSRAMSECF),
-> +	SECF(SECF_MCE, RCC_AHB6SECSR, RCC_AHB6SECSR_MCESECF),
-> +	SECF(SECF_FMC, RCC_AHB6SECSR, RCC_AHB6SECSR_FMCSECF),
-> +	SECF(SECF_QSPI, RCC_AHB6SECSR, RCC_AHB6SECSR_QSPISECF),
-> +	SECF(SECF_SDMMC1, RCC_AHB6SECSR, RCC_AHB6SECSR_SDMMC1SECF),
-> +	SECF(SECF_SDMMC2, RCC_AHB6SECSR, RCC_AHB6SECSR_SDMMC2SECF),
-> +	SECF(SECF_ETH1CK, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH1CKSECF),
-> +	SECF(SECF_ETH1TX, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH1TXSECF),
-> +	SECF(SECF_ETH1RX, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH1RXSECF),
-> +	SECF(SECF_ETH1MAC, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH1MACSECF),
-> +	SECF(SECF_ETH1STP, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH1STPSECF),
-> +	SECF(SECF_ETH2CK, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH2CKSECF),
-> +	SECF(SECF_ETH2TX, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH2TXSECF),
-> +	SECF(SECF_ETH2RX, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH2RXSECF),
-> +	SECF(SECF_ETH2MAC, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH2MACSECF),
-> +	SECF(SECF_ETH2STP, RCC_AHB6SECSR, RCC_AHB6SECSR_ETH2STPSECF),
-> +	SECF(SECF_MCO1, RCC_SECCFGR, RCC_SECCFGR_MCO1SEC),
-> +	SECF(SECF_MCO2, RCC_SECCFGR, RCC_SECCFGR_MCO2SEC),
-> +};
-> +
->  static const char * const eth12_src[] = {
->  	"pll4_p", "pll3_q"
->  };
-> @@ -448,13 +573,29 @@ static struct clk_stm32_composite ck_mco2 = {
->  };
->  
->  static const struct clock_config stm32mp13_clock_cfg[] = {
-> -	STM32_MUX_CFG(NO_ID, ck_ker_eth1),
-> -	STM32_GATE_CFG(ETH1CK_K, eth1ck_k),
-> -	STM32_DIV_CFG(ETH1PTP_K, eth1ptp_k),
-> -	STM32_COMPOSITE_CFG(CK_MCO1, ck_mco1),
-> -	STM32_COMPOSITE_CFG(CK_MCO2, ck_mco2),
-> +	STM32_MUX_CFG(NO_ID, ck_ker_eth1, SECF_ETH1CK),
-> +	STM32_GATE_CFG(ETH1CK_K, eth1ck_k, SECF_ETH1CK),
-> +	STM32_DIV_CFG(ETH1PTP_K, eth1ptp_k, SECF_ETH1CK),
-> +	STM32_COMPOSITE_CFG(CK_MCO1, ck_mco1, SECF_MCO1),
-> +	STM32_COMPOSITE_CFG(CK_MCO2, ck_mco2, SECF_MCO2),
->  };
->  
-> +static int stm32mp13_clock_is_provided_by_secure(void __iomem *base,
-> +						 const struct clock_config *cfg)
+> +/* Ensure the check is called after the initialization of PMU driver */
+> +static int __init lockup_detector_check(void)
 > +{
-> +	int sec_id = cfg->sec_id;
+> +	if (detector_delay_init_state < DELAY_INIT_WAIT)
+> +		return 0;
 > +
-> +	if (sec_id != SECF_NONE) {
-> +		const struct clk_stm32_securiy *secf;
-> +
-> +		secf = &stm32mp13_security[sec_id];
-> +
-> +		return !!(readl(base + secf->offset) & BIT(secf->bit_idx));
+> +	if (WARN_ON(detector_delay_init_state == DELAY_INIT_WAIT)) {
+
+Again. Is WARN_ON() needed?
+
+Also the condition looks wrong. IMHO, this is the expected state.
+
+> +		detector_delay_init_state = DELAY_INIT_READY;
+> +		wake_up(&hld_detector_wait);
 > +	}
-> +
+> +	flush_work(&detector_work);
 > +	return 0;
 > +}
-> +
->  u16 stm32mp13_cpt_gate[GATE_NB];
->  
->  struct clk_stm32_clock_data stm32mp13_clock_data = {
-> @@ -468,6 +609,7 @@ static const struct stm32_rcc_match_data stm32mp13_data = {
->  	.tab_clocks	= stm32mp13_clock_cfg,
->  	.num_clocks	= ARRAY_SIZE(stm32mp13_clock_cfg),
->  	.clock_data	= &stm32mp13_clock_data,
-> +	.check_security = &stm32mp13_clock_is_provided_by_secure,
->  	.maxbinding	= STM32MP1_LAST_CLK,
->  	.clear_offset	= RCC_CLR_OFFSET,
->  };
+> +late_initcall_sync(lockup_detector_check);
 
+Otherwise, it make sense.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Best Regards,
+Petr
+
+PS: I am not going to review the last patch because I am no familiar
+    with arm. I reviewed just the changes in the generic watchdog
+    code.

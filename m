@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E0F4C44F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E554C44F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiBYMwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S240757AbiBYMxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240753AbiBYMwt (ORCPT
+        with ESMTP id S240751AbiBYMxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:52:49 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06669C4847;
-        Fri, 25 Feb 2022 04:52:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1645793530;
-        bh=9lcoOLsGCXLhkybsvev0q1tU/jL3rCQ5FnCyxRe43og=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jd/SsLoPixrR02DgY9hWbozzLSPPbGTNJnOW7wDsw/ZrlZX9EduwaxRHuSJO5jDdl
-         4GLz8WqWjsUHRFAecNL1seO6geNv2sb8+IbG0dcUyhS+YRqJSCrxsqZTT6t21hNJIg
-         qqBYTLJdur5M2gBEV30oIOLZPF68G7Cq+4w2vl4Y=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F1F4F1280D51;
-        Fri, 25 Feb 2022 07:52:10 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id usP77mWu0meA; Fri, 25 Feb 2022 07:52:10 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1645793530;
-        bh=9lcoOLsGCXLhkybsvev0q1tU/jL3rCQ5FnCyxRe43og=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jd/SsLoPixrR02DgY9hWbozzLSPPbGTNJnOW7wDsw/ZrlZX9EduwaxRHuSJO5jDdl
-         4GLz8WqWjsUHRFAecNL1seO6geNv2sb8+IbG0dcUyhS+YRqJSCrxsqZTT6t21hNJIg
-         qqBYTLJdur5M2gBEV30oIOLZPF68G7Cq+4w2vl4Y=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E1D461280BA6;
-        Fri, 25 Feb 2022 07:52:09 -0500 (EST)
-Message-ID: <c97132f444ddb45dcbd4561df0a0c045dbcc2192.camel@HansenPartnership.com>
-Subject: Re: [REMINDER] LSF/MM/BPF: 2022: Call for Proposals
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Josef Bacik <josef@toxicpanda.com>,
-        lsf-pc@lists.linuxfoundation.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-nvme@lists.infradead.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Feb 2022 07:52:08 -0500
-In-Reply-To: <YherWymi1E/hP/sS@localhost.localdomain>
-References: <YherWymi1E/hP/sS@localhost.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        Fri, 25 Feb 2022 07:53:15 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A616AA43;
+        Fri, 25 Feb 2022 04:52:43 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so1666183wme.0;
+        Fri, 25 Feb 2022 04:52:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=oWC0YbmclU1/rupUD32FXFHq6eElAXM2xq7gQcBXak0=;
+        b=ZBbh+Q/xIlciESMD0GrmlN7WswAz2h4ORJHQgFeNhyFVSRDu7C0zlV+k4Ah8oeGGzZ
+         bIdvFnHnMDAg7ujH6gc6zb+jFMGR28blPonpfYee/GJu0jQqN+dntWTobfMndQNXi7Pr
+         b0XEc9sFSz41izSWUO7Z2NISBIB+MKBoh9BPSb/Er8iTbrVstwbnpzsRTk5ayLbM2lQP
+         aFaEmRulRdGTynm4NEo6+bzOtx2h9zz1maMOimDON6MVzWaJPl0P0QB2S+kuCfnDnhxC
+         XSxTTC1N+1dCgw8ZYVVNkDvF4EqoAu1v8QbZwKBq9aUtR7seHdmPFowFi6W3E0liL/jC
+         HUEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oWC0YbmclU1/rupUD32FXFHq6eElAXM2xq7gQcBXak0=;
+        b=tQSaT88f74etuhwj+/qDLtnLJi8NB587S+xPDnwOXoks86mco5CYr2QYOUDJymj8ca
+         W1r2Nd7oHvWjvowoXRgKuENw4z/ZiPuIvBWX9rMZRrUyGQzgVEwVbOSyiYPTCjFvDjBn
+         KPwsNr7SVsE3rjrY1DJBHQSKLLDcH4K5524JuzwbGLq7T0Xl+0sjgueAmwI6/M3RftXT
+         mPwFb5QPmUhKydJt64dN24/ZKiRe2wO0hIzWvYqTB3yAs0GdZwlBL9eG1a77V+oYCxrp
+         gDsvqT/fgx6VjQCfGia4Scq8JuJovlfKxwEFqBKFVRILQhjk88IzbcXN+1NNWqBFf2Vn
+         DwXw==
+X-Gm-Message-State: AOAM533ztiZNbGiTylk01t5bI2E6bwiONdI/fuetcE4QLiI0Hpck/3E2
+        tc5uLU3NxPKvuhaz4BbxsdfqqTVI9g6wuQ==
+X-Google-Smtp-Source: ABdhPJxC56iBIkZNIpZl+UpjBQOMRnaxmMhkcz7Atp4KHK8CYiIsSv/nPy1fjD4h4B236iksMyYC3Q==
+X-Received: by 2002:a05:600c:1c8d:b0:37b:fb3b:adf3 with SMTP id k13-20020a05600c1c8d00b0037bfb3badf3mr2642601wms.64.1645793561858;
+        Fri, 25 Feb 2022 04:52:41 -0800 (PST)
+Received: from localhost.localdomain ([64.64.123.58])
+        by smtp.gmail.com with ESMTPSA id x1-20020a05600c420100b003811fb95734sm3167713wmh.37.2022.02.25.04.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 04:52:41 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     3chas3@gmail.com
+Cc:     linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] atm: firestream: check the return value of ioremap() in fs_init()
+Date:   Fri, 25 Feb 2022 04:52:30 -0800
+Message-Id: <20220225125230.26707-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,32 +64,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-24 at 10:59 -0500, Josef Bacik wrote:
-> A few updates
-> 
-> - The COVID related restrictions can be found here 
-> 
-> 	
-> https://events.linuxfoundation.org/lsfmm/attend/health-and-safety/
-> 
-> - We are working on a virtual component, however it will likely not
-> be interactive, likely just a live stream and then an IRC channel to
-> ask questions through.
+The function ioremap() in fs_init() can fail, so its return value should
+be checked.
 
-We've been experimenting with hybrid over at plumbers.  Our last
-experiment at LSS in Seattle managed to get us a successful interactive
-two way A/V stream for a live Q and A using Big Blue Button.  We
-collaborated with E3 on this (The standard LF A/V provider for OSS) so
-most likely they'll be who you have in Palm Springs.  We were planning
-to go for another trial at OSS in Austin, but if you'd like to be our
-Guinea Pig, we can put all our infrastructure at your disposal.
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/atm/firestream.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Note, your hotel uplink may not support doing this for all four tracks:
-we estimate the uplink bandwidth requirement at around 10M per track
-dedicated, but we could try it on a single track.
-
-Regards,
-
-James
-
+diff --git a/drivers/atm/firestream.c b/drivers/atm/firestream.c
+index 3bc3c314a467..4f67404fe64c 100644
+--- a/drivers/atm/firestream.c
++++ b/drivers/atm/firestream.c
+@@ -1676,6 +1676,8 @@ static int fs_init(struct fs_dev *dev)
+ 	dev->hw_base = pci_resource_start(pci_dev, 0);
+ 
+ 	dev->base = ioremap(dev->hw_base, 0x1000);
++	if (!dev->base)
++		return 1;
+ 
+ 	reset_chip (dev);
+   
+-- 
+2.17.1
 

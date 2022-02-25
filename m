@@ -2,45 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB47F4C5130
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05B24C5111
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiBYWGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S230052AbiBYVzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiBYWG3 (ORCPT
+        with ESMTP id S232338AbiBYVzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:06:29 -0500
-X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Feb 2022 14:05:55 PST
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D835C1F636C;
-        Fri, 25 Feb 2022 14:05:55 -0800 (PST)
-Received: from localhost.localdomain (89-166-24-184.bb.dnainternet.fi [89.166.24.184])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 809A83F67D;
-        Fri, 25 Feb 2022 22:58:09 +0100 (CET)
-From:   Jami Kettunen <jami.kettunen@somainline.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Caleb Connolly <caleb@connolly.tech>
-Subject: [PATCH] arm64: dts: qcom: msm8998-oneplus-common: Add NFC
-Date:   Fri, 25 Feb 2022 23:56:42 +0200
-Message-Id: <20220225215642.3916-1-jami.kettunen@somainline.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Feb 2022 16:55:41 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB50218CD7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:55:07 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso4560317ots.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m/vqkWoLM2koeZAVeet1hIz9u/sHUyuW7PwgatN//uU=;
+        b=gVA38gVk5Bz6qX9+3TKvQmTJbn8Non5K/l9Quge1etshRDJ5NyKr5KNQ8U+1h8IfzH
+         te0ujsc4GV441ZVDNugdbECMhzVpS8mx3jIU9tT5Z0aYywFV0DWfAWzku/w59vX9vsWI
+         YjoyBr2QqUPaYD50kNXo8xDwCG/IBTvYlvcPoYgZEmwleVuPFUiZv+snbsZKIa92KTMh
+         eNMSlbjVwC+VRBj1w+mMmt3btdgNlXsGdQG3Rq3daIsOqbOFif3eS2JLlZ0n8foRDwki
+         pdNAIjCVCf6NVrPnucizvMJt+/z9HybfdN3hlZxA4Vw/VGVdTxiOFRrd0mV3AZCWrRWi
+         garw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m/vqkWoLM2koeZAVeet1hIz9u/sHUyuW7PwgatN//uU=;
+        b=S9gGW3HSfpAbVqG5neuNis7PeCjxAYC/+D05hCfsWqVH+JTO4T7545cDhAayLvkLEb
+         pxtYO/OjIqYS6yMY6/++/w9fAZIfPkgrVDeG25Swe9y4kQT1/x/D3CxjB8KBNUs32Xw+
+         y6n67R1faJCNWXXMwDLCp7QdgKuWaVUE1j9PErkFSf9Ih0mbAPJmjrERzkXchELrOnS5
+         yBOLc2DmtfHcUXKCbEkNGvg7bd99JFdHx2DBd63ajdOtrafsV6Qg4RUjnG8Thjf28XgM
+         ZALqoI28jU2zs2YdUVuA6TLerh+jTEgujEQdJc+iFY3l8E2YomuedBPJdR4X8ndoR7PJ
+         Bziw==
+X-Gm-Message-State: AOAM532lrPMRwnXWudurY+vY3YWDJBlA6kP96KbLlSqgtiP+dFsATgDM
+        kGN/yyb3xWa6+nTd1kGSOOZVAw==
+X-Google-Smtp-Source: ABdhPJyWXfpVOjBQzPDsuZlQkeTho7DcqtU5U87DNz4IiNmLbE7u74pfulpklA/AtpE9EXIZhDTquw==
+X-Received: by 2002:a9d:176:0:b0:5ae:ed94:f1c0 with SMTP id 109-20020a9d0176000000b005aeed94f1c0mr3838228otu.74.1645826107045;
+        Fri, 25 Feb 2022 13:55:07 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id cz42-20020a05687064aa00b000d6c97027b7sm1705425oab.30.2022.02.25.13.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 13:55:06 -0800 (PST)
+Date:   Fri, 25 Feb 2022 13:57:03 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH 0/5] Wifi & Bluetooth on LG G Watch R
+Message-ID: <YhlQr17fGi+Q7KT8@ripper>
+References: <20220216212433.1373903-1-luca@z3ntu.xyz>
+ <YhcGSmd5M3W+fI6c@builder.lan>
+ <4379033.LvFx2qVVIh@g550jk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4379033.LvFx2qVVIh@g550jk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,66 +76,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OnePlus 5/5T both have an NXP PN553 which is supported by the
-nxp-nci-i2c driver in mainline. It detects/reads NFC tags using
-"nfctool" and with the NearD test scripts data can also be written
-to be received by another device.
+On Fri 25 Feb 12:19 PST 2022, Luca Weiss wrote:
 
-Signed-off-by: Jami Kettunen <jami.kettunen@somainline.org>
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
----
- .../boot/dts/qcom/msm8998-oneplus-common.dtsi | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+> Hi Bjorn
+> 
+> On Donnerstag, 24. Februar 2022 05:15:06 CET Bjorn Andersson wrote:
+> > On Wed 16 Feb 15:24 CST 2022, Luca Weiss wrote:
+> > > This series adds the BCM43430A0 chip providing Bluetooth & Wifi on the
+> > > LG G Watch R.
+> > 
+> > I picked the dts changes, but would prefer that the other two changes
+> > goes through the BT tree. I see that you haven't copied Marcel on the
+> > dt-binding change though, so please resubmit those two patches together.
+> 
+> Thank you, will resubmit the first two!
+> 
+> Just to be clear, as far as I understand each patch gets sent based on its own 
+> get_maintainer.pl, and the cover letter gets sent to the superset of all 
+> individual patch recipients?
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-index 9823d48a91b1..dbaea360bffc 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-@@ -188,6 +188,23 @@ rmi4_f12: rmi4-f12@12 {
- 	};
- };
- 
-+&blsp1_i2c6 {
-+	status = "okay";
-+
-+	nfc@28 {
-+		compatible = "nxp,nxp-nci-i2c";
-+		reg = <0x28>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <92 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		enable-gpios = <&tlmm 116 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&nfc_int_active &nfc_enable_active>;
-+	};
-+};
-+
- &blsp1_uart3 {
- 	status = "okay";
- 
-@@ -462,6 +479,20 @@ ts_reset_active: ts-reset-active {
- 		drive-strength = <8>;
- 		bias-pull-up;
- 	};
-+
-+	nfc_int_active: nfc-int-active {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_enable_active: nfc-enable-active {
-+		pins = "gpio12", "gpio116";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
- };
- 
- &ufshc {
--- 
-2.35.1
+It's rather annoying to be maintainer and only get 1-2 patches out of a
+larger series and having to browse lore.kernel.org to find the rest. So
+based on that I tend to make sure that everyone is Cc'ed on all patches
+in my series.
 
+And then there's the general advice that if there isn't a strong
+dependency between the patches, it might be better to just submit them
+separately in the first place. Simply to make it easier for each
+maintainer to merge your patches.
+
+> I'm using this script that's largely based on something I found online a while 
+> ago
+> https://github.com/z3ntu/dotfiles/blob/master/scripts/usr/local/bin/cocci_cc
+> 
+> Also just checked and Marcel isn't listed as maintainer of the relevant dt 
+> bindings in MAINTAINERS, maybe they should get added there?
+> 
+
+In general I think the DT bindings goes through the relevant subsystem
+maintainer, so I would suggest that you post a patch. If for some reason
+Marcel shouldn't merge BT related DT patches, then the discussion that
+follows will make that clear and you could make sure that MAINTAINERS
+reflects the outcome.
+
+Regards,
+Bjorn
+
+> (also CCed Marcel on this email)
+> 
+> Regards
+> Luca
+> 
+> > 
+> > Thanks,
+> > Bjorn
+> > 
+> > > Luca Weiss (5):
+> > >   dt-bindings: bluetooth: broadcom: add BCM43430A0
+> > >   Bluetooth: hci_bcm: add BCM43430A0
+> > >   ARM: dts: qcom: msm8226: Add pinctrl for sdhci nodes
+> > >   ARM: dts: qcom: apq8026-lg-lenok: Add Wifi
+> > >   ARM: dts: qcom: apq8026-lg-lenok: Add Bluetooth
+> > >  
+> > >  .../bindings/net/broadcom-bluetooth.yaml      |  1 +
+> > >  arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts   | 98 ++++++++++++++++---
+> > >  arch/arm/boot/dts/qcom-msm8226.dtsi           | 57 +++++++++++
+> > >  drivers/bluetooth/hci_bcm.c                   |  1 +
+> > >  4 files changed, 144 insertions(+), 13 deletions(-)
+> 
+> 
+> 
+> 

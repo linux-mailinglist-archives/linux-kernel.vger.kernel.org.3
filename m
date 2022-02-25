@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CC04C3ECE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A730D4C3ED1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238024AbiBYHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S238032AbiBYHQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbiBYHMO (ORCPT
+        with ESMTP id S235033AbiBYHQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:12:14 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AB83B548
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:11:42 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso7731216pjk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uGhzlt2t6o+8i2zqg3MDSAcgIvp80HsaumhqEr+aVuA=;
-        b=bCTCvwdprbUmaWGdjK2w4AhRfj51ARiwdd5jRHELW89c5ufQFPe+Ax0dd3j9/XEN+E
-         TqcKvwJ2AEpW+jIORqrZbYaU74ZDGkbIVKq4d6uS7zi7mJzsdztlLgtjwuuuJIVkTVHV
-         EulqOmjKu6uXVnZvJioPVMEilEiqQId0rcI0T90PYht5e7IY4PsdSa49eikYXAZgprv8
-         si8AJ6vSJQY4G0oTOQuva39YNN0UpGDZViVu1IeV6jt9EQRfDZchpDLWu2GrLURL0HXh
-         3ZrSdATtMsR0Hjff1Ii7ypCl+q/uSBT3KPJQC9zLctcorhVh8spx9JYsraBjcp4aC1UV
-         z/DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=uGhzlt2t6o+8i2zqg3MDSAcgIvp80HsaumhqEr+aVuA=;
-        b=4HZr40HYrVZy0CHXFK1MVssLVIkfImfAvGRTYl12Xu3vBMFFGL5JsuFdFb08nDLCMq
-         DIVFubYP7wnAOIk7EAepRmSgEvR24kAP2lB5HF7e5oooUIOnNs9Io6nto5BkhrVp3Gy5
-         gVb9qRR5wcHZ/C7FioWCWdi/tOOSQf9JohIi5YipZRSrGREZEOaVj432XzmymotyCcic
-         mgTZiZKcGb7bKIhl5dmv1qwqz69kZCk+Ukdszx/Go2pPiiB70a7YMt3twjrmc9RwdE9p
-         iiaNLnRvNCQwOnjZNQSktjenT1wAtD4/m5//dI6kIZiNnYpE2CfnGf0VD+s20qMdz5ja
-         T2Cg==
-X-Gm-Message-State: AOAM530+a/J+ufo/cZ6PMuskxhcmjBJNOpwUp7NEhbpIkqOjd4SE96MJ
-        SQu76d96kuK3QKMr5SCIkUYZ92oZLVxNBCM6crs=
-X-Google-Smtp-Source: ABdhPJwsHNYsMyE00iRtoqsgp1WpP4CM7ELQPxCrJYar+r/apzNsZLMLdvLe5Q2CnDDye58EWhJaPxqZsdxkcgLE0Lk=
-X-Received: by 2002:a17:90b:fc7:b0:1bc:4fc0:6fbd with SMTP id
- gd7-20020a17090b0fc700b001bc4fc06fbdmr1869825pjb.198.1645773101686; Thu, 24
- Feb 2022 23:11:41 -0800 (PST)
+        Fri, 25 Feb 2022 02:16:00 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD3320A39A;
+        Thu, 24 Feb 2022 23:15:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FWiXAba7zRc9aiHfLu200ZgZ1fmK2Yh4KIezJS9eSvONiOMvCu26FvGDi9G44IDWmmY5A7sqeq5TUP3ZEMhoM1adapAzaY/F/GUT/vyubNpnRFXBp4i7l1NkG4qUPQft7sN5Ml6qLFlPC4De7LREZroR0dcExZi7f5abfM0+AtHeI1gA3cRMJlv4iWKavzcIFjrPNoIvnHezPBnpcX47R6O6r8ryV+KVMa/UWUDWSfIn2aoU3gcP+18gVX+X4D0pOMCisrZta/paYTug8UT6iLXRsliY+UsNx/RxfWShmiOk/EmFbA0yv6iQYn7MNxCZKW3etDqOlc4WHFf6zoRX6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ny8gHbh0IARovu1egy7EbUpzjRYarq2ytwagwI//nio=;
+ b=WcklE6h3gK5KYNd37dE4GRIGDd2LkCqQwyl4Cvu8l1hIr0Erv1eUN7wYRh67WQ71mqKuhRXepvP7XoUrmoF+5VDO4wdtGDkv0v7QS0Bs0JaOSVv7wtk/fa3GYBpuXMqK395JMKLPpqS2CLchGRn5Q98Rh/hRgsORj+TTtn3UUb91bsOqJOx/IaySeWWLx51FY6W7kgB/e/QB/VqmgRuFqViph68XYmSBKNn6j36W3xWe28i8uLj8kv1TE8qErE3wYYsCFYmZUkdykKvr0yTY5QxUR1CS1cD71xqhFVuRg/4o/y3WB/SxMYNRMYeT/l93b14tzA/IQ3gMsfXa2YSsBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ny8gHbh0IARovu1egy7EbUpzjRYarq2ytwagwI//nio=;
+ b=kxwoptwlxF3avZvwAb30dMgPLOAKVrhH2yn90qFUNWh1Mn+Sy00aJtqwYAgK2OtV+heMkru1lo3OgZf8LNZK4lZ5/c8KBT66+GSfqCOwFSx8bKmvmzztkqYVc3pnKN14COpkxSIEtqkyA53UGKbDrPy/SrI+bJlFnX9DGqoEa7A//0S8Yl34NdRhjLGvTPffPTpiSsez0Jwu14qX2ZgSIl9jgiskRNZtAsGtZJjjei+c1xbmeLsV6TRZQu2r236E7c91+EVOZltkfKDqfa6PUNsTh6r+zyOXeUdo30Yuhe6ruAPCmSnrUTkZ4QE64Of1hIXc2/pWZwOylZCkuxYJ1Q==
+Received: from DM3PR12CA0091.namprd12.prod.outlook.com (2603:10b6:0:55::11) by
+ BY5PR12MB3970.namprd12.prod.outlook.com (2603:10b6:a03:1ac::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Fri, 25 Feb
+ 2022 07:15:26 +0000
+Received: from DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:0:55:cafe::ed) by DM3PR12CA0091.outlook.office365.com
+ (2603:10b6:0:55::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21 via Frontend
+ Transport; Fri, 25 Feb 2022 07:15:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT024.mail.protection.outlook.com (10.13.172.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 07:15:25 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 25 Feb
+ 2022 07:15:25 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 24 Feb 2022
+ 23:15:24 -0800
+Received: from henryl-vm.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Thu, 24 Feb 2022 23:15:22 -0800
+From:   Henry Lin <henryl@nvidia.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     Henry Lin <henryl@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] xhci: fix runtime PM imbalance in USB2 resume
+Date:   Fri, 25 Feb 2022 15:15:06 +0800
+Message-ID: <20220225071506.22012-1-henryl@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220225055311.92447-1-henryl@nvidia.com>
+References: <20220225055311.92447-1-henryl@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:c58b:0:0:0:0 with HTTP; Thu, 24 Feb 2022 23:11:41
- -0800 (PST)
-Reply-To: canadabell84@gmail.com
-From:   Bell-CANADA Entreprises <jacquesgeorgesguichard@gmail.com>
-Date:   Fri, 25 Feb 2022 08:11:41 +0100
-Message-ID: <CADq6x7dHCgcbaRqk7_zJ1udsM=HOn4gmFrHEM7HuC9G3ju7ZvQ@mail.gmail.com>
-Subject: SESSION DE RECRUTEMENT 2022
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1042 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5006]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jacquesgeorgesguichard[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [canadabell84[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4670e78c-b8e2-4b81-48d5-08d9f82e9888
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3970:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB397038A9C86EE87E21187740AC3E9@BY5PR12MB3970.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2XDJN5eMeGD6wNysvx6xhK7TWdQRPi7XxTxLx+X5illvrAFLdSeuguAXWIPW1StU7rDHGsYY+B/Mn7u9ntimy5iIQsukrF6+fgsJPs2zCVpLApNfaTFIzc1In5WqRqaivP1zy9cokbdBEG5+Pdbp2S8nr1QW01DfQiiMpb6gARMWfXeZHYh3W75YbZuUpGGjFk1ZOHXg8u7y3Y+eLjcihK9Y7Y2ddNBmR5kN1eScKR1fKhQzhambStqte3RUW85hDXeAfhoTJaOVcJ6ldHh77PJnNPpHCtzhZ/U+UTHfFzYulQFtK+8ZyRiY2GEqS9qV7DvblntoIvvxn1AU+D/kDvQvbrJp2h9FeWjeB9flAzX8bAwF7+kP8PN/BuFdPtE2qp8/dmNcy197mg8CP995t48zCSwi0SUcC+h6b9/ZLF9zIdLbn8YLnG6q8e5hkPFzX4VeCeuX4/tS5QYBi2bzx68mcDoPehFXmmabJ9kKeUxd97hWev7sYsI0zn7EOzLA9zVMM3yA7JMYi8QAPCZJdD5qaotZx7zcOk1Gm68BfBqnZ++CscmSFpfaJcqTv3Gq9HDnNOXnd/bK+5EMtlo2xv3LNKF17DmNgGcIVVRjXeiffojXX0vsFfDm9FZUWAPJkT8DJycNoeqCsInOsvlnFaBESeG1m8vGUzqmJjmLb40hLZd/DWhmaHlP13FBXfIAmJTIf6beCDgGvp/IkWRDVw==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2906002)(47076005)(508600001)(6666004)(7696005)(83380400001)(316002)(6916009)(5660300002)(36860700001)(54906003)(36756003)(4744005)(8936002)(8676002)(82310400004)(4326008)(2616005)(26005)(186003)(336012)(426003)(1076003)(70206006)(70586007)(86362001)(81166007)(40460700003)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 07:15:25.9794
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4670e78c-b8e2-4b81-48d5-08d9f82e9888
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3970
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A votre Attention !!!
-Cadres et Jeunes dipl=C3=B4m=C3=A9s Bienvenus, Dans le souci de lutter cont=
-re le
-voyage clandestin, la pauvret=C3=A9, de promouvoir l'emploi et =C3=A0
-l'int=C3=A9gration Africaine au processus de la mondialisation, La
-Compagnie BELL-CANADA en collaboration avec le service de Citoyennet=C3=A9
-et Immigration au Canada lance une grande session de Recrutement
-2022.En effet nous recherchons avant tout des personnes capables sans
-distinction de sexe qui pourront s'adapter =C3=A0 notre environnement de
-travail.
+USB2 resume starts with usb_hcd_start_port_resume() in port status
+change handling for RESUME link state. usb_hcd_end_port_resume() call is
+needed to keep runtime PM balance.
 
-CONDITION A REMPLIR POUR TOUTE PERSONNE INT=C3=89RESS=C3=89E
+Fixes: a231ec41e6f6 ("xhci: refactor U0 link state handling in get_port_status")
+Signed-off-by: Henry Lin <henryl@nvidia.com>
+---
+ drivers/usb/host/xhci-hub.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-1- =C3=8Atre =C3=A2g=C3=A9(e) entre 18 et 65 ans
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index df3522dab31b..4a8b07b8ee01 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1090,6 +1090,8 @@ static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
+ 		if (link_state == XDEV_U0) {
+ 			bus_state->resume_done[portnum] = 0;
+ 			clear_bit(portnum, &bus_state->resuming_ports);
++			usb_hcd_end_port_resume(&port->rhub->hcd->self,
++						portnum);
+ 			if (bus_state->suspended_ports & (1 << portnum)) {
+ 				bus_state->suspended_ports &= ~(1 << portnum);
+ 				bus_state->port_c_suspend |= 1 << portnum;
+-- 
+2.17.1
 
-2- =C3=8Atre titulaire au moins du BEPC BAC ou autres Dipl=C3=B4mes
-
-Professionnels
-
-3- Savoir parler le fran=C3=A7ais ou l'anglais
-
-4- Avoir de bonnes qualit=C3=A9s relationnelles
-
-5- Avoir une bonne moralit=C3=A9
-
-PS: Pour plus d'informations et le retrait du formulaire, veuillez
-nous envoyer vos coordonn=C3=A9es Si vous =C3=AAtes int=C3=A9ress=C3=A9s ve=
-uillez nous
-envoyer: NOM; PR=C3=89NOMS; =C3=82GE; PAYS;NATIONALIT=C3=89,PROFESSION,SEXE=
-,NUM=C3=89RO
-T=C3=89L=C3=89PHONE,ADRESSE: =C3=A0 l'adresse de la direction par =C3=89mai=
-l qui est la
-suivant : canadabell84@gmail.com
-
-pour confirmation de votre inscription et pour plus d'informations sur
-les conditions =C3=A0 remplir et les pi=C3=A8ces =C3=A0 fournir pour votre =
-dossier de
-candidature.
-
-Le charg=C3=A9 de l'information

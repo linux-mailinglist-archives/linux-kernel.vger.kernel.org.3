@@ -2,90 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17ED4C3E40
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5664C3E58
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbiBYGNN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Feb 2022 01:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S237793AbiBYGYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 01:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiBYGNM (ORCPT
+        with ESMTP id S236480AbiBYGY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 01:13:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C1EA172E5E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:12:40 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-147-A1-nNgw5OU26roG4mbNyRw-1; Fri, 25 Feb 2022 06:12:37 +0000
-X-MC-Unique: A1-nNgw5OU26roG4mbNyRw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 06:12:35 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 06:12:35 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: RE: Strange output on the console
-Thread-Topic: Strange output on the console
-Thread-Index: AQHYKfxF0QTTTto/+k+8VsyEcwRQo6yjyM1g
-Date:   Fri, 25 Feb 2022 06:12:35 +0000
-Message-ID: <61226fc12ff9459d8daed8e346d6ab94@AcuMS.aculab.com>
-References: <20220224230035.36547137@gandalf.local.home>
-In-Reply-To: <20220224230035.36547137@gandalf.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Feb 2022 01:24:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA0F23584B;
+        Thu, 24 Feb 2022 22:23:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B01961A4D;
+        Fri, 25 Feb 2022 06:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55565C340E7;
+        Fri, 25 Feb 2022 06:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645770234;
+        bh=JIjPLXAFteEFGFpis11xNVKv9A9z+UArDoDbTHvX+Z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RxRmf/Vgkh0rt6lUwdVqBhKNdailJzKBY9PYNbPw3Udm2O5kKkNq5QaXrHd1unw4E
+         MLfd38LlZYPjmtadv883rVLUTVLNbDzmNxGkLoREjgHPXiU/21ZrmI45Dzv2nfzigK
+         +wJ+ItW5mtOzkTIp+FVojs4FZTgkPkJopYflTV6Y=
+Date:   Fri, 25 Feb 2022 07:23:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Henry Lin <henryl@nvidia.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xhci: fix runtime PM imbalance in USB2 resume
+Message-ID: <Yhh19qsTsGRhsLWT@kroah.com>
+References: <20220225055311.92447-1-henryl@nvidia.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225055311.92447-1-henryl@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 25 February 2022 04:01
+On Fri, Feb 25, 2022 at 01:53:11PM +0800, Henry Lin wrote:
+> USB2 resume starts with usb_hcd_start_port_resume() in port status
+> change handling for RESUME link state. usb_hcd_end_port_resume() call is
+> needed to keep runtime PM balance.
 > 
-> I've been noticing that my tests have been spitting out strange output on
-> the console. It would happen at boot up and then clear up. It looks like
-> something screwed up with the serial timing.
-> 
-> Attached is a dmesg of one of my test runs as an example.
-> 
-> I've noticed this on both 32 bit and 64 bit x86.
-> 
-> I haven't had time to look deeper into this, but I figured I let you know
-> about it.
-> 
-> And it always seems to happen right after:
-> 
->   Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> 
-> Maybe this is a serial issue and not a printk one? :-/
+> Signed-off-by: Henry Lin <henryl@nvidia.com>
+> ---
+>  drivers/usb/host/xhci-hub.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Looks very much like the serial baud rate is being reset.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+What commit does this fix?

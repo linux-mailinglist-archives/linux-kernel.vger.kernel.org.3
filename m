@@ -2,100 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFAE4C4B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED304C4B9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243448AbiBYRDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S243458AbiBYRGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243498AbiBYRDA (ORCPT
+        with ESMTP id S238530AbiBYRF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:03:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF63B546;
-        Fri, 25 Feb 2022 09:02:27 -0800 (PST)
+        Fri, 25 Feb 2022 12:05:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AFE1FEFB4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:05:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E3A961D4E;
-        Fri, 25 Feb 2022 17:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E44C340E7;
-        Fri, 25 Feb 2022 17:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645808546;
-        bh=dN2Bz1iygo2sIzesrF8govzJ+5QKuGfIYEDRIld0RBc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kNz+vf0XXx6YWRBHyghc9YOie2pR8cVyN/8NcKdyUPkLFTfzE0Eccuet4IqVWopnD
-         WUpD1ykttsJFpRQSRH8wV7ysRpinVdd01d34pMOfhTOiV1uazBqaWJsWOlYTjSOev8
-         4JUqe/yCwUbMwWAkNIHlBnCDVtFGJqTajEtIyUbG4z1LOB2n9/cX13hR9l6vSDOSWC
-         xsW8Un1/afxBL0SmeUdyGsmETQb/6xoFN0J1BWnvyp6UsEX+HQU9XXSSsT8Y5CSA/L
-         RLHvnIFhHNRXovtG7GSY8suQKmzy2y83z1sFk6nt6ncaWxDbJ379TsDQZ7Nx0fWSJL
-         qKme2ubhjDpFA==
-Date:   Fri, 25 Feb 2022 11:02:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
- Set_Slot_Power_Limit message
-Message-ID: <20220225170225.GA363593@bhelgaas>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1AD9BB8329E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 17:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174FDC340E7;
+        Fri, 25 Feb 2022 17:05:20 +0000 (UTC)
+Date:   Fri, 25 Feb 2022 12:05:19 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Tom Zanussi <zanussi@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] tracing: Have traceon and traceoff trigger honor the
+ instance
+Message-ID: <20220225120459.738858e9@gandalf.local.home>
+In-Reply-To: <d3004368d5784e3c2a40e3229d3618a88924b11e.camel@kernel.org>
+References: <20220223223837.14f94ec3@rorschach.local.home>
+        <d3004368d5784e3c2a40e3229d3618a88924b11e.camel@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220225125407.wglplhyisgges3zk@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:54:07PM +0100, Pali Rohár wrote:
-> On Thursday 24 February 2022 15:28:11 Bjorn Helgaas wrote:
-> > On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
-> > > This PCIe message is sent automatically by mvebu HW when link changes
-> > > status from down to up.
- 
-> > PCIe r6.0, sec 2.2.8.5 and 7.5.3.9, also say Set_Slot_Power_Limit must
-> > be sent on a config write to Slot Capabilities.  I don't really
-> > understand that, since AFAICS, everything in that register is
-> > read-only.  But there must be some use case for forcing a message.
+On Fri, 25 Feb 2022 11:00:18 -0600
+Tom Zanussi <zanussi@kernel.org> wrote:
+
+> Looks good,
 > 
-> I understood it in this way: Capabilities register is read-only hw-init
-> and so firmware / driver can write initialization values into this
-> register. And when firmware / driver is doing this write then Root port
-> should send that Set_Slot_Power_Limit message.
+> Reviewed-by: Tom Zanussi <zanussi@kernel.org>
 
-Sec 7.5.3.9 describes the behavior of Slot Capabilities in config
-space, where it must be read-only.  Firmware (or the mvebu driver)
-must use a different mechanism to initialize the values.
+Thanks.
 
-FWIW, I found this implementation note in PCIe r6.0, sec 6.9 that
-explains why config writes to this read-only register would be useful:
+Oo, I was just about to send my pull request. It's not too late to add
+this tag ;-)
 
-  IMPLEMENTATION NOTE: AUTO SLOT POWER LIMIT DISABLE
-
-  In some environments host software may wish to directly manage the
-  transmission of a Set_Slot_Power_Limit message by performing a
-  Configuration Write to the Slot Capabilities register rather than
-  have the transmission automatically occur when the Link transitions
-  from a non-DL_Up to a DL_Up status. This allows host software to
-  limit power supply surge current by staggering the transition of
-  Endpoints to a higher power state following a Link Down or when
-  multiple Endpoints are simultaneously hot-added due to cable or
-  adapter insertion.
-
-Bjorn
+-- Steve

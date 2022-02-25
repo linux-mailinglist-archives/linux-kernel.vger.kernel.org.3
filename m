@@ -2,97 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EBB4C4D74
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E494C4D7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiBYSPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S230438AbiBYSSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiBYSPo (ORCPT
+        with ESMTP id S230043AbiBYSSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:15:44 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6AE1F634D;
-        Fri, 25 Feb 2022 10:15:12 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A49E22A0;
-        Fri, 25 Feb 2022 18:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A49E22A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1645812911; bh=oUN6Pog7J8FgoaWGTBczYy16pRgLbEf5z+vxasmFPJ4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=r7wIfyR5nqun/xkfnd1eampwJGtpTzMwGB5yA76V+8NAGQmLmkOACFoZXyS5099ZI
-         1pTngONPzPM0JrjVm144/0g0/eKwBvHUkgxyJhIPpZKM0arwNMf3TZV1d9DmIqrKTj
-         1aqGEgZSBxumAX6NkwTXHM4wbzlR5vqzCsgxQooXmR14Sdlq8EwkvHt/RTh35wpLmf
-         NOQ2Vz2dTlrS+XCFrTTtPwkuqUV/f1lp2kLzGSmtRJw0iqXYElfTHppsGbvyX4TRIj
-         HGeDoW+31I2edKkf7BQsmbYxzMTdV3foMGiZ6vFeh77elayUwKX5oAXZKsMrjdVxUr
-         Xz2OGoeFKmeNg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
-Subject: Re: [RFC PATCH v2 09/11] sched: Introduce per memory space current
- virtual cpu id
-In-Reply-To: <1323451367.108396.1645811762372.JavaMail.zimbra@efficios.com>
-References: <20220218210633.23345-1-mathieu.desnoyers@efficios.com>
- <20220218210633.23345-10-mathieu.desnoyers@efficios.com>
- <87k0dikfxa.fsf@meer.lwn.net>
- <1323451367.108396.1645811762372.JavaMail.zimbra@efficios.com>
-Date:   Fri, 25 Feb 2022 11:15:11 -0700
-Message-ID: <8735k6ke34.fsf@meer.lwn.net>
+        Fri, 25 Feb 2022 13:18:18 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD53CCC60
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:45 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id d3so4924601ilr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:17:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nm1eERrg8QDTPCsLNsG13mocNpZXJWrPQxbp3Pqr/O0=;
+        b=LrlfXrTX+QxWh8wUSC0Vc6h1EJHK8bDM+gv9X0431xQynF9lp/x7PAVokMD9j9c7np
+         UpM9S/YUQnAZWuVcCIBSDeoxxgHir0vY4shQLn0dWHdHsNdfsb6hKR8aw8KMVOX453eu
+         6GlgE6hoCl/WfP364bdXe4EkcrDYVi4fIm+y1rB7TrO0VHw3RlqEAXi8VWj6NrK3ajJc
+         8fSvFfItHAf4DZRE6ebcNofroeIeFT9MjUcMA1wJ7y8FG8scMNInxCZJ+TN2ENFhGLAf
+         wlYGLhNIhujG0fEtqgY86K+WGMNHA2tFAhTAwFTVPuoLTkfRkHWbrIB64vKnKysMf96D
+         aJXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nm1eERrg8QDTPCsLNsG13mocNpZXJWrPQxbp3Pqr/O0=;
+        b=VyTUPnLp63BPunavPrba7D1IlvChigLEQcvs2sW9kc4B/S1msDFlkvh0DqZ8rs4MMf
+         nxHGnTkXKedxMKcO93c2BsGWPHP/iUY1hxoSRqXp2V7MHq+Sqyz0OJHQ9BSzm5nEQmjW
+         JMWxs6FBh8dSI0muhQX36qI4Dtj6PmL1ogKkuLO/esEHcqZE9T4T7eh1fK0vydheKdL+
+         oriM5BfMLUnCFumySGr+2E0vFzH16Zo2nwp82ssybKQOzlQtuRhvAUGjy9g1qHoGRspw
+         MYO/vN65cYFW7hGxTtujntGg41V3Fes5AiCRcL0UrnZOTJBF4Cus7B+sRE62VJGLqdVZ
+         SAPQ==
+X-Gm-Message-State: AOAM5330YULZLICvxbzyJ1N0JrK8odr2F8+CeTn8Aw99x8sXvcM/60Wg
+        xphjkyRWRiSzZCQcZmqg72uIOCpJFWmOBgHnu1C+jQ==
+X-Google-Smtp-Source: ABdhPJxsTPK5RtHCNw8uXoUXlBNjPtA2SXEwcUKP5Iehw0GUHKTdV9i+YhCq+TbSg+5YUrbwKP1QG2EYv/sjXRYCwyY=
+X-Received: by 2002:a05:6e02:dd4:b0:2bd:ef9f:cf99 with SMTP id
+ l20-20020a056e020dd400b002bdef9fcf99mr7188195ilj.275.1645813064833; Fri, 25
+ Feb 2022 10:17:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224181953.1030665-1-axelrasmussen@google.com>
+ <fd265bb6-d9be-c8a3-50a9-4e3bf048c0ef@schaufler-ca.com> <CAJHvVcgbCL7+4bBZ_5biLKfjmz_DKNBV8H6NxcLcFrw9Fbu7mw@mail.gmail.com>
+ <0f74f1e4-6374-0e00-c5cb-04eba37e4ee3@schaufler-ca.com> <YhhF0jEeytTO32yt@xz-m1.local>
+In-Reply-To: <YhhF0jEeytTO32yt@xz-m1.local>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 25 Feb 2022 10:17:06 -0800
+Message-ID: <CAJHvVciO1GUbmL+Rxi-psGT8V=LyTfGT-Hyigtaebx1Xf+z6fw@mail.gmail.com>
+Subject: Re: [PATCH] userfaultfd, capability: introduce CAP_USERFAULTFD
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Serge Hallyn <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+Thanks for the detailed explanation Casey!
 
-> Some effective upper bounds for the number of vcpu ids observable in a process:
+On Thu, Feb 24, 2022 at 6:58 PM Peter Xu <peterx@redhat.com> wrote:
 >
-> - sysconf(3) _SC_NPROCESSORS_CONF,
-> - the number of threads which exist concurrently in the process,
-> - the number of cpus in the cpu affinity mask applied by sched_setaffinity,
->   except in corner-case situations such as cpu hotplug removing all cpus from
->   the affinity set,
-> - cgroup cpuset "partition" limits,
+> On Thu, Feb 24, 2022 at 04:39:44PM -0800, Casey Schaufler wrote:
+> > What I'd want to see is multiple users where the use of CAP_USERFAULTD
+> > is independent of the use of CAP_SYS_PTRACE. That is, the programs would
+> > never require CAP_SYS_PTRACE. There should be demonstrated real value.
+> > Not just that a compromised program with CAP_SYS_PTRACE can do bad things,
+> > but that the programs with CAP_USERFAULTDD are somehow susceptible to
+> > being exploited to doing those bad things. Hypothetical users are just
+> > that, and often don't materialize.
 >
-> Note that AFAIR non-partition cgroup cpusets allow a cgroup to "borrow"
-> additional cores from the rest of the system if they are idle, therefore
-> allowing the number of concurrent threads to go beyond the specified limit.
+> I kind of have the same question indeed..
 >
-> AFAIR the sched affinity mask is tweaked independently of the cgroup cpuset.
-> Those are two mechanisms both affecting the scheduler task placement.
+> The use case we're talking about is VM migration, and the in-question
+> subject is literally the migration process or thread.  Isn't that a trusted
+> piece of software already?
 >
-> I would expect the user-space code to use some sensible upper bound as a
-> hint about how many per-vcpu data structure elements to expect (and how many
-> to pre-allocate), but have a "lazy initialization" fall-back in case the
-> vcpu id goes up to the number of configured processors - 1. And I suspect
-> that even the number of configured processors may change with CRIU.
->
-> If the above explanation makes sense (please let me know if I am wrong
-> or missed something), I suspect I should add it to the commit message.
+> Then the question is why the extra capability (in CAP_PTRACE but not in
+> CAP_UFFD) could bring much risk to the system.  Axel, did I miss something
+> important?
 
-That helps, thanks.  I do think that something like this belongs in the
-changelog - or, even better, in the upcoming restartable-sequences
-section in the userspace-api documentation :)
+For me it's just a matter of giving the live migration process as
+little power as I can while still letting it do its job.
 
-Thanks,
+Live migration is somewhat trusted, and certainly if it can mess with
+the memory contents of its own VM, that's no concern. But there are
+other processes or threads running alongside it to manage other parts
+of the VM, like attached virtual disks. Also it's probably running on
+a server which also hosts other VMs, and I think it's a common design
+to have them all run as the same user (although, they may be running
+in other containers).
 
-jon
+So, it seems unfortunate to me that the live migration process can
+just ptrace() any of these other things running alongside it.
+
+Casey is right that we can restrict what it can do with e.g. SELinux
+or seccomp-ebpf or whatever else. But it seems to me a more fragile
+design to give the permissions and then restrict them, vs. just never
+giving those permissions in the first place.
+
+In any case though, it sounds like folks are more amenable to the
+device node approach. Honestly, I got that impression from Andrea as
+well when we first talked about this some months ago. So, I can pursue
+that approach instead.
+
+>
+> Thanks,
+
+>
+> --
+> Peter Xu
+>

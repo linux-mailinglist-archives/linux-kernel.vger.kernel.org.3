@@ -2,322 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F614C50A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017CB4C5098
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbiBYVYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S238534AbiBYVYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238549AbiBYVY0 (ORCPT
+        with ESMTP id S238419AbiBYVYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:24:26 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4911D18F208;
-        Fri, 25 Feb 2022 13:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645824230; x=1677360230;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=bFG81RF7RThm5jbdvhr7joMHXyFrPlvsUgZjDCCYl8A=;
-  b=ye17GIN4+t7J85PaEEA/gx1NM0t+ePbOgSvEIwCbF3IJZ+m9/5mkOWst
-   Xj2ovIiW3VUUB2Ie65sJwvivo8s8vssjfUMjjpyQbqFI1Wzbzag5Kvgyx
-   UJUyM2Wec10kEWNIqjNUwaJvmAkf+67k9Cyec09JKzxc0K0kQZsQVNAdb
-   E=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 25 Feb 2022 13:23:50 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 13:23:49 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 13:23:29 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 13:23:28 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 3/4] drm/msm/dpu:  revise timing engine programming to support widebus feature
-Date:   Fri, 25 Feb 2022 13:23:11 -0800
-Message-ID: <1645824192-29670-4-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1645824192-29670-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1645824192-29670-1-git-send-email-quic_khsieh@quicinc.com>
+        Fri, 25 Feb 2022 16:24:04 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25FA182D8E;
+        Fri, 25 Feb 2022 13:23:30 -0800 (PST)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21PLNBLr009217
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 16:23:12 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 8674315C0038; Fri, 25 Feb 2022 16:23:11 -0500 (EST)
+Date:   Fri, 25 Feb 2022 16:23:11 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH -v3] ext4: don't BUG if kernel subsystems dirty pages without
+ asking ext4 first
+Message-ID: <YhlIvw00Y4MkAgxX@mit.edu>
+References: <Yg0m6IjcNmfaSokM@google.com>
+ <Yhks88tO3Em/G370@mit.edu>
+ <YhlBUCi9O30szf6l@sol.localdomain>
+ <YhlFRoJ3OdYMIh44@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhlFRoJ3OdYMIh44@mit.edu>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Widebus feature will transmit two pixel data per pixel clock to interface.
-Timing engine provides driving force for this purpose. This patch base
-on HPG (Hardware Programming Guide) to revise timing engine register
-setting to accommodate both widebus and non widebus application. Also
-horizontal width parameters need to be reduced by half since two pixel
-data are clocked out per pixel clock when widebus feature enabled.
+[un]pin_user_pages_remote is dirtying pages without properly warning
+the file system in advance.  This was noted by Jan Kara in 2018[1] and
+more recently has resulted in bug reports by Syzbot in various Android
+kernels[2].
 
-Widebus can be enabled individually at DP. However at DSI, widebus have
-to be enabled along with DSC to achieve pixel clock rate be scaled down
-with same ratio as compression ratio when 10 bits per source component.
-Therefore this patch add no supports of DSI related widebus and compression.
+This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
+that a buggy kernel subsystem which dirty pages without properly
+notifying the file system causes ext4 to BUG, while other file systems
+are not (although user data likely will be lost).  I suspect in real
+life it is rare that people are using RDMA into file-backed memory,
+which is why no one has complained to ext4 developers except fuzzing
+programs.
 
-Changes in v2:
--- remove compression related code from timing
--- remove op_info from  struct msm_drm_private
--- remove unnecessary wide_bus_en variables
--- pass wide_bus_en into timing configuration by struct msm_dp
+So instead of crashing with a BUG, issue a warning (since there may be
+potential data loss) and just mark the page as clean to avoid
+unprivileged denial of service attacks until the problem can be
+properly fixed.  More discussion and background can be found in the
+thread starting at [2].
 
-Changes in v3:
--- split patch into 3 patches
+[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
 
-Changes in v4:
--- rework timing engine to not interfere with dsi/hdmi
--- cover both widebus and compression
-
-Changes in v5:
--- remove supports of DSI widebus and compression
-
-Changes in v7:
--- split this patch into 3 patches
--- add Tested-by
-
-Changes in v8:
--- move new registers writes under DATA_HCTL_EN features check.
-
-Changes in v10:
--- add const inside dpu_encoder_is_widebus_enabled()
--- drop useless parenthesis please
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
+Reported-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 ++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
- .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 ++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 53 ++++++++++++++++------
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
- 5 files changed, 67 insertions(+), 14 deletions(-)
+ fs/ext4/inode.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 1e648db..9a8d992 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -208,6 +208,8 @@ struct dpu_encoder_virt {
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 01c9e4f743ba..008fe8750109 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -1993,6 +1993,15 @@ static int ext4_writepage(struct page *page,
+ 	else
+ 		len = PAGE_SIZE;
  
- 	u32 idle_timeout;
- 
-+	bool wide_bus_en;
-+
- 	struct msm_dp *dp;
- };
- 
-@@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
- 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
- };
- 
-+
-+bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
-+{
-+	const struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
-+
-+	return dpu_enc->wide_bus_en;
-+}
-+
- static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
- {
- 	struct dpu_hw_dither_cfg dither_cfg = { 0 };
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-index e241914..3d8e839 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-@@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
-  */
- int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
- 
-+bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc);
-+
- #endif /* __DPU_ENCODER_H__ */
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-index ddd9d89..04ac2dc 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-@@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
- 		timing->v_back_porch += timing->v_front_porch;
- 		timing->v_front_porch = 0;
- 	}
-+
-+	timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
-+
-+	/*
-+	 * for DP, divide the horizonal parameters by 2 when
-+	 * widebus is enabled
-+	 */
-+	if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
-+		timing->width = timing->width >> 1;
-+		timing->xres = timing->xres >> 1;
-+		timing->h_back_porch = timing->h_back_porch >> 1;
-+		timing->h_front_porch = timing->h_front_porch >> 1;
-+		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
++	/* Should never happen but for bugs in other kernel subsystems */
++	if (!page_has_buffers(page)) {
++		ext4_warning_inode(inode,
++		   "page %lu does not have buffers attached", page->index);
++		ClearPageDirty(page);
++		unlock_page(page);
++		return 0;
 +	}
- }
- 
- static u32 get_horizontal_total(const struct intf_timing_params *timing)
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-index c2cd185..2ae30da 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-@@ -33,6 +33,7 @@
- #define INTF_TP_COLOR1                  0x05C
- #define INTF_CONFIG2                    0x060
- #define INTF_DISPLAY_DATA_HCTL          0x064
-+#define INTF_ACTIVE_DATA_HCTL           0x068
- #define INTF_FRAME_LINE_COUNT_EN        0x0A8
- #define INTF_FRAME_COUNT                0x0AC
- #define   INTF_LINE_COUNT               0x0B0
-@@ -96,15 +97,23 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 	u32 hsync_period, vsync_period;
- 	u32 display_v_start, display_v_end;
- 	u32 hsync_start_x, hsync_end_x;
-+	u32 hsync_data_start_x, hsync_data_end_x;
- 	u32 active_h_start, active_h_end;
- 	u32 active_v_start, active_v_end;
- 	u32 active_hctl, display_hctl, hsync_ctl;
- 	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
- 	u32 panel_format;
--	u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
-+	u32 intf_cfg, intf_cfg2 = 0;
-+	u32 display_data_hctl = 0, active_data_hctl = 0;
-+	u32 data_width;
-+	bool dp_intf = false;
- 
- 	/* read interface_cfg */
- 	intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
 +
-+	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
-+		dp_intf = true;
-+
- 	hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
- 	p->h_front_porch;
- 	vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
-@@ -118,7 +127,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 	hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
- 	hsync_end_x = hsync_period - p->h_front_porch - 1;
+ 	page_bufs = page_buffers(page);
+ 	/*
+ 	 * We cannot do block allocation or other extent handling in this
+@@ -2588,12 +2597,28 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+ 			     (mpd->wbc->sync_mode == WB_SYNC_NONE)) ||
+ 			    unlikely(page->mapping != mapping)) {
+ 				unlock_page(page);
+-				continue;
++				goto out;
+ 			}
  
--	if (p->width != p->xres) {
-+	if (p->width != p->xres) { /* border fill added */
- 		active_h_start = hsync_start_x;
- 		active_h_end = active_h_start + p->xres - 1;
- 	} else {
-@@ -126,7 +135,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 		active_h_end = 0;
- 	}
+ 			wait_on_page_writeback(page);
+ 			BUG_ON(PageWriteback(page));
  
--	if (p->height != p->yres) {
-+	if (p->height != p->yres) { /* border fill added */
- 		active_v_start = display_v_start;
- 		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
- 	} else {
-@@ -147,17 +156,35 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
- 	display_hctl = (hsync_end_x << 16) | hsync_start_x;
- 
--	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
-+	/*
-+	 * DATA_HCTL_EN controls data timing which can be different from
-+	 * video timing. It is recommended to enable it for all cases, except
-+	 * if compression is enabled in 1 pixel per clock mode
-+	 */
-+	if (p->wide_bus_en)
-+		intf_cfg2 |= INTF_CFG2_DATABUS_WIDEN | INTF_CFG2_DATA_HCTL_EN;
++			/*
++			 * Should never happen but for buggy code in
++			 * other subsystems that call
++			 * set_page_dirty() without properly warning
++			 * the file system first.  See [1] for more
++			 * information.
++			 *
++			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
++			 */
++			if (!page_has_buffers(page)) {
++				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
++				ClearPageDirty(page);
++				unlock_page(page);
++				continue;
++			}
 +
-+	data_width = p->width;
-+
-+	hsync_data_start_x = hsync_start_x;
-+	hsync_data_end_x =  hsync_start_x + data_width - 1;
-+
-+	display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
-+
-+	if (dp_intf) {
-+		/* DP timing adjustment */
-+		display_v_start += p->hsync_pulse_width + p->h_back_porch;
-+		display_v_end   -= p->h_front_porch;
-+
- 		active_h_start = hsync_start_x;
- 		active_h_end = active_h_start + p->xres - 1;
- 		active_v_start = display_v_start;
- 		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
- 
--		display_v_start += p->hsync_pulse_width + p->h_back_porch;
--		display_v_end   -= p->h_front_porch; 
--
- 		active_hctl = (active_h_end << 16) | active_h_start;
- 		display_hctl = active_hctl;
-+
-+		intf_cfg |= INTF_CFG_ACTIVE_H_EN | INTF_CFG_ACTIVE_V_EN;
- 	}
- 
- 	den_polarity = 0;
-@@ -187,13 +214,6 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 				(COLOR_8BIT << 4) |
- 				(0x21 << 8));
- 
--	if (ctx->cap->features & BIT(DPU_DATA_HCTL_EN)) {
--		intf_cfg2 |= INTF_CFG2_DATA_HCTL_EN;
--		display_data_hctl = display_hctl;
--		DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
--		DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
--	}
--
- 	DPU_REG_WRITE(c, INTF_HSYNC_CTL, hsync_ctl);
- 	DPU_REG_WRITE(c, INTF_VSYNC_PERIOD_F0, vsync_period * hsync_period);
- 	DPU_REG_WRITE(c, INTF_VSYNC_PULSE_WIDTH_F0,
-@@ -211,6 +231,11 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 	DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
- 	DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
- 	DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
-+	if (ctx->cap->features & BIT(DPU_DATA_HCTL_EN)) {
-+		DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
-+		DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
-+		DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
-+	}
- }
- 
- static void dpu_hw_intf_enable_timing_engine(
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-index 3568be8..e4a518a 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-@@ -30,6 +30,8 @@ struct intf_timing_params {
- 	u32 border_clr;
- 	u32 underflow_clr;
- 	u32 hsync_skew;
-+
-+	bool wide_bus_en;
- };
- 
- struct intf_prog_fetch {
+ 			if (mpd->map.m_len == 0)
+ 				mpd->first_page = page->index;
+ 			mpd->next_page = page->index + 1;
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.31.0
 

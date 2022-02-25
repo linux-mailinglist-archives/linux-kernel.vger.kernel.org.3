@@ -2,208 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C95C4C47C5
+	by mail.lfdr.de (Postfix) with ESMTP id 308BE4C47C4
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbiBYOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        id S241355AbiBYOkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiBYOjR (ORCPT
+        with ESMTP id S230040AbiBYOkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:39:17 -0500
+        Fri, 25 Feb 2022 09:40:00 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66B71AE656;
-        Fri, 25 Feb 2022 06:38:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FBA1D21D1;
+        Fri, 25 Feb 2022 06:39:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6225260FD3;
-        Fri, 25 Feb 2022 14:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D44C340E7;
-        Fri, 25 Feb 2022 14:38:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A738614BD;
+        Fri, 25 Feb 2022 14:39:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEAEC340E7;
+        Fri, 25 Feb 2022 14:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645799923;
-        bh=NPDWNX4z15E/nqAD2vGd2TQeDDWREovDKjiNWAiQWYI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=LLFcRuCqAx0Ofpr1UyhOV9cVmRpmEYfshwPkdi7vYBN4BpX5xl3IPqDVsga3LHPcL
-         yviGcRxmJEtO3joHSepSfmGTd6eUAAK9mWFMw/HXA8ypbeUfySxWQeo3OMO4uY90TC
-         40asBPPg/Npk5RJI1PRFGI/utCx0Tl3znNYEfozp1/8NxSlpHXe8n9iImgG++sEaUY
-         jDUaCnumZvyf4M0zH4CmE2dDIcRF1+KzXoHySpZWWeTZ9q4CKPJqEcIe/mz8KhA8kV
-         N0Vx/NbOuXHsZaLsmt2lpbrMFvFwxP8Ro2sShP3875LE4dGnF6UxL9vWIymLS3Zp7q
-         wtvWT/sj9f2Ag==
-Message-ID: <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-Date:   Fri, 25 Feb 2022 08:38:41 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
- <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
-In-Reply-To: <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1645799967;
+        bh=cNgfaXX/ZY2ofKk0wyVNQWz4wXK1w3ilqbl4W9JFkyQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dvMXNfEp5LbXneNtmXndDp6B4ROeUk4WyLcH3nwf6ImqOwMzQvlPqEFJM2qEUSiSn
+         gVh/AmdWq7Cqr5hGjd8II945ud7TiUXtTqSnIQjesKin91DmTgISJTs+NV05TiaWLY
+         RNJOmY0uuhTa938PoQnNxCQlOews8NGtk5V3dElPnYvNMvdUKgJD3SGOW3wZ6rn3On
+         w8+HeRrHlfLy3e1+a9SR4S9hi0ipxh6ZYRzgeRFD+IxshliLFDdICby0cUIvr1CN7G
+         l44qdugBtMNxITvpEIu0sD/Ctm+EUk6xGPvbUuzrrCVoDrgs/TL7YqNn1DM0jhrbCA
+         TeCSBXkgWSb3A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nNbkj-00AYAh-6t; Fri, 25 Feb 2022 14:39:25 +0000
+Date:   Fri, 25 Feb 2022 14:39:24 +0000
+Message-ID: <87mtif2eoz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] irqchip/apple-aic: Add Fast IPI support
+In-Reply-To: <20220224130741.63924-4-marcan@marcan.st>
+References: <20220224130741.63924-1-marcan@marcan.st>
+        <20220224130741.63924-4-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/25/22 08:29, Dinh Nguyen wrote:
+On Thu, 24 Feb 2022 13:07:37 +0000,
+Hector Martin <marcan@marcan.st> wrote:
 > 
+> The newer AICv2 present in t600x SoCs does not have legacy IPI support
+> at all. Since t8103 also supports Fast IPIs, implement support for this
+> first. The legacy IPI code is left as a fallback, so it can be
+> potentially used by older SoCs in the future.
 > 
-> On 2/25/22 02:52, Anshuman Khandual wrote:
->>
->>
->> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->>> Hi Anshuman,
->>>
->>> On 2/13/22 20:30, Anshuman Khandual wrote:
->>>> This defines and exports a platform specific custom 
->>>> vm_get_page_prot() via
->>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and 
->>>> __PXXX
->>>> macros can be dropped which are no longer needed.
->>>>
->>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>> ---
->>>>    arch/nios2/Kconfig               |  1 +
->>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
->>>>    arch/nios2/mm/init.c             | 45 
->>>> ++++++++++++++++++++++++++++++++
->>>>    3 files changed, 46 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>>> index 33fd06f5fa41..85a58a357a3b 100644
->>>> --- a/arch/nios2/Kconfig
->>>> +++ b/arch/nios2/Kconfig
->>>> @@ -6,6 +6,7 @@ config NIOS2
->>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>>        select ARCH_HAS_DMA_SET_UNCACHED
->>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>>        select ARCH_NO_SWAP
->>>>        select COMMON_CLK
->>>>        select TIMER_OF
->>>> diff --git a/arch/nios2/include/asm/pgtable.h 
->>>> b/arch/nios2/include/asm/pgtable.h
->>>> index 4a995fa628ee..2678dad58a63 100644
->>>> --- a/arch/nios2/include/asm/pgtable.h
->>>> +++ b/arch/nios2/include/asm/pgtable.h
->>>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>>     */
->>>>      /* Remove W bit on private pages for COW support */
->>>> -#define __P000    MKP(0, 0, 0)
->>>> -#define __P001    MKP(0, 0, 1)
->>>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>>> -#define __P100    MKP(1, 0, 0)
->>>> -#define __P101    MKP(1, 0, 1)
->>>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>>      /* Shared pages can have exact HW mapping */
->>>> -#define __S000    MKP(0, 0, 0)
->>>> -#define __S001    MKP(0, 0, 1)
->>>> -#define __S010    MKP(0, 1, 0)
->>>> -#define __S011    MKP(0, 1, 1)
->>>> -#define __S100    MKP(1, 0, 0)
->>>> -#define __S101    MKP(1, 0, 1)
->>>> -#define __S110    MKP(1, 1, 0)
->>>> -#define __S111    MKP(1, 1, 1)
->>>>      /* Used all over the kernel */
->>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | 
->>>> _PAGE_READ | \
->>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>>> index 613fcaa5988a..311b2146a248 100644
->>>> --- a/arch/nios2/mm/init.c
->>>> +++ b/arch/nios2/mm/init.c
->>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct 
->>>> *vma)
->>>>    {
->>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>>    }
->>>> +
->>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>>> +{
->>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>>> +    case VM_NONE:
->>>> +        return MKP(0, 0, 0);
->>>> +    case VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    /* COW */
->>>> +    case VM_WRITE:
->>>> +        return MKP(0, 0, 0);
->>>> +    /* COW */
->>>> +    case VM_WRITE | VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    case VM_EXEC:
->>>> +        return MKP(1, 0, 0);
->>>> +    case VM_EXEC | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    /* COW */
->>>> +    case VM_EXEC | VM_WRITE:
->>>> +        return MKP(1, 0, 0);
->>>> +    /* COW */
->>>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    case VM_SHARED:
->>>> +        return MKP(0, 0, 0);
->>>> +    case VM_SHARED | VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    case VM_SHARED | VM_WRITE:
->>>> +        return MKP(0, 1, 0);
->>>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>>> +        return MKP(0, 1, 1);
->>>> +    case VM_SHARED | VM_EXEC:
->>>> +        return MKP(1, 0, 0);
->>>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>>> +        return MKP(1, 1, 0);
->>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>>> +        return MKP(1, 1, 1);
->>>> +    default:
->>>> +        BUILD_BUG();
->>>> +    }
->>>> +}
->>>> +EXPORT_SYMBOL(vm_get_page_prot);
->>>
->>> I'm getting this compile error after applying this patch when build 
->>> NIOS2:
->>
->> Hmm, that is strange.
->>
->> Did you apply the entire series or atleast upto the nios2 patch ? Generic
->> vm_get_page_prot() should not be called (which is build complaining here)
->> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
->>
->> Ran a quick build test on nios2 for the entire series and also just upto
->> this particular patch, build was successful.
->>
+> The vIPI code is shared; only the IPI firing/acking bits change for Fast
+> IPIs.
 > 
-> Ok, I did not apply the whole series, just this patch.
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/irqchip/irq-apple-aic.c | 122 ++++++++++++++++++++++++++++----
+>  1 file changed, 109 insertions(+), 13 deletions(-)
 > 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index 38091ebb9403..613e0ebdabdc 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -24,7 +24,7 @@
+>   * - Default "this CPU" register view and explicit per-CPU views
+>   *
+>   * In addition, this driver also handles FIQs, as these are routed to the same
+> - * IRQ vector. These are used for Fast IPIs (TODO), the ARMv8 timer IRQs, and
+> + * IRQ vector. These are used for Fast IPIs, the ARMv8 timer IRQs, and
+>   * performance counters (TODO).
+>   *
+>   * Implementation notes:
+> @@ -52,9 +52,11 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/irqchip/arm-vgic-info.h>
+>  #include <linux/irqdomain.h>
+> +#include <linux/jump_label.h>
+>  #include <linux/limits.h>
+>  #include <linux/of_address.h>
+>  #include <linux/slab.h>
+> +#include <asm/cputype.h>
+>  #include <asm/exception.h>
+>  #include <asm/sysreg.h>
+>  #include <asm/virt.h>
+> @@ -106,7 +108,6 @@
+>  
+>  /*
+>   * IMP-DEF sysregs that control FIQ sources
+> - * Note: sysreg-based IPIs are not supported yet.
+>   */
+>  
+>  /* Core PMC control register */
+> @@ -155,6 +156,10 @@
+>  #define SYS_IMP_APL_UPMSR_EL1		sys_reg(3, 7, 15, 6, 4)
+>  #define UPMSR_IACT			BIT(0)
+>  
+> +/* MPIDR fields */
+> +#define MPIDR_CPU(x)			MPIDR_AFFINITY_LEVEL(x, 0)
+> +#define MPIDR_CLUSTER(x)		MPIDR_AFFINITY_LEVEL(x, 1)
+> +
+>  #define AIC_NR_FIQ		4
+>  #define AIC_NR_SWIPI		32
+>  
+> @@ -173,11 +178,44 @@
+>  #define AIC_TMR_EL02_PHYS	AIC_TMR_GUEST_PHYS
+>  #define AIC_TMR_EL02_VIRT	AIC_TMR_GUEST_VIRT
+>  
+> +DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
+> +
+> +struct aic_info {
+> +	int version;
+> +
+> +	/* Features */
+> +	bool fast_ipi;
+> +};
+> +
+> +static const struct aic_info aic1_info = {
+> +	.version	= 1,
+> +};
+> +
+> +static const struct aic_info aic1_fipi_info = {
+> +	.version	= 1,
+> +
+> +	.fast_ipi	= true,
+> +};
+> +
+> +static const struct of_device_id aic_info_match[] = {
+> +	{
+> +		.compatible = "apple,t8103-aic",
+> +		.data = &aic1_fipi_info,
+> +	},
+> +	{
+> +		.compatible = "apple,aic",
+> +		.data = &aic1_info,
+> +	},
+> +	{}
+> +};
+> +
+>  struct aic_irq_chip {
+>  	void __iomem *base;
+>  	struct irq_domain *hw_domain;
+>  	struct irq_domain *ipi_domain;
+>  	int nr_hw;
+> +
+> +	struct aic_info info;
+>  };
+>  
+>  static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
+> @@ -386,8 +424,12 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+>  	 */
+>  
+>  	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> -		pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> -		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +		if (static_branch_likely(&use_fast_ipi)) {
+> +			aic_handle_ipi(regs);
+> +		} else {
+> +			pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> +			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +		}
+>  	}
+>  
+>  	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0)))
+> @@ -563,6 +605,22 @@ static const struct irq_domain_ops aic_irq_domain_ops = {
+>   * IPI irqchip
+>   */
+>  
+> +static void aic_ipi_send_fast(int cpu)
+> +{
+> +	u64 mpidr = cpu_logical_map(cpu);
+> +	u64 my_mpidr = read_cpuid_mpidr();
+> +	u64 cluster = MPIDR_CLUSTER(mpidr);
+> +	u64 idx = MPIDR_CPU(mpidr);
+> +
+> +	if (MPIDR_CLUSTER(my_mpidr) == cluster)
+> +		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx),
+> +			       SYS_IMP_APL_IPI_RR_LOCAL_EL1);
+> +	else
+> +		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx) | FIELD_PREP(IPI_RR_CLUSTER, cluster),
+> +			       SYS_IMP_APL_IPI_RR_GLOBAL_EL1);
+> +	isb();
 
+I think you have an ordering issue with this, see below.
 
-Is someone taking this whole series or should I just take this patch?
+> +}
+> +
+>  static void aic_ipi_mask(struct irq_data *d)
+>  {
+>  	u32 irq_bit = BIT(irqd_to_hwirq(d));
+> @@ -588,8 +646,12 @@ static void aic_ipi_unmask(struct irq_data *d)
+>  	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
+>  	 * No barriers needed here since this is a self-IPI.
+>  	 */
+> -	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit)
+> -		aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
+> +	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
+> +		if (static_branch_likely(&use_fast_ipi))
+> +			aic_ipi_send_fast(smp_processor_id());
+> +		else
+> +			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
+> +	}
+>  }
+>  
+>  static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+> @@ -617,8 +679,12 @@ static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+>  		smp_mb__after_atomic();
+>  
+>  		if (!(pending & irq_bit) &&
+> -		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit))
+> -			send |= AIC_IPI_SEND_CPU(cpu);
+> +		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
+> +			if (static_branch_likely(&use_fast_ipi))
+> +				aic_ipi_send_fast(cpu);
 
-Dinh
+OK, this is suffering from the same issue that GICv3 has, which is
+that memory barriers don't provide order against sysregs. You need a
+DSB for that, which is a pain. Something like this:
+
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index 602c8b274170..579f22b72339 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -736,6 +736,15 @@ static void aic_ipi_send_fast(int cpu)
+ 	u64 cluster = MPIDR_CLUSTER(mpidr);
+ 	u64 idx = MPIDR_CPU(mpidr);
+ 
++	/*
++	 * A DSB is required here in to order prior writes to memory
++	 * with system register accesses having a side effect
++	 * (matching the behaviour of the IPI registers). Make sure we
++	 * only order stores with in the IS domain, keeping as light
++	 * as possible.
++	 */
++	dsb(ishst);
++
+ 	if (MPIDR_CLUSTER(my_mpidr) == cluster)
+ 		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx),
+ 			       SYS_IMP_APL_IPI_RR_LOCAL_EL1);
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

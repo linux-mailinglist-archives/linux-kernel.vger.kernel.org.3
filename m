@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA36A4C4B60
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718094C4B6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243352AbiBYQxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S243456AbiBYQyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243120AbiBYQwx (ORCPT
+        with ESMTP id S243246AbiBYQw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:52:53 -0500
+        Fri, 25 Feb 2022 11:52:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0918022311E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC9C223108
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:52:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B6361990
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B732F61C4A
         for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBD5C340F8;
-        Fri, 25 Feb 2022 16:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D8BC340F0;
+        Fri, 25 Feb 2022 16:52:20 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nNdpK-00B8KE-V3;
-        Fri, 25 Feb 2022 11:52:18 -0500
-Message-ID: <20220225165218.795842827@goodmis.org>
+        id 1nNdpL-00B8Km-52;
+        Fri, 25 Feb 2022 11:52:19 -0500
+Message-ID: <20220225165218.983307690@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 25 Feb 2022 11:51:55 -0500
+Date:   Fri, 25 Feb 2022 11:51:56 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [for-linus][PATCH 04/13] eprobes: Remove redundant event type information
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [for-linus][PATCH 05/13] tracing: Uninline trace_trigger_soft_disabled() partly
 References: <20220225165151.824659113@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,173 +47,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Currently, the event probes save the type of the event they are attached
-to when recording the event. For example:
+On a powerpc32 build with CONFIG_CC_OPTIMISE_FOR_SIZE, the inline
+keyword is not honored and trace_trigger_soft_disabled() appears
+approx 50 times in vmlinux.
 
-  # echo 'e:switch sched/sched_switch prev_state=$prev_state prev_prio=$prev_prio next_pid=$next_pid next_prio=$next_prio' > dynamic_events
-  # cat events/eprobes/switch/format
+Adding -Winline to the build, the following message appears:
 
- name: switch
- ID: 1717
- format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
+	./include/linux/trace_events.h:712:1: error: inlining failed in call to 'trace_trigger_soft_disabled': call is unlikely and code size would grow [-Werror=inline]
 
-        field:unsigned int __probe_type;        offset:8;       size:4; signed:0;
-        field:u64 prev_state;   offset:12;      size:8; signed:0;
-        field:u64 prev_prio;    offset:20;      size:8; signed:0;
-        field:u64 next_pid;     offset:28;      size:8; signed:0;
-        field:u64 next_prio;    offset:36;      size:8; signed:0;
+That function is rather big for an inlined function:
 
- print fmt: "(%u) prev_state=0x%Lx prev_prio=0x%Lx next_pid=0x%Lx next_prio=0x%Lx", REC->__probe_type, REC->prev_state, REC->prev_prio, REC->next_pid, REC->next_prio
+	c003df60 <trace_trigger_soft_disabled>:
+	c003df60:	94 21 ff f0 	stwu    r1,-16(r1)
+	c003df64:	7c 08 02 a6 	mflr    r0
+	c003df68:	90 01 00 14 	stw     r0,20(r1)
+	c003df6c:	bf c1 00 08 	stmw    r30,8(r1)
+	c003df70:	83 e3 00 24 	lwz     r31,36(r3)
+	c003df74:	73 e9 01 00 	andi.   r9,r31,256
+	c003df78:	41 82 00 10 	beq     c003df88 <trace_trigger_soft_disabled+0x28>
+	c003df7c:	38 60 00 00 	li      r3,0
+	c003df80:	39 61 00 10 	addi    r11,r1,16
+	c003df84:	4b fd 60 ac 	b       c0014030 <_rest32gpr_30_x>
+	c003df88:	73 e9 00 80 	andi.   r9,r31,128
+	c003df8c:	7c 7e 1b 78 	mr      r30,r3
+	c003df90:	41 a2 00 14 	beq     c003dfa4 <trace_trigger_soft_disabled+0x44>
+	c003df94:	38 c0 00 00 	li      r6,0
+	c003df98:	38 a0 00 00 	li      r5,0
+	c003df9c:	38 80 00 00 	li      r4,0
+	c003dfa0:	48 05 c5 f1 	bl      c009a590 <event_triggers_call>
+	c003dfa4:	73 e9 00 40 	andi.   r9,r31,64
+	c003dfa8:	40 82 00 28 	bne     c003dfd0 <trace_trigger_soft_disabled+0x70>
+	c003dfac:	73 ff 02 00 	andi.   r31,r31,512
+	c003dfb0:	41 82 ff cc 	beq     c003df7c <trace_trigger_soft_disabled+0x1c>
+	c003dfb4:	80 01 00 14 	lwz     r0,20(r1)
+	c003dfb8:	83 e1 00 0c 	lwz     r31,12(r1)
+	c003dfbc:	7f c3 f3 78 	mr      r3,r30
+	c003dfc0:	83 c1 00 08 	lwz     r30,8(r1)
+	c003dfc4:	7c 08 03 a6 	mtlr    r0
+	c003dfc8:	38 21 00 10 	addi    r1,r1,16
+	c003dfcc:	48 05 6f 6c 	b       c0094f38 <trace_event_ignore_this_pid>
+	c003dfd0:	38 60 00 01 	li      r3,1
+	c003dfd4:	4b ff ff ac 	b       c003df80 <trace_trigger_soft_disabled+0x20>
 
-The __probe_type adds 4 bytes to every event.
+However it is located in a hot path so inlining it is important.
+But forcing inlining of the entire function by using __always_inline
+leads to increasing the text size by approx 20 kbytes.
 
-One of the reasons for creating eprobes is to limit what is traced in an
-event to be able to limit what is written into the ring buffer. Having
-this redundant 4 bytes to every event takes away from this.
+Instead, split the fonction in two parts, one part with the likely
+fast path, flagged __always_inline, and a second part out of line.
 
-The event that is recorded can be retrieved from the event probe itself,
-that is available when the trace is happening. For user space tools, it
-could simply read the dynamic_event file to find the event they are for.
-So there is really no reason to write this information into the ring
-buffer for every event.
+With this change, on a powerpc32 with CONFIG_CC_OPTIMISE_FOR_SIZE
+vmlinux text increases by only 1,4 kbytes, which is partly
+compensated by a decrease of vmlinux data by 7 kbytes.
 
-Link: https://lkml.kernel.org/r/20220218190057.2f5a19a8@gandalf.local.home
+On ppc64_defconfig which has CONFIG_CC_OPTIMISE_FOR_SPEED, this
+change reduces vmlinux text by more than 30 kbytes.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
+Link: https://lkml.kernel.org/r/69ce0986a52d026d381d612801d978aa4f977460.1644563295.git.christophe.leroy@csgroup.eu
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace.h        |  1 -
- kernel/trace/trace_eprobe.c | 16 +++++++---------
- kernel/trace/trace_probe.c  | 10 +++++-----
- kernel/trace/trace_probe.h  |  1 -
- 4 files changed, 12 insertions(+), 16 deletions(-)
+ include/linux/trace_events.h        | 22 ++++++++++++----------
+ kernel/trace/trace_events_trigger.c | 14 ++++++++++++++
+ 2 files changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index d038ddbf1bea..c5b09c31e077 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -136,7 +136,6 @@ struct kprobe_trace_entry_head {
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 70c069aef02c..dcea51fb60e2 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -699,6 +699,8 @@ event_triggers_post_call(struct trace_event_file *file,
  
- struct eprobe_trace_entry_head {
- 	struct trace_entry	ent;
--	unsigned int		type;
- };
+ bool trace_event_ignore_this_pid(struct trace_event_file *trace_file);
  
- struct kretprobe_trace_entry_head {
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 191db32dec46..541aa13581b9 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -242,7 +242,6 @@ static int trace_eprobe_tp_arg_update(struct trace_eprobe *ep, int i)
- 
- static int eprobe_event_define_fields(struct trace_event_call *event_call)
++bool __trace_trigger_soft_disabled(struct trace_event_file *file);
++
+ /**
+  * trace_trigger_soft_disabled - do triggers and test if soft disabled
+  * @file: The file pointer of the event to test
+@@ -708,20 +710,20 @@ bool trace_event_ignore_this_pid(struct trace_event_file *trace_file);
+  * triggers that require testing the fields, it will return true,
+  * otherwise false.
+  */
+-static inline bool
++static __always_inline bool
+ trace_trigger_soft_disabled(struct trace_event_file *file)
  {
--	int ret;
- 	struct eprobe_trace_entry_head field;
- 	struct trace_probe *tp;
+ 	unsigned long eflags = file->flags;
  
-@@ -250,8 +249,6 @@ static int eprobe_event_define_fields(struct trace_event_call *event_call)
- 	if (WARN_ON_ONCE(!tp))
- 		return -ENOENT;
- 
--	DEFINE_FIELD(unsigned int, type, FIELD_STRING_TYPE, 0);
--
- 	return traceprobe_define_arg_fields(event_call, sizeof(field), tp);
+-	if (!(eflags & EVENT_FILE_FL_TRIGGER_COND)) {
+-		if (eflags & EVENT_FILE_FL_TRIGGER_MODE)
+-			event_triggers_call(file, NULL, NULL, NULL);
+-		if (eflags & EVENT_FILE_FL_SOFT_DISABLED)
+-			return true;
+-		if (eflags & EVENT_FILE_FL_PID_FILTER)
+-			return trace_event_ignore_this_pid(file);
+-	}
+-	return false;
++	if (likely(!(eflags & (EVENT_FILE_FL_TRIGGER_MODE |
++			       EVENT_FILE_FL_SOFT_DISABLED |
++			       EVENT_FILE_FL_PID_FILTER))))
++		return false;
++
++	if (likely(eflags & EVENT_FILE_FL_TRIGGER_COND))
++		return false;
++
++	return __trace_trigger_soft_disabled(file);
  }
  
-@@ -270,7 +267,9 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	struct trace_event_call *pevent;
- 	struct trace_event *probed_event;
- 	struct trace_seq *s = &iter->seq;
-+	struct trace_eprobe *ep;
- 	struct trace_probe *tp;
-+	unsigned int type;
+ #ifdef CONFIG_BPF_EVENTS
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index efe563140f27..7eb9d04f1c2e 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -84,6 +84,20 @@ event_triggers_call(struct trace_event_file *file,
+ }
+ EXPORT_SYMBOL_GPL(event_triggers_call);
  
- 	field = (struct eprobe_trace_entry_head *)iter->ent;
- 	tp = trace_probe_primary_from_call(
-@@ -278,15 +277,18 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	if (WARN_ON_ONCE(!tp))
- 		goto out;
- 
-+	ep = container_of(tp, struct trace_eprobe, tp);
-+	type = ep->event->event.type;
++bool __trace_trigger_soft_disabled(struct trace_event_file *file)
++{
++	unsigned long eflags = file->flags;
 +
- 	trace_seq_printf(s, "%s: (", trace_probe_name(tp));
- 
--	probed_event = ftrace_find_event(field->type);
-+	probed_event = ftrace_find_event(type);
- 	if (probed_event) {
- 		pevent = container_of(probed_event, struct trace_event_call, event);
- 		trace_seq_printf(s, "%s.%s", pevent->class->system,
- 				 trace_event_name(pevent));
- 	} else {
--		trace_seq_printf(s, "%u", field->type);
-+		trace_seq_printf(s, "%u", type);
- 	}
- 
- 	trace_seq_putc(s, ')');
-@@ -498,10 +500,6 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
- 		return;
- 
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
--	if (edata->ep->event)
--		entry->type = edata->ep->event->event.type;
--	else
--		entry->type = 0;
- 	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 73d90179b51b..80863c6508e5 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -871,15 +871,15 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
- 	switch (ptype) {
- 	case PROBE_PRINT_NORMAL:
- 		fmt = "(%lx)";
--		arg = "REC->" FIELD_STRING_IP;
-+		arg = ", REC->" FIELD_STRING_IP;
- 		break;
- 	case PROBE_PRINT_RETURN:
- 		fmt = "(%lx <- %lx)";
--		arg = "REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
-+		arg = ", REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
- 		break;
- 	case PROBE_PRINT_EVENT:
--		fmt = "(%u)";
--		arg = "REC->" FIELD_STRING_TYPE;
-+		fmt = "";
-+		arg = "";
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -903,7 +903,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
- 					parg->type->fmt);
- 	}
- 
--	pos += snprintf(buf + pos, LEN_OR_ZERO, "\", %s", arg);
-+	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"%s", arg);
- 
- 	for (i = 0; i < tp->nr_args; i++) {
- 		parg = tp->args + i;
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 99e7a5df025e..92cc149af0fd 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -38,7 +38,6 @@
- #define FIELD_STRING_IP		"__probe_ip"
- #define FIELD_STRING_RETIP	"__probe_ret_ip"
- #define FIELD_STRING_FUNC	"__probe_func"
--#define FIELD_STRING_TYPE	"__probe_type"
- 
- #undef DEFINE_FIELD
- #define DEFINE_FIELD(type, item, name, is_signed)			\
++	if (eflags & EVENT_FILE_FL_TRIGGER_MODE)
++		event_triggers_call(file, NULL, NULL, NULL);
++	if (eflags & EVENT_FILE_FL_SOFT_DISABLED)
++		return true;
++	if (eflags & EVENT_FILE_FL_PID_FILTER)
++		return trace_event_ignore_this_pid(file);
++	return false;
++}
++EXPORT_SYMBOL_GPL(__trace_trigger_soft_disabled);
++
+ /**
+  * event_triggers_post_call - Call 'post_triggers' for a trace event
+  * @file: The trace_event_file associated with the event
 -- 
 2.34.1

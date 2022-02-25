@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326304C4FDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08EC4C4FE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 21:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbiBYUpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 15:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S237203AbiBYUp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 15:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237013AbiBYUpF (ORCPT
+        with ESMTP id S236961AbiBYUpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 15:45:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDF51AAFFE;
-        Fri, 25 Feb 2022 12:44:32 -0800 (PST)
+        Fri, 25 Feb 2022 15:45:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE031D0365
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:44:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93C15B83377;
-        Fri, 25 Feb 2022 20:44:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3686EC340E7;
-        Fri, 25 Feb 2022 20:44:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 289AEB83302
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9B29C340E7;
+        Fri, 25 Feb 2022 20:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645821870;
-        bh=RBSGcynFsGOIZ0yZcF9ccn83g+TvOmmfcfeka8M1WcI=;
+        s=k20201202; t=1645821877;
+        bh=WOCc2PQIsQsm/iJx6vyvbC5v8aZhj+zRPljDes6/c9s=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=RX51k/dg+b8Un/g7CXEfyaq1m+Vimh3zfelUllngReKFdeCNDySX0JCyP/bPccFni
-         WXviRD1IrsFWdHBBhLrg4Dh+UCGBBHZYjNq/QId2uVUktPHLC8ptZUmee1MSkCZxRc
-         7R2jjwmY5JhCBIG3m02yXVrYvnvBBPN6tyx9xzO8wD9RirMMiwCl52nvlAql3s31Fw
-         VcJyA9F8OJznJvjaoAkRY/G49XWgXcd/upjOj9GVMGphBQEnBmJ6upZKXlp3FLivzU
-         ul0InH0eJhBZVMpUWGnCRNFUyAyPBKOeaBdoINED6kwoJmHGvhh7In9KECOhs1UNgd
-         TanUsDbNKp4YQ==
+        b=teUXmRsC4qSu8zY0ED/xy5LqPIMKT4mwiM5967D9g6I8UXorkkihqJfhS2W7YY4yK
+         Z1KxocVCMU+42nD+cXKPCHYi9H6xtF859zHq4fk7BJL9StlSIBaj45tZZPC6/fYnM6
+         GpBQX/MROPr3jBLzdcnof3nrJG9fYZPZLbiO0i693Cn61TUkVq6JqPzdMfBW/IHwyJ
+         iHnuACs9s+eT6Q/DiX0sKZ4InjQtTrgsjeQfXdNEerY80ov0QyJzq1mIYONJnPCKYW
+         IuKG2nLfZe6VRIuNceqBzU0k84WvoBfQjPZ6abnefPji40AM+cl7aRxSqQZKugLWTT
+         MZwRNWiSGgA5Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16701E6D4BB;
-        Fri, 25 Feb 2022 20:44:30 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control fix for v5.17-rc6
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AC499E6D453;
+        Fri, 25 Feb 2022 20:44:37 +0000 (UTC)
+Subject: Re: [GIT PULL] regmap fixes for v5.17-rc5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
-References: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc6
-X-PR-Tracked-Commit-Id: 3abea10e6a8f0e7804ed4c124bea2d15aca977c8
+In-Reply-To: <20220225165516.678CAC340E7@smtp.kernel.org>
+References: <20220225165516.678CAC340E7@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220225165516.678CAC340E7@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v5.17-rc5
+X-PR-Tracked-Commit-Id: d04ad245d67a3991dfea5e108e4c452c2ab39bac
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e48cb5c2c65db87cf1269ca004e111764da6cc74
-Message-Id: <164582187008.27616.5119390862849636582.pr-tracker-bot@kernel.org>
-Date:   Fri, 25 Feb 2022 20:44:30 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+X-PR-Merge-Commit-Id: 0e9894e6aac2c591da00dae91c448c02d1ca6373
+Message-Id: <164582187770.27616.17600137215496809938.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Feb 2022 20:44:37 +0000
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 25 Feb 2022 16:33:08 +0100:
+The pull request you sent on Fri, 25 Feb 2022 16:55:04 +0000:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc6
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v5.17-rc5
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e48cb5c2c65db87cf1269ca004e111764da6cc74
+https://git.kernel.org/torvalds/c/0e9894e6aac2c591da00dae91c448c02d1ca6373
 
 Thank you!
 

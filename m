@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626ED4C4A86
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534134C4A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242911AbiBYQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S242922AbiBYQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242901AbiBYQV6 (ORCPT
+        with ESMTP id S242907AbiBYQWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:21:58 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57756F4B6;
-        Fri, 25 Feb 2022 08:21:25 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aee37.dynamic.kabel-deutschland.de [95.90.238.55])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9C2D261EA1928;
-        Fri, 25 Feb 2022 17:21:22 +0100 (CET)
-Message-ID: <c8d83507-3ef7-5de6-6c1f-721757afd3b6@molgen.mpg.de>
-Date:   Fri, 25 Feb 2022 17:21:22 +0100
+        Fri, 25 Feb 2022 11:22:01 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D5375C07
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:21:29 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id m11so5237140pls.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dCkOofuT+eKplJpKUyxcU7JCwWPLhe5vZbRj/rqU7Ek=;
+        b=CiXw6wJ/i76/Cqk2SEPO6Cr+eb1PpfDFsRw3P1RxPdQbc28gtVEPA6ayCEW8VwXr/7
+         pEWf6Vm9WSDlkfazp/KdPafVywfXQotF7wVnCX46tMiSAfpZaCb5pWk8gn3fv4Hvj5bw
+         yO8yUxO/H7Jatt2uh3HilCq12Ek1TXGRAZ6SXI8p5bh2EpuxoUH8vm2855cqiG1IfWf0
+         yFx8ObVlHVRzDwFSPzt7a2Wd7GeXtf8ITf+j1bA3wrjgCwGi4fdbbVEHFxdqz2HVz/Fr
+         /VJA86nEqwgTZab7UWS1IFrWSJDxyVFSd7t7YQSnCH7RE434PHReO618rqpxw1FVVUJy
+         mllQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dCkOofuT+eKplJpKUyxcU7JCwWPLhe5vZbRj/rqU7Ek=;
+        b=PX80MqT9zv27qDxb6RKpneKRrQc8yWZ1TK9BW3Q0aDyDHwjtN6TJdBpnAOCPPG1SOF
+         JH/fFCyFZ5KCGb95E7MzKan6LHUpk9XC6quggjGx9uxcTTDSp2q9sIZaLVI5jqjMzs27
+         2vVZeXsx+cL7HCXKVzyZ2oLUtPUqM9i7Te/iLHx9kbQvmRqpy4IXkJ32Vhn5K1kIf38i
+         lmMzy8jPqTCN8wKpRa/54v2UIaFZ3kAi6UVfAqQpZLEew/9UIpQLgMpROfEzHpo3ACOk
+         BCE3Ue/I7hUB2lIjTyJHt00815WjADQvJX3aZ+yzzuO8VrgKhvK2YS82tgRZDZx92NWH
+         MZZA==
+X-Gm-Message-State: AOAM530viQ4cpjA7NQ9o8wjYzMF6cRkw6t6As/10Kxbm36v8YSnjJf/B
+        MCKnz3u2Jm6Dt08yH9BbWN0cVQ==
+X-Google-Smtp-Source: ABdhPJx6OzZS+uLCUucPfcMPVbrXAeG1bsgoQvkUHxAV2WgwiZRVRbwww1JV+0eel38i6XP0m75ELQ==
+X-Received: by 2002:a17:902:e8d7:b0:149:3b5d:2b8b with SMTP id v23-20020a170902e8d700b001493b5d2b8bmr7990890plg.162.1645806088619;
+        Fri, 25 Feb 2022 08:21:28 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q13-20020aa7982d000000b004cb98a2ca35sm4097321pfl.211.2022.02.25.08.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 08:21:27 -0800 (PST)
+Date:   Fri, 25 Feb 2022 16:21:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Anton Romanov <romanton@google.com>
+Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is
+ constant
+Message-ID: <YhkCBH9fsqrJYMca@google.com>
+References: <20220225013929.3577699-1-seanjc@google.com>
+ <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+ <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 1/3] ata: ahci: Rename board_ahci_mobile
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Mario Limonciello <Mario.Limonciello@amd.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220225061113.223920-1-mario.limonciello@amd.com>
- <Yhj9Pdp/sHASmBw4@infradead.org>
- <BL1PR12MB5157D29423AE95EE32F00303E23E9@BL1PR12MB5157.namprd12.prod.outlook.com>
- <e65c4fbb-95d0-5c5a-2b15-414b519d3319@redhat.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <e65c4fbb-95d0-5c5a-2b15-414b519d3319@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7086443d5e1e21d72a3d5c386c16f0c07d37a0a8.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Hans, dear Christoph,
-
-
-Am 25.02.22 um 17:16 schrieb Hans de Goede:
-> Hi,
+On Fri, Feb 25, 2022, David Woodhouse wrote:
+> On Fri, 2022-02-25 at 13:10 +0100, Paolo Bonzini wrote:
+> > 
+> > Queued, but I'd rather have a subject that calls out that max_tsc_khz 
+> > needs a replacement at vCPU creation time.  In fact, the real change 
+> > (and bug, and fix) is in kvm_arch_vcpu_create(), while the subject 
+> > mentions only the change in kvm_timer_init().
 > 
-> On 2/25/22 17:04, Limonciello, Mario wrote:
->> [Public]
->>
->>> On Fri, Feb 25, 2022 at 12:11:11AM -0600, Mario Limonciello wrote:
->>>> This board definition was originally created for mobile devices to
->>>> designate default link power managmeent policy to influence runtime
->>>> power consumption.
->>>>
->>>> As this is interesting for more than just mobile designs, rename the
->>>> board to `board_ahci_low_power` to make it clear it is about default
->>>> policy.
->>>
->>> Is there any good reason to not just apply the policy to all devices
->>> by default?
->>
->> That sure would make this all cleaner.
->>
->> I think Hans knows more of the history here than anyone else.  I had
->> presumed there was some data loss scenarios with some of the older
->> chipsets.
+> In
+> https://lore.kernel.org/kvm/e7be32b06676c7ebf415d9deea5faf50aa8c0785.camel@infradead.org/T/
+> last night I was coming round to the idea that we might want a KVM-wide 
+> default frequency which is settable from userspace and is used instead
+> of max_tsc_khz anyway.
 > 
-> When I first introduced this change there were reports of crashes and
-> data corruption caused by setting the policy to min_power, these were
-> tied to some motherboards and/or to some drives.
-> 
-> This is the whole reason why I only enabled this on a subset of all the
-> AHCI chipsets.
-> 
-> At least on devices with a chipset which is currently marked as
-> mobile, the motherboard specific issues could be fixed with a BIOS
-> update. But I doubt that similar BIOS fixes have also been rolled
-> out to all desktop boards (and have been applied by all users),
-> and I also don't know about older boards.
-> 
-> So enabling this on all chipsets is definitely not without risks.
+> I also have questions about the use case for the above patch.... if
+> this is a clean boot and you're just starting to host guests, surely we
+> can wait for the time it takes for the TSC synchronization to complete?
 
-Exactly, even requiring to update the firmware would go against Linux’ 
-no regression rule.
-
-When new chipset are added from now on, we should ask the submitter to 
-test with LPM first though.
-
-Mario’s patches look fine to me, and other changes should be done in 
-follow-up patches.
-
-All are:
-
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul
+KVM is built into the kernel in their case, the vmx_init() => kvm_init() gets
+automatically called during boot.  The VMs aren't started until well after
+synchronization has completed, but KVM has already snapshotted the "bad" value.

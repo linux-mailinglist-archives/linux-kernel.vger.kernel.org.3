@@ -2,50 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D884C4307
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007204C430A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239923AbiBYLDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S239922AbiBYLEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239913AbiBYLDq (ORCPT
+        with ESMTP id S239795AbiBYLEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:03:46 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27681223219;
-        Fri, 25 Feb 2022 03:03:14 -0800 (PST)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K4mwC4Nk0z683hj;
-        Fri, 25 Feb 2022 18:58:19 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 25 Feb 2022 12:03:12 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 25 Feb 2022 11:03:09 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <chenxiang66@hisilicon.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 2/2] scsi: libsas: Use bool for queue_work() return code
-Date:   Fri, 25 Feb 2022 18:57:36 +0800
-Message-ID: <1645786656-221630-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1645786656-221630-1-git-send-email-john.garry@huawei.com>
-References: <1645786656-221630-1-git-send-email-john.garry@huawei.com>
+        Fri, 25 Feb 2022 06:04:39 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC046223219;
+        Fri, 25 Feb 2022 03:04:07 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id d10so10052632eje.10;
+        Fri, 25 Feb 2022 03:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=J1vtATe8xS2rnhXfuGjs3otCLwyKXCCg9BTOffjh3gk=;
+        b=DKjBKIQcroCN2WWwSd8HkCbHtJiS+c+4hFc3dx+D7uXixR9RFIlIE4Lj/m2fx83HEp
+         6OCethccFO7W3Mm0eqMw6X6vq7Wx1l9fNHzegavQDCqvT20o6Pbq5WwrN+7EEuOmmlW/
+         xyW0ZLNe2Z0LMgjAfnWtGIk0VXOK2rOpnisw+QsdxbjTh6advilSCX2pDsRwfm8PwSf2
+         z5xnbHgkRQRD4AJZJaEgFqOmJ2Vtmw2q3bp9hApB4R2Fp8faiaA8+MqdTzzcsXn4ag6x
+         4QBJhEKaM2XzCr590DSPD9oNzKE0cLTjUgTXOZbFbCnBFHdufdmBYLb7uoxHOaVrnQ1z
+         eMzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=J1vtATe8xS2rnhXfuGjs3otCLwyKXCCg9BTOffjh3gk=;
+        b=2Y/yCnGjBFGxYzSIuFCdWuWx/K3ULcc6y1QSaoUt8YJm34oKjNDdVajqwqw1oVF8xT
+         F4AaKx8r+o8UnU0LtXvw6g/eMs3VpyiywQPuEqflCKuzdujpjWlOcZ7ySSTrIcnMhcHq
+         jNEicXJNeywsg28FgsCoXG6CorsO2DgsHBBZAfirWVwkCwvHjyivg7bcUHNeIML0c/he
+         6RqS1O8WfuPnJsIyWb3e3K9h3HyvD0oyNPV4PqJfCe/pkIIGr6e6eNusBv/wYJUJNN4s
+         V8IQuywm6Ds9VQkx8/OzpxMD2qF/KGHgonoOWe4mGgyqMbTcV6S+LaZFhLv4m/00cakM
+         KTRw==
+X-Gm-Message-State: AOAM531DSGmLPb4bg32NXngq97ueo+yivA6wcWWsvxHV8+3yCOyV1/qi
+        HdBIpjnJwvr4O/CiIOQqkO8=
+X-Google-Smtp-Source: ABdhPJwH7GUb7aprXSwoupidbtjf/OXY/8xeFuVk5HLbvAPx14fCA8zgXvelMEtG/AdqFFFzPzSmcw==
+X-Received: by 2002:a17:907:7711:b0:6ce:e03c:e1e2 with SMTP id kw17-20020a170907771100b006cee03ce1e2mr5780203ejc.769.1645787046076;
+        Fri, 25 Feb 2022 03:04:06 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id l21-20020a056402231500b0041327b58030sm1231150eda.2.2022.02.25.03.04.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 03:04:05 -0800 (PST)
+Message-ID: <3c7494bc-cff2-5b69-9c3c-b5f5560d0fbc@gmail.com>
+Date:   Fri, 25 Feb 2022 12:04:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] arm64: dts: rockchip: add the usb3 nodes to rk356x
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+References: <20220225100943.2115933-1-michael.riesch@wolfvision.net>
+ <20220225100943.2115933-2-michael.riesch@wolfvision.net>
+ <3e3d0e25-cea4-5b1a-e181-15e793ecba91@gmail.com>
+In-Reply-To: <3e3d0e25-cea4-5b1a-e181-15e793ecba91@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,125 +83,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function queue_work() returns a bool, so use a bool to hold this value
-for the return code from callers, which should make the code a tiny bit
-more clear.
+Oops...
 
-Also take this opportunity to condense the code of the those callers, such
-as sas_queue_work(), as suggested by Damien.
+On 2/25/22 11:53, Johan Jonker wrote:
+> Hi Michael,
+> 
+> On 2/25/22 11:09, Michael Riesch wrote:
+>> The Rockchip RK3566 and RK3568 feature two USB 3.0 xHCI controllers,
+>> one of them with Dual Role Device (DRD) capability.
+>>
+>> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+>> ---
+>>  arch/arm64/boot/dts/rockchip/rk3568.dtsi |  5 ++
+>>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 58 ++++++++++++++++++++++++
+>>  2 files changed, 63 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+>> index 91a0b798b857..0cd4ef36066a 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+>> @@ -116,3 +116,8 @@ power-domain@RK3568_PD_PIPE {
+>>  		#power-domain-cells = <0>;
+>>  	};
+>>  };
+>> +
+>> +&usb_host0_dwc3 {
+>> +	phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
+>> +	phy-names = "usb2-phy", "usb3-phy";
+>> +};
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+>> index 8b9fae3d348a..b46794486037 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+>> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+>> @@ -230,6 +230,64 @@ scmi_shmem: sram@0 {
+>>  		};
+>>  	};
+>>  
+>> +	usb_host0_xhci: usb@fcc00000 {
+> 
+>> +		compatible = "rockchip,rk3399-dwc3";
+> 
+> Add string to rockchip,dwc3.yaml
+> and check with dtsb_check
+> 
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/libsas/sas_event.c    | 30 +++++++++++-------------------
- drivers/scsi/libsas/sas_internal.h |  2 +-
- 2 files changed, 12 insertions(+), 20 deletions(-)
+> compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
 
-diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
-index 8ff58fd97837..f3a17191a4fe 100644
---- a/drivers/scsi/libsas/sas_event.c
-+++ b/drivers/scsi/libsas/sas_event.c
-@@ -10,29 +10,26 @@
- #include <scsi/scsi_host.h>
- #include "sas_internal.h"
- 
--int sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw)
-+bool sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw)
- {
--	/* it's added to the defer_q when draining so return succeed */
--	int rc = 1;
--
- 	if (!test_bit(SAS_HA_REGISTERED, &ha->state))
--		return 0;
-+		return false;
- 
- 	if (test_bit(SAS_HA_DRAINING, &ha->state)) {
- 		/* add it to the defer list, if not already pending */
- 		if (list_empty(&sw->drain_node))
- 			list_add_tail(&sw->drain_node, &ha->defer_q);
--	} else
--		rc = queue_work(ha->event_q, &sw->work);
-+		return true;
-+	}
- 
--	return rc;
-+	return queue_work(ha->event_q, &sw->work);
- }
- 
--static int sas_queue_event(int event, struct sas_work *work,
-+static bool sas_queue_event(int event, struct sas_work *work,
- 			    struct sas_ha_struct *ha)
- {
- 	unsigned long flags;
--	int rc;
-+	bool rc;
- 
- 	spin_lock_irqsave(&ha->lock, flags);
- 	rc = sas_queue_work(ha, work);
-@@ -44,13 +41,12 @@ static int sas_queue_event(int event, struct sas_work *work,
- void sas_queue_deferred_work(struct sas_ha_struct *ha)
- {
- 	struct sas_work *sw, *_sw;
--	int ret;
- 
- 	spin_lock_irq(&ha->lock);
- 	list_for_each_entry_safe(sw, _sw, &ha->defer_q, drain_node) {
- 		list_del_init(&sw->drain_node);
--		ret = sas_queue_work(ha, sw);
--		if (ret != 1) {
-+
-+		if (!sas_queue_work(ha, sw)) {
- 			pm_runtime_put(ha->dev);
- 			sas_free_event(to_asd_sas_event(&sw->work));
- 		}
-@@ -170,7 +166,6 @@ void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
- {
- 	struct sas_ha_struct *ha = phy->ha;
- 	struct asd_sas_event *ev;
--	int ret;
- 
- 	BUG_ON(event >= PORT_NUM_EVENTS);
- 
-@@ -186,8 +181,7 @@ void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
- 	if (sas_defer_event(phy, ev))
- 		return;
- 
--	ret = sas_queue_event(event, &ev->work, ha);
--	if (ret != 1) {
-+	if (!sas_queue_event(event, &ev->work, ha)) {
- 		pm_runtime_put(ha->dev);
- 		sas_free_event(ev);
- 	}
-@@ -199,7 +193,6 @@ void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
- {
- 	struct sas_ha_struct *ha = phy->ha;
- 	struct asd_sas_event *ev;
--	int ret;
- 
- 	BUG_ON(event >= PHY_NUM_EVENTS);
- 
-@@ -215,8 +208,7 @@ void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
- 	if (sas_defer_event(phy, ev))
- 		return;
- 
--	ret = sas_queue_event(event, &ev->work, ha);
--	if (ret != 1) {
-+	if (!sas_queue_event(event, &ev->work, ha)) {
- 		pm_runtime_put(ha->dev);
- 		sas_free_event(ev);
- 	}
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 24843db2cb65..13d0ffaada93 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -67,7 +67,7 @@ void sas_porte_broadcast_rcvd(struct work_struct *work);
- void sas_porte_link_reset_err(struct work_struct *work);
- void sas_porte_timer_event(struct work_struct *work);
- void sas_porte_hard_reset(struct work_struct *work);
--int sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw);
-+bool sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw);
- 
- int sas_notify_lldd_dev_found(struct domain_device *);
- void sas_notify_lldd_dev_gone(struct domain_device *);
--- 
-2.26.2
+compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
 
+> 
+>> +		#address-cells = <2>;
+> 
+> remove
+> 
+>> +		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
+> 
+>> +			 <&cru ACLK_USB3OTG0>, <&cru PCLK_PIPE>;
+> 
+> PCLK_PIPE part of an other node, probably only to enable PD_PIPE.
+> 
+> 	combphy1: phy@fe830000 {
+> 		compatible = "rockchip,rk3568-naneng-combphy";
+> 		reg = <0x0 0xfe830000 0x0 0x100>;
+> 		clocks = <&pmucru CLK_PCIEPHY1_REF>,
+> 			 <&cru PCLK_PIPEPHY1>,
+> 			 <&cru PCLK_PIPE>;
+> 		clock-names = "ref", "apb", "pipe";
+> 		assigned-clocks = <&pmucru CLK_PCIEPHY1_REF>;
+> 		assigned-clock-rates = <100000000>;
+> 		resets = <&cru SRST_PIPEPHY1>;
+> 		rockchip,pipe-grf = <&pipegrf>;
+> 		rockchip,pipe-phy-grf = <&pipe_phy_grf1>;
+> 		#phy-cells = <1>;
+> 		status = "disabled";
+> 	};
+> 
+> Rockchip RK3568 TRM Part1 V1.0-20210111.pdf
+> page 475
+> 
+> PD_PIPE:
+> 
+> BIU_PIPE
+> USB3OTG
+> PCIE20
+> PCIE30
+> SATA
+> XPCS
+> 
+> PCIE, SATA USB clocks are child of aclk_pipe
+> Yet PCLK_PIPE is the only clock that enables RK3568_PD_PIPE.
+> 
+> 
+> 	COMPOSITE_NOMUX(PCLK_PIPE, "pclk_pipe", "aclk_pipe", 0,
+> 			RK3568_CLKSEL_CON(29), 4, 4, DFLAGS,
+> 			RK3568_CLKGATE_CON(10), 1, GFLAGS),
+> 
+> &power {
+> 	power-domain@RK3568_PD_PIPE {
+> 		reg = <RK3568_PD_PIPE>;
+> 
+> 		clocks = <&cru PCLK_PIPE>;
+> 
+> Do we need more clocks here for USB for example?
+> 
+> 		pm_qos = <&qos_pcie2x1>,
+> 			 <&qos_pcie3x1>,
+> 			 <&qos_pcie3x2>,
+> 			 <&qos_sata0>,
+> 			 <&qos_sata1>,
+> 			 <&qos_sata2>,
+> 			 <&qos_usb3_0>,
+> 			 <&qos_usb3_1>;
+> 		#power-domain-cells = <0>;
+> 	};
+> };
+> 
+>> +		clock-names = "ref_clk", "suspend_clk", "bus_clk", "grf_clk";
+> 
+> grf_clk only related to rk3399 ACLK_USB3_GRF and not to PCLK_PIPE.
+> 
+>> +		ranges;
+>> +		#size-cells = <2>;
+> 
+> remove
+> 
+>> +		status = "disabled";
+>> +
+>> +		usb_host0_dwc3: usb@fcc00000 {
+> 
+> No subnode for "snps,dwc3"
+> No more subdriver like rk3399.
+> Use dwc core only and fix things/quirks there.
+> 
+>> +			compatible = "snps,dwc3";
+>> +			reg = <0x0 0xfcc00000 0x0 0x400000>;
+>> +			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+>> +			dr_mode = "otg";
+>> +			phy_type = "utmi_wide";
+>> +			power-domains = <&power RK3568_PD_PIPE>;
+>> +			resets = <&cru SRST_USB3OTG0>;
+>> +			reset-names = "usb3-otg";
+>> +			snps,dis-del-phy-power-chg-quirk;
+>> +			snps,dis_enblslpm_quirk;
+>> +			snps,dis_rxdet_inp3_quirk;
+>> +			snps,dis-tx-ipgap-linecheck-quirk;
+>> +			snps,dis-u2-freeclk-exists-quirk;
+> 
+>> +			snps,xhci-trb-ent-quirk;
+> 
+> Not in mainline.
+> See snps,dwc3.yaml
+> 
+>> +		};
+>> +	};
+>> +
+>> +	usb_host1_xhci: usb@fd000000 {
+
+>> +		compatible = "rockchip,rk3399-dwc3";
+
+compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
+
+>> +		#address-cells = <2>;
+>> +		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
+>> +			 <&cru ACLK_USB3OTG1>, <&cru PCLK_PIPE>;
+>> +		clock-names = "ref_clk", "suspend_clk", "bus_clk", "grf_clk";
+>> +		ranges;
+>> +		#size-cells = <2>;
+>> +		status = "disabled";
+>> +
+>> +		usb_host1_dwc3: usb@fd000000 {
+>> +			compatible = "snps,dwc3";
+>> +			reg = <0x0 0xfd000000 0x0 0x400000>;
+>> +			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+>> +			dr_mode = "host";
+>> +			phy_type = "utmi_wide";
+>> +			phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+>> +			phy-names = "usb2-phy", "usb3-phy";
+>> +			power-domains = <&power RK3568_PD_PIPE>;
+>> +			resets = <&cru SRST_USB3OTG1>;
+> 
+>> +			reset-names = "usb3-host";
+> 
+>   reset-names:
+>     const: usb3-otg
+> 
+> Fix binding or DT ??
+> 
+>> +			snps,dis-del-phy-power-chg-quirk;
+>> +			snps,dis_enblslpm_quirk;
+>> +			snps,dis_rxdet_inp3_quirk;
+>> +			snps,dis-tx-ipgap-linecheck-quirk;
+>> +			snps,dis-u2-freeclk-exists-quirk;
+> 
+>> +			snps,xhci-trb-ent-quirk;
+> 
+> Not in mainline ??
+> 
+>> +		};
+>> +	};
+>> +
+> 
+> 
+> 	usbdrd3_1: usb@fd000000 {
+
+> 		compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
+
+compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
+
+> 		reg = <0x0 0xfd000000 0x0 0x400000>;
+> 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+> 		clocks = <&cru CLK_USB3OTG1_REF>,
+> 			 <&cru CLK_USB3OTG1_SUSPEND>,
+> 			 <&cru ACLK_USB3OTG1>;
+> 		clock-names = "ref_clk", "suspend_clk", "bus_clk";
+> 		dr_mode = "host";
+> 		phy_type = "utmi_wide";
+> 		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+> 		phy-names = "usb2-phy", "usb3-phy";
+> 		power-domains = <&power RK3568_PD_PIPE>;
+> 		resets = <&cru SRST_USB3OTG1>;
+> 		reset-names = "usb3-otg";
+> 		snps,dis-del-phy-power-chg-quirk;
+> 		snps,dis_enblslpm_quirk;
+> 		snps,dis_rxdet_inp3_quirk;
+> 		snps,dis-tx-ipgap-linecheck-quirk;
+> 		snps,dis-u2-freeclk-exists-quirk;
+> 		status = "disabled";
+> 	};
+> 
+> 
+>>  	gic: interrupt-controller@fd400000 {
+>>  		compatible = "arm,gic-v3";
+>>  		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */

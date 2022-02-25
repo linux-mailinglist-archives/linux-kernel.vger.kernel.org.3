@@ -2,113 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019364C4A15
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0434C4A1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242618AbiBYQGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        id S242629AbiBYQHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbiBYQGx (ORCPT
+        with ESMTP id S242620AbiBYQHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:06:53 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD19211316;
-        Fri, 25 Feb 2022 08:06:20 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [80.241.60.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K4vlZ0rVwz9sWK;
-        Fri, 25 Feb 2022 17:06:18 +0100 (CET)
-From:   Marcello Sylvester Bauer <sylv@sylv.io>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645805176;
+        Fri, 25 Feb 2022 11:07:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00F75211320
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645805206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ajwrqPctCAOf/kug9ZVs1DEHHuF8348gK83QTGUqptI=;
-        b=KCNt/EfdLPcJfwqy5b1g/yEK2Ah7JfyFJ7UcVVzVphXU9maItGbXKPPVSxvOj8frnHZPaZ
-        7i9mtV0eQpr9kRyYKJlMWGJ2OYW2aHzvnwm9yZLNBgi4VmMbgafcpxdisTLRTE6JA8N0Wr
-        z6PwPiyfsstpCPaB4Vwua+BVtb9yO2FroH8ssrklXRUt79yqpim3DrTWyKdl77Izz1X+ht
-        lRP7h7eTwJSH+/E94Pw6LytvcN9/FCKXbXceBaYAkVhQEUpb+/Dl1qw0ZC/S13vCkkC9Zm
-        rZaJjN/KeBjV1aDVqajGsS7N52cmzRoIiRFn0Y8ouM2tCa6GFiYE3PgLtGbvTw==
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v1 1/1] drivers/hwmon/pmbus: Add mutex to regulator ops
-Date:   Fri, 25 Feb 2022 17:06:09 +0100
-Message-Id: <b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
+        b=EvriBeJmaKA9toWJMbVMuqAfxqoSfBrtIM4qzuETChFtVohuFJS+6d5EnlEeYoaHr08LXw
+        P8iNNd0z262mnqlm0ljVnGszJsogvmlJHk8lkEMi7IP91a16U3YITDbqlRUkdOa+6psCMA
+        3Ir7MxKR/xGDNsY3GIl87QQmWwxC5dQ=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-978ktIK7N7iHSodVq-ZZPQ-1; Fri, 25 Feb 2022 11:06:44 -0500
+X-MC-Unique: 978ktIK7N7iHSodVq-ZZPQ-1
+Received: by mail-pl1-f200.google.com with SMTP id z14-20020a170902ccce00b0014d7a559635so3218500ple.16
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:06:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
+        b=rxcojd5Wwy8Y6Ytw1vv+yzCmyJksLdDDNLELUZA2HZdUOE+QQjDmaYMEQ9q4RBljB/
+         rxHTRIhYSpNim23uNHUK6EgBgm4eIHK5ltCqHjfP3m4yArgmfjswWwTvOgXvyMif18mI
+         DpRz+Amra1fg6U9yGY02w9VMgIrdw88Xa4c6ejcHo5DUVCwGz2/Noi3ghHzT7yGZYO4Q
+         y8vOzg16BiE1wJrY6CJVjYO/GqKjIdx/HNdgPTsPxYCCfOqNmjj7i0do2C6C5mP/GPls
+         g9MW3O/eDf8+A8LcaVWAiL+0y1Xynq7M+TjHcX/qb97uD7bNLdUImjyuDwf4CCZoH9In
+         u3HQ==
+X-Gm-Message-State: AOAM530bTQoNC5Jpd529A+15Cz5SuuhF1fIUIEWujRmLlXsLTE1K5SWH
+        GtJ72ArOgMPRw99nawkJYpotFBME0ZEI+ne37wN+0m6yMtE4+haSn46a3fjNoqtGAOX6wjoZpfO
+        Fvjd1OhUL+qD8fCSooc6zbUNplkM4VSzfiEasiNKo
+X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr8295942plb.73.1645805203631;
+        Fri, 25 Feb 2022 08:06:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUIpWXteQHikzWnedR/pQmtGNKJt81L52dh8Zvx5yBKuSs0mA4pDWiMKp+ELlQrYIZ5T2VI/o7I3Fd2NGvn7E=
+X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id
+ bc8-20020a170902930800b0014edef5e6b5mr8295906plb.73.1645805203288; Fri, 25
+ Feb 2022 08:06:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
+ <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
+In-Reply-To: <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 25 Feb 2022 17:06:32 +0100
+Message-ID: <CAO-hwJ+CJkPqdOE+OpZHOscMk3HHZb4qVtXjF-bkOweU0QjppA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Thu, Feb 24, 2022 at 6:21 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 2/24/22 5:49 AM, Benjamin Tissoires wrote:
+> > Hi Greg,
+> >
+> > Thanks for the quick answer :)
+> >
+> > On Thu, Feb 24, 2022 at 12:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >>
+> >> On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
+> >>> Hi there,
+> >>>
+> >>> This series introduces support of eBPF for HID devices.
+> >>>
+> >>> I have several use cases where eBPF could be interesting for those
+> >>> input devices:
+> >>>
+> >>> - simple fixup of report descriptor:
+> >>>
+> >>> In the HID tree, we have half of the drivers that are "simple" and
+> >>> that just fix one key or one byte in the report descriptor.
+> >>> Currently, for users of such devices, the process of fixing them
+> >>> is long and painful.
+> >>> With eBPF, we could externalize those fixups in one external repo,
+> >>> ship various CoRe bpf programs and have those programs loaded at boot
+> >>> time without having to install a new kernel (and wait 6 months for the
+> >>> fix to land in the distro kernel)
+> >>
+> >> Why would a distro update such an external repo faster than they update
+> >> the kernel?  Many sane distros update their kernel faster than other
+> >> packages already, how about fixing your distro?  :)
+> >
+> > Heh, I'm going to try to dodge the incoming rhel bullet :)
+> >
+> > It's true that thanks to the work of the stable folks we don't have to
+> > wait 6 months for a fix to come in. However, I think having a single
+> > file to drop in a directory would be easier for development/testing
+> > (and distribution of that file between developers/testers) than
+> > requiring people to recompile their kernel.
+> >
+> > Brain fart: is there any chance we could keep the validated bpf
+> > programs in the kernel tree?
+>
+> Yes, see kernel/bpf/preload/iterators/iterators.bpf.c.
 
-On PMBUS devices with multiple pages, the regulator ops need to be
-protected with the update mutex. This prevents accidentally changing
-the page in a separate thread while operating on the PMBUS_OPERATION
-register.
+Thanks. This is indeed interesting.
+I am not sure the exact usage of it though :)
 
-Tested on Infineon xdpe11280 while a separate thread polls for sensor
-data.
+One thing I wonder too while we are on this topic, is it possible to
+load a bpf program from the kernel directly, in the same way we can
+request firmwares?
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
----
- drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+Because if we can do that, in my HID use case we could replace simple
+drivers with bpf programs entirely and reduce the development cycle to
+a bare minimum.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..f79930162256 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2386,10 +2386,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
- 	int ret;
- 
-+	mutex_lock(&data->update_lock);
- 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-+	mutex_unlock(&data->update_lock);
-+
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2400,11 +2404,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
-+	int ret;
- 
--	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
--				      PB_OPERATION_CONTROL_ON,
--				      enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_lock(&data->update_lock);
-+	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-+				     PB_OPERATION_CONTROL_ON,
-+				     enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_unlock(&data->update_lock);
-+
-+	return ret;
- }
- 
- static int pmbus_regulator_enable(struct regulator_dev *rdev)
--- 
-2.35.1
+Cheers,
+Benjamin
+
+
+>
+> >
+> >>
+> >> I'm all for the idea of using ebpf for HID devices, but now we have to
+> >> keep track of multiple packages to be in sync here.  Is this making
+> >> things harder overall?
+> >
+> > Probably, and this is also maybe opening a can of worms. Vendors will
+> > be able to say "use that bpf program for my HID device because the
+> > firmware is bogus".
+> >
+> > OTOH, as far as I understand, you can not load a BPF program in the
+> > kernel that uses GPL-declared functions if your BPF program is not
+> > GPL. Which means that if firmware vendors want to distribute blobs
+> > through BPF, either it's GPL and they have to provide the sources, or
+> > it's not happening.
+> >
+> > I am not entirely clear on which plan I want to have for userspace.
+> > I'd like to have libinput on board, but right now, Peter's stance is
+> > "not in my garden" (and he has good reasons for it).
+> > So my initial plan is to cook and hold the bpf programs in hid-tools,
+> > which is the repo I am using for the regression tests on HID.
+> >
+> > I plan on building a systemd intrinsic that would detect the HID
+> > VID/PID and then load the various BPF programs associated with the
+> > small fixes.
+> > Note that everything can not be fixed through eBPF, simply because at
+> > boot we don't always have the root partition mounted.
+> [...]
+>
 

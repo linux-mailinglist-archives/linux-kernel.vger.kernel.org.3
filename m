@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF164C43D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2977D4C43D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 12:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240224AbiBYLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 06:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S240230AbiBYLqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 06:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236551AbiBYLpe (ORCPT
+        with ESMTP id S235981AbiBYLqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 06:45:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA6F1E149B;
-        Fri, 25 Feb 2022 03:45:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E729AB82F54;
-        Fri, 25 Feb 2022 11:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E1CC340F1;
-        Fri, 25 Feb 2022 11:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645789499;
-        bh=SyCcd5YyTFEoGeGsYaB35HytNVv8VEbM/zH5Nnq5ve0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UA1J9wUChl+3NAGjvYQsIrCIUKBsdCbyK5N29bUZyjGQnA02heNKfk5Dn2ZJtsylZ
-         9yYbb0x00luCWmM2biJtE3AMv+3fjLudhyN3RgkQGTuu/0I1x2ovnW1dPI3lnLxVJ3
-         XxcGmvFsgCD2uLuXqn1Wbv9aNHrfJeUc2RgB6i1ZhSLktnz/2oQLcDrI2/LsQ2aLHO
-         awHBMZueY5I2cnfWxiWttBCdi00+NNONLvKnPxCrw5IAbNIjVw4kVWJ4aEeHnRLIYv
-         dCsjPUKcTSKtcbgbStHoaD9JR8YEUdt6SHv6X5/DbVPxKjDmCuo0FZ5JQLYGgW40Vu
-         Za6rCXxmqRQ0Q==
-Received: by mail-yb1-f182.google.com with SMTP id j12so5302420ybh.8;
-        Fri, 25 Feb 2022 03:44:59 -0800 (PST)
-X-Gm-Message-State: AOAM533QxHiLljL1RfxGwoMdJrXcSr7S6555MHVzTjYLE0A/DB36f2V+
-        WYHb6Zey8Go2Np+SH6p88OdkFcAkps3L51Sai6w=
-X-Google-Smtp-Source: ABdhPJw20WQ6OeE6e3QFGaeduOMLc1gtByftoR3pgLNQmEnrN6vNG+m6AxxfV6mUzDPnla1p5Et4lg45CPQ/LSYqTqY=
-X-Received: by 2002:a25:6c43:0:b0:61d:e94b:3c55 with SMTP id
- h64-20020a256c43000000b0061de94b3c55mr6880234ybc.224.1645789498678; Fri, 25
- Feb 2022 03:44:58 -0800 (PST)
+        Fri, 25 Feb 2022 06:46:48 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E8B1E149B;
+        Fri, 25 Feb 2022 03:46:16 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d23so8906772lfv.13;
+        Fri, 25 Feb 2022 03:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=7bAU6OW5WZdNkadr0RsuhVpr6+vDWzdc54BoxnojpCk=;
+        b=WnNnH2bNBx0UFGX9fwWjbhEHj3Q4ximEgZDZQqSJcGAUti2ZlGfn8S6G/ceffJxqVQ
+         u3SMfefDopDk1kQaY/hbmm3ZjLkN71GKnfBqDBiO8lANOsEfdmCKPKdNlN0nOxTXRjlc
+         nVUaoEKgYKPNjUGhIhu5MnbiXM08FLw64PeXmX/wJ/13BEljXfkSQmg8VWjqpXazrs6M
+         kHNrdrObIuGYmE8nTZiizDEG9iVUNA4GRF9wv47leIrx2zE+NgbD5yZeLO98t4+IEoQM
+         NXm/QtTw6BIafaMqRIJeC5iAiXqaWiHB6id0INibrc9jXZi2sBnXXkWeDqbckCgqkLor
+         HJTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=7bAU6OW5WZdNkadr0RsuhVpr6+vDWzdc54BoxnojpCk=;
+        b=MUUxjDHU4sRvfckESRR2sWFa+jl3ytI1rRxFkBKHDv+9dSC94G9NbImwaNld8NCNkF
+         5iO2gzu60xfU8HwojhxUyrWp9YaJjuaosAvP71Ah1eGhYIpaKfXY3LiOXSylggBLsqmH
+         Ox8X6vOpW8uKBovocZjLRPt1JWuRRARU3d64Ldd3IUwZeLTZ24WPftwh2Hnl9n7RMowL
+         nwjixWjy4F4JezF7LmoIYfMZvhTRPj57sj04pT+Qck4h+D8NGH3OcL9HWAZ8u6z1ynAu
+         rhmgDiP5DNcLpVdFX5Br1iJ+I3Ftej0EMO07PIZPp3ka69Irus4u4+764ujCmgH32Cyu
+         4AqQ==
+X-Gm-Message-State: AOAM532MZmzQl9FQKICceqIDohb52pdu2hDq7BXsv2kcm/4mvyV4pJSG
+        P/u4NAFYUNq/OlU0wkCDH/dvl0TBUwTXSKB0
+X-Google-Smtp-Source: ABdhPJytaNv527bU1A5HJWtn+Q6koaojjpqaa6Q8UpXacLfroBuMI0B4S1i33usmNwuWZ2Ui2d3ijw==
+X-Received: by 2002:a05:6512:304a:b0:445:9d7:dad4 with SMTP id b10-20020a056512304a00b0044509d7dad4mr4685783lfb.261.1645789574426;
+        Fri, 25 Feb 2022 03:46:14 -0800 (PST)
+Received: from wse-c0127.beijerelectronics.com ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id g7-20020a19e047000000b0044395c894d2sm184177lfj.163.2022.02.25.03.46.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 03:46:13 -0800 (PST)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH iproute2-next 0/1] Add support for locked bridge ports (for 802.1X)
+Date:   Fri, 25 Feb 2022 12:44:56 +0100
+Message-Id: <20220225114457.2386149-1-schultz.hans+netdev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220224133906.751587-1-Jason@zx2c4.com> <20220224133906.751587-2-Jason@zx2c4.com>
- <CAMj1kXGuh62A8=43NjSMLRkux_TCFULXtw5a1C5w=gy9A8dO6w@mail.gmail.com> <CAHmME9r_WZ7hTaPpq=JKzVj-9bfnbE=J_z+aMHzrjPv=6y2_CA@mail.gmail.com>
-In-Reply-To: <CAHmME9r_WZ7hTaPpq=JKzVj-9bfnbE=J_z+aMHzrjPv=6y2_CA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 25 Feb 2022 12:44:47 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF9-JcjRoUgJgdVZo0Q6E5GezH1YGtE4H-u-kMjGHzQgg@mail.gmail.com>
-Message-ID: <CAMj1kXF9-JcjRoUgJgdVZo0Q6E5GezH1YGtE4H-u-kMjGHzQgg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] random: add mechanism for VM forks to reinitialize crng
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-hyperv@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        adrian@parity.io, "Woodhouse, David" <dwmw@amazon.co.uk>,
-        Alexander Graf <graf@amazon.com>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        "Weiss, Radu" <raduweis@amazon.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Laszlo Ersek <lersek@redhat.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Eduardo Habkost <ehabkost@redhat.com>, ben@skyportsystems.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 at 12:44, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> On Fri, Feb 25, 2022 at 12:26 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Thu, 24 Feb 2022 at 14:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > >
-> > > When a VM forks, we must immediately mix in additional information to
-> > > the stream of random output so that two forks or a rollback don't
-> > > produce the same stream of random numbers, which could have catastrophic
-> > > cryptographic consequences. This commit adds a simple API, add_vmfork_
-> > > randomness(), for that, by force reseeding the crng.
-> > >
-> > > This has the added benefit of also draining the entropy pool and setting
-> > > its timer back, so that any old entropy that was there prior -- which
-> > > could have already been used by a different fork, or generally gone
-> > > stale -- does not contribute to the accounting of the next 256 bits.
-> > >
-> > > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> > > Cc: Theodore Ts'o <tytso@mit.edu>
-> > > Cc: Jann Horn <jannh@google.com>
-> > > Cc: Eric Biggers <ebiggers@google.com>
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> >
-> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
->
-> Okay if I treat this as a Reviewed-by instead?
+This patch set is to complement the kernel locked port patches, such
+that iproute2 can be used to lock/unlock a port and check if a port
+is locked or not. To lock or unlock a port use the command:
 
-Sure no problem.
+bridge link set dev DEV locked {on | off}
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+
+To show the detailed setting of a port, including if the locked flag is
+enabled for the port(s), use the command:
+
+bridge -d link show [dev DEV]
+
+
+Hans Schultz (1):
+  bridge: link: Add command to set port in locked mode
+
+ bridge/link.c                | 13 +++++++++++++
+ include/uapi/linux/if_link.h |  1 +
+ 2 files changed, 14 insertions(+)
+
+-- 
+2.30.2
+

@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556784C515C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D072D4C5159
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbiBYWQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S236902AbiBYWQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 17:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236549AbiBYWQA (ORCPT
+        with ESMTP id S236694AbiBYWP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:16:00 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448718F21E;
-        Fri, 25 Feb 2022 14:15:28 -0800 (PST)
+        Fri, 25 Feb 2022 17:15:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418B018F226;
+        Fri, 25 Feb 2022 14:15:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 685C2CE27EC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B36ED61C44;
         Fri, 25 Feb 2022 22:15:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A876FC340E7;
-        Fri, 25 Feb 2022 22:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2591BC36AE2;
+        Fri, 25 Feb 2022 22:15:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645827324;
-        bh=tk3VRDpANFYB8NRJhQeUoW4hJrY3AMcDY0PFavgHSlM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=GcEMYWBJDy+GrVvgWXw9G6tgkduT4RiIH8V+ghG8kiqsvZ4gRRBqx9oRhgORLK9JL
-         UwD+8MuHddaL4r6piLp1I5iDQF8pmPhxfeFFkFMnVPgrq3IvLr4y4ViLUyuwvvx/79
-         eJopq66hUBHEs8nno/mlqTNJZ1TlXD/iMbmN2e5MxkW4NmOkU0x5RmtmWrUARpbrv2
-         CZbBV9jFd5gIaIhIGmgdII9kByJyeiYCGkBwfremIbecTfz5TBlngGjl4/k91/ExzL
-         2DY4rluykLyO6tF0BGSdMisRk2jDyc2UhEljCtOJg4AaVCCBYdAeVyeBm/Rvt14M56
-         lJACkQE/x0ASg==
-Date:   Fri, 25 Feb 2022 16:15:23 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v9 00/11] vgaarb: Rework default VGA device selection
-Message-ID: <20220225221523.GA385757@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224224753.297579-1-helgaas@kernel.org>
+        s=k20201202; t=1645827326;
+        bh=r/GgL5/YMee3eJN6gSMFNQgfSHE5lETu9MZRkSseqkU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GredjddhcOS1Hd183qpkW3L2iuPiCyop5sPBmR7myP9RSLeY4pXMBHgUhqVLs54pe
+         In6BY2koIbav0TO9zmUZUvjH3PEdsp1dxxN9wQXLc1G48ybJpXxaffyr6CFFQUVTEK
+         /gr48uI0cGUeCZvT7Nmct4I5oxfGJl90N6ox7sPP3398mgXKZTkVab9qXNUAjojkwD
+         3QFk4HNToPx5C2f7+Xj7z/NHAx7BUO2ZMtl6wz4FNbR4C84CMV3QYXm056jQcuIBct
+         9JAD4AA63/8uGBPjxPDZ3/7skUn/CqgbTpJKiyfgoqN2YOhilCqTQnfNSeADkj2n1f
+         Yp2UrOPbXbbQA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10E2EE6D4BB;
+        Fri, 25 Feb 2022 22:15:26 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220225211629.GA352636@nvidia.com>
+References: <20220225211629.GA352636@nvidia.com>
+X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220225211629.GA352636@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: 22e9f71072fa605cbf033158db58e0790101928d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ca7457236d47d8748bdb6b423d148726220ec3d8
+Message-Id: <164582732605.9849.1793697406867197811.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Feb 2022 22:15:26 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,29 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 04:47:42PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Current default VGA device selection fails in some cases because part of it
-> is done in the vga_arb_device_init() subsys_initcall, and some arches
-> enumerate PCI devices in pcibios_init(), which runs *after* that.
-> 
-> The big change from the v8 posting is that this moves vgaarb.c from
-> drivers/gpu/vga to drivers/pci because it really has nothing to do with
-> GPUs or DRM.
+The pull request you sent on Fri, 25 Feb 2022 17:16:29 -0400:
 
-I provisionally applied this to pci/vga and put it into -next just
-to get a little runtime on it.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
-But I'd prefer not to unilaterally yank this out of drivers/gpu
-without a consensus from the GPU folks that this is the right thing to
-do.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ca7457236d47d8748bdb6b423d148726220ec3d8
 
-Any thoughts?  If it seems OK to you, I think patch 1/11 (the move
-itself) is all you would need to look at, although of course I would
-still be grateful for any review and feedback on the rest.
+Thank you!
 
-After it's in drivers/pci, all the blame for any issues would come my
-way.
-
-Bjorn
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

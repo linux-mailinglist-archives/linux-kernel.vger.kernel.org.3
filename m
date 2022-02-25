@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ECF4C427C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBED4C4277
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 11:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiBYKgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 05:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S238943AbiBYKgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 05:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239603AbiBYKgm (ORCPT
+        with ESMTP id S239615AbiBYKgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:36:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B628D2399FF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:36:10 -0800 (PST)
+        Fri, 25 Feb 2022 05:36:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7D8D2465F4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 02:36:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645785369;
+        s=mimecast20190719; t=1645785380;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
         bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=WkvD1oYPOPmPilYBST4/DIqO+S62V9D+MbpSvCtaeSeSmykGxCqYnZiD9ZGwBAX+4gT+iC
-        iyq6wTtc4m6WovPPSiuCkObbBwD1DqdMPcX55GF36mGjRzcjXaHZrN1kcJlRUIMSn1DkYO
-        nwJzxSfSGtwsbudp8faFw3aaR3XeY9I=
+        b=WVVrmlno0v5Iyk/XaoXz0p38x/f7uxcKA/9TGe1IXRa5pyHGDXlHwAhaygVDH/AN7doa7h
+        d/6S9P/J2PKQdjYxWIdArcowU4lhkWlUMFu7w15WiDqanbI5YxCwK4IDZ1aIVfn+OKWRQr
+        pX5fvDC2wxQJTjxech2ubR114rcHrBc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-0RuoCiUbNpiTMt0wYcQAUg-1; Fri, 25 Feb 2022 05:36:06 -0500
-X-MC-Unique: 0RuoCiUbNpiTMt0wYcQAUg-1
+ us-mta-648-acowaRhpO1SzPHVbAcN98Q-1; Fri, 25 Feb 2022 05:36:14 -0500
+X-MC-Unique: acowaRhpO1SzPHVbAcN98Q-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BE82E5123;
-        Fri, 25 Feb 2022 10:36:04 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4256F1091DA0;
+        Fri, 25 Feb 2022 10:36:13 +0000 (UTC)
 Received: from avogadro.lan (unknown [10.39.193.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F025923797;
-        Fri, 25 Feb 2022 10:35:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E8812619D;
+        Fri, 25 Feb 2022 10:36:11 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [PATCH v2] KVM: Don't actually set a request when evicting vCPUs for GFN cache invd
-Date:   Fri, 25 Feb 2022 11:35:06 +0100
-Message-Id: <20220225103507.483695-4-pbonzini@redhat.com>
-In-Reply-To: 20220223165302.3205276-1-seanjc@google.com
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] x86/kvm: Don't waste memory if kvmclock is disabled
+Date:   Fri, 25 Feb 2022 11:35:07 +0100
+Message-Id: <20220225103507.483695-5-pbonzini@redhat.com>
+In-Reply-To: 1645520523-30814-1-git-send-email-wanpengli@tencent.com
 References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,4 +68,5 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Queued, thanks.
 
 Paolo
+
 

@@ -2,138 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39404C402A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323F94C402E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 09:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbiBYIbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 03:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S238541AbiBYIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 03:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238511AbiBYIbU (ORCPT
+        with ESMTP id S235206AbiBYIej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:31:20 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6EB23A18E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 00:30:48 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id cp23-20020a17090afb9700b001bbfe0fbe94so4190749pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 00:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=umjNYNhgnIxE5VvC0JbQD7toURbbqbp0XwksnmHUrBk=;
-        b=u8zHs+9LnkJgCALSy6ds+Yd6X2VPqHpIFdGf8+KEnCsbZxxg2Pymyp5hP6OrRP4WnA
-         K4deMddtit22sYeHlSZsYTLsc6QhVn3KQFZYaI/lkgwvtqe4Xs3f1VvYcYSxwSVlY2yz
-         sNepcUDim4t4wyRz/RSc4jRwLnIYnRW1LtlU66tMq5LdVOJF/GagbDlpqTpYSMSSXADR
-         rmzMKGf+ZeT8iKCoAiHggyfwAtXtHVFdQsy7D0mq4YNyRCR2FWChuN1SR92GWnDDYEL5
-         WVG9lheJII5ZkK3uVN/W/9pvHVK+OyaBzEhp8Khn4v/jHWDbUFmYdCpn3AVclfrD9XKC
-         Q7Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=umjNYNhgnIxE5VvC0JbQD7toURbbqbp0XwksnmHUrBk=;
-        b=ykS2kPMcpGxE+orgBH/Yb/qe3FSgEGN86jsPouPk3RBKz6fvVysfW4AgJYr0QCOnJs
-         eGw3gt9C2Q08U4pywXcsmGC3o3BPGMvc5MaJYVAFBBbEfIRCdpmVm82e5VLVbV4RH5kX
-         cAt205ySS51sSEm4QSUSQQqulJk+/+/XXkl9AR7x+DuCzPyDmcbv6cVLJ1VKv9D3PPeL
-         S0/LTasikfc/YyggF6MOcrePxeugM0STiQX1+2gIddFpL673Mb0uB1wzr2edCKi6zP9j
-         +Pxv1vIhVH0DREApEb5rbADuAPkqDV58P4C9YSt8QFA6Y1aeV50TYCdG8SZDeshma6Y3
-         nw8w==
-X-Gm-Message-State: AOAM531XneV4tRS9Pg84xJQT7lcDA8hLipPmLMD0dWgCzQWm1iaWP+qq
-        IADRu9bI5AO+dWp2EVKO7+pfKA==
-X-Google-Smtp-Source: ABdhPJw0uLU4lqngX7/k9zLZXpp650nEStictQd4H3d3J4CHpNkXYKfPxxAYJ70h3fuhgk3W3eB0IQ==
-X-Received: by 2002:a17:90a:c296:b0:1bc:7a6e:623b with SMTP id f22-20020a17090ac29600b001bc7a6e623bmr2135245pjt.68.1645777848494;
-        Fri, 25 Feb 2022 00:30:48 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm2142663pfl.44.2022.02.25.00.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 00:30:47 -0800 (PST)
-Date:   Fri, 25 Feb 2022 16:30:42 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: psci: Iterate backwards over list in
- psci_pd_remove()
-Message-ID: <20220225083042.GC269879@dragon>
-References: <20220225082420.450620-1-shawn.guo@linaro.org>
+        Fri, 25 Feb 2022 03:34:39 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B8F247769;
+        Fri, 25 Feb 2022 00:34:07 -0800 (PST)
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MvryJ-1oGATC2KAR-00swa3; Fri, 25 Feb 2022 09:34:05 +0100
+Received: by mail-wm1-f50.google.com with SMTP id p4so1213534wmg.1;
+        Fri, 25 Feb 2022 00:34:05 -0800 (PST)
+X-Gm-Message-State: AOAM531E/j6S13Yb+YVordzdIyMNOwY64v2CLQ+9k04WKi0/xa6c+JuP
+        +4SyB2M8ymkZJNufNUcXUk395TidptYOiLwOOe0=
+X-Google-Smtp-Source: ABdhPJxlT0ZeeZN0sp/wnlDP9vqKjX5249QxVFT0x3B4UnYiAZsJdwfn3z3PfGHyveoi2R5x9P4PLXraCF/IwsdQHuA=
+X-Received: by 2002:a05:600c:4ecb:b0:37c:9125:ac03 with SMTP id
+ g11-20020a05600c4ecb00b0037c9125ac03mr1654188wmq.98.1645778045094; Fri, 25
+ Feb 2022 00:34:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225082420.450620-1-shawn.guo@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+ <20220223135820.2252470-2-anders.roxell@linaro.org> <1645670923.t0z533n7uu.astroid@bobo.none>
+ <1645678884.dsm10mudmp.astroid@bobo.none> <20220224171207.GM614@gate.crashing.org>
+ <1645748601.idp48wexp9.astroid@bobo.none>
+In-Reply-To: <1645748601.idp48wexp9.astroid@bobo.none>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 25 Feb 2022 09:33:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0feJOsKMNP0zCdPho5XdD+NXFceUTTe1X6dA9OdWQntQ@mail.gmail.com>
+Message-ID: <CAK8P3a0feJOsKMNP0zCdPho5XdD+NXFceUTTe1X6dA9OdWQntQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:V3M9SmkRnE9os/eykVVe88xc1Z4Z0/NijhamjVkFNGxnP9lcJNX
+ XwYkh8mmSmoGRtLddGmzAMa4RkKZo3x9fRVOKsFKI2h6KQIfypCWZH/OoFIwW6CIYlwkdX+
+ xhG6K/vKjSoprdke6bsrF2DrT0iuyxq2p7jYFczcuMKOFfk9sEGDOy9EH2BC3c3LEE1z8JS
+ /Yh0OLOPlE+5PPsTWmg3g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qjY77EtsRBI=:8S4FHM4uubYJ99LtsrLa8B
+ 95RSBjhwuvOXrzuhBAYalx1kZMOnKHsnwNjzoI7ULwD/mJLuBZSFkrNYK4BKgFcpIM3BnIcmV
+ oZ/pkhsMYr5qLRo7Uz922ynpd+jWlJxWTPxRlFF7Ef1z/2o3+LNxSl0SmsOGnelKZdoTw1Vpz
+ Fs9drUBQpHI3n4SzV6ixubCWsPZ1hGSR+0iMxP8cik8cjvh9VQcuMqTMhM0divMhaftWA9woV
+ waV6Iecdx4SaZvmfX55nzbAtyzeHd0wNGtYgjNH629Uqxn8i8QsyE8LnpQw7FFih9ZKfJuwxe
+ HPBQBSNnrxf4wZwMryGIuwdNFjZ8Phpn6Dn1pviC9ZyccsfPbqqOK5xGRn/QM9uLPniVq5LEv
+ skvcZ3Sg9ZjcaSkbq2OCztQAd7UbU+couHNroosYbS0GBap6vjKdpAihUJiPuG8wGyTiHwNYg
+ +Qe2r5ZyTmXIbqux14fifBZa7uqPilmBVAtVXkhzZx9mndYFCXylEhJ/0oUjn9FeaJQWBCLub
+ ELRYmFQOEW3lmWqzyCK75Q5CjbELnghinJ56oYZgGkQjJwqLBVkpSpZNrm0SihGkh3geUTkCd
+ ToVxtm5yzGy1yZHq9xW+SPGLAx0e/7//EGhlKr9/MGXhGbBd2qt3+ioNkzchlcxy9UcHyjV3X
+ K78RwYVU4XmuGvS4fQnpSMp+0fprcefS+lWQiaGbQMT4KyiT2fr4bZzgABL+3S5JkVWk612a4
+ GtKcPsyud7xbf0oGPPlqYL0/z3sigKsNb8XFnZdbfQyq8Cbm9X0LyxrjFnp9Bmlsg3ZxRJgeO
+ /r+5wk8g5okbMLeYlZ4BNWAJRqPQdybc+/ZdoZ8E7TrvZF1GG8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 04:24:20PM +0800, Shawn Guo wrote:
-> In case that psci_pd_init_topology() fails for some reason,
-> psci_pd_remove() will be responsible for deleting provider and removing
-> genpd from psci_pd_providers list.  There will be a failure when removing
-> the cluster PD, because the cpu (child) PDs haven't been removed.
-> 
-> [    0.050232] CPUidle PSCI: init PM domain cpu0
-> [    0.050278] CPUidle PSCI: init PM domain cpu1
-> [    0.050329] CPUidle PSCI: init PM domain cpu2
-> [    0.050370] CPUidle PSCI: init PM domain cpu3
-> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
-> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
-> [    0.051412] PM: genpd_remove: removed cpu3
-> [    0.051449] PM: genpd_remove: removed cpu2
-> [    0.051499] PM: genpd_remove: removed cpu1
-> [    0.051546] PM: genpd_remove: removed cpu0
-> 
-> Fix the problem by iterating the provider list in a reversely order, so
+On Fri, Feb 25, 2022 at 1:32 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+> Excerpts from Segher Boessenkool's message of February 25, 2022 3:12 am:
+> >> +#ifdef CONFIG_CC_IS_GCC
+> >> +#if (GCC_VERSION >= 100000)
+> >> +#if (CONFIG_AS_VERSION == 23800)
+> >> +asm(".machine any");
+> >> +#endif
+> >> +#endif
+> >> +#endif
+> >> +#endif /* __ASSEMBLY__ */
+> >
+> > Abusing toplevel asm like this is broken and you *will* end up with
+> > unhappiness all around.
+>
+> It actually unbreaks things and reduces my unhappiness. It's only done
+> for broken compiler versions and only where as does not have the
+> workaround for the breakage.
 
-s/reversely/reversed
+It doesn't work with clang, which always passes explicit .machine
+statements around each inline asm, and it's also fundamentally
+incompatible with LTO builds. Generally speaking, you can't expect
+a top-level asm statement to have any effect inside of another
+function.
 
-> that parent PD gets removed before child's PDs.
-
-s/before/after
-
-Essentially, with this change, the PM domains will be removed in the same
-order how they were added.
-
-[    0.029052] CPUidle PSCI: init PM domain cpu0
-[    0.029076] CPUidle PSCI: init PM domain cpu1
-[    0.029103] CPUidle PSCI: init PM domain cpu2
-[    0.029124] CPUidle PSCI: init PM domain cpu3
-[    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
-[    0.029647] PM: genpd_remove: removed cpu0
-[    0.029666] PM: genpd_remove: removed cpu1
-[    0.029690] PM: genpd_remove: removed cpu2
-[    0.029714] PM: genpd_remove: removed cpu3
-[    0.029738] PM: genpd_remove: removed cpu-cluster0
-
-Shawn
-
-> 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
->  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index ff2c3f8e4668..ce5c415fb04d 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -182,7 +182,8 @@ static void psci_pd_remove(void)
->  	struct psci_pd_provider *pd_provider, *it;
->  	struct generic_pm_domain *genpd;
->  
-> -	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
-> +	list_for_each_entry_safe_reverse(pd_provider, it,
-> +					 &psci_pd_providers, link) {
->  		of_genpd_del_provider(pd_provider->node);
->  
->  		genpd = of_genpd_remove_last(pd_provider->node);
-> -- 
-> 2.25.1
-> 
+        Arnd

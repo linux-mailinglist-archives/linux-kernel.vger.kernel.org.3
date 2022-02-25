@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FDE4C4445
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDCF4C444B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiBYMHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S233543AbiBYMIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiBYMHK (ORCPT
+        with ESMTP id S232959AbiBYMIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:07:10 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D9C267D;
-        Fri, 25 Feb 2022 04:06:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6B3AC1F42522
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645790793;
-        bh=bCvONPGPweF9C0iIikhI+xXmgfTZPFzQXLGikPMic4Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NUdBb0+vQZH9FR5rKRZuLNISs3qEAxljfZxyX/wjLatzxAmwaTmRWfJmN854GQnnP
-         elhn7SJKFAOyWwiGMiAw7rGokii5TDEQBg9fCuv3L9ofZuZ1zFN+F64J8dP9dYQTlJ
-         dcsEF3s1quTSkbShgCbYTkm6yK4R8RAVDKjQI/BV2C3ToBbzXP8/Lh+OPo+U+TDLzB
-         TOQSvp5E1tgdUAdbB3rZ9f6gekB+4LKSz3UsPHk6meK51t9YoX0odctJxl76GeijL9
-         zNrysxDz9Bv8nxRlUybyWDDYCYDTDhrObaNriQVzfep8rKnf3RxcLPhvK/gH0IDDHF
-         8i6+AtMAKSCHQ==
-Message-ID: <cca52225-629c-bb18-8d62-7b8f65e88064@collabora.com>
-Date:   Fri, 25 Feb 2022 13:06:29 +0100
+        Fri, 25 Feb 2022 07:08:48 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F101A12AF
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645790896; x=1677326896;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WVqYG+DiXIExAcDccN7FBAxpgMaONMHtVx9VTrInYlQ=;
+  b=OHCXBEuf19eEKd30VTwJoVukKGAxjVzkC/QAhfZ/VAZqcjZpuiYPChfQ
+   pXtPPBkiyHh/SOyBontSkK1aiYHJ9lx5zUjdjz+YjxbhaA5UeQ6xznfxN
+   dKozhA1EGzgRocgMlMdxiB6ebVI5DUOeEa1OGYIcLcgv6sxvltFFDQDpa
+   y9nbNGy7n2P1TZDjZS4jKslJ3vp3J0+R0YRHQ3GxkOTrRraIPdAsW9NAw
+   4N36lMDjw8l/W3vo6lFya6mdxAkodHkrY4PFE9HDQKD37q5+98bhBwRAd
+   KyNmEZckNs2gCyFt6eTi/ckw1yDKNX7GZdMoujmHkVaGUj2L76bnAsNmU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="232456535"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="232456535"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 04:08:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="574579422"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 04:08:07 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNZOI-0004Hn-L4; Fri, 25 Feb 2022 12:08:06 +0000
+Date:   Fri, 25 Feb 2022 20:07:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 2786/4674] arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier
+ 'smccc_trng_available'
+Message-ID: <202202252023.bwH1Xekw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v8 14/19] phy: phy-mtk-dp: Add driver for DP phy
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
- <20220218145437.18563-15-granquet@baylibre.com>
- <bdd867fe-3103-a99b-e9ec-02df6a18d385@collabora.com>
- <CABnWg9tfutasgiUaLBvb8CxTycLKf8Ry=9PMi2Vtu2JeB4a=dQ@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CABnWg9tfutasgiUaLBvb8CxTycLKf8Ry=9PMi2Vtu2JeB4a=dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,207 +64,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/02/22 12:49, Guillaume Ranquet ha scritto:
-> Quoting AngeloGioacchino Del Regno (2022-02-21 15:31:51)
->> Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
->>> From: Markus Schneider-Pargmann <msp@baylibre.com>
->>>
->>> This is a new driver that supports the integrated DisplayPort phy for
->>> mediatek SoCs, especially the mt8195. The phy is integrated into the
->>> DisplayPort controller and will be created by the mtk-dp driver. This
->>> driver expects a struct regmap to be able to work on the same registers
->>> as the DisplayPort controller. It sets the device data to be the struct
->>> phy so that the DisplayPort controller can easily work with it.
->>>
->>> The driver does not have any devicetree bindings because the datasheet
->>> does not list the controller and the phy as distinct units.
->>>
->>> The interaction with the controller can be covered by the configure
->>> callback of the phy framework and its displayport parameters.
->>>
->>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->>> ---
->>>    MAINTAINERS                       |   1 +
->>>    drivers/phy/mediatek/Kconfig      |   8 ++
->>>    drivers/phy/mediatek/Makefile     |   1 +
->>>    drivers/phy/mediatek/phy-mtk-dp.c | 199 ++++++++++++++++++++++++++++++
->>>    4 files changed, 209 insertions(+)
->>>    create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
->>>
+Hi Will,
 
-..snip..
+FYI, the error/warning still remains.
 
->>> +static int mtk_dp_phy_reset(struct phy *phy)
->>> +{
->>> +     struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
->>> +
->>> +     regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
->>> +                        DP_GLB_SW_RST_PHYD, 0);
->>
->> Please, when you add delays/sleeps, add a comment explaining the reason for that.
->>
->> To you.. and to me as well.. the reason is very much known and honestly obvious,
->> but let's be nice with people that don't know the MediaTek platforms :)
->>
-> It's sadly not obvious to me, I've asked mediatek engineers mutlple
-> times for these
-> kind of information, but I'm rather short on information... :-/
-> 
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   9eab20c98fb13b08ab49ae0bc8c90232e8e56d70
+commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/4674] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
+config: arm64-randconfig-r011-20220225 (https://download.01.org/0day-ci/archive/20220225/202202252023.bwH1Xekw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Clearly, the PHY needs at least 50uS to perform software reset (SW_RST) of
-the digital (controller? my brain doesn't want to cooperate on giving the
-right word right now, sorry), so we sleep that time after asserting the
-reset bit to comply with this timing.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->>> +     usleep_range(50, 200);
->>> +     regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
->>> +                        DP_GLB_SW_RST_PHYD, 1);
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static const struct phy_ops mtk_dp_phy_dev_ops = {
->>> +     .init = mtk_dp_phy_init,
->>> +     .configure = mtk_dp_phy_configure,
->>> +     .reset = mtk_dp_phy_reset,
->>> +     .owner = THIS_MODULE,
->>> +};
->>> +
->>> +static int mtk_dp_phy_probe(struct platform_device *pdev)
->>> +{
->>> +     struct device *dev = &pdev->dev;
->>> +     struct mtk_dp_phy *dp_phy;
->>> +     struct phy *phy;
->>
->>          struct regmap *regs = (blah);
->>
->>          if (!dp_phy->regs)
->>                  return -EINVAL;
->>
->> Doing that before allocating the dp_phy struct seems sensible as, even
->> if it's unlikely that this platform data is not passed, we'd be sparing
->> some time around.
->>
->> Besides - I think that the error message is not necessary here, but, if
->> you really want to keep it, please return dev_err_probe(): using it in
->> these cases is also allowed.
->>
-> You are right, it's logical to return as early as possible.
-> 
->>> +
->>> +     dp_phy = devm_kzalloc(dev, sizeof(*dp_phy), GFP_KERNEL);
->>> +     if (!dp_phy)
->>> +             return -ENOMEM;
->>> +
->>> +     dp_phy->regs = *(struct regmap **)dev->platform_data;
->>> +     if (!dp_phy->regs) {
->>> +             dev_err(dev, "No data passed, requires struct regmap**\n");
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     phy = devm_phy_create(dev, NULL, &mtk_dp_phy_dev_ops);
->>
->>          if (IS_ERR(phy))
->>                  return dev_err_probe(dev, PTR_ERR(phy), "Cannot create DP PHY\n");
->>
->>> +     if (IS_ERR(phy)) {
->>> +             dev_err(dev, "Failed to create DP PHY: %ld\n", PTR_ERR(phy));
->>> +             return PTR_ERR(phy);
->>> +     }
->>> +     phy_set_drvdata(phy, dp_phy);
->>> +
->>> +     if (!dev->of_node)
->>
->> This will never happen if you use DT to probe this driver - and please do!
->>
->> An example device-tree binding would be:
->>
->> dp_phy: phy@somewhere {
->>          compatible = "mediatek,mt8195-dp-phy", "mediatek,dp-phy";
->>          reg = <...>;
->>          #phy-cells = <0>;
->> };
->>
->> mtk_dp: displayport-controller@somewhere_else {
->>          compatible = "mediatek,mt8195-edp-tx", "mediatek,edp-tx";
->>          reg = <....>;
->>          other-properties;
->>
->>          phys = <&dp_phy>;
->>          phy-names = "dp";
->> };
->>
->> Also, remember: since you're nicely using regmap, if you - for any reason - need
->> to share the same iospace between the two drivers, you can always use a
->> syscon node for that purpose.
->>
-> Sadly, I'm not using DT to prove this driver... and this driver will
-> probably never
-> be used with DT.
-> This phy is actually an integral part of the dp ip, this driver is
-> only a "logical"
-> separation between the DP/phy functionnalities.
-> It's probed from the DP driver with a call to `platform_register_device()`.
-> Both the DP and phy driver share the same regmap struct.
-> 
-> Markus tried to explain that in the commit message, please tell me if this needs
-> a reword?
-> The original discussion is here:
-> https://lore.kernel.org/all/CAAOTY__cJMqcAieEraJ2sz4gi0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/
-> 
+All errors (new ones prefixed by >>):
 
-I understand the fact that the PHY is part of the entire block, but you cannot
-guarantee that the next block will have an entirely different PHY and also an
-entirely different port IP.
-
-I will pretty much oversimplify this as to make sure that you understand the
-strategy and concerns that I have in mind, and why I think that this should
-still be probed separately with its own device-tree compatible:
-
-1. The DisplayPort IP that we have in MT8195 is composed of
-A - DisplayPort PHY, let's give it a fantasy version V1.0
-B - DisplayPort "port" IP, also fantasy version V1.0
-
-2. DisplayPort IP in a future MT9988 chip may be composed of
-A - DisplayPort PHY, V1.0
-B - DisplayPort "port" IP, V1.1, maybe in a different iospace
-
-3. Of course, it may happen that MT9999 chip may have a variant of the one in 9988
-A - DisplayPort PHY, V1.01, maybe in a different iospace
-B - DisplayPort "port" IP, V1.1
-
-In cases 2, 3, having both drivers probed as I suggest, will allow to not only
-specify a different iospace (which may not be contiguous anymore!), but also to
-avoid specifying a different compatible string for one of the two components
-which are not carrying any variation in the register layout and/or management.
-
-This, in turn, will also make it easier for developers reading the SoC device
-trees to get more immediate knowledge of the hardware, but of course this is not
-a primary reason, but more like a side-benefit.
-
-> I didn't know about syscon, I'll have a look... but it's definitively what
-> I'm doing here...
-> 
-
-P.S.: As for "holes in the middle", remember that device-tree supports "ranges"!
-
->>> +             phy_create_lookup(phy, "dp", dev_name(dev));
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +struct platform_driver mtk_dp_phy_driver = {
->>> +     .probe = mtk_dp_phy_probe,
->>> +     .driver = {
->>> +             .name = "mediatek-dp-phy",
->>> +     },
->>> +};
->>> +module_platform_driver(mtk_dp_phy_driver);
->>> +
->>> +MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com>");
->>> +MODULE_DESCRIPTION("MediaTek DP PHY Driver");
->>> +MODULE_LICENSE("GPL v2");
->>
+>> arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier 'smccc_trng_available'
+           kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+                                                ^
+   1 error generated.
 
 
+vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
+
+  1997	
+  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
+  1999	{
+  2000		void *addr = phys_to_virt(hyp_mem_base);
+  2001		int ret;
+  2002	
+  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
+  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
+  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
+  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
+  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
+  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
+> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+  2012	
+  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
+  2014		if (ret)
+  2015			return ret;
+  2016	
+  2017		ret = init_stage2_iommu();
+  2018		if (ret < 0)
+  2019			return ret;
+  2020	
+  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
+  2022		if (ret)
+  2023			return ret;
+  2024	
+  2025		free_hyp_pgds();
+  2026	
+  2027		return 0;
+  2028	}
+  2029	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

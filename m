@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C024C44D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 247AC4C44D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240682AbiBYMph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S240702AbiBYMqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 07:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiBYMpg (ORCPT
+        with ESMTP id S230124AbiBYMqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:45:36 -0500
+        Fri, 25 Feb 2022 07:46:36 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633D51C8847
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:45:04 -0800 (PST)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24A421CD12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:46:04 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BCDB840017
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:45:02 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A602C3F1C9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 12:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645793102;
-        bh=SnSbt9srZ7OcpfO0TO3d0HjnXYX+4WJ6SgK04DiqgE8=;
+        s=20210705; t=1645793163;
+        bh=IZZDTFAqzc8aGjWg1aZGEvUIk/RV0NTNXI1qwgw2jtM=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=bcEi+LRiTemlC7Hj63WfwVaBWrkJ6xI0+QDibvP7bLfF+CmKjYWpu0MIIlYHLDZXU
-         zs1bFHorBWqxTimKZlX/U0Va8OvbWkKVF3aeO9i5jQTwi9l1a/QOACSr9rSxqX+Qhx
-         m+GARMgijfuxqQVTVF0YcoVAHVjXC/I/TS8YQIjFx2xvBShUoLmiz6WLLvtyqG79pf
-         Png5lW6KSjhxNRhnlBErHRotSf0uScw9OWAv6qKIaT6HUaKhhYrJtLf7pqBiZoM0Oz
-         viNNFKRvi6DmzuMI2o4N+1r+DH1VfkzJA1EOGlKXMYpm+8uJEmxtso/VmgKjKbbT4J
-         d8BTk+vYhecTg==
-Received: by mail-wm1-f72.google.com with SMTP id r8-20020a05600c35c800b0038118108e71so1266302wmq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:45:02 -0800 (PST)
+        b=NbuplYwpZDA6vimglNGnb8sl8yD7+jhJ2oi2Ti0IUGF2J8G0s9m/GZ+8jhnFutli7
+         5Y/Ldq7Ixg47hG+FvmiBCry+Tp5sr26yKf4JRpOvFLrfi8/Lpl9dPIzsgq7lpu8Ozj
+         KLe95HHy8+5oGLpMPcRsrSHu4fIr55Z47JvXsBPcnoUcgLNgqrigfjUQFk/tV88G7r
+         t6vujrku7IlIqFQ/9Y6We8xM4uT8TJuQLRIOjs/R9lE0l4xg2bsUBtlv/FmKcYAHkU
+         qiK3MXgm0a3NJakRdxbIAWeelxK8C3XhS53DBYDYoiePomfoUPJ6G03o+FWa3R4oA+
+         0dx1/xoQYLzEw==
+Received: by mail-wm1-f69.google.com with SMTP id w3-20020a7bc743000000b0037c5168b3c4so1510781wmk.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 04:46:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SnSbt9srZ7OcpfO0TO3d0HjnXYX+4WJ6SgK04DiqgE8=;
-        b=aNMnUwpbUuF+xQDgHSFCjXOrZfxAUAfNlakJW+w/8e+Kgo2sm7A5aXBFRbxJORPtjz
-         KMJgBPkIyod686fPFMP308ENkFI/UfMXKPRErr8wvKzEvCviWZKmLZB1AwtN+VW0OLRc
-         kmF1OrQsbSeyqmnqEFtezoF7RcwJPJF94l/ZjXw6KsqYHmgaRh8+vUCfGReKLt4TDhQb
-         Y8f9udNM4C0kZLxg1YC0nSSb0nKNUBlSBvOi/GljU66DQc1lwUCcaAUFbgX5cN5Oa9La
-         DWX/YieQ7vj4qqegZUdc7H1IqZTXZN6umK+57M0s6CY80O/SN5AFNWzN9jnfwCapRIqO
-         CLuQ==
-X-Gm-Message-State: AOAM533gAdKOFWBpIJT7i57atSnblFLxQH+ypgvKRrC9htsb+o7uGgi2
-        b8bBFCjqMbioYM77MHxwEWce3A5prw6Xbfg88zPFm0iw2TarbDurbt0/w4CAeoXfYwAKJWUW3RJ
-        JnBoUS7LjMkkKr1GLuu/tTPzE6LUUMzkOVeTKD5DF0g==
-X-Received: by 2002:a5d:6a41:0:b0:1ed:c1da:6c22 with SMTP id t1-20020a5d6a41000000b001edc1da6c22mr5742732wrw.473.1645793102134;
-        Fri, 25 Feb 2022 04:45:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwQgKrZu6jaYzaCu1NYJXPtNkDwJhWrhUHTE8uagr23ma/j8UbcytWvj2M2yAnW2lyu4uqPTg==
-X-Received: by 2002:a5d:6a41:0:b0:1ed:c1da:6c22 with SMTP id t1-20020a5d6a41000000b001edc1da6c22mr5742718wrw.473.1645793101972;
-        Fri, 25 Feb 2022 04:45:01 -0800 (PST)
+        bh=IZZDTFAqzc8aGjWg1aZGEvUIk/RV0NTNXI1qwgw2jtM=;
+        b=5MFNklMRl4lPD1dBHw6iQRs6qpAfetCZZFL9EAFzXMsrN9fHIIUh1TnbEypkD6jVQW
+         dtxokPL0gVgyMdqZP9CSj3bEByw5k6aC5aRUXHWXR5hAZDTTAPNn/jT9B5A8vi+oynwE
+         0RVNSzt3xYiCTiD92fAkuanttp0qONjLVPSU4tVubtUgHsJ1HXtJdCf5vRAWmHiBewHV
+         ElRXMHHVjkPxl39lGdTh3VClILARJBNhY+k/RKPjIpf8xynKSsHvFe6liWMNDV73RMwF
+         WzuXn9BhCdHo7M43okBU7vjCfAuavyIJ68LooQBmLoYihd66mponshpe5LhrGmuGM+Lm
+         42Qw==
+X-Gm-Message-State: AOAM531QnMq/ZcoBPoFYjqTrF+kB+M7wvz1Hon5AOe+Tzl/iRGRcW3qk
+        lEsi0339dlKXI+ZK3vgjn+FySuKqCl6veRCc2N89zHMIS00MUoxJsBUTg07yD6k+X1/tP11LR5b
+        DUKdPeYjpuHx90XYq1tb8h2/aRzZ38LbZ00LlCmYpZA==
+X-Received: by 2002:a5d:59af:0:b0:1e4:a027:ce3b with SMTP id p15-20020a5d59af000000b001e4a027ce3bmr5811393wrr.318.1645793163256;
+        Fri, 25 Feb 2022 04:46:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxO7k/BdZpfrSelXcnhXik1Fk/jhx3wZbS/FHtdA4vPeJI99+BzxjzzIqpykVUwH5wXXBm4Wg==
+X-Received: by 2002:a5d:59af:0:b0:1e4:a027:ce3b with SMTP id p15-20020a5d59af000000b001e4a027ce3bmr5811384wrr.318.1645793163068;
+        Fri, 25 Feb 2022 04:46:03 -0800 (PST)
 Received: from localhost.localdomain (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05600002ad00b001ea78a5df11sm2712125wry.1.2022.02.25.04.45.01
+        by smtp.gmail.com with ESMTPSA id e33-20020a05600c4ba100b003810c690ba2sm4741109wmp.3.2022.02.25.04.46.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 04:45:01 -0800 (PST)
+        Fri, 25 Feb 2022 04:46:02 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -70,9 +70,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Nick Hu <nickhu@andestech.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com
-Subject: [PATCH -fixes v3 5/6] riscv: Move high_memory initialization to setup_bootmem
-Date:   Fri, 25 Feb 2022 13:39:52 +0100
-Message-Id: <20220225123953.3251327-6-alexandre.ghiti@canonical.com>
+Subject: [PATCH -fixes v3 6/6] riscv: Fix kasan pud population
+Date:   Fri, 25 Feb 2022 13:39:53 +0100
+Message-Id: <20220225123953.3251327-7-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220225123953.3251327-1-alexandre.ghiti@canonical.com>
 References: <20220225123953.3251327-1-alexandre.ghiti@canonical.com>
@@ -88,75 +88,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-high_memory used to be initialized in mem_init, way after setup_bootmem.
-But a call to dma_contiguous_reserve in this function gives rise to the
-below warning because high_memory is equal to 0 and is used at the very
-beginning at cma_declare_contiguous_nid.
+In sv48, the kasan inner regions are not aligned on PGDIR_SIZE and then
+when we populate the kasan linear mapping region, we clear the kasan
+vmalloc region which is in the same PGD.
 
-It went unnoticed since the move of the kasan region redefined
-KERN_VIRT_SIZE so that it does not encompass -1 anymore.
+Fix this by copying the content of the kasan early pud after allocating a
+new PGD for the first time.
 
-Fix this by initializing high_memory in setup_bootmem.
-
-------------[ cut here ]------------
-virt_to_phys used for non-linear address: ffffffffffffffff (0xffffffffffffffff)
-WARNING: CPU: 0 PID: 0 at arch/riscv/mm/physaddr.c:14 __virt_to_phys+0xac/0x1b8
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper Not tainted 5.17.0-rc1-00007-ga68b89289e26 #27
-Hardware name: riscv-virtio,qemu (DT)
-epc : __virt_to_phys+0xac/0x1b8
- ra : __virt_to_phys+0xac/0x1b8
-epc : ffffffff80014922 ra : ffffffff80014922 sp : ffffffff84a03c30
- gp : ffffffff85866c80 tp : ffffffff84a3f180 t0 : ffffffff86bce657
- t1 : fffffffef09406e8 t2 : 0000000000000000 s0 : ffffffff84a03c70
- s1 : ffffffffffffffff a0 : 000000000000004f a1 : 00000000000f0000
- a2 : 0000000000000002 a3 : ffffffff8011f408 a4 : 0000000000000000
- a5 : 0000000000000000 a6 : 0000000000f00000 a7 : ffffffff84a03747
- s2 : ffffffd800000000 s3 : ffffffff86ef4000 s4 : ffffffff8467f828
- s5 : fffffff800000000 s6 : 8000000000006800 s7 : 0000000000000000
- s8 : 0000000480000000 s9 : 0000000080038ea0 s10: 0000000000000000
- s11: ffffffffffffffff t3 : ffffffff84a035c0 t4 : fffffffef09406e8
- t5 : fffffffef09406e9 t6 : ffffffff84a03758
-status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff8322ef4c>] cma_declare_contiguous_nid+0xf2/0x64a
-[<ffffffff83212a58>] dma_contiguous_reserve_area+0x46/0xb4
-[<ffffffff83212c3a>] dma_contiguous_reserve+0x174/0x18e
-[<ffffffff83208fc2>] paging_init+0x12c/0x35e
-[<ffffffff83206bd2>] setup_arch+0x120/0x74e
-[<ffffffff83201416>] start_kernel+0xce/0x68c
-irq event stamp: 0
-hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-hardirqs last disabled at (0): [<0000000000000000>] 0x0
-softirqs last  enabled at (0): [<0000000000000000>] 0x0
-softirqs last disabled at (0): [<0000000000000000>] 0x0
----[ end trace 0000000000000000 ]---
-
-Fixes: f7ae02333d13 ("riscv: Move KASAN mapping next to the kernel mapping")
+Fixes: e8a62cc26ddf ("riscv: Implement sv48 support")
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- arch/riscv/mm/init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/mm/kasan_init.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index c27294128e18..0d588032d6e6 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -125,7 +125,6 @@ void __init mem_init(void)
- 	else
- 		swiotlb_force = SWIOTLB_NO_FORCE;
- #endif
--	high_memory = (void *)(__va(PFN_PHYS(max_low_pfn)));
- 	memblock_free_all();
+diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
+index 85e849318389..cd1a145257b7 100644
+--- a/arch/riscv/mm/kasan_init.c
++++ b/arch/riscv/mm/kasan_init.c
+@@ -113,8 +113,11 @@ static void __init kasan_populate_pud(pgd_t *pgd,
+ 		base_pud = pt_ops.get_pud_virt(pfn_to_phys(_pgd_pfn(*pgd)));
+ 	} else {
+ 		base_pud = (pud_t *)pgd_page_vaddr(*pgd);
+-		if (base_pud == lm_alias(kasan_early_shadow_pud))
++		if (base_pud == lm_alias(kasan_early_shadow_pud)) {
+ 			base_pud = memblock_alloc(PTRS_PER_PUD * sizeof(pud_t), PAGE_SIZE);
++			memcpy(base_pud, (void *)kasan_early_shadow_pud,
++			       sizeof(pud_t) * PTRS_PER_PUD);
++		}
+ 	}
  
- 	print_vm_layout();
-@@ -195,6 +194,7 @@ static void __init setup_bootmem(void)
- 
- 	min_low_pfn = PFN_UP(phys_ram_base);
- 	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
-+	high_memory = (void *)(__va(PFN_PHYS(max_low_pfn)));
- 
- 	dma32_phys_limit = min(4UL * SZ_1G, (unsigned long)PFN_PHYS(max_low_pfn));
- 	set_max_mapnr(max_low_pfn - ARCH_PFN_OFFSET);
+ 	pudp = base_pud + pud_index(vaddr);
 -- 
 2.32.0
 

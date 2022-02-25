@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7E4C3F36
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87DF4C3F38
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238187AbiBYHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S238229AbiBYHoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:44:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiBYHo3 (ORCPT
+        with ESMTP id S238214AbiBYHow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:44:29 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1991EC9B6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645775037; x=1677311037;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DN2p7KxLB5XwxTqu5Cf/PTHocnMkAa+elHEUHPuQ280=;
-  b=QLgdD1mjbJuauVUkguR1ucW0YqhLSrShq2Ku+mFfj/EiVjBACYLfPhdI
-   UUEIc/3EMhZGQGvQJGk1WYjjBqmRFK1OqWByg4XZLVbBG3JYJKPXCeprv
-   Bt45iGixwqZl7q6JJH+GMs8rtjyebZ4i0lq1f2X23DtzHgSmJ0QEstjNp
-   +X2n5YtyoFT4T/90IUe9jLzBPK03XvHZR+Xhm1gKh283TVrKMzUaGUL/u
-   fUeO7J3gwols4EcHArRVgqKsoAIl6Z24kUmCyGlnI0mDw8nFxcXbcWjs+
-   w+w/G1S3uhiPymY5VKSmBljqHDnowfToHHlOa7Q8MMQorLT9HKIceUZMO
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252172741"
-X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="252172741"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 23:43:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,135,1643702400"; 
-   d="scan'208";a="509188703"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Feb 2022 23:43:55 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNVGc-00042T-RI; Fri, 25 Feb 2022 07:43:54 +0000
-Date:   Fri, 25 Feb 2022 15:43:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>
-Subject: [dinguyen:nios2_for_v5.18 5/6] lib/strncpy_from_user.c:123:13:
- error: implicit declaration of function 'user_addr_max'
-Message-ID: <202202251524.ivDzBaPs-lkp@intel.com>
+        Fri, 25 Feb 2022 02:44:52 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5052272E3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:44:20 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 132so3930606pga.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:44:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pebQAfXF6XweYjs0eGI3bFR9spMrRG1FqYYUkNhfn+E=;
+        b=Kl/dwA7J9l0gxrWs8kMoBqr+lcMx8XxtSxViisuumNbHcyG2PUWuPy3+a5v+k4wPxW
+         Hv0eHcxH9z1uv+5779eWO9UV65SXJflq3eRoH531R/3kG35qboZIhDdFJhvGkg5hh+Rw
+         oMYmH/tYn66ot8W98dH0/liRAWSshqbU7RjtWMIcg7vQDIB5zlDRsLYwJJpVSvE65WH2
+         /BqanM+9joXU9QGK6FPHIIOBtuw2CqmFaWdT36d/R3FEt45+8uLFzltsKshoQ3ofxO+o
+         sXAfLGSrU79VemMHEXTCZVyYq6CSWkZRQdUZtFY/pWonsuew09I1qG3gb5k8MD3rwUoa
+         WYNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pebQAfXF6XweYjs0eGI3bFR9spMrRG1FqYYUkNhfn+E=;
+        b=yxQD/mblKpnA2QJPSD+55dcDINUNiRW6FXISdPDaqLxECgWhMVuXI1oMXPiU2szP9E
+         nRoEhvkzcftvHb+2sacPZ3yxTGKPhhEAeoh+QxjrVA7dQUrykNZHzCr5K9GSiS3nmSg2
+         K7iOWCFPBYj3GDu63gfB5QKJ1qwFQvV+wxcyipoZ0JXW6M0IZJ76jbwipHC9FAlR0uKZ
+         WZsClS9JY+QC2cJAFd4WX6qXQNfXWFi7D0Y/WfOT0w7MVryQKvaWcM79MDLfEpnCxr03
+         N+huGbJj7AjOxAed/8fkO7Bvojjhch7tMXBIMUTq1WjWwQG784dAjTxZWocXyWaWWuhi
+         APrw==
+X-Gm-Message-State: AOAM530gUIvxjfukIcBSnIFVWm6hQf7Q1x0zEuWYB60B9FI+vvEhqzvZ
+        Avw4/oitXIwwHcK5eAue8sa4
+X-Google-Smtp-Source: ABdhPJysLEw5Fe2Qq+cY1LBZd0c6mBCnomaQ6NxvOIVAGyd6cEKU6O+Dheso6fSjReAysM8+HH2yIA==
+X-Received: by 2002:a63:ba5e:0:b0:372:9bb2:c12d with SMTP id l30-20020a63ba5e000000b003729bb2c12dmr5253196pgu.380.1645775060237;
+        Thu, 24 Feb 2022 23:44:20 -0800 (PST)
+Received: from thinkpad ([220.158.159.240])
+        by smtp.gmail.com with ESMTPSA id nn17-20020a17090b38d100b001bc5a705fb2sm1480029pjb.26.2022.02.24.23.44.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 23:44:19 -0800 (PST)
+Date:   Fri, 25 Feb 2022 13:14:15 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, agross@kernel.org,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: Add chosen node information for SDX65.
+Message-ID: <20220225074415.GF274289@thinkpad>
+References: <1644574845-23248-1-git-send-email-quic_rohiagar@quicinc.com>
+ <YhfgAL8z6rO+zU3w@builder.lan>
+ <b9205016-1f33-74fd-c314-c307412bfca3@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b9205016-1f33-74fd-c314-c307412bfca3@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git nios2_for_v5.18
-head:   048b7695b48a3a4523a7a7fbfedc396b40ccf62f
-commit: f368e6211f42e086e37dde58d081a86ac033dda3 [5/6] uaccess: generalize access_ok()
-config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220225/202202251524.ivDzBaPs-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git/commit/?id=f368e6211f42e086e37dde58d081a86ac033dda3
-        git remote add dinguyen https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
-        git fetch --no-tags dinguyen nios2_for_v5.18
-        git checkout f368e6211f42e086e37dde58d081a86ac033dda3
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Fri, Feb 25, 2022 at 12:46:26PM +0530, Rohit Agarwal wrote:
+> 
+> On 2/25/2022 1:14 AM, Bjorn Andersson wrote:
+> > On Fri 11 Feb 04:20 CST 2022, Rohit Agarwal wrote:
+> > 
+> > > Add chosen node in the base dtsi file of SDX65.
+> > > 
+> > While this happens to be the same on most boards, it is still a
+> > board-specific decision which UART is the debug uart, or if there is one
+> > at all...
+> > 
+> > So this property should remain in the dts.
+> > 
+> > Thanks,
+> > Bjorn
+> 
+> Without the chosen node in base dtsi, the device is not booting up.
+> Can we have an empty chosen node in the base dtsi and the board-specific
+> details
+> updated in the respective dts file. The device boots up with this.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I believe this is something to do with bootloader. But still I don't understand
+how this matters at all since the bootloader finally parses the "dtb" only.
 
-All errors (new ones prefixed by >>):
+Is the bootloader picking up correct dtb?
 
-   lib/strncpy_from_user.c: In function 'strncpy_from_user':
->> lib/strncpy_from_user.c:123:13: error: implicit declaration of function 'user_addr_max' [-Werror=implicit-function-declaration]
-     123 |  max_addr = user_addr_max();
-         |             ^~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   lib/strnlen_user.c: In function 'strnlen_user':
->> lib/strnlen_user.c:99:13: error: implicit declaration of function 'user_addr_max' [-Werror=implicit-function-declaration]
-      99 |  max_addr = user_addr_max();
-         |             ^~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Thanks,
+Mani
 
-
-vim +/user_addr_max +123 lib/strncpy_from_user.c
-
-2922585b93294d David S. Miller      2012-05-24   94  
-2922585b93294d David S. Miller      2012-05-24   95  /**
-2922585b93294d David S. Miller      2012-05-24   96   * strncpy_from_user: - Copy a NUL terminated string from userspace.
-2922585b93294d David S. Miller      2012-05-24   97   * @dst:   Destination address, in kernel space.  This buffer must be at
-2922585b93294d David S. Miller      2012-05-24   98   *         least @count bytes long.
-2922585b93294d David S. Miller      2012-05-24   99   * @src:   Source address, in user space.
-2922585b93294d David S. Miller      2012-05-24  100   * @count: Maximum number of bytes to copy, including the trailing NUL.
-2922585b93294d David S. Miller      2012-05-24  101   *
-2922585b93294d David S. Miller      2012-05-24  102   * Copies a NUL-terminated string from userspace to kernel space.
-2922585b93294d David S. Miller      2012-05-24  103   *
-2922585b93294d David S. Miller      2012-05-24  104   * On success, returns the length of the string (not including the trailing
-2922585b93294d David S. Miller      2012-05-24  105   * NUL).
-2922585b93294d David S. Miller      2012-05-24  106   *
-2922585b93294d David S. Miller      2012-05-24  107   * If access to userspace fails, returns -EFAULT (some data may have been
-2922585b93294d David S. Miller      2012-05-24  108   * copied).
-2922585b93294d David S. Miller      2012-05-24  109   *
-2922585b93294d David S. Miller      2012-05-24  110   * If @count is smaller than the length of the string, copies @count bytes
-2922585b93294d David S. Miller      2012-05-24  111   * and returns @count.
-2922585b93294d David S. Miller      2012-05-24  112   */
-2922585b93294d David S. Miller      2012-05-24  113  long strncpy_from_user(char *dst, const char __user *src, long count)
-2922585b93294d David S. Miller      2012-05-24  114  {
-2922585b93294d David S. Miller      2012-05-24  115  	unsigned long max_addr, src_addr;
-2922585b93294d David S. Miller      2012-05-24  116  
-07887358993d48 KP Singh             2020-06-04  117  	might_fault();
-4d0e9df5e43dba Albert van der Linde 2020-10-15  118  	if (should_fail_usercopy())
-4d0e9df5e43dba Albert van der Linde 2020-10-15  119  		return -EFAULT;
-2922585b93294d David S. Miller      2012-05-24  120  	if (unlikely(count <= 0))
-2922585b93294d David S. Miller      2012-05-24  121  		return 0;
-2922585b93294d David S. Miller      2012-05-24  122  
-2922585b93294d David S. Miller      2012-05-24 @123  	max_addr = user_addr_max();
-
-:::::: The code at line 123 was first introduced by commit
-:::::: 2922585b93294d47172a765115e0dbc1bfe1be19 lib: Sparc's strncpy_from_user is generic enough, move under lib/
-
-:::::: TO: David S. Miller <davem@davemloft.net>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Thanks,
+> Rohit
+> 
+> > > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> > > ---
+> > >   arch/arm/boot/dts/qcom-sdx65-mtp.dts | 4 ----
+> > >   arch/arm/boot/dts/qcom-sdx65.dtsi    | 4 ++++
+> > >   2 files changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> > > index 59457da..3a75c21 100644
+> > > --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> > > +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> > > @@ -14,10 +14,6 @@
+> > >   	aliases {
+> > >   		serial0 = &blsp1_uart3;
+> > >   	};
+> > > -
+> > > -	chosen {
+> > > -		stdout-path = "serial0:115200n8";
+> > > -	};
+> > >   };
+> > >   &blsp1_uart3 {
+> > > diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> > > index 796641d..653df15 100644
+> > > --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
+> > > +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> > > @@ -17,6 +17,10 @@
+> > >   	qcom,msm-id = <458 0x10000>, <483 0x10000>, <509 0x10000>;
+> > >   	interrupt-parent = <&intc>;
+> > > +	chosen {
+> > > +		stdout-path = "serial0:115200n8";
+> > > +	};
+> > > +
+> > >   	memory {
+> > >   		device_type = "memory";
+> > >   		reg = <0 0>;
+> > > -- 
+> > > 2.7.4
+> > > 

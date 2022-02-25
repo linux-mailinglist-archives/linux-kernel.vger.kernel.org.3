@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC364C4187
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B784C418B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 10:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239146AbiBYJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S237787AbiBYJgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 04:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237389AbiBYJfg (ORCPT
+        with ESMTP id S234262AbiBYJgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 04:35:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9BC1F767A;
-        Fri, 25 Feb 2022 01:35:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14FE660B1B;
-        Fri, 25 Feb 2022 09:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED5EC340E7;
-        Fri, 25 Feb 2022 09:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645781704;
-        bh=abf0Kch29YhEwOBNj51lTk+PAfj/fNdrPzssmkFkqcQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cp6DBjCSjkdqWtr+kYaxgG+OSWSYZmiIzWtpNlRwDK6SwIRYroop7daFC6tvAgyUm
-         b9LXto5PtMZ9/p6wo967SOrCHF2bnIMIWA7AtJa67EGbf/etTe7JkYH/awSZOiA2/I
-         gedfxZfUTPpXVI//iIkPjW/a0fHVZl3QXb+JDQOc=
-Date:   Fri, 25 Feb 2022 10:35:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] serial: 8250: Report which option to enable for
- blacklisted PCI devices
-Message-ID: <Yhiixm/iRlnF18B7@kroah.com>
-References: <alpine.DEB.2.21.2202121646020.34636@angie.orcam.me.uk>
- <alpine.DEB.2.21.2202121706060.34636@angie.orcam.me.uk>
+        Fri, 25 Feb 2022 04:36:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20DE71F7679;
+        Fri, 25 Feb 2022 01:35:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF2EF106F;
+        Fri, 25 Feb 2022 01:35:40 -0800 (PST)
+Received: from [10.163.51.16] (unknown [10.163.51.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5E803F70D;
+        Fri, 25 Feb 2022 01:35:38 -0800 (PST)
+Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+ <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
+ <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
+ <CAMuHMdXRO5dph1m21=V3bVyniVvKfhDLbMoEHQzwPgvSesXj6A@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <d417c0e7-8a47-4f40-6eb1-161797d16cef@arm.com>
+Date:   Fri, 25 Feb 2022 15:05:36 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2202121706060.34636@angie.orcam.me.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdXRO5dph1m21=V3bVyniVvKfhDLbMoEHQzwPgvSesXj6A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 05:30:59PM +0000, Maciej W. Rozycki wrote:
-> Provide information in the kernel log as to what configuration option to 
-> enable for PCI UART devices that have been blacklisted in the generic 
-> PCI 8250 UART driver and which have a dedicated driver available to 
-> handle that has been disabled.  The rationale is there is no easy way 
-> for the user to map a specific PCI vendor:device pair to an individual 
-> dedicated driver while the generic driver has this information readily 
-> available and it will likely be confusing that the generic driver does 
-> not register such a port.
-> 
-> A message is then printed like:
-> 
-> serial 0000:04:00.3: ignoring port, enable SERIAL_8250_PERICOM to handle
-> 
-> when an affected device is encountered and the generic driver rejects it.
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-I've applied patch 1 of this series, but this is really an odd one.
 
-We don't do this for any other driver subsystem, so why is it really
-needed?  What is so special about this driver that distros can't
-just enable all of the drivers and all is good?  What is keeping those
-drivers fromb eing enabled?
+On 2/25/22 2:32 PM, Geert Uytterhoeven wrote:
+> Hi Anshuman, Andrew,
+> 
+> On Mon, Feb 21, 2022 at 12:54 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+>> On Mon, Feb 21, 2022 at 9:45 AM Anshuman Khandual
+>> <anshuman.khandual@arm.com> wrote:
+>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>>> macros can be dropped which are no longer needed.
+>>>
+>>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>>> Cc: linux-m68k@lists.linux-m68k.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>
+>> Thanks for your patch!
+>>
+>>> --- a/arch/m68k/mm/init.c
+>>> +++ b/arch/m68k/mm/init.c
+>>> @@ -128,3 +128,107 @@ void __init mem_init(void)
+>>>         memblock_free_all();
+>>>         init_pointer_tables();
+>>>  }
+>>> +
+>>> +#ifdef CONFIG_COLDFIRE
+>>> +/*
+>>> + * Page protections for initialising protection_map. See mm/mmap.c
+>>> + * for use. In general, the bit positions are xwr, and P-items are
+>>> + * private, the S-items are shared.
+>>> + */
+>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>
+>> Wouldn't it make more sense to add this to arch/m68k/mm/mcfmmu.c?
+> 
+> It's not just about sense, but also about correctness.
+> The CF_PAGE_* definitions below exist only if CONFIG_MMU=y,
+> thus causing breakage for cfnommu in today's linux-next.
+> http://kisskb.ellerman.id.au/kisskb/buildresult/14701640/
 
-thanks,
-
-greg k-h
+As mentioned before, will do all these necessary changes in the next
+version probably sometime earlier next week. I was waiting for other
+reviews (if any) till now.

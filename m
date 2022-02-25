@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C48C4C4DA2
+	by mail.lfdr.de (Postfix) with ESMTP id 40E8E4C4DA1
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiBYSXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S233115AbiBYSXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiBYSXb (ORCPT
+        with ESMTP id S232566AbiBYSXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:23:31 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ED61029E5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:58 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id n188-20020a6340c5000000b003747606cb0dso3054220pga.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:58 -0800 (PST)
+        Fri, 25 Feb 2022 13:23:33 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA49712A75B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:00 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id x18-20020a170902b41200b0014fc2665bddso3408248plr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=yJjWTGvj3xklna+YumgfwjW/70CkdMmVGz7JULQJc9w=;
-        b=CQmcUVe96I5qFAe4jXJ6N24Z0ricyasxuL9MqcTlxQ9hAjj2K5BzVagYNRYvvxHXDU
-         RHryQu0J0EwAqWcJ6xQ524QpN6qApH6AraFM+RRtmeZ51JPN604CQvnR6RnU5V8Jh4RM
-         FtLlQ4SLJCco5XLwRzMTYTp73sE15/eYjZ0uqBkUA3cdFA38FG4iLC+dRoBixOVkjR/t
-         kXMeIDO99qxMbkgRdnAVKdYm9kSstrFQbh7UpolsLsBcOZoJCZVAVLJgtUrxKPvSVJJQ
-         j9WRUPkxwqU+/YEmmsiWMZQ+lt5O3vitEpjhyqm41PhfcRdodpnz7ihoFJaMS850sNz5
-         FGAQ==
+        bh=OKpSENCWyXwHBdjGJ3gByFACo60D6cjEVL83LoqsyAI=;
+        b=b9RI+WDrYKbDwWxRpfBrGKJ+M0uWUYG/R9HMlU4/mEqPTWu7oVtS1VUBgFgWjZ++ZP
+         qR7+DT+WJGieOarv8OsgBF6aZHUnul3W3dcki20lr/dtvbRybp2muAitL2U05f51Ishp
+         6keyKWiJjZBWG/rIx5ewTqUShB0uvTvoNxYZOCz/NIiY5uOzPagL0MB+A1+anitssEbE
+         NmT/DbUfJ8sAXFaBQmTOfpKmmqacNgBbRIxzbZPqI7vmHCB5kmBDot/QnQIzwiitk4ob
+         cDTNizSkwp2Xg707XqCJDUTVTz0k3eXvcUkGGZ76FFJ+7R81vfgTkmat4/9b4wuNQGJK
+         tPqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=yJjWTGvj3xklna+YumgfwjW/70CkdMmVGz7JULQJc9w=;
-        b=g9R2nxD+RRCQY8yIDs0kIxYD58JeoqXRsszh5JTrPCeuGlDdt3qCsvEJLPOcsDYSRg
-         CMG+T5PoyWnq0VUMbE3Gv5GvmuvPURn/xu3dKDyU4BI6D2PuH9sssYpbgHuJyoyQ4HIT
-         IN9eIpTKXh0Oar33i8l+lIx0s0hU9Q9F57WavBwBg1uTPPNdT66+HsmxZPAjMxTQKxmx
-         O1ZH3RyCY5dgLquUmSZ4Qsh9oEJ+gb3apXU14KMmUKat4NQlXJVkvV858Am3vq5Sy46S
-         qrRRjX1i2FT373o8ab1yAXK4jCxVuN3k10GKRj4q9u9ejezqqbHGeiT6Zkf9jw9Zs5CP
-         VPzQ==
-X-Gm-Message-State: AOAM532IoP0H9gU0LGBiQw1fZyMRtpur2n13nBc9rY8dCumjrQd4vLDN
-        P9VhUVoVFz+RHdKyHKxu2A4p/tt9Lbo=
-X-Google-Smtp-Source: ABdhPJwqiIRfaVu24g/26s1NG9RDLXkL5Soz2O1/mDxe1b9k+mFjwrTrkF1v4W13AzJ6xBLpa8bZDPY/cKc=
+        bh=OKpSENCWyXwHBdjGJ3gByFACo60D6cjEVL83LoqsyAI=;
+        b=OPK2gwwwioNBBV/gFJeQA9fZz9kLCcIFocGO72tHGd8EXO0fW18BEX++SP+HnO5RyJ
+         7aZJQ1629lSol305xgBvc696TkRpVAJJiIL8slK8VB7oLG12PVfNA1o3CgWzTBzKgKtZ
+         JpU3dHA0WxqRx/s6kCCxIp/6KCIqbc0CSmY/WbIK7fNzEnGSVu6ESECedpmWwBxIhZAp
+         xNM+Xgctn7B7j62pIi+lZyTbK0dMTk1Jt3FfWRmpMk/aq4ITUv8xOXQTiUHRpQQzJ1Ep
+         DWxU2lrvVtZ/QX63uMQyps6y1qQQNs6t64wD5YLIikDaee3x9k25slSRPCYqV3uzt0Xf
+         cPCg==
+X-Gm-Message-State: AOAM532401niM7VIBKScxKk49U+Qj2ApUfuw3AGWKzxB1qr1vVkmEVDN
+        s7RLtX3AmCLaYXfs97A9dlpZkIArcAw=
+X-Google-Smtp-Source: ABdhPJwUNaTUFvmEZHBOnSpxwiw/lZ+XqgCu1OS+l26XAQ4480iv62UAgTn9TFAeEJvztnJGJ5LksjK+jVc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:67c1:b0:1bc:f062:62e8 with SMTP id
- g1-20020a17090a67c100b001bcf06262e8mr3951454pjm.86.1645813378248; Fri, 25 Feb
- 2022 10:22:58 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:3c01:b0:1bc:b160:7811 with SMTP id
+ pb1-20020a17090b3c0100b001bcb1607811mr4342903pjb.164.1645813379912; Fri, 25
+ Feb 2022 10:22:59 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 25 Feb 2022 18:22:46 +0000
+Date:   Fri, 25 Feb 2022 18:22:47 +0000
 In-Reply-To: <20220225182248.3812651-1-seanjc@google.com>
-Message-Id: <20220225182248.3812651-6-seanjc@google.com>
+Message-Id: <20220225182248.3812651-7-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220225182248.3812651-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v2 5/7] KVM: s390: Replace KVM_REQ_MMU_RELOAD usage with arch
- specific request
+Subject: [PATCH v2 6/7] KVM: Drop KVM_REQ_MMU_RELOAD and update
+ vcpu-requests.rst documentation
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -79,84 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an arch request, KVM_REQ_REFRESH_GUEST_PREFIX, to deal with guest
-prefix changes instead of piggybacking KVM_REQ_MMU_RELOAD.  This will
-allow for the removal of the generic KVM_REQ_MMU_RELOAD, which isn't
-actually used by generic KVM.
-
-No functional change intended.
+Remove the now unused KVM_REQ_MMU_RELOAD, shift KVM_REQ_VM_DEAD into the
+unoccupied space, and update vcpu-requests.rst, which was missing an
+entry for KVM_REQ_VM_DEAD.  Switching KVM_REQ_VM_DEAD to entry '1' also
+fixes the stale comment about bits 4-7 being reserved.
 
 Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/s390/include/asm/kvm_host.h | 2 ++
- arch/s390/kvm/kvm-s390.c         | 8 ++++----
- arch/s390/kvm/kvm-s390.h         | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ Documentation/virt/kvm/vcpu-requests.rst | 7 +++----
+ include/linux/kvm_host.h                 | 3 +--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-index a22c9266ea05..766028d54a3e 100644
---- a/arch/s390/include/asm/kvm_host.h
-+++ b/arch/s390/include/asm/kvm_host.h
-@@ -45,6 +45,8 @@
- #define KVM_REQ_START_MIGRATION KVM_ARCH_REQ(3)
- #define KVM_REQ_STOP_MIGRATION  KVM_ARCH_REQ(4)
- #define KVM_REQ_VSIE_RESTART	KVM_ARCH_REQ(5)
-+#define KVM_REQ_REFRESH_GUEST_PREFIX	\
-+	KVM_ARCH_REQ_FLAGS(6, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+diff --git a/Documentation/virt/kvm/vcpu-requests.rst b/Documentation/virt/kvm/vcpu-requests.rst
+index ad2915ef7020..b61d48aec36c 100644
+--- a/Documentation/virt/kvm/vcpu-requests.rst
++++ b/Documentation/virt/kvm/vcpu-requests.rst
+@@ -112,11 +112,10 @@ KVM_REQ_TLB_FLUSH
+   choose to use the common kvm_flush_remote_tlbs() implementation will
+   need to handle this VCPU request.
  
- #define SIGP_CTRL_C		0x80
- #define SIGP_CTRL_SCN_MASK	0x3f
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 577f1ead6a51..db8c113562cf 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -3394,7 +3394,7 @@ static void kvm_gmap_notifier(struct gmap *gmap, unsigned long start,
- 		if (prefix <= end && start <= prefix + 2*PAGE_SIZE - 1) {
- 			VCPU_EVENT(vcpu, 2, "gmap notifier for %lx-%lx",
- 				   start, end);
--			kvm_s390_sync_request(KVM_REQ_MMU_RELOAD, vcpu);
-+			kvm_s390_sync_request(KVM_REQ_REFRESH_GUEST_PREFIX, vcpu);
- 		}
- 	}
- }
-@@ -3796,19 +3796,19 @@ static int kvm_s390_handle_requests(struct kvm_vcpu *vcpu)
- 	if (!kvm_request_pending(vcpu))
- 		return 0;
- 	/*
--	 * We use MMU_RELOAD just to re-arm the ipte notifier for the
-+	 * If the guest prefix changed, re-arm the ipte notifier for the
- 	 * guest prefix page. gmap_mprotect_notify will wait on the ptl lock.
- 	 * This ensures that the ipte instruction for this request has
- 	 * already finished. We might race against a second unmapper that
- 	 * wants to set the blocking bit. Lets just retry the request loop.
- 	 */
--	if (kvm_check_request(KVM_REQ_MMU_RELOAD, vcpu)) {
-+	if (kvm_check_request(KVM_REQ_REFRESH_GUEST_PREFIX, vcpu)) {
- 		int rc;
- 		rc = gmap_mprotect_notify(vcpu->arch.gmap,
- 					  kvm_s390_get_prefix(vcpu),
- 					  PAGE_SIZE * 2, PROT_WRITE);
- 		if (rc) {
--			kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
-+			kvm_make_request(KVM_REQ_REFRESH_GUEST_PREFIX, vcpu);
- 			return rc;
- 		}
- 		goto retry;
-diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
-index 098831e815e6..45b7c1edd85f 100644
---- a/arch/s390/kvm/kvm-s390.h
-+++ b/arch/s390/kvm/kvm-s390.h
-@@ -105,7 +105,7 @@ static inline void kvm_s390_set_prefix(struct kvm_vcpu *vcpu, u32 prefix)
- 		   prefix);
- 	vcpu->arch.sie_block->prefix = prefix >> GUEST_PREFIX_SHIFT;
- 	kvm_make_request(KVM_REQ_TLB_FLUSH, vcpu);
--	kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
-+	kvm_make_request(KVM_REQ_REFRESH_GUEST_PREFIX, vcpu);
- }
+-KVM_REQ_MMU_RELOAD
++KVM_REQ_VM_DEAD
  
- static inline u64 kvm_s390_get_base_disp_s(struct kvm_vcpu *vcpu, u8 *ar)
+-  When shadow page tables are used and memory slots are removed it's
+-  necessary to inform each VCPU to completely refresh the tables.  This
+-  request is used for that.
++  This request informs all VCPUs that the VM is dead and unusable, e.g. due to
++  fatal error or because the VM's state has been intentionally destroyed.
+ 
+ KVM_REQ_UNBLOCK
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 0aeb47cffd43..9536ffa0473b 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -153,10 +153,9 @@ static inline bool is_error_page(struct page *page)
+  * Bits 4-7 are reserved for more arch-independent bits.
+  */
+ #define KVM_REQ_TLB_FLUSH         (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+-#define KVM_REQ_MMU_RELOAD        (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
++#define KVM_REQ_VM_DEAD           (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_UNBLOCK           2
+ #define KVM_REQ_UNHALT            3
+-#define KVM_REQ_VM_DEAD           (4 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_GPC_INVALIDATE    (5 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQUEST_ARCH_BASE     8
+ 
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

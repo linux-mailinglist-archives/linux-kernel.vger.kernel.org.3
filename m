@@ -2,309 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649674C5071
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7ED4C5074
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 22:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238177AbiBYVRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 16:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S238224AbiBYVRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 16:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiBYVQ6 (ORCPT
+        with ESMTP id S230389AbiBYVRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:16:58 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F711D304A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:16:24 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso8161211ooi.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 13:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ko8qqQEVUil5TWFjZfqRwHEsMLuAIssU02AmVQdPBOw=;
-        b=pGszxkCLQ3puVUxsx62owzoe4FsnFHrgHXfZzjx3PsWQBzq8vGDnk6bIge3G16WDGM
-         +W0ly4wRg2QDX+85iQJuJxRD/pZ8BBjRhZKF6WaYk9BR78am4cRa/Fl+hg3a27kaX3dT
-         oixl5lr930/QhU2LemXNOOgLCA3hbD/Un9/BN1FEapSvvEgTKXIpnWlV23OyKo9vH8hG
-         QURSCbNp2g3jkoLYVgLrLF7Ot0g1Dm8uVLGkKYqP4Yh31coeL9zxOwD7iOPeRYWbgpLd
-         w7Wf6lc5ZK7U12kout/97lFa5Zxvu2jx99n4mF6AEzSroOdnBMNaOTdgvkPB9bVf8yGf
-         3cCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ko8qqQEVUil5TWFjZfqRwHEsMLuAIssU02AmVQdPBOw=;
-        b=UMPZCMLexDQ7XUouNzWkqmQTWw7HMZwgHKJ89Vb8JFh0P3kO8/BGcmjkCLIgmgC6WM
-         KcupGVOD1HnbDnKIoJ9AqOu8I2lYDVQcfmYq7pTJTRJ25hSkkeOACZQLa1Xw+i8aIhqo
-         aRSheCoIjjZU6mIw7vvzSVM9+dkO6lgXtKowbYSIbzJbFNo1MpLB+lFKsHN8DCEl2xSj
-         wBuCz7I4vX7ptz2K0Lh1luluO1LErRbDrxqWVi/KcYDGsIfzncASRWt9/sdVMcQHjcVb
-         HxlrjLnLsW4fez0+o4DXjzNlmZ45q/pJvDAAH3wTMIlifEbR/UlEx9jnIhu8iOZTS3kp
-         tW2Q==
-X-Gm-Message-State: AOAM533M6pA5ltrYOjIZNtCNG2JAkxk8IqfXhxBJ4Oev7ed0mJ4FlgIq
-        JGoNZRDDB0Zdpv2rfBY6r6EbTuCB0dJBqdvsXt3ji4TT
-X-Google-Smtp-Source: ABdhPJx0UqLcJv9VvPEe1YEdHeHZsbfs190hpTC8C4yhZQ7vGGmV8HjFm9Npla5tYVZetEQv299PhTUQENa8PbJwcq0=
-X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id
- lk13-20020a0568703e0d00b000d3fe6d57c3mr2338969oab.225.1645823783588; Fri, 25
- Feb 2022 13:16:23 -0800 (PST)
+        Fri, 25 Feb 2022 16:17:06 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2070.outbound.protection.outlook.com [40.107.212.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091571D3053;
+        Fri, 25 Feb 2022 13:16:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f3xv7ILzB6uaJq6bU1Tv7uzsISMC0lPy0b+D/Krp0fTFEE3ln1x1raj4+VHcbbVCy5MYBbeSZS4Z9nC5z6DTuh1BFtR+DfCTCYqtQT/ZAdHHdRyX0+e3uD5rIXa16yoNxssoLyN8Y7UwP87wz9id1uknxIAuH2UmNtPTP0XAhf/d9MzL+kINC4djsVAhvdolXvuQ/buNHZh5cwaBBhcg7pgei6S6/77+AB519xp//FJKR0W01ak4TMraJzYSUGkechIJSHZEeFohX3sM/VmV5kCqHqmAiURO81nG+GZYW61Yr51A/CIOo9+Vz8FhtCAxaa3CLdgVoIZup9P/Kp3gWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MxpB4JbT0UiS4Ksh56xPuDOl6qCtHfOyE6Q2L1swegA=;
+ b=KDKHmrv6FqHiQEHlV9kbMITOwiX2q4CQvPvZ5hmWnD0ZJ+RLE3ljQhNKhuA/KdA0t89oeW3g4t3tEBOfavFkPa5Mny4KnFBsrphbKIiD+SjRfz119cnom9PU4v0V2UYvJ4/u6hem56BnctEIyMa8HILdXyXpOEFpDB7x23xFRVVlKfh2w2GiAaple+0smGuxIDvs7npDcIdjRA4Q/+VcxAxtr6Q/vTmEHcBNVXKCfRSyp6C5LS86IDd8GHXdps3ewELVheRbyPTibwvZ3y5I2BSW5RSiXGcb+glgJhnu3YHIoM7rTmgf/d6uHVxYik1VxoySM5PkOEDhruoV4Rbt/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MxpB4JbT0UiS4Ksh56xPuDOl6qCtHfOyE6Q2L1swegA=;
+ b=KDGYG4p6OlfAqIBfcFL09M/DqMi9ZzdKfQbnOS2A87410gJGZygUQA8QX5S2xo4sb3rLnppqMdBjsd8zZnT+g6cFJYoNR01OOWCUD6SCB+sDofKgW10MsTCJAvbxTTSS3sNhvdBOLJ6hv9Ko+utwxTGTmRS94aZyftMJ170YKyOYiS+LZ7kkzbKWca619xhVabuQr84/iGf7Ewohhxt7qxXvcBPDRmgBRR8XflXw69fMPsFHqSA7LPyU9Y+qklFfZwiwx7C1zmKCPq8vHoJgg5ms+Z+yRUcbmKRtgkvH8l89nnkBrZOEZ8PAY97/YSWF4/PAQum1p6yvu/oZgYXG7g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH2PR12MB3799.namprd12.prod.outlook.com (2603:10b6:610:21::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Fri, 25 Feb
+ 2022 21:16:31 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.5017.026; Fri, 25 Feb 2022
+ 21:16:30 +0000
+Date:   Fri, 25 Feb 2022 17:16:29 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <20220225211629.GA352636@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
+Content-Disposition: inline
+X-ClientProxiedBy: BLAPR03CA0016.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::21) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220225094722.4734-1-tangmeng@uniontech.com> <DM6PR12MB2619714B0189A1A9A70F50F2E43E9@DM6PR12MB2619.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB2619714B0189A1A9A70F50F2E43E9@DM6PR12MB2619.namprd12.prod.outlook.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 25 Feb 2022 16:16:12 -0500
-Message-ID: <CADnq5_O5dwwmmknOFfMbhTeOTtXUH5QpqJ8CDZ5kAzarbw4Sgw@mail.gmail.com>
-Subject: Re: [PATCH] gpu/amd: vega10_hwmgr: fix inappropriate private variable name
-To:     "Quan, Evan" <Evan.Quan@amd.com>
-Cc:     Meng Tang <tangmeng@uniontech.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: abdfcd88-d10d-4f3f-1329-08d9f8a417c0
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3799:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3799560654788D10D4D4A6C4C23E9@CH2PR12MB3799.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6ZDKbRYZ3sR/jDv3hfLGfc8q5qKh+F4PKSq6CR7qQJwTo/UsW5h8YZWO4zxl2DNenXiXU5Iau6nhTJBXpRkrzFvTRxoZUM+FLacQqKH7e0u6LyQ5EAHttnlUVKJtJpjJTCu0gEkKv+5nyRVXvQL69N9t1TxgULeWRJ3aWxDCMkgRYd+b4Jl43ZTm8XsDG6o/4xBB900tCciZeSoICqW8eq6KTMGDN5XMiXX5L6ORfBqDw4sXPekjrss+3X24BN8brBOm7muGcmLUTfeZKIAs2k02NEuwOsmhhkzWWECze35To/HXIQ6SsHalec8SPmEtncxsF6498aXH9sJ+Z5OfnkDwfIB7wTukovkPhrJ2fXB1WaLgDD64FExTpD0S+khEHUrLOPeSR4yMVFTLwL0gDWIxGv1iEYY2Rp2Dt3gUpfIegnVq3iysA5+XykBRf3qYGhG7zGfIVUdwvY9ieMff8wcrLTL6l3WUmRWCQVpCskvatOE/mM23pwZfKDnKAX3udLyzT7kuyfWl3kX80osGpQSzn1gVq6+nEJ3wLwIbZiON4H7j9jZkNd0/Zk4URa2jN3a/15KAwWGUTJf81gw1UFnmv5D8vXDZNb7zsZhT+Z3Y9bzmV78/DNdC+qOkiSykmkHwkJKj4sfR6KEkHwMQysLNI/KL+tVgz+ND7WNS5pP0C0nW3SyizoWesVIAE4/0y2QtKobxFxe0NxHmVWRkU7cH0IUjENH9oiKXXvL3pvY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(33656002)(38100700002)(4326008)(66476007)(86362001)(8676002)(6916009)(66556008)(66946007)(5660300002)(1076003)(21480400003)(2906002)(6486002)(6506007)(44144004)(8936002)(6512007)(36756003)(2616005)(83380400001)(186003)(508600001)(26005)(27376004)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jLV/ujDs1o3JGPMth9UV6eBq1dGEZnwhONJEYI8u/ItaZYcHcdgmKtnS7fwY?=
+ =?us-ascii?Q?s5wfbQNvpioKLyGTna/0elPHDISCSqXimTPdZ/m4h8eALMA4d664GgMo4NPL?=
+ =?us-ascii?Q?17ZoWYCoxm8++DCvp/0qTqInQoQZlps0UvzbBEBgXB9Y4gbdsB5M1uQB010a?=
+ =?us-ascii?Q?jTFPiPIzBzJhkWxm0W+ZX8Ieh2IKfU8TszcF6DFznwPXfvvtaViFFIrgrkve?=
+ =?us-ascii?Q?QdqBs7TKCXO8M2u4o3LqZNYf43xjMP2GlwOYbZL+n6hBbTp5F6GgKUtFGZUn?=
+ =?us-ascii?Q?O11lWbnRhNbBBCve1CjsvKuJPISTK9TlibDt4ZqtmPBZ2SRAMzBVCf9temBU?=
+ =?us-ascii?Q?+C4hFypjNs+esNX1mnhCA17dCXhDT83jQmKsY4kCK2fEzIMzy3jMxMmXfsep?=
+ =?us-ascii?Q?S3c6zvhJmwpN94OOIWdaiuDQAjAyo+mecYaLEXH5u5PCZqmsV8lsDs2pJ6Gr?=
+ =?us-ascii?Q?CFumoSl0/BvZiY/HMBFg6pB9wAodcvu2eHl549XV71dXtcQkIZntdKAl9A7R?=
+ =?us-ascii?Q?7H5HMshiIvn3aUdTjsw2k/deasz5W50pzNEGSUwIx0D+FJyXTXyUTIbPdYdm?=
+ =?us-ascii?Q?UtJ+nIEKi31wNK8MsO+kYSXUZpDMxCgdkLsbP9+NIRbYLAjMK/gD6k6wKH+A?=
+ =?us-ascii?Q?LSUD50GKnrQxqnqVvtdQfm509450lA23F681dUtBVUwDLEehE+PoVAbLxtE8?=
+ =?us-ascii?Q?coIRzI6c2lmjyxVZ7niUn5DKFQqM9DYs0vPvCaabRxZCqfvioXsUMUJNUQGL?=
+ =?us-ascii?Q?Z+wL4AzEF7iWQAUyky6Moc8zFLpG6rBEqK5ujGPDkTDvYEK2w/PNgN/HBDlR?=
+ =?us-ascii?Q?sn+5Jo3s0gjTVIzwEEiPAaq8Mtx5EakLzd6r3UnWneRn4GHMpVnpQiRgOatE?=
+ =?us-ascii?Q?4ep1EFyfwqNXqbJjyBay9MewHxwXEgDKvp9rdFDm5nskkZDurW72ShCVIB4s?=
+ =?us-ascii?Q?rsrHs9o9snQQQwzs/J7qgfgU+oyz5D/aVRew8MWIyuMSKQPkS7ZZvMziwkq+?=
+ =?us-ascii?Q?5z7Nj5TOyyXhsjKTth+lQTm+jVulNEyytnm9b8ZNtFdntnywtZvk4kAYzBXm?=
+ =?us-ascii?Q?K6cg3LI57Convr8lOlfNa7alMx6x22WaXd2EJhqAW7JwVwum5a7GHQIVJdsI?=
+ =?us-ascii?Q?BswRMAfqGy5baP8oqIeHPSppLYo2AkKIOpl6IrervzledgSv3rq+TWRAHI4q?=
+ =?us-ascii?Q?8ouNhkeaDc6AfJ2smBpQG4SOxlH/ZmeuVJjR3V3SYOak952rSCkBdqYCYyQl?=
+ =?us-ascii?Q?wM8WM8qoVNzlZadwwiEF/A7ivO0Lys26/PjoImTGaK3pJKolomGQxNNNr8Hf?=
+ =?us-ascii?Q?H4srva0O01v2rJXv09n9sWCPlVnaOsZsDWzwEAkdOTGHJnnw/yyY034z3Rj5?=
+ =?us-ascii?Q?H8PzmPjQnnbtzvBy+r0z1jnJdXEY/6SGdK0DuQ/GFW2kAWbo1z8V7bXp6gK3?=
+ =?us-ascii?Q?9rxa+pWBENw7X3A8PsyPFihb2ZBOiC5LsgAHL3+9PY5jBWyYxk83CiXV24NC?=
+ =?us-ascii?Q?W3dfXsoYre8zVufFHQJiElsuLgi33wjB2mC1dXAIm8t00PDK99P3XLT4m/a7?=
+ =?us-ascii?Q?R6VDO9ftjKB8Oee9rwg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abdfcd88-d10d-4f3f-1329-08d9f8a417c0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 21:16:30.7830
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cQ5MaaBC9U938CPP6W9mqUb0ddrOFfSiQ5Qf2k+Vfqj9vTpdIwCNMc2ZmZVWokJ8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3799
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+--82I3+IH0IqGh5yIs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Alex
+Hi Linus,
 
-On Fri, Feb 25, 2022 at 8:04 AM Quan, Evan <Evan.Quan@amd.com> wrote:
->
-> [AMD Official Use Only]
->
-> Thanks!
-> The patch is reviewed-by: Evan Quan <evan.quan@amd.com>
->
-> > -----Original Message-----
-> > From: Meng Tang <tangmeng@uniontech.com>
-> > Sent: Friday, February 25, 2022 5:47 PM
-> > To: airlied@linux.ie; daniel@ffwll.ch
-> > Cc: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Koenig, Christian
-> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; amd-
-> > gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> > kernel@vger.kernel.org; Meng Tang <tangmeng@uniontech.com>
-> > Subject: [PATCH] gpu/amd: vega10_hwmgr: fix inappropriate private variable
-> > name
-> >
-> > In file vega10_hwmgr.c, the names of struct vega10_power_state *
-> > and struct pp_power_state * are confusingly used, which may lead
-> > to some confusion.
-> >
-> > Status quo is that variables of type struct vega10_power_state *
-> > are named "vega10_ps", "ps", "vega10_power_state". A more
-> > appropriate usage is that struct are named "ps" is used for
-> > variabled of type struct pp_power_state *.
-> >
-> > So rename struct vega10_power_state * which are named "ps" and
-> > "vega10_power_state" to "vega10_ps", I also renamed "psa" to
-> > "vega10_psa" and "psb" to "vega10_psb" to make it more clearly.
-> >
-> > The rows longer than 100 columns are involved.
-> >
-> > Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-> > ---
-> >  .../drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c | 68 +++++++++++---
-> > -----
-> >  1 file changed, 38 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-> > b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-> > index 3f040be0d158..37324f2009ca 100644
-> > --- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-> > +++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
-> > @@ -3095,7 +3095,7 @@ static int
-> > vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
-> >               void *pp_table, uint32_t classification_flag)
-> >  {
-> >       ATOM_Vega10_GFXCLK_Dependency_Record_V2
-> > *patom_record_V2;
-> > -     struct vega10_power_state *vega10_power_state =
-> > +     struct vega10_power_state *vega10_ps =
-> >                       cast_phw_vega10_power_state(&(power_state-
-> > >hardware));
-> >       struct vega10_performance_level *performance_level;
-> >       ATOM_Vega10_State *state_entry = (ATOM_Vega10_State *)state;
-> > @@ -3145,17 +3145,17 @@ static int
-> > vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
-> >       power_state->temperatures.min = 0;
-> >       power_state->temperatures.max = 0;
-> >
-> > -     performance_level = &(vega10_power_state->performance_levels
-> > -                     [vega10_power_state-
-> > >performance_level_count++]);
-> > +     performance_level = &(vega10_ps->performance_levels
-> > +                     [vega10_ps->performance_level_count++]);
-> >
-> >       PP_ASSERT_WITH_CODE(
-> > -                     (vega10_power_state->performance_level_count <
-> > +                     (vega10_ps->performance_level_count <
-> >                                       NUM_GFXCLK_DPM_LEVELS),
-> >                       "Performance levels exceeds SMC limit!",
-> >                       return -1);
-> >
-> >       PP_ASSERT_WITH_CODE(
-> > -                     (vega10_power_state->performance_level_count
-> > <=
-> > +                     (vega10_ps->performance_level_count <=
-> >                                       hwmgr->platform_descriptor.
-> >                                       hardwareActivityPerformanceLevels),
-> >                       "Performance levels exceeds Driver limit!",
-> > @@ -3169,8 +3169,8 @@ static int
-> > vega10_get_pp_table_entry_callback_func(struct pp_hwmgr *hwmgr,
-> >       performance_level->mem_clock = mclk_dep_table->entries
-> >                       [state_entry->ucMemClockIndexLow].ulMemClk;
-> >
-> > -     performance_level = &(vega10_power_state->performance_levels
-> > -                             [vega10_power_state-
-> > >performance_level_count++]);
-> > +     performance_level = &(vega10_ps->performance_levels
-> > +                             [vega10_ps->performance_level_count++]);
-> >       performance_level->soc_clock = socclk_dep_table->entries
-> >                               [state_entry->ucSocClockIndexHigh].ulClk;
-> >       if (gfxclk_dep_table->ucRevId == 0) {
-> > @@ -3201,11 +3201,11 @@ static int vega10_get_pp_table_entry(struct
-> > pp_hwmgr *hwmgr,
-> >               unsigned long entry_index, struct pp_power_state *state)
-> >  {
-> >       int result;
-> > -     struct vega10_power_state *ps;
-> > +     struct vega10_power_state *vega10_ps;
-> >
-> >       state->hardware.magic = PhwVega10_Magic;
-> >
-> > -     ps = cast_phw_vega10_power_state(&state->hardware);
-> > +     vega10_ps = cast_phw_vega10_power_state(&state->hardware);
-> >
-> >       result = vega10_get_powerplay_table_entry(hwmgr, entry_index,
-> > state,
-> >                       vega10_get_pp_table_entry_callback_func);
-> > @@ -3218,10 +3218,10 @@ static int vega10_get_pp_table_entry(struct
-> > pp_hwmgr *hwmgr,
-> >        */
-> >       /* set DC compatible flag if this state supports DC */
-> >       if (!state->validation.disallowOnDC)
-> > -             ps->dc_compatible = true;
-> > +             vega10_ps->dc_compatible = true;
-> >
-> > -     ps->uvd_clks.vclk = state->uvd_clocks.VCLK;
-> > -     ps->uvd_clks.dclk = state->uvd_clocks.DCLK;
-> > +     vega10_ps->uvd_clks.vclk = state->uvd_clocks.VCLK;
-> > +     vega10_ps->uvd_clks.dclk = state->uvd_clocks.DCLK;
-> >
-> >       return 0;
-> >  }
-> > @@ -4823,33 +4823,41 @@ static int vega10_check_states_equal(struct
-> > pp_hwmgr *hwmgr,
-> >                               const struct pp_hw_power_state *pstate1,
-> >                       const struct pp_hw_power_state *pstate2, bool
-> > *equal)
-> >  {
-> > -     const struct vega10_power_state *psa;
-> > -     const struct vega10_power_state *psb;
-> > +     const struct vega10_power_state *vega10_psa;
-> > +     const struct vega10_power_state *vega10_psb;
-> >       int i;
-> >
-> >       if (pstate1 == NULL || pstate2 == NULL || equal == NULL)
-> >               return -EINVAL;
-> >
-> > -     psa = cast_const_phw_vega10_power_state(pstate1);
-> > -     psb = cast_const_phw_vega10_power_state(pstate2);
-> > -     /* If the two states don't even have the same number of
-> > performance levels they cannot be the same state. */
-> > -     if (psa->performance_level_count != psb-
-> > >performance_level_count) {
-> > +     vega10_psa = cast_const_phw_vega10_power_state(pstate1);
-> > +     vega10_psb = cast_const_phw_vega10_power_state(pstate2);
-> > +
-> > +     /* If the two states don't even have the same number of
-> > performance levels
-> > +      * they cannot be the same state.
-> > +      */
-> > +     if (vega10_psa->performance_level_count != vega10_psb-
-> > >performance_level_count) {
-> >               *equal = false;
-> >               return 0;
-> >       }
-> >
-> > -     for (i = 0; i < psa->performance_level_count; i++) {
-> > -             if (!vega10_are_power_levels_equal(&(psa-
-> > >performance_levels[i]), &(psb->performance_levels[i]))) {
-> > -                     /* If we have found even one performance level pair
-> > that is different the states are different. */
-> > +     for (i = 0; i < vega10_psa->performance_level_count; i++) {
-> > +             if (!vega10_are_power_levels_equal(&(vega10_psa-
-> > >performance_levels[i]),
-> > +                                                &(vega10_psb-
-> > >performance_levels[i]))) {
-> > +                     /* If we have found even one performance level pair
-> > +                      * that is different the states are different.
-> > +                      */
-> >                       *equal = false;
-> >                       return 0;
-> >               }
-> >       }
-> >
-> >       /* If all performance levels are the same try to use the UVD clocks to
-> > break the tie.*/
-> > -     *equal = ((psa->uvd_clks.vclk == psb->uvd_clks.vclk) && (psa-
-> > >uvd_clks.dclk == psb->uvd_clks.dclk));
-> > -     *equal &= ((psa->vce_clks.evclk == psb->vce_clks.evclk) && (psa-
-> > >vce_clks.ecclk == psb->vce_clks.ecclk));
-> > -     *equal &= (psa->sclk_threshold == psb->sclk_threshold);
-> > +     *equal = ((vega10_psa->uvd_clks.vclk == vega10_psb->uvd_clks.vclk)
-> > &&
-> > +               (vega10_psa->uvd_clks.dclk == vega10_psb-
-> > >uvd_clks.dclk));
-> > +     *equal &= ((vega10_psa->vce_clks.evclk == vega10_psb-
-> > >vce_clks.evclk) &&
-> > +                (vega10_psa->vce_clks.ecclk == vega10_psb-
-> > >vce_clks.ecclk));
-> > +     *equal &= (vega10_psa->sclk_threshold == vega10_psb-
-> > >sclk_threshold);
-> >
-> >       return 0;
-> >  }
-> > @@ -5444,19 +5452,19 @@ static int vega10_get_performance_level(struct
-> > pp_hwmgr *hwmgr, const struct pp_
-> >                               PHM_PerformanceLevelDesignation
-> > designation, uint32_t index,
-> >                               PHM_PerformanceLevel *level)
-> >  {
-> > -     const struct vega10_power_state *ps;
-> > +     const struct vega10_power_state *vega10_ps;
-> >       uint32_t i;
-> >
-> >       if (level == NULL || hwmgr == NULL || state == NULL)
-> >               return -EINVAL;
-> >
-> > -     ps = cast_const_phw_vega10_power_state(state);
-> > +     vega10_ps = cast_const_phw_vega10_power_state(state);
-> >
-> > -     i = index > ps->performance_level_count - 1 ?
-> > -                     ps->performance_level_count - 1 : index;
-> > +     i = index > vega10_ps->performance_level_count - 1 ?
-> > +                     vega10_ps->performance_level_count - 1 : index;
-> >
-> > -     level->coreClock = ps->performance_levels[i].gfx_clock;
-> > -     level->memory_clock = ps->performance_levels[i].mem_clock;
-> > +     level->coreClock = vega10_ps->performance_levels[i].gfx_clock;
-> > +     level->memory_clock = vega10_ps-
-> > >performance_levels[i].mem_clock;
-> >
-> >       return 0;
-> >  }
-> > --
-> > 2.20.1
-> >
-> >
+Small rc PR, usual bug fixes, thanks
+
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to 22e9f71072fa605cbf033158db58e0790101928d:
+
+  RDMA/cma: Do not change route.addr.src_addr outside state checks (2022-02-25 16:46:51 -0400)
+
+----------------------------------------------------------------
+Second v5.17 rc request
+
+- Older "does not even boot" regression in qib from July
+
+- Bug fixes for error unwind in rtrs
+
+- Avoid a deadlock syzkaller found in srp
+
+- Fix another UAF syzkaller found in cma
+
+----------------------------------------------------------------
+Bart Van Assche (1):
+      RDMA/ib_srp: Fix a deadlock
+
+Jason Gunthorpe (1):
+      RDMA/cma: Do not change route.addr.src_addr outside state checks
+
+Md Haris Iqbal (2):
+      RDMA/rtrs-clt: Fix possible double free in error case
+      RDMA/rtrs-clt: Move free_permit from free_clt to rtrs_clt_close
+
+Mike Marciniszyn (1):
+      IB/qib: Fix duplicate sysfs directory name
+
+ drivers/infiniband/core/cma.c          | 38 ++++++++++++++++++++-------------
+ drivers/infiniband/hw/qib/qib_sysfs.c  |  2 +-
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 39 ++++++++++++++++++----------------
+ drivers/infiniband/ulp/srp/ib_srp.c    |  6 ++++--
+ 4 files changed, 49 insertions(+), 36 deletions(-)
+
+--82I3+IH0IqGh5yIs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfB7FMLh+8QxL+6i3OG33FX4gmxoFAmIZRyYACgkQOG33FX4g
+mxo8bA/+J7KioNqLOS61boY+TXygmQVznPaE3u1J5dK4OskhDSCtJFdXccePyrNA
+ervs+ZyqglCmolxohrTVly+bK9u/eOJYakPYkokeiKwhcSFy6LbR9xgV7CN5UPnc
+wcbOslGxS+8vq/Pu2qorRR7Ll85R6pCVVeru4nfW8UFtYNDGNKjMG9fg6r7n7f5x
+WPuxLZSDAxKOc8AnmX2ZeUNCpEzS7411XS/jYUzL0oWVliMnrqOup8imZxX3RnSK
+9bYA7XMXP20v9uecG/LJIsOlpn5LUfat4SlXVRnkzlThPTa8dzmj9xcBe6z27nwv
+j0/j7nVy0G7/z8XLdifcrwKt/diIl3dn89ZngGjEwaYhfOPqZEYK2L4DEAAfhWSj
+L8qiPKXFh+1WnA1CQ5Mh88chopRdopO7nesSmWyi4k5xXsQMJv0GiBqcYPHdzRl4
+c00/o/CYQWPsZlCJH4XSGvf5CbD68QTGBQxCEgPzPjv1C/uq02KdEHFYR5RIOg0J
+G3y8wR1dbwJX85+Kp5IZpejVWg99BlLZJ4gLC4X69zCQysVh7WUVlBCM78g0vUpT
+kXGGGWCu3K59aCtOWCE0+xWx7LE3Z9IVnghfWZ5pvStMrZFZr/oYdcg0zRWQ1oGc
+D1VmJf1t+bZBHshukhWNc+4HBPWrn67F1RJMaft0J/m0EAqSi40=
+=aEDe
+-----END PGP SIGNATURE-----
+
+--82I3+IH0IqGh5yIs--

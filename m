@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764EC4C46DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8264C46E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiBYNra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S233114AbiBYNuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiBYNrZ (ORCPT
+        with ESMTP id S231828AbiBYNt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:47:25 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D33E40E4A;
-        Fri, 25 Feb 2022 05:46:51 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m13-20020a7bca4d000000b00380e379bae2so1708587wml.3;
-        Fri, 25 Feb 2022 05:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WOJDawq4UDbuTj1KJIDLM/jMOXSHv7p8EKE/sG/KKz4=;
-        b=m8MYoDvvDvREAkO3wGE+9kmU/6N48Gb8khl9XPXk5O6MghtnOMfqjmzVlSuKTF+E/4
-         t0Ea3BgebQXkcOHIENHCSRrGLk2C4N3q9DOnkxVD1cMmVP03BOIsx50aqfxw8Pqkmk/l
-         gaeu6LCeCoi1WM6Gfgv+pTZjg9+JEXf/nET+KDKLdlaaPOPqQb0Sk90gGziWd4+OC2ba
-         6vMvhdbExhPhrGrKczjvFnsRmEjbBT9hJY5QQbLQEhjEShWl6oibmp2pXwGIm3KdGn+W
-         bTR1sJypb4YN9NjCIUVOd644rvV8qlLhsARi4cCwsUs0ch/N2/cCOxbtx3JyGQuDtG57
-         vAlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WOJDawq4UDbuTj1KJIDLM/jMOXSHv7p8EKE/sG/KKz4=;
-        b=1yEdjwD2A2O/oE34R9ibZXVKa3RIA/SBtLglkZm81F6nsqV7OWH9lWrWLBq5EJj5nq
-         EddDum6YogMGDXwuPzcJTFqHnO55HzePBOGvxWCf6mnFVVZvOJ/g5U/HBXnQzq/W3P3u
-         Qw1WkuHMex6Q4UaAVmjsGE8aV7bCZ+qDiNqCBPXwwfjsfCzhWB/tme8vcAEi8o4VhSAB
-         qJVx5PDdwJBHtwKJL/mRiwLnLl+bq+1VOSZiDzefo9AZfTfh1vBCJufvAvrdjAEbDVbr
-         FOh5g1YqofbFDEm+DZ+KJGo2hA6WvC5k2cAqkghQlIfQ4VZnS0Qc2wLuWrp3wpbvdX6U
-         YKnQ==
-X-Gm-Message-State: AOAM533Br5yujm98/ZcaXxcnrPmzvUZgvh2cp8IJtL/LiyyVEPR04RxN
-        DUvkSo5dE4HOySAzbl9XKsI=
-X-Google-Smtp-Source: ABdhPJyWomoCRJMSMC6pFRaLjTLNDleYv44mHjL3o7g8/yIrnOR8RMVvw1KQdtpLA/x53shX8Gj7ew==
-X-Received: by 2002:a05:600c:1e8a:b0:37f:deb2:6aec with SMTP id be10-20020a05600c1e8a00b0037fdeb26aecmr2801976wmb.86.1645796810049;
-        Fri, 25 Feb 2022 05:46:50 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05600c3b8f00b0037bc64fbd17sm6196397wms.11.2022.02.25.05.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 05:46:49 -0800 (PST)
-Date:   Fri, 25 Feb 2022 14:46:47 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     richard.leitner@linux.dev
-Cc:     richard.leitner@skidata.com, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: tegra: tamonten: Fix I2C3 pad setting
-Message-ID: <Yhjdx49OcmfqipxV@orome>
-References: <20211201161148.238263-1-richard.leitner@linux.dev>
+        Fri, 25 Feb 2022 08:49:59 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02A441DDFC3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:49:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C1E0712FC;
+        Fri, 25 Feb 2022 05:49:27 -0800 (PST)
+Received: from e122027.cambridge.arm.com (e122027.cambridge.arm.com [10.1.32.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7F093F5A1;
+        Fri, 25 Feb 2022 05:49:25 -0800 (PST)
+From:   Steven Price <steven.price@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Steven Price <steven.price@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: [PATCH] cpu/hotplug: Set st->cpu earlier
+Date:   Fri, 25 Feb 2022 13:49:18 +0000
+Message-Id: <20220225134918.105796-1-steven.price@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AxXtD6Dj3Z4zzjbO"
-Content-Disposition: inline
-In-Reply-To: <20211201161148.238263-1-richard.leitner@linux.dev>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
+too late as other callbacks can be made before that point. In particular
+if one of the earlier callbacks fails and triggers a rollback that
+rollback will be done with st->cpu==0 causing CPU0 to be erroneously set
+to be dying, causing the scheduler to get mightily confused and throw
+its toys out of the pram.
 
---AxXtD6Dj3Z4zzjbO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Move the assignment earlier before any callbacks have a chance to run.
 
-On Wed, Dec 01, 2021 at 05:11:48PM +0100, richard.leitner@linux.dev wrote:
-> From: Richard Leitner <richard.leitner@skidata.com>
->=20
-> This patch fixes the tristate configuration for i2c3 function assigned
-> to the dtf pins on the Tamonten Tegra20 SoM.
->=20
-> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
-> ---
->  arch/arm/boot/dts/tegra20-tamonten.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Steven Price <steven.price@arm.com>
+CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
+---
+This was initially triggered by a VM which didn't have enough memory for
+its VCPUs, but an easier way of triggering it is to make a change like
+below in __smpboot_create_thread (as suggested by Dietmar Eggemann) to
+pretend the memory allocation fails for a particular CPU:
 
-This fell through the cracks for last cycle. Applied now, thanks.
+ 	td = kzalloc_node(sizeof(*td), GFP_KERNEL, cpu_to_node(cpu));
+-	if (!td)
++	if (!td || cpu == 1)
+ 		return -ENOMEM;
 
-Thierry
+I'm not entirely sure quite where the best place to set st->cpu is, so
+please do let me know if there's a better place to do the assignment.
+---
+ kernel/cpu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---AxXtD6Dj3Z4zzjbO
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 407a2568f35e..49c3ef6067e5 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -720,7 +720,6 @@ static void cpuhp_create(unsigned int cpu)
+ 
+ 	init_completion(&st->done_up);
+ 	init_completion(&st->done_down);
+-	st->cpu = cpu;
+ }
+ 
+ static int cpuhp_should_run(unsigned int cpu)
+@@ -1333,6 +1332,8 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+ 		goto out;
+ 	}
+ 
++	st->cpu = cpu;
++
+ 	/*
+ 	 * The caller of cpu_up() might have raced with another
+ 	 * caller. Nothing to do.
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY3ccACgkQ3SOs138+
-s6HnTA//c25d7M3OmIF12IRyNITho0et8saGGqV9u8LhkDG6QYMxspuvEwVLJNUO
-o5xJsEeM2RF23H/crRQ56+Fk5bV/xhdkYPJWau98AHPbYG626eUvyIKvKaIW5s4B
-HtufuoJRKg+2riMkyNkLdrl6Eka0MZjpwawiBsk23fWQrNotxFgrHXEulD4c27so
-m1aD3u2VrYPZ0mIDNHrd4NW+yhPI1SYxERJoqwQBq5c6PVO7/JcMt9bJkYHVdGDN
-FHbjy3DoHukv9pj8RtAnk9gR5j60bqT+1CNdelxsZ1FW4wr5A73CP/EdP918YgK1
-mOJqDlZU0yFPUZOCf4D+Ag6ttlsykhxtxWuYae+WjtWhKOodjoAvo5ioWBKu1PJ8
-rqYPABbudsRO6IIHCLdPx91BvaLOcKeOAyVP/dAJHmgAqEXLNOqq9UO8tdaQApnn
-AdItCp3ALGSeUy9bXd9wQgIzg2+ia3EneRrzgeU9aS5YE8BZCy8IfoGVIUN1ONOm
-Ii6TNVRoz43tQE3l8KuW6fgjRVlD/KJsgXYZqu7cIkDfynf1ksIv0YYYjbF/pEsI
-K77k/COeGAEeC0OslSMxKLtxwT1g6Tfg4JRCIE4XrOPC0jZEcsR1l4bxQwRgQe38
-c5/bTGJX2m2/95ynLnpKGWaOyGzXeorqLnyZTR6AwP7sDEAFgIo=
-=O1Ys
------END PGP SIGNATURE-----
-
---AxXtD6Dj3Z4zzjbO--

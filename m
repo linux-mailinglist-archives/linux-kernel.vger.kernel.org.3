@@ -2,230 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7F64C4BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885704C4BE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiBYRTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S243580AbiBYRUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240045AbiBYRTt (ORCPT
+        with ESMTP id S243568AbiBYRU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:19:49 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD8A1A805C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645809556; x=1677345556;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=wDSiBDmCKpLVt2jIUR5PbJ+58L+uDnkoj+dLHErW/94=;
-  b=m8gTybAW7c5M9T5gJs8Tkdt4BKht/u5Xne8YkGcuIY8Hmq1HJzkkWjh7
-   xKwmKQl8tKn+vTmwYc+cwpCkeyjLj5s4jQy6eVQhWA187Zc4/6svC0PP4
-   m3I2HmEK3lbDHDxJVhlQIESdGI7jOiaFGNZaULADS2takjmZycvMvnBwc
-   YgKveThkGQDWPi7H8/CjztN9omr8V0/aCm/OR0Dvc1aAHI0DRZkKkXijx
-   RqhHkvYSg95SoKDweatpkfLPOXWxfgyQCsTXm6q5op6hE0qLh+v3KsPtx
-   m71x9ZBgERGJCzYCzCEAcYMfOH8Iqri0qlsjR+lQ1hBJj31DSVT1vKX+c
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
-   d="scan'208";a="154924973"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 10:19:15 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 25 Feb 2022 10:19:15 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Fri, 25 Feb 2022 10:19:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g87Rl4WqOXc0IKBbEwQoVOZTDfFIdhNG6X2bDIxJYSTUIz5Ilx5/RRd//gK7mSjZqrNFNnt8HJYkDSROlYGCRcklaz1oIOTxKeLDTcYCrkxwiFa5NSGo/mdViLcsdhxWFLztkwDLHtSrC/KWXEJSUNGmnSENV4lxmJu6BSCnDH6BTSOtQqvOAqMZRWJRUhLkZIMH9uvs+cMmw8WiDz+5XY4Q1d9yIGiZdg4BVr8gXLN4a8Oe3iEXDMcXFN3SuuNRPjG58Khtu7NWLMhMh4DKMNH72Jk0SQBx1CAb/Pbh8zrBV3+NojGt5ykHbx0NHI7k8ieHnylP+PYQFWIxTfAIlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wDSiBDmCKpLVt2jIUR5PbJ+58L+uDnkoj+dLHErW/94=;
- b=M5k77+HMflWurrAZv5VcNe6/adJhsxyTdHvdaTkBz76atgMJfTZbw2CVRDD8nie8gyUBZStkMcVeO0X+GHdHwnbt+XzmlMuIdIim/Yedz+E2Met8lX9waT3mfjop6AHIeXSoDIaf5y1RCWwiA3wm8CbN+oOMiKsVAnOtg0br+N28ANUhGi1i2enfvyw9dCkQegp0SQBqXLA5Ar4x5D59TlVsF4yfNkWvHYsbTSaRCCE2XShyt4HGIF+CHZWa83PjyM8QgvISsclbj8W+48FEqTbsctYluUKe9Q5nRS2qZpX6qJsP57nc1ynYcw85HG4jAYfygiQtY5eTuQuIUAhdjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wDSiBDmCKpLVt2jIUR5PbJ+58L+uDnkoj+dLHErW/94=;
- b=pYug7r2x+EdB9GUFxpucp74ZPiTY5oqoG1UKTWMNahHqJ9XwPT1xMkULnpSSV7pzTOUDps9u9xbyLxog3TROR7IMudt4pyy73qmJl5yiMLC+htqX1hBF5QuzdBny19RmYrsD5WDCg5RiImbE6Sl/b049pX8gSTmIIOLXDqMjTVw=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by BN7PR11MB2643.namprd11.prod.outlook.com (2603:10b6:406:b2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 25 Feb
- 2022 17:19:10 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9%5]) with mapi id 15.20.5017.026; Fri, 25 Feb 2022
- 17:19:10 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <quic_c_sbhanu@quicinc.com>, <dianders@chromium.org>,
-        <michael@walle.cc>, <p.yadav@ti.com>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_stummala@quicinc.com>, <quic_vbadigan@quicinc.com>,
-        <quic_rampraka@quicinc.com>, <quic_pragalla@quicinc.com>,
-        <quic_sartgarg@quicinc.com>
-Subject: Re: [PATCH V7] mtd: spi-nor: winbond: add support for W25Q512NW-IM
-Thread-Topic: [PATCH V7] mtd: spi-nor: winbond: add support for W25Q512NW-IM
-Thread-Index: AQHYKmvNxsxBmNvG6U+9dCklDAOpPA==
-Date:   Fri, 25 Feb 2022 17:19:09 +0000
-Message-ID: <63301527-46ff-b7ee-93dd-12ce9d79008b@microchip.com>
-References: <1644578661-21821-1-git-send-email-quic_c_sbhanu@quicinc.com>
-In-Reply-To: <1644578661-21821-1-git-send-email-quic_c_sbhanu@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9841d2a0-bf64-4ea1-8ef2-08d9f882efac
-x-ms-traffictypediagnostic: BN7PR11MB2643:EE_
-x-microsoft-antispam-prvs: <BN7PR11MB2643980454FE6584D44C1FCEF03E9@BN7PR11MB2643.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ko2Pn77+hTfqGuVIypQCpdcaYO0CQvK/obXLZyZ+wmZK5YYWl64eaHJEvyWhnEVdqVJdqhiEHcen3Jid7hXvcqEfT2k3nNHrxUVeMM+Stb98KDb4/OCLD1wGZKkjCpT67I2qoG33jSCsBVpKOpwyAPuNyTA8fypXfRoMZKgpXRERJ37kCy31wkgvxtc/cEahr3l3hXPPFDJij9M/4ZpYyKfgaljHkik0tO2/QiYUsz3nO3J/IAJrWHTMtgHZLvHTyE2TifuqkXmXHuq0JVSdmIA35G6NCcRSC0TuRT7Wk3HcGNbstYBLnERpT54FMUkQ6FQ5rZHT+f+lSuTSaqxvxGAMmQcNsAw88y2N26OWMF9RomW2B01QL821GEVaZm3crH2PVRRa3XeTG6x+Cc0HfYrny8MvdupcJ6PcGUZmSeKUkNt27fn+O67RrjSkuS6CcosL/0rfHYXflKhMt20JGBWdanmVuQg8etsBQDyEvRzb/Vu8V3txbaWvu5b2UAjtbYgaSiTtv9Zjj2eaEji7DFtKOUwziAHqjkaEUw0jQKLu5+FtYPh7dZ/Q2fFicqJdZ+t81I+v5yQ/V7D9jMCkVvSc2yy1eLovjaqW5dPUzf1t3mm5v9stHjzrlr837mr885y81i2B2P/QrjndMypnOF2uHa7zrU5KyC9GvS2Eab8bmTIRRGaRDZsNQzEFo5NhjIkhyqUrbX9A9IwpylBYbVhhOPiyRAocZHGGuiq+63ZIdmVIH/wztC8El8ZRWath64Hwm2mzCcO/dUvoMzM1geujTM7XRb2oAiCa+4Sq304cBFmV0o8E8Lgh/oJ6QDcpvPkffABDMUUxjHhh1jkn0eX6th1yYmZnwQPkruOAMeY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(8936002)(7416002)(8676002)(6486002)(966005)(4326008)(5660300002)(86362001)(31696002)(316002)(36756003)(31686004)(91956017)(64756008)(508600001)(66446008)(110136005)(66476007)(66556008)(66946007)(76116006)(54906003)(6512007)(6506007)(53546011)(122000001)(38100700002)(83380400001)(71200400001)(186003)(2906002)(2616005)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MVIrMFFNZGQ1QUFHTi9kVFdTNHNZSWFqNVZnY0htemxKUHRWd2wzOVdsejdS?=
- =?utf-8?B?M1dhQ1ZMWFlaUTJ4TVhORzluWW9HbFNvQ3dybFd4dDZUYkwwcDMzenNURjB2?=
- =?utf-8?B?T1BnZHhkUkFDOUpRcGhUeU9jaW53MlJlUkNqVmtURnZxekE3SlBxZmFBVnFZ?=
- =?utf-8?B?Z1JZaWVoNmZQamtNVFR6MW9ibHFjNW9GS1U5c0tza1hnSDRzWHR0RDZDbGlZ?=
- =?utf-8?B?b3VidFFveVBYaExHUmN5aGRscFQ3Rmp5L2VJeVRJQTJWVGRXcWdHMkxXTld6?=
- =?utf-8?B?ZE94Vlg5akZGQmZaV0VnZERad3pSNVFibXVpZHpZb3hiNDAxemxyVGZyM3lD?=
- =?utf-8?B?cVpWWHowcHhEMit3aklPcmRuSjhNQUU5NlVEd3ZWWGwvVWt0MEd2QkhnNlNr?=
- =?utf-8?B?SVN6eUl1SzVRTDAvZlZnR0RNU3pNRHVRY2pqL3RQVzhmdkxTUUxvUlp4QUxu?=
- =?utf-8?B?YzlsR25wV0dERTdONnVteUVBYVRRSjFHYms4QnFQQUhaR2xoY2txbEdsdHRJ?=
- =?utf-8?B?RFVRTGN6OTU5c3lqSkFGeGE2bmVudlZScHBIeVc2Wi9sTmgxTEJ2S1VIcG4x?=
- =?utf-8?B?ZmYzY2FESzBIRjM5c3hQaWdKbVppUjlJdHBVVThpaWZhZ0Vkbk54S2cwNFAr?=
- =?utf-8?B?QTNTN05xU2JnM2dTSXozYVA2Y01MT082dG5NL1B2Ky9lNXNSQWIxdnVCYm8r?=
- =?utf-8?B?aTU5UUh1Y3lNRWVCd1lzUGE5ZU81enVIU0hXTDl3VmZTUmhhZlFwUVo3cFZW?=
- =?utf-8?B?K05YTXU3NzN4OXp0d2pjTXBYV2hkRGJWQ09UT2dlQ3RJV2lQOGVnbEpLSG9h?=
- =?utf-8?B?SWtmVEt2VjNpTm5jeTNLREFiblhmTW5kWXJVOStiREVMcmMzVE5keUh1dDBu?=
- =?utf-8?B?bS9pYW1Td1BmOVhmV2ZFc1FxcnhJRDRKNjBBMWVWcHhCWHhZeHpXN3dhMDg2?=
- =?utf-8?B?UTJ4Z1B1TVJuV2xQMGFvQlRsa1Z3Zy9JcXBlTzUzTmNnVjAveFk3OWJGaFVG?=
- =?utf-8?B?dG9aNk9JOWlWTWVEU1dzT25Hc3lONENtQm9raE9aOHhjZmo4cjBBWENHeG91?=
- =?utf-8?B?T3FYWFdyV0U4RTNoRjBXMkxpb2Faa0lkWkF3MFhMNGpkbm5oUW9IU0lodVYx?=
- =?utf-8?B?NVBmUFd3UnN2VUFXWmNXZ2FQM0RKUkc3UG5ybVJiVVBaMHYxZXBCa2Q3UUk4?=
- =?utf-8?B?QW9wWmVmUVJ6UlVsek5sKzdXV3k3Zm1QOExncWo1cjIzZXpHZHdjMzBGbTQ5?=
- =?utf-8?B?YkR6d0N3T0xLcXBPeHB3TzFSU1hPN09OUGIyV1BKcHB2akxOVDh1VWQ2d2NV?=
- =?utf-8?B?ZGtoOEpIU0VheHNTVkt0d2VZVFc1SnA0TDRKSi9mdUErMXlVcTNzQys0cXFs?=
- =?utf-8?B?TU5vcGZDN1RzSXMvdEFPYU5EV0MrbHNEYWhIVUhON280UGhicDd1VTg4KzBO?=
- =?utf-8?B?N1RQdTJSUGltbytPWkJiTk1mUlozWTJ6RjZqYUFhWjR4SWhUNm54cXZ6dU5w?=
- =?utf-8?B?SjdGaS9PQ0NJT2VaRkt4R3RFWUx3cjczWHl0S2tuUDJ5THh0MTg2R3pYVHVI?=
- =?utf-8?B?dFNPVVl5TmhOZEZzZnJOaU1wakxYZ0NtL0pZdGRmSzN3UjJMZXorQnFXZFJT?=
- =?utf-8?B?Mk9IdHFOODlkeGZMeG8vRTFiRk5Ob25jTDdmZ2Iwdm1pZ2t1MWUvMmJiTE5m?=
- =?utf-8?B?RUZQNXNvc3JTVmN4YzBZNWNUUGNpLzN0Vi9rdjZvNmY5QWRkaGI2WkRGS2Zz?=
- =?utf-8?B?L1YvWWpyU1RjWk5uYzE1bFBzdGFWbDBOdFJSamFtd3lvM2VMQnZXTnJQdEFY?=
- =?utf-8?B?ZUU2R0NNc2d6NkNtVy8rTWZSVEsxclVxQUl3eEZMRk1aaHp4TFdBNnNvcjZ2?=
- =?utf-8?B?OFQvc1M0dEFXTjErMjEzdU5LaVlncTgwUU1iQjZadGRDejNTRm4vRmEwaXlP?=
- =?utf-8?B?STBLcG13aTlCTThvL2R4cmViUnZlOGQ4SEU3SExxTUIxOStudndYallhbUQy?=
- =?utf-8?B?NElCYitZUmZoL3ZXR2RJM1FxTStvbElaTVF5N0M1akZUNmtWQ084SDF0cDcv?=
- =?utf-8?B?YnlwZXZGWVhhRzR6Y1B0VXlXQWFDYTRPNEszQWw3RUtNTnRHOHVhZmZyMnoz?=
- =?utf-8?B?Q20wN0tYTmVzc2krNW1VKzk3RGx2NEI2SFZXc0dtdGtCbnJ6VHNJQTNkZGJ6?=
- =?utf-8?B?N2pHQ1UrVS9sS2lzWlVic1g4dU9oV1JLY2FBSFNLYVlDQVY2eURWSDYvdGpI?=
- =?utf-8?B?Y25YZHNCNzF5VDNpMlUxcWRmc3ZnPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <243D939D9A7AA242AA426D03ECD69A74@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 25 Feb 2022 12:20:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6707B1C2D9B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:19:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645809594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0bdBwNSnrD7yysUHd564/dKTLnPvhau29Bt+Q9jstDU=;
+        b=cYV20tyKciv68POq/kdH+lAYSkS13oSDXC5iz3RvJt11ceSY+tgHCAFmgqRy2ISQp5mvCR
+        Vi8nQuuGCZMdmxbS4Nr9AMDI6Jd9cCG2qOqoshp63uwlO2CLBogfZAlnJLGPSXKW60XNmp
+        so9/61ODnGhMMg9tB2ZJrHNwbQPJVwE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-I5C8UVqENE6b8OLJbAh-2A-1; Fri, 25 Feb 2022 12:19:49 -0500
+X-MC-Unique: I5C8UVqENE6b8OLJbAh-2A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 02B27800425;
+        Fri, 25 Feb 2022 17:19:42 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9983F1073025;
+        Fri, 25 Feb 2022 17:19:33 +0000 (UTC)
+Message-ID: <0e9a22e90256ed289d90956f720f36d870c92d2a.camel@redhat.com>
+Subject: Re: [PATCH v6 7/9] KVM: VMX: enable IPI virtualization
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
+Date:   Fri, 25 Feb 2022 19:19:32 +0200
+In-Reply-To: <20220225082223.18288-8-guang.zeng@intel.com>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+         <20220225082223.18288-8-guang.zeng@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9841d2a0-bf64-4ea1-8ef2-08d9f882efac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 17:19:09.9667
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ui0REQGw3HsyLlBGEyZyfoQES7nVUHa2kj099h4xShXynF5bShIHdn3zJv8g8Q2s29jqQIdQDpnEZwyxU9sMhFbJK9lsu/ORkhPbvf3XbZA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2643
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCk9uIDIvMTEvMjIgMTM6MjQsIFNoYWlrIFNhamlkYSBCaGFudSB3cm90ZToNCj4gRVhU
-RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
-cyB5b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBBZGQgc3VwcG9ydCBmb3Igd2lu
-Ym9uZCBXMjVRNTEyTlctSU0gY2hpcC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFNoYWlrIFNhamlk
-YSBCaGFudSA8cXVpY19jX3NiaGFudUBxdWljaW5jLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IERvdWcg
-QW5kZXJzb24gPGRpYW5kZXJzQGNocm9taXVtLm9yZz4NCj4gLS0tDQo+IGxvY2FsaG9zdCAvICMg
-Y2F0IC9zeXMvYnVzL3BsYXRmb3JtL2RldmljZXMvc29jXEAwLzg4ZGMwMDAuc3BpL3NwaV9tYXN0
-ZXIvc3BpMTYvDQo+IHNwaTE2LjAvc3BpLW5vci9qZWRlY19pZA0KPiBlZjgwMjANCj4gDQo+IGxv
-Y2FsaG9zdCAvICMgY2F0IC9zeXMvYnVzL3BsYXRmb3JtL2RldmljZXMvc29jXEAwLzg4ZGMwMDAu
-c3BpL3NwaV9tYXN0ZXIvc3BpMTYvDQo+IHNwaTE2LjAvc3BpLW5vci9tYW51ZmFjdHVyZXINCj4g
-d2luYm9uZA0KPiANCj4gbG9jYWxob3N0IC8gIyBjYXQgL3N5cy9idXMvcGxhdGZvcm0vZGV2aWNl
-cy9zb2NcQDAvODhkYzAwMC5zcGkvc3BpX21hc3Rlci9zcGkxNi8NCj4gc3BpMTYuMC9zcGktbm9y
-L3BhcnRuYW1lDQo+IHcyNXE1MTJud20NCj4gDQo+IGxvY2FsaG9zdCAvICMgaGV4ZHVtcCAvc3lz
-L2J1cy9wbGF0Zm9ybS9kZXZpY2VzL3NvY1xAMC84OGRjMDAwLnNwaS9zcGlfbWFzdGVyL3NwDQo+
-IGkxNi9zcGkxNi4wL3NwaS1ub3Ivc2ZkcA0KPiAwMDAwMDAwIDQ2NTMgNTA0NCAwMTA2IGZmMDEg
-MDYwMCAxMDAxIDAwODAgZmYwMA0KPiAwMDAwMDEwIDAwODQgMDIwMSAwMGQwIGZmMDAgZmZmZiBm
-ZmZmIGZmZmYgZmZmZg0KPiAwMDAwMDIwIDY4MDAgNmM2NSA2ZjZjIDc3MjAgNzI2ZiA2NDZjIGZm
-ZmYgZmZmZg0KPiAwMDAwMDMwIGZmZmYgZmZmZiBmZmZmIGZmZmYgZmZmZiBmZmZmIGZmZmYgZmZm
-Zg0KPiAqDQo+IDAwMDAwODAgMjBlNSBmZmZiIGZmZmYgMWZmZiBlYjQ0IDZiMDggM2IwOCBiYjQy
-DQo+IDAwMDAwOTAgZmZmZSBmZmZmIGZmZmYgMDAwMCBmZmZmIGViNDAgMjAwYyA1MjBmDQo+IDAw
-MDAwYTAgZDgxMCAwMDAwIDAyMzMgMDBhNiBlNzgxIGQ5MTQgNjNlOSAzMzc2DQo+IDAwMDAwYjAg
-NzU3YSA3NTdhIGJkZjcgNWNkNSBmNzE5IGZmNWQgNzBlOSBhNWY5DQo+IDAwMDAwYzAgZmZmZiBm
-ZmZmIGZmZmYgZmZmZiBmZmZmIGZmZmYgZmZmZiBmZmZmDQo+IDAwMDAwZDAgMGFmZiBmZmYwIGZm
-MjEgZmZkYw0KPiAwMDAwMGQ4DQo+IA0KPiBsb2NhbGhvc3QgLyAjIG1kNXN1bSAvc3lzL2J1cy9w
-bGF0Zm9ybS9kZXZpY2VzL3NvY1xAMC84OGRjMDAwLnNwaS9zcGlfbWFzdGVyL3NwaQ0KPiAxNi9z
-cGkxNi4wL3NwaS1ub3Ivc2ZkcA0KPiAxMDZkODlkNmMwNDkxMTBiYzk0YzAxNTE3Y2I0Y2UyNCAv
-c3lzL2J1cy9wbGF0Zm9ybS9kZXZpY2VzL3NvY0AwLzg4ZGMwMDAuc3BpLw0KPiBzcGlfbWFzdGVy
-L3NwaTE2L3NwaTE2LjAvc3BpLW5vci9zZmRwDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIFYxOg0KPiAg
-ICAgICAgIC0gQWRkZWQgc3BhY2UgYmVmb3JlIG5hbWUgb2YgdGhlIGZsYXNoIHBhcnQgYXMgc3Vn
-Z2VzdGVkIGJ5IERvdWcuDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIFYyOg0KPiAgICAgICAgIC0gVXBk
-YXRlZCBjaGlwIG5hbWUgYXMgdzI1cTUxMm53bSBhcyBzdWdnZXN0ZWQgYnkgRG91Zy4NCj4gDQo+
-IENoYW5nZXMgc2luY2UgVjM6DQo+ICAgICAgICAgLSBVcGRhdGVkIGZsYXNoX2luZm8gZmxhZ3Mg
-cGFzc2luZyBhY2NvcmRpbmcgdG8gYmVsb3cgcGF0Y2guDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIFY0
-Og0KPiAgICAgICAgIC0gQWRkZWQgT1RQIHN1cHBvcnQgZm9yIFNQSSBjYXJkIGFzIHN1Z2dlc3Rl
-ZCBieSBNaWNoYWVsIFdhbGxlLg0KPiAgICAgICAgIC0gVXBkYXRlZCBTRkRQIGZsYWdzIHBhc3Np
-bmcgYXMgc3VnZ2VzdGVkIGJ5IFByYXR5dXNoIFlhZGF2Lg0KPiANCj4gQ2hhbmdlcyBzaW5jZSBW
-NToNCj4gICAgICAgICAtIFJlb3JkZXJlZCBmbGFncyBwYXNzaW5nIGluZm8gZm9yIHNwaSBub3Ig
-YXMgc3VnZ2VzdGVkIGJ5DQo+ICAgICAgICAgICBNaWNoYWVsIFdhbGxlLg0KPiAgICAgICAgIC0g
-QWRkZWQgU0ZEUCBkdW1wIGluZm8gaW4gY29tbWl0IGFzIHN1Z2dlc3RlZCBieSBNaWNoYWVsIFdh
-bGxlLg0KPiANCj4gQ2hhbmdlcyBzaW5jZSBWNjoNCj4gICAgICAgICAtIFVwZGF0ZWQgY29tbWl0
-IHN1YmplY3QgYW5kIGFkZGVkIG1kNXN1bSBpbiBjb21taXQgYXMgc3VnZ2VzdGVkDQo+ICAgICAg
-ICAgICBieSBNaWNoYWVsIFdhbGxlLg0KPiAgICAgICAgIC0gUmVvcmRlcmVkIGZsYWdzIHBhc3Np
-bmcgaW5mbyBmb3Igc3BpIG5vciB3aGljaCBoYXMgbWlzc2VkIGluDQo+ICAgICAgICAgICBWNSBw
-YXRjaCBhcyBzdWdnZXN0ZWQgYnkgTWljaGFlbCBXYWxsZS4NCj4gLS0tDQo+ICBkcml2ZXJzL210
-ZC9zcGktbm9yL3dpbmJvbmQuYyB8IDQgKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0
-aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbXRkL3NwaS1ub3Ivd2luYm9uZC5j
-IGIvZHJpdmVycy9tdGQvc3BpLW5vci93aW5ib25kLmMNCj4gaW5kZXggNjc1ZjMyYy4uNmZkZTJh
-YyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tdGQvc3BpLW5vci93aW5ib25kLmMNCj4gKysrIGIv
-ZHJpdmVycy9tdGQvc3BpLW5vci93aW5ib25kLmMNCj4gQEAgLTEyNCw2ICsxMjQsMTAgQEAgc3Rh
-dGljIGNvbnN0IHN0cnVjdCBmbGFzaF9pbmZvIHdpbmJvbmRfcGFydHNbXSA9IHsNCj4gICAgICAg
-ICB7ICJ3MjVtNTEyanYiLCBJTkZPKDB4ZWY3MTE5LCAwLCA2NCAqIDEwMjQsIDEwMjQpDQo+ICAg
-ICAgICAgICAgICAgICBOT19TRkRQX0ZMQUdTKFNFQ1RfNEsgfCBTUElfTk9SX1FVQURfUkVBRCB8
-DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNQSV9OT1JfRFVBTF9SRUFEKSB9LA0K
-PiArICAgICAgIHsgIncyNXE1MTJud20iLCBJTkZPKDB4ZWY4MDIwLCAwLCA2NCAqIDEwMjQsIDEw
-MjQpDQo+ICsgICAgICAgICAgICAgICBQQVJTRV9TRkRQDQo+ICsgICAgICAgICAgICAgICBGTEFH
-UyhTUElfTk9SX0hBU19MT0NLIHwgU1BJX05PUl9IQVNfVEIpDQoNClRoaXMgZmxhc2ggaGFzIDNC
-UCBzdXBwb3J0LCB3YXMgbG9ja2luZyB0ZXN0ZWQ/IEkgd291bGQgbGlrZSB5b3UgdG8NCmRlc2Ny
-aWJlIGluIHRoZSBjb21taXQgbWVzc2FnZSBob3cgdGhlIGZsYXNoIHdhcyB0ZXN0ZWQsIGFuZCBh
-ZGQgaW4NCnRoZSBjb21tZW50IHNlY3Rpb25zIHByb29mcyBvbiBob3cgaXQgd2FzIHRlc3RlZC4N
-Cg0KaHR0cHM6Ly93d3cud2luYm9uZC5jb20vcmVzb3VyY2UtZmlsZXMvVzI1UTUxMk5XJTIwUmV2
-QiUyMDA3MTkyMDIxLnBkZg0KDQpDaGVlcnMsDQp0YQ0KDQo+ICsgICAgICAgICAgICAgICBPVFBf
-SU5GTygyNTYsIDMsIDB4MTAwMCwgMHgxMDAwKSB9LA0KPiAgICAgICAgIHsgIncyNXE1MTJqdnEi
-LCBJTkZPKDB4ZWY0MDIwLCAwLCA2NCAqIDEwMjQsIDEwMjQpDQo+ICAgICAgICAgICAgICAgICBO
-T19TRkRQX0ZMQUdTKFNFQ1RfNEsgfCBTUElfTk9SX0RVQUxfUkVBRCB8DQo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIFNQSV9OT1JfUVVBRF9SRUFEKSB9LA0KPiAtLQ0KPiBRVUFMQ09N
-TSBJTkRJQSwgb24gYmVoYWxmIG9mIFF1YWxjb21tIElubm92YXRpb24gQ2VudGVyLCBJbmMuIGlz
-IGEgbWVtYmVyDQo+IG9mIENvZGUgQXVyb3JhIEZvcnVtLCBob3N0ZWQgYnkgVGhlIExpbnV4IEZv
-dW5kYXRpb24NCj4gDQoNCg==
+On Fri, 2022-02-25 at 16:22 +0800, Zeng Guang wrote:
+> From: Gao Chao <chao.gao@intel.com>
+> 
+> With IPI virtualization enabled, the processor emulates writes to
+> APIC registers that would send IPIs. The processor sets the bit
+> corresponding to the vector in target vCPU's PIR and may send a
+> notification (IPI) specified by NDST and NV fields in target vCPU's
+> Posted-Interrupt Descriptor (PID). It is similar to what IOMMU
+> engine does when dealing with posted interrupt from devices.
+> 
+> A PID-pointer table is used by the processor to locate the PID of a
+> vCPU with the vCPU's APIC ID.
+> 
+> Like VT-d PI, if a vCPU goes to blocked state, VMM needs to switch its
+> notification vector to wakeup vector. This can ensure that when an IPI
+> for blocked vCPUs arrives, VMM can get control and wake up blocked
+> vCPUs. And if a VCPU is preempted, its posted interrupt notification
+> is suppressed.
+> 
+> Note that IPI virtualization can only virualize physical-addressing,
+> flat mode, unicast IPIs. Sending other IPIs would still cause a
+> trap-like APIC-write VM-exit and need to be handled by VMM.
+> 
+> Signed-off-by: Gao Chao <chao.gao@intel.com>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>  arch/x86/include/asm/vmx.h         |  8 ++++
+>  arch/x86/include/asm/vmxfeatures.h |  2 +
+>  arch/x86/kvm/vmx/capabilities.h    |  6 +++
+>  arch/x86/kvm/vmx/posted_intr.c     | 12 ++++-
+>  arch/x86/kvm/vmx/vmx.c             | 74 +++++++++++++++++++++++++++---
+>  arch/x86/kvm/vmx/vmx.h             |  3 ++
+>  6 files changed, 97 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index 8c929596a299..b79b6438acaa 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -76,6 +76,11 @@
+>  #define SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE	VMCS_CONTROL_BIT(USR_WAIT_PAUSE)
+>  #define SECONDARY_EXEC_BUS_LOCK_DETECTION	VMCS_CONTROL_BIT(BUS_LOCK_DETECTION)
+>  
+> +/*
+> + * Definitions of Tertiary Processor-Based VM-Execution Controls.
+> + */
+> +#define TERTIARY_EXEC_IPI_VIRT			VMCS_CONTROL_BIT(IPI_VIRT)
+> +
+>  #define PIN_BASED_EXT_INTR_MASK                 VMCS_CONTROL_BIT(INTR_EXITING)
+>  #define PIN_BASED_NMI_EXITING                   VMCS_CONTROL_BIT(NMI_EXITING)
+>  #define PIN_BASED_VIRTUAL_NMIS                  VMCS_CONTROL_BIT(VIRTUAL_NMIS)
+> @@ -159,6 +164,7 @@ static inline int vmx_misc_mseg_revid(u64 vmx_misc)
+>  enum vmcs_field {
+>  	VIRTUAL_PROCESSOR_ID            = 0x00000000,
+>  	POSTED_INTR_NV                  = 0x00000002,
+> +	LAST_PID_POINTER_INDEX		= 0x00000008,
+>  	GUEST_ES_SELECTOR               = 0x00000800,
+>  	GUEST_CS_SELECTOR               = 0x00000802,
+>  	GUEST_SS_SELECTOR               = 0x00000804,
+> @@ -224,6 +230,8 @@ enum vmcs_field {
+>  	TSC_MULTIPLIER_HIGH             = 0x00002033,
+>  	TERTIARY_VM_EXEC_CONTROL	= 0x00002034,
+>  	TERTIARY_VM_EXEC_CONTROL_HIGH	= 0x00002035,
+> +	PID_POINTER_TABLE		= 0x00002042,
+> +	PID_POINTER_TABLE_HIGH		= 0x00002043,
+>  	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
+>  	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
+>  	VMCS_LINK_POINTER               = 0x00002800,
+> diff --git a/arch/x86/include/asm/vmxfeatures.h b/arch/x86/include/asm/vmxfeatures.h
+> index ff20776dc83b..7ce616af2db2 100644
+> --- a/arch/x86/include/asm/vmxfeatures.h
+> +++ b/arch/x86/include/asm/vmxfeatures.h
+> @@ -86,4 +86,6 @@
+>  #define VMX_FEATURE_ENCLV_EXITING	( 2*32+ 28) /* "" VM-Exit on ENCLV (leaf dependent) */
+>  #define VMX_FEATURE_BUS_LOCK_DETECTION	( 2*32+ 30) /* "" VM-Exit when bus lock caused */
+>  
+> +/* Tertiary Processor-Based VM-Execution Controls, word 3 */
+> +#define VMX_FEATURE_IPI_VIRT		(3*32 +  4) /* "" Enable IPI virtualization */
+>  #endif /* _ASM_X86_VMXFEATURES_H */
+> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> index 31f3d88b3e4d..5f656c9e33be 100644
+> --- a/arch/x86/kvm/vmx/capabilities.h
+> +++ b/arch/x86/kvm/vmx/capabilities.h
+> @@ -13,6 +13,7 @@ extern bool __read_mostly enable_ept;
+>  extern bool __read_mostly enable_unrestricted_guest;
+>  extern bool __read_mostly enable_ept_ad_bits;
+>  extern bool __read_mostly enable_pml;
+> +extern bool __read_mostly enable_ipiv;
+>  extern int __read_mostly pt_mode;
+>  
+>  #define PT_MODE_SYSTEM		0
+> @@ -283,6 +284,11 @@ static inline bool cpu_has_vmx_apicv(void)
+>  		cpu_has_vmx_posted_intr();
+>  }
+>  
+> +static inline bool cpu_has_vmx_ipiv(void)
+> +{
+> +	return vmcs_config.cpu_based_3rd_exec_ctrl & TERTIARY_EXEC_IPI_VIRT;
+> +}
+> +
+>  static inline bool cpu_has_vmx_flexpriority(void)
+>  {
+>  	return cpu_has_vmx_tpr_shadow() &&
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index aa1fe9085d77..90124a30c074 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -177,11 +177,21 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
+>  	local_irq_restore(flags);
+>  }
+>  
+> +static bool vmx_can_use_ipiv_pi(struct kvm *kvm)
+> +{
+> +	return irqchip_in_kernel(kvm) && enable_ipiv;
+> +}
+> +
+> +static bool vmx_can_use_posted_interrupts(struct kvm *kvm)
+> +{
+> +	return vmx_can_use_ipiv_pi(kvm) || vmx_can_use_vtd_pi(kvm);
+
+It took me a while to figure that out.
+ 
+vmx_can_use_vtd_pi returns true when the VM can be targeted by posted
+interrupts from the IOMMU, which leads to
+ 
+1. update of the NV vector and SN bit on vcpu_load/vcpu_put to let
+IOMMU knows where the vCPU really runs.
+ 
+2. in vmx_pi_update_irte to configure the posted interrupts.
+ 
+ 
+Now IPIv will also use the same NV vector and SN bit for IPI virtualization,
+thus they have to be kept up to date on vcpu load/put.
+ 
+I would appreciate a comment about this in vmx_can_use_posted_interrupts
+because posted interrupts can mean too many things, like a host->guest
+posted interrupt which is sent by just interrupt.
+ 
+Maybe also rename the function to something like
+ 
+vmx_need_up_to_date_nv_sn(). Sounds silly to me so
+maybe something else.
+
+
+> +}
+> +
+>  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
+>  {
+>  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+>  
+> -	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+> +	if (!vmx_can_use_posted_interrupts(vcpu->kvm))
+I see here it is used.
+>  		return;
+>  
+>  	if (kvm_vcpu_is_blocking(vcpu) && !vmx_interrupt_blocked(vcpu))
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 7beba7a9f247..0cb141c277ef 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -105,6 +105,9 @@ module_param(fasteoi, bool, S_IRUGO);
+>  
+>  module_param(enable_apicv, bool, S_IRUGO);
+>  
+> +bool __read_mostly enable_ipiv = true;
+> +module_param(enable_ipiv, bool, 0444);
+> +
+>  /*
+>   * If nested=1, nested virtualization is supported, i.e., guests may use
+>   * VMX and be a hypervisor for its own guests. If nested=0, guests may not
+> @@ -227,6 +230,11 @@ static const struct {
+>  };
+>  
+>  #define L1D_CACHE_ORDER 4
+> +
+> +/* PID(Posted-Interrupt Descriptor)-pointer table entry is 64-bit long */
+> +#define MAX_PID_TABLE_ORDER get_order(KVM_MAX_VCPU_IDS * sizeof(u64))
+> +#define PID_TABLE_ENTRY_VALID 1
+> +
+>  static void *vmx_l1d_flush_pages;
+>  
+>  static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
+> @@ -2543,7 +2551,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  	}
+>  
+>  	if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
+> -		u64 opt3 = 0;
+> +		u64 opt3 = TERTIARY_EXEC_IPI_VIRT;
+>  		u64 min3 = 0;
+>  
+>  		if (adjust_vmx_controls_64(min3, opt3,
+> @@ -3898,6 +3906,8 @@ static void vmx_update_msr_bitmap_x2apic(struct kvm_vcpu *vcpu)
+>  		vmx_enable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_TMCCT), MSR_TYPE_RW);
+>  		vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_EOI), MSR_TYPE_W);
+>  		vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_SELF_IPI), MSR_TYPE_W);
+> +		if (enable_ipiv)
+> +			vmx_disable_intercept_for_msr(vcpu, X2APIC_MSR(APIC_ICR),MSR_TYPE_RW);
+>  	}
+>  }
+>  
+> @@ -4219,14 +4229,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+>  
+>  	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
+>  	if (cpu_has_secondary_exec_ctrls()) {
+> -		if (kvm_vcpu_apicv_active(vcpu))
+> +		if (kvm_vcpu_apicv_active(vcpu)) {
+>  			secondary_exec_controls_setbit(vmx,
+>  				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
+>  				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> -		else
+> +			if (cpu_has_tertiary_exec_ctrls() && enable_ipiv)
+> +				tertiary_exec_controls_setbit(vmx,
+> +						TERTIARY_EXEC_IPI_VIRT);
+> +		} else {
+>  			secondary_exec_controls_clearbit(vmx,
+>  					SECONDARY_EXEC_APIC_REGISTER_VIRT |
+>  					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> +			if (cpu_has_tertiary_exec_ctrls())
+> +				tertiary_exec_controls_clearbit(vmx,
+> +						TERTIARY_EXEC_IPI_VIRT);
+> +		}
+
+Why check for cpu_has_tertiary_exec_ctrls()? wouldn't it be always true
+(enable_ipiv has to be turned to false if CPU doesn't support IPIv,
+and if it does it will support tertiary exec controls).
+
+I don't mind this as a precaution + consistency with other code.
+
+
+>  	}
+>  
+>  	vmx_update_msr_bitmap_x2apic(vcpu);
+> @@ -4260,7 +4277,16 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
+>  
+>  static u64 vmx_tertiary_exec_control(struct vcpu_vmx *vmx)
+>  {
+> -	return vmcs_config.cpu_based_3rd_exec_ctrl;
+> +	u64 exec_control = vmcs_config.cpu_based_3rd_exec_ctrl;
+> +
+> +	/*
+> +	 * IPI virtualization relies on APICv. Disable IPI
+> +	 * virtualization if APICv is inhibited.
+> +	 */
+> +	if (!enable_ipiv || !kvm_vcpu_apicv_active(&vmx->vcpu))
+> +		exec_control &= ~TERTIARY_EXEC_IPI_VIRT;
+
+I am not 100% sure, but kvm_vcpu_apicv_active might not be the
+best thing to check here, as it reflects per-cpu dynamic APICv inhibit.
+
+It probably works, but it might be better to use enable_apicv
+here and rely on normal APICv inhibit, and there inibit IPIv  as well
+as you do in vmx_refresh_apicv_exec_ctrl/
+
+
+
+> +
+> +	return exec_control;
+>  }
+>  
+>  /*
+> @@ -4412,6 +4438,9 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
+>  
+>  static void init_vmcs(struct vcpu_vmx *vmx)
+>  {
+> +	struct kvm_vcpu *vcpu = &vmx->vcpu;
+> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
+> +
+>  	if (nested)
+>  		nested_vmx_set_vmcs_shadowing_bitmap();
+>  
+> @@ -4431,7 +4460,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  	if (cpu_has_tertiary_exec_ctrls())
+>  		tertiary_exec_controls_set(vmx, vmx_tertiary_exec_control(vmx));
+>  
+> -	if (kvm_vcpu_apicv_active(&vmx->vcpu)) {
+> +	if (kvm_vcpu_apicv_active(vcpu)) {
+
+here too (pre-existing), I also not 100% sure that kvm_vcpu_apicv_active
+should be used. I haven't studied APICv code that much to be 100% sure.
+
+
+>  		vmcs_write64(EOI_EXIT_BITMAP0, 0);
+>  		vmcs_write64(EOI_EXIT_BITMAP1, 0);
+>  		vmcs_write64(EOI_EXIT_BITMAP2, 0);
+> @@ -4441,6 +4470,13 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  
+>  		vmcs_write16(POSTED_INTR_NV, POSTED_INTR_VECTOR);
+>  		vmcs_write64(POSTED_INTR_DESC_ADDR, __pa((&vmx->pi_desc)));
+> +
+> +		if (enable_ipiv) {
+> +			WRITE_ONCE(kvm_vmx->pid_table[vcpu->vcpu_id],
+> +				__pa(&vmx->pi_desc) | PID_TABLE_ENTRY_VALID);
+> +			vmcs_write64(PID_POINTER_TABLE, __pa(kvm_vmx->pid_table));
+> +			vmcs_write16(LAST_PID_POINTER_INDEX, kvm_vmx->pid_last_index);
+> +		}
+>  	}
+>  
+>  	if (!kvm_pause_in_guest(vmx->vcpu.kvm)) {
+> @@ -4492,7 +4528,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  		vmcs_write16(GUEST_PML_INDEX, PML_ENTITY_NUM - 1);
+>  	}
+>  
+> -	vmx_write_encls_bitmap(&vmx->vcpu, NULL);
+> +	vmx_write_encls_bitmap(vcpu, NULL);
+
+I might have separated the refactoring of using vcpu instead of &vmx->vcpu
+in a separate patch, but I don't mind that that much.
+
+>  
+>  	if (vmx_pt_mode_is_host_guest()) {
+>  		memset(&vmx->pt_desc, 0, sizeof(vmx->pt_desc));
+> @@ -4508,7 +4544,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  
+>  	if (cpu_has_vmx_tpr_shadow()) {
+>  		vmcs_write64(VIRTUAL_APIC_PAGE_ADDR, 0);
+> -		if (cpu_need_tpr_shadow(&vmx->vcpu))
+> +		if (cpu_need_tpr_shadow(vcpu))
+>  			vmcs_write64(VIRTUAL_APIC_PAGE_ADDR,
+>  				     __pa(vmx->vcpu.arch.apic->regs));
+>  		vmcs_write32(TPR_THRESHOLD, 0);
+> @@ -7165,6 +7201,18 @@ static int vmx_vm_init(struct kvm *kvm)
+>  			break;
+>  		}
+>  	}
+> +
+> +	if (enable_ipiv) {
+> +		struct page *pages;
+> +
+> +		pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PID_TABLE_ORDER);
+> +		if (!pages)
+> +			return -ENOMEM;
+> +
+> +		to_kvm_vmx(kvm)->pid_table = (void *)page_address(pages);
+> +		to_kvm_vmx(kvm)->pid_last_index = KVM_MAX_VCPU_IDS - 1;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -7756,6 +7804,14 @@ static bool vmx_check_apicv_inhibit_reasons(ulong bit)
+>  	return supported & BIT(bit);
+>  }
+>  
+> +static void vmx_vm_destroy(struct kvm *kvm)
+> +{
+> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
+> +
+> +	if (kvm_vmx->pid_table)
+> +		free_pages((unsigned long)kvm_vmx->pid_table, MAX_PID_TABLE_ORDER);
+
+Maybe add a warning checking that ipiv was actually enabled.
+Maybe this is overkill.
+
+
+> +}
+> +
+>  static struct kvm_x86_ops vmx_x86_ops __initdata = {
+>  	.name = "kvm_intel",
+>  
+> @@ -7768,6 +7824,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+>  
+>  	.vm_size = sizeof(struct kvm_vmx),
+>  	.vm_init = vmx_vm_init,
+> +	.vm_destroy = vmx_vm_destroy,
+>  
+>  	.vcpu_create = vmx_create_vcpu,
+>  	.vcpu_free = vmx_free_vcpu,
+> @@ -8022,6 +8079,9 @@ static __init int hardware_setup(void)
+>  	if (!enable_apicv)
+>  		vmx_x86_ops.sync_pir_to_irr = NULL;
+>  
+> +	if (!enable_apicv || !cpu_has_vmx_ipiv())
+> +		enable_ipiv = false;
+> +
+>  	if (cpu_has_vmx_tsc_scaling()) {
+>  		kvm_has_tsc_control = true;
+>  		kvm_max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index d4a647d3ed4a..e7b0c00c9d43 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -365,6 +365,9 @@ struct kvm_vmx {
+>  	unsigned int tss_addr;
+>  	bool ept_identity_pagetable_done;
+>  	gpa_t ept_identity_map_addr;
+> +	/* PID table for IPI virtualization */
+> +	u64 *pid_table;
+> +	u16 pid_last_index;
+>  };
+>  
+>  bool nested_vmx_allowed(struct kvm_vcpu *vcpu);
+
+
+I might have missed something, but overall looks good.
+
+Best regards,
+	Maxim Levitsky
+

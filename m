@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234794C5167
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F2C4C516A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 23:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbiBYWST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 17:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S237173AbiBYWTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 17:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiBYWSQ (ORCPT
+        with ESMTP id S229927AbiBYWTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 17:18:16 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6A552B38
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:17:42 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id ay7so8678404oib.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:17:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=dXvo0FUwxGOK+PzYKSVnOxYz4S+No09K3o4P0/XBEQY=;
-        b=Zka9dxzwevyuRP7bh7bB+2VLzJcEohGN+IkaQhrqR9tqMLIIhFDAdgjwyUobMemgHG
-         HxbUt/MRrIU5ANvMryCf/IOd5w5VhcWy+QIBZrpdrCO4tJhHOIU/JKKO4sbYy5isTFRF
-         SvjEbvOQ88lMyrUNYjFcACdeObaqTYceEfTfc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=dXvo0FUwxGOK+PzYKSVnOxYz4S+No09K3o4P0/XBEQY=;
-        b=Biq6WwSYlPShbdn7Xu3ClTeDdIgEeeUgw+8iZWGSPoqKnvm2F3buPVqyzOMrCq8WBV
-         qzEmVgtVpgN3PKSnUvrX7VgkYBWC83YP/GCRRYSmiPoEhLre5rq2ik0sR5ezu7AKyiwR
-         E+awCiQMV/bMR7Cbd7BCJdXqNcWutVfpnduFXDb0r6SBYBAiH2nVe+csoXxQVsXDmR9x
-         Kia+VZjPHoFRNeZXFRR1K3069ZiKI2tA5yPBYF65WjBHhgty1dkBVEE+4tQYD4yw2aYA
-         xw23J+rqYjET9fkEnMVcCcUsIeIcoc8h2EFveqTazp5ijLZxr1MC2D8ZAwVjy9gqym6G
-         Bw/A==
-X-Gm-Message-State: AOAM531aHphlYbVTygxCPad63RhJtf7NFR18SHsVumhWb4que18ijfqZ
-        U+YZIYgrfn4i2/gSMjKerxSHXPslliD58x5tvOnGAg==
-X-Google-Smtp-Source: ABdhPJwZkpsXKtTOoOCmoxhBmLUBoDoC7bnujscOdTuslS997FSPo3U4IMVbsNIzko5zK+fYiQ4P/xGtoL+aut7gVPs=
-X-Received: by 2002:a05:6808:1a28:b0:2d7:3c61:e0d6 with SMTP id
- bk40-20020a0568081a2800b002d73c61e0d6mr3055013oib.32.1645827461436; Fri, 25
- Feb 2022 14:17:41 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 25 Feb 2022 14:17:41 -0800
+        Fri, 25 Feb 2022 17:19:03 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8773FCFBAC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 14:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645827509; x=1677363509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z0t6umZFSsFQi800PuhFPF3XXD6xv7GQd81Q9Rk0qK0=;
+  b=dwR6gkttQfDjMkkpLxqHjtdbXgAiavrJO8LlDGgMqvvflHgbF2Fuztua
+   RgNLu2xfNDD5qnAjtlESr8Cb2YGJ/veh4nXVG39BV44RnelnXTe5AbAEv
+   efb3LsKfHZ0qfyQzVXzG/njjdSeyTRSasUS26hF60sp/xnpvs1DORh5/9
+   XOdXyTNSvrVe/L4LhmI1fydvtvTQKsL+uI5D/2FCaoMNMdxCUFiulSm/F
+   ami5dXun701/k6cIi+rBFE4xd93oQdSV8wUgtAmDzJ3pH9JhlcvTBtHCh
+   PuliLNp6BsANgmLCdHDgdkD2RmSf7GeDyWM66NkvfCNzqhHzhEq5e3F0J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="252786632"
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="252786632"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 14:18:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="492107723"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Feb 2022 14:18:26 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNiuv-0004mD-NC; Fri, 25 Feb 2022 22:18:25 +0000
+Date:   Sat, 26 Feb 2022 06:18:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Cheng <michael.cheng@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, willy@infradead.org,
+        michael.cheng@intel.com, casey.g.bowman@intel.com,
+        lucas.demarchi@intel.com, wayne.boyer@intel.com,
+        tvrtko.ursulin@linux.intel.com, matthew.d.roper@intel.com,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v1] Add struct folio to cacheflush.h
+Message-ID: <202202260658.uzJ0YnVP-lkp@intel.com>
+References: <20220225201248.984169-1-michael.cheng@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1645824192-29670-5-git-send-email-quic_khsieh@quicinc.com>
-References: <1645824192-29670-1-git-send-email-quic_khsieh@quicinc.com> <1645824192-29670-5-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 25 Feb 2022 14:17:40 -0800
-Message-ID: <CAE-0n53s11KHrj-rzRkjV4q775XCoxzZCLK-HRCt=H1++DR-YQ@mail.gmail.com>
-Subject: Re: [PATCH v12 4/4] drm/msm/dp: enable widebus feature for display port
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225201248.984169-1-michael.cheng@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,49 +68,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-02-25 13:23:12)
-> Widebus feature will transmit two pixel data per pixel clock to interface.
-> This feature now is required to be enabled to easy migrant to higher
-> resolution applications in future. However since some legacy chipsets
-> does not support this feature, this feature is enabled by setting
-> wide_bus_en flag to true within msm_dp_desc struct.
->
-> changes in v2:
-> -- remove compression related code from timing
-> -- remove op_info from  struct msm_drm_private
-> -- remove unnecessary wide_bus_en variables
-> -- pass wide_bus_en into timing configuration by struct msm_dp
->
-> Changes in v3:
-> -- split patch into 3 patches
-> -- enable widebus feature base on chip hardware revision
->
-> Changes in v5:
-> -- DP_INTF_CONFIG_DATABUS_WIDEN
->
-> Changes in v6:
-> -- static inline bool msm_dp_wide_bus_enable() in msm_drv.h
->
-> Changes in v7:
-> -- add Tested-by
->
-> Changes in v9:
-> -- add wide_bus_en to msm_dp_desc
->
-> Changes in v10:
-> -- add wide_bus_en boolean to dp_catalog struc to avoid passing it as parameter
->
-> Changes in v11:
-> -- add const to dp_catalog_hw_revision()
-> -- add const to msm_dp_wide_bus_available()
->
-> Changes in v12:
-> -- dp_catalog_hw_revision(const struct dp_catalog *dp_catalog)
-> -- msm_dp_wide_bus_available(const struct msm_dp *dp_display)
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+Hi Michael,
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master v5.17-rc5 next-20220224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Michael-Cheng/Add-struct-folio-to-cacheflush-h/20220226-041442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220226/202202260658.uzJ0YnVP-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/f519440dbde207a6ade2472cd2e6c32028923342
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Cheng/Add-struct-folio-to-cacheflush-h/20220226-041442
+        git checkout f519440dbde207a6ade2472cd2e6c32028923342
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld: block/bfq-wf2q.o:(.bss+0x0): multiple definition of `folio'; block/bfq-iosched.o:(.bss+0x0): first defined here
+   ld: block/bfq-cgroup.o:(.bss+0x0): multiple definition of `folio'; block/bfq-iosched.o:(.bss+0x0): first defined here
+--
+>> ld: fs/isofs/inode.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+   ld: fs/isofs/dir.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+   ld: fs/isofs/util.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+   ld: fs/isofs/rock.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+   ld: fs/isofs/export.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+   ld: fs/isofs/joliet.o:(.bss+0x0): multiple definition of `folio'; fs/isofs/namei.o:(.bss+0x0): first defined here
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

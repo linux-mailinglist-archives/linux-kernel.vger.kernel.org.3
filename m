@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3A4C4C13
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F824C4C0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 18:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243676AbiBYRZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 12:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S232967AbiBYRZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 12:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243629AbiBYRYm (ORCPT
+        with ESMTP id S243713AbiBYRZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:24:42 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C91A8CBB;
-        Fri, 25 Feb 2022 09:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645809849; x=1677345849;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hNHti6tTy0PoN8MfewwykBYirfpqGBhg0XeiGh6x06g=;
-  b=NuWhMUyflaKC1xkGqafq7+AT039ZXGBc46pC19x8ne/GyiuU+bpK6FuH
-   n6grrulyLacAbEZQgZbCdYUzkc1VxvW0dbRJtxc35r1B2PQFw1AxaeSnZ
-   IF1HVG6sCQyiVPXgHn1rAr2lwnmhj8TNa+7hLzpIv7lQBZE13mBEcjMWl
-   XKXlkJfrbLdoZGmZidgEmCFcwIaVqpy+LIdEA4zLwHSWUIwYTbFhRZ2/2
-   5LftgkZDyEluqcSaPVJn+r7MUCsWVWMq3Zbei+PhpIRwYd5mIkkp2G+vc
-   20aB9ooYQfjEhV+92cRcLjvMTEl+ZZB2kSK6cgs7HyhFrfJx4C9avU+2q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313259072"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="313259072"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:24:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="544119493"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2022 09:24:07 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A63857FA; Fri, 25 Feb 2022 19:24:21 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 11/11] spi: pxa2xx-pci: Constify struct pxa_spi_info variables
-Date:   Fri, 25 Feb 2022 19:23:50 +0200
-Message-Id: <20220225172350.69797-11-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220225172350.69797-1-andriy.shevchenko@linux.intel.com>
-References: <20220225172350.69797-1-andriy.shevchenko@linux.intel.com>
+        Fri, 25 Feb 2022 12:25:29 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC451C469B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:24:51 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id s1so5511193wrg.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 09:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OnzsbpdTokjeYoQbiPr/+t6TgoCpWDGcyPSZBp89N3c=;
+        b=B8FXv0FhWSmI3cLZbbXQKoNr//vluNNa5zkb4CrNOWqo/wY5gvLhU2EYYtwCvhNFBT
+         qYJTcWa6Tj/29ce0IqRrs3/NNwfYFzK7gHS7/uKmAW/lz7M6/GPtndI7nPmoXrksE2o0
+         uZw1VmsxLoH7yGJXx6VEJwtdI+Cp+5vjXYBJtG+7k6WNNQlnTRAJAQ5isgUg+jdQPeHL
+         tyGarn2WH26OAQT2zoziqGG3p+tdOyz5atnWTBbAR6r7yU3OXsCBfLLWfUC8ZSgptX7a
+         UaIzqx9MmkE3nTXAUR5+HSIb3iPa2WDdiRIX78mBWJRH9+gljN+Lu5IWBN2Gls77lJb5
+         9zLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OnzsbpdTokjeYoQbiPr/+t6TgoCpWDGcyPSZBp89N3c=;
+        b=G4vC7Tap7boWS0Xzoij0R7S2d6VcFyrtL1TON2mAqvjiQg7jq1+fva6hN3B4tZP6Xr
+         rggawgVIwzXUNEo7Xp3Dl2MBeK+ASe+n864CjdxeMvc41YNjL6iabzjehGokK1xgPPCU
+         b1Z/DPp4xjUVNuyN0+x6gSCOdy5tFSs8s6BeAeVZ98Cb1Yd6JQuJweg63h4u0zymQp+i
+         RE7iRz4QMhp3Bu8y2jP6biHT6GPJKGuB2M1hxowkXKqsVQHfgcju9Xfdg/ov0te7ei33
+         6XUZHDhQtZxe19a2d1+5KSpWLEEUoiF04fUv1BrJtpjwPS/9XHcxkrjKI05W517bEi7L
+         mM+Q==
+X-Gm-Message-State: AOAM532kGp8ZCJfw06E6IgXUpxdOuBOnZGEpLkKfAvNRNT+DaUYpZ0i3
+        Lb7FVfnZVW/4J1PY6I8MbQJ42X2bFA==
+X-Google-Smtp-Source: ABdhPJygam76Nuh9SogpjMaoXyliR8wOs9/NmSR1w4fOil5yv20XEl3WzFGil+CHhPuPjXFNCt/ryg==
+X-Received: by 2002:a5d:6f1a:0:b0:1ef:6254:bca3 with SMTP id ay26-20020a5d6f1a000000b001ef6254bca3mr3086708wrb.119.1645809889632;
+        Fri, 25 Feb 2022 09:24:49 -0800 (PST)
+Received: from localhost.localdomain ([46.53.252.217])
+        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b00352d0e1de62sm3017396wmd.24.2022.02.25.09.24.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 09:24:49 -0800 (PST)
+Date:   Fri, 25 Feb 2022 20:24:47 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Drop -Wdeclaration-after-statement
+Message-ID: <YhkQ34tN8jEOR6SJ@localhost.localdomain>
+References: <YhiQPhsoODiXRAPy@localhost.localdomain>
+ <59387c6677af43c18d434b4f3c1e5430@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <59387c6677af43c18d434b4f3c1e5430@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now when there are no dynamical changes required, we may
-constify struct pxa_spi_info variables.
+On Fri, Feb 25, 2022 at 10:01:23AM +0000, David Laight wrote:
+> From: Alexey Dobriyan
+> > Sent: 25 February 2022 08:16
+> > 
+> > Putting declarations before statement is relict of single pass compiler
+> > era. It was necessary to allocate stack slots before generating code.
+> > 
+> > Recently added static_assert() is a declaration. -Wdeclaration-after-statement
+> > prevents its placement anywhere in the code for no reason.
+> 
+> That could enclose its declaration inside a block.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx-pci.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+It could but why put useless characters on the screen?
 
-diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
-index 3c5d14affa95..861b21c63504 100644
---- a/drivers/spi/spi-pxa2xx-pci.c
-+++ b/drivers/spi/spi-pxa2xx-pci.c
-@@ -164,7 +164,7 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
- 	return 0;
- }
- 
--static struct pxa_spi_info lpss_info_config = {
-+static const struct pxa_spi_info lpss_info_config = {
- 	.setup = lpss_spi_setup,
- };
- 
-@@ -179,7 +179,7 @@ static int ce4100_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c
- 	return pxa2xx_spi_pci_clk_register(dev, ssp, 3686400);
- }
- 
--static struct pxa_spi_info ce4100_info_config = {
-+static const struct pxa_spi_info ce4100_info_config = {
- 	.setup = ce4100_spi_setup,
- };
- 
-@@ -236,7 +236,7 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
- 	return 0;
- }
- 
--static struct pxa_spi_info mrfld_info_config = {
-+static const struct pxa_spi_info mrfld_info_config = {
- 	.setup = mrfld_spi_setup,
- };
- 
-@@ -251,18 +251,18 @@ static int qrk_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
- 	return pxa2xx_spi_pci_clk_register(dev, ssp, 50000000);
- }
- 
--static struct pxa_spi_info qrk_info_config = {
-+static const struct pxa_spi_info qrk_info_config = {
- 	.setup = qrk_spi_setup,
- };
- 
- static int pxa2xx_spi_pci_probe(struct pci_dev *dev,
- 		const struct pci_device_id *ent)
- {
-+	const struct pxa_spi_info *info;
- 	struct platform_device_info pi;
- 	int ret;
- 	struct platform_device *pdev;
- 	struct pxa2xx_spi_controller spi_pdata;
--	struct pxa_spi_info *info;
- 	struct ssp_device *ssp;
- 
- 	ret = pcim_enable_device(dev);
--- 
-2.34.1
+> But then it wouldn't be usable at global scope (is it anyway?)
 
+It is usable in global scope.
+
+> > Placing variable declarations in the beginning of the block increases
+> > variable "LOC lifetime" so to speak and chances that it will be misused.
+> > This is very low probability bug but still. Declaring variables right
+> > before first use will make "LOC lifetime" smaller.
+> 
+> NAK it makes it very hard for a human (some of us are) to find
+> the declaration.
+
+What?
+
+Which editor are you using?
+
+Shift+3 with selection highlighting in vim works just fine.
+I don't believe Emacs doesn't have an equivalent.
+
+> Indeed putting them anywhere other that the top of a function
+> or the top of a very short code block makes them hard to find.

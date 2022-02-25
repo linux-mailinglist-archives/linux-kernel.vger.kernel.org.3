@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9A84C4582
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4CA4C4587
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbiBYNK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S240985AbiBYNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiBYNKz (ORCPT
+        with ESMTP id S240372AbiBYNLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:10:55 -0500
-Received: from winds.org (winds.org [68.75.195.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B2931E7A43;
-        Fri, 25 Feb 2022 05:10:23 -0800 (PST)
-Received: by winds.org (Postfix, from userid 100)
-        id 8F7521CA5924; Fri, 25 Feb 2022 08:10:22 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by winds.org (Postfix) with ESMTP id 8D2511CA5920;
-        Fri, 25 Feb 2022 08:10:22 -0500 (EST)
-Date:   Fri, 25 Feb 2022 08:10:22 -0500 (EST)
-From:   Byron Stanoszek <gandalf@winds.org>
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-In-Reply-To: <YhfzUc8afuoQkx/U@casper.infradead.org>
-Message-ID: <257dc4a9-dfa0-327e-f05a-71c0d9742e98@winds.org>
-References: <YhIwUEpymVzmytdp@casper.infradead.org> <20220222100408.cyrdjsv5eun5pzij@quack3.lan> <20220222221614.GC3061737@dread.disaster.area> <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org> <YhfzUc8afuoQkx/U@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 25 Feb 2022 08:11:24 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E931EDA11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:10:45 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j22so4397855wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=fcpSanLXTluEH1o3Di3VGPHlfJFzXldmeWc3Lc0lqLs=;
+        b=Zk1vTZUmiGcgGskXNTXtWMVdtBc28Z/taq9E7cQRToI1sWHpLiL0pG2iwpEOoiqEnT
+         DifajOEgMkiTp6w4TAkNWoJFa4l8GKcO6umclQvtwbsMZGTkNeEMMhhhieO90DjzyBA1
+         vLU8Gwh5/iiSrChSx6OFHHzLTIpwT8mmd3aqd7eqOGcLZzVSi5o8QYxuxxEXBzO62Qm9
+         ir6xdbc0uD3c8DGyoHSwN3XmgB7/Tca6UBc0YC6/TDHE9QzTTvECJgcInRz3hrY/DaG+
+         TExuv2PP4qJMKcqjSwwMY6ussMfFX8ynFxpgJ09IuA0rYfITvbu+0M+l3UiNN5cmzl1R
+         xFWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fcpSanLXTluEH1o3Di3VGPHlfJFzXldmeWc3Lc0lqLs=;
+        b=EL2ja08csJQ84YmR1+Hc1THXi1DKg4DP2v1JJfByaJFtET5g/cesa/iY4NxktBcqkk
+         l8pFCjmlLLg8YteRtRY8v8vyrfQI0R3y+IuenvIfM0bt7iEbNasZdliLQ/ObEAUlOtp9
+         pBXhJ6zzH3zM2JxUmhoOdUbn/2yMT1MT7cqdOTtoww7zQBRVEK4WUpA/fxeKwivNoEu+
+         iRRdNXjXB3QcRYsZQVytRuQ/JMioGg7Uy0vxS3MT//HWtfzn7aNxi4Metwkt7pdItxna
+         h5Yk/6y1Mz6+87MH5wecENvPppW1hyvNcVNKl/Kj4sUy/b1+JmhnuBHsnB1r2nbW7ti8
+         4Sng==
+X-Gm-Message-State: AOAM533fuonWaUpfszzfQsBRrJmuGLXdcmzEydOsOIvVhcBp4sPjU1gl
+        hGHyNx1eyWO73Bbu59nQpmk=
+X-Google-Smtp-Source: ABdhPJyre3/XXa54d/UN7EUXy/JFbdoL52eQtuhRqP5E+3QcqPH/s40WiFNE1Y8lkp08FQKUN7/IrQ==
+X-Received: by 2002:adf:e18d:0:b0:1ef:7c17:cf96 with SMTP id az13-20020adfe18d000000b001ef7c17cf96mr330851wrb.444.1645794644476;
+        Fri, 25 Feb 2022 05:10:44 -0800 (PST)
+Received: from localhost.localdomain ([64.64.123.58])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b0037d62a899b1sm2494089wmq.6.2022.02.25.05.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:10:43 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     oder_chiou@realtek.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] ALSA: rt5663: check the return value of devm_kzalloc() in rt5663_parse_dp()
+Date:   Fri, 25 Feb 2022 05:10:30 -0800
+Message-Id: <20220225131030.27248-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022, Matthew Wilcox wrote:
-> On Wed, Feb 23, 2022 at 09:48:26AM -0500, Byron Stanoszek wrote:
->> For what it's worth, I have a number of production servers still using
->> Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
->> annually (mostly to apply security patches). I figured this filesystem would
->> still be available for several more years, since it's not quite y2038k yet.
->
-> Hey Byron, thanks for sharing your usage.
->
-> It's not entirely clear to me from your message whether you're aware
-> that our annual LTS release actually puts out new kernels every week (or
-> sometimes twice a week), and upgrades to the latest version are always
-> recommended.  Those LTS kernels typically get five years of support in
-> total; indeed we just retired the v4.4 series earlier this month which
-> was originally released in January 2016, so it got six years of support.
->
-> If we dropped reiserfs from the kernel today (and thanks to Edward, we
-> don't have to), you'd still be able to use a v5.15 based kernel with
-> regular updates until 2028.  If we drop it in two years, that should
-> take you through to 2030.  Is that enough for your usage?
+The function devm_kzalloc() in rt5663_parse_dp() can fail, so its return
+value should be checked.
 
-I'm aware of the LTS releases, but I hadn't thought about them in relation to
-this issue. That's a good point, and so it sounds like I have nothing to worry
-about.
+Fixes: 457c25efc592 ("ASoC: rt5663: Add the function of impedance sensing")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ sound/soc/codecs/rt5663.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks for the recommendation.
-
-Regards,
-  -Byron
+diff --git a/sound/soc/codecs/rt5663.c b/sound/soc/codecs/rt5663.c
+index 2138f62e6af5..3a8fba101b20 100644
+--- a/sound/soc/codecs/rt5663.c
++++ b/sound/soc/codecs/rt5663.c
+@@ -3478,6 +3478,8 @@ static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
+ 		table_size = sizeof(struct impedance_mapping_table) *
+ 			rt5663->pdata.impedance_sensing_num;
+ 		rt5663->imp_table = devm_kzalloc(dev, table_size, GFP_KERNEL);
++		if (!rt5663->imp_table)
++			return -ENOMEM;
+ 		ret = device_property_read_u32_array(dev,
+ 			"realtek,impedance_sensing_table",
+ 			(u32 *)rt5663->imp_table, table_size);
+-- 
+2.17.1
 

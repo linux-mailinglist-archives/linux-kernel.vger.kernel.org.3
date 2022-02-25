@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554F04C3E99
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340274C3E9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237939AbiBYGtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 01:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S237940AbiBYGwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 01:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiBYGtp (ORCPT
+        with ESMTP id S231365AbiBYGwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 01:49:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9661D63AC;
-        Thu, 24 Feb 2022 22:49:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3189B82A97;
-        Fri, 25 Feb 2022 06:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B38ECC340E7;
-        Fri, 25 Feb 2022 06:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645771751;
-        bh=BjNnUDa6YlGgHdiU/3W/Okj0r21M2eZrvd1rB4FoNeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YO1rSojNZX7K70GU6AqJDWQ2IFRsUyUKjWVllXrmh2m8IMqneE8wc9qDilxDUucew
-         lCPKNRD5HLLbhGHtqzHosuaC7lOzMtxf7dEPmzq1XpobO6WxyBdwmdpU9gA4fMhcDh
-         exwRtBpoK9jcCXqkmel+58l9zq2P0a9hHzaAENlM=
-Date:   Fri, 25 Feb 2022 07:49:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Henry Lin <henryl@nvidia.com>
-Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xhci: fix runtime PM imbalance in USB2 resume
-Message-ID: <Yhh74nrKH5XuRZ/U@kroah.com>
-References: <20220225055311.92447-1-henryl@nvidia.com>
- <Yhh19qsTsGRhsLWT@kroah.com>
- <CH0PR12MB5089EB28FAA6DF61F57F6D09AC3E9@CH0PR12MB5089.namprd12.prod.outlook.com>
+        Fri, 25 Feb 2022 01:52:20 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F7533EAC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:51:48 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d17so3980041pfl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L9veUilJjU8BgaFzfFNZAp7aUZ0r2DY2hwo5tY1hj7U=;
+        b=jxy6te3sNK33/QPRpNeXR6RoChyv3hj6l/jlhVKPMDcoUgPOgZBUtvnLKgnUqFRgzi
+         tLlJmO9DeEIHG631qitRGG2Sdt8WWUdNTX1EGM74XBh5NhS5PqeO10qTXOfu3q7Zy/H5
+         Ml4rha7BUAJs84qkZr8HAZaBNXiHHwt79xxzvN8WUhOgY/g252cXWSemlkLFfX4HCQ3n
+         29PraZbua/1G/r7+s/yrmuYMKgDcNHEeULnaOPpO6957wpJz29bhNDY44Be2vdQAhaaD
+         laGCn+DS3uNQN58Or3gTfgvn3bnkSoKku0bf3siU2mMExZdTQGWyVvII3T60maH4FmJ9
+         jS4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L9veUilJjU8BgaFzfFNZAp7aUZ0r2DY2hwo5tY1hj7U=;
+        b=NFpajVyqYzriZNwmRsE3U4H0ush8xo4aNH249jpwn0g0U3QmF7jTTRDDGEmJOXyc4l
+         jHMNVOfu/pqrycASsz25kYbFbr06u/zYaNVq3umtyZZRIOJg28i8eKUAZtkipgNxWiOn
+         wvoogh/FjpaeiXbLgBcqagBU1INXPFGtSbyQ3VOv/LzJvWw29JYdhWa1Amk+npli7pTf
+         LehZKsMSkKBlnltAwi97xnKEd5sKkBVr08nAj0wR8sJXpdnV0c5sIYW+Zk17940MXSBV
+         7MJBaLuRn93Ui2Ycr7/xxKukJfe1rBys7WU91lDm97Z9eRhB9U00NCUUNzao6eBhdhWe
+         9AAg==
+X-Gm-Message-State: AOAM532GL9yO+tWWMWgUw4RrDvz3XTV7csOnpsg4xDlYsPbOpZeIJaQO
+        8EsmiVf9pPf2y57i6/McW9nyug==
+X-Google-Smtp-Source: ABdhPJyxnZEK8ubkW17E5lHI4ZuYwMnLpnCO8qPRF2YcCgHBpfbim0uYG2Uqv3F6TJWUHUvhN9utVQ==
+X-Received: by 2002:a05:6a00:244d:b0:4e0:1f65:d5da with SMTP id d13-20020a056a00244d00b004e01f65d5damr6203403pfj.6.1645771907999;
+        Thu, 24 Feb 2022 22:51:47 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id p128-20020a622986000000b004e1366dd88esm1589111pfp.160.2022.02.24.22.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 22:51:47 -0800 (PST)
+Message-ID: <4a457db8-428f-52ac-a864-cd3d2fda705a@bytedance.com>
+Date:   Fri, 25 Feb 2022 14:51:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CH0PR12MB5089EB28FAA6DF61F57F6D09AC3E9@CH0PR12MB5089.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH 0/5] introduce sched-idle balancing
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
+References: <20220217154403.6497-1-wuyun.abel@bytedance.com>
+ <YheiT2pGNDggdFSu@hirez.programming.kicks-ass.net>
+ <CAKfTPtB_GGb2eZqWfmKrY3-Z9spN9wzU4pXMGz38bAZu8ExCMQ@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CAKfTPtB_GGb2eZqWfmKrY3-Z9spN9wzU4pXMGz38bAZu8ExCMQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Fri, Feb 25, 2022 at 06:40:53AM +0000, Henry Lin wrote:
-> It fixes side effect from below change. 
+On 2/24/22 11:29 PM, Vincent Guittot Wrote:
+> On Thu, 24 Feb 2022 at 16:20, Peter Zijlstra <peterz@infradead.org> wrote:
+>>
+>> On Thu, Feb 17, 2022 at 11:43:56PM +0800, Abel Wu wrote:
+>>> Current load balancing is mainly based on cpu capacity
+>>> and task util, which makes sense in the POV of overall
+>>> throughput. While there still might be some improvement
+>>> can be done by reducing number of overloaded cfs rqs if
+>>> sched-idle or idle rq exists.
+>>
+>> I'm much confused, there is an explicit new-idle balancer and a periodic
+>> idle balancer already there.
 > 
-> commit a231ec41e6f6433daf4c693f169f6c5cfda8cb9d
-> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Date:   Fri Dec 7 16:19:35 2018 +0200
-> 
->     xhci: refactor U0 link state handling in get_port_status
-> 
->     Move U0 link state handing to USB3 and USB2 specific functions
-> 
->     Note that
->     bus_state->resuming_ports:
->     bus_state->resume_done[]:
->     are only used for USB2, and don't need to cleared for USB3 ports
-> 
->     No functional changes
-> 
->     Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> I agree, You failed to explain why newly_idle and periodic idle load
+> balance are not enough and we need this new one
 
-Great, please add a "Fixes:" tag to the patch when resubmitting it.
+Hi Vincent, sorry for not giving a clearer explanation. Please check
+my previous email replying to Peter, thanks.
 
-And the "no functional changes" seems not to have been true, right?
-Does this need to go into the stable kernels?
-
-thanks,
-
-greg k-h
+Best Regards,
+	Abel

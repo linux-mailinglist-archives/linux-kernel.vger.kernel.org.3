@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC564C4903
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768A04C4906
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiBYPcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S242136AbiBYPdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240060AbiBYPco (ORCPT
+        with ESMTP id S236052AbiBYPdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:32:44 -0500
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBC921BC56;
-        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id y189so6599505ybe.4;
-        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=XIo95I5CSuDu07kV8bCF7A7OdJcPDQG/mfn+QtIzwws=;
-        b=A9M5wD951NfXbYNzb49x3RGiheguUGPUIzm9bUhvmUSRmZsMJEWfX4FhgBcyo2OzXi
-         Ed+24uYaZTwwMEZTjpZ9W6wL7t+bL0ZF7gzYF+JCopzuGF37iN8qNlhzj5RwJ4x9VLKL
-         gHPdXWph0BRFGmFJgRnUqHdcgJI77UPGGhNiiL6+1OOY5HL3G9xpL2ooAoZKMETX3FOd
-         OxfonnTA4PQzUydWafG2qdfZBmaa9V/BPpp/bIJX/Twb7qUmrmYVpdk6nOeFXbN+fGgO
-         ALTuottRT4EAtrKsFPnPCMOnFVDp0Aez5lmPE5YIGXEKPdREMtL1SBIa72cUcmRnL2xA
-         pkvg==
-X-Gm-Message-State: AOAM533BvUvhZoecHZCxWyAdgfiN9ULmLloPUyWHrqjKt+aQivMyIRU+
-        Ji5TC6mUI6u0CtJDX9O2smPjN1MRtj3/feArsV0Un5KS27E=
-X-Google-Smtp-Source: ABdhPJz06MkArKMDiWXp9ew08baAlYqqGdxwREv8k4v/aL1+G7trQrEVut30eFI/sMoXOezJNX7TkPmMY6CEkoUASdI=
-X-Received: by 2002:a25:378f:0:b0:61d:8e8b:6cf5 with SMTP id
- e137-20020a25378f000000b0061d8e8b6cf5mr7385521yba.622.1645803131002; Fri, 25
- Feb 2022 07:32:11 -0800 (PST)
+        Fri, 25 Feb 2022 10:33:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813A4132967;
+        Fri, 25 Feb 2022 07:32:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B76F61844;
+        Fri, 25 Feb 2022 15:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2DBC340E7;
+        Fri, 25 Feb 2022 15:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645803157;
+        bh=re4LD9i2Uj90dRANt0iYKXhrrOvJlN1j1FZasGnyiig=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F1tGVoHU9ft3AJ+FdeAO59avOt3QxhvLzRVgJxVOTUyM/l1NsqIkhu55dRD4ZNdt2
+         d9stGn0B4d2XqJf3Ur8ta0doAE3REzxrPBRNDoGd5pKTXJMcUY1owi1u41zSn3poD4
+         HEl5AoxnmCOxFpq1wP/jH2N8qxKyX5GvfhKl0GAzlb/qK5NNasac8yy6s/+GLskSBk
+         kvNkqeXi8X9K37K1FJwRHCeuJk6pF805y9R9/lxaqFpj05K2BoYyUq/yQ99jDCDiyQ
+         CzEWwInpVRNufbQWjO6XqVPDbSPZ11OeGuirK4Aw0EZM6Ym5DHkaYpmeGcbAXz30Yl
+         ng24jir7s8h7Q==
+Message-ID: <d0c27a7a-1ea9-6083-7d57-e9a23949c52f@kernel.org>
+Date:   Fri, 25 Feb 2022 08:32:34 -0700
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Feb 2022 16:32:00 +0100
-Message-ID: <CAJZ5v0jOz82pc7KvQrmBojyOAdL6tGnNtfqspROFf3j0+5enGA@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.17-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next v2] net/ip6mr: Fix build with
+ !CONFIG_IPV6_PIMSM_V2
+Content-Language: en-US
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Mobashshera Rasool <mobash.rasool.linux@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+References: <20220225145206.561409-1-dima@arista.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220225145206.561409-1-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2/25/22 7:52 AM, Dmitry Safonov wrote:
+> The following build-error on my config:
+> net/ipv6/ip6mr.c: In function ‘ip6_mroute_setsockopt’:
+> net/ipv6/ip6mr.c:1656:14: error: unused variable ‘do_wrmifwhole’ [-Werror=unused-variable]
+>  1656 |         bool do_wrmifwhole;
+>       |              ^
+> 
+> Cc: Mobashshera Rasool <mobash.rasool.linux@gmail.com>
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Fixes: 4b340a5a726d
+> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> ---
+> v2: move the (v == MRT6MSG_WRMIFWHOLE) check under if (v != mrt->mroute_do_pim)
+> 
+>  net/ipv6/ip6mr.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
 
-Please pull from the tag
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.17-rc6
-
-with top-most commit c5eb92f57de2446e0071c3af70ea54f237eb05d5
-
- Merge branch 'cpufreq/arm/fixes' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
-
-on top of commit cfb92440ee71adcc2105b0890bb01ac3cddb8507
-
- Linux 5.17-rc5
-
-to receive power management fixes for 5.17-rc6.
-
-These fix the throttle IRQ handling during cpufreq initialization on
-Qualcomm platforms (Bjorn Andersson).
-
-Thanks!
-
-
----------------
-
-Bjorn Andersson (2):
-      cpufreq: Reintroduce ready() callback
-      cpufreq: qcom-hw: Delay enabling throttle_irq
-
----------------
-
- Documentation/cpu-freq/cpu-drivers.rst                    |  3 +++
- Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |  2 ++
- drivers/cpufreq/cpufreq.c                                 |  4 ++++
- drivers/cpufreq/qcom-cpufreq-hw.c                         | 11 ++++++++++-
- include/linux/cpufreq.h                                   |  3 +++
- 5 files changed, 22 insertions(+), 1 deletion(-)

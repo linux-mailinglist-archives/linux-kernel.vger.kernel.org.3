@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF344C4D97
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821B44C4DA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbiBYSXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S232929AbiBYSXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiBYSX1 (ORCPT
+        with ESMTP id S232308AbiBYSX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:23:27 -0500
+        Fri, 25 Feb 2022 13:23:29 -0500
 Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48555F1EB1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:54 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id a12-20020a65640c000000b003756296df5cso3044781pgv.19
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81991029E5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:55 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id bj8-20020a056a02018800b0035ec8c16f0bso3059185pgb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=VKMBlWNx4jK1iDVhpsaRZcvzkSOAxKFhhP9NDDoxkLA=;
-        b=Fdd0ugG9W3f4EJeeUYsCgb8W9Ynd5MF6AKEcW9LnQwoRU3YEau0D2ZwFmpoNIOuvd1
-         J6HppSKpX/QYcTmEka6QjbKpAhYpeQgkge2amIHPVjFS9MehVv+XZZd30rcmdCiItSeY
-         0l6W7scfFbqHQAkX4U1MAUk+AlREKywJdodZSG3B2SIZQTZmBi9wJiPUXWioIjh7j1ya
-         JnMh5Rv9Ap/QzJQDQXG1x8HwsQ92lTRv/4ln8Vo1StPl4s4CSvXq3bZmdHl7jANIHTPt
-         MgOgzVCSzc4MgjTWgS8zkx+e8N0Wo/mApBy98n4knaA8odwbLo7GDc3PWVYrNry/ub6K
-         cg+w==
+        bh=uyp+YpR2LCYPHpmAeEJtjNTYELJqSix3hhuKEFkcmAA=;
+        b=K/9NSmTITbjmwLiBOKORmckVTpBtCOjqt8lM1ExKYGpgAuDfMMyKDuPAoxGFdQQmyO
+         Cl/ZSWyRgjEsfD324NAAE7370ShErimNCl8bDVTbiDi9haRm21z+Lfzg6UO7EVjC4QIz
+         0b5azA44faCG+4MUUYxMY7rRTfxPaiN3PdpTmzbZkXD97uZboDH6t+NKrk3XYbUoN+fN
+         ZGgkN7NdIl00CZWchQwR+ORPvF4iJZwkdc941znlbhq3bqKlFB8bhW7HtC2n9abovu6x
+         ccCEz7dl+1u3mgWVgvF/H8fzUWaYgKpUgHEKHklpNZi3oWF/2sS4xwue0wqCIGhAIwAM
+         zn6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=VKMBlWNx4jK1iDVhpsaRZcvzkSOAxKFhhP9NDDoxkLA=;
-        b=f0tdVP1c5p5SHelKJCG/pZYTVCXFZbpZfAzz/bnFYLT+WxKWhUa27+3w1fRwnfaASB
-         8nLOxv7jF99dOlEf60Ly8497XfwllexW4ysxC5Fk/V6q9jRKgMEGjBv8Hi4fN652z0lH
-         +uKYS4HJwDJdtPGud1VzXijjkz0JlttAhaiIn7FKF3bvgN2vJXTNYs8iFvH5bx01iiEe
-         UAn6qynU/vLi0bL5lbxgY5k/THq7uxUdXSJijUPAfsMgxPd405zHflPwKZHl5ha9nqmP
-         ZIhF/GiE7iKSDMreAgcEvjnEA1grOG7yhpp+ZPK1XQJBlulBKiaf/fGs0SqMcpXVqtRT
-         2OmQ==
-X-Gm-Message-State: AOAM533XxKYgKMYRDmNXzFc8OgY51xa5BPnfbeXnKOjWErWL5DuGkHJL
-        2zQHpGPTxb2AOKMveo7H43zF8zcABOk=
-X-Google-Smtp-Source: ABdhPJxoyxmqX3mxfoFgGAjyblYLJ3fu4AUs1RNVx87TMDdvK+Ro/2u7tKzWPg4caY5UCaJlP+QbMSmje30=
+        bh=uyp+YpR2LCYPHpmAeEJtjNTYELJqSix3hhuKEFkcmAA=;
+        b=U/uJzOFLf7RLTCpRR9AXy2opZnWP+uocr9HT1D1fuQXyikZcNwxzjzUZ1914RUGtxH
+         f2awZUikZQitz5Fqof/xiYkPnYahZCyoG4k/VacQy0a2nmCIBVW+QF8geP5qqCJZ6S2A
+         ScwNQuJGK7hDJJyZu+VTcdipQWgBFtwKH0ufjwtALtPJjmueS8if0eBvKYhK87Vcbkij
+         wQFzhg5EdixdaCc3QYWBOe51uUOdMtH8vYkzMHO/zDYs2UwSdCVBRnTacxnQu0II4NBq
+         U72ePMwKhbBeClkIMpTXy45U8I53s/oBakJUnoiaKrfN3gfu9R/NJf7Tvp/MTJvzTpR4
+         VHMA==
+X-Gm-Message-State: AOAM531ku6+IyVvidC8HZeOSzOBNvV725wcX2T5ehq/wqHdl0Yph+mGu
+        7SrkQRov/F6aH/nJVJndn6+24qqqAqg=
+X-Google-Smtp-Source: ABdhPJyOha9usWYX4MGUAJDF97U64lo1sBxpvSHGuIbz/lOMQKj21CeheradWAoSeC33U/vg9C8Yo7X2eLE=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:4f43:b0:1bc:7e5c:e024 with SMTP id
- pj3-20020a17090b4f4300b001bc7e5ce024mr26606pjb.0.1645813373353; Fri, 25 Feb
- 2022 10:22:53 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a62:770a:0:b0:4e0:2547:9219 with SMTP id
+ s10-20020a62770a000000b004e025479219mr8651634pfc.43.1645813375172; Fri, 25
+ Feb 2022 10:22:55 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 25 Feb 2022 18:22:43 +0000
+Date:   Fri, 25 Feb 2022 18:22:44 +0000
 In-Reply-To: <20220225182248.3812651-1-seanjc@google.com>
-Message-Id: <20220225182248.3812651-3-seanjc@google.com>
+Message-Id: <20220225182248.3812651-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220225182248.3812651-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v2 2/7] KVM: x86: Invoke kvm_mmu_unload() directly on
- CR4.PCIDE change
+Subject: [PATCH v2 3/7] KVM: Drop kvm_reload_remote_mmus(), open code request
+ in x86 users
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -79,32 +79,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace a KVM_REQ_MMU_RELOAD request with a direct kvm_mmu_unload() call
-when the guest's CR4.PCIDE changes.  This will allow tweaking the logic
-of KVM_REQ_MMU_RELOAD to free only obsolete/invalid roots, which is the
-historical intent of KVM_REQ_MMU_RELOAD.  The recent PCIDE behavior is
-the only user of KVM_REQ_MMU_RELOAD that doesn't mark affected roots as
-obsolete, needs to unconditionally unload the entire MMU, _and_ affects
-only the current vCPU.
+Remove the generic kvm_reload_remote_mmus() and open code its
+functionality into the two x86 callers.  x86 is (obviously) the only
+architecture that uses the hook, and is also the only architecture that
+uses KVM_REQ_MMU_RELOAD in a way that's consistent with the name.  That
+will change in a future patch, as x86's usage when zapping a single
+shadow page x86 doesn't actually _need_ to reload all vCPUs' MMUs, only
+MMUs whose root is being zapped actually need to be reloaded.
 
+s390 also uses KVM_REQ_MMU_RELOAD, but for a slightly different purpose.
+
+Drop the generic code in anticipation of implementing s390 and x86 arch
+specific requests, which will allow dropping KVM_REQ_MMU_RELOAD entirely.
+
+Opportunistically reword the x86 TDP MMU comment to avoid making
+references to functions (and requests!) when possible, and to remove the
+rather ambiguous "this".
+
+No functional change intended.
+
+Cc: Ben Gardon <bgardon@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/mmu/mmu.c   | 14 +++++++-------
+ include/linux/kvm_host.h |  1 -
+ virt/kvm/kvm_main.c      |  5 -----
+ 3 files changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2157284d05b0..579b26ffc124 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1077,7 +1077,7 @@ void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned lon
- 	 */
- 	if (!tdp_enabled &&
- 	    (cr4 & X86_CR4_PCIDE) && !(old_cr4 & X86_CR4_PCIDE))
--		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
-+		kvm_mmu_unload(vcpu);
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index b2c1c4eb6007..32c6d4b33d03 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2353,7 +2353,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+ 		 * treats invalid shadow pages as being obsolete.
+ 		 */
+ 		if (!is_obsolete_sp(kvm, sp))
+-			kvm_reload_remote_mmus(kvm);
++			kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+ 	}
  
- 	/*
- 	 * The TLB has to be flushed for all PCIDs if any of the following
+ 	if (sp->lpage_disallowed)
+@@ -5639,11 +5639,11 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+ 	 */
+ 	kvm->arch.mmu_valid_gen = kvm->arch.mmu_valid_gen ? 0 : 1;
+ 
+-	/* In order to ensure all threads see this change when
+-	 * handling the MMU reload signal, this must happen in the
+-	 * same critical section as kvm_reload_remote_mmus, and
+-	 * before kvm_zap_obsolete_pages as kvm_zap_obsolete_pages
+-	 * could drop the MMU lock and yield.
++	/*
++	 * In order to ensure all vCPUs drop their soon-to-be invalid roots,
++	 * invalidating TDP MMU roots must be done while holding mmu_lock for
++	 * write and in the same critical section as making the reload request,
++	 * e.g. before kvm_zap_obsolete_pages() could drop mmu_lock and yield.
+ 	 */
+ 	if (is_tdp_mmu_enabled(kvm))
+ 		kvm_tdp_mmu_invalidate_all_roots(kvm);
+@@ -5656,7 +5656,7 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+ 	 * Note: we need to do this under the protection of mmu_lock,
+ 	 * otherwise, vcpu would purge shadow page but miss tlb flush.
+ 	 */
+-	kvm_reload_remote_mmus(kvm);
++	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+ 
+ 	kvm_zap_obsolete_pages(kvm);
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index f11039944c08..0aeb47cffd43 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1325,7 +1325,6 @@ int kvm_vcpu_yield_to(struct kvm_vcpu *target);
+ void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
+ 
+ void kvm_flush_remote_tlbs(struct kvm *kvm);
+-void kvm_reload_remote_mmus(struct kvm *kvm);
+ 
+ #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 83c57bcc6eb6..66bb1631cb89 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -354,11 +354,6 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+ EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+ #endif
+ 
+-void kvm_reload_remote_mmus(struct kvm *kvm)
+-{
+-	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+-}
+-
+ #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+ 					       gfp_t gfp_flags)
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

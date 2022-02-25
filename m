@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B4B4C3C69
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8234C3C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 04:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237024AbiBYD16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 22:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S237034AbiBYD2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 22:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiBYD1z (ORCPT
+        with ESMTP id S229812AbiBYD2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 22:27:55 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97EC3E5CC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:27:23 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id x18so3587769pfh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:27:23 -0800 (PST)
+        Thu, 24 Feb 2022 22:28:31 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177C740E7D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:28:00 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id p8so3579176pfh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 19:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BgI2EJuSIzpOUNhctfjPqGhg508IvCLj61p7UGXcDW4=;
-        b=lnKKEF71GQwLLk6L1Cb6CNm+zcjt5wSJXZcyPvZTpzRaRW24kN1PVpPd4tkvK4XtEq
-         7OX5O5GAwUxP0NaDnJjpSp86bLWJECVKJqdcmoPKPkry6Yrt0GvX7Ef+VaLZRQa0F6X6
-         IRVfTt/yCRIk+JZECaZqjcPTM31K9Qto1XGWE=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lZMKM13WOXr0Cj+JFI693E2RT8tiGsgNHY8tIWC/7wA=;
+        b=NlEBER48+BAv+pYpPTx0rfeKZ1GwncJgF+xLdGTwRe3mDhFs5KsTN6WYQcXYUt6VPG
+         wuhKmKVgs7OG3yHA6LjqWJRNXaplIMBeQWsy/oPEeF4+zBTqs9sltsPPY9QPCKZOXXON
+         661cGzrUtj/uEV0VytoAeEu/9v/3lQcw4b/jo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BgI2EJuSIzpOUNhctfjPqGhg508IvCLj61p7UGXcDW4=;
-        b=7IOITWBQ0Ngn4XSpqqKt6Ez1nW1iOKUq36NFGlkNcT44mwhDq2NIpfAy/x4ncelp+S
-         YUAjupK3hMlRpOjWEX1+Y8QwK2I11a0O4BSF9dT9PEVHsPfPw6n8dCxggYddxpyD10on
-         tGR6qVfxrVfm8JCqHe3Zmev0k9UfmyhdTsvFxdgq01nKZ/YBoM9seJKtCybUSqLiO2UH
-         FvwaGjuHaBLbEIWTaBCwl2awFJe7y7QeEVW1aNUEuM93H2VMwFL/TFysNF+g0AbvnLNx
-         W/a3US/LqxDA3kNhlpXi6UGUDzWZKga9qCV/AmnvkrFru9Y18gNv7xQoBMsk7JbE1MGc
-         eAnA==
-X-Gm-Message-State: AOAM531rWBKpcNrLnne2Ys2H/+NrZH7nRAXJMO1XO2tXJE6wGSbcqCrs
-        3W8LXLJGkMfwd9uL6fbpFvumxA==
-X-Google-Smtp-Source: ABdhPJw5ZZGF3Ss2gSpUb3HF2rJY1bntT7qQO5JeESYzYRqkYyAZEp30+JzL3ijQKwxRW4jmryxJzg==
-X-Received: by 2002:a05:6a00:24c4:b0:4cb:7324:bfd with SMTP id d4-20020a056a0024c400b004cb73240bfdmr5899295pfv.60.1645759643482;
-        Thu, 24 Feb 2022 19:27:23 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y191-20020a638ac8000000b0036c7329efadsm840783pgd.65.2022.02.24.19.27.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lZMKM13WOXr0Cj+JFI693E2RT8tiGsgNHY8tIWC/7wA=;
+        b=KGlgPWx0BpPiHKUL9bZ2mA43QngJKxduATmtDaHsAfO/WBc5cMKh3J2UsJMegfb9mj
+         wLrSDo5DU8NtapAe3nNU4JlYbgRT3PUDNa7UN3hXH32SU80eXdFpfqQSbPCwgUfWdt2G
+         enDPVESPT1FwL7IzeW/WA1yoDoFJDTMJzr6quucjYgD5X/RyYFcuKpDs02hm8w4OyKUS
+         //Yt1MOywu42luSS12GdaQYGYTnpgH/Y7rQfcCJm9UTZfoPZNgko7wNkSwGKjZWQyIrO
+         eVA/GFYNJK3hBvpabitHYyupIzl63leLYpuoXus1FGJQZp/KgRcJHeBW/EsRQ+/drkmZ
+         YjXg==
+X-Gm-Message-State: AOAM530V3dwXWOf1Dn3Fc27y5mGOpRgeCIQgmdqjjOenMp7k9qYORrlq
+        nhoyqKlR3x/+cgwV+tGvB7ZFLg==
+X-Google-Smtp-Source: ABdhPJx+kHFiPrkhdZm5XLElk/g3benE49UUovXBtXArAuVbE2sKuAaWSgZHosRUd7JHRRrHV4UmWw==
+X-Received: by 2002:a65:6c0d:0:b0:364:ae2e:9708 with SMTP id y13-20020a656c0d000000b00364ae2e9708mr4611904pgu.189.1645759679598;
+        Thu, 24 Feb 2022 19:27:59 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:d786:892f:a6fa:6f0c])
+        by smtp.gmail.com with ESMTPSA id q5-20020a056a00150500b004be09fd6ad6sm905097pfu.191.2022.02.24.19.27.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 19:27:23 -0800 (PST)
-Date:   Thu, 24 Feb 2022 19:27:22 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Chris Zankel <chris@zankel.net>, Marc Zyngier <maz@kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] xtensa: Implement "current_stack_pointer"
-Message-ID: <202202241927.B5368AFC@keescook>
-References: <20220224060503.1856302-1-keescook@chromium.org>
- <CAMo8BfJFJE-n3=AF+pb9_6oF3gzxX7a+7aBrASHjjNX5byqDqw@mail.gmail.com>
- <202202232239.FF2343D42@keescook>
- <CAMo8BfLU-BLRnp=fmmQkTckxPq1vkSZeOwfgiSW06L0+H+EDJA@mail.gmail.com>
+        Thu, 24 Feb 2022 19:27:59 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/mediatek: Fix DPI component detection for MT8192
+Date:   Fri, 25 Feb 2022 11:27:54 +0800
+Message-Id: <20220225032754.140168-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMo8BfLU-BLRnp=fmmQkTckxPq1vkSZeOwfgiSW06L0+H+EDJA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,65 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:58:00PM -0800, Max Filippov wrote:
-> On Wed, Feb 23, 2022 at 10:43 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Wed, Feb 23, 2022 at 10:22:59PM -0800, Max Filippov wrote:
-> > > On Wed, Feb 23, 2022 at 10:05 PM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > To follow the existing per-arch conventions replace open-coded uses
-> > > > of asm "sp" as "current_stack_pointer". This will let it be used in
-> > > > non-arch places (like HARDENED_USERCOPY).
-> > > >
-> > > > Cc: Chris Zankel <chris@zankel.net>
-> > > > Cc: Max Filippov <jcmvbkbc@gmail.com>
-> > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > Cc: linux-xtensa@linux-xtensa.org
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  arch/xtensa/Kconfig                  | 1 +
-> > > >  arch/xtensa/include/asm/current.h    | 2 ++
-> > > >  arch/xtensa/include/asm/stacktrace.h | 2 +-
-> > > >  arch/xtensa/kernel/irq.c             | 3 +--
-> > > >  4 files changed, 5 insertions(+), 3 deletions(-)
-> > >
-> > > Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-> >
-> > Thanks! And apologies, my cross-compiler tricked me into thinking this
-> > patch compiled without problems. It did, however. I've change the patch
-> > slightly to deal with the needed casts:
-> >
-> > diff --git a/arch/xtensa/include/asm/stacktrace.h b/arch/xtensa/include/asm/stacktrace.h
-> > index fe06e8ed162b..a85e785a6288 100644
-> > --- a/arch/xtensa/include/asm/stacktrace.h
-> > +++ b/arch/xtensa/include/asm/stacktrace.h
-> > @@ -19,14 +19,14 @@ struct stackframe {
-> >
-> >  static __always_inline unsigned long *stack_pointer(struct task_struct *task)
-> >  {
-> > -       unsigned long *sp;
-> > +       unsigned long sp;
-> >
-> >         if (!task || task == current)
-> > -               __asm__ __volatile__ ("mov %0, a1\n" : "=a"(sp));
-> > +               sp = current_stack_pointer;
-> >         else
-> > -               sp = (unsigned long *)task->thread.sp;
-> > +               sp = task->thread.sp;
-> >
-> > -       return sp;
-> > +       return (unsigned long *)sp;
-> >  }
-> >
-> >  void walk_stackframe(unsigned long *sp,
-> >
-> > Shall I send a v2, or just carry this fix in my tree?
-> 
-> This additional change looks good to me, if you could
-> fold it into the original patch that'd be perfect. But separate
-> patch would also work.
+When support for MT8192 was added, the DPI device was not added to the
+list of components to look for. This causes the secondary display
+pipeline to not be able to fully bind, and the DRM driver subsequently
+defers probing.
 
-Thanks!
+Add the DPI device compatible to list of DPI components to fix this.
 
+Fixes: 01365f549c88 ("drm/mediatek: Add support for Mediatek SoC MT8192")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index b147797177c6..47ba18cbc5c8 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -511,6 +511,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+ 	  .data = (void *)MTK_DPI },
+ 	{ .compatible = "mediatek,mt8183-dpi",
+ 	  .data = (void *)MTK_DPI },
++	{ .compatible = "mediatek,mt8192-dpi",
++	  .data = (void *)MTK_DPI },
+ 	{ .compatible = "mediatek,mt2701-dsi",
+ 	  .data = (void *)MTK_DSI },
+ 	{ .compatible = "mediatek,mt8173-dsi",
 -- 
-Kees Cook
+2.35.1.574.g5d30c73bfb-goog
+

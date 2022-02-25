@@ -2,119 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91A24C4DA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3574C4DA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 19:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbiBYSX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 13:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S233102AbiBYSYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 13:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbiBYSXf (ORCPT
+        with ESMTP id S233040AbiBYSYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:23:35 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DCF16DAD2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:02 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id bh9-20020a056a02020900b0036c0d29eb3eso3061450pgb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=L4MqIEc/JbsQtnFnEaV173FD1GR2zeygOeGJKcIQHTM=;
-        b=j/8rVgwYSLF3S4KclnS2WyxYGKq78Q2Pofky6B4ClrHiTlJMvAxQKPBPDGdnxYTHsb
-         hWa5sLtrz+TbRfNlOWBc4U5GVLwtNNCOpckkzebNdjafWEgSepQR/Tx3PVA74hnePoYe
-         xP/FJLDwab7dkTjeOQtTw4XYYbSSTdfn5l26SMVawmzCvxGn0PsUaQtrYTzTAf2eHRhv
-         UHh/Fs9+sDwrPhDKZ8dAZ86rPtP+W71Tf2mhqhXbk+bdF02skbuCTWcGfkdJyOEd2qae
-         vRIBLgSiv09yctbEh50CsDFVMftonFAzi5fVFFtJUei2H/ei/AK4uCh73Fj+BEMFRqMP
-         WtEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=L4MqIEc/JbsQtnFnEaV173FD1GR2zeygOeGJKcIQHTM=;
-        b=Z3weMugoWGa4mUXRDCMm9HqqD69jCUo98JTXXEx98CRjZtZwulekK1b7diW2qe584G
-         yFliRQKU1m46ApjawooRMRLAcxU9Wy+ckbXG3elR37QFii67p4g+NDsA7fqfCFKeaEns
-         s3hMvtCoe2hyPLHRpIN1m5GmM4OtGj4Gfj+UUSNuvObj32G3qPy33F+U/RNKLZMUViuO
-         PWhpUwalbqUPMmbomnmZXWOalmBkCZJbjTbVc0LiptjxVh9RbsLk0YGl/x/AmwZTrDrB
-         xfYwqOoTmGpWGXEJ1JfA0M849Pw62gtYzhnZWOf6EJ9TxC/9Znv56zzxd+RZV6BAeOQq
-         gmFA==
-X-Gm-Message-State: AOAM532zfy9mCEt2Qv3bOgi8n9Js1z+WIqhm+a8bXGtX3CO/QIx6fvCs
-        OvJiQUopbAt6rqxZ3DZGXTLMCz8BKFA=
-X-Google-Smtp-Source: ABdhPJw93c17M/Wa7z94CmL+MMkOWMzcXaEGjy6d/i23LqFNc4Iax0+2elbEtSqmyNeMnzOh+XEeqm0YPKo=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:84d3:0:b0:4e1:b5c:1dd4 with SMTP id
- k202-20020a6284d3000000b004e10b5c1dd4mr8798283pfd.20.1645813381710; Fri, 25
- Feb 2022 10:23:01 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 25 Feb 2022 18:22:48 +0000
-In-Reply-To: <20220225182248.3812651-1-seanjc@google.com>
-Message-Id: <20220225182248.3812651-8-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220225182248.3812651-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v2 7/7] KVM: WARN if is_unsync_root() is called on a root
- without a shadow page
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Fri, 25 Feb 2022 13:24:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C778F1A39EF
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 10:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645813400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S1NmdYyRDaBXoSCp03484hlz5eKqc7q4f9y/0Zo2bME=;
+        b=YikD8NrimmYR5y1ZVym4TRzPR9SYmZQRG73ELAqHKAD+T6B2mulUeFcvGvsXFHubkapefX
+        bxllPw2wu7+PTb98REIPovTEQAab8YCKgDflGUpSjZjUZh/7pw5kqjzXYflD4u7JA2f7E7
+        UZJjpmSnXvQRH2As2ctUrEnTgqM+5Pg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-5VQhx3J0PUGYCSKJ_C8OoQ-1; Fri, 25 Feb 2022 13:23:16 -0500
+X-MC-Unique: 5VQhx3J0PUGYCSKJ_C8OoQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39CC0FC80;
+        Fri, 25 Feb 2022 18:23:15 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4021786C33;
+        Fri, 25 Feb 2022 18:22:53 +0000 (UTC)
+Message-ID: <f38c3bc0fab811220621b849592ca8e1fdfc6651.camel@redhat.com>
+Subject: Re: [PATCH 2/4] KVM: x86: hyper-v: Drop redundant 'ex' parameter
+ from kvm_hv_flush_tlb()
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 25 Feb 2022 20:22:52 +0200
+In-Reply-To: <20220222154642.684285-3-vkuznets@redhat.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
+         <20220222154642.684285-3-vkuznets@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WARN and bail if is_unsync_root() is passed a root for which there is no
-shadow page, i.e. is passed the physical address of one of the special
-roots, which do not have an associated shadow page.  The current usage
-squeaks by without bug reports because neither kvm_mmu_sync_roots() nor
-kvm_mmu_sync_prev_roots() calls the helper with pae_root or pml4_root,
-and 5-level AMD CPUs are not generally available, i.e. no one can coerce
-KVM into calling is_unsync_root() on pml5_root.
+On Tue, 2022-02-22 at 16:46 +0100, Vitaly Kuznetsov wrote:
+> 'struct kvm_hv_hcall' has all the required information already,
+> there's no need to pass 'ex' additionally.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 23 ++++++-----------------
+>  1 file changed, 6 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 15b6a7bd2346..714af3b94f31 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1750,7 +1750,7 @@ struct kvm_hv_hcall {
+>  	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
+>  };
+>  
+> -static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
+> +static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  {
+>  	int i;
+>  	gpa_t gpa;
+> @@ -1765,7 +1765,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>  	int sparse_banks_len;
+>  	bool all_cpus;
+>  
+> -	if (!ex) {
+> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
+> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
+>  		if (hc->fast) {
+>  			flush.address_space = hc->ingpa;
+>  			flush.flags = hc->outgpa;
+> @@ -2247,32 +2248,20 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  				kvm_hv_hypercall_complete_userspace;
+>  		return 0;
+>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
+> -		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
+> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+> -			break;
+> -		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+> -		break;
+> -	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+> -		if (unlikely(hc.rep)) {
+> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+> -			break;
+> -		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+> -		break;
+>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+>  		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
+> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
+>  		break;
+> +	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
+>  		if (unlikely(hc.rep)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
+> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
+>  		break;
+>  	case HVCALL_SEND_IPI:
+>  		if (unlikely(hc.rep)) {
 
-Note, this doesn't fix the mess with 5-level nNPT, it just (hopefully)
-prevents KVM from crashing.
 
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 825996408465..3e7c8ad5bed9 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3634,6 +3634,14 @@ static bool is_unsync_root(hpa_t root)
- 	 */
- 	smp_rmb();
- 	sp = to_shadow_page(root);
-+
-+	/*
-+	 * PAE roots (somewhat arbitrarily) aren't backed by shadow pages, the
-+	 * PDPTEs for a given PAE root need to be synchronized individually.
-+	 */
-+	if (WARN_ON_ONCE(!sp))
-+		return false;
-+
- 	if (sp->unsync || sp->unsync_children)
- 		return true;
- 
--- 
-2.35.1.574.g5d30c73bfb-goog
+Best regards,
+	Maxim Levitsky
 

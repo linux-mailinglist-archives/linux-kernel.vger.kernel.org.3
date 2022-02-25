@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE84C4518
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 13:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBC84C451F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbiBYM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 07:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S234168AbiBYNAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiBYM6r (ORCPT
+        with ESMTP id S230364AbiBYNAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 07:58:47 -0500
+        Fri, 25 Feb 2022 08:00:45 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DE714FFFE;
-        Fri, 25 Feb 2022 04:58:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EFE1DA007;
+        Fri, 25 Feb 2022 05:00:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D4CAB82F79;
-        Fri, 25 Feb 2022 12:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68B6C340E7;
-        Fri, 25 Feb 2022 12:58:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 229A8B83022;
+        Fri, 25 Feb 2022 13:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B707EC340E8;
+        Fri, 25 Feb 2022 13:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645793893;
-        bh=yXNshXV8iIu7D0QVOExyxryhfq/he3SIhXZTLLv/Cos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uLwe9KLo89Nib7HAZFqLVK/37FznuJAkVKorOG+qTB9XTpwuqAFkoQC6K79+86FoE
-         2HUAiZcBSIzsMXwfwFf5oye8uSVbL7kMYmpwS9fRuWEnwt0zKPOROcTXO+cBzkuRsO
-         IgOkGY0XeJaI8x6fy5tXh7jt5AiMNVJIpm/O8+/itqfk/emur0v7ExOIwBA+zFASst
-         VliY0+I2ReoymJUGSaxBS+SCvQuhBQ0XKRKUhCdSWnItMhqrPxIAFhRyzv7fQOW2B1
-         nOzdp0l4BNtNMxNx5T7veOmCAihQbiunDw8zJfqZIVkc24wTrEy4UY45QmwMTSx/YO
-         IfyqeaWdYlLcA==
-Received: by pali.im (Postfix)
-        id 62D427EF; Fri, 25 Feb 2022 13:58:10 +0100 (CET)
-Date:   Fri, 25 Feb 2022 13:58:10 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 04/12] dt-bindings: PCI: mvebu: Add num-lanes property
-Message-ID: <20220225125810.7mbo7firer5yodls@pali>
-References: <20220222155030.988-5-pali@kernel.org>
- <20220225000226.GA304258@bhelgaas>
+        s=k20201202; t=1645794010;
+        bh=drhUIkFwhZuOmzO4HyFTpZzdjlDBmOAg++AaIHs35gc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RKKrN0qlxAeIb85z4H7KLkHMECeP58LRdumLhFLfxo7IBUJE2Z9NP2M195lM9gQwp
+         PdgkPH/VReuB/NJFyqDbP/ttQPD4Z7rkBzpmBnZwHmBJUof5XhBUuwDbeP5rGhLdYH
+         zycg37I6bizoTe69XQFXVwiEOWNTO/V+hfGZctaLLJ1Ap+T+jE8GvlVqpLIE4IRKiJ
+         9Xe4r6hTyHiRFzXkg7+BPDF1wzLkHb1E4tvyMMJ4oEcvswSoKAh6IZOcF7h7n4V03i
+         s+5gwQJalFvqdv9oe53PJ7OnVlXtEmNLMSNKEk6RtaiyRCde6mQqfl0JOZHDVN6Pyz
+         WZaUkxCsinTAA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C3E6EAC09A;
+        Fri, 25 Feb 2022 13:00:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220225000226.GA304258@bhelgaas>
-User-Agent: NeoMutt/20180716
+Subject: Re: [PATCH] net: chelsio: cxgb3: check the return value of
+ pci_find_capability()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164579401063.25347.4798991812587825840.git-patchwork-notify@kernel.org>
+Date:   Fri, 25 Feb 2022 13:00:10 +0000
+References: <20220225123727.26194-1-baijiaju1990@gmail.com>
+In-Reply-To: <20220225123727.26194-1-baijiaju1990@gmail.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,63 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 24 February 2022 18:02:26 Bjorn Helgaas wrote:
-> On Tue, Feb 22, 2022 at 04:50:22PM +0100, Pali Rohár wrote:
-> > Controller driver needs to correctly configure PCIe link if it contains 1
-> > or 4 SerDes PCIe lanes. Therefore add a new 'num-lanes' DT property for
-> > mvebu PCIe controller. Property 'num-lanes' seems to be de-facto standard
-> > way how number of lanes is specified in other PCIe controllers.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/pci/mvebu-pci.txt | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/mvebu-pci.txt b/Documentation/devicetree/bindings/pci/mvebu-pci.txt
-> > index 6173af6885f8..24225852bce0 100644
-> > --- a/Documentation/devicetree/bindings/pci/mvebu-pci.txt
-> > +++ b/Documentation/devicetree/bindings/pci/mvebu-pci.txt
-> > @@ -77,6 +77,7 @@ and the following optional properties:
-> >  - marvell,pcie-lane: the physical PCIe lane number, for ports having
-> >    multiple lanes. If this property is not found, we assume that the
-> >    value is 0.
-> > +- num-lanes: number of SerDes PCIe lanes for this link (1 or 4)
-> >  - reset-gpios: optional GPIO to PERST#
-> >  - reset-delay-us: delay in us to wait after reset de-assertion, if not
-> >    specified will default to 100ms, as required by the PCIe specification.
-> > @@ -141,6 +142,7 @@ pcie-controller {
-> >  		interrupt-map = <0 0 0 0 &mpic 58>;
-> >  		marvell,pcie-port = <0>;
-> >  		marvell,pcie-lane = <0>;
-> > +		num-lanes = <1>;
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 25 Feb 2022 04:37:27 -0800 you wrote:
+> The function pci_find_capability() in t3_prep_adapter() can fail, so its
+> return value should be checked.
 > 
-> Is this patch really necessary?
-
-This is just documentation patch. And I think that documentation is
-always important.
-
-> AFAICS, the related driver change
-> only sets "port->is_x4 = true" when "num-lanes = <4>", and in all
-> other cases it defaults to a Max Link Width of 1:
+> Fixes: 4d22de3e6cc4 ("Add support for the latest 1G/10G Chelsio adapter, T3")
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 > 
->   lnkcap |= (port->is_x4 ? 4 : 1) << 4;
+> [...]
 
-Yes!
+Here is the summary with links:
+  - net: chelsio: cxgb3: check the return value of pci_find_capability()
+    https://git.kernel.org/netdev/net/c/767b9825ed17
 
-And this registers configures number of lanes in HW.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> I don't see the point of adding a value that we don't validate or do
-> anything with.  E.g., I don't see an error message that would catch
-> "num-lanes = <3>".
-> 
-> Bjorn
 
-In past I was told that kernel should not do validation of DT properties
-and it is job of some DT schema validation. That is why I did not added
-code into kernel which show error message when value different than 1
-and 4 is specified in DT.
-
-But issue here is that there is no DT schema for pci-mvebu as above
-.txt file was not converted to YAML schema yet. This is something which
-should be improved...

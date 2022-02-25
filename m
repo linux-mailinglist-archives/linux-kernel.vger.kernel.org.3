@@ -2,513 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8204C3B2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BC34C3B31
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 02:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236525AbiBYBlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 20:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S236540AbiBYBpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 20:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbiBYBlm (ORCPT
+        with ESMTP id S234727AbiBYBpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 20:41:42 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2061.outbound.protection.outlook.com [40.107.21.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AEA28D393;
-        Thu, 24 Feb 2022 17:41:10 -0800 (PST)
+        Thu, 24 Feb 2022 20:45:22 -0500
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA6522321F;
+        Thu, 24 Feb 2022 17:44:51 -0800 (PST)
+Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 24E7345E8A;
+        Fri, 25 Feb 2022 01:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1645753491; bh=s/fqScUpHokopw9VgbhCf9an5/jf6hULStRj/69dLOY=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=PdgCR7eaDzDIs8dpMWnZNB4RT5gX9usGdbJoWm4kSqaT1Wi44rLyn8WFFSY5l2HK0
+         Jmf/UIWRuHCAqP5E3S+F0kHaYm5Ru4DMN/rEKDloejmMvQDD82QbYfBhOm2tsB7WLq
+         Bc2ix8RK3zy4ZHLuK0tUrEmm0uaQ9LHn1SbhKIgGZiVffQRtVWe9Ym3/inGktN1oPH
+         6XtMajmXa5NIRb9qmhhjxVwZ/2Mmvpx4/mg+xUurMfPW4wxpwNW3++7spj+bFMGiZH
+         ftCIO9WRg8eDT/tXVGdo56I1OUQ/biveQMDyMezMmOupxT2qiBUU9wZGqIna3NdxVD
+         Np9OO313+v5WQ==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 69308A0080;
+        Fri, 25 Feb 2022 01:44:47 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id A6CEF40031;
+        Fri, 25 Feb 2022 01:44:46 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="TC3XCJAI";
+        dkim-atps=neutral
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kfswS2MJaEkkxq1bHMQglr9v8Uvpgg66BrHTaTtlQBR2qjtjRe1O7wEO1lQOgbhwDHQbLvf/StvPc0NDlPJ+rKK74IrWIECsEUGk7Kh/uDhv2S6iwThncz+cBGI3ji/USr00oAwZOtuyH/o+kLGKr6lCueNkBs/SMoNCtTMgq5vxyJnu26gP7ogkm9RrkP8LPk4ZqW3hMGHzefkuTAdqFM+sro4EvLm9iM3SdA1wG8LV1mP0tAYmLmphY7oQZEQZ4c1g00B8X06n0Ql4NbWf85cWOyXVujXdLU5eaVdBdQOj2aeFb+S2oh5q9H9loMVmbcreqiLq2/NduIZTBsXUww==
+ b=V+NTfjbQoM62wkbkVosxsk6sNANSzoFSFxp6SFCNSZOiiodauVzww+GpB0KP5w85HCz4b/aRCS1O38J8wWwzmav9sJNvxnMTFNY2REIdHn0g7ECXyrBa5eRMvAwUs8dArORQTbuotfwufM4gLzOA00TnO3eLPih5CDogtb/nBwYKjw8OgvqWtPFwQR8OqKuDFX+kYT81nrcWK950zfuXf5Ouwvloqb2+UrUPI+eyLXgXqFJNNjYnT3nh9QpcNHxo2SJtZcYmQtY9PSne1OYVgIdCCsDE6bIHWLmPw0OUByN6n6NowSGIne7vzyJf1oGZ9HLqLHKZkyhymQAQVgdzsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pWsqDCPjul/3v+fpSij+Ne9ILFushZ47W7wBext0djc=;
- b=ax94qN97L+tFXllWCrMQOf2J7hG41/TrAN4czTC3jxjS4NRuz6u9sQ1kxPZ1fiRsEVDcdDP6ZHxMgUeeIz+/Ns5/APvObFu4GTAnK0udA0Y8DvP6A9faIf6R2zGp0nfrVQtf1/IPK9nEG+hYx5zwpeDOiDFA9BXz7YOhV/n6UBpC3wZwyILZypKMqSfWKvIsHdOkaiaadxc4zCUsYGDdDfz9jdDx9dtDJbQj37pFoznKLhWm8aKNb6qBW33qMaAMjjJdqmU4PsPlBuM4Ti9fVwRyTZfMihjHLlc0Jb1xwSoIfdyM4V66lkZcEMzEuTx2pA9S5l/nYj+YIxa8MYQ76w==
+ bh=s/fqScUpHokopw9VgbhCf9an5/jf6hULStRj/69dLOY=;
+ b=FoaOCxIZPAeSeW2X8Xq96ldYzBgWMm6X/tREPlPXWqWdLiF248CuJwbFxz8q6s574kYe3VTWHv+Kgi95ln6Pfkk8TPospS+JJy3H5v5lMi1yqYH1Bh1pjzamgaMk7INtqoVBtYkGtPprHNS9qa1VZNyq2db/Wz8s7cKn+Y9/dVsVtob5U+uuoTuG0XEqFUyTBQxwppQKoT8VbgLzJ7Qf1h4IgFHzTkain+VeUeexVWpgId2BPscLJNDYwP0NaRdmWi6BxVx82MFgSYlR3tcnaTsTpqiSifZPVETdQe5wQovA0KIISq2rXUHpbPfOHPhGggOcyswUO3DGgXW1MFNV0Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pWsqDCPjul/3v+fpSij+Ne9ILFushZ47W7wBext0djc=;
- b=cZ+TwFIuG55rF9sGN2FrEQy8xBGYg4nij7JX9VL+RxevbIrcwUJfSu1NtCUKX6nK6KHaWw5UNI3lIL+gkRxwokhNjFKvUc7kq+5r9sKPhNbPXWlm0VbI+EsxAfnkrEaBawgneHFPHkmnRC5TLUglQNQUB8r6bAD2XYuh83yo0eE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM0PR04MB5316.eurprd04.prod.outlook.com (2603:10a6:208:d0::25) with
+ bh=s/fqScUpHokopw9VgbhCf9an5/jf6hULStRj/69dLOY=;
+ b=TC3XCJAIXoTgKO758+jG83q36BpSNjKuCWKS1t3Goehj2lJuKqGklN+wuEITaONykLxN/5dl8raAUZ72ADl1APkj/KVxn+w/RwkZ+cHv5TYiehfRQycKSLA1zYJp1oQII+7NoDaL4PW1mIVKIVfnGD4/E1Kv5NRtO1sxf9ACM7Y=
+Received: from BN8PR12MB4787.namprd12.prod.outlook.com (2603:10b6:408:a1::11)
+ by MN2PR12MB3248.namprd12.prod.outlook.com (2603:10b6:208:a9::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Fri, 25 Feb
- 2022 01:41:07 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::552c:ed46:26dc:77cc]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::552c:ed46:26dc:77cc%4]) with mapi id 15.20.4995.018; Fri, 25 Feb 2022
- 01:41:07 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, abel.vesa@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V5 5/5] clk: imx: add i.MX93 clk
-Date:   Fri, 25 Feb 2022 09:42:34 +0800
-Message-Id: <20220225014234.1766305-6-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220225014234.1766305-1-peng.fan@oss.nxp.com>
-References: <20220225014234.1766305-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0018.apcprd02.prod.outlook.com
- (2603:1096:4:194::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Fri, 25 Feb
+ 2022 01:44:43 +0000
+Received: from BN8PR12MB4787.namprd12.prod.outlook.com
+ ([fe80::19df:84b5:e723:ac84]) by BN8PR12MB4787.namprd12.prod.outlook.com
+ ([fe80::19df:84b5:e723:ac84%7]) with mapi id 15.20.5017.022; Fri, 25 Feb 2022
+ 01:44:43 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jung Daehwan <dh10.jung@samsung.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING in
+ ep cmd fails
+Thread-Topic: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
+ in ep cmd fails
+Thread-Index: AQHYIZOvXlHACGixbUGMAnHCl5PyK6yTYqcAgADHvYCAALGHgIADVGEAgAA82ACAB34VgIAAlEuAgALM6QCAAD24AIAAAXqAgAADvQA=
+Date:   Fri, 25 Feb 2022 01:44:43 +0000
+Message-ID: <4371e407-7791-b0b5-dc8c-ad0be09acba4@synopsys.com>
+References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
+ <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
+ <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
+ <20220215063925.GC144890@ubuntu>
+ <63c8c9d1-9b07-a9f2-3639-a38641e19a7a@synopsys.com>
+ <6a1322c4-9589-f4de-d42c-d38af2e12e82@quicinc.com>
+ <e3332511-82d3-2892-ad72-a0c167273174@synopsys.com>
+ <01c4d42e-93cd-d293-f4e3-8c136049d87c@codeaurora.org>
+ <894d54ad-b6f9-b942-be99-fe3ad102051b@synopsys.com>
+ <dbd00cb1-b5d0-24e7-ef72-dff3765c26cf@codeaurora.org>
+ <810de66c-7d73-fae0-9356-b06b48134ad6@synopsys.com>
+ <1714910d-f923-d0c7-72a9-0c1d098f783f@codeaurora.org>
+In-Reply-To: <1714910d-f923-d0c7-72a9-0c1d098f783f@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 79f29490-dc22-4ffa-dc8c-08d9f800654d
+x-ms-traffictypediagnostic: MN2PR12MB3248:EE_
+x-microsoft-antispam-prvs: <MN2PR12MB32488C946C521DD391D0F66DAA3E9@MN2PR12MB3248.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jvDHMANhC5U7cqczu0gDytruboMQ5gVi4mYpntiL6ax2l0FnAh5fBCCDKBEP1jVZ8Ylo071y7uQfD+Cu2Bp80ZTjIHmn8x4mDyWnPWTeiGYe9HAy4Z/SbLE79qRd3TmKDPt9OkNn18QaKE3k/T++q08ZSwbEwvRCgoAkvqAj0C3o/5hLbXiwdhE0k6o9dm3ROS9VNYcLQ4+yahtb02vduoU4144Rye/+hkm/7cdsmpRAq3mBcgEUimX/l/B/ctAVtStoCnOKHFebVUNIxiGJKXIGrFwFLxtm8PcXXXIuaBDiA8+GlJJz81Vj0Paz5BCWx36d2aCOVlKSt1IezAfZWTalEATW5lKhF0Ot5WBF46OJBRXEtQ0f1fLORAnsHqZ5RRgXBSTZGG/86cugEcNT1UoNbt/28SowaU1zmklpLLFitIbKHBEUO+fCKQsXqsHaQt7HNAbu0pWv95D5Sj8IRMgA70GaFGdx5C3QUq/dUR8Kz30a7l60RAmlkHl4GWjR1FBxcsy6L9tNm6G5vwiqaBVqjIlSQt1vy/Uf+nwX1euPgvffO0/v0WWw3LdkOOFmrRi3t6uGotausXLLgO5wcOcA44hkENoBGgYmKRookQq9JteQFofyY1hdgU8Z+tEUTmJ3dDZWmqz38BAhAZ1FshJItxYOxUgXINvQWbS1b+WhO5tpkoRxGic9HE0tFKvwZGAHIPHDjy9BOdMjDewKT1cKD6RehQt+JLD7lrkFf3IBMhjfkv0f6GuZ6ZeqiCQsiJCs/CYCD8DorpWeRLZpiQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB4787.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(76116006)(316002)(6486002)(66476007)(122000001)(66446008)(26005)(66946007)(66556008)(186003)(71200400001)(4326008)(64756008)(110136005)(54906003)(91956017)(2906002)(38070700005)(8676002)(2616005)(38100700002)(86362001)(53546011)(6506007)(6512007)(31686004)(5660300002)(31696002)(36756003)(83380400001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U3FwQ3VyZHpoTGIxYTVjV2pUcTEzK2JRMEdqczNnWWRYWW9ybXd1SEpaMmE3?=
+ =?utf-8?B?ZWJPWTRKcGYwVkRPVldUU3NTYWxoWXpRRTgxNE51QUc0Qi83ZUxXV0VPQWR6?=
+ =?utf-8?B?eWg4MzhBQk8wSGt1UldGZ2pFVlFHTUVOMXJoZzZKclRReEJtbXlPNW9SNXdr?=
+ =?utf-8?B?UFkvVzc3MURlSFdhRitTSmd5M0tGSk5oRnc4ZllmY2FLRjRIMWZMeUR6YVpO?=
+ =?utf-8?B?ZEhZQTRaNkxJSkxKVlE1TVdTcytFR2tvY25OVDJlcHQxZUNOZmc5NGJudW82?=
+ =?utf-8?B?TGxJbzlYUGt2UkY2eXMydDJWOWhsZEtwZUhWc1JqTDRVdVpWSXZCMERzbVFP?=
+ =?utf-8?B?QzhuejJWajFqcm1OenU2RFdOTWtrL3gxV0JJUmpwSFlqaWpYN09HdC9jWWVK?=
+ =?utf-8?B?OHgvbm1hMStSZXlTY1RQNENaVE1WdlFvZEJkS1NCTUhiRFNnNHZwUHNoa0hC?=
+ =?utf-8?B?Y1k1Nk9RdDl2Rmc3MEErREZweU5iMDdDZi9pSWttT0N4Y2hKeXRVenkydVox?=
+ =?utf-8?B?Z2Q4eXhCbWNrNSs1WkQzTnZuUDlOS0MvejQ5UkxiejlHU2pFRW41QnNGUkw2?=
+ =?utf-8?B?SHF4QTZSYVdxWHp5WWhnYThqL1NuQ1p3QTNickR0L3p6U3lYVXc3Z205Z1FZ?=
+ =?utf-8?B?Mytlb05iMWd1c0I1MEZDRC9JSWxpTmZVT3hRL3UwaHpjb090Q1lqNGhJa3BS?=
+ =?utf-8?B?N1FHU3hzNmRuUkNZVFM3RHNWTDMwbTBzQ1hKTEI2dzk3amRka09tS2lqZ3hv?=
+ =?utf-8?B?cHBxRkcxME5GVm5qTlEyMi9BNVZ0Q216cm5jcDB1NGFBREh2VkVYU05kK0R3?=
+ =?utf-8?B?QVhmRFdGZ21iaVVGNU5GTmFzbDRPeUhKaG0vMmx2Y0ZMTTgwNmtYVVNzV1Y4?=
+ =?utf-8?B?b3N5Y1lHS1BwUGJFMkltMzhFakdNdUNnampYL05TQklzU0VWVUlSTW8yWmlO?=
+ =?utf-8?B?MUFEeVYrbXJvSWdjVVVteGNtMVpNSHdvelJXSXlUektpaUNlalhUUVRIOFpM?=
+ =?utf-8?B?NmtMVjREcldjUUlQR3hRTVdBVUx3OEhYNTRFUDREZTRoUHBHVUhlN01TTkxP?=
+ =?utf-8?B?S25HTVRnRGVyY0lnUWJVYnFMbnFzMEFqOGlmcDZYOHZOelF5dnhkQklLK08x?=
+ =?utf-8?B?VGRvMDloZ3YxQ1RSZDlYOHNJZTY5RlZvVzlsWkJMb0QwTmVPUHllcmJlUlgx?=
+ =?utf-8?B?bVlvVEh2RlZBblRTMnZSUFpEUnhLVytDTG5iLzh1cW9uV1RVaDBkTzhmdXBK?=
+ =?utf-8?B?QXBzZWVKaDNWWlUybytFSWwxS1ljb2g5MkU5RHBUWmlOclF0V3M5MlBxc3Nr?=
+ =?utf-8?B?K0lnS2xUUkM3cm1SNVFJd3RkdGZOTDJUUnBnQzk5V3FIWGJHWnBWSmo5YW9r?=
+ =?utf-8?B?WGVHMXlhUTlleFhaTGxVV1l5UFMwMlpTT1JRMFpEU3I1c0pYOGVZZmtXaHBO?=
+ =?utf-8?B?WkwvR0hUUlVyaGI1MGQveWxzalNxcFdvTzBCZ1BzcTNCRS9MU2FiZWw4clIv?=
+ =?utf-8?B?bzFYZS8xVUlNNWV4UjlaMElwMExKMitJbHEyMWxyMUxyNHpPTzRjY0V6Q2Zr?=
+ =?utf-8?B?VHhZbVZZTU51ZWp5VkdVSSs4bU0vU3V0bmd5ZFNrVHAzZzl5SDZZTTQ1VjBp?=
+ =?utf-8?B?Uk1scERJWGlOc1BSYWg1a1pGTmdkWVd5bmhOeEFqalRxMFlvV2lZcHgrQzdF?=
+ =?utf-8?B?c1BvREQ1YTJMREppV3p2Slk5NXlhZXhmWVFRN2U4NXRtZUJIQ3gvOTFjejkv?=
+ =?utf-8?B?bzQyTUZ3ZXdWK0YrdXBhbHVnaFhsbGthVlpZSEhHL3g1QlVocW9uOXhUVzU1?=
+ =?utf-8?B?enladWN5OTJhWkMrNzRobEZGakVuWXNXN1hIY0lXdzUvemJCc1FDNldGRmlW?=
+ =?utf-8?B?UnVyY2pScHlLdjdUTGtwRHc1RldSck5wOEd5VVdWd0MyWWlWY1Q1bE12aG5p?=
+ =?utf-8?B?NUtwMXMzemFITHBTbXhKWDE4R1pVN2d2N2Z2eVNSb1lHUVVoblN3aXY4ek9w?=
+ =?utf-8?B?VnpiVksxWFF1VFFPYmdqaXg0QXRYSnM1bUx6N3lwL2ovM3RaT3JKeG5zTGc4?=
+ =?utf-8?B?YXJ4Q2ViZjZmQVNJQXMrdEtpa0kzS2NxRjdRYkxmV1o5SHoxM3dTVjVzaC9j?=
+ =?utf-8?B?Q1FDZmpsRUNkUkJybjZHVTl1UUlqdElDSUhzY0NmQTNGWGxITlJMUEF6VHdM?=
+ =?utf-8?B?Qnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DE44F114CA7EE6448FC42C5ACCC86749@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 23e0773d-2f3e-4dc5-0648-08d9f7ffe452
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5316:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB53169FB28890CBEFD1C290A9C93E9@AM0PR04MB5316.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S4DwISU6KGoFMvAQt0UzISq5jCuGeFcw+6/9uw1ixdW+9XX2Df+q3cLsRWcd221AJ9Gmjb1hiLCbx/IiJqhD/BOwZsMbcA4LIO5BTZZUzPq8GIZuSDrQrKd5tYNtKDko458q3QLWBmtgJs7USrl3YWHl8pwlXDgNm38LS4ri8Ap3NecXK7/CdNP3gu0jtxmEH5Dg4MO1sNhbZGRyA7Cu7ejkEFsVzhLl7uI7LWdBLoi9bvcwGJPlf+jfVKDemt0lXTFhJTxMDsMTLueOJSfoQEqiRZ4ngLb0RRSjnLnIkdZoKOrBVzLNcSSUns6vG01fl05udBWHtk8I5930gL8VgO6twihZ6OrfkWFz85XhuhO1M29Rpp4EJ7bmcIJl1YcLadIK1hSj1fJD56jf6uCykQfWzfTx58YibGqhulFivqEAy6j3rEMH5VjAiy3K8YiTm7gnJXSdoT9OAJqXPJUL/30z2A2hfr2FB4pRWpNAG87kR4sq/nnD/0ytyMnQdk4Bu6YlH8YxkSFajt5O8huuaUDTik8aNMTexZKu/a8tBHIBbproeiGb4LJ0YvwuVO3Yf0zM6GM2+8k7e/IxMLTOVmlgPuk1n5TciE/LLIS2HaDsfm8fkJxERjtKNSoVJzJFuySgWklLusSc5n1di7ETIJ+wXExHuIqj8Yak3HcRPXySJx6GR1w1v+3oP89MkL70z8KEGYPx/grvfiIEY7lPYw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(508600001)(38100700002)(83380400001)(38350700002)(6486002)(316002)(66946007)(5660300002)(7416002)(6512007)(6666004)(8676002)(86362001)(66476007)(66556008)(4326008)(52116002)(2906002)(2616005)(30864003)(26005)(1076003)(186003)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nBHwTT1H09ilNpvm0zeiVds2eOKDC0f975yIIdtZ/00CTPJHJNqqwfF6jm0f?=
- =?us-ascii?Q?LrVQSEX9y6zSeGspry/T7ye1T54BPbD54Qr/fplMog1T0GfiWvK15pEu5rvr?=
- =?us-ascii?Q?jfSYTxvqAIoEi7IM9vXIKzkuZVC/KTYfJIu8dA7mn890XpjepiwapOp4dT5F?=
- =?us-ascii?Q?5nzOEI/5ER/r1hPTPdvWU3+Dl5rITLbdnKjus+Rf1+ZMPQNQ8wyPkLoIskg0?=
- =?us-ascii?Q?/4t7F6KeptZlfMu15m8H3bWV/Db/Q3gP0Vw3PMZPSP6DplxDqO9qS6Fy5eGO?=
- =?us-ascii?Q?UVPuRuF7rDZnYieCJ/ZGts2YKMDeWrHY6gVhceFuIZKImqPQkXIpi5nLPi/M?=
- =?us-ascii?Q?hpUTDovPj/mUHaBQnIb2lIhEkb/3BvZALe9TSfKtEkIXEr8LSmlHkwFo17et?=
- =?us-ascii?Q?VAa5388ki+qKKHaHMY9gZf/26lP1E61DjTFpseHEQ68Uas0B/7LQSsqSMJ/k?=
- =?us-ascii?Q?WmXm5EGkWk41MBsonUmZRysHVs3wuMohM5bf6nSxYXnod0MbblIcFRZHmDW6?=
- =?us-ascii?Q?iCwrPdrw/KXPv+Sfabv3X9GAV5/GmvnF+HChXH2rFwy7F9RIHk0QtCXNxh/t?=
- =?us-ascii?Q?bTsgUB5S8zUv4QUOtyXeurblkNamDafR+l73QlZNJfWhh4WuONGI0IUSUw9M?=
- =?us-ascii?Q?3qKGOSZsaIAtwvLPlEzH8K0ADTRP6/iQSCttiInUylyKoyz2L++3gD17GEyh?=
- =?us-ascii?Q?9W7XfKAKnb4XlUZeE5OC2Q6VSn2uuW2NGChcY/4/U/dgob20vM2CLu+fKtQf?=
- =?us-ascii?Q?23ilqeA21/0n6fgwFqvdibIKsYOliJuCbAL6vZKAtDqQO6fnMcTqGuBpg22o?=
- =?us-ascii?Q?3NTtHZmZdY32wK+RoVFTYH7b9tfFW0/drdBYH5IEAl2FW/VlpIS1uI5CVxhd?=
- =?us-ascii?Q?51sdJvhh9S2udJCU2Sw8t8c9W/QBJu9WzrKRGbKlXfetY6wuDzy8cazsQ+DC?=
- =?us-ascii?Q?TOnI0hfKJexx3TvYnWdEVudQnS6S374ORmFVyK7cFKP9nWTDoQnAyj+2jKCH?=
- =?us-ascii?Q?40/K845qGFUlIqv1qLnefCe+XzlrBOvy2DH/4FGaqyhD4+OVk2nXDFKIY7iJ?=
- =?us-ascii?Q?5PdWMFJWXNH8jzA9b9ZTx0KzBBPGElToZ2e1ni7b5dW3p+H31O8D0Y5K1uj6?=
- =?us-ascii?Q?HjUODUHO+AOJXbovzn6i8V4004IXzT/GCOgzeUdb6AW9BIMnRD2BXyzFgJ5X?=
- =?us-ascii?Q?qDeA+xSRfgN/k43Lducu/9oAeYTUdRkU00ess7hyOUdIDlhhFGPbKZ+Dw858?=
- =?us-ascii?Q?+E2t8oVG7AmkMxTDQq/OjniVk9IBESUvmMAzOlkxFSVsWvQ+DNe00ovhTGbi?=
- =?us-ascii?Q?4M/3Fme2U0vb3awPclVb+ebYdex5tZ/gyoEHiU5QhKp2CryAPVWbPNVOg1aK?=
- =?us-ascii?Q?FZJBfAlqrNUFg8Fq1cYvP8o8GPQtwAN9jX39peSod/yxJleJNH6PUGtKu/CM?=
- =?us-ascii?Q?cIgl4t9uW4D+kI4lhlJF77H4Y0ZCh0SJh2CpueGxHlzWF9A6kMM11h/5+1nj?=
- =?us-ascii?Q?4idzb8EWP39b7kwGBpfsA/OGl0PEFXXXL7KUtDmNydDkOT3+Tdy2DqhrpuF9?=
- =?us-ascii?Q?28nPPAHP/+pgydiY64G0bpyE3v1RfT1LXTTCyIXOA3WrdpBWxwUoI+uhbHew?=
- =?us-ascii?Q?CyPjXXNfv0ccxDQ2l1jJ4Ok=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23e0773d-2f3e-4dc5-0648-08d9f7ffe452
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 01:41:07.1749
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB4787.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79f29490-dc22-4ffa-dc8c-08d9f800654d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 01:44:43.1519
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RN/8SKBizw21O9p/0ynQn4DT4N59g8cBjzuJnoMIwYn5ns3yYOuvtm2hAc6srjzCuGQCTjpa1jn2w0M16/Lpew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5316
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D5EUsV/MZvso97KYg7/IBQNToZGo5phURFc5VmS66iSE0IL9wTVOSjT8o2nXB085kEbkQzPBdaV3jpVFwpGzMg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3248
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
-
-Add i.MX93 clk driver. i.MX93 clk hardware design is different compared
-with i.MX8M. It supports 4 sources for each clk root and the sources
-are separated into a few groups, low speed/fast io/audio and etc.
-
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/clk/imx/Kconfig     |   6 +
- drivers/clk/imx/Makefile    |   2 +
- drivers/clk/imx/clk-imx93.c | 338 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 346 insertions(+)
- create mode 100644 drivers/clk/imx/clk-imx93.c
-
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index 45641b8bdc50..cc464a42d646 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -106,6 +106,12 @@ config CLK_IMX8ULP
- 	help
- 	    Build the driver for i.MX8ULP CCM Clock Driver
- 
-+config CLK_IMX93
-+	tristate "IMX93 CCM Clock Driver"
-+	depends on ARCH_MXC || COMPILE_TEST
-+	help
-+	    Build the driver for i.MX93 CCM Clock Driver
-+
- config CLK_IMXRT1050
- 	tristate "IMXRT1050 CCM Clock Driver"
- 	depends on SOC_IMXRT
-diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index 60c8a4bb7574..88b9b9285d22 100644
---- a/drivers/clk/imx/Makefile
-+++ b/drivers/clk/imx/Makefile
-@@ -28,6 +28,8 @@ obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
- obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
- obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
- 
-+obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
-+
- obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
- clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o \
- 				     clk-imx8qxp-rsrc.o clk-imx8qm-rsrc.o \
-diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-new file mode 100644
-index 000000000000..7cd5e7fb0c8b
---- /dev/null
-+++ b/drivers/clk/imx/clk-imx93.c
-@@ -0,0 +1,338 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2021 NXP.
-+ */
-+
-+#include <dt-bindings/clock/imx93-clock.h>
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/debugfs.h>
-+#include <linux/err.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+#include "clk.h"
-+
-+enum clk_sel {
-+	LOW_SPEED_IO_SEL,
-+	NON_IO_SEL,
-+	FAST_SEL,
-+	AUDIO_SEL,
-+	VIDEO_SEL,
-+	TPM_SEL,
-+	CKO1_SEL,
-+	CKO2_SEL,
-+	MISC_SEL,
-+	MAX_SEL
-+};
-+
-+static const char *parent_names[MAX_SEL][4] = {
-+	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "video_pll"},
-+	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "sys_pll_pfd2_div2"},
-+	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "sys_pll_pfd2"},
-+	{"osc_24m", "audio_pll", "video_pll", "clk_ext1"},
-+	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd0"},
-+	{"osc_24m", "sys_pll_pfd0", "audio_pll", "clk_ext1"},
-+	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "audio_pll"},
-+	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "video_pll"},
-+	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd2"},
-+};
-+
-+struct imx93_clk_root {
-+	u32 clk;
-+	char *name;
-+	u32 off;
-+	enum clk_sel sel;
-+	unsigned long flags;
-+} root_array[] = {
-+	{ IMX93_CLK_A55_PERIPH,		"a55_periph_root",	0x0000,	FAST_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_A55_MTR_BUS,	"a55_mtr_bus_root",	0x0080,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_A55,		"a55_root",		0x0100,	FAST_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_M33,		"m33_root",		0x0180,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_BUS_WAKEUP,		"bus_wakeup_root",	0x0280,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_BUS_AON,		"bus_aon_root",		0x0300,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_WAKEUP_AXI,		"wakeup_axi_root",	0x0380,	FAST_SEL, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_SWO_TRACE,		"swo_trace_root",	0x0400,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_M33_SYSTICK,	"m33_systick_root",	0x0480,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_FLEXIO1,		"flexio1_root",		0x0500,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_FLEXIO2,		"flexio2_root",		0x0580,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPIT1,		"lpit1_root",		0x0600,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPIT2,		"lpit2_root",		0x0680,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPTMR1,		"lptmr1_root",		0x0700,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPTMR2,		"lptmr2_root",		0x0780,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_TPM1,		"tpm1_root",		0x0800,	TPM_SEL, },
-+	{ IMX93_CLK_TPM2,		"tpm2_root",		0x0880,	TPM_SEL, },
-+	{ IMX93_CLK_TPM3,		"tpm3_root",		0x0900,	TPM_SEL, },
-+	{ IMX93_CLK_TPM4,		"tpm4_root",		0x0980,	TPM_SEL, },
-+	{ IMX93_CLK_TPM5,		"tpm5_root",		0x0a00,	TPM_SEL, },
-+	{ IMX93_CLK_TPM6,		"tpm6_root",		0x0a80,	TPM_SEL, },
-+	{ IMX93_CLK_FLEXSPI1,		"flexspi1_root",	0x0b00,	FAST_SEL, },
-+	{ IMX93_CLK_CAN1,		"can1_root",		0x0b80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_CAN2,		"can2_root",		0x0c00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART1,		"lpuart1_root",		0x0c80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART2,		"lpuart2_root",		0x0d00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART3,		"lpuart3_root",		0x0d80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART4,		"lpuart4_root",		0x0e00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART5,		"lpuart5_root",		0x0e80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART6,		"lpuart6_root",		0x0f00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART7,		"lpuart7_root",		0x0f80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPUART8,		"lpuart8_root",		0x1000,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C1,		"lpi2c1_root",		0x1080,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C2,		"lpi2c2_root",		0x1100,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C3,		"lpi2c3_root",		0x1180,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C4,		"lpi2c4_root",		0x1200,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C5,		"lpi2c5_root",		0x1280,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C6,		"lpi2c6_root",		0x1300,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C7,		"lpi2c7_root",		0x1380,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPI2C8,		"lpi2c8_root",		0x1400,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI1,		"lpspi1_root",		0x1480,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI2,		"lpspi2_root",		0x1500,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI3,		"lpspi3_root",		0x1580,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI4,		"lpspi4_root",		0x1600,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI5,		"lpspi5_root",		0x1680,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI6,		"lpspi6_root",		0x1700,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI7,		"lpspi7_root",		0x1780,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_LPSPI8,		"lpspi8_root",		0x1800,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_I3C1,		"i3c1_root",		0x1880,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_I3C2,		"i3c2_root",		0x1900,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_USDHC1,		"usdhc1_root",		0x1980,	FAST_SEL, },
-+	{ IMX93_CLK_USDHC2,		"usdhc2_root",		0x1a00,	FAST_SEL, },
-+	{ IMX93_CLK_USDHC3,		"usdhc3_root",		0x1a80,	FAST_SEL, },
-+	{ IMX93_CLK_SAI1,		"sai1_root",		0x1b00,	AUDIO_SEL, },
-+	{ IMX93_CLK_SAI2,		"sai2_root",		0x1b80,	AUDIO_SEL, },
-+	{ IMX93_CLK_SAI3,		"sai3_root",		0x1c00,	AUDIO_SEL, },
-+	{ IMX93_CLK_CCM_CKO1,		"ccm_cko1_root",	0x1c80,	CKO1_SEL, },
-+	{ IMX93_CLK_CCM_CKO2,		"ccm_cko2_root",	0x1d00,	CKO2_SEL, },
-+	{ IMX93_CLK_CCM_CKO3,		"ccm_cko3_root",	0x1d80,	CKO1_SEL, },
-+	{ IMX93_CLK_CCM_CKO4,		"ccm_cko4_root",	0x1e00,	CKO2_SEL, },
-+	{ IMX93_CLK_HSIO,		"hsio_root",		0x1e80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_HSIO_USB_TEST_60M,	"hsio_usb_test_60m_root", 0x1f00, LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_HSIO_ACSCAN_80M,	"hsio_acscan_80m_root",	0x1f80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_HSIO_ACSCAN_480M,	"hsio_acscan_480m_root", 0x2000, MISC_SEL, },
-+	{ IMX93_CLK_ML_APB,		"ml_apb_root",		0x2180,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_ML,			"ml_root",		0x2200,	FAST_SEL, },
-+	{ IMX93_CLK_MEDIA_AXI,		"media_axi_root",	0x2280,	FAST_SEL, },
-+	{ IMX93_CLK_MEDIA_APB,		"media_apb_root",	0x2300,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_MEDIA_LDB,		"media_ldb_root",	0x2380,	VIDEO_SEL, },
-+	{ IMX93_CLK_MEDIA_DISP_PIX,	"media_disp_pix_root",	0x2400,	VIDEO_SEL, },
-+	{ IMX93_CLK_CAM_PIX,		"cam_pix_root",		0x2480,	VIDEO_SEL, },
-+	{ IMX93_CLK_MIPI_TEST_BYTE,	"mipi_test_byte_root",	0x2500,	VIDEO_SEL, },
-+	{ IMX93_CLK_MIPI_PHY_CFG,	"mipi_phy_cfg_root",	0x2580,	VIDEO_SEL, },
-+	{ IMX93_CLK_ADC,		"adc_root",		0x2700,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_PDM,		"pdm_root",		0x2780,	AUDIO_SEL, },
-+	{ IMX93_CLK_TSTMR1,		"tstmr1_root",		0x2800,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_TSTMR2,		"tstmr2_root",		0x2880,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_MQS1,		"mqs1_root",		0x2900,	AUDIO_SEL, },
-+	{ IMX93_CLK_MQS2,		"mqs2_root",		0x2980,	AUDIO_SEL, },
-+	{ IMX93_CLK_AUDIO_XCVR,		"audio_xcvr_root",	0x2a00,	NON_IO_SEL, },
-+	{ IMX93_CLK_SPDIF,		"spdif_root",		0x2a80,	AUDIO_SEL, },
-+	{ IMX93_CLK_ENET,		"enet_root",		0x2b00,	NON_IO_SEL, },
-+	{ IMX93_CLK_ENET_TIMER1,	"enet_timer1_root",	0x2b80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_ENET_TIMER2,	"enet_timer2_root",	0x2c00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_ENET_REF,		"enet_ref_root",	0x2c80,	NON_IO_SEL, },
-+	{ IMX93_CLK_ENET_REF_PHY,	"enet_ref_phy_root",	0x2d00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_I3C1_SLOW,		"i3c1_slow_root",	0x2d80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_I3C2_SLOW,		"i3c2_slow_root",	0x2e00,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_USB_PHY_BURUNIN,	"usb_phy_root",		0x2e80,	LOW_SPEED_IO_SEL, },
-+	{ IMX93_CLK_PAL_CAME_SCAN,	"pal_came_scan_root",	0x2f00,	MISC_SEL, }
-+};
-+
-+struct imx93_clk_ccgr {
-+	u32 clk;
-+	char *name;
-+	char *parent_name;
-+	u32 off;
-+	unsigned long flags;
-+} ccgr_array[] = {
-+	{ IMX93_CLK_A55_GATE,		"a55",		"a55_root",		0x8000, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_CM33_GATE,		"cm33",		"m33_root",		0x8040, CLK_IS_CRITICAL },
-+	{ IMX93_CLK_ADC1_GATE,		"adc1",		"osc_24m",		0x82c0, },
-+	{ IMX93_CLK_WDOG1_GATE,		"wdog1",	"osc_24m",		0x8300, },
-+	{ IMX93_CLK_WDOG2_GATE,		"wdog2",	"osc_24m",		0x8340, },
-+	{ IMX93_CLK_WDOG3_GATE,		"wdog3",	"osc_24m",		0x8380, },
-+	{ IMX93_CLK_WDOG4_GATE,		"wdog4",	"osc_24m",		0x83c0, },
-+	{ IMX93_CLK_WDOG5_GATE,		"wdog5",	"osc_24m",		0x8400, },
-+	{ IMX93_CLK_SEMA1_GATE,		"sema1",	"bus_aon_root",		0x8440, },
-+	{ IMX93_CLK_SEMA2_GATE,		"sema2",	"bus_wakeup_root",	0x8480, },
-+	{ IMX93_CLK_MU_A_GATE,		"mu_a",		"bus_aon_root",		0x84c0, },
-+	{ IMX93_CLK_MU_B_GATE,		"mu_b",		"bus_aon_root",		0x8500, },
-+	{ IMX93_CLK_EDMA1_GATE,		"edma1",	"wakeup_axi_root",	0x8540, },
-+	{ IMX93_CLK_EDMA2_GATE,		"edma2",	"wakeup_axi_root",	0x8580, },
-+	{ IMX93_CLK_FLEXSPI1_GATE,	"flexspi",	"flexspi_root",		0x8640, },
-+	{ IMX93_CLK_GPIO1_GATE,		"gpio1",	"m33_root",		0x8880, },
-+	{ IMX93_CLK_GPIO2_GATE,		"gpio2",	"bus_wakeup_root",	0x88c0, },
-+	{ IMX93_CLK_GPIO3_GATE,		"gpio3",	"bus_wakeup_root",	0x8900, },
-+	{ IMX93_CLK_GPIO4_GATE,		"gpio4",	"bus_wakeup_root",	0x8940, },
-+	{ IMX93_CLK_FLEXIO1_GATE,	"flexio1",	"flexio1_root",		0x8980, },
-+	{ IMX93_CLK_FLEXIO2_GATE,	"flexio2",	"flexio2_root",		0x89c0, },
-+	{ IMX93_CLK_LPIT1_GATE,		"lpit1",	"lpit1_root",		0x8a00, },
-+	{ IMX93_CLK_LPIT2_GATE,		"lpit2",	"lpit2_root",		0x8a40, },
-+	{ IMX93_CLK_LPTMR1_GATE,	"lptmr1",	"lptmr1_root",		0x8a80, },
-+	{ IMX93_CLK_LPTMR2_GATE,	"lptmr2",	"lptmr2_root",		0x8ac0, },
-+	{ IMX93_CLK_TPM1_GATE,		"tpm1",		"tpm1_root",		0x8b00, },
-+	{ IMX93_CLK_TPM2_GATE,		"tpm2",		"tpm2_root",		0x8b40, },
-+	{ IMX93_CLK_TPM3_GATE,		"tpm3",		"tpm3_root",		0x8b80, },
-+	{ IMX93_CLK_TPM4_GATE,		"tpm4",		"tpm4_root",		0x8bc0, },
-+	{ IMX93_CLK_TPM5_GATE,		"tpm5",		"tpm5_root",		0x8c00, },
-+	{ IMX93_CLK_TPM6_GATE,		"tpm6",		"tpm6_root",		0x8c40, },
-+	{ IMX93_CLK_CAN1_GATE,		"can1",		"can1_root",		0x8c80, },
-+	{ IMX93_CLK_CAN2_GATE,		"can2",		"can2_root",		0x8cc0, },
-+	{ IMX93_CLK_LPUART1_GATE,	"lpuart1",	"lpuart1_root",		0x8d00, },
-+	{ IMX93_CLK_LPUART2_GATE,	"lpuart2",	"lpuart2_root",		0x8d40, },
-+	{ IMX93_CLK_LPUART3_GATE,	"lpuart3",	"lpuart3_root",		0x8d80, },
-+	{ IMX93_CLK_LPUART4_GATE,	"lpuart4",	"lpuart4_root",		0x8dc0, },
-+	{ IMX93_CLK_LPUART5_GATE,	"lpuart5",	"lpuart5_root",		0x8e00, },
-+	{ IMX93_CLK_LPUART6_GATE,	"lpuart6",	"lpuart6_root",		0x8e40, },
-+	{ IMX93_CLK_LPUART7_GATE,	"lpuart7",	"lpuart7_root",		0x8e80, },
-+	{ IMX93_CLK_LPUART8_GATE,	"lpuart8",	"lpuart8_root",		0x8ec0, },
-+	{ IMX93_CLK_LPI2C1_GATE,	"lpi2c1",	"lpi2c1_root",		0x8f00, },
-+	{ IMX93_CLK_LPI2C2_GATE,	"lpi2c2",	"lpi2c2_root",		0x8f40, },
-+	{ IMX93_CLK_LPI2C3_GATE,	"lpi2c3",	"lpi2c3_root",		0x8f80, },
-+	{ IMX93_CLK_LPI2C4_GATE,	"lpi2c4",	"lpi2c4_root",		0x8fc0, },
-+	{ IMX93_CLK_LPI2C5_GATE,	"lpi2c5",	"lpi2c5_root",		0x9000, },
-+	{ IMX93_CLK_LPI2C6_GATE,	"lpi2c6",	"lpi2c6_root",		0x9040, },
-+	{ IMX93_CLK_LPI2C7_GATE,	"lpi2c7",	"lpi2c7_root",		0x9080, },
-+	{ IMX93_CLK_LPI2C8_GATE,	"lpi2c8",	"lpi2c8_root",		0x90c0, },
-+	{ IMX93_CLK_LPSPI1_GATE,	"lpspi1",	"lpspi1_root",		0x9100, },
-+	{ IMX93_CLK_LPSPI2_GATE,	"lpspi2",	"lpspi2_root",		0x9140, },
-+	{ IMX93_CLK_LPSPI3_GATE,	"lpspi3",	"lpspi3_root",		0x9180, },
-+	{ IMX93_CLK_LPSPI4_GATE,	"lpspi4",	"lpspi4_root",		0x91c0, },
-+	{ IMX93_CLK_LPSPI5_GATE,	"lpspi5",	"lpspi5_root",		0x9200, },
-+	{ IMX93_CLK_LPSPI6_GATE,	"lpspi6",	"lpspi6_root",		0x9240, },
-+	{ IMX93_CLK_LPSPI7_GATE,	"lpspi7",	"lpspi7_root",		0x9280, },
-+	{ IMX93_CLK_LPSPI8_GATE,	"lpspi8",	"lpspi8_root",		0x92c0, },
-+	{ IMX93_CLK_I3C1_GATE,		"i3c1",		"i3c1_root",		0x9300, },
-+	{ IMX93_CLK_I3C2_GATE,		"i3c2",		"i3c2_root",		0x9340, },
-+	{ IMX93_CLK_USDHC1_GATE,	"usdhc1",	"usdhc1_root",		0x9380, },
-+	{ IMX93_CLK_USDHC2_GATE,	"usdhc2",	"usdhc2_root",		0x93c0, },
-+	{ IMX93_CLK_USDHC3_GATE,	"usdhc3",	"usdhc3_root",		0x9400, },
-+	{ IMX93_CLK_SAI1_GATE,		"sai1",		"sai1_root",		0x9440, },
-+	{ IMX93_CLK_SAI2_GATE,		"sai2",		"sai2_root",		0x9480, },
-+	{ IMX93_CLK_SAI3_GATE,		"sai3",		"sai3_root",		0x94c0, },
-+	{ IMX93_CLK_MIPI_CSI_GATE,	"mipi_csi",	"media_apb_root",	0x9580, },
-+	{ IMX93_CLK_MIPI_DSI_GATE,	"mipi_dsi",	"media_apb_root",	0x95c0, },
-+	{ IMX93_CLK_LVDS_GATE,		"lvds",		"media_ldb_root",	0x9600, },
-+	{ IMX93_CLK_LCDIF_GATE,		"lcdif",	"media_apb_root",	0x9640, },
-+	{ IMX93_CLK_PXP_GATE,		"pxp",		"media_apb_root",	0x9680, },
-+	{ IMX93_CLK_ISI_GATE,		"isi",		"media_apb_root",	0x96c0, },
-+	{ IMX93_CLK_NIC_MEDIA_GATE,	"nic_media",	"media_apb_root",	0x9700, },
-+	{ IMX93_CLK_USB_CONTROLLER_GATE, "usb_controller", "hsio_root",		0x9a00, },
-+	{ IMX93_CLK_USB_TEST_60M_GATE,	"usb_test_60m",	"hsio_usb_test_60m_root", 0x9a40, },
-+	{ IMX93_CLK_HSIO_TROUT_24M_GATE, "hsio_trout_24m", "osc_24m",		0x9a80, },
-+	{ IMX93_CLK_PDM_GATE,		"pdm",		"pdm_root",		0x9ac0, },
-+	{ IMX93_CLK_MQS1_GATE,		"mqs1",		"sai1_root",		0x9b00, },
-+	{ IMX93_CLK_MQS2_GATE,		"mqs2",		"sai3_root",		0x9b40, },
-+	{ IMX93_CLK_AUD_XCVR_GATE,	"aud_xcvr",	"audio_xcvr_root",	0x9b80, },
-+	{ IMX93_CLK_SPDIF_GATE,		"spdif",	"spdif_root",		0x9c00, },
-+	{ IMX93_CLK_HSIO_32K_GATE,	"hsio_32k",	"osc_32k",		0x9dc0, },
-+	{ IMX93_CLK_ENET1_GATE,		"enet1",	"enet_root",		0x9e00, },
-+	{ IMX93_CLK_ENET_QOS_GATE,	"enet_qos",	"wakeup_axi_root",	0x9e40, },
-+	{ IMX93_CLK_SYS_CNT_GATE,	"sys_cnt",	"osc_24m",		0x9e80, },
-+	{ IMX93_CLK_TSTMR1_GATE,	"tstmr1",	"bus_aon_root",		0x9ec0, },
-+	{ IMX93_CLK_TSTMR2_GATE,	"tstmr2",	"bus_wakeup_root",	0x9f00, },
-+	{ IMX93_CLK_TMC_GATE,		"tmc",		"osc_24m",		0x9f40, },
-+	{ IMX93_CLK_PMRO_GATE,		"pmro",		"osc_24m",		0x9f80, }
-+};
-+
-+static struct clk_hw_onecell_data *clk_hw_data;
-+static struct clk_hw **clks;
-+
-+static int imx93_clocks_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct imx93_clk_root *root;
-+	struct imx93_clk_ccgr *ccgr;
-+	void __iomem *base = NULL;
-+	int i, ret;
-+
-+	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+					  IMX93_CLK_END), GFP_KERNEL);
-+	if (WARN_ON(!clk_hw_data))
-+		return -ENOMEM;
-+
-+	clk_hw_data->num = IMX93_CLK_END;
-+	clks = clk_hw_data->hws;
-+
-+	clks[IMX93_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0);
-+	clks[IMX93_CLK_24M] = imx_obtain_fixed_clk_hw(np, "osc_24m");
-+	clks[IMX93_CLK_32K] = imx_obtain_fixed_clk_hw(np, "osc_32k");
-+	clks[IMX93_CLK_EXT1] = imx_obtain_fixed_clk_hw(np, "clk_ext1");
-+
-+	clks[IMX93_CLK_SYS_PLL_PFD0] = imx_clk_hw_fixed("sys_pll_pfd0", 1000000000);
-+	clks[IMX93_CLK_SYS_PLL_PFD0_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd0_div2",
-+								    "sys_pll_pfd0", 1, 2);
-+	clks[IMX93_CLK_SYS_PLL_PFD1] = imx_clk_hw_fixed("sys_pll_pfd1", 800000000);
-+	clks[IMX93_CLK_SYS_PLL_PFD1_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd1_div2",
-+								    "sys_pll_pfd1", 1, 2);
-+	clks[IMX93_CLK_SYS_PLL_PFD2] = imx_clk_hw_fixed("sys_pll_pfd2", 625000000);
-+	clks[IMX93_CLK_SYS_PLL_PFD2_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd2_div2",
-+								    "sys_pll_pfd2", 1, 2);
-+
-+	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
-+	base = of_iomap(np, 0);
-+	of_node_put(np);
-+	if (WARN_ON(!base))
-+		return -ENOMEM;
-+
-+	clks[IMX93_CLK_AUDIO_PLL] = imx_clk_fracn_gppll("audio_pll", "osc_24m", base + 0x1200,
-+							&imx_fracn_gppll);
-+	clks[IMX93_CLK_VIDEO_PLL] = imx_clk_fracn_gppll("video_pll", "osc_24m", base + 0x1400,
-+							&imx_fracn_gppll);
-+
-+	np = dev->of_node;
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (WARN_ON(IS_ERR(base)))
-+		return PTR_ERR(base);
-+
-+	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
-+		root = &root_array[i];
-+		clks[root->clk] = imx93_clk_composite_flags(root->name,
-+							    parent_names[root->sel],
-+							    4, base + root->off,
-+							    root->flags);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(ccgr_array); i++) {
-+		ccgr = &ccgr_array[i];
-+		clks[ccgr->clk] = imx_clk_hw_gate4_flags(ccgr->name,
-+							 ccgr->parent_name,
-+							 base + ccgr->off, 0,
-+							 ccgr->flags);
-+	}
-+
-+	imx_check_clk_hws(clks, IMX93_CLK_END);
-+
-+	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to register clks for i.MX93\n");
-+		goto unregister_hws;
-+	}
-+
-+	return 0;
-+
-+unregister_hws:
-+	imx_unregister_hw_clocks(clks, IMX93_CLK_END);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id imx93_clk_of_match[] = {
-+	{ .compatible = "fsl,imx93-ccm" },
-+	{ /* Sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
-+
-+static struct platform_driver imx93_clk_driver = {
-+	.probe = imx93_clocks_probe,
-+	.driver = {
-+		.name = "imx93-ccm",
-+		.suppress_bind_attrs = true,
-+		.of_match_table = of_match_ptr(imx93_clk_of_match),
-+	},
-+};
-+module_platform_driver(imx93_clk_driver);
--- 
-2.25.1
-
+V2VzbGV5IENoZW5nIHdyb3RlOg0KPiBIaSBUaGluaCwNCj4gDQo+IE9uIDIvMjQvMjAyMiA1OjI2
+IFBNLCBUaGluaCBOZ3V5ZW4gd3JvdGU6DQo+PiBIaSBXZXNsZXksDQo+Pg0KPj4gV2VzbGV5IENo
+ZW5nIHdyb3RlOg0KPj4+IEhpIFRoaW5oLA0KPj4+DQo+Pj4gT24gMi8yMi8yMDIyIDY6NTkgUE0s
+IFRoaW5oIE5ndXllbiB3cm90ZToNCj4+Pj4gSGkgV2VzbGV5LA0KPj4+Pg0KPj4NCj4+IDxzbmlw
+Pg0KPj4NCj4+Pj4NCj4+Pj4gQ2FuIHlvdSBwcm92aWRlIGEgZnVsbCB0cmFjZT8NCj4+Pj4NCj4+
+PiBTb3JyeSBmb3IgZG9pbmcgdGhpcywgYnV0IHdlIGRpZG4ndCBoYXZlIGEgd2F5IHRvIHNoYXJl
+IHRoZSBmaWxlDQo+Pj4gZGlyZWN0bHksIHNvIEkgaGF2ZSB0byBwYXN0ZSB0aGUgdHJhY2UgYmVs
+b3cuIDovDQo+Pj4NCj4+Pj4gQnR3LCB3aGVuIHlvdSBleHBlcmltZW50IHdpdGggaW5jcmVhc2lu
+ZyB0aGUgdGltZW91dCB0byAxMCBzZWNvbmRzLCBkaWQNCj4+Pj4geW91IHVzZSB0aGUgbWRlbGF5
+KCkgaW4gZWFjaCBsb29wPyBUaGUgZGVsdGEgdGltZSBmb3IgRW5kIFRyYW5zZmVyDQo+Pj4+IHRp
+bWVvdXQgaGVyZSBzZWVtcyB2ZXJ5IHNtYWxsLg0KPj4+Pg0KPj4+IFRoaXMgcGFydGljdWxhciBy
+dW4gZGlkIG5vdCBtb2RpZnkgdGhlIHRpbWVvdXQgZm9yIHRoZSBjbWQgc3RhdHVzIHBvbGxpbmcu
+DQo+Pj4NCj4+PiBJcyB0aGF0IHNvbWV0aGluZyB0aGF0IHlvdSB3YW50IHRvIHRyeT8gIE5vdCBw
+ZXJ0YWluaW5nIHRvIHRoaXMgZGVxdWV1ZQ0KPj4+IHNpdHVhdGlvbiwgZHVyaW5nIHRoZSBwdWxs
+dXAgZGlzYWJsZSBwYXRoIGRlYnVnLCBJIG5vdGljZWQgdGhhdCBhcyBsb25nDQo+Pj4gYXMgdGhl
+cmUgd2FzIGEgcGVuZGluZyBFUDAgU0VUVVAgcGFja2V0IChub3QgZGF0YS9zdGF0dXMpIGNhY2hl
+ZCBpbiB0aGUNCj4+PiBjb250cm9sbGVyLCBpdCB3b3VsZCBhbHNvIGhhdmUgZW5keGZlciB0aW1l
+b3V0cyBvbiBub24tY29udHJvbCBFUHMuICBXZQ0KPj4+IHdlcmUgYWJsZSB0byBjYXB0dXJlIGEg
+YnVzIHNuaWZmZXIgbG9nICsgZnRyYWNlLCBhbmQgaXQgc2hvd2VkIHRoYXQgYXQNCj4+PiB0aGUg
+cG9pbnQgb2YgdGhlIGVycm9yLCB0aGUgbGVjcm95L2J1cyBsb2cgc2F3IGEgU0VUVVAgdG9rZW4g
+QUNLJ2VkLA0KPj4+IHdoaWxlIG9uIHRoZSBmdHJhY2UsIHRoZXJlIHdlcmUgZW5keGZlciB0aW1l
+b3V0cyBmb3IgYWxsIG5vbi1jb250cm9sIEVQcw0KPj4+IChkdWUgdG8gdGhlIGR3YzNfZ2FkZ2V0
+X3N0b3BfYWN0aXZlX3RyYW5zZmVycygpIGNhbGwpDQo+Pj4NCj4+PiBUaGFua3MNCj4+PiBXZXNs
+ZXkNCj4+Pg0KPj4+IFRSQUNFDQo+Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4NCj4+DQo+PiA8c25pcD4N
+Cj4+DQo+Pj4gWyAxMDIzLjkxMjU1MDA1MCAgICAgICAweDRhZjY2NmZkMl0gICBkYmdfdHJhY2Vf
+bG9nX2N0cmw6IENsZWFyIEVuZHBvaW50DQo+Pj4gRmVhdHVyZShIYWx0IGVwNGluKQ0KPj4+IFsg
+MTAyMy45MTI5MzQ3MzggICAgICAgMHg0YWY2NjhjYWJdICAgZGJnX3NlbmRfZXBfY21kOiBlcDBv
+dXQ6IGNtZCAnU2V0DQo+Pj4gU3RhbGwnIFs0MDRdIHBhcmFtcyAwMDAwMDAwMCAwMDAwMDAwMCAw
+MDAwMDAwMCAtLT4gc3RhdHVzOiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDIzLjkxMzM2MTU2MSAgICAg
+ICAweDRhZjY2YWNhZV0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kDQo+Pj4gJ1N0YXJ0
+IFRyYW5zZmVyJyBbNDA2XSBwYXJhbXMgMDAwMDAwMDAgZWZmZmEwMDAgMDAwMDAwMDAgLS0+IHN0
+YXR1czoNCj4+PiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI0LjMzNjQ4MDU3MyAgICAgICAweDRhZmUy
+YTI5Yl0gICBkYmdfdHJhY2VfbG9nX2N0cmw6IENsZWFyIEVuZHBvaW50DQo+Pj4gRmVhdHVyZShI
+YWx0IGVwNWluKQ0KPj4+IFsgMTAyNC4zMzY4NTU1NzMgICAgICAgMHg0YWZlMmJlYmNdICAgZGJn
+X3NlbmRfZXBfY21kOiBlcDVpbjogY21kICdDbGVhcg0KPj4+IFN0YWxsJyBbNDA1XSBwYXJhbXMg
+MDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vzc2Z1bA0KPj4+IFsg
+MTAyNC4zMzcyNjQ1MzEgICAgICAgMHg0YWZlMmRkNjhdICAgZGJnX3NlbmRfZXBfY21kOiBlcDBp
+bjogY21kICdTdGFydA0KPj4+IFRyYW5zZmVyJyBbNDA2XSBwYXJhbXMgMDAwMDAwMDAgZWZmZmEw
+MDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vzc2Z1bA0KPj4+IFsgMTAyNC4zNTE5MTAxNTYg
+ICAgICAgMHg0YWZlNzI3ZDRdICAgZGJnX3NlbmRfZXBfY21kOiBlcDBvdXQ6IGNtZA0KPj4+ICdT
+dGFydCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAwIC0t
+PiBzdGF0dXM6DQo+Pj4gU3VjY2Vzc2Z1bA0KPj4+IFsgMTAyNC4zNjMxMzk4OTYgICAgICAgMHg0
+YWZlYTcyMGZdICAgZGJnX3RyYWNlX2xvZ19jdHJsOiBDbGVhciBFbmRwb2ludA0KPj4+IEZlYXR1
+cmUoSGFsdCBlcDRpbikNCj4+PiBbIDEwMjQuMzYzODk4MjgxICAgICAgIDB4NGFmZWFhYWYwXSAg
+IGRiZ19zZW5kX2VwX2NtZDogZXAwb3V0OiBjbWQgJ1NldA0KPj4+IFN0YWxsJyBbNDA0XSBwYXJh
+bXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vzc2Z1bA0KPj4+
+IFsgMTAyNC4zNjQ3MzQwMTAgICAgICAgMHg0YWZlYWU5OWVdICAgZGJnX3NlbmRfZXBfY21kOiBl
+cDBvdXQ6IGNtZA0KPj4+ICdTdGFydCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVm
+ZmZhMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6DQo+Pj4gU3VjY2Vzc2Z1bA0KPj4+IFsgMTAyNC43
+NzYxNzM4MDMgICAgICAgMHg0YjA2MzczOWFdICAgZGJnX3RyYWNlX2xvZ19jdHJsOiBDbGVhciBF
+bmRwb2ludA0KPj4+IEZlYXR1cmUoSGFsdCBlcDVpbikNCj4+PiBbIDEwMjQuNzc2OTA3MTg4ICAg
+ICAgIDB4NGIwNjNhYTliXSAgIGRiZ19zZW5kX2VwX2NtZDogZXA1aW46IGNtZCAnQ2xlYXINCj4+
+PiBTdGFsbCcgWzQwNV0gcGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0
+dXM6IFN1Y2Nlc3NmdWwNCj4+PiBbIDEwMjQuNzc3NjQ2MTQ3ICAgICAgIDB4NGIwNjNlMjA4XSAg
+IGRiZ19zZW5kX2VwX2NtZDogZXAwaW46IGNtZCAnU3RhcnQNCj4+PiBUcmFuc2ZlcicgWzQwNl0g
+cGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwN
+Cj4+PiBbIDEwMjQuNzg4NjQxOTgwICAgICAgIDB4NGIwNjcxYWI4XSAgIGRiZ19zZW5kX2VwX2Nt
+ZDogZXAwb3V0OiBjbWQNCj4+PiAnU3RhcnQgVHJhbnNmZXInIFs0MDZdIHBhcmFtcyAwMDAwMDAw
+MCBlZmZmYTAwMCAwMDAwMDAwMCAtLT4gc3RhdHVzOg0KPj4+IFN1Y2Nlc3NmdWwNCj4+PiBbIDEw
+MjQuNzk5NjgyMzk3ICAgICAgIDB4NGIwNmE1NmJmXSAgIGRiZ190cmFjZV9sb2dfY3RybDogQ2xl
+YXIgRW5kcG9pbnQNCj4+PiBGZWF0dXJlKEhhbHQgZXA0aW4pDQo+Pj4gWyAxMDI0LjgwMDQ0MjYw
+NSAgICAgICAweDRiMDZhOGZjM10gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kICdTZXQN
+Cj4+PiBTdGFsbCcgWzQwNF0gcGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBz
+dGF0dXM6IFN1Y2Nlc3NmdWwNCj4+PiBbIDEwMjQuODAxMTg0NTg0ICAgICAgIDB4NGIwNmFjNzY5
+XSAgIGRiZ19zZW5kX2VwX2NtZDogZXAwb3V0OiBjbWQNCj4+PiAnU3RhcnQgVHJhbnNmZXInIFs0
+MDZdIHBhcmFtcyAwMDAwMDAwMCBlZmZmYTAwMCAwMDAwMDAwMCAtLT4gc3RhdHVzOg0KPj4+IFN1
+Y2Nlc3NmdWwNCj4+PiBbIDEwMjUuMjIyMTczNzUyICAgICAgIDB4NGIwZTYxZDk5XSAgIGRiZ190
+cmFjZV9sb2dfY3RybDogQ2xlYXIgRW5kcG9pbnQNCj4+PiBGZWF0dXJlKEhhbHQgZXA1aW4pDQo+
+Pj4gWyAxMDI1LjIyMjk5MTY2OSAgICAgICAweDRiMGU2NWFmMV0gICBkYmdfc2VuZF9lcF9jbWQ6
+IGVwNWluOiBjbWQgJ0NsZWFyDQo+Pj4gU3RhbGwnIFs0MDVdIHBhcmFtcyAwMDAwMDAwMCAwMDAw
+MDAwMCAwMDAwMDAwMCAtLT4gc3RhdHVzOiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI1LjIyMzg1MDcz
+MSAgICAgICAweDRiMGU2OWI1Zl0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMGluOiBjbWQgJ1N0YXJ0
+DQo+Pj4gVHJhbnNmZXInIFs0MDZdIHBhcmFtcyAwMDAwMDAwMCBlZmZmYTAwMCAwMDAwMDAwMCAt
+LT4gc3RhdHVzOiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI1LjIzOTAyMzQ5MiAgICAgICAweDRiMGVi
+MGQ1NF0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kDQo+Pj4gJ1N0YXJ0IFRyYW5zZmVy
+JyBbNDA2XSBwYXJhbXMgMDAwMDAwMDAgZWZmZmEwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czoNCj4+
+PiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI1LjI0ODk2MzE3OSAgICAgICAweDRiMGVkZjZjZV0gICBk
+YmdfdHJhY2VfbG9nX2N0cmw6IENsZWFyIEVuZHBvaW50DQo+Pj4gRmVhdHVyZShIYWx0IGVwNGlu
+KQ0KPj4+IFsgMTAyNS4yNDk3MDk4NDYgICAgICAgMHg0YjBlZTJlY2RdICAgZGJnX3NlbmRfZXBf
+Y21kOiBlcDBvdXQ6IGNtZCAnU2V0DQo+Pj4gU3RhbGwnIFs0MDRdIHBhcmFtcyAwMDAwMDAwMCAw
+MDAwMDAwMCAwMDAwMDAwMCAtLT4gc3RhdHVzOiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI1LjI1MDUz
+MzQ0MCAgICAgICAweDRiMGVlNmM5M10gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kDQo+
+Pj4gJ1N0YXJ0IFRyYW5zZmVyJyBbNDA2XSBwYXJhbXMgMDAwMDAwMDAgZWZmZmEwMDAgMDAwMDAw
+MDAgLS0+IHN0YXR1czoNCj4+PiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI1LjY2NzA4NDUzNSAgICAg
+ICAweDRiMTY4NzVlN10gICBkYmdfdHJhY2VfbG9nX2N0cmw6IENsZWFyIEVuZHBvaW50DQo+Pj4g
+RmVhdHVyZShIYWx0IGVwNWluKQ0KPj4+IFsgMTAyNS42Njc4Mjc3NjQgICAgICAgMHg0YjE2OGFk
+YTZdICAgZGJnX3NlbmRfZXBfY21kOiBlcDVpbjogY21kICdDbGVhcg0KPj4+IFN0YWxsJyBbNDA1
+XSBwYXJhbXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vzc2Z1
+bA0KPj4+IFsgMTAyNS42Njg2MzU5OTMgICAgICAgMHg0YjE2OGVhNDRdICAgZGJnX3NlbmRfZXBf
+Y21kOiBlcDBpbjogY21kICdTdGFydA0KPj4+IFRyYW5zZmVyJyBbNDA2XSBwYXJhbXMgMDAwMDAw
+MDAgZWZmZmEwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vzc2Z1bA0KPj4+IFsgMTAyNS42
+NzQ3Nzc3NjQgICAgICAgMHg0YjE2YWI2ZTddICAgZGJnX3NlbmRfZXBfY21kOiBlcDBvdXQ6IGNt
+ZA0KPj4+ICdTdGFydCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAw
+MDAwMDAwIC0tPiBzdGF0dXM6DQo+Pj4gU3VjY2Vzc2Z1bA0KPj4+IFsgMTAyNS42ODQ3MzM1OTcg
+ICAgICAgMHg0YjE2ZGExOTddICAgZGJnX3RyYWNlX2xvZ19jdHJsOiBDbGVhciBFbmRwb2ludA0K
+Pj4+IEZlYXR1cmUoSGFsdCBlcDRpbikNCj4+PiBbIDEwMjUuNjg1MzM2MTUwICAgICAgIDB4NGIx
+NmRjZWM3XSAgIGRiZ19zZW5kX2VwX2NtZDogZXAwb3V0OiBjbWQgJ1NldA0KPj4+IFN0YWxsJyBb
+NDA0XSBwYXJhbXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogU3VjY2Vz
+c2Z1bA0KPj4+IFsgMTAyNS42ODYxMTI2MDggICAgICAgMHg0YjE2ZTA5MDRdICAgZGJnX3NlbmRf
+ZXBfY21kOiBlcDBvdXQ6IGNtZA0KPj4+ICdTdGFydCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAw
+MDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6DQo+Pj4gU3VjY2Vzc2Z1bA0KPj4+
+IFsgMTAyNS42OTg4NDIzNDcgICAgICAgMHg0YjE3MWMzYmZdICAgZGJnX3NlbmRfZXBfY21kOiBl
+cDBvdXQ6IGNtZCAnU2V0DQo+Pj4gU3RhbGwnIFs0MDRdIHBhcmFtcyAwMDAwMDAwMCAwMDAwMDAw
+MCAwMDAwMDAwMCAtLT4gc3RhdHVzOiBTdWNjZXNzZnVsDQo+Pj4gWyAxMDI2LjQ0NDA1MTU2OSAg
+ICAgICAweDRiMjRjMTY3MF0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kDQo+Pj4gJ1N0
+YXJ0IFRyYW5zZmVyJyBbNDA2XSBwYXJhbXMgMDAwMDAwMDAgZWZmZmEwMDAgMDAwMDAwMDAgLS0+
+IHN0YXR1czogTm8NCj4+PiBSZXNvdXJjZQ0KPj4NCj4+IFdoeSBkaWQgdGhpcyBmYWlsIHdpdGgg
+Tm8gUmVzb3VyY2U/IFdhcyBpdCBzZW50IGJlZm9yZSB0aGUgY29udHJvbCBUUkINCj4+IGNvbXBs
+ZXRpb24/DQo+Pg0KPj4+IFsgMTAyNy4yMjU3MDU0MjUgICAgICAgMHg0YjMzMTE2NzhdICAgZGJn
+X3RyYWNlX2xvZ19jdHJsOiBDbGVhciBFbmRwb2ludA0KPj4+IEZlYXR1cmUoSGFsdCBlcDVpbikN
+Cj4+PiBbIDEwMjcuMjI1ODIwMTY1ICAgICAgIDB4NGIzMzExZjE0XSAgIGRiZ19zZW5kX2VwX2Nt
+ZDogZXA1aW46IGNtZCAnQ2xlYXINCj4+PiBTdGFsbCcgWzQwNV0gcGFyYW1zIDAwMDAwMDAwIDAw
+MDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4+PiBbIDEwMjcuMjI1OTMx
+NDY3ICAgICAgIDB4NGIzMzEyNzZjXSAgIGRiZ19zZW5kX2VwX2NtZDogZXAwaW46IGNtZCAnU3Rh
+cnQNCj4+PiBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAw
+IC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4+PiBbIDEwMjcuMjM0MzExNDY3ICAgICAgIDB4NGIz
+MzM5YmVkXSAgIGRiZ19lcF9kZXF1ZXVlOiBlcDdpbjogcmVxDQo+Pj4gZmZmZmZmODdmOTliOGYw
+MCBsZW5ndGggMC82MTY5NiB6c0kgPT0+IC0xMTUNCj4+PiBbIDEwMjcuMjQ3NDA5MTIzICAgICAg
+IDB4NGIzMzc3MjNmXSAgIGRiZ19zZW5kX2VwX2NtZDogZXA3aW46IGNtZCAnRW5kDQo+Pj4gVHJh
+bnNmZXInIFtmMGQwOF0gcGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0
+dXM6IFRpbWVkIE91dA0KPj4+DQo+Pg0KPj4gSWYgdGhlIFN0YXJ0IFRyYW5zZmVyIGZvciBlcDAg
+ZmFpbGVkIGFuZCB0aGUgU2V0dXAgcGFja2V0IGNhbid0IGJlDQo+PiBETUEnZWQgb3V0LCB0aGUg
+RW5kIFRyYW5zZmVyIG1heSBub3QgZ28gdGhyb3VnaC4NCj4+DQo+PiBDYW4geW91IGxlYXZlIHRo
+ZSBsb2cgdW5maWx0ZXJlZCBhbmQgaXMgaXQgcG9zc2libGUgdG8gc2VuZCBhcw0KPj4gYXR0YWNo
+bWVudD8gSXQncyBtaXNzaW5nIHNvbWUgaW1wb3J0YW50IGluZm8gaW4gdGhpcyBsb2cuDQo+Pg0K
+PiBBcmUgdGhlcmUgYW55IHNwZWNpZmljIGxvZ3MgeW91IHdlcmUgbG9va2luZyBmb3I/DQo+IHRy
+YWNlX2R3YzNfZXZlbnQNCj4gdHJhY2VfZHdjM19wcmVwYXJlX3RyYg0KPiANCj4gUGFydCBvZiBy
+ZXByb2R1Y2luZyB0aGlzIGlzc3VlIHdpbGwgbm90IGFsbG93IG1lIHRvIGVuYWJsZSB0cmFjaW5n
+LCBzbyBJDQo+IGhhdmUgdG8gbWFrZSBjaGFuZ2VzIGluIG91ciBkcml2ZXIgdG8gcmVyb3V0ZSB0
+aGUgbG9ncyBlbHNld2hlcmUuICBTbw0KPiBmYXIgSSd2ZSBhZGRlZCBjaGFuZ2VzIHRvIGRvOg0K
+PiAJdHJhY2VfZHdjM19jdHJsX3JlcQ0KPiAJdHJhY2VfZHdjM19lcF9xdWV1ZQ0KPiAJdHJhY2Vf
+ZHdjM19lcF9kZXF1ZXVlDQo+IAl0cmFjZV9kd2MzX2dhZGdldF9naXZlYmFjaw0KPiAJdHJhY2Vf
+ZHdjM19nYWRnZXRfZXBfY21kDQo+IA0KPiBJIGNhbiBhZGQgdGhlIGFib3ZlIDIgdHJhY2Vwb2lu
+dHMgYXMgd2VsbCwgYnV0IHdvbmRlcmluZyBpZiB5b3UgbmVlZGVkDQo+IGFueXRoaW5nIGVsc2Uu
+DQo+IA0KDQpJZiBwb3NzaWJsZSwgcGxlYXNlIGhhdmUgdGhlc2UgaW4gYWRkaXRpb24gdG8gdGhl
+IGFib3ZlLg0KDQp0cmFjZV9kd2MzX2V2ZW50DQp0cmFjZV9kd2MzX2NvbXBsZXRlX3RyYg0KDQpU
+aGFua3MsDQpUaGluaA0K

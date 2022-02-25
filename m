@@ -2,98 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF684C483A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CFB4C4840
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 16:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiBYPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 10:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S234252AbiBYPEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 10:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiBYPBm (ORCPT
+        with ESMTP id S229718AbiBYPED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:01:42 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDC71E4810
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:01:09 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 25 Feb 2022 10:04:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED56A1BCC;
+        Fri, 25 Feb 2022 07:03:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D33523F1BC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 15:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645801267;
-        bh=FkU2gOdn2xGABSYHRUy35muG2CC0vuUozeaWL5Zy+WY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=dtv7rP6259AZ1SHyhvaSzl7Mg/6M+VFnTzxtfRTezR6xOJkIdSOrv4bINeiDL7gwK
-         ufP/+DdwK0P0AP+zn3/YAc1fNihnLHLTf3vG8ZLWCxQTlDOZOAFY2mkHsfI46ldn1n
-         FsneRVdi0N9Vsrf/nx5ijkz+rTPOs5oy7HwV+M7ht86maMxoYu5qJRDVfKPo/ZZR2w
-         w9ZegY0OwOvbaKIsfphmdqSUutPuaYwM3zanf08JkwQg+QhaXhI5/whQIxI9WT0WDU
-         4JH+5/GX5umSWI8ugHFey4ITfZCe0Iqw+lpdOp8BNAgk+XGjI++40oOafNYgSuNXyZ
-         5+GBGw1Y54Mjg==
-Received: by mail-wm1-f70.google.com with SMTP id ay7-20020a05600c1e0700b003813d7a7d03so621656wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:01:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FkU2gOdn2xGABSYHRUy35muG2CC0vuUozeaWL5Zy+WY=;
-        b=gvG/xybj41329SUQCl9Ht4N57Je0X0lSSeRALG5UcHQFkPq1kaSL4fDsaf3KDCdwbD
-         CShaodSiDjQbBrVyFQM9ZfGWzfNFnKpee7pszo7eAJVbDg9QrvX2ETpKhjJXYqLCfkuC
-         bCva1tLVUOGq2oCCYvJJCXA1a5DyaY3xGYYeCC7QyeaoI1Fck4LNArx0Fj6TbRcovFdx
-         37yYFitWEKyh6slziA2CpIvQYMbgf/JMhkAB90n+e5zcVvhUtF4s4/Rp6ZanoMckhMai
-         mgxIgbKk2ATa6TYXN1T7614RcG8EFHGHblqng+//OazvYWtPa/Y7LEuR1z6d92AzVXYa
-         MuHA==
-X-Gm-Message-State: AOAM530RSOX+Tea6y020r72MNMxZokcUx7HJtwwc9qyu92Y7wi0xXQeR
-        oAXkHqcdVaRZxm6GiEFI481uvXPlUALg8sy0Pg+VN4AFTUo4d09IdYavo4LEzWeH8aZBwlKQXY+
-        iGd2/0hTg4c9M+Ul+KlnXfuDL78p8WgavmMkIG9DXQA==
-X-Received: by 2002:a5d:5302:0:b0:1ed:e1d2:f0fd with SMTP id e2-20020a5d5302000000b001ede1d2f0fdmr6610777wrv.585.1645801266882;
-        Fri, 25 Feb 2022 07:01:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxN1+UNzBg/eC7kDf7ekQci8yZiV5FtBTZawvHTK83D4OV89DFOny0v4a9sH8j5mmEhULnVZw==
-X-Received: by 2002:a5d:5302:0:b0:1ed:e1d2:f0fd with SMTP id e2-20020a5d5302000000b001ede1d2f0fdmr6610760wrv.585.1645801266664;
-        Fri, 25 Feb 2022 07:01:06 -0800 (PST)
-Received: from [192.168.0.132] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05600c1c9a00b0037bdeaf5d30sm3000004wms.36.2022.02.25.07.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 07:01:05 -0800 (PST)
-Message-ID: <546b11fe-5eb6-03f0-63c5-881c9d4a293c@canonical.com>
-Date:   Fri, 25 Feb 2022 16:01:03 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A77B616BB;
+        Fri, 25 Feb 2022 15:03:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834FAC340F2;
+        Fri, 25 Feb 2022 15:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645801407;
+        bh=8tgY1YkBbYTWTXyYR4O+XbrJwoQVpT2+sYNnsPtqvH0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dw9ap3JVLMMql71K82hI4mKsP/7YHWQoyfv72bwQlBiAVWxaiwD1wRw3F+VZXEvvx
+         WQ875mGxuzYNn9YOGvOVhfM48/vJmXWbVWzJawe9/qtylmFhRFKzi/WIlticaLs2cM
+         AIsKthZYoQsa2oyxoCpZ4YjBqEKyMb9wcdQRk1xHNA53poMUthPP4xAVhwDjyRsWdQ
+         zUiWsfTNGn4gtWhCXAbO3yoH2GxxQrng0fLO7xpjNZyfrFAeZaNLFEQf/aFqJSVq2Q
+         N6ip6YngC/8NKzFuprepndLFjNKU7KXIMlZ5Hj7GkAhONkklJjut0MRGVV52yDZV2+
+         8foGTd4vToHxA==
+Received: by mail-yb1-f174.google.com with SMTP id u12so6407758ybd.7;
+        Fri, 25 Feb 2022 07:03:27 -0800 (PST)
+X-Gm-Message-State: AOAM530jsifmsMEcJ7uw9GREOKQVuqa2wLuI207ootGjVhCeORZfI0gd
+        +wmjmkHFPO7FwOWj4G1hBsH5vdRMgBuesU1Oz9o=
+X-Google-Smtp-Source: ABdhPJwozR+tvIwdArnwynmJXvOgvPU8UZYk0FrDkdJKmQOdPasCTGp0ANalFhRoBVSWGK5vHEFvk0JS4lVatY3R8aA=
+X-Received: by 2002:a25:24ce:0:b0:61e:1276:bfcf with SMTP id
+ k197-20020a2524ce000000b0061e1276bfcfmr7488253ybk.299.1645801406586; Fri, 25
+ Feb 2022 07:03:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] memory: emif: check the pointer temp in
- get_device_details()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, ssantosh@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220225132552.27894-1-baijiaju1990@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220225132552.27894-1-baijiaju1990@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHmME9pJ3wb=EbUErJrCRC=VYGhFZqj2ar_AkVPsUvAnqGtwwg@mail.gmail.com>
+ <20220225124848.909093-1-Jason@zx2c4.com> <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
+In-Reply-To: <05c9f2a9-accb-e0de-aac7-b212adac7eb2@amazon.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 25 Feb 2022 16:03:15 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGbP+NGjqLndPS7EO_sazyoN7ot5siCR5hPTJfNYU2SaQ@mail.gmail.com>
+Message-ID: <CAMj1kXGbP+NGjqLndPS7EO_sazyoN7ot5siCR5hPTJfNYU2SaQ@mail.gmail.com>
+Subject: Re: [PATCH v4] virt: vmgenid: introduce driver for reinitializing RNG
+ on VM fork
+To:     Alexander Graf <graf@amazon.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        KVM list <kvm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        adrian@parity.io, ben@skyportsystems.com,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eduardo Habkost <ehabkost@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Laszlo Ersek <lersek@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>, Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 14:25, Jia-Ju Bai wrote:
-> The pointer temp is allocated by devm_kzalloc(), so it should be
-> checked for error handling.
-> 
-> Fixes: 7ec944538dde ("memory: emif: add basic infrastructure for EMIF driver")
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+On Fri, 25 Feb 2022 at 14:58, Alexander Graf <graf@amazon.com> wrote:
+>
+>
+> On 25.02.22 13:48, Jason A. Donenfeld wrote:
+> >
+> > VM Generation ID is a feature from Microsoft, described at
+> > <https://go.microsoft.com/fwlink/?LinkId=3D260709>, and supported by
+> > Hyper-V and QEMU. Its usage is described in Microsoft's RNG whitepaper,
+> > <https://aka.ms/win10rng>, as:
+> >
+> >      If the OS is running in a VM, there is a problem that most
+> >      hypervisors can snapshot the state of the machine and later rewind
+> >      the VM state to the saved state. This results in the machine runni=
+ng
+> >      a second time with the exact same RNG state, which leads to seriou=
+s
+> >      security problems.  To reduce the window of vulnerability, Windows
+> >      10 on a Hyper-V VM will detect when the VM state is reset, retriev=
+e
+> >      a unique (not random) value from the hypervisor, and reseed the ro=
+ot
+> >      RNG with that unique value.  This does not eliminate the
+> >      vulnerability, but it greatly reduces the time during which the RN=
+G
+> >      system will produce the same outputs as it did during a previous
+> >      instantiation of the same VM state.
+> >
+> > Linux has the same issue, and given that vmgenid is supported already b=
+y
+> > multiple hypervisors, we can implement more or less the same solution.
+> > So this commit wires up the vmgenid ACPI notification to the RNG's newl=
+y
+> > added add_vmfork_randomness() function.
+> >
+> > It can be used from qemu via the `-device vmgenid,guid=3Dauto` paramete=
+r.
+> > After setting that, use `savevm` in the monitor to save the VM state,
+> > then quit QEMU, start it again, and use `loadvm`. That will trigger thi=
+s
+> > driver's notify function, which hands the new UUID to the RNG. This is
+> > described in <https://git.qemu.org/?p=3Dqemu.git;a=3Dblob;f=3Ddocs/spec=
+s/vmgenid.txt>.
+> > And there are hooks for this in libvirt as well, described in
+> > <https://libvirt.org/formatdomain.html#general-metadata>.
+> >
+> > Note, however, that the treatment of this as a UUID is considered to be
+> > an accidental QEMU nuance, per
+> > <https://github.com/libguestfs/virt-v2v/blob/master/docs/vm-generation-=
+id-across-hypervisors.txt>,
+> > so this driver simply treats these bytes as an opaque 128-bit binary
+> > blob, as per the spec. This doesn't really make a difference anyway,
+> > considering that's how it ends up when handed to the RNG in the end.
+> >
+> > Cc: Adrian Catangiu <adrian@parity.io>
+> > Cc: Daniel P. Berrang=C3=A9 <berrange@redhat.com>
+> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Reviewed-by: Laszlo Ersek <lersek@redhat.com>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+...
+> > +
+> > +       device->driver_data =3D state;
+> > +
+> > +out:
+> > +       ACPI_FREE(parsed.pointer);
+> > +       return ret;
+> > +}
+> > +
+> > +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
+> > +{
+> > +       struct vmgenid_state *state =3D acpi_driver_data(device);
+> > +       u8 old_id[VMGENID_SIZE];
+> > +
+> > +       memcpy(old_id, state->this_id, sizeof(old_id));
+> > +       memcpy(state->this_id, state->next_id, sizeof(state->this_id));
+> > +       if (!memcmp(old_id, state->this_id, sizeof(old_id)))
+> > +               return;
+> > +       add_vmfork_randomness(state->this_id, sizeof(state->this_id));
+> > +}
+> > +
+> > +static const struct acpi_device_id vmgenid_ids[] =3D {
+> > +       { "VMGENID", 0 },
+> > +       { "QEMUVGID", 0 },
+>
+>
+> According to the VMGenID spec[1], you can only rely on _CID and _DDN for
+> matching. They both contain "VM_Gen_Counter". The list above contains
+> _HID values which are not an official identifier for the VMGenID device.
+>
+> IIRC the ACPI device match logic does match _CID in addition to _HID.
+> However, it is limited to 8 characters. Let me paste an experimental
+> hack I did back then to do the _CID matching instead.
+>
+> [1]
+> https://download.microsoft.com/download/3/1/C/31CFC307-98CA-4CA5-914C-D97=
+72691E214/VirtualMachineGenerationID.docx
+>
 
-I cannot find this report. This is an open source work and public
-collaboration. The “Reported-by” usually means that the issue was
-reported. Usually in public. Can we see the report?
+I think matching on the HIDs of two known existing implementations is
+fine, as opposed to matching on the (broken) CID of any implementation
+that claims to be compatible with it. And dumping random strings into
+the _CID property doesn't mesh well with the ACPI spec either, which
+is why we don't currently support it.
 
-
-Best regards,
-Krzysztof
+We could still check _DDN if we wanted to, but I don't think this is
+necessary. Other implementations that want to target his driver
+explicitly can always put VMGENID or QEMUVGID into the _CID.

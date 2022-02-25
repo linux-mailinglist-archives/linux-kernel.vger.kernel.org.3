@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBACE4C4AEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB734C4AEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 17:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243073AbiBYQg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 11:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        id S243088AbiBYQgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 11:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243069AbiBYQg0 (ORCPT
+        with ESMTP id S243080AbiBYQgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:36:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCF0220429B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 08:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645806954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fqYY7w88iLzBzKsxm+iVgsvPAyDnq+ffNP0ORFfBhSI=;
-        b=I7qqpsCJXIWLWDoN5f3tnXIYgZcgQxCnZ5+TjpVUuguJ4RfzrN/ce9GwTgKjy9AzmnVDpk
-        56DUdSI51yQUMIXlkY79Ekj71WcFx+87Xjyf96cNJ0pejitbIeALJq1aOw/UpqjFN5XDhu
-        dv2vlX1L6+OuYOjMPu27EB3AaLaQHJ8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648--e9CF4UpMz-0XyEgup1qLg-1; Fri, 25 Feb 2022 11:35:50 -0500
-X-MC-Unique: -e9CF4UpMz-0XyEgup1qLg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3967F51A8;
-        Fri, 25 Feb 2022 16:35:49 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.17.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D730A7C04A;
-        Fri, 25 Feb 2022 16:35:48 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 446602237E9; Fri, 25 Feb 2022 11:35:48 -0500 (EST)
-Date:   Fri, 25 Feb 2022 11:35:48 -0500
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        lsf-pc@lists.linux-foundation.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ioannis Angelakopoulos <jaggel@bu.edu>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
- cluster fs
-Message-ID: <YhkFZE8wUWhycwX2@redhat.com>
-References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
- <Yhf+FemcQQToB5x+@redhat.com>
- <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
- <YhjYSMIE2NBZ/dGr@redhat.com>
- <YhjeX0HvXbED65IM@casper.infradead.org>
- <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
+        Fri, 25 Feb 2022 11:36:47 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209920A96F;
+        Fri, 25 Feb 2022 08:36:15 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id 12so7950055oix.12;
+        Fri, 25 Feb 2022 08:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=niaOyKFRTLM4nq6p91pTJy+BgOVTpwhZEheiPnsTKW0=;
+        b=njphU4SgCOeE1f6MWWYJwpInbIET4zmkTohQOWwD4Q9qCNfs4RqdFN5jbmZzafN8Pc
+         VNlUi8NwVsvtHA/EBjWVVHawtRv2OZSHx9mO690DMac36GHIwN3fRPu/uTvdQ4zBv4wr
+         /1gY0YjmPEDvlZpkurRE0d3cmltJEW2yGJxp9QO853qYRiUL0gO1IdG/8Y6/ev/QIGk7
+         +qMHuZNl0I6VClkELq1oGpNlicuIrTcMsvrVlBc1tK06KRlqxhDQkrotroFmZTyyOq12
+         zLP8FqeY09VQg58xpGa5DSoaxibdmLLLksHZviHqSNogHNPvvZ1KgGQJZJHTaELY4Dub
+         +GSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=niaOyKFRTLM4nq6p91pTJy+BgOVTpwhZEheiPnsTKW0=;
+        b=FB2KFrhBsFLOzPs1KGoIzr9EAUYKVd5rZFkFjP4f7s8rCyi/s9VCaMIOk6gGZ/fyGy
+         e7DpyyWyBqFi0HuNgSXiTuH4bjT61Fzd4884NXMRBRDl4uGI7i+K2FFsX3PWxkra046Q
+         aek9XDTZT1ALXNzCe3e7Uz/QGJC1Jtbac5ngdSzJctDr91B2KDvLUtwWLONKrEemGESF
+         kRsxeyObEkOGyNrri38Zt42wSVKPElptMSwEoU3LPSls1E5pn0y4vP0dsACogQ7hVRlV
+         X+7B7qCwa4QXNFhVcaUTzkKI1iZbENza9luMJ/Vv7zUT2xLMsmbvA+TelloLh++T+/vx
+         91Iw==
+X-Gm-Message-State: AOAM531KP4c8C1xLis6nr61kC80HPrqP8IxvFK5WAhPfdJa85kc8D2tB
+        qoQhto+NkoUwHe3NSqv5Y2rtEwXOSTc=
+X-Google-Smtp-Source: ABdhPJwGU24ldVXUVF0yTKU6iyVpDQgNrpuF3eu0sc35FMtjpWmbCQaUXCpa0iDMVke9oEjrTSJaDA==
+X-Received: by 2002:a05:6808:d46:b0:2d7:27c0:17d3 with SMTP id w6-20020a0568080d4600b002d727c017d3mr81864oik.84.1645806974885;
+        Fri, 25 Feb 2022 08:36:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k13-20020a056830150d00b005af8c9f399esm1275129otp.50.2022.02.25.08.36.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 08:36:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3501d9dd-b3d4-525b-995c-520b637f712f@roeck-us.net>
+Date:   Fri, 25 Feb 2022 08:36:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [4/4] watchdog: mediatek: mt8186: add wdt support
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, wim@linux-watchdog.org,
+        matthias.bgg@gmail.com, robh+dt@kernel.org, p.zabel@pengutronix.de
+Cc:     runyang.chen@mediatek.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
+ <20220216014505.28428-5-rex-bc.chen@mediatek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220216014505.28428-5-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 09:27:55AM -0600, Steve French wrote:
-> On Fri, Feb 25, 2022 at 7:49 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
-> > > What about local events. I am assuming you want to supress local events
-> > > and only deliver remote events. Because having both local and remote
-> > > events delivered at the same time will be just confusing at best.
-> >
-> > This paragraph confuses me.  If I'm writing, for example, a file manager
-> > and I want it to update its display automatically when another task alters
-> > the contents of a directory, I don't care whether the modification was
-> > done locally or remotely.
-> >
-> > If I understand the SMB protocol correctly, it allows the client to take
-> > out a lease on a directory and not send its modifications back to the
-> > server until the client chooses to (or the server breaks the lease).
-> > So you wouldn't get any remote notifications because the client hasn't
-> > told the server.
+On 2/15/22 17:45, Rex-BC Chen wrote:
+> From: Runyang Chen <runyang.chen@mediatek.com>
 > 
-> Directory leases would be broken by file create so the more important
-> question is what happens when client 1 has a change notification on writes
-> to files in a directory then client 2 opens a file in the same directory and is
-> granted a file lease and starts writing to the file (which means the
-> writes could get cached).   This is probably a minor point because when
-> writes get flushed from client 2, client 1 (and any others with notifications
-> requested) will get notified of the event (changes to files in a directory
-> that they are watching).
+> Support MT8186 watchdog device.
 > 
-> Local applications watching a file on a network or cluster mount in Linux
-> (just as is the case with Windows, Macs etc.) should be able to be notified of
-> local (cached) writes to a remote file or remote writes to the file from another
-> client.  I don't think the change is large, and there was an earlier version of
-> a patch circulated for this
+> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-So local notifications are generated by filesystem code as needed?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-IOW, in general disable all local events and let filesystems decide which
-local events to generate? And locally cached write is one such example?
-
-Thanks
-Vivek
+> ---
+>   drivers/watchdog/mtk_wdt.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index 4577a76dd464..fe5a2ecba97a 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -11,6 +11,7 @@
+>   
+>   #include <dt-bindings/reset/mt2712-resets.h>
+>   #include <dt-bindings/reset/mt8183-resets.h>
+> +#include <dt-bindings/reset/mt8186-resets.h>
+>   #include <dt-bindings/reset/mt8192-resets.h>
+>   #include <dt-bindings/reset/mt8195-resets.h>
+>   #include <linux/delay.h>
+> @@ -80,6 +81,10 @@ static const struct mtk_wdt_data mt8183_data = {
+>   	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+>   };
+>   
+> +static const struct mtk_wdt_data mt8186_data = {
+> +	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
+> +};
+> +
+>   static const struct mtk_wdt_data mt8192_data = {
+>   	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
+>   };
+> @@ -419,6 +424,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
+>   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>   	{ .compatible = "mediatek,mt6589-wdt" },
+>   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+> +	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+>   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+>   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+>   	{ /* sentinel */ }
 

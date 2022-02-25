@@ -2,126 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483844C3EC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CC04C3ECE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236694AbiBYHKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S238024AbiBYHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbiBYHKV (ORCPT
+        with ESMTP id S235033AbiBYHMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:10:21 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36091E016C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:09:49 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id v186so4161260ybg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:09:49 -0800 (PST)
+        Fri, 25 Feb 2022 02:12:14 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AB83B548
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:11:42 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso7731216pjk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:11:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
-        b=HWn4IvjfftzLpqogskfwiXRMAhH2YnmMfM5OsMY9RPUSUcpryyGeZSTHjOYBaHiIhl
-         DVOSOUlkmc+GGeLQcCUCEg0bwaxihtZERTQVzs5XnzXFXVQtPTUIDk9zHM5vNiWqySP/
-         oCCjbOR3glTpDgw6Ab7PaILpFVVNUw4Z0UebaRQq7ZVMZmcXjHL8O/hAGCL94evRM/CE
-         1JnE2fM1rc/x9+lklrxU1xg20vX4oB7de6MI2UDp54zDrz/ZqQ1qP5CvbBTmPTSLBvA4
-         b7esENhujCgn/h//pWlg7FsoklcZbtwyv1b98q4BPSugWpd5aACAOCjFVOaDvk67eTwE
-         2iJQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uGhzlt2t6o+8i2zqg3MDSAcgIvp80HsaumhqEr+aVuA=;
+        b=bCTCvwdprbUmaWGdjK2w4AhRfj51ARiwdd5jRHELW89c5ufQFPe+Ax0dd3j9/XEN+E
+         TqcKvwJ2AEpW+jIORqrZbYaU74ZDGkbIVKq4d6uS7zi7mJzsdztlLgtjwuuuJIVkTVHV
+         EulqOmjKu6uXVnZvJioPVMEilEiqQId0rcI0T90PYht5e7IY4PsdSa49eikYXAZgprv8
+         si8AJ6vSJQY4G0oTOQuva39YNN0UpGDZViVu1IeV6jt9EQRfDZchpDLWu2GrLURL0HXh
+         3ZrSdATtMsR0Hjff1Ii7ypCl+q/uSBT3KPJQC9zLctcorhVh8spx9JYsraBjcp4aC1UV
+         z/DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
-        b=TrE1fSs3zLF2qM9QuBdVT+jyKTqLS0YmR/mxAOZaHGTLonnBjViJrC7tMYOfU++/nt
-         upn11OkYT/Zp2vx1lr1oSw0ZSeSBIzYB6ZEjiJoCLDh78fk9hF+PCxZ45gp98vQpAU/C
-         89pNYazxWeo31cMe01GBrWx1J26EdxKSQWIy7pIUVfXRL0s5k24SMF53+TzUqr76rfZy
-         5lU/wvYcXyyNkFGUQaerynV9MHT5iE7JQnfIJs8QJ6yibaelZo2nUOhLUSRvrNgfB4IW
-         E8edNs7tZNt/jqyWGkwB4JULjQn7mDNVKcgwyspqciV7Z3pofln6LJAETm1d9d4Z53j9
-         Eiaw==
-X-Gm-Message-State: AOAM533FiyvKKmYRtVnTrh4LVsDnYjH354O2ddzbP8Iy6DVeCL96cB63
-        s6Uy7LDsR9GjvbvadpIWvpudGLrqv+VuhybWgLDMkw85ZtZTyg==
-X-Google-Smtp-Source: ABdhPJz5laBsJeGK80mAX/WEbB1K3EIdSrupGykMNNj/HIKrR3FFyHPZAgRAHsNtHZz81rqQLu1yS8VO8iZ7ZOAkxDU=
-X-Received: by 2002:a25:2551:0:b0:623:a424:e2b5 with SMTP id
- l78-20020a252551000000b00623a424e2b5mr6277259ybl.603.1645772989000; Thu, 24
- Feb 2022 23:09:49 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=uGhzlt2t6o+8i2zqg3MDSAcgIvp80HsaumhqEr+aVuA=;
+        b=4HZr40HYrVZy0CHXFK1MVssLVIkfImfAvGRTYl12Xu3vBMFFGL5JsuFdFb08nDLCMq
+         DIVFubYP7wnAOIk7EAepRmSgEvR24kAP2lB5HF7e5oooUIOnNs9Io6nto5BkhrVp3Gy5
+         gVb9qRR5wcHZ/C7FioWCWdi/tOOSQf9JohIi5YipZRSrGREZEOaVj432XzmymotyCcic
+         mgTZiZKcGb7bKIhl5dmv1qwqz69kZCk+Ukdszx/Go2pPiiB70a7YMt3twjrmc9RwdE9p
+         iiaNLnRvNCQwOnjZNQSktjenT1wAtD4/m5//dI6kIZiNnYpE2CfnGf0VD+s20qMdz5ja
+         T2Cg==
+X-Gm-Message-State: AOAM530+a/J+ufo/cZ6PMuskxhcmjBJNOpwUp7NEhbpIkqOjd4SE96MJ
+        SQu76d96kuK3QKMr5SCIkUYZ92oZLVxNBCM6crs=
+X-Google-Smtp-Source: ABdhPJwsHNYsMyE00iRtoqsgp1WpP4CM7ELQPxCrJYar+r/apzNsZLMLdvLe5Q2CnDDye58EWhJaPxqZsdxkcgLE0Lk=
+X-Received: by 2002:a17:90b:fc7:b0:1bc:4fc0:6fbd with SMTP id
+ gd7-20020a17090b0fc700b001bc4fc06fbdmr1869825pjb.198.1645773101686; Thu, 24
+ Feb 2022 23:11:41 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Feb 2022 12:39:37 +0530
-Message-ID: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
-Subject: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
-To:     linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
+Received: by 2002:a05:6a10:c58b:0:0:0:0 with HTTP; Thu, 24 Feb 2022 23:11:41
+ -0800 (PST)
+Reply-To: canadabell84@gmail.com
+From:   Bell-CANADA Entreprises <jacquesgeorgesguichard@gmail.com>
+Date:   Fri, 25 Feb 2022 08:11:41 +0100
+Message-ID: <CADq6x7dHCgcbaRqk7_zJ1udsM=HOn4gmFrHEM7HuC9G3ju7ZvQ@mail.gmail.com>
+Subject: SESSION DE RECRUTEMENT 2022
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1042 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5006]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jacquesgeorgesguichard[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [canadabell84[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Please ignore this email if it is already reported]
+A votre Attention !!!
+Cadres et Jeunes dipl=C3=B4m=C3=A9s Bienvenus, Dans le souci de lutter cont=
+re le
+voyage clandestin, la pauvret=C3=A9, de promouvoir l'emploi et =C3=A0
+l'int=C3=A9gration Africaine au processus de la mondialisation, La
+Compagnie BELL-CANADA en collaboration avec le service de Citoyennet=C3=A9
+et Immigration au Canada lance une grande session de Recrutement
+2022.En effet nous recherchons avant tout des personnes capables sans
+distinction de sexe qui pourront s'adapter =C3=A0 notre environnement de
+travail.
 
-Linux next-20220224 arch mips build errors / warnings noticed [1].
+CONDITION A REMPLIR POUR TOUTE PERSONNE INT=C3=89RESS=C3=89E
 
-Build configs:
-  -  mips-gcc-8-malta_defconfig
-  -  mips-gcc-10-malta_defconfig
-  -  mips-gcc-8-defconfig
-  -  mips-gcc-10-defconfig
+1- =C3=8Atre =C3=A2g=C3=A9(e) entre 18 et 65 ans
 
-metadata:
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
-    git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
-    kconfig: defconfig
-    target_arch: mips
-    toolchain: gcc-10
+2- =C3=8Atre titulaire au moins du BEPC BAC ou autres Dipl=C3=B4mes
 
+Professionnels
 
-Build errors / warnings:
+3- Savoir parler le fran=C3=A7ais ou l'anglais
 
-arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
-  233 | static int __init mt_init(void)
-      |                   ^~~~~~~
-In file included from include/linux/mm_types.h:12,
-                 from include/linux/mmzone.h:21,
-                 from include/linux/gfp.h:6,
-                 from include/linux/radix-tree.h:12,
-                 from include/linux/idr.h:15,
-                 from include/linux/kernfs.h:12,
-                 from include/linux/sysfs.h:16,
-                 from include/linux/kobject.h:20,
-                 from include/linux/energy_model.h:7,
-                 from include/linux/device.h:16,
-                 from arch/mips/kernel/mips-mt.c:7:
-include/linux/maple_tree.h:589:20: note: previous definition of
-'mt_init' was here
-  589 | static inline void mt_init(struct maple_tree *mt)
-      |                    ^~~~~~~
-make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
+4- Avoir de bonnes qualit=C3=A9s relationnelles
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+5- Avoir une bonne moralit=C3=A9
 
-Steps to reproduce:
-------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+PS: Pour plus d'informations et le retrait du formulaire, veuillez
+nous envoyer vos coordonn=C3=A9es Si vous =C3=AAtes int=C3=A9ress=C3=A9s ve=
+uillez nous
+envoyer: NOM; PR=C3=89NOMS; =C3=82GE; PAYS;NATIONALIT=C3=89,PROFESSION,SEXE=
+,NUM=C3=89RO
+T=C3=89L=C3=89PHONE,ADRESSE: =C3=A0 l'adresse de la direction par =C3=89mai=
+l qui est la
+suivant : canadabell84@gmail.com
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig defconfig
+pour confirmation de votre inscription et pour plus d'informations sur
+les conditions =C3=A0 remplir et les pi=C3=A8ces =C3=A0 fournir pour votre =
+dossier de
+candidature.
 
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/
+Le charg=C3=A9 de l'information

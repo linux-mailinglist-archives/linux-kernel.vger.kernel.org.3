@@ -2,158 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFC64C4708
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD48F4C470B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 15:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238814AbiBYODC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 09:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S241232AbiBYODL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 09:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiBYODA (ORCPT
+        with ESMTP id S241252AbiBYODE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 09:03:00 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FC9B7C75
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:02:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645797748; x=1677333748;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=9Q/1oCkUB/OLGEqeePNbO2y4Wfm+vA00xnbc38lnMI4=;
-  b=vhbHYs50t5IGyxvZqftfnU9lfa9NlDsg2/5wYiowWTevsRtF8BoILcRE
-   AgPvL+V1k+3FAOO9wRR4p/BNU7Uey8M1eMQ/hrQUmdYBrmkVFMeEgGxzM
-   ZgSCbt5jbvKEzEc/e3V3UYVs3jVyhWsQaqNojYXEg14bmNqsI/VB7TGJz
-   0NWQwNmLobVTAmYh0P+JEREQ/ITbeQ8j5P9wxNQp/L7QIaafibWJpV3V9
-   fWL9Orvs23gwytsiCkFeED8ijdC/kncBsp/GwTha3+12rXS1uMg5BBRJ1
-   tp2DPB3jUqI5XcT5NMCtjPVLUanuWeU13eUN+UwNcA/H0DxX278YCtqh7
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
-   d="scan'208";a="163650385"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 07:02:27 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 25 Feb 2022 07:02:27 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 25 Feb 2022 07:02:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iPVR14bOVuTJ5B2BD7uThbPPuSkwZ4veDGFNMS3NIncYyiPOi//wfHM/8THbkl2hiJ6SrshtTCmxZjn/HQnY1XYCg2pU5J2JBNtGW3yH8Zo45u6xxNJD99r3VdtURwOZKaPOjm5H+q+LjXP8rqro8Ic5Upj0JbEFqqSk+F0WUCY44Yz9pTixHnB/lDbHY1j8cBa46kMbM5++zXeWZUArWaBG2BqIJzNAjWoZzu5TlrrHCOiJ49mlQ8byJTdhMNg+yyaTxc9Z7ZP2YFzH2Lt7yqCHfWuBPk0TJ5R8TBUpOSm+2HHnp0V8kEOkyfaBibqCXPqRRFrxvA/lAU1hu1hK2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Q/1oCkUB/OLGEqeePNbO2y4Wfm+vA00xnbc38lnMI4=;
- b=gJm0Ztkpai05TS4UviLcwDF62BeRLSjoCvOGBnpPuIUOx1bch1IhdgJCmE+wXRwm17HhQJGb8m79mEJrTUxCedmrpLvdeyyD5D4ZV46rRK0hvpi0Iz0qmBKRc7lSGdGQUEEOYqR9qlzx70dxWHiPiQjdjMEfl6l07fwWMQE4016DAkhH5SBuHq8lEpBTiJIolTc9nwe6mMx+jHSXmCJXg+UpRvkJb2/4f89A69r6XPSVWzIrDIJZJYBZYFoWeS04ODpJtc41TGhuVja6rT8FSy/4ecFSv5BruD6iWV9ZnyXhokedsudbTDaYRO7jG/+k0RjBVJzAZxklHIAkDJi5jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Fri, 25 Feb 2022 09:03:04 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F9C3C1E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:02:31 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id y5so1736489wmi.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 06:02:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Q/1oCkUB/OLGEqeePNbO2y4Wfm+vA00xnbc38lnMI4=;
- b=pERJN/R7GtUPhE+oXBqY115i4dkYuSqYxrALd3JQ84SRt7m64V8kksY0VG1areAbRtSjJWWyCZj+xh3dl3uzaZd9uILeUon9A4gu3Lruf2oeEMOQFtjAOZi1d4vApWasZq7tCN7X5BSyEVyr90cFW1uXtr7Z9zhJxBt1k+l2C2I=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by BN6PR11MB1298.namprd11.prod.outlook.com (2603:10b6:404:48::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Fri, 25 Feb
- 2022 14:02:21 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9%5]) with mapi id 15.20.5017.026; Fri, 25 Feb 2022
- 14:02:21 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <p.yadav@ti.com>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <yaliang.wang@windriver.com>
-Subject: Re: [PATCH v5 22/32] mtd: spi-nor: xilinx: rename vendor specific
- functions and defines
-Thread-Topic: [PATCH v5 22/32] mtd: spi-nor: xilinx: rename vendor specific
- functions and defines
-Thread-Index: AQHYKlBO5uIg8ku+7kKf95f5Ls3ySw==
-Date:   Fri, 25 Feb 2022 14:02:21 +0000
-Message-ID: <457672c9-3ea9-32de-8458-c1aeff1788ce@microchip.com>
-References: <20220223134358.1914798-1-michael@walle.cc>
- <20220223134358.1914798-23-michael@walle.cc>
-In-Reply-To: <20220223134358.1914798-23-michael@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b04dcca5-129d-46cb-5b77-08d9f867712a
-x-ms-traffictypediagnostic: BN6PR11MB1298:EE_
-x-microsoft-antispam-prvs: <BN6PR11MB1298F2EAA4AB0E0A69A32B7EF03E9@BN6PR11MB1298.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GJDyg5H7nP8hZcICOQfpTEXTy6X9tebV3zi+YheijNlc2y/aSPIYtNQRiWyI+cGdFcPrRXJVocxQY2CZmbT64cQ1xPwISTVdpLuisBcVZwXusPlbIvTkblLtl1ogVHLLs/jyNYPka9nGU6gDPlHMZh5v6i+YwD8tmeRxMATI431Ti2CFflec6xrdz1gfADXONYSDe6Eq6j11kl6JrqiFG/PfR6g0bG+OhwkFSJovLr9OySA7zWArHGq7/vip2j2sLSnabOSULM+lTeOHR1qRECOMdG0RFhL3HhLeGbSQVS2tEf+5s4mMSf5oWHx/xb1BObJZZDHK/CAbNIbeUsGf3V73uG225gmFEqUKfXHNJ9xm4sjlBWyoHeGLfx1hBjXn4R4W/8YXIR4ZSSTDLLSd1v/WzPMQ3syShSTnZf82SAL/nleDtZxvT1ET2g9v1BTp6uUOjO8pHkvwoO7PCIFw4Mn0FrmqpGqDyezH+XPGlLBKBtkR1/BYp6zDRrGlV1KiqDHnx9tSdh/7QVpUVTICGBoEQ6SB8eYrBzKQnz2YKfv3DfInw7KYLSTOAUuGVp20hPY9C6bIrQIE++9UdfQXfhtvJK8LAN1VNdxq6CUtLEoYz1YUL0xnS98lNJ9rsmQe/fLznDv4G22mANn00khmHJEkuGhKhNqaSCpbusNTWMniqARnIpRj/3z/N2HPKTdgcxewhrF4UxESM+fUahanSQgy7pPrEveroQwzDknIt/DhgxMJPLc+M6h2kmjDH4Alb4oaDrR2YoCMVEKS73gc7Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(26005)(110136005)(2616005)(71200400001)(54906003)(66446008)(186003)(2906002)(66476007)(31696002)(86362001)(38070700005)(316002)(76116006)(66556008)(66946007)(64756008)(8676002)(6506007)(122000001)(91956017)(83380400001)(8936002)(38100700002)(4744005)(5660300002)(36756003)(31686004)(508600001)(53546011)(6512007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V0V1dVJ1VXZtaGg0bEl1aHp5WUo3VFlHY1ZCYllqOGlaaDd1dE1IZitmSnA1?=
- =?utf-8?B?T0hianlHRURQQTV2dS9MSWZKdjNOZVhtMDJqTCtaZ014VWRObisxdjBsTzJm?=
- =?utf-8?B?S21jN0ozdUFpVFdNcnZnVEVZcUxPc01UMUo1anpDVm5XWk5WUU1PRDBpUkJ1?=
- =?utf-8?B?VCtEcjc0akoydnZpM0k2azVtL0ZWV0dHK2diZXFJZ2VGRWxuTG42cllYQXA0?=
- =?utf-8?B?QnRwR3JYVUVaVElBY0VWZGN1Q0RNMk1DZlVWQ1NUMldsTVRROTc1TzBuL1J2?=
- =?utf-8?B?ZUF5UWFSeTZqcDhTbm5ON1JDdTNsRTVIWm9GU2t1Mndlc000NFZIZExNQ0Nq?=
- =?utf-8?B?SytaSVpleUVkbUtVT0xLYjRIM0FYK003TlVrOHhiMFpRdXk2d3RCTzh1cFlU?=
- =?utf-8?B?N3hTekJLMldQa05jUXNMcHpxczA1UlBHdWV1YWRUK0NIc0doaUMwanVESnpj?=
- =?utf-8?B?b1JLdXltMUd3RjQ4K0tSMlBUeldjWGpTMjZTZERWL2d4WVR5aVhxY1RBTzFI?=
- =?utf-8?B?SzV5S3dqU3BBYkdQN2xGS0VwVWE3Z0RxMnpVeW1Db3VvSnc3dzc0bWxGU3Ji?=
- =?utf-8?B?Y0ZVeGdxME1DL0ZheWowSDYybTZwb0FIVkM1YVdlTW9Ja0lrcDkzWjFhTUc4?=
- =?utf-8?B?R29HQUVrSnk1ZEZDZXd0VzNtbDc4aVB6Nk9sMGQwWmdjcDV0U2JSaWZQd3ZK?=
- =?utf-8?B?a1ZKcmd0Ukh3elJSa0VUMFVDYlJ3YVNtS2RsN0RuMURnVFNHa1dNbW54aUlF?=
- =?utf-8?B?MVF0dXBzdDNqelRxbUZEdFVCZDlwU0VGbDE5ejZOOVRPdC9xU0lkT2lxNWNy?=
- =?utf-8?B?cFg3aDQ1TlJKVFNiTEFCQWxPZTN2R1Z0SUt3dXNmbHlScHl3Zkg4bThCTTFT?=
- =?utf-8?B?M0tOWklxbldqWFJtakx6U1lYZDdqSUdtb1JnOUh0TVdic0U0QXNkbUYxVVdE?=
- =?utf-8?B?VDdKc0t6bUJ3QTlvU1BSdEhrcGJoWGpXeks5L3IvcVMrZDAxbng5cVh5S0JT?=
- =?utf-8?B?b2VzbWZNMGp0MDFva3dNSVNSUW5jS0JEemZPOEsvOEg2NGdpbjhSTC82S2R5?=
- =?utf-8?B?b1h4YVltVTNmaitackJ0NWFlVTBrYUpGcWNtTkRXWDRvdkpFck52SXAyTWl3?=
- =?utf-8?B?WGpnYTFrZlEveHN3WHBmSkR2NHBKeldmNWFFTGxMSExNOVZ2OFdWTmlyQUZm?=
- =?utf-8?B?N0Y2eG5jMnJHcnhCLzhvVGhXVUtqQ3cwUzZBUmx1ZTJvdHB0cWVyZmFOb1Fr?=
- =?utf-8?B?REdJR29Md2hxRUo0UTNWaWtmS3poMUNZMnJqU3c1NUZEOEVsL0trdVRRdFlP?=
- =?utf-8?B?eHhFalVNVEt4cE51d3dXQUsvUEtjcGdHb1FGU0s1TlZLanBsWkFScFBHZm5H?=
- =?utf-8?B?SnppQm1jbzNPTnVYaldSNGlmRjlJQ29Hd0gwQnhxZWRXeVhaVThZUmRJODhR?=
- =?utf-8?B?UUtJSHlmeDlkck1EY29ZME1aY29GaFlETVhnbVNwVjlUR1hvR1JlQ1hHcVVj?=
- =?utf-8?B?cmFHbE8wbTkvZCttUjhEeHVSeUVrVlBKeWdRKzJRbzhrazBtM3AxMWRCc0ps?=
- =?utf-8?B?ajJKOVQ1d1ZsbkNvczFUM3ZEMmdJd1RLaHZ0VDlqTDFmQjFMeU5jenBzM3RH?=
- =?utf-8?B?NjFXa2NLV051NFFIU3F3cVYvT0E4cnlQdC9Ibmk3Y2lMQlFtaGVtWlJ0TjRt?=
- =?utf-8?B?SHpuOGx6dmFoa1BYVDJUTzlUK2IrcDRXMm9FY040TVUrbVJqaDA1dlhkZkNM?=
- =?utf-8?B?OEZXTXlLaTRYZDlLNDY0ZS92R0RRM2JFQmZGb2FVejF2dnhQMDlEQVJNcmcr?=
- =?utf-8?B?aDFLeXhjSFZCbHJLZnZ3ZzF3NFRsNjYwZVZrSlk4ZWhta3dvdmQzOVpBUHlm?=
- =?utf-8?B?aDU2VGZzQWliMkhaK05SVC9pZkNqeGlEWmNyVkJMek1VNSs3bDBBWFo3dTQ5?=
- =?utf-8?B?UU5KNFNKNUtYL3RqNnZLZzdBeTgzZ2JjeDM1MGszcStnZ3lNVU4wN0RiOVR0?=
- =?utf-8?B?ZXdRUUpRRVVTNlNUZXp6L0FDRmUzTHorbE9CeGUrSnVDWk5HT01Zb0ZhQU1o?=
- =?utf-8?B?QysyVmFHL1RmMkNhZzBSWnR2WUNmRFJLOGFpS1VHbFVNeU1oWTk0OGk5UE5n?=
- =?utf-8?B?M2VtdFRTOGxIMlg3MngrT1N4YUpxeEgvWVdwNVlvaE1Ma29vQ2tlSkxjMHJR?=
- =?utf-8?B?V0pFTXpvb1dWcVBvWXBXK0c5c0JyUVMyMXBMcHNzNVdCcFYyRWl3NXhsNU5s?=
- =?utf-8?B?N2llc0d6eCs1MVlNVFRYOXN1bFJBPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6232E6BEEED67F418B9999C21C738A4F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qk5zAx/v4pV2NZHwekGx/zCPF5BYYqJTYfuyv4JLKnY=;
+        b=qSqHaAhVw1FQbAxP/QAKts4bG5uOwjXiLlvlpqNoykQNaeeBXx32Edu43dPFStbZCG
+         cnQTUAezVOLG2KcozYpdObnmmiXEODrRfjE3sgIO4puFvZRT7+VS21wqJ0ZA2wY+Gmie
+         q4OMiLbz4SyMAB+tqwh9ilNBqpa8fyiAkMWeuXzAlAdESXgegz2460ZT7qY9jn215v+v
+         fFkTJxtJT5oB6R3OaoW7TwhajdFxuXkE77nR3r5OB7lbU1dHY2s/K9xrZjilvGNH8x5m
+         7MSD0/mhJ8tj8BYvyIVdzEon2/I5Hjt4/zFb6EWNseBMC8roVJ3usS25uz22iiIOt6BF
+         fLlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qk5zAx/v4pV2NZHwekGx/zCPF5BYYqJTYfuyv4JLKnY=;
+        b=0Y7+fcncCByIljUEJnHgnvGWFUAepPhhDGm4VDyITARtLDBWFy8RfqwS/ytM13NLi9
+         sgiuW89sB2vhJR9yr3rJGCSZzIJ3Egpmg9Gd4nD018BG/LbPCa1KfIrEJYoGWldoYtMV
+         c9kHji24CY4yIOxUCdBVKNFhPCmCFYceFun8N5ZS/dqqJjSFMwt4CaDapAtZlXsAde4K
+         SY02ccwrHILxa9TwJVoepxTNdgvUDxtc+QOxjGlseVWUF0f11zUB0aJXwhxGBWjnVbz+
+         RLAFjz/m2htCF//7c+sz9LHfLxiOIaJUGd6Dug7g+WSRQFijXecVeiK++LKZMYN3modR
+         8Ing==
+X-Gm-Message-State: AOAM530mnWc0TVKcVFC0EIAxT7MtoEhaEu9UDjrzG1JCjU870dOyLmX/
+        nppbPwi2j5ZZ/tHJuFLpza94HQ==
+X-Google-Smtp-Source: ABdhPJzNfT6n5Kc9L2VQ5D1j+nBD0b/pLVfgouVRVGcRtPNPueTZJNk9DqZCS70uXP1DUkfwvKJuoQ==
+X-Received: by 2002:a05:600c:508:b0:380:fd39:2c42 with SMTP id i8-20020a05600c050800b00380fd392c42mr2814366wmc.178.1645797750075;
+        Fri, 25 Feb 2022 06:02:30 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
+        by smtp.googlemail.com with ESMTPSA id f21-20020a7bcd15000000b0034efd01ee16sm2462450wmj.42.2022.02.25.06.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 06:02:29 -0800 (PST)
+Message-ID: <422bd780-354d-d4ac-7b7a-8060325fc13e@linaro.org>
+Date:   Fri, 25 Feb 2022 15:02:27 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b04dcca5-129d-46cb-5b77-08d9f867712a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 14:02:21.2932
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EtwXfPc10MTxTkBtCthNGvD0EWhR9/vgpw1M9PyCGDlDIjYpUFKRWQBlvv4UtnAM/5HNodNBzBNBlWft/3yQMZ0yVx2P9ucXU8NCdLDZvf4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1298
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+ in threshold irq reporting
+Content-Language: en-US
+To:     Benjamin Li <benl@squareup.com>, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220120200153.1214-1-benl@squareup.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220120200153.1214-1-benl@squareup.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -161,20 +79,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMi8yMy8yMiAxNTo0MywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
-IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
-aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBEcm9wIHRoZSBnZW5lcmljIHNwaV9ub3IgcHJlZml4
-IGZvciBhbGwgdGhlIHhpbGlueCBmdW5jdGlvbnMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBNaWNo
-YWVsIFdhbGxlIDxtaWNoYWVsQHdhbGxlLmNjPg0KPiBSZXZpZXdlZC1ieTogUHJhdHl1c2ggWWFk
-YXYgPHAueWFkYXZAdGkuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvbXRkL3NwaS1ub3IveGlsaW54
-LmMgfCAzMCArKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2Vk
-LCAxNSBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL210ZC9zcGktbm9yL3hpbGlueC5jIGIvZHJpdmVycy9tdGQvc3BpLW5vci94aWxpbngu
-Yw0KPiBpbmRleCAwNWM3ZmU4NDNhN2QuLmZmZDU1NzlkNDVjYiAxMDA2NDQNCj4gLS0tIGEvZHJp
-dmVycy9tdGQvc3BpLW5vci94aWxpbnguYw0KPiArKysgYi9kcml2ZXJzL210ZC9zcGktbm9yL3hp
-bGlueC5jDQo+IEBAIC04LDkgKzgsOSBAQA0KPiANCj4gICNpbmNsdWRlICJjb3JlLmgiDQo+IA0K
-PiAtI2RlZmluZSBTUElOT1JfT1BfWFNFICAgICAgICAgIDB4NTAgICAgLyogU2VjdG9yIGVyYXNl
-ICovDQo+IC0jZGVmaW5lIFNQSU5PUl9PUF9YUFAgICAgICAgICAgMHg4MiAgICAvKiBQYWdlIHBy
-b2dyYW0gKi8NCj4gLSNkZWZpbmUgU1BJTk9SX09QX1hSRFNSICAgICAgICAgICAgICAgIDB4ZDcg
-ICAgLyogUmVhZCBzdGF0dXMgcmVnaXN0ZXIgKi8NCj4gKyNkZWZpbmUgWElMSU5YX09QX1NFICAg
-ICAgICAgICAweDUwICAgIC8qIFNlY3RvciBlcmFzZSAqLw0KDQpYSUxJTlhfTk9SX09QX1NFPw0K
+On 20/01/2022 21:01, Benjamin Li wrote:
+> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
+> polling mechanism to check for threshold trips. This is used sometimes to
+> run performance test cases.
+> 
+> However, tsens supports an interrupt mechanism to receive notification of
+> trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
+> interrupt support").
+> 
+> Currently the thermal zone mode that's set by userspace is not checked
+> before propagating threshold trip events from IRQs. Let's fix this to
+> restore the abilty to disable thermal throttling at runtime.
+> 
+> ====================
+> 
+> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
+> four thermal zones control cpu0-3 and the last zone is for the other four
+> CPUs together.
+> 
+>    for f in /sys/class/thermal/thermal_zone*; do
+>      echo "disabled" > $f/mode
+>      echo $f | paste - $f/type $f/mode
+>    done
+> 
+> /sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
+> /sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
+> /sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
+> /sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
+> /sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
+> 
+> With mitigation thresholds at 75 degC and load running, we can now cruise
+> past temp=75000 without CPU throttling kicking in.
+> 
+>    watch -n 1 "grep '' /sys/class/thermal/*/temp
+>        /sys/class/thermal/*/cur_state
+>        /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
+> 
+> /sys/class/thermal/thermal_zone0/temp:82000
+> /sys/class/thermal/thermal_zone1/temp:84000
+> /sys/class/thermal/thermal_zone2/temp:87000
+> /sys/class/thermal/thermal_zone3/temp:84000
+> /sys/class/thermal/thermal_zone4/temp:84000
+> /sys/class/thermal/cooling_device0/cur_state:0
+> /sys/class/thermal/cooling_device1/cur_state:0
+> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
+> 
+> Reported-by: Zac Crosby <zac@squareup.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
+> ---
+> Changes in v3:
+> - Upgraded logging to dev_info_ratelimited and revised log message.
+> - Remove unrelated hunk.
+> 
+> Some drivers that support thermal zone disabling implement a set_mode
+> operation and simply disable the sensor or the relevant IRQ(s), so they
+> actually don't log anything when zones are disabled. These drivers are
+> imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+> 
+> For tsens.c, implementing a change_mode would require migrating the driver
+> from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
+> (or updating thermal_of.c to add a change_mode operation in thermal_zone_
+> of_device_ops).
+> 
+> stm_thermal.c seems to use this patch's model of not disabling IRQs when
+> the zone is disabled (they still perform the thermal_zone_device_update
+> upon IRQ, but return -EAGAIN from their get_temp).
+
+What is the concern by changing the core code to have a correct handling 
+of the disabled / enabled state in this driver ? (and by this way give 
+the opportunity to other drivers to fix their code)
+
+
+> Changes in v2:
+> - Reordered sentences in first part of commit message to make sense.
+> 
+>   drivers/thermal/qcom/tsens.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 99a8d9f3e03c..dd0002829536 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -509,10 +509,14 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>   		spin_unlock_irqrestore(&priv->ul_lock, flags);
+>   
+>   		if (trigger) {
+> -			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> -				hw_id, __func__, temp);
+> -			thermal_zone_device_update(s->tzd,
+> -						   THERMAL_EVENT_UNSPECIFIED);
+> +			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +					hw_id, __func__, temp);
+> +				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+> +			} else {
+> +				dev_info_ratelimited(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped - zone disabled, operating outside of safety limits!\n",
+> +					hw_id, __func__, temp);
+> +			}
+>   		} else {
+>   			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+>   				hw_id, __func__, temp);
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EA74C3A8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 899F34C3A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 01:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236189AbiBYAyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 19:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S236198AbiBYAyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 19:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbiBYAyH (ORCPT
+        with ESMTP id S234370AbiBYAyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:54:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E13716AA49;
-        Thu, 24 Feb 2022 16:53:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF12A61CEF;
-        Fri, 25 Feb 2022 00:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CA5C340E9;
-        Fri, 25 Feb 2022 00:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645750416;
-        bh=tax7gyujyT6hamv2XDCo/atDi2P1HZEp3rPfnjbbCdE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YgLBqBYjepIdalPEmtByKWBteNUDYoZxTTH91SQNLFOkDyz0gGFPRbQ7tL1cRKjRN
-         Ugj8t2g6TO/TrTElDEEj5dPdMVXz3/uIXtUDyVKF6UkNRAEE1q4HAqbo1fNJ2IInT0
-         GU4y/YxRtX1lpihD6xw0BPtYPqOtt3LMOcPww7WzFdMXMPNdBlH6tRa8bvCMxffXl5
-         8+zwcqa3NDFw6qglGhI5+V1Af/fYYxfNYtaESlY50ZzcG41jpooAsNT6h6jzVIMVZm
-         +BIEa1VU2iV/vESUGgdk9eyUvpZu0WKtXCVObIcuCiEisQOjOQyQ6JqxrWnJPr0AJn
-         lIyGf7ryo8XvA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Feb 2022 19:54:37 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887CB150415
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:06 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id d15so104188pjg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:54:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=arleATP5kW7wyYGHooV473HnyxLZGbKklPsBufv8eRI=;
+        b=bR3EbXpzYvJ6cwg3PLr2AUkX1uESfQTkRVu9vmdx1aQtJDsldu+Ap5dY07ATI/jVER
+         sYElMIQIXlyfEuN8+fR6wxCgui7KN47EQF9ugdjgNSX40RqGJ6Pym/coO69vn7mMswWK
+         m6Q1x75EGHqdSrDqWOfVb0bZKuXekoUdvgFP0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=arleATP5kW7wyYGHooV473HnyxLZGbKklPsBufv8eRI=;
+        b=WHoHfQ09UcC0OKgVRyrzuNdy5oajdP9/lKHh0AhRC6Jc4FJ/zR56rvet+dvg284ein
+         xbH9SStJY9l8RuYzI9lrJ6e78hc/SNDaJbG7Y3wnWAM9dZEWZtyN/90rzIPeUNdhIvYL
+         xTyYDPrwe91+yEd2d/7kQezaOBim3LihJ5+e512bxND/qZN1gDj4fBt5owoI8q5RF4S9
+         s6EO21YQY5OEu2EteeKAP1wXLTyPMznf6BKCuzgnq0hdb7lgmBW4NUpIcYZ0lZ1RaXK3
+         qCEO+nr9pnuOk2mBhEGOtxsgSSf3AadEyXvm0ltausMpz7T1UBJ9w7rbMQ7cx1xmXfjM
+         quOg==
+X-Gm-Message-State: AOAM532c8Od1evsNtmiCfIl1n7/499fpYAi6a+U9LWcAR4nFE2VtgUJ8
+        OX/lM/3VYJC91xMXYVqidahEvw==
+X-Google-Smtp-Source: ABdhPJxjDUQU4W1vH85mj/uxM4etnm6FLc/dttTyz80ozroHUMPQ3vkX6egkTBJzanvPc+qufEBOuw==
+X-Received: by 2002:a17:90a:2d6:b0:1b8:cd70:697d with SMTP id d22-20020a17090a02d600b001b8cd70697dmr720816pjd.78.1645750445691;
+        Thu, 24 Feb 2022 16:54:05 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o17-20020a056a0015d100b004e1c11d833fsm728217pfu.90.2022.02.24.16.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 16:54:05 -0800 (PST)
+Date:   Thu, 24 Feb 2022 16:54:04 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 11/39] x86/ibt,kvm: Add ENDBR to fastops
+Message-ID: <202202241651.B5FB7DBE@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.656194153@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220219141536.460812-1-horatiu.vultur@microchip.com>
-References: <20220219141536.460812-1-horatiu.vultur@microchip.com>
-Subject: Re: [PATCH] clk: lan966x: Fix linking error
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, nicolas.ferre@microchip.com,
-        kavyasree.kotagiri@microchip.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        kernel test robot <lkp@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 24 Feb 2022 16:53:34 -0800
-User-Agent: alot/0.10
-Message-Id: <20220225005336.55CA5C340E9@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224151322.656194153@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,17 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Horatiu Vultur (2022-02-19 06:15:36)
-> If the config options HAS_IOMEM is not set then the driver fails to link
-> with the following error:
-> clk-lan966x.c:(.text+0x950): undefined reference to
-> `devm_platform_ioremap_resource'
->=20
-> Therefor add missing dependencies: HAS_IOMEM and OF.
->=20
-> Fixes: 54104ee02333 ("clk: lan966x: Add lan966x SoC clock driver")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+On Thu, Feb 24, 2022 at 03:51:49PM +0100, Peter Zijlstra wrote:
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
+>  arch/x86/kvm/emulate.c |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -189,7 +189,7 @@
+>  #define X16(x...) X8(x), X8(x)
+>  
+>  #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
+> -#define FASTOP_SIZE 8
+> +#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
 
-Applied to clk-fixes
+Err, is this right? FASTOP_SIZE is used both as a size and an alignment.
+But the ENDBR instruction is 4 bytes? Commit log maybe needed to
+describe this.
+
+-- 
+Kees Cook

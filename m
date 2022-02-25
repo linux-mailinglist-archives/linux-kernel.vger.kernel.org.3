@@ -2,167 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6A4C3E84
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A494C3E86
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 07:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbiBYGlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 01:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S237897AbiBYGne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 01:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbiBYGl1 (ORCPT
+        with ESMTP id S232861AbiBYGnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 01:41:27 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA8B27026D;
-        Thu, 24 Feb 2022 22:40:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b+biWWavF2xCckYRjOEYf23UcEVt225R60jfJISz8kuqcWN2v0BJowITn69aV9+18G6lVy3iK21bmr/hIVGFcL9Up8xyUn5lLsfn1nLVdtfsgcdNR7Z7zo1cN5bx17dyxWUe+SDhrs/zEt6ANRE48BwIVECGJdai/RKYCFVruqJkJ94NBba8Tev1Ffopez2DGTJ1fMZZiciX/0wpwE+wgc6IQbQMKhnQfeFhQ2b6R09ttGtFMHPaZNIN3PFn3LSd729GDddaH4jxuTTJz1t/tgKDWgDhCjHxFvziRQ82VOlz9iJ37aT+SCQ/W5hjwkkv/WY06GgWFiu9xnSGHvEwsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LqlOOxKvvTChI7USl2u6Sgb9zJlqKRrRAx02r0T9URI=;
- b=BARFCbA6ctSnkx1cEk3MWXG+VuhlbzNtjocQhWI/Rk0bUrYaUAriWpmLeqaUSxAaD5YhSN2pQVtzh0Kt7jJTVIgkSkZgmWQcoXkg2fDj8fXienbGzND+UCDi/fnGtyXkzxGKMe226JCz1e5RB4kvIieNrcQmdadr7HuVkP1UC4PKn7uvRGgK+G7cuMmugBqaYCZgMs6NAHMu7jctjHFDCuugKrrU3y3cip2Gr7/A+qAACDWSga3RtQE0LGB3PTryiJbi5pgHIDg5wUvR++pohNIgxoy2rlvp2ProNcUewKCcdTG0s1qpYvvHQfOwI99/GrcZ6XhtfX/1wPtLUn/1Gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LqlOOxKvvTChI7USl2u6Sgb9zJlqKRrRAx02r0T9URI=;
- b=HkIyS0rtWlohSgyviZxSTDJUZ/vEv0egZYw1nwu/73PjoDO4VTEnKnPZEPoj/Z+jHw9fTTkvNk1gVDQeY6+4aoZSCMTInjO1dIj1EGYr1UAHjO+eBcXsuSc+mN6Y+gHzkiC6QnCNwfUFhRJsw21V1+MnU1nWPEdDAmDuSwpnNigZKdt3UcSNbtqn/4azulzqbFVaBPRyJj4JFhQqmr6EI0JmJxvbZs0RRPos1qBK9IjmKA/F97mk9hWOHJrPLPmxNUKoG2BEprui/dmaW96/mWPJVHAHnIklvTw7m8o1GELM8AFEmn/8xPEekXSUu1PtLVpnl6FTolmkX0XuobvYHA==
-Received: from CH0PR12MB5089.namprd12.prod.outlook.com (2603:10b6:610:bc::8)
- by DM6PR12MB2876.namprd12.prod.outlook.com (2603:10b6:5:15d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Fri, 25 Feb
- 2022 06:40:53 +0000
-Received: from CH0PR12MB5089.namprd12.prod.outlook.com
- ([fe80::2158:bc32:112a:2860]) by CH0PR12MB5089.namprd12.prod.outlook.com
- ([fe80::2158:bc32:112a:2860%2]) with mapi id 15.20.5017.025; Fri, 25 Feb 2022
- 06:40:53 +0000
-From:   Henry Lin <henryl@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xhci: fix runtime PM imbalance in USB2 resume
-Thread-Topic: [PATCH] xhci: fix runtime PM imbalance in USB2 resume
-Thread-Index: AQHYKgwFCgHVyOvH4ESDy/u/4+LZrKyjzGkAgAADKIU=
-Date:   Fri, 25 Feb 2022 06:40:53 +0000
-Message-ID: <CH0PR12MB5089EB28FAA6DF61F57F6D09AC3E9@CH0PR12MB5089.namprd12.prod.outlook.com>
-References: <20220225055311.92447-1-henryl@nvidia.com>
- <Yhh19qsTsGRhsLWT@kroah.com>
-In-Reply-To: <Yhh19qsTsGRhsLWT@kroah.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 4600caaf-e313-1c88-4c9f-3ab00130298a
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1535a804-ed0c-4bba-c12e-08d9f829c552
-x-ms-traffictypediagnostic: DM6PR12MB2876:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB28767FE139119D36E93909F4AC3E9@DM6PR12MB2876.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DgJtswULTuphIZAzlrcUe8zx0mKzZNb50VebVy0xlxrepi2LYIu2fpCMwQUCfs9sAH7pLU25lxHOC6VHIczCi6PgKJ+fi/EDC5ImdRZvujJQM6vPZj1og3XFfRM18QkrU95Cd9KsoxjeRXM2ZS8UFNJ+Qzg6rbcGxWObgsw2C296SLe095BpPkHWanYiqwk9CgLK9ggjGJFoSAjLIlPaC9184o25nr67hy6xtGphYfWjqFAN9ujgMo4YnCPvmOMkT140lc1ZGfS9TLnN9lnIzYZ8JC0J5J+DOPaQbVa8HDZuh7/dZ9EbIz4fhf45ki71Qx/RrJ7pGhuEvNa2q8I8mmNtSr3STmIn7Ns3xXwzfiv0+mMjy6gvNNVhpXjFLjVXHlmXrVntiXT88DGAsdspAmGGTb7fHIXmjhx4RqbkgQli1BU/2qpNg8ot/mtKHXocsR45iz1XEGDSjfTYjsiGi9baOxmZfx6+Y+ZrosVSRr190t7REqXXKLZH+SfUYdNlQOMHi6xwqGb+t12SQDpAPEYeDj+ZX81ZetLGCrQ0tLGJlSa0yTc457ibkCjxoLfP5egakTeR0nnTMzyav3DkVvu4cuGcmA4xnx2O2KuaQaB5GoJxRBenA71sjHhhT3BVtryyLRiGIKPvZ1e9lNEvs7gKTtSyIlimEo1z8yOfx78qF5glbdzpGlrbRv9r6KZywFK3f7CFpXhYwOw1plGCzA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5089.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(9686003)(6916009)(316002)(91956017)(508600001)(71200400001)(76116006)(186003)(8676002)(66556008)(66946007)(64756008)(66446008)(86362001)(54906003)(6506007)(7696005)(122000001)(66476007)(53546011)(8936002)(38100700002)(4326008)(55016003)(52536014)(5660300002)(2906002)(38070700005)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?/Dho7ol6l7KofMYqm2Y1vFXvtnGga4ecyj3CDQZfoHKC5sLomZN601bBb8?=
- =?iso-8859-1?Q?x0mvlj3qFg5NV/o84w4rdWhpMANMcaxeneciex6DO5SQhL7EZ+uJpavMVU?=
- =?iso-8859-1?Q?3IyNY7VsjP5w/z8h6CbhmKGQd887i/ky8FtEw6zDZtditpFovwM2poetWr?=
- =?iso-8859-1?Q?TwplkTuKGa7YAm/qDsqZgBp/oAf6/BwniCrhJ7YLg5zv+Iips31k4fdmmc?=
- =?iso-8859-1?Q?v7uolWKVhpn3ihJPAfg41l/IBKlVQyO4sHgrbqfgPCcWbcgs6o59iU44Te?=
- =?iso-8859-1?Q?pMUweTUqYiA19zBF+qHVKUEE0S2KtVGV7GngHYmMGjN/zhQHdBc600W51V?=
- =?iso-8859-1?Q?GcfljM8rGW0rDbth+7XKxALY9B+gAinKSKAKoBVexPFxoMkZKSjPzMWmXr?=
- =?iso-8859-1?Q?jPQRk+yoeTl3Vv+4xW0saLygTQ6V5ay2/sxC3WC0dAeqKgCYqKYrGeZ8vB?=
- =?iso-8859-1?Q?FQ5b7IUjzivRkbnVtt1orFlPLZuvXvoY8EsF90sfzHMlHvsw5Nql8JbBCw?=
- =?iso-8859-1?Q?0qTLPp2vk12ShhR8tPpNbtyKyCY5ZGM6jqph3LlcmwywXp+EEj5B4S9ToQ?=
- =?iso-8859-1?Q?0dnSpBXecD0aeV8UVUjkQbYbBOau5aKfxEHseFRnUTNbPdG9pOXumnQbVi?=
- =?iso-8859-1?Q?jUv6z1mdiVn8ECmsWmzlOjCTAQ16C0uDKiDajxw1iB7lqJ7BLs4HCxwVA2?=
- =?iso-8859-1?Q?D8xEqrnAA6Z6DtdpR3wwS4Dzahhqe6jMUMtkXU5de8p5fRDsifL/+vX7z2?=
- =?iso-8859-1?Q?6tqm4aRD6JFPuVbBWQejdaecqsgrBh5I1uoTGtzSw5bKb5AZtjRlK4+l3x?=
- =?iso-8859-1?Q?hPocOZq2XQrS/bhMbbhf/Mr7t9neRPGyjCaobANaXttsUCFv1OmPHi3rbw?=
- =?iso-8859-1?Q?q4yFGNHNpenM5JwHHCTELakBSCc48SKc0x7UA73LFNGTDuR/vt71z4G62d?=
- =?iso-8859-1?Q?anVxy/vTY+Vwb8MlGxYXP+V0Kb18xQFvmMGHT3PuvuowlHVxI6ZN3YeHZc?=
- =?iso-8859-1?Q?GH/jfY4y98giEngCirQ3l6j/UNmGFNz6+FVPe/2yPXA0VFT9wfwTWS+sto?=
- =?iso-8859-1?Q?I2sLN3OTqr4w+YsfAPYbbk30/BDbN8WMXk8SHh6LuOVXcukOsYbMMG/jaN?=
- =?iso-8859-1?Q?nX+jBdp2SEIFJ/xgeZoDWGBnxkSUPuSdl1qs7Fhd874vJQjV3M9r6JTG8z?=
- =?iso-8859-1?Q?CmroUFXOEHAlnveBym96f5OSLb0qb/hHEOuhuaoZWVqEMRXj5GHxFyEWYj?=
- =?iso-8859-1?Q?P73rCoDNMNiAqhJE2k0Sz1IBbW5QcvoQPQe68Auh8N+ij4rodbtVU1H79r?=
- =?iso-8859-1?Q?1FKxQ5VxIf7lgTeWqut1BFwq5wqGMZVHTUsS7gczTnhKIN2MjfTyBJFjTT?=
- =?iso-8859-1?Q?Z5S/P87DMOMzZGDtggxWh+z26z398SBdIc0aEb2m3Ll+HoQNO8IaM5M+Px?=
- =?iso-8859-1?Q?c4wt4KXPlz9RFK8v3FbkfTjxibjmhQ5WlNwlypS5MjoWIj9/pDmkj9AmNK?=
- =?iso-8859-1?Q?unnyivbFz1kFzQzhScq91ZbhfoXRXRNAg+qv5SvsViFxOuRPoyz+2aV/Ng?=
- =?iso-8859-1?Q?kbBqJvFgBXV3nRDod1YsjOmmPl6oaLhcirbs4W3MgKpEfa8ECjBUpar8B1?=
- =?iso-8859-1?Q?yl0t/2xPG/Xjy3z3a9i+MVCwlTxr/2WUqtkiJJiVU8mdsM63EBa4Es7w?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 25 Feb 2022 01:43:32 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1487DAB2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:43:01 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id i1so3589895ila.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:43:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3WKwDOfvIucdHL9pK/JQ4fGfUfoOR9rKDu+vz9mXHr0=;
+        b=llpmptyH/Oo89tS4JSWIPeZ4BB1PE4VD/2fgg5tQ89Ip2J0B0xoM/23xz9EidgWjBZ
+         IAj8+D07jmB0szwX5VJkQ8Wmz5xMZIE/R2h0qXtROL2dcfEKWumRAPDHUvIIIHUjsLiD
+         +1YQnChbotcSy7w5cIcUW+I1n3xixvcc/BlPksoFenBb7ZMLb2Oauh3pdirk7dbV1oT2
+         N5IbtmwoelB+UsN+RnchWIYH4S89d5kxFkBfi0N0apDI2TcIfEq7gqpyHg8dHWl+DFBv
+         4t9cP2AcffdiUalQ26Z/jg9PfsSL2/bPia3CQzhq1rvlL+MY1Rvus/Jmq9vWTig79XsD
+         6BiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3WKwDOfvIucdHL9pK/JQ4fGfUfoOR9rKDu+vz9mXHr0=;
+        b=y6yoGTIwgDCquuOwviZQR/ybzUq0owQnPbogcyGnJ5qCRMi3ifgKHqaR9VDqy9+IBi
+         eql4YLK/ypOn7cfpate3KQ1HKqabyrau1Vzx7I0N+jWqDGUwMB/Og4o3Pn8Nipykdrz1
+         nex0jG+ZQrklTCQvT7wp3RTSs3oIK3ZLVwnLlmmIbzjSX1h9BabXp1YxRTOb7AGu6xkZ
+         xP3rBufEAKOFZIJrviLnZ+yaSi5qLzvJPME27rxL64FJBOyjB8DzKXp6EwEY8/S/xBY3
+         qqjmXsxdfPEyDhW8+vJgmon6csIG97p1lkrXvGdkcm5J23dfu+IxmsAFz3bD1d9c6yGk
+         1Xvg==
+X-Gm-Message-State: AOAM533ik1Pjm0VBqM4+nfptIbg7xpHc+YpOj+Y+4FOsdnjzgKN3tE2R
+        XfHUdS+FgTcSICudfqxYybjTng==
+X-Google-Smtp-Source: ABdhPJy6ITAnsm5nVmqiIlnmBmman4yKpQsEkHFZ28WmpxRivmqhiq1FdVZnDjVLthZ7r4QeptRd9Q==
+X-Received: by 2002:a05:6e02:54e:b0:2b8:b9af:731a with SMTP id i14-20020a056e02054e00b002b8b9af731amr5349458ils.205.1645771380280;
+        Thu, 24 Feb 2022 22:43:00 -0800 (PST)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056e02118400b002c274deca4esm1158065ili.0.2022.02.24.22.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 22:42:59 -0800 (PST)
+Date:   Fri, 25 Feb 2022 06:42:56 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 02/13] KVM: arm64: Introduce KVM_CAP_ARM_REG_SCOPE
+Message-ID: <Yhh6cI4P5VEMitkg@google.com>
+References: <20220224172559.4170192-1-rananta@google.com>
+ <20220224172559.4170192-3-rananta@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5089.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1535a804-ed0c-4bba-c12e-08d9f829c552
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2022 06:40:53.6436
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SZetP92khJ6itHBGboLPB1UOUFnvSO+ftRHtH8DNohIrbgyJ247NmGJjpbgN0QKYtfO8nalGDR7UBi5lV5l52Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2876
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224172559.4170192-3-rananta@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It fixes side effect from below change. =0A=
-=0A=
-commit a231ec41e6f6433daf4c693f169f6c5cfda8cb9d=0A=
-Author: Mathias Nyman <mathias.nyman@linux.intel.com>=0A=
-Date:   Fri Dec 7 16:19:35 2018 +0200=0A=
-=0A=
-    xhci: refactor U0 link state handling in get_port_status=0A=
-=0A=
-    Move U0 link state handing to USB3 and USB2 specific functions=0A=
-=0A=
-    Note that=0A=
-    bus_state->resuming_ports:=0A=
-    bus_state->resume_done[]:=0A=
-    are only used for USB2, and don't need to cleared for USB3 ports=0A=
-=0A=
-    No functional changes=0A=
-=0A=
-    Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>=0A=
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>=0A=
-=0A=
---nvpublic=0A=
-________________________________________=0A=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>=0A=
-Sent: Friday, February 25, 2022 2:23 PM=0A=
-To: Henry Lin=0A=
-Cc: mathias.nyman@intel.com; linux-usb@vger.kernel.org; linux-kernel@vger.k=
-ernel.org=0A=
-Subject: Re: [PATCH] xhci: fix runtime PM imbalance in USB2 resume=0A=
-=0A=
-External email: Use caution opening links or attachments=0A=
-=0A=
-=0A=
-On Fri, Feb 25, 2022 at 01:53:11PM +0800, Henry Lin wrote:=0A=
-> USB2 resume starts with usb_hcd_start_port_resume() in port status=0A=
-> change handling for RESUME link state. usb_hcd_end_port_resume() call is=
-=0A=
-> needed to keep runtime PM balance.=0A=
->=0A=
-> Signed-off-by: Henry Lin <henryl@nvidia.com>=0A=
-> ---=0A=
->  drivers/usb/host/xhci-hub.c | 2 ++=0A=
->  1 file changed, 2 insertions(+)=0A=
-=0A=
-What commit does this fix?=0A=
+On Thu, Feb 24, 2022 at 05:25:48PM +0000, Raghavendra Rao Ananta wrote:
+> KVM_[GET|SET]_ONE_REG act on per-vCPU basis. Currently certain
+> ARM64 registers, such as KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_[1|2],
+> are accessed via this interface even though the effect that
+> they have are really per-VM. As a result, userspace could just
+> waste cycles to read/write the same information for every vCPU
+> that it spawns, only to realize that there's absolutely no change
+> in the VM's state. The problem gets worse in proportion to the
+> number of vCPUs created.
+> 
+> As a result, to avoid this redundancy, introduce the capability
+> KVM_CAP_ARM_REG_SCOPE. If enabled, KVM_GET_REG_LIST will advertise
+> the registers that are VM-scoped by dynamically modifying the
+> register encoding. KVM_REG_ARM_SCOPE_* helper macros are introduced
+> to decode the same. By learning this, userspace can access such
+> registers only once.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst    | 16 ++++++++++++++++
+>  arch/arm64/include/asm/kvm_host.h |  3 +++
+>  arch/arm64/include/uapi/asm/kvm.h |  6 ++++++
+>  arch/arm64/kvm/arm.c              | 13 +++++++------
+>  include/uapi/linux/kvm.h          |  1 +
+>  5 files changed, 33 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index a4267104db50..7e7b3439f540 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -7561,3 +7561,19 @@ The argument to KVM_ENABLE_CAP is also a bitmask, and must be a subset
+>  of the result of KVM_CHECK_EXTENSION.  KVM will forward to userspace
+>  the hypercalls whose corresponding bit is in the argument, and return
+>  ENOSYS for the others.
+> +
+> +8.34 KVM_CAP_ARM_REG_SCOPE
+> +--------------------------
+> +
+> +:Architectures: arm64
+> +
+> +The capability, if enabled, amends the existing register encoding
+> +with additional information to the userspace if a particular register
+> +is scoped per-vCPU or per-VM via KVM_GET_REG_LIST. KVM provides
+> +KVM_REG_ARM_SCOPE_* helper macros to decode the same. Userspace can
+> +use this information from the register encoding to access a VM-scopped
+> +regiser only once, as opposed to accessing it for every vCPU for the
+> +same effect.
+> +
+
+Could you describe the encoding changes in 4.68 'KVM_SET_ONE_REG', along
+with the other ARM encoding details?
+
+> +On the other hand, if the capability is disabled, all the registers
+> +remain vCPU-scopped by default, retaining backward compatibility.
+
+typo: vCPU-scoped
+
+That said, I don't believe we need to document behavior if the CAP is
+disabled, as the implicated ioctls should continue to work the same.
+
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 5bc01e62c08a..8132de6bd718 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -136,6 +136,9 @@ struct kvm_arch {
+>  
+>  	/* Memory Tagging Extension enabled for the guest */
+>  	bool mte_enabled;
+> +
+> +	/* Register scoping enabled for KVM registers */
+> +	bool reg_scope_enabled;
+>  };
+>  
+>  struct kvm_vcpu_fault_info {
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index b3edde68bc3e..c35447cc0e0c 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -199,6 +199,12 @@ struct kvm_arm_copy_mte_tags {
+>  #define KVM_REG_ARM_COPROC_MASK		0x000000000FFF0000
+>  #define KVM_REG_ARM_COPROC_SHIFT	16
+>  
+> +/* Defines if a KVM register is one per-vCPU or one per-VM */
+> +#define KVM_REG_ARM_SCOPE_MASK		0x0000000010000000
+> +#define KVM_REG_ARM_SCOPE_SHIFT		28
+
+Thinking about the advertisement of VM- and vCPU-scoped registers, this
+could be generally useful. Might it make sense to add such an encoding
+to the arch-generic register definitions?
+
+If that is the case, we may want to snap up a few more bits (a nybble)
+for future expansion.
+
+> +#define KVM_REG_ARM_SCOPE_VCPU		0
+> +#define KVM_REG_ARM_SCOPE_VM		1
+> +
+>  /* Normal registers are mapped as coprocessor 16. */
+>  #define KVM_REG_ARM_CORE		(0x0010 << KVM_REG_ARM_COPROC_SHIFT)
+>  #define KVM_REG_ARM_CORE_REG(name)	(offsetof(struct kvm_regs, name) / sizeof(__u32))
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index ecc5958e27fe..107977c82c6c 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -81,26 +81,26 @@ int kvm_arch_check_processor_compat(void *opaque)
+>  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  			    struct kvm_enable_cap *cap)
+>  {
+> -	int r;
+> +	int r = 0;
+>  
+>  	if (cap->flags)
+>  		return -EINVAL;
+>  
+>  	switch (cap->cap) {
+>  	case KVM_CAP_ARM_NISV_TO_USER:
+> -		r = 0;
+>  		kvm->arch.return_nisv_io_abort_to_user = true;
+>  		break;
+>  	case KVM_CAP_ARM_MTE:
+>  		mutex_lock(&kvm->lock);
+> -		if (!system_supports_mte() || kvm->created_vcpus) {
+> +		if (!system_supports_mte() || kvm->created_vcpus)
+>  			r = -EINVAL;
+> -		} else {
+> -			r = 0;
+> +		else
+>  			kvm->arch.mte_enabled = true;
+> -		}
+>  		mutex_unlock(&kvm->lock);
+>  		break;
+
+Hmm.. these all look like cleanups. If you want to propose these, could
+you do it in a separate patch?
+
+> +	case KVM_CAP_ARM_REG_SCOPE:
+> +		WRITE_ONCE(kvm->arch.reg_scope_enabled, true);
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+> @@ -209,6 +209,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_SET_GUEST_DEBUG:
+>  	case KVM_CAP_VCPU_ATTRIBUTES:
+>  	case KVM_CAP_PTP_KVM:
+> +	case KVM_CAP_ARM_REG_SCOPE:
+
+It is a bit odd to advertise a capability (and allow userspace to enable
+it), despite the fact that the feature itself hasn't yet been
+implemented.
+
+Is it possible to fold the feature in to the patch that exposes it to
+userspace? Otherwise, you could punt advertisement of the CAP until it
+is actually implemented in kernel.
+
+--
+Oliver
+

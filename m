@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6234E4C3EB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A95B4C3EBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 08:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238011AbiBYHGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 02:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S234975AbiBYHI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 02:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbiBYHGq (ORCPT
+        with ESMTP id S231335AbiBYHIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 02:06:46 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9581E14BF;
-        Thu, 24 Feb 2022 23:06:15 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id a8so8983599ejc.8;
-        Thu, 24 Feb 2022 23:06:14 -0800 (PST)
+        Fri, 25 Feb 2022 02:08:51 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C032018BA5F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:08:16 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EF9D83F1C6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 07:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645772884;
+        bh=nJ9Qo3Ms5zSOBS8XZ5bLiglHuK27pu9HmmC0N63PtXY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=PwaQPeVRdAs3Qbzlw7YNeFVKOXGvMKi77HbVavUU5GWZ4Mm3CjUFcEo5J6N7nTJp6
+         KYjgwEM3lkHBOuzcLEiyBFn784c0/yMWw774hPcTmQWK8yUrUk/5eXJuCqgmz2Zjn6
+         oBabkai0RafQ4ynFH900ZftZNJR4YHLWt6eyjZGw1RnD5QyWj+1iPCqtePydnUvyvm
+         yHL2ylbV6fTz/IuWSRGgOgPsF3+jv+q6T9RQz7bJ3yI8fhB7vX879YowsgLDX7B7o8
+         FCzgBoBsc8S+YntBrTplg6Pn3UAYx7Pi8Lu3CVvz5CAmcUfF1ckdXGGQUd4EppWdXE
+         siQQcnLRfRptA==
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso1854850edt.20
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 23:08:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JDaN7T5a5SMQ/lOcHwZ3iJ4ce75iqqbIoOIHiwveTKo=;
-        b=c96gCPG5Y/tQfdRBC9u0UrvqKXz5O8eh9Twj7TgGZpiciHYLP8BSWOBQkGQBgSt2Uy
-         hXHDjUMzqm8AS4dNjMJqYjVfpFFZzelMMw3GPuh4Bb2zqXwqAHBIt1yWpoMJkdy5kYAF
-         opjbD3pSFDICcUYexXj6a5fMBbnNtxvMSfyfx/jNWnqzkKIsieS0egjKkfyeKSY/IXyS
-         26VzBbhbpP4VQHVUdYAqn8bkg//B5TkEiDiZ/eZDrqIgdJkeyJ4kOAbrJ3Iex/p6WVS8
-         M7Xl7lSs8LeEktJ7HgAA44J822/uxk5O7Xh8hSCV7OQAcprlo06ehm01/uJ8zbHG/lgj
-         JQSA==
-X-Gm-Message-State: AOAM532PhANhrK8uRK5uoZWb2KXCALMbv9zKv5jKo2YRnw8wY+h59eUM
-        zWjqACJGECz8CfTj8MlRMZhvwOvqnZI=
-X-Google-Smtp-Source: ABdhPJxxrOBNQcNwFo2aVjJ+AbwXnC5WVqb7SCBZSef51+r9okC3As9UhHyBUCIpUkgb0puyfUK3tg==
-X-Received: by 2002:a17:907:78cc:b0:6b4:ecc1:42fb with SMTP id kv12-20020a17090778cc00b006b4ecc142fbmr4808647ejc.248.1645772773371;
-        Thu, 24 Feb 2022 23:06:13 -0800 (PST)
+        bh=nJ9Qo3Ms5zSOBS8XZ5bLiglHuK27pu9HmmC0N63PtXY=;
+        b=qMgYUCPwov8ntdYCvHp7GJxReJDLzlnW8wv7fe8VkT5ff1bFDtkJSi2CNhWvEX9ghh
+         FGsd6Es/nwPqBMifk3cxK1dpZG5eK1ymV2vJopu6+TXylRwC6CJVwT8zQSWTMGTgVfT5
+         1dWCJchwksYtb8ZQSLIhae8IpEp31l8cJ2Rwn2VpbC/Yg6CuDCOawL/boWO3UHMhoj1h
+         r/pnbyYwHdFVnzxCC6Os+/NRwVhbM+I6MzlzthNX0qinZzS6K2rE7PmH3/ozAgYHZkJF
+         /QDTKAxMBO/DkUvcxtWjjuipuiAXCQWdl6B6cBrrySFgFwEasCFzE3gjBmWptrfKTt4W
+         Aikg==
+X-Gm-Message-State: AOAM533EvQcmFLdAYpEgxFzeZ1NY2FUVoD7XMp7Y0bsEWvsOArP8xGag
+        gQD3to0E5gyt14m6ZbNc9ZGmcsbsslHMcccfPmq5ipLqRKr1swXvs9O9QHJOjBG1i2IlKYiNb/1
+        UtKr97cvRb2jGwe3RnORTIdmfoXfkWzF2OuNNyj0gtA==
+X-Received: by 2002:a17:906:6848:b0:6cf:6273:9c47 with SMTP id a8-20020a170906684800b006cf62739c47mr5229235ejs.1.1645772884456;
+        Thu, 24 Feb 2022 23:08:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcHek/GgCpfJfanPqM4Y7zz/cBC0dLM8NbyjsbtX2y6e5P2doQfOf3dsBC76JOz13onBUUwg==
+X-Received: by 2002:a17:906:6848:b0:6cf:6273:9c47 with SMTP id a8-20020a170906684800b006cf62739c47mr5229217ejs.1.1645772884268;
+        Thu, 24 Feb 2022 23:08:04 -0800 (PST)
 Received: from [192.168.0.128] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id h12-20020a1709060f4c00b006b4ec988cc3sm664190ejj.4.2022.02.24.23.06.11
+        by smtp.gmail.com with ESMTPSA id f15-20020a50e08f000000b004134a121ed2sm899973edl.82.2022.02.24.23.08.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 23:06:12 -0800 (PST)
-Message-ID: <c6607953-927e-4d85-21cb-72e01a121453@kernel.org>
-Date:   Fri, 25 Feb 2022 08:06:11 +0100
+        Thu, 24 Feb 2022 23:08:03 -0800 (PST)
+Message-ID: <3c199306-62a9-1cc6-f864-6f79869d4bc5@canonical.com>
+Date:   Fri, 25 Feb 2022 08:08:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add sample averaging property
- for ADM1275
+Subject: Re: [PATCH 3/3] ARM: dts: Update jedec,lpddr2 revision-id binding
 Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220224154329.9755-1-potin.lai@quantatw.com>
- <20220224154329.9755-3-potin.lai@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220224154329.9755-3-potin.lai@quantatw.com>
+To:     Julius Werner <jwerner@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220224003421.3440124-1-jwerner@chromium.org>
+ <20220224003421.3440124-4-jwerner@chromium.org>
+ <ec0c90b9-58a9-669f-fe4a-73e60df335d5@canonical.com> <Yhd8OoJQer86kTZ8@orome>
+ <CAODwPW9_cbsvU3Jf-9G6TSRUwHwu+HKCQug=eJ51tsRFo6HcPg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAODwPW9_cbsvU3Jf-9G6TSRUwHwu+HKCQug=eJ51tsRFo6HcPg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 16:43, Potin Lai wrote:
-> Add new properties for binding sample averaging in PMON_CONFIG register
+On 25/02/2022 02:41, Julius Werner wrote:
+>>> I bounced the mail to Jonathan, Thierry and linux-tegra (+Cc), so
+>>> hopefully they will get it. If not, series might need resend with proper
+>>> addresses.
+>>
+>> Thanks for the bounce. Applied.
 > 
-> - adi,volt-curr-sample-average
-> - adi,power-sample-average
-> 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->  .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> index 223393d7cafd..325f6827648f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -37,6 +37,48 @@ properties:
->      description:
->        Shunt resistor value in micro-Ohm.
->  
-> +  adi,volt-curr-sample-average:
-> +    description: |
-> +      A value to configure VI_AVG in PMON_CONFIG register to indicate a
-> +      number of samples to be used to report voltage and currentvalues.
+> Sorry, I wasn't sure how this was supposed to work for interdependent
+> patches, I thought they would all go through the same maintainer tree.
+> If you do split them up please be aware of the dependency, i.e. this
+> patch should not be applied anywhere without patch 1 and 2 of this
+> series landing first.
 
-missing space after current.
-
-> +      If set to 7, the 128 samples averaging would be used.
-> +
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-
-Make it a uint32.
-
-The previous usage of this field was more appropriate. Instead of
-keeping register values in DT, it's better to keep logical value. What
-if in next cheap the register values have calculation method?
-
-This should be like in v1 - enum for number of samples to take in averaging.
-
-> +    enum:
-> +      - 0 # 1 sample averaging
-> +      - 1 # 2 sample averaging
-> +      - 2 # 4 sample averaging
-> +      - 3 # 8 sample averaging
-> +      - 4 # 16 sample averaging
-> +      - 5 # 32 sample averaging
-> +      - 6 # 64 sample averaging
-> +      - 7 # 128 sample averaging
-> +    default: 0
-> +
-> +  adi,power-sample-average:
-> +    description: |
-> +      A value to configure PWR_AVG in PMON_CONFIG register to indicate a
-> +      number of samples to be used to report power values.
-> +      If set to 7, the 128 samples averaging would be used.
-
-The same.
-
-> +
-> +      The chip supports power sample averaging:
-> +        "adi,adm1272"
-> +        "adi,adm1278"
-> +        "adi,adm1293"
-> +        "adi,adm1294"
-
-This should be in if-block like here:
-https://lore.kernel.org/linux-devicetree/YheqjZQHq0T%2FRSIz@robh.at.kernel.org/T/#m0672807a08c95aba2bccb927d37ff24fde471b8b
-
+DTS changes never go with driver changes. Even if within the same tree,
+these will be different branches, so you cannot maintain dependency. The
+cover letter therefore should mention such dependency, so DTS won't get
+applied too fast.
 
 Best regards,
 Krzysztof

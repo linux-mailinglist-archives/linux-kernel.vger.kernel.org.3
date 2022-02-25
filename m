@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152114C45A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B744C45A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 14:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbiBYNNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 08:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S231354AbiBYNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 08:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241007AbiBYNNO (ORCPT
+        with ESMTP id S229512AbiBYNOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:13:14 -0500
+        Fri, 25 Feb 2022 08:14:37 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D1DB181E45
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:12:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 707D01EDA28
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:14:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645794761;
+        s=mimecast20190719; t=1645794842;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Q5m/jO7lh5udnKQzVaUijMT/vcP8DIr3AnFBCv6X8sA=;
-        b=A+whudTHBepKndncnELDJctBP6oue4vB3ufQvbGVHmaOmN0NNDVYUiY70U9rMqGdsgRxP3
-        Ehk1454R3uy3G6MRabXy6klxw8OQP0fYbFDUlY1TnHXriHha4Kgyu9/jPlNfaeTupNCJuS
-        PreZpfbiNMAyA3fZUXDuGSyiffPuIO0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vhdaWsgc8pUfwK/nTPSWJVbbpkwucFw4giQzlRhkFMo=;
+        b=PXM9FWFL29QIgdODaV950tqeQfS9VJa45PNIdZ/I4zMJpA3THwqGkfzoLk6gccKrOPKluc
+        9NOOwZd4OEfLhvigIbgDX59UQ+onoIAhfuuZZD+lnjjjqOiOllBds7CNvHjJvOHdbutnb+
+        PoLb3bUwn0sUv3ZQMfFG3auGnrsPogk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-n2hgkKUaNX-SzJhm0V7p5Q-1; Fri, 25 Feb 2022 08:12:40 -0500
-X-MC-Unique: n2hgkKUaNX-SzJhm0V7p5Q-1
-Received: by mail-wm1-f71.google.com with SMTP id ay7-20020a05600c1e0700b003813d7a7d03so489763wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:12:39 -0800 (PST)
+ us-mta-365-ICU3eu9lMialpVb-EUq3ag-1; Fri, 25 Feb 2022 08:14:01 -0500
+X-MC-Unique: ICU3eu9lMialpVb-EUq3ag-1
+Received: by mail-wr1-f69.google.com with SMTP id w8-20020a5d4b48000000b001ef708e7f71so388691wrs.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 05:14:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Q5m/jO7lh5udnKQzVaUijMT/vcP8DIr3AnFBCv6X8sA=;
-        b=34re4qWf4qVypql/EXiA0Ao2p1REWMO3zwLC5vnOvI/3iya8x79/wvYNetS0lraQJJ
-         d06VnYyUrHapWGICDOwAiHaykCnUPFF84mfMm3gxVp1SaY4WWO7WC65l0hQzLukl6eTm
-         8lszDVlNWlnI04YgwmxFoDvcTSWY/wxEDG5MwVTUQ9sZcxsPhCO9AwmOWQeBn0r9SdAX
-         R3o6qMhz05dbZEWm061KYYdKifp/gLYiTJSqEUqV8U6S1RDcDPRPcq7wRgOD8Y6K2jxZ
-         axxV9vxUhwXLDZOukzZ11S0fvQimuMSMvaB5Kv6csd863FmvJ7HzP4XC1uSGg970pBjF
-         pXmw==
-X-Gm-Message-State: AOAM532AOuoqMbgPoflQlsQY1/u3aG5RKKksTAzt62Zn9Om3JWCD9QsK
-        Za9t+W5VQILAYh7wF6gqpQzAtysGFJy1kFMHgEuzYHJf255mr+cMdlpv1bYdsmpHOgdcBj/ZsxO
-        Znidacfhr34ANpQiLcr7gHDQP
-X-Received: by 2002:a05:600c:230d:b0:37d:5882:ec9b with SMTP id 13-20020a05600c230d00b0037d5882ec9bmr2621759wmo.162.1645794759006;
-        Fri, 25 Feb 2022 05:12:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwI4b9vBHcOeQt/ZmS1/e52HNSF01bwScuFUG5ZV9CohndqVjI+TJ4cckBrt1RE2I3tNlK5oQ==
-X-Received: by 2002:a05:600c:230d:b0:37d:5882:ec9b with SMTP id 13-20020a05600c230d00b0037d5882ec9bmr2621744wmo.162.1645794758739;
-        Fri, 25 Feb 2022 05:12:38 -0800 (PST)
-Received: from ?IPV6:2003:cb:c706:1900:f2f7:d2ad:80d9:218f? (p200300cbc7061900f2f7d2ad80d9218f.dip0.t-ipconnect.de. [2003:cb:c706:1900:f2f7:d2ad:80d9:218f])
-        by smtp.gmail.com with ESMTPSA id m5-20020a05600c3b0500b00380da3ac789sm2535021wms.1.2022.02.25.05.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 05:12:38 -0800 (PST)
-Message-ID: <ad29be74-d296-a9fb-41d7-00d2ba15ea5c@redhat.com>
-Date:   Fri, 25 Feb 2022 14:12:37 +0100
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=vhdaWsgc8pUfwK/nTPSWJVbbpkwucFw4giQzlRhkFMo=;
+        b=19AqGv6u0rHt6rG2FGyNNqIX8ESdgOwKLoxb0OnoLjG0zGWeTzDkVJYLgwfy2cIuw3
+         vsJ6S3UK7iR8qp3MMxqYZUBY4XevSf1DmTHUGmtF6/2gq6U3LXDujKJCvbF53UXxZB1H
+         O2nNMKi4Pc0Ed0mEJxxHGPGMVXMoRT6tm3OZlkDOpmRdzANISzt4DH1Dax9bpsl3d90X
+         KjHGr3J7YSkOaPJcXVVIw1XfFUVADAEd+GQMknFPjOUB4D9AtVtRHpZjLnktZy7Zss1L
+         Didh4E908uGK14YwuWymcS2RrrlZDVrzuO9Sz7MxWPUr4Lb6Y+BOVK090GqM1wdKj4ln
+         2u+g==
+X-Gm-Message-State: AOAM5315bGsFaRtXeP8DwdxTHcWFl1v/dcj3R9p3u21xNwd7rBSp6XqT
+        FMRvR25rylMmTEnU5+nrzTopF8pZVuyUb/+6GHsRqqJNTXZZH362RR0z0bWSmyA0vqVi8eZFumk
+        ENL6L47ZISni0JXFKb4Unj0+ObdI7q2q5eAu3CAjwcYhpBcxMlPXIwOMBb+9b2YjPi1N44Ejy1p
+        RX
+X-Received: by 2002:a5d:52c8:0:b0:1ed:e591:be70 with SMTP id r8-20020a5d52c8000000b001ede591be70mr5861911wrv.436.1645794839931;
+        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyD84loAXJxH22Clm2Yzp/r6WGj0EKjWQlqM3zf3yfaq29n1Q4opKpjCnUwONdMWNH5Ve4tOQ==
+X-Received: by 2002:a5d:52c8:0:b0:1ed:e591:be70 with SMTP id r8-20020a5d52c8000000b001ede591be70mr5861892wrv.436.1645794839589;
+        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id k4-20020adfe8c4000000b001e68c92af35sm2295773wrn.30.2022.02.25.05.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 05:13:59 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] KVM: x86: hyper-v: XMM fast hypercalls fixes
+In-Reply-To: <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
+ <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
+Date:   Fri, 25 Feb 2022 14:13:58 +0100
+Message-ID: <871qzrdr6x.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 0/7] block, fs: convert Direct IO to FOLL_PIN
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220225085025.3052894-1-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220225085025.3052894-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,39 +81,266 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.02.22 09:50, John Hubbard wrote:
-> Hi,
-> 
-> Summary:
-> 
-> This puts some prerequisites in place, including a CONFIG parameter,
-> making it possible to start converting and testing the Direct IO part of
-> each filesystem, from get_user_pages_fast(), to pin_user_pages_fast().
-> 
-> It will take "a few" kernel releases to get the whole thing done.
-> 
-> Details:
-> 
-> As part of fixing the "get_user_pages() + file-backed memory" problem
-> [1], and to support various COW-related fixes as well [2], we need to
-> convert the Direct IO code from get_user_pages_fast(), to
-> pin_user_pages_fast(). Because pin_user_pages*() calls require a
-> corresponding call to unpin_user_page(), the conversion is more
-> elaborate than just substitution.
-> 
-> Further complicating the conversion, the block/bio layers get their
-> Direct IO pages via iov_iter_get_pages() and iov_iter_get_pages_alloc(),
-> each of which has a large number of callers. All of those callers need
-> to be audited and changed so that they call unpin_user_page(), rather
-> than put_page().
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-vmsplice is another candidate that uses iov_iter_get_pages() and should
-be converted to FOLL_PIN. For that particular user, we have to also pass
-FOLL_LONGTERM -- vmsplice as it stands can block memory hotunplug / CMA
-/ ... for all eternity.
+> On 2/22/22 16:46, Vitaly Kuznetsov wrote:
+>> While working on some Hyper-V TLB flush improvements and Direct TLB flush
+>> feature for Hyper-V on KVM I experienced Windows Server 2019 crashes on
+>> boot when XMM fast hypercall input feature is advertised. Turns out,
+>> HVCALL_SEND_IPI_EX is also an XMM fast hypercall and returning an error
+>> kills the guest. This is fixed in PATCH4. PATCH3 fixes erroneous capping
+>> of sparse CPU banks for XMM fast TLB flush hypercalls. The problem should
+>> be reproducible with >360 vCPUs.
+>> 
+>> Vitaly Kuznetsov (4):
+>>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
+>>      kvm_hv_send_ipi()
+>>    KVM: x86: hyper-v: Drop redundant 'ex' parameter from
+>>      kvm_hv_flush_tlb()
+>>    KVM: x86: hyper-v: Fix the maximum number of sparse banks for XMM fast
+>>      TLB flush hypercalls
+>>    KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+>> 
+>>   arch/x86/kvm/hyperv.c | 84 +++++++++++++++++++++++--------------------
+>>   1 file changed, 45 insertions(+), 39 deletions(-)
+>> 
+>
+> Merging this in 5.18 is a bit messy.  Please check that the below
+> patch against kvm/next makes sense:
+
+Something is wrong with the diff as it doesn't apply :-(
+
+>
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 653e08c993c4..98fb998c31ce 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1770,9 +1770,11 @@ struct kvm_hv_hcall {
+>   };
+>   
+>   static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+> +				 int consumed_xmm_halves,
+>   				 u64 *sparse_banks, gpa_t offset)
+>   {
+>   	u16 var_cnt;
+> +	int i;
+>   
+>   	if (hc->var_cnt > 64)
+>   		return -EINVAL;
+> @@ -1780,13 +1782,29 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+>   	/* Ignore banks that cannot possibly contain a legal VP index. */
+>   	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
+>   
+> +	if (hc->fast) {
+> +		/*
+> +		 * Each XMM holds two sparse banks, but do not count halves that
+> +		 * have already been consumed for hypercall parameters.
+> +		 */
+> +		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
+> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +		for (i = 0; i < var_cnt; i++) {
+> +			int j = i + consumed_xmm_halves;
+> +			if (j % 2)
+> +				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
+> +			else
+> +				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
+
+Let's say we have 1 half of XMM0 consumed. Now:
+
+ i = 0;
+ j = 1;
+ if (1) 
+     sparse_banks[0] = sse128_lo(hc->xmm[0]); 
+
+ This doesn't look right as we need to get the upper half of XMM0.
+
+ I guess it should be reversed, 
+
+     if (j % 2)
+         sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
+     else
+         sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
+
+> +		}
+> +		return 0;
+> +	}
+> +
+>   	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
+>   			      var_cnt * sizeof(*sparse_banks));
+>   }
+>   
+> -static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
+> +static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>   {
+> -	int i;
+>   	struct kvm *kvm = vcpu->kvm;
+>   	struct hv_tlb_flush_ex flush_ex;
+>   	struct hv_tlb_flush flush;
+> @@ -1803,7 +1821,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   	 */
+>   	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
+>   
+> -	if (!ex) {
+> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
+> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
+
+In case you're trying to come up with a smaller patch for 5.18, we can
+certainly drop these 'ex'/'non-ex' changes as these are merely
+cosmetic.
+
+>   		if (hc->fast) {
+>   			flush.address_space = hc->ingpa;
+>   			flush.flags = hc->outgpa;
+> @@ -1859,17 +1878,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   		if (!hc->var_cnt)
+>   			goto ret_success;
+>   
+> -		if (hc->fast) {
+> -			if (hc->var_cnt > HV_HYPERCALL_MAX_XMM_REGISTERS - 1)
+> -				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> -			for (i = 0; i < hc->var_cnt; i += 2) {
+> -				sparse_banks[i] = sse128_lo(hc->xmm[i / 2 + 1]);
+> -				sparse_banks[i + 1] = sse128_hi(hc->xmm[i / 2 + 1]);
+> -			}
+> -			goto do_flush;
+> -		}
+> -
+> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
+> +		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
+>   					  offsetof(struct hv_tlb_flush_ex,
+>   						   hv_vp_set.bank_contents)))
+
+I like your idea to put 'consumed_xmm_halves' into
+kvm_get_sparse_vp_set() as kvm_hv_flush_tlb is getting too big.
+
+>   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> @@ -1913,7 +1922,7 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+>   	}
+>   }
+>   
+> -static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
+> +static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>   {
+>   	struct kvm *kvm = vcpu->kvm;
+>   	struct hv_send_ipi_ex send_ipi_ex;
+> @@ -1924,7 +1933,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   	u32 vector;
+>   	bool all_cpus;
+>   
+> -	if (!ex) {
+> +	if (hc->code == HVCALL_SEND_IPI) {
+>   		if (!hc->fast) {
+>   			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
+>   						    sizeof(send_ipi))))
+> @@ -1943,9 +1952,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   
+>   		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+>   	} else {
+> -		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+> -					    sizeof(send_ipi_ex))))
+> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +		if (!hc->fast) {
+> +			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+> +						    sizeof(send_ipi_ex))))
+> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +		} else {
+> +			send_ipi_ex.vector = (u32)hc->ingpa;
+> +			send_ipi_ex.vp_set.format = hc->outgpa;
+> +			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
+> +		}
+>   
+>   		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+>   					 send_ipi_ex.vp_set.format,
+> @@ -1964,7 +1979,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   		if (!hc->var_cnt)
+>   			goto ret_success;
+>   
+> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
+> +		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
+>   					  offsetof(struct hv_send_ipi_ex,
+>   						   vp_set.bank_contents)))
+>   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> @@ -2126,6 +2141,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
+> +	case HVCALL_SEND_IPI_EX:
+>   		return true;
+>   	}
+>   
+> @@ -2283,46 +2299,43 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>   				kvm_hv_hypercall_complete_userspace;
+>   		return 0;
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
+> -		if (unlikely(!hc.rep_cnt || hc.rep_idx || hc.var_cnt)) {
+> +		if (unlikely(hc.var_cnt)) {
+>   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   			break;
+>   		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+> -		break;
+> -	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+> -		if (unlikely(hc.rep || hc.var_cnt)) {
+> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+> -			break;
+> -		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+> -		break;
+> +		fallthrough;
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+>   		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
+>   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   			break;
+>   		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
+> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
+>   		break;
+> +	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+> +		if (unlikely(hc.var_cnt)) {
+> +			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +			break;
+> +		}
+> +		fallthrough;
+>   	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
+>   		if (unlikely(hc.rep)) {
+>   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   			break;
+>   		}
+> -		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
+> +		ret = kvm_hv_flush_tlb(vcpu, &hc);
+>   		break;
+>   	case HVCALL_SEND_IPI:
+> -		if (unlikely(hc.rep || hc.var_cnt)) {
+> +		if (unlikely(hc.var_cnt)) {
+>   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   			break;
+>   		}
+> -		ret = kvm_hv_send_ipi(vcpu, &hc, false);
+> -		break;
+> +		fallthrough;
+>   	case HVCALL_SEND_IPI_EX:
+> -		if (unlikely(hc.fast || hc.rep)) {
+> +		if (unlikely(hc.rep)) {
+>   			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   			break;
+>   		}
+> -		ret = kvm_hv_send_ipi(vcpu, &hc, true);
+> +		ret = kvm_hv_send_ipi(vcpu, &hc);
+>   		break;
+>   	case HVCALL_POST_DEBUG_DATA:
+>   	case HVCALL_RETRIEVE_DEBUG_DATA:
+
+I've smoke tested this (with the change I've mentioned above) and WS2019
+booted with 65 vCPUs. This is a good sign)
+
+>
+>
+> The resulting merge commit is already in kvm/queue shortly (which should
+> become the next kvm/next as soon as tests complete).
+>
+
+I see, please swap sse128_lo()/sse128_hi() there too :-)
 
 -- 
-Thanks,
-
-David / dhildenb
+Vitaly
 

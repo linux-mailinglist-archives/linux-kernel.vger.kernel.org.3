@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD8E4C553B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 11:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474B24C553E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 11:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiBZKnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 05:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S231178AbiBZKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 05:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiBZKnp (ORCPT
+        with ESMTP id S229796AbiBZKrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 05:43:45 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8380194154
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 02:43:11 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b11so13415139lfb.12
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 02:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=YoUK01TmiEsBUHhYRUMOPQJYt8lJJXxv/J3wmab8N4Qhe3M7OGibTul1xW6QqLlKoj
-         pvJJjME+aMgmwUAkbTy0U0RFJ0LJjvSpZ1Tf8eVcyCa7txsyLq7dgrSZ/Fs3UlEcxHmX
-         BOh8rhelS9N917nM1WmVYc+cvxOYv4Y7PiaYbYsKCXqGRn+HDon31tZrMSyxynBgRVAD
-         T8l6lVZ8COrXjSniU7uHtA+x5Kf+I2lJomrL+j4DNw7OrJ/yruezO3Z1bOjUF9zpuwFL
-         EZI0H3kOeteVEBCOnrAuEYMEEsJbc3dVWFOVMmHnAjk7Y/LKb6DehVLtE+Uvx64NvU1L
-         x7Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=Gjofh6+bgb3E6Jxgv2l9UFq7KD1OHc8x+j5lPa/Pw/ceIR5ec5n/f0gM3w2XTNDZVU
-         1IIG034M9UwyyoEnruugxw5D70e59puAdKJaBn5U0zmWcytsg+BrxMp7D9+qVnZED4tL
-         BX3AjVLtGyevlppWF5T9pzy7S2olDwvvmT8vff259hYOL+nNrxIQF82NIuJhoFqDH+ak
-         7cMQq268uwrvt6ovjD3zKHB1myoJvNjQqJkC1S0tOOTtcWfdxy+RM4GpNuA6F8stPoza
-         4AquZbAnxDUnGWLhBgpfVk4TMVx3XsyRxtc/gkVWhb/VWrIdYWRmzkn5rOjcdQc7L+gV
-         Addg==
-X-Gm-Message-State: AOAM5310eMbTaFAbzLR3LcMosiZGCZ9MG2UfoZg/WOkBp+qpF+iEoYhc
-        sXbkXAYPDlOHd9BZDIim8ycciiUvXJB591tJ2sA=
-X-Google-Smtp-Source: ABdhPJyfPd7pv6UL/usmWhIwH6tV2LmfkF/EMQ1p/4KqoGpODGNHE6mk13SfZzwWGGmzGEcr+K3QfHSVAuTAD8ZBFhk=
-X-Received: by 2002:a19:f80e:0:b0:443:7eba:1b89 with SMTP id
- a14-20020a19f80e000000b004437eba1b89mr7553605lff.446.1645872190195; Sat, 26
- Feb 2022 02:43:10 -0800 (PST)
+        Sat, 26 Feb 2022 05:47:46 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CA5329C46F
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 02:47:11 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 78EC392009C; Sat, 26 Feb 2022 11:47:10 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 6B9CA92009B;
+        Sat, 26 Feb 2022 10:47:10 +0000 (GMT)
+Date:   Sat, 26 Feb 2022 10:47:10 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: Avoid handing out address 0 to devices
+Message-ID: <alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Received: by 2002:a05:6520:402a:b0:199:feb0:3ce7 with HTTP; Sat, 26 Feb 2022
- 02:43:09 -0800 (PST)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <nillapep@gmail.com>
-Date:   Sat, 26 Feb 2022 11:43:09 +0100
-Message-ID: <CAHJCGRisacumTE-itWsVPYaJXjJrcPhOSB9_f3MbW63BaFsPfQ@mail.gmail.com>
-Subject: SICHERES KREDITANGEBOT BEI 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:134 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [clmloans9[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nillapep[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+We have numerous platforms that permit assigning addresses from 0 to PCI 
+devices, both in the memory and the I/O bus space, and we happily do so 
+if there is no conflict, e.g.:
 
-*Vollst=C3=A4ndiger Name:
-* Ben=C3=B6tigte Menge:
-*Leihdauer:
-*Mobiltelefon:
-*Land:
+pci 0000:07:00.0: BAR 0: assigned [io  0x0000-0x0007]
+pci 0000:07:00.1: BAR 0: assigned [io  0x0008-0x000f]
+pci 0000:06:01.0: PCI bridge to [bus 07]
+pci 0000:06:01.0:   bridge window [io  0x0000-0x0fff]
+
+(with the SiFive HiFive Unmatched RISC-V board and a dual serial port 
+option card based on the OxSemi OXPCIe952 device wired for the legacy 
+UART mode).
+
+Address 0 is treated specially however in many places, for example in 
+`pci_iomap_range' and `pci_iomap_wc_range' we require that the start 
+address is non-zero, and even if we let such an address through, then 
+individual device drivers could reject a request to handle a device at 
+such an address, such as in `uart_configure_port'.  Consequently given
+devices configured as shown above only one is actually usable:
+
+Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+serial 0000:07:00.0: enabling device (0000 -> 0001)
+serial: probe of 0000:07:00.0 failed with error -12
+serial 0000:07:00.1: enabling device (0000 -> 0001)
+serial 0000:07:00.1: detected caps 00000700 should be 00000500
+0000:07:00.1: ttyS0 at I/O 0x8 (irq = 39, base_baud = 15625000) is a 16C950/954
+
+Especially I/O space ranges are particularly valuable, because bridges 
+only decode bits from 12 up and consequently where 16-bit addressing is 
+in effect, as few as 16 separate ranges can be assigned to individual 
+buses only.
+
+Therefore avoid handing out address 0, however rather than bumping the 
+lowest address available to PCI via PCIBIOS_MIN_IO and PCIBIOS_MIN_MEM, 
+or doing an equivalent arrangement in `__pci_assign_resource', let the 
+whole range assigned to a bus start from that address and instead only 
+avoid it for actual devices.  Do it in `pci_bus_alloc_from_region' then 
+observing that bridge resources will have the IORESOURCE_STARTALIGN flag 
+set rather than IORESOURCE_SIZEALIGN and by making the least significant 
+bit decoded 1 according to the resource type, either memory or I/O.
+
+With this in place the system in question we have:
+
+pci 0000:07:00.0: BAR 0: assigned [io  0x0008-0x000f]
+pci 0000:07:00.1: BAR 0: assigned [io  0x0010-0x0017]
+pci 0000:06:01.0: PCI bridge to [bus 07]
+pci 0000:06:01.0:   bridge window [io  0x0000-0x0fff]
+
+and then devices work correctly:
+
+Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+serial 0000:07:00.0: enabling device (0000 -> 0001)
+serial 0000:07:00.0: detected caps 00000700 should be 00000500
+0000:07:00.0: ttyS0 at I/O 0x8 (irq = 38, base_baud = 15625000) is a 16C950/954
+serial 0000:07:00.1: enabling device (0000 -> 0001)
+serial 0000:07:00.1: detected caps 00000700 should be 00000500
+0000:07:00.1: ttyS1 at I/O 0x10 (irq = 39, base_baud = 15625000) is a 16C950/954
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+Hi,
+
+ NB I have an OxSemi OXPCIe952 based card that can be wired to either the 
+native or the legacy mode via a jumper block and I am so glad that I have 
+checked whether it works in the legacy mode as well.  I guess there are so 
+few legacy-free platforms still for nobody else to notice this issue yet.
+
+ I think I've chosen the right solution, but I'll be happy to hear any 
+suggestions for an alternative one.  Otherwise please apply.
+
+  Maciej
+---
+ drivers/pci/bus.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+linux-pci-bus-alloc-from-region-min.diff
+Index: linux-macro/drivers/pci/bus.c
+===================================================================
+--- linux-macro.orig/drivers/pci/bus.c
++++ linux-macro/drivers/pci/bus.c
+@@ -194,6 +194,15 @@ static int pci_bus_alloc_from_region(str
+ 		 */
+ 		if (avail.start)
+ 			min_used = avail.start;
++		/*
++		 * For non-bridge resources avoid assigning address 0 as
++		 * we assume that to mean no assignment in many places,
++		 * starting from `pci_iomap_range'.
++		 */
++		if (min_used == 0 && (res->flags & IORESOURCE_SIZEALIGN))
++			min_used = res->flags & IORESOURCE_IO ?
++				   ~PCI_BASE_ADDRESS_IO_MASK + 1 :
++				   ~PCI_BASE_ADDRESS_MEM_MASK + 1;
+ 
+ 		max = avail.end;
+ 

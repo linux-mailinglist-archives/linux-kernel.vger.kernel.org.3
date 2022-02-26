@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82A84C5FA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 00:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6414F4C6075
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiB0XAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 18:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S230377AbiB1Azt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 19:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiB0XAj (ORCPT
+        with ESMTP id S231203AbiB1Azq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 18:00:39 -0500
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D99BF6D4C9;
-        Sun, 27 Feb 2022 15:00:01 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.90,142,1643641200"; 
-   d="scan'208";a="111726405"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 28 Feb 2022 08:00:01 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1047F40062C3;
-        Mon, 28 Feb 2022 07:59:58 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
-Date:   Sun, 27 Feb 2022 22:59:56 +0000
-Message-Id: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 27 Feb 2022 19:55:46 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 16:55:07 PST
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FC47063
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 16:55:06 -0800 (PST)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
+        id 1nOUEj-0003yc-QB
+        for linux-kernel@vger.kernel.org; Mon, 28 Feb 2022 01:50:01 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-kernel@vger.kernel.org
+From:   Samuel Bronson <naesten@gmail.com>
+Subject: Re: [PATCH v3 1/8] riscv: Avoid unaligned access when relocating modules
+Date:   Fri, 25 Feb 2022 23:48:41 -0500
+Message-ID: <87zgme6xna.fsf@DESKTOP-5JD7O8D.localdomain>
+References: <20220224152456.493365-1-kernel@esmil.dk>
+        <20220224152456.493365-2-kernel@esmil.dk>
+Mime-Version: 1.0
+Content-Type: text/plain
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Cancel-Lock: sha1:mColZ0E90tcqhrcGvi1sG17CQfs=
+Cc:     linux-riscv@lists.infradead.org
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_ADSP_CUSTOM_MED,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add RSPI binding documentation for Renesas RZ/V2L SoC.
+Emil Renner Berthing <kernel@esmil.dk> writes:
 
-RSPI block is identical to one found on RZ/A, so no driver changes are
-required. The fallback compatible string "renesas,rspi-rz" will be used
-on RZ/V2L.
+> With the C-extension regular 32bit instructions are not
+> necessarily aligned on 4-byte boundaries. RISC-V instructions
+> are in fact an ordered list of 16bit native-endian
+> "parcels", so access the instruction as such.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-DTSI changes have been posted as part of series [0].
+Hold on a minute, this is what it says in my copy of the Unprivileged
+ISA:
 
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/
-patch/20220227203744.18355-13-prabhakar.mahadev-lad.rj@bp.renesas.com/
----
- Documentation/devicetree/bindings/spi/renesas,rspi.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+,----
+| RISC-V base ISAs have either little-endian or big-endian memory systems,
+| with the privileged architecture further defining bi-endian operation.
+| Instructions are stored in memory as a sequence of 16-bit *little-endian*
+| parcels, regardless of memory system endianness.  Parcels forming one
+| instruction are stored at increasing halfword addresses, with the
+| *lowest-addressed parcel holding the lowest-numbered bits* in the
+| instruction specification.
+`----
+[Emphasis mine.]
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-index 76e6d9e52fc7..a902f0ca2198 100644
---- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-@@ -22,6 +22,7 @@ properties:
-               - renesas,rspi-r7s72100  # RZ/A1H
-               - renesas,rspi-r7s9210   # RZ/A2
-               - renesas,r9a07g044-rspi # RZ/G2{L,LC}
-+              - renesas,r9a07g054-rspi # RZ/V2L
-           - const: renesas,rspi-rz     # RZ/A and RZ/G2{L,LC}
- 
-       - items:
-@@ -124,6 +125,7 @@ allOf:
-             enum:
-               - renesas,qspi
-               - renesas,r9a07g044-rspi
-+              - renesas,r9a07g054-rspi
-     then:
-       required:
-         - resets
--- 
-2.17.1
+In other words, the parcels are little endian, and they're arranged in
+little-endian order.  System endianness doesn't matter, it collapses to
+plain old little-endian.
+
+(I'm really not sure why they describe the ordering in such a
+round-about way; I assume that's the source of the confusion here?)
 

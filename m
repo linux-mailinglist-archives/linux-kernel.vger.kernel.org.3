@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701494C571C
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 18:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4529A4C5723
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 18:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbiBZRXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 12:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
+        id S232486AbiBZRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 12:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiBZRXu (ORCPT
+        with ESMTP id S232468AbiBZRde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 12:23:50 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4ACC49;
-        Sat, 26 Feb 2022 09:23:15 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id m3so11589233eda.10;
-        Sat, 26 Feb 2022 09:23:15 -0800 (PST)
+        Sat, 26 Feb 2022 12:33:34 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642804926F
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 09:32:59 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id t13so2638506lfd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 09:32:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YcpZK+xr5EvJE7NBNH0TKzpdMRtHf+7OM+HfHyAdVJ4=;
-        b=KyfgXokUYlGABMuZ8I4NhMguyngYa0xh/Cuk3vfRvFGCjTqPAVRD7Fpq2SsFw7jQGP
-         ExaojrmnClfLvBlVQdcxHzQlArLQN+kRcGywPuj0qPcQBbsY5XoKJkOHwZbnbgsGTmNR
-         ouA+ra7nBiwexfFWOalFSq+ouY+XHO840mbUeku/htns8jKg3WzVTdF5cC2XJUIK6K1w
-         IbJnhS9DPpzBvsuAJsMsbnATMIebh7J1LWFXUTthTe/OvhWqwqEQZBWPdVdrwCNhNZuY
-         g1CMPxlvbtfEtDgvHuyLZZbaEL56PzYUK2PUoxxqE+gprNmR5VoReyS5tHac8gX2X0rd
-         1Cyg==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=S6VT3HN2IRbsIi5o911BX4SW84hwNa5voGHttJrK4Jw=;
+        b=hHgmboyLosisGAkcLt2JhF9QgbqUC2scITXSxCRmvWU0ms2g75Lv7zM/Y08zHzjq1Y
+         2U+13GO5wi/KUVDIvlTLQiEAl+tpeSekXhkgJJnZ9CT3Tn9U1dCkT4OTIxqZ7fLXndAH
+         iZhCs9Hn9KBVMsH5MSIOydfcvlQBCy85EEOUpfgBkZOYuPEnV3oC+yJhRhQkCu1OIps2
+         cGhI7LrMjJW6zXryu8TpQGXCMUkk5HB8fG43hOihfTTcaKGYzsWRgBK2b903+4Hb641m
+         NailEuNwnNUcds46Ov1WulKolgGo96283HNjjfQklFVZq6gYWXAVYaaq087vLtT7j2EL
+         RvGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YcpZK+xr5EvJE7NBNH0TKzpdMRtHf+7OM+HfHyAdVJ4=;
-        b=uFgb4WekO7eEF7TBn6N8ONAyXZqUlXO4P4e5fmswXf2EvFCHKWKrklbgKguHCsLKjr
-         oAje+YwamF7DyaP1Aq8MXPJe457J4/1tRX4aTDMPaxfvDaZ8KZLx9heGoHBYQdmirlCn
-         fvErCcVmKWhosyW1EDmGYTZ+JuUmgFBjpkvKQjFTz9BCoU/r5QnFS7AJP2pIFJQHbwYD
-         pU8BbNPSJOUy4KMlxhbdyiyOzYCeZR23fMWSZVxq/AmH4ML4MokNtGODtcnixzgSG4Kh
-         cujc8a5b60+q//2uTPZstBATRfr0FOggIOfMGXLBZblm5d4QwAEzk1sDeQ4aXFY7PS4M
-         2c/A==
-X-Gm-Message-State: AOAM533X8/dJqx/gZ0zlQ0vCfY1IO/+N+Y2yXXyYWu/14TB8PpnNmMPd
-        GX6uhhVMPZ2Lpmg5pRNrkpCwN0cevMcIJg==
-X-Google-Smtp-Source: ABdhPJzJpPw83QjgZyzUfYuVGM9fIbeqnebzhxf9ZbgbQ5Yb4Uaan809IOjAIWCk/GEzAQs4PR7Atg==
-X-Received: by 2002:a05:6402:2546:b0:412:d0eb:2a4a with SMTP id l6-20020a056402254600b00412d0eb2a4amr12399710edb.306.1645896193877;
-        Sat, 26 Feb 2022 09:23:13 -0800 (PST)
-Received: from krava ([2a00:102a:4012:7bee:99f7:73f9:d8ed:b1a])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm3085832eds.21.2022.02.26.09.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 09:23:13 -0800 (PST)
-Date:   Sat, 26 Feb 2022 18:23:10 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Shunsuke <nakamura.shun@fujitsu.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] libperf: Add overflow detection of sampling
- events
-Message-ID: <Yhph/u/Jxl31uXew@krava>
-References: <20220225103114.144239-1-nakamura.shun@fujitsu.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=S6VT3HN2IRbsIi5o911BX4SW84hwNa5voGHttJrK4Jw=;
+        b=Tc1cr8eP8zC6JsPyTUmPWeisy8R24FJBB4YumvX0TzHj/xzGMXRpY+6nP96+eHlj7J
+         I4DK/EAwOGrDFIhXZDUyo8YBy1wex9wbFlzbE8h2USbkPldT6Qs46iAbtWOVAMtefWCe
+         CP63mzX7vXELh5YSIGLCS5NrKmv7RdshGIpHuTgfL0mTsFG1WDZei9soEBdQJ/ftK6pg
+         rVkcCXw2tuL7hbyk6VPuh+Yg62+6b4cJ+uIi2Dh3RqNo3rItW2KuTJYuIw9mNmvTYWvf
+         epDqOoXkn0YIw20pdaqVtH192TjRoQwFDXeHx/lMuTjK3WOaP1SSXSXV24+jEIrWCd/H
+         izUA==
+X-Gm-Message-State: AOAM533eFTNZjUcalKnVlijSbje7GKlfces85L2lt52cl6Shuhuv15Lv
+        GORlAhbZH9PC1rDzs92vM8w=
+X-Google-Smtp-Source: ABdhPJwI9oNaDgrJBvTYu2L4to0gFqre6Dn9V4cXbBKGULhD8E7HGzBlxDpozKL+mM+VWoVQpkOePA==
+X-Received: by 2002:ac2:4577:0:b0:443:fac7:d701 with SMTP id k23-20020ac24577000000b00443fac7d701mr8136269lfm.384.1645896777200;
+        Sat, 26 Feb 2022 09:32:57 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.64])
+        by smtp.gmail.com with ESMTPSA id b23-20020ac247f7000000b004435ff1ef17sm499218lfp.23.2022.02.26.09.32.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Feb 2022 09:32:56 -0800 (PST)
+Message-ID: <184f741c-60ed-fe32-5705-08f9769e926a@gmail.com>
+Date:   Sat, 26 Feb 2022 20:32:55 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225103114.144239-1-nakamura.shun@fujitsu.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 3/6] staging: r8188eu: cnt is set but not used
+Content-Language: en-US
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220226144843.1118951-1-martin@kaiser.cx>
+ <20220226144843.1118951-4-martin@kaiser.cx>
+ <1c44c931-5b90-03d8-94bd-5e68682c4787@gmail.com>
+In-Reply-To: <1c44c931-5b90-03d8-94bd-5e68682c4787@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,87 +79,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 07:31:07PM +0900, Shunsuke wrote:
-> From: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+On 2/26/22 19:57, Pavel Skripkin wrote:
+> Hi Martin,
 > 
-> This patch series adds sampling event overflow detection capability
-> to libperf.
+> On 2/26/22 17:48, Martin Kaiser wrote:
+>> In function recv_func, the cnt variable is set but not used.
+>> It can be removed.
+>> 
+>> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+>> ---
+>>   drivers/staging/r8188eu/core/rtw_recv.c | 2 --
+>>   1 file changed, 2 deletions(-)
+>> 
+>> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+>> index 0144c4642911..9a2e2bc2e294 100644
+>> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+>> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+>> @@ -1798,11 +1798,9 @@ static int recv_func(struct adapter *padapter, struct recv_frame *rframe)
+>>   	if (check_fwstate(mlmepriv, WIFI_STATION_STATE) &&
+>>   	    psecuritypriv->busetkipkey) {
+>>   		struct recv_frame *pending_frame;
+>> -		int cnt = 0;
+>>   
+>>   		pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
+>>   		while (pending_frame) {
 > 
-> First patch fixes a typo in the error message that I noticed.
+> Just out of curiosity: is this thing infinity loop?
 > 
-> Second patch  adds a interface to set PERF_FLAG_FD_CLOEXEC
-> 
-> Third patch adds a interface to perform IOC_REFRESH and IOC_PERIOD.
-> 
-> Fourth patch adds a interface to set the signal handler.
-> 
-> Fifth patch adds a interface to detect overflowed events.
-> 
-> Sixth and seventh patch adds tests.
-> 
-> Shunsuke Nakamura (7):
->   libperf tests: Fix typo in the error message "evsel" -> "evlist"
->   libperf: Add perf_evsel__set_close_on_exec() function
->   libperf: Add perf_evsel__refresh()/period() functions
->   libperf: Add perf_evsel__set_signal() functions
->   libperf: Add perf_evsel__check_fd() functions
->   libperf test: Add test_stat_overflow()
->   libperf test: Add test_detect_overflow_event()
 
-hi,
-I think the interface might be more clear if we use additional options
-for new and open functions, same way like it's done in libbpf
+Hm.
 
-how about adding following interface:
-
-  - perf_evsel__new_opts would allow to setup needed attr fields before opening
-
-    struct perf_evsel_new_opts {
-      /* size of this struct, for forward/backward compatiblity */
-      size_t sz;
-
-      int open_flags;
-      int sample_period;
-    }
-   
-    struct perf_evsel *perf_evsel__new_opts(struct perf_event_attr *attr,
-                                            struct perf_evsel_new_opts *opts);
-
-  - perf_evlist__open_opts would do additional setup 'after' the event
-    is open and we have file descriptor available
+This function is called only inside a tasklet. IIRC it's not ok to have 
+this kind of loops in softirq context
 
 
-    struct perf_evsel_open_opts {
-      /* size of this struct, for forward/backward compatiblity */
-      size_t sz;
 
-      int flags; /* fcntl flags */
-      int signal;
-      int owner_type;
-    }
 
-    int perf_evlist__open_opts(struct perf_evlist *evlist,
-                               struct perf_evsel_open_opts *opts);)
-
-    int perf_evsel__open_opts(struct perf_evsel *evsel,
-                              struct perf_cpu_map *cpus,
-                              struct perf_thread_map *threads,
-                              struct perf_evsel_open_opts *opts)
-
-    not sure we want special opts for evlist.. the evlist open
-    is just a wrapper and I don't think there's special open
-    info just for evlist
-
-I did not analyze your usecases deeply, so I might be missing some
-case where above API would need some adjustment, but from the quick
-look this could fit and I think it's better than special functions
-for each feature
-
-there are additional macros like DECLARE_LIBBPF_OPTS that allows to
-define the opts structures in backward compatible way, we'd need to
-'borrow' that as well
-
-thoughts?
-
-thanks,
-jirka
+With regards,
+Pavel Skripkin

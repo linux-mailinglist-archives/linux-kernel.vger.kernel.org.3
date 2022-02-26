@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480CF4C5780
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C8B4C578E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiBZSdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 13:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S232681AbiBZSl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 13:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiBZSdd (ORCPT
+        with ESMTP id S232656AbiBZSlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 13:33:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C3C14FFF9;
-        Sat, 26 Feb 2022 10:32:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AFDE60EEF;
-        Sat, 26 Feb 2022 18:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A076C340E8;
-        Sat, 26 Feb 2022 18:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645900375;
-        bh=Csg8unkLr4Ux6a7qCx2jnDAk15HDPzu9ev6OyC96Zlg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MqU3eKey64+bo/qPZRZG5C54jKIRhMZWBrpUvuAwWjQ11uvHdHPvCG/zuB6JJ8ycw
-         D9FBVoHfr4rvkZsWqSQaxexI6ZGkt+jGOiejQ8hMD/TgPDb7CmlnTktv/5PdWC/d6g
-         ul6PKciU+/HTzA/xmXw2FYWWYh0QRli3+aSiUCD85ksxFG48R5Y6s0p5H5D/qs20FU
-         oZekFfq7jHcWeUiFePu1PV3dem/tp8S6ocMtvalzCVXtsbhWZKd475VrxkEREsLnYj
-         wqUqxi/3wQ/0G9ssooLkjy+kij3crx6N5N7uwSrM6i+Uz4j0nKg7bwEjslLkpkBay8
-         ZDCo8h/5Ugfcw==
-Date:   Sat, 26 Feb 2022 18:39:56 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jagath Jog J <jagathjog1996@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 5/7] iio: potentiometer: Add device specific read_raw
- function
-Message-ID: <20220226183956.199aef29@jic23-huawei>
-In-Reply-To: <CAHp75VcKvXi6oUm2Ysx_F+Myu6Dy9-Vxp9MwTcrT5si0Fe6c7w@mail.gmail.com>
-References: <20220223163525.13399-1-jagathjog1996@gmail.com>
-        <20220223163525.13399-6-jagathjog1996@gmail.com>
-        <CAHp75VcKvXi6oUm2Ysx_F+Myu6Dy9-Vxp9MwTcrT5si0Fe6c7w@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 26 Feb 2022 13:41:25 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662A31E64F6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 10:40:49 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so9498618pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 10:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wIF6UAlZFRz6CcmK0c/prHkHHtjI2Q86YKElLvocVO8=;
+        b=xTGtjyG6s/i0yLUNvqRqayykUOAItFhlCadv69XPBgfya01BjC0zDvu2wgXJQt8hFD
+         VfnyRKHwy4zcok8W2UyA5CyxTwA3IkLb9EQ7vmaUOX4S3xoU4Rkf0DSmYf8odhQCNlue
+         h78Vm80xewBipO05IGlgfce7+3GArqYCcszk65hH12WHjSw5Ahi2QnuzDhK/YgcANxTw
+         lY4a+Vkd5umrM3VUwDKZ3UXSAXpt5Bu1rlWofmrkB702y22fsitSJ1NKqa8rhHC0z7oF
+         iFdsmywsU7d3Umg4MhYSHSH4S1c0kY2eHx/iiSmc+2NlOl4GhhgeaadHDPb05m9osC4E
+         /BBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wIF6UAlZFRz6CcmK0c/prHkHHtjI2Q86YKElLvocVO8=;
+        b=VtFfXb7Bd5BGt9KR2xapq2wbU/EgazlSIJ3saIuYTQQ7Q3Bx5HEVT8eYNQVFh7/H8z
+         7KpMNZF81B3bipUHFIJgQ/9QqQLzPGJlaKLEDoDwarZLpm0b0nPJHOvukCyK+FpZeti3
+         dqU5KqwVBgP/5kQ0KA+qiQf6pG+6ovRWMRjKU8QCV+hzmeeV2g4HlHBbVN5OGD1KkIAU
+         ZE6ei46qrV/tEACnv+IlE7xmz7MCQ1MLlUF3+LxTJ9OYVJuMYvxYEwv0Mi8+nMsEYTzn
+         y0bppmV53KryHRj5yd+QQIuaeayDf9ZXe0V6wNpWUebpnI1EdYQ+6XDQzEAu1KyV6567
+         Llpg==
+X-Gm-Message-State: AOAM531KrK8WBhDrQSz2Mze5fhWOC/WDqBVa5KK+eznv39hhlamHMNl5
+        MDCC6+bdkCWqrfZIu67D/I7Izg==
+X-Google-Smtp-Source: ABdhPJySc/nbUPv/BRzgMlSJltXAYJTXNFuOBjxcT6Gi7JtRc3q1gogEehEoyoKGDBwADnuY+e1ajw==
+X-Received: by 2002:a17:902:758f:b0:14f:b5ee:cc5a with SMTP id j15-20020a170902758f00b0014fb5eecc5amr13319231pll.43.1645900848818;
+        Sat, 26 Feb 2022 10:40:48 -0800 (PST)
+Received: from localhost.localdomain ([223.179.136.225])
+        by smtp.gmail.com with ESMTPSA id b187-20020a621bc4000000b004f3c8f3b560sm7049319pfb.129.2022.02.26.10.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 10:40:48 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, maz@kernel.org,
+        quic_mkshah@quicinc.com, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 0/4] Add support for PDC interrupt controller for sm8150
+Date:   Sun, 27 Feb 2022 00:10:24 +0530
+Message-Id: <20220226184028.111566-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,119 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 02:46:34 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Changes since v1:
+-----------------
+- v1 can be found here: https://lore.kernel.org/linux-arm-msm/20220119203133.467264-1-bhupesh.sharma@linaro.org/
+- Collect ACK from Rob on PATCH 1/4.
+- Address review comments from Maulik.
 
-> On Wed, Feb 23, 2022 at 6:35 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >
-> > Added function pointer in the device specific structure to
-> > call the appropriate device read_raw function, so that the
-> > other type of devices with different read method can be
-> > handled.
-> >
-> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> > ---
-> >  drivers/iio/potentiometer/ds1803.c | 28 ++++++++++++++++++++++------
-> >  1 file changed, 22 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/iio/potentiometer/ds1803.c b/drivers/iio/potentiometer/ds1803.c
-> > index aeb74ee46fbc..878188351f8f 100644
-> > --- a/drivers/iio/potentiometer/ds1803.c
-> > +++ b/drivers/iio/potentiometer/ds1803.c
-> > @@ -32,6 +32,8 @@ struct ds1803_cfg {
-> >         int kohms;
-> >         const struct iio_chan_spec *channels;
-> >         u8 num_channels;
-> > +       int (*read)(struct iio_dev *indio_dev,
-> > +                   struct iio_chan_spec const *chan, int *val);
-> >  };
-> >
-> >  struct ds1803_data {
-> > @@ -55,6 +57,22 @@ static const struct iio_chan_spec ds1803_channels[] = {
-> >         DS1803_CHANNEL(1, DS1803_WIPER_1),
-> >  };
-> >
-> > +static int ds1803_read(struct iio_dev *indio_dev,
-> > +                      struct iio_chan_spec const *chan,
-> > +                      int *val)
-> > +{
-> > +       struct ds1803_data *data = iio_priv(indio_dev);
-> > +       int ret;
-> > +       u8 result[ARRAY_SIZE(ds1803_channels)];
-> > +
-> > +       ret = i2c_master_recv(data->client, result, indio_dev->num_channels);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       *val = result[chan->channel];
-> > +       return ret;
-> > +}
-> > +
-> >  static const struct ds1803_cfg ds1803_cfg[] = {
-> >         [DS1803_010] = {
-> >           .wipers = 2,
-> > @@ -62,6 +80,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
-> >           .kohms =  10,
-> >           .channels = ds1803_channels,
-> >           .num_channels = ARRAY_SIZE(ds1803_channels),
-> > +         .read = ds1803_read,
-> >         },
-> >         [DS1803_050] = {
-> >           .wipers = 2,
-> > @@ -69,6 +88,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
-> >           .kohms =  50,
-> >           .channels = ds1803_channels,
-> >           .num_channels = ARRAY_SIZE(ds1803_channels),
-> > +         .read = ds1803_read,
-> >         },
-> >         [DS1803_100] = {
-> >           .wipers = 2,
-> > @@ -76,6 +96,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
-> >           .kohms = 100,
-> >           .channels = ds1803_channels,
-> >           .num_channels = ARRAY_SIZE(ds1803_channels),
-> > +         .read = ds1803_read,
-> >         },
-> >  };
-> >
-> > @@ -84,20 +105,15 @@ static int ds1803_read_raw(struct iio_dev *indio_dev,
-> >                            int *val, int *val2, long mask)
-> >  {
-> >         struct ds1803_data *data = iio_priv(indio_dev);
-> > -       int pot = chan->channel;
-> >         int ret;
-> > -       u8 result[ARRAY_SIZE(ds1803_channels)];
-> >
-> >         switch (mask) {
-> >         case IIO_CHAN_INFO_RAW:
-> > -               ret = i2c_master_recv(data->client, result,
-> > -                                     indio_dev->num_channels);
-> > +               ret = data->cfg->read(indio_dev, chan, val);
-> >                 if (ret < 0)
-> >                         return ret;
-> >
-> > -               *val = result[pot];
-> >                 return IIO_VAL_INT;  
-> 
-> > -  
-> 
-> Seems like a stray change. Up to Jonathan to decide what to do (no
-> need for resend b/c of this).
+This patchset adds the support for PDC interrupt controller found
+on sm8150 SoCs from Qualcomm.
 
-Good spot. Given I was tweaking this series a fair bit anyway whilst
-applying I tidied this up as well.
+Here we add the device-tree bindings, pinctrl driver support
+and the dts support for the same.
 
-Thanks,
+Cc: Maulik Shah <quic_mkshah@quicinc.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 
-Jonathan
+Bhupesh Sharma (4):
+  dt-bindings: qcom,pdc: Add compatible for SM8150
+  pinctrl: qcom: sm8150: Specify PDC map
+  arm64: dts: qcom: sm8150: Add pdc interrupt controller node
+  arm64: dts: qcom: sm8150: Add PDC as the interrupt parent for tlmm
 
-> 
-> >         case IIO_CHAN_INFO_SCALE:
-> >                 *val = 1000 * data->cfg->kohms;
-> >                 *val2 = data->cfg->avail[2]; /* Max wiper position */
-> > --
-> > 2.17.1
-> >  
-> 
-> 
+ .../interrupt-controller/qcom,pdc.txt         |  1 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 11 ++++++++++
+ drivers/pinctrl/qcom/pinctrl-sm8150.c         | 22 +++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+
+-- 
+2.35.1
 

@@ -2,231 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3679D4C5391
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 04:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9B14C5393
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 04:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiBZDbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 22:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S229770AbiBZDil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 22:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiBZDbh (ORCPT
+        with ESMTP id S229500AbiBZDii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 22:31:37 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BB52BA9C6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 19:31:00 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id w1-20020a05690204e100b006244315a721so5395006ybs.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 19:31:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=j2FdqvAg92mVH36PVc9Yu0hrEVjIPnTLS+qsjkQt3KE=;
-        b=fuVz7mV5xAXXD+5JGzAYynY/Zshh0GrWZ8jjkAA1KHrjpdhfQaKgvci2uB02UC4Pj6
-         fljJiUpSshQy/otqthaW29j7OHv5AC1jk57WUz/G7BZhIbtpplCoTIYLZTwD42bGZgEb
-         3Gr+r4RmRs8qyZzmTaBPq/VqIsdhPVyiRB1BOGpTJpN6N4pKgocG454B+lKe/OZ1HilZ
-         LjawccxaerKNoLZ/cGh1pbfVfBcIzoEm6bAUIJX49OCBEoW9VkJ4LxFc8eenn8bO1P7c
-         ExyRMNANz5KZ5a4u7w4Tb1a1bS7GEYpjOK2z1SwVyWVBadDsaTLSQgW5LjvKzif3jqMK
-         N1eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=j2FdqvAg92mVH36PVc9Yu0hrEVjIPnTLS+qsjkQt3KE=;
-        b=v62agzL9uNtWfba1a4W+3fnnk9aWBoEEpGOpn3wpwzYxIiBlVYi8FqyX2GUUroaigD
-         cQOX5IcrRxszWGxjTFOJ8Oipg2z/bhTyhKiIjFVSYWrihJ807HzuFN/Q+hHOO04z2snx
-         v8Nr7BCfw8ZekJQ//L0otiM5SpvZWa5unPXWhhHFgAvmX8HcgLnXIiMfCmvKiTxUkzkt
-         uIoXXcKtzWdiawmG5H0ITK8Op3wvTz2zgcICy7rTJirceRRdcRpnd0BSQQ11W85CdHzV
-         JFNvWaIYAoT8ua6xg4FAm5+zlt1flH7SLBm9RDPzuYmk4T2lRWhTKlBrxlqRBjm09Qjl
-         zdmg==
-X-Gm-Message-State: AOAM531GfhiTvDoo+UdnTHc5JYawjFosSOCMkdWGzmJXR7G75DlDdZM0
-        9EajF1MgCdHC/ZM5UwAEkq6+nrrmrahfhQ==
-X-Google-Smtp-Source: ABdhPJx7iXHxivoUPHylbghOBIuZVmV9V4rUGyQyl/RajkfqalR+hZ4N3/z3SlcGs3Uqyq29jXNI287buN2pUg==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:3f24:7bc4:da33:c93e])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:1007:b0:622:9e94:4df8 with SMTP
- id w7-20020a056902100700b006229e944df8mr9956691ybt.315.1645846259422; Fri, 25
- Feb 2022 19:30:59 -0800 (PST)
-Date:   Fri, 25 Feb 2022 19:30:54 -0800
-Message-Id: <20220226033054.2860933-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH] kunit: tool: more descriptive metavars/--help output
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 22:38:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D4D190B74;
+        Fri, 25 Feb 2022 19:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=08er3IcfPnj5kT98Dd2WZNuTMcBcFbsLNGNVuShvVqM=; b=F2YNPX+gmhOOZlQiXQMjDQYfea
+        PmulQeG6uFsxUN4ajYPmnDoejveC/63RPzTavLD7oenwSKGC4S8pZYjHd6sg42fmYdM2U9zbmrnSH
+        rhHBjfy5s/ExZ6FLv3AXwuz4JkDAbtiEUy6/cpaYJr3uk5BCDDNKlpcVlylrx10XgV5UdHWeouXA7
+        Olcu4sv4tGUJ7g4IP+NXt0eCjx5CqC3/gxCsVPdBvKVrT9PD5i5F8KY9a+ltX5huH4PgN+P/xfAGC
+        loFrMgb+Kk4sX3S8Z2TH1wWNWy6xq3ng5MogXM6XppVn4VVOLmjJdKt9eJE7LSedxE1MtMtbUktYI
+        yvb6AErQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNntr-006Pbs-Bd; Sat, 26 Feb 2022 03:37:39 +0000
+Message-ID: <e172056c-fe88-4c7e-376b-ce768d76ab5b@infradead.org>
+Date:   Fri, 25 Feb 2022 19:37:34 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: fix function usage
+ information for -f option
+Content-Language: en-US
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, corbet@lwn.net
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        weizhenliang@huawei.com, georgi.djakov@linaro.org,
+        skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hanshenghong2019@email.szu.edu.cn
+References: <20220226032641.2493-1-caoyixuan2019@email.szu.edu.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220226032641.2493-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before, our help output contained lines like
-  --kconfig_add KCONFIG_ADD
-  --qemu_config qemu_config
-  --jobs jobs
 
-They're not very helpful.
 
-The former kind come from the automatic 'metavar' we get from argparse,
-the uppsercase version of the flag name.
-The latter are where we manually specified metavar as the flag name.
+On 2/25/22 19:26, Yixuan Cao wrote:
+> A previous linux-next based patch
+> d7e9705bb715fc3deb16bfd5976d9d50f8d2aa67
+> (tools/vm/page_owner_sort.c: fix the instructions for use)
+> stated that the description for the "-f" option should be
+> "Filter out the information of blocks whose memory
+> has been released."
+> 
+> So I made the same changes in this document.
+> 
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+> ---
+>  Documentation/vm/page_owner.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+> index aec1906976f4..32ca54757d3f 100644
+> --- a/Documentation/vm/page_owner.rst
+> +++ b/Documentation/vm/page_owner.rst
+> @@ -78,7 +78,7 @@ Usage
+>  
+>  2) Enable page owner: add "page_owner=on" to boot cmdline.
+>  
+> -3) Do the job what you want to debug
+> +3) Do the job what you want to debug.
 
-After:
-  --build_dir DIR
-  --make_options X=Y
-  --kunitconfig KUNITCONFIG
-  --kconfig_add CONFIG_X=Y
-  --arch ARCH
-  --cross_compile PREFIX
-  --qemu_config FILE
-  --jobs N
-  --timeout SECONDS
-  --raw_output [{all,kunit}]
-  --json [FILE]
+s/what/that/
 
-This patch tries to make the code more clear by specifying the _type_ of
-input we expect, e.g. --build_dir is a DIR, --qemu_config is a FILE.
-I also switched it to uppercase since it looked more clearly like
-placeholder text that way.
+>  
+>  4) Analyze information from page owner::
+>  
+> @@ -126,4 +126,4 @@ Usage
+>  		-c		Cull by comparing stacktrace instead of total block.
+>  
+>  	Filter:
+> -		-f		Filter out the information of blocks whose memory has not been released.
+> +		-f		Filter out the information of blocks whose memory has been released.
 
-This patch also changes --raw_output to specify `choices` to make it
-more clear what the options are, and this way argparse can validate it
-for us, as shown by the added test case.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit.py           | 26 ++++++++++++--------------
- tools/testing/kunit/kunit_tool_test.py |  5 +++++
- 2 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 9274c6355809..566404f5e42a 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -206,8 +206,6 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[
- 			pass
- 		elif request.raw_output == 'kunit':
- 			output = kunit_parser.extract_tap_lines(output)
--		else:
--			print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
- 		for line in output:
- 			print(line.rstrip())
- 
-@@ -281,10 +279,10 @@ def add_common_opts(parser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
- 			    'directory.',
--			    type=str, default='.kunit', metavar='build_dir')
-+			    type=str, default='.kunit', metavar='DIR')
- 	parser.add_argument('--make_options',
- 			    help='X=Y make option, can be repeated.',
--			    action='append')
-+			    action='append', metavar='X=Y')
- 	parser.add_argument('--alltests',
- 			    help='Run all KUnit tests through allyesconfig',
- 			    action='store_true')
-@@ -292,11 +290,11 @@ def add_common_opts(parser) -> None:
- 			     help='Path to Kconfig fragment that enables KUnit tests.'
- 			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
- 			     'will get  automatically appended.',
--			     metavar='kunitconfig')
-+			     metavar='KUNITCONFIG')
- 	parser.add_argument('--kconfig_add',
- 			     help='Additional Kconfig options to append to the '
- 			     '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
--			    action='append')
-+			    action='append', metavar='CONFIG_X=Y')
- 
- 	parser.add_argument('--arch',
- 			    help=('Specifies the architecture to run tests under. '
-@@ -304,7 +302,7 @@ def add_common_opts(parser) -> None:
- 				  'string passed to the ARCH make param, '
- 				  'e.g. i386, x86_64, arm, um, etc. Non-UML '
- 				  'architectures run on QEMU.'),
--			    type=str, default='um', metavar='arch')
-+			    type=str, default='um', metavar='ARCH')
- 
- 	parser.add_argument('--cross_compile',
- 			    help=('Sets make\'s CROSS_COMPILE variable; it should '
-@@ -316,18 +314,18 @@ def add_common_opts(parser) -> None:
- 				  'if you have downloaded the microblaze toolchain '
- 				  'from the 0-day website to a directory in your '
- 				  'home directory called `toolchains`).'),
--			    metavar='cross_compile')
-+			    metavar='PREFIX')
- 
- 	parser.add_argument('--qemu_config',
- 			    help=('Takes a path to a path to a file containing '
- 				  'a QemuArchParams object.'),
--			    type=str, metavar='qemu_config')
-+			    type=str, metavar='FILE')
- 
- def add_build_opts(parser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
- 			    'jobs (commands) to run simultaneously."',
--			    type=int, default=get_default_jobs(), metavar='jobs')
-+			    type=int, default=get_default_jobs(), metavar='N')
- 
- def add_exec_opts(parser) -> None:
- 	parser.add_argument('--timeout',
-@@ -336,7 +334,7 @@ def add_exec_opts(parser) -> None:
- 			    'tests.',
- 			    type=int,
- 			    default=300,
--			    metavar='timeout')
-+			    metavar='SECONDS')
- 	parser.add_argument('filter_glob',
- 			    help='Filter which KUnit test suites/tests run at '
- 			    'boot-time, e.g. list* or list*.*del_test',
-@@ -346,7 +344,7 @@ def add_exec_opts(parser) -> None:
- 			    metavar='filter_glob')
- 	parser.add_argument('--kernel_args',
- 			    help='Kernel command-line parameters. Maybe be repeated',
--			     action='append')
-+			     action='append', metavar='')
- 	parser.add_argument('--run_isolated', help='If set, boot the kernel for each '
- 			    'individual suite/test. This is can be useful for debugging '
- 			    'a non-hermetic test, one that might pass/fail based on '
-@@ -357,13 +355,13 @@ def add_exec_opts(parser) -> None:
- def add_parse_opts(parser) -> None:
- 	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
- 			    'If set to --raw_output=kunit, filters to just KUnit output.',
--			    type=str, nargs='?', const='all', default=None)
-+			     type=str, nargs='?', const='all', default=None, choices=['all', 'kunit'])
- 	parser.add_argument('--json',
- 			    nargs='?',
- 			    help='Stores test results in a JSON, and either '
- 			    'prints to stdout or saves to file if a '
- 			    'filename is specified',
--			    type=str, const='stdout', default=None)
-+			    type=str, const='stdout', default=None, metavar='FILE')
- 
- def main(argv, linux=None):
- 	parser = argparse.ArgumentParser(
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 352369dffbd9..eb2011d12c78 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -595,6 +595,11 @@ class KUnitMainTest(unittest.TestCase):
- 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
- 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
-+	def test_run_raw_output_invalid(self):
-+		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
-+		with self.assertRaises(SystemExit) as e:
-+			kunit.main(['run', '--raw_output=invalid'], self.linux_source_mock)
-+
- 	def test_run_raw_output_does_not_take_positional_args(self):
- 		# --raw_output is a string flag, but we don't want it to consume
- 		# any positional arguments, only ones after an '='
-
-base-commit: 5debe5bfa02c4c8922bd2d0f82c9c3a70bec8944
 -- 
-2.35.1.574.g5d30c73bfb-goog
-
+~Randy

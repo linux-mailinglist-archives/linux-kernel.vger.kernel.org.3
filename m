@@ -2,410 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897024C5524
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 11:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366DD4C5527
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 11:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbiBZKVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 05:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S231132AbiBZKXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 05:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiBZKVC (ORCPT
+        with ESMTP id S229819AbiBZKXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 05:21:02 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE431EDA03;
-        Sat, 26 Feb 2022 02:20:28 -0800 (PST)
-Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 02483C8606;
-        Sat, 26 Feb 2022 10:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1645870827; bh=BBTPR8ndkMJKzpJc4293l6J8Otn5feMmw3gXpcNORDE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hK04Tbp110tYvso8tQ7qoodu6F9dvH7vbcPoOuTYIKvaGoWSB51/Fx/aPWNzrE4TO
-         Rve3F4TLP0Jq2D+q6OEeFU3Zyco66Fpejyt7qumPwEivxTJ+BgaqkMzxlsQrl1Q8EG
-         H9jms7yd4fuf3M7KqVCwDGniPg7nqfmdCj5paRH0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARM: dts: qcom: Add support for ASUS ZenWatch 2
-Date:   Sat, 26 Feb 2022 11:19:39 +0100
-Message-Id: <20220226101939.1011551-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220226101939.1011551-1-luca@z3ntu.xyz>
-References: <20220226101939.1011551-1-luca@z3ntu.xyz>
+        Sat, 26 Feb 2022 05:23:15 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A54210450;
+        Sat, 26 Feb 2022 02:22:41 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id t11so9376210ioi.7;
+        Sat, 26 Feb 2022 02:22:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7jsdZ9DhlS+cuBn5e0nl64bHzF3fsXAHgkXh5/R5ncc=;
+        b=Pk/5G1ltlqkex9Y+38e0ALpLwIfmXwSdGhfyk3KPmYg7jA8caCJ5ptjHVJ8qkrApBN
+         PNsT6YFchzjpfgqUDntNayFb7qHshC7M4cynt2wDG3w+qRcIzmjT4A123luLgdFYZZyS
+         cfl3zIwmajvZby33ZoWHTOS7wjzJuwU9rc/p/psW6U9qElutFiMDXtaStoHn4VAIWJxw
+         ccZNKUp3cfUMQjAfMaTlYk9sZSlPgpRDqIFTEPIHlUdaY8Vc4uecClBtQmeTHpV2GhcN
+         qk3uBpZ7ZrG11i2NUPBf1rSerH/IpgTqx7BhceHzb94piiA5AWXht/y/hOcWWVVaBLUr
+         VF+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7jsdZ9DhlS+cuBn5e0nl64bHzF3fsXAHgkXh5/R5ncc=;
+        b=smss3/zdVsBBpcb/6UipHbZ7LvuK7YUcX6FGSw0F0XgP8D8Ac3Oju4qGox1aSSIpYo
+         vaJINX4v2cRXeoixg088luVXGYT/rz28PqO9p/2kc8TbOnvNZKH6Oh8PHN+p1Poxqdfd
+         sMLq5xs2VwpfGTSi8M2oJ4mmxhBJPcNlERPEA2XaC1O2Uowr9YscNkB1ejfyXEKjyaoS
+         /1m08TwpFIZ1mMhnam+xYOVVZxx2iJGN4nqUJkUQVVm2y3dYoDKqyAfiGOWCnVJYtFsv
+         IXKGKGrX4a7BsIh4Rx4lbB+Xix2m+Zo56honvcM3IfW/ZzHASJa+20aaEcvfCSrOUFvm
+         xKHA==
+X-Gm-Message-State: AOAM532P8eA1jr/oQhsG0QKoNq+Lf81a/tAdgDLR9UysESV44AkQ8Lqu
+        aCUZYzlXH5pnkN0dXcNpem64Uck8c+SdTkm9pGQ=
+X-Google-Smtp-Source: ABdhPJwz8AsXgVV4L2PxrAIHcbkuaegZX2IWrny5SGALDuwN9dFZuBKCYJAaU1OIMy4FNI+KTaHOiybD2TFeolYhkIo=
+X-Received: by 2002:a05:6638:4905:b0:317:1dda:b116 with SMTP id
+ cx5-20020a056638490500b003171ddab116mr985704jab.188.1645870961399; Sat, 26
+ Feb 2022 02:22:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
+ <Yhf+FemcQQToB5x+@redhat.com> <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
+ <YhjYSMIE2NBZ/dGr@redhat.com> <YhjeX0HvXbED65IM@casper.infradead.org>
+ <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
+ <YhkFZE8wUWhycwX2@redhat.com> <CAH2r5msPz1JZK4OWX_=+2HTzKTZE07ACxbEv3xM-1T0HTnVWMw@mail.gmail.com>
+In-Reply-To: <CAH2r5msPz1JZK4OWX_=+2HTzKTZE07ACxbEv3xM-1T0HTnVWMw@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sat, 26 Feb 2022 12:22:26 +0200
+Message-ID: <CAOQ4uxi+VJG56TPvcpOqoVAGgbb8gZQJEfvhXyGyB5VboRE2wA@mail.gmail.com>
+Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Enabling change notification for
+ network and cluster fs
+To:     Steve French <smfrench@gmail.com>
+Cc:     Vivek Goyal <vgoyal@redhat.com>, CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ioannis Angelakopoulos <jaggel@bu.edu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        lsf-pc <lsf-pc@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for this smartwatch, based on Snapdragon 400 SoC.
+On Fri, Feb 25, 2022 at 8:11 PM Steve French <smfrench@gmail.com> wrote:
+>
+> > IOW, in general disable all local events and let filesystems decide which
+> local events to generate? And locally cached write is one such example?
+>
+> The fs doesn't see cached writes so probably best to still use the common
+> existing code for notification on local writes
+>
 
-Currently supported functionality:
-* Internal storage
-* USB
-* Charger
-* Power button
-* Vibration motor
-* Bluetooth
-* Wifi
+I guess SMB protocol does not allow client B to request a NOTIFY on change
+when client A has a directory lease, because requesting NOTIFY requires
+getting a read file handle on the dir?
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Please note that this patch soft-depends on "Bluetooth: hci_bcm: add
-BCM43430A0 & BCM43430A1" which I sent out yesterday.
+Effectively, smb client needs to open the remote directory for read in order
+to prove that the client has read access to the directory, which is the
+prerequisite for getting directory change notifications.
 
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/qcom-apq8026-asus-sparrow.dts    | 294 ++++++++++++++++++
- arch/arm/boot/dts/qcom-msm8226.dtsi           |   9 +
- 3 files changed, 304 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
+The local check for permissions is not enough for remote notifications:
+        /* you can only watch an inode if you have read permissions on it */
+        error = path_permission(path, MAY_READ);
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 235ad559acb2..4b2489580f7c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -967,6 +967,7 @@ dtb-$(CONFIG_ARCH_OXNAS) += \
- 	ox820-cloudengines-pogoplug-series-3.dtb
- dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-apq8016-sbc.dtb \
-+	qcom-apq8026-asus-sparrow.dtb \
- 	qcom-apq8026-lg-lenok.dtb \
- 	qcom-apq8060-dragonboard.dtb \
- 	qcom-apq8064-cm-qs600.dtb \
-diff --git a/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts b/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
-new file mode 100644
-index 000000000000..ace8cea27949
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
-@@ -0,0 +1,294 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Luca Weiss <luca@z3ntu.xyz>
-+ */
-+
-+/dts-v1/;
-+
-+#include "qcom-msm8226.dtsi"
-+#include "qcom-pm8226.dtsi"
-+
-+/ {
-+	model = "ASUS ZenWatch 2";
-+	compatible = "asus,sparrow", "qcom,apq8026";
-+	chassis-type = "watch";
-+	qcom,msm-id = <199 0x20000>;
-+	qcom,board-id = <8 3005>;
-+
-+	reserved-memory {
-+		sbl_region: sbl@2f00000 {
-+			reg = <0x02f00000 0x100000>;
-+			no-map;
-+		};
-+		external_image_region: external-image@3100000 {
-+			reg = <0x3100000 0x200000>;
-+			no-map;
-+		};
-+		peripheral_region: peripheral@3300000 {
-+			reg = <0x3300000 0x600000>;
-+			no-map;
-+		};
-+		adsp_region: adsp@3900000 {
-+			reg = <0x3900000 0x1400000>;
-+			no-map;
-+		};
-+		modem_region: modem@4d00000 {
-+			reg = <0x4d00000 0x1b00000>;
-+			no-map;
-+		};
-+		modem_efs_region: modem-efs@7f00000 {
-+			reg = <0x7f00000 0x100000>;
-+			no-map;
-+		};
-+	};
-+
-+	vreg_wlan: wlan-regulator {
-+		compatible = "regulator-fixed";
-+
-+		regulator-name = "wl-reg";
-+		regulator-min-microvolt = <2950000>;
-+		regulator-max-microvolt = <2950000>;
-+
-+		gpio = <&tlmm 35 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wlan_regulator_default_state>;
-+	};
-+};
-+
-+&blsp1_uart1 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&blsp1_uart1_default_state>;
-+
-+	bluetooth {
-+		compatible = "brcm,bcm43430a1-bt";
-+		max-speed = <3000000>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bluetooth_default_state>;
-+
-+		host-wakeup-gpios = <&tlmm 48 GPIO_ACTIVE_HIGH>;
-+		device-wakeup-gpios = <&tlmm 61 GPIO_ACTIVE_HIGH>;
-+		shutdown-gpios = <&tlmm 34 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&pm8226_vib {
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	pm8226-regulators {
-+		compatible = "qcom,rpm-pm8226-regulators";
-+
-+		pm8226_s3: s3 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+		pm8226_s4: s4 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2200000>;
-+		};
-+		pm8226_s5: s5 {
-+			regulator-min-microvolt = <1150000>;
-+			regulator-max-microvolt = <1150000>;
-+		};
-+
-+		pm8226_l1: l1 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+		pm8226_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+		pm8226_l3: l3 {
-+			regulator-min-microvolt = <750000>;
-+			regulator-max-microvolt = <1337500>;
-+		};
-+		pm8226_l4: l4 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+		pm8226_l5: l5 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+		pm8226_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l7: l7 {
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <1900000>;
-+		};
-+		pm8226_l8: l8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l9: l9 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l10: l10 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l14: l14 {
-+			regulator-min-microvolt = <2750000>;
-+			regulator-max-microvolt = <2750000>;
-+		};
-+		pm8226_l15: l15 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+		pm8226_l16: l16 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+		pm8226_l17: l17 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8226_l18: l18 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8226_l19: l19 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+		};
-+		pm8226_l20: l20 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+		pm8226_l21: l21 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8226_l22: l22 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8226_l23: l23 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8226_l24: l24 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+		pm8226_l25: l25 {
-+			regulator-min-microvolt = <1775000>;
-+			regulator-max-microvolt = <2125000>;
-+		};
-+		pm8226_l26: l26 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+		pm8226_l27: l27 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+		pm8226_l28: l28 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_lvs1: lvs1 {};
-+	};
-+};
-+
-+&sdhc_1 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm8226_l17>;
-+	vqmmc-supply = <&pm8226_l6>;
-+
-+	bus-width = <8>;
-+	non-removable;
-+};
-+
-+&sdhc_3 {
-+	status = "okay";
-+
-+	max-frequency = <100000000>;
-+	non-removable;
-+
-+	vmmc-supply = <&vreg_wlan>;
-+	vqmmc-supply = <&pm8226_l6>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	wifi@1 {
-+		compatible = "brcm,bcm43430a1-fmac", "brcm,bcm4329-fmac";
-+		reg = <1>;
-+
-+		interrupts-extended = <&tlmm 46 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-names = "host-wake";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wlan_hostwake_default_state>;
-+	};
-+};
-+
-+&smbb {
-+	qcom,fast-charge-safe-current = <1500000>;
-+	qcom,fast-charge-current-limit = <350000>;
-+	qcom,fast-charge-safe-voltage = <4430000>;
-+	qcom,fast-charge-high-threshold-voltage = <4400000>;
-+	qcom,auto-recharge-threshold-voltage = <4300000>;
-+	qcom,minimum-input-voltage = <4400000>;
-+};
-+
-+&tlmm {
-+	blsp1_uart1_default_state: blsp1-uart1-default-state {
-+		pins = "gpio0", "gpio1", "gpio2", "gpio3";
-+		function = "blsp_uart1";
-+		drive-strength = <8>;
-+		bias-disable;
-+	};
-+
-+	bluetooth_default_state: bluetooth-default-state {
-+		pins = "gpio48", "gpio61";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-disable;
-+		input-enable;
-+	};
-+
-+	wlan_hostwake_default_state: wlan-hostwake-default-state {
-+		pins = "gpio46";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		input-enable;
-+	};
-+
-+	wlan_regulator_default_state: wlan-regulator-default-state {
-+		pins = "gpio35";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&usb {
-+	status = "okay";
-+	extcon = <&smbb>;
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&smbb>;
-+	v1p8-supply = <&pm8226_l10>;
-+	v3p3-supply = <&pm8226_l20>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index dfeb47eb41a2..e24e53438b4d 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -153,6 +153,15 @@ sdhc_3: sdhci@f9864900 {
- 			status = "disabled";
- 		};
- 
-+		blsp1_uart1: serial@f991d000 {
-+			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
-+			reg = <0xf991d000 0x1000>;
-+			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc GCC_BLSP1_UART1_APPS_CLK>, <&gcc GCC_BLSP1_AHB_CLK>;
-+			clock-names = "core", "iface";
-+			status = "disabled";
-+		};
-+
- 		blsp1_uart3: serial@f991f000 {
- 			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
- 			reg = <0xf991f000 0x1000>;
--- 
-2.35.1
-
+Thanks,
+Amir.

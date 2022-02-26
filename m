@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A714C53B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A199E4C53B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiBZE0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 23:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S229909AbiBZE0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 23:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiBZE0M (ORCPT
+        with ESMTP id S229700AbiBZE0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 23:26:12 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18165EB333
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:25:39 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id 12so9127331oix.12
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:25:39 -0800 (PST)
+        Fri, 25 Feb 2022 23:26:11 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321D1D21D7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:25:38 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id a5so5570141pfv.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:25:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sRW1QJ44zEpsGk5UtujfrjSj7k2heySjFPlbGEPPKyw=;
-        b=suDbmFilW3Jt+qrtziO3xmLeoOIUAU/VnRyH6jHfnk+C5d2HrUGYnmB+tW9jCzX/MP
-         OR1W9aDDXIA52TBcMKmF8A1JIr/BUWDKIp5PlokXaM5G6DOvlahyDKYefjes/e4mlqSQ
-         +ARdz1ovnNqSJMc3KpkY9B4cMp9puLUJtKYrSh7VotjOTC5hNmFILtZfJ6pOfBqfgzwF
-         QLRplPBAy0HhODYja/1nB30WjfMDs3Z1QqsNDAtmxAtOjHg0iwSCnJimKROpSMKiXkAh
-         KrYHsfkyPhm+z9S5g36gwsEVrlLtrtfHB1h4FamRxPOX+APzQf9n1gl/PYAzrKlsggbW
-         42tA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=Fp8tS9Tv9uCsWH6vrg9RydV37obfExfUsNqz1M7URQw=;
+        b=gAwNByTQb9WAk7MPfXqU6n8mq0gTMsBg0s07UhnpFy7iVZ7BGyO+fcZMiq1ckGgeST
+         SPtN9ABVZSGJUMpwJiBgmjb+llU2FOqn0orQ/CM2hYu0upRAEc2AskxGiAkuDR4dueZ6
+         GJuPYwt12mV9VHyCAbc8ZEANweruJ4SFj+zHNZm9O4vugdXzlJxPh4sr/NbtEfZ7P33y
+         T7VPH9en9aAAkmXGot0rJkeLIZVA+jiz6x6dR5mZG8Vp0iPTcO01F70AHcHv1i3H8x2w
+         Ht6uKu3tQ3anzoNnJ4B7D+yHxVA7G6VItDpJ+RYNo81rSW6HsGDolLaQIgap2L21yttM
+         qy/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sRW1QJ44zEpsGk5UtujfrjSj7k2heySjFPlbGEPPKyw=;
-        b=zGY36Axr4OEBuYkHkXjBhl/cC0vk7X8mj8lA3qmBwM5KXKzVb4bNoZXU58csNyRbur
-         eQc08Qn/Vfp4aXx2ccbGrugLdhm/KQieTTe4HgqnPnb0KPipa22BhwkR3Hl0rUcMXUrS
-         2ONKqoZLtiTSV+BN2F6zWmuYy6WydFeb/dcplzmr2hNVka+g664k6X1pwkB3KlgLWYLY
-         X/pfMYt8SioQK3PgTjjoFwlGzMQKbt4q7eA83cdz+a4375VUPYOk5QFrJ3A4R6MNY1U9
-         EYCxnwsol360WwiJlFgw4/YIS4aEl7dQ7oKIwfBIZD3CrhfboReobyZB/tr/mNxuLmmv
-         vUWA==
-X-Gm-Message-State: AOAM5315PYo360BHV+ifk5BSQjyhYekzMzGHG1GcHmIhFRgcjtktBcZb
-        +PhrOzxtcXy7xMKiDYtsU0n/S6Q5LNjBSvcKN/fiIA==
-X-Google-Smtp-Source: ABdhPJyEt9lNaCxjgbv2hxl6Ij0KpV13H0Y4J982X2CLh2QH0Vwh5FYCedQnUqhzDSLDz0T9Mh3sHb9KKqMRTxheChk=
-X-Received: by 2002:a05:6808:1443:b0:2d7:306b:2943 with SMTP id
- x3-20020a056808144300b002d7306b2943mr3916811oiv.66.1645849538082; Fri, 25 Feb
- 2022 20:25:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Fp8tS9Tv9uCsWH6vrg9RydV37obfExfUsNqz1M7URQw=;
+        b=fsp9eBzO91N9BG0L2gsKUTNJhxx1uPPqUB/NjfNIWs3gzaWryc4qsTTdtngzzp/5zb
+         kx6Fco8jG9nbdA1B9lA34HYwzmSNwTc5ZHPWCIngcK17RCSCiX4lgnNytAHk+EOcXI3P
+         /Pqmj40Xo/tTVHznEQ2a63u6XZ4tnHmYAEf4PMqz7cl8KkFQ1duVuRo+fzQdaCKdNkDB
+         jmS+82RIv/d+RcuzzGx28vzwhJUzIKP482dUGLGIM1+1NrMxKkzI+FqP9yaOURw8VPpH
+         XUOlPDaelpF8CnIuVirYTe32bBTtNwh6TWr7G6DYT4g1zjUI/p2PPpdVXMoFVeLUUXyX
+         ZKqw==
+X-Gm-Message-State: AOAM533eHvbO5ZuVQrQuCwjWlgWQFPRrLNgUyINqnN30j820+vsfv+2J
+        7I4iK7GF2WAAZ1P6cPE3kvPQl3/Qv7wXMBm1
+X-Google-Smtp-Source: ABdhPJzHQLmT4p//evrcfBLw6x6Xobkv89wYpaBw12Jpf3R4cHoxj+UYFlNw9jxJJ4iXYg8goHDYUA==
+X-Received: by 2002:a63:2d05:0:b0:34b:3f1d:2fa8 with SMTP id t5-20020a632d05000000b0034b3f1d2fa8mr8844216pgt.447.1645849537593;
+        Fri, 25 Feb 2022 20:25:37 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id z8-20020aa79588000000b004e1dc67ead3sm4783050pfj.126.2022.02.25.20.25.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 20:25:37 -0800 (PST)
+Date:   Sat, 26 Feb 2022 17:25:31 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: prevent uninitialized data from being
+ printed out
+Message-ID: <Yhmruyr2BUn0+3O3@mail.google.com>
 MIME-Version: 1.0
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
- <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
- <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
- <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com> <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
-In-Reply-To: <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 25 Feb 2022 20:25:26 -0800
-Message-ID: <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
->
-> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
-> > On 2/25/22 16:12, Xiaoyao Li wrote:
-> >>>>>
-> >>>>
-> >>>> I don't like the idea of making things up without notifying userspace
-> >>>> that this is fictional. How is my customer running nested VMs supposed
-> >>>> to know that L2 didn't actually shutdown, but L0 killed it because the
-> >>>> notify window was exceeded? If this information isn't reported to
-> >>>> userspace, I have no way of getting the information to the customer.
-> >>>
-> >>> Then, maybe a dedicated software define VM exit for it instead of
-> >>> reusing triple fault?
-> >>>
-> >>
-> >> Second thought, we can even just return Notify VM exit to L1 to tell
-> >> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
-> >> to L1.
-> >
-> > That might cause NULL pointer dereferences or other nasty occurrences.
->
-> IMO, a well written VMM (in L1) should handle it correctly.
->
-> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
-> setting Notify VM exit. If a L2 causes notify_vm_exit with
-> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
-> support of Notify VM Exit from VMX MSR capability. Following L1 handler
-> is possible:
->
-> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
->                 handle in b)
->         } else {
->                 report unexpected vm exit reason to userspace;
->         }
->
-> b)      similar handler like we implement in KVM:
->         if (!vm_context_invalid)
->                 re-enter guest;
->         else
->                 report to userspace;
->
-> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
-> unsupported exit reason
->
-> As long as it belongs to any case above, I think L1 can handle it
-> correctly. Any nasty occurrence should be caused by incorrect handler in
-> L1 VMM, in my opinion.
+local_buffer is not initialised before data is passed to
+spi_sync_transfer. In case spi* function fails then the dev_dbg
+statement after that can potentially print out uninitialised data
 
-Please test some common hypervisors (e.g. ESXi and Hyper-V).
+this patch initialises local_buffer array.
+
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Meta-comments:
+
+- this change was requested by Dan Carpenter in a different thread:
+https://lore.kernel.org/lkml/20220207100601.GF1951@kadam/
+
+Patch dependency:
+
+- this patch depends on the following patch to be applied first as
+both of them change the same file:
+https://lore.kernel.org/lkml/Yhla4a1Clpguoo2h@mail.google.com/
+---
+ drivers/staging/pi433/rf69.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index e5b23ab39c69..3028018f0b45 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -782,7 +782,7 @@ int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
+ {
+ 	int i;
+ 	struct spi_transfer transfer;
+-	u8 local_buffer[FIFO_SIZE + 1];
++	u8 local_buffer[FIFO_SIZE + 1] = {};
+ 	int retval;
+ 
+ 	if (size > FIFO_SIZE) {
+-- 
+2.34.1
+

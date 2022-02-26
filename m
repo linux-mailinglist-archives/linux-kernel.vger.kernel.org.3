@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DABA04C52A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875914C5298
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbiBZASj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S233741AbiBZASs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241471AbiBZARz (ORCPT
+        with ESMTP id S241490AbiBZARz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Feb 2022 19:17:55 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0940225595
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:55 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id h128-20020a625386000000b004f10a219a98so3988247pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:55 -0800 (PST)
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44CD234039
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:56 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id k130-20020a628488000000b004f362b45f28so3967041pfd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=ZivJE8MVPu2+0VJQHIQDwCaX4QVLks+DVDCy+33e+r8=;
-        b=mMU4YwGqseNPZMpoNYmxFxG4jtTHTrOwwNMMtFmvF5gU3KuAfnYwOTnZjRQMZCj6LL
-         2ge/6ljDTmTYz3JDy0ObU/z3MurRyM4S2ySEh38mtjBgB2XRzbyeuZTTOp3RhFmupm4L
-         hqWf+267+WCsN3maMGLfrNA5cJadn3cyBsIsP//FOmbObzbe2kwKkbhShHvXyFYHGtIB
-         gzcBXLaCiu4Fs3dVHuhYG49cqGvgJS09YjKP7bL3eyZvuADi+p3cNlB8sYDMxemp4whB
-         7XNLvyCKA6a6OtGvEBjRJKc6U4Io5PQjLJxHYjZencIXDE5DItvB0wddFu726/RY/Bp8
-         b3Jw==
+        bh=eZ6FrXYp5R1CiB/zutWVqNTtHVIMJ9iK/usaw7re+ZM=;
+        b=hl4rpFhiL+jXYPutqrx0t6H9bf3KWGfYlj27fcEIS4FHVk2BLJKj160C755dQet0Om
+         5wKQ0jzn+T5sVODiQ3ZVUFHquVzV4gTyXE1RAGwfmiNCujdwofwFLe67wnXAwY3ijDky
+         6SOhAc6xWzGXY2bLPyVm02FJWPuCr90UPEKlq6cMCQPphEEo9LBJWScK66QVyzou7qc5
+         4ZmdsrFTu6j72r1Bz7uS+S46URV1CD9jrUh3nSS5KFhoixty4Wr8AgwFKpu5RV+sqjz+
+         u1EMjoVbVh8eUyq40oxulkA2xXnztTkZBRfq7UC5YNTfkYaybbE9PZdge8FPKML8hwGy
+         x+Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=ZivJE8MVPu2+0VJQHIQDwCaX4QVLks+DVDCy+33e+r8=;
-        b=yKSNX9D5GZTpkmYb4d97wZchi1Wn483vXbQesB90FJjqpeHeTMKQGvsWa4DzB89+du
-         9bdZj/euFTp2fb3srUqriG0U5picZNCnoSVmWkWm82CWMz1OVl8/zxuu96VSr5DM1slg
-         cU4An7mnlpWIJ50Pvn0+xmdHfRoN4gBAH3k2ypF6D9Q/RjzrEVoa3Bd5OWkle/qM6HK8
-         w5APAqG02sDON1IT0H7EefgE6zoDVOnzvYKsI35aBiw5E5pEpssQiIuZhOTHfCog7QEf
-         S1mgEK35gA1A28Xu7Cb/NIC8SImaaZktrMGGpKBF6AfNVpH2oDDvUC5UsFfttxd9xwRF
-         uShQ==
-X-Gm-Message-State: AOAM530BXc2pzuWmpH2Oc2zt0hk+/V9prbMojT23Bdp+cIXIiubjAM5L
-        yYDzDKpVK924RXgzpCjruexPRE8pSPY=
-X-Google-Smtp-Source: ABdhPJy1aQwG7FMFmonazVOqZZykIl+8MuBlSYKEV1ch4e6+SOFabB6zEO+fnjaBZuxd70dpPtyEts027Es=
+        bh=eZ6FrXYp5R1CiB/zutWVqNTtHVIMJ9iK/usaw7re+ZM=;
+        b=Kv4PpF3ZXoK20UtiZQA8PJLDQEbSg8bKwxN+/oc6GHD52D2CLL8jEiWCP6kQZHnuMK
+         svA2Zvujd49pCQnu4ADZ/2UGw5ftfhyCP0GODzq++zT+56dSi/nmZy5KSWczX3/vMHjd
+         hRUpFExS6DCHbNfu1srtOIK0L/ayGu0U74Q89DAYkreKY3M6u9zXVsLpUf2WnP4TlLVW
+         gh82PSXRC/JUbiEI2LYJ93rRA2/czjGl9knJzJTQ5Q2+Zm8USjMTfhxVkSMRSdzxuSYS
+         mk2NO+ZZ/RvUmTSOZjtkEiNEZtYUTI1TIwashiqMMQNr5Cy401ofDjBou53tEOo+Dt5p
+         Eu5A==
+X-Gm-Message-State: AOAM530wZaeLK5sv5ZchdFL2NyP96ywJhmOZarQJKYDcF749ubSqzqIT
+        eObnNG4qkwULMfvhs9pFJ/T15bgRemw=
+X-Google-Smtp-Source: ABdhPJwZkbulWxQN1QcjvFOpJ/+q7sB6nKIs0wpPywx0Zluyg3uCsp5kDjezDFiO3Pz0lKzYCwPrRRNdG08=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:1d42:0:b0:4c7:f78d:6f62 with SMTP id
- d63-20020a621d42000000b004c7f78d6f62mr9946549pfd.33.1645834605317; Fri, 25
- Feb 2022 16:16:45 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:bc42:b0:14f:e6d0:fb7b with SMTP id
+ t2-20020a170902bc4200b0014fe6d0fb7bmr9397561plz.127.1645834606838; Fri, 25
+ Feb 2022 16:16:46 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 26 Feb 2022 00:15:44 +0000
+Date:   Sat, 26 Feb 2022 00:15:45 +0000
 In-Reply-To: <20220226001546.360188-1-seanjc@google.com>
-Message-Id: <20220226001546.360188-27-seanjc@google.com>
+Message-Id: <20220226001546.360188-28-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220226001546.360188-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v3 26/28] KVM: selftests: Split out helper to allocate guest
- mem via memfd
+Subject: [PATCH v3 27/28] KVM: selftests: Define cpu_relax() helpers for s390
+ and x86
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -80,93 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extract the code for allocating guest memory via memfd out of
-vm_userspace_mem_region_add() and into a new helper, kvm_memfd_alloc().
-A future selftest to populate a guest with the maximum amount of guest
-memory will abuse KVM's memslots to alias guest memory regions to a
-single memfd-backed host region, i.e. needs to back a guest with memfd
-memory without a 1:1 association between a memslot and a memfd instance.
-
-No functional change intended.
+Add cpu_relax() for s390 and x86 for use in arch-agnostic tests.  arm64
+already defines its own version.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     |  1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    | 42 +++++++++++--------
- 2 files changed, 25 insertions(+), 18 deletions(-)
+ tools/testing/selftests/kvm/include/s390x/processor.h  | 8 ++++++++
+ tools/testing/selftests/kvm/include/x86_64/processor.h | 5 +++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 573de0354175..92cef0ffb19e 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -123,6 +123,7 @@ int kvm_memcmp_hva_gva(void *hva, struct kvm_vm *vm, const vm_vaddr_t gva,
- 		       size_t len);
+diff --git a/tools/testing/selftests/kvm/include/s390x/processor.h b/tools/testing/selftests/kvm/include/s390x/processor.h
+index e0e96a5f608c..255c9b990f4c 100644
+--- a/tools/testing/selftests/kvm/include/s390x/processor.h
++++ b/tools/testing/selftests/kvm/include/s390x/processor.h
+@@ -5,6 +5,8 @@
+ #ifndef SELFTEST_KVM_PROCESSOR_H
+ #define SELFTEST_KVM_PROCESSOR_H
  
- void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename);
-+int kvm_memfd_alloc(size_t size, bool hugepages);
++#include <linux/compiler.h>
++
+ /* Bits in the region/segment table entry */
+ #define REGION_ENTRY_ORIGIN	~0xfffUL /* region/segment table origin	   */
+ #define REGION_ENTRY_PROTECT	0x200	 /* region protection bit	   */
+@@ -19,4 +21,10 @@
+ #define PAGE_PROTECT	0x200		/* HW read-only bit  */
+ #define PAGE_NOEXEC	0x100		/* HW no-execute bit */
  
- void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent);
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index dcb8e96c6a54..1665a220abcb 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -718,6 +718,27 @@ void kvm_vm_free(struct kvm_vm *vmp)
- 	free(vmp);
- }
- 
-+int kvm_memfd_alloc(size_t size, bool hugepages)
++/* Is there a portable way to do this? */
++static inline void cpu_relax(void)
 +{
-+	int memfd_flags = MFD_CLOEXEC;
-+	int fd, r;
-+
-+	if (hugepages)
-+		memfd_flags |= MFD_HUGETLB;
-+
-+	fd = memfd_create("kvm_selftest", memfd_flags);
-+	TEST_ASSERT(fd != -1, "memfd_create() failed, errno: %i (%s)",
-+		    errno, strerror(errno));
-+
-+	r = ftruncate(fd, size);
-+	TEST_ASSERT(!r, "ftruncate() failed, errno: %i (%s)", errno, strerror(errno));
-+
-+	r = fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0, size);
-+	TEST_ASSERT(!r, "fallocate() failed, errno: %i (%s)", errno, strerror(errno));
-+
-+	return fd;
++	barrier();
 +}
 +
- /*
-  * Memory Compare, host virtual to guest virtual
-  *
-@@ -970,24 +991,9 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 		region->mmap_size += alignment;
+ #endif
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 8a470da7b71a..37db341d4cc5 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -363,6 +363,11 @@ static inline unsigned long get_xmm(int n)
+ 	return 0;
+ }
  
- 	region->fd = -1;
--	if (backing_src_is_shared(src_type)) {
--		int memfd_flags = MFD_CLOEXEC;
--
--		if (src_type == VM_MEM_SRC_SHARED_HUGETLB)
--			memfd_flags |= MFD_HUGETLB;
--
--		region->fd = memfd_create("kvm_selftest", memfd_flags);
--		TEST_ASSERT(region->fd != -1,
--			    "memfd_create failed, errno: %i", errno);
--
--		ret = ftruncate(region->fd, region->mmap_size);
--		TEST_ASSERT(ret == 0, "ftruncate failed, errno: %i", errno);
--
--		ret = fallocate(region->fd,
--				FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
--				region->mmap_size);
--		TEST_ASSERT(ret == 0, "fallocate failed, errno: %i", errno);
--	}
-+	if (backing_src_is_shared(src_type))
-+		region->fd = kvm_memfd_alloc(region->mmap_size,
-+					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
++static inline void cpu_relax(void)
++{
++	asm volatile("rep; nop" ::: "memory");
++}
++
+ bool is_intel_cpu(void);
+ bool is_amd_cpu(void);
  
- 	region->mmap_start = mmap(NULL, region->mmap_size,
- 				  PROT_READ | PROT_WRITE,
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

@@ -2,133 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F294C5608
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 14:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2364C5603
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 14:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiBZNGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 08:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S231755AbiBZNBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 08:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiBZNG2 (ORCPT
+        with ESMTP id S230121AbiBZNBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 08:06:28 -0500
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Feb 2022 05:05:54 PST
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CFF28C9F2;
-        Sat, 26 Feb 2022 05:05:54 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id F33B03200B23;
-        Sat, 26 Feb 2022 07:59:24 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 26 Feb 2022 07:59:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8KqfMNtNUHH
-        53hTk=; b=UskEd8CKuqShsWO2xuk3i+VOFsjg7pIm1JRD8U3uPlg393NqrNUF3I
-        GfhK5TxYJnKkZifBNbDvxwRn6VJRQVGNFABJfzASJOoJgNkrjyz38Rgn+RO0KlW3
-        Q1dh/bot3oBCc6uQY9fNeoYRMnnGya2QuV66R6SXonCrv27FcNjaWFWuqLsQ1jua
-        4bvvKotYSJ9HjnFqcjLvucHCbM5vbxHVjJlRHVrMJ9z6xdZh/IuQgputmPPS8+2o
-        DYlyBiXHRMs5sicOzPlwvm6815aF3tR5ntA1VEQDVEEW2l29VcJEdV6OH3Vw1wef
-        0/J07rSHBPUdOXTtLiT2nvEFKhuPABTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8K
-        qfMNtNUHH53hTk=; b=W9FpTaMphsavn3/8ndGiuutvKDc54GGOLzjxHGEhcVmc3
-        8fUu9iPa2ZVrSA2CzeyXEU0bj78A4cQf2H8bWs3e6dPybEU6Un7CMXXsMwqcQZ/b
-        ZjmEM6CnVTOwPHKxqeeDPbpyFK4NDT+kGnKPoicmxDgvkQcRzfNpv0AsujVZovud
-        msiyC/1ZVMCaSqVyLwEpps4q0YdBSr3AnyK+Fllx88AZBNkJ4ETyQo1ZkFEAie2e
-        +6ZuxDfh8MwYmH79mNeqx/Ftn1mOof4OXoWduMv8wkOtEjzvGxBwnt7Ix98SrR4y
-        UH0rfPL0wMZFtKvLf1yzghQLvpj9dZn2iInFvRMCw==
-X-ME-Sender: <xms:KyQaYkI1P--HgEw406hQ3zgQE6wjGkufVMk-35C_G1TxO3yIzRSkLw>
-    <xme:KyQaYkIVkUTDxwS1bE50XHw4n3eZ8_qjX5xq97bOH3r4hqN8UQHzHppsvf8jtClBW
-    ufyVDi0StzRqR-fkfY>
-X-ME-Received: <xmr:KyQaYkuxF1ftGNn8VQbGO0kVWstdsfVJVEN_1ig62BW-jLEs_qwJuo6fUb-GzKVewG7UzHQwNGTkaepFPFV5VI8-svU1E_HfeTd_id2qky5eQGuoNg3ZwB1enh_ZZMU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleeigdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvght
-    vghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpe
-    eugfelkedvtdejffefjeehveelfeevkefgudduhfeghfefgedtheevjeefffffgfenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhessh
-    hvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:KyQaYhZLZx5AwBB2Yl64I65F4Vgb5Ca8dkaLIPyexB9BQ3ojjnsLbw>
-    <xmx:KyQaYraA_EfLzhIh4I9lEe7OjLOyYVvALk1_H3vzy-yq-m_kVR5ezg>
-    <xmx:KyQaYtDt1H6iZNI1TrxLIfoAvY8FvVhKgN1NRU7hsyHTea5GuILJZQ>
-    <xmx:LCQaYgNvzMqkVN7aoy5Q5ActaAdRL48avKL_ho2dY9EW1ILCGfPp3g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 26 Feb 2022 07:59:21 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: tipd: Forward plug orientation to typec subsystem
-Date:   Sat, 26 Feb 2022 13:59:12 +0100
-Message-Id: <20220226125912.59828-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Sat, 26 Feb 2022 08:01:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD02266DB8;
+        Sat, 26 Feb 2022 05:00:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79672B80139;
+        Sat, 26 Feb 2022 13:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C0DC340E8;
+        Sat, 26 Feb 2022 13:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645880433;
+        bh=frJylF/+FxLOI5G318Rhg4DUZhcG4+0AAN7L8S41CrM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V9uipyOymCTqT+EbivBEe4AYc+pBeKqN0BSGP+jOPZRHR2OiD2rwOvm9KUdsYjT40
+         YEq1e+CpFHFgcTmq/111wY3ZVIRzl8bLMce+2D8qX5amd+ftsK6nBbLzAzjLNihvBg
+         MgkmuMkSmKWC5GsneQ3FUxu2zB6DZI1iFdsMnnpI=
+Date:   Sat, 26 Feb 2022 14:00:30 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, rostedt@goodmis.org, mingo@redhat.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH] blktrace: Revert "blktrace: remove debugfs file dentries
+ from struct blk_trace"
+Message-ID: <Yhokbid+ForZROCn@kroah.com>
+References: <20220226095343.1121256-1-yukuai3@huawei.com>
+ <Yhn2UD7nY3poWzkN@kroah.com>
+ <09fd48a2-77b1-f4fb-87d8-704fba9d754b@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <09fd48a2-77b1-f4fb-87d8-704fba9d754b@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to bring up the USB3 PHY on the Apple M1 we need to know the
-orientation of the Type-C cable. Extract it from the status register and
-forward it to the typec subsystem.
+On Sat, Feb 26, 2022 at 05:57:44PM +0800, yukuai (C) wrote:
+> 在 2022/02/26 17:43, Greg KH 写道:
+> > On Sat, Feb 26, 2022 at 05:53:43PM +0800, Yu Kuai wrote:
+> > > This reverts commit c0ea57608b691d6cde8aff23e11f9858a86b5918.
+> > > 
+> > > When tracing the whole disk, 'dropped' and 'msg' will be created
+> > > under 'q->debugfs_dir' and 'bt->dir' is NULL, thus blk_trace_free()
+> > > won't remove those files. What's worse, the following UAF can be
+> > > triggered because of stale 'dropped' and 'msg':
+> > 
+> > Only root has access to these files, right?
+> 
+> Hi,
+> 
+> Yes, usually user will use blktrace to access these files.
+> > 
+> > > 
+> > > ==================================================================
+> > > BUG: KASAN: use-after-free in blk_dropped_read+0x89/0x100
+> > > Read of size 4 at addr ffff88816912f3d8 by task blktrace/1188
+> > > 
+> > > CPU: 27 PID: 1188 Comm: blktrace Not tainted 5.17.0-rc4-next-20220217+ #469
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-4
+> > > Call Trace:
+> > >   <TASK>
+> > >   dump_stack_lvl+0x34/0x44
+> > >   print_address_description.constprop.0.cold+0xab/0x381
+> > >   ? blk_dropped_read+0x89/0x100
+> > >   ? blk_dropped_read+0x89/0x100
+> > >   kasan_report.cold+0x83/0xdf
+> > >   ? blk_dropped_read+0x89/0x100
+> > >   kasan_check_range+0x140/0x1b0
+> > >   blk_dropped_read+0x89/0x100
+> > >   ? blk_create_buf_file_callback+0x20/0x20
+> > >   ? kmem_cache_free+0xa1/0x500
+> > >   ? do_sys_openat2+0x258/0x460
+> > >   full_proxy_read+0x8f/0xc0
+> > >   vfs_read+0xc6/0x260
+> > >   ksys_read+0xb9/0x150
+> > >   ? vfs_write+0x3d0/0x3d0
+> > >   ? fpregs_assert_state_consistent+0x55/0x60
+> > >   ? exit_to_user_mode_prepare+0x39/0x1e0
+> > >   do_syscall_64+0x35/0x80
+> > >   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > RIP: 0033:0x7fbc080d92fd
+> > > Code: ce 20 00 00 75 10 b8 00 00 00 00 0f 05 48 3d 01 f0 ff ff 73 31 c3 48 83 1
+> > > RSP: 002b:00007fbb95ff9cb0 EFLAGS: 00000293 ORIG_RAX: 0000000000000000
+> > > RAX: ffffffffffffffda RBX: 00007fbb95ff9dc0 RCX: 00007fbc080d92fd
+> > > RDX: 0000000000000100 RSI: 00007fbb95ff9cc0 RDI: 0000000000000045
+> > > RBP: 0000000000000045 R08: 0000000000406299 R09: 00000000fffffffd
+> > > R10: 000000000153afa0 R11: 0000000000000293 R12: 00007fbb780008c0
+> > > R13: 00007fbb78000938 R14: 0000000000608b30 R15: 00007fbb780029c8
+> > >   </TASK>
+> > > 
+> > > Allocated by task 1050:
+> > >   kasan_save_stack+0x1e/0x40
+> > >   __kasan_kmalloc+0x81/0xa0
+> > >   do_blk_trace_setup+0xcb/0x410
+> > >   __blk_trace_setup+0xac/0x130
+> > >   blk_trace_ioctl+0xe9/0x1c0
+> > >   blkdev_ioctl+0xf1/0x390
+> > >   __x64_sys_ioctl+0xa5/0xe0
+> > >   do_syscall_64+0x35/0x80
+> > >   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > 
+> > > Freed by task 1050:
+> > >   kasan_save_stack+0x1e/0x40
+> > >   kasan_set_track+0x21/0x30
+> > >   kasan_set_free_info+0x20/0x30
+> > >   __kasan_slab_free+0x103/0x180
+> > >   kfree+0x9a/0x4c0
+> > >   __blk_trace_remove+0x53/0x70
+> > >   blk_trace_ioctl+0x199/0x1c0
+> > >   blkdev_common_ioctl+0x5e9/0xb30
+> > >   blkdev_ioctl+0x1a5/0x390
+> > >   __x64_sys_ioctl+0xa5/0xe0
+> > >   do_syscall_64+0x35/0x80
+> > >   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > 
+> > > The buggy address belongs to the object at ffff88816912f380
+> > >   which belongs to the cache kmalloc-96 of size 96
+> > > The buggy address is located 88 bytes inside of
+> > >   96-byte region [ffff88816912f380, ffff88816912f3e0)
+> > > The buggy address belongs to the page:
+> > > page:000000009a1b4e7c refcount:1 mapcount:0 mapping:0000000000000000 index:0x0f
+> > > flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
+> > > raw: 0017ffffc0000200 ffffea00044f1100 dead000000000002 ffff88810004c780
+> > > raw: 0000000000000000 0000000000200020 00000001ffffffff 0000000000000000
+> > > page dumped because: kasan: bad access detected
+> > > 
+> > > Memory state around the buggy address:
+> > >   ffff88816912f280: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+> > >   ffff88816912f300: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+> > > > ffff88816912f380: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+> > >                                                      ^
+> > >   ffff88816912f400: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+> > >   ffff88816912f480: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+> > > ==================================================================
+> > > 
+> > > Fixes: c0ea57608b69 ("blktrace: remove debugfs file dentries from struct blk_trace")
+> > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > > ---
+> > >   include/linux/blktrace_api.h | 2 ++
+> > >   kernel/trace/blktrace.c      | 8 ++++++--
+> > >   2 files changed, 8 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/blktrace_api.h b/include/linux/blktrace_api.h
+> > > index 22501a293fa5..f288d229727c 100644
+> > > --- a/include/linux/blktrace_api.h
+> > > +++ b/include/linux/blktrace_api.h
+> > > @@ -23,6 +23,8 @@ struct blk_trace {
+> > >   	u32 pid;
+> > >   	u32 dev;
+> > >   	struct dentry *dir;
+> > > +	struct dentry *dropped_file;
+> > > +	struct dentry *msg_file;
+> > 
+> > No need to save these dentries.  Just look them up when you want to
+> > remove the files.
+> 
+> Ok, I'll do this in the v2 patch.
+> > 
+> > >   	struct list_head running_list;
+> > >   	atomic_t dropped;
+> > >   };
+> > > diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
+> > > index 19514edc44f7..13152a17fdb3 100644
+> > > --- a/kernel/trace/blktrace.c
+> > > +++ b/kernel/trace/blktrace.c
+> > > @@ -312,6 +312,8 @@ static void __blk_add_trace(struct blk_trace *bt, sector_t sector, int bytes,
+> > >   static void blk_trace_free(struct blk_trace *bt)
+> > >   {
+> > > +	debugfs_remove(bt->msg_file);
+> > > +	debugfs_remove(bt->dropped_file);
+> > >   	relay_close(bt->rchan);
+> > >   	debugfs_remove(bt->dir);
+> > 
+> > Why not just move this line up above relay_close()?
+> > 
+> > Then you the whole directory is properly removed, along with the files
+> > in it.
+> 
+> In the case tracing the whole disk, bt->dir is NULL, if dentries are not
+> saved, they should be looked up from 'q->debugfs_dir'. Perhaps the
+> following:
+> 
+> if (bt->dir) {
+> 	debugfs_remove(bt->dir);
+> } else {
+> 	/* lookup from q->debugfs_dir and remove */
+> }
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- drivers/usb/typec/tipd/core.c     | 5 +++++
- drivers/usb/typec/tipd/tps6598x.h | 1 +
- 2 files changed, 6 insertions(+)
+The check for bt->dir is odd, as aren't the msg_file in the bt->dir
+directory?
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 7ffcda94d323..16b4560216ba 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -256,6 +256,10 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, mode);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-+	if (TPS_STATUS_TO_UPSIDE_DOWN(status))
-+		typec_set_orientation(tps->port, TYPEC_ORIENTATION_REVERSE);
-+	else
-+		typec_set_orientation(tps->port, TYPEC_ORIENTATION_NORMAL);
- 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), true);
- 
- 	tps->partner = typec_register_partner(tps->port, &desc);
-@@ -278,6 +282,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-+	typec_set_orientation(tps->port, TYPEC_ORIENTATION_NONE);
- 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), false);
- 
- 	power_supply_changed(tps->psy);
-diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-index 3dae84c524fb..527857549d69 100644
---- a/drivers/usb/typec/tipd/tps6598x.h
-+++ b/drivers/usb/typec/tipd/tps6598x.h
-@@ -17,6 +17,7 @@
- /* TPS_REG_STATUS bits */
- #define TPS_STATUS_PLUG_PRESENT		BIT(0)
- #define TPS_STATUS_PLUG_UPSIDE_DOWN	BIT(4)
-+#define TPS_STATUS_TO_UPSIDE_DOWN(s)	(!!((s) & TPS_STATUS_PLUG_UPSIDE_DOWN))
- #define TPS_STATUS_PORTROLE		BIT(5)
- #define TPS_STATUS_TO_TYPEC_PORTROLE(s) (!!((s) & TPS_STATUS_PORTROLE))
- #define TPS_STATUS_DATAROLE		BIT(6)
--- 
-2.25.1
+Ah, ick, that's not obvious at all that there is two different cases
+happening here.
 
+Yes, your code will work, but please comment the heck out of it as
+normally when I see a "check if we have a file/directory before we
+remove it" for debugfs I want to optimize it away to just call the
+debugfs function as debugfs doesn't care about invalid parameters like
+this.  But you are using it as a test if this is in full disk mode or
+not, which isn't obvious at all (hence my confusion when I wrote the
+original patch, sorry.)
+
+thanks,
+
+greg k-h

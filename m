@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1654C525D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA164C5260
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239908AbiBZACd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S239932AbiBZADT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiBZACc (ORCPT
+        with ESMTP id S239844AbiBZADR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:02:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE8B1D683C;
-        Fri, 25 Feb 2022 16:01:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DC666195F;
-        Sat, 26 Feb 2022 00:01:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30787C340E7;
-        Sat, 26 Feb 2022 00:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1645833718;
-        bh=BooAGY/hhrBDZBSySQP/8P16m40+4PwEwwvGBs0SX8A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gEEIn0s5wBSEY2vhiOTZBAmbSkuLlHV/NRyR/Ow4IyirgPycAL6SEEekKPtmUZ2cJ
-         QJFTrZbM28gkQL49MGfHQv6yabdQ0W+uMnXpOffr+8R8HGlGgt0CDNw83JJSs62A9W
-         5y5I1B/Y/mmocuqyUOijNkX1xbn5zzr4qvByDbH4=
-Date:   Fri, 25 Feb 2022 16:01:57 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, linux-mm@kvack.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] usercopy: Check valid lifetime via stack depth
-Message-Id: <20220225160157.680ecdea21ce81183059bb63@linux-foundation.org>
-In-Reply-To: <20220225173345.3358109-1-keescook@chromium.org>
-References: <20220225173345.3358109-1-keescook@chromium.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Feb 2022 19:03:17 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF1A157200
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:02:44 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id j5so5595463ila.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4TpFdWGGu68hiozG5aqHPRXt94qhCk+o6JG516+kdbE=;
+        b=DzGxjc6L9fhiwmV2m0lZXtTqNZOD0d6unMPEKi/4vECMwSDnZGJKgitxTQY+EiEGfy
+         XquzQiMm6zyfeB2uD/xjaAvx/63eP9LCMpLBaaYVhBv327i4srbO4RFScHr69DptsG+L
+         emmu5kQvsQAaBRhnQy43NaHkWsS8brDZvR1RU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4TpFdWGGu68hiozG5aqHPRXt94qhCk+o6JG516+kdbE=;
+        b=QAvgZRunuVfWc4YRYDQREOx+6aVBhus0pZlBBRpLTT/SKVl7cm0TOp51XSo55GKtmZ
+         Nodkc4Xj9/70iExyuID3l6YledcepcsKjRxfuZBnQL8NCPGEMFJCdwn0em9ECseoH+0A
+         7xn/PC/WmOLacnmYZcOiHAkF2YeoSuu2i7yY+t6xmoHhBZ9uW0fcI5FseTXxZpacZC9P
+         gwbAgezED2T9B6TRy+20JGBg+cQrS3F3EamPe9LINUOSbvMXXNKo9ML2JDbwRpL2DPsH
+         U0eu/S5HwxWiKr7wyITDx4b0KfsOBMuFtQSPYbjMRPA5bPPH/pXh6Uj+unSs/ulk53hg
+         JDUQ==
+X-Gm-Message-State: AOAM532ktZYjpw8mFJDWltBMmOSTclp2i/2EcgUiSfwB/Y+6Pf08Clgq
+        IsPZIYeepypnXXhQBRRcUZQzqg==
+X-Google-Smtp-Source: ABdhPJyeiNDbp52Qr+n41Pw/M9uNVzxmLnxPbY1ljMyWkWITko2VTAG5m4gcWRKj5yoMXnCSK8iSpA==
+X-Received: by 2002:a92:cf43:0:b0:2c2:841e:b03b with SMTP id c3-20020a92cf43000000b002c2841eb03bmr8009336ilr.68.1645833763950;
+        Fri, 25 Feb 2022 16:02:43 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056e021b8600b002bf45d43938sm2400916ili.86.2022.02.25.16.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 16:02:43 -0800 (PST)
+Subject: Re: [PATCH] selftests/rtc: continuously read RTC in a loop for 30s
+To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220219072713.5280-1-mat.jonczyk@o2.pl>
+ <6d8f500d-0ee0-3e27-dfdf-e8c0a34880e5@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fb6da998-3970-90f9-f79e-386987bfd431@linuxfoundation.org>
+Date:   Fri, 25 Feb 2022 17:02:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <6d8f500d-0ee0-3e27-dfdf-e8c0a34880e5@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 09:33:45 -0800 Kees Cook <keescook@chromium.org> wrote:
-
-> Under CONFIG_HARDENED_USERCOPY=y, when exact stack frame boundary checking
-> is not available (i.e. everything except x86 with FRAME_POINTER), check
-> a stack object as being at least "current depth valid", in the sense
-> that any object within the stack region but not between start-of-stack
-> and current_stack_pointer should be considered unavailable (i.e. its
-> lifetime is from a call no longer present on the stack).
+On 2/25/22 1:56 PM, Shuah Khan wrote:
+> On 2/19/22 12:27 AM, Mateusz Jończyk wrote:
+>> Some problems with reading the RTC time may happen rarely, for example
+>> while the RTC is updating. So read the RTC many times to catch these
+>> problems. For example, a previous attempt for my
+>> commit ea6fa4961aab ("rtc: mc146818-lib: fix RTC presence check")
+>> was incorrect and would have triggered this selftest.
+>>
+>> To avoid the risk of damaging the hardware, wait 11ms before consecutive
+>> reads.
+>>
+>> In rtc_time_to_timestamp I copied values manually instead of casting -
+>> just to be on the safe side. The 11ms wait period was chosen so that it is
+>> not a divisor of 1000ms.
+>>
+>> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+>> Cc: Alessandro Zummo <a.zummo@towertech.it>
+>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> ---
+>>
+>> Also, before
+>> commit cdedc45c579f ("rtc: cmos: avoid UIP when reading alarm time")
+>> reading the RTC alarm time during RTC update produced incorrect results
+>> on many Intel platforms. Preparing a similar selftest for this case
+>> would be more difficult, though, because the RTC alarm time is cached by
+>> the kernel. Direct access would have to be exposed somehow, for example
+>> in debugfs. I may prepare a patch for it in the future.
+>> ---
 > 
-> Introduce ARCH_HAS_CURRENT_STACK_POINTER to track which architectures
-> have actually implemented the common global register alias.
+> Looks good to me. We end up tweaking the timeout=210 in settings every
+> now and then. Not sure how we can avoid adjusting it as we find problems.
 > 
-> Additionally report usercopy bounds checking failures with an offset
-> from current_stack_pointer, which may assist with diagnosing failures.
+> I will apply this in for Linux 5.18-rc1
 > 
-> The LKDTM USERCOPY_STACK_FRAME_TO and USERCOPY_STACK_FRAME_FROM tests
-> (once slightly adjusted in a separate patch) will pass again with
-> this fixed.
 
-Again, what does this actually do?
+Applied to linux-kselftest next for Linux 5.18-rc1
 
-> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
-A link to that report would shed some light.  But actually describing
-the user-visible impact right there in the changelog is preferable.
-
-It sounds like a selftest is newly failing, which makes it a
-userspace-visible regression, perhaps?
-
-If so, do we have a Fixes: and is a cc:stable warranted?
+thanks,
+-- Shuah

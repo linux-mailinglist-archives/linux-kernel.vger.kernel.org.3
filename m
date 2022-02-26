@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D24C545A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D7B4C545B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiBZHYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 02:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S230128AbiBZHYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 02:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiBZHX7 (ORCPT
+        with ESMTP id S230119AbiBZHYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 02:23:59 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FBE2180B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id u25-20020a5d8199000000b006421bd641bbso3292863ion.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
+        Sat, 26 Feb 2022 02:24:08 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8E114A6F0;
+        Fri, 25 Feb 2022 23:23:34 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b22so6588930pls.7;
+        Fri, 25 Feb 2022 23:23:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vmKathGK6mfgAHLPLOY5TXssiRrWVPGkmG385lwzvBE=;
+        b=T3RjDHOa513Nwxhzbj+/Zrz982LT0OyqV0K2hCl3b5wt5pR1sM4KjzxwmWg7KF9GA9
+         2G0nadY6nW9MB5sARr/01cFMPxFAzUrL+rygYksFjY7Eg5+YLFvnVNTK30LcZtyhhIam
+         XGyRtZWyg3MUqPFdSRQcOZNjbZoh4bS8lyhybab2FypZk434pwVMeqn/lK6AJ56ot6Nn
+         t0eAeqEeOGK2wOw4FaqMljvWyXTrLjQ7pefQI/r2KW6pyEeveUCHje/CeZToMGbfoQC+
+         orG3s2ZfIkg7ESY3qV59HtEr44FjqcS0d5JiXMmrViBAMKJuHhsVUon0DtVDBqNver0Q
+         ce+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ni4lvJQUTghS0A94JZkFOwka6WIVFnjt5N9mjzzU6a4=;
-        b=MYQWCaj2uaFeULVyLmXY7Mxu+5TjdqU9s8eZazl4PvrDP2nwwD0BDwO+o4Ud60nWH0
-         AQMJSQsnOb+5lxOjvwPgY4/aE+Rp79BEJUW+VK9aBwnbc/gq4m7qd6K6ZyhZ6XXz+RLN
-         wN5ctv9L3dTvkiFxMp/LhWIFXpHex5kC4BakMu0PBbVlDXQ1s/mOEpgvyCO5yVeKQpK/
-         g4l4frnFJdCh0CpYzEB12jPWJacGsK3HFJCbj9jr/ERKnWhd6cNRjSMwGW7s9Zfg2kJF
-         pIbFTU0Jo4ij11ZKr15U2gCdsk7I9vT5PbPJJBgaZbIY2yV+ploBInDqIe/BP8lSh48E
-         gz3g==
-X-Gm-Message-State: AOAM531b+SJjyAYUPpDCGD9CoXe5RzLHAWaRqAPUvKQ6Z5u3tnftpY7H
-        ATveQvnSXvzPz1A99+WS2p0iG1FX4KwL6CtP5HpYRqNBD2Nv
-X-Google-Smtp-Source: ABdhPJzx4DUBAx43q5XkKlSSWv/3LQS5YxNMm76ElPyAHBb7zrVHBi5LdDdAO+6ZiEkqMGxMpYthJqCrWFpq4t0tvyVcm1cfgfvm
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vmKathGK6mfgAHLPLOY5TXssiRrWVPGkmG385lwzvBE=;
+        b=rwPETCUjODtHmx5guWiSzOhrI91AvMfh4ylqrMngYmQva9YRj9G1qZLHkRgciIqC9N
+         6CirqAu5eRzHyT2x8EG6QTqG3RvUoxZi67+vZlRJgLI7CMKuBbhZSmKvbLkDFXeIk5R1
+         EhN0CPu+xqflwAJo6Pv5mOAJcHnrerKTN3Mt2EUIqMuPif5fa2EluPnnQUbPvQEw2c+2
+         L4LACc2LigZFlELbNQIHEXIaLpCKZlcUFHaXfHy7SxT9tsgDtPhy+zMCp//ilWRLluw1
+         jsY2+0me3Yy18WaAI4QXyv2Dta1PGOsP3QlpNPIIt307XbSeAOrN/Nvfz09PEmac6VJc
+         dN9A==
+X-Gm-Message-State: AOAM533xpdJLxvqk2DDamClCAJlADKvFWdFh08iFgZ6a+gH4xIyFfQrO
+        cClRm0mQPZAOaywXSYrmEqw=
+X-Google-Smtp-Source: ABdhPJxIHC6vdgLY4plb4nLRWbHxo6QegFm8ozZ64RRk2jUixv2U5fsd+oUXOlJBi3jRMN0hsP1Uhw==
+X-Received: by 2002:a17:902:f64d:b0:14f:fb63:f1a with SMTP id m13-20020a170902f64d00b0014ffb630f1amr11144031plg.159.1645860213759;
+        Fri, 25 Feb 2022 23:23:33 -0800 (PST)
+Received: from localhost ([2405:201:2003:b021:6001:8ce1:3e29:705e])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a000b4a00b004e12fd48035sm5757150pfo.96.2022.02.25.23.23.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Feb 2022 23:23:33 -0800 (PST)
+Date:   Sat, 26 Feb 2022 12:53:27 +0530
+From:   Raag Jadav <raagjadav@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
+Message-ID: <20220226072327.GA6830@localhost>
+References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+ <YhdimdT1qLdGqPAW@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-Received: by 2002:a02:ccd7:0:b0:30d:21d0:51d6 with SMTP id
- k23-20020a02ccd7000000b0030d21d051d6mr8894823jaq.138.1645860203526; Fri, 25
- Feb 2022 23:23:23 -0800 (PST)
-Date:   Fri, 25 Feb 2022 23:23:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7fde605d8e6b085@google.com>
-Subject: [syzbot] linux-next test error: WARNING in __mod_memcg_lruvec_state
-From:   syzbot <syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhdimdT1qLdGqPAW@shell.armlinux.org.uk>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Feb 24, 2022 at 10:48:57AM +0000, Russell King (Oracle) wrote:
+> Sorry for the late comment on this patch.
+> 
+> On Sat, Feb 05, 2022 at 12:14:52PM +0530, Raag Jadav wrote:
+> > +static int vsc85xx_config_inband_aneg(struct phy_device *phydev, bool enabled)
+> > +{
+> > +	int rc;
+> > +	u16 reg_val = 0;
+> > +
+> > +	if (enabled)
+> > +		reg_val = MSCC_PHY_SERDES_ANEG;
+> > +
+> > +	mutex_lock(&phydev->lock);
+> > +
+> > +	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_3,
+> > +			      MSCC_PHY_SERDES_PCS_CTRL, MSCC_PHY_SERDES_ANEG,
+> > +			      reg_val);
+> > +
+> > +	mutex_unlock(&phydev->lock);
+> 
+> What is the reason for the locking here?
+> 
+> phy_modify_paged() itself is safe due to the MDIO bus lock, so you
+> shouldn't need locking around it.
+> 
 
-syzbot found the following issue on:
+True.
 
-HEAD commit:    06aeb1495c39 Add linux-next specific files for 20220225
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a69c8e700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d8bf144f45f9b3
-dashboard link: https://syzkaller.appspot.com/bug?extid=a526c269335f529d25c8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+My initial thought was to have serialized access at PHY level,
+as we have multiple ports to work with.
+But I guess MDIO bus lock could do the job as well.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com
+Will fix it in v2 if required.
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3590 at mm/memcontrol.c:749 __mod_memcg_lruvec_state+0x1ab/0x220
-Modules linked in:
-CPU: 1 PID: 3590 Comm: syz-fuzzer Not tainted 5.17.0-rc5-next-20220225-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__mod_memcg_lruvec_state+0x1ab/0x220
-Code: bb 23 92 0e 48 c7 c7 e0 b6 d9 89 e8 af d9 95 07 65 c7 05 f4 c8 37 7e 00 00 00 00 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f c3 <0f> 0b e9 a6 fe ff ff 4c 89 f6 48 c7 c7 60 63 ee 8b e8 8f d3 45 02
-RSP: 0000:ffffc900039efbc0 EFLAGS: 00010202
-RAX: 0000000000000206 RBX: 0000000000000200 RCX: ffffffff81aafa53
-RDX: 1ffff1100218fa8d RSI: 000000000000001c RDI: ffff888010c7d468
-RBP: ffff888010c7d000 R08: 0000000000000001 R09: ffffffff8ba144e7
-R10: fffffbfff174289c R11: 0000000000000001 R12: 000000000000001c
-R13: ffff88813fe38000 R14: ffff88813fe38000 R15: ffff88813fffa000
-FS:  000000c0001d2c90(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c000e00000 CR3: 000000001cfb0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __mod_lruvec_page_state+0x1e5/0x3e0
- page_add_new_anon_rmap+0x2e5/0x930
- do_huge_pmd_anonymous_page+0x102c/0x2350
- __handle_mm_fault+0x2a66/0x4110
- handle_mm_fault+0x1c8/0x790
- do_user_addr_fault+0x489/0x11c0
- exc_page_fault+0x9e/0x180
- asm_exc_page_fault+0x1e/0x30
-RIP: 0033:0x465e33
-Code: 00 00 c5 fe 6f 06 c5 fe 6f 4e 20 c5 fe 6f 56 40 c5 fe 6f 5e 60 48 81 c6 80 00 00 00 c5 fd e7 07 c5 fd e7 4f 20 c5 fd e7 57 40 <c5> fd e7 5f 60 48 81 c7 80 00 00 00 48 81 eb 80 00 00 00 77 b5 0f
-RSP: 002b:000000c0003533b8 EFLAGS: 00010202
-RAX: 000000c000db4000 RBX: 0000000000423fe0 RCX: 000000c001224000
-RDX: 000000c001224001 RSI: 000000c000990020 RDI: 000000c000dfffa0
-RBP: 000000c000353418 R08: 000000c000db4000 R09: 0000000000000000
-R10: 0000000000000020 R11: 0000000000000206 R12: 000000c000243f18
-R13: 000000000000002e R14: 000000c0000001a0 R15: 0000000000000000
- </TASK>
+I've gone through Vladimir's patches and they look more promising
+than this approach.
+Let me know if I could be of any help.
 
+Cheers,
+Raag
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> Thanks.
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

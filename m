@@ -2,236 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB564C540F
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 06:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2272D4C5412
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 07:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiBZF6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 00:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S229702AbiBZGBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 01:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiBZF6s (ORCPT
+        with ESMTP id S229633AbiBZGA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 00:58:48 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67D932067;
-        Fri, 25 Feb 2022 21:58:14 -0800 (PST)
+        Sat, 26 Feb 2022 01:00:58 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76572B3242;
+        Fri, 25 Feb 2022 22:00:25 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so6723641pjw.5;
+        Fri, 25 Feb 2022 22:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645855094; x=1677391094;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AmXUBSuHFySHyrVMXfN8pTiAjw657UhHtMjurHCjX2M=;
-  b=Yk3qdSqnLCsOMf/GtgQyH7Vo6791gz5s4AOHAD2aGPz4UmkIP0E/2zOl
-   +7+ZCwReJNBIUyvFiCG5Xn27Uu16WfvxnQ6Gz0yjevsuENLKZHP9LgkWm
-   SW7Jkrt/ZeKsjNjCnBeHeprURQoc3S26V+zgbiffdb3JVsf2NcfBN9WX1
-   Y=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Feb 2022 21:58:14 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 21:58:13 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 21:58:12 -0800
-Received: from [10.216.53.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 25 Feb
- 2022 21:58:06 -0800
-Message-ID: <6e498021-bf08-3fd8-a3b8-2fcba054f4a0@quicinc.com>
-Date:   Sat, 26 Feb 2022 11:28:03 +0530
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oDT98PrOTAZMh1f0FQTgJlvh+w4WkNvtBzSfLHQ9opk=;
+        b=dTADfc2oH8Zx04x5ieJgdOyEhVFw2wdfSMBg4MLa58q13O/vuIHpEI9jx64lE5L2Se
+         60L8NzAOLCsDD6JY+cxZCgI0ASyFQ1kT69byCMiZ7d8DxHLWbdF17sKML6aOyA1ZeDNE
+         4/kt0ihfaB0sGcWQgZP9WjSzQGEd3Ena4r9lOiOidJc8gDXS+UFVudmRx/181cNI0YzO
+         o4nF5sODl8PvOvxSs42RByt3gX4k6UwKOSFea9yeHN0HMDZ10kWakOOrrv+AZuZOC9CP
+         ayfsGNYJV0gb041bBzUAxZvowqJ6jHHSzufmZF/ddtrWWDlEkP1YFuZhMAysDrITwXpN
+         w3cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oDT98PrOTAZMh1f0FQTgJlvh+w4WkNvtBzSfLHQ9opk=;
+        b=lNogqG1a/CtJpsBHqUVD3ZQ4i/SXVDoE46TCzJLLW8LSxUsXcsyQMn4x4zwRbscCop
+         3zd+Zgxk9jK8r6JeozCQ8adsP1nYEjUHvKmRbfuAA83rqZQC+g6OavMizHGayQu1Tr+h
+         zBbVlml4EOVsVTkj14SyQpPi8IHDcFWgjDGOLg/ROuX74ZhJ/mbSU+nrHnAKydUcMpLa
+         J6gU3ZAKyr4YokrLxtycER3qeDdqrGKViqYo4LyQTe4rOlSoj+wG+E7Yy+/G0ctLf1iI
+         cmaIGDrIUloPit2ZbrSGzrz7GnMh1nPObcVcDk6bjeqgqeQFXhXBvniyt8Qxp12EpNie
+         exPw==
+X-Gm-Message-State: AOAM5336LX0kcazgTaj6ZfLQK88Oe4m/S42p4s8VjcG2aApCU7CqnIO1
+        5XxlkCjiL64vJk5GW7SHLEIkC/4lfpg=
+X-Google-Smtp-Source: ABdhPJzKNufD8mPotVAi9pDdAKSmsNVT2NFskNOQ9zAG3731IwcZlA1jN9XiPo4h7e01fAVbTYZfog==
+X-Received: by 2002:a17:90a:5794:b0:1b9:8932:d475 with SMTP id g20-20020a17090a579400b001b98932d475mr6564400pji.24.1645855224931;
+        Fri, 25 Feb 2022 22:00:24 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a91a:1bbf:dba0:d0eb])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056a0024ce00b004f3c87df62bsm5375472pfv.81.2022.02.25.22.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 22:00:23 -0800 (PST)
+Date:   Fri, 25 Feb 2022 22:00:21 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Sean O'Brien <seobrien@chromium.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: vivaldi: fix sysfs attributes leak
+Message-ID: <YhnB9ajOyThI37H7@google.com>
+References: <YhmAAjNeTjiNoLlJ@google.com>
+ <CAE-0n53tHSswXFKabHEZymn3-sObFU_7n51wRkR0xk9g05SBCw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v16 6/9] ASoC: qcom: Add support for codec dma driver
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <alsa-devel@alsa-project.org>, <bgoswami@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>, <judyhsiao@chromium.org>,
-        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <perex@perex.cz>,
-        <quic_plai@quicinc.com>, <robh+dt@kernel.org>,
-        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
-        <tiwai@suse.com>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1645716828-15305-1-git-send-email-quic_srivasam@quicinc.com>
- <1645716828-15305-7-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n53K3Em52tTFK4zmcsf_ZzFbX4uQQ00_uH9=pq44chwyeg@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAE-0n53K3Em52tTFK4zmcsf_ZzFbX4uQQ00_uH9=pq44chwyeg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n53tHSswXFKabHEZymn3-sObFU_7n51wRkR0xk9g05SBCw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 25, 2022 at 08:55:26PM -0800, Stephen Boyd wrote:
+> Quoting Dmitry Torokhov (2022-02-25 17:18:58)
+> > The driver creates the top row map sysfs attribute in input_configured()
+> > method; unfortunately we do not have a callback that is executed when HID
+> > interface is unbound, thus we are leaking these sysfs attributes, for
+> > example when device is disconnected.
+> >
+> > To fix it let's switch to managed version of adding sysfs attributes which
+> > will ensure that they are destroyed when the driver is unbound.
+> >
+> > Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> 
+> Makes sense
+> 
+> Tested-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> will you make a similar change for the hid-google-hammer driver?
 
-On 2/25/2022 5:10 AM, Stephen Boyd wrote:
-Thanks for your time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2022-02-24 07:33:45)
->> diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
->> index 198f27c..b3af971 100644
->> --- a/sound/soc/qcom/lpass-platform.c
->> +++ b/sound/soc/qcom/lpass-platform.c
->> @@ -684,6 +953,17 @@ static irqreturn_t lpass_dma_interrupt_handler(
->>                  reg = LPAIF_IRQCLEAR_REG(v, LPAIF_IRQ_PORT_HOST);
->>                  val = 0;
->>          break;
->> +       case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
->> +       case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
->> +               map = drvdata->rxtx_lpaif_map;
->> +               reg = LPAIF_RXTX_IRQCLEAR_REG(v, LPAIF_IRQ_PORT_HOST);
->> +               val = 0;
->> +       break;
->> +       case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
->> +               map = drvdata->va_lpaif_map;
->> +               reg = LPAIF_VA_IRQCLEAR_REG(v, LPAIF_IRQ_PORT_HOST);
->> +               val = 0;
->> +       break;
-> These breaks have the wrong indentation.
-Okay. will fix it.
->
->>          default:
->>          dev_err(soc_runtime->dev, "%s: invalid  %d interface\n", __func__, dai_id);
->>          return -EINVAL;
->> @@ -791,16 +1071,115 @@ static irqreturn_t lpass_platform_hdmiif_irq(int irq, void *data)
->>                                  return rv;
->>                  }
->>          }
->> +       return IRQ_HANDLED;
->> +}
->> +
->> +static irqreturn_t lpass_platform_rxtxif_irq(int irq, void *data)
->> +{
->> +       struct lpass_data *drvdata = data;
->> +       struct lpass_variant *v = drvdata->variant;
->> +       unsigned int irqs;
->> +       irqreturn_t rv;
->> +       int chan;
->> +
->> +       rv = regmap_read(drvdata->rxtx_lpaif_map,
->> +                       LPAIF_RXTX_IRQSTAT_REG(v, LPAIF_IRQ_PORT_HOST), &irqs);
->> +
->> +       /* Handle per channel interrupts */
->> +       for (chan = 0; chan < LPASS_MAX_CDC_DMA_CHANNELS; chan++) {
->> +               if (irqs & LPAIF_IRQ_ALL(chan) && drvdata->rxtx_substream[chan]) {
->> +                       rv = lpass_dma_interrupt_handler(
->> +                                               drvdata->rxtx_substream[chan],
->> +                                               drvdata, chan, irqs);
->> +                       if (rv != IRQ_HANDLED)
->> +                               return rv;
->> +               }
->> +       }
->> +
->> +       return IRQ_HANDLED;
->> +}
->> +
->> +static irqreturn_t lpass_platform_vaif_irq(int irq, void *data)
->> +{
->> +       struct lpass_data *drvdata = data;
->> +       struct lpass_variant *v = drvdata->variant;
->> +       unsigned int irqs;
->> +       irqreturn_t rv;
->> +       int chan;
->> +
->> +       rv = regmap_read(drvdata->va_lpaif_map,
->> +                       LPAIF_VA_IRQSTAT_REG(v, LPAIF_IRQ_PORT_HOST), &irqs);
->>
->> +       /* Handle per channel interrupts */
->> +       for (chan = 0; chan < LPASS_MAX_VA_CDC_DMA_CHANNELS; chan++) {
->> +               if (irqs & LPAIF_IRQ_ALL(chan) && drvdata->va_substream[chan]) {
->> +                       rv = lpass_dma_interrupt_handler(
->> +                                               drvdata->va_substream[chan],
->> +                                               drvdata, chan, irqs);
->> +                       if (rv != IRQ_HANDLED)
->> +                               return rv;
->> +               }
->> +       }
->>          return IRQ_HANDLED;
->>   }
->>
->> +static int lpass_platform_prealloc_cdc_dma_buffer(struct snd_soc_component *component,
->> +                                                 struct snd_pcm *pcm, int dai_id)
->> +{
->> +       struct lpass_data *drvdata = snd_soc_component_get_drvdata(component);
->> +       struct snd_pcm_substream *substream;
->> +       struct snd_dma_buffer *buf;
->> +
->> +       if (pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream)
->> +               substream = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream;
->> +       else
->> +               substream = pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream;
->> +
->> +       buf = &substream->dma_buffer;
->> +       buf->dev.dev = pcm->card->dev;
->> +       buf->private_data = NULL;
->> +
->> +       /* Assign Codec DMA buffer pointers */
->> +       buf->dev.type = SNDRV_DMA_TYPE_CONTINUOUS;
->> +
->> +       switch (dai_id) {
->> +       case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
->> +               buf->bytes = lpass_platform_rxtx_hardware.buffer_bytes_max;
->> +               buf->addr = drvdata->rxtx_cdc_dma_lpm_buf;
->> +               break;
->> +       case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
->> +               buf->bytes = lpass_platform_rxtx_hardware.buffer_bytes_max;
->> +               buf->addr = drvdata->rxtx_cdc_dma_lpm_buf + LPASS_RXTX_CDC_DMA_LPM_BUFF_SIZE;
->> +               break;
->> +       case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
->> +               buf->bytes = lpass_platform_va_hardware.buffer_bytes_max;
->> +               buf->addr = drvdata->va_cdc_dma_lpm_buf;
->> +               break;
->> +       default:
->> +               break;
->> +       }
->> +
->> +       buf->area = (unsigned char * __force)memremap(buf->addr, buf->bytes, MEMREMAP_WT);
-> What's the cast and __force for now? MEMREMAP_WT is almost never used so
-Here dma_buffer structure has virtual address(buf->area) of unsigned 
-char pointer but memremap returns void pointer.
-> this looks wrong. Why can't MEMREMAP_WC be used? But if it's DMA then
-Okay. Will update the flag MEMREMAP_WT
-> why isn't dma_map_resource() being used?
+Yeah, I was taking a closer look at your series and that was the result
+of it.
 
-I am sorry bit confused here. You mean some thing like below.
+Thanks.
 
-For Physical address mapping: buf->addr = dma_map_resource(pcm->card->dev, drvdata->va_cdc_dma_lpm_buf,
-			     buf->bytes, DMA_BIDIRECTIONAL, 0);
-For virtual address mapping. buf->area = (unsigned char * __force)memremap(buf->addr, buf->bytes, MEMREMAP_WC);
-
->
->> +
->> +       return 0;
->> +}
->> +
->>   static int lpass_platform_pcm_new(struct snd_soc_component *component,
->>                                    struct snd_soc_pcm_runtime *soc_runtime)
->>   {
->>          struct snd_pcm *pcm = soc_runtime->pcm;
->> +       struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
->> +       unsigned int dai_id = cpu_dai->driver->id;
->> +
->>          size_t size = lpass_platform_pcm_hardware.buffer_bytes_max;
->>
->> +       /*
->> +        * Lpass codec dma can access only lpass lpm hardware memory.
->> +        * ioremap is for HLOS to access hardware memory.
->> +        */
->> +       if (is_cdc_dma_port(dai_id))
->> +               return lpass_platform_prealloc_cdc_dma_buffer(component, pcm, dai_id);
->> +
->>          return snd_pcm_set_fixed_buffer_all(pcm, SNDRV_DMA_TYPE_DEV,
->>                                              component->dev, size);
->>   :
+-- 
+Dmitry

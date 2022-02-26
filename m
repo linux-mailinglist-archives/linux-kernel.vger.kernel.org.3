@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFD74C5767
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F554C576C
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiBZSQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 13:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        id S231837AbiBZSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 13:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232624AbiBZSQt (ORCPT
+        with ESMTP id S230394AbiBZSSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 13:16:49 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FFF16DAE2;
-        Sat, 26 Feb 2022 10:16:12 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id u3so12282296ybh.5;
-        Sat, 26 Feb 2022 10:16:12 -0800 (PST)
+        Sat, 26 Feb 2022 13:18:25 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8694013CA05;
+        Sat, 26 Feb 2022 10:17:50 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id s1so9171494wrg.10;
+        Sat, 26 Feb 2022 10:17:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LrEwaB+kbTeaznkd+BNx8jVuqDzOoWE98mZBP/QrouE=;
-        b=IX95pwb0o0c1hdOQhpuOhe3OCnJ2Gb7GVrSZ6X1I2PH9tjuaE86tQRG/xSsVZvYINv
-         XiYp6Fa/W2Ctg4q5bq8P7CmKiU4zAjOb5lWtmw8e+aFNTGNK9T/DjNXpjjXFouQ6do2u
-         6g4R+0MsSjO0gkHAFPSNWQNiT2VZTOJAimfBV4M1ibAXdeAHP8Xt5KzAMCOo//ReGTby
-         Ef/acwmtbJdtd5CgnBFTcv8y0hNbkttqPcFRiYs7bIO1Y6BCjBAVnm1UtsVVIQ1f1207
-         GhYSBN6wAYrtX/jNMU/lVB9NLpVR/hVv8ZiYT4yIRboutW58uEXkYtPQcJx8br2gnguI
-         hVnw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aXqc/Aa9aaNrrCHTBVmSAtXCikpEnBmLxdEuX//VMWU=;
+        b=jtr7I7oBaQCz1K7NodtGWIWvx6CuCVFmpkCqRc29oj0eixPTVLUs5vEwREXdFpwdjN
+         ibe/afapjhfixepBK/jho5rwnuLm5dd+XbgyViSR9NoJ8+O6lDjEVwP9OZncY+ewMWzw
+         MBb3KFvCfraCchfsT4z7L4eGE8uqmXezcE8C2vetJQOTDsJFe+PzIK4lMos4CdzdaJmc
+         /CjH6tueilO+pHtAOzBr0We1Hgo432CCEYnlWkwMSU6oahg9noYNz9Bb2yFvGXUv3QGM
+         X+ElAO0Fn8KemopfvoEYLXwkMGaBZAs+BpcRfM3Z8bPS4UyB9/hcVok2EN+JimRfZOHD
+         ZO9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LrEwaB+kbTeaznkd+BNx8jVuqDzOoWE98mZBP/QrouE=;
-        b=gUfKaoV6ktq168lK20tRRr1ubOUKstsW5t+mvpd61HZ19focux3JYkYQcXGjfTe3Mr
-         iao2Lpmk+jmN8aRnFIa2t5rK/vIb/3UcfE6If97jyEWXqH3Z3a+q1xvKjcxWeDw7uBT7
-         +GcFilA3rCluHhIxRP+7g1P/vBQIdtEm63YUqNkm8sTFjyfJa7uz90hQePrrrmfaK8LJ
-         NL7/mwUFRzNP4Y5KeKwAiCeoWIK09ie6UiY0QdXHxZKNRXA9gzaBZPGwndxyK0CvlKxg
-         c1w2u7zqzf84CO9kE7ZpCkC6O3HiSI8JP6HOZDYcqNrdWU0k4x6Fw/nAYSvlZ/Fn+XeN
-         nZJA==
-X-Gm-Message-State: AOAM532migsp6oVClk8I5Se88nhsEvaNMTNCWE2U/Jf+7gqeZZq763Nw
-        ewI7BlUDTynJSuLdK/44YY6CNIdF17SQbrHP6SwxGN5fczm6zw==
-X-Google-Smtp-Source: ABdhPJx6p75lgdbg9+7oe/9Jb1gunfXQkp3m4E3iFa+ALW1LnJX8X5/l6U5lvNfO3suJC1cXRwg6JBfdicUwZAOWbcE=
-X-Received: by 2002:a25:8490:0:b0:624:5f70:142a with SMTP id
- v16-20020a258490000000b006245f70142amr12382739ybk.173.1645899371404; Sat, 26
- Feb 2022 10:16:11 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=aXqc/Aa9aaNrrCHTBVmSAtXCikpEnBmLxdEuX//VMWU=;
+        b=omdPiccnY3UNUVv3G0C52yUKFj6KzJyB1hPYqmT5cSugiFw7FhjTjnv1tKEwIjqmpR
+         0MCCUo0lN/LGCLI+9cCN5MkoTwpWOkDEVQSbge/jxaQifflZQauFViXwePq10yDPYPif
+         PE2Yok93lZv12zi3s+e6Jg/Nk81BiEArVXrCeH5a0J5Jwky64MNsXsarhNOfhmSp6cDD
+         IsQyc29/VzfHS+jtNB3RL17q2jjfRVaXEjipgm+sXI+e8Fy/m2JxC7Uoe9N6dyN8CT4V
+         RyxiDK9Q/+G90Y7mfYauW0aRzE9Gz7UKxFMi3DJfbqeO8qeFcx6zv0zJ52bJb3YIOi6a
+         pg6g==
+X-Gm-Message-State: AOAM532fiLU4UcJuR0mvUJx5PbsUgiIdOn3kK+w4A0z5pd8Vjzd6jc6k
+        /mklYJ5tTXW1zeu80hlnPL4=
+X-Google-Smtp-Source: ABdhPJxu/yOz40F7BewccOOPmPsZ+nsr7S4T0cKSzHr7RVIH+u7AvaIFfSWZu2pJF2K0Wj9D+uT8/A==
+X-Received: by 2002:adf:e804:0:b0:1ea:9c3b:8f41 with SMTP id o4-20020adfe804000000b001ea9c3b8f41mr10543899wrm.53.1645899468936;
+        Sat, 26 Feb 2022 10:17:48 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm5824814wrg.62.2022.02.26.10.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 10:17:48 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jonas@kwiboo.se, nicolas@ndufresne.ca,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: Re: Re: [PATCH v3 09/14] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+Date:   Sat, 26 Feb 2022 19:17:46 +0100
+Message-ID: <7348885.EvYhyI6sBW@kista>
+In-Reply-To: <1884298.PYKUYFuaPT@kista>
+References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com> <4378293.LvFx2qVVIh@kista> <1884298.PYKUYFuaPT@kista>
 MIME-Version: 1.0
-References: <20220226135724.61516-1-linux@fw-web.de> <2815432.3mA4caTK8C@diego>
-In-Reply-To: <2815432.3mA4caTK8C@diego>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sat, 26 Feb 2022 13:15:59 -0500
-Message-ID: <CAMdYzYro7r2nELu2O4TuxxtZLxNSv1e3iU5yBzjd7AQgHP+FPw@mail.gmail.com>
-Subject: Re: [PATCH v1] arm64: dts: rockchip: Add sata2 node to rk356x
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,69 +77,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 1:08 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Hi Frank,
->
-> Am Samstag, 26. Februar 2022, 14:57:24 CET schrieb Frank Wunderlich:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > RK356x supports up to 3 sata controllers which were compatible with the
-> > existing snps,dwc-ahci binding.
-> >
-> > My board has only sata2 connected to combphy2 so only add this one.
->
-> how far does the added node diverge from the vendor kernel?
->
-> If it's pretty much similar between both, we can assume the other nodes
-> should work pretty well as well and therefore should all of them at once
-> and hope for the best?
+Dne sobota, 26. februar 2022 ob 18:59:18 CET je Jernej =C5=A0krabec napisal=
+(a):
+> Hi!
+>=20
+> Dne petek, 25. februar 2022 ob 20:30:20 CET je Jernej =C5=A0krabec napisa=
+l(a):
+> > Hi!
+> >=20
+> > Dne petek, 25. februar 2022 ob 17:45:55 CET je Benjamin Gaignard=20
+napisal(a):
+> > > The number of 'entry point offset' could be very variable.
+> > > Rather than use a large static array define a v4l2 dynamic array
+> > > of integer control.
+> >=20
+> > I suggest we should be more specific and say U32 (V4L2_CTRL_TYPE_U32).
+> >=20
+> > > The number of entry point offsets is reported by the elems field.
+>=20
+> I did few more tests and these are my findings:
+> 1. dynamic array can't be set over size, specified in .dims array
+> 2. entry point offsets are per slice, so if we make slices dynamic array,=
+=20
+then=20
+> entry points would become two dimensional dynamic array
+> 3. num_entry_point_offsets must be part of slice control, because it can =
+be=20
+> zero, but size of array can't be
 
-There's essentially zero divergence (minus the change due to combophy
-changing), and likely won't be until the ahci-platform.txt is
-converted to yaml.
+Clarification: num_entry_point_offsets is needed in any case, even without =
+entry=20
+point list.
 
-I have tested both SATA1 and SATA2 successfully on the rk3566.
-I don't have any rk3568 boards that are operational yet to test SATA0.
+> 4. fortunately, not setting entry points doesn't impact decoding=20
+correctness.=20
+> This is in line what John told me about them.
+>=20
+> Hans, can you comment points 1-3? I might misunderstand point 1.
+>=20
+> In short, it seems like we don't really need entry points, even if they a=
+re=20
+> used in BSP library. In both cases, I got fluster score 119/138 (10-bit=20
+> excluded), so we can just drop this patch, although I'm a bit uneasy not=
+=20
+> setting entry points...
+>=20
+> Best regards,
+> Jernej
+>=20
+> > >=20
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > ---
+> > >  .../userspace-api/media/v4l/ext-ctrls-codec.rst          | 9 +++++++=
+++
+> > >  include/media/hevc-ctrls.h                               | 1 +
+> > >  2 files changed, 10 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rs=
+t b/
+> > Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > index 44a268a948c0..71f7dc1c1ccd 100644
+> > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > @@ -3128,6 +3128,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field=
+ -
+> > > =20
+> > >      \normalsize
+> > > =20
+> > > +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+> >=20
+> > Here you have OFFSETS (plural) ...
+> >=20
+> > > +    Specifies the i-th entry point offset in bytes and is represente=
+d by
+> > > +    offset_len_minus1 plus 1 bits.
+> >=20
+> > You probably mean entry_point_offset_minus1? offset_len_minus1 just tel=
+ls=20
+how=20
+> > much bits need to be read for each element and it's not important for=20
+actual=20
+> > decoding.
+> >=20
+> > > +    This control is a dynamically sized array. The number of entry=20
+point
+> > > +    offsets is reported by the ``elems`` field.
+> > > +    This bitstream parameter is defined according to :ref:`hevc`.
+> > > +    They are described in section 7.4.7.1 "General slice segment hea=
+der
+> > > +    semantics" of the specification.
+> > > +
+> > >  ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+> > >      Specifies the HEVC scaling matrix parameters used for the scalin=
+g=20
+> > process
+> > >      for transform coefficients.
+> > > diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> > > index 3016c1abb1d0..3f8a67924df3 100644
+> > > --- a/include/media/hevc-ctrls.h
+> > > +++ b/include/media/hevc-ctrls.h
+> > > @@ -20,6 +20,7 @@
+> > >  #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE +=
+=20
+> > 1012)
+> > >  #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE +=20
+> > 1015)
+> > >  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE=20
++=20
+> 1016)
+> > > +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET (V4L2_CID_CODEC_B=
+ASE=20
++=20
+> > 1017)
+> >=20
+> > ... and here you have OFFSET (singlular). I suggest plural form to be u=
+sed=20
+> in=20
+> > all places, including subject line of this commit.
+> >=20
+> > Additionally, it would be nice if control is initialized, like so:
+> > https://github.com/jernejsk/linux-1/commit/
+> > f938e162cd8dd77c9f6f1b248d80144840a37bce
+> >=20
+> > Best regards,
+> > Jernej
+> >=20
+> > > =20
+> > >  /* enum v4l2_ctrl_type type values */
+> > >  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> > > --=20
+> > > 2.32.0
+> > >=20
+> > >=20
+> >=20
+> >=20
+> >=20
+>=20
+>=20
+>=20
 
->
-> Thanks
-> Heiko
->
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot=
-/dts/rockchip/rk356x.dtsi
-> > index 7cdef800cb3c..7b6c8a0c8b84 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> > @@ -230,6 +230,21 @@ scmi_shmem: sram@0 {
-> >               };
-> >       };
-> >
-> > +     sata2: sata@fc800000 {
-> > +             compatible =3D "snps,dwc-ahci";
-> > +             reg =3D <0 0xfc800000 0 0x1000>;
-> > +             clocks =3D <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
-> > +                      <&cru CLK_SATA2_RXOOB>;
-> > +             clock-names =3D "sata", "pmalive", "rxoob";
-> > +             interrupts =3D <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-> > +             interrupt-names =3D "hostc";
-> > +             phys =3D <&combphy2 PHY_TYPE_SATA>;
-> > +             phy-names =3D "sata-phy";
-> > +             ports-implemented =3D <0x1>;
-> > +             power-domains =3D <&power RK3568_PD_PIPE>;
-> > +             status =3D "disabled";
-> > +     };
-> > +
-> >       gic: interrupt-controller@fd400000 {
-> >               compatible =3D "arm,gic-v3";
-> >               reg =3D <0x0 0xfd400000 0 0x10000>, /* GICD */
-> >
->
->
->
->
+

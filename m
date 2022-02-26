@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C8F4C54E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C3A4C54D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiBZJYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 04:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S230356AbiBZJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 04:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiBZJYR (ORCPT
+        with ESMTP id S229633AbiBZJUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 04:24:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E711B2AD5;
-        Sat, 26 Feb 2022 01:23:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DA1760FD8;
-        Sat, 26 Feb 2022 09:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0388C340E8;
-        Sat, 26 Feb 2022 09:23:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645867423;
-        bh=Drm593FxdaMjEXv54XpM7u4sTVgfw1fpSFTqP+vF/Sw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R63McLfGxlNO1VVtTzVyhZlBLD/EdO2emxiJNDbz0alK4WVE7OKub43ux5C4Ugmg8
-         1nXjfBjm0q2kAjRCE10MS+A9w2pHM1ZiEcM2NVW+cs5fXFhq7lZ1lhQX4tPyVBVIAd
-         SDEoE+lP3n6p7TDMn7+03zaddaLLSvgMdAR4t8K8Qdk5WTuF9yzmmnJCHrhjqxPhD+
-         l8Y2w4r3wj+T79am2nam0R7RhUyBFx6ZF4E5Jzy8P49wNOdE+x/Pb4tRk0EX75wSfp
-         KoZ25z876TdL7bdDhYfCJMw74mLW3znqCGrzLp564ypky7UjG4tjNszKbBj8TCpgMt
-         S+xpYFFMHKdmw==
-Date:   Sat, 26 Feb 2022 17:15:42 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: dwc: Fix integrated MSI Receiver mask reg setting
- during resume
-Message-ID: <YhnvvnPNgDNkTHXO@xhacker>
-References: <20211226074019.2556-1-jszhang@kernel.org>
- <Ye1D4lYAIpDe7qAN@xhacker>
- <20220223114622.GA27645@lpieralisi>
- <YhZbcU3yNuuBDXm/@xhacker>
- <20220224140847.GA4839@lpieralisi>
+        Sat, 26 Feb 2022 04:20:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23941263726
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:19:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645867168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BQWC4qnEcozjetIUZAtQHzyvu0e2sFoHBrXr/242A4Q=;
+        b=Tebt/Jlh42UlaL03nqVeC5sy13NQG9FBNsir2Kn+HVmZjvBOB6SvvoBBpwlK13uUbNqWnp
+        oUJKZiLn/Uhr/79gKp6SyTJ9gepkOiJtfOHSRii+GaVwaGgLJfjsYyNlU83cD0BZmdX5LL
+        gMP74JPDy0sz40uXDglm1kZ/hQumzwU=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-118-833f2hHhNkynFtyHUaH_IA-1; Sat, 26 Feb 2022 04:19:26 -0500
+X-MC-Unique: 833f2hHhNkynFtyHUaH_IA-1
+Received: by mail-pf1-f197.google.com with SMTP id v127-20020a622f85000000b004f3dfd386e8so1589906pfv.16
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:19:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BQWC4qnEcozjetIUZAtQHzyvu0e2sFoHBrXr/242A4Q=;
+        b=7jZAY1L2vOsD0YQpMqCHhQ3rjHwttN+pOz20EMZ2MZWF9+/0RBOMpchs3wZWWAyJa7
+         1PyLk+oazBkF4PC/Xuvkmb7GObcvVa6bdEjJbpDV1Hd+YLR1kox8ASajQLGZfEkrqUfH
+         GrJZFe8WoanPwATyZhFmfxKLW05hwNbFPQlXRVdGZeNMwjfed0ageHxsKIIIn43b18Y4
+         K69oMJtpE8DKcZY7R63Ktqg/15UdEvpnj1yY9tqZSt14MRu0l2Icq2YMFhzjbPEzGEBb
+         JJ0X2evJLb2agZvPT7/Gs+wNbhk8KtHF+KZmOGt5bzakPRlPXBi4om3wSOjVnZsw7Kko
+         CeBA==
+X-Gm-Message-State: AOAM5301pQNsvSQkH6uErdwi9fsuVIZ6we4ibPSVTttWYv4/O33mAhDo
+        hLey+fNvZxKgSdlMdcr4PfzTN5wC7yKMg3jCVmr6ysYrFc/a47y1Ynej6GD7ZXeQWTgUcU51Pbz
+        MBJRLRVa0HbuIkbHZNVhscKXC+fxJHVTIBVWb6UP4
+X-Received: by 2002:a65:5bc3:0:b0:378:4f82:d73d with SMTP id o3-20020a655bc3000000b003784f82d73dmr4114575pgr.191.1645867165754;
+        Sat, 26 Feb 2022 01:19:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdmbKJWHucKh9BWGgfnXQpcu4fvoXKQiGkxgHr4yoN9zm+Warf9dy1Ixf50NWclTqjqytmZTgZRWPfxr9pk+s=
+X-Received: by 2002:a65:5bc3:0:b0:378:4f82:d73d with SMTP id
+ o3-20020a655bc3000000b003784f82d73dmr4114546pgr.191.1645867165532; Sat, 26
+ Feb 2022 01:19:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220224140847.GA4839@lpieralisi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
+ <YhjbzxxgxtSxFLe/@kroah.com> <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+ <YhkEqpF6QSYeoMQn@kroah.com> <CAPhsuW4F6pMNYwstQOy68pyU2xrtd8c3k8q2GrNKY9fj46TMdg@mail.gmail.com>
+In-Reply-To: <CAPhsuW4F6pMNYwstQOy68pyU2xrtd8c3k8q2GrNKY9fj46TMdg@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Sat, 26 Feb 2022 10:19:14 +0100
+Message-ID: <CAO-hwJL7qfAihq=8dwrh=0xLnKKxmCS42KE0eJECKfREEuEkhg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
+To:     Song Liu <song@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 02:08:47PM +0000, Lorenzo Pieralisi wrote:
-> On Thu, Feb 24, 2022 at 12:06:09AM +0800, Jisheng Zhang wrote:
-> > On Wed, Feb 23, 2022 at 11:46:22AM +0000, Lorenzo Pieralisi wrote:
-> > > On Sun, Jan 23, 2022 at 08:02:42PM +0800, Jisheng Zhang wrote:
-> > > > On Sun, Dec 26, 2021 at 03:40:19PM +0800, Jisheng Zhang wrote:
-> > > > > If the host which makes use of the IP's integrated MSI Receiver losts
-> > > > > power during suspend, we call dw_pcie_setup_rc() to reinit the RC. But
-> > > > > dw_pcie_setup_rc() always set the pp->irq_mask[ctrl] as ~0, so the mask
-> > > > > register is always set as 0xffffffff incorrectly, thus the MSI can't
-> > > > > work after resume.
-> > > > > 
-> > > > > Fix this issue by moving pp->irq_mask[ctrl] initialization to
-> > > > > dw_pcie_host_init(), so we can correctly set the mask reg during both
-> > > > > boot and resume.
-> > > > > 
-> > > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > 
-> > > > Hi all,
-> > > > 
-> > > > This patch can still be applied to the latest linus tree. Do you want
-> > > > me to rebase and send out a new version?
-> > > > 
-> > > > Without this patch, dwc host MSI interrupt(if use the IP's integrated
-> > > > MSI receiver) can't work after resume. Could it be picked up as a fix
-> > > > for v5.17?
-> > > 
-> > > The tricky bit with this patch is that it is not clear what piece of
-> > > logic is lost on power down and what not. IIUC MSI interrupt controller
-> > > logic is kept so it does not need to be saved/restored (but in
-> > 
-> > You may mean the external MSI interrupt controller case, but here the
-> > focus is the integrated MSI Receiver in the IP. Normally, after
-> > suspending to ram, the dwc IP would lost power, so the integrated MSI
-> > Receiver also lost power.
-> > 
-> > > dw_pcie_setup_rc() we overwrite PCIE_MSI_INTR0_ENABLE even if it
-> > > is not needed on resume - actually, it can even be destructive).
-> > > 
-> > 
-> > For the integrated MSI Receiver case, since the entire IP power is lost,
-> > so the PCIE_MSI_INTR0_MASK|ENABLE setting is lost, we need to resume the
-> > mask to the one before suspending. For PCIE_MSI_INTR0_ENABLE register(s),
-> > since it's always 0xffffffff, so current code is fine.
-> > 
-> > > Maybe we need to write suspend/resume hooks for the dwc core instead
-> > > of moving code around to fix these bugs ?
-> > > 
-> > 
-> > Even with suspend/resume hooks, we still need to fix the
-> > PCIE_MSI_INTR0_MASK wrong setting with always ~0. After the fix, msi works
-> > so we don't need suspend/resume hooks any more.
-> 
-> I don't understand. The fix removes code that is writing into
-> PCIE_MSI_INTR0_MASK (in dw_pcie_setup_rc()). Where that register
+On Sat, Feb 26, 2022 at 8:37 AM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Feb 25, 2022 at 8:32 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> [...]
+> >
+> > One comment about the patch series.  You might want to break the patches
+> > up a bit smaller, having the example code in a separate commit from the
+> > "add this feature" commit, as it was hard to pick out what was kernel
+> > changes, and what was test changes from it.  That way I can complain
+> > about the example code and tests without having to worry about the
+> > kernel patches.
+>
+> Echo on this part.  Please organize kernel changes, libbpf changes,
+> maybe also bpftool changes, selftests, and samples into separate patches.
+> This would help folks without HID experience understand the design.
+>
 
-No, the patch just moves the irq_mask[] array setting from
-dw_pcie_setup_rc() to dw_pcie_host_init(), the code which writes
-irq_mask[] array into PCIE_MSI_INTR0_MASK is still kept there.
+Sure. And thanks for the initial review.
 
-> content is restored on power up to the correct value then ?
+I'll send out a splitted v2 early next week then.
 
-the irq_mask[] array.
+Cheers,
+Benjamin
+

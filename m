@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA48B4C55E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341DB4C55F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbiBZMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 07:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S231732AbiBZM5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 07:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiBZMuj (ORCPT
+        with ESMTP id S231137AbiBZM5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 07:50:39 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA481F3B49;
-        Sat, 26 Feb 2022 04:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645879805; x=1677415805;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1P2Ald/OcCTFw9/tPkaIRqeNCWPrecaJnymxn1sUGis=;
-  b=irYNrzjWmW+JtcYwhpy13QHzldJKtO2PgRS3Xe7COwK6UPUM6gSXh6RJ
-   FINnOuKU/HIUa8/L8CJkzpSzuef9ZQKLqtU04DSYYAvJ37JDBwYBUskbm
-   ynjACBSps5o1+2iSHNV4yoEhH6+FrH+kUiXb6oD01xhLw98hPFt+okMXO
-   c=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Feb 2022 04:50:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 04:50:04 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Sat, 26 Feb 2022 04:50:04 -0800
-Received: from [10.216.36.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Sat, 26 Feb
- 2022 04:49:56 -0800
-Message-ID: <90408caa-6b3b-bd09-10ca-bc6c4431111f@quicinc.com>
-Date:   Sat, 26 Feb 2022 18:19:53 +0530
+        Sat, 26 Feb 2022 07:57:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F20B249136;
+        Sat, 26 Feb 2022 04:56:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB31611C1;
+        Sat, 26 Feb 2022 12:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C2FC340E8;
+        Sat, 26 Feb 2022 12:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645880207;
+        bh=ErmV24WkvOMnp37HiuWsv2j69OgPJxdDVLKwg5mrsoM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1uocR33JVqwcXl9YbOUGIC7f3c2haGv8tdCN6Yhmjza30QGo7BuduXRvmVDVYmpFr
+         IT6KDvp7EgwCM0sBjNjl4rpEe2ZDlGPqYmUAmjvXq19n3p25ks8MbvalhgRWYkxDN5
+         XO5gi4kFAmFjJcgGDpey3yAIxeBlrDf/G7mTWFt8=
+Date:   Sat, 26 Feb 2022 13:56:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Jerome Pouiller <Jerome.Pouiller@silabs.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v10 0/1] wfx: get out from the staging area
+Message-ID: <YhojjHGp4EfsTpnG@kroah.com>
+References: <20220226092142.10164-1-Jerome.Pouiller@silabs.com>
+ <871qzpucyi.fsf@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] soundwire: qcom: remove redundant wait for completion
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1645800257-27025-1-git-send-email-quic_srivasam@quicinc.com>
- <a99a59eb-cd59-f566-b98d-486c94f32eec@linaro.org>
- <06650d56-eed3-73ad-d6b4-6b56a5a70669@linux.intel.com>
- <4811be6f-7e86-2a62-94cf-98504d5e64e7@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <4811be6f-7e86-2a62-94cf-98504d5e64e7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871qzpucyi.fsf@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,75 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Feb 26, 2022 at 12:41:41PM +0200, Kalle Valo wrote:
+> + jakub
+> 
+> Jerome Pouiller <Jerome.Pouiller@silabs.com> writes:
+> 
+> > The firmware and the PDS files (= antenna configurations) are now a part of
+> > the linux-firmware repository.
+> >
+> > All the issues have been fixed in staging tree. I think we are ready to get
+> > out from the staging tree for the kernel 5.18.
+> 
+> [...]
+> 
+> >  rename Documentation/devicetree/bindings/{staging => }/net/wireless/silabs,wfx.yaml (98%)
+> 
+> I lost track, is this file acked by the DT maintainers now?
+> 
+> What I suggest is that we queue this for v5.19. After v5.18-rc1 is
+> released I could create an immutable branch containing this one commit.
+> Then I would merge the branch to wireless-next and Greg could merge it
+> to the staging tree, that way we would minimise the chance of conflicts
+> between trees.
+> 
+> Greg, what do you think? Would this work for you? IIRC we did the same
+> with wilc1000 back in 2020 and I recall it went without hiccups.
 
-On 2/25/2022 11:33 PM, Srinivas Kandagatla wrote:
-Thanks for Your time Srini!!!
->
-> On 25/02/2022 15:43, Pierre-Louis Bossart wrote:
->>
->>
->> On 2/25/22 08:45, Srinivas Kandagatla wrote:
->>>
->>>
->>> On 25/02/2022 14:44, Srinivasa Rao Mandadapu wrote:
->>>> Remove wait_for_completion_timeout from soundwire probe as it seems
->>>> unnecessary and device enumeration is anyway not happening here,
->>>> hence this api is blocking till it completes max wait time.
->>>> Also, as device enumeration event is dependent on wcd938x probe to be
->>>> completed, its of no use waiting here.
->>>> Waiting here increasing the boot time almost 4 seconds and impacting
->>>> other modules like touch screen.
->>>>
->>>> Fixes: 06dd96738d618 ("soundwire: qcom: wait for enumeration to be
->>>> complete in probe")
->>>>
->>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>
->>> LGTM,
->>>
->>> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>
->> I don't get the idea, sorry.
->>
->> If you look at the code, these are the cases where this 'struct
->> completion' is used
->>
->>     struct completion enumeration;
->>     complete(&ctrl->enumeration);
->>     /* Enable Auto enumeration */
->>     init_completion(&ctrl->enumeration);
->>     wait_for_completion_timeout(&ctrl->enumeration,
->>
->>
->> so if you remove the wait_for_completeion, then you might just as well
->> remove the whole thing and revert 06dd96738d618
->>
->> what am I missing?
-> Yes, that makes more sense to revert it, as it is the only user of 
-> this completion.
-> We could add it back when we really need this again in pm runtime 
-> setup if required.
->
-> --srini
-Thanks for confirmation. Sent revert patch.
->>
->>
->>>> ---
->>>>    drivers/soundwire/qcom.c | 2 --
->>>>    1 file changed, 2 deletions(-)
->>>>
->>>> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
->>>> index 5481341..9a32a24 100644
->>>> --- a/drivers/soundwire/qcom.c
->>>> +++ b/drivers/soundwire/qcom.c
->>>> @@ -1309,8 +1309,6 @@ static int qcom_swrm_probe(struct
->>>> platform_device *pdev)
->>>>        }
->>>>          qcom_swrm_init(ctrl);
->>>> -    wait_for_completion_timeout(&ctrl->enumeration,
->>>> -                    msecs_to_jiffies(TIMEOUT_MS));
->>>>        ret = qcom_swrm_register_dais(ctrl);
->>>>        if (ret)
->>>>            goto err_master_add;
+That sounds great to me, let's plan on that happening after 5.18-rc1 is
+out.
+
+thanks,
+
+greg k-h

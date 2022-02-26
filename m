@@ -2,186 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498FC4C5451
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2F14C5457
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiBZHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 02:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S230110AbiBZHUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 02:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiBZHTy (ORCPT
+        with ESMTP id S229581AbiBZHUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 02:19:54 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B910856A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 23:19:20 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d17so6669139pfl.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 23:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w/nWriioWhTCDbXhgq6kII6jQkdhme4v3WIf5BYW8Qw=;
-        b=Q5YTpZthtvysfBrdzc4noBJ4ma3kSXbtSS7u4D7zltlumAqiWbRQLdRrUaFfbnDgWV
-         aT6ci8xd5ZSFJTGxJPXz52yXwg6Bquy6zbSkU59zTFo1VdGLr7HwNTwRrNqnFz7FlxU/
-         kW+9ryL+a2zsurlxh52elWSk4oATd49/abO3+H1uHFuF+GIdK34bz6av1HHbejyJPnnZ
-         9o+ldoQ/AGtOk/CAi5bw3P+Fq08aAxq+Z19Q/WIUI/CuiATJfaT1l1aDd5xm7PE4p0UD
-         PRp7cTR+m3p9raxPGIzccwSsZkNkzt84APNv/b6T9mp89HDuzMDI+kSp1Sfn6kQlInnS
-         kkjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w/nWriioWhTCDbXhgq6kII6jQkdhme4v3WIf5BYW8Qw=;
-        b=CRdfDeBzJ736blKnnCfebk2jzNWu/ReTHFpHbhdwR9BehPptWrE0KBtEKwh8vzPD+b
-         75orhluEcgGKj1oTC1ctDSgHJQBHB2CGdkUCH7AN87mNtk7cnML2LOX/r6Q0AMXO52dV
-         BLeWoEUR7r+6gP5FBSNEpkJjX2/Ek0C6J0nUkGLoib1kwZucDcx+l7bN7P6il7PVI2Yj
-         sREWryUxZdI1nFs+vJvVRImhN8lrrADTnavlcb92w0hMOYoke39ZTqJhW62NR2v0CFQo
-         W3MxrObmI4sVQ1V30lPXfvf2DwLerM40hBn+r+GuOK3JBI/wPsicUYH6UmiNpsIzYur6
-         JDWw==
-X-Gm-Message-State: AOAM530J2jD/fXP99+xXsuK6s+TYHelhzi4NFZ1e7oKE0Ad8+j2Ops2i
-        6uJfwJmT6ew/yxachnrKbBY=
-X-Google-Smtp-Source: ABdhPJxbGmLtUJ+pAMwAQGsx9xQgcS6vz8B1z1/Fcn+J1vyx7yy603Q5p0jypvIbXgnMXtHaCMuDnw==
-X-Received: by 2002:a63:7d5:0:b0:374:5575:8773 with SMTP id 204-20020a6307d5000000b0037455758773mr9166160pgh.160.1645859960339;
-        Fri, 25 Feb 2022 23:19:20 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056a00162200b004e0a8002697sm5347933pfc.123.2022.02.25.23.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 23:19:19 -0800 (PST)
-Date:   Sat, 26 Feb 2022 07:19:14 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
-Message-ID: <YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220225180318.20594-1-vbabka@suse.cz>
+        Sat, 26 Feb 2022 02:20:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E510EC6B;
+        Fri, 25 Feb 2022 23:20:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DA61B80E98;
+        Sat, 26 Feb 2022 07:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D579AC340F7;
+        Sat, 26 Feb 2022 07:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645860011;
+        bh=ofx/8UMawymSolW9/1spk+z2Bwj/As67j3fVkfBuAzs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iCF/uAhVIA7RG+I1dt0cBvq2m17PR8LzsMFcaai9xyipY638e4u7caZj8Up4mdbjC
+         U0Qb2Wr02F3O/bfYLGfUHS6J1mAXTzmd4oiVd+C6/g0UYH+gVly5AiguSeBxU4hP3L
+         fh14a1xXdNDi5+FFHmNfbhkjQkSefxg94D5o/uRJSNGxefLSBRkj3BX8tYCSS8TlfS
+         y3w9rWoVFjmnUhWsP7hdDfr7ruc9vrqdo0YLMZQSjqqhZH8PZ8EJ/Dz9ZN8saD+bDs
+         qdb+7+6Ov/jfnxUKVJSUPTsd99zAUwA+O9/2BL4Qlg5KEtPmNtnnhJGpkfdf+2qON9
+         web5PzO55EKLA==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2d641c31776so55816417b3.12;
+        Fri, 25 Feb 2022 23:20:11 -0800 (PST)
+X-Gm-Message-State: AOAM530D9yFbOgmtHGarx0ARbaWS5mplACLtZ9vmFzNrCqUY0/2AZg53
+        2vbhudY7OrD/KM3fDVhkORJs8keibEo5u7czvqY=
+X-Google-Smtp-Source: ABdhPJxdIFLHwHUx529GD3ngCgx2QM3CmfT7PgzGhXo2DtgLpPra5Wv7EzZh/16FFBtkTaHYLf7wLuM43neFA3g+GMk=
+X-Received: by 2002:a0d:ea0a:0:b0:2d6:93b9:cda1 with SMTP id
+ t10-20020a0dea0a000000b002d693b9cda1mr11410445ywe.460.1645860010773; Fri, 25
+ Feb 2022 23:20:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225180318.20594-1-vbabka@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com> <20220224110828.2168231-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220224110828.2168231-2-benjamin.tissoires@redhat.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 25 Feb 2022 23:19:59 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6wx6aNfLzFt5npCG+X=keB57_mkZNwHkAQ0gZWNk9ixw@mail.gmail.com>
+Message-ID: <CAPhsuW6wx6aNfLzFt5npCG+X=keB57_mkZNwHkAQ0gZWNk9ixw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/6] HID: initial BPF implementation
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 07:03:13PM +0100, Vlastimil Babka wrote:
-> Hi,
-> 
-> this series combines and revives patches from Oliver's last year
-> bachelor thesis (where I was the advisor) that make SLUB's debugfs
-> files alloc_traces and free_traces more useful.
-> The resubmission was blocked on stackdepot changes that are now merged,
-> as explained in patch 2.
-> 
+On Thu, Feb 24, 2022 at 3:09 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> HID is a protocol that could benefit from using BPF too.
+>
+> This patch implements a net-like use of BPF capability for HID.
+> Any incoming report coming from the device gets injected into a series
+> of BPF programs that can modify it or even discard it by setting the
+> size in the context to 0.
+>
+> The kernel/bpf implementation is based on net-namespace.c, with only
+> the bpf_link part kept, there is no real points in keeping the
+> bpf_prog_{attach|detach} API.
+>
+> The implementation is split into 2 parts:
+> - the kernel/bpf part which isn't aware of the HID usage, but takes care
+>   of handling the BPF links
+> - the drivers/hid/hid-bpf.c part which knows about HID
+>
+> Note that HID can be compiled in as a module, and so the functions that
+> kernel/bpf/hid.c needs to call in hid.ko are exported in struct hid_hooks.
+>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> ---
+>  drivers/hid/Makefile                         |   1 +
+>  drivers/hid/hid-bpf.c                        | 176 ++++++++
+>  drivers/hid/hid-core.c                       |  21 +-
+>  include/linux/bpf-hid.h                      |  87 ++++
+>  include/linux/bpf_types.h                    |   4 +
+>  include/linux/hid.h                          |  16 +
+>  include/uapi/linux/bpf.h                     |   7 +
+>  include/uapi/linux/bpf_hid.h                 |  39 ++
+>  kernel/bpf/Makefile                          |   3 +
+>  kernel/bpf/hid.c                             | 437 +++++++++++++++++++
+>  kernel/bpf/syscall.c                         |   8 +
+>  samples/bpf/.gitignore                       |   1 +
+>  samples/bpf/Makefile                         |   4 +
+>  samples/bpf/hid_mouse_kern.c                 |  66 +++
+>  samples/bpf/hid_mouse_user.c                 | 129 ++++++
+>  tools/include/uapi/linux/bpf.h               |   7 +
+>  tools/lib/bpf/libbpf.c                       |   7 +
+>  tools/lib/bpf/libbpf.h                       |   2 +
+>  tools/lib/bpf/libbpf.map                     |   1 +
+>  tools/testing/selftests/bpf/prog_tests/hid.c | 318 ++++++++++++++
+>  tools/testing/selftests/bpf/progs/hid.c      |  20 +
+>  21 files changed, 1351 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/hid/hid-bpf.c
+>  create mode 100644 include/linux/bpf-hid.h
+>  create mode 100644 include/uapi/linux/bpf_hid.h
+>  create mode 100644 kernel/bpf/hid.c
+>  create mode 100644 samples/bpf/hid_mouse_kern.c
+>  create mode 100644 samples/bpf/hid_mouse_user.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/hid.c
 
-Hello. I just started review/testing this series.
+Please split kernel changes, libbpf changes, selftests, and sample code into
+separate patches.
 
-it crashed on my system (arm64)
+>
+> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> index 6d3e630e81af..08d2d7619937 100644
+> --- a/drivers/hid/Makefile
+> +++ b/drivers/hid/Makefile
+> @@ -4,6 +4,7 @@
+>  #
+>  hid-y                  := hid-core.o hid-input.o hid-quirks.o
+>  hid-$(CONFIG_DEBUG_FS)         += hid-debug.o
+> +hid-$(CONFIG_BPF)              += hid-bpf.o
+>
+>  obj-$(CONFIG_HID)              += hid.o
+>  obj-$(CONFIG_UHID)             += uhid.o
+> diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
+> new file mode 100644
+> index 000000000000..6c8445820944
+> --- /dev/null
+> +++ b/drivers/hid/hid-bpf.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + *  BPF in HID support for Linux
+> + *
+> + *  Copyright (c) 2021 Benjamin Tissoires
 
-I ran with boot parameter slub_debug=U, and without KASAN.
-So CONFIG_STACKDEPOT_ALWAYS_INIT=n.
+Maybe 2022?
 
-void * __init memblock_alloc_try_nid(
-                        phys_addr_t size, phys_addr_t align,
-                        phys_addr_t min_addr, phys_addr_t max_addr,
-                        int nid)
-{
-        void *ptr;
+[...]
 
-        memblock_dbg("%s: %llu bytes align=0x%llx nid=%d from=%pa max_addr=%pa %pS\n",
-                     __func__, (u64)size, (u64)align, nid, &min_addr,
-                     &max_addr, (void *)_RET_IP_);
-        ptr = memblock_alloc_internal(size, align,
-                                           min_addr, max_addr, nid, false);
-        if (ptr)
-                memset(ptr, 0, size); <--- Crash Here
+> +static int hid_bpf_run_progs(struct hid_device *hdev, enum bpf_hid_attach_type type,
+> +                            struct hid_bpf_ctx *ctx, u8 *data, int size)
+> +{
+> +       enum hid_bpf_event event = HID_BPF_UNDEF;
+> +
+> +       if (type < 0 || !ctx)
+> +               return -EINVAL;
+> +
+> +       switch (type) {
+> +       case BPF_HID_ATTACH_DEVICE_EVENT:
+> +               event = HID_BPF_DEVICE_EVENT;
+> +               if (size > sizeof(ctx->u.device.data))
+> +                       return -E2BIG;
+> +               break;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (!hdev->bpf.run_array[type])
+> +               return 0;
+> +
+> +       memset(ctx, 0, sizeof(*ctx));
+> +       ctx->hdev = hdev;
+> +       ctx->type = event;
+> +
+> +       if (size && data) {
+> +               switch (event) {
+> +               case HID_BPF_DEVICE_EVENT:
+> +                       memcpy(ctx->u.device.data, data, size);
+> +                       ctx->u.device.size = size;
+> +                       break;
+> +               default:
+> +                       /* do nothing */
+> +               }
+> +       }
+> +
+> +       BPF_PROG_RUN_ARRAY(hdev->bpf.run_array[type], ctx, bpf_prog_run);
 
-        return ptr;
-}
+I guess we need "return BPF_PROG_RUN_ARRAY(...)"?
 
-It crashed during create_boot_cache() -> stack_depot_init() ->
-memblock_alloc().
+> +
+> +       return 0;
+> +}
+> +
+> +u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *data, int *size)
+> +{
+> +       int ret;
+> +
+> +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_DEVICE_EVENT))
+> +               return data;
+> +
+> +       ret = hid_bpf_run_progs(hdev, BPF_HID_ATTACH_DEVICE_EVENT,
+> +                               hdev->bpf.ctx, data, *size);
+> +       if (ret)
+> +               return data;
 
-I think That's because, in kmem_cache_init(), both slab and memblock is not
-available. (AFAIU memblock is not available after mem_init() because of
-memblock_free_all(), right?)
+shall we return ERR_PTR(ret)?
 
-Thanks!
+> +
+> +       if (!hdev->bpf.ctx->u.device.size)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       *size = hdev->bpf.ctx->u.device.size;
+> +
+> +       return hdev->bpf.ctx->u.device.data;
+> +}
 
-/*
- * Set up kernel memory allocators
- */
-static void __init mm_init(void)
-{
-        /*
-         * page_ext requires contiguous pages,
-         * bigger than MAX_ORDER unless SPARSEMEM.
-         */
-        page_ext_init_flatmem();
-        init_mem_debugging_and_hardening();
-        kfence_alloc_pool();
-        report_meminit();
-        stack_depot_early_init();
-        mem_init();
-        mem_init_print_info();
-        kmem_cache_init();
-        /*
-         * page_owner must be initialized after buddy is ready, and also after
-         * slab is ready so that stack_depot_init() works properly
-         */)
+[...]
 
-> Patch 1 is a new preparatory cleanup.
-> 
-> Patch 2 originally submitted here [1], was merged to mainline but
-> reverted for stackdepot related issues as explained in the patch.
-> 
-> Patches 3-5 originally submitted as RFC here [2]. In this submission I
-> have omitted the new file 'all_objects' (patch 3/3 in [2]) as it might
-> be considered too intrusive so I will postpone it for later. The docs
-> patch is adjusted accordingly.
-> 
-> Also available in git, based on v5.17-rc1:
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v1
-> 
-> I'd like to ask for some review before I add this to the slab tree.
-> 
-> [1] https://lore.kernel.org/all/20210414163434.4376-1-glittao@gmail.com/
-> [2] https://lore.kernel.org/all/20210521121127.24653-1-glittao@gmail.com/
-> 
-> Oliver Glitta (4):
->   mm/slub: use stackdepot to save stack trace in objects
->   mm/slub: aggregate and print stack traces in debugfs files
->   mm/slub: sort debugfs output by frequency of stack traces
->   slab, documentation: add description of debugfs files for SLUB caches
-> 
-> Vlastimil Babka (1):
->   mm/slub: move struct track init out of set_track()
-> 
->  Documentation/vm/slub.rst |  61 +++++++++++++++
->  init/Kconfig              |   1 +
->  mm/slub.c                 | 152 +++++++++++++++++++++++++-------------
->  3 files changed, 162 insertions(+), 52 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
-> 
+> diff --git a/include/uapi/linux/bpf_hid.h b/include/uapi/linux/bpf_hid.h
+> new file mode 100644
+> index 000000000000..243ac45a253f
+> --- /dev/null
+> +++ b/include/uapi/linux/bpf_hid.h
+> @@ -0,0 +1,39 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> +
+> +/*
+> + *  HID BPF public headers
+> + *
+> + *  Copyright (c) 2021 Benjamin Tissoires
+> + */
+> +
+> +#ifndef _UAPI__LINUX_BPF_HID_H__
+> +#define _UAPI__LINUX_BPF_HID_H__
+> +
+> +#include <linux/types.h>
+> +
+> +#define HID_BPF_MAX_BUFFER_SIZE                16384           /* 16kb */
+> +
+> +struct hid_device;
+> +
+> +enum hid_bpf_event {
+> +       HID_BPF_UNDEF = 0,
+> +       HID_BPF_DEVICE_EVENT,
+> +};
+> +
+> +/* type is HID_BPF_DEVICE_EVENT */
+> +struct hid_bpf_ctx_device_event {
+> +       __u8 data[HID_BPF_MAX_BUFFER_SIZE];
 
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
+16kB sounds pretty big to me, do we usually need that much?
+
+> +       unsigned long size;
+> +};
+> +
+> +struct hid_bpf_ctx {
+> +       enum hid_bpf_event type;
+> +       struct hid_device *hdev;
+> +
+> +       union {
+> +               struct hid_bpf_ctx_device_event device;
+> +       } u;
+> +};
+> +
+> +#endif /* _UAPI__LINUX_BPF_HID_H__ */
+[...]
+
+> diff --git a/kernel/bpf/hid.c b/kernel/bpf/hid.c
+> new file mode 100644
+> index 000000000000..d3cb952bfc26
+> --- /dev/null
+> +++ b/kernel/bpf/hid.c
+
+[...]
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 9c7a72b65eee..230ca6964a7e 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3,6 +3,7 @@
+>   */
+>  #include <linux/bpf.h>
+>  #include <linux/bpf-cgroup.h>
+> +#include <linux/bpf-hid.h>
+>  #include <linux/bpf_trace.h>
+>  #include <linux/bpf_lirc.h>
+>  #include <linux/bpf_verifier.h>
+> @@ -2174,6 +2175,7 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+>         case BPF_PROG_TYPE_CGROUP_SYSCTL:
+>         case BPF_PROG_TYPE_SOCK_OPS:
+>         case BPF_PROG_TYPE_EXT: /* extends any prog */
+> +       case BPF_PROG_TYPE_HID:
+
+Is this net_admin type?
+
+>                 return true;
+>         case BPF_PROG_TYPE_CGROUP_SKB:
+>                 /* always unpriv */
+> @@ -3188,6 +3190,8 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+>                 return BPF_PROG_TYPE_SK_LOOKUP;
+>         case BPF_XDP:
+>                 return BPF_PROG_TYPE_XDP;
+> +       case BPF_HID_DEVICE_EVENT:
+> +               return BPF_PROG_TYPE_HID;
+>         default:
+>                 return BPF_PROG_TYPE_UNSPEC;
+>         }
+> @@ -3331,6 +3335,8 @@ static int bpf_prog_query(const union bpf_attr *attr,
+>         case BPF_SK_MSG_VERDICT:
+>         case BPF_SK_SKB_VERDICT:
+>                 return sock_map_bpf_prog_query(attr, uattr);
+> +       case BPF_HID_DEVICE_EVENT:
+> +               return bpf_hid_prog_query(attr, uattr);
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -4325,6 +4331,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+>                 ret = bpf_perf_link_attach(attr, prog);
+>                 break;
+>  #endif
+> +       case BPF_PROG_TYPE_HID:
+> +               return bpf_hid_link_create(attr, prog);
+>         default:
+>                 ret = -EINVAL;
+>         }
+
+[...]
+
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index afe3d0d7f5f2..5978b92cacd3 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -952,6 +952,7 @@ enum bpf_prog_type {
+>         BPF_PROG_TYPE_LSM,
+>         BPF_PROG_TYPE_SK_LOOKUP,
+>         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+> +       BPF_PROG_TYPE_HID,
+>  };
+>
+>  enum bpf_attach_type {
+> @@ -997,6 +998,7 @@ enum bpf_attach_type {
+>         BPF_SK_REUSEPORT_SELECT,
+>         BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+>         BPF_PERF_EVENT,
+> +       BPF_HID_DEVICE_EVENT,
+>         __MAX_BPF_ATTACH_TYPE
+>  };
+>
+> @@ -1011,6 +1013,7 @@ enum bpf_link_type {
+>         BPF_LINK_TYPE_NETNS = 5,
+>         BPF_LINK_TYPE_XDP = 6,
+>         BPF_LINK_TYPE_PERF_EVENT = 7,
+> +       BPF_LINK_TYPE_HID = 8,
+>
+>         MAX_BPF_LINK_TYPE,
+>  };
+> @@ -5870,6 +5873,10 @@ struct bpf_link_info {
+>                 struct {
+>                         __u32 ifindex;
+>                 } xdp;
+> +               struct  {
+> +                       __s32 hidraw_ino;
+> +                       __u32 attach_type;
+> +               } hid;
+>         };
+>  } __attribute__((aligned(8)));
+>

@@ -2,165 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCAF4C55A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 12:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6628D4C55B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 12:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiBZLXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 06:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S231519AbiBZLm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 06:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiBZLXn (ORCPT
+        with ESMTP id S230151AbiBZLmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 06:23:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E038B3E4D
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 03:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645874588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x+IuamfionJsCAWkaO5i4D2ZqLfIRaCl1AlxS4yAGFk=;
-        b=LxVUkLdA7OO/emLd/hDAkHeE80FJyTOOZgsjiaY+i7s5IRgPlXgMYyGv0uM/ddnAk012Tj
-        ghQBhMpMs2dxJAZDkiI3zsqajENQ0vZB17GL0eLkurLSEOyJL3DWQ7Pq7LsKOKzYuk0VjA
-        sBFbGpO3iLnQLDm4frMy+jqgzENNhfE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-ROb9reUcO4CE45eDhAU5yA-1; Sat, 26 Feb 2022 06:23:04 -0500
-X-MC-Unique: ROb9reUcO4CE45eDhAU5yA-1
-Received: by mail-ej1-f71.google.com with SMTP id sa7-20020a170906eda700b006d1b130d65bso3881764ejb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 03:23:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x+IuamfionJsCAWkaO5i4D2ZqLfIRaCl1AlxS4yAGFk=;
-        b=Yyghopf685Y6Pl/HErNulw7rhHynZJplr5OruiJI3fnNLq7jrPMcjV6msmDfvLGZb6
-         FQg2//PEaPl1QJ1eIbrqNIVFGaKvdvnvIhnRr77uBq2+vqos6h9m672SSOXsxz/8FT1m
-         3E4RFfkjOMbFw/tojKinZtqg6FSs3KIsUdWtUpZXcRNHUHVRdOs0+MWfSprzyIrmMXA5
-         QfsFdVwHhR97PN4bGUOCaXGp8QUPETpmKRq131ANLvoolAfvRpA1xydnXLhgrsSL1PP0
-         YMIt/NwEq/bGoRMYXGIFB67mLA3o5ONOjoM6dcuSIDyV35OWftbcIAVZ3Lgc1g+ECH5n
-         VJVg==
-X-Gm-Message-State: AOAM53004JpUYt2CXxpb6STqiuI/piJkLnb89gaVu+zd3zg8YN/Ns2sy
-        Kxk1a+KhBUOffLEePYBtr0KQZRSLV2B/ZMajPJ2IRx7AOh4mo3rzTr18kJZUaP/085xiQydKxn0
-        L4SpZjQLoYCDxBWUbXX5PYOqB
-X-Received: by 2002:a17:906:9256:b0:6a9:dfca:78d8 with SMTP id c22-20020a170906925600b006a9dfca78d8mr9543625ejx.330.1645874583409;
-        Sat, 26 Feb 2022 03:23:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzGlnOwREffcqEUPlYPOBueuAuK8YRoN++aVAp89eAHDRdCFOq0EolVIqEqkoamcjE8zTLIAw==
-X-Received: by 2002:a17:906:9256:b0:6a9:dfca:78d8 with SMTP id c22-20020a170906925600b006a9dfca78d8mr9543617ejx.330.1645874583229;
-        Sat, 26 Feb 2022 03:23:03 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id js24-20020a170906ca9800b006c8aeca8fe8sm2128900ejb.58.2022.02.26.03.23.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Feb 2022 03:23:02 -0800 (PST)
-Message-ID: <7cfa7a1f-e413-cbc9-308c-bf8bfe6ac2a7@redhat.com>
-Date:   Sat, 26 Feb 2022 12:23:01 +0100
+        Sat, 26 Feb 2022 06:42:25 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A557F244A3E
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 03:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645875711; x=1677411711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RgmcXJbJ/Ccx3swLS6YILi+XqKDeBSb5Ta9hU0rJz0w=;
+  b=GdFpL372HYQNsRy0MoL49Ky6Q8GAReeBVuEtIOZBgNavhvNhatrRQnHe
+   RuesJ41gSz7YxUXJ6ZMn5ZFpNW80uC7U9u5OsO/2m9yjzFUaVIUnkZyGg
+   YmIfu/V4tulkRsszGpByOYPqcPdACwooCh1EoAnP9paDQANCA3iaCl+w5
+   XF9vZLuz7YuxEQVrCIzdcSxt02M7RCpvzhyRrGj6uZO+CIF4htfo0Yl7z
+   B+P5uGNrg6Le0RmjBhOF31EC26jQk9+mAndZYhALeaXLxfbmcY9n6fMoR
+   yu6Xz2gH5ywG4Gz+Q28ocEwBfv28gjjseJ8RWIoFvTgNyd3+gCHngDBZD
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="251485062"
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="251485062"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 03:41:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="640404067"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Feb 2022 03:41:50 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNvSP-0005QM-AH; Sat, 26 Feb 2022 11:41:49 +0000
+Date:   Sat, 26 Feb 2022 19:41:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 17/47]
+ arch/x86/include/asm/segment.h:278:39: error: 'HAS_KERNEL_IBT' undeclared
+ here (not in a function)
+Message-ID: <202202261948.uPVLnDCm-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC 2/2] ata: ahci: Protect users from setting policies their
- drives don't support
-Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220225181030.980223-1-mario.limonciello@amd.com>
- <20220225181030.980223-2-mario.limonciello@amd.com>
- <7381d145-ac6f-60f4-296a-7b191296964a@redhat.com>
- <BL1PR12MB5157C0A33DC4484B6E5E6E91E23E9@BL1PR12MB5157.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <BL1PR12MB5157C0A33DC4484B6E5E6E91E23E9@BL1PR12MB5157.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   db78c0938593e12efacf2c1821700b6f39754245
+commit: 286a983c759d72da5b39c444d8531c7f1135d151 [17/47] x86/ibt,entry: Sprinkle ENDBR dust
+config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20220226/202202261948.uPVLnDCm-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=286a983c759d72da5b39c444d8531c7f1135d151
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 286a983c759d72da5b39c444d8531c7f1135d151
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 prepare
 
-On 2/25/22 22:24, Limonciello, Mario wrote:
-> [AMD Official Use Only]
-> 
-> 
-> 
->> -----Original Message-----
->> From: Hans de Goede <hdegoede@redhat.com>
->> Sent: Friday, February 25, 2022 15:20
->> To: Limonciello, Mario <Mario.Limonciello@amd.com>; Damien Le Moal
->> <damien.lemoal@opensource.wdc.com>
->> Cc: open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers) <linux-
->> ide@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
->> Subject: Re: [RFC 2/2] ata: ahci: Protect users from setting policies their
->> drives don't support
->>
->> Hi,
->>
->> On 2/25/22 19:10, Mario Limonciello wrote:
->>> As the default low power policy applies to more chipsets and drives, it's
->>> important to make sure that drives actually support the policy that a user
->>> selected in their kernel configuration.
->>>
->>> If the drive doesn't support slumber, don't let the default policy for the
->>> ATA port be `min_power` or `min_power_with_partial`.
->>>
->>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>> ---
->>>  drivers/ata/ahci.c | 8 ++++++++
->>>  1 file changed, 8 insertions(+)
->>>
->>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
->>> index 17d757ad7111..af8999453084 100644
->>> --- a/drivers/ata/ahci.c
->>> +++ b/drivers/ata/ahci.c
->>> @@ -1584,8 +1584,16 @@ static int ahci_init_msi(struct pci_dev *pdev,
->> unsigned int n_ports,
->>>  static void ahci_update_initial_lpm_policy(struct ata_port *ap,
->>>  					   struct ahci_host_priv *hpriv)
->>>  {
->>> +	struct pci_dev *pdev = to_pci_dev(ap->host->dev);
->>>  	int policy = CONFIG_SATA_LPM_POLICY;
->>>
->>> +	if (policy >= ATA_LPM_MIN_POWER_WITH_PARTIAL &&
->>> +	   !(hpriv->cap & HOST_CAP_SSC)) {
->>> +		dev_warn(&pdev->dev,
->>> +			 "This drive doesn't support slumber; ignoring default
->> SATA policy\n");
->>> +		return;
->>> +	}
->>> +
->>
->> Don't the capabilties get checked later when the policy gets applied ?
->>
->> At least I think they do get checked later, but I have not looked
->> at this code for years  ...  ?
-> 
-> There's a bunch of layers of indirection so I might have missed something,
-> but I didn't see anything in sata_link_scr_lpm or anywhere else for that
-> matter that actually checked HOST_CAP_SSC.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hmm, ok. Note that the user can still change the policy with an echo
-to sysfs. So I think it would be better to do a fix where HOST_CAP_SSC
-gets checked when the features are actually being enabled. Or at least
-also at a HOST_CAP_SSC check to the sysfs write functions.
+All errors (new ones prefixed by >>):
 
-Regards,
-
-Hans
+   In file included from arch/x86/include/asm/ptrace.h:5,
+                    from arch/x86/include/asm/math_emu.h:5,
+                    from arch/x86/include/asm/processor.h:13,
+                    from arch/x86/include/asm/cpufeature.h:5,
+                    from arch/x86/include/asm/thread_info.h:53,
+                    from include/linux/thread_info.h:60,
+                    from arch/x86/include/asm/preempt.h:7,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/crypto.h:20,
+                    from arch/x86/kernel/asm-offsets.c:9:
+>> arch/x86/include/asm/segment.h:278:39: error: 'HAS_KERNEL_IBT' undeclared here (not in a function)
+     278 | #define EARLY_IDT_HANDLER_SIZE (9 + 4*HAS_KERNEL_IBT)
+         |                                       ^~~~~~~~~~~~~~
+   arch/x86/include/asm/segment.h:290:66: note: in expansion of macro 'EARLY_IDT_HANDLER_SIZE'
+     290 | extern const char early_idt_handler_array[NUM_EXCEPTION_VECTORS][EARLY_IDT_HANDLER_SIZE];
+         |                                                                  ^~~~~~~~~~~~~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
->>>  	/* user modified policy via module param */
->>>  	if (mobile_lpm_policy != -1) {
->>>  		policy = mobile_lpm_policy;
+vim +/HAS_KERNEL_IBT +278 arch/x86/include/asm/segment.h
 
+   270	
+   271	/*
+   272	 * early_idt_handler_array is an array of entry points referenced in the
+   273	 * early IDT.  For simplicity, it's a real array with one entry point
+   274	 * every nine bytes.  That leaves room for an optional 'push $0' if the
+   275	 * vector has no error code (two bytes), a 'push $vector_number' (two
+   276	 * bytes), and a jump to the common entry code (up to five bytes).
+   277	 */
+ > 278	#define EARLY_IDT_HANDLER_SIZE (9 + 4*HAS_KERNEL_IBT)
+   279	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

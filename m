@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B88A4C5847
+	by mail.lfdr.de (Postfix) with ESMTP id D23BD4C5849
 	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiBZVYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 16:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S229734AbiBZV1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 16:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiBZVYI (ORCPT
+        with ESMTP id S229726AbiBZV13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 16:24:08 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E080D28EBB5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:23:33 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id e129-20020a25d387000000b006245d830ca6so6820569ybf.13
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:23:33 -0800 (PST)
+        Sat, 26 Feb 2022 16:27:29 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5309C271474;
+        Sat, 26 Feb 2022 13:26:53 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so3802518wme.0;
+        Sat, 26 Feb 2022 13:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=J6j2inEmM2G/VjC4yVLo68KdKRLj/4RdQFdUNasgbc4=;
-        b=p1UQxaHkIXrxFewg80mViEE+sNxpZrJ5BXIUBsMp5MBkAfULz3wEdzO1SWTfpqxAeb
-         AovBR03HS/YvV8v59t+R4ro/HK1Lgb/A11zoIm2jVSKCJpk1Omff8DZdBVun3eNSh99P
-         qiCP88AYXqZRg0F26UMFh6tFAqD0T9MKB9RM7BQSfgF135w2ToWvF/BiaNuKT/cJiHlb
-         eVuWdEi7IHrmaSR0DHzYjNtCtM0wmSLwQ0MGU7BbIvYtJgYrgrzomRs5EKkfRLu2UoXC
-         pJhBv0VrFeLJqqzrK2bfPLNZfkqayO7vj26sTHNFTTyV0ST1Hhk++WcAnCi0btUZA/km
-         wXZg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TyrNgSDfo+1HFIj3kDakMkkgmqGllazNd2qDuPTwQZo=;
+        b=JHkgen1brpV4/9y45tcSWvczIjOgQ2zM3BreLzjdq75kuvLq7cY7aLWtCf1vMmYLtO
+         is/K7zoVzAXdWmdj1n5M3WZn93zhKAuCpOiCMqFfVNwqPWs7sAB8lmGVUgKyAxGoIJqt
+         GfLi4+hbI3MvATKfj1i/q3cmD2ryj0qWkfEYpMFfbDA3KKSm1Yhstl7/w/HMW132NP+e
+         MQzmvqD05GtpUlaO13b2u5tSWIz+W5utTnZn3+jYFSbtZHssFy4JiMPdtEdaETpbY77O
+         ys4EJ7XM3yl/ncKP89Yz5/+V5ZX+c1syo42Udj5/e4g0Xn3FDKXpaeXqoEdWNLmtKDZ8
+         8fvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=J6j2inEmM2G/VjC4yVLo68KdKRLj/4RdQFdUNasgbc4=;
-        b=JrYUw9wXtBWRYnsGwo7XafDGmaK1qI6B9diwMrGdgr1DbrtY36GCnEdKJCnv4CVffn
-         30HEgLsyshJBIiqfvcrjlVaqQgh71ynvgYxmcWWlKmQoGCHXxljJqSd5uMEKyAo/Zzoe
-         WEz+O1HJzxtl49wjqWC6jCBWfAaMVl7MC1g0BP1FaXBGT07GS3HDYpwAwgDzD+UxcU3V
-         0AxNpUwlhUgvcWKm0z/TLVvmA517Mq8dpSXoVyVzF/uZO80COilMD7g0nL4xF8mvMzkz
-         fibNxgjRsrYLCUMNiYlWBVKbyjEu4/z4sWw42BV3g3iAa5MY2fPZdzq9mGTjSUVxLBMY
-         977g==
-X-Gm-Message-State: AOAM532fRd7Q/b6q+R4ngBZun5DrR/ZwZ0H52vvuV6zDCrKQTuj1WQ/Q
-        tseD8GZMJu3TTSLeyHiYhbncJ+qWwaXBWA==
-X-Google-Smtp-Source: ABdhPJx2ZmaY96X8Esy5Q6/6g/Hm/z+/jdCTYF1vj/idV3IZqOvcTd6IY6lC1+gMb6jOOMuBFGu2ezJ9MXER7A==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:3a80:7413:c995:5fb1])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:1027:b0:619:3e74:ab5b with SMTP
- id x7-20020a056902102700b006193e74ab5bmr13207007ybt.136.1645910613153; Sat,
- 26 Feb 2022 13:23:33 -0800 (PST)
-Date:   Sat, 26 Feb 2022 13:23:25 -0800
-Message-Id: <20220226212325.2984807-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v2] kunit: tool: more descriptive metavars/--help output
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TyrNgSDfo+1HFIj3kDakMkkgmqGllazNd2qDuPTwQZo=;
+        b=CcuvV/hZ4ZEov+pF4dQ8IAFQrm2WjCQXH6ZvECA4uMGSdffAjxkr7nQm1NF2xlJV7v
+         0c04fQ7NtacHjoEnprnjFrc2OlWMqAfHOXPrm4ZlTfhmvscyCPRAGwV4gRkjtQRdNaNy
+         PFuJNzyajNUneApktNFJMaVyjv/5yE39Fr4XSTT0KIQ7L0a0nMh19yPmlpAp4RNPj4Yv
+         tWYJ1wdfrdtdMhPScrVVUsodNwDXXs3O/1kPfvPKncCVoa0IiiofmlfF2G4pPTEIc9cG
+         32rKYYNiivAnlLJz1VdlJrG65goWHJbRe+Tx4XaiUx12jFmy9tMjA+tSNX686R3e3Ebr
+         ZZQA==
+X-Gm-Message-State: AOAM531dPni9DrsYAc2qNA/wz+uhbM057PRPghOw5kIxlMFLtZT0PDlq
+        U4EoFN9oCqwUPlSLu9WrZUh0nylL70XwXdxh
+X-Google-Smtp-Source: ABdhPJwy3XONgbZN4q8BHplRawf8sSEJs3LQ347lcI5tm9T3b21rmk9OimmOVRdkhypkRB4nblntdw==
+X-Received: by 2002:a05:600c:2146:b0:380:d7df:137c with SMTP id v6-20020a05600c214600b00380d7df137cmr7974476wml.140.1645910811793;
+        Sat, 26 Feb 2022 13:26:51 -0800 (PST)
+Received: from [192.168.0.149] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id ay23-20020a5d6f17000000b001ea79f73fbcsm5740733wrb.25.2022.02.26.13.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Feb 2022 13:26:51 -0800 (PST)
+Message-ID: <ae52c028-05c7-c22e-fc47-d97ee4a2f6c7@gmail.com>
+Date:   Sat, 26 Feb 2022 22:26:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 2/7] landlock: Fix landlock_add_rule(2) signature
+Content-Language: en-US
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Shuah Khan <shuah@kernel.org>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20220221155311.166278-1-mic@digikod.net>
+ <20220221155311.166278-3-mic@digikod.net>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+In-Reply-To: <20220221155311.166278-3-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,169 +84,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before, our help output contained lines like
-  --kconfig_add KCONFIG_ADD
-  --qemu_config qemu_config
-  --jobs jobs
+Hi Mickaël,
 
-They're not very helpful.
+On 21/2/22 16:53, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Replace the enum landlock_rule_type with an int in the syscall signature
+> of landlock_add_rule to avoid an implementation-defined size.  In
+> practice an enum type is like an int (at least with GCC and clang), but
+> compilers may accept options (e.g. -fshort-enums) that would have an
+> impact on that [1].  This change is mostly a cosmetic fix according to
+> the current kernel compilers and used options.
 
-The former kind come from the automatic 'metavar' we get from argparse,
-the uppercase version of the flag name.
-The latter are where we manually specified metavar as the flag name.
+There are two proposals for C2x that might bring C++ syntax to C for 
+enums, i.e., being able to specify the underlying type of an enum.
 
-After:
-  --build_dir DIR
-  --make_options X=Y
-  --kunitconfig PATH
-  --kconfig_add CONFIG_X=Y
-  --arch ARCH
-  --cross_compile PREFIX
-  --qemu_config FILE
-  --jobs N
-  --timeout SECONDS
-  --raw_output [{all,kunit}]
-  --json [FILE]
+See:
+<http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2904.htm>
+<http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2908.htm>
 
-This patch tries to make the code more clear by specifying the _type_ of
-input we expect, e.g. --build_dir is a DIR, --qemu_config is a FILE.
-I also switched it to uppercase since it looked more clearly like
-placeholder text that way.
+Since the current kernel is safe from that enum problem, it may be 
+better to wait and see what the standard decides to do with enum.  I 
+guess they'll add this feature sooner or later.
 
-This patch also changes --raw_output to specify `choices` to make it
-more clear what the options are, and this way argparse can validate it
-for us, as shown by the added test case.
+Regards,
+Alex
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
- tools/testing/kunit/kunit.py           | 26 ++++++++++++--------------
- tools/testing/kunit/kunit_tool_test.py |  5 +++++
- 2 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 9274c6355809..63d2c4bb9503 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -206,8 +206,6 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[
- 			pass
- 		elif request.raw_output == 'kunit':
- 			output = kunit_parser.extract_tap_lines(output)
--		else:
--			print(f'Unknown --raw_output option "{request.raw_output}"', file=sys.stderr)
- 		for line in output:
- 			print(line.rstrip())
- 
-@@ -281,10 +279,10 @@ def add_common_opts(parser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
- 			    'directory.',
--			    type=str, default='.kunit', metavar='build_dir')
-+			    type=str, default='.kunit', metavar='DIR')
- 	parser.add_argument('--make_options',
- 			    help='X=Y make option, can be repeated.',
--			    action='append')
-+			    action='append', metavar='X=Y')
- 	parser.add_argument('--alltests',
- 			    help='Run all KUnit tests through allyesconfig',
- 			    action='store_true')
-@@ -292,11 +290,11 @@ def add_common_opts(parser) -> None:
- 			     help='Path to Kconfig fragment that enables KUnit tests.'
- 			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
- 			     'will get  automatically appended.',
--			     metavar='kunitconfig')
-+			     metavar='PATH')
- 	parser.add_argument('--kconfig_add',
- 			     help='Additional Kconfig options to append to the '
- 			     '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
--			    action='append')
-+			    action='append', metavar='CONFIG_X=Y')
- 
- 	parser.add_argument('--arch',
- 			    help=('Specifies the architecture to run tests under. '
-@@ -304,7 +302,7 @@ def add_common_opts(parser) -> None:
- 				  'string passed to the ARCH make param, '
- 				  'e.g. i386, x86_64, arm, um, etc. Non-UML '
- 				  'architectures run on QEMU.'),
--			    type=str, default='um', metavar='arch')
-+			    type=str, default='um', metavar='ARCH')
- 
- 	parser.add_argument('--cross_compile',
- 			    help=('Sets make\'s CROSS_COMPILE variable; it should '
-@@ -316,18 +314,18 @@ def add_common_opts(parser) -> None:
- 				  'if you have downloaded the microblaze toolchain '
- 				  'from the 0-day website to a directory in your '
- 				  'home directory called `toolchains`).'),
--			    metavar='cross_compile')
-+			    metavar='PREFIX')
- 
- 	parser.add_argument('--qemu_config',
- 			    help=('Takes a path to a path to a file containing '
- 				  'a QemuArchParams object.'),
--			    type=str, metavar='qemu_config')
-+			    type=str, metavar='FILE')
- 
- def add_build_opts(parser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
- 			    'jobs (commands) to run simultaneously."',
--			    type=int, default=get_default_jobs(), metavar='jobs')
-+			    type=int, default=get_default_jobs(), metavar='N')
- 
- def add_exec_opts(parser) -> None:
- 	parser.add_argument('--timeout',
-@@ -336,7 +334,7 @@ def add_exec_opts(parser) -> None:
- 			    'tests.',
- 			    type=int,
- 			    default=300,
--			    metavar='timeout')
-+			    metavar='SECONDS')
- 	parser.add_argument('filter_glob',
- 			    help='Filter which KUnit test suites/tests run at '
- 			    'boot-time, e.g. list* or list*.*del_test',
-@@ -346,7 +344,7 @@ def add_exec_opts(parser) -> None:
- 			    metavar='filter_glob')
- 	parser.add_argument('--kernel_args',
- 			    help='Kernel command-line parameters. Maybe be repeated',
--			     action='append')
-+			     action='append', metavar='')
- 	parser.add_argument('--run_isolated', help='If set, boot the kernel for each '
- 			    'individual suite/test. This is can be useful for debugging '
- 			    'a non-hermetic test, one that might pass/fail based on '
-@@ -357,13 +355,13 @@ def add_exec_opts(parser) -> None:
- def add_parse_opts(parser) -> None:
- 	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
- 			    'If set to --raw_output=kunit, filters to just KUnit output.',
--			    type=str, nargs='?', const='all', default=None)
-+			     type=str, nargs='?', const='all', default=None, choices=['all', 'kunit'])
- 	parser.add_argument('--json',
- 			    nargs='?',
- 			    help='Stores test results in a JSON, and either '
- 			    'prints to stdout or saves to file if a '
- 			    'filename is specified',
--			    type=str, const='stdout', default=None)
-+			    type=str, const='stdout', default=None, metavar='FILE')
- 
- def main(argv, linux=None):
- 	parser = argparse.ArgumentParser(
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 352369dffbd9..eb2011d12c78 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -595,6 +595,11 @@ class KUnitMainTest(unittest.TestCase):
- 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
- 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
-+	def test_run_raw_output_invalid(self):
-+		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
-+		with self.assertRaises(SystemExit) as e:
-+			kunit.main(['run', '--raw_output=invalid'], self.linux_source_mock)
-+
- 	def test_run_raw_output_does_not_take_positional_args(self):
- 		# --raw_output is a string flag, but we don't want it to consume
- 		# any positional arguments, only ones after an '='
-
-base-commit: 5debe5bfa02c4c8922bd2d0f82c9c3a70bec8944
--- 
-2.35.1.574.g5d30c73bfb-goog
+> 
+> Link: https://lore.kernel.org/r/8a22a3c2-468c-e96c-6516-22a0f029aa34@gmail.com/ [1]
+> Reported-by: Alejandro Colomar <alx.manpages@gmail.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220221155311.166278-3-mic@digikod.net
+> ---
+>   include/linux/syscalls.h     | 3 +--
+>   security/landlock/syscalls.c | 7 ++++---
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index 819c0cb00b6d..a5956f91caf2 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -71,7 +71,6 @@ struct clone_args;
+>   struct open_how;
+>   struct mount_attr;
+>   struct landlock_ruleset_attr;
+> -enum landlock_rule_type;
+>   
+>   #include <linux/types.h>
+>   #include <linux/aio_abi.h>
+> @@ -1053,7 +1052,7 @@ asmlinkage long sys_pidfd_send_signal(int pidfd, int sig,
+>   asmlinkage long sys_pidfd_getfd(int pidfd, int fd, unsigned int flags);
+>   asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr __user *attr,
+>   		size_t size, __u32 flags);
+> -asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
+> +asmlinkage long sys_landlock_add_rule(int ruleset_fd, int rule_type,
+>   		const void __user *rule_attr, __u32 flags);
+>   asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
+>   asmlinkage long sys_memfd_secret(unsigned int flags);
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index fd4b24022a06..3b40fc5d0216 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+> @@ -277,8 +277,9 @@ static int get_path_from_fd(const s32 fd, struct path *const path)
+>    *
+>    * @ruleset_fd: File descriptor tied to the ruleset that should be extended
+>    *		with the new rule.
+> - * @rule_type: Identify the structure type pointed to by @rule_attr (only
+> - *             LANDLOCK_RULE_PATH_BENEATH for now).
+> + * @rule_type: Identify the structure type pointed to by @rule_attr as defined
+> + *             by enum landlock_rule_type (only LANDLOCK_RULE_PATH_BENEATH for
+> + *             now).
+>    * @rule_attr: Pointer to a rule (only of type &struct
+>    *             landlock_path_beneath_attr for now).
+>    * @flags: Must be 0.
+> @@ -301,7 +302,7 @@ static int get_path_from_fd(const s32 fd, struct path *const path)
+>    * - EFAULT: @rule_attr inconsistency.
+>    */
+>   SYSCALL_DEFINE4(landlock_add_rule,
+> -		const int, ruleset_fd, const enum landlock_rule_type, rule_type,
+> +		const int, ruleset_fd, const int, rule_type,
+>   		const void __user *const, rule_attr, const __u32, flags)
+>   {
+>   	struct landlock_path_beneath_attr path_beneath_attr;
 

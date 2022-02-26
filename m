@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501704C534F
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5FC4C5354
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiBZCLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 21:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S229573AbiBZCNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 21:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiBZCLV (ORCPT
+        with ESMTP id S229447AbiBZCNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 21:11:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13E62A260
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 18:10:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D0461E20
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 02:10:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331B6C340E7;
-        Sat, 26 Feb 2022 02:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645841446;
-        bh=AV3sdxBqak7FnOl47IK+1riBgeHHcDfaa81rdgxXet8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QJrYoMWTq9PvTTpdPhVH+P9sQw3r/djy8+OBcJAeB6Uz+whB/SCwsb4yhhS10qt5t
-         WxlbXMtzKEUTh2thtZ0BO8uaHwEP7ImyNOqEShnTtQGfpeu6MaMGmyT6++HrOs01ZG
-         Qjnq1tL9R3hAnqCJRNNXbwlDOu2tqHHQ3L8kzUjehU6xkxo5lKrg8+n8CLIAEVT9wt
-         wYR4tMJFaRxEOvpbe2THcE9fvtRmGmmCPYaXwB1hcsszErqtREimEDpm/NzX0Og6Em
-         4jmNpZDyjJlp9dMKepaEZKJNw3KLDMLKpInt7dZ5MNiffyA6D00NwtEgV3mqbkBn94
-         InDFYB8ZReqcw==
-Date:   Sat, 26 Feb 2022 11:10:40 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-Id: <20220226111040.49b6b82a6c0caebee8c6d552@kernel.org>
-In-Reply-To: <Yhj4myrr0X6USU3+@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.892372059@infradead.org>
-        <20220225103215.77080de0b3edd0fa2839b8fa@kernel.org>
-        <YhizfwoddLwWWl2J@hirez.programming.kicks-ass.net>
-        <20220225224249.cbabe82e530758cdb28e65e9@kernel.org>
-        <Yhj4myrr0X6USU3+@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 25 Feb 2022 21:13:11 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C29179265;
+        Fri, 25 Feb 2022 18:12:38 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id j12so2502209vkr.0;
+        Fri, 25 Feb 2022 18:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lDWpy2NuIsQN7E/0B1NasChFwKSZ7ta4TFaRo3f/J1c=;
+        b=RRvEInhRxEBzutgK0TBld7VqkdgO2eExoA/SoRpxe/FJJ0U3LL31c1DPAVhHdIazw+
+         riRIH3qQo6YW79G0JeW4MO3oAmr///O+zV2uOJzW4dwjqhLSS/a25Y9iibdTseuz7VXX
+         LfK38vfc0uld1ZG+YldAS1ZsQURnnZuLFN0AnE0f950yiaFDjnNAFZqlN4o5Q1jAH32E
+         R69V7NIBYDmTxrtLFYvc3pNY2rZhy1UDw0IyEuml6cgH3JKhfqsovSK0N+GXdBxdyj/m
+         Ja8yq5rw5xqYlJbl2f2GNPx+pBW8T0DjIvsZ2dJXADPS9usSYVcD+Rf1Ql1UggKZ7vUs
+         L/Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lDWpy2NuIsQN7E/0B1NasChFwKSZ7ta4TFaRo3f/J1c=;
+        b=BkMtMBl7qpZRP7TMLtXCvrFvs6gnmyUGjSmt4kAqSr4urBRIuofIXzGVgemMd4lhM0
+         kD6Eq4f4xXPodjIbbw2vwLd6CXQfkDrNymZ2YhSMGnA1C0hBfdlHiMJFldSPmjK0BwPb
+         HiaqG43uvq5vEnRhJyM1SIvfrJ9wIrvoPAKOjtSbRGQOphPGUsNn6hP4Y9ioW5843JNN
+         vZcWLiFzNxjsM6MpaEIomp4kjgIGJjkk03GtmjdNFcf3GQYbm5VKp3E+agmbdWn/r3a5
+         NDeIH8sbDOr4iK1lPa3BAfDtnvFXtzJMfcbkMuwDD5bDy3p+GTlT4A7RObtVZm5jxqzm
+         cFdg==
+X-Gm-Message-State: AOAM531Ff3r8Nn33D84I8QXA3+0g4dWOCactgoszFj/V0tOllYwC2BSH
+        84c9sZUpZZleL8cHVrtxnQUJl8jKrByYLyrwtlw=
+X-Google-Smtp-Source: ABdhPJzsUE+TqICcXLNuL+ZS/uvjE53/+EGUyjFKuVTi339MEgMzrXx6N86iaeg/mC2K5UwwLFGYsT3W6YgRtSbD0mM=
+X-Received: by 2002:a05:6122:d0f:b0:330:c206:d46e with SMTP id
+ az15-20020a0561220d0f00b00330c206d46emr4846192vkb.41.1645841557409; Fri, 25
+ Feb 2022 18:12:37 -0800 (PST)
+MIME-Version: 1.0
+References: <CAJoG2+9Tp4ZW4tqTVSgp7wukduEFKHiqOXJO-Yn17OwTvn+a+w@mail.gmail.com>
+ <20220225182004.GA369816@bhelgaas>
+In-Reply-To: <20220225182004.GA369816@bhelgaas>
+From:   Yusuf Khan <yusisamerican@gmail.com>
+Date:   Fri, 25 Feb 2022 18:12:26 -0800
+Message-ID: <CAJoG2+9p4jC1aSybosd_+pkEzGDv=44D_VshrJzbgpk++Nr8Ng@mail.gmail.com>
+Subject: Re: [PATCH] Removed some usages of the deprecated "pci-dma-compat.h" KPI
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        tiwai@suse.com, perex@perex.cz, alex.bou9@gmail.com,
+        mporter@kernel.crashing.org, logang@deltatee.com,
+        kurt.schwemmer@microsemi.com, Bjorn Helgaas <bhelgaas@google.com>,
+        kw@linux.com, robh@kernel.org, lorenzo.pieralisi@arm.com,
+        jonathan.derrick@linux.dev, nirmal.patel@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,58 +71,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 16:41:15 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+sorry....
 
-> On Fri, Feb 25, 2022 at 10:42:49PM +0900, Masami Hiramatsu wrote:
-> 
-> > OK, this sounds like kp->addr should be "call fentry" if there is ENDBR.
-> > 
-> > > 
-> > > This patch takes the approach that sym+0 means __fentry__, irrespective
-> > > of where it might actually live. I *think* that's more or less
-> > > consistent with what other architectures do; specifically see
-> > > arch/powerpc/kernel/kprobes.c:kprobe_lookup_name(). I'm not quite sure
-> > > what ARM64 does when it has BTI on (which is then very similar to what
-> > > we have here).
-> > 
-> > Yeah, I know the powerpc does such thing, but I think that is not what
-> > user expected. I actually would like to fix that, because in powerpc
-> > and other non-x86 case (without BTI/IBT), the instructions on sym+0 is
-> > actually executed.
-> > 
-> > > 
-> > > What do you think makes most sense here?
-> > 
-> > Are there any way to distinguish the "preparing instructions" (part of
-> > calling mcount) and this kind of trap instruction online[1]? If possible,
-> > I would like to skip such traps, but put the probe on preparing
-> > instructions.
-> 
-> None that exist, but we could easily create one. See also my email here:
-> 
->   https://lkml.kernel.org/r/Yhj1oFcTl2RnghBz@hirez.programming.kicks-ass.net
-> 
-> That skip_endbr() function is basically what you're looking for; it just
-> needs a better name and a Power/ARM64 implementation to get what you
-> want, right?
-
-Great! that's what I need. I think is_endbr() is also useful :)
-
-> The alternative 'hack' I've been contemplating is (ab)using
-> INT_MIN/INT_MAX offset for __fentry__ and __fexit__ points (that latter
-> is something we'll probably have to grow when CET-SHSTK or backward-edge
-> CFI gets to be done, because then ROP tricks as used by function-graph
-> and kretprobes are out the window).
-> 
-> That way sym+[0..size) is still a valid reference to the actual
-> instruction in the symbol, but sym+INT_MIN will hard map to __fentry__
-> while sym+INT_MAX will get us __fexit__.
-
-Interesting, is that done by another series?
-Maybe I have to check that change for kprobe jump optimization.
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+On Fri, Feb 25, 2022 at 10:20 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Wed, Feb 23, 2022 at 01:54:54AM -0800, Yusuf Khan wrote:
+> > See https://lkml.org/lkml/2022/2/23/11 Before you think of this commit!
+>
+> Use links to https://lore.kernel.org/r/ whenever you can, instead of
+> lkml.org, etc.

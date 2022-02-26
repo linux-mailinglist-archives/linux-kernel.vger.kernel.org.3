@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687F94C53BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF6E4C53C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiBZE4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 23:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S229967AbiBZE6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 23:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiBZE4B (ORCPT
+        with ESMTP id S229949AbiBZE6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 23:56:01 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65CF1AA048
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:55:27 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id d134-20020a4a528c000000b00319244f4b04so9594077oob.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:55:27 -0800 (PST)
+        Fri, 25 Feb 2022 23:58:38 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2247513CA3F
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:58:05 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so8647331pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:58:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=B1iyIZxykdfFaUxBAPXSJr+OEff3IvbWqJkmpppNQ2A=;
-        b=cqQxtTdwgeqkVD8mIAABpM3Lb+uPsK+Ljq/J96oufbg3NqlWmx9uB/n87dKiJqYJcY
-         Cnhr/mwuTdRzlORa1RmggOoW0nfVUjgXK7g2uAggAAX7GRcuNxfBUf6X/TZYAg4Bv6s/
-         v9kH5cgSrGPg91jM7qG5NS+t0NEPQ6uoXN4KQ=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5WDq2AfJRdEk3uwNCX9CCL0Qxk/1zT3oEVQ37zTBxiQ=;
+        b=c3aDV/sWGC8Aav0gTokKYXKTVE9bAzdOg/VodTQkI1ZuWDFLBaAapUK41ly/1s3IY/
+         W+Z6/i2+AiHX1zTPTIWN0fxwS7weXUa9htEgesB3a3/aUvLro2QbUvmJvb7PuCo8MDxY
+         cWLiWBjaqvM9w53HJp7E2yo9+WCoeGP3wPwnw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=B1iyIZxykdfFaUxBAPXSJr+OEff3IvbWqJkmpppNQ2A=;
-        b=ESAn4GzOv1aCV6sNysF/T97PM36PJlQOHjs+eeuhO8MThaolIhkKCbwmkjchlYFc47
-         5KhWThYoTwsLk2V1crOnnKOgWez3m5UeOT5D7UCpnCMIXadPN2PswTpZ5Pu9CISr/kH3
-         dqq9XCSW9ehBny+hfpHsHeNZN1NXmkR3IqJo0bW3jyxgEk/dTqbtGZNgnlJ6NXmFriKy
-         6a3aBKUTeo4ImBQw5hnNJMy/31x/r5qDyPscJWukrmzgzYUunAM3fHPIfUSOkJsa2NSJ
-         8DUpnIxqzt4ul3GesyAewkVtfEkd7X7lhHtNee404oTlunkjLmpZH2Hsr4DxQ/B0CJBS
-         lMqA==
-X-Gm-Message-State: AOAM533gp4HW/kHEK5lZrcb4lWCsCCSMK+bn1rkMnWA3hNa0uEhLRvwj
-        yKdGQ5ndvrn5fgVcGcLBbaQBzkLN8nx1pnlfa0DyvA==
-X-Google-Smtp-Source: ABdhPJxp6sVEjW60aep61/nJM/HwunlNfAbyEPQYp6FXwhxqj+plH0SEeNdCtXwccMojoGcClktp7K5QhnuyShvUY+Q=
-X-Received: by 2002:a05:6870:631a:b0:d1:7d97:806 with SMTP id
- s26-20020a056870631a00b000d17d970806mr2928982oao.8.1645851327275; Fri, 25 Feb
- 2022 20:55:27 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 25 Feb 2022 20:55:26 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5WDq2AfJRdEk3uwNCX9CCL0Qxk/1zT3oEVQ37zTBxiQ=;
+        b=5C9DM4tnHmlEe9XJHgYltSIMH9CgtDGOBiFk3vTkF04I+jOA1oH23ZxxaKheqC9eh8
+         Sx7MvMrZGg6fWHUhQLaUIbsHwgFgzcwKw6/akPqjejcEKxWVpEUWnOMxyOLOn2XE+TfJ
+         SnuNxLnKKb38+B9qafKD6/9x070yb8EObb6mdxB4Xuw0XGWbc2cOV8DqRI9oxLWw+lmL
+         qQ+uWWMkIisgeFyQuHzysWaFuBmojHfaq27Z8kjvOc8iU926o3y/Y9hgtOSycFq5mDJv
+         IRjyVQW0V0niq1F6sAzkkZpDccZubdI+4R5TRLSc5FYgHc30DzB9YQEVW/ZKW0myGwUH
+         WihQ==
+X-Gm-Message-State: AOAM5319zAz+olXGFfZFQ6ivSQ6umE2CC4keEPNhq1BGmGKsNpQaVa0l
+        x7DjDnbC0BVwLiM94WFT85diNg==
+X-Google-Smtp-Source: ABdhPJw+Pq5ORed8exj9wiY5jEUAPWkvWhs95qMwc9/ZjM7l7Vq7hTKWaYi8/0ifVsSFdaFo8S2A8g==
+X-Received: by 2002:a17:90a:6a45:b0:1bc:5899:c960 with SMTP id d5-20020a17090a6a4500b001bc5899c960mr6431453pjm.128.1645851484628;
+        Fri, 25 Feb 2022 20:58:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v3-20020a17090a088300b001bc76ed4ad9sm11129598pjc.9.2022.02.25.20.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 20:58:04 -0800 (PST)
+Date:   Fri, 25 Feb 2022 20:58:03 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Joao Moreira <joao@overdrivepizza.com>,
+        Fangrui Song <maskray@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 05/39] x86: Base IBT bits
+Message-ID: <202202252055.AB16A4B8@keescook>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.307406918@infradead.org>
+ <202202241627.EEF3D5D2@keescook>
+ <YhgnA8O4Bp19hfse@dev-arch.archlinux-ax161>
+ <YhlTRhh7qj538ygM@dev-arch.archlinux-ax161>
+ <605731324a76f36aafa87bd9390808c3@overdrivepizza.com>
 MIME-Version: 1.0
-In-Reply-To: <YhmAAjNeTjiNoLlJ@google.com>
-References: <YhmAAjNeTjiNoLlJ@google.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 25 Feb 2022 20:55:26 -0800
-Message-ID: <CAE-0n53tHSswXFKabHEZymn3-sObFU_7n51wRkR0xk9g05SBCw@mail.gmail.com>
-Subject: Re: [PATCH] HID: vivaldi: fix sysfs attributes leak
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     "Sean O'Brien" <seobrien@chromium.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <605731324a76f36aafa87bd9390808c3@overdrivepizza.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,22 +79,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dmitry Torokhov (2022-02-25 17:18:58)
-> The driver creates the top row map sysfs attribute in input_configured()
-> method; unfortunately we do not have a callback that is executed when HID
-> interface is unbound, thus we are leaking these sysfs attributes, for
-> example when device is disconnected.
->
-> To fix it let's switch to managed version of adding sysfs attributes which
-> will ensure that they are destroyed when the driver is unbound.
->
-> Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
+On Fri, Feb 25, 2022 at 04:29:49PM -0800, Joao Moreira wrote:
+> > https://github.com/ClangBuiltLinux/linux/issues/1606
+> 
+> Candidate fix: https://reviews.llvm.org/D120600
 
-Makes sense
+And landed! Thanks!
 
-Tested-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Since this is a pretty small change, do you think it could be backported
+to the clang-14 branch?
 
-will you make a similar change for the hid-google-hammer driver?
+-- 
+Kees Cook

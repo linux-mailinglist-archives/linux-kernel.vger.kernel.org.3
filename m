@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D10C4C583D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E236B4C5844
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiBZVDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 16:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S229717AbiBZVXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 16:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiBZVDD (ORCPT
+        with ESMTP id S229642AbiBZVXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 16:03:03 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C813DFC7;
-        Sat, 26 Feb 2022 13:02:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t5PvKUiCfOMquPumfQ4cEUgcoR3Wsv7oMQVd0HhO0Zo=; b=gtNP4G6fJqE4QOtsMvUMIVFpQ4
-        usPnT7I8lr5qMEgoySSAWt79IYauedv87xchUhNtpl7pnUuuRmvckbPV6Jrh5QQRePDS6sPnrEQDd
-        mLQ0Ey83QSIJDK7LZAYz8RaD9Ty3Uk4YPD8g08lRJITopv9NFbKS0T6ivFF2JXpzjxWqLKHWfLMs7
-        /1pUHclLHba1zIqBZlA3gQ5Fdj504mt++KNl0uh9fqrQ9NvJbk0RXdsU+cxFtTCjnPBSHCngUnrxJ
-        dos+hBJALOqBjdOz1d/nnI/Uul/HHo8YsphtGDRkybBB1eyTqR3HR5r/4/hbB0g5TVXmt2v3P+8gM
-        8tVWXt+A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nO4Cp-008XqG-Id; Sat, 26 Feb 2022 21:02:19 +0000
-Date:   Sat, 26 Feb 2022 13:02:19 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tangmeng <tangmeng@uniontech.com>
-Cc:     viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        keescook@chromium.org, yzaikin@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        nizhen@uniontech.com, zhanglianjie@uniontech.com,
-        nixiaoming@huawei.com
-Subject: Re: [PATCH v2 10/11] fs/drop_caches: move drop_caches sysctls to its
- own file
-Message-ID: <YhqVW972rnF5L22U@bombadil.infradead.org>
-References: <20220221061018.10472-1-tangmeng@uniontech.com>
+        Sat, 26 Feb 2022 16:23:39 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C4D26CD48
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:23:03 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id p14so17475852ejf.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QWZ01UyCGLSlDNqY8JjmkSJKDtH9axWGLl/d6bmmI2A=;
+        b=WlGYT50nOVvuXCTkZs/10ZQqFCXwEQYkBIcwA0Y/acruuDAB44TEduCAL4R6Udyyad
+         qkTAOxCgVb2nbIjw/fyRFYxHzS29h5Pg83h+8mij7A3qMN8RQklxh8yUrGulN7PivGY+
+         hUYVMjAdySTlbRg30aBwanlkuNDn3pUTW+QdsZjf6jl/CVgtm1BTi+W6Czi6mIlkK0f3
+         x5EaPszIZlqLaKLmXIKHnc8F+SE6+RMNj1dICYpTgVOn/4tuJxWLONqJNgEGSogx0oTT
+         1vn1k/TyZzC9+01TQPYHTw/X+dRdjf+paaCrRQl9EIgIrX3Qv631Q5nG2RnR2AlOUpe7
+         21Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QWZ01UyCGLSlDNqY8JjmkSJKDtH9axWGLl/d6bmmI2A=;
+        b=W0k6G0yZEd9rYjPp336bEiVY/Bf6fybxqSuOEWT9B8ejzpUBqPRIEKT//lM8bq1Lhl
+         AiBmYry1AKsiqw20u8JNisR12jzRls3KG7pJOY9PI4Y6gTUREOzlz2MfafJQ3yemI04R
+         g9y7VerN0XOOhW5vcp69eB8MyENr+a+oGE/UtNdS5m7BkEO/kuxfrdrEyVXljIW2GCCE
+         XdwI6tNU52K3nCvmcDlySZJMjGXyb7je6biiXyTN82dIq8S80VkzIE/HI2eQHDh/Jyql
+         hE+nc2BWueK6/SbpjCfhrB+xWyIIfh0jwTs0X0rgj0m3VgvWSAzFeHJF6mOTU/ipLStM
+         gUXg==
+X-Gm-Message-State: AOAM532+umWmFCV1pko1H36EkZFF3OQc9m0tl+zcvCF2UPO6dHFOXn3F
+        SefRhtkd0fMLmnI2wE1d3PRT8zIf1N6Gj9284MEZmCYNKJY=
+X-Google-Smtp-Source: ABdhPJzuScH+m3ha4aSMHjV6W8J6w5omN6qOU4v7f1V/dh9CaAT5DYg75KBcpPiUNiYff+VTdF81kU/L1x4ojJK2gOc=
+X-Received: by 2002:a17:906:6a2a:b0:6cf:d228:790c with SMTP id
+ qw42-20020a1709066a2a00b006cfd228790cmr11014296ejc.75.1645910582220; Sat, 26
+ Feb 2022 13:23:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221061018.10472-1-tangmeng@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220226033054.2860933-1-dlatypov@google.com> <CABVgOSksQBD4F8UaKE3N8D-_U65w_t+OwchQ1G52YnAb1a4YUg@mail.gmail.com>
+In-Reply-To: <CABVgOSksQBD4F8UaKE3N8D-_U65w_t+OwchQ1G52YnAb1a4YUg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Sat, 26 Feb 2022 13:22:50 -0800
+Message-ID: <CAGS_qxpCH_R9h41r=ycV4aRkXH50mUR5HdODYUF-tTqLbPwuAw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: more descriptive metavars/--help output
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,23 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 02:10:18PM +0800, tangmeng wrote:
-> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-> dishes, this makes it very difficult to maintain.
-> 
-> To help with this maintenance let's start by moving sysctls to places
-> where they actually belong.  The proc sysctl maintainers do not want to
-> know what sysctl knobs you wish to add for your own piece of code, we
-> just care about the core logic.
-> 
-> All filesystem syctls now get reviewed by fs folks. This commit
-> follows the commit of fs, move the drop_caches sysctls to its own file,
-> fs/drop_caches.c.
-> 
-> Signed-off-by: tangmeng <tangmeng@uniontech.com>
+On Fri, Feb 25, 2022 at 8:29 PM David Gow <davidgow@google.com> wrote:
+> > @@ -292,11 +290,11 @@ def add_common_opts(parser) -> None:
+> >                              help='Path to Kconfig fragment that enables KUnit tests.'
+> >                              ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
+> >                              'will get  automatically appended.',
+> > -                            metavar='kunitconfig')
+> > +                            metavar='KUNITCONFIG')
+>
+> Is it worth making this something like FILE or PATH instead.
+> PATH_TO_KUNITCONFIG would be verbose, but this is a path being given,
+> so just KUNITCONFIG is still a bit useless.
 
-Thanks but please send a v3 including all the other patches as well
-and collecting the Reviewed/Acked-bys, etc. This can be sent *after*
-your v3 of the optimization work.
+Here's what the complete help output looks like right now:
+  --kunitconfig KUNITCONFIG
+                        Path to Kconfig fragment that enables KUnit tests. If
+                        given a directory, (e.g. lib/kunit), "/.kunitconfig"
+                        will get automatically appended.
 
-  Luis
+So I didn't think it mattered too much if we left it as-is.
+But I like PATH (since users can use a dir, FILE felt potentially
+misleading, even if  technically correct).
+
+Will send a v2 with the typo in the commit fixed and this changed to PATH.

@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863C54C548F
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 09:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E4A4C5495
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 09:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiBZIHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 03:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S230274AbiBZIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 03:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiBZIHo (ORCPT
+        with ESMTP id S230080AbiBZIIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 03:07:44 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0990E267CE8;
-        Sat, 26 Feb 2022 00:07:11 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nNs6c-001ujp-9m; Sat, 26 Feb 2022 09:07:06 +0100
-Received: from dynamic-089-014-140-217.89.14.pool.telefonica.de ([89.14.140.217] helo=[192.168.1.9])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nNs6b-000md8-Sp; Sat, 26 Feb 2022 09:07:06 +0100
-Message-ID: <c7d6d986-f6b4-3200-f2c5-761ac39b9c87@physik.fu-berlin.de>
-Date:   Sat, 26 Feb 2022 09:07:04 +0100
+        Sat, 26 Feb 2022 03:08:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452133EAAB;
+        Sat, 26 Feb 2022 00:07:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDFC160E9A;
+        Sat, 26 Feb 2022 08:07:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42924C340E8;
+        Sat, 26 Feb 2022 08:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645862866;
+        bh=evy4XN0cXQyAddyjb+9P2DGhByVUh1+2+x/nxkz9HVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aPaJX3B0nVG9Plv7XUMl8R0QoyyUx/FeIjg+sCFJrzo13lvj2995wcuhhygQ/nI9I
+         X1h48zTRyNbREfOIDKyvxtDaTdlilOuzSzDW30szePFrzdQ6naW5ZTBOr1l5BTWq4Q
+         o5eSJodUy+0qe75UTrL7JhLA9T437rbdFnkq3m4s=
+Date:   Sat, 26 Feb 2022 09:07:42 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Message-ID: <YhnfzipoU1NbkjQQ@kroah.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+ <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+ <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+ <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>
-References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
- <63f06bf0-fc7b-3c5c-8af9-5adfd7628354@omp.ru>
- <dde846f0-1324-7fde-ef92-eb72d4200b50@physik.fu-berlin.de>
- <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
- <9671b75b-d0c4-7967-a543-5eebdf942b35@omp.ru>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <9671b75b-d0c4-7967-a543-5eebdf942b35@omp.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 89.14.140.217
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey!
-
-On 2/25/22 20:28, Sergey Shtylyov wrote:
->>> I can test your revised patch next week on my SH7785LCR.
->>
->>    Please do, although testing on the AP-SH4A* bords would be a bit more
->> interesting, as they actually use IRQ0 for the SMSC911x chip...
+On Fri, Feb 25, 2022 at 02:11:04PM -0500, Mimi Zohar wrote:
+> On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Friday, February 25, 2022 1:22 AM
+> > > Hi Roberto,
+> > > 
+> > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > implementation of integrity-focused LSMs based on eBPF.
+> > > 
+> > > I've previously requested adding eBPF module measurements and signature
+> > > verification support in IMA.  There seemed to be some interest, but
+> > > nothing has been posted.
+> > 
+> > Hi Mimi
+> > 
+> > for my use case, DIGLIM eBPF, IMA integrity verification is
+> > needed until the binary carrying the eBPF program is executed
+> > as the init process. I've been thinking to use an appended
+> > signature to overcome the limitation of lack of xattrs in the
+> > initial ram disk.
 > 
->    So, were you finally able to test it?
+> I would still like to see xattrs supported in the initial ram disk. 
+> Assuming you're still interested in pursuing it, someone would need to
+> review and upstream it.  Greg?
 
-Not yet, sorry. Machine is currently offline due to a power outage and I cannot
-turn it back on remotely, I'm not home until tomorrow. I will be able to test
-it tomorrow, however.
+Me?  How about the filesystem maintainers and developers?  :)
 
-Adrian
+There's a reason we never added xattrs support to ram disks, but I can't
+remember why...
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+thanks,
 
+gre gk-h

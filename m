@@ -2,455 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0E84C52B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B07E4C52BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236787AbiBZAgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S239939AbiBZAlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBZAgP (ORCPT
+        with ESMTP id S234434AbiBZAly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:36:15 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C7184B5F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:35:42 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id d7so5617918ilf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:35:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vJ+m4tX6Yk7/lEAxWMyNHmunn/51cFADo2dy4pCchSU=;
-        b=SC+79IGHFQd7ZcRRwYHkyA3fmPwXFfL/RGcwmgOYM2lS1l3L9UKhX9vWFrWCFyoFIB
-         WqHA9CggxEbmKR8a3RnMC5+wkvPXaEEzeJgNv1wxfqc0y2QXujiVK0wLB6jk/ws+MlBg
-         Kzbw1g6VeIru8FWic3os/EXccppsnIvWxkP7I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vJ+m4tX6Yk7/lEAxWMyNHmunn/51cFADo2dy4pCchSU=;
-        b=ziIQyCs2hA2MEfQ5PzA8jOuyEpI8YdcyU44xHSNEsjlTzAbWKK968dxHsO8s/PJz0B
-         6HdUE33ZyKQS5hdP25XqgrDN1vB3qLd6fxljFeG3PQNIpZF7WD4HDYTykTTInMcE9WWT
-         6a8SaO8911WWsEpEjlcKpwA+C3DDwdgGLY1pl/miTI/psTgTUAZ8tLiezCVwqRGnx2uF
-         4Qg0FuHh+h/qFUyq6KgCuHfvgg/flcibtqH1IxgBBz2ahOIfksY4rmWWKKyedApZg8AT
-         xb4MjKZz4ydBGSqjOKRf8B5E4ST6RK2sA676PGIXq0GEnceueVm2y0yx7dHomwyVlPmT
-         SBiQ==
-X-Gm-Message-State: AOAM532EJlgx4jyNMYuG3gKJ6K+JJrSwR7M412qxMiT9GP36acMoB/MS
-        cd8p1D8ZMjG0RZ/INTTYOdPT2uUdSsSqOw==
-X-Google-Smtp-Source: ABdhPJw7CawhavPx2deGXh0nvprWXYD3i7XtDu1IlUhG8GWwE/QvGjeMsw+D+vykzt5qsyNYeH6Skg==
-X-Received: by 2002:a05:6e02:1ba5:b0:2c2:b1a8:efcf with SMTP id n5-20020a056e021ba500b002c2b1a8efcfmr3812911ili.20.1645835741593;
-        Fri, 25 Feb 2022 16:35:41 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id w19-20020a056602035300b006390eea5d28sm2429057iou.42.2022.02.25.16.35.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 16:35:40 -0800 (PST)
-Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        Will Deacon <will@kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220224212335.3045905-1-usama.anjum@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <edf398a7-b1a1-c7c9-5128-f37cfc3a5c95@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 17:35:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220224212335.3045905-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 25 Feb 2022 19:41:54 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2089.outbound.protection.outlook.com [40.107.95.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C2F18646A;
+        Fri, 25 Feb 2022 16:41:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W9XnSFKrvvDTilSLQuY05oNPtqdNpNEtdF27BgcBkWl0uiYunxV+FjdolhKa1hd0h7W9ezpHSGFbg/j2Nvw7IWu1l0d9PSeeyTevk/DnBBuJr7sPig6/0qmkaVal/lTdonqzvzDXkFcwKnlz/1HoPjP2l1YXc45qq29gok3QVG2zzocjJmZB/dvKVqBxJh1X//wZk8hvuup7z9YXraF8xXoroEUj94yBOcI2lqDwPPoWnJZh8XTGBCmyYfjuMfGFMHt2qSQF7tP755cofOaGa7n2xKm5Z/6k2Ilrt3LpQm5OUoeOlz9VEKF6hFcOf8nkMm7R+Gzb41pYDRHmPACKPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NmOBt+Eh9nfkYkBteY8xd/9ZBfcZlc5z8qXALUjOGzM=;
+ b=h3ZL3ZvUivZ/72IXtzgLU3FPt6cEAS6w6o+XbCnqpm3IlWkCXE0ie16ih5wpoDpD+fc1osXqgK9IU9l2ajcX+i8lzEOzelxYXPEorM/ZSvAYSJKnxi+wRw6Spt3GLbIvTv6Inp/qiV52M3UIo4ZMpIPqEe1vVYk9U0zRzkubPkVwbuPe9lcwqMeixI6PnTSdZeXPvirHyK/RR59Ln6Tn9V7ERh8bZUtAC0skgg2elLap+KB/zKbHHujsy0XYi0+NJ/+fT+6DCjmzwHkegiJosca10vfmNNxa3DbMl2tJ10+pbFiCbcaaFrM55qicdWSGdAANe7X3QIZHosp3TXzK5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NmOBt+Eh9nfkYkBteY8xd/9ZBfcZlc5z8qXALUjOGzM=;
+ b=ADCeMFqefJvV2U/ZnIBPSEtIBJ5lTXc20wyMxoeKXJWlp8R9d9ikhLd23kCauGESI/y4O2VEOGy7ffZD2aiFte/tP8CB07RoW1YC6xRvoqHvaWjZ0XiuFitCpLvW3W7OmKUuOsm3+FJQz2KWuhKbWWRvXRLxkqS5fDQ+Ozpjtyc5eN+bvZdFUFMIGP/DJ2cmlU+339pyrp4l570Sy4ZfbaXYd9RmpQ6mb4Ae65zMqrLXxaCNvLCLFYrfa5kXxcOGVgqPS1BhxnvDnqcB/NsBgO4KC7A6bYXJiRtClLPIyKKGMssvSlz8tZClJMJjCi+QUA/3H9oKhu2ehXAdx/j9jg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by DM6PR12MB4714.namprd12.prod.outlook.com (2603:10b6:5:30::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Sat, 26 Feb
+ 2022 00:41:19 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::498:6469:148a:49c7]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::498:6469:148a:49c7%7]) with mapi id 15.20.5017.026; Sat, 26 Feb 2022
+ 00:41:19 +0000
+Message-ID: <303059e6-3a33-99cb-2952-82fe8079fa45@nvidia.com>
+Date:   Fri, 25 Feb 2022 16:41:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH -v3] ext4: don't BUG if kernel subsystems dirty pages
+ without asking ext4 first
 Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+References: <Yg0m6IjcNmfaSokM@google.com> <Yhks88tO3Em/G370@mit.edu>
+ <YhlBUCi9O30szf6l@sol.localdomain> <YhlFRoJ3OdYMIh44@mit.edu>
+ <YhlIvw00Y4MkAgxX@mit.edu> <2f9933b3-a574-23e1-e632-72fc29e582cf@nvidia.com>
+ <YhlkcYjozFmt3Kl4@mit.edu>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <YhlkcYjozFmt3Kl4@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR03CA0263.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a0::28) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6db02009-d568-42b9-5da5-08d9f8c0b418
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4714:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB47143308C925ACEB267D2A91A83F9@DM6PR12MB4714.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ohfcDu30HRSHdOJkahnxc4HH+jUcMkHrurpyUhB8LHSGM7JVM43kXHWGU0874IOh+4d1gRp75l1jOHIzv+98p+AgQPKoQ4GgWM93ltJKWmQ8AKpNMbTJYzNpruAqv19zjO9hH7dWOm7TfQ79xQ5dtt0m41TLJU0NRxMOtgj0z8qckAHmbkkeREJTaMhR1cPz83nCWBOmubq/22SZzD2Ti6Srm64vc1HkJ6epPIDz4/6oyAxTR0uLyBtZe6gO1pC/i7bgSn2pyPOe1DxY/aAwWXBnm2zkn4j/e8vSf39Q6wyIIG371ymxOrFQF+odVrUtxAFchmnPzUwIPsaWBkOiNMG7XjCmXGF+IhN03aIeQfgfs9nlEST1Iw5shEAVbmtn18dA1Z2P6Z1wBd3Zr11DyIdALpDCrNVs1yWkOd0Jnd+kc2veLl2DYFCueBlgNiPHDO2prGeyS6RJhf+UQuXjJgazDYTGOSbABLOzSZli92qNVHfoJ7Oya3PYpsldSOZ2Lb03hGiBHfWOIfjq3DSueg9itkp7YxhPphl5+hcnCH8qlgi1pSwRcFggzliPcSXo1yvJpFaDDss4MTrGyWLffMHkRjhcse2Qlksm2xzBK5b5F+sdkIn3QXjtDvT7u9b/luP5/7PxxXBnRKv3Or1tmSQ0akQdtpTJrxOJoKmIr7eQ5IojQw3ouR091+hdiSolzp5UhwtDZYWD/li5lxlT1hebwMgxxl7gyEFwTOI7i1BUU0fCi3s9glGLRsxpmxvTcnuPnkVdmwt0Ybnjbd9m+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(66556008)(31696002)(508600001)(38100700002)(66946007)(83380400001)(6486002)(6666004)(36756003)(53546011)(8936002)(31686004)(2616005)(316002)(6506007)(86362001)(26005)(6916009)(66476007)(2906002)(8676002)(4326008)(7416002)(186003)(54906003)(5660300002)(14143004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YXY1bkRIeUFWeVZaa0VVbWZucHhLa2k0aFJaSG5ITjUxb2dhaHNXbVZiazk1?=
+ =?utf-8?B?OC9LbnZqWFZ5TXdLSk51eERveFlObkc5eGlxbGR0NnVRNnNEaUFwL1NiTnNM?=
+ =?utf-8?B?NGU2MS9oUVptSGJYOU15d3ZUOGxoVDVVZml5MCtrMnhCYzRKZlBnT2cxZWN1?=
+ =?utf-8?B?cjlzYUZlNmwvWkRLTUlFNWhXVWVhMGIwQ1VSeFZWUzhzL1BvWWIrMWIyRnVU?=
+ =?utf-8?B?ZXUvdXJ2ZU9SZTczcGJGM1lTV2xLcy9Fd3VoNXNPY1RXdDExL0hDanc0cGhJ?=
+ =?utf-8?B?VlFMQVl5Yno0S2VjUUtlS2NZZzZES2RvS2hxcXFuaUJtVEFGNW9SVFgrNU80?=
+ =?utf-8?B?Tno2ZmhnV2J1UTNYd3JIcERua3VvbjZORXJOSGtFVm5zL3ZURDdqVmFxYXFu?=
+ =?utf-8?B?dGdNdU1OTlZpQmgvckpGSG1sTXdsOFVsWkVrdncxSXNUQXU5eEIra1JHd3hQ?=
+ =?utf-8?B?bEl2bkV2c3RKQm1kY2JZL0ZnWTlpbTQwVVpWUTg1K3hjRVE4Q3JlZmRJdXhI?=
+ =?utf-8?B?OXVRUUZNZjVtSjgrVzFEN0lzQVJmcktqdlhaM3BBclo1TURrR2g1YUJESzB4?=
+ =?utf-8?B?bEduNE1oUmxzR0dPVTc2dUE1di8vNVlFK0ttckVhdjcyaHFrVnp3and0U2hX?=
+ =?utf-8?B?VzJUbW94eVpDSFRWMWVWNUhvNVVpdWZ6UWdJR05TMGg0OUc4MWIzdmZjVHkw?=
+ =?utf-8?B?dVlsbCt0VHRqdTJDVWpTVVFkUmNMTVQzeXBBWWJSWlRFQXVHcVBBZmZWMU92?=
+ =?utf-8?B?UEF4TnBSRERTbFM4NTBiZFIrc0VTbXRiWEtOYVkvWERHMzE5MzJkZ2hJVHFR?=
+ =?utf-8?B?bkdLWUxiVXJaWnJOQVdHMDFBUWh1bjRoa2dkbGxpb3QyMFFWaFd6YnAyRmlw?=
+ =?utf-8?B?UEptMi9xRVhIbUwvUFRZOUd0TEo3allSUGpuSVEvWUtURE1DRnNZMkNXNEQ0?=
+ =?utf-8?B?cGtlam95RGFCUFNQTlpLVzk1MzJmdkNlU1ptRVZHZnk3anRnb0hDNGRDZ3JB?=
+ =?utf-8?B?Y3FiMTNBSVpRQ3RCR0hvMm0zMHlFR2FIVW9oalBUL3REUjg5U3R6enY3dlZr?=
+ =?utf-8?B?bFA0dUpHc0ZCSnU5b1ltRUpIN3I3QlRVTXFEQ2RPY2ZMdFpWenJ1NU5DVVoy?=
+ =?utf-8?B?ZVFUZFQ3eXNZV2pjZlZFMm1IWndBa2N0YjAxT2VORVhVeCtDYzRWbEg0MmJI?=
+ =?utf-8?B?VXNseFZPUEM5dUNKMFRaTFRySlF5R3MxbXlJQnArK3hLWktFQ21uQThrYVdS?=
+ =?utf-8?B?amZhVUg1VmNjV3ZSNEdnOVpmVCt5alNrc3I0NFk1TXlxQWtoc2hrclhvRzE3?=
+ =?utf-8?B?U1ROd2NablkzRnoyL0txeUtLME85YXlnbzJ0MlpsVngyMjlUSENmL2VIaGVi?=
+ =?utf-8?B?M2FwTnRNcFhCb04rT2hIWEs5cmsxdEE3YWwvd1JhVEc0TEwzeUhGV2hRRGRI?=
+ =?utf-8?B?cU9mbzgzaVk5aCtsR1JjVWwzc2VhbCtUNlZBY2dqQU1GaVhoeUNJUkxibFNF?=
+ =?utf-8?B?cDUvU1JkK21oY1Z0WE8yQnIxNUE2eFRrM0JzNnhBT2lycHJZTHAzKzJNVlhE?=
+ =?utf-8?B?aUgwT21YQy9vY2FhaEdLQVlTTUVOOEQ4cU4yVjNxTnIxZXpMUXRMSFJKdGg1?=
+ =?utf-8?B?WXJjZWIxc0Z2azNRZHFqdjNpZUFaakovL01GLytGOS9DdWMvTnN3YWMzL1Jl?=
+ =?utf-8?B?NmRkY3hKeDh2L0hFZGFNMlJERXNzUGxlVEpJVkc0NTNyNmw5bnQzYW1EcWNG?=
+ =?utf-8?B?R2VEWEFuNk9VS1VxYUIwT0UyWkRMOG1ySno0cU1YOWU2V1NpTkZCbTdhUG9I?=
+ =?utf-8?B?WFZoVFlwNUNkMUxMY1U3Y01MV2tvUVF3djc1SkY3UnVKZm1meThXNWRKdFVh?=
+ =?utf-8?B?bklhci9IZFhkenZHazJsUHJLdmlDakpzV1c5Vm1kVnNLaGVTOHd2MjRNYWNu?=
+ =?utf-8?B?VHdzelBKNTlBL3VoSHU1NDBVSlc0UEk1SWtTZEFNbC9nalg3aWU4SFN0Tkp0?=
+ =?utf-8?B?L2Q2ejNyYUZ1YTdvVHBkbmU4bzd4a3VOai9MK2htaldhZ2kraHVDY0FYVnNM?=
+ =?utf-8?B?R0YxQXhNWllRa2dRMlpJSVdETjJKVlpqcGJ3cjVTY0lJTW5JdkRYYXVQWVNZ?=
+ =?utf-8?B?dTNBenkxR0NEN3k1SEZPYjBRWXg2anBPUGovYnZWZ0t5SlpxUTlmUHBuS3hO?=
+ =?utf-8?Q?Bx+09a0dJD9cIRpqkY4loEY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6db02009-d568-42b9-5da5-08d9f8c0b418
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2022 00:41:19.0586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tgtP3IfZKZxkok33P5zyFbNNLnFSM0ygzmoVshlsxRevM3hujjNyAFRpCsHoFDF2gNwB8jSSRCixCkb0aydVqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4714
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 2:23 PM, Muhammad Usama Anjum wrote:
-> This introduces three tests:
-> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-> check if the SD bit flipped.
-> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-> 3) Check soft-dirty on huge pages
+On 2/25/22 15:21, Theodore Ts'o wrote:
+...
+> For process_vm_writev() this is a case where user pages are pinned and
+> then released in short order, so I suspect that race with the page
+> cleaner would also be very hard to hit.  But we could completely
+> remove the potential for the race, and also make things kinder for
+
+Completely removing the race would be wonderful. Because large
+supercomputer installations are good at hitting "rare" cases.
+
+
+> f2fs and btrfs's compressed file write support, by making things work
+> much like the write(2) system call.  Imagine if we had a
+> "pin_user_pages_local()" which calls write_begin(), and a
+> "unpin_user_pages_local()" which calls write_end(), and the
+
+Right, that would supply the missing connection to the filesystems.
+
+In fact, maybe these names about right:
+
+     pin_user_file_pages()
+     unpin_user_file_pages()
+
+...and then put them in a filesystem header file, because these are now
+tightly coupled to filesystems, what with the need to call
+.write_begin() and .write_end().
+
+OK...
+
+> presumption with the "[un]pin_user_pages_local" API is that you don't
+> hold the pinned pages for very long --- say, not across a system call
+> boundary, and then it would work the same way the write(2) system call
+> works does except that in the case of process_vm_writev(2) the pages
+> are identified by another process's address space where they happen to
+> be mapped.
 > 
-> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-> same issue that he fixed, and this test would have caught it.
+> This obviously doesn't work when pinning pages for remote DMA, because
+> in that case the time between pin_user_pages_remote() and
+> unpin_user_pages_remote() could be a long, long time, so that means we
+> can't use using write_begin/write_end; we'd need to call page_mkwrite()
+> when the pages are first pinned and then somehow prevent the page
+> cleaner from touching a dirty page which is pinned for use by the
+> remote DMA.
 > 
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes in V3:
-> Move test to selftests/vm
-> Use kselftest macros
-> Minor updates to make code more maintainable
-> Add configurations in config file
+> Does that make sense?
 > 
-> Tests of soft dirty bit in this patch and in
-> selftest/vm/madv_populate.c are non-overlapping.
-> 
-> V2 of this patch:
-> https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
-> ---
->   tools/testing/selftests/vm/.gitignore   |   1 +
->   tools/testing/selftests/vm/Makefile     |   1 +
->   tools/testing/selftests/vm/config       |   2 +
->   tools/testing/selftests/vm/soft-dirty.c | 238 ++++++++++++++++++++++++
->   4 files changed, 242 insertions(+)
->   create mode 100644 tools/testing/selftests/vm/soft-dirty.c
-> 
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index d7507f3c7c76..3cb4fa771ec2 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -29,5 +29,6 @@ write_to_hugetlbfs
->   hmm-tests
->   memfd_secret
->   local_config.*
-> +soft-dirty
->   split_huge_page_test
->   ksm_tests
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 5e43f072f5b7..de9b13d018c3 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->   TEST_GEN_FILES += thuge-gen
->   TEST_GEN_FILES += transhuge-stress
->   TEST_GEN_FILES += userfaultfd
-> +TEST_GEN_FILES += soft-dirty
->   TEST_GEN_FILES += split_huge_page_test
->   TEST_GEN_FILES += ksm_tests
->   
-> diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-> index 60e82da0de85..be087c4bc396 100644
-> --- a/tools/testing/selftests/vm/config
-> +++ b/tools/testing/selftests/vm/config
-> @@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
->   CONFIG_DEVICE_PRIVATE=y
->   CONFIG_TEST_HMM=m
->   CONFIG_GUP_TEST=y
-> +CONFIG_TRANSPARENT_HUGEPAGE=y
-> +CONFIG_MEM_SOFT_DIRTY=y
-> diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
-> new file mode 100644
-> index 000000000000..f56c215e0ece
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/soft-dirty.c
-> @@ -0,0 +1,238 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <stdbool.h>
-> +#include <fcntl.h>
-> +#include <stdint.h>
-> +#include <malloc.h>
-> +#include <sys/mman.h>
-> +#include "../kselftest.h"
-> +
-> +#define PAGEMAP_PATH		"/proc/self/pagemap"
+> 							- Ted
 
-Why is this names PATH - it is the file name right?
+Yes, I really like this suggestion. It would neatly solve most short
+term pinning cases, without interfering with any future solutions for
+the long term pinning cases. Very nice.
 
-> +#define CLEAR_REFS_PATH		"/proc/self/clear_refs"
-
-Same here  - why is this named _PATH?
-
-Let's line these defines up - makes it easier to read
-
-> +#define SMAP_PATH		"/proc/self/smaps"
-
-Same here - why is this named _PATH?
-
-> +#define PMD_SIZE_PATH		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-
-Same  here  - why is this named _PATH?
-
-> +#define MAX_LINE_LENGTH		512
-> +#define TEST_ITERATIONS		10000
-> +#define PAGE_NUM_TO_TEST	2
-> +
-> +int clear_refs;
-> +int pagemap;
-> +
-
-Get rid of these globals and pass these in - please find name
-that clearly indicates them as fds
-
-> +int pagesize;
-> +int mmap_size;	/* Size of test region */
-
-Get rid of these globals and pass these in - please find name
-that clearly indicates
-
-> +
-> +static void clear_all_refs(void)
-> +{
-> +	const char *ctrl = "4";
-> +
-> +	if (write(clear_refs, ctrl, strlen(ctrl)) != strlen(ctrl))
-> +		ksft_exit_fail_msg("%s: failed to clear references\n", __func__);
-> +}
-> +
-> +static void touch_page(char *map, int n)
-> +{
-> +	map[(pagesize * n) + 1]++;
-> +}
-> +
-> +static int check_page(char *start, int page_num, int clear)
-> +{
-> +	unsigned long pfn = (unsigned long)start / pagesize;
-> +	uint64_t entry;
-> +	int ret;
-> +
-> +	ret = pread(pagemap, &entry, sizeof(entry), (pfn + page_num) * sizeof(entry));
-> +	if (ret != sizeof(entry))
-> +		ksft_exit_fail_msg("reading pagemap failed\n");
-> +	if (clear)
-> +		clear_all_refs();
-> +
-> +	return ((entry >> 55) & 1);
-
-Add a define for 55 insead of hardcoding with a meaningful name
-that describes what this value is.
-
-> +}
-> +
-> +static void test_simple(void)
-> +{
-> +	int i;
-> +	char *map;
-> +
-> +	map = aligned_alloc(pagesize, mmap_size);
-> +	if (!map)
-> +		ksft_exit_fail_msg("mmap failed\n");
-> +
-> +	clear_all_refs();
-
-If clear_all_refs() fails and exits, when does map get freed?
-
-> +
-> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-> +		if (check_page(map, PAGE_NUM_TO_TEST, 1) == 1) {
-> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-> +			break;
-> +		}
-> +
-> +		touch_page(map, 2);
-> +
-> +		if (check_page(map, PAGE_NUM_TO_TEST, 1) == 0) {
-> +			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-> +			break;
-> +		}
-> +
-> +	}
-> +	free(map);
-> +
-> +	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-> +}
-> +
-> +static void test_vma_reuse(void)
-> +{
-> +	char *map, *map2;
-> +
-> +	map = (char *) 0x900000000000;
-> +	map = mmap(map, mmap_size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
-> +	if (map == MAP_FAILED)
-> +		ksft_exit_fail_msg("mmap failed");
-> +
-> +	clear_all_refs();
-> +	touch_page(map, PAGE_NUM_TO_TEST);
-> +
-> +	munmap(map, mmap_size);
-> +	map2 = mmap(map, mmap_size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
-> +	if (map2 == MAP_FAILED)
-> +		ksft_exit_fail_msg("mmap failed");
-> +
-> +	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
-> +
-> +	ksft_test_result(check_page(map, PAGE_NUM_TO_TEST, 1) != 0,
-> +			 "Test %s dirty bit of previous page\n", __func__);
-> +
-> +	munmap(map2, mmap_size);
-> +}
-> +
-> +/*
-> + * read_pmd_pagesize(), check_for_pattern() and check_huge() adapted
-> + * from 'tools/testing/selftest/vm/split_huge_page_test.c'
-
-Don't use the full path here - just use the file name
-
-> + */
-> +static uint64_t read_pmd_pagesize(void)
-> +{
-> +	int fd;
-> +	char buf[20];
-> +	ssize_t num_read;
-> +
-> +	fd = open(PMD_SIZE_PATH, O_RDONLY);
-> +	if (fd == -1)
-> +		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
-> +
-> +	num_read = read(fd, buf, 19);
-> +	if (num_read < 1) {
-> +		close(fd);
-> +		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
-> +	}
-> +	buf[num_read] = '\0';
-> +	close(fd);
-> +
-> +	return strtoul(buf, NULL, 10);
-> +}
-> +
-> +static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-> +{
-> +	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
-> +		if (!strncmp(buf, pattern, strlen(pattern)))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +static uint64_t check_huge(void *addr)
-> +{
-> +	uint64_t thp = 0;
-> +	int ret;
-> +	FILE *fp;
-> +	char buffer[MAX_LINE_LENGTH];
-> +	char addr_pattern[MAX_LINE_LENGTH];
-> +
-> +	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-> +		       (unsigned long) addr);
-> +	if (ret >= MAX_LINE_LENGTH)
-> +		ksft_print_msg("%s: Pattern is too long\n", __func__);
-
-Okay. Pattern is too log - does the test continue?
-
-> +
-> +	fp = fopen(SMAP_PATH, "r");
-> +	if (!fp)
-> +		ksft_print_msg("%s: Failed to open file %s\n", __func__, SMAP_PATH);
-
-Same commnet about root user
-
-
-> +
-> +	if (!check_for_pattern(fp, addr_pattern, buffer))
-> +		goto err_out;
-> +
-> +	/*
-> +	 * Fetch the AnonHugePages: in the same block and check the number of
-> +	 * hugepages.
-> +	 */
-> +	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-> +		goto err_out;
-> +
-> +	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
-> +		ksft_print_msg("Reading smap error\n");
-> +
-> +err_out:
-> +	fclose(fp);
-> +
-> +	return thp;
-> +}
-> +
-> +static void test_hugepage(void)
-> +{
-> +	char *map;
-> +	int i, ret;
-> +	size_t hpage_len = read_pmd_pagesize();
-> +
-> +	map = memalign(hpage_len, hpage_len);
-> +	if (!map)
-> +		ksft_exit_fail_msg("memalign failed\n");
-> +
-> +	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
-> +	if (ret)
-> +		ksft_exit_fail_msg("madvise failed %d\n", ret);
-> +
-> +	for (i = 0; i < hpage_len; i++)
-> +		map[i] = (char)i;
-> +
-> +	ksft_test_result(check_huge(map), "Test %s huge page allocation\n", __func__);
-> +
-> +	clear_all_refs();
-> +	for (i = 0 ; i < TEST_ITERATIONS ; i++) {
-> +		if (check_page(map, PAGE_NUM_TO_TEST, 1) == 1) {
-> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-> +			break;
-> +		}
-> +
-> +		touch_page(map, PAGE_NUM_TO_TEST);
-> +
-> +		if (check_page(map, PAGE_NUM_TO_TEST, 1) == 0) {
-> +			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-> +			break;
-> +		}
-> +	}
-> +
-> +	ksft_test_result(i == TEST_ITERATIONS, "Test %s dirty bit\n", __func__);
-> +
-> +	munmap(map, mmap_size);
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	ksft_print_header();
-> +	ksft_set_plan(5);
-> +
-> +	pagemap = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap < 0)
-> +		ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP_PATH);
-
-Can non-root user open this file? If not, when non-root user fails to
-open, it is a skip not fail
-
-> +
-> +	clear_refs = open(CLEAR_REFS_PATH, O_WRONLY);
-> +	if (clear_refs < 0)
-> +		ksft_exit_fail_msg("Failed to open %s\n", CLEAR_REFS_PATH);
-
-Same comment as above here
-
-Also why would you want to define clear_refs as global? Why not define it
-here - make it clear that it is fd
-
-> +
-> +	pagesize = getpagesize();
-
-Why is pagesize global?
-
-> +	mmap_size = 10 * pagesize;
-
-Same here?
-
-> +
-> +	test_simple();
-> +	test_vma_reuse();
-> +	test_hugepage();
-
-What happens when these tests fail?
-
-> +
-> +	return ksft_exit_pass();
-> +}
-> 
-
-Where do CLEAR_REFS_PATH etc. get closed. Please take a look
-at the error paths carefully. I would like to see the output for
-this test. Please include it in the change log.
 
 thanks,
--- Shuah
+-- 
+John Hubbard
+NVIDIA

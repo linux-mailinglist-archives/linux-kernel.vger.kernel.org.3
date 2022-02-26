@@ -2,157 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57794C55CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93E74C55CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiBZMTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 07:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S231559AbiBZMfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 07:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiBZMTF (ORCPT
+        with ESMTP id S230526AbiBZMfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 07:19:05 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7BA506C9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 04:18:30 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id z4so7134536pgh.12
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 04:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uJhNwGmR4jfl5BmmAkHAR/2s9Nf7V6bWaoI62Ajwb1E=;
-        b=QeWEBbB+BRiDiiLwwGDHXZHYm/35Mzts/HYOGduGciqxZ9XMrm9nAW5ih19tXkvlKf
-         /DquCpH9n1YjyBaTQDYP0Dnc1vds+8gjLXIaO2CJqIpnmiTpJu8mgut1xS/PaZhAYxyS
-         0cOQHw2KDtEA7zF41LHKb/XOkk5mRa5BrDgy+05yAjqQDSiooriHlIfk2JiijiVftazu
-         l5oIl8W2xSa0R13ejhIQuh4B+zsfVJRLgBCq71dsfmlh/QglMWbMrHTD1rIYIT0ttNBZ
-         RtFpoaZDnwT1IE7794XabOkr7k4gNzXBGKGMTTRvMamr9YQ5Es/gI0FveJ7B+IFGBc0e
-         7YTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uJhNwGmR4jfl5BmmAkHAR/2s9Nf7V6bWaoI62Ajwb1E=;
-        b=he9/pW9eisz9K9DhXyHNhQsB3S5Tlyo25xBobfr0joz8vz2wfxgRi9O2C7RkXnjRDS
-         M0rVtOv/YBMi+TWG0Ci6YeAJD6rwnpcvDNNT2f4q/F8JB9P7HXo9Wz6ajIXRtGVFb+jd
-         Rc7/PNLtDQaEQpnXfdFX+BW49g5PV+XdSEhKAUlvRCUSMVAzMaF5TaJdZFKjTaxAnVLe
-         pkDkydyIEYToDbVdzSyp+m4iY2+hbrgxlv2NBCNqeMGsVPl0wS8sn2sGBVUMl20mZ4pj
-         R/+bf6/Kgp8yBbELKPggZWK4AcuDUXqy6eVFKzHuvEvFcWwQbzUlYzLzDVWJIH6+kRu/
-         gIpw==
-X-Gm-Message-State: AOAM530HGbpXdTcxpsc6nWSbI5lYMli4baLd+oQdKfG+1yW/n1u4SRxU
-        hzN//fY9grMyMPWRDVcpGzA=
-X-Google-Smtp-Source: ABdhPJzaV4QlMzXBsxfzUWbJYpevhsZoCQG5fPSFD+RKMhVDCtVrsai5Mo62+S8HJ3RjzYkBnSq4OA==
-X-Received: by 2002:a63:a1c:0:b0:341:760a:1b03 with SMTP id 28-20020a630a1c000000b00341760a1b03mr9830351pgk.484.1645877910197;
-        Sat, 26 Feb 2022 04:18:30 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id gl5-20020a17090b120500b001bc5d44f233sm11496433pjb.52.2022.02.26.04.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 04:18:29 -0800 (PST)
-Date:   Sat, 26 Feb 2022 12:18:24 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
-Message-ID: <YhoakP7Kih/YUgiN@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220225180318.20594-1-vbabka@suse.cz>
+        Sat, 26 Feb 2022 07:35:03 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF801CFA2E
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 04:34:28 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21QB9OKh026106;
+        Sat, 26 Feb 2022 04:33:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=D9x7VqFP9H1RRad+KXn/qCLD1LolS1QYT66GB+23zJQ=;
+ b=VTnD4LcyiuK1ckJkhGL45bGEBr/puVJZygj2McPU11JeUG2D6/aETOHFd1dfljNsjUMB
+ Oh3h+0VXyLVSlO8TfMD+riC0z/SwwZ+h336yrVMI5S3gUCA/D3LKKsZijtbVMXTLFdnc
+ rmcP7URO1ayx0J/0YS9eBGhzfEBPOOsLrdhbf4GckA6AKPE+jY9MyXZ0Ls1UkI9d2Jpn
+ n9mFKSb0bqnGwnexk5BG4pknuYPsk2lM9silFwgr7nfDRgMOxG64jvebr4LGnU5rCxUJ
+ SvzFZdfwMUX2m17JnxPiKHAFblFTaeQWpwl9FKztiuE2DkZyyTNLADPgw9gI3c1N7BKw 2g== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3eegm888sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sat, 26 Feb 2022 04:33:57 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 26 Feb
+ 2022 04:33:55 -0800
+Received: from localhost.localdomain (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Sat, 26 Feb 2022 04:33:52 -0800
+From:   Linu Cherian <lcherian@marvell.com>
+To:     <maz@kernel.org>, <tglx@linutronix.de>, <catalin.marinas@arm.com>,
+        <will@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>,
+        Linu Cherian <lcherian@marvell.com>
+Subject: [PATCH] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+Date:   Sat, 26 Feb 2022 18:03:32 +0530
+Message-ID: <20220226123332.29988-1-lcherian@marvell.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225180318.20594-1-vbabka@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: gIyQA9F90xhWVyQskfzq5Tg3wgwp7HIP
+X-Proofpoint-GUID: gIyQA9F90xhWVyQskfzq5Tg3wgwp7HIP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-25_11,2022-02-25_01,2022-02-23_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 07:03:13PM +0100, Vlastimil Babka wrote:
-> Hi,
-> 
-> this series combines and revives patches from Oliver's last year
-> bachelor thesis (where I was the advisor) that make SLUB's debugfs
-> files alloc_traces and free_traces more useful.
-> The resubmission was blocked on stackdepot changes that are now merged,
-> as explained in patch 2.
-> 
-> Patch 1 is a new preparatory cleanup.
-> 
-> Patch 2 originally submitted here [1], was merged to mainline but
-> reverted for stackdepot related issues as explained in the patch.
-> 
-> Patches 3-5 originally submitted as RFC here [2]. In this submission I
-> have omitted the new file 'all_objects' (patch 3/3 in [2]) as it might
-> be considered too intrusive so I will postpone it for later. The docs
-> patch is adjusted accordingly.
-> 
+When a IAR register read races with a GIC interrupt RELEASE event,
+GIC-CPU interface could wrongly return a valid INTID to the CPU
+for an interrupt that is already released(non activated) instead of 0x3ff.
 
-This problem is not caused by this patch series.
-But I think it's worth mentioning...
+As a side effect, an interrupt handler could run twice, once with
+interrupt priority and then with idle priority.
 
-It's really weird that some stack traces are not recorded
-when CONFIG_KASAN=y.
+As a workaround, gic_read_iar is updated so that it will return a
+valid interrupt ID only if there is a change in the active priority list
+after the IAR read on all the affected Silicons.
 
-I made sure that:
-	- Stack Depot did not reach its limit
-	- the free path happen on CONFIG_KASAN=y too.
+Along with this, Thunderx erratum 23154 is reworked to use GIC IIDR
+based quirk management for the sake of consistency and also
+because there is workaround overlap on some silicon variants.
 
-I have no clue why this happen.
+Signed-off-by: Linu Cherian <lcherian@marvell.com>
+---
+ Documentation/arm64/silicon-errata.rst |  4 +-
+ arch/arm64/Kconfig                     | 10 -----
+ arch/arm64/include/asm/arch_gicv3.h    | 24 +++++++++--
+ arch/arm64/kernel/cpu_errata.c         |  8 ----
+ arch/arm64/tools/cpucaps               |  1 -
+ drivers/irqchip/irq-gic-v3.c           | 56 +++++++++++++++++++++++++-
+ 6 files changed, 77 insertions(+), 26 deletions(-)
 
-# cat dentry/free_traces (CONFIG_KASAN=y)
-   6585 <not-available> age=4294912647 pid=0 cpus=0
-
-# cat dentry/free_traces (CONFIG_KASAN=n)
-   1246 <not-available> age=4294906877 pid=0 cpus=0
-    379 __d_free+0x20/0x2c age=33/14225/14353 pid=0-122 cpus=0-3
-        kmem_cache_free+0x1f4/0x21c
-        __d_free+0x20/0x2c
-        rcu_core+0x334/0x580
-        rcu_core_si+0x14/0x20
-        __do_softirq+0x12c/0x2a8
-
-      2 dentry_free+0x58/0xb0 age=14101/14101/14101 pid=158 cpus=0
-        kmem_cache_free+0x1f4/0x21c
-        dentry_free+0x58/0xb0
-        __dentry_kill+0x18c/0x1d0
-        dput+0x1c4/0x2fc
-        __fput+0xb0/0x230
-        ____fput+0x14/0x20
-        task_work_run+0x84/0x17c
-        do_notify_resume+0x208/0x1330
-        el0_svc+0x6c/0x80
-        el0t_64_sync_handler+0xa8/0x130
-        el0t_64_sync+0x1a0/0x1a4
-
-      1 dentry_free+0x58/0xb0 age=7678 pid=190 cpus=1
-        kmem_cache_free+0x1f4/0x21c
-        dentry_free+0x58/0xb0
-        __dentry_kill+0x18c/0x1d0
-        dput+0x1c4/0x2fc
-        __fput+0xb0/0x230
-        ____fput+0x14/0x20
-        task_work_run+0x84/0x17c
-        do_exit+0x2dc/0x8e0
-        do_group_exit+0x38/0xa4
-        __wake_up_parent+0x0/0x34
-        invoke_syscall+0x48/0x114
-        el0_svc_common.constprop.0+0x44/0xfc
-        do_el0_svc+0x2c/0x94
-        el0_svc+0x28/0x80
-        el0t_64_sync_handler+0xa8/0x130
-        el0t_64_sync+0x1a0/0x1a4
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index ea281dd75517..f602faf4bf82 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -136,10 +136,12 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144        |
+ +----------------+-----------------+-----------------+-----------------------------+
+-| Cavium         | ThunderX GICv3  | #23154          | CAVIUM_ERRATUM_23154        |
++| Cavium         | ThunderX GICv3  | #23154          | N/A                         |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
+ +----------------+-----------------+-----------------+-----------------------------+
++| Cavium         | ThunderX GICv3  | #38545          | N/A                         |
+++----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX Core   | #27456          | CAVIUM_ERRATUM_27456        |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX Core   | #30115          | CAVIUM_ERRATUM_30115        |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 09b885cc4db5..889cb56bf5ec 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -890,16 +890,6 @@ config CAVIUM_ERRATUM_23144
+ 
+ 	  If unsure, say Y.
+ 
+-config CAVIUM_ERRATUM_23154
+-	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
+-	default y
+-	help
+-	  The gicv3 of ThunderX requires a modified version for
+-	  reading the IAR status to ensure data synchronization
+-	  (access to icc_iar1_el1 is not sync'ed before and after).
+-
+-	  If unsure, say Y.
+-
+ config CAVIUM_ERRATUM_27456
+ 	bool "Cavium erratum 27456: Broadcast TLBI instructions may cause icache corruption"
+ 	default y
+diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
+index 4ad22c3135db..bc98a60a4bcb 100644
+--- a/arch/arm64/include/asm/arch_gicv3.h
++++ b/arch/arm64/include/asm/arch_gicv3.h
+@@ -47,21 +47,37 @@ static inline u64 gic_read_iar_common(void)
+ 	return irqstat;
+ }
+ 
+-/*
++/* Marvell Erratum 38545
++ *
++ * When a IAR register read races with a GIC interrupt RELEASE event,
++ * GIC-CPU interface could wrongly return a valid INTID to the CPU
++ * for an interrupt that is already released(non activated) instead of 0x3ff.
++ *
++ * To workaround this, return a valid interrupt ID only if there is a change
++ * in the active priority list after the IAR read.
++ *
+  * Cavium ThunderX erratum 23154
+  *
+  * The gicv3 of ThunderX requires a modified version for reading the
+  * IAR status to ensure data synchronization (access to icc_iar1_el1
+  * is not sync'ed before and after).
++ *
++ * Have merged both the workarounds into a common function since,
++ * 1. On Thunderx 88xx 1.x both erratas are applicable.
++ * 2. Having extra nops doesn't add any side effects for Silicons where
++ *    erratum 23154 is not applicable.
+  */
+-static inline u64 gic_read_iar_cavium_thunderx(void)
++static inline u64 gic_read_iar_marvell_38545_23154(void)
+ {
+-	u64 irqstat;
++	u64 irqstat, apr;
+ 
++	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
+ 	nops(8);
+ 	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
+ 	nops(4);
+-	mb();
++	dsb(sy);
++	if (unlikely(apr == read_sysreg_s(SYS_ICC_AP1R0_EL1)))
++		return 0x3ff;
+ 
+ 	return irqstat;
+ }
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index b217941713a8..79beb800ee79 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -423,14 +423,6 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ 		ERRATA_MIDR_RANGE_LIST(erratum_845719_list),
+ 	},
+ #endif
+-#ifdef CONFIG_CAVIUM_ERRATUM_23154
+-	{
+-	/* Cavium ThunderX, pass 1.x */
+-		.desc = "Cavium erratum 23154",
+-		.capability = ARM64_WORKAROUND_CAVIUM_23154,
+-		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
+-	},
+-#endif
+ #ifdef CONFIG_CAVIUM_ERRATUM_27456
+ 	{
+ 		.desc = "Cavium erratum 27456",
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 9c65b1e25a96..3f751fe4fec4 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -62,7 +62,6 @@ WORKAROUND_2077057
+ WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+ WORKAROUND_TSB_FLUSH_FAILURE
+ WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+-WORKAROUND_CAVIUM_23154
+ WORKAROUND_CAVIUM_27456
+ WORKAROUND_CAVIUM_30115
+ WORKAROUND_CAVIUM_TX2_219_PRFM
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 5e935d97207d..a3b58bf4fce4 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -35,6 +35,8 @@
+ 
+ #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+ #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
++#define FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154	(1ULL << 2)
++#define FLAGS_WORKAROUND_MARVELL_ERRATUM_38545	(1ULL << 3)
+ 
+ #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+ 
+@@ -60,6 +62,7 @@ struct gic_chip_data {
+ 
+ static struct gic_chip_data gic_data __read_mostly;
+ static DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
++static DEFINE_STATIC_KEY_FALSE(gic_iar_quirk);
+ 
+ #define GIC_ID_NR	(1U << GICD_TYPER_ID_BITS(gic_data.rdists.gicd_typer))
+ #define GIC_LINE_NR	min(GICD_TYPER_SPIS(gic_data.rdists.gicd_typer), 1020U)
+@@ -235,10 +238,19 @@ static void gic_redist_wait_for_rwp(void)
+ 
+ #ifdef CONFIG_ARM64
+ 
++static u64 __maybe_unused gic_read_iar_fixup(void)
++{
++	if (gic_data.flags & FLAGS_WORKAROUND_MARVELL_ERRATUM_38545 ||
++		gic_data.flags & FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154)
++		return gic_read_iar_marvell_38545_23154();
++	else /* Not possible */
++		return ICC_IAR1_EL1_SPURIOUS;
++}
++
+ static u64 __maybe_unused gic_read_iar(void)
+ {
+-	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
+-		return gic_read_iar_cavium_thunderx();
++	if (static_branch_unlikely(&gic_iar_quirk))
++		return gic_read_iar_fixup();
+ 	else
+ 		return gic_read_iar_common();
+ }
+@@ -1614,6 +1626,16 @@ static bool gic_enable_quirk_msm8996(void *data)
+ 	return true;
+ }
+ 
++static bool gic_enable_quirk_cavium_23154(void *data)
++{
++	struct gic_chip_data *d = data;
++
++	d->flags |= FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154;
++	static_branch_enable(&gic_iar_quirk);
++
++	return true;
++}
++
+ static bool gic_enable_quirk_cavium_38539(void *data)
+ {
+ 	struct gic_chip_data *d = data;
+@@ -1623,6 +1645,16 @@ static bool gic_enable_quirk_cavium_38539(void *data)
+ 	return true;
+ }
+ 
++static bool gic_enable_quirk_marvell_38545(void *data)
++{
++	struct gic_chip_data *d = data;
++
++	d->flags |= FLAGS_WORKAROUND_MARVELL_ERRATUM_38545;
++	static_branch_enable(&gic_iar_quirk);
++
++	return true;
++}
++
+ static bool gic_enable_quirk_hip06_07(void *data)
+ {
+ 	struct gic_chip_data *d = data;
+@@ -1660,6 +1692,13 @@ static const struct gic_quirk gic_quirks[] = {
+ 		.iidr	= 0x00000000,
+ 		.mask	= 0xffffffff,
+ 		.init	= gic_enable_quirk_hip06_07,
++	},
++		/* ThunderX: CN88xx 1.x */
++	{
++		.desc	= "GICv3: Cavium erratum 23154",
++		.iidr	= 0xa101034c,
++		.mask	= 0xffff0fff,
++		.init	= gic_enable_quirk_cavium_23154,
+ 	},
+ 	{
+ 		/*
+@@ -1674,6 +1713,19 @@ static const struct gic_quirk gic_quirks[] = {
+ 		.mask	= 0xe8f00fff,
+ 		.init	= gic_enable_quirk_cavium_38539,
+ 	},
++	{
++		/*
++		 * IAR register reads could be unreliable, under certain
++		 * race conditions. This erratum applies to:
++		 * - ThunderX: CN88xx
++		 * - OCTEON TX: CN83xx, CN81xx
++		 * - OCTEON TX2: CN93xx, CN96xx, CN98xx, CNF95xx*
++		 */
++		.desc	= "GICv3: Marvell erratum 38545",
++		.iidr	= 0xa000034c,
++		.mask	= 0xe0f00fff,
++		.init	= gic_enable_quirk_marvell_38545,
++	},
+ 	{
+ 	}
+ };
 -- 
-Thank you, You are awesome!
-Hyeonggon :-)
+2.31.1
+

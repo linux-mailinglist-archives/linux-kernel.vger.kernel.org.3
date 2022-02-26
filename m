@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878284C525C
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1654C525D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239873AbiBZABX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S239908AbiBZACd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiBZABW (ORCPT
+        with ESMTP id S230035AbiBZACc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:01:22 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8BD1FED87;
-        Fri, 25 Feb 2022 16:00:48 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21Q0093w027074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 19:00:10 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 9E38515C0038; Fri, 25 Feb 2022 19:00:09 -0500 (EST)
-Date:   Fri, 25 Feb 2022 19:00:09 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Willy Tarreau <w@1wt.eu>, Byron Stanoszek <gandalf@winds.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <YhltiUy/WtA0Dz5g@mit.edu>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
- <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
- <YhfzUc8afuoQkx/U@casper.infradead.org>
- <257dc4a9-dfa0-327e-f05a-71c0d9742e98@winds.org>
- <20220225132300.GC18720@1wt.eu>
- <20220225225600.GO3061737@dread.disaster.area>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225225600.GO3061737@dread.disaster.area>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 25 Feb 2022 19:02:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE8B1D683C;
+        Fri, 25 Feb 2022 16:01:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DC666195F;
+        Sat, 26 Feb 2022 00:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30787C340E7;
+        Sat, 26 Feb 2022 00:01:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1645833718;
+        bh=BooAGY/hhrBDZBSySQP/8P16m40+4PwEwwvGBs0SX8A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gEEIn0s5wBSEY2vhiOTZBAmbSkuLlHV/NRyR/Ow4IyirgPycAL6SEEekKPtmUZ2cJ
+         QJFTrZbM28gkQL49MGfHQv6yabdQ0W+uMnXpOffr+8R8HGlGgt0CDNw83JJSs62A9W
+         5y5I1B/Y/mmocuqyUOijNkX1xbn5zzr4qvByDbH4=
+Date:   Fri, 25 Feb 2022 16:01:57 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, linux-mm@kvack.org,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] usercopy: Check valid lifetime via stack depth
+Message-Id: <20220225160157.680ecdea21ce81183059bb63@linux-foundation.org>
+In-Reply-To: <20220225173345.3358109-1-keescook@chromium.org>
+References: <20220225173345.3358109-1-keescook@chromium.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,38 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 09:56:00AM +1100, Dave Chinner wrote:
+On Fri, 25 Feb 2022 09:33:45 -0800 Kees Cook <keescook@chromium.org> wrote:
+
+> Under CONFIG_HARDENED_USERCOPY=y, when exact stack frame boundary checking
+> is not available (i.e. everything except x86 with FRAME_POINTER), check
+> a stack object as being at least "current depth valid", in the sense
+> that any object within the stack region but not between start-of-stack
+> and current_stack_pointer should be considered unavailable (i.e. its
+> lifetime is from a call no longer present on the stack).
 > 
-> Hence we have to acknowledge that fact that once upstream has
-> deprecated a feature, it's up to distros to decide how they want to
-> handle long term support for that feature. The upstream LTS kernel
-> maintainers are going to have to decide on their own policy, too,
-> because we cannot bind upstream maintenance decisions on random
-> individual downstream support constraints. Downstream has to choose
-> for itself how it handles upstream deprecation notices but, that
-> said, upstream developers also need to listen to downstream distro
-> support and deprecation requirements...
+> Introduce ARCH_HAS_CURRENT_STACK_POINTER to track which architectures
+> have actually implemented the common global register alias.
+> 
+> Additionally report usercopy bounds checking failures with an offset
+> from current_stack_pointer, which may assist with diagnosing failures.
+> 
+> The LKDTM USERCOPY_STACK_FRAME_TO and USERCOPY_STACK_FRAME_FROM tests
+> (once slightly adjusted in a separate patch) will pass again with
+> this fixed.
 
-This is as it should be.  It might not make a difference for reiserfs,
-where the development efforts is largely dead already, but once
-upstream deprecates a feature, the distributions can no longer rely on
-upstream developers to fix a critical stability or security bug in
-upstream, so it can be backported into an LTS or stable distro kernel.
-They are on their own.
+Again, what does this actually do?
 
-The bug might even be fixed in one enterprise distro's kernel product,
-but an isolated patch might not be available; only a megapatch of all
-of the distro's changes afgainst an upstrema kernel as a single
-un-broken-out-and-GPL-compliant patch.  So a critical bugfix present
-in one distro release might not be so easily carried over to another
-distro.
+> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-So that's an important thing to remember; an LTS kernel as a whole
-might be "supported" by a stable kernel team from a backports
-perspective for years, but that doesn't mean that a deprecated feature
-or subsystem is going to be receiving upstream support, and it's fair
-that this be advertised so that users and distributions can make their
-own decisions about how long they want to use or support a deprecated
-feature or subsystem on a downstream basis.
+A link to that report would shed some light.  But actually describing
+the user-visible impact right there in the changelog is preferable.
 
-						- Ted
+It sounds like a selftest is newly failing, which makes it a
+userspace-visible regression, perhaps?
+
+If so, do we have a Fixes: and is a cc:stable warranted?

@@ -2,142 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03174C5866
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 23:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2924C5879
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 23:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiBZV7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 16:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S229799AbiBZWCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 17:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiBZV7h (ORCPT
+        with ESMTP id S229754AbiBZWCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 16:59:37 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389DB1AE662
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:59:01 -0800 (PST)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mtxxk-1oDioB1fsS-00uHl7 for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022
- 22:58:59 +0100
-Received: by mail-wr1-f45.google.com with SMTP id r10so9678044wrp.3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:58:59 -0800 (PST)
-X-Gm-Message-State: AOAM533dBlaoj+r8rrdi1Hcjiq6HhCmLZHWLEK2xk/aJD6Cqo0odW6md
-        0APdVTcbzJ9Q6FGrg5Jv00Df8t9neoeyyPuP5Wc=
-X-Google-Smtp-Source: ABdhPJxIMRHcHYl03TUCv5wkOGw38ddPd33kAbcIXq38Ae6aP5aEwYf/SsOHWiu2pW/lReeQBoa2ITKHVcyza4FHIzI=
-X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
- c2-20020a5d63c2000000b001ef840ee139mr3249510wrw.192.1645912739041; Sat, 26
- Feb 2022 13:58:59 -0800 (PST)
+        Sat, 26 Feb 2022 17:02:00 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF281AE662
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:24 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3E8493F1BE
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 22:01:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645912883;
+        bh=wEJI0tsPJ58dwyE9Xp27AwQHbd9ZGSbsPqkX6S6UniU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=gMQKDLtIpkrsrkBTeJuWzdwteXI488j2vZsFYzU5XX6oDRVX3DDQ/ZdxZUrfPiUlA
+         5SlI3m1Qe6+0zZdW0K0E+9SGPB7uEnXlPB73KatmRDKwOwln98BoQ8+9UGue11MMLc
+         SVfFxMTGVWsaW1ByymfwdFVQidBr+6QyndCln8EjXLoqxO+RhTtPQ8yn8zJawOfF6l
+         wt2At1hsVdTQmcLGgqcHgt5ITKMgFPl9Xn/Elw6DgKUnjLUq1qz6ESfZ8im5wFffLB
+         QOtm1LMz14RRFu+jQyFumrpS7IVfcD1ZMLsDQuEhMEbLzFXogLaT0c99IbV41UsTXy
+         I01E9ktWjgy/Q==
+Received: by mail-ed1-f71.google.com with SMTP id m11-20020a056402430b00b00410678d119eso3390411edc.21
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wEJI0tsPJ58dwyE9Xp27AwQHbd9ZGSbsPqkX6S6UniU=;
+        b=7H1FT9ekoWM/3GT/31T+Bg45LzH2xnTGo0PuBuBxSLMeA6zodSNWPyxGGBrtsgT45k
+         VrFW5WdZ6rNIslliZ7fkiwJXUAGYdVCDBiteX/xWT/jPUq4TTaL3aobrKv0ZU2AAlh18
+         yq2SOkEr8vwHgE0zsZLfzzqTV5z9rgf2mDHl5qnHypRd1dqbjU7lhEauN3tLAogAnFKb
+         fndy9H2jcmifrpvp4/N+2AIFM0foiqzK1gq5yw8hXX885vgBOnj0sSm6k8jL00Wa7Odp
+         kNFt5djyfnr9OEmX9cNexjqgv9EqMoOcCV8Unnr29011XRCQ+4Fm6sXGtbCVx4kpBw/7
+         LUew==
+X-Gm-Message-State: AOAM533G3egUDjexWaj2HmGPzrm76WPwwTIptPm1JKQZfzfuOz24e8Ew
+        VMY8UEmkPeMEf1MD/GSewVZKIzRKsTwMMdKSp2JzYEq4zi39uJRxFboY0n9P/z+KsLymHSNikeQ
+        Ty38N8p8wEgpTznnXAYPG/bmUQ/Tu54LLEmPECh7STQ==
+X-Received: by 2002:a50:fb89:0:b0:413:94d8:7c56 with SMTP id e9-20020a50fb89000000b0041394d87c56mr3352372edq.143.1645912882477;
+        Sat, 26 Feb 2022 14:01:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEBhuaA6wu2knYliwBM0vfBK3OqsI4wC3+TjCY0HhYvYRPRyZBWMQcEQwW1VhP271dIbvvaw==
+X-Received: by 2002:a50:fb89:0:b0:413:94d8:7c56 with SMTP id e9-20020a50fb89000000b0041394d87c56mr3352361edq.143.1645912882295;
+        Sat, 26 Feb 2022 14:01:22 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id s2-20020a056402014200b0041285556b7csm3497424edu.72.2022.02.26.14.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 14:01:21 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/3] ARM: dts: samsung: Second round for v5.18
+Date:   Sat, 26 Feb 2022 23:01:14 +0100
+Message-Id: <20220226220116.13452-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220226022053.958688-1-yusisamerican@gmail.com>
- <CAK8P3a3TWx71xT83003LSFsu1eF1p75hCxvpCB_FZf1SrNjQJw@mail.gmail.com> <CAJoG2+_qbu1Ca51exoq+0MSdcGda4y5YxM9vdseDqiH1n_i88A@mail.gmail.com>
-In-Reply-To: <CAJoG2+_qbu1Ca51exoq+0MSdcGda4y5YxM9vdseDqiH1n_i88A@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 26 Feb 2022 22:58:42 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2cuanmR7oPefX-fZM2K1LioN40_c0SU-bdCAZQwcdyhQ@mail.gmail.com>
-Message-ID: <CAK8P3a2cuanmR7oPefX-fZM2K1LioN40_c0SU-bdCAZQwcdyhQ@mail.gmail.com>
-Subject: Re: [PATCH] drivers: ddcci: upstream DDCCI driver
-To:     Yusuf Khan <yusisamerican@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        gregkh <gregkh@linuxfoundation.org>, javier@javigon.com,
-        Will Deacon <will@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:iVSyEFetGP9yRAroK/KUA0rnWE58i9DJ3KKfN6T4NswGppwSc3K
- lzpXum49+bnrZmLb3eUfKR4+OcRn5iI23hFiJmme6MwEajcJGj6pNf0bX8Wy4ArErB88gjL
- yaW9MVZRl+1XTtG0Bez/5WDrRlwTZJYGIepbEKezHkYwbveCNApz3DRC1X65+uoEDSOILni
- i7UO4tx0NDocTaX9gzkWQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2FnM3oqw6DA=:qCrVeAaKCggwSDa9ZL/coZ
- ecNiSrqvL0igoz/FgaXtPADRIrQtZCvnZ65eVygtSS8bAP9UXGegBF5JOBgXAU09tGPcYJFg4
- pvaTNkotCPP3hvhzpNSPH7Yt/hk8IY9ZQkd+9pps6kWvWFZEh9jJFZtd/mvLhZf7pYIUgWnSm
- 5Wiup65MFJ4KsKzFvfZ1vgpV8xZ4abMmhOVLAk09GOh1DYhMSYxUnKBAyDJX/MTHPGYscWauT
- mVYFvcInpZ4guoZ21ovjeL2V0EpoquW6A4znlJ78Lh6fSTQeVdnju2RRHmk+HrBEZsLBV4QmF
- pvHQd83TdGWVJcQX5vge32k32gtWpHm+32SlFpzFPIWe1k0qLojTpAyObXfuh5prv13hWjX0r
- oh589fZlc5IOwKyVJOp2DiMbQWnwW3Io52EAH2PqMsLo1zLohzpOwxWFh4ZUgA7PL3/l+tjMh
- us7lH2dE75USxoU0plX19JQXH3rm0P6qECDuUhUTb052ADFDuIjd8WRIbUO25rekwr9cCiFZR
- +sP62MZCZxm+SbTTkxtv9pgoRrJHfyuXvD0wuMquHoyzURL6X1WeDSmogyEhjMpZdBiv1JjRo
- tPkXBYJNjdE9DUmtfcS4cvMdtH9W04h+rTDaroVGv6Sax5ZGCzCq0LMVh2LVUjrQZHjbAcck5
- fQ0NMCyKITvKFiWtA6vz9vIrYwse7vQwwCf+kinBS4hmOPIlS4XpelzNZUlV5zXme1tEF1zht
- WWQjMMVHbadmMgiKxzRkXm9XnWY0P0zU4ke3OWLeEr9H79uXQpcq2i4FfXkWx8xh5kAtWJMRy
- jAvPg/4Qa4hV5mLvi1JRZhjtQiJDvuYEP61HmUyFih/EtrPqyA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 11:48 AM Yusuf Khan <yusisamerican@gmail.com> wrote:
-> On Sat, Feb 26, 2022 at 1:39 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > with the other ones.On Sat, Feb 26, 2022 at 3:20 AM Yusuf Khan
-> > <yusisamerican@gmail.com> wrote:
-> > >
-> >
-> > If this is a backlight driver, I think it should go into
-> > drivers/video/backlight/,
-> > no need for a top-level subsystem.
->
-> Arnd, the driver includes a backlight driver, the main part of the
-> driver(ddcci.c) is a monitor communication protocol. Should
-> I leave the backlight driver(ddcci-backlight.c) in drivers/video/backlight?
+Hi,
 
-It's more important to decide how the user space interface should be
-handled, let's decide about that first.
+On top of previous pull request.
 
-> > > + */
-> > > +
-> > > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > > +#include <asm-generic/fcntl.h>
-> >
-> > Including the asm-generic version causes the build failures. If you need
-> > the contents, use <linux/fcntl.h>, otherwise leave it out.
-> >
-> > > +static dev_t ddcci_cdev_first;
-> > > +static dev_t ddcci_cdev_next;
-> > > +static dev_t ddcci_cdev_end;
-> > > +static DEFINE_SEMAPHORE(core_lock);
-> >
-> > No new semaphores please, this should probably be a mutex.
-> >
-> >
-> > > +struct bus_type ddcci_bus_type;
-> > > +EXPORT_SYMBOL_GPL(ddcci_bus_type);
-> > > +
-> > > +/* Assert neccessary string array sizes  */
-> > > +#ifndef sizeof_field
-> > > +# define sizeof_field(t,m) FIELD_SIZEOF(t,m)
-> > > +#endif
-> > > +static_assert(sizeof_field(struct ddcci_device, prot) > 8);
-> > > +static_assert(sizeof_field(struct ddcci_device, type) > 8);
-> > > +static_assert(sizeof_field(struct ddcci_device, model) > 8);
-> > > +static_assert(sizeof_field(struct ddcci_device, vendor) > 8);
-> > > +static_assert(sizeof_field(struct ddcci_device, module) > 8);
-> > > +
-> > > +/* Internal per-i2c-client driver data */
-> > > +struct ddcci_bus_drv_data {
-> > > +       unsigned long quirks;
-> > > +       struct i2c_client *i2c_dev;
-> > > +       struct semaphore sem;
-> > > +       unsigned char recv_buffer[DDCCI_RECV_BUFFER_SIZE];
-> > > +};
-> >
-> > Same here.
-> >
-> > > +static const struct file_operations ddcci_fops = {
-> > > +       .owner = THIS_MODULE,
-> > > +       .read = ddcci_cdev_read,
-> > > +       .write = ddcci_cdev_write,
-> > > +       .open = ddcci_cdev_open,
-> > > +       .release = ddcci_cdev_close,
-> > > +       .llseek = ddcci_cdev_seek
-> > > +};
-> >
-> > It looks like this adds low-level access to a bus that is already managed by
-> > the drm (or older framebuffer) drivers. How do you prevent these two
-> > from stepping on each other's toes?
+Best regards,
+Krzysztof
+
+
+The following changes since commit f5b721d2c91144b7c494a05003fc840f1607e876:
+
+  ARM: dts: exynos: use generic node name for LPDDR3 timings in Odroid (2022-02-05 13:04:43 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.18-2
+
+for you to fetch changes up to 7cdfe3b3b60c89f0e12e8ee194a7cfbfd46515dd:
+
+  ARM: dts: exynos: align PPMU event node names with dtschema (2022-02-18 14:17:40 +0100)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.18, part two
+
+Various cleanups after introducing DT schema: adding missing HDMI
+supplies and aligning PPMU event node names with DT schema.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      ARM: dts: exynos: add missing HDMI supplies on SMDK5250
+      ARM: dts: exynos: add missing HDMI supplies on SMDK5420
+      ARM: dts: exynos: align PPMU event node names with dtschema
+
+ arch/arm/boot/dts/exynos5250-smdk5250.dts |  3 +++
+ arch/arm/boot/dts/exynos5420-smdk5420.dts |  3 +++
+ arch/arm/boot/dts/exynos5420.dtsi         | 16 ++++++++--------
+ 3 files changed, 14 insertions(+), 8 deletions(-)

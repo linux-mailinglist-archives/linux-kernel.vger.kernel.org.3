@@ -2,61 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93E74C55CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B90B4C55D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 13:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiBZMfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 07:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S230526AbiBZMjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 07:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbiBZMfD (ORCPT
+        with ESMTP id S230085AbiBZMjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 07:35:03 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF801CFA2E
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 04:34:28 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21QB9OKh026106;
-        Sat, 26 Feb 2022 04:33:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=D9x7VqFP9H1RRad+KXn/qCLD1LolS1QYT66GB+23zJQ=;
- b=VTnD4LcyiuK1ckJkhGL45bGEBr/puVJZygj2McPU11JeUG2D6/aETOHFd1dfljNsjUMB
- Oh3h+0VXyLVSlO8TfMD+riC0z/SwwZ+h336yrVMI5S3gUCA/D3LKKsZijtbVMXTLFdnc
- rmcP7URO1ayx0J/0YS9eBGhzfEBPOOsLrdhbf4GckA6AKPE+jY9MyXZ0Ls1UkI9d2Jpn
- n9mFKSb0bqnGwnexk5BG4pknuYPsk2lM9silFwgr7nfDRgMOxG64jvebr4LGnU5rCxUJ
- SvzFZdfwMUX2m17JnxPiKHAFblFTaeQWpwl9FKztiuE2DkZyyTNLADPgw9gI3c1N7BKw 2g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3eegm888sx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sat, 26 Feb 2022 04:33:57 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 26 Feb
- 2022 04:33:55 -0800
-Received: from localhost.localdomain (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Sat, 26 Feb 2022 04:33:52 -0800
-From:   Linu Cherian <lcherian@marvell.com>
-To:     <maz@kernel.org>, <tglx@linutronix.de>, <catalin.marinas@arm.com>,
-        <will@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>,
-        Linu Cherian <lcherian@marvell.com>
-Subject: [PATCH] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
-Date:   Sat, 26 Feb 2022 18:03:32 +0530
-Message-ID: <20220226123332.29988-1-lcherian@marvell.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 26 Feb 2022 07:39:08 -0500
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8271DD0EE;
+        Sat, 26 Feb 2022 04:38:32 -0800 (PST)
+Received: from grover.. (133-32-176-37.west.xps.vectant.ne.jp [133.32.176.37]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 21QCc9WD001922;
+        Sat, 26 Feb 2022 21:38:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 21QCc9WD001922
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645879089;
+        bh=w4IvZVR355kM81ZI/8mx1GapwivjUjEVqtanCtDOEho=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rMTJUEW1JOvAN2qUlp/WtYzIkLNyJqVcM4/YWzv8CktRUebdwKTnBMc3XWwohWlUg
+         KAAtqPU/VMhdFvYI4RfVbOjS94u8Vfg3HtW8CT3DBmgCr95tVZ7IfV1cUzh+rY5Yxj
+         j0OI+8JJOI4wAldnDpnp0pdnVSqC7/uoHbCSoG8sN2vb/D5rI2f2xPWLLAUgwQZsg/
+         bYuKIp00GIc5qAjHUw4aBMM6gR8/yq+TcnTL2Q/ZzlAdBr+zSsojn6AlJN0Z9FclqT
+         Lee4z415PmXu2RzCppN7cjGu0HgBv2wHTTuQCwkeAiRDwbYfDQYiz6r4tZ7qLvhOB6
+         bdzKnyyPpyFWw==
+X-Nifty-SrcIP: [133.32.176.37]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH] kconfig: change .config format to use =n instead of "is not set"
+Date:   Sat, 26 Feb 2022 21:37:55 +0900
+Message-Id: <20220226123755.85213-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: gIyQA9F90xhWVyQskfzq5Tg3wgwp7HIP
-X-Proofpoint-GUID: gIyQA9F90xhWVyQskfzq5Tg3wgwp7HIP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_11,2022-02-25_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,258 +50,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a IAR register read races with a GIC interrupt RELEASE event,
-GIC-CPU interface could wrongly return a valid INTID to the CPU
-for an interrupt that is already released(non activated) instead of 0x3ff.
+The .config file uses "# CONFIG_FOO is not set" form to represent
+disabled options. In the old days, it was useful because the .config
+was directly included from Makefiles. For example, you can use
+"ifdef CONFIG_FOO" in Makefiles to check if the option is enabled.
 
-As a side effect, an interrupt handler could run twice, once with
-interrupt priority and then with idle priority.
+Commit c955ccafc38e ("kconfig: fix .config dependencies") introduced
+include/config/auto.conf, which mirrors the .config, but trims down
+all disabled options.
 
-As a workaround, gic_read_iar is updated so that it will return a
-valid interrupt ID only if there is a change in the active priority list
-after the IAR read on all the affected Silicons.
+Since then, include/config/auto.conf defines CONFIG options during the
+build. The .config is used just for storing the user's configuration.
+I do not see a strong reason to use a particular pattern of comment
+for disabled options.
 
-Along with this, Thunderx erratum 23154 is reworked to use GIC IIDR
-based quirk management for the sake of consistency and also
-because there is workaround overlap on some silicon variants.
+With this commit, Kconfig will output disable options in a more natural
+form, "CONFIG_FOO=n".
 
-Signed-off-by: Linu Cherian <lcherian@marvell.com>
+Kconfig accepts both "# CONFIG_FOO is not set" and "CONFIG_FOO=n" as a
+valid input. You do not need to update arch/*/configs/*_defconfig files
+for now. "git bisect" should be able to cross the commit in both ways
+without any issue.
+
+A problem may occur if you parse the .config for the "# ... is not set"
+patterns.
+
+I adjusted streamline_config.pl, merge_config.sh, scripts/kconfig/tests/.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- Documentation/arm64/silicon-errata.rst |  4 +-
- arch/arm64/Kconfig                     | 10 -----
- arch/arm64/include/asm/arch_gicv3.h    | 24 +++++++++--
- arch/arm64/kernel/cpu_errata.c         |  8 ----
- arch/arm64/tools/cpucaps               |  1 -
- drivers/irqchip/irq-gic-v3.c           | 56 +++++++++++++++++++++++++-
- 6 files changed, 77 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index ea281dd75517..f602faf4bf82 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -136,10 +136,12 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144        |
- +----------------+-----------------+-----------------+-----------------------------+
--| Cavium         | ThunderX GICv3  | #23154          | CAVIUM_ERRATUM_23154        |
-+| Cavium         | ThunderX GICv3  | #23154          | N/A                         |
- +----------------+-----------------+-----------------+-----------------------------+
- | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
- +----------------+-----------------+-----------------+-----------------------------+
-+| Cavium         | ThunderX GICv3  | #38545          | N/A                         |
-++----------------+-----------------+-----------------+-----------------------------+
- | Cavium         | ThunderX Core   | #27456          | CAVIUM_ERRATUM_27456        |
- +----------------+-----------------+-----------------+-----------------------------+
- | Cavium         | ThunderX Core   | #30115          | CAVIUM_ERRATUM_30115        |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 09b885cc4db5..889cb56bf5ec 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -890,16 +890,6 @@ config CAVIUM_ERRATUM_23144
+ scripts/kconfig/confdata.c                    | 15 +++++----------
+ scripts/kconfig/merge_config.sh               | 19 +++++++++++--------
+ scripts/kconfig/streamline_config.pl          |  2 +-
+ .../tests/choice/alldef_expected_config       |  6 +++---
+ .../tests/choice/allmod_expected_config       |  4 ++--
+ .../tests/choice/allno_expected_config        |  6 +++---
+ .../tests/choice/allyes_expected_config       |  8 ++++----
+ scripts/kconfig/tests/choice/oldask1_config   |  2 +-
+ .../tests/inter_choice/expected_config        |  2 +-
+ .../kconfig/tests/new_choice_with_dep/config  |  2 +-
+ .../tests/no_write_if_dep_unmet/__init__.py   |  7 +++----
+ .../no_write_if_dep_unmet/expected_config     |  2 +-
+ 12 files changed, 36 insertions(+), 39 deletions(-)
+
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index c4340c90e172..00f93c03aa57 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -658,9 +658,7 @@ static char *escape_string_value(const char *in)
+ 	return out;
+ }
  
- 	  If unsure, say Y.
- 
--config CAVIUM_ERRATUM_23154
--	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
--	default y
--	help
--	  The gicv3 of ThunderX requires a modified version for
--	  reading the IAR status to ensure data synchronization
--	  (access to icc_iar1_el1 is not sync'ed before and after).
+-enum output_n { OUTPUT_N, OUTPUT_N_AS_UNSET, OUTPUT_N_NONE };
 -
--	  If unsure, say Y.
--
- config CAVIUM_ERRATUM_27456
- 	bool "Cavium erratum 27456: Broadcast TLBI instructions may cause icache corruption"
- 	default y
-diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
-index 4ad22c3135db..bc98a60a4bcb 100644
---- a/arch/arm64/include/asm/arch_gicv3.h
-+++ b/arch/arm64/include/asm/arch_gicv3.h
-@@ -47,21 +47,37 @@ static inline u64 gic_read_iar_common(void)
- 	return irqstat;
- }
- 
--/*
-+/* Marvell Erratum 38545
-+ *
-+ * When a IAR register read races with a GIC interrupt RELEASE event,
-+ * GIC-CPU interface could wrongly return a valid INTID to the CPU
-+ * for an interrupt that is already released(non activated) instead of 0x3ff.
-+ *
-+ * To workaround this, return a valid interrupt ID only if there is a change
-+ * in the active priority list after the IAR read.
-+ *
-  * Cavium ThunderX erratum 23154
-  *
-  * The gicv3 of ThunderX requires a modified version for reading the
-  * IAR status to ensure data synchronization (access to icc_iar1_el1
-  * is not sync'ed before and after).
-+ *
-+ * Have merged both the workarounds into a common function since,
-+ * 1. On Thunderx 88xx 1.x both erratas are applicable.
-+ * 2. Having extra nops doesn't add any side effects for Silicons where
-+ *    erratum 23154 is not applicable.
-  */
--static inline u64 gic_read_iar_cavium_thunderx(void)
-+static inline u64 gic_read_iar_marvell_38545_23154(void)
+-static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
++static void __print_symbol(FILE *fp, struct symbol *sym, bool output_n,
+ 			   bool escape_string)
  {
--	u64 irqstat;
-+	u64 irqstat, apr;
+ 	const char *val;
+@@ -672,11 +670,8 @@ static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
+ 	val = sym_get_string_value(sym);
  
-+	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
- 	nops(8);
- 	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
- 	nops(4);
--	mb();
-+	dsb(sy);
-+	if (unlikely(apr == read_sysreg_s(SYS_ICC_AP1R0_EL1)))
-+		return 0x3ff;
+ 	if ((sym->type == S_BOOLEAN || sym->type == S_TRISTATE) &&
+-	    output_n != OUTPUT_N && *val == 'n') {
+-		if (output_n == OUTPUT_N_AS_UNSET)
+-			fprintf(fp, "# %s%s is not set\n", CONFIG_, sym->name);
++	    !output_n && *val == 'n')
+ 		return;
+-	}
  
- 	return irqstat;
- }
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index b217941713a8..79beb800ee79 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -423,14 +423,6 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 		ERRATA_MIDR_RANGE_LIST(erratum_845719_list),
- 	},
- #endif
--#ifdef CONFIG_CAVIUM_ERRATUM_23154
--	{
--	/* Cavium ThunderX, pass 1.x */
--		.desc = "Cavium erratum 23154",
--		.capability = ARM64_WORKAROUND_CAVIUM_23154,
--		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
--	},
--#endif
- #ifdef CONFIG_CAVIUM_ERRATUM_27456
- 	{
- 		.desc = "Cavium erratum 27456",
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index 9c65b1e25a96..3f751fe4fec4 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -62,7 +62,6 @@ WORKAROUND_2077057
- WORKAROUND_TRBE_OVERWRITE_FILL_MODE
- WORKAROUND_TSB_FLUSH_FAILURE
- WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
--WORKAROUND_CAVIUM_23154
- WORKAROUND_CAVIUM_27456
- WORKAROUND_CAVIUM_30115
- WORKAROUND_CAVIUM_TX2_219_PRFM
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 5e935d97207d..a3b58bf4fce4 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -35,6 +35,8 @@
+ 	if (sym->type == S_STRING && escape_string) {
+ 		escaped = escape_string_value(val);
+@@ -690,17 +685,17 @@ static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
  
- #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
- #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
-+#define FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154	(1ULL << 2)
-+#define FLAGS_WORKAROUND_MARVELL_ERRATUM_38545	(1ULL << 3)
- 
- #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
- 
-@@ -60,6 +62,7 @@ struct gic_chip_data {
- 
- static struct gic_chip_data gic_data __read_mostly;
- static DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
-+static DEFINE_STATIC_KEY_FALSE(gic_iar_quirk);
- 
- #define GIC_ID_NR	(1U << GICD_TYPER_ID_BITS(gic_data.rdists.gicd_typer))
- #define GIC_LINE_NR	min(GICD_TYPER_SPIS(gic_data.rdists.gicd_typer), 1020U)
-@@ -235,10 +238,19 @@ static void gic_redist_wait_for_rwp(void)
- 
- #ifdef CONFIG_ARM64
- 
-+static u64 __maybe_unused gic_read_iar_fixup(void)
-+{
-+	if (gic_data.flags & FLAGS_WORKAROUND_MARVELL_ERRATUM_38545 ||
-+		gic_data.flags & FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154)
-+		return gic_read_iar_marvell_38545_23154();
-+	else /* Not possible */
-+		return ICC_IAR1_EL1_SPURIOUS;
-+}
-+
- static u64 __maybe_unused gic_read_iar(void)
+ static void print_symbol_for_dotconfig(FILE *fp, struct symbol *sym)
  {
--	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
--		return gic_read_iar_cavium_thunderx();
-+	if (static_branch_unlikely(&gic_iar_quirk))
-+		return gic_read_iar_fixup();
- 	else
- 		return gic_read_iar_common();
- }
-@@ -1614,6 +1626,16 @@ static bool gic_enable_quirk_msm8996(void *data)
- 	return true;
+-	__print_symbol(fp, sym, OUTPUT_N_AS_UNSET, true);
++	__print_symbol(fp, sym, true, true);
  }
  
-+static bool gic_enable_quirk_cavium_23154(void *data)
-+{
-+	struct gic_chip_data *d = data;
-+
-+	d->flags |= FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154;
-+	static_branch_enable(&gic_iar_quirk);
-+
-+	return true;
-+}
-+
- static bool gic_enable_quirk_cavium_38539(void *data)
+ static void print_symbol_for_autoconf(FILE *fp, struct symbol *sym)
  {
- 	struct gic_chip_data *d = data;
-@@ -1623,6 +1645,16 @@ static bool gic_enable_quirk_cavium_38539(void *data)
- 	return true;
+-	__print_symbol(fp, sym, OUTPUT_N_NONE, false);
++	__print_symbol(fp, sym, false, false);
  }
  
-+static bool gic_enable_quirk_marvell_38545(void *data)
-+{
-+	struct gic_chip_data *d = data;
-+
-+	d->flags |= FLAGS_WORKAROUND_MARVELL_ERRATUM_38545;
-+	static_branch_enable(&gic_iar_quirk);
-+
-+	return true;
-+}
-+
- static bool gic_enable_quirk_hip06_07(void *data)
+ void print_symbol_for_listconfig(struct symbol *sym)
  {
- 	struct gic_chip_data *d = data;
-@@ -1660,6 +1692,13 @@ static const struct gic_quirk gic_quirks[] = {
- 		.iidr	= 0x00000000,
- 		.mask	= 0xffffffff,
- 		.init	= gic_enable_quirk_hip06_07,
-+	},
-+		/* ThunderX: CN88xx 1.x */
-+	{
-+		.desc	= "GICv3: Cavium erratum 23154",
-+		.iidr	= 0xa101034c,
-+		.mask	= 0xffff0fff,
-+		.init	= gic_enable_quirk_cavium_23154,
- 	},
- 	{
- 		/*
-@@ -1674,6 +1713,19 @@ static const struct gic_quirk gic_quirks[] = {
- 		.mask	= 0xe8f00fff,
- 		.init	= gic_enable_quirk_cavium_38539,
- 	},
-+	{
-+		/*
-+		 * IAR register reads could be unreliable, under certain
-+		 * race conditions. This erratum applies to:
-+		 * - ThunderX: CN88xx
-+		 * - OCTEON TX: CN83xx, CN81xx
-+		 * - OCTEON TX2: CN93xx, CN96xx, CN98xx, CNF95xx*
-+		 */
-+		.desc	= "GICv3: Marvell erratum 38545",
-+		.iidr	= 0xa000034c,
-+		.mask	= 0xe0f00fff,
-+		.init	= gic_enable_quirk_marvell_38545,
-+	},
- 	{
- 	}
- };
+-	__print_symbol(stdout, sym, OUTPUT_N, true);
++	print_symbol_for_dotconfig(stdout, sym);
+ }
+ 
+ static void print_symbol_for_c(FILE *fp, struct symbol *sym)
+diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_config.sh
+index e5b46980c22a..aac60de3b7c7 100755
+--- a/scripts/kconfig/merge_config.sh
++++ b/scripts/kconfig/merge_config.sh
+@@ -110,8 +110,11 @@ if [ ! -r "$INITFILE" ]; then
+ fi
+ 
+ MERGE_LIST=$*
+-SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
+-SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
++SED_CONFIG_EXP="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
++
++# Disabled options were previously written as "# CONFIG_... is not set", but
++# now is "CONFIG_...=n". Convert the format before the merge steps.
++SED_CONVERT_NOT_SET="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1=n/"
+ 
+ TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
+ MERGE_FILE=$(mktemp ./.merge_tmp.config.XXXXXXXXXX)
+@@ -120,7 +123,7 @@ echo "Using $INITFILE as base"
+ 
+ trap clean_up EXIT
+ 
+-cat $INITFILE > $TMP_FILE
++sed "$SED_CONVERT_NOT_SET" $INITFILE > $TMP_FILE
+ 
+ # Merge files, printing warnings on overridden values
+ for ORIG_MERGE_FILE in $MERGE_LIST ; do
+@@ -129,8 +132,8 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
+ 		echo "The merge file '$ORIG_MERGE_FILE' does not exist.  Exit." >&2
+ 		exit 1
+ 	fi
+-	cat $ORIG_MERGE_FILE > $MERGE_FILE
+-	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
++	sed "$SED_CONVERT_NOT_SET" $ORIG_MERGE_FILE > $MERGE_FILE
++	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP" $MERGE_FILE)
+ 
+ 	for CFG in $CFG_LIST ; do
+ 		grep -q -w $CFG $TMP_FILE || continue
+@@ -155,9 +158,9 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
+ 			echo Value of $CFG is redundant by fragment $ORIG_MERGE_FILE:
+ 		fi
+ 		if [ "$BUILTIN_FLAG" = "false" ]; then
+-			sed -i "/$CFG[ =]/d" $TMP_FILE
++			sed -i "/$CFG=/d" $TMP_FILE
+ 		else
+-			sed -i "/$CFG[ =]/d" $MERGE_FILE
++			sed -i "/$CFG=/d" $MERGE_FILE
+ 		fi
+ 	done
+ 	cat $MERGE_FILE >> $TMP_FILE
+@@ -191,7 +194,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
+ 
+ 
+ # Check all specified config values took (might have missed-dependency issues)
+-for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
++for CFG in $(sed -n -e "$SED_CONFIG_EXP" $TMP_FILE); do
+ 
+ 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
+ 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG" || true)
+diff --git a/scripts/kconfig/streamline_config.pl b/scripts/kconfig/streamline_config.pl
+index 3387ad7508f7..0f20142764f2 100755
+--- a/scripts/kconfig/streamline_config.pl
++++ b/scripts/kconfig/streamline_config.pl
+@@ -617,7 +617,7 @@ foreach my $line (@config_file) {
+     $_ = $line;
+ 
+     if (/CONFIG_IKCONFIG/) {
+-	if (/# CONFIG_IKCONFIG is not set/) {
++	if (/# CONFIG_IKCONFIG is not set/ || /CONFIG_IKCONFIG=n/) {
+ 	    # enable IKCONFIG at least as a module
+ 	    print "CONFIG_IKCONFIG=m\n";
+ 	    # don't ask about PROC
+diff --git a/scripts/kconfig/tests/choice/alldef_expected_config b/scripts/kconfig/tests/choice/alldef_expected_config
+index 7a754bf4be94..75d98d488488 100644
+--- a/scripts/kconfig/tests/choice/alldef_expected_config
++++ b/scripts/kconfig/tests/choice/alldef_expected_config
+@@ -1,5 +1,5 @@
+ CONFIG_MODULES=y
+-# CONFIG_BOOL_CHOICE0 is not set
++CONFIG_BOOL_CHOICE0=n
+ CONFIG_BOOL_CHOICE1=y
+-# CONFIG_TRI_CHOICE0 is not set
+-# CONFIG_TRI_CHOICE1 is not set
++CONFIG_TRI_CHOICE0=n
++CONFIG_TRI_CHOICE1=n
+diff --git a/scripts/kconfig/tests/choice/allmod_expected_config b/scripts/kconfig/tests/choice/allmod_expected_config
+index f1f5dcdb7923..ed8ffcb18a3a 100644
+--- a/scripts/kconfig/tests/choice/allmod_expected_config
++++ b/scripts/kconfig/tests/choice/allmod_expected_config
+@@ -1,7 +1,7 @@
+ CONFIG_MODULES=y
+-# CONFIG_BOOL_CHOICE0 is not set
++CONFIG_BOOL_CHOICE0=n
+ CONFIG_BOOL_CHOICE1=y
+-# CONFIG_OPT_BOOL_CHOICE0 is not set
++CONFIG_OPT_BOOL_CHOICE0=n
+ CONFIG_OPT_BOOL_CHOICE1=y
+ CONFIG_TRI_CHOICE0=m
+ CONFIG_TRI_CHOICE1=m
+diff --git a/scripts/kconfig/tests/choice/allno_expected_config b/scripts/kconfig/tests/choice/allno_expected_config
+index b88ee7a43136..37b2749277dd 100644
+--- a/scripts/kconfig/tests/choice/allno_expected_config
++++ b/scripts/kconfig/tests/choice/allno_expected_config
+@@ -1,5 +1,5 @@
+-# CONFIG_MODULES is not set
+-# CONFIG_BOOL_CHOICE0 is not set
++CONFIG_MODULES=n
++CONFIG_BOOL_CHOICE0=n
+ CONFIG_BOOL_CHOICE1=y
+-# CONFIG_TRI_CHOICE0 is not set
++CONFIG_TRI_CHOICE0=n
+ CONFIG_TRI_CHOICE1=y
+diff --git a/scripts/kconfig/tests/choice/allyes_expected_config b/scripts/kconfig/tests/choice/allyes_expected_config
+index e5a062a1157c..a2b36c017ffb 100644
+--- a/scripts/kconfig/tests/choice/allyes_expected_config
++++ b/scripts/kconfig/tests/choice/allyes_expected_config
+@@ -1,9 +1,9 @@
+ CONFIG_MODULES=y
+-# CONFIG_BOOL_CHOICE0 is not set
++CONFIG_BOOL_CHOICE0=n
+ CONFIG_BOOL_CHOICE1=y
+-# CONFIG_OPT_BOOL_CHOICE0 is not set
++CONFIG_OPT_BOOL_CHOICE0=n
+ CONFIG_OPT_BOOL_CHOICE1=y
+-# CONFIG_TRI_CHOICE0 is not set
++CONFIG_TRI_CHOICE0=n
+ CONFIG_TRI_CHOICE1=y
+-# CONFIG_OPT_TRI_CHOICE0 is not set
++CONFIG_OPT_TRI_CHOICE0=n
+ CONFIG_OPT_TRI_CHOICE1=y
+diff --git a/scripts/kconfig/tests/choice/oldask1_config b/scripts/kconfig/tests/choice/oldask1_config
+index b67bfe3c641f..f0a4e5e9f2c1 100644
+--- a/scripts/kconfig/tests/choice/oldask1_config
++++ b/scripts/kconfig/tests/choice/oldask1_config
+@@ -1,2 +1,2 @@
+-# CONFIG_MODULES is not set
++CONFIG_MODULES=n
+ CONFIG_OPT_BOOL_CHOICE0=y
+diff --git a/scripts/kconfig/tests/inter_choice/expected_config b/scripts/kconfig/tests/inter_choice/expected_config
+index 5dceefb054e3..4cf72e16f300 100644
+--- a/scripts/kconfig/tests/inter_choice/expected_config
++++ b/scripts/kconfig/tests/inter_choice/expected_config
+@@ -1,4 +1,4 @@
+ CONFIG_MODULES=y
+ CONFIG_CHOICE_VAL0=y
+-# CONFIG_CHOIVE_VAL1 is not set
++CONFIG_CHOIVE_VAL1=n
+ CONFIG_DUMMY=y
+diff --git a/scripts/kconfig/tests/new_choice_with_dep/config b/scripts/kconfig/tests/new_choice_with_dep/config
+index 47ef95d567fd..47599c856033 100644
+--- a/scripts/kconfig/tests/new_choice_with_dep/config
++++ b/scripts/kconfig/tests/new_choice_with_dep/config
+@@ -1,3 +1,3 @@
+ CONFIG_CHOICE_B=y
+-# CONFIG_CHOICE_D is not set
++CONFIG_CHOICE_D=n
+ CONFIG_CHOICE_E=y
+diff --git a/scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py b/scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py
+index ffd469d1f226..9ba7542d47d5 100644
+--- a/scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py
++++ b/scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py
+@@ -2,14 +2,13 @@
+ """
+ Do not write choice values to .config if the dependency is unmet.
+ 
+-"# CONFIG_... is not set" should not be written into the .config file
+-for symbols with unmet dependency.
++=n should not be written into the .config file for symbols with unmet
++dependency.
+ 
+ This was not working correctly for choice values because choice needs
+ a bit different symbol computation.
+ 
+-This checks that no unneeded "# COFIG_... is not set" is contained in
+-the .config file.
++This checks that no unneeded =n is contained in the .config file.
+ 
+ Related Linux commit: cb67ab2cd2b8abd9650292c986c79901e3073a59
+ """
+diff --git a/scripts/kconfig/tests/no_write_if_dep_unmet/expected_config b/scripts/kconfig/tests/no_write_if_dep_unmet/expected_config
+index 473228810c35..9d057fad723c 100644
+--- a/scripts/kconfig/tests/no_write_if_dep_unmet/expected_config
++++ b/scripts/kconfig/tests/no_write_if_dep_unmet/expected_config
+@@ -2,4 +2,4 @@
+ # Automatically generated file; DO NOT EDIT.
+ # Main menu
+ #
+-# CONFIG_A is not set
++CONFIG_A=n
 -- 
-2.31.1
+2.32.0
 

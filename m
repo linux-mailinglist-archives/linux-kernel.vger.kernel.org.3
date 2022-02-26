@@ -2,153 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8F04C56D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 17:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00D34C56D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 17:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiBZQjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 11:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
+        id S232348AbiBZQcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 11:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiBZQjA (ORCPT
+        with ESMTP id S232339AbiBZQcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 11:39:00 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F8326CCFF;
-        Sat, 26 Feb 2022 08:38:26 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so7616591pjb.0;
-        Sat, 26 Feb 2022 08:38:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CUVRXEQjDfoKEnIhwgTgR29LkrM8Q5Udo+mcuXgqxmY=;
-        b=grgm2wFbK239cNsLuzTSkhY1fzbLdc1+OWLlurJMgls83pSJbwu15IopmmDkS32PPL
-         tNEmmBI0vNz9/Mydz6ArfC24pv2VrzwdsLMsf84Yms+r/DvKK2uUnGk8lAb6J3LpDch/
-         hzT/WYx4ugDyw4a5sICOVIRHCLT96cpcof/bhY3NZcW0mnM/ispEckofu/No/6QLbmPj
-         HzkEMzhgOMYUJIewtIiyD/BPzELZg9mfZSt7Ce3v1cdBxRU8NVs5Lo5l5ke8gpmHz4T3
-         7/IWy7u2LVZc6VR2ykF8rEpCSWFZIeYXrLYPqwXGu3vjef92ycMR9pJl14BBzZQSS61j
-         x0+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CUVRXEQjDfoKEnIhwgTgR29LkrM8Q5Udo+mcuXgqxmY=;
-        b=zHHCA+jvl2EKigiBuCFL2JBp8EwG5kJ29RQufDMPcMuWuF6Ts5ID+t8fL1zij3rAbK
-         +JNpJ2lWOlRkiATQhsjHTlxG3D7ayXWG8wQle7m4PArPCAlG5VWDkxREbwzmhYZX0Gf6
-         XiQT7n8VmI0TnoxetJMrVPc/32qx3DQOyLuLQfgAddgwKZReHg6IXv1IC/6EUdSdmID/
-         JwFS5fQN9UG6J8zIcBy+6uHpn/o39qwhiatIp2yZh5tYxVODp7ZbtTyosGtVuhHa3GxA
-         UtFXEqrjdCXa72uEQacmO0iSqy2/dOk4PEmv9qPRU263mEWTz7rn3FHm5f8E/2+WpyR9
-         EE3Q==
-X-Gm-Message-State: AOAM531KcJ6c4J6uLHcVj7S7b5UbdcngvuOEQy627Q6qidmFwaFlBlVl
-        x6lYzDqnv60q5WmiwdmhKk454k/S3tvgpQ==
-X-Google-Smtp-Source: ABdhPJyX3DH6/7pRuo98AF5k/wsbwDDIgDR8b7/uEgUSRy3dwdVRxE2BVCaEZc+fx8I6+XwbcMw8zA==
-X-Received: by 2002:a17:902:7205:b0:14c:9586:f9d5 with SMTP id ba5-20020a170902720500b0014c9586f9d5mr12627831plb.77.1645893505599;
-        Sat, 26 Feb 2022 08:38:25 -0800 (PST)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id g7-20020a656cc7000000b00375948e63d6sm5602217pgw.91.2022.02.26.08.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 08:38:25 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next v2] bpftool: Remove redundant slashes
-Date:   Sun, 27 Feb 2022 00:38:15 +0800
-Message-Id: <20220226163815.520133-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220225161507.470763-1-ytcoode@gmail.com>
-References: <20220225161507.470763-1-ytcoode@gmail.com>
+        Sat, 26 Feb 2022 11:32:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C824DEE5;
+        Sat, 26 Feb 2022 08:32:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C55A60BBD;
+        Sat, 26 Feb 2022 16:32:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC156C340E8;
+        Sat, 26 Feb 2022 16:32:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645893135;
+        bh=JIVnVPR5itRuwZnH80P4NOCj7Kr4fqQ4kQyZO3sUUcI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nf1uZWprEJ7KLB82ozSwEVAxVikYZ3hxO98I0/viiUNo8+zbh0YSiBehdDNvj1F3S
+         tgducp9CeMSRoLxc/RK+0XV1yOdzMNkBGaJ0/+NWSTCB10ttlGBLYJbk8AjWnGTrMv
+         lbfsl6Bg3Q0Xiu2ISOoM0THdR4RtDluE81HwVd51iJTan1fmR+uyqgl1G2ZkMED6BV
+         IJ782tiOPHHMWN/D9tTAPRP4TIbjqIswWjtfe4h/bcDSPgL1fNK29+u6kS/cMj9QuC
+         pydIbNg1LPLFwQItVlrxp3K4E2R+wWDGvDObYIRdS+87R6Xtaqk8nf894ubmhuKBHW
+         5ra+dBGO2YnQw==
+Date:   Sat, 26 Feb 2022 16:39:16 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH v2 1/1] iio: multiplexer: Make use of device properties
+Message-ID: <20220226163916.39b9421f@jic23-huawei>
+In-Reply-To: <Yf7COufm4GG7VkJu@smile.fi.intel.com>
+References: <20220202204427.57506-1-andriy.shevchenko@linux.intel.com>
+        <20220205173854.14a7aca0@jic23-huawei>
+        <Yf7COufm4GG7VkJu@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because the OUTPUT variable ends with a slash but CURDIR doesn't, to keep
-the _OUTPUT value consistent, we add a trailing slash to CURDIR when
-defining _OUTPUT variable.
+On Sat, 5 Feb 2022 20:30:18 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Since the _OUTPUT variable holds a value ending with a trailing slash,
-there is no need to add another one when defining BOOTSTRAP_OUTPUT and
-LIBBPF_OUTPUT variables.
+> On Sat, Feb 05, 2022 at 05:38:54PM +0000, Jonathan Cameron wrote:
+> > On Wed,  2 Feb 2022 22:44:27 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >   
+> > > Convert the module to be property provider agnostic and allow
+> > > it to be used on non-OF platforms.
+> > > 
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
+> > Looks good to me, but as it's complex I'd like Peter + anyone else interested
+> > to have a bit more time to take a look before I apply this one.  
+> 
+> Sure, I would love to see more eyes and hear comments!
+> 
 
-When defining LIBBPF_INCLUDE and LIBBPF_BOOTSTRAP_INCLUDE, we shouldn't
-add an extra slash either for the same reason.
+Peter, do you have time to take a look at this one?
+No problem if you are too busy, I'll just take another look myself and apply
+it if I think it looks fine.
 
-When building libbpf, the value of the DESTDIR argument should also not
-end with a trailing slash.
+Thanks,
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
----
-v1 -> v2: make the commit message more accurate
-
- tools/bpf/bpftool/Makefile | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index ba647aede0d6..9800f966fd51 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -18,19 +18,19 @@ BPF_DIR = $(srctree)/tools/lib/bpf
- ifneq ($(OUTPUT),)
-   _OUTPUT := $(OUTPUT)
- else
--  _OUTPUT := $(CURDIR)
-+  _OUTPUT := $(CURDIR)/
- endif
--BOOTSTRAP_OUTPUT := $(_OUTPUT)/bootstrap/
-+BOOTSTRAP_OUTPUT := $(_OUTPUT)bootstrap/
- 
--LIBBPF_OUTPUT := $(_OUTPUT)/libbpf/
-+LIBBPF_OUTPUT := $(_OUTPUT)libbpf/
- LIBBPF_DESTDIR := $(LIBBPF_OUTPUT)
--LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)/include
-+LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
- LIBBPF_HDRS_DIR := $(LIBBPF_INCLUDE)/bpf
- LIBBPF := $(LIBBPF_OUTPUT)libbpf.a
- 
- LIBBPF_BOOTSTRAP_OUTPUT := $(BOOTSTRAP_OUTPUT)libbpf/
- LIBBPF_BOOTSTRAP_DESTDIR := $(LIBBPF_BOOTSTRAP_OUTPUT)
--LIBBPF_BOOTSTRAP_INCLUDE := $(LIBBPF_BOOTSTRAP_DESTDIR)/include
-+LIBBPF_BOOTSTRAP_INCLUDE := $(LIBBPF_BOOTSTRAP_DESTDIR)include
- LIBBPF_BOOTSTRAP_HDRS_DIR := $(LIBBPF_BOOTSTRAP_INCLUDE)/bpf
- LIBBPF_BOOTSTRAP := $(LIBBPF_BOOTSTRAP_OUTPUT)libbpf.a
- 
-@@ -44,7 +44,7 @@ $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP_OUTPUT) $(LIBBPF_HDRS_DI
- 
- $(LIBBPF): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) \
--		DESTDIR=$(LIBBPF_DESTDIR) prefix= $(LIBBPF) install_headers
-+		DESTDIR=$(LIBBPF_DESTDIR:/=) prefix= $(LIBBPF) install_headers
- 
- $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_DIR)
- 	$(call QUIET_INSTALL, $@)
-@@ -52,7 +52,7 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
- 
- $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
--		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR) prefix= \
-+		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) prefix= \
- 		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
- 
- $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
--- 
-2.35.1
-
+Jonathan

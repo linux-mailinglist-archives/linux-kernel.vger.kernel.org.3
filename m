@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E734C54E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904E04C54ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiBZJaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 04:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S230424AbiBZJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 04:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiBZJaY (ORCPT
+        with ESMTP id S230171AbiBZJjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 04:30:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01560292EE2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645867787; x=1677403787;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aMLlJIdLHd5i9yiuNGg3R4D6MIquWUN9F2dRs7n82f0=;
-  b=ReTwyJlMIC8VpljlKIZ0hBVCkhRuVNVEtqYRtpRbRf5+bAzCsOiY0B1u
-   h1+sF5aDXGjcIzKhPHRqso1LugTxXYn/xtXNFVkYz5IbpTL+PcUIbC/Fn
-   H9lknsBjW7jRDntUGeHrHBAqkzp5C/UxDyIStqTPoo8pCdmomvXMehgN8
-   86pPeaS5Q1wEmOcbq2ITx7zAtFAkLK3G0noONXsnAxGqyVJnm0s2hY3I+
-   N6ditb4nqkdcBPDNryqI0Ww1NtrCT9AWuYvw0NbrihxWhuX9YT6KM0V8U
-   cMQ33tfN45/1jO375FQAA1Ccv62YdOfYkYUJDvWODLkV08q/lfvzl2wxo
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="277286999"
-X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
-   d="scan'208";a="277286999"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 01:29:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
-   d="scan'208";a="684884464"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2022 01:29:46 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNtOb-0005Lf-Hs; Sat, 26 Feb 2022 09:29:45 +0000
-Date:   Sat, 26 Feb 2022 17:29:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [ammarfaizi2-block:next/linux-next/akpm-base 54/86]
- drivers/scsi/aacraid/aachba.c:841:26: warning: array subscript 12 is outside
- array bounds of 'struct scsi_cmnd[1]'
-Message-ID: <202202261717.NzgEagBk-lkp@intel.com>
+        Sat, 26 Feb 2022 04:39:42 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9B3AA2FB
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:39:06 -0800 (PST)
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1McY0L-1nvaGS1Fcb-00cucF for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022
+ 10:39:05 +0100
+Received: by mail-wr1-f50.google.com with SMTP id s13so7869568wrb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:39:05 -0800 (PST)
+X-Gm-Message-State: AOAM531bEnJk47UjADTPWPGw0jnCJwT3fZ+xqRC2bw+P/Us6In4wZIQP
+        AoAN41GAFjX9egZ+i6sEdCMKKx8Z4cynDtGaaO0=
+X-Google-Smtp-Source: ABdhPJz5BYSSQUITstBOGh3oQUl0MT9nxRdFpSTkQkaM/Mp2O6n4D5+VZUw9uqGXLyEWFliZMNZp0PqkbSgCjnh2pOI=
+X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
+ v3-20020adfedc3000000b001ec5f115415mr7159000wro.317.1645868344946; Sat, 26
+ Feb 2022 01:39:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20220226022053.958688-1-yusisamerican@gmail.com>
+In-Reply-To: <20220226022053.958688-1-yusisamerican@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 26 Feb 2022 10:38:48 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3TWx71xT83003LSFsu1eF1p75hCxvpCB_FZf1SrNjQJw@mail.gmail.com>
+Message-ID: <CAK8P3a3TWx71xT83003LSFsu1eF1p75hCxvpCB_FZf1SrNjQJw@mail.gmail.com>
+Subject: Re: [PATCH] drivers: ddcci: upstream DDCCI driver
+To:     Yusuf Khan <yusisamerican@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        gregkh <gregkh@linuxfoundation.org>, javier@javigon.com,
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:B2DstmSc9M3m0E9elewUttugDookDbMvQA63i0T014IA1fVd9LF
+ TRZEhGMQLL8/lINsjOQRsv4TphtN+WRMDC8YWm4djgtsOz/u6zxmikIdONsQA2dI7rVmgQS
+ 1uaG7+uHHGUwF6rI+ua3M8HMftim0JIicmjDdG/aeSOhXs6tlBpnBjToYCPQHlWtGdpcauf
+ BPEmRigA9zbtJRrW2GO7w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8I52WhC/3No=:8mKCrXoAa9h3mt/XaPdAU1
+ 51i/CIFZEXJFx2L+K1V/re+fiBBC4HjmA+Scj8eM7aUC6S7gCqI63zJxoMPM2B3u8MCtM17TS
+ xBcAbbt1rAsD771IbhhrtLLC+pE5Kf+8dSj5E449gJQ+kDVPIo9ohgdkOwgSs51GxImVem5mu
+ idFFgM/4fOfom05BdTbYBx7+6n8c1jmuQVzyg2oaLyChqZnxVtnMXlCH1uHaK0nhapeGahs4j
+ f+FnhxdImhpUx73BwJ8HssmycgOPYIQh1hqbIDF2tk8bkk4tTjp0zHgTpCuKa/jCQKnHNGKxE
+ UJIXSTH5qxxGyWyRBHDZwaRIG090JEQ4azklPVm1ZvH8EXrZmquLJVH+PJayUyY63WO2x9KL8
+ SFah3ElhyZPLjzELu1LMeZ7tFWjTWwQHqIPnmaWIYSYfoiS7hEF5lbMX+Ywe2JtHOqG/icHzd
+ D1tcHgfQepeRHCWnNzCSVvA9VXy/uqimUbLOBU3S6Y/F9lYViZNKP4c0ZnZCGXP34QmbaLfzm
+ WpM0eJYrHhZW/amZDMJWQVEFZcFzIGKB1zAXg1iwMoPpyVwzqGNM2n2ugqEkyPBCwBA4RwNKA
+ M4JyrpJy3zj7uKoI0SZc2pgj5zKO9b3YJmzmNIZIsLG+uX4F3UZiSEp6WBOyGuL3TwHq3RTIw
+ 6R5nWDuqRrfxxZauQhjVuEk0tByYQlIrk709AOobaiRDBC/eIjWWbjjiPVncTfkhywSv2O8/X
+ s5G6K1QAnFDcWiQq/EgMdvKTutIvqyfQtg/kePWxGmionUDzy83cdtSWvH3+FxXtvZ5Cn8IYO
+ BH5FPYI75eId0cu6r2W21hqunHmhgfHDDSlrcfBOOVVAgMFLDs=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,73 +71,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/akpm-base
-head:   96e1561b10f208e7e599796f3dc3717d357ab4a1
-commit: 4d3f3f514ee62c43ee39f5596408b95cccb46fbb [54/86] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
-config: microblaze-buildonly-randconfig-r003-20220225 (https://download.01.org/0day-ci/archive/20220226/202202261717.NzgEagBk-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4d3f3f514ee62c43ee39f5596408b95cccb46fbb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block next/linux-next/akpm-base
-        git checkout 4d3f3f514ee62c43ee39f5596408b95cccb46fbb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/scsi/aacraid/
+with the other ones.On Sat, Feb 26, 2022 at 3:20 AM Yusuf Khan
+<yusisamerican@gmail.com> wrote:
+>
+> This patch upstreams the DDCCI driver by Christoph Grenz into
+> the kernel. The original gitlab page is loacted at https://gitlab
+> .com/ddcci-driver-linux/ddcci-driver-linux/-/tree/master.
+>
+> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+> ---
+>  drivers/Kconfig                 |    2 +
+>  drivers/Makefile                |    1 +
+>  drivers/ddcci/Kconfig           |    3 +
+>  drivers/ddcci/Makefile          |    3 +
+>  drivers/ddcci/ddcci-backlight.c |  413 +++++++
+>  drivers/ddcci/ddcci.c           | 1895 +++++++++++++++++++++++++++++++
+>  include/linux/ddcci.h           |  164 +++
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If this is a backlight driver, I think it should go into
+drivers/video/backlight/,
+no need for a top-level subsystem.
 
-All warnings (new ones prefixed by >>):
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +#include <asm-generic/fcntl.h>
 
-   drivers/scsi/aacraid/aachba.c: In function 'aac_probe_container':
->> drivers/scsi/aacraid/aachba.c:841:26: warning: array subscript 12 is outside array bounds of 'struct scsi_cmnd[1]' [-Warray-bounds]
-     841 |         status = cmd_priv->status;
-         |                          ^~
-   drivers/scsi/aacraid/aachba.c:821:37: note: referencing an object of size 196 allocated by 'kzalloc.constprop'
-     821 |         struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd), GFP_KERNEL);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Including the asm-generic version causes the build failures. If you need
+the contents, use <linux/fcntl.h>, otherwise leave it out.
+
+> +static dev_t ddcci_cdev_first;
+> +static dev_t ddcci_cdev_next;
+> +static dev_t ddcci_cdev_end;
+> +static DEFINE_SEMAPHORE(core_lock);
+
+No new semaphores please, this should probably be a mutex.
 
 
-vim +841 drivers/scsi/aacraid/aachba.c
+> +struct bus_type ddcci_bus_type;
+> +EXPORT_SYMBOL_GPL(ddcci_bus_type);
+> +
+> +/* Assert neccessary string array sizes  */
+> +#ifndef sizeof_field
+> +# define sizeof_field(t,m) FIELD_SIZEOF(t,m)
+> +#endif
+> +static_assert(sizeof_field(struct ddcci_device, prot) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, type) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, model) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, vendor) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, module) > 8);
+> +
+> +/* Internal per-i2c-client driver data */
+> +struct ddcci_bus_drv_data {
+> +       unsigned long quirks;
+> +       struct i2c_client *i2c_dev;
+> +       struct semaphore sem;
+> +       unsigned char recv_buffer[DDCCI_RECV_BUFFER_SIZE];
+> +};
 
-779dfcf6435b9a Phong Tran      2020-03-09  818  
-fe76df4235986c Mark Haverkamp  2007-03-15  819  int aac_probe_container(struct aac_dev *dev, int cid)
-fe76df4235986c Mark Haverkamp  2007-03-15  820  {
-7afdb863799749 Bart Van Assche 2021-10-07  821  	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd), GFP_KERNEL);
-76a3451b64c6d1 Bart Van Assche 2022-02-18  822  	struct aac_cmd_priv *cmd_priv = aac_priv(scsicmd);
-7afdb863799749 Bart Van Assche 2021-10-07  823  	struct scsi_device *scsidev = kzalloc(sizeof(*scsidev), GFP_KERNEL);
-fe76df4235986c Mark Haverkamp  2007-03-15  824  	int status;
-fe76df4235986c Mark Haverkamp  2007-03-15  825  
-fe76df4235986c Mark Haverkamp  2007-03-15  826  	if (!scsicmd || !scsidev) {
-fe76df4235986c Mark Haverkamp  2007-03-15  827  		kfree(scsicmd);
-fe76df4235986c Mark Haverkamp  2007-03-15  828  		kfree(scsidev);
-fe76df4235986c Mark Haverkamp  2007-03-15  829  		return -ENOMEM;
-fe76df4235986c Mark Haverkamp  2007-03-15  830  	}
-^1da177e4c3f41 Linus Torvalds  2005-04-16  831  
-fe76df4235986c Mark Haverkamp  2007-03-15  832  	scsicmd->device = scsidev;
-fe76df4235986c Mark Haverkamp  2007-03-15  833  	scsidev->sdev_state = 0;
-fe76df4235986c Mark Haverkamp  2007-03-15  834  	scsidev->id = cid;
-fe76df4235986c Mark Haverkamp  2007-03-15  835  	scsidev->host = dev->scsi_host_ptr;
-fe76df4235986c Mark Haverkamp  2007-03-15  836  
-fe76df4235986c Mark Haverkamp  2007-03-15  837  	if (_aac_probe_container(scsicmd, aac_probe_container_callback1) == 0)
-fe76df4235986c Mark Haverkamp  2007-03-15  838  		while (scsicmd->device == scsidev)
-fe76df4235986c Mark Haverkamp  2007-03-15  839  			schedule();
-802ae2f05b646c Salyzyn, Mark   2007-03-21  840  	kfree(scsidev);
-76a3451b64c6d1 Bart Van Assche 2022-02-18 @841  	status = cmd_priv->status;
-fe76df4235986c Mark Haverkamp  2007-03-15  842  	kfree(scsicmd);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  843  	return status;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  844  }
-^1da177e4c3f41 Linus Torvalds  2005-04-16  845  
+Same here.
 
-:::::: The code at line 841 was first introduced by commit
-:::::: 76a3451b64c6d1718a651697670bd5dc557ed148 scsi: aacraid: Move the SCSI pointer to private command data
+> +static const struct file_operations ddcci_fops = {
+> +       .owner = THIS_MODULE,
+> +       .read = ddcci_cdev_read,
+> +       .write = ddcci_cdev_write,
+> +       .open = ddcci_cdev_open,
+> +       .release = ddcci_cdev_close,
+> +       .llseek = ddcci_cdev_seek
+> +};
 
-:::::: TO: Bart Van Assche <bvanassche@acm.org>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+It looks like this adds low-level access to a bus that is already managed by
+the drm (or older framebuffer) drivers. How do you prevent these two
+from stepping on each other's toes?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        Arnd

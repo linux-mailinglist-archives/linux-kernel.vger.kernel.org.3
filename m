@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B6A4C5765
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFD74C5767
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 19:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbiBZSQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 13:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S232629AbiBZSQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 13:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiBZSQr (ORCPT
+        with ESMTP id S232624AbiBZSQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 13:16:47 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68D227EC2B;
-        Sat, 26 Feb 2022 10:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645899366;
-        bh=b6FURsJsW+kr6eAUTeFvjpLUUXagxQmlheQYAf45hrk=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=UmtMMia2tIroAhkdS1ib1bWj7SO9m1lrOWP+Hggn+h6fGnOhOs3e8yKIVt/tHQUKd
-         sG0F4BfbU+KrWHkFbdGjrCjY0XUtZjjmMWQg36CwDkmfczhhgyGeWGu5yhULJzMwkP
-         KTNAnqRPF/HE9WFGyd73pYc6m0vbX0muysAu3w5A=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from genesis.localnet ([217.232.144.251]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lc9-1nNkUn2hE3-000wzb; Sat, 26
- Feb 2022 19:16:06 +0100
-From:   Alois Wohlschlager <alwoju@gmx.de>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ovl: warn if trusted xattr creation fails
-Date:   Sat, 26 Feb 2022 19:15:50 +0100
-Message-ID: <2619141.9QKAVWPfZp@genesis>
-In-Reply-To: <YhNzc/++SHzdMXyt@miu.piliscsaba.redhat.com>
-References: <2783448.iqOl4yHqVZ@genesis> <YhNzc/++SHzdMXyt@miu.piliscsaba.redhat.com>
+        Sat, 26 Feb 2022 13:16:49 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FFF16DAE2;
+        Sat, 26 Feb 2022 10:16:12 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id u3so12282296ybh.5;
+        Sat, 26 Feb 2022 10:16:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LrEwaB+kbTeaznkd+BNx8jVuqDzOoWE98mZBP/QrouE=;
+        b=IX95pwb0o0c1hdOQhpuOhe3OCnJ2Gb7GVrSZ6X1I2PH9tjuaE86tQRG/xSsVZvYINv
+         XiYp6Fa/W2Ctg4q5bq8P7CmKiU4zAjOb5lWtmw8e+aFNTGNK9T/DjNXpjjXFouQ6do2u
+         6g4R+0MsSjO0gkHAFPSNWQNiT2VZTOJAimfBV4M1ibAXdeAHP8Xt5KzAMCOo//ReGTby
+         Ef/acwmtbJdtd5CgnBFTcv8y0hNbkttqPcFRiYs7bIO1Y6BCjBAVnm1UtsVVIQ1f1207
+         GhYSBN6wAYrtX/jNMU/lVB9NLpVR/hVv8ZiYT4yIRboutW58uEXkYtPQcJx8br2gnguI
+         hVnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LrEwaB+kbTeaznkd+BNx8jVuqDzOoWE98mZBP/QrouE=;
+        b=gUfKaoV6ktq168lK20tRRr1ubOUKstsW5t+mvpd61HZ19focux3JYkYQcXGjfTe3Mr
+         iao2Lpmk+jmN8aRnFIa2t5rK/vIb/3UcfE6If97jyEWXqH3Z3a+q1xvKjcxWeDw7uBT7
+         +GcFilA3rCluHhIxRP+7g1P/vBQIdtEm63YUqNkm8sTFjyfJa7uz90hQePrrrmfaK8LJ
+         NL7/mwUFRzNP4Y5KeKwAiCeoWIK09ie6UiY0QdXHxZKNRXA9gzaBZPGwndxyK0CvlKxg
+         c1w2u7zqzf84CO9kE7ZpCkC6O3HiSI8JP6HOZDYcqNrdWU0k4x6Fw/nAYSvlZ/Fn+XeN
+         nZJA==
+X-Gm-Message-State: AOAM532migsp6oVClk8I5Se88nhsEvaNMTNCWE2U/Jf+7gqeZZq763Nw
+        ewI7BlUDTynJSuLdK/44YY6CNIdF17SQbrHP6SwxGN5fczm6zw==
+X-Google-Smtp-Source: ABdhPJx6p75lgdbg9+7oe/9Jb1gunfXQkp3m4E3iFa+ALW1LnJX8X5/l6U5lvNfO3suJC1cXRwg6JBfdicUwZAOWbcE=
+X-Received: by 2002:a25:8490:0:b0:624:5f70:142a with SMTP id
+ v16-20020a258490000000b006245f70142amr12382739ybk.173.1645899371404; Sat, 26
+ Feb 2022 10:16:11 -0800 (PST)
 MIME-Version: 1.0
+References: <20220226135724.61516-1-linux@fw-web.de> <2815432.3mA4caTK8C@diego>
+In-Reply-To: <2815432.3mA4caTK8C@diego>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sat, 26 Feb 2022 13:15:59 -0500
+Message-ID: <CAMdYzYro7r2nELu2O4TuxxtZLxNSv1e3iU5yBzjd7AQgHP+FPw@mail.gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: rockchip: Add sata2 node to rk356x
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="us-ascii"
-X-Provags-ID: V03:K1:yea8lAhWsg2b284JbNbp1bAsDqhMJzbu+HTFIiw8iFSDFatyfPb
- mjBwN2E9rCnBU3bitsJLKVzL1zR8X3W+BGU39/iXsQAdRfj7mllmPE/wgVvtNqqkzi9RYmn
- suE6Z3BM/Cc+yGme+530l/JErtuLVhhfnaosILiC1SPJPC6u38vaO6d8i4pvNKJEowiEeqf
- RKTNTg0YipN2tkp+k9WPA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rd50DzNluzk=:CxzKDPOsywbN/lwqTASyvx
- 3o+lMuZ6IM0RWiIFYS7B5OjKgSB0vZxYBhzlVCgq21dkJ57ORnIaNH5LoGMz8C2iAHxTecEdX
- TRY7WbgLTHxYS/FGC187EyaRn+caveLPvgzpGXKn7P8XuOFbUBpf72F/W9RlHA/f+SnWhO2ev
- O0a1FtC3luAPBAIh06Pr1+t+TCsyxb9rOlww5ubJF7Mkwy/cIiBZjlA6j/Rj5xEPjKR0BhMnZ
- l/qT4qF9z0fRyS5augxwa0EKPJVhYmiDC1Pyd9L2d6BgFekyokZAte7NaD7tLLpf2wJ+htdIu
- cUfDo3pwUrCjBp98oQC1vqa6c3eaNcALY0nwm84GB4aLfVX7piCoYQnHxeQ4Jk2dvfsbMIwv1
- gWygtEsAD2ifRAmH2gMGkG2tDWWSBZxLKzyY8d7TxLd/oFx0NahqnC8kPd/47ze0rJSV4WLy/
- YPFKYxWAzx9eYbYMNnF/P47jamQ3V0mt7MtrYmT4vdonhvAf+MQX0jOKoKYG2bePvVq7iRzKK
- liTyAG5jtV7rLaxbC5ipTj54ZuStvtHmyvUgoUsiM8kLY8Ql7bjErqy8C3rXkPE+r8WJB38Rj
- cF77bdY3ZWofzE7zXxPqg95EHaRRkTkXxIEMd2Bn5uBSArqbDQ8wTNdxUkSl/dGwJ3QfJHnFA
- TsxhFnA14+0dKP/ET2rvgLllYBdO/BmrHbYLaWCd95NoML45eKMo4BS1MoZZYDrph9ixR++fz
- HKCp1m1OwCfNg8am87F5i1KPPN+jEWeUkkhIWFwrXrkXaBq5dle75pI0deYGi9PUXGxm/n0e3
- 6ZrJ1vemgmolspH9+1hQ+KzLjnd5MVTZv0F1xURlKzaZemriTiiK4M5i85cCYEiwSukoFjIJP
- lBYPzbtS28qPtQyvahjCK7k5RO4oM4J9l7U+AtJKLmOh5fZlqay6/YcuPI2l3FuzNtRE/CT+n
- wPaYs+Aagyw4tJm+Jcoyeidtm3KC4k6THfYFus8pEygFNjQWKde0tzdT6igsfdLOf5kCCiBG9
- GhdUrg4joYZTqkPNPqBW7oso2BpDMhdWyWdAoW910r3HfZ+85Fm55rv7MTCVgeJqU2y7e6G3I
- eQZy878BMm2534=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 21. Februar 2022, 12:11:47 CET schrieb Miklos Szeredi:
+On Sat, Feb 26, 2022 at 1:08 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
 >
-> Thanks for the patch.
+> Hi Frank,
 >
-> How about the following (untested) variant?
+> Am Samstag, 26. Februar 2022, 14:57:24 CET schrieb Frank Wunderlich:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > RK356x supports up to 3 sata controllers which were compatible with the
+> > existing snps,dwc-ahci binding.
+> >
+> > My board has only sata2 connected to combphy2 so only add this one.
 >
-> Thanks,
-> Miklos
+> how far does the added node diverge from the vendor kernel?
 >
->
-> diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-> index 7bb0a47cb615..955aeefc3b29 100644
-> --- a/fs/overlayfs/super.c
-> +++ b/fs/overlayfs/super.c
-> @@ -1413,11 +1413,12 @@ static int ovl_make_workdir(struct super_block *=
-sb,
-> struct ovl_fs *ofs, */
->  	err =3D ovl_do_setxattr(ofs, ofs->workdir, OVL_XATTR_OPAQUE, "0", 1);
->  	if (err) {
-> +		pr_warn("failed to set xattr on upper\n");
->  		ofs->noxattr =3D true;
->  		if (ofs->config.index || ofs->config.metacopy) {
->  			ofs->config.index =3D false;
->  			ofs->config.metacopy =3D false;
-> -			pr_warn("upper fs does not support xattr, falling back to
-> index=3Doff,metacopy=3Doff.\n"); +			pr_warn("...falling back to
-> index=3Doff,metacopy=3Doff.\n");
->  		}
->  		/*
->  		 * xattr support is required for persistent st_ino.
-> @@ -1425,8 +1426,10 @@ static int ovl_make_workdir(struct super_block *s=
-b,
-> struct ovl_fs *ofs, */
->  		if (ofs->config.xino =3D=3D OVL_XINO_AUTO) {
->  			ofs->config.xino =3D OVL_XINO_OFF;
-> -			pr_warn("upper fs does not support xattr, falling back to xino=3Doff=
-.\n");
-> +			pr_warn("...falling back to xino=3Doff.\n");
->  		}
-> +		if (err =3D=3D -EPERM && !ofs->config.userxattr)
-> +			pr_info("try mounting with 'userxattr' option\n");
->  		err =3D 0;
->  	} else {
->  		ovl_do_removexattr(ofs, ofs->workdir, OVL_XATTR_OPAQUE);
+> If it's pretty much similar between both, we can assume the other nodes
+> should work pretty well as well and therefore should all of them at once
+> and hope for the best?
 
-Seems sensible to me, since it doesn't duplicate information in case index=
-, metacopy or xino are attempted to be used.
+There's essentially zero divergence (minus the change due to combophy
+changing), and likely won't be until the ahci-platform.txt is
+converted to yaml.
 
-Alois
+I have tested both SATA1 and SATA2 successfully on the rk3566.
+I don't have any rk3568 boards that are operational yet to test SATA0.
 
-
+>
+> Thanks
+> Heiko
+>
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot=
+/dts/rockchip/rk356x.dtsi
+> > index 7cdef800cb3c..7b6c8a0c8b84 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > @@ -230,6 +230,21 @@ scmi_shmem: sram@0 {
+> >               };
+> >       };
+> >
+> > +     sata2: sata@fc800000 {
+> > +             compatible =3D "snps,dwc-ahci";
+> > +             reg =3D <0 0xfc800000 0 0x1000>;
+> > +             clocks =3D <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
+> > +                      <&cru CLK_SATA2_RXOOB>;
+> > +             clock-names =3D "sata", "pmalive", "rxoob";
+> > +             interrupts =3D <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+> > +             interrupt-names =3D "hostc";
+> > +             phys =3D <&combphy2 PHY_TYPE_SATA>;
+> > +             phy-names =3D "sata-phy";
+> > +             ports-implemented =3D <0x1>;
+> > +             power-domains =3D <&power RK3568_PD_PIPE>;
+> > +             status =3D "disabled";
+> > +     };
+> > +
+> >       gic: interrupt-controller@fd400000 {
+> >               compatible =3D "arm,gic-v3";
+> >               reg =3D <0x0 0xfd400000 0 0x10000>, /* GICD */
+> >
+>
+>
+>
+>

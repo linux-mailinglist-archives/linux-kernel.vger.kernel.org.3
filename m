@@ -2,322 +2,2627 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9014C5364
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAFE4C535F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiBZCeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 21:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S229531AbiBZCeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 21:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiBZCeM (ORCPT
+        with ESMTP id S229455AbiBZCeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 21:34:12 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3D10DA52;
-        Fri, 25 Feb 2022 18:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645842817; x=1677378817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=43gOqWKi55OYaSFCmbMbQJLx6uNrCxT4m6xOeQarbNM=;
-  b=KY0eDzs5a1HLp3NCS23fsfS9LgrbfSTyiuIMdRdbOgiNcSx7DIBLJeu0
-   MzEE25T8o3W5O+Ao77K1c4S3jTK3/duxyfiyzv1+pibX5lHqn7omOw/N4
-   B33T1cNzPl0p6oNxCG3/giJx0QuFIwuwuA5ifHTRIdwMAq2zgD7DftAVc
-   8PmVyq/dPDYq2bFaPFQqD8WBu8o8IOJ6V43sEZNF+ZQUgXvoLp81tCIVt
-   7tIJjr+FMd2R0qXfgjeZrf2TDMZS1PdYCeNnnyE9ccqUgECmqd51/XxhZ
-   A0i02vY3rzKXdu7hdZVzYTPr2E9lFx6gWy/3y6L+igzAagBPUH2m1xuui
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="277261931"
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="277261931"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 18:33:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="492163099"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Feb 2022 18:33:33 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNmto-0004yF-P9; Sat, 26 Feb 2022 02:33:32 +0000
-Date:   Sat, 26 Feb 2022 10:32:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shakeel Butt <shakeelb@google.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     kbuild-all@lists.01.org, Ivan Babrou <ivan@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Daniel Dao <dqminh@cloudflare.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive
- codepaths
-Message-ID: <202202261045.FAsMZlyD-lkp@intel.com>
-References: <20220226002412.113819-1-shakeelb@google.com>
+        Fri, 25 Feb 2022 21:34:05 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89073113D89
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 18:33:29 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id j12so2518230vkr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 18:33:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=13806hgwl/wRavWtiawsIXWbmdFB7C2xtkHtiywbpWY=;
+        b=iu4Sj2RZinLTOKJWVhldH3GJcvlbQqCuAMQ7yurMa6+V4pg9Q5q13BqHh2zJB0so7X
+         8i+fwEZEBEgzQOA6WLOEuTJKvuDL2GnX2CC1zHWDyZNqCG2FaSa4cXMvVoneqTcMkBAj
+         opDCk0Niiz/IpCtIlMC8UxQ8sRpceFtHYnpBy7/0080oP26iSYBsEI7PGriPUrDw4gCJ
+         hQmginFCz9MNtSuTK7xcT2QD3EA/LCC2CQwoAZ+MZqxG6L7uRx9WeKGhqccoG5VtH5rX
+         MQuzd93sDcjG+ObBhje2IN3lxdrfEQ230A9BrQjlpJnZt1MiubN0s8LmN1W7gW2JXAA+
+         D6xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=13806hgwl/wRavWtiawsIXWbmdFB7C2xtkHtiywbpWY=;
+        b=J3PMQjTLGjQygByig0GArNSP206xh2Jouon5parf7mfq+lCpJul2G1OFx53N2lEevk
+         f82wQBQjL6fgP1/Pxf1hFl/jKO1j2AWYN7aKVt7eA1Zudd9Mvp/LvxJ1rDDYfp9kBXtk
+         ObbNsBd9LeW+ipYkAgdaz+9Bsckx2eU70OXd+jCZalSrID/SzQQhytDzvuG01ZsxDmrM
+         ejudGRfK4kfRUaL0DkcJ0zj+zYh9YACrZ682mbHjAPWl2+xhYAU4KFxAHMZGmYIeX9Ej
+         4TBusssCLFraD746cfTBfl9UpxXgvHSNrELjQTFU38jW3Id8ULC0XCC1NX8KhQFpDmxH
+         WcJQ==
+X-Gm-Message-State: AOAM530xuV7+gy7+Fj1gVJC+hA+XSCiRPL2A85OgXbj9mfPthAzuHcjA
+        Jx98FG+KoN5DzyK4sYUbtvlTXMpe6OxktxDvW56RC2Xooz+DuA==
+X-Google-Smtp-Source: ABdhPJylxTI8YUBSprjRoTFrfZLKgDCmGjdSw9mogDUKIiJjlhUJx7txvJXraTC8/YTHhXs8sszDB3KN6aDJmtAnUak=
+X-Received: by 2002:a05:6122:c9f:b0:330:e2ed:4786 with SMTP id
+ ba31-20020a0561220c9f00b00330e2ed4786mr4469332vkb.29.1645842807956; Fri, 25
+ Feb 2022 18:33:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226002412.113819-1-shakeelb@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220226022053.958688-1-yusisamerican@gmail.com>
+In-Reply-To: <20220226022053.958688-1-yusisamerican@gmail.com>
+From:   Yusuf Khan <yusisamerican@gmail.com>
+Date:   Fri, 25 Feb 2022 18:33:15 -0800
+Message-ID: <CAJoG2+-hmkhf8zy_nb0oyHSdaYdJwcnPPX4BAwrT6SvSsRQ+VA@mail.gmail.com>
+Subject: Re: [PATCH] drivers: ddcci: upstream DDCCI driver
+To:     linux-kernel@vger.kernel.org
+Cc:     jasowang@redhat.com, mikelley@microsoft.com, mst@redhat.com,
+        gregkh@linuxfoundation.org, javier@javigon.com, arnd@arndb.de,
+        will@kernel.org, axboe@kernel.dk, bjorn.andersson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shakeel,
+derp, I should have used the checkpatch command before I sent the
+patch, v2 is coming.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on hnaz-mm/master]
-[also build test ERROR on linus/master v5.17-rc5 next-20220224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Shakeel-Butt/memcg-async-flush-memcg-stats-from-perf-sensitive-codepaths/20220226-082444
-base:   https://github.com/hnaz/linux-mm master
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220226/202202261045.FAsMZlyD-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/5dffeb24975bc4cbe99af650d833eb0183a4882f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Shakeel-Butt/memcg-async-flush-memcg-stats-from-perf-sensitive-codepaths/20220226-082444
-        git checkout 5dffeb24975bc4cbe99af650d833eb0183a4882f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mm/vmscan.c: In function 'shrink_node':
->> mm/vmscan.c:3191:2: error: implicit declaration of function 'mem_cgroup_flush_stats_async'; did you mean 'mem_cgroup_flush_stats'? [-Werror=implicit-function-declaration]
-    3191 |  mem_cgroup_flush_stats_async();
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |  mem_cgroup_flush_stats
-   cc1: some warnings being treated as errors
---
-   mm/workingset.c: In function 'workingset_refault':
->> mm/workingset.c:358:2: error: implicit declaration of function 'mem_cgroup_flush_stats_async'; did you mean 'mem_cgroup_flush_stats'? [-Werror=implicit-function-declaration]
-     358 |  mem_cgroup_flush_stats_async();
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |  mem_cgroup_flush_stats
-   cc1: some warnings being treated as errors
-
-
-vim +3191 mm/vmscan.c
-
-  3175	
-  3176	static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
-  3177	{
-  3178		struct reclaim_state *reclaim_state = current->reclaim_state;
-  3179		unsigned long nr_reclaimed, nr_scanned;
-  3180		struct lruvec *target_lruvec;
-  3181		bool reclaimable = false;
-  3182		unsigned long file;
-  3183	
-  3184		target_lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat);
-  3185	
-  3186	again:
-  3187		/*
-  3188		 * Flush the memory cgroup stats, so that we read accurate per-memcg
-  3189		 * lruvec stats for heuristics.
-  3190		 */
-> 3191		mem_cgroup_flush_stats_async();
-  3192	
-  3193		memset(&sc->nr, 0, sizeof(sc->nr));
-  3194	
-  3195		nr_reclaimed = sc->nr_reclaimed;
-  3196		nr_scanned = sc->nr_scanned;
-  3197	
-  3198		/*
-  3199		 * Determine the scan balance between anon and file LRUs.
-  3200		 */
-  3201		spin_lock_irq(&target_lruvec->lru_lock);
-  3202		sc->anon_cost = target_lruvec->anon_cost;
-  3203		sc->file_cost = target_lruvec->file_cost;
-  3204		spin_unlock_irq(&target_lruvec->lru_lock);
-  3205	
-  3206		/*
-  3207		 * Target desirable inactive:active list ratios for the anon
-  3208		 * and file LRU lists.
-  3209		 */
-  3210		if (!sc->force_deactivate) {
-  3211			unsigned long refaults;
-  3212	
-  3213			refaults = lruvec_page_state(target_lruvec,
-  3214					WORKINGSET_ACTIVATE_ANON);
-  3215			if (refaults != target_lruvec->refaults[0] ||
-  3216				inactive_is_low(target_lruvec, LRU_INACTIVE_ANON))
-  3217				sc->may_deactivate |= DEACTIVATE_ANON;
-  3218			else
-  3219				sc->may_deactivate &= ~DEACTIVATE_ANON;
-  3220	
-  3221			/*
-  3222			 * When refaults are being observed, it means a new
-  3223			 * workingset is being established. Deactivate to get
-  3224			 * rid of any stale active pages quickly.
-  3225			 */
-  3226			refaults = lruvec_page_state(target_lruvec,
-  3227					WORKINGSET_ACTIVATE_FILE);
-  3228			if (refaults != target_lruvec->refaults[1] ||
-  3229			    inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
-  3230				sc->may_deactivate |= DEACTIVATE_FILE;
-  3231			else
-  3232				sc->may_deactivate &= ~DEACTIVATE_FILE;
-  3233		} else
-  3234			sc->may_deactivate = DEACTIVATE_ANON | DEACTIVATE_FILE;
-  3235	
-  3236		/*
-  3237		 * If we have plenty of inactive file pages that aren't
-  3238		 * thrashing, try to reclaim those first before touching
-  3239		 * anonymous pages.
-  3240		 */
-  3241		file = lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
-  3242		if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FILE))
-  3243			sc->cache_trim_mode = 1;
-  3244		else
-  3245			sc->cache_trim_mode = 0;
-  3246	
-  3247		/*
-  3248		 * Prevent the reclaimer from falling into the cache trap: as
-  3249		 * cache pages start out inactive, every cache fault will tip
-  3250		 * the scan balance towards the file LRU.  And as the file LRU
-  3251		 * shrinks, so does the window for rotation from references.
-  3252		 * This means we have a runaway feedback loop where a tiny
-  3253		 * thrashing file LRU becomes infinitely more attractive than
-  3254		 * anon pages.  Try to detect this based on file LRU size.
-  3255		 */
-  3256		if (!cgroup_reclaim(sc)) {
-  3257			unsigned long total_high_wmark = 0;
-  3258			unsigned long free, anon;
-  3259			int z;
-  3260	
-  3261			free = sum_zone_node_page_state(pgdat->node_id, NR_FREE_PAGES);
-  3262			file = node_page_state(pgdat, NR_ACTIVE_FILE) +
-  3263				   node_page_state(pgdat, NR_INACTIVE_FILE);
-  3264	
-  3265			for (z = 0; z < MAX_NR_ZONES; z++) {
-  3266				struct zone *zone = &pgdat->node_zones[z];
-  3267				if (!managed_zone(zone))
-  3268					continue;
-  3269	
-  3270				total_high_wmark += high_wmark_pages(zone);
-  3271			}
-  3272	
-  3273			/*
-  3274			 * Consider anon: if that's low too, this isn't a
-  3275			 * runaway file reclaim problem, but rather just
-  3276			 * extreme pressure. Reclaim as per usual then.
-  3277			 */
-  3278			anon = node_page_state(pgdat, NR_INACTIVE_ANON);
-  3279	
-  3280			sc->file_is_tiny =
-  3281				file + free <= total_high_wmark &&
-  3282				!(sc->may_deactivate & DEACTIVATE_ANON) &&
-  3283				anon >> sc->priority;
-  3284		}
-  3285	
-  3286		shrink_node_memcgs(pgdat, sc);
-  3287	
-  3288		if (reclaim_state) {
-  3289			sc->nr_reclaimed += reclaim_state->reclaimed_slab;
-  3290			reclaim_state->reclaimed_slab = 0;
-  3291		}
-  3292	
-  3293		/* Record the subtree's reclaim efficiency */
-  3294		vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
-  3295			   sc->nr_scanned - nr_scanned,
-  3296			   sc->nr_reclaimed - nr_reclaimed);
-  3297	
-  3298		if (sc->nr_reclaimed - nr_reclaimed)
-  3299			reclaimable = true;
-  3300	
-  3301		if (current_is_kswapd()) {
-  3302			/*
-  3303			 * If reclaim is isolating dirty pages under writeback,
-  3304			 * it implies that the long-lived page allocation rate
-  3305			 * is exceeding the page laundering rate. Either the
-  3306			 * global limits are not being effective at throttling
-  3307			 * processes due to the page distribution throughout
-  3308			 * zones or there is heavy usage of a slow backing
-  3309			 * device. The only option is to throttle from reclaim
-  3310			 * context which is not ideal as there is no guarantee
-  3311			 * the dirtying process is throttled in the same way
-  3312			 * balance_dirty_pages() manages.
-  3313			 *
-  3314			 * Once a node is flagged PGDAT_WRITEBACK, kswapd will
-  3315			 * count the number of pages under pages flagged for
-  3316			 * immediate reclaim and stall if any are encountered
-  3317			 * in the nr_immediate check below.
-  3318			 */
-  3319			if (sc->nr.writeback && sc->nr.writeback == sc->nr.taken)
-  3320				set_bit(PGDAT_WRITEBACK, &pgdat->flags);
-  3321	
-  3322			/* Allow kswapd to start writing pages during reclaim.*/
-  3323			if (sc->nr.unqueued_dirty == sc->nr.file_taken)
-  3324				set_bit(PGDAT_DIRTY, &pgdat->flags);
-  3325	
-  3326			/*
-  3327			 * If kswapd scans pages marked for immediate
-  3328			 * reclaim and under writeback (nr_immediate), it
-  3329			 * implies that pages are cycling through the LRU
-  3330			 * faster than they are written so forcibly stall
-  3331			 * until some pages complete writeback.
-  3332			 */
-  3333			if (sc->nr.immediate)
-  3334				reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
-  3335		}
-  3336	
-  3337		/*
-  3338		 * Tag a node/memcg as congested if all the dirty pages were marked
-  3339		 * for writeback and immediate reclaim (counted in nr.congested).
-  3340		 *
-  3341		 * Legacy memcg will stall in page writeback so avoid forcibly
-  3342		 * stalling in reclaim_throttle().
-  3343		 */
-  3344		if ((current_is_kswapd() ||
-  3345		     (cgroup_reclaim(sc) && writeback_throttling_sane(sc))) &&
-  3346		    sc->nr.dirty && sc->nr.dirty == sc->nr.congested)
-  3347			set_bit(LRUVEC_CONGESTED, &target_lruvec->flags);
-  3348	
-  3349		/*
-  3350		 * Stall direct reclaim for IO completions if the lruvec is
-  3351		 * node is congested. Allow kswapd to continue until it
-  3352		 * starts encountering unqueued dirty pages or cycling through
-  3353		 * the LRU too quickly.
-  3354		 */
-  3355		if (!current_is_kswapd() && current_may_throttle() &&
-  3356		    !sc->hibernation_mode &&
-  3357		    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
-  3358			reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
-  3359	
-  3360		if (should_continue_reclaim(pgdat, sc->nr_reclaimed - nr_reclaimed,
-  3361					    sc))
-  3362			goto again;
-  3363	
-  3364		/*
-  3365		 * Kswapd gives up on balancing particular nodes after too
-  3366		 * many failures to reclaim anything from them and goes to
-  3367		 * sleep. On reclaim progress, reset the failure counter. A
-  3368		 * successful direct reclaim run will revive a dormant kswapd.
-  3369		 */
-  3370		if (reclaimable)
-  3371			pgdat->kswapd_failures = 0;
-  3372	}
-  3373	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Fri, Feb 25, 2022 at 6:21 PM Yusuf Khan <yusisamerican@gmail.com> wrote:
+>
+> This patch upstreams the DDCCI driver by Christoph Grenz into
+> the kernel. The original gitlab page is loacted at https://gitlab
+> .com/ddcci-driver-linux/ddcci-driver-linux/-/tree/master.
+>
+> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+> ---
+>  drivers/Kconfig                 |    2 +
+>  drivers/Makefile                |    1 +
+>  drivers/ddcci/Kconfig           |    3 +
+>  drivers/ddcci/Makefile          |    3 +
+>  drivers/ddcci/ddcci-backlight.c |  413 +++++++
+>  drivers/ddcci/ddcci.c           | 1895 +++++++++++++++++++++++++++++++
+>  include/linux/ddcci.h           |  164 +++
+>  7 files changed, 2481 insertions(+)
+>  create mode 100644 drivers/ddcci/Kconfig
+>  create mode 100644 drivers/ddcci/Makefile
+>  create mode 100644 drivers/ddcci/ddcci-backlight.c
+>  create mode 100644 drivers/ddcci/ddcci.c
+>  create mode 100644 include/linux/ddcci.h
+>
+> diff --git a/drivers/Kconfig b/drivers/Kconfig
+> index 0d399ddaa185..3a58a29113f9 100644
+> --- a/drivers/Kconfig
+> +++ b/drivers/Kconfig
+> @@ -236,4 +236,6 @@ source "drivers/interconnect/Kconfig"
+>  source "drivers/counter/Kconfig"
+>
+>  source "drivers/most/Kconfig"
+> +
+> +source "drivers/ddcci/Kconfig"
+>  endmenu
+> diff --git a/drivers/Makefile b/drivers/Makefile
+> index a110338c860c..c9181f1dc5aa 100644
+> --- a/drivers/Makefile
+> +++ b/drivers/Makefile
+> @@ -21,6 +21,7 @@ obj-y                         += pci/
+>  obj-$(CONFIG_PARISC)           += parisc/
+>  obj-$(CONFIG_RAPIDIO)          += rapidio/
+>  obj-y                          += video/
+> +obj-$(CONFIG_DDCCI)                            += ddcci/
+>  obj-y                          += idle/
+>
+>  # IPMI must come before ACPI in order to provide IPMI opregion support
+> diff --git a/drivers/ddcci/Kconfig b/drivers/ddcci/Kconfig
+> new file mode 100644
+> index 000000000000..416881cc88e1
+> --- /dev/null
+> +++ b/drivers/ddcci/Kconfig
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +menuconfig DDCCI
+> +       tristate "DDCCI display protocol support"
+> diff --git a/drivers/ddcci/Makefile b/drivers/ddcci/Makefile
+> new file mode 100644
+> index 000000000000..cce606be8038
+> --- /dev/null
+> +++ b/drivers/ddcci/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_DDCCI) += ddcci.o
+> +obj-$(CONFIG_DDCCI) += ddcci-backlight.o
+> diff --git a/drivers/ddcci/ddcci-backlight.c b/drivers/ddcci/ddcci-backlight.c
+> new file mode 100644
+> index 000000000000..7a9852207f0b
+> --- /dev/null
+> +++ b/drivers/ddcci/ddcci-backlight.c
+> @@ -0,0 +1,413 @@
+> +/*
+> + *  DDC/CI monitor backlight driver
+> + *
+> + *  Copyright (c) 2015 Christoph Grenz
+> + */
+> +
+> +/*
+> + * This program is free software; you can redistribute it and/or modify it
+> + * under the terms of the GNU General Public License as published by the Free
+> + * Software Foundation; either version 2 of the License, or (at your option)
+> + * any later version.
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +#include <linux/backlight.h>
+> +#include <linux/module.h>
+> +#include <linux/fb.h>
+> +#include <linux/sysfs.h>
+> +
+> +#include <linux/ddcci.h>
+> +
+> +
+> +#define DDCCI_COMMAND_READ     0x01    /* read ctrl value */
+> +#define DDCCI_REPLY_READ       0x02    /* read ctrl value reply */
+> +#define DDCCI_COMMAND_WRITE    0x03    /* write ctrl value */
+> +#define DDCCI_COMMAND_SAVE     0x0c    /* save current settings */
+> +
+> +#define DDCCI_MONITOR_LUMINANCE        0x10
+> +#define DDCCI_MONITOR_BACKLIGHT        0x13
+> +#define DDCCI_MONITOR_BL_WHITE         0x6B
+> +
+> +static bool convenience_symlink = true;
+> +
+> +struct ddcci_monitor_drv_data {
+> +       struct ddcci_device *device;
+> +       struct backlight_device *bl_dev;
+> +       struct device *fb_dev;
+> +       unsigned char used_vcp;
+> +};
+> +
+> +static int ddcci_monitor_writectrl(struct ddcci_device *device,
+> +                                  unsigned char ctrl, unsigned short value)
+> +{
+> +       unsigned char buf[4];
+> +       int ret;
+> +
+> +       buf[0] = DDCCI_COMMAND_WRITE;
+> +       buf[1] = ctrl;
+> +       buf[2] = (value >> 8);
+> +       buf[3] = (value & 255);
+> +
+> +       ret = ddcci_device_write(device, true, buf, sizeof(buf));
+> +
+> +       return ret;
+> +}
+> +
+> +static int ddcci_monitor_readctrl(struct ddcci_device *device,
+> +                                 unsigned char ctrl, unsigned short *value,
+> +                                 unsigned short *maximum)
+> +{
+> +       int ret;
+> +       unsigned char buf[10];
+> +
+> +       buf[0] = DDCCI_COMMAND_READ;
+> +       buf[1] = ctrl;
+> +
+> +       ret = ddcci_device_writeread(device, true, buf, 2, sizeof(buf));
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (ret == 0)
+> +               return -ENOTSUPP;
+> +
+> +       if (ret == 8 && buf[0] == DDCCI_REPLY_READ && buf[2] == ctrl) {
+> +               if (value)
+> +                       *value = buf[6] * 256 + buf[7];
+> +
+> +               if (maximum)
+> +                       *maximum = buf[4] * 256 + buf[5];
+> +
+> +               if (buf[1] == 1)
+> +                       return -ENOTSUPP;
+> +               if (buf[1] != 0)
+> +                       return -EIO;
+> +               return 0;
+> +       }
+> +
+> +       return -EIO;
+> +}
+> +
+> +static int ddcci_backlight_check_fb(struct backlight_device *bl,
+> +                                  struct fb_info *info)
+> +{
+> +       struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
+> +
+> +       return drv_data->fb_dev == NULL || drv_data->fb_dev == info->dev;
+> +}
+> +
+> +static int ddcci_backlight_update_status(struct backlight_device *bl)
+> +{
+> +       struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
+> +       int brightness = bl->props.brightness;
+> +       int ret;
+> +
+> +       if (bl->props.power != FB_BLANK_UNBLANK ||
+> +           bl->props.state & BL_CORE_FBBLANK)
+> +               brightness = 0;
+> +
+> +       ret = ddcci_monitor_writectrl(drv_data->device, drv_data->used_vcp,
+> +                                     brightness);
+> +       if (ret > 0)
+> +               ret = 0;
+> +       return ret;
+> +}
+> +
+> +static int ddcci_backlight_get_brightness(struct backlight_device *bl)
+> +{
+> +       unsigned short value = 0, maxval = 0;
+> +       int ret;
+> +       struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
+> +
+> +       ret = ddcci_monitor_readctrl(drv_data->device, drv_data->used_vcp,
+> +                                    &value, &maxval);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       bl->props.brightness = value;
+> +       bl->props.max_brightness = maxval;
+> +       ret = value;
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct backlight_ops ddcci_backlight_ops = {
+> +       .options        = 0,
+> +       .update_status  = ddcci_backlight_update_status,
+> +       .get_brightness = ddcci_backlight_get_brightness,
+> +       .check_fb       = ddcci_backlight_check_fb,
+> +};
+> +
+> +static const char *ddcci_monitor_vcp_name(unsigned char vcp)
+> +{
+> +       switch (vcp) {
+> +               case DDCCI_MONITOR_BL_WHITE:
+> +                       return "backlight";
+> +               case DDCCI_MONITOR_LUMINANCE:
+> +                       return "luminance";
+> +               default:
+> +                       return "???";
+> +       }
+> +}
+> +
+> +static const char *ddcci_monitor_next_vcp_item(const char *ptr)
+> +{
+> +       int depth = 0;
+> +
+> +       /* Sanity check */
+> +       if (unlikely(ptr == NULL || ptr[0] == '\0'))
+> +               return NULL;
+> +
+> +       /* Find next white space outside of parentheses */
+> +       while ((ptr = strpbrk(ptr, " ()"))) {
+> +               if (!ptr || depth == INT_MAX) {
+> +                       return NULL;
+> +               } else if (*ptr == '(') {
+> +                       depth++;
+> +               } else if (depth > 0) {
+> +                       if (*ptr == ')')
+> +                               depth--;
+> +               } else {
+> +                       break;
+> +               }
+> +               ++ptr;
+> +       }
+> +
+> +       /* Skip over whitespace */
+> +       ptr = skip_spaces(ptr);
+> +
+> +       /* Check if we're now at the end of the list */
+> +       if (unlikely(*ptr == '\0' || *ptr == ')'))
+> +               return NULL;
+> +
+> +       return ptr;
+> +}
+> +
+> +static bool ddcci_monitor_find_vcp(unsigned char vcp, const char *s)
+> +{
+> +       const char *ptr = s;
+> +       char vcp_hex[3];
+> +
+> +       /* Sanity check */
+> +       if (unlikely(s == NULL || s[0] == '\0'))
+> +               return false;
+> +
+> +       /* Create hex representation of VCP */
+> +       if (unlikely(snprintf(vcp_hex, 3, "%02hhX", vcp) != 2)) {
+> +               pr_err("snprintf failed to convert to hex. This should not happen.\n");
+> +               return false;
+> +       }
+> +
+> +       /* Search for it */
+> +       do {
+> +               if (strncasecmp(vcp_hex, ptr, 2) == 0) {
+> +                       if (ptr[2] == ' ' || ptr[2] == '(' || ptr[2] == ')') {
+> +                               return true;
+> +                       }
+> +               }
+> +       } while ((ptr = ddcci_monitor_next_vcp_item(ptr)));
+> +
+> +       return false;
+> +}
+> +
+> +static int ddcci_backlight_create_symlink(struct ddcci_device *ddcci_dev)
+> +{
+> +       int i, result;
+> +       struct device *dev = &ddcci_dev->dev;
+> +       struct kernfs_node *dirent;
+> +       for (i = 0; i < 3; ++i) {
+> +               dev = dev->parent;
+> +               if (!dev) {
+> +                       dev_dbg(&ddcci_dev->dev, "failed to create convenience symlink: ancestor device not found\n");
+> +                       return -ENOENT;
+> +               }
+> +       }
+> +       dirent = sysfs_get_dirent(dev->kobj.sd, "ddcci_backlight");
+> +       if (dirent) {
+> +               sysfs_put(dirent);
+> +               dev_dbg(&ddcci_dev->dev, "failed to create convenience symlink: %s/ddcci_backlight already exists\n", dev_name(dev));
+> +               return -EEXIST;
+> +       }
+> +
+> +       result = sysfs_create_link(&dev->kobj, &ddcci_dev->dev.kobj, "ddcci_backlight");
+> +       if (result == 0) {
+> +               dev_dbg(&ddcci_dev->dev, "created symlink %s/ddcci_backlight\n", dev_name(dev));
+> +       } else {
+> +               dev_info(&ddcci_dev->dev, "failed to create convenience symlink: %d\n", result);
+> +       }
+> +       return result;
+> +}
+> +
+> +static int ddcci_backlight_remove_symlink(struct ddcci_device *ddcci_dev)
+> +{
+> +       int i;
+> +       struct device *dev = &ddcci_dev->dev;
+> +       struct kernfs_node *dirent;
+> +       for (i = 0; i < 3; ++i) {
+> +               dev = dev->parent;
+> +               if (!dev)
+> +                       return -ENOENT;
+> +       }
+> +       dirent = sysfs_get_dirent(dev->kobj.sd, "ddcci_backlight");
+> +       if (!dirent) {
+> +               return -ENOENT;
+> +       }
+> +
+> +       if ((dirent->flags & KERNFS_LINK) == 0) {
+> +               sysfs_put(dirent);
+> +               dev_dbg(&ddcci_dev->dev, "won't remove %s/ddcci_backlight: not a symlink\n", dev_name(dev));
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (dirent->symlink.target_kn != ddcci_dev->dev.kobj.sd) {
+> +               sysfs_put(dirent);
+> +               dev_dbg(&ddcci_dev->dev, "won't remove %s/ddcci_backlight: we are not the link target\n", dev_name(dev));
+> +               return -EINVAL;
+> +       }
+> +
+> +       sysfs_put(dirent);
+> +
+> +       sysfs_remove_link(&dev->kobj, "ddcci_backlight");
+> +       dev_dbg(&ddcci_dev->dev, "removed symlink %s/ddcci_backlight\n", dev_name(dev));
+> +       return 0;
+> +}
+> +
+> +static int ddcci_monitor_probe(struct ddcci_device *dev,
+> +                              const struct ddcci_device_id *id)
+> +{
+> +       struct ddcci_monitor_drv_data *drv_data;
+> +       struct backlight_properties props;
+> +       struct backlight_device *bl = NULL;
+> +       int ret = 0;
+> +       bool support_luminance, support_bl_white;
+> +       unsigned short brightness = 0, max_brightness = 0;
+> +       const char *vcps;
+> +
+> +       dev_dbg(&dev->dev, "probing monitor backlight device\n");
+> +
+> +       /* Get VCP list */
+> +       vcps = ddcci_find_capstr_item(dev->capabilities, "vcp", NULL);
+> +       if (IS_ERR(vcps)) {
+> +               dev_info(&dev->dev,
+> +                        "monitor doesn't provide a list of supported controls.\n");
+> +               support_bl_white = support_luminance = true;
+> +       } else {
+> +               /* Check VCP list for supported VCPs */
+> +               support_bl_white = ddcci_monitor_find_vcp(DDCCI_MONITOR_BL_WHITE, vcps);
+> +               support_luminance = ddcci_monitor_find_vcp(DDCCI_MONITOR_LUMINANCE, vcps);
+> +               /* Fallback to trying if no support is found */
+> +               if (!support_bl_white && !support_luminance) {
+> +                       dev_info(&dev->dev,
+> +                                "monitor doesn't announce support for backlight or luminance controls.\n");
+> +                       support_bl_white = support_luminance = true;
+> +               }
+> +       }
+> +
+> +       /* Initialize driver data structure */
+> +       drv_data = devm_kzalloc(&dev->dev, sizeof(struct ddcci_monitor_drv_data),
+> +                               GFP_KERNEL);
+> +       if (!drv_data)
+> +               return -ENOMEM;
+> +       drv_data->device = dev;
+> +
+> +       if (support_bl_white) {
+> +               /* Try getting backlight level */
+> +               dev_dbg(&dev->dev,
+> +                       "trying to access \"backlight level white\" control\n");
+> +               ret = ddcci_monitor_readctrl(drv_data->device, DDCCI_MONITOR_BL_WHITE,
+> +                                               &brightness, &max_brightness);
+> +               if (ret < 0) {
+> +                       if (ret == -ENOTSUPP)
+> +                               dev_info(&dev->dev,
+> +                                       "monitor does not support reading backlight level\n");
+> +                       else
+> +                               goto err_free;
+> +               } else {
+> +                       drv_data->used_vcp = DDCCI_MONITOR_BL_WHITE;
+> +               }
+> +       }
+> +
+> +       if (support_luminance && !drv_data->used_vcp) {
+> +               /* Try getting luminance */
+> +               dev_dbg(&dev->dev,
+> +                       "trying to access \"luminance\" control\n");
+> +               ret = ddcci_monitor_readctrl(drv_data->device, DDCCI_MONITOR_LUMINANCE,
+> +                                            &brightness, &max_brightness);
+> +               if (ret < 0) {
+> +                       if (ret == -ENOTSUPP)
+> +                               dev_info(&dev->dev,
+> +                                       "monitor does not support reading luminance\n");
+> +                       else
+> +                               goto err_free;
+> +               } else {
+> +                       drv_data->used_vcp = DDCCI_MONITOR_LUMINANCE;
+> +               }
+> +               drv_data->used_vcp = DDCCI_MONITOR_LUMINANCE;
+> +       }
+> +
+> +       if (!drv_data->used_vcp)
+> +               goto err_free;
+> +
+> +       /* Create brightness device */
+> +       memset(&props, 0, sizeof(props));
+> +       props.type = BACKLIGHT_RAW;
+> +       props.max_brightness = max_brightness;
+> +       props.brightness = brightness;
+> +       bl = devm_backlight_device_register(&dev->dev, dev_name(&dev->dev),
+> +                                           &dev->dev, drv_data,
+> +                                           &ddcci_backlight_ops, &props);
+> +       drv_data->bl_dev = bl;
+> +       if (IS_ERR(bl)) {
+> +               dev_err(&dev->dev, "failed to register backlight\n");
+> +               return PTR_ERR(bl);
+> +       }
+> +       dev_info(&dev->dev, "registered %s as backlight device %s\n",
+> +                ddcci_monitor_vcp_name(drv_data->used_vcp),
+> +                dev_name(&dev->dev));
+> +
+> +       if (convenience_symlink) {
+> +               ddcci_backlight_create_symlink(dev);
+> +       }
+> +
+> +       goto end;
+> +err_free:
+> +       devm_kfree(&dev->dev, drv_data);
+> +end:
+> +       return ret;
+> +}
+> +
+> +static int ddcci_monitor_remove(struct ddcci_device *dev)
+> +{
+> +       dev_dbg(&dev->dev, "removing device\n");
+> +       ddcci_backlight_remove_symlink(dev);
+> +       return 0;
+> +}
+> +
+> +static struct ddcci_device_id ddcci_monitor_idtable[] = {
+> +       { "monitor", DDCCI_ANY_ID, DDCCI_ANY_ID, DDCCI_ANY_ID, DDCCI_ANY_ID, 0 },
+> +       {}
+> +};
+> +
+> +static struct ddcci_driver ddcci_backlight_driver = {
+> +       .driver = {
+> +               .name   = "ddcci-backlight",
+> +               .owner  = THIS_MODULE,
+> +       },
+> +
+> +       .id_table       = ddcci_monitor_idtable,
+> +       .probe          = ddcci_monitor_probe,
+> +       .remove         = ddcci_monitor_remove,
+> +};
+> +
+> +module_ddcci_driver(ddcci_backlight_driver);
+> +
+> +/* Module parameter description */
+> +module_param(convenience_symlink, bool, S_IRUGO|S_IWUSR);
+> +MODULE_PARM_DESC(convenience_symlink, "add convenience symlink \"ddcci_backlight\" to ancestor device in sysfs (default true)");
+> +
+> +MODULE_AUTHOR("Christoph Grenz");
+> +MODULE_DESCRIPTION("DDC/CI generic monitor backlight driver");
+> +MODULE_VERSION("0.4.2");
+> +MODULE_LICENSE("GPL");
+> +
+> +MODULE_ALIAS("ddcci:monitor-*-*-*-*");
+> diff --git a/drivers/ddcci/ddcci.c b/drivers/ddcci/ddcci.c
+> new file mode 100644
+> index 000000000000..e26d15cae948
+> --- /dev/null
+> +++ b/drivers/ddcci/ddcci.c
+> @@ -0,0 +1,1895 @@
+> +/*
+> + *  DDC/CI sub-bus driver
+> + *
+> + *  Copyright (c) 2015 Christoph Grenz
+> + */
+> +
+> +/*
+> + * This program is free software; you can redistribute it and/or modify it
+> + * under the terms of the GNU General Public License as published by the Free
+> + * Software Foundation; either version 2 of the License, or (at your option)
+> + * any later version.
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +#include <asm-generic/fcntl.h>
+> +#include <linux/cdev.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/fs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/rwsem.h>
+> +#include <linux/sem.h>
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/version.h>
+> +
+> +#include <linux/ddcci.h>
+> +
+> +#define DDCCI_RECV_BUFFER_SIZE 130
+> +#define DEVICE_NAME "ddcci"
+> +#define DDCCI_MAX_CAP_CHUNKS 200
+> +
+> +static unsigned int delay = 60;
+> +static unsigned short autoprobe_addrs[127] = {0xF0, 0xF2, 0xF4, 0xF6, 0xF8};
+> +static int autoprobe_addr_count = 5;
+> +
+> +static dev_t ddcci_cdev_first;
+> +static dev_t ddcci_cdev_next;
+> +static dev_t ddcci_cdev_end;
+> +static DEFINE_SEMAPHORE(core_lock);
+> +
+> +struct bus_type ddcci_bus_type;
+> +EXPORT_SYMBOL_GPL(ddcci_bus_type);
+> +
+> +/* Assert neccessary string array sizes  */
+> +#ifndef sizeof_field
+> +# define sizeof_field(t,m) FIELD_SIZEOF(t,m)
+> +#endif
+> +static_assert(sizeof_field(struct ddcci_device, prot) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, type) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, model) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, vendor) > 8);
+> +static_assert(sizeof_field(struct ddcci_device, module) > 8);
+> +
+> +/* Internal per-i2c-client driver data */
+> +struct ddcci_bus_drv_data {
+> +       unsigned long quirks;
+> +       struct i2c_client *i2c_dev;
+> +       struct semaphore sem;
+> +       unsigned char recv_buffer[DDCCI_RECV_BUFFER_SIZE];
+> +};
+> +
+> +/* Replace non-alphanumeric characters in a string (used for modalias) */
+> +static void ddcci_modalias_clean(char *string, size_t n, char replacement)
+> +{
+> +       int i;
+> +       for (i = 0; i < n; ++i) {
+> +               char c = string[i];
+> +               if (c == 0) {
+> +                       return;
+> +               } else if (c < '0' || (c > '9' && c < 'A') || (c > 'Z' && c < 'a') || c > 'z') {
+> +                       string[i] = replacement;
+> +               }
+> +       }
+> +}
+> +
+> +/* Write a message to the DDC/CI bus using i2c_smbus_write_byte() */
+> +static int __ddcci_write_bytewise(struct i2c_client *client, unsigned char addr,
+> +                                 bool p_flag, const unsigned char * __restrict buf,
+> +                                 unsigned char len)
+> +{
+> +       int ret = 0;
+> +       unsigned char outer_addr = (unsigned char)(client->addr << 1);
+> +       unsigned xor = outer_addr; /* initial xor value */
+> +
+> +       /* Consistency checks */
+> +       if (len > 127)
+> +               return -EINVAL;
+> +
+> +       /* Special case: sender to 0x6E is always 0x51 */
+> +       if (addr == DDCCI_DEFAULT_DEVICE_ADDR) {
+> +               addr = DDCCI_HOST_ADDR_ODD;
+> +       } else {
+> +               /* When sending the odd address is used */
+> +               addr = addr | 1;
+> +       }
+> +
+> +       /* first byte: sender address */
+> +       xor ^= addr;
+> +       ret = i2c_smbus_write_byte(client, addr);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       /* second byte: protocol flag and message size */
+> +       xor ^= ((p_flag << 7) | len);
+> +       ret = i2c_smbus_write_byte(client, (p_flag << 7)|len);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       /* send payload */
+> +       while (len--) {
+> +               xor ^= (*buf);
+> +               ret = i2c_smbus_write_byte(client, (*buf));
+> +               if (ret < 0)
+> +                       return ret;
+> +               buf++;
+> +       }
+> +
+> +       /* send checksum */
+> +       ret = i2c_smbus_write_byte(client, xor);
+> +       return ret;
+> +}
+> +
+> +/* Write a message to the DDC/CI bus using i2c_master_send() */
+> +static int __ddcci_write_block(struct i2c_client *client, unsigned char addr,
+> +                              unsigned char *sendbuf, bool p_flag,
+> +                              const unsigned char *data, unsigned char len)
+> +{
+> +       unsigned char outer_addr = (unsigned char)(client->addr << 1);
+> +       unsigned xor = outer_addr;      /* initial xor value */
+> +       unsigned char *ptr = sendbuf;
+> +
+> +       /* Consistency checks */
+> +       if (len > 127)
+> +               return -EINVAL;
+> +
+> +       /* Special case: sender to 0x6E is always 0x51 */
+> +       if (addr == DDCCI_DEFAULT_DEVICE_ADDR) {
+> +               addr = DDCCI_HOST_ADDR_ODD;
+> +       } else {
+> +               /* When sending the odd address is used */
+> +               addr = addr | 1;
+> +       }
+> +
+> +       /* first byte: sender address */
+> +       xor ^= addr;
+> +       *(ptr++) = addr;
+> +       /* second byte: protocol flag and message size */
+> +       xor ^= ((p_flag << 7) | len);
+> +       *(ptr++) = (p_flag << 7)|len;
+> +       /* payload */
+> +       while (len--) {
+> +               xor ^= (*data);
+> +               *(ptr++) = (*data);
+> +               data++;
+> +       }
+> +       /* checksum */
+> +       (*ptr) = xor;
+> +
+> +       /* Send it */
+> +       return i2c_master_send(client, sendbuf, ptr - sendbuf + 1);
+> +}
+> +
+> +/*
+> + * Write a message to the DDC/CI bus.
+> + *
+> + * You must hold the bus semaphore when calling this function.
+> + */
+> +static int ddcci_write(struct i2c_client *client, unsigned char addr,
+> +                      bool p_flag, const unsigned char *data,
+> +                      unsigned char len)
+> +{
+> +       struct ddcci_bus_drv_data *drv_data;
+> +       unsigned char *sendbuf;
+> +       int ret;
+> +
+> +       drv_data = i2c_get_clientdata(client);
+> +
+> +
+> +       pr_debug("sending to %d:%02x:%02x: %*ph\n", client->adapter->nr,
+> +                client->addr << 1, addr, len, data);
+> +       if (drv_data->quirks & DDCCI_QUIRK_WRITE_BYTEWISE) {
+> +               ret = __ddcci_write_bytewise(client, addr, p_flag, data, len);
+> +       } else {
+> +               sendbuf = drv_data->recv_buffer;
+> +               ret = __ddcci_write_block(client, addr, sendbuf, p_flag, data, len);
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +/*
+> + * Read a response from the DDC/CI bus with headers directly into a buffer.
+> + * Always check for DDCCI_QUIRK_SKIP_FIRST_BYTE when using this function.
+> + * The returned length contains the whole unmodified response.
+> + * If -EMSGSIZE is returned, the buffer contains the response up to `len`.
+> + * If any other negative error code is returned, the buffer content is
+> + * unspecified.
+> + */
+> +static int __ddcci_read(struct i2c_client *client, unsigned char addr,
+> +                       bool p_flag, unsigned long quirks, unsigned char *buf,
+> +                       unsigned char len)
+> +{
+> +       int i, payload_len, packet_length, ret;
+> +       unsigned char xor = DDCCI_HOST_ADDR_EVEN;
+> +
+> +       /* Consistency checks */
+> +       if (len < 3)
+> +               return -EINVAL;
+> +
+> +       /* Read frame */
+> +       ret = i2c_master_recv(client, buf, len);
+> +       if (ret < 0)
+> +               goto out_err;
+> +       packet_length = ret;
+> +
+> +       /* Skip first byte if quirk active */
+> +       if ((quirks & DDCCI_QUIRK_SKIP_FIRST_BYTE) && ret > 0 && len > 0) {
+> +               ret--;
+> +               len--;
+> +               buf++;
+> +       }
+> +
+> +       /* If answer too short (= incomplete) break out */
+> +       if (ret < 3) {
+> +               ret = -EIO;
+> +               goto out_err;
+> +       }
+> +
+> +       /* validate first byte */
+> +       if (unlikely(buf[0] != addr)) {
+> +               ret = (buf[0] == '\0') ? -EAGAIN : -EIO;
+> +               goto out_err;
+> +       }
+> +
+> +       /* validate second byte (protocol flag) */
+> +       if (unlikely((buf[1] & 0x80) != (p_flag << 7))) {
+> +               if (!p_flag || !(quirks & DDCCI_QUIRK_NO_PFLAG)) {
+> +                       ret = -EIO;
+> +                       goto out_err;
+> +               }
+> +       }
+> +
+> +       /* get and check payload length */
+> +       payload_len = buf[1] & 0x7F;
+> +       if (3+payload_len > packet_length)
+> +               return -EBADMSG;
+> +       if (3+payload_len > len)
+> +               return -EMSGSIZE;
+> +
+> +       /* calculate checksum */
+> +       for (i = 0; i < 3+payload_len; i++)
+> +               xor ^= buf[i];
+> +
+> +       /* verify checksum */
+> +       if (xor != 0) {
+> +               dev_err(&client->dev, "invalid DDC/CI response, corrupted data - xor is 0x%02x, length 0x%02x\n",
+> +                       xor, payload_len);
+> +               ret = -EBADMSG;
+> +               goto out_err;
+> +       }
+> +
+> +       /* return result */
+> +       ret = payload_len+3+((quirks & DDCCI_QUIRK_SKIP_FIRST_BYTE)?1:0);
+> +
+> +out_err:
+> +       return ret;
+> +}
+> +
+> +/*
+> + * Read a response from the DDC/CI bus
+> + *
+> + * You must hold the bus semaphore when calling this function.
+> + */
+> +static int ddcci_read(struct i2c_client *client, unsigned char addr,
+> +                     bool p_flag, unsigned char *buf, unsigned char len)
+> +{
+> +       struct ddcci_bus_drv_data *drv_data;
+> +       unsigned char *recvbuf;
+> +       int ret;
+> +
+> +       drv_data = i2c_get_clientdata(client);
+> +       recvbuf = drv_data->recv_buffer;
+> +
+> +       /* Read frame */
+> +       ret = __ddcci_read(client, addr, p_flag,
+> +               drv_data->quirks, recvbuf, DDCCI_RECV_BUFFER_SIZE);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (drv_data->quirks & DDCCI_QUIRK_SKIP_FIRST_BYTE)
+> +               recvbuf++;
+> +
+> +       /* return result */
+> +       if (buf) {
+> +               if (ret > 3) {
+> +                       ret = ret-3;
+> +                       /* copy to caller buffer */
+> +                       memcpy(buf, &recvbuf[2], (ret < len) ? ret : len);
+> +
+> +                       if (ret > len) {
+> +                               /* if message was truncated, return -EMSGSIZE */
+> +                               pr_debug("received from %d:%02x:%02x: [%u/%u] %*ph ...\n",
+> +                                        client->adapter->nr, client->addr << 1,
+> +                                        addr, ret, len, len, buf);
+> +                               ret = -EMSGSIZE;
+> +                       } else {
+> +                               pr_debug("received from %d:%02x:%02x: [%u/%u] %*ph\n",
+> +                                        client->adapter->nr, client->addr << 1,
+> +                                        addr, ret, len, ret, buf);
+> +                       }
+> +               }
+> +       }
+> +       if (!(drv_data->quirks & DDCCI_QUIRK_WRITE_BYTEWISE)) {
+> +               /* second read to clear buffers, needed on some devices */
+> +               __ddcci_read(client, addr, true, drv_data->quirks, recvbuf, 1);
+> +       }
+> +       return ret;
+> +}
+> +
+> +/* Request the capability string for a device and put it into buf */
+> +static int ddcci_get_caps(struct i2c_client *client, unsigned char addr,
+> +                         unsigned char *buf, unsigned int len)
+> +{
+> +       int result = 0, counter = 0, offset = 0;
+> +       unsigned char cmd[3] = { DDCCI_COMMAND_CAPS, 0x00, 0x00 };
+> +       unsigned char *chunkbuf = kzalloc(35, GFP_KERNEL);
+> +
+> +       if (!chunkbuf)
+> +               return -ENOMEM;
+> +
+> +       do {
+> +               /* Send command */
+> +               result = ddcci_write(client, addr, true, cmd, sizeof(cmd));
+> +               if (result < 0)
+> +                       goto err_free;
+> +               msleep(delay);
+> +               /* read result chunk */
+> +               result = ddcci_read(client, addr, true, chunkbuf,
+> +                                   (len > 32) ? 35 : len+3);
+> +               if (result < 0)
+> +                       goto err_free;
+> +
+> +               if (result > 0) {
+> +                       /* check chunk header */
+> +                       if (chunkbuf[0] != DDCCI_REPLY_CAPS) {
+> +                               result = -EIO;
+> +                               goto err_free;
+> +                       }
+> +                       if (chunkbuf[1] != cmd[1] || chunkbuf[2] != cmd[2]) {
+> +                               result = -EIO;
+> +                               goto err_free;
+> +                       }
+> +                       if (result < 3) {
+> +                               result = -EIO;
+> +                               goto err_free;
+> +                       }
+> +                       memcpy(buf, chunkbuf+3, min((unsigned int)result-3, len));
+> +
+> +                       counter++;
+> +                       /* adjust offset, etc. */
+> +                       offset += result-3;
+> +                       len -= result-3;
+> +                       buf += result-3;
+> +                       cmd[1] = offset >> 8;
+> +                       cmd[2] = offset & 0xFF;
+> +                       /* Another superfluous read to make some devices happy... */
+> +                       ddcci_read(client, addr, true, NULL, 2);
+> +               }
+> +       } while (result > 3 && counter < DDCCI_MAX_CAP_CHUNKS);
+> +
+> +       kfree(chunkbuf);
+> +       return offset+result-3;
+> +err_free:
+> +       kfree(chunkbuf);
+> +       return result;
+> +}
+> +
+> +/*
+> + * Request the device identification and put it into buf.
+> + *
+> + * Also detects all communication quirks and sets the corresponding flags
+> + * in the ddcci_bus_drv_data structure associated with client.
+> + *
+> + * The identification command will fail on most DDC devices, as it is optional
+> + * to support, but even the "failed" response suffices to detect quirks.
+> + */
+> +static int ddcci_identify_device(struct i2c_client *client, unsigned char addr,
+> +                                unsigned char *buf, unsigned char len)
+> +{
+> +       int i, payload_len, ret = -ENODEV;
+> +       unsigned long quirks;
+> +       unsigned char cmd[1] = { DDCCI_COMMAND_ID };
+> +       unsigned char *buffer;
+> +       unsigned char xor = DDCCI_HOST_ADDR_EVEN;
+> +       struct ddcci_bus_drv_data *bus_drv_data;
+> +
+> +       bus_drv_data = i2c_get_clientdata(client);
+> +       quirks = bus_drv_data->quirks;
+> +       buffer = bus_drv_data->recv_buffer;
+> +
+> +       /* Send Identification command */
+> +       if (!(quirks & DDCCI_QUIRK_WRITE_BYTEWISE)) {
+> +               ret = __ddcci_write_block(client, addr, buffer, true, cmd, sizeof(cmd));
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] writing identification command in block mode: %d\n",
+> +                       client->addr << 1, addr, ret);
+> +               if ((ret == -ENXIO)
+> +                   && i2c_check_functionality(client->adapter,
+> +                                              I2C_FUNC_SMBUS_WRITE_BYTE)) {
+> +                       quirks |= DDCCI_QUIRK_WRITE_BYTEWISE;
+> +                       dev_info(&client->dev,
+> +                               "DDC/CI bus quirk detected: writes must be done bytewise\n");
+> +                       /* Some devices need writing twice after a failed blockwise write */
+> +                       __ddcci_write_bytewise(client, addr, true, cmd, sizeof(cmd));
+> +                       msleep(delay);
+> +               }
+> +       }
+> +       if (ret < 0 && (quirks & DDCCI_QUIRK_WRITE_BYTEWISE)) {
+> +               ret = __ddcci_write_bytewise(client, addr, true, cmd, sizeof(cmd));
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] writing identification command in bytewise mode: %d\n",
+> +                       client->addr << 1, addr, ret);
+> +       }
+> +       if (ret < 0)
+> +               return -ENODEV;
+> +
+> +       /* Wait */
+> +       msleep(delay);
+> +
+> +       /* Receive response */
+> +       ret = i2c_master_recv(client, buffer, DDCCI_RECV_BUFFER_SIZE);
+> +       if (ret < 0) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] receiving identification response resulted in errno %d\n",
+> +                       client->addr << 1, addr, ret);
+> +               return ret;
+> +       }
+> +
+> +       if (ret == 0) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] no identification response received\n",
+> +                       client->addr << 1, addr);
+> +               return ret;
+> +       }
+> +
+> +       /* Skip first byte if quirk already active */
+> +       if (quirks & DDCCI_QUIRK_SKIP_FIRST_BYTE && ret > 1) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] doubled first byte quirk in effect\n",
+> +                       client->addr << 1, addr);
+> +               ret--;
+> +               buffer++;
+> +       }
+> +
+> +       /* If answer too short (= incomplete) break out */
+> +       if (ret < 3) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] identification response is too short (%d bytes)\n",
+> +                       client->addr << 1, addr, ret);
+> +               return -EIO;
+> +       }
+> +
+> +       /* validate first byte */
+> +       if (buffer[0] != addr) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] identification response: %*ph\n",
+> +                       client->addr << 1, addr, (ret > 32 ? 32 : ret), buffer);
+> +
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] identification response invalid (expected first byte %02x, got %02x)\n",
+> +                       client->addr << 1, addr, addr, buffer[0]);
+> +               return -ENODEV;
+> +       }
+> +
+> +       /* Check if first byte is doubled (QUIRK_SKIP_FIRST_BYTE) */
+> +       if (!(quirks & DDCCI_QUIRK_SKIP_FIRST_BYTE)) {
+> +               if (buffer[0] == buffer[1]) {
+> +                       quirks |= DDCCI_QUIRK_SKIP_FIRST_BYTE;
+> +                       dev_info(&client->dev,
+> +                               "DDC/CI bus quirk detected: doubled first byte on read\n");
+> +                       ret--;
+> +                       buffer++;
+> +                       if (ret < 3)
+> +                               return -EIO;
+> +               }
+> +       }
+> +
+> +       /* validate second byte (protocol flag) */
+> +       if ((buffer[1] & 0x80) != 0x80 && !(quirks & DDCCI_QUIRK_NO_PFLAG)) {
+> +               dev_info(&client->dev,
+> +                       "DDC/CI bus quirk detected: device omits protocol flag on responses\n");
+> +               quirks |= DDCCI_QUIRK_NO_PFLAG;
+> +       }
+> +
+> +       /* get and check payload length */
+> +       payload_len = buffer[1] & 0x7F;
+> +       if (3+payload_len > ret) {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] identification response: %*ph ...\n",
+> +                       client->addr << 1, addr, ret, buffer);
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] identification response was truncated (expected %d bytes, got %d)\n",
+> +                       client->addr << 1, addr, 3+payload_len, ret);
+> +               return -EBADMSG;
+> +       }
+> +
+> +       dev_dbg(&client->dev,
+> +               "[%02x:%02x] identification response: %*ph\n",
+> +               client->addr << 1, addr, 3+payload_len, buffer);
+> +
+> +       /* calculate checksum */
+> +       for (i = 0; i < 3+payload_len; i++)
+> +               xor ^= buffer[i];
+> +
+> +       /* verify checksum */
+> +       if (xor != 0) {
+> +               dev_err(&client->dev,
+> +                       "[%02x:%02x] invalid DDC/CI response, corrupted data - xor is 0x%02x, length 0x%02x\n",
+> +                       client->addr << 1, addr, xor, payload_len);
+> +               return -EBADMSG;
+> +       }
+> +
+> +       /* save quirks */
+> +       bus_drv_data->quirks = quirks;
+> +
+> +       /* return result */
+> +       if (payload_len <= len) {
+> +               ret = payload_len;
+> +               memcpy(buf, &buffer[2], payload_len);
+> +       } else {
+> +               ret = -EMSGSIZE;
+> +               memcpy(buf, &buffer[2], len);
+> +       }
+> +       return ret;
+> +}
+> +
+> +/* Character device */
+> +
+> +/* Data structure for an open file handle */
+> +struct ddcci_fp_data {
+> +       struct ddcci_device *dev;
+> +       bool exclusive;
+> +       unsigned char buffer[129];
+> +};
+> +
+> +/* Called when the character device is opened */
+> +static int ddcci_cdev_open(struct inode *inode, struct file *filp)
+> +{
+> +       struct ddcci_device *dev = container_of(inode->i_cdev,
+> +                                               struct ddcci_device, cdev);
+> +       struct ddcci_fp_data *fp_data = NULL;
+> +
+> +       fp_data = kzalloc(sizeof(struct ddcci_fp_data), GFP_KERNEL);
+> +
+> +       if (!fp_data)
+> +               return -ENOMEM;
+> +
+> +       fp_data->exclusive = filp->f_flags & O_EXCL;
+> +
+> +       if (fp_data->exclusive) {
+> +               if (down_write_trylock(&dev->cdev_sem) == 0) {
+> +                       kfree(fp_data);
+> +                       return -EBUSY;
+> +               }
+> +       } else {
+> +               if (down_read_trylock(&dev->cdev_sem) == 0) {
+> +                       kfree(fp_data);
+> +                       return -EBUSY;
+> +               }
+> +       }
+> +
+> +       fp_data->dev = dev;
+> +       filp->private_data = fp_data;
+> +
+> +       return 0;
+> +}
+> +
+> +/* Called when the character device is closed */
+> +static int ddcci_cdev_close(struct inode *inode, struct file *filp)
+> +{
+> +       struct ddcci_fp_data *fp_data = filp->private_data;
+> +       struct ddcci_device *dev = fp_data->dev;
+> +
+> +       if (fp_data->exclusive)
+> +               up_write(&dev->cdev_sem);
+> +       else
+> +               up_read(&dev->cdev_sem);
+> +
+> +       filp->private_data = NULL;
+> +       kfree(fp_data);
+> +       return 0;
+> +}
+> +
+> +/* Called when reading from the character device */
+> +static ssize_t ddcci_cdev_read(struct file *filp, char __user *buffer,
+> +                              size_t length, loff_t *offset)
+> +{
+> +       struct ddcci_fp_data *fp_data = filp->private_data;
+> +       struct ddcci_device *dev = fp_data->dev;
+> +       unsigned char *buf = fp_data->buffer;
+> +       const bool nonblocking = (filp->f_flags & O_NONBLOCK) != 0;
+> +       int ret = 0;
+> +
+> +       if ((filp->f_mode & FMODE_READ) == 0)
+> +               return -EBADF;
+> +
+> +       /* Lock mutex */
+> +       if (nonblocking) {
+> +               if (down_trylock(&dev->bus_drv_data->sem))
+> +                       return -EAGAIN;
+> +       } else {
+> +               if (down_interruptible(&dev->bus_drv_data->sem))
+> +                       return -ERESTARTSYS;
+> +       }
+> +
+> +       /* Execute read */
+> +       ret = ddcci_read(dev->bus_drv_data->i2c_dev, dev->inner_addr, true, buf,
+> +                        length);
+> +
+> +       if (ret > 0) {
+> +               /* Copy data from user space */
+> +               if (copy_to_user(buffer, buf, ret)) {
+> +                       ret = -EFAULT;
+> +                       goto out;
+> +               }
+> +       }
+> +
+> +out:
+> +       up(&dev->bus_drv_data->sem);
+> +       return ret;
+> +}
+> +
+> +/* Called when writing to the character device */
+> +static ssize_t ddcci_cdev_write(struct file *filp, const char __user *buffer,
+> +                               size_t count, loff_t *offset)
+> +{
+> +       struct ddcci_fp_data *fp_data = filp->private_data;
+> +       struct ddcci_device *dev = fp_data->dev;
+> +       unsigned char *buf = fp_data->buffer;
+> +       const bool nonblocking = (filp->f_flags & O_NONBLOCK) != 0;
+> +       int ret = 0;
+> +
+> +       if ((filp->f_mode & FMODE_WRITE) == 0)
+> +               return -EBADF;
+> +
+> +       if (count > 127)
+> +               return -EINVAL;
+> +
+> +       /* Lock mutex */
+> +       if (nonblocking) {
+> +               if (down_trylock(&dev->bus_drv_data->sem))
+> +                       return -EAGAIN;
+> +       } else {
+> +               if (down_interruptible(&dev->bus_drv_data->sem))
+> +                       return -ERESTARTSYS;
+> +       }
+> +
+> +       if (count > 0) {
+> +               /* Copy data from user space */
+> +               if (copy_from_user(buf, buffer, count)) {
+> +                       ret = -EFAULT;
+> +                       goto err_out;
+> +               }
+> +
+> +               /* Execute write */
+> +               ret = ddcci_write(dev->bus_drv_data->i2c_dev, dev->inner_addr,
+> +                                 true, buf, count);
+> +       }
+> +
+> +       if (ret >= 0) {
+> +               msleep(delay);
+> +               up(&dev->bus_drv_data->sem);
+> +               return count;
+> +       }
+> +
+> +err_out:
+> +       up(&dev->bus_drv_data->sem);
+> +       return ret;
+> +}
+> +
+> +/* Called when seeking the character device */
+> +static loff_t ddcci_cdev_seek(struct file *filp, loff_t offset, int anchor)
+> +{
+> +       return -EINVAL;
+> +}
+> +
+> +static const struct file_operations ddcci_fops = {
+> +       .owner = THIS_MODULE,
+> +       .read = ddcci_cdev_read,
+> +       .write = ddcci_cdev_write,
+> +       .open = ddcci_cdev_open,
+> +       .release = ddcci_cdev_close,
+> +       .llseek = ddcci_cdev_seek
+> +};
+> +
+> +/* Set up the character device for a DDC/CI device */
+> +static int ddcci_setup_char_device(struct ddcci_device *device)
+> +{
+> +       int ret = -EINVAL;
+> +
+> +       /* Check if free minor exists */
+> +       if (ddcci_cdev_next == ddcci_cdev_end) {
+> +               dev_err(&device->dev, "no free major/minor\n");
+> +               ret = -ENFILE;
+> +               goto out;
+> +       }
+> +
+> +       /* Initialize rwsem */
+> +       init_rwsem(&device->cdev_sem);
+> +
+> +       /* Initialize character device node */
+> +       cdev_init(&device->cdev, &ddcci_fops);
+> +       device->cdev.owner = THIS_MODULE;
+> +
+> +       /* Publish char device */
+> +       device->dev.devt = ddcci_cdev_next;
+> +       ret = cdev_add(&device->cdev, ddcci_cdev_next, 1);
+> +       if (ret) {
+> +               device->dev.devt = 0;
+> +               goto out;
+> +       }
+> +
+> +       ddcci_cdev_next++;
+> +out:
+> +       return ret;
+> +}
+> +
+> +/* sysfs attributes */
+> +
+> +static ssize_t ddcci_attr_capabilities_show(struct device *dev,
+> +                                           struct device_attribute *attr,
+> +                                           char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = device->capabilities_len;
+> +               if (unlikely(len > PAGE_SIZE))
+> +                       len = PAGE_SIZE;
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else {
+> +                       memcpy(buf, device->capabilities, len);
+> +                       if (likely(len < PAGE_SIZE)) {
+> +                               buf[len] = '\n';
+> +                               ret = len+1;
+> +                       }
+> +               }
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_prot_show(struct device *dev,
+> +                                   struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = strnlen(device->prot, sizeof(device->prot));
+> +               strncpy(buf, device->prot, PAGE_SIZE);
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else if (likely(len < PAGE_SIZE)) {
+> +                       buf[len] = '\n';
+> +                       ret = len+1;
+> +               } else {
+> +                       ret = PAGE_SIZE;
+> +               }
+> +       }
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_type_show(struct device *dev,
+> +                                   struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = strnlen(device->type, sizeof(device->type));
+> +               strncpy(buf, device->type, PAGE_SIZE);
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else if (likely(len < PAGE_SIZE)) {
+> +                       buf[len] = '\n';
+> +                       ret = len+1;
+> +               } else {
+> +                       ret = PAGE_SIZE;
+> +               }
+> +       }
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_model_show(struct device *dev,
+> +                                    struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = strnlen(device->model, sizeof(device->model));
+> +               strncpy(buf, device->model, PAGE_SIZE);
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else if (likely(len < PAGE_SIZE)) {
+> +                       buf[len] = '\n';
+> +                       ret = len+1;
+> +               } else {
+> +                       ret = PAGE_SIZE;
+> +               }
+> +       }
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_vendor_show(struct device *dev,
+> +                                     struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = strnlen(device->vendor, sizeof(device->vendor));
+> +               strncpy(buf, device->vendor, PAGE_SIZE);
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else if (likely(len < PAGE_SIZE)) {
+> +                       buf[len] = '\n';
+> +                       ret = len+1;
+> +               } else {
+> +                       ret = PAGE_SIZE;
+> +               }
+> +       }
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_module_show(struct device *dev,
+> +                                     struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       size_t len;
+> +
+> +       if (likely(device != NULL)) {
+> +               len = strnlen(device->module, sizeof(device->module));
+> +               strncpy(buf, device->module, PAGE_SIZE);
+> +               if (len == 0) {
+> +                       ret = len;
+> +               } else if (likely(len < PAGE_SIZE)) {
+> +                       buf[len] = '\n';
+> +                       ret = len+1;
+> +               } else {
+> +                       ret = PAGE_SIZE;
+> +               }
+> +       }
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_serial_show(struct device *dev,
+> +                                     struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +
+> +       if (likely(device != NULL))
+> +               ret = scnprintf(buf, PAGE_SIZE, "%d\n", device->device_number);
+> +
+> +       return ret;
+> +}
+> +
+> +static ssize_t ddcci_attr_modalias_show(struct device *dev,
+> +                                     struct device_attribute *attr, char *buf)
+> +{
+> +       struct ddcci_device *device = ddcci_verify_device(dev);
+> +       ssize_t ret = -ENOENT;
+> +       char model[ARRAY_SIZE(device->model)];
+> +       char vendor[ARRAY_SIZE(device->model)];
+> +       char module[ARRAY_SIZE(device->model)];
+> +
+> +       if (likely(device != NULL)) {
+> +               memcpy(model, device->model, sizeof(model));
+> +               memcpy(vendor, device->vendor, sizeof(vendor));
+> +               memcpy(module, device->module, sizeof(module));
+> +               ddcci_modalias_clean(model, sizeof(model), '_');
+> +               ddcci_modalias_clean(vendor, sizeof(vendor), '_');
+> +               ddcci_modalias_clean(module, sizeof(module), '_');
+> +
+> +               ret = scnprintf(buf, PAGE_SIZE, "%s%s-%s-%s-%s-%s\n",
+> +                       DDCCI_MODULE_PREFIX,
+> +                       device->prot,
+> +                       device->type,
+> +                       model,
+> +                       vendor,
+> +                       module
+> +               );
+> +       }
+> +       return ret;
+> +}
+> +
+> +static DEVICE_ATTR(capabilities, S_IRUGO, ddcci_attr_capabilities_show, NULL);
+> +static DEVICE_ATTR(idProt, S_IRUGO, ddcci_attr_prot_show, NULL);
+> +static DEVICE_ATTR(idType, S_IRUGO, ddcci_attr_type_show, NULL);
+> +static DEVICE_ATTR(idModel, S_IRUGO, ddcci_attr_model_show, NULL);
+> +static DEVICE_ATTR(idVendor, S_IRUGO, ddcci_attr_vendor_show, NULL);
+> +static DEVICE_ATTR(idModule, S_IRUGO, ddcci_attr_module_show, NULL);
+> +static DEVICE_ATTR(idSerial, S_IRUGO, ddcci_attr_serial_show, NULL);
+> +static DEVICE_ATTR(modalias, S_IRUGO, ddcci_attr_modalias_show, NULL);
+> +
+> +static struct attribute *ddcci_char_device_attrs[] = {
+> +       &dev_attr_capabilities.attr,
+> +       &dev_attr_idProt.attr,
+> +       &dev_attr_idType.attr,
+> +       &dev_attr_idModel.attr,
+> +       &dev_attr_idVendor.attr,
+> +       &dev_attr_idModule.attr,
+> +       &dev_attr_idSerial.attr,
+> +       &dev_attr_modalias.attr,
+> +       NULL,
+> +};
+> +ATTRIBUTE_GROUPS(ddcci_char_device);
+> +
+> +/* DDC/CI bus */
+> +
+> +static int ddcci_device_uevent(struct device *dev, struct kobj_uevent_env *env)
+> +{
+> +       struct ddcci_device     *device = to_ddcci_device(dev);
+> +       char model[ARRAY_SIZE(device->model)];
+> +       char vendor[ARRAY_SIZE(device->vendor)];
+> +       char module[ARRAY_SIZE(device->module)];
+> +
+> +       memcpy(model, device->model, sizeof(model));
+> +       memcpy(vendor, device->vendor, sizeof(vendor));
+> +       memcpy(module, device->module, sizeof(module));
+> +       ddcci_modalias_clean(model, sizeof(model), '_');
+> +       ddcci_modalias_clean(vendor, sizeof(vendor), '_');
+> +       ddcci_modalias_clean(module, sizeof(module), '_');
+> +
+> +       if (add_uevent_var(env, "MODALIAS=%s%s-%s-%s-%s-%s",
+> +                          DDCCI_MODULE_PREFIX,
+> +                          device->prot,
+> +                          device->type,
+> +                          model,
+> +                          vendor,
+> +                          module
+> +               ))
+> +               return -ENOMEM;
+> +
+> +       if (device->prot[0])
+> +               if (add_uevent_var(env, "DDCCI_PROT=%s", device->prot))
+> +                       return -ENOMEM;
+> +
+> +       if (device->type[0])
+> +               if (add_uevent_var(env, "DDCCI_TYPE=%s", device->type))
+> +                       return -ENOMEM;
+> +
+> +       if (device->model[0])
+> +               if (add_uevent_var(env, "DDCCI_MODEL=%s", device->model))
+> +                       return -ENOMEM;
+> +
+> +       if (device->vendor[0]) {
+> +               if (add_uevent_var(env, "DDCCI_VENDOR=%s", device->vendor))
+> +                       return -ENOMEM;
+> +
+> +               if (add_uevent_var(env, "DDCCI_MODULE=%s", device->module))
+> +                       return -ENOMEM;
+> +
+> +               if (add_uevent_var(env, "DDCCI_UNIQ=%d", device->device_number))
+> +                       return -ENOMEM;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void ddcci_device_release(struct device *dev)
+> +{
+> +       struct ddcci_device *device = to_ddcci_device(dev);
+> +       struct ddcci_driver *driver;
+> +
+> +       /* Notify driver */
+> +       if (dev->driver) {
+> +               driver = to_ddcci_driver(dev->driver);
+> +               if (driver->remove)
+> +                       driver->remove(device);
+> +       }
+> +
+> +       /* Teardown chardev */
+> +       if (dev->devt) {
+> +               down(&core_lock);
+> +               if (device->cdev.dev == ddcci_cdev_next-1)
+> +                       ddcci_cdev_next--;
+> +               cdev_del(&device->cdev);
+> +               up(&core_lock);
+> +       }
+> +
+> +       /* Free capability string */
+> +       if (device->capabilities) {
+> +               device->capabilities_len = 0;
+> +               kfree(device->capabilities);
+> +       }
+> +       /* Free device */
+> +       kfree(device);
+> +}
+> +
+> +static char *ddcci_devnode(struct device *dev,
+> +                        umode_t *mode, kuid_t *uid, kgid_t *gid)
+> +{
+> +       struct ddcci_device *device;
+> +
+> +       device = to_ddcci_device(dev);
+> +       return kasprintf(GFP_KERNEL, "bus/ddcci/%d/display",
+> +                        device->i2c_client->adapter->nr);
+> +}
+> +
+> +static char *ddcci_dependent_devnode(struct device *dev,
+> +                        umode_t *mode, kuid_t *uid, kgid_t *gid)
+> +{
+> +       struct ddcci_device *device;
+> +
+> +       device = to_ddcci_device(dev);
+> +       if (device->flags & DDCCI_FLAG_EXTERNAL) {
+> +               if (device->outer_addr == device->inner_addr)
+> +                       return kasprintf(GFP_KERNEL, "bus/ddcci/%d/e%02x",
+> +                                        device->i2c_client->adapter->nr,
+> +                                        device->outer_addr);
+> +               else
+> +                       return kasprintf(GFP_KERNEL, "bus/ddcci/%d/e%02x%02x",
+> +                                        device->i2c_client->adapter->nr,
+> +                                        device->outer_addr, device->inner_addr);
+> +       } else {
+> +               return kasprintf(GFP_KERNEL, "bus/ddcci/%d/i%02x",
+> +                                device->i2c_client->adapter->nr,
+> +                                device->inner_addr);
+> +       }
+> +}
+> +
+> +/* Device type for main DDC/CI devices*/
+> +static struct device_type ddcci_device_type = {
+> +       .name   = "ddcci-device",
+> +       .uevent         = ddcci_device_uevent,
+> +       .groups         = ddcci_char_device_groups,
+> +       .release        = ddcci_device_release,
+> +       .devnode        = ddcci_devnode
+> +};
+> +
+> +/* Device type for dependent DDC/CI devices*/
+> +static struct device_type ddcci_dependent_type = {
+> +       .name   = "ddcci-dependent-device",
+> +       .uevent         = ddcci_device_uevent,
+> +       .groups         = ddcci_char_device_groups,
+> +       .release        = ddcci_device_release,
+> +       .devnode        = ddcci_dependent_devnode
+> +};
+> +
+> +/**
+> + * ddcci_verify_device - return parameter as ddcci_device, or NULL
+> + * @dev: device, probably from some driver model iterator
+> + */
+> +struct ddcci_device *ddcci_verify_device(struct device *dev)
+> +{
+> +       if (unlikely(!dev))
+> +               return NULL;
+> +       return (dev->type == &ddcci_device_type
+> +               || dev->type == &ddcci_dependent_type)
+> +                       ? to_ddcci_device(dev)
+> +                       : NULL;
+> +}
+> +EXPORT_SYMBOL(ddcci_verify_device);
+> +
+> +/**
+> + * ddcci_quirks - Get quirks for DDC/CI device
+> + * @dev: Target DDC/CI device
+> + */
+> +unsigned long ddcci_quirks(struct ddcci_device *dev)
+> +{
+> +       if (unlikely(WARN_ON(!dev)))
+> +               return ~0L;
+> +       if (unlikely(WARN_ON(!dev->bus_drv_data)))
+> +               return ~0L;
+> +       return dev->bus_drv_data->quirks;
+> +}
+> +EXPORT_SYMBOL(ddcci_quirks);
+> +
+> +/**
+> + * ddcci_register_driver - register DDC/CI driver
+> + * @owner: the owning module
+> + * @driver: the driver to register
+> + */
+> +int ddcci_register_driver(struct module *owner, struct ddcci_driver *driver)
+> +{
+> +       int ret;
+> +
+> +       /* Can't register until after driver model init */
+> +       if (unlikely(WARN_ON(!ddcci_bus_type.p)))
+> +               return -EAGAIN;
+> +
+> +       pr_debug("registering driver [%s]\n", driver->driver.name);
+> +
+> +       /* add the driver to the list of ddcci drivers in the driver core */
+> +       driver->driver.owner = owner;
+> +       driver->driver.bus = &ddcci_bus_type;
+> +
+> +       /* When registration returns, the driver core
+> +        * will have called probe() for all matching-but-unbound devices.
+> +        */
+> +       ret = driver_register(&driver->driver);
+> +       if (ret)
+> +               return ret;
+> +
+> +       pr_debug("driver [%s] registered\n", driver->driver.name);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL(ddcci_register_driver);
+> +
+> +/**
+> + * ddcci_del_driver - unregister DDC/CI driver
+> + * @driver: the driver being unregistered
+> + */
+> +void ddcci_del_driver(struct ddcci_driver *driver)
+> +{
+> +       driver_unregister(&driver->driver);
+> +       pr_debug("driver [%s] unregistered\n", driver->driver.name);
+> +}
+> +EXPORT_SYMBOL(ddcci_del_driver);
+> +
+> +/**
+> + * ddcci_device_write - Write a message to a DDC/CI device
+> + * @dev: Target DDC/CI device
+> + * @p_flag: Protocol flag, true for standard control messages
+> + * @data: Data that will be written to the device
+> + * @length: How many bytes to write
+> + *
+> + * Writes the message to the device and sleeps (see module parameter 'delay')
+> + */
+> +int ddcci_device_write(struct ddcci_device *dev, bool p_flag,
+> +                      unsigned char *data, unsigned char length)
+> +{
+> +       int ret;
+> +
+> +       if (down_interruptible(&dev->bus_drv_data->sem))
+> +               return -EAGAIN;
+> +
+> +       ret = ddcci_write(dev->bus_drv_data->i2c_dev, dev->inner_addr, p_flag, data, length);
+> +       msleep(delay);
+> +       up(&dev->bus_drv_data->sem);
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL(ddcci_device_write);
+> +
+> +/**
+> + * ddcci_device_read - Read a response from a DDC/CI device
+> + * @dev: Target DDC/CI device
+> + * @p_flag: Protocol flag, must match the corresponding write
+> + * @buffer: Where to store data read from the device
+> + * @length: Buffer size
+> + */
+> +int ddcci_device_read(struct ddcci_device *dev, bool p_flag,
+> +                     unsigned char *buffer, unsigned char length)
+> +{
+> +       int ret;
+> +
+> +       if (down_interruptible(&dev->bus_drv_data->sem))
+> +               return -EAGAIN;
+> +
+> +       ret = ddcci_read(dev->bus_drv_data->i2c_dev, dev->inner_addr, p_flag, buffer, length);
+> +       up(&dev->bus_drv_data->sem);
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL(ddcci_device_read);
+> +
+> +/**
+> + * ddcci_device_writeread - Write a message to a device and read the response
+> + * @dev: Target DDC/CI device
+> + * @p_flag: Protocol flag, true for standard control messages
+> + * @buffer: Buffer used for write and read
+> + * @length: How many bytes to write
+> + * @maxlength: Buffer size on read
+> + *
+> + * Writing, sleeping and reading are done without releasing the DDC/CI bus.
+> + * This provides atomicity in respect to other DDC/CI accesses on the same bus.
+> + */
+> +int ddcci_device_writeread(struct ddcci_device *dev, bool p_flag,
+> +                          unsigned char *buffer, unsigned char length,
+> +                          unsigned char maxlength)
+> +{
+> +       int ret;
+> +
+> +       if (down_interruptible(&dev->bus_drv_data->sem))
+> +               return -EAGAIN;
+> +
+> +       ret = ddcci_write(dev->bus_drv_data->i2c_dev, dev->inner_addr, p_flag, buffer, length);
+> +       if (ret < 0)
+> +               goto err;
+> +       msleep(delay);
+> +       ret = ddcci_read(dev->bus_drv_data->i2c_dev, dev->inner_addr, p_flag, buffer, maxlength);
+> +err:
+> +       up(&dev->bus_drv_data->sem);
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL(ddcci_device_writeread);
+> +
+> +#define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+> +
+> +/* Check if any device id in the array matches the device and return the matching id */
+> +static const struct ddcci_device_id *ddcci_match_id(const struct ddcci_device_id *id,
+> +                                                   const struct ddcci_device *device)
+> +{
+> +       while (id->prot[0] || id->type[0] || id->model[0] || id->vendor[0] || id->module[0]) {
+> +               if ((IS_ANY_ID(id->prot) || (strcmp(device->prot, id->prot) == 0))
+> +                && (IS_ANY_ID(id->type) || (strcmp(device->type, id->type) == 0))
+> +                && (IS_ANY_ID(id->model) || (strcmp(device->model, id->model) == 0))
+> +                && (IS_ANY_ID(id->vendor) || (strcmp(device->vendor, id->vendor) == 0))
+> +                && (IS_ANY_ID(id->module) || (strcmp(device->module, id->module) == 0))) {
+> +                       return id;
+> +               }
+> +               id++;
+> +       }
+> +       return NULL;
+> +}
+> +
+> +static int ddcci_device_match(struct device *dev, struct device_driver *drv)
+> +{
+> +       struct ddcci_device     *device = ddcci_verify_device(dev);
+> +       struct ddcci_driver     *driver;
+> +
+> +       if (!device)
+> +               return 0;
+> +
+> +       driver = to_ddcci_driver(drv);
+> +       /* match on an id table if there is one */
+> +       if (driver->id_table)
+> +               return ddcci_match_id(driver->id_table, device) != NULL;
+> +
+> +       return 0;
+> +}
+> +
+> +static int ddcci_device_probe(struct device *dev)
+> +{
+> +       struct ddcci_device     *device = ddcci_verify_device(dev);
+> +       struct ddcci_driver     *driver;
+> +       const struct ddcci_device_id *id;
+> +       int ret = 0;
+> +
+> +       if (!device)
+> +               return -EINVAL;
+> +       driver = to_ddcci_driver(dev->driver);
+> +
+> +       id = ddcci_match_id(driver->id_table, device);
+> +       if (!id)
+> +               return -ENODEV;
+> +
+> +       if (driver->probe)
+> +               ret = driver->probe(device, id);
+> +
+> +       return ret;
+> +}
+> +
+> +static int ddcci_device_remove(struct device *dev)
+> +{
+> +       struct ddcci_device     *device = ddcci_verify_device(dev);
+> +       struct ddcci_driver     *driver;
+> +       int ret = 0;
+> +
+> +       if (!device)
+> +               return -EINVAL;
+> +       driver = to_ddcci_driver(dev->driver);
+> +
+> +       if (driver->remove)
+> +               ret = driver->remove(device);
+> +
+> +       return ret;
+> +}
+> +
+> +#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
+> +static void ddcci_device_remove_void(struct device *dev)
+> +{
+> +       ddcci_device_remove(dev);
+> +}
+> +#endif
+> +
+> +/**
+> + * DDCCI bus type structure
+> + */
+> +struct bus_type ddcci_bus_type = {
+> +       .name           = "ddcci",
+> +       .match          = ddcci_device_match,
+> +       .probe          = ddcci_device_probe,
+> +#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
+> +       .remove         = ddcci_device_remove_void
+> +#else
+> +       .remove         = ddcci_device_remove
+> +#endif
+> +};
+> +
+> +/* Main I2C driver */
+> +
+> +/* Get a pointer to the closing parenthesis */
+> +static char *ddcci_capstr_tok(const char *s, int depth)
+> +{
+> +       const char *ptr = s;
+> +       char *end;
+> +
+> +       if (s == NULL || s[0] == '\0')
+> +               return NULL;
+> +
+> +       while ((end = strpbrk(ptr, "()"))) {
+> +               if (!end || depth == INT_MAX)
+> +                       return NULL;
+> +               if (*end == '(')
+> +                       depth++;
+> +               else if (depth > 0)
+> +                       depth--;
+> +               else
+> +                       break;
+> +               ptr = end+1;
+> +       }
+> +       return end;
+> +}
+> +
+> +/**
+> + * ddcci_find_capstr_item - Search capability string for a tag
+> + * @capabilities: Capability string to search
+> + * @tag: Tag to find
+> + * @length: Buffer for the length of the found tag value (optional)
+> + *
+> + * Return a pointer to the start of the tag value (directly after the '(') on
+> + * success and write the length of the value (excluding the ')') into `length`.
+> + *
+> + * If the tag is not found or another error occurs, an ERR_PTR is returned
+> + * and `length` stays untouched.
+> + */
+> +const char *ddcci_find_capstr_item(const char * capabilities,
+> +                                  const char * __restrict tag,
+> +                                  size_t *length)
+> +{
+> +       const char *src = capabilities, *ptr;
+> +       ptrdiff_t len;
+> +       int taglen = strnlen(tag, 1024);
+> +
+> +       /* Check length of requested tag */
+> +       if (unlikely(taglen <= 0 || taglen > 1023))
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       /* Find tag */
+> +       while (src && (strncmp(src+1, tag, taglen) != 0 || src[1+taglen] != '('))
+> +               src = ddcci_capstr_tok(src+1, -1);
+> +       if (!src || src[0] == '\0')
+> +               return ERR_PTR(-ENOENT);
+> +
+> +       /* Locate end of value */
+> +       src += taglen+2;
+> +       ptr = ddcci_capstr_tok(src, 0);
+> +       if (unlikely(!ptr))
+> +               return ERR_PTR(-EOVERFLOW);
+> +
+> +       /* Check length of tag data */
+> +       len = ptr-src;
+> +       if (unlikely(len < 0 || len > 65535))
+> +               return ERR_PTR(-EMSGSIZE);
+> +
+> +       /* Return pointer and length */
+> +       if (likely(length != NULL))
+> +               *length = (size_t)len;
+> +       return src;
+> +}
+> +EXPORT_SYMBOL(ddcci_find_capstr_item);
+> +
+> +/* Search the capability string for a tag and copy the value to dest */
+> +static int ddcci_cpy_capstr_item(char *dest, const char *src,
+> +                                 const char * __restrict tag, size_t maxlen)
+> +{
+> +       const char *ptr;
+> +       size_t len;
+> +
+> +       /* Find tag */
+> +       ptr = ddcci_find_capstr_item(src, tag, &len);
+> +       if (IS_ERR(ptr)) {
+> +               return PTR_ERR(ptr);
+> +       }
+> +
+> +       /* Copy value */
+> +       memcpy(dest, ptr, min(len, maxlen));
+> +       return 0;
+> +}
+> +
+> +/* Fill fields in device by parsing the capability string */
+> +static int ddcci_parse_capstring(struct ddcci_device *device)
+> +{
+> +       const char *capstr = device->capabilities;
+> +       int ret = 0;
+> +
+> +       if (!capstr)
+> +               return -EINVAL;
+> +
+> +       /* capability string start with a paren */
+> +       if (capstr[0] != '(')
+> +               return -EINVAL;
+> +
+> +       /* get prot(...) */
+> +       ret = ddcci_cpy_capstr_item(device->prot, capstr, "prot", sizeof(device->prot)-1);
+> +       if (ret) {
+> +               if (ret == -ENOENT) {
+> +                       dev_warn(&device->dev, "malformed capability string: no protocol tag");
+> +                       memset(device->prot, 0, sizeof(device->prot)-1);
+> +               } else {
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       /* get type(...) */
+> +       ret = ddcci_cpy_capstr_item(device->type, capstr, "type", sizeof(device->type)-1);
+> +       if (ret) {
+> +               if (ret == -ENOENT) {
+> +                       dev_warn(&device->dev, "malformed capability string: no type tag");
+> +                       memset(device->type, 0, sizeof(device->type)-1);
+> +               } else {
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       /* and then model(...) */
+> +       ret = ddcci_cpy_capstr_item(device->model, capstr, "model", sizeof(device->model)-1);
+> +       if (ret) {
+> +               if (ret == -ENOENT) {
+> +                       dev_warn(&device->dev, "malformed capability string: no model tag");
+> +                       memset(device->model, 0, sizeof(device->model)-1);
+> +               } else {
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       /* if there is no protocol tag */
+> +       if (!device->prot[0]) {
+> +               /* and no type tag: give up. */
+> +               if (!device->type[0])
+> +                       return -ENOENT;
+> +
+> +               /* Assume protocol "monitor" if type is "LCD" or "CRT" */
+> +               if (strncasecmp(device->type, "LCD", sizeof(device->type)-1) == 0
+> +                || strncasecmp(device->type, "CRT", sizeof(device->type)-1) == 0) {
+> +                       memcpy(device->prot, "monitor", 7);
+> +               }
+> +       }
+> +
+> +       /* skip the rest for now */
+> +
+> +       return 0;
+> +}
+> +
+> +/* Probe for a device on an inner address and create a ddcci_device for it */
+> +static int ddcci_detect_device(struct i2c_client *client, unsigned char addr,
+> +                              int dependent)
+> +{
+> +       int ret;
+> +       unsigned char outer_addr = client->addr << 1;
+> +       unsigned char *buffer = NULL;
+> +       struct ddcci_bus_drv_data *drv_data = i2c_get_clientdata(client);
+> +       struct ddcci_device *device = NULL;
+> +
+> +       down(&drv_data->sem);
+> +
+> +       /* Allocate buffer big enough for any capability string */
+> +       buffer = kmalloc(16384, GFP_KERNEL);
+> +       if (!buffer) {
+> +               ret = -ENOMEM;
+> +               goto err_end;
+> +       }
+> +
+> +       /* Allocate device struct */
+> +       device = kzalloc(sizeof(struct ddcci_device), GFP_KERNEL);
+> +       if (!device) {
+> +               ret = -ENOMEM;
+> +               goto err_end;
+> +       }
+> +
+> +       /* Initialize device */
+> +       device_initialize(&device->dev);
+> +       device->dev.parent = &client->dev;
+> +       device->dev.bus = &ddcci_bus_type;
+> +       device->outer_addr = outer_addr;
+> +       device->inner_addr = addr;
+> +       device->bus_drv_data = drv_data;
+> +       device->i2c_client = client;
+> +
+> +       if (!dependent) {
+> +               device->dev.type = &ddcci_device_type;
+> +               ret = dev_set_name(&device->dev, "ddcci%d", client->adapter->nr);
+> +       } else if (outer_addr == dependent) {
+> +               /* Internal dependent device */
+> +               device->dev.type = &ddcci_dependent_type;
+> +               device->flags = DDCCI_FLAG_DEPENDENT;
+> +               ret = dev_set_name(&device->dev, "ddcci%di%02x", client->adapter->nr, addr);
+> +       } else if (outer_addr == addr) {
+> +               /* External dependent device */
+> +               device->dev.type = &ddcci_dependent_type;
+> +               device->flags = DDCCI_FLAG_DEPENDENT | DDCCI_FLAG_EXTERNAL;
+> +               ret = dev_set_name(&device->dev, "ddcci%de%02x", client->adapter->nr, addr);
+> +       } else {
+> +               /* Dependent device of external dependent device
+> +                  Just in case something like this exists */
+> +               device->dev.type = &ddcci_dependent_type;
+> +               device->flags = DDCCI_FLAG_DEPENDENT | DDCCI_FLAG_EXTERNAL;
+> +               ret = dev_set_name(&device->dev, "ddcci%de%02x%02x", client->adapter->nr, outer_addr, addr);
+> +       }
+> +
+> +       if (ret)
+> +               goto err_free;
+> +
+> +       /* Read identification and check for quirks */
+> +       ret = ddcci_identify_device(client, addr, buffer, 29);
+> +       if (ret < 0) {
+> +               if (!dependent && (ret == -EBADMSG || ret == -EMSGSIZE)) {
+> +                       dev_warn(&device->dev, "DDC/CI main device sent broken response on identification. Trying to detect solely based on capability information.\n");
+> +               } else {
+> +                       goto err_free;
+> +               }
+> +       }
+> +
+> +       if (ret == 29 && buffer[0] == DDCCI_REPLY_ID) {
+> +               memcpy(device->vendor, &buffer[7], 8);
+> +               memcpy(device->module, &buffer[17], 8);
+> +               device->device_number = be32_to_cpu(*(__force __be32 *)&buffer[18]);
+> +       }
+> +
+> +       /* Read capabilities */
+> +       ret = ddcci_get_caps(client, addr, buffer, 16384);
+> +       if (ret > 0) {
+> +               /* Fixup unparenthesized capability strings, but only if the first
+> +                  character is an ascii lower case letter.
+> +                  This should still allow an early exit for completely garbled
+> +                  data but helps detecting devices where only the parentheses are
+> +                  missing, as the second char must be the first character of a
+> +                  keyword. */
+> +               if (ret > 2 && buffer[0] >= 'a' && buffer[0] <= 'z') {
+> +                       dev_err(&device->dev, "DDC/CI device quirk detected: unparenthesized capability string\n");
+> +                       device->capabilities = kzalloc(ret+3, GFP_KERNEL);
+> +                       if (!device->capabilities) {
+> +                               ret = -ENOMEM;
+> +                               goto err_free;
+> +                       }
+> +                       device->capabilities_len = ret+2;
+> +                       memcpy(&(device->capabilities[1]), buffer, ret);
+> +                       device->capabilities[0] = '(';
+> +                       device->capabilities[ret+1] = ')';
+> +               } else {
+> +                       /* Standard case: simply copy the received string */
+> +                       device->capabilities = kzalloc(ret+1, GFP_KERNEL);
+> +                       if (!device->capabilities) {
+> +                               ret = -ENOMEM;
+> +                               goto err_free;
+> +                       }
+> +                       device->capabilities_len = ret;
+> +                       memcpy(device->capabilities, buffer, ret);
+> +               }
+> +
+> +               ret = ddcci_parse_capstring(device);
+> +               if (ret) {
+> +                       dev_err(&device->dev, "malformed capability string: \"%s\" errno %d\n", device->capabilities, ret);
+> +                       ret = -EINVAL;
+> +                       goto err_free;
+> +               }
+> +       }
+> +
+> +       /* Found a device if either identification or capabilities succeeded */
+> +       if (!device->capabilities && device->vendor[0] == '\0') {
+> +               dev_dbg(&client->dev,
+> +                       "[%02x:%02x] got neither valid identification nor capability data\n",
+> +                       client->addr << 1, addr);
+> +               ret = -ENODEV;
+> +               goto err_free;
+> +       }
+> +
+> +       /* Setup chardev */
+> +       down(&core_lock);
+> +       ret = ddcci_setup_char_device(device);
+> +       up(&core_lock);
+> +       if (ret)
+> +               goto err_free;
+> +
+> +       /* Release semaphore and add device to the tree */
+> +       up(&drv_data->sem);
+> +       pr_debug("found device at %d:%02x:%02x\n", client->adapter->nr, outer_addr, addr);
+> +       ret = device_add(&device->dev);
+> +       if (ret)
+> +               goto err_free;
+> +
+> +       goto end;
+> +err_free:
+> +       put_device(&device->dev);
+> +err_end:
+> +       up(&drv_data->sem);
+> +end:
+> +       kfree(buffer);
+> +       return ret;
+> +}
+> +
+> +/* I2C detect function: check if a main or external dependent device exists */
+> +static int ddcci_detect(struct i2c_client *client, struct i2c_board_info *info)
+> +{
+> +       int ret;
+> +       unsigned char outer_addr;
+> +       unsigned char inner_addr;
+> +       unsigned char buf[32];
+> +       unsigned char cmd_id[1] = { DDCCI_COMMAND_ID };
+> +       unsigned char cmd_caps[3] = { DDCCI_COMMAND_CAPS, 0x00, 0x00};
+> +       unsigned char *cmd;
+> +       unsigned int cmd_len;
+> +
+> +       /* Check for i2c_master_* functionality */
+> +       if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+> +               pr_debug("i2c adapter %d unsuitable: no i2c_master functionality\n", client->adapter->nr);
+> +               return -ENODEV;
+> +       }
+> +
+> +       /* send Capabilities Request (for main) or Identification Request command (for dependent devices) */
+> +       outer_addr = client->addr << 1;
+> +       inner_addr = (outer_addr == DDCCI_DEFAULT_DEVICE_ADDR) ? DDCCI_HOST_ADDR_ODD : outer_addr | 1;
+> +       cmd = (outer_addr == DDCCI_DEFAULT_DEVICE_ADDR) ? cmd_caps : cmd_id;
+> +       cmd_len = (outer_addr == DDCCI_DEFAULT_DEVICE_ADDR) ? sizeof(cmd_caps) : sizeof(cmd_id);
+> +       pr_debug("detecting %d:%02x\n", client->adapter->nr, outer_addr);
+> +
+> +       ret = __ddcci_write_block(client, inner_addr, buf, true, cmd, cmd_len);
+> +
+> +       if (ret == -ENXIO || ret == -EIO) {
+> +               if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE)) {
+> +                       pr_debug("i2c write failed with ENXIO or EIO but bytewise writing is not supported\n");
+> +                       return -ENODEV;
+> +               }
+> +               pr_debug("i2c write failed with ENXIO or EIO, trying bytewise writing\n");
+> +               ret = __ddcci_write_bytewise(client, inner_addr, true, cmd, cmd_len);
+> +               if (ret == 0) {
+> +                       msleep(delay);
+> +                       ret = __ddcci_write_bytewise(client, inner_addr, true, cmd, cmd_len);
+> +               }
+> +       }
+> +
+> +       if (ret < 0)
+> +               return -ENODEV;
+> +
+> +       /* wait for device */
+> +       msleep(delay);
+> +       /* receive answer */
+> +       ret = i2c_master_recv(client, buf, 32);
+> +       if (ret < 3) {
+> +               pr_debug("detection failed: no answer\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       /* check response starts with outer addr */
+> +       if (buf[0] != outer_addr) {
+> +               pr_debug("detection failed: invalid %s response (%02x != %02x)\n", (cmd == cmd_id) ? "identification" : "capabilities", buf[0], outer_addr);
+> +               pr_debug("received message was %*ph \n", ret, buf);
+> +               return -ENODEV;
+> +       }
+> +
+> +       pr_debug("detected %d:%02x\n", client->adapter->nr, outer_addr);
+> +
+> +       /* set device type */
+> +       strlcpy(info->type, (outer_addr == DDCCI_DEFAULT_DEVICE_ADDR) ? "ddcci" : "ddcci-dependent", I2C_NAME_SIZE);
+> +
+> +       return 0;
+> +}
+> +
+> +/* I2C probe function */
+> +static int ddcci_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> +{
+> +       int i, ret = -ENODEV, tmp;
+> +       unsigned char main_addr, addr;
+> +       struct ddcci_bus_drv_data *drv_data;
+> +
+> +       /* Initialize driver data structure */
+> +       drv_data = devm_kzalloc(&client->dev, sizeof(struct ddcci_bus_drv_data), GFP_KERNEL);
+> +       if (!drv_data)
+> +               return -ENOMEM;
+> +       drv_data->i2c_dev = client;
+> +       sema_init(&drv_data->sem, 1);
+> +
+> +       /* Set i2c client data */
+> +       i2c_set_clientdata(client, drv_data);
+> +
+> +       if (id->driver_data == 0) {
+> +               /* Core device, probe at 0x6E */
+> +               main_addr = DDCCI_DEFAULT_DEVICE_ADDR;
+> +               dev_dbg(&client->dev, "probing core device [%02x]\n",
+> +                       client->addr << 1);
+> +               ret = ddcci_detect_device(client, main_addr, 0);
+> +               if (ret) {
+> +                       dev_info(&client->dev, "core device [%02x] probe failed: %d\n",
+> +                                client->addr << 1, ret);
+> +                       if (ret == -EIO)
+> +                               ret = -ENODEV;
+> +                       goto err_free;
+> +               }
+> +
+> +               /* Detect internal dependent devices */
+> +               dev_dbg(&client->dev, "probing internal dependent devices\n");
+> +               for (i = 0; i < autoprobe_addr_count; ++i) {
+> +                       addr = (unsigned short)autoprobe_addrs[i];
+> +                       if ((addr & 1) == 0 && addr != main_addr) {
+> +                               tmp = ddcci_detect_device(client, addr, main_addr);
+> +                               if (tmp < 0 && tmp != -ENODEV) {
+> +                                       dev_info(&client->dev, "internal dependent device [%02x:%02x] probe failed: %d\n",
+> +                                                client->addr << 1, addr, ret);
+> +                               }
+> +                       }
+> +               }
+> +       } else if (id->driver_data == 1) {
+> +               /* External dependent device */
+> +               main_addr = client->addr << 1;
+> +               dev_dbg(&client->dev, "probing external dependent device [%02x]\n", main_addr);
+> +               ret = ddcci_detect_device(client, main_addr, -1);
+> +               if (ret) {
+> +                       dev_info(&client->dev, "external dependent device [%02x] probe failed: %d\n",
+> +                                main_addr, ret);
+> +                       if (ret == -EIO)
+> +                               ret = -ENODEV;
+> +                       goto err_free;
+> +               }
+> +       } else {
+> +               dev_warn(&client->dev,
+> +                        "probe() called with invalid i2c device id\n");
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       goto end;
+> +err_free:
+> +       devm_kfree(&client->dev, drv_data);
+> +end:
+> +       return ret;
+> +}
+> +
+> +/*
+> + * Callback for bus_find_device() used in ddcci_remove()
+> + *
+> + * Find next device on i2c_client not flagged with
+> + * DDCCI_FLAG_REMOVED and flag it.
+> + */
+> +#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+> +static int ddcci_remove_helper(struct device *dev, const void *p)
+> +#else
+> +static int ddcci_remove_helper(struct device *dev, void *p)
+> +#endif
+> +{
+> +       struct ddcci_device *device;
+> +
+> +       device = ddcci_verify_device(dev);
+> +       if (!device || device->flags & DDCCI_FLAG_REMOVED)
+> +               return 0;
+> +
+> +       if (!p || (dev->parent == p)) {
+> +               device->flags |= DDCCI_FLAG_REMOVED;
+> +               wmb();
+> +               return 1;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +/* I2C driver remove callback: unregister all subdevices */
+> +static int ddcci_remove(struct i2c_client *client)
+> +{
+> +       struct ddcci_bus_drv_data *drv_data = i2c_get_clientdata(client);
+> +       struct device *dev;
+> +
+> +       down(&drv_data->sem);
+> +       while (1) {
+> +               dev = bus_find_device(&ddcci_bus_type, NULL, client,
+> +                                     ddcci_remove_helper);
+> +               if (!dev)
+> +                       break;
+> +               device_unregister(dev);
+> +               put_device(dev);
+> +       }
+> +       up(&drv_data->sem);
+> +       return 0;
+> +}
+> +
+> +/*
+> + * I2C driver device identification table.
+> + */
+> +static const struct i2c_device_id ddcci_idtable[] = {
+> +       { "ddcci", 0 },
+> +       { "ddcci-dependent", 1 },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ddcci_idtable);
+> +
+> +/*
+> + * I2C driver description structure
+> + */
+> +static struct i2c_driver ddcci_driver = {
+> +       .driver = {
+> +               .name   = "ddcci",
+> +               .owner  = THIS_MODULE,
+> +       },
+> +
+> +       .id_table       = ddcci_idtable,
+> +       .probe          = ddcci_probe,
+> +       .remove         = ddcci_remove,
+> +       .class          = I2C_CLASS_DDC,
+> +       .detect         = ddcci_detect,
+> +       .address_list   = I2C_ADDRS(
+> +               DDCCI_DEFAULT_DEVICE_ADDR>>1
+> +       ),
+> +};
+> +
+> +/*
+> + * Module initialization function. Called when the module is inserted or
+> + * (if builtin) at boot time.
+> + */
+> +static int __init ddcci_module_init(void)
+> +{
+> +       int ret;
+> +
+> +       pr_debug("initializing ddcci driver\n");
+> +       /* Allocate a device number region for the character devices */
+> +       ret = alloc_chrdev_region(&ddcci_cdev_first, 0, 128, DEVICE_NAME);
+> +       if (ret < 0) {
+> +               pr_err("failed to register device region: error %d\n", ret);
+> +               goto err_chrdevreg;
+> +       }
+> +       ddcci_cdev_next = ddcci_cdev_first;
+> +       ddcci_cdev_end = MKDEV(MAJOR(ddcci_cdev_first), MINOR(ddcci_cdev_first)+128);
+> +
+> +       /* Register bus */
+> +       ret = bus_register(&ddcci_bus_type);
+> +       if (ret) {
+> +               pr_err("failed to register bus 'ddcci'\n");
+> +               goto err_busreg;
+> +       }
+> +
+> +       /* Register I2C driver */
+> +       ret = i2c_add_driver(&ddcci_driver);
+> +       if (ret) {
+> +               pr_err("failed to register i2c driver\n");
+> +               goto err_drvreg;
+> +       }
+> +
+> +       pr_debug("ddcci driver initialized\n");
+> +
+> +       return 0;
+> +
+> +err_drvreg:
+> +       bus_unregister(&ddcci_bus_type);
+> +err_busreg:
+> +       unregister_chrdev_region(ddcci_cdev_first, 128);
+> +err_chrdevreg:
+> +       return ret;
+> +}
+> +
+> +/*
+> + * Module clean-up function. Called when the module is removed.
+> + */
+> +static void __exit ddcci_module_exit(void)
+> +{
+> +       struct device *dev;
+> +
+> +       while (1) {
+> +               dev = bus_find_device(&ddcci_bus_type, NULL, NULL, ddcci_remove_helper);
+> +               if (!dev)
+> +                       break;
+> +               device_unregister(dev);
+> +               put_device(dev);
+> +       }
+> +
+> +       i2c_del_driver(&ddcci_driver);
+> +       bus_unregister(&ddcci_bus_type);
+> +       unregister_chrdev_region(ddcci_cdev_first, 128);
+> +}
+> +
+> +/* Let the kernel know the calls for module init and exit */
+> +module_init(ddcci_module_init);
+> +module_exit(ddcci_module_exit);
+> +
+> +/* Module parameter description */
+> +module_param(delay, uint, S_IRUGO|S_IWUSR);
+> +MODULE_PARM_DESC(delay, "default delay after bus writes (in ms, default 60)");
+> +module_param_array(autoprobe_addrs, ushort, &autoprobe_addr_count, S_IRUGO|S_IWUSR);
+> +MODULE_PARM_DESC(autoprobe_addrs, "internal dependent device addresses to autoprobe");
+> +
+> +/* Module description */
+> +MODULE_AUTHOR("Christoph Grenz");
+> +MODULE_DESCRIPTION("DDC/CI bus driver");
+> +MODULE_VERSION("0.4.2");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/ddcci.h b/include/linux/ddcci.h
+> new file mode 100644
+> index 000000000000..a219f031e584
+> --- /dev/null
+> +++ b/include/linux/ddcci.h
+> @@ -0,0 +1,164 @@
+> +/*
+> + *  DDC/CI bus driver
+> + *
+> + *  Copyright (c) 2015 Christoph Grenz
+> + */
+> +
+> +/*
+> + * This program is free software; you can redistribute it and/or modify it
+> + * under the terms of the GNU General Public License as published by the Free
+> + * Software Foundation; either version 2 of the License, or (at your option)
+> + * any later version.
+> + */
+> +
+> +#ifndef _DDCCI_H
+> +#define _DDCCI_H
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/device.h>
+> +#include <linux/cdev.h>
+> +
+> +#define DDCCI_MODULE_PREFIX "ddcci:"
+> +
+> +/* Special addresses */
+> +
+> +/* default device address (even) */
+> +#define DDCCI_DEFAULT_DEVICE_ADDR      0x6E
+> +/* receiving host address for communication with default device address */
+> +#define DDCCI_HOST_ADDR_EVEN   0x50
+> +/* sending host address for communication with default device address */
+> +#define DDCCI_HOST_ADDR_ODD    0x51
+> +
+> +/* Command codes */
+> +
+> +/* Identification Request */
+> +#define DDCCI_COMMAND_ID       0xf1
+> +/* Identification Reply */
+> +#define DDCCI_REPLY_ID 0xe1
+> +/* Capabilities Request */
+> +#define DDCCI_COMMAND_CAPS     0xf3
+> +/* Capabilities Reply */
+> +#define DDCCI_REPLY_CAPS       0xe3
+> +
+> +/* Quirks */
+> +
+> +/* Device always responds with unset protocol flag */
+> +#define DDCCI_QUIRK_NO_PFLAG BIT(1)
+> +/* Device needs writing one byte at a time  */
+> +#define DDCCI_QUIRK_WRITE_BYTEWISE BIT(2)
+> +/* Device repeats first byte on read */
+> +#define DDCCI_QUIRK_SKIP_FIRST_BYTE BIT(3)
+> +
+> +/* Flags */
+> +
+> +#define DDCCI_FLAG_REMOVED BIT(1)
+> +#define DDCCI_FLAG_DEPENDENT BIT(2)
+> +#define DDCCI_FLAG_EXTERNAL BIT(3)
+> +
+> +extern struct bus_type ddcci_bus_type;
+> +
+> +struct ddcci_bus_drv_data;
+> +
+> +/* struct ddcci_device_id - identifies DDC/CI devices for probing */
+> +struct ddcci_device_id {
+> +       char prot[9];
+> +       char type[9];
+> +       char model[9];
+> +       char vendor[9];
+> +       char module[9];
+> +       kernel_ulong_t driver_data;     /* Data private to the driver */
+> +};
+> +#define DDCCI_ANY_ID "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+> +
+> +/**
+> + * struct ddcci_device - represent an DDC/CI device
+> + * @outer_addr: Outer device address (I2C address << 1).
+> + * @inner_addr: Inner device address.
+> + * @flags: Device flags.
+> + * @capabilities: Device capability string.
+> + * @capabilities_len: Length of capability string.
+> + * @i2c_client: Parent I2C device.
+> + * @bus_drv_data: Driver internal data structure.
+> + * @dev: Driver model device node for the slave.
+> + * @cdev: Character device structure
+> + * @cdev_sem: RW semaphore for exclusive access on character device.
+> + * @prot: Device class ("protocol", from capability string)
+> + * @type: Device subclass ("type", from capability string)
+> + * @model: Device model (from capability string)
+> + * @vendor: Device vendor (from identification command response)
+> + * @module: Device module (from identification command response)
+> + * @device_number: Device serial (from identification command response)
+> + */
+> +struct ddcci_device {
+> +       unsigned short outer_addr;
+> +       unsigned short inner_addr;
+> +       int flags;
+> +       char *capabilities;
+> +       size_t capabilities_len;
+> +       struct i2c_client *i2c_client;
+> +       struct ddcci_bus_drv_data *bus_drv_data;
+> +       struct device dev;
+> +       struct cdev cdev;
+> +       struct rw_semaphore cdev_sem;
+> +       char prot[9];
+> +       char type[9];
+> +       char model[9];
+> +       char vendor[9];
+> +       char module[9];
+> +       int device_number;
+> +};
+> +#define to_ddcci_device(d) container_of(d, struct ddcci_device, dev)
+> +
+> +/**
+> + * struct ddcci_driver - represent an DDC/CI device driver
+> + * @probe: Callback for device binding
+> + * @remove: Callback for device unbinding
+> + * @driver: Device driver model driver
+> + * @id_table: List of DDC/CI devices supported by this driver
+> + *
+> + * The driver.owner field should be set to the module owner of this driver.
+> + * The driver.name field should be set to the name of this driver.
+> + */
+> +struct ddcci_driver {
+> +       int (*probe)(struct ddcci_device *, const struct ddcci_device_id *);
+> +       int (*remove)(struct ddcci_device *);
+> +       struct device_driver driver;
+> +       struct ddcci_device_id *id_table;
+> +};
+> +#define to_ddcci_driver(d) container_of(d, struct ddcci_driver, driver)
+> +
+> +int ddcci_register_driver(struct module *owner, struct ddcci_driver *driver);
+> +#define ddcci_add_driver(driver) \
+> +       ddcci_register_driver(THIS_MODULE, driver)
+> +void ddcci_del_driver(struct ddcci_driver *driver);
+> +
+> +struct ddcci_device *ddcci_verify_device(struct device *dev);
+> +
+> +#define module_ddcci_driver(__ddcci_driver) \
+> +       module_driver(__ddcci_driver, ddcci_add_driver, \
+> +                       ddcci_del_driver)
+> +
+> +int ddcci_device_write(struct ddcci_device *, bool p_flag, unsigned char *data,
+> +                      unsigned char length);
+> +int ddcci_device_read(struct ddcci_device *, bool p_flag, unsigned char *buffer,
+> +                     unsigned char length);
+> +int ddcci_device_writeread(struct ddcci_device *, bool p_flag,
+> +                          unsigned char *buffer, unsigned char length,
+> +                          unsigned char maxlength);
+> +
+> +static inline void *ddcci_get_drvdata(const struct ddcci_device *dev)
+> +{
+> +       return dev_get_drvdata(&dev->dev);
+> +}
+> +
+> +static inline void ddcci_set_drvdata(struct ddcci_device *dev, void *data)
+> +{
+> +       dev_set_drvdata(&dev->dev, data);
+> +}
+> +
+> +unsigned long ddcci_quirks(struct ddcci_device *dev);
+> +
+> +const char *ddcci_find_capstr_item(const char *capabilities, const char *tag,
+> +                                  size_t *length);
+> +
+> +#endif
+> --
+> 2.25.1
+>

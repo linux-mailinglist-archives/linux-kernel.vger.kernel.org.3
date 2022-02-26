@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13364C529C
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC704C5292
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241196AbiBZASe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S240663AbiBZAS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241354AbiBZARy (ORCPT
+        with ESMTP id S241437AbiBZARz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:17:54 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594A22559E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:50 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id bm16-20020a656e90000000b00372932b1d83so3474383pgb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:50 -0800 (PST)
+        Fri, 25 Feb 2022 19:17:55 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8282325DF
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:52 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b64-20020a256743000000b0061e169a5f19so4968428ybc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=EjwrK4ZJChvc6iOJgG1AWxHnLn4z532gyWXr0rVG/jQ=;
-        b=lDvo9S5DXUSc+JKq46AkxVaccqJHq5C6rWdkLNnSG8RB7M0LjPk1aSTbjzHeUBF2SK
-         LdC8PARFCyh+yPqzV5tav9taOV6Oxa+HPg0xnKCj8GKro1Ihjk0vStC60ejtziH7Kp22
-         hHSwQoe7biVA931GQdyCO+VJFwkH8jxSdWXJcPS3F3/jgFHejbPhBKfjtliBSkBeeDe1
-         XTSXxP4elMA42o+QiK1nVBNWnT11jiKN3/lT6obqM9bkRm5JT9VYMLqruY0A9EvvX79K
-         jiQkAs77DMMXN1I5PgcKZxVhI/ZWz5mf4sza4V1Bg3oo9vG+KmZ3q66uyPOB4qwbxkLG
-         bxfw==
+        bh=jDVD0FfZcUe5uWry8KBPjcFndvGRfOS1F52KZePQv64=;
+        b=T9WXpGyEnZLrxkitFkBsPgYBLyCW7XwcE1VwCSGjV9s4WFQysreorHCGoMFsh8hrIM
+         IzmblvucT4xzigG87YTxcYTRcNqbOFtd84wqGH3mYBWL8a73fTxpTd+W72Gk2DkVjLFg
+         JTJBwaqj7alTS2R7hhU6fahZsJbsBIQDLo0mqHAJCulNVxA/aCYexv+WDODnzFHMSGa7
+         pAHZE38TLzNkxPPyJa5T+aGqLLcmsCY+Cg4SNmMxQPznkQVu8MZ4gMTg2zrMmBu6hrvO
+         lGcxqdBxGELdEzHXgOoVmjk10z8+WTpCQe/Q0MSpH3qsaKxNeja84KgfseJx+eFOzU/V
+         0tzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=EjwrK4ZJChvc6iOJgG1AWxHnLn4z532gyWXr0rVG/jQ=;
-        b=fathtZhHX+Mt1Ln0EMBagdDMVDymsXglmUPPv9oPs15obD/vq90yiXUCIfcQcEA1ec
-         Z2yWQ5UT+GSvGj2WF4q2E96Iwi2MIsIw4HM6xifbEEHmIULndGljH+MGBgOBaFZXJLRr
-         eyBe04Z18NwBeuPw6Cr6xL6tYJCqzsIbw8y3aa5h47NXOJ5lSEebHrNpKO31Pxgb54hT
-         1IxZCbAz7Tiny3Y63PeshjuaWRXb5omlcby8iUD6ZXhOHUY66nmFo2aLFMwbX+uSqVP7
-         oQa0L6cG/djDWOWBuWIA9DvNJgH4wMudq5DQY9dQBosTjKeZtrKUSaDIrBA7Q2VgBIJK
-         Pr6Q==
-X-Gm-Message-State: AOAM533c8sH58gvQsJ+DoSlm0sfplHXNzpCXsW1vJbzG0yvJfzA9jeN5
-        9xwodpGmLt/rb1W0PY+yKS8Fh16hDr4=
-X-Google-Smtp-Source: ABdhPJzhwOAheOAxV2q4FzmEjanJlp4ncefsNjpgHyJ+GuhwmxFDKtdwHVUgHSS+KmKk/lVsS3qcCikIfn8=
+        bh=jDVD0FfZcUe5uWry8KBPjcFndvGRfOS1F52KZePQv64=;
+        b=nwLqDZmWa7kV2mH7mQIYv4VrQgNva38scQqHgI+fTbEit0OWuopGZg3XKwgtLuOKWA
+         GNoEDF1VXCqkV0PkTyN/4HeyNsqPh5je33MS+2t0/MKh/JCOEITUvtpri7qCKhWYil7g
+         fK5PpjffcBQMIgY3RouPrmPUWE5Xyx2/crtXGvWtf3X9oD8ymOR/f9uwAXdeWJMDLxt9
+         xblUmWEhqpJQK+5Ql7+sjPMmQknwPxbtLGaq16TvvSW92+OQh4U2YehMFtGXbhMwcYCX
+         5bgWlmO6QI1le4dNPchEFyHUQSxnLuUjyTvpVRHJdDdjHXMuMGBfmYzodsiulCO31Qer
+         L5kA==
+X-Gm-Message-State: AOAM531azqVou/ppRZq2i9AkY3q2wN/gOrm9dklWIjKlh/uLo6pU2dbb
+        NMe5ZJ8oN8ohIejTD0oQbuOnu/dmY5g=
+X-Google-Smtp-Source: ABdhPJxBK2MG0ah/gTntZ+O9t2UxhQVSELyR+UzzKfx3xqejvGSGlTsiwTsqCrtgJgDW8NhWeejikSqR4IM=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:7f81:b0:1b9:4485:3f01 with SMTP id
- m1-20020a17090a7f8100b001b944853f01mr5573009pjl.120.1645834599991; Fri, 25
- Feb 2022 16:16:39 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a25:c2c4:0:b0:615:ea99:43bc with SMTP id
+ s187-20020a25c2c4000000b00615ea9943bcmr9759670ybf.283.1645834602019; Fri, 25
+ Feb 2022 16:16:42 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 26 Feb 2022 00:15:41 +0000
+Date:   Sat, 26 Feb 2022 00:15:42 +0000
 In-Reply-To: <20220226001546.360188-1-seanjc@google.com>
-Message-Id: <20220226001546.360188-24-seanjc@google.com>
+Message-Id: <20220226001546.360188-25-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220226001546.360188-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v3 23/28] KVM: x86/mmu: Check for a REMOVED leaf SPTE before
- making the SPTE
+Subject: [PATCH v3 24/28] KVM: x86/mmu: WARN on any attempt to atomically
+ update REMOVED SPTE
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -73,42 +73,66 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explicitly check for a REMOVED leaf SPTE prior to attempting to map
-the final SPTE when handling a TDP MMU fault.  Functionally, this is a
-nop as tdp_mmu_set_spte_atomic() will eventually detect the frozen SPTE.
-Pre-checking for a REMOVED SPTE is a minor optmization, but the real goal
-is to allow tdp_mmu_set_spte_atomic() to have an invariant that the "old"
-SPTE is never a REMOVED SPTE.
+Disallow calling tdp_mmu_set_spte_atomic() with a REMOVED "old" SPTE.
+This solves a conundrum introduced by commit 3255530ab191 ("KVM: x86/mmu:
+Automatically update iter->old_spte if cmpxchg fails"); if the helper
+doesn't update old_spte in the REMOVED case, then theoretically the
+caller could get stuck in an infinite loop as it will fail indefinitely
+on the REMOVED SPTE.  E.g. until recently, clear_dirty_gfn_range() didn't
+check for a present SPTE and would have spun until getting rescheduled.
 
+In practice, only the page fault path should "create" a new SPTE, all
+other paths should only operate on existing, a.k.a. shadow present,
+SPTEs.  Now that the page fault path pre-checks for a REMOVED SPTE in all
+cases, require all other paths to indirectly pre-check by verifying the
+target SPTE is a shadow-present SPTE.
+
+Note, this does not guarantee the actual SPTE isn't REMOVED, nor is that
+scenario disallowed.  The invariant is only that the caller mustn't
+invoke tdp_mmu_set_spte_atomic() if the SPTE was REMOVED when last
+observed by the caller.
+
+Cc: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 4151e61245a7..1acd12bf309f 100644
+index 1acd12bf309f..d223870b3790 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1250,7 +1250,11 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- 		}
- 	}
+@@ -634,16 +634,15 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
+ 	u64 *sptep = rcu_dereference(iter->sptep);
+ 	u64 old_spte;
  
--	if (iter.level != fault->goal_level) {
-+	/*
-+	 * Force the guest to retry the access if the upper level SPTEs aren't
-+	 * in place, or if the target leaf SPTE is frozen by another CPU.
-+	 */
-+	if (iter.level != fault->goal_level || is_removed_spte(iter.old_spte)) {
- 		rcu_read_unlock();
- 		return RET_PF_RETRY;
- 	}
+-	WARN_ON_ONCE(iter->yielded);
+-
+-	lockdep_assert_held_read(&kvm->mmu_lock);
+-
+ 	/*
+-	 * Do not change removed SPTEs. Only the thread that froze the SPTE
+-	 * may modify it.
++	 * The caller is responsible for ensuring the old SPTE is not a REMOVED
++	 * SPTE.  KVM should never attempt to zap or manipulate a REMOVED SPTE,
++	 * and pre-checking before inserting a new SPTE is advantageous as it
++	 * avoids unnecessary work.
+ 	 */
+-	if (is_removed_spte(iter->old_spte))
+-		return -EBUSY;
++	WARN_ON_ONCE(iter->yielded || is_removed_spte(iter->old_spte));
++
++	lockdep_assert_held_read(&kvm->mmu_lock);
+ 
+ 	/*
+ 	 * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

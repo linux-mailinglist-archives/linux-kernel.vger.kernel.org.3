@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00D34C56D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 17:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356D74C56D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 17:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiBZQcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 11:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S232344AbiBZQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 11:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiBZQcv (ORCPT
+        with ESMTP id S230359AbiBZQgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 11:32:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C824DEE5;
-        Sat, 26 Feb 2022 08:32:16 -0800 (PST)
+        Sat, 26 Feb 2022 11:36:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6090B26295B;
+        Sat, 26 Feb 2022 08:36:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C55A60BBD;
-        Sat, 26 Feb 2022 16:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC156C340E8;
-        Sat, 26 Feb 2022 16:32:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01F19B80814;
+        Sat, 26 Feb 2022 16:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F649C340E8;
+        Sat, 26 Feb 2022 16:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645893135;
-        bh=JIVnVPR5itRuwZnH80P4NOCj7Kr4fqQ4kQyZO3sUUcI=;
+        s=k20201202; t=1645893360;
+        bh=xX8VmDztp3N0GoPaZtIyUGbJBpyw5EhUWfj6kUcQHCc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nf1uZWprEJ7KLB82ozSwEVAxVikYZ3hxO98I0/viiUNo8+zbh0YSiBehdDNvj1F3S
-         tgducp9CeMSRoLxc/RK+0XV1yOdzMNkBGaJ0/+NWSTCB10ttlGBLYJbk8AjWnGTrMv
-         lbfsl6Bg3Q0Xiu2ISOoM0THdR4RtDluE81HwVd51iJTan1fmR+uyqgl1G2ZkMED6BV
-         IJ782tiOPHHMWN/D9tTAPRP4TIbjqIswWjtfe4h/bcDSPgL1fNK29+u6kS/cMj9QuC
-         pydIbNg1LPLFwQItVlrxp3K4E2R+wWDGvDObYIRdS+87R6Xtaqk8nf894ubmhuKBHW
-         5ra+dBGO2YnQw==
-Date:   Sat, 26 Feb 2022 16:39:16 +0000
+        b=HR9lfhyI+fHAOfKgfe05UMA/jXHbf9+uZhq595RCkVcX2s0qFxVwi1STNsa5T6+7s
+         oZURCoGXOraYw3UPCridA37xCmIWnbIjMxIHx7OIx/Asb11+gS9mR+i9459ey1S2lI
+         4glj1gPAul4lWU6WYSqpPPaLit3AhAFDb5HrP0+R0SH1oPRqoa2hkOJBPmZE+PSX6r
+         mfiEtaQotW3aHoj90xMnxT96lX3f6cLtJ3NKhmMYCWUrln5UMYI9/MlHgl5rvmG/Lj
+         ur7/lhQlbd2Z/9pIE/A0PJ1PLDK0rP0SYvtxlhIdU5tHUqWMNFJnu+W3iVL4ZoqtcS
+         othBeSDGXJzKQ==
+Date:   Sat, 26 Feb 2022 16:43:00 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH v2 1/1] iio: multiplexer: Make use of device properties
-Message-ID: <20220226163916.39b9421f@jic23-huawei>
-In-Reply-To: <Yf7COufm4GG7VkJu@smile.fi.intel.com>
-References: <20220202204427.57506-1-andriy.shevchenko@linux.intel.com>
-        <20220205173854.14a7aca0@jic23-huawei>
-        <Yf7COufm4GG7VkJu@smile.fi.intel.com>
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] iio: adc: xilinx-ams: Use
+ devm_delayed_work_autocancel() to simplify code
+Message-ID: <20220226164300.63b31841@jic23-huawei>
+In-Reply-To: <f874a9c7-8d8d-fecc-8fc9-51dcf37cf60b@monstr.eu>
+References: <2626e6a057e40cd2271ef0e5f81d12e607bad5b4.1644776929.git.christophe.jaillet@wanadoo.fr>
+        <20220220114552.53fedd33@jic23-huawei>
+        <f874a9c7-8d8d-fecc-8fc9-51dcf37cf60b@monstr.eu>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,27 +62,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Feb 2022 20:30:18 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Mon, 21 Feb 2022 11:02:00 +0100
+Michal Simek <monstr@monstr.eu> wrote:
 
-> On Sat, Feb 05, 2022 at 05:38:54PM +0000, Jonathan Cameron wrote:
-> > On Wed,  2 Feb 2022 22:44:27 +0200
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> Hi,
+> 
+> On 2/20/22 12:45, Jonathan Cameron wrote:
+> > On Sun, 13 Feb 2022 19:29:05 +0100
+> > Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 > >   
-> > > Convert the module to be property provider agnostic and allow
-> > > it to be used on non-OF platforms.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> > Looks good to me, but as it's complex I'd like Peter + anyone else interested
-> > to have a bit more time to take a look before I apply this one.  
+> >> Use devm_delayed_work_autocancel() instead of hand writing it. This is
+> >> less verbose and saves a few lines of code.
+> >>
+> >> devm_delayed_work_autocancel() uses devm_add_action() instead of
+> >> devm_add_action_or_reset(). This is fine, because if the underlying memory
+> >> allocation fails, no work has been scheduled yet. So there is nothing to
+> >> undo.
+> >>
+> >> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>  
+> > Looks good to me, but I'd ideally like some input from someone familiar with
+> > the driver.  
 > 
-> Sure, I would love to see more eyes and hear comments!
+> Anand told me that the change is fine that's why here is my
+> Acked-by: Michal Simek <michal.simek@xilinx.com>
 > 
+> Jonathan: Anand decided to do change in his carrier that's why that emails won't 
+> go through. But I am still around if you need something xilinx/amd to test.
+> 
+> Thanks,
+> Michal
 
-Peter, do you have time to take a look at this one?
-No problem if you are too busy, I'll just take another look myself and apply
-it if I think it looks fine.
+Thanks Michal and best wishes to Anand for whatever comes next!
+
+Applied to the togreg branch of iio.git and pushed out as testing for
+0-day to take a quick look before I expose this to linux-next.
 
 Thanks,
 
 Jonathan
+
+

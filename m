@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F004C5470
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAF54C5472
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 08:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiBZHhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 02:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S230205AbiBZHiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 02:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiBZHha (ORCPT
+        with ESMTP id S230101AbiBZHiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 02:37:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1931C2F42;
-        Fri, 25 Feb 2022 23:36:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7894B80E98;
-        Sat, 26 Feb 2022 07:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5DFC36AE7;
-        Sat, 26 Feb 2022 07:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645861014;
-        bh=g94fQTRsmkDzxnFwqKlncZPJPFMXOEaR80ZqGPrByjc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BKrZ5Fqviw0iFMpM01VIUcmpW/MVTbwhsLlgMmtftkUChjkXIEWjnQlwMbyMkhFZf
-         r4xKaVjKczryTxS1NXpDQoyc6cEsRL+t1jxb95eo2u5pxJM7vQsVBE3dHevpmdkagi
-         SPdvNom8xPg11LoqK1ZAit9yZimTuPAFJ5ND2Guwvg911wK9KvhvcTGwodYFY86p+x
-         VBbEXnfZlOpM4B9fvoTgN2N9MXD8UAFc7R8JPtmrk7ksz/Ot+PqI6ayK3U/xpesDFP
-         iQBe6B5+qinDC9cxes0OFinXC6m1tiNLknx9Hn5U5riXoSLYyJnjaPmIKhGsdLV/i7
-         Q+rBY7myb5DBA==
-Received: by mail-yb1-f178.google.com with SMTP id e140so10173613ybh.9;
-        Fri, 25 Feb 2022 23:36:54 -0800 (PST)
-X-Gm-Message-State: AOAM530vVQ7l0ppoHtI7WPh1G7lyaUvFpNA9x8wdgxZ9Xo4VwqrIyq9l
-        hCGppAdj4mZq0PP4nPaHZiRtfQXhAR34f+ZCM9M=
-X-Google-Smtp-Source: ABdhPJzAmXByR1myE0ItnK4PftEWDzsmIRtPeFSBUgNcKmDiy1PgZacAOHLh9+8uyvSI9uptig1XbM65jBZTTq7tuPM=
-X-Received: by 2002:a25:c89:0:b0:61d:a1e8:fd14 with SMTP id
- 131-20020a250c89000000b0061da1e8fd14mr10531412ybm.322.1645861013601; Fri, 25
- Feb 2022 23:36:53 -0800 (PST)
+        Sat, 26 Feb 2022 02:38:20 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB112630;
+        Fri, 25 Feb 2022 23:37:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645861066; x=1677397066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rS/E+W2/97ST4K/88Qf66fE+o1rQtxjY0+PNbov5cAA=;
+  b=dz7k3MLTDOtduXa2yGqJxAcD0+sIfs2dsvpyox+zEAnCWumIklNvIJrr
+   WiWYJzlVLRFFZ5PdAEmcHT4rT5dZlfc2Aker+Yn97QobQ/NsP2MhqO/2D
+   7sH6d2aT/H+J4BX2Oc+bUpFKI4F4PVLOrwr9zxaHoyfLrApsfiPLBvsN6
+   kb0CUFbzKniyJ9KZphdOArAhN4l3GsfGupdbnO6DEeMGNa31T81x4oz8+
+   KaSdluFP7ftOMMDuzFDO5kUp8RjbgAcoPvRirvKBI0NJo09rjVXeEjGy1
+   +QEY1xREs0T/gdnXUOPvBVLZRwkFTTri0Y5Ig8krve3Ew1COMGQD2LuZ2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="277280221"
+X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
+   d="scan'208";a="277280221"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 23:37:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
+   d="scan'208";a="574831778"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2022 23:37:43 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNreB-0005G1-53; Sat, 26 Feb 2022 07:37:43 +0000
+Date:   Sat, 26 Feb 2022 15:37:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     kbuild-all@lists.01.org, dhowells@redhat.com, jlayton@kernel.org,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] afs: Enable multipage folio support
+Message-ID: <202202261524.4tAqmT0a-lkp@intel.com>
+References: <2274528.1645833226@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
- <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
- <YhjbzxxgxtSxFLe/@kroah.com> <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
- <YhkEqpF6QSYeoMQn@kroah.com>
-In-Reply-To: <YhkEqpF6QSYeoMQn@kroah.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 25 Feb 2022 23:36:42 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4F6pMNYwstQOy68pyU2xrtd8c3k8q2GrNKY9fj46TMdg@mail.gmail.com>
-Message-ID: <CAPhsuW4F6pMNYwstQOy68pyU2xrtd8c3k8q2GrNKY9fj46TMdg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2274528.1645833226@warthog.procyon.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 8:32 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-[...]
->
-> One comment about the patch series.  You might want to break the patches
-> up a bit smaller, having the example code in a separate commit from the
-> "add this feature" commit, as it was hard to pick out what was kernel
-> changes, and what was test changes from it.  That way I can complain
-> about the example code and tests without having to worry about the
-> kernel patches.
+Hi David,
 
-Echo on this part.  Please organize kernel changes, libbpf changes,
-maybe also bpftool changes, selftests, and samples into separate patches.
-This would help folks without HID experience understand the design.
+I love your patch! Yet something to improve:
 
-Thanks,
-Song
+[auto build test ERROR on dhowells-fs/fscache-next]
+[also build test ERROR on linux/master linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/David-Howells/afs-Enable-multipage-folio-support/20220226-075436
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git fscache-next
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220226/202202261524.4tAqmT0a-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/91637acf6da0c809e1bedc59696d6bc0a8604f03
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-Howells/afs-Enable-multipage-folio-support/20220226-075436
+        git checkout 91637acf6da0c809e1bedc59696d6bc0a8604f03
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "PageHeadHuge" [fs/afs/kafs.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

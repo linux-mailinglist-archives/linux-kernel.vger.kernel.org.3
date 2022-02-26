@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CF14C529D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FDD4C528D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiBZARZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S237370AbiBZARk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiBZAQy (ORCPT
+        with ESMTP id S240323AbiBZAQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:16:54 -0500
+        Fri, 25 Feb 2022 19:16:55 -0500
 Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F1A2261D2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:17 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id t7-20020a634447000000b0036579648983so3492393pgk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024542261E4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:18 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id t68-20020a635f47000000b003732348b971so3493527pgb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=GLAMaXO4BLnbAIX6/AcgYNLqdWbaIIgMTgsuYxMQrpk=;
-        b=IPBFBbCu7NaqWZPAwKKolZZ7oYeFq3VbCvxdfwxTJg7sDDIHVVNvQ+JzTDvbEWoaSm
-         JPyFzrWUNkecgHpj8QiukTXlwmFWIN6NsPOuVRTdiMBxdLhExWwS54vP8lvV9wxlLzAk
-         crDpVn+H2Gu4Jf5TVQTru59EVW2Ikn1TJUE9ESs1Kzrw4HQbGm24VbOGAU0i8ovY7ov7
-         dC15CQL3p9ur70HdDnvJZTi8QNCO2/AsxHOqOj49EXETuI33UMOH1MnrAcLf0RKXiwU9
-         dxu6skrBMSqR5SD2fAf+nOXqMJkKBu4qPwfBoYRfAxioYxRze7VllMVXgpicU9bJJC+l
-         f7Bw==
+        bh=Lu5Zb5K5z9Ao4faecJWogQLcUl62itC1pDHyKWB4Szo=;
+        b=rAH+CawAA7QAlMyJN3NdqP1kqf3643HSBwkEoDU38fZX3HhmSZHXCjwkA6eTZF9zeM
+         h8uoj6K3E+4qSYaXDmhoZPe3RDLUrIVTd6CuVu4fLZgkqYqHd6GXX9i6aaRrZ4hkmOhX
+         X6xr9MHYI9covtPmNWnB5Acxyd6uc03ZbiMN3JIduDeI9A0To20OtTKKlgERreCy45Hv
+         6+f9s6fhKfE7Ds/+l8W8wMtjwKTZEqLSTNU6Phr9jtqjAi2jTIJV4bEymOSZyhh1HixD
+         X5dPTEYpbbpdSN9TH+JMi227hrXI6mQpe2OPvmLz4NEv3v/nwi8wX3DUqKhh7fQi89FD
+         JYcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=GLAMaXO4BLnbAIX6/AcgYNLqdWbaIIgMTgsuYxMQrpk=;
-        b=PFJgbJBkTUpXC6nou+SN/voTqVZj2pq76f8Vv73M2BtjgM0OMuUaJBh9s1q8vyF8Vk
-         z/e7Dm+p6+ChL1aRbfY7sEtZ0xDKPPhI85QCAFZhTb6knoDsj3kj5qed/GT364k2LUfC
-         7wIt1dUheTlaeGIpakcmQfHXmSwNmmYGngagl+qmIiBp/Zke9uexSlx2799XoJmr+j3F
-         wK255IbJC+UshfxcpREeUyN5QKCEKB6p/e/DVXrjbbR3hHrDJDzGO+6KEwmOSK+mhrX3
-         P8edSsN7xYNoMS2Eb3HcahYirEU1kbqoNwYVGsuysETW95ouG2Hmg/R6gQ2W6mbANHSc
-         Y7+g==
-X-Gm-Message-State: AOAM532d8RbHXndq5fbHoj4YcLRiwqDmGD5eZ3IH+Eftq3syFhmrLGqY
-        8MNieAAx7unWqotjr0tJiT0BT7yMkMg=
-X-Google-Smtp-Source: ABdhPJx8rYJ83MXizyFpwRKKPP/3gcYAoJ2ByXAk92IyTDKirx3ywRF4qjmtmIJKkIa8SfBeZxMvIoxCRF0=
+        bh=Lu5Zb5K5z9Ao4faecJWogQLcUl62itC1pDHyKWB4Szo=;
+        b=HtTij8xNpQo+yeJU++tLoXNjrBGhf8XCVPG6FxRTh4lpLfPCgtmLkZlgsOhXNdaT/+
+         7VKQqXF/vxvcnj4mlexrMHkDDOrTGUqrdbTcRRDwbbn+bTrOdXT5OfTIuO2rpkiRyqE6
+         4VKR63fBrJvNqF6I2jyRZcBowa+kNetZkxaa/J3yZQy1H6BDXemeaomZQWu5Tgq7U8Wz
+         vg8nRAD5FlXWPLfc4BsEqeVUEyb1uO1FShCgsvmhhW0kiBU1bJLC0cOAPIGtt0IeGSfn
+         EMxddLuiueWEg18ulrLhHqorermPtbIx/KHvZrtkkfeSul2OTpqoXcjkJs+OnW0vEEDN
+         ji+A==
+X-Gm-Message-State: AOAM530xR0VchJVN4vI5OucS0vG8z+qNfQTTduFBEAMiY71lNDahvhLJ
+        9OBPmVkQR9fj24VLMGFe8oz5QG3JO/k=
+X-Google-Smtp-Source: ABdhPJz14fr8CmwWpHoBUZQ5h7RoKy3te0//NmcR2dmx3Olc8psLMchJrSZrtQlTY0WAg1eKXW9jY43YI/8=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:3018:b0:4e1:de9a:a5a3 with SMTP id
- ay24-20020a056a00301800b004e1de9aa5a3mr10262616pfb.80.1645834576574; Fri, 25
- Feb 2022 16:16:16 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a62:7554:0:b0:4e1:5898:4fbb with SMTP id
+ q81-20020a627554000000b004e158984fbbmr10185233pfc.2.1645834578388; Fri, 25
+ Feb 2022 16:16:18 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 26 Feb 2022 00:15:27 +0000
+Date:   Sat, 26 Feb 2022 00:15:28 +0000
 In-Reply-To: <20220226001546.360188-1-seanjc@google.com>
-Message-Id: <20220226001546.360188-10-seanjc@google.com>
+Message-Id: <20220226001546.360188-11-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220226001546.360188-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v3 09/28] KVM: x86/mmu: Drop RCU after processing each root in
- MMU notifier hooks
+Subject: [PATCH v3 10/28] KVM: x86/mmu: Add helpers to read/write TDP MMU
+ SPTEs and document RCU
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -80,54 +80,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop RCU protection after processing each root when handling MMU notifier
-hooks that aren't the "unmap" path, i.e. aren't zapping.  Temporarily
-drop RCU to let RCU do its thing between roots, and to make it clear that
-there's no special behavior that relies on holding RCU across all roots.
+Add helpers to read and write TDP MMU SPTEs instead of open coding
+rcu_dereference() all over the place, and to provide a convenient
+location to document why KVM doesn't exempt holding mmu_lock for write
+from having to hold RCU (and any future changes to the rules).
 
-Currently, the RCU protection is completely superficial, it's necessary
-only to make rcu_dereference() of SPTE pointers happy.  A future patch
-will rely on holding RCU as a proxy for vCPUs in the guest, e.g. to
-ensure shadow pages aren't freed before all vCPUs do a TLB flush (or
-rather, acknowledge the need for a flush), but in that case RCU needs to
-be held until the flush is complete if and only if the flush is needed
-because a shadow page may have been removed.  And except for the "unmap"
-path, MMU notifier events cannot remove SPs (don't toggle PRESENT bit,
-and can't change the PFN for a SP).
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/tdp_iter.c |  6 +++---
+ arch/x86/kvm/mmu/tdp_iter.h | 16 ++++++++++++++++
+ arch/x86/kvm/mmu/tdp_mmu.c  |  6 +++---
+ 3 files changed, 22 insertions(+), 6 deletions(-)
 
+diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
+index be3f096db2eb..6d3b3e5a5533 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.c
++++ b/arch/x86/kvm/mmu/tdp_iter.c
+@@ -12,7 +12,7 @@ static void tdp_iter_refresh_sptep(struct tdp_iter *iter)
+ {
+ 	iter->sptep = iter->pt_path[iter->level - 1] +
+ 		SHADOW_PT_INDEX(iter->gfn << PAGE_SHIFT, iter->level);
+-	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
++	iter->old_spte = kvm_tdp_mmu_read_spte(iter->sptep);
+ }
+ 
+ static gfn_t round_gfn_for_level(gfn_t gfn, int level)
+@@ -89,7 +89,7 @@ static bool try_step_down(struct tdp_iter *iter)
+ 	 * Reread the SPTE before stepping down to avoid traversing into page
+ 	 * tables that are no longer linked from this entry.
+ 	 */
+-	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
++	iter->old_spte = kvm_tdp_mmu_read_spte(iter->sptep);
+ 
+ 	child_pt = spte_to_child_pt(iter->old_spte, iter->level);
+ 	if (!child_pt)
+@@ -123,7 +123,7 @@ static bool try_step_side(struct tdp_iter *iter)
+ 	iter->gfn += KVM_PAGES_PER_HPAGE(iter->level);
+ 	iter->next_last_level_gfn = iter->gfn;
+ 	iter->sptep++;
+-	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
++	iter->old_spte = kvm_tdp_mmu_read_spte(iter->sptep);
+ 
+ 	return true;
+ }
+diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
+index 216ebbe76ddd..bb9b581f1ee4 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.h
++++ b/arch/x86/kvm/mmu/tdp_iter.h
+@@ -9,6 +9,22 @@
+ 
+ typedef u64 __rcu *tdp_ptep_t;
+ 
++/*
++ * TDP MMU SPTEs are RCU protected to allow paging structures (non-leaf SPTEs)
++ * to be zapped while holding mmu_lock for read.  Holding RCU isn't required for
++ * correctness if mmu_lock is held for write, but plumbing "struct kvm" down to
++ * the lower depths of the TDP MMU just to make lockdep happy is a nightmare, so
++ * all accesses to SPTEs are done under RCU protection.
++ */
++static inline u64 kvm_tdp_mmu_read_spte(tdp_ptep_t sptep)
++{
++	return READ_ONCE(*rcu_dereference(sptep));
++}
++static inline void kvm_tdp_mmu_write_spte(tdp_ptep_t sptep, u64 val)
++{
++	WRITE_ONCE(*rcu_dereference(sptep), val);
++}
++
+ /*
+  * A TDP iterator performs a pre-order walk over a TDP paging structure.
+  */
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 634a2838e117..4f460782a848 100644
+index 4f460782a848..8fbf3364f116 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1100,18 +1100,18 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
- 	struct tdp_iter iter;
- 	bool ret = false;
- 
--	rcu_read_lock();
--
- 	/*
- 	 * Don't support rescheduling, none of the MMU notifiers that funnel
- 	 * into this helper allow blocking; it'd be dead, wasteful code.
+@@ -609,7 +609,7 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+ 	 * here since the SPTE is going from non-present
+ 	 * to non-present.
  	 */
- 	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
-+		rcu_read_lock();
-+
- 		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
- 			ret |= handler(kvm, &iter, range);
--	}
+-	WRITE_ONCE(*rcu_dereference(iter->sptep), 0);
++	kvm_tdp_mmu_write_spte(iter->sptep, 0);
  
--	rcu_read_unlock();
-+		rcu_read_unlock();
-+	}
- 
- 	return ret;
+ 	return 0;
  }
+@@ -648,7 +648,7 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+ 	 */
+ 	WARN_ON(is_removed_spte(iter->old_spte));
+ 
+-	WRITE_ONCE(*rcu_dereference(iter->sptep), new_spte);
++	kvm_tdp_mmu_write_spte(iter->sptep, new_spte);
+ 
+ 	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
+ 			      new_spte, iter->level, false);
+@@ -1046,7 +1046,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 			 * because the new value informs the !present
+ 			 * path below.
+ 			 */
+-			iter.old_spte = READ_ONCE(*rcu_dereference(iter.sptep));
++			iter.old_spte = kvm_tdp_mmu_read_spte(iter.sptep);
+ 		}
+ 
+ 		if (!is_shadow_present_pte(iter.old_spte)) {
 -- 
 2.35.1.574.g5d30c73bfb-goog
 

@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0777C4C534B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D620A4C5355
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 03:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiBZCYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 21:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S229733AbiBZCYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 21:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiBZCYA (ORCPT
+        with ESMTP id S229663AbiBZCYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 21:24:00 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640541CABDB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 18:23:27 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id y5so6262577pfe.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 18:23:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f0XyVRsy6VI+7eRXJAPqPSb00XdxH7dw8UKaExj76WY=;
-        b=GbbdOdzubH9OeXiGvJCqbZANneBAor10rlDy64UkWrUddr6ky6pTk20qwBTntYhEbs
-         zqPvVzlCk9wq2RGLlGlCgYYvieOosw5pCn0kDFQYlW9iHMYXvb58O/p+g6S/JX2kkVSM
-         1He00hlo1YNX4NuSvLTHqFpdFrRtPOFiM9TlA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f0XyVRsy6VI+7eRXJAPqPSb00XdxH7dw8UKaExj76WY=;
-        b=oSLdkWGHXBK80Xy0fYMygMD9rtTpc59+O81lvx/fiiF7mAPlYvWUTh/4yOa1XKdezn
-         TxAY/eIZxpnlrcccLhrZCznzfyhBmGxoIMGN4RB65GeeZ3oOw5fFDblTSfMzS7t9heUG
-         Mhh+/VgTQkxk+3etxqghACKzoHLEBfRzJFFiWE+BnXF+/miLqQfLvu9cszEcWzPf2LLw
-         EmH8l8WVw7g4P6yqfj/0wImbM8oYCD0Gws0ZtnjbNmtUkRjVwmmEJm9YNocLxjE1qqaW
-         L5ZqGHOywMbq6WqGWXuLfXXNyVfdixdtodm0XjtygVXT8sdEUp4MqswKqHKNRn4oCKf+
-         uf6g==
-X-Gm-Message-State: AOAM530ZO3urFI2toBziL2yAx+LUnM3PrJ2cQYEO/x9WxR00n+8KcTUw
-        g3bBOi/V118pbZSSVd0HvtJ81ov3Tx2Irg==
-X-Google-Smtp-Source: ABdhPJyGHey3mOCBptss5gAziA/MSrAvAK5hKHAs1C85u6b/2KXCUrd4ZfmYqJyFhOM+4DuxoD5d2g==
-X-Received: by 2002:aa7:9429:0:b0:4e1:5814:79b3 with SMTP id y9-20020aa79429000000b004e1581479b3mr10582289pfo.82.1645842206911;
-        Fri, 25 Feb 2022 18:23:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 131-20020a621989000000b004df51429f31sm4914239pfz.79.2022.02.25.18.23.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 18:23:26 -0800 (PST)
-Date:   Fri, 25 Feb 2022 18:23:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] kselftest: add generated objects to .gitignore
-Message-ID: <202202251823.138A87C@keescook>
-References: <20220225102726.3231228-1-usama.anjum@collabora.com>
- <f3757ff8-0078-4cf9-c0c6-95c780b90ae2@linuxfoundation.org>
+        Fri, 25 Feb 2022 21:24:48 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B9426570;
+        Fri, 25 Feb 2022 18:24:14 -0800 (PST)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21Q2NcRB000816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 21:23:40 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id EE27A15C0038; Fri, 25 Feb 2022 21:23:37 -0500 (EST)
+Date:   Fri, 25 Feb 2022 21:23:37 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        jaegeuk@kernel.org, chao@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next v2] ext4:fix file system corrupted when rmdir non
+ empty directory with IO error
+Message-ID: <YhmPKVrVHhTeKOzl@mit.edu>
+References: <20220211093527.3335518-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f3757ff8-0078-4cf9-c0c6-95c780b90ae2@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220211093527.3335518-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +47,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 04:59:58PM -0700, Shuah Khan wrote:
-> On 2/25/22 3:27 AM, Muhammad Usama Anjum wrote:
-> > Add kselftests_install directory and some other files to the
-> > .gitignore.
-> > 
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> > ---
-> >   tools/testing/selftests/.gitignore      | 1 +
-> >   tools/testing/selftests/exec/.gitignore | 2 ++
-> >   tools/testing/selftests/kvm/.gitignore  | 1 +
-> >   tools/testing/selftests/net/.gitignore  | 1 +
-> >   4 files changed, 5 insertions(+)
-> > 
-> 
-> It is better to split these patches per test - makes it easier
-> to apply. Please send separate patches for each test. This patch
-> doesn't apply as is.
+On Fri, Feb 11, 2022 at 05:35:27PM +0800, Ye Bin wrote:
+> Now if read directory block failed, 'ext4_empty_dir' will return true, assume
+> directory is empty. Obviously, it will lead to above issue.
+> To solve this issue, if read directory block failed 'ext4_empty_dir' just assume
+> directory isn't empty. To avoid making things worse when file system is already
+> corrupted, 'ext4_empty_dir' also assume directory isn't empty.
+> To distinguish the error type, return the exact error code to the caller.
+>
 
-Once fixed, please consider them:
+Does the same issue exist for f2fs and ubifs?  We could solve the
+specific bug much more simply by having ext4_empty_dir() return FALSE
+if we aren't able to read the directory block.  Yes, it means that we
+don't return as specific an error code in the case of an I/O error ---
+although I believe we do syslog a warning --- but it makes for a much
+simpler patch that doesn't requiring getting acked-by's from the
+fscrypt, f2fs and ubifs folks.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+							- Ted

@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843004C5266
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449564C5270
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240011AbiBZAIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S240071AbiBZAQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238742AbiBZAIV (ORCPT
+        with ESMTP id S233911AbiBZAQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:08:21 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C8A41B3;
-        Fri, 25 Feb 2022 16:07:44 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m22so6182339pja.0;
-        Fri, 25 Feb 2022 16:07:44 -0800 (PST)
+        Fri, 25 Feb 2022 19:16:34 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8292118FA
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:01 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id p21-20020a631e55000000b00372d919267cso3495027pgm.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=c5B6JRpH2tbmLBFBMPjCFNLPBgu4FT5DIbHXGYJdCK8=;
-        b=MmF7aDNZ0tCRKCA08hEFDy64f+YnQ2/g6cOWR4EuXliwFwbU0Vu48vP/mdNsKXQeyZ
-         EeSvXiWEUGzXToeTYPgpa6MFBK3iab+OaDsdhIKZxv4sdPiflwZZvHioYRhpL5iqKoQu
-         PJp8yRfo4e95feVAS+zetRfXI2De+dfnuJ7+Td+RwqYVjrdmIBUtIzApG5HZoJuLjuOi
-         OHquYyPAM9s74SnqQcjS+PKNRNsLV31TGtolp6h57rm2yCdYqog0aTTMiGntqVR4lfeI
-         ieDUgO/0TSqeVgvAI6Ovh8YoMMkroBoJSaBlcrEqhy3uUmvWWHmx4EzzVDzjcWp0JfbX
-         MV4g==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=nJ7T2/Eu0kELrWfOHFiuRi78BtlV/GKdiarGzSeljcE=;
+        b=Xt+4iTJwwp9DbCI6oRTmoYIzy6Mi2+yjlhedxHM4EIkIrsuU4DkckUVye5uQyxXOut
+         lsOU4iTkW5/AkP+K9a5HdsyBDsuAR3zC5KX9TEyu18p5R1iUOg4kwrJmEj6q2NlbSdFg
+         EdyflBEuagAyC2yErwUDGzqnuMLkZDkkhcwfOpql1/FkPULLhd6gyu2vP7+YxX173NLo
+         ppU19l22kPw2G9K5RZBHisFip7jO7ZBcL5jTYmueprtzH85Pd4vdP17+Lld5OmeICRhH
+         78JvzLsbsXCKCjBuYDcrbm/5RwT6HmHUkWUJA4B0f+CwPDk/Rk8QLerCFPEafS2L0cnT
+         INIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=c5B6JRpH2tbmLBFBMPjCFNLPBgu4FT5DIbHXGYJdCK8=;
-        b=f6Edy9BD9RHXfNWuKWxtNzYYs/u6gobAo3/7FexLz7Cy8r0Mfj6nAZnx/H8OU/apXM
-         agNg1Z+n2Ts9Wd2mT/lvFAXIkzNN3+h6JwB8xDYxOvcCF9OEChIWAO6r1W+M4hbyaNpR
-         ZwfxP/lagBVejWhiETh0TV+b8awTArxOJwk8NlcL9bOb8Dg0OEO6bnSw7IXqqRst3OCg
-         wwq/c9p6wUj51lZYueJQJpAUyJzxCiOYPGD8TXz5tWrvOnUU9WZpNOa/X3Rt0oRt3bNY
-         awNlFMPMPyL4413RYMzSCmTs/0n5/rwWG9VKWADLCzRK4q6nPNyJRXbjvkE+t+Lc7Kge
-         3iBQ==
-X-Gm-Message-State: AOAM533s5Q4IuhcULt0W5uBNJavodMe2/3uWf2CfeXba0494rE/jyUrM
-        9ra+yJ4lZgb5h+4MckK+8DStrng4YLA=
-X-Google-Smtp-Source: ABdhPJz8UcTnhJMjqVzj//IRynVGj6DHXJzLRxFY20AEWWT0+6hgtNUecNWrIpo0/D5GJEv1WjEHug==
-X-Received: by 2002:a17:902:8bcc:b0:14f:2294:232e with SMTP id r12-20020a1709028bcc00b0014f2294232emr9754162plo.105.1645834063924;
-        Fri, 25 Feb 2022 16:07:43 -0800 (PST)
-Received: from localhost (118-208-203-92.tpgi.com.au. [118.208.203.92])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056a0023c900b004e10365c47dsm4550030pfc.192.2022.02.25.16.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 16:07:43 -0800 (PST)
-Date:   Sat, 26 Feb 2022 10:07:38 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/3] powerpc: fix build errors
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "# 3.4.x" <stable@vger.kernel.org>
-References: <20220223135820.2252470-1-anders.roxell@linaro.org>
-        <20220223135820.2252470-2-anders.roxell@linaro.org>
-        <1645670923.t0z533n7uu.astroid@bobo.none>
-        <1645678884.dsm10mudmp.astroid@bobo.none>
-        <CAK8P3a28XEN7aH-WdR=doBQKGskiTAeNsjbfvaD5YqEZNM=v0g@mail.gmail.com>
-        <1645694174.z03tip9set.astroid@bobo.none>
-        <CAK8P3a1LgZkAV2wX03hAgx527MuiFt5ABWFp1bGdsTGc=8OmMg@mail.gmail.com>
-        <1645700767.qxyu8a9wl9.astroid@bobo.none>
-        <20220224172948.GN614@gate.crashing.org>
-        <1645748553.sa2ewgy7dr.astroid@bobo.none>
-        <20220225222841.GS614@gate.crashing.org>
-In-Reply-To: <20220225222841.GS614@gate.crashing.org>
-MIME-Version: 1.0
-Message-Id: <1645833637.za1t01a9md.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=nJ7T2/Eu0kELrWfOHFiuRi78BtlV/GKdiarGzSeljcE=;
+        b=sgTmWV3xYwmPMCdy468150wwwrtnUlR6uRzHWZKUcNpaYUOXZ5yqVOjDKtQe8I0bOd
+         j8Qyz7vGkOX5MShJifw4DXUX7etZiw8pLMsLj9pAfeRCQLvhOvXi22pMbMUJNf+AUMGT
+         PMBGQh9y5LtGDn5Ty7mPc0fRaeneQuuqSt2qqedRsxI7CPDWgF3rqQ4epgKVsTVUNgx4
+         rtm5FZdpC3OPLOzXdMtbxa00+FkT/T3EkDEWC8DDvif/WJtoF/3pma9ojAV3vwDRmkSI
+         4RwZh6MAa0pptbYj9VMXndQFVCV/QJlIHD9hF2bFQlyTr+pIrqLpEuHnX0h+F7u7azhl
+         jbmQ==
+X-Gm-Message-State: AOAM530G1sH6jVOUHzAlIBreBbIAK+QdUNSLc2Zh7AHVJKLy+cL8ZWaW
+        HIrhtS49wU3PtJM/a2mLgSBbO5cUKq8=
+X-Google-Smtp-Source: ABdhPJy4c/aYDFUNcEp854e/8yA0riolv8ASU2lMLjWbw/piD98wr2QFUpC0gUAH42k0DaB+JU0SVjPhQnU=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:f48f:b0:1bc:2521:fb0a with SMTP id
+ bx15-20020a17090af48f00b001bc2521fb0amr5661180pjb.48.1645834561115; Fri, 25
+ Feb 2022 16:16:01 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Sat, 26 Feb 2022 00:15:18 +0000
+Message-Id: <20220226001546.360188-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH v3 00/28] KVM: x86/mmu: Overhaul TDP MMU zapping and flushing
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,80 +76,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Segher Boessenkool's message of February 26, 2022 8:28 am:
-> On Fri, Feb 25, 2022 at 10:23:07AM +1000, Nicholas Piggin wrote:
->> Excerpts from Segher Boessenkool's message of February 25, 2022 3:29 am:
->> > On Thu, Feb 24, 2022 at 09:13:25PM +1000, Nicholas Piggin wrote:
->> >> Excerpts from Arnd Bergmann's message of February 24, 2022 8:20 pm:
->> >> > Again, there should be a minimum number of those .machine directive=
-s
->> >> > in inline asm as well, which tends to work out fine as long as the
->> >> > entire kernel is built with the correct -march=3D option for the mi=
-nimum
->> >> > supported CPU, and stays away from inline asm that requires a highe=
-r
->> >> > CPU level.
->> >>=20
->> >> There's really no advantage to them, and they're ugly and annoying
->> >> and if we applied the concept consistently for all asm they would gro=
-w=20
->> >> to a very large number.
->> >=20
->> > The advantage is that you get machine code that *works*.  There are
->> > quite a few mnemonics that translate to different instructions with
->> > different machine options!  We like to get the intended instructions
->> > instead of something that depends on what assembler options the user
->> > has passed behind our backs.
->> >=20
->> >> The idea they'll give you good static checking just doesn't really
->> >> pan out.
->> >=20
->> > That never was a goal of this at all.
->> >=20
->> > -many was very problematical for GCC itself.  We no longer use it.
->>=20
->> You have the wrong context. We're not talking about -many vs .machine
->> here.
->=20
-> Okay, so you have no idea what you are talking about?  Wow.
+Overhaul TDP MMU's handling of zapping and TLB flushing to reduce the
+number of TLB flushes, fix soft lockups and RCU stalls, avoid blocking
+vCPUs for long durations while zapping paging structure, and to clean up
+the zapping code.
 
-Wrong context. It's not about -many. We're past that everyone agrees=20
-it's wrong.
+The largest cleanup is to separate the flows for zapping roots (zap
+_everything_), zapping leaf SPTEs (zap guest mappings for whatever reason),
+and zapping a specific SP (NX recovery).  They're currently smushed into a
+single zap_gfn_range(), which was a good idea at the time, but became a
+mess when trying to handle the different rules, e.g. TLB flushes aren't
+needed when zapping a root because KVM can safely zap a root if and only
+if it's unreachable.
 
-> The reason GCC uses .machine *itself* is because assembler -mmachine
-> options *cannot work*, for many reasons.  We hit problems often enough
-> that years ago we started moving away from it already.  The biggest
-> problems are that on one hand there are mnemonics that encode to
-> different instructions depending on target arch or cpu selected (like
-> mftb, lxvx, wait, etc.), and on the other hand GCC needs to switch that
-> target halfway through compilation (attribute((target(...)))).
->=20
-> Often these problems were hidden most of the time by us passing -many.
-> But not all of the time, and over time, problems became more frequent
-> and nasty.
->=20
-> Passing assembler -m options is nasty when you have to mix it with
-> .machine statements (and we need the latter no matter what), and it
+To solve the soft lockups, stalls, and vCPU performance issues:
 
-No it's not nasty, read the gas manual. -m specifies the machine and
-so does .machine. It's simple.
+ - Defer remote TLB flushes to the caller when zapping TDP MMU shadow
+   pages by relying on RCU to ensure the paging structure isn't freed
+   until all vCPUs have exited the guest.
 
-> becomes completely unpredictable if the user passes other -m options
-> manually.
-> Inline assembler is inserted textually in the generated assembler code.
-> This is a big part of the strength of inline assembler.  It does mean
-> that if you need a different target selected for your assembler code
-> then you need to arrange for that in your assembler code.
->=20
-> So yes, this very much is about -many, other -m options, and .machine .
-> I discourage the kernel (as well as any other project) from using -m
-> options, especially -many, but that is your own choice of course.  I
-> get sick and tired from you calling a deliberate design decision we
-> arrived at after years of work and weighing alternatives a "bug" though.
+ - Allowing yielding when zapping TDP MMU roots in response to the root's
+   last reference being put.  This requires a bit of trickery to ensure
+   the root is reachable via mmu_notifier, but it's not too gross.
 
-Alan posted a good summary here
+ - Zap roots in two passes to avoid holding RCU for potential hundreds of
+   seconds when zapping guest with terabytes of memory that is backed
+   entirely by 4kb SPTEs.
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D102485#c10
+ - Zap defunct roots asynchronously via the common work_queue so that a
+   vCPU doesn't get stuck doing the work if the vCPU happens to drop the
+   last reference to a root.
 
-Thanks,
-Nick
+The selftest at the end allows populating a guest with the max amount of
+memory allowed by the underlying architecture.  The most I've tested is
+~64tb (MAXPHYADDR=46) as I don't have easy access to a system with
+MAXPHYADDR=52.  The selftest compiles on arm64 and s390x, but otherwise
+hasn't been tested outside of x86-64.  It will hopefully do something
+useful as is, but there's a non-zero chance it won't get past init with
+a high max memory.  Running on x86 without the TDP MMU is comically slow.
+
+v3:
+  - Drop patches that were applied.
+  - Rebase to latest kvm/queue.
+  - Collect a review. [David]
+  - Use helper instead of goto to zap roots in two passes. [David]
+  - Add patches to disallow REMOVED "old" SPTE when atomically
+    setting SPTE.
+
+v2:
+  - https://lore.kernel.org/all/20211223222318.1039223-1-seanjc@google.com
+  - Drop patches that were applied.
+  - Collect reviews for patches that weren't modified. [Ben]
+  - Abandon the idea of taking invalid roots off the list of roots.
+  - Add a patch to fix misleading/wrong comments with respect to KVM's
+    responsibilities in the "fast zap" flow, specifically that all SPTEs
+    must be dropped before the zap completes.
+  - Rework yielding in kvm_tdp_mmu_put_root() to keep the root visibile
+    while yielding.
+  - Add patch to zap roots in two passes. [Mingwei, David]
+  - Add a patch to asynchronously zap defunct roots.
+  - Add the selftest.
+
+v1: https://lore.kernel.org/all/20211120045046.3940942-1-seanjc@google.com
+
+
+Sean Christopherson (28):
+  KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots
+  KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP
+    MMU
+  KVM: x86/mmu: Fix wrong/misleading comments in TDP MMU fast zap
+  KVM: x86/mmu: Formalize TDP MMU's (unintended?) deferred TLB flush
+    logic
+  KVM: x86/mmu: Document that zapping invalidated roots doesn't need to
+    flush
+  KVM: x86/mmu: Require mmu_lock be held for write in unyielding root
+    iter
+  KVM: x86/mmu: Check for !leaf=>leaf, not PFN change, in TDP MMU SP
+    removal
+  KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU notifier
+    change_spte
+  KVM: x86/mmu: Drop RCU after processing each root in MMU notifier
+    hooks
+  KVM: x86/mmu: Add helpers to read/write TDP MMU SPTEs and document RCU
+  KVM: x86/mmu: WARN if old _or_ new SPTE is REMOVED in non-atomic path
+  KVM: x86/mmu: Refactor low-level TDP MMU set SPTE helper to take raw
+    vals
+  KVM: x86/mmu: Zap only the target TDP MMU shadow page in NX recovery
+  KVM: x86/mmu: Skip remote TLB flush when zapping all of TDP MMU
+  KVM: x86/mmu: Add dedicated helper to zap TDP MMU root shadow page
+  KVM: x86/mmu: Require mmu_lock be held for write to zap TDP MMU range
+  KVM: x86/mmu: Zap only TDP MMU leafs in kvm_zap_gfn_range()
+  KVM: x86/mmu: Do remote TLB flush before dropping RCU in TDP MMU
+    resched
+  KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow
+    pages
+  KVM: x86/mmu: Allow yielding when zapping GFNs for defunct TDP MMU
+    root
+  KVM: x86/mmu: Zap roots in two passes to avoid inducing RCU stalls
+  KVM: x86/mmu: Zap defunct roots via asynchronous worker
+  KVM: x86/mmu: Check for a REMOVED leaf SPTE before making the SPTE
+  KVM: x86/mmu: WARN on any attempt to atomically update REMOVED SPTE
+  KVM: selftests: Move raw KVM_SET_USER_MEMORY_REGION helper to utils
+  KVM: selftests: Split out helper to allocate guest mem via memfd
+  KVM: selftests: Define cpu_relax() helpers for s390 and x86
+  KVM: selftests: Add test to populate a VM with the max possible guest
+    mem
+
+ arch/x86/kvm/mmu/mmu.c                        |  42 +-
+ arch/x86/kvm/mmu/mmu_internal.h               |  15 +-
+ arch/x86/kvm/mmu/tdp_iter.c                   |   6 +-
+ arch/x86/kvm/mmu/tdp_iter.h                   |  15 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    | 595 ++++++++++++------
+ arch/x86/kvm/mmu/tdp_mmu.h                    |  26 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/include/kvm_util_base.h     |   5 +
+ .../selftests/kvm/include/s390x/processor.h   |   8 +
+ .../selftests/kvm/include/x86_64/processor.h  |   5 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  66 +-
+ .../selftests/kvm/max_guest_memory_test.c     | 292 +++++++++
+ .../selftests/kvm/set_memory_region_test.c    |  35 +-
+ 14 files changed, 832 insertions(+), 282 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/max_guest_memory_test.c
+
+
+base-commit: 625e7ef7da1a4addd8db41c2504fe8a25b93acd5
+-- 
+2.35.1.574.g5d30c73bfb-goog
+

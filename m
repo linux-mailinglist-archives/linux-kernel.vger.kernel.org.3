@@ -2,169 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98B14C5862
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5B94C585C
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiBZVm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 16:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S229794AbiBZVod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 16:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiBZVmY (ORCPT
+        with ESMTP id S229782AbiBZVob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 16:42:24 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDE749C96
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:41:49 -0800 (PST)
-Received: from localhost.localdomain (abxh33.neoplus.adsl.tpnet.pl [83.9.1.33])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 3E00B3F415;
-        Sat, 26 Feb 2022 22:41:47 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] clk: qcom: smd: Add missing MSM8998 RPM clocks
-Date:   Sat, 26 Feb 2022 22:41:26 +0100
-Message-Id: <20220226214126.21209-3-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220226214126.21209-1-konrad.dybcio@somainline.org>
-References: <20220226214126.21209-1-konrad.dybcio@somainline.org>
+        Sat, 26 Feb 2022 16:44:31 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6670E3B282;
+        Sat, 26 Feb 2022 13:43:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s14so12224365edw.0;
+        Sat, 26 Feb 2022 13:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gwvZa2dcVddk9XhPqnnw7BdDWgMrIWi0l2xYTw7uVq4=;
+        b=ieuNHUrgJeWwVhmGIAi92YZErZliThzoNqRKo14Vh+sq3q1K9eTV+DiAdkpOoRTYaG
+         WXNuRbXkazy+XO0BJK7MKSAt6Em7dNuT2QdgJpNTqlHnHm/v95O0pfprvooUCt/NvsNP
+         GsGeRZcVt6bsmPb/OVepmmCzhLbFdfigKKPGdNKglInJGsvP4kYjYGakxo0TYHKiLOeR
+         Hb0B/WodBnzk5LwENVkEwgLMfptAZ2nIh3ed/smowJh+s/V5xsy5YA0d78SnAaHhEZ1c
+         +0eV1wxXGGCaV8f22P5RzZZMaDyTH5meSyMsfyoAqbg0Qhf1U2asE7lyjTKtcPwZkp0R
+         ISqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gwvZa2dcVddk9XhPqnnw7BdDWgMrIWi0l2xYTw7uVq4=;
+        b=5u+WHDBhgs7pud2Faglwv7PBJOhbjzyUmhDB68eEL1EMdqhMjEJWkMZoDDLANgj9fr
+         udSHZuMBT0Fe7TBxroAiyXshj3+Ry6f3i+0aFQiAauifXLtG23NSgrnu4DPu2VklVIGS
+         O1rDDdQGAFRBiewUABzuvIChhIsdcew0fO2cXS7dww6jlTpbA1XW+IHIQrlj7FYrE717
+         ITeRpfZ6f1MPo9VDRq6PeU4P/1mrffmosPQt4p5AkwaMfmYNoJiKFq+6ZTsC7qUe9Ahs
+         wx4dzOlyjvgngUls1t97aomwRvDv9edu2qjozIoGM1BnOS09Ia+x2tFxrP0skh2pThpO
+         F05g==
+X-Gm-Message-State: AOAM533yDRTElakJnta0ubryWWI6jlm9pioR7mdKpZ1bZe9kNgzGlcIe
+        +RN7mbeWZx8L+4eIqBUdK59nebLrMdkKxw==
+X-Google-Smtp-Source: ABdhPJyNzE3rhYea/K5v861WD31Sr8quT5QSWT3FQqUAGpv/O3PpnjVEp3OTedF/I9qaslLnxSh6uQ==
+X-Received: by 2002:a05:6402:518b:b0:412:80a3:fb6e with SMTP id q11-20020a056402518b00b0041280a3fb6emr13399264edd.84.1645911834812;
+        Sat, 26 Feb 2022 13:43:54 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id t19-20020a1709060c5300b006d582121f99sm2658615ejf.36.2022.02.26.13.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Feb 2022 13:43:54 -0800 (PST)
+Message-ID: <cdbf28ae-b54f-dfaf-887b-c5705319ac06@gmail.com>
+Date:   Sat, 26 Feb 2022 22:43:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 08/11] usb: dwc3: add rk3568 dwc3 support
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        michael.riesch@wolfvision.net, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220226184147.769964-1-pgwipeout@gmail.com>
+ <20220226184147.769964-9-pgwipeout@gmail.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220226184147.769964-9-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing RPM-provided clocks on msm8998 and reorder the definitions
-where needed.
+Hi Peter,
 
-JAMI: fixed for a0384ecfe2aa ("clk: qcom: smd-rpm: De-duplicate identical entries")
-JAMI: fixed for 36354c32bd76 ("clk: qcom: smd-rpm: Add .recalc_rate hook for clk_smd_rpm_branch_ops")
-Tested-by: Jami Kettunen <jami.kettunen@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/clk/qcom/clk-smd-rpm.c | 40 +++++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 13 deletions(-)
+See comments by rob+dt:
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 418f017e933f..afc6dc930011 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -816,15 +816,18 @@ static const struct rpm_smd_clk_desc rpm_clk_qcs404 = {
- 	.num_clks = ARRAY_SIZE(qcs404_clks),
- };
- 
--DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, ln_bb_clk3_pin, ln_bb_clk3_a_pin,
--				     3, 19200000);
-+DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8998, ln_bb_clk3, ln_bb_clk3_a, 3, 19200000);
-+DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, ln_bb_clk3_pin, ln_bb_clk3_a_pin, 3, 19200000);
- DEFINE_CLK_SMD_RPM(msm8998, aggre1_noc_clk, aggre1_noc_a_clk,
- 		   QCOM_SMD_RPM_AGGR_CLK, 1);
- DEFINE_CLK_SMD_RPM(msm8998, aggre2_noc_clk, aggre2_noc_a_clk,
- 		   QCOM_SMD_RPM_AGGR_CLK, 2);
- DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8998, rf_clk3, rf_clk3_a, 6, 19200000);
- DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, rf_clk3_pin, rf_clk3_a_pin, 6, 19200000);
-+
- static struct clk_smd_rpm *msm8998_clks[] = {
-+	[RPM_SMD_XO_CLK_SRC] = &sdm660_bi_tcxo,
-+	[RPM_SMD_XO_A_CLK_SRC] = &sdm660_bi_tcxo_a,
- 	[RPM_SMD_BIMC_CLK] = &msm8916_bimc_clk,
- 	[RPM_SMD_BIMC_A_CLK] = &msm8916_bimc_a_clk,
- 	[RPM_SMD_PCNOC_CLK] = &msm8916_pcnoc_clk,
-@@ -837,12 +840,22 @@ static struct clk_smd_rpm *msm8998_clks[] = {
- 	[RPM_SMD_CE1_A_CLK] = &msm8992_ce1_a_clk,
- 	[RPM_SMD_DIV_CLK1] = &msm8974_div_clk1,
- 	[RPM_SMD_DIV_A_CLK1] = &msm8974_div_a_clk1,
-+	[RPM_SMD_DIV_CLK2] = &msm8974_div_clk2,
-+	[RPM_SMD_DIV_A_CLK2] = &msm8974_div_a_clk2,
-+	[RPM_SMD_DIV_CLK3] = &msm8992_div_clk3,
-+	[RPM_SMD_DIV_A_CLK3] = &msm8992_div_clk3_a,
- 	[RPM_SMD_IPA_CLK] = &msm8976_ipa_clk,
- 	[RPM_SMD_IPA_A_CLK] = &msm8976_ipa_a_clk,
- 	[RPM_SMD_LN_BB_CLK1] = &msm8916_bb_clk1,
- 	[RPM_SMD_LN_BB_CLK1_A] = &msm8916_bb_clk1_a,
- 	[RPM_SMD_LN_BB_CLK2] = &msm8916_bb_clk2,
- 	[RPM_SMD_LN_BB_CLK2_A] = &msm8916_bb_clk2_a,
-+	[RPM_SMD_LN_BB_CLK3] = &msm8998_ln_bb_clk3,
-+	[RPM_SMD_LN_BB_CLK3_A] = &msm8998_ln_bb_clk3_a,
-+	[RPM_SMD_LN_BB_CLK1_PIN] = &msm8916_bb_clk1_pin,
-+	[RPM_SMD_LN_BB_CLK1_A_PIN] = &msm8916_bb_clk1_a_pin,
-+	[RPM_SMD_LN_BB_CLK2_PIN] = &msm8916_bb_clk2_pin,
-+	[RPM_SMD_LN_BB_CLK2_A_PIN] = &msm8916_bb_clk2_a_pin,
- 	[RPM_SMD_LN_BB_CLK3_PIN] = &msm8998_ln_bb_clk3_pin,
- 	[RPM_SMD_LN_BB_CLK3_A_PIN] = &msm8998_ln_bb_clk3_a_pin,
- 	[RPM_SMD_MMAXI_CLK] = &msm8996_mmssnoc_axi_rpm_clk,
-@@ -855,10 +868,14 @@ static struct clk_smd_rpm *msm8998_clks[] = {
- 	[RPM_SMD_QDSS_A_CLK] = &msm8916_qdss_a_clk,
- 	[RPM_SMD_RF_CLK1] = &msm8916_rf_clk1,
- 	[RPM_SMD_RF_CLK1_A] = &msm8916_rf_clk1_a,
--	[RPM_SMD_RF_CLK2_PIN] = &msm8916_rf_clk2_pin,
--	[RPM_SMD_RF_CLK2_A_PIN] = &msm8916_rf_clk2_a_pin,
-+	[RPM_SMD_RF_CLK2] = &msm8916_rf_clk2,
-+	[RPM_SMD_RF_CLK2_A] = &msm8916_rf_clk2_a,
- 	[RPM_SMD_RF_CLK3] = &msm8998_rf_clk3,
- 	[RPM_SMD_RF_CLK3_A] = &msm8998_rf_clk3_a,
-+	[RPM_SMD_RF_CLK1_PIN] = &msm8916_rf_clk1_pin,
-+	[RPM_SMD_RF_CLK1_A_PIN] = &msm8916_rf_clk1_a_pin,
-+	[RPM_SMD_RF_CLK2_PIN] = &msm8916_rf_clk2_pin,
-+	[RPM_SMD_RF_CLK2_A_PIN] = &msm8916_rf_clk2_a_pin,
- 	[RPM_SMD_RF_CLK3_PIN] = &msm8998_rf_clk3_pin,
- 	[RPM_SMD_RF_CLK3_A_PIN] = &msm8998_rf_clk3_a_pin,
- };
-@@ -868,9 +885,6 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8998 = {
- 	.num_clks = ARRAY_SIZE(msm8998_clks),
- };
- 
--DEFINE_CLK_SMD_RPM_XO_BUFFER(sdm660, ln_bb_clk3, ln_bb_clk3_a, 3, 19200000);
--DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(sdm660, ln_bb_clk3_pin, ln_bb_clk3_pin_a, 3, 19200000);
--
- static struct clk_smd_rpm *sdm660_clks[] = {
- 	[RPM_SMD_XO_CLK_SRC] = &sdm660_bi_tcxo,
- 	[RPM_SMD_XO_A_CLK_SRC] = &sdm660_bi_tcxo_a,
-@@ -900,16 +914,16 @@ static struct clk_smd_rpm *sdm660_clks[] = {
- 	[RPM_SMD_LN_BB_A_CLK] = &msm8916_bb_clk1_a,
- 	[RPM_SMD_LN_BB_CLK2] = &msm8916_bb_clk2,
- 	[RPM_SMD_LN_BB_CLK2_A] = &msm8916_bb_clk2_a,
--	[RPM_SMD_LN_BB_CLK3] = &sdm660_ln_bb_clk3,
--	[RPM_SMD_LN_BB_CLK3_A] = &sdm660_ln_bb_clk3_a,
-+	[RPM_SMD_LN_BB_CLK3] = &msm8998_ln_bb_clk3,
-+	[RPM_SMD_LN_BB_CLK3_A] = &msm8998_ln_bb_clk3_a,
- 	[RPM_SMD_RF_CLK1_PIN] = &msm8916_rf_clk1_pin,
- 	[RPM_SMD_RF_CLK1_A_PIN] = &msm8916_rf_clk1_a_pin,
- 	[RPM_SMD_LN_BB_CLK1_PIN] = &msm8916_bb_clk1_pin,
- 	[RPM_SMD_LN_BB_CLK1_A_PIN] = &msm8916_bb_clk1_a_pin,
- 	[RPM_SMD_LN_BB_CLK2_PIN] = &msm8916_bb_clk2_pin,
- 	[RPM_SMD_LN_BB_CLK2_A_PIN] = &msm8916_bb_clk2_a_pin,
--	[RPM_SMD_LN_BB_CLK3_PIN] = &sdm660_ln_bb_clk3_pin,
--	[RPM_SMD_LN_BB_CLK3_A_PIN] = &sdm660_ln_bb_clk3_pin_a,
-+	[RPM_SMD_LN_BB_CLK3_PIN] = &msm8998_ln_bb_clk3_pin,
-+	[RPM_SMD_LN_BB_CLK3_A_PIN] = &msm8998_ln_bb_clk3_a_pin,
- };
- 
- static const struct rpm_smd_clk_desc rpm_clk_sdm660 = {
-@@ -1011,8 +1025,8 @@ static struct clk_smd_rpm *sm6125_clks[] = {
- 	[RPM_SMD_LN_BB_CLK1_A] = &msm8916_bb_clk1_a,
- 	[RPM_SMD_LN_BB_CLK2] = &msm8916_bb_clk2,
- 	[RPM_SMD_LN_BB_CLK2_A] = &msm8916_bb_clk2_a,
--	[RPM_SMD_LN_BB_CLK3] = &sdm660_ln_bb_clk3,
--	[RPM_SMD_LN_BB_CLK3_A] = &sdm660_ln_bb_clk3_a,
-+	[RPM_SMD_LN_BB_CLK3] = &msm8998_ln_bb_clk3,
-+	[RPM_SMD_LN_BB_CLK3_A] = &msm8998_ln_bb_clk3_a,
- 	[RPM_SMD_QUP_CLK] = &sm6125_qup_clk,
- 	[RPM_SMD_QUP_A_CLK] = &sm6125_qup_a_clk,
- 	[RPM_SMD_MMRT_CLK] = &sm6125_mmrt_clk,
--- 
-2.35.1
+https://lore.kernel.org/linux-rockchip/CAL_JsqJwNdUfoYM8SZmOgMG9iAyZkJ4-kzjjiDDm_mdmghTEOA@mail.gmail.com/
 
+> Presumably you are getting lucky here (with link order). The kernel
+> has no logic to decide which driver to bind to if there are 2 matching
+> drivers.
+
+Due to the fall back string you make a mess with two drivers.
+Don't use dwc3-of-simple.c
+(only for rk3399 and legacy support. Not for new SoCs),
+because core.c has now reset support.
+You are creating a race which driver get probed first.
+Handle your quirks in core.
+
+Johan
+
+On 2/26/22 19:41, Peter Geis wrote:
+> The rk3568 dwc3 controller is backwards compatible with the rk3399 dwc3
+> controller.
+> Add support for it to the dwc3-of-simple driver.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  drivers/usb/dwc3/dwc3-of-simple.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+> index 57ba9427ad74..d9d1c5bfac3f 100644
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -195,6 +195,10 @@ static const struct of_device_id of_dwc3_simple_match[] = {
+>  		.compatible = "rockchip,rk3399-dwc3",
+>  		.data = &dwc3_of_simple_data_rk3399,
+>  	},
+> +	{
+> +		.compatible = "rockchip,rk3568-dwc3",
+> +		.data = &dwc3_of_simple_data_rk3399,
+> +	},
+>  	{
+>  		.compatible = "sprd,sc9860-dwc3",
+>  	},

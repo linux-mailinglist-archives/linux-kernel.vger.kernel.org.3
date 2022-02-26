@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3300C4C57E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 21:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CC34C57EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 21:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiBZT63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 14:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S229463AbiBZUJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 15:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiBZT61 (ORCPT
+        with ESMTP id S229449AbiBZUJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 14:58:27 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971C31617EE
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 11:57:52 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id s1so10476352iob.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 11:57:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Cv/6Z6+pyAreCkwxMM18g15x+IjlN4OIyfYI1qCYP+Q=;
-        b=OwhnfxRdzj0Hp+JnACw0PPwob+Z4ncFgKksYIHuxlwovhizc5I08eToYYduaYrXSxc
-         WkX4g/krhGltjacmxQpQ09K1zyZf4JpfkVztpmgMDyPP+aLaM5+2678yfvrEpQnMYj67
-         q3d/Xh3DO+HmeVLnSVXXG00nx4xWs1+gfsFNkAyONc+I8Yfmx0C+pFUr86tMTSXfnKFm
-         V0MW5pAZ/1WFOkUsWVM5CqynyKzPbg64f5zLWJjA4dfpfXIh6m5NkNl4nBdHsLgYmMUt
-         Ls5/vmujwgDmXo5b11HStP7tbV4GX31iOxWInbvBoaAMVPYSCd2xeGAmZ4Q8ZnM2Cy27
-         9OPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Cv/6Z6+pyAreCkwxMM18g15x+IjlN4OIyfYI1qCYP+Q=;
-        b=VftlHlIBJ4JMbYIVxs74BKJT+qWkng4HqIrhSI8u26W0puPwCJpVEb2gOhV9QGz5lU
-         0TLWLi+7HOBcp83GtkuPVYEEE4y1iO1l6M8Tm1ib77E5LlBs+jR93Tp2D//UEDbYnynk
-         4OAuxHGMHkAWVTEBGvABcBHPpiRa/MgkGRcsRq2KBlNrnjCLDyF5Cyqfuk6Y6OItM3O4
-         C/rm7ENSneL5NntnA6zGaWmgv4/yFb90QM1cUBHZ8cKaZJfXi+HEOSgYPXiI/oz7MEnB
-         7RT/F6D5x6zlKHhDYpEoZLLpFQbwJQR9B+YidiEV63awesHJHLi0t+Gh03ZPIHnYYKuM
-         Skdw==
-X-Gm-Message-State: AOAM532xnHJr9dy/80IDmHaFhkFcliYr0OgbS998udpv0zov0oRKyCWE
-        AnDGskRsv1n8rAHk7B9GhLeNpA==
-X-Google-Smtp-Source: ABdhPJyx+KOaFq8OheibXJgQjaSqO3biimUyN7E/0NUIetMdhagfFE8L73g5uLw+XVTxQOjCg1cUnA==
-X-Received: by 2002:a05:6602:3409:b0:641:a051:df23 with SMTP id n9-20020a056602340900b00641a051df23mr9965368ioz.98.1645905471736;
-        Sat, 26 Feb 2022 11:57:51 -0800 (PST)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id b1-20020a926701000000b002c25d28d378sm3419748ilc.71.2022.02.26.11.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 11:57:50 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        lkp@intel.com, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: ipa: add an interconnect dependency
-Date:   Sat, 26 Feb 2022 13:57:47 -0600
-Message-Id: <20220226195747.231133-1-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Sat, 26 Feb 2022 15:09:55 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B9C244A19
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 12:09:16 -0800 (PST)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EC7F03F494;
+        Sat, 26 Feb 2022 21:09:13 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] clk: qcom: Fix sorting of SDX_GCC_65 in Makefile and Kconfig
+Date:   Sat, 26 Feb 2022 21:09:09 +0100
+Message-Id: <20220226200911.230030-2-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220226200911.230030-1-marijn.suijten@somainline.org>
+References: <20220226200911.230030-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,32 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to function, the IPA driver very clearly requires the
-interconnect framework to be enabled in the kernel configuration.
-State that dependency in the Kconfig file.
+In order to keep at least the list of `CONFIG_SM_` drivers sorted
+alphabetically, SDX_GCC_65 should have been moved one line up.  This in
+turn makes it easier and cleaner to add the followup SM_DISPCC_6125
+driver in the right place, right before SM_DISPCC_8250.
 
-This became a problem when CONFIG_COMPILE_TEST support was added.
-Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 38a4066f593c5 ("net: ipa: support COMPILE_TEST")
-Signed-off-by: Alex Elder <elder@linaro.org>
+Fixes: d79afa201328 ("clk: qcom: Add SDX65 GCC support")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/net/ipa/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/qcom/Kconfig  | 14 +++++++-------
+ drivers/clk/qcom/Makefile |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ipa/Kconfig b/drivers/net/ipa/Kconfig
-index d037682fb7adb..3e0da1e764718 100644
---- a/drivers/net/ipa/Kconfig
-+++ b/drivers/net/ipa/Kconfig
-@@ -2,6 +2,7 @@ config QCOM_IPA
- 	tristate "Qualcomm IPA support"
- 	depends on NET && QCOM_SMEM
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on INTERCONNECT
- 	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
- 	select QCOM_MDT_LOADER if ARCH_QCOM
- 	select QCOM_SCM
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index f5b54bfc992f..161b257da9ca 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -574,13 +574,6 @@ config SDX_GCC_55
+ 	  Say Y if you want to use peripheral devices such as UART,
+ 	  SPI, I2C, USB, SD/UFS, PCIe etc.
+ 
+-config SM_CAMCC_8250
+-	tristate "SM8250 Camera Clock Controller"
+-	select SM_GCC_8250
+-	help
+-	  Support for the camera clock controller on SM8250 devices.
+-	  Say Y if you want to support camera devices and camera functionality.
+-
+ config SDX_GCC_65
+ 	tristate "SDX65 Global Clock Controller"
+ 	select QCOM_GDSC
+@@ -589,6 +582,13 @@ config SDX_GCC_65
+ 	  Say Y if you want to use peripheral devices such as UART,
+ 	  SPI, I2C, USB, SD/UFS, PCIe etc.
+ 
++config SM_CAMCC_8250
++	tristate "SM8250 Camera Clock Controller"
++	select SM_GCC_8250
++	help
++	  Support for the camera clock controller on SM8250 devices.
++	  Say Y if you want to support camera devices and camera functionality.
++
+ config SM_DISPCC_8250
+ 	tristate "SM8150 and SM8250 Display Clock Controller"
+ 	depends on SM_GCC_8150 || SM_GCC_8250
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index d96d6793fc7d..3e4eb843b8d2 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -84,8 +84,8 @@ obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
+ obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+ obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
+ obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
+-obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+ obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
++obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+ obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
+ obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
+ obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
 -- 
-2.32.0
+2.35.1
 

@@ -2,68 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904E04C54ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07144C54F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 10:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiBZJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 04:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S230443AbiBZJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 04:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiBZJjm (ORCPT
+        with ESMTP id S229819AbiBZJl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 04:39:42 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9B3AA2FB
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:39:06 -0800 (PST)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1McY0L-1nvaGS1Fcb-00cucF for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022
- 10:39:05 +0100
-Received: by mail-wr1-f50.google.com with SMTP id s13so7869568wrb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:39:05 -0800 (PST)
-X-Gm-Message-State: AOAM531bEnJk47UjADTPWPGw0jnCJwT3fZ+xqRC2bw+P/Us6In4wZIQP
-        AoAN41GAFjX9egZ+i6sEdCMKKx8Z4cynDtGaaO0=
-X-Google-Smtp-Source: ABdhPJz5BYSSQUITstBOGh3oQUl0MT9nxRdFpSTkQkaM/Mp2O6n4D5+VZUw9uqGXLyEWFliZMNZp0PqkbSgCjnh2pOI=
-X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
- v3-20020adfedc3000000b001ec5f115415mr7159000wro.317.1645868344946; Sat, 26
- Feb 2022 01:39:04 -0800 (PST)
+        Sat, 26 Feb 2022 04:41:57 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D485228860E
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 01:41:21 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K5M3d3Fy3z1FDWQ;
+        Sat, 26 Feb 2022 17:36:45 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 26 Feb
+ 2022 17:41:19 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
+        <david@redhat.com>, <osalvador@suse.de>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH RFC] mm/memory-failure.c: fix memory failure race with memory offline
+Date:   Sat, 26 Feb 2022 17:40:34 +0800
+Message-ID: <20220226094034.23938-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <20220226022053.958688-1-yusisamerican@gmail.com>
-In-Reply-To: <20220226022053.958688-1-yusisamerican@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 26 Feb 2022 10:38:48 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3TWx71xT83003LSFsu1eF1p75hCxvpCB_FZf1SrNjQJw@mail.gmail.com>
-Message-ID: <CAK8P3a3TWx71xT83003LSFsu1eF1p75hCxvpCB_FZf1SrNjQJw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: ddcci: upstream DDCCI driver
-To:     Yusuf Khan <yusisamerican@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        gregkh <gregkh@linuxfoundation.org>, javier@javigon.com,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B2DstmSc9M3m0E9elewUttugDookDbMvQA63i0T014IA1fVd9LF
- TRZEhGMQLL8/lINsjOQRsv4TphtN+WRMDC8YWm4djgtsOz/u6zxmikIdONsQA2dI7rVmgQS
- 1uaG7+uHHGUwF6rI+ua3M8HMftim0JIicmjDdG/aeSOhXs6tlBpnBjToYCPQHlWtGdpcauf
- BPEmRigA9zbtJRrW2GO7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8I52WhC/3No=:8mKCrXoAa9h3mt/XaPdAU1
- 51i/CIFZEXJFx2L+K1V/re+fiBBC4HjmA+Scj8eM7aUC6S7gCqI63zJxoMPM2B3u8MCtM17TS
- xBcAbbt1rAsD771IbhhrtLLC+pE5Kf+8dSj5E449gJQ+kDVPIo9ohgdkOwgSs51GxImVem5mu
- idFFgM/4fOfom05BdTbYBx7+6n8c1jmuQVzyg2oaLyChqZnxVtnMXlCH1uHaK0nhapeGahs4j
- f+FnhxdImhpUx73BwJ8HssmycgOPYIQh1hqbIDF2tk8bkk4tTjp0zHgTpCuKa/jCQKnHNGKxE
- UJIXSTH5qxxGyWyRBHDZwaRIG090JEQ4azklPVm1ZvH8EXrZmquLJVH+PJayUyY63WO2x9KL8
- SFah3ElhyZPLjzELu1LMeZ7tFWjTWwQHqIPnmaWIYSYfoiS7hEF5lbMX+Ywe2JtHOqG/icHzd
- D1tcHgfQepeRHCWnNzCSVvA9VXy/uqimUbLOBU3S6Y/F9lYViZNKP4c0ZnZCGXP34QmbaLfzm
- WpM0eJYrHhZW/amZDMJWQVEFZcFzIGKB1zAXg1iwMoPpyVwzqGNM2n2ugqEkyPBCwBA4RwNKA
- M4JyrpJy3zj7uKoI0SZc2pgj5zKO9b3YJmzmNIZIsLG+uX4F3UZiSEp6WBOyGuL3TwHq3RTIw
- 6R5nWDuqRrfxxZauQhjVuEk0tByYQlIrk709AOobaiRDBC/eIjWWbjjiPVncTfkhywSv2O8/X
- s5G6K1QAnFDcWiQq/EgMdvKTutIvqyfQtg/kePWxGmionUDzy83cdtSWvH3+FxXtvZ5Cn8IYO
- BH5FPYI75eId0cu6r2W21hqunHmhgfHDDSlrcfBOOVVAgMFLDs=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,77 +47,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-with the other ones.On Sat, Feb 26, 2022 at 3:20 AM Yusuf Khan
-<yusisamerican@gmail.com> wrote:
->
-> This patch upstreams the DDCCI driver by Christoph Grenz into
-> the kernel. The original gitlab page is loacted at https://gitlab
-> .com/ddcci-driver-linux/ddcci-driver-linux/-/tree/master.
->
-> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
-> ---
->  drivers/Kconfig                 |    2 +
->  drivers/Makefile                |    1 +
->  drivers/ddcci/Kconfig           |    3 +
->  drivers/ddcci/Makefile          |    3 +
->  drivers/ddcci/ddcci-backlight.c |  413 +++++++
->  drivers/ddcci/ddcci.c           | 1895 +++++++++++++++++++++++++++++++
->  include/linux/ddcci.h           |  164 +++
+There is a theoretical race window between memory failure and memory
+offline. Think about the below scene:
 
-If this is a backlight driver, I think it should go into
-drivers/video/backlight/,
-no need for a top-level subsystem.
+  CPU A					  CPU B
+memory_failure				offline_pages
+  mutex_lock(&mf_mutex);
+  TestSetPageHWPoison(p)
+					  start_isolate_page_range
+					    has_unmovable_pages
+					      --PageHWPoison is movable
+					  do {
+					    scan_movable_pages
+					    do_migrate_range
+					      --PageHWPoison isn't migrated
+					  }
+					  test_pages_isolated
+					    --PageHWPoison is isolated
+					remove_memory
+  access page... bang
+  ...
 
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +#include <asm-generic/fcntl.h>
+When PageHWPoison is set, the page could be offlined anytime regardless
+of the page refcnt. It's bacause start_isolate_page_range treats HWPoison
+page as movable and already isolated, so the page range can be successfully
+isolated. soft_offline_page and unpoison_memory have the similar race. Fix
+this by using get_online_mems + put_online_mems pair to guard aginst memory
+offline when doing memory failure.
 
-Including the asm-generic version causes the build failures. If you need
-the contents, use <linux/fcntl.h>, otherwise leave it out.
+There is a even worse race window. If the page refcnt is held, then memory
+failure happens, the page could be offlined while it's still in use. So The
+assumption that a page can not be offlined when the page refcnt is held is
+now broken. This theoretical race window could happen in every vm activity.
+But this race window might be too small to fix.
 
-> +static dev_t ddcci_cdev_first;
-> +static dev_t ddcci_cdev_next;
-> +static dev_t ddcci_cdev_end;
-> +static DEFINE_SEMAPHORE(core_lock);
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/memory-failure.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-No new semaphores please, this should probably be a mutex.
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 5444a8ef4867..b85232a64104 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1702,6 +1702,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 	if (!sysctl_memory_failure_recovery)
+ 		panic("Memory failure on page %lx", pfn);
+ 
++	get_online_mems();
+ 	mutex_lock(&mf_mutex);
+ 
+ 	p = pfn_to_online_page(pfn);
+@@ -1894,11 +1895,13 @@ int memory_failure(unsigned long pfn, int flags)
+ identify_page_state:
+ 	res = identify_page_state(pfn, p, page_flags);
+ 	mutex_unlock(&mf_mutex);
++	put_online_mems();
+ 	return res;
+ unlock_page:
+ 	unlock_page(p);
+ unlock_mutex:
+ 	mutex_unlock(&mf_mutex);
++	put_online_mems();
+ 	return res;
+ }
+ EXPORT_SYMBOL_GPL(memory_failure);
+@@ -2058,6 +2061,7 @@ int unpoison_memory(unsigned long pfn)
+ 	if (!pfn_valid(pfn))
+ 		return -ENXIO;
+ 
++	get_online_mems();
+ 	p = pfn_to_page(pfn);
+ 	page = compound_head(p);
+ 
+@@ -2114,6 +2118,7 @@ int unpoison_memory(unsigned long pfn)
+ 
+ unlock_mutex:
+ 	mutex_unlock(&mf_mutex);
++	put_online_mems();
+ 	return ret;
+ }
+ EXPORT_SYMBOL(unpoison_memory);
+@@ -2278,10 +2283,12 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 	if (flags & MF_COUNT_INCREASED)
+ 		ref_page = pfn_to_page(pfn);
+ 
++	get_online_mems();
+ 	/* Only online pages can be soft-offlined (esp., not ZONE_DEVICE). */
+ 	page = pfn_to_online_page(pfn);
+ 	if (!page) {
+ 		put_ref_page(ref_page);
++		put_online_mems();
+ 		return -EIO;
+ 	}
+ 
+@@ -2291,13 +2298,12 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 		pr_info("%s: %#lx page already poisoned\n", __func__, pfn);
+ 		put_ref_page(ref_page);
+ 		mutex_unlock(&mf_mutex);
++		put_online_mems();
+ 		return 0;
+ 	}
+ 
+ retry:
+-	get_online_mems();
+ 	ret = get_hwpoison_page(page, flags);
+-	put_online_mems();
+ 
+ 	if (ret > 0) {
+ 		ret = soft_offline_in_use_page(page);
+@@ -2310,6 +2316,7 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 	}
+ 
+ 	mutex_unlock(&mf_mutex);
++	put_online_mems();
+ 
+ 	return ret;
+ }
+-- 
+2.23.0
 
-
-> +struct bus_type ddcci_bus_type;
-> +EXPORT_SYMBOL_GPL(ddcci_bus_type);
-> +
-> +/* Assert neccessary string array sizes  */
-> +#ifndef sizeof_field
-> +# define sizeof_field(t,m) FIELD_SIZEOF(t,m)
-> +#endif
-> +static_assert(sizeof_field(struct ddcci_device, prot) > 8);
-> +static_assert(sizeof_field(struct ddcci_device, type) > 8);
-> +static_assert(sizeof_field(struct ddcci_device, model) > 8);
-> +static_assert(sizeof_field(struct ddcci_device, vendor) > 8);
-> +static_assert(sizeof_field(struct ddcci_device, module) > 8);
-> +
-> +/* Internal per-i2c-client driver data */
-> +struct ddcci_bus_drv_data {
-> +       unsigned long quirks;
-> +       struct i2c_client *i2c_dev;
-> +       struct semaphore sem;
-> +       unsigned char recv_buffer[DDCCI_RECV_BUFFER_SIZE];
-> +};
-
-Same here.
-
-> +static const struct file_operations ddcci_fops = {
-> +       .owner = THIS_MODULE,
-> +       .read = ddcci_cdev_read,
-> +       .write = ddcci_cdev_write,
-> +       .open = ddcci_cdev_open,
-> +       .release = ddcci_cdev_close,
-> +       .llseek = ddcci_cdev_seek
-> +};
-
-It looks like this adds low-level access to a bus that is already managed by
-the drm (or older framebuffer) drivers. How do you prevent these two
-from stepping on each other's toes?
-
-        Arnd

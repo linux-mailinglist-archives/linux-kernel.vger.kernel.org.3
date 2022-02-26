@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5882A4C57C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 20:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D134C57C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 20:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiBZTGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 14:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S232900AbiBZTOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 14:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiBZTGG (ORCPT
+        with ESMTP id S229624AbiBZTOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 14:06:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E31F673C0;
-        Sat, 26 Feb 2022 11:05:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32A15B80B11;
-        Sat, 26 Feb 2022 19:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCADC340E8;
-        Sat, 26 Feb 2022 19:05:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645902327;
-        bh=YFpBY9wDvTHmMS1Zc9n4J3oJYs4cbW7dQDrp/3OLfUU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a+VwuvCRmM0XTjrQqhS9MkUdCnCBPHIY1COV8/K1rb+Zgct7DHo4uu5MHoTd58+tj
-         DALaQVmIScYzZKWlbqOikswSXmt4XodqNQXfqai36bzPHuNRHU+jCtUGardZLIbfTv
-         zs3Um0Ijf7vpPw6NqJaXhlKx5AgHb9MB+aB6eUIaXyBvhzIxx6RZgFZAb7FGQMx2vy
-         W926gYg+OZR0U1n/t+UESLQ/VpdkMgN6DtmeEyeigSrPsV3iv+Rcf2zBsJqRsO2aYm
-         fextJnJMfWrPGml2iPvFP9uPNYjE3p1AH1/yoSf/WapPu7TxpIuArUVeE/9GfGpdMl
-         wHUCmoblHBkeA==
-Date:   Sat, 26 Feb 2022 19:12:28 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>
-Subject: Re: [PATCH v2 1/8] iio: accel: adxl345: Convert to use
- dev_err_probe()
-Message-ID: <20220226191228.2d0eca14@jic23-huawei>
-In-Reply-To: <CAAd53p7sZL4ppWoXfeM8=N_ucjMUs3vv6-LoyLX4-beYE30fSQ@mail.gmail.com>
-References: <20220222090009.2060-1-andriy.shevchenko@linux.intel.com>
-        <CAAd53p7sZL4ppWoXfeM8=N_ucjMUs3vv6-LoyLX4-beYE30fSQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 26 Feb 2022 14:14:44 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BC450066
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 11:14:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645902849; x=1677438849;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kIJBp/nzhxZ2xXsHsaI1ovOue0plIU8nsuK+IkB7K8U=;
+  b=c0bG1Qt7hlUO3izIuYIMPgwRjSTyc2upcdNMod9tY0+gEh6Y6H2DDpUj
+   hqh6GzVv6XcycaeLBVj4io7Ll9nHUzPmZz3+MkxviMdIhWH4PNcRUDW1s
+   r35S36oItk0IGXElC/Z1JZapQTPBZ3riSU8zZzLnm9Lq4zpKpVvVQSJvz
+   Dxl5FdjJj8U/U6mBm1NUlfd/LhJ5XHt3zSJ7+2Y8lhU862HtfaAiDDWmS
+   Z2nh39TfPzoYAtCwxCmJ95r2FFVqSw5d8aTO3ZpXmN5wKrEdak8tInYxb
+   V5VyWqUHP0Wk5DhqG3prPzdHVMfRe6D1UPDiRAPuLm/lM4E695Yd1ocE/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="251510588"
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="251510588"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 11:14:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="549700616"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2022 11:14:06 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nO2W6-0005rw-1A; Sat, 26 Feb 2022 19:14:06 +0000
+Date:   Sun, 27 Feb 2022 03:13:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v2 149/159]
+ drivers/nvme/host/tcp.c:1299:35: warning: format specifies type 'unsigned
+ long' but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202202262102.YfMrKOTP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,135 +63,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 11:10:47 +0800
-Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   21b520ae0b338bd30496feb1ca90a2820dab7a65
+commit: 96e2b9364c5e070dab1a5d438376a406ab66690d [149/159] nvme-tcp: cmsg for tls recvmsg()
+config: hexagon-randconfig-r023-20220226 (https://download.01.org/0day-ci/archive/20220226/202202262102.YfMrKOTP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=96e2b9364c5e070dab1a5d438376a406ab66690d
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout 96e2b9364c5e070dab1a5d438376a406ab66690d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvme/host/
 
-> On Tue, Feb 22, 2022 at 4:59 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > It's fine to call dev_err_probe() in ->probe() when error code is known.
-> > Convert the driver to use dev_err_probe().
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> 
-> Tested on ACPI based platform. Hence, for the whole series,
-> 
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Series applied to the togreg branch of iio.git and pushed out as testing
-to let 0-day see if it can find anything we missed.
+All warnings (new ones prefixed by >>):
 
-Thanks,
+>> drivers/nvme/host/tcp.c:1299:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    nvme_tcp_queue_id(queue), ret, iov.iov_len);
+                                                   ^~~~~~~~~~~
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   drivers/nvme/host/tcp.c:1328:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    nvme_tcp_queue_id(queue), ret, iov.iov_len);
+                                                   ^~~~~~~~~~~
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   2 warnings generated.
 
-Jonathan
 
-> 
-> > ---
-> > v2: fixed typo (LKP), shorten one line to satisfy checkpatch
-> >  drivers/iio/accel/adxl345_core.c | 26 +++++++++-----------------
-> >  drivers/iio/accel/adxl345_i2c.c  |  7 ++-----
-> >  drivers/iio/accel/adxl345_spi.c  | 15 +++++----------
-> >  3 files changed, 16 insertions(+), 32 deletions(-)
-> >
-> > diff --git a/drivers/iio/accel/adxl345_core.c b/drivers/iio/accel/adxl345_core.c
-> > index ef2240e356e0..078e1029e49d 100644
-> > --- a/drivers/iio/accel/adxl345_core.c
-> > +++ b/drivers/iio/accel/adxl345_core.c
-> > @@ -222,16 +222,12 @@ int adxl345_core_probe(struct device *dev, struct regmap *regmap,
-> >         int ret;
-> >
-> >         ret = regmap_read(regmap, ADXL345_REG_DEVID, &regval);
-> > -       if (ret < 0) {
-> > -               dev_err(dev, "Error reading device ID: %d\n", ret);
-> > -               return ret;
-> > -       }
-> > +       if (ret < 0)
-> > +               return dev_err_probe(dev, ret, "Error reading device ID\n");
-> >
-> > -       if (regval != ADXL345_DEVID) {
-> > -               dev_err(dev, "Invalid device ID: %x, expected %x\n",
-> > -                       regval, ADXL345_DEVID);
-> > -               return -ENODEV;
-> > -       }
-> > +       if (regval != ADXL345_DEVID)
-> > +               return dev_err_probe(dev, -ENODEV, "Invalid device ID: %x, expected %x\n",
-> > +                                    regval, ADXL345_DEVID);
-> >
-> >         indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-> >         if (!indio_dev)
-> > @@ -245,10 +241,8 @@ int adxl345_core_probe(struct device *dev, struct regmap *regmap,
-> >
-> >         ret = regmap_write(data->regmap, ADXL345_REG_DATA_FORMAT,
-> >                            data->data_range);
-> > -       if (ret < 0) {
-> > -               dev_err(dev, "Failed to set data range: %d\n", ret);
-> > -               return ret;
-> > -       }
-> > +       if (ret < 0)
-> > +               return dev_err_probe(dev, ret, "Failed to set data range\n");
-> >
-> >         indio_dev->name = name;
-> >         indio_dev->info = &adxl345_info;
-> > @@ -259,10 +253,8 @@ int adxl345_core_probe(struct device *dev, struct regmap *regmap,
-> >         /* Enable measurement mode */
-> >         ret = regmap_write(data->regmap, ADXL345_REG_POWER_CTL,
-> >                            ADXL345_POWER_CTL_MEASURE);
-> > -       if (ret < 0) {
-> > -               dev_err(dev, "Failed to enable measurement mode: %d\n", ret);
-> > -               return ret;
-> > -       }
-> > +       if (ret < 0)
-> > +               return dev_err_probe(dev, ret, "Failed to enable measurement mode\n");
-> >
-> >         ret = devm_add_action_or_reset(dev, adxl345_powerdown, data->regmap);
-> >         if (ret < 0)
-> > diff --git a/drivers/iio/accel/adxl345_i2c.c b/drivers/iio/accel/adxl345_i2c.c
-> > index 7bc8324c4f07..e3205dce91b8 100644
-> > --- a/drivers/iio/accel/adxl345_i2c.c
-> > +++ b/drivers/iio/accel/adxl345_i2c.c
-> > @@ -28,11 +28,8 @@ static int adxl345_i2c_probe(struct i2c_client *client,
-> >                 return -ENODEV;
-> >
-> >         regmap = devm_regmap_init_i2c(client, &adxl345_i2c_regmap_config);
-> > -       if (IS_ERR(regmap)) {
-> > -               dev_err(&client->dev, "Error initializing i2c regmap: %ld\n",
-> > -                       PTR_ERR(regmap));
-> > -               return PTR_ERR(regmap);
-> > -       }
-> > +       if (IS_ERR(regmap))
-> > +               return dev_err_probe(&client->dev, PTR_ERR(regmap), "Error initializing regmap\n");
-> >
-> >         return adxl345_core_probe(&client->dev, regmap, id->driver_data,
-> >                                   id->name);
-> > diff --git a/drivers/iio/accel/adxl345_spi.c b/drivers/iio/accel/adxl345_spi.c
-> > index c752562c5d3b..9223302fdd46 100644
-> > --- a/drivers/iio/accel/adxl345_spi.c
-> > +++ b/drivers/iio/accel/adxl345_spi.c
-> > @@ -26,18 +26,13 @@ static int adxl345_spi_probe(struct spi_device *spi)
-> >         struct regmap *regmap;
-> >
-> >         /* Bail out if max_speed_hz exceeds 5 MHz */
-> > -       if (spi->max_speed_hz > ADXL345_MAX_SPI_FREQ_HZ) {
-> > -               dev_err(&spi->dev, "SPI CLK, %d Hz exceeds 5 MHz\n",
-> > -                       spi->max_speed_hz);
-> > -               return -EINVAL;
-> > -       }
-> > +       if (spi->max_speed_hz > ADXL345_MAX_SPI_FREQ_HZ)
-> > +               return dev_err_probe(&spi->dev, -EINVAL, "SPI CLK, %d Hz exceeds 5 MHz\n",
-> > +                                    spi->max_speed_hz);
-> >
-> >         regmap = devm_regmap_init_spi(spi, &adxl345_spi_regmap_config);
-> > -       if (IS_ERR(regmap)) {
-> > -               dev_err(&spi->dev, "Error initializing spi regmap: %ld\n",
-> > -                       PTR_ERR(regmap));
-> > -               return PTR_ERR(regmap);
-> > -       }
-> > +       if (IS_ERR(regmap))
-> > +               return dev_err_probe(&spi->dev, PTR_ERR(regmap), "Error initializing regmap\n");
-> >
-> >         return adxl345_core_probe(&spi->dev, regmap, id->driver_data, id->name);
-> >  }
-> > --
-> > 2.34.1
-> >  
+vim +1299 drivers/nvme/host/tcp.c
 
+  1255	
+  1256	static int nvme_tcp_init_connection(struct nvme_tcp_queue *queue)
+  1257	{
+  1258		struct nvme_tcp_icreq_pdu *icreq;
+  1259		struct nvme_tcp_icresp_pdu *icresp;
+  1260		struct msghdr msg = {};
+  1261		char cbuf[CMSG_SPACE(sizeof(char))];
+  1262		struct cmsghdr *cmsg;
+  1263		unsigned char ctype;
+  1264		struct kvec iov;
+  1265		bool ctrl_hdgst, ctrl_ddgst;
+  1266		int ret;
+  1267	
+  1268		icreq = kzalloc(sizeof(*icreq), GFP_KERNEL);
+  1269		if (!icreq)
+  1270			return -ENOMEM;
+  1271	
+  1272		icresp = kzalloc(sizeof(*icresp), GFP_KERNEL);
+  1273		if (!icresp) {
+  1274			ret = -ENOMEM;
+  1275			goto free_icreq;
+  1276		}
+  1277	
+  1278		icreq->hdr.type = nvme_tcp_icreq;
+  1279		icreq->hdr.hlen = sizeof(*icreq);
+  1280		icreq->hdr.pdo = 0;
+  1281		icreq->hdr.plen = cpu_to_le32(icreq->hdr.hlen);
+  1282		icreq->pfv = cpu_to_le16(NVME_TCP_PFV_1_0);
+  1283		icreq->maxr2t = 0; /* single inflight r2t supported */
+  1284		icreq->hpda = 0; /* no alignment constraint */
+  1285		if (queue->hdr_digest)
+  1286			icreq->digest |= NVME_TCP_HDR_DIGEST_ENABLE;
+  1287		if (queue->data_digest)
+  1288			icreq->digest |= NVME_TCP_DATA_DIGEST_ENABLE;
+  1289	
+  1290		iov.iov_base = icreq;
+  1291		iov.iov_len = sizeof(*icreq);
+  1292		ret = kernel_sendmsg(queue->sock, &msg, &iov, 1, iov.iov_len);
+  1293		if (ret < 0) {
+  1294			pr_err("queue %d: failed to send icresp, error %d\n",
+  1295			       nvme_tcp_queue_id(queue), ret);
+  1296			goto free_icresp;
+  1297		}
+  1298		pr_debug("queue %d: sent %d/%lu icreq bytes\n",
+> 1299			 nvme_tcp_queue_id(queue), ret, iov.iov_len);
+  1300		memset(&msg, 0, sizeof(msg));
+  1301		msg.msg_control = cbuf;
+  1302		msg.msg_controllen = sizeof(cbuf);
+  1303		msg.msg_flags = MSG_WAITALL;
+  1304		iov.iov_base = icresp;
+  1305		iov.iov_len = sizeof(*icresp);
+  1306		ret = kernel_recvmsg(queue->sock, &msg, &iov, 1,
+  1307				iov.iov_len, msg.msg_flags);
+  1308		cmsg = CMSG_FIRSTHDR(&msg);
+  1309		if (cmsg) {
+  1310			pr_debug("queue %d: received cmsg level %d\n",
+  1311				 nvme_tcp_queue_id(queue), cmsg->cmsg_level);
+  1312			if (cmsg->cmsg_level == SOL_TLS) {
+  1313				pr_debug("queue %d: received tls cmsg %d\n",
+  1314					 nvme_tcp_queue_id(queue), cmsg->cmsg_type);
+  1315				if (cmsg->cmsg_type == TLS_GET_RECORD_TYPE) {
+  1316					ctype = *((unsigned char *)CMSG_DATA(cmsg));
+  1317					if (ctype != 100)
+  1318						ret = -ENOTCONN;
+  1319				}
+  1320			}
+  1321		}
+  1322		if (ret < 0) {
+  1323			pr_err("queue %d: failed to receive icresp, error %d\n",
+  1324			       nvme_tcp_queue_id(queue), ret);
+  1325			goto free_icresp;
+  1326		}
+  1327		pr_debug("queue %d: received %d/%lu icresp bytes\n",
+  1328			 nvme_tcp_queue_id(queue), ret, iov.iov_len);
+  1329		ret = -EINVAL;
+  1330		if (icresp->hdr.type != nvme_tcp_icresp) {
+  1331			pr_err("queue %d: bad type returned %d\n",
+  1332				nvme_tcp_queue_id(queue), icresp->hdr.type);
+  1333			print_hex_dump(KERN_ERR, "icresp: ", 0,
+  1334				       8, 1, icresp, iov.iov_len, true);
+  1335			goto free_icresp;
+  1336		}
+  1337	
+  1338		if (le32_to_cpu(icresp->hdr.plen) != sizeof(*icresp)) {
+  1339			pr_err("queue %d: bad pdu length returned %d\n",
+  1340				nvme_tcp_queue_id(queue), icresp->hdr.plen);
+  1341			goto free_icresp;
+  1342		}
+  1343	
+  1344		if (icresp->pfv != NVME_TCP_PFV_1_0) {
+  1345			pr_err("queue %d: bad pfv returned %d\n",
+  1346				nvme_tcp_queue_id(queue), icresp->pfv);
+  1347			goto free_icresp;
+  1348		}
+  1349	
+  1350		ctrl_ddgst = !!(icresp->digest & NVME_TCP_DATA_DIGEST_ENABLE);
+  1351		if ((queue->data_digest && !ctrl_ddgst) ||
+  1352		    (!queue->data_digest && ctrl_ddgst)) {
+  1353			pr_err("queue %d: data digest mismatch host: %s ctrl: %s\n",
+  1354				nvme_tcp_queue_id(queue),
+  1355				queue->data_digest ? "enabled" : "disabled",
+  1356				ctrl_ddgst ? "enabled" : "disabled");
+  1357			goto free_icresp;
+  1358		}
+  1359	
+  1360		ctrl_hdgst = !!(icresp->digest & NVME_TCP_HDR_DIGEST_ENABLE);
+  1361		if ((queue->hdr_digest && !ctrl_hdgst) ||
+  1362		    (!queue->hdr_digest && ctrl_hdgst)) {
+  1363			pr_err("queue %d: header digest mismatch host: %s ctrl: %s\n",
+  1364				nvme_tcp_queue_id(queue),
+  1365				queue->hdr_digest ? "enabled" : "disabled",
+  1366				ctrl_hdgst ? "enabled" : "disabled");
+  1367			goto free_icresp;
+  1368		}
+  1369	
+  1370		if (icresp->cpda != 0) {
+  1371			pr_err("queue %d: unsupported cpda returned %d\n",
+  1372				nvme_tcp_queue_id(queue), icresp->cpda);
+  1373			goto free_icresp;
+  1374		}
+  1375	
+  1376		ret = 0;
+  1377	free_icresp:
+  1378		kfree(icresp);
+  1379	free_icreq:
+  1380		kfree(icreq);
+  1381		return ret;
+  1382	}
+  1383	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

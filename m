@@ -2,197 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8496F4C5273
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3444C52B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 01:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbiBZARM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 19:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S241732AbiBZAZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 19:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240382AbiBZAQw (ORCPT
+        with ESMTP id S241068AbiBZAZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:16:52 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0419225591
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:16:14 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21Q0G8eL060315;
-        Fri, 25 Feb 2022 18:16:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645834568;
-        bh=pBw395L0AUcASRYS2i9hrKEYCApz4CFHb/+TgP651cs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=tEr177f4BrpptmxG8YZOj0yhtBjccpWEyYiO/+USDUeHVXfvyiwmRu1eq02D9jnEo
-         kQ5sNQ8SGNrxqVyXFZqeswtOOoLMkbAq5LN845c+CNQt1oaVoFhMzq3um9EHLmSO0K
-         C7lxQevcdFNM7MIlCjqmZwiFQEQYnFD79ujEUJt0=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21Q0G87f012350
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 25 Feb 2022 18:16:08 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 25
- Feb 2022 18:16:08 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 25 Feb 2022 18:16:08 -0600
-Received: from [10.249.33.2] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21Q0G854109058;
-        Fri, 25 Feb 2022 18:16:08 -0600
-Message-ID: <073d7213-bd3a-5adb-8187-f0a83478fd76@ti.com>
-Date:   Fri, 25 Feb 2022 18:16:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] mailbox: ti-msgmgr: Refactor message read during
- interrupt handler
-Content-Language: en-US
-To:     Dave Gerlach <d-gerlach@ti.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20220210041631.26767-1-d-gerlach@ti.com>
- <20220210041631.26767-2-d-gerlach@ti.com>
-From:   Suman Anna <s-anna@ti.com>
-In-Reply-To: <20220210041631.26767-2-d-gerlach@ti.com>
+        Fri, 25 Feb 2022 19:25:08 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEAA199D78
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:24:34 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae11464so46581207b3.14
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 16:24:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=c5XxepI0RiJzH9nImzDTpadEG2SO2IU4ZT8K2Wm0fgw=;
+        b=iwU9nbdapI4QDtZoaxiJdFfKk1Aeelgfe69uZJ/lOO24OOX3A5QLJPiH4qboOUz+2t
+         zQ09GP9qcVBfCxpp8LeUQrCciTFqyr3ZfNXtHmQcDdshuU8oBAZQYGNMMsLvF1rrJSy0
+         xgl5ybIbuKPpkxSdP4WL+dvjKkd+mHI6inkn2YcaLxC09Mz1DhKHMnY5GFhO+SCythBy
+         J5KTKZYcptRIR/A8cB0AHU+KBOeaXdbwJSaeFWuzemzTsZh9FW8r2PUqyNenl0z+4moK
+         scvXa+QlOZ7lJ9J3duby8Kr1w1z/3ERSbJTInf29y1U66/ojmBs2Psy+xnZMhY6dGx+E
+         5nFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=c5XxepI0RiJzH9nImzDTpadEG2SO2IU4ZT8K2Wm0fgw=;
+        b=x9k3W9mezHr8nc5nx5SrrGt65qnJnv2xkD6+82ik8HXkqn1SF/HQv24f9C2BE1HeYr
+         qJEF2vpgM+BWvF1tMaJtVU07ZUm6tzdYwwwnjiVdfd4Li4f/o42SBtbpJywhUojF2SHG
+         37+GyaMUIwSeJ8ExH9NbHjNafgIzvGQRoLm6vDFWMbLvYQlpmddltNC/UhbsqoRLDZES
+         NOTqFNQgXotgv56p/4ySbVPyos4aN1yLwoT8ySnJdZpklNBBETobQpAgXXnlHAd6k9Ce
+         mzsl+A6bnremFHsDD8PzzjRkHNOGgh2AMIFAjAqf++PNO0O69FBcqrT9M/ai/M2O+NBW
+         wVBA==
+X-Gm-Message-State: AOAM530Wi6yu85M6Px/yQvUCgtGxTPbZcL2r1Gv8epMEEL9T9jVbQu7n
+        kKccqEFxMlS+rBBUQ+laUnL+gCiCDExDLQ==
+X-Google-Smtp-Source: ABdhPJzqsLR7y0lfbkwTXvPkY6+2FHJWcDSoxXSS/X5D8//dIU/36RB8yXNtw/F6Ve7tENac2apQuJ7ROS38pQ==
+X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:1a3e:f375:915f:ad7e])
+ (user=shakeelb job=sendgmr) by 2002:a25:2b0a:0:b0:624:a898:3e2f with SMTP id
+ r10-20020a252b0a000000b00624a8983e2fmr9753491ybr.643.1645835074125; Fri, 25
+ Feb 2022 16:24:34 -0800 (PST)
+Date:   Fri, 25 Feb 2022 16:24:12 -0800
+Message-Id: <20220226002412.113819-1-shakeelb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH] memcg: async flush memcg stats from perf sensitive codepaths
+From:   Shakeel Butt <shakeelb@google.com>
+To:     "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ivan Babrou <ivan@cloudflare.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+        Daniel Dao <dqminh@cloudflare.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 22:16, Dave Gerlach wrote:
-> Refactor the portion of code that actually reads received messages from
-> a queue into its own function, ti_msgmgr_queue_rx_data, that is called
-> by the interrupt handler instead of reading directly from the handler.
-> 
-> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Daniel Dao has reported [1] a regression on workloads that may trigger
+a lot of refaults (anon and file). The underlying issue is that flushing
+rstat is expensive. Although rstat flush are batched with (nr_cpus *
+MEMCG_BATCH) stat updates, it seems like there are workloads which
+genuinely do stat updates larger than batch value within short amount of
+time. Since the rstat flush can happen in the performance critical
+codepaths like page faults, such workload can suffer greatly.
 
-Acked-by: Suman Anna <s-anna@ti.com>
+The easiest fix for now is for performance critical codepaths trigger
+the rstat flush asynchronously. This patch converts the refault codepath
+to use async rstat flush. In addition, this patch has premptively
+converted mem_cgroup_wb_stats and shrink_node to also use the async
+rstat flush as they may also similar performance regressions.
 
-> ---
->  drivers/mailbox/ti-msgmgr.c | 88 +++++++++++++++++++++----------------
->  1 file changed, 49 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/mailbox/ti-msgmgr.c b/drivers/mailbox/ti-msgmgr.c
-> index efb43b038596..f860cd0c907a 100644
-> --- a/drivers/mailbox/ti-msgmgr.c
-> +++ b/drivers/mailbox/ti-msgmgr.c
-> @@ -190,6 +190,53 @@ static inline bool ti_msgmgr_queue_is_error(const struct ti_msgmgr_desc *d,
->  	return val ? true : false;
->  }
->  
-> +static int ti_msgmgr_queue_rx_data(struct mbox_chan *chan, struct ti_queue_inst *qinst,
-> +				   const struct ti_msgmgr_desc *desc)
-> +{
-> +	int num_words;
-> +	struct ti_msgmgr_message message;
-> +	void __iomem *data_reg;
-> +	u32 *word_data;
-> +
-> +	/*
-> +	 * I have no idea about the protocol being used to communicate with the
-> +	 * remote producer - 0 could be valid data, so I wont make a judgement
-> +	 * of how many bytes I should be reading. Let the client figure this
-> +	 * out.. I just read the full message and pass it on..
-> +	 */
-> +	message.len = desc->max_message_size;
-> +	message.buf = (u8 *)qinst->rx_buff;
-> +
-> +	/*
-> +	 * NOTE about register access involved here:
-> +	 * the hardware block is implemented with 32bit access operations and no
-> +	 * support for data splitting.  We don't want the hardware to misbehave
-> +	 * with sub 32bit access - For example: if the last register read is
-> +	 * split into byte wise access, it can result in the queue getting
-> +	 * stuck or indeterminate behavior. An out of order read operation may
-> +	 * result in weird data results as well.
-> +	 * Hence, we do not use memcpy_fromio or __ioread32_copy here, instead
-> +	 * we depend on readl for the purpose.
-> +	 *
-> +	 * Also note that the final register read automatically marks the
-> +	 * queue message as read.
-> +	 */
-> +	for (data_reg = qinst->queue_buff_start, word_data = qinst->rx_buff,
-> +	     num_words = (desc->max_message_size / sizeof(u32));
-> +	     num_words; num_words--, data_reg += sizeof(u32), word_data++)
-> +		*word_data = readl(data_reg);
-> +
-> +	/*
-> +	 * Last register read automatically clears the IRQ if only 1 message
-> +	 * is pending - so send the data up the stack..
-> +	 * NOTE: Client is expected to be as optimal as possible, since
-> +	 * we invoke the handler in IRQ context.
-> +	 */
-> +	mbox_chan_received_data(chan, (void *)&message);
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * ti_msgmgr_queue_rx_interrupt() - Interrupt handler for receive Queue
->   * @irq:	Interrupt number
-> @@ -206,10 +253,7 @@ static irqreturn_t ti_msgmgr_queue_rx_interrupt(int irq, void *p)
->  	struct ti_msgmgr_inst *inst = dev_get_drvdata(dev);
->  	struct ti_queue_inst *qinst = chan->con_priv;
->  	const struct ti_msgmgr_desc *desc;
-> -	int msg_count, num_words;
-> -	struct ti_msgmgr_message message;
-> -	void __iomem *data_reg;
-> -	u32 *word_data;
-> +	int msg_count;
->  
->  	if (WARN_ON(!inst)) {
->  		dev_err(dev, "no platform drv data??\n");
-> @@ -237,41 +281,7 @@ static irqreturn_t ti_msgmgr_queue_rx_interrupt(int irq, void *p)
->  		return IRQ_NONE;
->  	}
->  
-> -	/*
-> -	 * I have no idea about the protocol being used to communicate with the
-> -	 * remote producer - 0 could be valid data, so I won't make a judgement
-> -	 * of how many bytes I should be reading. Let the client figure this
-> -	 * out.. I just read the full message and pass it on..
-> -	 */
-> -	message.len = desc->max_message_size;
-> -	message.buf = (u8 *)qinst->rx_buff;
-> -
-> -	/*
-> -	 * NOTE about register access involved here:
-> -	 * the hardware block is implemented with 32bit access operations and no
-> -	 * support for data splitting.  We don't want the hardware to misbehave
-> -	 * with sub 32bit access - For example: if the last register read is
-> -	 * split into byte wise access, it can result in the queue getting
-> -	 * stuck or indeterminate behavior. An out of order read operation may
-> -	 * result in weird data results as well.
-> -	 * Hence, we do not use memcpy_fromio or __ioread32_copy here, instead
-> -	 * we depend on readl for the purpose.
-> -	 *
-> -	 * Also note that the final register read automatically marks the
-> -	 * queue message as read.
-> -	 */
-> -	for (data_reg = qinst->queue_buff_start, word_data = qinst->rx_buff,
-> -	     num_words = (desc->max_message_size / sizeof(u32));
-> -	     num_words; num_words--, data_reg += sizeof(u32), word_data++)
-> -		*word_data = readl(data_reg);
-> -
-> -	/*
-> -	 * Last register read automatically clears the IRQ if only 1 message
-> -	 * is pending - so send the data up the stack..
-> -	 * NOTE: Client is expected to be as optimal as possible, since
-> -	 * we invoke the handler in IRQ context.
-> -	 */
-> -	mbox_chan_received_data(chan, (void *)&message);
-> +	ti_msgmgr_queue_rx_data(chan, qinst, desc);
->  
->  	return IRQ_HANDLED;
->  }
+Link: https://lore.kernel.org/all/CA+wXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com [1]
+Fixes: 1f828223b799 ("memcg: flush lruvec stats in the refault")
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Signed-off-by: Shakeel Butt <shakeelb@google.com>
+Cc: <stable@vger.kernel.org>
+---
+ include/linux/memcontrol.h |  1 +
+ mm/memcontrol.c            | 10 +++++++++-
+ mm/vmscan.c                |  2 +-
+ mm/workingset.c            |  2 +-
+ 4 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index ef4b445392a9..bfdd48be60ff 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -998,6 +998,7 @@ static inline unsigned long lruvec_page_state_local(struct lruvec *lruvec,
+ }
+ 
+ void mem_cgroup_flush_stats(void);
++void mem_cgroup_flush_stats_async(void);
+ 
+ void __mod_memcg_lruvec_state(struct lruvec *lruvec, enum node_stat_item idx,
+ 			      int val);
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index c695608c521c..4338e8d779b2 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -690,6 +690,14 @@ void mem_cgroup_flush_stats(void)
+ 		__mem_cgroup_flush_stats();
+ }
+ 
++void mem_cgroup_flush_stats_async(void)
++{
++	if (atomic_read(&stats_flush_threshold) > num_online_cpus()) {
++		atomic_set(&stats_flush_threshold, 0);
++		mod_delayed_work(system_unbound_wq, &stats_flush_dwork, 0);
++	}
++}
++
+ static void flush_memcg_stats_dwork(struct work_struct *w)
+ {
+ 	__mem_cgroup_flush_stats();
+@@ -4522,7 +4530,7 @@ void mem_cgroup_wb_stats(struct bdi_writeback *wb, unsigned long *pfilepages,
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(wb->memcg_css);
+ 	struct mem_cgroup *parent;
+ 
+-	mem_cgroup_flush_stats();
++	mem_cgroup_flush_stats_async();
+ 
+ 	*pdirty = memcg_page_state(memcg, NR_FILE_DIRTY);
+ 	*pwriteback = memcg_page_state(memcg, NR_WRITEBACK);
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index c6f77e3e6d59..b6c6b165c1ef 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -3188,7 +3188,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	 * Flush the memory cgroup stats, so that we read accurate per-memcg
+ 	 * lruvec stats for heuristics.
+ 	 */
+-	mem_cgroup_flush_stats();
++	mem_cgroup_flush_stats_async();
+ 
+ 	memset(&sc->nr, 0, sizeof(sc->nr));
+ 
+diff --git a/mm/workingset.c b/mm/workingset.c
+index b717eae4e0dd..a4f2b1aa5bcc 100644
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -355,7 +355,7 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 
+ 	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
+ 
+-	mem_cgroup_flush_stats();
++	mem_cgroup_flush_stats_async();
+ 	/*
+ 	 * Compare the distance to the existing workingset size. We
+ 	 * don't activate pages that couldn't stay resident even if
+-- 
+2.35.1.574.g5d30c73bfb-goog
 

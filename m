@@ -2,148 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922CC4C57FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 21:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DCC4C57FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 21:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiBZU2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 15:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S229586AbiBZUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 15:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiBZU2g (ORCPT
+        with ESMTP id S229578AbiBZUbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 15:28:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050643ADE;
-        Sat, 26 Feb 2022 12:28:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=9yCcSGVYN3jLB7eJbP2OW/SZZ9s+/VmmHUtUePxZZew=; b=KQracF7UT2+2lVsCGP4/4gnqHh
-        y1qif2Yv++GeyzOY/D/0H13vrs4I4WQN6WbY/U/vP7bkECgz1Z+qs6lnM71dc6UQS0GIsUyb5WS59
-        Je0aey7gbY/GRxAbTAzlmp8w98YpFaAy9Mb3sjNuZRSWyVqZXz5H9+vNO0WSvH/lvOoXUgyS0dFLV
-        1+pEbKIlBt+FwAQq4/LAv/z93LctaIJ/cxJSWUSvDxQKmcf6iC1ELaFDdbz5zoxsaML9ZGcZVFkS5
-        rJCoM0E+eaSgpJPZpDEzTp90pIk3UfqwQNZ01w1jD+I8Q16o1eTVOTFfRrGAFrstZCC/kPTfA6MBw
-        t6S0IFig==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nO3fS-008UKJ-4C; Sat, 26 Feb 2022 20:27:50 +0000
-Date:   Sat, 26 Feb 2022 12:27:50 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, Petr Mladek <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate
- file
-Message-ID: <YhqNRoEgIaoplF9b@bombadil.infradead.org>
-References: <20220222141303.1392190-1-atomlin@redhat.com>
- <20220222141303.1392190-10-atomlin@redhat.com>
- <YhieKf9EcS3GQSXG@alley>
- <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu>
- <YhisWkgZCK8dz5fl@alley>
- <CANfR36gsRw26C3M0hXGGK2w_05pC0rzkhg0-3Q+8tr_XxLiqiw@mail.gmail.com>
- <CANfR36iKJ6pHU5gm3HKqTPZ=FGsC5qX316UKt2sN0aMFEODA9w@mail.gmail.com>
- <aad10c3f-ecaf-c8fb-f1c6-81ba6f1c4f8d@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aad10c3f-ecaf-c8fb-f1c6-81ba6f1c4f8d@csgroup.eu>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 26 Feb 2022 15:31:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD64241502
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 12:30:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E88CC60FE6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51FDCC340E8;
+        Sat, 26 Feb 2022 20:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645907428;
+        bh=ff3bi4g41RKRKYz5tIpQPfp57Ad0O9hUyF5WfiL6vfA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tiZDhmR3RlXCgTl3nUWnxQZQL6slt1wkpi9Ir3Oa5Y3NalfXV8Am7vO/AkxfBGu0T
+         e2jcB5KDxlVpVORoeQfWmZlpqBUC7oLITG1Frf7h2UgpWCwQNZuJ8tLglgR9SSiZdZ
+         Q1OGZm76dgiakNT5kYg/qIxBRatghjwGh98oUG2GjJXb1eWQop8fo8pr54tuy+LL9x
+         PmuSMn3JS2rBYuR7ZkN1/mTGVGHlQZnjuDPoayxTkDFDFUt+hw1GlNZMHVa4fcvT5B
+         EYTYHOrvXGG6/nYS9TNjcSGTIC6lq9wVvYowGLQ2HDW1Y9hEbDAxsFUu+3Iv6imCMw
+         d8UEAUBKpL6tQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40C39E6D3DE;
+        Sat, 26 Feb 2022 20:30:28 +0000 (UTC)
+Subject: Re: [GIT PULL] memblock: memblock: use kfree() to release kmalloced
+ memblock regions
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YhnYeoIbwkEy1ryt@kernel.org>
+References: <YhnYeoIbwkEy1ryt@kernel.org>
+X-PR-Tracked-List-Id: <linux-mm.kvack.org>
+X-PR-Tracked-Message-Id: <YhnYeoIbwkEy1ryt@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2022-02-26
+X-PR-Tracked-Commit-Id: c94afc46cae7ad41b2ad6a99368147879f4b0e56
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e41898d2ba51ef2e8e81fb905c1eaa958aec830a
+Message-Id: <164590742825.22632.11817441511132841934.pr-tracker-bot@kernel.org>
+Date:   Sat, 26 Feb 2022 20:30:28 +0000
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 12:57:34PM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 25/02/2022 à 13:21, Aaron Tomlin a écrit :
-> > On Fri 2022-02-25 10:27 +0000, Aaron Tomlin wrote:
-> >> On Fri 2022-02-25 11:15 +0100, Petr Mladek wrote:
-> >>> rcu_dereference_sched() makes sparse happy. But lockdep complains
-> >>> because the _rcu pointer is not accessed under:
-> >>>
-> >>>      rcu_read_lock_sched();
-> >>>      rcu_read_unlock_sched();
-> >>
-> >> Hi Petr,
-> >>
-> >>>
-> >>> This is not the case here. Note that module_mutex does not
-> >>> disable preemtion.
-> >>>
-> >>> Now, the code is safe. The RCU access makes sure that "mod"
-> >>> can't be freed in the meantime:
-> >>>
-> >>>     + add_kallsyms() is called by the module loaded when the module
-> >>>       is being loaded. It could not get removed in parallel
-> >>>       by definition.
-> >>>
-> >>>     + module_kallsyms_on_each_symbol() takes module_mutex.
-> >>>       It means that the module could not get removed.
-> >>
-> >> Indeed, which is why I did not use rcu_read_lock_sched() and
-> >> rcu_read_unlock_sched() with rcu_dereference_sched(). That being said, I
-> >> should have mentioned this in the commit message.
-> >>
-> >>> IMHO, we have two possibilities here:
-> >>>
-> >>>     + Make sparse and lockdep happy by using rcu_dereference_sched()
-> >>>       and calling the code under rcu_read_lock_sched().
-> >>>
-> >>>     + Cast (struct mod_kallsyms *)mod->kallsyms when accessing
-> >>>       the value.
-> >>
-> >> I prefer the first option.
-> >>
-> >>> I do not have strong preference. I am fine with both.
-> >>>
-> >>> Anyway, such a fix should be done in a separate patch!
-> >>
-> >> Agreed.
-> > 
-> > Luis,
-> > 
-> > If I understand correctly, it might be cleaner to resolve the above in two
-> > separate patches for a v9 i.e. a) address the sparse and lockdep feedback
-> > and b) refactor the code, before the latest version [1] is merged into
-> > module-next. I assume the previous iteration will be reverted first?
-> > 
-> > Please let me know your thoughts
-> > 
-> > [1]: https://lore.kernel.org/all/20220222141303.1392190-1-atomlin@redhat.com/
-> > 
-> 
-> I would do it the other way: first move the code into a separate file, 
-> and then handle the sparse __rcu feedback as a followup patch to the series.
+The pull request you sent on Sat, 26 Feb 2022 09:36:26 +0200:
 
-I want to avoid any regressions and new complaints, fixes should be
-submitted before so that if they are applicable to stable / etc they
-can be sent there.
+> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2022-02-26
 
-> Regarding module-next, AFAICS at the moment we still have only the 10 
-> first patches of v6 in the tree. I guess the way forward will be to 
-> rebase module-next and drop those patches and commit v9 instead.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e41898d2ba51ef2e8e81fb905c1eaa958aec830a
 
-Right, I'll just git fetch and reset to Linus' latest tree, so I'll drop
-all of the stuff there now. And then the hope is to apply your new fresh new
-clean v9.
+Thank you!
 
-Thanks for chugging on with this series!
-
-  Luis
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

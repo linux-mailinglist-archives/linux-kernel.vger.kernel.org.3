@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2AB4C586C
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 23:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B570E4C5868
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 23:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiBZWCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 17:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiBZWCE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229819AbiBZWCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 26 Feb 2022 17:02:04 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8C727144E
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:29 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229782AbiBZWCB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 26 Feb 2022 17:02:01 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128B81AE662
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:27 -0800 (PST)
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C989F40017
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 22:01:24 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5CBF33FCA7
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 22:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645912884;
-        bh=xV/5bMwc5qAM+A4IvuW3pBdozLYDEc1r9Q3hw04Dixk=;
+        s=20210705; t=1645912885;
+        bh=FAnUY3DfJ5M1qZcbwfAjnLrPQZIrehzFU3WzcGW4NPY=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=VE/fUGW0KSTweZ7t4JsHvA44LFSfo4TuDaPbM17ddbeM68k1XP3AQ3ZQSudhKZ3de
-         zZC7SfLvTjAW587xOLRwDAIAiRvxBaWC3Y9ADaB9QSzIzXYGH6wThPXkqkQI7t2cgw
-         TxKLwuCsP4gUQI9sz0xsNo7CwnyXEYrdte0SuNgQAciInQFh9ByOmOCpILUbtApV4o
-         A9EcbEGLxfCKOPaCL5Euwup9NQZm84p83W9dfXx9Eaxn0TFKadPunD7OzlSgdvfJ4u
-         oHwPGNDP43v95OCuyKDkmk3BVMwLs8+JdS9Jj7Nn1g9M+fPxEx50TtiGl2UljTUGlS
-         JsgFFOk8SleWA==
-Received: by mail-ed1-f70.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso3427103edh.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:24 -0800 (PST)
+        b=CPY8LzLDrC/HrjuEx8cmKTddpcMv7irPqA5I8Bp6hAFpRzRG8pGrB/XoKXHKSp72O
+         KIABgInSvRinotthkVisWR3wiSXHBbhMFwePMiahoUOi3qoDmBZDvyqv/g5t4jxAor
+         FHF0fCuVLoEJvHnacj4ARHvcfY9684yARApb59Ar0WjRrnzh40zk+BcDZ6TeqYU7Jn
+         8d+71v/gZpjoaL0mdfJjeRTMEpx6rHZBYcIzmwd+uQC3Nr+uW+zfY3jX0a7z2C/SRB
+         QPZMcEwnWb2OnlZ+wcBweSeAxmiQ3N7mDM9EkKHLh/mc6Oav/Yfzcr+IvsVWqDBb3R
+         NLn4vZ9JOQP3A==
+Received: by mail-ed1-f70.google.com with SMTP id eg48-20020a05640228b000b00413041cd917so3412678edb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 14:01:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xV/5bMwc5qAM+A4IvuW3pBdozLYDEc1r9Q3hw04Dixk=;
-        b=dfGcr6lUHhKlUsKSI9UFQqVXxkpPvFlcFp55kln8XsL7TRsK4evsuw8EX0pqy49iY0
-         L2qqXaEXaQeQooRG9T0gu6fj1+s8deNi0n1Tcws7ypfnFLhmWCEdv9F3XrH4jJ9l94iu
-         AahuxmmenQwEwDvN3wDQmRzM4o8DXXhbVoufSh8GCX/h8D499l/6TWTN3q0iQdikiPzj
-         3Qx3yP03jODecFLqgsD61aCA1d5YTyWwZSJobvc1nQakbvS0F67mmz1E7bBnUhLuGY5H
-         +kxHWxzaBgG7sq5UvCai/8SSyUn2TEpJpVI1CZUFUQFTcHi5l8GFbicyp/vdmmwC1Pw4
-         L90g==
-X-Gm-Message-State: AOAM530glqZdzuYgdE5ob7KKSS9piUMSiHPPlZGF54ReuCEZFbIPXgX3
-        k4+500lmaIe9ZDuAepXZ/M7ZSI9YxKXQFBlb37ufgGYg6sllR6+yjks9pnBnY/VcHtWRjDajiDw
-        Nb+CQRUh4aQablSPPHOakfAxD/H13bjWlZB/aMB0YCQ==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr10407901ejg.413.1645912883765;
-        Sat, 26 Feb 2022 14:01:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxs93C93YzMJrP3OiKQ/sgLNFsaAgYmkcNTN7UpTw7SIF6jbShVHGKqvZnBavwKBdlkJ/mhZw==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr10407892ejg.413.1645912883577;
-        Sat, 26 Feb 2022 14:01:23 -0800 (PST)
+        bh=FAnUY3DfJ5M1qZcbwfAjnLrPQZIrehzFU3WzcGW4NPY=;
+        b=6+mE1gKYOL3lsr+3S3f8YvwtAs7IvesAI5Vtajm/gWFudxLsBlvnlaA1GI1zjKODlJ
+         ksGrIYhw9Sz0IYvIeuzQLOM6CJW5ZJ16tO8QC1dEA5vCOV/Kgc1AXDALF+sAO3k9isTb
+         0IzpCMLzup03a+VhAJbd3b0qfSNu/fMZuKgwy0IjOlcrAWWq7KhHrf5NkeoSmBuM6Leh
+         Ho2R9TFkyDkBPM1sq3bGWj0UWf9OQGg/Qm2NlTZXlI/rMQh5iiiKQmJU+mQr0q6CG8RA
+         R2B11HcjqsohJBTxySQwpVxegpv0JikP1cQd4zHpBhy4RJTINDLq9vLOLrlM83wu0maY
+         pyww==
+X-Gm-Message-State: AOAM533Wbk5mWAMKAXsQpQ+pcfzxHgTnVOPKxUhQxAGEMraAcnugkJ7W
+        3CYBoG9R3ty1bi+FrqOEJiuvc9yIMU0un044aazIoAHIE0ptuiIYuXSC5Lxo3D2zndLg2hFIXoo
+        dV5CXfpMGBkTkMjC4oso5j8w6wzLevuoZuGP6bJJjqQ==
+X-Received: by 2002:aa7:d415:0:b0:410:a0fa:dc40 with SMTP id z21-20020aa7d415000000b00410a0fadc40mr12768959edq.46.1645912885063;
+        Sat, 26 Feb 2022 14:01:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJywqQ9pXRrzKzKSQQBjqQxtTf/L4gU2wppPf0iq4G4eucek0Gvb/L4v1UJzCEwf47xTWZi0Ig==
+X-Received: by 2002:aa7:d415:0:b0:410:a0fa:dc40 with SMTP id z21-20020aa7d415000000b00410a0fadc40mr12768937edq.46.1645912884877;
+        Sat, 26 Feb 2022 14:01:24 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id s2-20020a056402014200b0041285556b7csm3497424edu.72.2022.02.26.14.01.22
+        by smtp.gmail.com with ESMTPSA id s2-20020a056402014200b0041285556b7csm3497424edu.72.2022.02.26.14.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 14:01:22 -0800 (PST)
+        Sat, 26 Feb 2022 14:01:23 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         arm@kernel.org, soc@kernel.org
@@ -65,9 +65,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 2/3] arm64: dts: samsung: Second round for v5.18
-Date:   Sat, 26 Feb 2022 23:01:15 +0100
-Message-Id: <20220226220116.13452-2-krzysztof.kozlowski@canonical.com>
+Subject: [GIT PULL 3/3] ARM: samsung: mach/soc for v5.18
+Date:   Sat, 26 Feb 2022 23:01:16 +0100
+Message-Id: <20220226220116.13452-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220226220116.13452-1-krzysztof.kozlowski@canonical.com>
 References: <20220226220116.13452-1-krzysztof.kozlowski@canonical.com>
@@ -85,47 +85,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On top of previous pull request.
+There was no mach/soc pull before, so on top of master.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit a0d5455330ece6f50ddf9e71d530f91c302803e9:
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-  arm64: dts: exynos: adjust USB DRD clocks with dtschema in Exynos7 (2022-02-01 09:17:16 +0100)
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.18-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.18
 
-for you to fetch changes up to 06874015327ba7bf6aae49ca825a492a2679237f:
+for you to fetch changes up to e465ea5cc05d1d0b45c315fca0254bd2ee04b661:
 
-  arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC (2022-02-23 14:08:04 +0100)
-
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v5.18, part two
-
-1. Minor fixes and cleanups in newly introduced support for Exynos850.
-2. Add basic support for Exynos7885 and  Samsung Galaxy A8 (2018):
-   SM-A530F.
+  dt-bindings: soc: samsung: usi: refer to dtschema for children (2022-02-12 17:34:48 +0100)
 
 ----------------------------------------------------------------
-David Virag (1):
-      arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC
+Samsung mach/soc changes for v5.18
 
-Krzysztof Kozlowski (3):
-      arm64: dts: exynos: drop incorrectly placed wakeup interrupts in Exynos850
-      arm64: dts: exynos: align pinctrl with dtschema in Exynos850
-      arm64: dts: exynos: use dedicated wake-up pinctrl compatible in Exynos850
+1. Fix hang of secondary CPU bring-up on some of Exynos5420-based
+   devices (Secure Monitor Call SMC_CMD_CPU1BOOT should be skipped for
+   all Exynos5 devices).
+2. Extend Universal Serial Interface DT schema to precisely describe
+   children nodes.
 
- arch/arm64/boot/dts/exynos/Makefile                |   9 +-
- .../boot/dts/exynos/exynos7885-jackpotlte.dts      |  92 +++
- arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi | 855 +++++++++++++++++++++
- arch/arm64/boot/dts/exynos/exynos7885.dtsi         | 423 ++++++++++
- arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi  |  56 +-
- arch/arm64/boot/dts/exynos/exynos850.dtsi          |  44 +-
- 6 files changed, 1405 insertions(+), 74 deletions(-)
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
+----------------------------------------------------------------
+Henrik Grimler (1):
+      ARM: exynos: only do SMC_CMD_CPU1BOOT call on Exynos4
+
+Krzysztof Kozlowski (1):
+      dt-bindings: soc: samsung: usi: refer to dtschema for children
+
+ .../devicetree/bindings/soc/samsung/exynos-usi.yaml  | 20 ++++++++++----------
+ arch/arm/mach-exynos/firmware.c                      |  4 +++-
+ 2 files changed, 13 insertions(+), 11 deletions(-)

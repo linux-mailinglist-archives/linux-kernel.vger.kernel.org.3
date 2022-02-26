@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FA04C531B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 02:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3062C4C5320
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 02:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiBZBoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 20:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S229501AbiBZBqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 20:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiBZBoK (ORCPT
+        with ESMTP id S229518AbiBZBqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 20:44:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7658673DC;
-        Fri, 25 Feb 2022 17:43:32 -0800 (PST)
+        Fri, 25 Feb 2022 20:46:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9BE24DED4;
+        Fri, 25 Feb 2022 17:45:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5685FB81F83;
-        Sat, 26 Feb 2022 01:43:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC8CBC340E7;
-        Sat, 26 Feb 2022 01:43:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E32B961E0E;
+        Sat, 26 Feb 2022 01:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A11A8C340E7;
+        Sat, 26 Feb 2022 01:45:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645839810;
-        bh=V9ttdSjn6UUrGKE25w061dNm0P8WHEsABbEFmKTz3Js=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hulgvFrh2VmT00A49MRB2U0nfcnyj7Ke0PuJUSbPOTOG46n6juiAkt+2cBvBoy2V6
-         Ub00ivENz41Ha/Vqo/0R0SOiawbNZbpRz5bGYUiim8rOhniX7gM+i521hGlOP4lEOX
-         ODuGM7kxKvbrNyDBr1iw5L2l5cU8ahiJmzTrCHKDBV4lfm9/PUmimrvDOf8Zv16y+o
-         rqdLfuh/C89kYzC1KZmp9oSJIhpkrnxLRf9v50mszQbRAvHCv9TZjkMILnydIa7m8B
-         Ik77s1cqU/+ndpcQehgqeJ+GvqajKP+6+/kXWQvG/nBJ7WpS+q0sQl5/8Bm6ftCcgE
-         8A5cSEBiWk/nw==
-Date:   Sat, 26 Feb 2022 01:43:24 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>
-Subject: Re: mmotm 2022-02-23-21-20 uploaded
-Message-ID: <YhmFvOb9kE3P8FTC@sirena.org.uk>
-References: <20220224052137.BFB10C340E9@smtp.kernel.org>
- <20220223212416.c957b713f5f8823f9b8e0a8d@linux-foundation.org>
- <Yhg60P06ksKTjddP@sirena.org.uk>
- <20220224223701.4dd5245b08feb3e85a1be718@linux-foundation.org>
+        s=k20201202; t=1645839952;
+        bh=DeJ/glawEIhByI9KS72jBTvIlHhNmoRRcqULEJRM5W8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ohlHvMUXkd6zPwQlxgVVutQwpW3UAlCnSNqvHPujku1JleXYx1J/ulKR80zgLVkVD
+         rHDbsvTVYozJXmCiMcuM0gubfBwZU0knSUu3Uk2mzQbXl+JTQPz+Sq6+i39yiLtZuo
+         ccmG9ofowSwI5/kPY6ZxEfUKd84x+eFVUtD3H0Xpg9x6KM9wE/3MX537EH4l9VBkZk
+         UAAiYBlZWEnnhME6WMPiKDddMwlEEnFWidqJd9qcdGoZWi4/M2K6Q6GwkYRDfdDdwi
+         R9lc8KYHL5rFbLWeCYHvuFP7iNSM8ZXQA8czqkRPtUJoDz39Wvz2DN2Yh5QA2GwLro
+         yFauBZAblm79Q==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Feb 25
+Date:   Sat, 26 Feb 2022 01:45:48 +0000
+Message-Id: <20220226014548.302603-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oRzq/BJu9ALQxAcc"
-Content-Disposition: inline
-In-Reply-To: <20220224223701.4dd5245b08feb3e85a1be718@linux-foundation.org>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
---oRzq/BJu9ALQxAcc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You will be relieved to know that Stephen is due back on Monday.
 
-On Thu, Feb 24, 2022 at 10:37:01PM -0800, Andrew Morton wrote:
+Changes since 20220224:
 
-> And today's fix-all-the-rejects patch is below that.
->=20
-> I'll upload all this in 2 secs...
+The at91 tree gained a build failure, I used the version from yesterday.
 
-Thanks, this (together with the update for Maple) have helped things go
-a lot smoother today.
+The drm tree gained multiple conflicts against the drm-fixes tree.
 
---oRzq/BJu9ALQxAcc
-Content-Type: application/pgp-signature; name="signature.asc"
+The drm tree gained a build failure, I used the version from yesterday.
 
------BEGIN PGP SIGNATURE-----
+The drm-intel tree gained a conflict against the drm-intel-fixes tree.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIZhbsACgkQJNaLcl1U
-h9DoJAf/Q3KW1y3Keb7BH7/UU6H3GId65zUoIsYSikXJO1pHm/URBg2CKT4K4gek
-/mYxmFMAsPcGK8KhZdGI+90jEE0rSgbjdFnn4B0tMBpbboPFOtbgffTpLfgMske0
-qobBIiM5rhM4tSO22RcAFmjtFSl/DvsJdTo0lb1aFQbxJQYpD3c/i1y9mdjT2cZR
-VRY8lzAyicZZzZ4ahbttwi0isQuSSI0En6PEWTNGenmZjNWGjHZYx93eOolPGRLS
-zos3RHbTK63I8LU5JCbKXMmtVCMavUAINrq0cBnu9Wh+TZHH2gweI/+IOorET2BY
-WkbMSoxOYnf7rsie4cUAoLGeKt6/Hw==
-=uRx5
------END PGP SIGNATURE-----
+The char-misc tree gained a build failure, I used the version from
+yesterday.
 
---oRzq/BJu9ALQxAcc--
+The extcon tree gained a conflict with the battery tree.
+
+The folio tree gained a conflict with the maple tree.
+
+The execve tree was added.
+
+Non-merge commits (relative to Linus' tree): 8105
+ 8307 files changed, 918091 insertions(+), 229603 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by builds
+for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
+and arm64 and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 347 trees (counting Linus' and 93 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

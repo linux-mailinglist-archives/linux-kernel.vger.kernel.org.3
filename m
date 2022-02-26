@@ -2,172 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73A54C5627
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 14:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856354C562D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 14:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiBZNcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 08:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S230488AbiBZNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 08:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiBZNcQ (ORCPT
+        with ESMTP id S230151AbiBZNvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 08:32:16 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A66865D39
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 05:31:31 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id q17so11068431edd.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 05:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=vFTjJiHGJM/FRxpTUAc+ZEjBxdNeuAkjjy0Iu6vBYo8=;
-        b=KX92MCr9ks85Ff0eYqPso+nM2TCbxXZbm9e3Y5G87Qw3JzHI4R+/D/7wXcw4Wpq9bX
-         r0yD2UtYGBDBY5DCONqaFaRHM3MC18EGUr6S77NPoIl2TgONFwCUwrVO0adY4WiEVSYS
-         jHz8b9DqtiHb64vVD+hW2pDh2aL8Y/MapZdCx+AqWYEujD2f7dSUkyg98U8Pfzas1srm
-         B92y089s8w1NvbWia57RXESjv3dWCcqPdram+tdn9cSsezLlvH0ieRHjRZ5gKPTtUNJa
-         5Yjm36o7NTrVc9U+XiM9L9tiuduBNp/kiOgugHw0Ru/0fwWGeRhAINyTqT7R2wD1xGRk
-         dHZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=vFTjJiHGJM/FRxpTUAc+ZEjBxdNeuAkjjy0Iu6vBYo8=;
-        b=NuyJ0X4l460AHWHrJNrR6dBlrIg/3BH6SDoooV9sUj4EV5axxR0O/Ige+1azd1YZCM
-         YciMByc/+8CARlf6BkxTxutaqV3KtQUiEKLgQ/uBIoc20nlBFH4ykHS/8CjDci5DW4EL
-         /kfYHhLzmHmrHO8Tqf4LPFQBVTkXZuvKM1M5DmFCotS9Q8A819ime7nltcc5IVkCqBaJ
-         i6tp9s+FIfDJG6ITcCX10jqiVpJOb15pbuIeyf1L9tAFiGYschYh/Rt6G0dgt/pVooX5
-         UhSC6ETj9jFqLW+3xcFPDcBxXl7qx18o/EQ2cMtobW0wsE3zq3H5UPCYgxrPIuuPz3iS
-         qPeQ==
-X-Gm-Message-State: AOAM531gRuPndWMD42xBtDyjZBfteMiMA/JdmzmEXWMmuPcnwNOn/ZLf
-        AENoPyV0EJuBbIyuZQs+NffD0q0Wy234ZeCSnyg=
-X-Google-Smtp-Source: ABdhPJyVruIzyl5laUhDiYEEFI2rXup7xukvDhuenZuzSGOPs4W3oYM2EBI7WHzXA6b+HWGeZEHEbl2JeLLnwRG3xE4=
-X-Received: by 2002:aa7:d694:0:b0:410:d89a:656e with SMTP id
- d20-20020aa7d694000000b00410d89a656emr11733587edr.402.1645882289988; Sat, 26
- Feb 2022 05:31:29 -0800 (PST)
-MIME-Version: 1.0
-Sender: groupcompanyltd2001@gmail.com
-Received: by 2002:a17:906:505:b0:6d0:8c9d:7ab4 with HTTP; Sat, 26 Feb 2022
- 05:31:29 -0800 (PST)
-From:   Ministere Desfinances <ministeredesfinances405@gmail.com>
-Date:   Sat, 26 Feb 2022 05:31:29 -0800
-X-Google-Sender-Auth: Q7t2PWPgKsJeRp6kJaFrTcw86Ao
-Message-ID: <CAFkacvSQRj62M_vhj0BsCeqzX1OpfxPGWTtRMLcy_QNwKJ1fsQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_FILL_THIS_FORM_FRAUD_PHISH,T_FILL_THIS_FORM_SHORT,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:531 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [groupcompanyltd2001[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [groupcompanyltd2001[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 T_FILL_THIS_FORM_FRAUD_PHISH Answer suspicious question(s)
-        *  1.1 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.3 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.5 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+        Sat, 26 Feb 2022 08:51:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AFA1CD7C5
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 05:50:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6768B80758
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 13:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 278F8C340E8;
+        Sat, 26 Feb 2022 13:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645883432;
+        bh=34GurLcP5KpCxF5cc8IXMmCOW1f2j7EERjP4u1ZxciU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iY3iVwCxIbJC0rK9Lr4pk7TWAJstzTSpUaZzzzbsrIKRGxO5iyE5Cd+f4GxQe8G3I
+         h3/Xf+Ci2IODOueWyeFALQ9B2oAqh0Fb6N0h0vHbIUX5CXgmBf2G/CzTaPNpQjb6S5
+         RkG3TfiwMCQfP7xgdG4XFI2r97dsSLt5V1DVYTgEcHAOpCUvGv1TnJ1zo6GMK2eYai
+         YVdkK9eop9RxdHlmgPW4LP8yWFScDiHW7AEf0+BsWEkZ5hE1vgsUYalmPVB4gmk17v
+         OsyAy6jk5Qwaj1KSCgEzDrM0E2CbT4DkqIyMyCdIZMYgzX3ybwI3pUO3KJfqb3zBkH
+         N32J4UDqOhuQw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nNxSv-00Ak9P-Ox; Sat, 26 Feb 2022 13:50:30 +0000
+Date:   Sat, 26 Feb 2022 13:50:28 +0000
+Message-ID: <871qzp7n4r.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linu Cherian <lcherian@marvell.com>
+Cc:     <tglx@linutronix.de>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+In-Reply-To: <20220226123332.29988-1-lcherian@marvell.com>
+References: <20220226123332.29988-1-lcherian@marvell.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: lcherian@marvell.com, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuc.decode@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention Dear Beneficially
+On Sat, 26 Feb 2022 12:33:32 +0000,
+Linu Cherian <lcherian@marvell.com> wrote:
+> 
+> When a IAR register read races with a GIC interrupt RELEASE event,
+> GIC-CPU interface could wrongly return a valid INTID to the CPU
+> for an interrupt that is already released(non activated) instead of 0x3ff.
+> 
+> As a side effect, an interrupt handler could run twice, once with
+> interrupt priority and then with idle priority.
+> 
+> As a workaround, gic_read_iar is updated so that it will return a
+> valid interrupt ID only if there is a change in the active priority list
+> after the IAR read on all the affected Silicons.
+> 
+> Along with this, Thunderx erratum 23154 is reworked to use GIC IIDR
+> based quirk management for the sake of consistency and also
+> because there is workaround overlap on some silicon variants.
+> 
+> Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> ---
+>  Documentation/arm64/silicon-errata.rst |  4 +-
+>  arch/arm64/Kconfig                     | 10 -----
+>  arch/arm64/include/asm/arch_gicv3.h    | 24 +++++++++--
+>  arch/arm64/kernel/cpu_errata.c         |  8 ----
+>  arch/arm64/tools/cpucaps               |  1 -
+>  drivers/irqchip/irq-gic-v3.c           | 56 +++++++++++++++++++++++++-
+>  6 files changed, 77 insertions(+), 26 deletions(-)
+> 
+> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> index ea281dd75517..f602faf4bf82 100644
+> --- a/Documentation/arm64/silicon-errata.rst
+> +++ b/Documentation/arm64/silicon-errata.rst
+> @@ -136,10 +136,12 @@ stable kernels.
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144        |
+>  +----------------+-----------------+-----------------+-----------------------------+
+> -| Cavium         | ThunderX GICv3  | #23154          | CAVIUM_ERRATUM_23154        |
+> +| Cavium         | ThunderX GICv3  | #23154          | N/A                         |
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
+>  +----------------+-----------------+-----------------+-----------------------------+
+> +| Cavium         | ThunderX GICv3  | #38545          | N/A                         |
 
+Cavium? Or Marvell? I can understand the identity crisis, but you
+should pick your poison. It also seem to affect the new TX2 rather
+than (or in addition to) the ancient TX.
 
-Nations (UN), European Union (EU) and FBI.We have been able to track
-down. Information from Nations (UN), European Union (EU) and FBI.We
-have been able to track down some scam artist in various parts of
-African countries which includes (Nigeria, Ghana and Senegal, cote
-d'ivoire Cotonou-Burkina Faso, South Korea and China - Burkina Faso)
+> ++----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX Core   | #27456          | CAVIUM_ERRATUM_27456        |
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX Core   | #30115          | CAVIUM_ERRATUM_30115        |
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 09b885cc4db5..889cb56bf5ec 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -890,16 +890,6 @@ config CAVIUM_ERRATUM_23144
+>  
+>  	  If unsure, say Y.
+>  
+> -config CAVIUM_ERRATUM_23154
+> -	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
+> -	default y
+> -	help
+> -	  The gicv3 of ThunderX requires a modified version for
+> -	  reading the IAR status to ensure data synchronization
+> -	  (access to icc_iar1_el1 is not sync'ed before and after).
+> -
+> -	  If unsure, say Y.
+> -
 
+This is starting really badly. Why make this config option disappear?
 
+This is both useful for documentation (in the absence of a public
+errata document from the silicon vendor, I *really* want to know what
+I am affected by) and for people who do not want their kernels to be
+encumbered by support for broken HW.
 
-They are all in Government custody now, they will appear at the
-International Criminal Court (ICC) soon for Justice. During the course
-of investigation, they were able to recover some funds from these scam
-artists and the IMF organization has ordered the funds recovered to be
-shared among the 100 Lucky people listed around the World as a
-compensation.
+I actually want to see a description of the *new* errata in Kconfig,
+warts and all.
 
+>  config CAVIUM_ERRATUM_27456
+>  	bool "Cavium erratum 27456: Broadcast TLBI instructions may cause icache corruption"
+>  	default y
+> diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
+> index 4ad22c3135db..bc98a60a4bcb 100644
+> --- a/arch/arm64/include/asm/arch_gicv3.h
+> +++ b/arch/arm64/include/asm/arch_gicv3.h
+> @@ -47,21 +47,37 @@ static inline u64 gic_read_iar_common(void)
+>  	return irqstat;
+>  }
+>  
+> -/*
+> +/* Marvell Erratum 38545
+> + *
+> + * When a IAR register read races with a GIC interrupt RELEASE event,
+> + * GIC-CPU interface could wrongly return a valid INTID to the CPU
+> + * for an interrupt that is already released(non activated) instead of 0x3ff.
+> + *
+> + * To workaround this, return a valid interrupt ID only if there is a change
+> + * in the active priority list after the IAR read.
+> + *
+>   * Cavium ThunderX erratum 23154
+>   *
+>   * The gicv3 of ThunderX requires a modified version for reading the
+>   * IAR status to ensure data synchronization (access to icc_iar1_el1
+>   * is not sync'ed before and after).
+> + *
+> + * Have merged both the workarounds into a common function since,
+> + * 1. On Thunderx 88xx 1.x both erratas are applicable.
 
+This is new. Are you saying that TX is also affected by this new bug?
+Experience doesn't seem to support this statement, but I am prepared
+to believe that this thing is even more broken than I thought.
 
-This notice has been directed to you because your email address was
-found in one of the scam Artists file and computer hard-disk during
-the investigation, maybe you have been scammed.
+Also, what is the story for virtualisation? Does the ICV interface
+suffer from the same bug? I can't see why not (23154 definitely
+affects virtualisation).
 
+> + * 2. Having extra nops doesn't add any side effects for Silicons where
+> + *    erratum 23154 is not applicable.
+>   */
+> -static inline u64 gic_read_iar_cavium_thunderx(void)
+> +static inline u64 gic_read_iar_marvell_38545_23154(void)
+>  {
+> -	u64 irqstat;
+> +	u64 irqstat, apr;
+>  
+> +	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
+>  	nops(8);
+>  	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
+>  	nops(4);
+> -	mb();
+> +	dsb(sy);
 
+mb() *is* a dsb(sy). Why the change?
 
-You are therefore being compensated with a sum of $ 2.2 Million US
-Dollars valid into an (ATM Visa Card). Even if you are now dealing
-with these nonofficial directors of the bank or any department always
-requesting money from you, you should STOP your communication with
-them and forward the details to our office so that we will help and
-recover your funds peacefully and illegally.
+> +	if (unlikely(apr == read_sysreg_s(SYS_ICC_AP1R0_EL1)))
+> +		return 0x3ff;
 
+So you are adding extra overhead to all TX platforms that did not
+require it. Why is that an acceptable outcome? If all platforms
+affected by 23154 are also affected by 38545, why are they treated
+independently with separate flags?
 
+>  
+>  	return irqstat;
+>  }
+> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> index b217941713a8..79beb800ee79 100644
+> --- a/arch/arm64/kernel/cpu_errata.c
+> +++ b/arch/arm64/kernel/cpu_errata.c
+> @@ -423,14 +423,6 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+>  		ERRATA_MIDR_RANGE_LIST(erratum_845719_list),
+>  	},
+>  #endif
+> -#ifdef CONFIG_CAVIUM_ERRATUM_23154
+> -	{
+> -	/* Cavium ThunderX, pass 1.x */
+> -		.desc = "Cavium erratum 23154",
+> -		.capability = ARM64_WORKAROUND_CAVIUM_23154,
+> -		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
+> -	},
+> -#endif
 
-Since your email address is among the lucky beneficiaries who will
-receive a compensation funds, we have arranged your payment to be paid
-to you through ATM VISA CARD and deliver to your postal address, as to
-enable you withdrawal maximum of $4,000 on each withdrawal from any
-Bank ATM Machine of your choice, until all the funds are exhausted.
+NAK. See below.
 
+>  #ifdef CONFIG_CAVIUM_ERRATUM_27456
+>  	{
+>  		.desc = "Cavium erratum 27456",
+> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+> index 9c65b1e25a96..3f751fe4fec4 100644
+> --- a/arch/arm64/tools/cpucaps
+> +++ b/arch/arm64/tools/cpucaps
+> @@ -62,7 +62,6 @@ WORKAROUND_2077057
+>  WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+>  WORKAROUND_TSB_FLUSH_FAILURE
+>  WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+> -WORKAROUND_CAVIUM_23154
+>  WORKAROUND_CAVIUM_27456
+>  WORKAROUND_CAVIUM_30115
+>  WORKAROUND_CAVIUM_TX2_219_PRFM
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 5e935d97207d..a3b58bf4fce4 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -35,6 +35,8 @@
+>  
+>  #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+>  #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
+> +#define FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154	(1ULL << 2)
+> +#define FLAGS_WORKAROUND_MARVELL_ERRATUM_38545	(1ULL << 3)
+>  
+>  #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+>  
+> @@ -60,6 +62,7 @@ struct gic_chip_data {
+>  
+>  static struct gic_chip_data gic_data __read_mostly;
+>  static DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
+> +static DEFINE_STATIC_KEY_FALSE(gic_iar_quirk);
+>  
+>  #define GIC_ID_NR	(1U << GICD_TYPER_ID_BITS(gic_data.rdists.gicd_typer))
+>  #define GIC_LINE_NR	min(GICD_TYPER_SPIS(gic_data.rdists.gicd_typer), 1020U)
+> @@ -235,10 +238,19 @@ static void gic_redist_wait_for_rwp(void)
+>  
+>  #ifdef CONFIG_ARM64
+>  
+> +static u64 __maybe_unused gic_read_iar_fixup(void)
+> +{
+> +	if (gic_data.flags & FLAGS_WORKAROUND_MARVELL_ERRATUM_38545 ||
+> +		gic_data.flags & FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154)
+> +		return gic_read_iar_marvell_38545_23154();
+> +	else /* Not possible */
+> +		return ICC_IAR1_EL1_SPURIOUS;
 
+Not possible? What does that even mean? And what is the point of
+gating things with a static key if you have to check again with an
+extra load?
 
-The package is coming from Ouagadougou, Burkina Faso. Don=E2=80=99t forget =
-to
-reconfirm your following information.
+> +}
+> +
+>  static u64 __maybe_unused gic_read_iar(void)
+>  {
+> -	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
+> -		return gic_read_iar_cavium_thunderx();
+> +	if (static_branch_unlikely(&gic_iar_quirk))
+> +		return gic_read_iar_fixup();
 
+You are trading a static key for another one describing... the same
+thing. What is the point?
 
+>  	else
+>  		return gic_read_iar_common();
+>  }
+> @@ -1614,6 +1626,16 @@ static bool gic_enable_quirk_msm8996(void *data)
+>  	return true;
+>  }
+>  
+> +static bool gic_enable_quirk_cavium_23154(void *data)
+> +{
+> +	struct gic_chip_data *d = data;
+> +
+> +	d->flags |= FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154;
+> +	static_branch_enable(&gic_iar_quirk);
+> +
+> +	return true;
+> +}
+> +
+>  static bool gic_enable_quirk_cavium_38539(void *data)
+>  {
+>  	struct gic_chip_data *d = data;
+> @@ -1623,6 +1645,16 @@ static bool gic_enable_quirk_cavium_38539(void *data)
+>  	return true;
+>  }
+>  
+> +static bool gic_enable_quirk_marvell_38545(void *data)
+> +{
+> +	struct gic_chip_data *d = data;
+> +
+> +	d->flags |= FLAGS_WORKAROUND_MARVELL_ERRATUM_38545;
+> +	static_branch_enable(&gic_iar_quirk);
+> +
+> +	return true;
+> +}
+> +
+>  static bool gic_enable_quirk_hip06_07(void *data)
+>  {
+>  	struct gic_chip_data *d = data;
+> @@ -1660,6 +1692,13 @@ static const struct gic_quirk gic_quirks[] = {
+>  		.iidr	= 0x00000000,
+>  		.mask	= 0xffffffff,
+>  		.init	= gic_enable_quirk_hip06_07,
+> +	},
+> +		/* ThunderX: CN88xx 1.x */
+> +	{
+> +		.desc	= "GICv3: Cavium erratum 23154",
+> +		.iidr	= 0xa101034c,
+> +		.mask	= 0xffff0fff,
+> +		.init	= gic_enable_quirk_cavium_23154,
+>  	},
+>  	{
+>  		/*
+> @@ -1674,6 +1713,19 @@ static const struct gic_quirk gic_quirks[] = {
+>  		.mask	= 0xe8f00fff,
+>  		.init	= gic_enable_quirk_cavium_38539,
+>  	},
+> +	{
+> +		/*
+> +		 * IAR register reads could be unreliable, under certain
+> +		 * race conditions. This erratum applies to:
+> +		 * - ThunderX: CN88xx
+> +		 * - OCTEON TX: CN83xx, CN81xx
+> +		 * - OCTEON TX2: CN93xx, CN96xx, CN98xx, CNF95xx*
+> +		 */
+> +		.desc	= "GICv3: Marvell erratum 38545",
+> +		.iidr	= 0xa000034c,
+> +		.mask	= 0xe0f00fff,
+> +		.init	= gic_enable_quirk_marvell_38545,
+> +	},
 
-1. Your Full Name:
+I love the fact that you are checking for a a *CPU interface* bug
+based on the *distributor* IIDR. What could possibly go wrong? Oh,
+don't worry, this only breaks... *all virtual machines*.
 
-2. Address Where You want us to Send Your ATM Card
+Puzzled,
 
-3. Cell/Mobile Number
+	M.
 
-4. Copy of your passport
-
-
-
-
-
-Yours in Services
-
-Mr. Jean Laurent Bonnafe
-
-MINISTERE DES FINANCES
-
-ET DE L=E2=80=99ECONOMIE (M.F.E)
-
-BURKINA FASO
+-- 
+Without deviation from the norm, progress is not possible.

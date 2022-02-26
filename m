@@ -2,79 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E384C5835
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE2B4C5837
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 22:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiBZVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 16:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
+        id S229697AbiBZVCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 16:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiBZVBk (ORCPT
+        with ESMTP id S229642AbiBZVCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 16:01:40 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB61DED4B;
-        Sat, 26 Feb 2022 13:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=msxU2UfcVFrwCj3eU5XFZoVOe7HH+NdjfV+cwoL/Fik=; b=yfQKckeHAJUkzcec9GpbN5u7v5
-        tt7t+WkvONdXeNDMT9gecLftrxF7SgByNdnwaiPKnHsbsvgxjdYak+WeNFloAOLrGcpUe8nuaz/Ur
-        eo3Kc2A3i15qlSLEByZ6uW5+OWy0H2QqMgWJNLJ6D5glFLloHSGkYDrW2aVBDXKZC9CSYpNmqIyjB
-        JrKzp6SQtMgaDnGLjrD6AMIRjbWqxTpOIyNeMsvLMviz+OI9FF7FgfO/PWimm1Ezng3aWoUBxsmtG
-        rRABOwL3FQU/4IS8uQ24Lbj8rpoL6y4m9BrG9jwGRmqgs5JdBRQSDAa6IjGfGKR4K3tZL4vNov1Sx
-        XQPBj4gw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nO4BR-008Xjj-IV; Sat, 26 Feb 2022 21:00:53 +0000
-Date:   Sat, 26 Feb 2022 13:00:53 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tangmeng <tangmeng@uniontech.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        yzaikin@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        nizhen@uniontech.com, zhanglianjie@uniontech.com,
-        nixiaoming@huawei.com, sujiaxun@uniontech.com
-Subject: Re: [PATCH 10/11] fs/drop_caches: move drop_caches sysctls to its
- own file
-Message-ID: <YhqVBcHRdctU65S/@bombadil.infradead.org>
-References: <20220220060626.15885-1-tangmeng@uniontech.com>
- <YhIokWPShGOYh9LK@casper.infradead.org>
- <cbc60b32-d69c-d848-ca4c-650016da65d3@uniontech.com>
- <YhWCOBqKc8xIylmT@bombadil.infradead.org>
- <8940d534-d6e5-0642-f145-67a323eb8092@uniontech.com>
+        Sat, 26 Feb 2022 16:02:22 -0500
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73C84D274;
+        Sat, 26 Feb 2022 13:01:45 -0800 (PST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1645909303; bh=PW8DryT1j0RzgBStJT0xURBoVehaZ5ACsqd1Obshzb4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tnfMQzdaAbFrK/sYeR7opT9i50S6djct2PY1a2sGRuK9NzCh3A7Co2H3LxSyoDhLR
+         a8hExqDlWfNwN8MErkoZzVNN10jVfkjkzSei3A2PYLDz1UqM+ayatBcmC+IIEmkoft
+         zhGwt01bgj/jOBgTsTfKC65uBSNdgMW8gCTszPQMO3Uf8XFAqr5ZInij1cM8L1vBsb
+         AWVCYhZC8i6dhuLeMy/9dHhqDFKTwVhBueA4UXIf3AuUixl5ojtQf97YaCVGhEu8gz
+         by/52VZ08W3PnpJLs0Vs33SflZKBS8prsv7MGQuOtmkAglYPeKoHgP1s3e8CJKR1kC
+         Ae4U/Y/PJmHHg==
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ath9k: make array voice_priority static const
+In-Reply-To: <20220222121749.87513-1-colin.i.king@gmail.com>
+References: <20220222121749.87513-1-colin.i.king@gmail.com>
+Date:   Sat, 26 Feb 2022 22:01:41 +0100
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87czj9uytm.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8940d534-d6e5-0642-f145-67a323eb8092@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 05:51:33PM +0800, tangmeng wrote:
-> On 2022/2/23 08:39, Luis Chamberlain wrote:
-> > 
-> > Since you are following up on more changes, can you work on this?
-> > Brownie points if you show size results to refelct no size difference
-> > based on a new build with an example new user.
-> > 
-> 
-> I'm going work on this, but I think it may take some times to get it done.
+Colin Ian King <colin.i.king@gmail.com> writes:
 
-Thanks and good stuff! Can you please then make that the focus of your
-first set of patches, and then respin this series by collecting all
-ACKs, Reviwed-bys? Yes please send a new v3 series for it. While at it
-please Cc the other folks doing sysctls changes so they are aware of
-this.
+> Don't populate the read-only array voice_priority on the stack but
+> instead make it static const. Also makes the object code a little
+> smaller.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Thanks!
-
-  Luis
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>

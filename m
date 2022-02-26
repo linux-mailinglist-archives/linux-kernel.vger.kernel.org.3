@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031FB4C56B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 16:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376C24C56C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 17:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiBZP7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 10:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S232280AbiBZQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 11:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiBZP7i (ORCPT
+        with ESMTP id S232265AbiBZQBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 10:59:38 -0500
+        Sat, 26 Feb 2022 11:01:42 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7006179257
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 07:59:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56F85179265
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 08:01:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645891142;
+        s=mimecast20190719; t=1645891267;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=Grhy4tvGVEY5R3BS2D+G2b4sVPmyn1TwoVnElYjF3HA=;
-        b=Ipku3yC4aCig8NgOKZ8/63iSE4nGmfoSLjuxW1bqxPDZvEpcUr+c6qF0mxWMUkbqXLfsuc
-        guDBKWK5pxhU5hj1i70wQJbBtUQpJsXXophs38njDH3QwCr55RAlU2bri4kayousVUgupD
-        o8gHsH6gX7egUXuZwNeGy+Kv4fcMFEg=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qCqINOQynquBVH+X40kSOhFUiEBHFu+5I+8mTF3ybnI=;
+        b=LCVA4Os2Ja2VC7vwXgVF9+It/eh16cP3PnlxyUCTLM1lQkcYMXFHwKs6Tr8GYrNF4hAXrK
+        D7U26m/sl7AEU7c3v6VxerpK2uxHn/wW+2tNggIg8y+MEvlicDYOZ3z0ADsdninoZPP+IJ
+        /aNLtgW9gL1w7I9SiVn8t/WfduuOWN4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-64-IUfESuxqPIa4Iee-FS37WA-1; Sat, 26 Feb 2022 10:59:01 -0500
-X-MC-Unique: IUfESuxqPIa4Iee-FS37WA-1
-Received: by mail-qv1-f69.google.com with SMTP id hu9-20020a056214234900b0042c4017aeb3so8058657qvb.14
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 07:59:01 -0800 (PST)
+ us-mta-582-epcjezo6OsulvytytK3P5A-1; Sat, 26 Feb 2022 11:01:06 -0500
+X-MC-Unique: epcjezo6OsulvytytK3P5A-1
+Received: by mail-qt1-f197.google.com with SMTP id a6-20020a05622a02c600b002dd2d38f153so4367578qtx.17
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 08:01:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Grhy4tvGVEY5R3BS2D+G2b4sVPmyn1TwoVnElYjF3HA=;
-        b=MZr870v/sth9oiLNd8AizZRC/7S0x0fy/Q2Y/W2BUf991Smnegjwxp9w5jcHgS/IMm
-         qKVHByI/GBJEaVnOGZKRo2gsXzbSRHfur8mKCb7hf3k7gCbbFKZbl6JbzgWsVnSVh8CC
-         qhe0Xu1ZqtOgCSxJ9xQ9Kinlr1TlT16zC9oH4ZHElzr8Iyn9/j/QD1Ldo1sQL4juwDlJ
-         1H+iyYmzKOSZqKMxccMYoymU76NRwaRWORNITE2iUqNOPnzbJV9vn36MX7KTqADN+mlG
-         qFzePiH7bDYCFJLBlSM6yAOjL5qb8XdkEeeNBMEr7ipvC2pPKKdVi/rT4xbw37a5nSr3
-         UmWw==
-X-Gm-Message-State: AOAM531zcQJDMO0in08Yvhl3cavWv02Ur1Sihas7lF9lSFXZLthNNF3I
-        dxDiCUrYuc6dIt5la+DfGGhzx3KrNDTiE++SNVfSteB9x/6sb7mp+ktMmluoU8770nkzYNIU/k6
-        iSIdXUs6qKdwevNEHrU8GsFwm
-X-Received: by 2002:a05:620a:122c:b0:47e:1445:15e8 with SMTP id v12-20020a05620a122c00b0047e144515e8mr7667248qkj.200.1645891141072;
-        Sat, 26 Feb 2022 07:59:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyep784W30LsjYckoKZZTZAqrxmyuQo5OmviyaAolfcaSK5XfS1laivNCE0UKTxjerrO/TlHg==
-X-Received: by 2002:a05:620a:122c:b0:47e:1445:15e8 with SMTP id v12-20020a05620a122c00b0047e144515e8mr7667237qkj.200.1645891140834;
-        Sat, 26 Feb 2022 07:59:00 -0800 (PST)
+        bh=qCqINOQynquBVH+X40kSOhFUiEBHFu+5I+8mTF3ybnI=;
+        b=ATDhhpO4ArWeBdIqL5rl53V6n8dlR+89+MIi4hobZQ8nn1DA5r1g8xAVWl25i0v+1T
+         1PWVCzFSa+IVsxoa6FzeadK04iUymKxFrjSeACH0/X9ZSCblGKtSQ3QbV/AheKtpBn4S
+         3V2sK8/71C+0nzW4gpxmWtzJlgZS08Prz+R8p8ROqpudo4XmZk1etP5kRwjSm3t9ywvy
+         aDF9PAB372FLL6W4ufVizIbS88R4xdXk+QnjoM+kNxHknxCq6VaEEkc1zMHSSQ889/Ou
+         UJk/afBv0bYtMMuzlwZfym3axeNzLu8ttm6N1mtoaLgUk62NFqbUQ7emkF0vlkegmy4l
+         mclw==
+X-Gm-Message-State: AOAM5339i/YaM3aoB1n0geOq4MBFmA9skfAAaprSGpEDSafB2Algu7Nl
+        vJdQyqpW28nC6GLEUyDaey+OSsh/hx+DGtI3fBPnFLk2zR5mKCshltjcv8DDgghUyf3cbnqBSpj
+        vP6WO0yVLs/yJGidR71fudVIE
+X-Received: by 2002:a05:6214:20a1:b0:42d:6f51:46e2 with SMTP id 1-20020a05621420a100b0042d6f5146e2mr9319672qvd.67.1645891265778;
+        Sat, 26 Feb 2022 08:01:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzrZuGlgdj4kgPM9qty3y9swpN5H03h3zppYgwnC6NM/6p/yilQ2qHIOt9Qulnvxtp1Jow/uw==
+X-Received: by 2002:a05:6214:20a1:b0:42d:6f51:46e2 with SMTP id 1-20020a05621420a100b0042d6f5146e2mr9319649qvd.67.1645891265477;
+        Sat, 26 Feb 2022 08:01:05 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05620a148900b005f188f755adsm2640064qkj.32.2022.02.26.07.58.58
+        by smtp.gmail.com with ESMTPSA id h19-20020a05620a245300b0047c5aec8cabsm2964991qkn.123.2022.02.26.08.01.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 07:59:00 -0800 (PST)
+        Sat, 26 Feb 2022 08:01:05 -0800 (PST)
 From:   trix@redhat.com
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        nathan@kernel.org, ndesaulniers@google.com, nirmoy.das@amd.com,
-        lijo.lazar@amd.com, tom.stdenis@amd.com, evan.quan@amd.com,
-        kevin1.wang@amd.com, Amaranath.Somalapuram@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+To:     ysato@users.sourceforge.jp, dalias@libc.org, geert@linux-m68k.org,
+        rmk+kernel@armlinux.org.uk, peterz@infradead.org,
+        keescook@chromium.org
+Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amdgpu: Fix realloc of ptr
-Date:   Sat, 26 Feb 2022 07:58:51 -0800
-Message-Id: <20220226155851.4176109-1-trix@redhat.com>
+Subject: [PATCH] sh: cleanup comments
+Date:   Sat, 26 Feb 2022 08:00:54 -0800
+Message-Id: <20220226160054.4176509-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,45 +78,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this error
-amdgpu_debugfs.c:1690:9: warning: 1st function call
-  argument is an uninitialized value
-  tmp = krealloc_array(tmp, i + 1,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+spdx, remove the extra '-'
 
-realloc will free tmp, so tmp can not be garbage.
-And the return needs to be checked.
+Replacements
+Defitions to Definitions
+highger to higher
+mechanizm to mechanism
+useable to usable
+presision to precision
 
-Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/sh/include/asm/addrspace.h      | 2 +-
+ arch/sh/include/asm/fixmap.h         | 6 +++---
+ arch/sh/include/asm/platform_early.h | 2 +-
+ arch/sh/include/asm/processor_32.h   | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-index 9eb9b440bd438..159b97c0b4ebc 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)file_inode(f)->i_private;
- 	char reg_offset[11];
--	uint32_t *tmp;
-+	uint32_t *tmp = NULL;
- 	int ret, i = 0, len = 0;
+diff --git a/arch/sh/include/asm/addrspace.h b/arch/sh/include/asm/addrspace.h
+index 468fba333e896..1fba671326890 100644
+--- a/arch/sh/include/asm/addrspace.h
++++ b/arch/sh/include/asm/addrspace.h
+@@ -2,7 +2,7 @@
+  *
+  * Copyright (C) 1999 by Kaz Kojima
+  *
+- * Defitions for the address spaces of the SH CPUs.
++ * Definitions for the address spaces of the SH CPUs.
+  */
+ #ifndef __ASM_SH_ADDRSPACE_H
+ #define __ASM_SH_ADDRSPACE_H
+diff --git a/arch/sh/include/asm/fixmap.h b/arch/sh/include/asm/fixmap.h
+index b07fbc7f7bc6a..5bb7e60ccc7b0 100644
+--- a/arch/sh/include/asm/fixmap.h
++++ b/arch/sh/include/asm/fixmap.h
+@@ -26,7 +26,7 @@
+  *
+  * these 'compile-time allocated' memory buffers are
+  * fixed-size 4k pages. (or larger if used with an increment
+- * highger than 1) use fixmap_set(idx,phys) to associate
++ * higher than 1) use fixmap_set(idx,phys) to associate
+  * physical memory with fixmap indices.
+  *
+  * TLB entries of such buffers will not be flushed across
+@@ -34,7 +34,7 @@
+  */
  
- 	do {
-@@ -1688,6 +1688,10 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
- 		}
+ /*
+- * on UP currently we will have no trace of the fixmap mechanizm,
++ * on UP currently we will have no trace of the fixmap mechanism,
+  * no page table allocations, etc. This might change in the
+  * future, say framebuffers for the console driver(s) could be
+  * fix-mapped?
+@@ -53,7 +53,7 @@ enum fixed_addresses {
+ #ifdef CONFIG_IOREMAP_FIXED
+ 	/*
+ 	 * FIX_IOREMAP entries are useful for mapping physical address
+-	 * space before ioremap() is useable, e.g. really early in boot
++	 * space before ioremap() is usable, e.g. really early in boot
+ 	 * before kmalloc() is working.
+ 	 */
+ #define FIX_N_IOREMAPS	32
+diff --git a/arch/sh/include/asm/platform_early.h b/arch/sh/include/asm/platform_early.h
+index fc802137c37d4..00b6e6dc4ac4a 100644
+--- a/arch/sh/include/asm/platform_early.h
++++ b/arch/sh/include/asm/platform_early.h
+@@ -1,4 +1,4 @@
+-/* SPDX--License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: GPL-2.0 */
  
- 		tmp = krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_KERNEL);
-+		if (!tmp) {
-+			ret = -ENOMEM;
-+			goto error_free;
-+		}
- 		if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) != 1) {
- 			ret = -EINVAL;
- 			goto error_free;
+ #ifndef __PLATFORM_EARLY__
+ #define __PLATFORM_EARLY__
+diff --git a/arch/sh/include/asm/processor_32.h b/arch/sh/include/asm/processor_32.h
+index 45240ec6b85a4..0ca85637c3b99 100644
+--- a/arch/sh/include/asm/processor_32.h
++++ b/arch/sh/include/asm/processor_32.h
+@@ -158,7 +158,7 @@ static __inline__ void enable_fpu(void)
+ 			     : "r" (~SR_FD));
+ }
+ 
+-/* Double presision, NANS as NANS, rounding to nearest, no exceptions */
++/* Double precision, NANS as NANS, rounding to nearest, no exceptions */
+ #define FPSCR_INIT  0x00080000
+ 
+ #define	FPSCR_CAUSE_MASK	0x0001f000	/* Cause bits */
 -- 
 2.26.3
 

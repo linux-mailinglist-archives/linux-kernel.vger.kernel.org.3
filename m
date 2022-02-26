@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40584C53BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642D24C53BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Feb 2022 05:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiBZExk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Feb 2022 23:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S229945AbiBZEye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Feb 2022 23:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiBZExj (ORCPT
+        with ESMTP id S229851AbiBZEyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Feb 2022 23:53:39 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EDBA1BD7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:53:06 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id t14so3524626pgr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:53:06 -0800 (PST)
+        Fri, 25 Feb 2022 23:54:33 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400E71AA064
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:54:00 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso9630247ooi.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Feb 2022 20:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Haj9SValrZqKZTYGpSt6kXipjXiAfqsH/MloLX0cnlY=;
-        b=P4qlojskJ+gKddnWPYaLdP/TK1bWGcNJynSFXhzApIM9pH2o6WCVVeT1bfGDUmvyxS
-         WdoQII6GbdXOBSm8VXEVRMOXQ82A53p6Vw2EhmP4FziOIqmI8aHotrHH2OtNwSjnECFU
-         GxBWaRodBrZeCUKZa2Qf7JOQiQ2RulEXpITqOKfzx3zS2ZCzxRsanuUCoZ/2ftMaHWus
-         zgrFageCVZt0B8/CJX00S/KDEJLw3DDVRIDPtIqOAK86/zml6fAzh5pl/h8LY85928G3
-         J4np+fcOfvH6AcVVnb2SzXzKakLBg+H5icNikWNTCZ56ekOTcxsH01HTBzv7siFV7hqv
-         bvGw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nWWlAFz05x0WZQU6INSvc2zGDo6a5FwCDit26I06Y0w=;
+        b=hajdGby9NoWKpfwTYiv9VdiiqaQbZAK4shAvaQ4mKq8P6QkIf3aSoxc5RAMpMx8EJ3
+         ZnKvJKOYtmKvnkc4rBRMowHY0nXztZfCU74NlU+a0VtQpcC93Mm/rwxOp/FZHrivHOh/
+         aTpkeW1tony7sHzFI9k2mG88UHLLVlP2HBcyPC2tX+IUWQ3fxrkofJp4F/Sbz1g59ujL
+         PNb4iOvJ2R6Rh34Rbm/vKLMvGUwFYuLsCAMLzjk3ZweA1nzgYgJ4RMIna2KM2Qd4EoQh
+         Zcq/kELrIEFqt9jdwD+AgtuJCEZ0d2GfQ+GrnMu3nXdNZ3ICOwPVT1lu4MXnQO2WzERf
+         Ehng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Haj9SValrZqKZTYGpSt6kXipjXiAfqsH/MloLX0cnlY=;
-        b=RbAQXVIWjwRh5pZe+FbbLvSaNQVetqFsSloBbad/9hDD24Diqx6SaxAfnV60zwUzCH
-         lgZZuXdRXD5awYUHDJ2i4ONKf1Uoaa/S17pzx5IrPfSHN5Pe2xlDeBBgVg+Ra8sVnJVP
-         6JCAFc2K/qi03lHwyp1GRbMwc7X2uzoqnl1RBZTdYT/kLhBOSvNCRPnPHpQwfrhwVDfb
-         noulCJ9JaF8e++KH44R9IlO3EQgi+djCeArLh6vsTaKugeDrQ9YkK4lL1bav5z2ntmsN
-         MWCQzt+zcIkldDF/MP8UqPwixkQ3mq98pn7bebhfR5A74izp3dEigCfRBuN7ep00GcGi
-         v9rg==
-X-Gm-Message-State: AOAM5313A1JqMe29pihkj/3e27+Q1y4iEGHosIkttTjqvy3vXWnPkkms
-        02LhEyk8MWofzsaN6xombiI=
-X-Google-Smtp-Source: ABdhPJzFpupRE/Yxz7PFJ7G+ivCNnYrGJWxbqXPGVsGvL6oFoV6op9CXK4j5yRdz69RT/25tH2cSPg==
-X-Received: by 2002:a63:5f47:0:b0:373:cf6c:c9d2 with SMTP id t68-20020a635f47000000b00373cf6cc9d2mr8763272pgb.85.1645851186000;
-        Fri, 25 Feb 2022 20:53:06 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a00249200b004df81f5ab5dsm5291196pfv.173.2022.02.25.20.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 20:53:05 -0800 (PST)
-Date:   Sat, 26 Feb 2022 17:52:59 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove TODOs-related item from the TODO file
-Message-ID: <YhmyK1Utaoj924im@mail.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nWWlAFz05x0WZQU6INSvc2zGDo6a5FwCDit26I06Y0w=;
+        b=pCT6RDRBtAERSQU4hLyBkdQT+5RNLXXrj46dArX59BG/Gxbd15/YTZ02m9WUp/0iph
+         l49eMuguvmWY53ikKACy0Er1zclWORBanY8FT0IlZlVFX2Jd9a+S21FQI+Z7eI3Y374j
+         LZ2jp6CWVdXsAm71LLe2Rf0HAenf5UXltAY91EQNWwcp08zO7IogtgAun9x9u8gobgxs
+         o+MC7es2MV/hpRvh9oTub8J9k6D/jGKvcntfBE/mYabwM7gyDNR+xEJ/7LG+xkL8pwU8
+         nuBogUhOjZk38Z59+hlRdaXsURX/2ESwwViqz3rYOou90ybG9aZMVZnd2vyt+XPQs3NB
+         n3MA==
+X-Gm-Message-State: AOAM533GGxTUfZdIz50gN+X0Uz4AH2fPWbQXNlIAS80WVo6WZfrwHPnj
+        4My3J3TZnbZX0q5885SIvlPxfowfMjy7E7AZDYSABQ==
+X-Google-Smtp-Source: ABdhPJx4B2UpUOycKMsEaKR1oo34cgguixNwY1J0Kw2hQf+OlP3d246J3e01nM0ALz+GGLelTlqinnKpTdgxg1YmUVE=
+X-Received: by 2002:a05:6870:2890:b0:d3:f439:2cbb with SMTP id
+ gy16-20020a056870289000b000d3f4392cbbmr3008695oab.139.1645851239328; Fri, 25
+ Feb 2022 20:53:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+ <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
+ <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
+ <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com> <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
+ <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
+In-Reply-To: <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 25 Feb 2022 20:53:48 -0800
+Message-ID: <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All occurences of code annotated with TODO in this driver have been
-addressed in the last couple of years by the community. The last
-occurrence of the word "TODO" was in the form of a multi-line comment in
-the header file intended to be exposed to userspace once this driver
-moves away from the staging folder.
+On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
+>
+> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+> >
+> > On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
+> > > On 2/25/22 16:12, Xiaoyao Li wrote:
+> > >>>>>
+> > >>>>
+> > >>>> I don't like the idea of making things up without notifying userspace
+> > >>>> that this is fictional. How is my customer running nested VMs supposed
+> > >>>> to know that L2 didn't actually shutdown, but L0 killed it because the
+> > >>>> notify window was exceeded? If this information isn't reported to
+> > >>>> userspace, I have no way of getting the information to the customer.
+> > >>>
+> > >>> Then, maybe a dedicated software define VM exit for it instead of
+> > >>> reusing triple fault?
+> > >>>
+> > >>
+> > >> Second thought, we can even just return Notify VM exit to L1 to tell
+> > >> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
+> > >> to L1.
+> > >
+> > > That might cause NULL pointer dereferences or other nasty occurrences.
+> >
+> > IMO, a well written VMM (in L1) should handle it correctly.
+> >
+> > L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
+> > setting Notify VM exit. If a L2 causes notify_vm_exit with
+> > invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
+> > support of Notify VM Exit from VMX MSR capability. Following L1 handler
+> > is possible:
+> >
+> > a)      if (notify_vm_exit available & notify_vm_exit enabled) {
+> >                 handle in b)
+> >         } else {
+> >                 report unexpected vm exit reason to userspace;
+> >         }
+> >
+> > b)      similar handler like we implement in KVM:
+> >         if (!vm_context_invalid)
+> >                 re-enter guest;
+> >         else
+> >                 report to userspace;
+> >
+> > c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
+> > unsupported exit reason
+> >
+> > As long as it belongs to any case above, I think L1 can handle it
+> > correctly. Any nasty occurrence should be caused by incorrect handler in
+> > L1 VMM, in my opinion.
+>
+> Please test some common hypervisors (e.g. ESXi and Hyper-V).
 
-This patch removes that TODO as well as the TODO-related item from the
-driver's TODO file
+I took a look at KVM in Linux v4.9 (one of our more popular guests),
+and it will not handle this case well:
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Meta-comments:
-- in the include/linux folder I've seen many standards such as:
-  -> Just the explanation of that that file is used for (I choose that)
-  -> name_of_file.h - brief explanation
-  -> include/linux/name_of_file.h - brief explanation
+        if (exit_reason < kvm_vmx_max_exit_handlers
+            && kvm_vmx_exit_handlers[exit_reason])
+                return kvm_vmx_exit_handlers[exit_reason](vcpu);
+        else {
+                WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
+                kvm_queue_exception(vcpu, UD_VECTOR);
+                return 1;
+        }
 
-  Since there was not clear pattern I chose the first one. Let me know
-  if anyone favours any other approach.
-
----
- drivers/staging/pi433/TODO       | 1 -
- drivers/staging/pi433/pi433_if.h | 2 --
- 2 files changed, 3 deletions(-)
-
-diff --git a/drivers/staging/pi433/TODO b/drivers/staging/pi433/TODO
-index 8d0f1b57961a..5cf3fd99d521 100644
---- a/drivers/staging/pi433/TODO
-+++ b/drivers/staging/pi433/TODO
-@@ -1,4 +1,3 @@
--* still TODOs, annotated in the code
- * currently the code introduces new IOCTLs. I'm afraid this is a bad idea.
-   -> Replace this with another interface, hints are welcome!
- * Some missing data (marked with ###) needs to be added in the documentation
-diff --git a/drivers/staging/pi433/pi433_if.h b/drivers/staging/pi433/pi433_if.h
-index 855f0bebdc1c..25ee0b77a32c 100644
---- a/drivers/staging/pi433/pi433_if.h
-+++ b/drivers/staging/pi433/pi433_if.h
-@@ -1,7 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0+ */
- /*
-- * include/linux/TODO
-- *
-  * userspace interface for pi433 radio module
-  *
-  * Pi433 is a 433MHz radio module for the Raspberry Pi.
--- 
-2.34.1
-
+At least there's an L1 kernel log message for the first unexpected
+NOTIFY VM-exit, but after that, there is silence. Just a completely
+inexplicable #UD in L2, assuming that L2 is resumable at this point.

@@ -2,189 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAF34C5A28
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7D74C5A2A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiB0JYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 04:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S229601AbiB0Jdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 04:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiB0JYH (ORCPT
+        with ESMTP id S229512AbiB0Jdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 04:24:07 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1F013E8F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 01:23:30 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p8so8441702pfh.8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 01:23:30 -0800 (PST)
+        Sun, 27 Feb 2022 04:33:32 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04516220D1;
+        Sun, 27 Feb 2022 01:32:55 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id r13so19184131ejd.5;
+        Sun, 27 Feb 2022 01:32:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=YKnxtZE2J4v12iS0fkHm9fdiEXM2m35F8Fk6VzqHDJs=;
-        b=gsFQBqioXHjAw6hD6Yd7BIthDv0o6558Jjlxjdj60UHr/TUw5mbmVDNW3Mw4mfLBqJ
-         y18TDRuBREtjEciK7pvIJk+Yml0exrMOuIfFfSGsRBS+kO5NQ3bLZGXbwIRKKX9yezdw
-         vtInvg6o/fRAGW9EWIg42jh/4u0Oh1R+AQwYlFa6K6rTTc5I9KGnXseZqdTm5iLCam4O
-         hhtPsxlQFlhr5MYHGq90OLuZG+6dQtA8oLuXPZps1CdB3WSZIuye4w7Hu27jYq/4Q0X1
-         ikiQUqdnK6BgGLuP7/XO07U9YE1oM8VlBgzcm6Ou2/fMdpgodE1Z8/1/qvdHX78t5YLe
-         eX8A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bPYynrjqhgBLtN2cr7LwW1Kf2fLVZCu7r0EjUJ+YJiA=;
+        b=LYhWFAXnRxSuSvGZnnvVcr2T5OpbkiroI1QxIQj+W54Oyelh03Q30ieQdg1LyfVqS7
+         HFUm9bMy7N1/iUaQfE1/U451qlV5t7BNldbEZGqm9l+nk+5cjq1Ahf1+2E/JGCX5f6pX
+         0OnLzJ7SjZyFrdW/I0M/XS2+F0g/BA+jfvsFPhG+5chcOeHgpvVVoo6VbCRMSCpJgVi/
+         d90jE/o2skITJ+v2PFc5RmLQJHFqHKEbXtN6O6DCmxzX+diJ1oj+781w3tQsywuYRypH
+         2y2JK9LeuoBjc5cTlkeecsXxl+HOMF0bpCkKwUBSkROZQ771hQo6U1YpXBh/ukG/yPF2
+         xzRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=YKnxtZE2J4v12iS0fkHm9fdiEXM2m35F8Fk6VzqHDJs=;
-        b=Ia25TCA0GPYVHbqwybSKPxv7RsCs7JdL6BXnzWKZNgTO5cfOxXcFecCIYnevtGIMm4
-         atPYVRoIo2yAQjMhkba1lTgzxswz7n/L5s/3HFF8GOIJ7SLHYEKXYyvDeq+ZsdtzDPGB
-         Kdb843KRNdXZpVxf/8kdso+/rWvNKpJEjam9vpodclPlqKKEcjJ9ucT7M6/AvtY6nnOg
-         Pg0Euk3uYzFatlnlPkyrfj1cjtUShhWYpatj0QytSSc0gHKoOqrJgTYGWirnfQq91ZU8
-         dUIRzivC7wez1MvlQ972ds/8PIRIGIGrqmR88bjqzTvWak3h+QBM/UFH9A2yqDkp2Nq8
-         h92Q==
-X-Gm-Message-State: AOAM531j2l/TyHhH1rz8S5B6Mb8IZcDFWvPCWuo5JbZ0+k9fHxelYSKk
-        5YOEtWyBxokAt8Y+0rriGM0=
-X-Google-Smtp-Source: ABdhPJzMawut+N0Hibcl7C82p1CHJqf3vz7xVupBicFzhSKFRDvmHb0hc3h1/wky4JSeuPTlAy9Mrw==
-X-Received: by 2002:a05:6a00:24ca:b0:4e1:cb76:32da with SMTP id d10-20020a056a0024ca00b004e1cb7632damr15794574pfv.81.1645953810461;
-        Sun, 27 Feb 2022 01:23:30 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id e14-20020a056a001a8e00b004e136d54a15sm9584444pfv.105.2022.02.27.01.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 01:23:30 -0800 (PST)
-Date:   Sun, 27 Feb 2022 09:23:22 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Zqiang <qiang.zhang@windriver.com>
-Subject: [PATCH v2] lib/stackdepot: Use page allocator if both slab and
- memblock is unavailable
-Message-ID: <YhtDCoHWsF11rwze@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bPYynrjqhgBLtN2cr7LwW1Kf2fLVZCu7r0EjUJ+YJiA=;
+        b=22tenkIzOpmkV6IYFpPWXa8YDiSdBtQZ5m96i61YVcmyPRuXl5cr5kvk54ln95nqY9
+         kLsTpx7z8NdU5DDI5DRSKoOXgAfIDld6DmJGat9jZxnJdhyIiWNA+rtyW6j9oK0tEQT2
+         4Ah+gs0+N84TwSQmYADNHEqQ/BoGjeENJkx7Kh8YcntS4doGUIN+ucdUYKuZU1ZNEU4O
+         yoYlyA2cm0xvAgxBBzPBIQhp8CWbznnws3xG01xwwdfem6KahCa4zwaGPFZTV0uMu0UX
+         Z11SoYbqHcy0pjZS7UfVoIWMFhBmM7ATPLxTigEAVj2o5I5p+Kx54qA9J77dTNJL6NZY
+         uxpg==
+X-Gm-Message-State: AOAM531kAvB8kpUvpdnG/sxO1JMwwiLvx/RZwgkDRbNVLLLHHdY2BIrN
+        70rlvqsq0tHdgmxZDNBOG2s=
+X-Google-Smtp-Source: ABdhPJx5ot/uXGhr5obXyws4B25ucf9VX/1Th/XDjyDOsT+iqK5YagLm09kuiQJ/Y+hXhld1lFapUA==
+X-Received: by 2002:a17:906:35d5:b0:6b7:faf7:9611 with SMTP id p21-20020a17090635d500b006b7faf79611mr11571638ejb.537.1645954373052;
+        Sun, 27 Feb 2022 01:32:53 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id lx9-20020a170906af0900b006d0d3179e11sm3166949ejb.105.2022.02.27.01.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Feb 2022 01:32:52 -0800 (PST)
+Message-ID: <89f358ac-eafa-3887-2fcb-db952a6161b3@gmail.com>
+Date:   Sun, 27 Feb 2022 10:32:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhrrM7NTYXG5JluY@ip-172-31-19-208.ap-northeast-1.compute.internal>
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] arm64: dts: rockchip: Add sata nodes to rk356x
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220227082131.131883-1-linux@fw-web.de>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220227082131.131883-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_FMBLA_NEWDOM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 2dba5eb1c73b ("lib/stackdepot: allow optional init and
-stack_table allocation by kvmalloc()"), stack_depot_init() is called
-later if CONFIG_STACKDEPOT_ALWAYS_INIT=n to remove unnecessary memory
-usage. It allocates stack_table using memblock_alloc() or kvmalloc()
-depending on availability of slab allocator.
+Hi Frank,
 
-But when stack_depot_init() is called while creating boot slab caches,
-both slab allocator and memblock is not available. So kernel crashes.
-Allocate stack_table from page allocator when both slab allocator and
-memblock is unavailable.
+Combine your patch in a serie with the ahci-platform.yaml conversion and
+include all current CC people and Rockchip list.
 
-Limit size of stack_table when using page allocator because vmalloc()
-is also unavailable in kmem_cache_init(). It must not be larger than
-(PAGE_SIZE << (MAX_ORDER - 1)).
+Your conversion and DT patch contains lots of errors.
+Check your serie before you submit and fix.
 
-This patch was tested on both CONFIG_STACKDEPOT_ALWAYS_INIT=y and n.
+ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/ahci-platform.yaml
 
-[ lkp@intel.com: Fix W=1 build warning ]
+ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/ahci-platform.yaml
 
-Fixes: 2dba5eb1c73b ("lib/stackdepot: allow optional init and stack_table allocation by kvmalloc()")
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- lib/stackdepot.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+Add power-domains as a new property after the conversion patch.
 
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index bf5ba9af0500..a96f8fd78c42 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -73,6 +73,14 @@ static int next_slab_inited;
- static size_t depot_offset;
- static DEFINE_RAW_SPINLOCK(depot_lock);
- 
-+static size_t stack_hash_size = (1 << CONFIG_STACK_HASH_ORDER);
-+static inline size_t stack_hash_mask(void)
-+{
-+	return stack_hash_size - 1;
-+}
-+
-+#define STACK_HASH_SEED 0x9747b28c
-+
- static bool init_stack_slab(void **prealloc)
- {
- 	if (!*prealloc)
-@@ -142,10 +150,6 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 	return stack;
- }
- 
--#define STACK_HASH_SIZE (1L << CONFIG_STACK_HASH_ORDER)
--#define STACK_HASH_MASK (STACK_HASH_SIZE - 1)
--#define STACK_HASH_SEED 0x9747b28c
--
- static bool stack_depot_disable;
- static struct stack_record **stack_table;
- 
-@@ -172,18 +176,28 @@ __ref int stack_depot_init(void)
- 
- 	mutex_lock(&stack_depot_init_mutex);
- 	if (!stack_depot_disable && !stack_table) {
--		size_t size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
-+		size_t size = (stack_hash_size * sizeof(struct stack_record *));
- 		int i;
- 
- 		if (slab_is_available()) {
- 			pr_info("Stack Depot allocating hash table with kvmalloc\n");
- 			stack_table = kvmalloc(size, GFP_KERNEL);
-+		} else if (totalram_pages() > 0) {
-+			/* Reduce size because vmalloc may be unavailable */
-+			size = min_t(size_t, size, PAGE_SIZE << (MAX_ORDER - 1));
-+			stack_hash_size = size / sizeof(struct stack_record *);
-+
-+			pr_info("Stack Depot allocating hash table with __get_free_pages\n");
-+			stack_table = (struct stack_record **)
-+				      __get_free_pages(GFP_KERNEL, get_order(size));
- 		} else {
- 			pr_info("Stack Depot allocating hash table with memblock_alloc\n");
- 			stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
- 		}
-+
- 		if (stack_table) {
--			for (i = 0; i < STACK_HASH_SIZE;  i++)
-+			pr_info("Stack Depot hash table size=%zu\n", stack_hash_size);
-+			for (i = 0; i < stack_hash_size;  i++)
- 				stack_table[i] = NULL;
- 		} else {
- 			pr_err("Stack Depot hash table allocation failed, disabling\n");
-@@ -363,7 +377,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		goto fast_exit;
- 
- 	hash = hash_stack(entries, nr_entries);
--	bucket = &stack_table[hash & STACK_HASH_MASK];
-+	bucket = &stack_table[hash & stack_hash_mask()];
- 
- 	/*
- 	 * Fast path: look the stack trace up without locking.
--- 
-2.33.1
+Johan
+
+===
+
+make a serie:
+
+conversion ahci-platform.yaml
+power-domains patch
+rockchip rk356x sata nodes patch
+
+
+On 2/27/22 09:21, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> RK356x supports up to 3 sata controllers which were compatible with the
+> existing snps,dwc-ahci binding.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> changes in v2:
+>   - added sata0 + 1, but have only tested sata2
+> ---
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 45 ++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 7cdef800cb3c..2e2e73be7417 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -230,6 +230,51 @@ scmi_shmem: sram@0 {
+>  		};
+>  	};
+>  
+
+> +	sata0: sata@fc000000 {
+
+rk3566 has no combphy0
+Move to rk3568.dtsi
+
+> +		compatible = "snps,dwc-ahci";
+> +		reg = <0 0xfc000000 0 0x1000>;
+> +		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
+> +			 <&cru CLK_SATA0_RXOOB>;
+
+> +		clock-names = "sata", "pmalive", "rxoob";
+
+remove
+> +		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+
+> +		interrupt-names = "hostc";
+
+remove
+
+> +		phys = <&combphy0 PHY_TYPE_SATA>;
+> +		phy-names = "sata-phy";
+> +		ports-implemented = <0x1>;
+> +		power-domains = <&power RK3568_PD_PIPE>;
+> +		status = "disabled";
+> +	};
+> +
+> +	sata1: sata@fc400000 {
+> +		compatible = "snps,dwc-ahci";
+> +		reg = <0 0xfc400000 0 0x1000>;
+> +		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
+> +			 <&cru CLK_SATA1_RXOOB>;
+
+> +		clock-names = "sata", "pmalive", "rxoob";
+
+remove
+
+> +		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
+
+> +		interrupt-names = "hostc";
+
+remove
+
+> +		phys = <&combphy1 PHY_TYPE_SATA>;
+> +		phy-names = "sata-phy";
+> +		ports-implemented = <0x1>;
+> +		power-domains = <&power RK3568_PD_PIPE>;
+> +		status = "disabled";
+> +	};
+> +
+> +	sata2: sata@fc800000 {
+> +		compatible = "snps,dwc-ahci";
+> +		reg = <0 0xfc800000 0 0x1000>;
+> +		clocks = <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
+> +			 <&cru CLK_SATA2_RXOOB>;
+
+> +		clock-names = "sata", "pmalive", "rxoob";
+
+remove
+
+> +		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+
+> +		interrupt-names = "hostc";
+
+remove
+
+> +		phys = <&combphy2 PHY_TYPE_SATA>;
+> +		phy-names = "sata-phy";
+> +		ports-implemented = <0x1>;
+> +		power-domains = <&power RK3568_PD_PIPE>;
+> +		status = "disabled";
+> +	};
+> +
+>  	gic: interrupt-controller@fd400000 {
+>  		compatible = "arm,gic-v3";
+>  		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */

@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4214C5E40
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F391E4C5E43
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiB0SqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 13:46:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S231390AbiB0SqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiB0SqI (ORCPT
+        with ESMTP id S231221AbiB0SqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 27 Feb 2022 13:46:08 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABDB4ECD6
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01E050453
         for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:45:23 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id q11so8895302pln.11
+Received: by mail-pj1-x1031.google.com with SMTP id bx5so9229424pjb.3
         for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:45:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hguOC+xPYO0eaAtZXq+RAjwSHPM/20IFHUGj359jpG8=;
-        b=Vt+FMmf2Lvacdy2VablByMnnRD1mjjC9+gDyfFfDq1B8f1Y4ajQPMV0pNVAwM0HZ9+
-         ta7G8l5pJ+K0fPQjp9rdTxZyZvDIpiK8a22ZNIYRBfHI4U0rZifX7Zi4ZWRI4jtYa0tl
-         LPTe8NuUbL6oMV+pLKAfdbADATj8s48JOZxcE=
+        bh=BMkktAsNfHIhPa1AJtPClUlYlr4FtiZE1a3GDbCXgk4=;
+        b=eH6EZmnqMckOS9O4oCCAOQ97Gk7PWZAVrFVwAHWRPKjSCasHblw8J3H51Cto/L4Oq/
+         7zqDwL6uGdZO25v6bmjZhS2MBNmqdSItLdQ8tnbuPyKYCvQsgJaqVAw1FtxJcVe83/LS
+         Zy2H2PJDdnwp3/ziVO/JJXQqpsFMARfT5Ychk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hguOC+xPYO0eaAtZXq+RAjwSHPM/20IFHUGj359jpG8=;
-        b=CkoNrafSFpoREu5Q3edRzdWpBYFY2MA02qtjPGVMObCXGzf83FpJ11biLy2dDuE2BZ
-         ySvvOvtqsHcoNEVhYLYFF+LNg3t+NdJXyRLpRPe8jMb6LYdHQ73vfZlqebG4iTuOSg/b
-         L8JmTjXkBBXsbVzdl6+YpTs7VeMOj1hDiNZak9JmFiYd4cnz5DwAp+MDqVosgNnIqJHg
-         u8rggE24P+bKUqgRXQ8phxRKWfsfnqmV0tOA53EtmLbA1tBeIncbxDCvzQaLnZK8/AYw
-         EoBA6RFObfvHey9xltveSmIGupkubnWAdGfFlWVne7PKcROHkxeGlWvbTSFouRJ4FWGP
-         gQkw==
-X-Gm-Message-State: AOAM5313iGehVkIX4IyyaPGaw7vF70ah54bCmIX9wR5+Wn16gV/Mu302
-        6bXdpKYyHsmKars5hAUtKPv3+A==
-X-Google-Smtp-Source: ABdhPJwyo1rMccr+9zW0ZyrPf84LJWZt8qC3wyk+XmwEvTaVBmNHap92GcCcUQYiiBcW9n/4wUYQ/g==
-X-Received: by 2002:a17:902:8203:b0:14f:c36f:70c with SMTP id x3-20020a170902820300b0014fc36f070cmr17209832pln.95.1645987522375;
-        Sun, 27 Feb 2022 10:45:22 -0800 (PST)
+        bh=BMkktAsNfHIhPa1AJtPClUlYlr4FtiZE1a3GDbCXgk4=;
+        b=WrwG8tbDNTS6iNIxYhG1GAcUIFURRjTQ3BznLmXyETWbor0YMIx9yRteoxFAj3eq1W
+         IK44yslvnh9V434myUsX4S3JQg81VS8Jumy+Fe9GP3wbqDrJFZjhSN+eQhSQlsFD/uNe
+         ku/oTNEan9V5CckTvTLdYp1KGEGd7SG8PPc+3CyAzMSlCQ4+4GUfEir2DqjEaGPE/9CL
+         FxK0F7mgFZTY8qvrcK6FRsWzkUK8SmsZD7IovAtlqTqALCfifHGbm6ffGgf/4esW40hm
+         Ak2v5Kx9utln/Eqn3I9xrOXhy5nTk85csG7TXb/KlIpR5VMz8sdGn9uq3gn62++IiwNv
+         DfrQ==
+X-Gm-Message-State: AOAM5327k9mVQmI1Hg4KBSBYBLa6XQu7PtNzOC56tz/FJuMqatnJT7uk
+        FUl6ZiGr8DAxuW+Hsi9z98PmqA==
+X-Google-Smtp-Source: ABdhPJw84+Su+R84+skE0k1lOhQUbnaFmq9xBqLDdfjXiaJKJ64Oxb/qHpmbmqqlBln5RT3beTcbVA==
+X-Received: by 2002:a17:902:d705:b0:14e:e5a2:1b34 with SMTP id w5-20020a170902d70500b0014ee5a21b34mr16650742ply.88.1645987523283;
+        Sun, 27 Feb 2022 10:45:23 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bg3-20020a056a001f8300b004f40e8b3133sm694802pfb.188.2022.02.27.10.45.21
+        by smtp.gmail.com with ESMTPSA id y12-20020a62ce0c000000b004ec4d8900d5sm10038318pfg.163.2022.02.27.10.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 10:45:21 -0800 (PST)
+        Sun, 27 Feb 2022 10:45:23 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>,
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Vitor Massaru Iha <vitor@massaru.org>,
         Daniel Latypov <dlatypov@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Masahiro Yamada <masahiroy@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        kunit-dev@googlegroups.com, llvm@lists.linux.dev, x86@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v3 4/7] um: Remove unused timeval_to_ns() function
-Date:   Sun, 27 Feb 2022 10:45:14 -0800
-Message-Id: <20220227184517.504931-5-keescook@chromium.org>
+        x86@kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3 5/7] um: Allow builds with Clang
+Date:   Sun, 27 Feb 2022 10:45:15 -0800
+Message-Id: <20220227184517.504931-6-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220227184517.504931-1-keescook@chromium.org>
 References: <20220227184517.504931-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1397; i=keescook@chromium.org; h=from:subject; bh=BBY0jyLtd6SE6A0Q+0QxoOVDMufJjpQntzXWcTVbBzQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a7pgTujxq03iEogLI3HZhrantD7izHXSbMposM 3ezh8hWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGuwAKCRCJcvTf3G3AJvdxD/ oCEV1wTwasGpPxS1HOVrQMyGEgZMjg1DXdqdV6HOBfnHhLIsIzbWuxSG7ROL9d+etvNu4CZ+boboMy F7ft4nDST1eKRd78RKyyQPuhjph5qsS/hk7PIadhAeAy+zBCdKfXIPzdA+NlthXEVCBTJU7MfuhaS8 WnW0AsKPv7iPGwFgFd3xCJ9Bl4aLW8KtaOhcKju3e1VCGJ/s4Yzf+P9PKpsgoHBBjRJWAxHvpISG9J yuRL+4TvhGpwioQUFq1FxLJy3blx9iD3vtnGBT+uaTxYXgjQZ8DF6m/lUsVwR43OdedREO3Gle3h2O ArZdZq0I1UZ7NysvfZOXcGFyrF1+OrxIIee/APsPXfOUeFkk12RJNnNCBBXcFdv/AtnX69OORj4hLW 4VBpLH01GaHhh9bO+Nzgzoiygx0ZURY6DOIbGd85lHROMECQedbCVjnSZWrDz9aA0L2IaOw0Neipba vifUqc5dwEZaZaQ/qpTOeLvmmTlgrFN7xOfi4oLNykNb65NlKZm9AOveVJrTprb2lcc4Q+ssTRhJ79 66chg4/PouI37iL0kA7CQLexQvpIc9aUVlvvZ5E4N7heEOMbxZ85wYGG5KSjWp5dGCbDQ6UDSbqyQD PtbBq8sZX7srMnaXmhH0C7ni5QOuy5hpeXo9lOudn2EfJOcEdpCfihoVDUtg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3536; h=from:subject; bh=9QnH+z+rCwCFrRsn/51gPTE+pPH8ccRFsd0v6DZGBGk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a8dEBk1HwrxEO2kL1Oda4tIa5yb6JeGO7Q8F+W TXMu3eKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGvAAKCRCJcvTf3G3AJh5fD/ 9KuzRhMOYg8agcaXgdhk9bHElsujSJHIv4H/iYy4vhIm5y+K4au1niInCr8gbRxN8h9SSpzFeHVeOV A+xuZDPDYD0/lGfOoYtZpV2f9uQZVbCu2O4DEne9NwKDTvoIRjBem9qfJmbhHpG6gcFnEYy8IA3/oe YoJUrjDoIKakakFQ0EWS7Y3OF6mZutVETPOUUBQJJ6FTmaXehOi2JRWbE5M0Y6f1utAKkHM7GQObJl gp4Y6NzKu3MsgDQC/PitvlV7wxex2381qQKHfMjaBXLtUKLizYHyvbjWStV9XM2J6VbCt0BU/LV+yJ qDs59Ih223zt/j7TbKxTAjrwLIX+byh70A+0o9K4CJvWbyAJ9X5CnAccGvf1HCW28QwuyLrpTwSAy8 YiSKxd9UxcYUI4/CDSV+8r72iiUkt7nWG1Ygv1E416BjhxHrDuk2k7nFssdZEYfIlDIqQA8ey/QpWf d48v7LOCx1Cui2GUH/XGI/QqDM7TOISr58NfvoT02QrJ398Hk/EovB9Y1CzFA+hlUrdcmRLnfw+THt WQvvUo7T7/w80plD1UFpTjsxcPq6znVhO0NCDULvpyGKXfCqzxri43YBojcrgwA4vXNVIrRUeaC5RW nBl0txZW59SpCiVLjlI9W0bmg+VGOmyOQGYcXCJo4mdIvb2DjeBGm21cJnyA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,44 +81,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+Add SUBARCH target for Clang+um (which must go last, not alphabetically,
+so the other SUBARCHes are assigned). Remove open-coded "DEFINE"
+macro, instead using linux/kbuild.h's version which was updated to use
+Clang-friendly assembly in commit cf0c3e68aa81 ("kbuild: fix asm-offset
+generation to work with clang"). Redefine "DEFINE_LONGS" in terms of
+"COMMENT" and "DEFINE" so that the intended coment actually has useful
+content. Add a missed "break" to avoid implicit fall-through warnings.
 
-The timeval_to_ns() function doesn't appear to be used anywhere, as far
-as I (or git grep) can tell, and clang throws up a warning about it:
+This lets me run KUnit tests with Clang:
 
-../arch/um/os-Linux/time.c:21:25: warning: unused function 'timeval_to_ns' [-Wunused-function]
-static inline long long timeval_to_ns(const struct timeval *tv)
-                        ^
-1 warning generated.
+$ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+...
 
-Signed-off-by: David Gow <davidgow@google.com>
-Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Link: https://lore.kernel.org/lkml/78d6ac17-9492-7c41-d6dd-4c92dce8ce62@cambridgegreys.com
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: linux-um@lists.infradead.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: llvm@lists.linux.dev
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
+Tested-by: David Gow <davidgow@google.com>
+Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220224081233.1765788-1-davidgow@google.com
 ---
-This is a resend of the above linked patch, just included in this series.
+v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org
+v2: https://lore.kernel.org/lkml/20220224055831.1854786-1-keescook@chromium.org
+v3:
+ - use kbuild.h to avoid duplication (Masahiro)
+ - fix intended comments (Masahiro)
+ - use SUBARCH (Nathan)
 ---
- arch/um/os-Linux/time.c | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/um/os-Linux/execvp.c  | 1 +
+ arch/x86/um/user-offsets.c | 9 ++++-----
+ scripts/Makefile.clang     | 1 +
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/um/os-Linux/time.c b/arch/um/os-Linux/time.c
-index 6c5041c5560b..4d5591d96d8c 100644
---- a/arch/um/os-Linux/time.c
-+++ b/arch/um/os-Linux/time.c
-@@ -18,12 +18,6 @@
+diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
+index 84a0777c2a45..c09a5fd5e225 100644
+--- a/arch/um/os-Linux/execvp.c
++++ b/arch/um/os-Linux/execvp.c
+@@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
+ 					   up finding no executable we can use, we want to diagnose
+ 					   that we did find one but were denied access.  */
+ 					got_eacces = 1;
++					break;
+ 				case ENOENT:
+ 				case ESTALE:
+ 				case ENOTDIR:
+diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+index bae61554abcc..e54a9814ccf1 100644
+--- a/arch/x86/um/user-offsets.c
++++ b/arch/x86/um/user-offsets.c
+@@ -8,12 +8,11 @@
+ #define __FRAME_OFFSETS
+ #include <linux/ptrace.h>
+ #include <asm/types.h>
++#include <linux/kbuild.h>
  
- static timer_t event_high_res_timer = 0;
- 
--static inline long long timeval_to_ns(const struct timeval *tv)
--{
--	return ((long long) tv->tv_sec * UM_NSEC_PER_SEC) +
--		tv->tv_usec * UM_NSEC_PER_USEC;
--}
+-#define DEFINE(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
 -
- static inline long long timespec_to_ns(const struct timespec *ts)
+-#define DEFINE_LONGS(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
++#define DEFINE_LONGS(sym, val)	\
++	COMMENT(#val " / sizeof(unsigned long)");	\
++	DEFINE(sym, val / sizeof(unsigned long))
+ 
+ void foo(void)
  {
- 	return ((long long) ts->tv_sec * UM_NSEC_PER_SEC) + ts->tv_nsec;
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 51fc23e2e9e5..87285b76adb2 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
++CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+ CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
 -- 
 2.32.0
 

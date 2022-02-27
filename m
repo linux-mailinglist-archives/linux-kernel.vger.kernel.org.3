@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA944C58E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 02:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE2E4C58DE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 02:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiB0BRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 20:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S229587AbiB0BMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 20:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiB0BRI (ORCPT
+        with ESMTP id S229501AbiB0BMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 20:17:08 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5434989CC1;
-        Sat, 26 Feb 2022 17:16:33 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21R19wb7032672;
-        Sat, 26 Feb 2022 19:09:58 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21R19uhE032669;
-        Sat, 26 Feb 2022 19:09:56 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Sat, 26 Feb 2022 19:09:56 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator after the loop
-Message-ID: <20220227010956.GW614@gate.crashing.org>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com> <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com> <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com> <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 26 Feb 2022 20:12:14 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06902229498
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:11:39 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id f38so1508725ybi.3
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:11:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=5A0m1bN6aUhIMIsLQ8DmMr2K7rDr/v9MtDeLLhXW6As=;
+        b=pkWgcULyMIqrcvNgtJCNJBdIuGraEqRQy8lawxb/MeMtDXh7YqJq4N53zV3jgobs7R
+         lJQfB0SdqtFRUn6ACmJf1gbeGw6GfbpCL7/wnoVWuVkqw+NoOR8QJvp3ewWRBqT+RkRl
+         PZdo2ap/+mlS212h5HVP1UsXOD8JsOE2KCfponeIoOYShwkER9HG0BokejVZEC+s6Bug
+         iKClbP41Q18dGi++ykUO2LLePrZE6AdHGSz+zqK9EOOBnKWdghXq2zXpVyafNfPCMEC8
+         UMCQABtNj+epjCWFZBHiEUdzaBYXS270Z8OPJlQCd7nlHt0+o7xVHVxYt2MP69/VtZ79
+         WicA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=5A0m1bN6aUhIMIsLQ8DmMr2K7rDr/v9MtDeLLhXW6As=;
+        b=3pyz/weTGmpP0iR9Sg4Ez7LzTytGiR3nGVUYbKI2tgV6qYXIYK2zGh1CI0K0kzhlEV
+         RlNGLEt79oUicigq0Qv/p31Lsz1+tDRLQref4mIRfwDbUzjj1PQ2nHEJPf+C8d4VvxiM
+         VPmRALQBGvhZML9X+q57AFHH+ke68NuNFFjKpEQzJEnVpD3r9QR6lid4/X4S+mmokuEV
+         F1ZrNRomPfBdoOm/X7d1kYVKis0gbD3zb6Yui6oE8/7PkYfrSGNSJ44RCBS2+FJaKR3e
+         a2a2leEjR1hnMEJKTZFNO7A8ZbqDjDB8YtArUzk7ZEUsWFBL8sBSXUGMSg7zJDERI0cb
+         s7lQ==
+X-Gm-Message-State: AOAM531ONaElSjsy6mcQ4JOIwsNGATc2u5fZ9lvsw7njfu4vJl0lgTxq
+        yiM9zGi03rDYe6TnWyrjQH2DTLT4W2rJp1fPt7bhfg==
+X-Google-Smtp-Source: ABdhPJx6fFzZX60QgOiP2+ukdiVHdD4rV+h48XcCnCeVioSNPfrisfj88O5sTvqZf1tl8i+dFMYwvR3h9AHEuj9+Rzw=
+X-Received: by 2002:a25:aac3:0:b0:624:ab10:49dc with SMTP id
+ t61-20020a25aac3000000b00624ab1049dcmr13631037ybi.291.1645924298247; Sat, 26
+ Feb 2022 17:11:38 -0800 (PST)
+MIME-Version: 1.0
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 27 Feb 2022 02:11:27 +0100
+Message-ID: <CACRpkdYM21hcH5d9rXyvjMPHQp429OZ1Zcy7uLU2tndoJcOmUQ@mail.gmail.com>
+Subject: [GIT PULL] pin control fixes for the v5.17 series
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 11:14:15PM +0100, Arnd Bergmann wrote:
-> On Sat, Feb 26, 2022 at 1:42 PM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> > On Wed, Feb 23, 2022 at 11:23:39AM -0800, Linus Torvalds wrote:
-> 
-> > > That said, we seem to only have two cases of it in the kernel, at
-> > > least by a x86-64 allmodconfig build. So we could examine the types
-> > > there, or we could just add '-Wno-shift-negative-value".
-> >
-> > Yes.
-> >
-> > The only reason the warning exists is because it is undefined behaviour
-> > (not implementation-defined or anything).  The reason it is that in the
-> > standard is that it is hard to implement and even describe for machines
-> > that are not two's complement.  However relevant that is today :-)
-> 
-> Could gcc follow the clang behavior then and skip the warning and
-> sanitizer for this case when -fno-strict-overflow or -fwrapv are used?
+Hi Linus,
 
-As I said, we have this implementation choice documented as
-  As an extension to the C language, GCC does not use the latitude
-  given in C99 and C11 only to treat certain aspects of signed '<<'
-  as undefined.  However, '-fsanitize=shift' (and
-  '-fsanitize=undefined') will diagnose such cases.  They are also
-  diagnosed where constant expressions are required.
-but that is not at all what we implement currently, we warn much more
-often.  Constant expressions are required only in a few places (#if
-condition, bitfield length, (non-variable) array length, enumeration
-declarations, _Alignas, _Static_assert, case labels, most initialisers);
-not places you will see code like this problem normally.
+some more pin control fixes that trickled in the last week or
+two.
 
-So imo we should just never do this by default, not just if the nasty
--fwrapv or nastier -fno-strict-overflow is used, just like we suggest
-in our own documentation.  The only valid reason -Wshift-negative-value
-is in -Wextra is it warns for situations that always are undefined
-behaviour (even if not in GCC).
+Please pull it in, some details are in the signed tag!
 
-Could you open a GCC PR for this?  The current situation is quite
-suboptimal, and what we document as our implementation choice is much
-more useful!
+Yours,
+Linus Walleij
 
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
 
-Segher
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+tags/pinctrl-v5-17-3
+
+for you to fetch changes up to 486c2d15aa812d669bb27f8241aa5d5dafbac5b9:
+
+  Merge tag 'intel-pinctrl-v5.17-5' of
+gitolite.kernel.org:pub/scm/linux/kernel/git/pinctrl/intel into fixes
+(2022-02-19 02:03:58 +0100)
+
+----------------------------------------------------------------
+Pin control fixes for the v5.17 series:
+
+- Fix some drive strength and pull-up code in the K210 driver.
+
+- Add the Alder Lake-M ACPI ID so it starts to work properly.
+
+- Use a static name for the StarFive GPIO irq_chip, forestalling
+  an upcoming fixes series from Marc Zyngier.
+
+- Fix an ages old bug in the Tegra 186 driver where we were
+  indexing at random into struct and being lucky getting the
+  right member.
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      pinctrl: tigerlake: Revert "Add Alder Lake-M ACPI ID"
+
+Dan Carpenter (1):
+      pinctrl: fix loop in k210_pinconf_get_drive()
+
+Linus Walleij (1):
+      Merge tag 'intel-pinctrl-v5.17-5' of
+gitolite.kernel.org:pub/scm/linux/kernel/git/pinctrl/intel into fixes
+
+Marc Zyngier (2):
+      pinctrl: starfive: Use a static name for the GPIO irq_chip
+      gpio: tegra186: Fix chip_data type confusion
+
+Sean Anderson (1):
+      pinctrl: k210: Fix bias-pull-up
+
+ drivers/gpio/gpio-tegra186.c              | 14 ++++++++++----
+ drivers/pinctrl/intel/pinctrl-tigerlake.c |  1 -
+ drivers/pinctrl/pinctrl-k210.c            |  4 ++--
+ drivers/pinctrl/pinctrl-starfive.c        |  2 +-
+ 4 files changed, 13 insertions(+), 8 deletions(-)

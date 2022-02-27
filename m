@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C454C5924
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4629F4C5926
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiB0D3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 22:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
+        id S229868AbiB0Dei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 22:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiB0D3k (ORCPT
+        with ESMTP id S229843AbiB0Deh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:29:40 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886C21F5D0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:29:04 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id ba20so9927373qvb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7uVsTdS9A3VvM3V9jvyobaIfl/vvSxzX/obLWEqItyo=;
-        b=Gus3oS9RSn7V1sr7kHl81y1aya0zl1pkxCw11w+XDvu9TPjWigg3K7tlfZovWKB4ae
-         LoFSKEOnw1/CPf1ue5bg4+ZnXYbF9Y+zkicAyImn/QMeG0xf8RkYkMwE7td7V+XucgUg
-         0gDiET8OWcLiR/uTHn2wUh3WcY8POKYYZw/O/qikdZt/B8Oxa+/h0kWL0zlh0jNugHBG
-         Rv5B++uhoDoF5bNd2dF70oz4vn2VMV+FnUr/zAIOwkrn52j00Kfgxx5zPdTqm8q/d8vi
-         I5UERrNvI3oCAHu2jLszQfE2Ir4z01/zstiDc3a//KS3VlYN7Eft03BJzMvOQq3z/VZH
-         WOlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7uVsTdS9A3VvM3V9jvyobaIfl/vvSxzX/obLWEqItyo=;
-        b=g5seU3HeC5Hfl0VlALtqJ8huXx8KJzcpIST0VtPGHwRhX0+8nozFKO2xWmbE4nJ9KV
-         X2RTvCrrlC/CdtZ/P+oBCt3LXIntqtxKJ734bKr0xFp+vcrJiDm19Du8MX8HKh29R2j5
-         ZJhZW/Ir8fOH9a0NkTWU0n8AzLHfLCKwRBJQxDQpMXxz/zaAXgZb3wtsst9Vzl4EGB7J
-         IOWpAate9O+AtZiWbasduJ86zn1HzSN1UdFDFz+bf5au6XZSHNvy7vPD8PFj0NqMAN9x
-         WrJYkfD7SyJ1vZfef5YzkzJ/xpJZYhpD+9pBTzcVpvtBU3UZV+K66APiaOD9By7xKoZR
-         ywrQ==
-X-Gm-Message-State: AOAM532OV/usnSVqaTdlzy/EUKWe7mjEOj9qTHkk4aifuBKzGUw3wIQL
-        dXa8D+uBRg+1qp7TcUy/x2cfKjOkCzq8xqJwvNtMoqhOimxFiw==
-X-Google-Smtp-Source: ABdhPJy7XFThPExoHd3VFYJIkPak1UpwZE6oPWxM0M9mvJOEkCCe6XwmadvukE4ueQzyWqWGH926oT69VQqrOB0s4xU=
-X-Received: by 2002:a0c:d807:0:b0:42c:1ff7:7242 with SMTP id
- h7-20020a0cd807000000b0042c1ff77242mr10578010qvj.119.1645932543232; Sat, 26
- Feb 2022 19:29:03 -0800 (PST)
+        Sat, 26 Feb 2022 22:34:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530B3DDC4
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:34:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF1C0B80990
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D65C340F4
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645932836;
+        bh=sINlhUUL3qCCKmllNYIAS6L68awhHaZWumjFZmCkwbA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Xch1FdbxJomskcGYC0j6vWmaDDUZOoXVKnF0kkvPmVKl/HSsVj5IJVwQSsxNYen12
+         zuPpmG9Irkh8aFI0Oo3rVSJIzs5xrkZtZIDJtoYONSovlJrjgERqaK0ZdpsQxRBGwn
+         g5ZAIFAb2AAOGwG3l4ltj0tmYCJ+uYQAYNKSGFl4mH9ssHzfv8YuqeL4Yj9IFMMCJk
+         TEHwR7xEDAX2YGY+qY2lTfoRFUkb47EOJ/X0NkUAuYpLvi37Pe9hlezfEQ5hxqfRAL
+         vLgYb9Lb1/Thp2xDCPh+T01Xd5VujOpGJDmW0EEvVAo5ZJ+Ob8t41Fb6s54eQw0jHQ
+         z6ZW/M2QrzZmw==
+Received: by mail-ed1-f45.google.com with SMTP id g20so12748646edw.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:33:56 -0800 (PST)
+X-Gm-Message-State: AOAM5337SSXKYfQPQh9w+DSU1uTB+/PxciknCyUlBjoXLv2bbOTgYQvn
+        qUcdh/QehTnCIVz8maVxezOcziE1O9mGtRg4DQ==
+X-Google-Smtp-Source: ABdhPJzAW6ryJztkKzpfOTbync3l10BoeisdAaTfjrRVJU3ASVjUgrEdyRhZQiMi8L3zCpy9UZ4Vsf9dVHrFb92NAyo=
+X-Received: by 2002:aa7:d415:0:b0:410:a0fa:dc40 with SMTP id
+ z21-20020aa7d415000000b00410a0fadc40mr13507630edq.46.1645932834417; Sat, 26
+ Feb 2022 19:33:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20220226200911.230030-1-marijn.suijten@somainline.org> <20220226200911.230030-2-marijn.suijten@somainline.org>
-In-Reply-To: <20220226200911.230030-2-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 27 Feb 2022 06:28:52 +0300
-Message-ID: <CAA8EJppH2AKe7DK7mPhtz2CCW19WdJ0-NJihmFPDswRwTtKcfw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: qcom: Fix sorting of SDX_GCC_65 in Makefile
- and Kconfig
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20211202064039.20797-1-jason-jh.lin@mediatek.com> <20211202064039.20797-3-jason-jh.lin@mediatek.com>
+In-Reply-To: <20211202064039.20797-3-jason-jh.lin@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Sun, 27 Feb 2022 11:33:42 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
+Message-ID: <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] drm/mediatek: add devlink to cmdq dev
+To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>, tzungbi@google.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fei Shao <fshao@chromium.org>,
+        Nancy Lin <nancy.lin@mediatek.com>, singo.chang@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,75 +74,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 at 02:38, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> In order to keep at least the list of `CONFIG_SM_` drivers sorted
-> alphabetically, SDX_GCC_65 should have been moved one line up.  This in
-> turn makes it easier and cleaner to add the followup SM_DISPCC_6125
-> driver in the right place, right before SM_DISPCC_8250.
->
-> Fixes: d79afa201328 ("clk: qcom: Add SDX65 GCC support")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Hi, Jason:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Build error:
 
+../drivers/gpu/drm/mediatek/mtk_drm_crtc.c: In function =E2=80=98mtk_drm_cr=
+tc_create=E2=80=99:
+../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:902:26: error: =E2=80=98struct
+mtk_drm_private=E2=80=99 has no member named =E2=80=98dev=E2=80=99
+  mtk_crtc->drm_dev =3D priv->dev;
+                          ^
+../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:974:30: error: =E2=80=98struct
+mtk_drm_private=E2=80=99 has no member named =E2=80=98dev=E2=80=99
+   link =3D device_link_add(priv->dev, mtk_crtc->cmdq_client.chan->mbox->de=
+v,
+                              ^
+In file included from ../include/linux/device.h:15:0,
+                 from ../include/linux/dma-mapping.h:7,
+                 from ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:7:
+../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:977:16: error: =E2=80=98struct
+mtk_drm_private=E2=80=99 has no member named =E2=80=98dev=E2=80=99
+    dev_err(priv->dev, "Unable to link dev=3D%s\n",
+                ^
+Regards,
+Chun-Kuang.
+
+jason-jh.lin <jason-jh.lin@mediatek.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=88=
+2=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=882:41=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Add devlink to cmdq to make sure the order of suspend and resume
+> is correct.
+>
+> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
 > ---
->  drivers/clk/qcom/Kconfig  | 14 +++++++-------
->  drivers/clk/qcom/Makefile |  2 +-
->  2 files changed, 8 insertions(+), 8 deletions(-)
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c | 43 ++++++++++++++++++-------
+>  1 file changed, 31 insertions(+), 12 deletions(-)
 >
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index f5b54bfc992f..161b257da9ca 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -574,13 +574,6 @@ config SDX_GCC_55
->           Say Y if you want to use peripheral devices such as UART,
->           SPI, I2C, USB, SD/UFS, PCIe etc.
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/me=
+diatek/mtk_drm_crtc.c
+> index 0b4012335e7a..612d1d69c16c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> @@ -60,6 +60,7 @@ struct mtk_drm_crtc {
+>  #endif
 >
-> -config SM_CAMCC_8250
-> -       tristate "SM8250 Camera Clock Controller"
-> -       select SM_GCC_8250
-> -       help
-> -         Support for the camera clock controller on SM8250 devices.
-> -         Say Y if you want to support camera devices and camera functionality.
-> -
->  config SDX_GCC_65
->         tristate "SDX65 Global Clock Controller"
->         select QCOM_GDSC
-> @@ -589,6 +582,13 @@ config SDX_GCC_65
->           Say Y if you want to use peripheral devices such as UART,
->           SPI, I2C, USB, SD/UFS, PCIe etc.
+>         struct device                   *mmsys_dev;
+> +       struct device                   *drm_dev;
+>         struct mtk_mutex                *mutex;
+>         unsigned int                    ddp_comp_nr;
+>         struct mtk_ddp_comp             **ddp_comp;
+> @@ -159,6 +160,7 @@ static void mtk_drm_crtc_destroy(struct drm_crtc *crt=
+c)
+>         mtk_drm_cmdq_pkt_destroy(&mtk_crtc->cmdq_handle);
 >
-> +config SM_CAMCC_8250
-> +       tristate "SM8250 Camera Clock Controller"
-> +       select SM_GCC_8250
-> +       help
-> +         Support for the camera clock controller on SM8250 devices.
-> +         Say Y if you want to support camera devices and camera functionality.
+>         if (mtk_crtc->cmdq_client.chan) {
+> +               device_link_remove(mtk_crtc->drm_dev, mtk_crtc->cmdq_clie=
+nt.chan->mbox->dev);
+>                 mbox_free_channel(mtk_crtc->cmdq_client.chan);
+>                 mtk_crtc->cmdq_client.chan =3D NULL;
+>         }
+> @@ -902,6 +904,7 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+>                 return -ENOMEM;
+>
+>         mtk_crtc->mmsys_dev =3D priv->mmsys_dev;
+> +       mtk_crtc->drm_dev =3D priv->dev;
+>         mtk_crtc->ddp_comp_nr =3D path_len;
+>         mtk_crtc->ddp_comp =3D devm_kmalloc_array(dev, mtk_crtc->ddp_comp=
+_nr,
+>                                                 sizeof(*mtk_crtc->ddp_com=
+p),
+> @@ -969,6 +972,18 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+>         }
+>
+>         if (mtk_crtc->cmdq_client.chan) {
+> +               struct device_link *link;
 > +
->  config SM_DISPCC_8250
->         tristate "SM8150 and SM8250 Display Clock Controller"
->         depends on SM_GCC_8150 || SM_GCC_8250
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index d96d6793fc7d..3e4eb843b8d2 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -84,8 +84,8 @@ obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
->  obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
->  obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
->  obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
-> -obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
->  obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
-> +obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
->  obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
->  obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
->  obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
-> --
-> 2.35.1
+> +               /* add devlink to cmdq dev to make sure suspend/resume or=
+der is correct */
+> +               link =3D device_link_add(priv->dev, mtk_crtc->cmdq_client=
+.chan->mbox->dev,
+> +                                      DL_FLAG_PM_RUNTIME | DL_FLAG_STATE=
+LESS);
+> +               if (!link) {
+> +                       dev_err(priv->dev, "Unable to link dev=3D%s\n",
+> +                               dev_name(mtk_crtc->cmdq_client.chan->mbox=
+->dev));
+> +                       ret =3D -ENODEV;
+> +                       goto cmdq_err;
+> +               }
+> +
+>                 ret =3D of_property_read_u32_index(priv->mutex_node,
+>                                                  "mediatek,gce-events",
+>                                                  i,
+> @@ -976,22 +991,26 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+>                 if (ret) {
+>                         dev_dbg(dev, "mtk_crtc %d failed to get mediatek,=
+gce-events property\n",
+>                                 drm_crtc_index(&mtk_crtc->base));
+> -                       mbox_free_channel(mtk_crtc->cmdq_client.chan);
+> -                       mtk_crtc->cmdq_client.chan =3D NULL;
+> -               } else {
+> -                       ret =3D mtk_drm_cmdq_pkt_create(&mtk_crtc->cmdq_c=
+lient,
+> -                                                     &mtk_crtc->cmdq_han=
+dle,
+> -                                                     PAGE_SIZE);
+> -                       if (ret) {
+> -                               dev_dbg(dev, "mtk_crtc %d failed to creat=
+e cmdq packet\n",
+> -                                       drm_crtc_index(&mtk_crtc->base));
+> -                               mbox_free_channel(mtk_crtc->cmdq_client.c=
+han);
+> -                               mtk_crtc->cmdq_client.chan =3D NULL;
+> -                       }
+> +                       goto cmdq_err;
+> +               }
+> +
+> +               ret =3D mtk_drm_cmdq_pkt_create(&mtk_crtc->cmdq_client,
+> +                                             &mtk_crtc->cmdq_handle,
+> +                                             PAGE_SIZE);
+> +               if (ret) {
+> +                       dev_dbg(dev, "mtk_crtc %d failed to create cmdq p=
+acket\n",
+> +                               drm_crtc_index(&mtk_crtc->base));
+> +                       goto cmdq_err;
+>                 }
 >
-
-
--- 
-With best wishes
-Dmitry
+>                 /* for sending blocking cmd in crtc disable */
+>                 init_waitqueue_head(&mtk_crtc->cb_blocking_queue);
+> +
+> +cmdq_err:
+> +               if (ret) {
+> +                       mbox_free_channel(mtk_crtc->cmdq_client.chan);
+> +                       mtk_crtc->cmdq_client.chan =3D NULL;
+> +               }
+>         }
+>  #endif
+>         return 0;
+> --
+> 2.18.0
+>

@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDE84C5DD2
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1823F4C5DDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiB0Rjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 12:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S229908AbiB0RrF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Feb 2022 12:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiB0Rjr (ORCPT
+        with ESMTP id S229664AbiB0RrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:39:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF95B3983D;
-        Sun, 27 Feb 2022 09:39:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B9B1B80884;
-        Sun, 27 Feb 2022 17:39:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE8C340EF;
-        Sun, 27 Feb 2022 17:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645983547;
-        bh=RlxsNBxWP23xW/4RVjjxHZDE4BG21qefYTNvuOdpYrc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BnRFAFvGMoca9d7oCUM2P30xUW2DQtTIu5s6WxGi5BJSKv92sBM2pOLtt0bONJw84
-         PUssBow1aejad+JoryXbY3lumR1oHPOLjEcFlL0DiD1q4agnWJEZVCOgMLyufa7eee
-         h4mpGQwP2xqEuWDvaitMcuoQqtqLe9ELsecnOm/GCzFyDWh1LSYTnIe4kFc+Ni9Zsz
-         AB0gEOOZTM06m5PWFjgq+wnTLJEqiPm3hsYdQBwoan6dTP6d10opDdvM+NVkOm4N3/
-         ZTjPCoQhbXInL81vfEM4s/WKlRL9HaLxwQwxflIFugFLA75hhu5x1O8oDxil9Pebcc
-         GlYYk4SMQDklw==
-Date:   Sun, 27 Feb 2022 17:46:10 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     trix@redhat.com
-Cc:     vilhelm.gray@gmail.com, nathan@kernel.org, ndesaulniers@google.com,
-        Jonathan.Cameron@huawei.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] counter: add defaults to switch-statements
-Message-ID: <20220227174610.0e0e73e4@jic23-huawei>
-In-Reply-To: <20220227161746.82776-1-trix@redhat.com>
-References: <20220227161746.82776-1-trix@redhat.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 27 Feb 2022 12:47:04 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662F9192B8
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:46:26 -0800 (PST)
+Date:   Sun, 27 Feb 2022 17:46:12 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH -next] misc: rtsx: fix build for CONFIG_PM not set
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei WANG <wei_wang@realsil.com.cn>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Message-Id: <0D5Z7R.NUOWBMRT4GQ2@crapouillou.net>
+In-Reply-To: <CAK8P3a30RbSk3Y5CyRrOjfTiq0c9XGxC3qjAD0154j3a7k+xQQ@mail.gmail.com>
+References: <20220226222457.13668-1-rdunlap@infradead.org>
+        <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
+        <449d6ceb-7308-9543-c23c-831bebffda21@infradead.org>
+        <CAK8P3a30RbSk3Y5CyRrOjfTiq0c9XGxC3qjAD0154j3a7k+xQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 08:17:46 -0800
-trix@redhat.com wrote:
+Hi,
 
-> From: Tom Rix <trix@redhat.com>
+Le dim., févr. 27 2022 at 18:30:16 +0100, Arnd Bergmann 
+<arnd@arndb.de> a écrit :
+> On Sun, Feb 27, 2022 at 5:57 PM Randy Dunlap <rdunlap@infradead.org> 
+> wrote:
+>>  On 2/27/22 04:04, Arnd Bergmann wrote:
+>>  > On Sat, Feb 26, 2022 at 11:24 PM Randy Dunlap 
+>> <rdunlap@infradead.org> wrote:
+>>  >
+>>  >> ---
+>>  >>  drivers/misc/cardreader/rtsx_pcr.c |    2 ++
+>>  >>  1 file changed, 2 insertions(+)
+>>  >>
+>>  >> --- linux-next-20220225.orig/drivers/misc/cardreader/rtsx_pcr.c
+>>  >> +++ linux-next-20220225/drivers/misc/cardreader/rtsx_pcr.c
+>>  >> @@ -1054,6 +1054,7 @@ static int rtsx_pci_acquire_irq(struct r
+>>  >>         return 0;
+>>  >>  }
+>>  >>
+>>  >> +#ifdef CONFIG_PM
+>>  >>  static void rtsx_enable_aspm(struct rtsx_pcr *pcr)
+>>  >>  {
+>>  >>         if (pcr->ops->set_aspm)
+>>  >> @@ -1085,6 +1086,7 @@ static void rtsx_pm_power_saving(struct
+>>  >>  {
+>>  >>         rtsx_comm_pm_power_saving(pcr);
+>>  >>  }
+>>  >> +#endif
+>>  >
+>>  > Now that we have DEFINE_SIMPLE_DEV_PM_OPS() etc, I think we should
+>>  > no longer add more __maybe_unused annotations or #ifdef CONFIG_PM 
+>> checks
+>>  > but just use the new macros for any new files or whenever a 
+>> warning like
+>>  > this shows up.
+>> 
+>>  In this case it looks like DEFINE_RUNTIME_DEV_PM_OPS() is better.
+>>  Using DEFINE_SIMPLE_DEV_PM_OPS() still produces build 
+>> warnings/errors
+>>  for unused functions. And I do see 4 drivers that are already using
+>>  DEFINE_RUNTIME_DEV_PM_OPS().
+>> 
+>>  Patch coming right up.
 > 
-> Clang static analysis reports this representative problem
-> counter-chrdev.c:482:3: warning: Undefined or garbage value
->   returned to caller
->   return ret;
->   ^~~~~~~~~~
+> DEFINE_RUNTIME_DEV_PM_OPS() only references the three runtime 
+> functions
+> (rtsx_pci_runtime_suspend, rtsx_pci_runtime_resume and 
+> rtsx_pci_runtime_idle)
+> but not the pm-sleep functions (rtsx_pci_suspend and 
+> rtsx_pci_resume), so your
+> second patch doesn't look correct either.
 > 
-> counter_get_data() has a multilevel switches, some without
-> defaults, so ret is sometimes not set.
-> Add returning -EINVAL similar to other defaults.
-> 
-> Fixes: b6c50affda59 ("counter: Add character device interface")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-I'm fairly sure this one is warning supression rather than a fix as
-that type u8 being used in the switch is storing an enum which is
-set only by kernel code and all values of the enum are covered.
+> I see there is a _DEFINE_DEV_PM_OPS() helper that appears to do
+> what we want here, but I'm not sure this is considered an official 
+> API. Adding
+> Rafael, Paul and Jonathan to Cc for extra input. As the macros are 
+> still
+> fairly new, I suspect the idea was to add more as needed, so maybe 
+> should
+> add a DEFINE_DEV_PM_OPS() to wrap _DEFINE_DEV_PM_OPS()?
 
-However, that's not locally visible so to me the addition looks good, I'd
-just be tempted to drop the fixes tag as backporting this looks like noise
-to me.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+There could be a DEFINE_DEV_PM_OPS(), but I don't think that's really 
+needed - you can very well declare your struct dev_pm_ops without using 
+one of these macros. Just make sure to use the SYSTEM_SLEEP_PM_OPS / 
+RUNTIME_PM_OPS macros for the callbacks and pm_ptr() for the device.pm 
+pointer.
 
-> ---
->  drivers/counter/counter-chrdev.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
-> index b7c62f957a6a8..69d340be9c93f 100644
-> --- a/drivers/counter/counter-chrdev.c
-> +++ b/drivers/counter/counter-chrdev.c
-> @@ -477,6 +477,8 @@ static int counter_get_data(struct counter_device *const counter,
->  		case COUNTER_SCOPE_COUNT:
->  			ret = comp->count_u8_read(counter, parent, &value_u8);
->  			break;
-> +		default:
-> +			return -EINVAL;
->  		}
->  		*value = value_u8;
->  		return ret;
-> @@ -496,6 +498,8 @@ static int counter_get_data(struct counter_device *const counter,
->  		case COUNTER_SCOPE_COUNT:
->  			ret = comp->count_u32_read(counter, parent, &value_u32);
->  			break;
-> +		default:
-> +			return -EINVAL;
->  		}
->  		*value = value_u32;
->  		return ret;
+Cheers,
+-Paul
+
 

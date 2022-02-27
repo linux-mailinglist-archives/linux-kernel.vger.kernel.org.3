@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1014C5DF7
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8589C4C5E10
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiB0SJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 13:09:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S230269AbiB0S1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiB0SJx (ORCPT
+        with ESMTP id S230055AbiB0S1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 13:09:53 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F8E5AA63;
-        Sun, 27 Feb 2022 10:09:15 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id k7so1413775ilo.8;
-        Sun, 27 Feb 2022 10:09:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xC1AEvib8Cf944AeDGf2M/f6rb9ZO4jKeFVIH15Nbqk=;
-        b=DjLbC97iDYNMPnSfMYcYuR7ZmA6TphGvtXjUpwS0GCSsJn0B3FGWTXnBy/1EKkvQzN
-         K7WEOm+RJe51gRu0uUeEZK75RFW7agFiAF5WZLW9IBTXq0xy6fKQPdXftZX4iOl6aqc8
-         PU8S0lucMlfUFvD9Is7TosZUz7+SV63HqKBU7sRQzJdTvRj1a1Ui5vRFpGyxwycklla4
-         ncH1ESWKPzUKjq4IZtvbBFaxv+gF5jglaK7t8B4uQOzBHWXczEFaLTNyIwqw6FtXL946
-         Bu7TUlvw9NnQYwUF9NG5XioFz8khWJjItWMJfGQ4f7s6LKH42Y+95XfrefOjK2FHLXCt
-         /IaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xC1AEvib8Cf944AeDGf2M/f6rb9ZO4jKeFVIH15Nbqk=;
-        b=6kvQC/+zubD479MfS+wuB5zyRznJgWw5H1ZXKfbLmr5BNUB0BqOdslkZ3aRKkkiWfL
-         iBWtoYncC9DSiUrwOtVi6ADGFAHEcypc4ugyO1FQu+DVZzqqqi9iUGfd9VykwIH2NiW3
-         AETpsIN7On55U4+Dqxr7Uj8zYvRyC9voeW6s4n0ZhpgLU7SxH+zx36q6tNGWBJoeIkQK
-         9VT+0l7aLuXNNkRMLMdFAvLxhOtxoRPD2dyzEFE24LPfCmuvHx2pWihpMQDuug5n7qtQ
-         8azm/3fWiXN0DhF1d9oD7gRxYZWU66U2tdqqXeajD7SOZjiRah6w1UmE6OMBJN2mgoad
-         SKGA==
-X-Gm-Message-State: AOAM531p/WQ32JY1hE3hNXJJKzwcUKeZk0pK7qJwUw1TZXQlSA2PO3rS
-        AiprCQd1rX7suYWrcB3OE+p3h1alXA+FyjGaUmY=
-X-Google-Smtp-Source: ABdhPJxvYPkV0VhY3Nxwq1nnZZ3cC8FXlIxU37f/ajKBusrVgs3BqdM0ArwdXZ+dStcHjAA9zbidtAhl7zTHVFLk1tc=
-X-Received: by 2002:a05:6e02:188b:b0:2c2:5444:afb9 with SMTP id
- o11-20020a056e02188b00b002c25444afb9mr14962600ilu.237.1645985355120; Sun, 27
- Feb 2022 10:09:15 -0800 (PST)
+        Sun, 27 Feb 2022 13:27:30 -0500
+X-Greylist: delayed 944 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 10:26:52 PST
+Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9075654A8
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=D6fceNIjKpwnS1biMuEu0ownwYQK1blsQ+uEVVtQEQo=; b=P0E4Nr4DmqSsmCEHU5jqJRzO5T
+        wFVMmg3qXLKqDSiW5jEtJsG7ICRgDchzvZQr1M515LsQp3T7zajfHyexNCInWp+G0sv4g4iR9Egtq
+        SNessDhV10bUUkr1eZlF2JPcqWs3/PE6HgqUeaP2/Dz7lLyuptyKDbpvKdA5sBCixDpCbR+bKh9yy
+        zrBDho0XW9ntOcoYoY4yGxpIUexIiNCKXOH6RwezM7gq5k/vTYmcx0xUQZAUONkS0mzYQVLqCklaI
+        1Vswu/A5swVD3SDzXMo8mR01UBYr61DlsYG+gB2Olbe7FDkgEdcUXgPrKIb2W5QELoj761OIZTjD5
+        I/PW/yig==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+        by mx.treblig.org with esmtp (Exim 4.94.2)
+        (envelope-from <linux@treblig.org>)
+        id 1nOO0f-0006o3-C9; Sun, 27 Feb 2022 18:11:04 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     akpm@linux-foundation.org, pasha.tatashin@soleen.com,
+        songmuchun@bytedance.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH] mm: Use strtobool for param parsing
+Date:   Sun, 27 Feb 2022 18:10:39 +0000
+Message-Id: <20220227181038.126926-1-linux@treblig.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
- <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
- <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
- <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
- <20220227113245.GY614@gate.crashing.org>
-In-Reply-To: <20220227113245.GY614@gate.crashing.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 27 Feb 2022 19:09:03 +0100
-Message-ID: <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 1:09 PM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> How will you define dividing by zero so that its behaviour is reasonable
-> for every program, for example?
+Use strtobool rather than open coding "on" and "off" parsing in
+mm/hugetlb_vmemmap.c and mm/page_table_check.c.
 
-The solution is to let the developer specify what they need to happen.
-That choice should include the unsafe possibility (i.e. unchecked),
-because sometimes that is precisely what we need.
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ mm/hugetlb_vmemmap.c  | 12 +-----------
+ mm/page_table_check.c | 10 +---------
+ 2 files changed, 2 insertions(+), 20 deletions(-)
 
-> Invoking an error handler at runtime
-> has most of the same unwanted effects, except is is never silent.  You
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index c540c21e26f5b..919411386e547 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -192,17 +192,7 @@ static int __init early_hugetlb_free_vmemmap_param(char *buf)
+ 		return 0;
+ 	}
+ 
+-	if (!buf)
+-		return -EINVAL;
+-
+-	if (!strcmp(buf, "on"))
+-		hugetlb_free_vmemmap_enabled = true;
+-	else if (!strcmp(buf, "off"))
+-		hugetlb_free_vmemmap_enabled = false;
+-	else
+-		return -EINVAL;
+-
+-	return 0;
++	return strtobool(buf, &hugetlb_free_vmemmap_enabled);
+ }
+ early_param("hugetlb_free_vmemmap", early_hugetlb_free_vmemmap_param);
+ 
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index 3763bd077861a..2458281bff893 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -23,15 +23,7 @@ EXPORT_SYMBOL(page_table_check_disabled);
+ 
+ static int __init early_page_table_check_param(char *buf)
+ {
+-	if (!buf)
+-		return -EINVAL;
+-
+-	if (strcmp(buf, "on") == 0)
+-		__page_table_check_enabled = true;
+-	else if (strcmp(buf, "off") == 0)
+-		__page_table_check_enabled = false;
+-
+-	return 0;
++	return strtobool(buf, &__page_table_check_enabled);
+ }
+ 
+ early_param("page_table_check", early_page_table_check_param);
+-- 
+2.35.1
 
-It may not be what it is needed in some cases (thus the necessity to
-be able to choose), but at least one can predict what happens and
-different compilers, versions, flags, inputs, etc. would agree.
-
-Cheers,
-Miguel

@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BC34C5DA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B132C4C5DA4
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiB0RCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 12:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S231533AbiB0REI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 12:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiB0RCa (ORCPT
+        with ESMTP id S229512AbiB0REH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:02:30 -0500
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E375AA71
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:01:52 -0800 (PST)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id OMvbnV3p641cbOMvbnynb3; Sun, 27 Feb 2022 18:01:50 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 27 Feb 2022 18:01:50 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-Date:   Sun, 27 Feb 2022 18:01:47 +0100
+        Sun, 27 Feb 2022 12:04:07 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC6228E24;
+        Sun, 27 Feb 2022 09:03:30 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id s14so14410634edw.0;
+        Sun, 27 Feb 2022 09:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dANX2Nn44mbCP9zs92/BfwoXKsDqb2azTmCoigDg0oU=;
+        b=LL2RxvR/1/nUpXagZ8ezOOBshFZ6Ut3TWhhpQTqimGrQSwON3CRmV6uP61RIU7jB0i
+         8l+0YrcDznzwP7CtQOiO3ymzZ8OyL92WUsu9fIypR0iyv3/vyeD5LqMoy0zgyp9E9E0W
+         rqZ1KLO/Bf0JwCQ5hbX9suKteBENqBaAAJJwSLvee4oNGb7H4+E3lcOGTyWZnTWrGomu
+         XKJ5eMZvpwx0ztwmT9unP4kejlM3pecyWt4D+qKZWaWog8YSi/kB0e2zPhMKBVSsL4HM
+         6lNkPX9sF7T466aXwy1AT3KikKt6f5046EMj+XIPVdQSkHeLcLeIU5wNx17UZU7cSDJW
+         lPkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dANX2Nn44mbCP9zs92/BfwoXKsDqb2azTmCoigDg0oU=;
+        b=7haKLubI64RIS/wYy7LqLrJFY3ed1DpBKgZajyt4KQ36/t2dLRDakP918oTsu8sVle
+         v77JnpapeNGj47vSXqPj3YbwtSvDKaIRBncCEpyDIgEiVtZKUqcJO5SNxQKlfd0At6Dd
+         c6nYxzooNUphPQXwYi9UqQB9NF4SodcK3QOyqPwmJ6a2BP/F2tDZLPz62FXtzf77H6gz
+         hXDGaJN1Xu4IZeRAXFOLuneyzMClKGLg/NLKpRuxEaQbISv3Um91BFiKUT3gektJMEez
+         mnz+6AmHj7UcL3R/Gu5MzlgP9mPgacW0mWUNE2GILEON57petvUF7uC1E2KQF4+Ijh7u
+         UdIA==
+X-Gm-Message-State: AOAM532BECB4+EHxG4V+fz6DAXXO7PgxqP0TNfM1VjofYYRKemDYmKe4
+        Gn398x/LAEmgCPQND/yi7tI=
+X-Google-Smtp-Source: ABdhPJwUjgrEmeNoJb0yPleFkeU4+PhfGM+FDV7S1txB8mcMnr2ykdbwmpn6pMLVCz48WjNv2ZCKkw==
+X-Received: by 2002:a05:6402:372:b0:40a:bbf4:7973 with SMTP id s18-20020a056402037200b0040abbf47973mr15856901edw.399.1645981408694;
+        Sun, 27 Feb 2022 09:03:28 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id gq15-20020a170906e24f00b006cfba1c5433sm3587873ejb.172.2022.02.27.09.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 09:03:28 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
+Date:   Sun, 27 Feb 2022 18:03:26 +0100
+Message-ID: <8898316.CDJkKcVGEf@kista>
+In-Reply-To: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] iio: adc: mt6360: strengthen return check of
- mt6360_adc_read_channel
-Content-Language: en-US
-To:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linus.walleij@linaro.org, ardeleanalex@gmail.com,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-References: <20220227164357.84742-1-trix@redhat.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220227164357.84742-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 27/02/2022 à 17:43, trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org a 
-écrit :
-> From: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> 
-> Clang static analysis reports this issue
-> mt6360-adc.c:277:20: warning: Assigned value is
->    garbage or undefined
->    data.values[i++] = val;
->                     ^ ~~~
-> 
-> val is set by a successful call to m6360_adc_read_channel().
-> A negative return is checked but within m6360_adc_read_channel,
-> a non zero check is done.
-> Strengthen the check to non zero.
+Dne nedelja, 27. februar 2022 ob 15:49:18 CET je Jernej Skrabec napisal(a):
+> First two patches add 10-bit formats to UAPI, third extends filtering
+> mechanism, fourth fixes incorrect assumption, fifth moves register
+> configuration code to proper place, sixth and seventh enable 10-bit
+> VP9 decoding on Allwinner H6 and last increases core frequency on
+> Allwinner H6.
 
-Hi, my understanding of m6360_adc_read_channel() is that on success, it 
-returns IIO_VAL_INT (i.e. 1).
+FYI, additional patch is needed for linear P010 output:
+https://github.com/jernejsk/linux-1/commit/
+28338c00749b821819690c9fd548fd5c311682b5
 
-So, I think that with your patch, we will now always fail because 'ret' 
-is never 0 at this point.
+With that, only native format was not tested.
 
-CJ
+Regards,
+Jernej
 
 > 
-> Signed-off-by: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> ---
->   drivers/iio/adc/mt6360-adc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> I'm sending this as RFC to get some comments:
+> 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+> 2. is extended filtering mechanism ok?
 > 
-> diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
-> index 07c0e67683910..9fb6dc305a392 100644
-> --- a/drivers/iio/adc/mt6360-adc.c
-> +++ b/drivers/iio/adc/mt6360-adc.c
-> @@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int irq, void *p)
->   	memset(&data, 0, sizeof(data));
->   	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->masklength) {
->   		ret = mt6360_adc_read_channel(mad, bit, &val);
-> -		if (ret < 0) {
-> +		if (ret) {
->   			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val\n", bit);
->   			goto out;
->   		}
+> I would also like if these patches are tested on some more HW.
+> Additionally, can someone test tiled P010?
+> 
+> Please take a look.
+> 
+> Best regards,
+> Jernej
+> 
+> Ezequiel Garcia (1):
+>   media: Add P010 tiled format
+> 
+> Jernej Skrabec (7):
+>   media: Add P010 format
+>   media: hantro: Support format filtering by depth
+>   media: hantro: postproc: Fix buffer size calculation
+>   media: hantro: postproc: Fix legacy regs configuration
+>   media: hantro: Store VP9 bit depth in context
+>   media: hantro: sunxi: Enable 10-bit decoding
+>   media: hantro: sunxi: Increase frequency
+> 
+>  drivers/media/v4l2-core/v4l2-common.c         |  3 ++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>  drivers/staging/media/hantro/hantro.h         |  4 ++
+>  drivers/staging/media/hantro/hantro_drv.c     | 23 +++++++++
+>  .../staging/media/hantro/hantro_g2_vp9_dec.c  |  8 ---
+>  .../staging/media/hantro/hantro_postproc.c    | 34 ++++++++++---
+>  drivers/staging/media/hantro/hantro_v4l2.c    | 50 +++++++++++++++++--
+>  drivers/staging/media/hantro/hantro_v4l2.h    |  3 ++
+>  drivers/staging/media/hantro/sunxi_vpu_hw.c   | 13 ++++-
+>  include/uapi/linux/videodev2.h                |  2 +
+>  10 files changed, 122 insertions(+), 20 deletions(-)
+> 
+> -- 
+> 2.35.1
+> 
+> 
+
 

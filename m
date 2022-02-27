@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26674C5F2B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A4F4C5F2E
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbiB0VwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 16:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S231902AbiB0Vwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 16:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiB0VwH (ORCPT
+        with ESMTP id S229901AbiB0Vw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 16:52:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE730517C5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:51:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 678DF6113C
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CDDC340E9;
-        Sun, 27 Feb 2022 21:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1645998689;
-        bh=BmmJIepf1iiX/4lbzXOg/zxx9xG02hnaEb7WP56p4+k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MuVkZFwOgSj62tmUAeFZOPXv2Zc8eeN8SH0dZDvxs+vAjTZuj3tr4WLZ0JkRPXram
-         vHuY1DzRXmGPBS+n2S411n/mX1OvwRE8qu6KKC1W3N8g3p2FLeUyH+F6FoB7aRoqXG
-         qP+JA/2PZJmpGlT8A8GS0Cr9twYVO49eeRJwGAy0=
-Date:   Sun, 27 Feb 2022 13:51:28 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Dr. David Alan Gilbert" <linux@treblig.org>
-Cc:     pasha.tatashin@soleen.com, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: Use strtobool for param parsing
-Message-Id: <20220227135128.3f5aabca43c7a33acea91cc8@linux-foundation.org>
-In-Reply-To: <20220227181038.126926-1-linux@treblig.org>
-References: <20220227181038.126926-1-linux@treblig.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sun, 27 Feb 2022 16:52:27 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C5466FB6
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:51:49 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id z15so9321855pfe.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:51:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T+bY3cSVQwU97rpm1PWOkOKMCijaJDttt0NtP9XMRUQ=;
+        b=P5MaDUXk16z8/hpH693B2xHSHZo//ZReUYLWsO5WmQlLEtpjLdqZ3SxcShABucESWD
+         gkUDZcqvtqrxzTL/HBznk0KrejYwIAj3HoxYQalVeG1HxDmq/YLbpu9NlB4P6TirmJj2
+         tNdNIV6wYGqY82VLMA+Mw5GUbyS0jOd/itE8dHkrcVdM9Bb6L95gorWOa8zYmgsddC8h
+         zwCoc5DjwY/j3Rg7vXTyev4iXasdo5AcMBQ1q6scfujWk+AKpoL3W0XrcjyD40Gt2MbI
+         /8viux9vd/q2pOFj2lly3had36ZTNzGSAeWkdFCorEsxqkjHFwoed3w28lUUMVXaTzda
+         BIcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T+bY3cSVQwU97rpm1PWOkOKMCijaJDttt0NtP9XMRUQ=;
+        b=u5clBpOP38Z/2NsY7UEO9QtW1O48H9qwvHlkEQrW543o34XKVI3xuI8EHNmplErNYw
+         idUQsryUJgS6aV6nGBHo0T3y89MqUpoxyScHy6ss4mtQaE+0B2Qz9WRlJ7ZmdxgvozJ8
+         wkh+xyUR0HaTmPQ0JoPf2qfgYwEm/IOBZ1pI0oT2d3KtH/j7NhRGJxZd2nHEBRprYlXZ
+         IWn6LXxXT9Yp8CQIalVjQrRB1zqJoe/L0WCtJMcdqgxz83MD1wWYqNYDczKjOP+SVMCr
+         DoX2rpt7mMYyoSFP82IX7KBO+FZbf1eVCT5a2nJw59eLOo1XehZE/9deCxaRCpvDS4iq
+         L08A==
+X-Gm-Message-State: AOAM531jXRbFg2RrVmuyORQUtJQV0LP8Goh9LQvZJuVcVZlKt0LT5ONN
+        le2cPXHeADgFA++kiJbTxrs5MQ==
+X-Google-Smtp-Source: ABdhPJw5iyelAy8Y8e7UDBvu5VGI0R9LRLKgwMaAMReYVGgkCIixIT0k5CsicGBwZOju4r6toco/bw==
+X-Received: by 2002:a63:221f:0:b0:374:7286:446a with SMTP id i31-20020a63221f000000b003747286446amr14756264pgi.538.1645998709137;
+        Sun, 27 Feb 2022 13:51:49 -0800 (PST)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id v23-20020a17090a521700b001bbfc181c93sm15037230pjh.19.2022.02.27.13.51.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Feb 2022 13:51:48 -0800 (PST)
+Message-ID: <d7ed009d-09af-935b-f905-fef7d02f1649@kernel.dk>
+Date:   Sun, 27 Feb 2022 14:51:46 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v9] block: cancel all throttled bios in del_gendisk()
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>, Yu Kuai <yukuai3@huawei.com>
+Cc:     ming.lei@redhat.com, tj@kernel.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220210115637.1074927-1-yukuai3@huawei.com>
+ <YhuyBgZSS6m/Mwu6@infradead.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YhuyBgZSS6m/Mwu6@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 18:10:39 +0000 "Dr. David Alan Gilbert" <linux@treblig.org> wrote:
-
-> Use strtobool rather than open coding "on" and "off" parsing in
-> mm/hugetlb_vmemmap.c and mm/page_table_check.c.
+On 2/27/22 10:16 AM, Christoph Hellwig wrote:
+> On Thu, Feb 10, 2022 at 07:56:37PM +0800, Yu Kuai wrote:
+>> Throttled bios can't be issued after del_gendisk() is done, thus
+>> it's better to cancel them immediately rather than waiting for
+>> throttle is done.
+>>
+>> For example, if user thread is throttled with low bps while it's
+>> issuing large io, and the device is deleted. The user thread will
+>> wait for a long time for io to return.
 > 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> ---
->  mm/hugetlb_vmemmap.c  | 12 +-----------
->  mm/page_table_check.c | 10 +---------
->  2 files changed, 2 insertions(+), 20 deletions(-)
-> 
-> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> index c540c21e26f5b..919411386e547 100644
-> --- a/mm/hugetlb_vmemmap.c
-> +++ b/mm/hugetlb_vmemmap.c
-> @@ -192,17 +192,7 @@ static int __init early_hugetlb_free_vmemmap_param(char *buf)
->  		return 0;
->  	}
->  
-> -	if (!buf)
-> -		return -EINVAL;
-> -
-> -	if (!strcmp(buf, "on"))
-> -		hugetlb_free_vmemmap_enabled = true;
-> -	else if (!strcmp(buf, "off"))
-> -		hugetlb_free_vmemmap_enabled = false;
-> -	else
-> -		return -EINVAL;
-> -
-> -	return 0;
-> +	return strtobool(buf, &hugetlb_free_vmemmap_enabled);
->  }
->  early_param("hugetlb_free_vmemmap", early_hugetlb_free_vmemmap_param);
+> FYI, this crashed left rigt and center when running xfstests with
+> traces pointing to throtl_pending_timer_fn.
 
-This part falls afoul of the changes in
-https://lkml.kernel.org/r/20211101031651.75851-3-songmuchun@bytedance.com
+Dropped for now.
 
-> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-> index 3763bd077861a..2458281bff893 100644
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -23,15 +23,7 @@ EXPORT_SYMBOL(page_table_check_disabled);
->  
->  static int __init early_page_table_check_param(char *buf)
->  {
-> -	if (!buf)
-> -		return -EINVAL;
-> -
-> -	if (strcmp(buf, "on") == 0)
-> -		__page_table_check_enabled = true;
-> -	else if (strcmp(buf, "off") == 0)
-> -		__page_table_check_enabled = false;
-> -
-> -	return 0;
-> +	return strtobool(buf, &__page_table_check_enabled);
->  }
+-- 
+Jens Axboe
 
-But this works OK.

@@ -2,166 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD5A4C5952
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39C24C5957
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiB0FKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 00:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S230009AbiB0FTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 00:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiB0FK1 (ORCPT
+        with ESMTP id S229499AbiB0FTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 00:10:27 -0500
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C763CD3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:09:46 -0800 (PST)
-X-QQ-mid: bizesmtp67t1645938576th46lq5y
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 27 Feb 2022 13:09:30 +0800 (CST)
-X-QQ-SSF: 01400000002000C0F000B00A0000000
-X-QQ-FEAT: TskX/GkkryA71JOqngR2rwZY4PD6O/RVwtsyrw4mgSIqLyrN4/cHwFSRUAAp2
-        nR0XRI4wrRVKRLrdiE6qGyegr41pyu+1MEpFc3Hz29sKVjLWnSopnntoSvE/kbFq32SbGIt
-        rbKaxgHdClGn63PGDLiKLSpge7rvhJ2Lb3a5Y/yGuNkxqQUnijlLwfyWJU6wXBOxTJ7JKFX
-        cMi+vVSHFi+wNBW55gLFClF6hKkyj7uafbdRpW+nMSEPF3jbY4VNx4svjPYstj924syC6eE
-        yDSDVNSo2F2ERn2AuTqDZRqdAo9LtT/+peenskUgLlQaHG5yjuZnqfpatn4Pz+NsjBWotzV
-        joUCZm/9zOQ9wEjuOAG21F38Ciz/O1ZZ9k68BUb
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     tiwai@suse.com, perex@perex.cz, broonie@kernel.org,
-        lgirdwood@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] ASoC: amd: pcm-dma: Use platform_get_irq() to get the interrupt
-Date:   Sun, 27 Feb 2022 13:09:28 +0800
-Message-Id: <20220227050928.32270-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Sun, 27 Feb 2022 00:19:01 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D02BF0;
+        Sat, 26 Feb 2022 21:18:25 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id ay5so5272416plb.1;
+        Sat, 26 Feb 2022 21:18:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hYI+LXbbkZPFFC9XcDUXZG81aMQ2hosXWFW9b6ZreDc=;
+        b=UdFNT83gCTMmhxLP6Ui+tTWUGiIulf/rG5QlpYS/3oCJjAonujj1+M1a0tGPmaDWBY
+         I2mslnulgrfIndJTTV7cOMUEjOGPk2sizZnwj36QgmJRtjPV51YZ7SecbYq1edGe8El7
+         f4P+L+EZSw9sGrriIKLiPRn3BlwjZqOjARp/THAHeVRFZOcZAei6T1pMnQVs6OVXD3+z
+         Q1LpPL7ifjXrx2UtrwHETQuJ3HRkv3SpaGikTT5UO5myE89c47fMsZluRZf3eJLfcpl2
+         ThuOngFQpb+sqlWNmSN09uhyESOmNNKGGRPBSWjvSKHbmWFsJSD//yt02Ua20zHHm9l/
+         azvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hYI+LXbbkZPFFC9XcDUXZG81aMQ2hosXWFW9b6ZreDc=;
+        b=HNj0gfQduZM0CxQdXlKk84TQDkQPChc8Huj4ndeu5mtcIJCMkqJHsxX9Jl+V0gMTpm
+         E1Cup893LUGxPCzvVs5XC3n6Z4xACrXXuZY6Lt/PGbVgeVvZlKXE41pIbHbzpnofMXq5
+         4hUdfhGhSac9/FUnf+ub165f/wrweNjrq9Npy64PMeoo0JeQbpeRvw7Gm0H70uuI2/u8
+         X+glCF6eRa1UV6mi1ILD7apw/oJsS80mwycZOauz/Oqf6it43M0Jow6NnJeG3w0VB+lN
+         IP72mZu3xnPYxkXQWQ2KK91VB/wJO+W42JjElo/QXlVjnLtmwGIwP76/g2jUQ5eMliRw
+         QJ1g==
+X-Gm-Message-State: AOAM532dDwhXpExof9S2Dubmh5v3duYRzux5Vet5902S+t0WEzP77P+i
+        JgG7YRGMWCmuS2oD2TX7jdA=
+X-Google-Smtp-Source: ABdhPJzPIeMNveCUomXkPpScbpB3z9dFlIxzuDvnkt9ldQMVIpMPaUVaHrBxw13PbZcxGyCuVQlPeA==
+X-Received: by 2002:a17:90a:de02:b0:1bc:d277:66bd with SMTP id m2-20020a17090ade0200b001bcd27766bdmr10698864pjv.109.1645939104628;
+        Sat, 26 Feb 2022 21:18:24 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id n125-20020a632783000000b003788c95b222sm450485pgn.9.2022.02.26.21.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 21:18:24 -0800 (PST)
+Date:   Sun, 27 Feb 2022 10:48:21 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+Message-ID: <20220227051821.fwrmeu7r6bab6tio@apollo.legion>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-2-haoluo@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225234339.2386398-2-haoluo@google.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypassed the hierarchical setup and messed up the
-irq chaining.
+On Sat, Feb 26, 2022 at 05:13:31AM IST, Hao Luo wrote:
+> This patch allows bpf_syscall prog to perform some basic filesystem
+> operations: create, remove directories and unlink files. Three bpf
+> helpers are added for this purpose. When combined with the following
+> patches that allow pinning and getting bpf objects from bpf prog,
+> this feature can be used to create directory hierarchy in bpffs that
+> help manage bpf objects purely using bpf progs.
+>
+> The added helpers subject to the same permission checks as their syscall
+> version. For example, one can not write to a read-only file system;
+> The identity of the current process is checked to see whether it has
+> sufficient permission to perform the operations.
+>
+> Only directories and files in bpffs can be created or removed by these
+> helpers. But it won't be too hard to allow these helpers to operate
+> on files in other filesystems, if we want.
+>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
+>  include/linux/bpf.h            |   1 +
+>  include/uapi/linux/bpf.h       |  26 +++++
+>  kernel/bpf/inode.c             |   9 +-
+>  kernel/bpf/syscall.c           | 177 +++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |  26 +++++
+>  5 files changed, 236 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index f19abc59b6cd..fce5e26179f5 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1584,6 +1584,7 @@ int bpf_link_new_fd(struct bpf_link *link);
+>  struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd);
+>  struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+>
+> +bool bpf_path_is_bpf_dir(const struct path *path);
+>  int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+>  int bpf_obj_get_user(const char __user *pathname, int flags);
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index afe3d0d7f5f2..a5dbc794403d 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5086,6 +5086,29 @@ union bpf_attr {
+>   *	Return
+>   *		0 on success, or a negative error in case of failure. On error
+>   *		*dst* buffer is zeroed out.
+> + *
+> + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
+> + *	Description
+> + *		Attempts to create a directory name *pathname*. The argument
+> + *		*pathname_sz* specifies the length of the string *pathname*.
+> + *		The argument *mode* specifies the mode for the new directory. It
+> + *		is modified by the process's umask. It has the same semantic as
+> + *		the syscall mkdir(2).
+> + *	Return
+> + *		0 on success, or a negative error in case of failure.
+> + *
+> + * long bpf_rmdir(const char *pathname, int pathname_sz)
+> + *	Description
+> + *		Deletes a directory, which must be empty.
+> + *	Return
+> + *		0 on sucess, or a negative error in case of failure.
+> + *
+> + * long bpf_unlink(const char *pathname, int pathname_sz)
+> + *	Description
+> + *		Deletes a name and possibly the file it refers to. It has the
+> + *		same semantic as the syscall unlink(2).
+> + *	Return
+> + *		0 on success, or a negative error in case of failure.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)		\
+>  	FN(unspec),			\
+> @@ -5280,6 +5303,9 @@ union bpf_attr {
+>  	FN(xdp_load_bytes),		\
+>  	FN(xdp_store_bytes),		\
+>  	FN(copy_from_user_task),	\
+> +	FN(mkdir),			\
+> +	FN(rmdir),			\
+> +	FN(unlink),			\
+>  	/* */
+>
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+How about only introducing bpf_sys_mkdirat and bpf_sys_unlinkat? That would be
+more useful for other cases in future, and when AT_FDCWD is passed, has the same
+functionality as these, but when openat/fget is supported, it would work
+relative to other dirfds as well. It can also allow using dirfd of the process
+calling read for a iterator (e.g. if it sets the fd number using skel->bss).
+unlinkat's AT_REMOVEDIR flag also removes the need for a bpf_rmdir.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- sound/soc/amd/acp-pcm-dma.c           | 11 ++++-------
- sound/soc/amd/raven/acp3x-pcm-dma.c   |  8 ++------
- sound/soc/amd/renoir/acp3x-pdm-dma.c  |  7 ++-----
- sound/soc/amd/vangogh/acp5x-pcm-dma.c |  7 ++-----
- 4 files changed, 10 insertions(+), 23 deletions(-)
+WDYT?
 
-diff --git a/sound/soc/amd/acp-pcm-dma.c b/sound/soc/amd/acp-pcm-dma.c
-index 8fa2e2fde4f1..1cd2e70a57df 100644
---- a/sound/soc/amd/acp-pcm-dma.c
-+++ b/sound/soc/amd/acp-pcm-dma.c
-@@ -1217,9 +1217,8 @@ static const struct snd_soc_component_driver acp_asoc_platform = {
- 
- static int acp_audio_probe(struct platform_device *pdev)
- {
--	int status;
-+	int status, irq;
- 	struct audio_drv_data *audio_drv_data;
--	struct resource *res;
- 	const u32 *pdata = pdev->dev.platform_data;
- 
- 	if (!pdata) {
-@@ -1249,13 +1248,11 @@ static int acp_audio_probe(struct platform_device *pdev)
- 
- 	audio_drv_data->asic_type =  *pdata;
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
- 		return -ENODEV;
--	}
- 
--	status = devm_request_irq(&pdev->dev, res->start, dma_irq_handler,
-+	status = devm_request_irq(&pdev->dev, irq, dma_irq_handler,
- 				  0, "ACP_IRQ", &pdev->dev);
- 	if (status) {
- 		dev_err(&pdev->dev, "ACP IRQ request failed\n");
-diff --git a/sound/soc/amd/raven/acp3x-pcm-dma.c b/sound/soc/amd/raven/acp3x-pcm-dma.c
-index 75c06697fa09..e4f8dbf0d11d 100644
---- a/sound/soc/amd/raven/acp3x-pcm-dma.c
-+++ b/sound/soc/amd/raven/acp3x-pcm-dma.c
-@@ -394,13 +394,9 @@ static int acp3x_audio_probe(struct platform_device *pdev)
- 	if (!adata->acp3x_base)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
-+	adata->i2s_irq =  platform_get_irq(pdev, 0);
-+	if (adata->i2s_irq < 0)
- 		return -ENODEV;
--	}
--
--	adata->i2s_irq = res->start;
- 
- 	dev_set_drvdata(&pdev->dev, adata);
- 	status = devm_snd_soc_register_component(&pdev->dev,
-diff --git a/sound/soc/amd/renoir/acp3x-pdm-dma.c b/sound/soc/amd/renoir/acp3x-pdm-dma.c
-index 9dd22a2fa2e5..88a242538461 100644
---- a/sound/soc/amd/renoir/acp3x-pdm-dma.c
-+++ b/sound/soc/amd/renoir/acp3x-pdm-dma.c
-@@ -399,13 +399,10 @@ static int acp_pdm_audio_probe(struct platform_device *pdev)
- 	if (!adata->acp_base)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
-+	adata->pdm_irq = platform_get_irq(pdev, 0);
-+	if (adata->pdm_irq < 0)
- 		return -ENODEV;
--	}
- 
--	adata->pdm_irq = res->start;
- 	adata->capture_stream = NULL;
- 
- 	dev_set_drvdata(&pdev->dev, adata);
-diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-index f10de38976cb..c8cd1777a63c 100644
---- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-+++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
-@@ -388,13 +388,10 @@ static int acp5x_audio_probe(struct platform_device *pdev)
- 	if (!adata->acp5x_base)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "IORESOURCE_IRQ FAILED\n");
-+	adata->i2s_irq = platform_get_irq(pdev, 0);
-+	if (adata->i2s_irq < 0)
- 		return -ENODEV;
--	}
- 
--	adata->i2s_irq = res->start;
- 	dev_set_drvdata(&pdev->dev, adata);
- 	status = devm_snd_soc_register_component(&pdev->dev,
- 						 &acp5x_i2s_component,
--- 
-2.20.1
+> [...]
 
-
-
+--
+Kartikeya

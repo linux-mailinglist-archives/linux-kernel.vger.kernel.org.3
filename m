@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C144C5AD6
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 13:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239FE4C5B04
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 13:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiB0MES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 07:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S230362AbiB0MWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 07:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiB0MEP (ORCPT
+        with ESMTP id S229998AbiB0MWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 07:04:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F004504C;
-        Sun, 27 Feb 2022 04:03:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64EC4B80BA1;
-        Sun, 27 Feb 2022 12:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D84C340E9;
-        Sun, 27 Feb 2022 12:03:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645963413;
-        bh=oCxNGVyXFBEgGugPHKW0CLS6eePMvEzboypl9TTvBb8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IQJ+GVQ2MclK/3FPcpwO2XsPb8IHnhgaAuWky53FX/YwRThuLwPkb1KPcfobmMj0d
-         zz4pFiww2YBAHggtvie/WPeZZr9rWvPGBnnA5rFZHjQcXPS4ObQ931xSjCGBvpM6dZ
-         ek1g07bmn7BjOCZJbUGxqrLisX46FZrhLcYTBRFfliwFVc8GxIQnarGBJYLuwZZtTU
-         H/hsAeHHQEUMZSqX9C+G/2qCVYPGMI+3AI7x2/8C650pIaOZWx22WzWYq73fBZryzE
-         PRQxVsZ9reUP/ElForUcxlvVZn72c46Nf11roqpMTuiTMJ7rucmRw5Ws6zGdimf/JS
-         /AL71XeBKKUBw==
-Date:   Sun, 27 Feb 2022 12:10:35 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, robh+dt@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: iio: amplifiers: add ada4250 doc
-Message-ID: <20220227121035.07a922a8@jic23-huawei>
-In-Reply-To: <Yhey1QmZa4RU0p50@robh.at.kernel.org>
-References: <20220223120112.8067-1-antoniu.miclaus@analog.com>
-        <Yhey1QmZa4RU0p50@robh.at.kernel.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 27 Feb 2022 07:22:33 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B385AEFD
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 04:21:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645964517; x=1677500517;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=R07GPCy1jIy1JXE9hr4EI4ZYmUfucWZTqLwFYuHqxVo=;
+  b=bwqh3fjM2GOiYhrdZn4rh0EWfZ0zVMKR4BiUjzuiuOLozYlnskCmjQkA
+   XCCZF0MHnvythWrst0RqdJeB6oVUhC9hwz+t1RQfa9y7kEJcvTCXr6dbN
+   azy/cmPY7LinxBnFjMdeS2zer9+LeyneHRwKQrswFC7fkhj4xJAwnjdRg
+   UQfwYHwzNo/J4rJrz9IQE8O4d6AmlkPwHKFPYQkZy2zEL26vqoCKBxGb5
+   drKDYnEzDrZWucWVXQhPRvfDWKFGqItrElHoMA/C3vJBm37WuaFdjIDzo
+   dwM3InHEV2eR44Dw1PH00CAPNA1JuHU4LtlAnp1hj/IyHiop4m5REqiIw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="313448179"
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="313448179"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 04:21:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
+   d="scan'208";a="777824681"
+Received: from pglc00012.png.intel.com ([10.221.207.32])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 04:21:52 -0800
+From:   niravkumar.l.rabara@intel.com
+To:     catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        krzk@kernel.org, biju.das.jz@bp.renesas.com,
+        enric.balletbo@collabora.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        aford173@gmail.com, alexander.stein@ew.tq-group.com,
+        spujar@nvidia.com, yuzenghui@huawei.com, festevam@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        niravkumar.l.rabara@intel.com, dinh.nguyen@intel.com
+Subject: [PATCH] arm64: defconfig: enable the CVP driver
+Date:   Sun, 27 Feb 2022 20:21:27 +0800
+Message-Id: <20220227122127.35093-1-niravkumar.l.rabara@intel.com>
+X-Mailer: git-send-email 2.19.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +63,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 10:31:17 -0600
-Rob Herring <robh@kernel.org> wrote:
+From: Dinh Nguyen <dinh.nguyen@intel.com>
 
-> On Wed, 23 Feb 2022 14:01:10 +0200, Antoniu Miclaus wrote:
-> > Add device tree bindings for the ADA4250 driver.
-> > 
-> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > ---
-> > changes in v6:
-> >  - add space before `{` in the amplifier node example
-> >  .../bindings/iio/amplifiers/adi,ada4250.yaml  | 50 +++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
-> >   
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Build the CVP driver in the standard arm64 defconfig.
 
-Series applied to the togreg branch of iio.git and pushed out as testing for
-0-day to take a quick look before I go making a mess of linux-next.
+Signed-off-by: Dinh Nguyen <dinh.nguyen@intel.com>
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-One side comment though - when there are lots of revisions in a short timescale
-and people haven't had time to get back to the intermediate ones, it is particularly
-helpful to give a multi version change log.
-
-i.e. tell us what happened in at least the last couple of revisions to save
-on having to go find the earlier threads to find out what changed in v5 and v4!
-
-Also, I always prefer a cover letter for a series even if brief. It give somewhere
-to reply to if there are discussions covering multiple patches, or if someone wants
-to give a tag for the whole series that I can trivially pick up with b4.
-Obviously no point for single patch series though!
-I don't normally moan about this, but I was moaning anyway so why not get
-everything off my chest! :)
-
-Thanks,
-
-Jonathan
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 30516dc0b70e..b2efafb15de6 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1172,6 +1172,7 @@ CONFIG_UNIPHIER_EFUSE=y
+ CONFIG_MESON_EFUSE=m
+ CONFIG_NVMEM_RMEM=m
+ CONFIG_FPGA=y
++CONFIG_FPGA_MGR_ALTERA_CVP=m
+ CONFIG_FPGA_MGR_STRATIX10_SOC=m
+ CONFIG_FPGA_BRIDGE=m
+ CONFIG_ALTERA_FREEZE_BRIDGE=m
+-- 
+2.19.0
 

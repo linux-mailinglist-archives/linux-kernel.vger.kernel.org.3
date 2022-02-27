@@ -2,176 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39C24C5957
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F244C5958
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiB0FTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 00:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S230026AbiB0FVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 00:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiB0FTB (ORCPT
+        with ESMTP id S230028AbiB0FVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 00:19:01 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D02BF0;
-        Sat, 26 Feb 2022 21:18:25 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id ay5so5272416plb.1;
-        Sat, 26 Feb 2022 21:18:25 -0800 (PST)
+        Sun, 27 Feb 2022 00:21:46 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B0A1A9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:21:07 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id j2so10784028oie.7
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hYI+LXbbkZPFFC9XcDUXZG81aMQ2hosXWFW9b6ZreDc=;
-        b=UdFNT83gCTMmhxLP6Ui+tTWUGiIulf/rG5QlpYS/3oCJjAonujj1+M1a0tGPmaDWBY
-         I2mslnulgrfIndJTTV7cOMUEjOGPk2sizZnwj36QgmJRtjPV51YZ7SecbYq1edGe8El7
-         f4P+L+EZSw9sGrriIKLiPRn3BlwjZqOjARp/THAHeVRFZOcZAei6T1pMnQVs6OVXD3+z
-         Q1LpPL7ifjXrx2UtrwHETQuJ3HRkv3SpaGikTT5UO5myE89c47fMsZluRZf3eJLfcpl2
-         ThuOngFQpb+sqlWNmSN09uhyESOmNNKGGRPBSWjvSKHbmWFsJSD//yt02Ua20zHHm9l/
-         azvg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=p2FWvVh852y2LuuIcxOEeOh71QGBakz57Fy4Yg2jNNk=;
+        b=KA7CUCmtmuqwszPd+rLI9ma1GA48BscFi+N6WDfKdfsAoVrlvoilC1tabQctfgtt3M
+         FcQ4B8NXp8iTxwzFiXmhyWenouBWK/KBCSdcFIye0WaFmCkg0Qdfbnd4dnjNCExcysll
+         j++5OjqKJiD0rswZOI76zprXBM5FbnibqxbhC1RZDQNHNU0PNiJ4jaI5TeSc6mQEti/Q
+         AhEWzKAR/Ha51rdBm2yhOqmyo7BBpqwGZSQ3RxOXhVLUsOr41MrP0f9GUg5q2dEFmBAy
+         Q9TYZzN9t8nOeYluwKuE5cLUSg5FWFLhjiTy/GOls52uGKrQKpEOy4+WAJiq+XDW9hy1
+         ZfZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hYI+LXbbkZPFFC9XcDUXZG81aMQ2hosXWFW9b6ZreDc=;
-        b=HNj0gfQduZM0CxQdXlKk84TQDkQPChc8Huj4ndeu5mtcIJCMkqJHsxX9Jl+V0gMTpm
-         E1Cup893LUGxPCzvVs5XC3n6Z4xACrXXuZY6Lt/PGbVgeVvZlKXE41pIbHbzpnofMXq5
-         4hUdfhGhSac9/FUnf+ub165f/wrweNjrq9Npy64PMeoo0JeQbpeRvw7Gm0H70uuI2/u8
-         X+glCF6eRa1UV6mi1ILD7apw/oJsS80mwycZOauz/Oqf6it43M0Jow6NnJeG3w0VB+lN
-         IP72mZu3xnPYxkXQWQ2KK91VB/wJO+W42JjElo/QXlVjnLtmwGIwP76/g2jUQ5eMliRw
-         QJ1g==
-X-Gm-Message-State: AOAM532dDwhXpExof9S2Dubmh5v3duYRzux5Vet5902S+t0WEzP77P+i
-        JgG7YRGMWCmuS2oD2TX7jdA=
-X-Google-Smtp-Source: ABdhPJzPIeMNveCUomXkPpScbpB3z9dFlIxzuDvnkt9ldQMVIpMPaUVaHrBxw13PbZcxGyCuVQlPeA==
-X-Received: by 2002:a17:90a:de02:b0:1bc:d277:66bd with SMTP id m2-20020a17090ade0200b001bcd27766bdmr10698864pjv.109.1645939104628;
-        Sat, 26 Feb 2022 21:18:24 -0800 (PST)
-Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id n125-20020a632783000000b003788c95b222sm450485pgn.9.2022.02.26.21.18.23
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=p2FWvVh852y2LuuIcxOEeOh71QGBakz57Fy4Yg2jNNk=;
+        b=joRoTG/d41q6R/7Mk7Eg3tqs4Tb0UF7z+4dYTVCuzZLrooySigbgWf7zz/cZvnRXAd
+         HPFz35EvCOTOPDZybTabedpmhvMVpObxj0sMIzOC0oVdSowCAR6DrhzLW8MQSPJvO9YI
+         5uukaa2APl1+SqhbsXH2UfOgXELw0JY/ib055an3gLVoFvb6uxqSN4ttatdjfOMkkgOR
+         K9tc5iFqWe61B/QhNFjmFUTgie+bQ7QLrjmFI85aKatWlt8FaYzvyX4OQiBXs9A+IWYk
+         n15EaCiXeFmKHXj4Zcumk6W4QenXrii+SdGgra9DBe5W4rMOrsJ6jpNzspW43YrfpwvU
+         ra4g==
+X-Gm-Message-State: AOAM533ke+qzg67E8LrDuyFvCIrhfUcP4gSieHtwRNuW44UksuNGDtGl
+        JV98CssRTWoSuT8FMl4a1X2q5A==
+X-Google-Smtp-Source: ABdhPJx6ungPL3K2I3A01hBjvb+zC2oK7mINCnfZ+jEAhf8zrgU9LlxSxNMKTYBYD1LkQHJQsjEBvw==
+X-Received: by 2002:aca:4b96:0:b0:2d7:2d16:f18e with SMTP id y144-20020aca4b96000000b002d72d16f18emr6583764oia.74.1645939266668;
+        Sat, 26 Feb 2022 21:21:06 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q6-20020a9d57c6000000b005ad5a1edd4csm3302900oti.22.2022.02.26.21.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 21:18:24 -0800 (PST)
-Date:   Sun, 27 Feb 2022 10:48:21 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-Message-ID: <20220227051821.fwrmeu7r6bab6tio@apollo.legion>
-References: <20220225234339.2386398-1-haoluo@google.com>
- <20220225234339.2386398-2-haoluo@google.com>
+        Sat, 26 Feb 2022 21:21:06 -0800 (PST)
+Date:   Sat, 26 Feb 2022 21:20:54 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, cgel.zte@gmail.com,
+        kirill@shutemov.name, songliubraving@fb.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
+        wang.yong12@zte.com.cn
+Subject: [PATCH] memfd: fix F_SEAL_WRITE after shmem huge page allocated
+In-Reply-To: <8986d97-3933-8fa7-abba-aabd67924bc2@google.com>
+Message-ID: <a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com>
+References: <20220215073743.1769979-1-cgel.zte@gmail.com> <1f486393-3829-4618-39a1-931afc580835@oracle.com> <d6e74520-88bc-9f57-e189-8e4f389726e@google.com> <Yg5RDDRLVsuT/Rfw@casper.infradead.org> <8986d97-3933-8fa7-abba-aabd67924bc2@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225234339.2386398-2-haoluo@google.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 05:13:31AM IST, Hao Luo wrote:
-> This patch allows bpf_syscall prog to perform some basic filesystem
-> operations: create, remove directories and unlink files. Three bpf
-> helpers are added for this purpose. When combined with the following
-> patches that allow pinning and getting bpf objects from bpf prog,
-> this feature can be used to create directory hierarchy in bpffs that
-> help manage bpf objects purely using bpf progs.
->
-> The added helpers subject to the same permission checks as their syscall
-> version. For example, one can not write to a read-only file system;
-> The identity of the current process is checked to see whether it has
-> sufficient permission to perform the operations.
->
-> Only directories and files in bpffs can be created or removed by these
-> helpers. But it won't be too hard to allow these helpers to operate
-> on files in other filesystems, if we want.
->
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
->  include/linux/bpf.h            |   1 +
->  include/uapi/linux/bpf.h       |  26 +++++
->  kernel/bpf/inode.c             |   9 +-
->  kernel/bpf/syscall.c           | 177 +++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |  26 +++++
->  5 files changed, 236 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index f19abc59b6cd..fce5e26179f5 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1584,6 +1584,7 @@ int bpf_link_new_fd(struct bpf_link *link);
->  struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd);
->  struct bpf_link *bpf_link_get_from_fd(u32 ufd);
->
-> +bool bpf_path_is_bpf_dir(const struct path *path);
->  int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
->  int bpf_obj_get_user(const char __user *pathname, int flags);
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index afe3d0d7f5f2..a5dbc794403d 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5086,6 +5086,29 @@ union bpf_attr {
->   *	Return
->   *		0 on success, or a negative error in case of failure. On error
->   *		*dst* buffer is zeroed out.
-> + *
-> + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
-> + *	Description
-> + *		Attempts to create a directory name *pathname*. The argument
-> + *		*pathname_sz* specifies the length of the string *pathname*.
-> + *		The argument *mode* specifies the mode for the new directory. It
-> + *		is modified by the process's umask. It has the same semantic as
-> + *		the syscall mkdir(2).
-> + *	Return
-> + *		0 on success, or a negative error in case of failure.
-> + *
-> + * long bpf_rmdir(const char *pathname, int pathname_sz)
-> + *	Description
-> + *		Deletes a directory, which must be empty.
-> + *	Return
-> + *		0 on sucess, or a negative error in case of failure.
-> + *
-> + * long bpf_unlink(const char *pathname, int pathname_sz)
-> + *	Description
-> + *		Deletes a name and possibly the file it refers to. It has the
-> + *		same semantic as the syscall unlink(2).
-> + *	Return
-> + *		0 on success, or a negative error in case of failure.
->   */
->  #define __BPF_FUNC_MAPPER(FN)		\
->  	FN(unspec),			\
-> @@ -5280,6 +5303,9 @@ union bpf_attr {
->  	FN(xdp_load_bytes),		\
->  	FN(xdp_store_bytes),		\
->  	FN(copy_from_user_task),	\
-> +	FN(mkdir),			\
-> +	FN(rmdir),			\
-> +	FN(unlink),			\
->  	/* */
->
+Wangyong reports: after enabling tmpfs filesystem to support
+transparent hugepage with the following command:
 
-How about only introducing bpf_sys_mkdirat and bpf_sys_unlinkat? That would be
-more useful for other cases in future, and when AT_FDCWD is passed, has the same
-functionality as these, but when openat/fget is supported, it would work
-relative to other dirfds as well. It can also allow using dirfd of the process
-calling read for a iterator (e.g. if it sets the fd number using skel->bss).
-unlinkat's AT_REMOVEDIR flag also removes the need for a bpf_rmdir.
+ echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
 
-WDYT?
+the docker program tries to add F_SEAL_WRITE through the following
+command, but it fails unexpectedly with errno EBUSY:
 
-> [...]
+ fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
 
---
-Kartikeya
+That is because memfd_tag_pins() and memfd_wait_for_pins() were never
+updated for shmem huge pages: checking page_mapcount() against
+page_count() is hopeless on THP subpages - they need to check
+total_mapcount() against page_count() on THP heads only.
+
+Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
+(compared != 1): either can be justified, but given the non-atomic
+total_mapcount() calculation, it is better now to be strict.  Bear in
+mind that total_mapcount() itself scans all of the THP subpages, when
+choosing to take an XA_CHECK_SCHED latency break.
+
+Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
+page has been swapped out since memfd_tag_pins(), then its refcount must
+have fallen, and so it can safely be untagged.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reported-by: wangyong <wang.yong12@zte.com.cn>
+Signed-off-by: Hugh Dickins <hughd@google.com>
+Cc: <stable@vger.kernel.org>
+---
+Andrew, please remove
+fix-shmem-huge-page-failed-to-set-f_seal_write-attribute-problem.patch
+fix-shmem-huge-page-failed-to-set-f_seal_write-attribute-problem-fix.patch
+from mmotm, and replace them by this patch against 5.17-rc5:
+wangyong's patch did not handle the case of pte-mapped huge pages, and I
+had this one from earlier, when I found the same issue with MFD_HUGEPAGE
+(but MFD_HUGEPAGE did not go in, so I didn't post this one, forgetting
+the transparent_hugepage/shmem_enabled case).
+
+ mm/memfd.c |   40 ++++++++++++++++++++++++++++------------
+ 1 file changed, 28 insertions(+), 12 deletions(-)
+
+--- 5.17-rc5/mm/memfd.c
++++ linux/mm/memfd.c
+@@ -31,20 +31,28 @@
+ static void memfd_tag_pins(struct xa_state *xas)
+ {
+ 	struct page *page;
+-	unsigned int tagged = 0;
++	int latency = 0;
++	int cache_count;
+ 
+ 	lru_add_drain();
+ 
+ 	xas_lock_irq(xas);
+ 	xas_for_each(xas, page, ULONG_MAX) {
+-		if (xa_is_value(page))
+-			continue;
+-		page = find_subpage(page, xas->xa_index);
+-		if (page_count(page) - page_mapcount(page) > 1)
++		cache_count = 1;
++		if (!xa_is_value(page) &&
++		    PageTransHuge(page) && !PageHuge(page))
++			cache_count = HPAGE_PMD_NR;
++
++		if (!xa_is_value(page) &&
++		    page_count(page) - total_mapcount(page) != cache_count)
+ 			xas_set_mark(xas, MEMFD_TAG_PINNED);
++		if (cache_count != 1)
++			xas_set(xas, page->index + cache_count);
+ 
+-		if (++tagged % XA_CHECK_SCHED)
++		latency += cache_count;
++		if (latency < XA_CHECK_SCHED)
+ 			continue;
++		latency = 0;
+ 
+ 		xas_pause(xas);
+ 		xas_unlock_irq(xas);
+@@ -73,7 +81,8 @@ static int memfd_wait_for_pins(struct ad
+ 
+ 	error = 0;
+ 	for (scan = 0; scan <= LAST_SCAN; scan++) {
+-		unsigned int tagged = 0;
++		int latency = 0;
++		int cache_count;
+ 
+ 		if (!xas_marked(&xas, MEMFD_TAG_PINNED))
+ 			break;
+@@ -87,10 +96,14 @@ static int memfd_wait_for_pins(struct ad
+ 		xas_lock_irq(&xas);
+ 		xas_for_each_marked(&xas, page, ULONG_MAX, MEMFD_TAG_PINNED) {
+ 			bool clear = true;
+-			if (xa_is_value(page))
+-				continue;
+-			page = find_subpage(page, xas.xa_index);
+-			if (page_count(page) - page_mapcount(page) != 1) {
++
++			cache_count = 1;
++			if (!xa_is_value(page) &&
++			    PageTransHuge(page) && !PageHuge(page))
++				cache_count = HPAGE_PMD_NR;
++
++			if (!xa_is_value(page) && cache_count !=
++			    page_count(page) - total_mapcount(page)) {
+ 				/*
+ 				 * On the last scan, we clean up all those tags
+ 				 * we inserted; but make a note that we still
+@@ -103,8 +116,11 @@ static int memfd_wait_for_pins(struct ad
+ 			}
+ 			if (clear)
+ 				xas_clear_mark(&xas, MEMFD_TAG_PINNED);
+-			if (++tagged % XA_CHECK_SCHED)
++
++			latency += cache_count;
++			if (latency < XA_CHECK_SCHED)
+ 				continue;
++			latency = 0;
+ 
+ 			xas_pause(&xas);
+ 			xas_unlock_irq(&xas);

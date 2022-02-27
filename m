@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66554C5A96
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0454C5A9D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiB0LK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 06:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S230221AbiB0LRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 06:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiB0LKy (ORCPT
+        with ESMTP id S229604AbiB0LRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 06:10:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3028C5B3CA;
-        Sun, 27 Feb 2022 03:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 717D0B80B98;
-        Sun, 27 Feb 2022 11:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16AB8C340F2;
-        Sun, 27 Feb 2022 11:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645960215;
-        bh=VDx1NMN5Fnle4AH471Xi19ig0epwy/svHVYRHa6+6Yc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=eGhS1nNeRe/x3rWpCOFSYmNaMa6lon8i/F+6LjkDLEriqdqxrPPtKop7DHWUhQVkT
-         mU9ncwzkibInpoBbXAZmjYH2IwMOpquV3x465TuMniWMvWM6ncaQxXbA6LO6RGk+ir
-         WQ28MR0R1mtQBQ1J5v1mGJw/eijbby9+AEXYdbqBqSllmE8s4FsbXVSkEZiB9MlU1M
-         b1VGSuXU/m6n6Mtuiaqqplgwaa6wPlhKOP1NxeS6+dA6RaDf3otvcSUv5C1e0KsdnB
-         cesAWl2Hk8P9yVBd7PQ76SGCi68WEyOyF3eCXJ2RgAgBWhErj5V4irOHG6fTCXczCa
-         OIEScvl0K4vdA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E99DFF03839;
-        Sun, 27 Feb 2022 11:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 27 Feb 2022 06:17:01 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A70F5D19C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:16:25 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id 8so10333195qvf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kg1Y0OYIFweQQA42dgS1d9xF+KPKvGQpFgfdMWlumF0=;
+        b=Q3w/r3DkeyCryBTFfiYCO/Ii7BMHjgXcrWujB1PodX17e24OIRTZQ7kMYVEdl6gQ0s
+         IWYkzo4EkczUIvFybEgY6mu6medwdUSzMYw91P9rZv3kQLOni74REsAC5dNwzjZpwonc
+         s48IEq+kcx+9q81cLHHHddXQ+SVlv3M2PjRhtikyRtzAQGBRz52TO3OEalTyEoeiLGTl
+         gOSCwI9Vq0MtpSIMnzhoOwSEseYXe2cGVgZJqcNaJggr5m/+aCtSaoBzh1XbSQwFm1zA
+         YvUint3pB4SYHoIKUBdC8oIhdOKydYl89mD6Bf3wtWsTrIBYtlz0lvS0phEevYsBUmvc
+         ab3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kg1Y0OYIFweQQA42dgS1d9xF+KPKvGQpFgfdMWlumF0=;
+        b=lQAjKf8trK79Gu879vLjP9lsKDb22VCZUwubNTn79mvBj0UenRdk7Q9F5/SfFqzrd/
+         1o1yCQwasQEOmad5EeWjBJCISMPqxMoIYQWIuab1heflIPxuM9qAwk3x+ngY9jDDy4fe
+         uDgdW5TrA3lOJ76jKMCSvI4wNlCvgFrvjwBPM3efIe9YGMs3NHoSrT5hiEZ6z7XbLksl
+         19ph4ajUdDkFLysIQgqqxNJpNvBofIJWDrnB1TBLSCuTeVp0Hx4GkhcPGIkk5R8cj7jF
+         Jzhv70odtlzvqe5VKvRBKJQkNk3BEIVuaK/9nVGO0gcJQ8VywUDdzBYjhZPouhuFogR2
+         xJ9Q==
+X-Gm-Message-State: AOAM530YuDV0SNR/GhdxOsyPAaDJrk+ppLD/B9hv+kzKyzQy/1k+41Wn
+        vQp+pQnFoUbGLFiDWArUZL7P2V5yxaI=
+X-Google-Smtp-Source: ABdhPJzPYtQSjM7E1Am//z+Jg/d3uZz0tHdEud143+XMuYtndFhkpEEIGLw7NRvrz/p37F+mpFSCRw==
+X-Received: by 2002:ad4:5bee:0:b0:432:f52d:28b6 with SMTP id k14-20020ad45bee000000b00432f52d28b6mr2840554qvc.44.1645960584406;
+        Sun, 27 Feb 2022 03:16:24 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id bs11-20020a05620a470b00b004b2d02f8a92sm3587402qkb.126.2022.02.27.03.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 03:16:23 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     cgel.zte@gmail.com, ebiederm@xmission.com
+Cc:     akpm@linux-foundation.org, balbir@linux.vnet.ibm.com,
+        bsingharora@gmail.com, containers@lists.linux.dev,
+        deng.changcheng@zte.com.cn, linux-kernel@vger.kernel.org,
+        xu.xin16@zte.com.cn
+Subject: Re:Re: [PATCH resend] kernel: Make taskstats available via genetlink per namespace
+Date:   Sun, 27 Feb 2022 11:16:18 +0000
+Message-Id: <20220227111618.2043152-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220223045639.1932955-1-xu.xin16@zte.com.cn>
+References: <20220223045639.1932955-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/3] net: use kfree_skb_reason() for ip/neighbour
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164596021495.1414.14538654076309776973.git-patchwork-notify@kernel.org>
-Date:   Sun, 27 Feb 2022 11:10:14 +0000
-References: <20220226041831.2058437-1-imagedong@tencent.com>
-In-Reply-To: <20220226041831.2058437-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, alobakin@pm.me,
-        cong.wang@bytedance.com, paulb@nvidia.com, talalahmad@google.com,
-        keescook@chromium.org, ilias.apalodimas@linaro.org,
-        memxor@gmail.com, flyingpeng@tencent.com, mengensun@tencent.com,
-        daniel@iogearbox.net, yajun.deng@linux.dev, roopa@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+>>> -sh-4.4# ./getdelays -d -p 186 -v
+>>> print delayacct stats ON
+>>> debug on
+>>> Error getting family id, errno 0
+>>>
+>>> As more and more applications are deployed in containers like Docker,
+>>> it is necessary to support getdelays to be used in net namespace.
+>>> Taskstats is safe for use per namespace as genetlink checks the
+>>> capability of namespace message by netlink_ns_capable().
+>>>
+>>> Make taskstats available via genetlink per namespace.
+>>
+>> Let me add a polite nack to this patch.
+>
+>> Taskstats is completely senseless in a network namespace.  There is no
+>> translation of identifiers into the context of the receiver of the
+>> message.
+>
+>The interface of taskstats is genetlink that is sensible in net namsespace.
+>
+>> To make this work requires updating the taskstats code to do something
+>> sensible when in a pid namespace, as well as when in a network
+>> namespace.
+>
+> Yes. Taskstats already does convert the input process ID into the task in the
+> correspoding pid namsespace. Do you mean to add some check of current user's
+> capability like SYS_ADMIN or else?
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Actually, here, I think it's meaningful to set the genl_family's netnsok of Taskstat
+as true. As you said, Taskstats itself is senseless in a network namespace. So, we
+don't have to limit it to the only init_net_ns, it is basically okay to make it
+available in all network namespace. Certainly, maybe taskstats itself also needs to
+updated, because it does seem to be missing something to just use CAP_NET_ADMIN as the
+acquisition restriction of taskstat.
 
-On Sat, 26 Feb 2022 12:18:28 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> In the series "net: use kfree_skb_reason() for ip/udp packet receive",
-> reasons for skb drops are added to the packet receive process of IP
-> layer. Link:
-> 
-> https://lore.kernel.org/netdev/20220205074739.543606-1-imagedong@tencent.com/
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v3,1/3] net: ip: add skb drop reasons for ip egress path
-    https://git.kernel.org/netdev/net-next/c/5e187189ec32
-  - [net-next,v3,2/3] net: neigh: use kfree_skb_reason() for __neigh_event_send()
-    https://git.kernel.org/netdev/net-next/c/a5736edda10c
-  - [net-next,v3,3/3] net: neigh: add skb drop reasons to arp_error_report()
-    https://git.kernel.org/netdev/net-next/c/56d4b4e48ace
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+xu xin 

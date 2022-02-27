@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCDD4C5F35
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF9D4C5F33
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiB0Vy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 16:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S231946AbiB0VyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 16:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiB0VyY (ORCPT
+        with ESMTP id S230343AbiB0VyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 16:54:24 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EDE3EBB3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:53:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645998827; x=1677534827;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=obWvSGCHBlQvp0m44jQyMhXbjuyu7QsBw25S8nIBpBk=;
-  b=CEcSWW9TkPFebqliD8H4hSGT2bhbidmaWHHY0BMYGIuVO/gN9vtPR0aO
-   miQp5mxBB0d9zkChCVtHy3WeC1mR9ZnGkpjCkwUb6pt6OjwcNOTXpqqDX
-   VCUV9BSas2S5YQtapM8XZhMbnz62x70jt994UuRkgih98RsmLqJ+J8n2l
-   7wgp7nDjDDLMkHb7TmN+QJLqH5yviURosS7JdY1TEEGcTIjVFqPSyanaI
-   4cAfH3ihPFOL29CmBHsFjNXNG7ZcNc30PYIkOpyVJOZugDpyS8N6K6Qnu
-   XN/awcIWn65EVndC8k0OS1rH3FNUuyT8Ln6jwwPjN+0TG5LKoBSvZnP9L
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="315979454"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="315979454"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 13:53:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="549984166"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Feb 2022 13:53:44 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nORU7-0006p9-BX; Sun, 27 Feb 2022 21:53:43 +0000
-Date:   Mon, 28 Feb 2022 05:52:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kees:for-next/overflow 9/9] ./usr/include/misc/kunit.h:22:15:
- error: no macro name given in #define directive
-Message-ID: <202202280550.gcosQL9r-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 27 Feb 2022 16:54:07 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA0A33EBA1;
+        Sun, 27 Feb 2022 13:53:29 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,142,1643641200"; 
+   d="scan'208";a="111722611"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 28 Feb 2022 06:53:29 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 54BB440F8EFF;
+        Mon, 28 Feb 2022 06:53:27 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: [PATCH] dt-bindings: memory: renesas,rpc-if: Document RZ/V2L SoC
+Date:   Sun, 27 Feb 2022 21:53:08 +0000
+Message-Id: <20220227215308.26135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/overflow
-head:   6a00c01f84e41b5cf50a312488cd72b5cd4e3d35
-commit: 6a00c01f84e41b5cf50a312488cd72b5cd4e3d35 [9/9] UAPI: Introduce KUnit userspace compatibility
-config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220228/202202280550.gcosQL9r-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=6a00c01f84e41b5cf50a312488cd72b5cd4e3d35
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/overflow
-        git checkout 6a00c01f84e41b5cf50a312488cd72b5cd4e3d35
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Document RZ/V2L RPC-IF bindings. RZ/V2L RPC-IF is identical to one found
+on the RZ/G2L SoC. No driver changes are required as generic compatible
+string "renesas,rzg2l-rpc-if" will be used as a fallback.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:32:
->> ./usr/include/misc/kunit.h:22:15: error: no macro name given in #define directive
-      22 | #define   /**/
-         |               ^
-   ./usr/include/misc/kunit.h:144:12: warning: 'run_suites' defined but not used [-Wunused-function]
-     144 | static int run_suites(char *name, struct kunit_suite *suites[], size_t count)
-         |            ^~~~~~~~~~
-
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+DTSI changes have been posted as part of series [0].
+
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20220227203744.18355-7-prabhakar.mahadev-lad.rj@bp.renesas.com/
+---
+ .../devicetree/bindings/memory-controllers/renesas,rpc-if.yaml   | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+index 294f1036420d..f051ffb2a421 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+@@ -40,6 +40,7 @@ properties:
+       - items:
+           - enum:
+               - renesas,r9a07g044-rpc-if      # RZ/G2{L,LC}
++              - renesas,r9a07g054-rpc-if      # RZ/V2L
+           - const: renesas,rzg2l-rpc-if       # RZ/G2L family
+ 
+   reg:
+-- 
+2.17.1
+

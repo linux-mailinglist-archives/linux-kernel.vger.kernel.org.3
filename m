@@ -2,280 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7B14C58FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5494C5903
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiB0DDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 22:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S229741AbiB0DHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 22:07:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiB0DDI (ORCPT
+        with ESMTP id S229734AbiB0DHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:03:08 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B7431516
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645930951; x=1677466951;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RZtY4KfMrV6LxVmaxP+PC0sKaj8p5O2CLZ0tkqMstJ8=;
-  b=oKv1qkh0LFYTcWjDiyvva14oUegVKq7SNcDimhpU1OFCVS8dfkbTe1XB
-   OYYqCM+iHmmzHNbN+JLUSS4aCwXKZGSsYnP0uVlUlfhG2apQ+CnAJvI55
-   sjUUmGS8KVZx31hmtKxQwVCZfdX/BGbSx4kzptrdZmoAkksA1Jkw0ZYFN
-   ZcpU4vpABTgvCT8hIMaEl4SH7pVxBLbwBSpJMbYLUN+2k1c8gmsflKP6w
-   RpoZ11jORjTR9AKwvs8a6c1JV4K8WVomS6DoXcG50VaoKPRz5M4a/78Kn
-   L7au1+nC4tN2w44k/6d/wI26SeNx3/6MTj+s8a/jv5wsuCPEoiXsZGADz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="339136134"
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="339136134"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 19:02:31 -0800
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="549782462"
-Received: from chenyu-dev.sh.intel.com (HELO chenyu-dev) ([10.239.158.61])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 19:02:26 -0800
-Date:   Sun, 27 Feb 2022 11:02:09 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH][RFC] sched: Stop searching for idle cpu if the LLC
- domain is overloaded
-Message-ID: <20220227030209.GA90484@chenyu-dev>
-References: <20220207034013.599214-1-yu.c.chen@intel.com>
- <4ca9ba48-20f0-84d5-6a38-11f9d4c7a028@amd.com>
+        Sat, 26 Feb 2022 22:07:46 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464F2205E16
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:07:09 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id v123-20020a6bc581000000b0063d8771a58aso6488576iof.0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:07:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=ZI/TnczTGZWx16MyuOAAaApciMqhDhuv/qpLMCRtkkw=;
+        b=GcpLWbVcEqlOTiY6Pg/radI4UEAZxeCWL8wJd/tshCjf327MmoduCkhox+haoqJggW
+         4QUQ0+mNtID5L0L3bgb1rUSMiW3R2Pl32BDWRyiEGU1/j5a+l66nx6QsLkyIhoeNhbZi
+         TjoINOG4AStICpg3oO0Lv8oO5/cwaagiVK+CjlCErDl4czRgK5i8K6R5LuvF9ngsGBFi
+         O6ddH58gSLMJfP6Vwfdww0YgoNCe0vs7XSZXXsIaZ5UWp91ECGK8im4j8Z1JM7OlJ8Sv
+         ADrDz6b6NGMo2fPeHNE4wdvUPOAxcQ/z1PYkZBiBXYGpgNT9C3T+k2+Om88G6GP3bthy
+         lgJQ==
+X-Gm-Message-State: AOAM5313e2y0GHbuTfUzbf3UFCOE6Rz+JqExzoSHyOhuq298LmtvRBbd
+        mvMOG0dhkUnjow73d+DfAws0OlmYkA3UYy6HDueHPFZmEeJw
+X-Google-Smtp-Source: ABdhPJwt01IVL5GbiuyiTNu4eC1wB8l4dV9Itk1gHvNeHEVLAVNAWFc2P16f0cqB7Lx4AYVIkA/nYSR2p0mnjbDyYlBV/e2AyFDS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ca9ba48-20f0-84d5-6a38-11f9d4c7a028@amd.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6b19:0:b0:640:a354:69ef with SMTP id
+ g25-20020a6b6b19000000b00640a35469efmr10882071ioc.186.1645931228468; Sat, 26
+ Feb 2022 19:07:08 -0800 (PST)
+Date:   Sat, 26 Feb 2022 19:07:08 -0800
+In-Reply-To: <20220227025605.2681-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003298d505d8f73af1@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in sco_sock_timeout
+From:   syzbot <syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com>
+To:     desmondcheongzx@gmail.com, hdanton@sina.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prateek,
-On Wed, Feb 23, 2022 at 03:35:35PM +0530, K Prateek Nayak wrote:
-> Hello Chenyu,
-> 
-> On 2/7/2022 9:10 AM, Chen Yu wrote:
-> > [Problem Statement]
-> > Searching for an idle cpu/core in a LLC domain is time consuming
-> > when the LLC domain is relatively busy. Even worse, it is possible
-> > that after iterating the whole LLC domain, it might still
-> > fail to find an idle cpu/core.
-> 
-> We tested the patch running some standard benchmark on a dual
-> socket AMD Zen3 system (2 x 64C/128T). Following are the results
-> comparing the results seen on tip/sched/core (sched-tip) and
-> tip/sched/core + this patch (util-avg)
-> 
-> ~~~~~~~~~
-> hackbench
-> ~~~~~~~~~
-> 
-> NPS Mode - NPS1
-> Test:                   sched-tip                util-avg
->  1-groups:         4.97 (0.00 pct)         5.06 (-1.81 pct)
->  2-groups:         5.71 (0.00 pct)         5.65 (1.05 pct)
->  4-groups:         6.33 (0.00 pct)         6.22 (1.73 pct)
->  8-groups:         7.93 (0.00 pct)         7.77 (2.01 pct)
-> 16-groups:        12.35 (0.00 pct)        11.75 (4.85 pct)
-> 
-> NPS Mode - NPS2
-> Test:                   sched-tip                util-avg
->  1-groups:         4.87 (0.00 pct)         4.97 (-2.05 pct)
->  2-groups:         5.43 (0.00 pct)         5.39 (0.73 pct)
->  4-groups:         6.07 (0.00 pct)         5.94 (2.14 pct)
->  8-groups:         7.46 (0.00 pct)         7.39 (0.93 pct)
-> 16-groups:        10.27 (0.00 pct)        10.07 (1.94 pct)
-> 
-> NPS Mode - NPS4
-> Test:                   sched-tip                util-avg
->  1-groups:         4.87 (0.00 pct)         4.89 (-0.41 pct)
->  2-groups:         5.40 (0.00 pct)         5.48 (-1.48 pct)
->  4-groups:         6.15 (0.00 pct)         6.17 (-0.32 pct)
->  8-groups:         7.63 (0.00 pct)         7.53 (1.31 pct)
-> 16-groups:        10.24 (0.00 pct)         9.89 (3.41 pct)
-> 
-> ~~~~~~~~
-> schbench
-> ~~~~~~~~
-> 
-> NPS Mode - NPS1
-> #workers:       sched-tip                util-avg
->   1:      13.00 (0.00 pct)        14.50 (-11.53 pct)
->   2:      31.50 (0.00 pct)        34.00 (-7.93 pct)
->   4:      43.50 (0.00 pct)        37.50 (13.79 pct)
->   8:      56.00 (0.00 pct)        50.50 (9.82 pct)
->  16:      69.50 (0.00 pct)        68.50 (1.43 pct)
->  32:     107.00 (0.00 pct)       106.50 (0.46 pct)
->  64:     191.00 (0.00 pct)       191.50 (-0.26 pct)
-> 128:     413.50 (0.00 pct)       408.50 (1.20 pct)
-> 256:     950.00 (0.00 pct)       947.00 (0.31 pct)
-> 512:     60352.00 (0.00 pct)     60288.00 (0.10 pct)
-> 
-> NPS Mode - NPS2
-> #workers:       sched-tip              util-avg
->   1:      11.50 (0.00 pct)        11.00 (4.34 pct)
->   2:      26.00 (0.00 pct)        30.00 (-15.38 pct)
->   4:      36.00 (0.00 pct)        39.00 (-8.33 pct)
->   8:      57.50 (0.00 pct)        49.50 (13.91 pct)
->  16:      68.50 (0.00 pct)        69.00 (-0.72 pct)
->  32:     105.50 (0.00 pct)       104.50 (0.94 pct)
->  64:     192.50 (0.00 pct)       189.50 (1.55 pct)
-> 128:     403.50 (0.00 pct)       430.00 (-6.56 pct)
-> 256:     945.00 (0.00 pct)       957.00 (-1.26 pct)
-> 512:     60288.00 (0.00 pct)     60224.00 (0.10 pct)
-> 
-> NPS Mode - NPS4
-> #workers:      sched-tip               util-avg
->   1:      12.50 (0.00 pct)        11.50 (8.00 pct)
->   2:      29.00 (0.00 pct)        23.00 (20.68 pct)
->   4:      28.50 (0.00 pct)        29.50 (-3.50 pct)
->   8:      45.00 (0.00 pct)        46.50 (-3.33 pct)
->  16:      74.00 (0.00 pct)        84.00 (-13.51 pct)
->  32:     110.50 (0.00 pct)       108.50 (1.80 pct)
->  64:     198.00 (0.00 pct)       191.50 (3.28 pct)
-> 128:     434.00 (0.00 pct)       418.00 (3.68 pct)
-> 256:     964.00 (0.00 pct)       952.00 (1.24 pct)
-> 512:     60352.00 (0.00 pct)     60352.00 (0.00 pct)
-> 
-> ~~~~~~
-> tbench
-> ~~~~~~
-> 
-> NPS Mode - NPS1
-> Clients:        sched-tip               util-avg
->     1    475.40 (0.00 pct)       480.46 (1.06 pct)
->     2    939.62 (0.00 pct)       929.13 (-1.11 pct)
->     4    1767.75 (0.00 pct)      1798.94 (1.76 pct)
->     8    3315.70 (0.00 pct)      3231.78 (-2.53 pct)
->    16    5887.79 (0.00 pct)      6037.36 (2.54 pct)
->    32    10202.20 (0.00 pct)     10223.65 (0.21 pct)
->    64    16816.42 (0.00 pct)     17122.40 (1.81 pct)
->   128    28423.90 (0.00 pct)     28680.46 (0.90 pct)
->   256    26726.29 (0.00 pct)     52502.83 (96.44 pct)
->   512    53082.43 (0.00 pct)     53635.54 (1.04 pct)
->  1024    52940.64 (0.00 pct)     53051.05 (0.20 pct)
-> 
-> NPS Mode - NPS2
-> Clients:        sched-tip               util-avg
->     1    481.84 (0.00 pct)       479.67 (-0.45 pct)
->     2    941.13 (0.00 pct)       927.93 (-1.40 pct)
->     4    1797.61 (0.00 pct)      1770.86 (-1.48 pct)
->     8    3353.37 (0.00 pct)      3360.29 (0.20 pct)
->    16    5779.49 (0.00 pct)      5925.27 (2.52 pct)
->    32    10810.27 (0.00 pct)     10855.17 (0.41 pct)
->    64    17046.83 (0.00 pct)     17457.64 (2.40 pct)
->   128    28799.32 (0.00 pct)     28855.49 (0.19 pct)
->   256    27654.49 (0.00 pct)     47126.18 (70.41 pct)
->   512    51831.52 (0.00 pct)     51219.55 (-1.18 pct)
->  1024    52579.87 (0.00 pct)     50213.68 (-4.50 pct)
-> 
-> NPS Mode - NPS4
-> Clients:        sched-tip               util-avg
->     1    474.08 (0.00 pct)       478.40 (0.91 pct)
->     2    928.23 (0.00 pct)       937.76 (1.02 pct)
->     4    1754.78 (0.00 pct)      1741.17 (-0.77 pct)
->     8    3219.31 (0.00 pct)      3318.00 (3.06 pct)
->    16    5791.53 (0.00 pct)      5687.78 (-1.79 pct)
->    32    9810.76 (0.00 pct)      10866.32 (10.75 pct)
->    64    17098.46 (0.00 pct)     17203.60 (0.61 pct)
->   128    28575.94 (0.00 pct)     28020.97 (-1.94 pct)
->   256    25997.38 (0.00 pct)     47735.83 (83.61 pct)
->   512    47698.94 (0.00 pct)     48220.54 (1.09 pct)
->  1024    51451.30 (0.00 pct)     50455.47 (-1.93 pct)
-> 
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> Stream with 16 threads.
-> built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=10
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> NPS Mode - NPS1
-> Test:           sched-tip                   util-avg
->  Copy:   175278.66 (0.00 pct)    147847.67 (-15.64 pct)
-> Scale:   193235.46 (0.00 pct)    186582.76 (-3.44 pct)
->   Add:   220232.14 (0.00 pct)    208519.22 (-5.31 pct)
-> Triad:   215526.78 (0.00 pct)    204975.14 (-4.89 pct)
-> 
-> NPS Mode - NPS2
-> Test:           sched-tip                    util-avg
->  Copy:   166600.09 (0.00 pct)    146456.45 (-12.09 pct)
-> Scale:   190820.84 (0.00 pct)    179603.16 (-5.87 pct)
->   Add:   214660.01 (0.00 pct)    198636.00 (-7.46 pct)
-> Triad:   210879.10 (0.00 pct)    196132.74 (-6.99 pct)
-> 
-> NPS Mode - NPS4
-> Test:           sched-tip                    util-avg
->  Copy:   173888.83 (0.00 pct)    180948.16 (4.05 pct)
-> Scale:   193027.03 (0.00 pct)    199330.65 (3.26 pct)
->   Add:   218731.48 (0.00 pct)    221743.63 (1.37 pct)
-> Triad:   214651.06 (0.00 pct)    218036.35 (1.57 pct)
-> 
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> Stream with 16 threads.
-> built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=100
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> NPS Mode - NPS1
-> Test:           sched-tip                    util-avg
->  Copy:   222954.79 (0.00 pct)    219066.70 (-1.74 pct)
-> Scale:   208255.97 (0.00 pct)    215060.20 (3.26 pct)
->   Add:   247694.16 (0.00 pct)    262893.33 (6.13 pct)
-> Triad:   236060.27 (0.00 pct)    250188.38 (5.98 pct)
-> 
-> NPS Mode - NPS2
-> Test:           sched-tip                   util-avg
->  Copy:   226147.92 (0.00 pct)    228438.70 (1.01 pct)
-> Scale:   214059.09 (0.00 pct)    215959.36 (0.88 pct)
->   Add:   264978.05 (0.00 pct)    270058.63 (1.91 pct)
-> Triad:   253095.73 (0.00 pct)    257466.31 (1.72 pct)
-> 
-> NPS Mode - NPS4
-> Test:           sched-tip                   util-avg
->  Copy:   223484.37 (0.00 pct)    266929.80 (19.44 pct)
-> Scale:   224198.90 (0.00 pct)    235316.80 (4.95 pct)
->   Add:   272008.98 (0.00 pct)    294452.15 (8.25 pct)
-> Triad:   258219.64 (0.00 pct)    285935.30 (10.73 pct)
-> --
-> 
-> We see great results in case of tbench with 256 workers when the
-> system is fully loaded which is exactly the kind of scenario this
-> patch optimizes for. Hackbench too shows improvements, especially
-> in the case of 16-groups.
+Hello,
 
-Thanks for the testing. Currently we have enhanced this patch
-according to Peter's suggestion, to make the number of idle cpu
-search more gradual. And we have launched some benchmarks to
-evaluate the effect. Once it is done, we will send the v2 patch
-out and it would be appreciated that you can also help give a glance
-at it.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Write in sco_sock_timeout
 
-Thanks,
-Chenyu
-> --
-> Thanks and Regards,
-> Prateek
+Bluetooth: hci0: command 0x040f tx timeout
+Bluetooth: hci0: command 0x0405 tx timeout
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: use-after-free in atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
+BUG: KASAN: use-after-free in __refcount_add include/linux/refcount.h:193 [inline]
+BUG: KASAN: use-after-free in __refcount_inc include/linux/refcount.h:250 [inline]
+BUG: KASAN: use-after-free in refcount_inc include/linux/refcount.h:267 [inline]
+BUG: KASAN: use-after-free in sock_hold include/net/sock.h:726 [inline]
+BUG: KASAN: use-after-free in sco_sock_timeout+0x64/0x290 net/bluetooth/sco.c:89
+Write of size 4 at addr ffff888021031080 by task kworker/0:3/1132
+
+CPU: 0 PID: 1132 Comm: kworker/0:3 Not tainted 5.17.0-rc4-syzkaller-01424-g922ea87ff6f2-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events sco_sock_timeout
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
+ __refcount_add include/linux/refcount.h:193 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ sock_hold include/net/sock.h:726 [inline]
+ sco_sock_timeout+0x64/0x290 net/bluetooth/sco.c:89
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Allocated by task 4058:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:586 [inline]
+ sk_prot_alloc+0x110/0x290 net/core/sock.c:1936
+ sk_alloc+0x32/0xa80 net/core/sock.c:1989
+ sco_sock_alloc.constprop.0+0x31/0x330 net/bluetooth/sco.c:488
+ sco_sock_create+0xd5/0x1b0 net/bluetooth/sco.c:527
+ bt_sock_create+0x17c/0x340 net/bluetooth/af_bluetooth.c:130
+ __sock_create+0x353/0x790 net/socket.c:1468
+ sock_create net/socket.c:1519 [inline]
+ __sys_socket+0xef/0x200 net/socket.c:1561
+ __do_sys_socket net/socket.c:1570 [inline]
+ __se_sys_socket net/socket.c:1568 [inline]
+ __x64_sys_socket+0x6f/0xb0 net/socket.c:1568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 4058:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x126/0x160 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
+ slab_free mm/slub.c:3509 [inline]
+ kfree+0xd0/0x390 mm/slub.c:4562
+ sk_prot_free net/core/sock.c:1972 [inline]
+ __sk_destruct+0x6c0/0x920 net/core/sock.c:2058
+ sk_destruct+0x131/0x180 net/core/sock.c:2076
+ __sk_free+0xef/0x3d0 net/core/sock.c:2087
+ sk_free+0x78/0xa0 net/core/sock.c:2098
+ sock_put include/net/sock.h:1926 [inline]
+ sco_sock_kill+0x18d/0x1b0 net/bluetooth/sco.c:403
+ sco_sock_release+0x197/0x310 net/bluetooth/sco.c:1264
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1318
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ get_signal+0x1de2/0x2490 kernel/signal.c:2631
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888021031000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 128 bytes inside of
+ 2048-byte region [ffff888021031000, ffff888021031800)
+The buggy address belongs to the page:
+page:ffffea0000840c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x21030
+head:ffffea0000840c00 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888010c42000
+raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd28c0(GFP_NOWAIT|__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3595, ts 45073525139, free_ts 36261730425
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab+0x27f/0x3c0 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0xbe1/0x12b0 mm/slub.c:3018
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
+ slab_alloc_node mm/slub.c:3196 [inline]
+ __kmalloc_node_track_caller+0x339/0x470 mm/slub.c:4957
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ pskb_expand_head+0x15e/0x1060 net/core/skbuff.c:1699
+ netlink_trim+0x1ea/0x240 net/netlink/af_netlink.c:1299
+ netlink_broadcast+0x5b/0xd50 net/netlink/af_netlink.c:1495
+ nlmsg_multicast include/net/netlink.h:1033 [inline]
+ nlmsg_notify+0x8f/0x280 net/netlink/af_netlink.c:2537
+ rtnl_notify net/core/rtnetlink.c:730 [inline]
+ rtmsg_ifinfo_send net/core/rtnetlink.c:3857 [inline]
+ rtmsg_ifinfo_event net/core/rtnetlink.c:3872 [inline]
+ rtmsg_ifinfo_event net/core/rtnetlink.c:3860 [inline]
+ rtnetlink_event+0x193/0x1d0 net/core/rtnetlink.c:5649
+ notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
+ call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1939
+ __netdev_upper_dev_link+0x3fd/0x7f0 net/core/dev.c:7483
+ netdev_upper_dev_link+0x8a/0xc0 net/core/dev.c:7524
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ __put_page+0x193/0x1e0 mm/swap.c:128
+ folio_put include/linux/mm.h:1199 [inline]
+ put_page include/linux/mm.h:1237 [inline]
+ __skb_frag_unref include/linux/skbuff.h:3249 [inline]
+ skb_release_data+0x49d/0x790 net/core/skbuff.c:672
+ skb_release_all net/core/skbuff.c:742 [inline]
+ __kfree_skb+0x46/0x60 net/core/skbuff.c:756
+ __sk_defer_free_flush net/ipv4/tcp.c:1600 [inline]
+ sk_defer_free_flush include/net/tcp.h:1380 [inline]
+ tcp_recvmsg+0x1ca/0x610 net/ipv4/tcp.c:2574
+ inet_recvmsg+0x11b/0x5e0 net/ipv4/af_inet.c:850
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ sock_read_iter+0x33c/0x470 net/socket.c:1039
+ call_read_iter include/linux/fs.h:2068 [inline]
+ new_sync_read+0x5c2/0x6e0 fs/read_write.c:400
+ vfs_read+0x35c/0x600 fs/read_write.c:481
+ ksys_read+0x1ee/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff888021030f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888021031000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888021031080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff888021031100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888021031180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+Tested on:
+
+commit:         922ea87f ionic: use vmalloc include
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=152f4b46700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d63ad23bb09039e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=170926a2700000
+

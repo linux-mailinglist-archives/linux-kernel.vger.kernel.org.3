@@ -2,243 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5494C5903
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8878A4C590E
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiB0DHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 22:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S229774AbiB0DI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 22:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiB0DHq (ORCPT
+        with ESMTP id S229734AbiB0DI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:07:46 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464F2205E16
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:07:09 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id v123-20020a6bc581000000b0063d8771a58aso6488576iof.0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:07:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ZI/TnczTGZWx16MyuOAAaApciMqhDhuv/qpLMCRtkkw=;
-        b=GcpLWbVcEqlOTiY6Pg/radI4UEAZxeCWL8wJd/tshCjf327MmoduCkhox+haoqJggW
-         4QUQ0+mNtID5L0L3bgb1rUSMiW3R2Pl32BDWRyiEGU1/j5a+l66nx6QsLkyIhoeNhbZi
-         TjoINOG4AStICpg3oO0Lv8oO5/cwaagiVK+CjlCErDl4czRgK5i8K6R5LuvF9ngsGBFi
-         O6ddH58gSLMJfP6Vwfdww0YgoNCe0vs7XSZXXsIaZ5UWp91ECGK8im4j8Z1JM7OlJ8Sv
-         ADrDz6b6NGMo2fPeHNE4wdvUPOAxcQ/z1PYkZBiBXYGpgNT9C3T+k2+Om88G6GP3bthy
-         lgJQ==
-X-Gm-Message-State: AOAM5313e2y0GHbuTfUzbf3UFCOE6Rz+JqExzoSHyOhuq298LmtvRBbd
-        mvMOG0dhkUnjow73d+DfAws0OlmYkA3UYy6HDueHPFZmEeJw
-X-Google-Smtp-Source: ABdhPJwt01IVL5GbiuyiTNu4eC1wB8l4dV9Itk1gHvNeHEVLAVNAWFc2P16f0cqB7Lx4AYVIkA/nYSR2p0mnjbDyYlBV/e2AyFDS
+        Sat, 26 Feb 2022 22:08:27 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DD920645A;
+        Sat, 26 Feb 2022 19:07:47 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K5pH15l0Dzbbnm;
+        Sun, 27 Feb 2022 11:03:09 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sun, 27 Feb 2022 11:07:45 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sun, 27 Feb 2022 11:07:44 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: [PATCH v21 0/5] support reserving crashkernel above 4G on arm64 kdump
+Date:   Sun, 27 Feb 2022 11:07:12 +0800
+Message-ID: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6b19:0:b0:640:a354:69ef with SMTP id
- g25-20020a6b6b19000000b00640a35469efmr10882071ioc.186.1645931228468; Sat, 26
- Feb 2022 19:07:08 -0800 (PST)
-Date:   Sat, 26 Feb 2022 19:07:08 -0800
-In-Reply-To: <20220227025605.2681-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003298d505d8f73af1@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in sco_sock_timeout
-From:   syzbot <syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com>
-To:     desmondcheongzx@gmail.com, hdanton@sina.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changes since [v20]:
+1. Check whether crashkernel=Y,low is incorrectly configured or not configured. Do different processing.
+2. Share the existing description of x86. The configuration of arm64 is the same as that of x86.
+3. Define the value of macro CRASH_ADDR_HIGH_MAX as memblock.current_limit, instead of MEMBLOCK_ALLOC_ACCESSIBLE.
+4. To improve readability, some lightweight code adjustments have been made to reserve_craskernel(), including comments.
+5. The defined value of DEFAULT_CRASH_KERNEL_LOW_SIZE reconsiders swiotlb, just like x86, to share documents.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Write in sco_sock_timeout
+Thanks to Baoquan He for his careful review.
 
-Bluetooth: hci0: command 0x040f tx timeout
-Bluetooth: hci0: command 0x0405 tx timeout
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: use-after-free in atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
-BUG: KASAN: use-after-free in __refcount_add include/linux/refcount.h:193 [inline]
-BUG: KASAN: use-after-free in __refcount_inc include/linux/refcount.h:250 [inline]
-BUG: KASAN: use-after-free in refcount_inc include/linux/refcount.h:267 [inline]
-BUG: KASAN: use-after-free in sock_hold include/net/sock.h:726 [inline]
-BUG: KASAN: use-after-free in sco_sock_timeout+0x64/0x290 net/bluetooth/sco.c:89
-Write of size 4 at addr ffff888021031080 by task kworker/0:3/1132
-
-CPU: 0 PID: 1132 Comm: kworker/0:3 Not tainted 5.17.0-rc4-syzkaller-01424-g922ea87ff6f2-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events sco_sock_timeout
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
- __refcount_add include/linux/refcount.h:193 [inline]
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- sock_hold include/net/sock.h:726 [inline]
- sco_sock_timeout+0x64/0x290 net/bluetooth/sco.c:89
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-Allocated by task 4058:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:586 [inline]
- sk_prot_alloc+0x110/0x290 net/core/sock.c:1936
- sk_alloc+0x32/0xa80 net/core/sock.c:1989
- sco_sock_alloc.constprop.0+0x31/0x330 net/bluetooth/sco.c:488
- sco_sock_create+0xd5/0x1b0 net/bluetooth/sco.c:527
- bt_sock_create+0x17c/0x340 net/bluetooth/af_bluetooth.c:130
- __sock_create+0x353/0x790 net/socket.c:1468
- sock_create net/socket.c:1519 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1561
- __do_sys_socket net/socket.c:1570 [inline]
- __se_sys_socket net/socket.c:1568 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 4058:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x126/0x160 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kfree+0xd0/0x390 mm/slub.c:4562
- sk_prot_free net/core/sock.c:1972 [inline]
- __sk_destruct+0x6c0/0x920 net/core/sock.c:2058
- sk_destruct+0x131/0x180 net/core/sock.c:2076
- __sk_free+0xef/0x3d0 net/core/sock.c:2087
- sk_free+0x78/0xa0 net/core/sock.c:2098
- sock_put include/net/sock.h:1926 [inline]
- sco_sock_kill+0x18d/0x1b0 net/bluetooth/sco.c:403
- sco_sock_release+0x197/0x310 net/bluetooth/sco.c:1264
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1318
- __fput+0x286/0x9f0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- get_signal+0x1de2/0x2490 kernel/signal.c:2631
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff888021031000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 128 bytes inside of
- 2048-byte region [ffff888021031000, ffff888021031800)
-The buggy address belongs to the page:
-page:ffffea0000840c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x21030
-head:ffffea0000840c00 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888010c42000
-raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd28c0(GFP_NOWAIT|__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3595, ts 45073525139, free_ts 36261730425
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x27f/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0xbe1/0x12b0 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- __kmalloc_node_track_caller+0x339/0x470 mm/slub.c:4957
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- pskb_expand_head+0x15e/0x1060 net/core/skbuff.c:1699
- netlink_trim+0x1ea/0x240 net/netlink/af_netlink.c:1299
- netlink_broadcast+0x5b/0xd50 net/netlink/af_netlink.c:1495
- nlmsg_multicast include/net/netlink.h:1033 [inline]
- nlmsg_notify+0x8f/0x280 net/netlink/af_netlink.c:2537
- rtnl_notify net/core/rtnetlink.c:730 [inline]
- rtmsg_ifinfo_send net/core/rtnetlink.c:3857 [inline]
- rtmsg_ifinfo_event net/core/rtnetlink.c:3872 [inline]
- rtmsg_ifinfo_event net/core/rtnetlink.c:3860 [inline]
- rtnetlink_event+0x193/0x1d0 net/core/rtnetlink.c:5649
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1939
- __netdev_upper_dev_link+0x3fd/0x7f0 net/core/dev.c:7483
- netdev_upper_dev_link+0x8a/0xc0 net/core/dev.c:7524
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3404
- __put_page+0x193/0x1e0 mm/swap.c:128
- folio_put include/linux/mm.h:1199 [inline]
- put_page include/linux/mm.h:1237 [inline]
- __skb_frag_unref include/linux/skbuff.h:3249 [inline]
- skb_release_data+0x49d/0x790 net/core/skbuff.c:672
- skb_release_all net/core/skbuff.c:742 [inline]
- __kfree_skb+0x46/0x60 net/core/skbuff.c:756
- __sk_defer_free_flush net/ipv4/tcp.c:1600 [inline]
- sk_defer_free_flush include/net/tcp.h:1380 [inline]
- tcp_recvmsg+0x1ca/0x610 net/ipv4/tcp.c:2574
- inet_recvmsg+0x11b/0x5e0 net/ipv4/af_inet.c:850
- sock_recvmsg_nosec net/socket.c:948 [inline]
- sock_recvmsg net/socket.c:966 [inline]
- sock_recvmsg net/socket.c:962 [inline]
- sock_read_iter+0x33c/0x470 net/socket.c:1039
- call_read_iter include/linux/fs.h:2068 [inline]
- new_sync_read+0x5c2/0x6e0 fs/read_write.c:400
- vfs_read+0x35c/0x600 fs/read_write.c:481
- ksys_read+0x1ee/0x250 fs/read_write.c:619
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
- ffff888021030f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888021031000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888021031080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff888021031100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888021031180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+The test cases are as follows: (Please update the kexec tool to the latest version)
+1) crashkernel=4G						//high=4G, low=256M
+2) crashkernel=4G crashkernel=512M,high crashkernel=512M,low	//high=4G, low=256M, high and low are ignored
+3) crashkernel=4G crashkernel=512M,high				//high=4G, low=256M, high is ignored
+4) crashkernel=4G crashkernel=512M,low				//high=4G, low=256M, low is ignored
+5) crashkernel=4G@0xe0000000					//high=0G, low=0M, cannot allocate, failed
+6) crashkernel=512M						//high=0G, low=512M
+7) crashkernel=128M						//high=0G, low=128M
+8) crashkernel=512M@0xde000000		//512M@3552M		//high=0G, low=512M
+9) crashkernel=4G,high						//high=4G, low=256M
+a) crashkernel=4G,high crashkernel=512M,low			//high=4G, low=512M
+b) crashkernel=512M,high crashkernel=128M,low			//high=512M, low=128M
+c) crashkernel=128M,high					//high=128M, low=256M
+d) crashkernel=512M,low						//high=0G, low=0M, invalid
+e) crashkernel=512M,high crashkernel=0,low			//high=512M, low=0M
+f) crashkernel=4G,high crashkernel=ab,low			//high=0G, low=0M, invalid
 
 
-Tested on:
+Changes since [v19]:
+1. Temporarily stop making reserve_crashkernel[_low]() generic. There are a
+   lot of details need to be considered, which can take a long time. Because
+   "make generic" does not add new functions and does not improve performance,
+   maybe I should say it's just a cleanup. So by stripping it out and leaving
+   it for other patches later, we can aggregate the changes to the main functions.
+2. Use insert_resource() to replace request_resource(), this not only simplifies
+   the code, but also reduces the differences between arm64 and x86 implementations.
+3. As commit 157752d84f5d ("kexec: use Crash kernel for Crash kernel low") do for
+   x86, we can also extend kexec-tools for arm64, and it's currently applied. See:
+   https://www.spinics.net/lists/kexec/msg28284.html
 
-commit:         922ea87f ionic: use vmalloc include
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=152f4b46700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d63ad23bb09039e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=170926a2700000
+Thank you very much, Borislav Petkov, for so many valuable comments.
+
+Changes since [v17]: v17 --> v19
+1. Patch 0001-0004
+   Introduce generic parse_crashkernel_high_low() to bring the parsing of
+   "crashkernel=X,high" and the parsing of "crashkernel=X,low" together,
+   then use it instead of the call to parse_crashkernel_{high|low}(). Two
+   confusing parameters of parse_crashkernel_{high|low}() are deleted.
+
+   I previously sent these four patches separately:
+   [1] https://lkml.org/lkml/2021/12/25/40
+2. Patch 0005-0009
+   Introduce generic reserve_crashkernel_mem[_low](), the implementation of
+   these two functions is based on function reserve_crashkernel[_low]() in
+   arch/x86/kernel/setup.c. There is no functional change for x86.
+   1) The check position of xen_pv_domain() does not change.
+   2) Still 1M alignment for crash kernel fixed region, when 'base' is specified.
+
+   To avoid compilation problems on other architectures: patch 0004 moves
+   the definition of global variable crashk[_low]_res from kexec_core.c to
+   crash_core.c, and provide default definitions for all macros involved, a
+   particular platform can redefine these macros to override the default
+   values.
+3. 0010, only one line of comment was changed.
+4. 0011
+   1) crashk_low_res may also a valid reserved memory, should be checked
+      in crash_is_nosave(), see arch/arm64/kernel/machine_kexec.
+   2) Drop memblock_mark_nomap() for crashk_low_res, because of:
+      2687275a5843 arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required
+   3) Also call kmemleak_ignore_phys() for crashk_low_res, because of:
+      85f58eb18898 arm64: kdump: Skip kmemleak scan reserved memory for kdump
+5. 0012, slightly rebased, because the following patch is applied in advance. 
+   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/linus&id=8347b41748c3019157312fbe7f8a6792ae396eb7
+6. 0013, no change.
+
+Others:
+1. Discard add ARCH_WANT_RESERVE_CRASH_KERNEL
+2. When allocating crash low memory, the start address still starts from 0.
+   low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+3. Discard change (1ULL << 32) to CRASH_ADDR_LOW_MAX.
+4. Ensure the check position of xen_pv_domain() have no change.
+5. Except patch 0010 and 0012, all "Tested-by", "Reviewed-by", "Acked-by" are removed.
+6. Update description.
+
+
+
+Changes since [v16]
+- Because no functional changes in this version, so add
+  "Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>" for patch 1-9
+- Add "Reviewed-by: Rob Herring <robh@kernel.org>" for patch 8
+- Update patch 9 based on the review comments of Rob Herring
+- As Catalin Marinas's suggestion, merge the implementation of
+  ARCH_WANT_RESERVE_CRASH_KERNEL into patch 5. Ensure that the
+  contents of X86 and ARM64 do not overlap, and reduce unnecessary
+  temporary differences.
+
+Changes since [v15]
+-  Aggregate the processing of "linux,usable-memory-range" into one function.
+   Only patch 9-10 have been updated.
+
+Changes since [v14]
+- Recovering the requirement that the CrashKernel memory regions on X86
+  only requires 1 MiB alignment.
+- Combine patches 5 and 6 in v14 into one. The compilation warning fixed
+  by patch 6 was introduced by patch 5 in v14.
+- As with crashk_res, crashk_low_res is also processed by
+  crash_exclude_mem_range() in patch 7.
+- Due to commit b261dba2fdb2 ("arm64: kdump: Remove custom linux,usable-memory-range handling")
+  has removed the architecture-specific code, extend the property "linux,usable-memory-range"
+  in the platform-agnostic FDT core code. See patch 9.
+- Discard the x86 description update in the document, because the description
+  has been updated by commit b1f4c363666c ("Documentation: kdump: update kdump guide").
+- Change "arm64" to "ARM64" in Doc.
+
+
+Changes since [v13]
+- Rebased on top of 5.11-rc5.
+- Introduce config CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL.
+Since reserve_crashkernel[_low]() implementations are quite similar on
+other architectures, so have CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL in
+arch/Kconfig and select this by X86 and ARM64.
+- Some minor cleanup.
+
+Changes since [v12]
+- Rebased on top of 5.10-rc1.
+- Keep CRASH_ALIGN as 16M suggested by Dave.
+- Drop patch "kdump: add threshold for the required memory".
+- Add Tested-by from John.
+
+Changes since [v11]
+- Rebased on top of 5.9-rc4.
+- Make the function reserve_crashkernel() of x86 generic.
+Suggested by Catalin, make the function reserve_crashkernel() of x86 generic
+and arm64 use the generic version to reimplement crashkernel=X.
+
+Changes since [v10]
+- Reimplement crashkernel=X suggested by Catalin, Many thanks to Catalin.
+
+Changes since [v9]
+- Patch 1 add Acked-by from Dave.
+- Update patch 5 according to Dave's comments.
+- Update chosen schema.
+
+Changes since [v8]
+- Reuse DT property "linux,usable-memory-range".
+Suggested by Rob, reuse DT property "linux,usable-memory-range" to pass the low
+memory region.
+- Fix kdump broken with ZONE_DMA reintroduced.
+- Update chosen schema.
+
+Changes since [v7]
+- Move x86 CRASH_ALIGN to 2M
+Suggested by Dave and do some test, move x86 CRASH_ALIGN to 2M.
+- Update Documentation/devicetree/bindings/chosen.txt.
+Add corresponding documentation to Documentation/devicetree/bindings/chosen.txt
+suggested by Arnd.
+- Add Tested-by from Jhon and pk.
+
+Changes since [v6]
+- Fix build errors reported by kbuild test robot.
+
+Changes since [v5]
+- Move reserve_crashkernel_low() into kernel/crash_core.c.
+- Delete crashkernel=X,high.
+- Modify crashkernel=X,low.
+If crashkernel=X,low is specified simultaneously, reserve spcified size low
+memory for crash kdump kernel devices firstly and then reserve memory above 4G.
+In addition, rename crashk_low_res as "Crash kernel (low)" for arm64, and then
+pass to crash dump kernel by DT property "linux,low-memory-range".
+- Update Documentation/admin-guide/kdump/kdump.rst.
+
+Changes since [v4]
+- Reimplement memblock_cap_memory_ranges for multiple ranges by Mike.
+
+Changes since [v3]
+- Add memblock_cap_memory_ranges back for multiple ranges.
+- Fix some compiling warnings.
+
+Changes since [v2]
+- Split patch "arm64: kdump: support reserving crashkernel above 4G" as
+two. Put "move reserve_crashkernel_low() into kexec_core.c" in a separate
+patch.
+
+Changes since [v1]:
+- Move common reserve_crashkernel_low() code into kernel/kexec_core.c.
+- Remove memblock_cap_memory_ranges() i added in v1 and implement that
+in fdt_enforce_memory_region().
+There are at most two crash kernel regions, for two crash kernel regions
+case, we cap the memory range [min(regs[*].start), max(regs[*].end)]
+and then remove the memory range in the middle.
+
+v1:
+There are following issues in arm64 kdump:
+1. We use crashkernel=X to reserve crashkernel below 4G, which
+will fail when there is no enough low memory.
+2. If reserving crashkernel above 4G, in this case, crash dump
+kernel will boot failure because there is no low memory available
+for allocation.
+
+To solve these issues, change the behavior of crashkernel=X.
+crashkernel=X tries low allocation in DMA zone and fall back to high
+allocation if it fails.
+
+We can also use "crashkernel=X,high" to select a high region above
+DMA zone, which also tries to allocate at least 256M low memory in
+DMA zone automatically and "crashkernel=Y,low" can be used to allocate
+specified size low memory.
+
+When reserving crashkernel in high memory, some low memory is reserved
+for crash dump kernel devices. So there may be two regions reserved for
+crash dump kernel.
+In order to distinct from the high region and make no effect to the use
+of existing kexec-tools, rename the low region as "Crash kernel (low)",
+and pass the low region by reusing DT property
+"linux,usable-memory-range". We made the low memory region as the last
+range of "linux,usable-memory-range" to keep compatibility with existing
+user-space and older kdump kernels.
+
+Besides, we need to modify kexec-tools:
+arm64: support more than one crash kernel regions(see [1])
+
+Another update is document about DT property 'linux,usable-memory-range':
+schemas: update 'linux,usable-memory-range' node schema(see [2])
+
+
+[1]: https://www.spinics.net/lists/kexec/msg28226.html
+[2]: https://github.com/robherring/dt-schema/pull/19 
+[v1]: https://lkml.org/lkml/2019/4/2/1174
+[v2]: https://lkml.org/lkml/2019/4/9/86
+[v3]: https://lkml.org/lkml/2019/4/9/306
+[v4]: https://lkml.org/lkml/2019/4/15/273
+[v5]: https://lkml.org/lkml/2019/5/6/1360
+[v6]: https://lkml.org/lkml/2019/8/30/142
+[v7]: https://lkml.org/lkml/2019/12/23/411
+[v8]: https://lkml.org/lkml/2020/5/21/213
+[v9]: https://lkml.org/lkml/2020/6/28/73
+[v10]: https://lkml.org/lkml/2020/7/2/1443
+[v11]: https://lkml.org/lkml/2020/8/1/150
+[v12]: https://lkml.org/lkml/2020/9/7/1037
+[v13]: https://lkml.org/lkml/2020/10/31/34
+[v14]: https://lkml.org/lkml/2021/1/30/53
+[v15]: https://lkml.org/lkml/2021/10/19/1405
+[v16]: https://lkml.org/lkml/2021/11/23/435
+[v17]: https://lkml.org/lkml/2021/12/10/38
+[v18]: https://lkml.org/lkml/2021/12/22/424
+[v19]: https://lkml.org/lkml/2021/12/28/203
+[v20]: https://lkml.org/lkml/2022/1/24/167
+
+Chen Zhou (2):
+  arm64: kdump: reimplement crashkernel=X
+  of: fdt: Add memory for devices by DT property
+    "linux,usable-memory-range"
+
+Zhen Lei (3):
+  kdump: return -ENOENT if required cmdline option does not exist
+  arm64: Use insert_resource() to simplify code
+  docs: kdump: Update the crashkernel description for arm64
+
+ .../admin-guide/kernel-parameters.txt         |   8 +-
+ arch/arm64/kernel/machine_kexec.c             |   9 +-
+ arch/arm64/kernel/machine_kexec_file.c        |  12 +-
+ arch/arm64/kernel/setup.c                     |  17 +--
+ arch/arm64/mm/init.c                          | 107 ++++++++++++++++--
+ drivers/of/fdt.c                              |  33 ++++--
+ kernel/crash_core.c                           |   3 +-
+ 7 files changed, 147 insertions(+), 42 deletions(-)
+
+-- 
+2.25.1
 

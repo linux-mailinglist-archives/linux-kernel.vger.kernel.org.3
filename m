@@ -2,208 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7D74C5A2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9617B4C5A32
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiB0Jdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 04:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S229618AbiB0JfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 04:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiB0Jdc (ORCPT
+        with ESMTP id S229512AbiB0JfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 04:33:32 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04516220D1;
-        Sun, 27 Feb 2022 01:32:55 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id r13so19184131ejd.5;
-        Sun, 27 Feb 2022 01:32:54 -0800 (PST)
+        Sun, 27 Feb 2022 04:35:20 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6B13AA66;
+        Sun, 27 Feb 2022 01:34:44 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id h13so10137210qvk.12;
+        Sun, 27 Feb 2022 01:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bPYynrjqhgBLtN2cr7LwW1Kf2fLVZCu7r0EjUJ+YJiA=;
-        b=LYhWFAXnRxSuSvGZnnvVcr2T5OpbkiroI1QxIQj+W54Oyelh03Q30ieQdg1LyfVqS7
-         HFUm9bMy7N1/iUaQfE1/U451qlV5t7BNldbEZGqm9l+nk+5cjq1Ahf1+2E/JGCX5f6pX
-         0OnLzJ7SjZyFrdW/I0M/XS2+F0g/BA+jfvsFPhG+5chcOeHgpvVVoo6VbCRMSCpJgVi/
-         d90jE/o2skITJ+v2PFc5RmLQJHFqHKEbXtN6O6DCmxzX+diJ1oj+781w3tQsywuYRypH
-         2y2JK9LeuoBjc5cTlkeecsXxl+HOMF0bpCkKwUBSkROZQ771hQo6U1YpXBh/ukG/yPF2
-         xzRg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mni5yEHGP1qoaz/6hLvUm/V5F3W7L/m3Wwp7WeQHDBs=;
+        b=i/DtVk9P1DTHcuWOXDH9pwmZG/a6m++cXjyfgszKxoJCGq61z0Vh9V6VT7598xqiMi
+         EF1aHesjRXqFVb1MLfCyfjVLdKDjxStOIQgcFf5sdUVfVFVSgj5nzuRpk39ZssABWyKh
+         a5V1wQVAoDRNzC9Dl1gk7AqHG50JPjaqkE16unCe75SAiAEMS+WC4cVBEtbtkF7Dem5C
+         uPnBaKWJ7OQhiSUrqoI9Da0PZrEndqPQmR1OX4KId4mTUcIqvmNuHTnvKYBBLBjkQG9b
+         zfm9wn/aSeqIz2OuKsGS5Jxx5jqmvvBDJl5gDl+K45QxzWErwVzB3/emB9ggfzRG4X0z
+         Zzmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bPYynrjqhgBLtN2cr7LwW1Kf2fLVZCu7r0EjUJ+YJiA=;
-        b=22tenkIzOpmkV6IYFpPWXa8YDiSdBtQZ5m96i61YVcmyPRuXl5cr5kvk54ln95nqY9
-         kLsTpx7z8NdU5DDI5DRSKoOXgAfIDld6DmJGat9jZxnJdhyIiWNA+rtyW6j9oK0tEQT2
-         4Ah+gs0+N84TwSQmYADNHEqQ/BoGjeENJkx7Kh8YcntS4doGUIN+ucdUYKuZU1ZNEU4O
-         yoYlyA2cm0xvAgxBBzPBIQhp8CWbznnws3xG01xwwdfem6KahCa4zwaGPFZTV0uMu0UX
-         Z11SoYbqHcy0pjZS7UfVoIWMFhBmM7ATPLxTigEAVj2o5I5p+Kx54qA9J77dTNJL6NZY
-         uxpg==
-X-Gm-Message-State: AOAM531kAvB8kpUvpdnG/sxO1JMwwiLvx/RZwgkDRbNVLLLHHdY2BIrN
-        70rlvqsq0tHdgmxZDNBOG2s=
-X-Google-Smtp-Source: ABdhPJx5ot/uXGhr5obXyws4B25ucf9VX/1Th/XDjyDOsT+iqK5YagLm09kuiQJ/Y+hXhld1lFapUA==
-X-Received: by 2002:a17:906:35d5:b0:6b7:faf7:9611 with SMTP id p21-20020a17090635d500b006b7faf79611mr11571638ejb.537.1645954373052;
-        Sun, 27 Feb 2022 01:32:53 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id lx9-20020a170906af0900b006d0d3179e11sm3166949ejb.105.2022.02.27.01.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 01:32:52 -0800 (PST)
-Message-ID: <89f358ac-eafa-3887-2fcb-db952a6161b3@gmail.com>
-Date:   Sun, 27 Feb 2022 10:32:51 +0100
+        bh=Mni5yEHGP1qoaz/6hLvUm/V5F3W7L/m3Wwp7WeQHDBs=;
+        b=z7gfc4HX5nXy1chSEyqmSlX1X47whTIgem/EfSk3ZBe0cD4aMk1vBlMnPGbejdoaIf
+         iq6NfBZ0RhxMgfM3VvOJdTk/BWWsojD18e3t10N7mlqDkNZrrNuK4h610LKpVoMG4/uc
+         WU8WUqzLxO24LSSV2cDcZWQF3e13drDQYnAbuQqfIwqs+rvnSVLELjfvCWT9g3ilDHMI
+         aKsA46ULKw5wUys6ArsBgKoN5+5C0ICxP3GsLc3V6FqjzjbCYWTkxC3EoF3srJgvJB2L
+         i6fgf1bQlh0sJLSPqIx1KCTqtI0QfjT73TcyDXgF6yQq9ANO04zJVxBhdoltgU7f3NZK
+         Jzmw==
+X-Gm-Message-State: AOAM5331l3AuHqqfNBB9b75j/Wz/NFgvy/wRQR1CucQzOBdQF8E1RpcS
+        Vpaynl4Wnoc9AaSkVjtp9/A=
+X-Google-Smtp-Source: ABdhPJzlq9Z9ay7IQGmu5husNkkRN/qKFoSudupKCgD7SFi/psSCUSPiOgMXvH9tuYollM3Gca/QcA==
+X-Received: by 2002:a05:6214:ca3:b0:42d:129a:5ac6 with SMTP id s3-20020a0562140ca300b0042d129a5ac6mr11161514qvs.86.1645954483191;
+        Sun, 27 Feb 2022 01:34:43 -0800 (PST)
+Received: from sandstorm.attlocal.net (76-242-90-12.lightspeed.sntcca.sbcglobal.net. [76.242.90.12])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05622a170300b002e008a93f8fsm469815qtk.91.2022.02.27.01.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 01:34:42 -0800 (PST)
+From:   jhubbard.send.patches@gmail.com
+X-Google-Original-From: jhubbard@nvidia.com
+To:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 0/6] block, fs: convert most Direct IO cases to FOLL_PIN
+Date:   Sun, 27 Feb 2022 01:34:28 -0800
+Message-Id: <20220227093434.2889464-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] arm64: dts: rockchip: Add sata nodes to rk356x
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220227082131.131883-1-linux@fw-web.de>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20220227082131.131883-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_FMBLA_NEWDOM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+From: John Hubbard <jhubbard@nvidia.com>
 
-Combine your patch in a serie with the ahci-platform.yaml conversion and
-include all current CC people and Rockchip list.
+Hi,
 
-Your conversion and DT patch contains lots of errors.
-Check your serie before you submit and fix.
+The feedback on the RFC [1] prompted me to convert the core Direct IO
+subsystem all at once. The key differences here, as compared to the RFC,
+are:
 
-ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/ahci-platform.yaml
+    * no dio_w_*() wrapper routines,
 
-ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make dtbs_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/ahci-platform.yaml
+    * no CONFIG parameter; and
 
-Add power-domains as a new property after the conversion patch.
+    * new iov_iter_pin_pages*() routines that pin pages without
+      affecting other callers of iov_iter_get_pages*(). Those other
+      callers (ceph, rds, net, ...) can be converted separately.
 
-Johan
+Also, many pre-existing callers of unpin_user_pages_dirty_lock() are
+wrong, and this series adds a few more callers. So readers may naturally
+wonder about that. I recently had a very productive discussion with Ted
+Ts'o, who suggested a way to fix the problem, and I'm going to implement
+it, next. However, I think it's best to do that fix separately from
+this, probably layered on top, although it could go either before or
+after.
 
-===
+As part of fixing the "get_user_pages() + file-backed memory" problem
+[2], and to support various COW-related fixes as well [3], we need to
+convert the Direct IO code from get_user_pages_fast(), to
+pin_user_pages_fast(). Because pin_user_pages*() calls require a
+corresponding call to unpin_user_page(), the conversion is more
+elaborate than just substitution.
 
-make a serie:
+In the main patch (patch 4) I'm a little concerned about the
+bio_map_user_iov() changes, because the sole caller,
+blk_rq_map_user_iov(), has either a direct mapped case or a copy from
+user case, and I'm still not sure that these are properly kept separate,
+from an unpin pages point of view. So a close look there by reviewers
+would be welcome.
 
-conversion ahci-platform.yaml
-power-domains patch
-rockchip rk356x sata nodes patch
+Testing: this needs lots of filesystem testing.
+
+In this patchset:
+
+Patches 1, 2: provide a few new routines that will be used by
+conversion: pin_user_page(), iov_iter_pin_pages(),
+iov_iter_pin_pages_alloc().
+
+Patch 3: provide a few asserts that only user space pages are being
+passed in for Direct IO. (This patch could be folded into another
+patch.)
+
+Patch 4: Convert all Direct IO callers that use iomap, or
+blockdev_direct_IO(), or bio_iov_iter_get_pages().
+
+Patch 5, 6: convert a few other callers to the new system: NFS-Direct,
+and fuse.
+
+This is based on linux-next (next-20220225). I've also stashed it here:
+
+    https://github.com/johnhubbard/linux bio_pup_next_20220225
 
 
-On 2/27/22 09:21, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> RK356x supports up to 3 sata controllers which were compatible with the
-> existing snps,dwc-ahci binding.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> changes in v2:
->   - added sata0 + 1, but have only tested sata2
-> ---
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 45 ++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 7cdef800cb3c..2e2e73be7417 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -230,6 +230,51 @@ scmi_shmem: sram@0 {
->  		};
->  	};
->  
+[1] https://lore.kernel.org/r/20220225085025.3052894-1-jhubbard@nvidia.com
 
-> +	sata0: sata@fc000000 {
+[2] https://lwn.net/Articles/753027/ "The trouble with get_user_pages()"
 
-rk3566 has no combphy0
-Move to rk3568.dtsi
+[3] https://lore.kernel.org/all/20211217113049.23850-1-david@redhat.com/T/#u
+    (David Hildenbrand's mm/COW fixes)
 
-> +		compatible = "snps,dwc-ahci";
-> +		reg = <0 0xfc000000 0 0x1000>;
-> +		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
-> +			 <&cru CLK_SATA0_RXOOB>;
+John Hubbard (6):
+  mm/gup: introduce pin_user_page()
+  iov_iter: new iov_iter_pin_pages*(), for FOLL_PIN pages
+  block, fs: assert that key paths use iovecs, and nothing else
+  block, bio, fs: convert most filesystems to pin_user_pages_fast()
+  NFS: direct-io: convert to FOLL_PIN pages
+  fuse: convert direct IO paths to use FOLL_PIN
 
-> +		clock-names = "sata", "pmalive", "rxoob";
+ block/bio.c          | 29 ++++++++--------
+ block/blk-map.c      |  6 ++--
+ fs/direct-io.c       | 28 ++++++++--------
+ fs/fuse/dev.c        |  7 ++--
+ fs/fuse/file.c       | 38 +++++----------------
+ fs/iomap/direct-io.c |  2 +-
+ fs/nfs/direct.c      | 15 +++------
+ include/linux/mm.h   |  1 +
+ include/linux/uio.h  |  4 +++
+ lib/iov_iter.c       | 78 ++++++++++++++++++++++++++++++++++++++++++++
+ mm/gup.c             | 34 +++++++++++++++++++
+ 11 files changed, 170 insertions(+), 72 deletions(-)
 
-remove
-> +		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
 
-> +		interrupt-names = "hostc";
+base-commit: 06aeb1495c39c86ccfaf1adadc1d2200179f16eb
+-- 
+2.35.1
 
-remove
-
-> +		phys = <&combphy0 PHY_TYPE_SATA>;
-> +		phy-names = "sata-phy";
-> +		ports-implemented = <0x1>;
-> +		power-domains = <&power RK3568_PD_PIPE>;
-> +		status = "disabled";
-> +	};
-> +
-> +	sata1: sata@fc400000 {
-> +		compatible = "snps,dwc-ahci";
-> +		reg = <0 0xfc400000 0 0x1000>;
-> +		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
-> +			 <&cru CLK_SATA1_RXOOB>;
-
-> +		clock-names = "sata", "pmalive", "rxoob";
-
-remove
-
-> +		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-
-> +		interrupt-names = "hostc";
-
-remove
-
-> +		phys = <&combphy1 PHY_TYPE_SATA>;
-> +		phy-names = "sata-phy";
-> +		ports-implemented = <0x1>;
-> +		power-domains = <&power RK3568_PD_PIPE>;
-> +		status = "disabled";
-> +	};
-> +
-> +	sata2: sata@fc800000 {
-> +		compatible = "snps,dwc-ahci";
-> +		reg = <0 0xfc800000 0 0x1000>;
-> +		clocks = <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
-> +			 <&cru CLK_SATA2_RXOOB>;
-
-> +		clock-names = "sata", "pmalive", "rxoob";
-
-remove
-
-> +		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-
-> +		interrupt-names = "hostc";
-
-remove
-
-> +		phys = <&combphy2 PHY_TYPE_SATA>;
-> +		phy-names = "sata-phy";
-> +		ports-implemented = <0x1>;
-> +		power-domains = <&power RK3568_PD_PIPE>;
-> +		status = "disabled";
-> +	};
-> +
->  	gic: interrupt-controller@fd400000 {
->  		compatible = "arm,gic-v3";
->  		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */

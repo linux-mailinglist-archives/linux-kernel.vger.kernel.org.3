@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18B54C58EF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 03:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7624C58F9
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 03:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiB0Bxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 20:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S229654AbiB0CXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 21:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiB0Bxv (ORCPT
+        with ESMTP id S229521AbiB0CXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 20:53:51 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1AA51325
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645926796; x=1677462796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1uvDqArwC09R6lFC53Xcn6vZTmk2HrLbjvMGEicphUU=;
-  b=E1e+Tn35gCqRnENBJHF9q7Nq5ORIvHMOL5+AB350BCiBpcBQ0CltOaZt
-   XMDC5YHVCjijbyW4+RAY7FRlVexWg6tMj+lI31octFOV3fffz2n9l4x9Y
-   M7sXkqRcz8UZKsjOWKZAbhcpAHpQyy01sGymCWgl0F015XoaTWKtL/dAi
-   PC50GrKf9QCZ4PVX86TlGkoPcyyNdb1QwLLbzw402SrSomg/2WxjzIDgN
-   G7WEb0gn4XLqQoW/ll0peknN2beacLwHJJYuaea9aZWBNb3NRvLNXQ4MQ
-   rvKxEUUBTcYcArsgrpn3HcSyZox0o3iiDE0tLdsehRBgOjcdnCxVBx4Vi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="252620165"
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="252620165"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:53:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="684993607"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2022 17:53:14 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nO8kL-000689-Nl; Sun, 27 Feb 2022 01:53:13 +0000
-Date:   Sun, 27 Feb 2022 09:52:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [rmk-arm:cex7 184/189] drivers/net/phy/qsfp.c:1229:3: warning:
- misleading indentation; statement is not part of the previous 'if'
-Message-ID: <202202270903.js3KOFR5-lkp@intel.com>
+        Sat, 26 Feb 2022 21:23:34 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B105AF0D
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 18:22:58 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id c7so7795544qka.7
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 18:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version;
+        bh=1vfHk8IgXV9x509jvY8zplci3eeq7Q2rCPdWsLWLaHw=;
+        b=ITJX+LIycQvk7DRc7SzlB5nlr7w9MDymPNVLBONq1Eqnxgho/XvwLuTjl1fsyU8hc3
+         qxgWWdoQF6wdw0WNHfNLKJLk0xPd7APFoHx28rXARWrZ5/4VGU//GvlObRAPWGbSZKyd
+         ue7dN8F5uV8XYOVGRKbWLLCJZ2q2QL8rWNURqceRWS8fFyJj8VbyDTLvxR1psjjOLL9r
+         gpYekmdc71U9RdenOd56OPTYbYQO7lQnTwjIAsKxE+1NVHxwCGDYXHNz5jI6Au1SMwhr
+         18YRLjJADJBJK8XhoICZona/j4zG6vR2je+SqO5jxiu+3majTk1VIc6S+ISD726vcbSe
+         NkUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
+        bh=1vfHk8IgXV9x509jvY8zplci3eeq7Q2rCPdWsLWLaHw=;
+        b=6uMyn0iDE8PXB6QD5xlzAy9Tx+eFlyOlYXE2rq6Xpspu+rkVZOqvneuI1tgBJBUqLc
+         ci+YMZ71Wffx4fYNE5D5wdRDBPMFhrI2lgwmItmQLUWKXLGxyRraUqj5WVdiaMeBlvCX
+         0LsVsPOUxd3l+Y6EsBZ66Dgv1v1JPgZj+8tOAyPkOKUotYQFaXOH71lETONKcpx+GHBI
+         +7gpT9MqMkgjT3oRNyo602gS46rQFhp45duf2REoAOw7rEJc4OAkK/+YEKyyPFCFMw1f
+         lr3ThKCIfND0F+0kjKUFrFBWk56IuaZSCXftT8c79DT+CPuKgkii19KMN4TUZXuy2Pwt
+         tgsg==
+X-Gm-Message-State: AOAM5311mTjLcFs/ajReWpYKTRislcfsGY4GIuKRDpPaplVSdNm+nJLN
+        PhaIFMcFCHP8YML8XCWEgcMZtA==
+X-Google-Smtp-Source: ABdhPJyeIm/PJhfj4Nk1Rv28GEm1yghQiGSJlYeDyQRtEgC4yNHFLSURoiA668n2vBiwr0kv06pmGw==
+X-Received: by 2002:a37:a88f:0:b0:47e:1590:d7e9 with SMTP id r137-20020a37a88f000000b0047e1590d7e9mr8558916qke.733.1645928577318;
+        Sat, 26 Feb 2022 18:22:57 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id f1-20020a37ad01000000b0064919f4b37csm3140532qkm.75.2022.02.26.18.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 18:22:56 -0800 (PST)
+Date:   Sat, 26 Feb 2022 18:22:47 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH next] mm/thp: fix collapse_file()'s try_to_unmap(folio,)
+Message-ID: <3f187b6c-e5e8-e66d-e0c0-7455ca6abb4c@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
-head:   f53b9594a2bfdd612aca57e15167da1f64e62404
-commit: 1fb157e3d601a392c0d17d2c6a8367e799859e81 [184/189] net: add qsfp support                              [*experimental*]
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220227/202202270903.js3KOFR5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm cex7
-        git checkout 1fb157e3d601a392c0d17d2c6a8367e799859e81
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+The foliation of THP collapse_file()'s call to try_to_unmap() is
+currently wrong, crashing on a test in rmap_walk() when xas_next()
+delivered a value (after which page has been loaded independently).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/qsfp.c:1229:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                   qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-                   ^
-   drivers/net/phy/qsfp.c:1222:2: note: previous statement is here
-           if (!qsfp->gpio_irq[GPIO_INTL])
-           ^
-   1 warning generated.
-
-
-vim +/if +1229 drivers/net/phy/qsfp.c
-
-  1215	
-  1216		if (qsfp->sm_dev_state == SFP_DEV_DETACHED) {
-  1217			qsfp_sm_ins_next(qsfp, SFP_MOD_WATTACH, 0);
-  1218			return;
-  1219		}
-  1220	
-  1221		// Start the poller if there is no interrupt support if not running
-  1222		if (!qsfp->gpio_irq[GPIO_INTL])
-  1223			queue_delayed_work(system_wq, &qsfp->poll, poll_jiffies);
-  1224	
-  1225	//	ret = sfp_module_insert(qsfp->sfp_bus, &id);
-  1226	//	if (ret < 0)
-  1227	//		qsfp_sm_ins_next(qsfp, SFP_MOD_ERROR, 0);
-  1228	//	else
-> 1229			qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
-  1230	}
-  1231	
-
+Fixes: c3b522d9a698 ("mm/rmap: Convert try_to_unmap() to take a folio")
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Please just fold in if you agree.
+
+ mm/khugepaged.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- mmotm/mm/khugepaged.c
++++ linux/mm/khugepaged.c
+@@ -1824,7 +1824,8 @@ static void collapse_file(struct mm_stru
+ 		}
+ 
+ 		if (page_mapped(page))
+-			try_to_unmap(folio, TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
++			try_to_unmap(page_folio(page),
++				     TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
+ 
+ 		xas_lock_irq(&xas);
+ 		xas_set(&xas, index);

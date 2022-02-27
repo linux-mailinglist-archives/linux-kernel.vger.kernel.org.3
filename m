@@ -2,205 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3184C5A46
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E7E4C5A4A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiB0Jfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 04:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S229602AbiB0Jmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 04:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiB0Jfa (ORCPT
+        with ESMTP id S229503AbiB0Jmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 04:35:30 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD82B3B00A;
-        Sun, 27 Feb 2022 01:34:54 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id c7so8186936qka.7;
-        Sun, 27 Feb 2022 01:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ydXRxafX1EOKVAeUm3spAkjR9HLvDHZhsiMVOXC7pM=;
-        b=Ry/pcRhCOPtr1BHLw6EHtZnD+ABBqojtwAXfsBmfqclWrxUkX6MSl4hET36Zct4AbT
-         4uOAlghzb+c72+v2pSSvRm9khxVGZyzADyCaA/2p864tFi9InGHoLV0kZrMm87/zxJVh
-         VSq5O3bnrSjGRHZCSfSHEs5jlLPJrKFDBq1EveU6WRvxDlNB/p5VOKzVXfQ629fxPNIr
-         qawBh26DurhQt+kvkGKMpZaWMscQKuOJlDFAwqqL6UrQyJ9vSzYS3uQG5AL7kRhVM2jS
-         wIj427P9ZAnm1FzBk73O1UcZn8Qg1HgpjyUioAIyoz4lhqRQZQr0yTULOXil6Kri7OeG
-         NslQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ydXRxafX1EOKVAeUm3spAkjR9HLvDHZhsiMVOXC7pM=;
-        b=RBxDqXomR6rJ3gjI0kdDutTwO3UiVItGXQolGym3ibmsqmFpB3s2iHHaIG3fhoU+UE
-         tbb4XLXWYySI2eEUEgLgVTQmsd2WhwQtdnh35yYxMcFeXffyDnbcT4HLTLoHdLQpQyGM
-         uMp1Wdly8GSw/jWijdQa2JF6+iecO/69HB0ghGYZh8ytA58BEFpq82ihEYbFMoFnrqLU
-         kYe/iOtlgOOguID81mPla9JEGNy1OwAUfQ0uF2RoAqpjZn1tzKkBzNkjVqO6DrruD0VS
-         /rU0sf4sjLF7u1jnUirFpnM/vgb0AMCON7hp3o/pMYVDadrsYtoAfKu+VLIkj15d00rv
-         HZgQ==
-X-Gm-Message-State: AOAM531cRkW5/f+cqkpiZRqfHyXMSC7TYukbKt/P2InqzCHWfk06gMP5
-        eBmln+MbIYDgLgrywzazeN0=
-X-Google-Smtp-Source: ABdhPJxMxpMStJYT/anaXMiOzH0PUmpS5c44ybggs8kRB3SW3X4/9Ls7JKzoSQwP278gUHwekI7TMA==
-X-Received: by 2002:a05:620a:469f:b0:648:f460:333c with SMTP id bq31-20020a05620a469f00b00648f460333cmr8758089qkb.36.1645954494005;
-        Sun, 27 Feb 2022 01:34:54 -0800 (PST)
-Received: from sandstorm.attlocal.net (76-242-90-12.lightspeed.sntcca.sbcglobal.net. [76.242.90.12])
-        by smtp.gmail.com with ESMTPSA id h3-20020a05622a170300b002e008a93f8fsm469815qtk.91.2022.02.27.01.34.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 01:34:53 -0800 (PST)
-From:   jhubbard.send.patches@gmail.com
-X-Google-Original-From: jhubbard@nvidia.com
-To:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 6/6] fuse: convert direct IO paths to use FOLL_PIN
-Date:   Sun, 27 Feb 2022 01:34:34 -0800
-Message-Id: <20220227093434.2889464-7-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220227093434.2889464-1-jhubbard@nvidia.com>
-References: <20220227093434.2889464-1-jhubbard@nvidia.com>
+        Sun, 27 Feb 2022 04:42:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387454130C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 01:42:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3FBA60BB9
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:42:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224CCC340EF
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645954924;
+        bh=uj1Pj/eliIRdIKDBsXyzCsYCI51mSIr4KYzn8O17m6g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gT7GD5tdAFX5pb4EbgCAnXXkqjAiMnHnINCyb85q+pK60XuTEsL6+Nn+1YtdnBhik
+         PVwCbT20R/kHw7blds44jL1g4dpzQwBUvv45QgnvRGoa9DtEU3f5UaaQPaQdNFm0Qi
+         sHRPqYaHUyUZd4MKk0hlqjkbC1w5MevGV6UZTXMI8bHNsSpVk3cYq2xFz/MCsCPhoE
+         CQhlrPzSADZ0f7T35Hbisdcmn6m9MtG5Cmz7PqxIVKxeS1ExnND735GBN6mYNln5hB
+         BkrIjd3Ia902S5hxdZMJ10wa3W5mjcPtNYPbeVL4Ngc7JH9Y3gpNJ1uR5D/BHQ6Rqn
+         zvCTmfhTPi9zQ==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2d66f95f1d1so77934647b3.0
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 01:42:04 -0800 (PST)
+X-Gm-Message-State: AOAM531Spha7ttcF7Gs6PqqJHWa9K3Bcb/nH3xQIjsI54LnetbL/kEmE
+        WFk+sXfHUFoS//q3sknLIZspROt+m0gc6H48FQ8=
+X-Google-Smtp-Source: ABdhPJwMp1A3TVFF/EuZlPrzjjhn91qHv+udmugHL/UM81i7lxGd4ib9f/XUOFuo+H5UBdv3copireXZGZgrT/sbLO0=
+X-Received: by 2002:a81:301:0:b0:2d7:3774:a50b with SMTP id
+ 1-20020a810301000000b002d73774a50bmr15677827ywd.206.1645954923209; Sun, 27
+ Feb 2022 01:42:03 -0800 (PST)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220224065805.3305407-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220224065805.3305407-1-jiasheng@iscas.ac.cn>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 27 Feb 2022 11:41:36 +0200
+X-Gmail-Original-Message-ID: <CAFCwf13dFDbkRer6uESKdWjpdt1QbMvDVV0989e1+FHXais_6Q@mail.gmail.com>
+Message-ID: <CAFCwf13dFDbkRer6uESKdWjpdt1QbMvDVV0989e1+FHXais_6Q@mail.gmail.com>
+Subject: Re: [PATCH] habanalabs: Add check for pci_enable_device
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuri Nudelman <ynudelman@habana.ai>,
+        Ofir Bitton <obitton@habana.ai>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Hubbard <jhubbard@nvidia.com>
-
-Convert the fuse filesystem to support the new iov_iter_get_pages()
-behavior. That routine now invokes pin_user_pages_fast(), which means
-that such pages must be released via unpin_user_page(), rather than via
-put_page().
-
-This commit also removes any possibility of kernel pages being handled,
-in the fuse_get_user_pages() call. Although this may seem like a steep
-price to pay, Christoph Hellwig actually recommended it a few years ago
-for nearly the same situation [1].
-
-[1] https://lore.kernel.org/kvm/20190724061750.GA19397@infradead.org/
-
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- fs/fuse/dev.c  |  7 +++++--
- fs/fuse/file.c | 38 +++++++++-----------------------------
- 2 files changed, 14 insertions(+), 31 deletions(-)
-
-diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-index e1b4a846c90d..9db85c4d549a 100644
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -675,7 +675,10 @@ static void fuse_copy_finish(struct fuse_copy_state *cs)
- 			flush_dcache_page(cs->pg);
- 			set_page_dirty_lock(cs->pg);
- 		}
--		put_page(cs->pg);
-+		if (cs->pipebufs)
-+			put_page(cs->pg);
-+		else
-+			unpin_user_page(cs->pg);
- 	}
- 	cs->pg = NULL;
- }
-@@ -730,7 +733,7 @@ static int fuse_copy_fill(struct fuse_copy_state *cs)
- 		}
- 	} else {
- 		size_t off;
--		err = iov_iter_get_pages(cs->iter, &page, PAGE_SIZE, 1, &off);
-+		err = iov_iter_pin_pages(cs->iter, &page, PAGE_SIZE, 1, &off);
- 		if (err < 0)
- 			return err;
- 		BUG_ON(!err);
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 94747bac3489..ecfa5bdde919 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -611,18 +611,6 @@ void fuse_read_args_fill(struct fuse_io_args *ia, struct file *file, loff_t pos,
- 	args->out_args[0].size = count;
- }
- 
--static void fuse_release_user_pages(struct fuse_args_pages *ap,
--				    bool should_dirty)
--{
--	unsigned int i;
--
--	for (i = 0; i < ap->num_pages; i++) {
--		if (should_dirty)
--			set_page_dirty_lock(ap->pages[i]);
--		put_page(ap->pages[i]);
--	}
--}
--
- static void fuse_io_release(struct kref *kref)
- {
- 	kfree(container_of(kref, struct fuse_io_priv, refcnt));
-@@ -720,7 +708,8 @@ static void fuse_aio_complete_req(struct fuse_mount *fm, struct fuse_args *args,
- 	struct fuse_io_priv *io = ia->io;
- 	ssize_t pos = -1;
- 
--	fuse_release_user_pages(&ia->ap, io->should_dirty);
-+	unpin_user_pages_dirty_lock(ia->ap.pages, ia->ap.num_pages,
-+				    io->should_dirty);
- 
- 	if (err) {
- 		/* Nothing */
-@@ -1382,25 +1371,14 @@ static int fuse_get_user_pages(struct fuse_args_pages *ap, struct iov_iter *ii,
- 	size_t nbytes = 0;  /* # bytes already packed in req */
- 	ssize_t ret = 0;
- 
--	/* Special case for kernel I/O: can copy directly into the buffer */
--	if (iov_iter_is_kvec(ii)) {
--		unsigned long user_addr = fuse_get_user_addr(ii);
--		size_t frag_size = fuse_get_frag_size(ii, *nbytesp);
--
--		if (write)
--			ap->args.in_args[1].value = (void *) user_addr;
--		else
--			ap->args.out_args[0].value = (void *) user_addr;
--
--		iov_iter_advance(ii, frag_size);
--		*nbytesp = frag_size;
--		return 0;
--	}
-+	/* Only user space buffers are allowed with fuse Direct IO. */
-+	if (WARN_ON_ONCE(!iter_is_iovec(ii)))
-+		return -EOPNOTSUPP;
- 
- 	while (nbytes < *nbytesp && ap->num_pages < max_pages) {
- 		unsigned npages;
- 		size_t start;
--		ret = iov_iter_get_pages(ii, &ap->pages[ap->num_pages],
-+		ret = iov_iter_pin_pages(ii, &ap->pages[ap->num_pages],
- 					*nbytesp - nbytes,
- 					max_pages - ap->num_pages,
- 					&start);
-@@ -1484,7 +1462,9 @@ ssize_t fuse_direct_io(struct fuse_io_priv *io, struct iov_iter *iter,
- 		}
- 
- 		if (!io->async || nres < 0) {
--			fuse_release_user_pages(&ia->ap, io->should_dirty);
-+			unpin_user_pages_dirty_lock(ia->ap.pages,
-+						    ia->ap.num_pages,
-+						    io->should_dirty);
- 			fuse_io_free(ia);
- 		}
- 		ia = NULL;
--- 
-2.35.1
-
+On Thu, Feb 24, 2022 at 8:58 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+>
+> As the potential failure of the pci_enable_device(),
+> it should be better to check the return value and return
+> error if fails.
+>
+> Fixes: 70b2f993ea4a ("habanalabs: create common folder")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/misc/habanalabs/common/debugfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+> index fc084ee5106e..09001fd9db85 100644
+> --- a/drivers/misc/habanalabs/common/debugfs.c
+> +++ b/drivers/misc/habanalabs/common/debugfs.c
+> @@ -890,6 +890,8 @@ static ssize_t hl_set_power_state(struct file *f, const char __user *buf,
+>                 pci_set_power_state(hdev->pdev, PCI_D0);
+>                 pci_restore_state(hdev->pdev);
+>                 rc = pci_enable_device(hdev->pdev);
+> +               if (rc < 0)
+> +                       return rc;
+>         } else if (value == 2) {
+>                 pci_save_state(hdev->pdev);
+>                 pci_disable_device(hdev->pdev);
+> --
+> 2.25.1
+>
+This patch is:
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Applied to -next.
+Thanks,
+Oded

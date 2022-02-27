@@ -2,94 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C55F4C5F70
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6B94C5F84
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiB0WeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 17:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
+        id S232090AbiB0Wn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 17:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiB0WeC (ORCPT
+        with ESMTP id S229486AbiB0Wn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 17:34:02 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D943434AD;
-        Sun, 27 Feb 2022 14:33:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6JFD5SVTz4xNq;
-        Mon, 28 Feb 2022 09:33:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646001200;
-        bh=he4tqkULprG8lOp+0VNCwlfXYNq9Q5rw/8wBY7GGSSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PvR5T7QhD014wcl3zzqh3gYZdNP6vGzBG6WP7MQqwbYNezQrwouZajKdnlRxKPl/C
-         EAuf1j8e7AOc+b8JODLite7RMH1RULnkwzEG3CGo/MtVUuwX+42WBQYpELccNvTeN6
-         J0VVjwJTK67HrNfkSe5cSxpgEbXd1JyiqWNI/R7KSAidb1zyLie8JKb0oB238MRJTd
-         Zz7FLTxLqQ361qMT8dbVGaTaKhd8RoIndY8bGD21mw8riDN5zfEg7VOTsVjt7IZo4V
-         1/YLSsYWnfI0IOI1OdXwWh2ZLGC+n/DzdftDNjttmpZzeYmoU79yNuLHRkstli+9HI
-         5rpA9dRb8ZcSQ==
-Date:   Mon, 28 Feb 2022 09:33:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 17
-Message-ID: <20220228093320.7ac8e394@canb.auug.org.au>
-In-Reply-To: <Yg+hpgB4EOp9DNOA@sirena.org.uk>
-References: <20220217205133.6c4d9ebb@canb.auug.org.au>
-        <Yg+hpgB4EOp9DNOA@sirena.org.uk>
+        Sun, 27 Feb 2022 17:43:57 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2873D3EB9F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:19 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id bq11so15090073edb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q8l4d/g0eKsVGAXwcSHou4m9texHyFwjSyXWV84L8X0=;
+        b=aS+Cuu53E5xh6ezL4BQQcygkZ7taEG098ncxgu4s2QZu+Pf48uAsX8EMwnsNmZzs5O
+         eo+kkcQwg/L9tnVyFaERl40XHOJRfEwQ+3p4bNjtTIEqFgNZTrhkUr5c7jHIQo0R2QlD
+         6Z3HbL6vTEGo3aFlsNtdBL0CtUa6ZZQikH6w4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q8l4d/g0eKsVGAXwcSHou4m9texHyFwjSyXWV84L8X0=;
+        b=tKVf3dM3wxXxe3e/nq33SWVMqbT7ZfAGMbMtgJt4btIN7NKCVsHTi8AgG0sTbCTiKK
+         OVH4l8JLtVFqhf85S5B1YPJAaarvcQHh7dQO5Rl3q9ZE9+rnZXGxClAzbVlcQWg4+u3F
+         l0Yd5B97QMPaoOIPuqvl/nLA3PYSOp2RVtpz1YSYwfmFY3cXWmopZM1nwU2MMfCRgAw+
+         0lpDbz8Ir5tQAAtpjTwB3LNONkINSfSQqEYmNU9S+fG8s0FRXVXhVUyzUVBNaRNFD5Kv
+         J5oSRABQgEn37Nv8cBN0RkBF14CmGKuqZQXjRGgVjOgscTFqn5xQJ6VyZWhqiENykcaS
+         Hvdg==
+X-Gm-Message-State: AOAM532HgC+PtIev3bwsLz7uTEMaI2umWLq6z+bmdhyVQluHkPZZtG40
+        T6vRy/xRybPoCgepmQ7lGO8lR9su7VQxyY4NQFM=
+X-Google-Smtp-Source: ABdhPJwQVRiyQwPGkhxP7ZJd0d2LPUJodxR1yrn9SzYb2q9Zg+BGU1vKuXwXUKXdG/dsAJ6zBMDOmw==
+X-Received: by 2002:a05:6402:d0d:b0:412:d49c:74d3 with SMTP id eb13-20020a0564020d0d00b00412d49c74d3mr16731948edb.207.1646001797509;
+        Sun, 27 Feb 2022 14:43:17 -0800 (PST)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm5169747edz.29.2022.02.27.14.43.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Feb 2022 14:43:17 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id d3so12722168wrf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:17 -0800 (PST)
+X-Received: by 2002:a2e:aaa2:0:b0:244:bf42:3e6e with SMTP id
+ bj34-20020a2eaaa2000000b00244bf423e6emr12796324ljb.176.1646001378532; Sun, 27
+ Feb 2022 14:36:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V+pfoY+x8gRXN6_im4u1NRM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227215408.3180023-1-arnd@kernel.org>
+In-Reply-To: <20220227215408.3180023-1-arnd@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Feb 2022 14:36:02 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
+Message-ID: <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
+Subject: Re: [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Mark,
-
-On Fri, 18 Feb 2022 13:39:50 +0000 Mark Brown <broonie@kernel.org> wrote:
+On Sun, Feb 27, 2022 at 1:54 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Thu, Feb 17, 2022 at 08:51:33PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > News: there will be no linux-next releases from Friday Feb 18 until
-> > Friday Feb 25 inclusive. =20
->=20
-> I'll try to provide cover from Monday as usual, I'm on holiday myself
-> today so not likely to be anything today.
+> Since the differences between gnu99, gnu11 and gnu17 are fairly minimal
+> and mainly impact warnings at the -Wpedantic level that the kernel
+> never enables, the easiest way is to just leave out the -std=gnu89
+> argument entirely, and rely on the compiler default language setting,
+> which is gnu11 for gcc-5, and gnu1x/gnu17 for all other supported
+> versions of gcc or clang.
 
-Thanks again for stepping up unasked.
+Honestly, I'd rather keep the C version we support as some explicit
+thing, instead of "whatever the installed compiler is".
 
---=20
-Cheers,
-Stephen Rothwell
+Not only do I suspect that you can set it in gcc spec files (so the
+standard version might actually be site-specific, not compiler version
+specific), but particularly with clang, I'd like that "GNU extensions
+enabled" to be explicit. Yes, maybe it's the default, but let's make
+sure.
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+The C version level has traditionally had a lot of odd semantic
+meaning details - you mention "inline", others have existed. So it's
+not just the actual new features that some C version implements, it's
+those kind of "same syntax, different meaning" issues. I really don't
+think that's something we want in the kernel any more.
 
------BEGIN PGP SIGNATURE-----
+Been there, done that, and we did the explicit standards level for a reason.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIb/DAACgkQAVBC80lX
-0GxtAwf+KB0f6IEDa0pbZGSTK+wjVX78vCvlhZfHSKIKbR/GzNfukP4V1g+lxKOT
-n6P2IyJzDmDNc/XmREhOfTVOsUPdi6qjQjBdmQBbvjp4KAVg2VNbWf6l5/pkhFAF
-nLUoFCc0a/VshbD5YVgfMB8Zz3L22neUvRf/GeVit2APebbKEejNt2jtNSG9ZaST
-jE+m9nrI1AJRTueB37F2CI64U+rWoVXQ45JEatc4N9/4mtUE19CP2Uw6RVAVJ4l7
-k4dY+f35RTy55mHjHB6iFwYJBzk13/Wzr5cpzrKMo5403RVE2I/EUxWcrahlIMqr
-guMOo9+sEUk+BgExMTy8byWB6tiW3A==
-=Nq1r
------END PGP SIGNATURE-----
+It may be true that c99/c11/c17 are all very similar, and don't have
+those issues. Or maybe they do.
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM--
+And I don't want somebody with a newer compiler version to not notice
+that he or she ended up using a c17 feature, just because _that_
+compiler supported it, and then other people get build errors because
+their compilers use gnu11 instead by default.
+
+Put another way: I see absolutely no upside to allowing different
+users using higher/lower versions of the standard. There are only
+downsides.
+
+If gnu11 is supported by gcc-5.1 and up, and all the relevant clang
+versions, then let's just pick that.
+
+And if there are any possible future advantages to gnu17 (or eventual
+gnu2x versions), let's document those, so that we can say "once our
+compiler version requirements go up sufficiently, we'll move to gnuXX
+because we want to take advantage of YY".
+
+Please?
+
+                   Linus
+
+                   Linus

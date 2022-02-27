@@ -2,180 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59664C5A94
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66554C5A96
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiB0LDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 06:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S230201AbiB0LK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 06:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiB0LDO (ORCPT
+        with ESMTP id S229604AbiB0LKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 06:03:14 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A82BF47
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:02:36 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 27 Feb 2022 06:10:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3028C5B3CA;
+        Sun, 27 Feb 2022 03:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 36C983FCAC
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 11:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645959755;
-        bh=RXUmSRm1O1VoA9wS7MAMGWoCbD7WOkk+zqEQ16+dydg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=l6WSRCryKsOmT77rOjXQSiMoDDR8OTmBNyXErp93OEsHZHMdqHAqTF/CI8vG1Wh7h
-         f4HH5OsH1lltbbvWPZOdmnsMa2WQVgtbyVWEgQfSJOqc21SJmqYCsGZUffMmmmwdQh
-         umnPckaaMDsvCBL6Eh5NZVVlbQ4QJAfSed8zqNj92umzprSKAg36VaZKs01cVqXXd9
-         fSbDEEEqqM+cgqupXN1MItg/VH15ihaAVSmVtmKrQXQtqUB645EgIG3b4KggT+Ogqc
-         m13hTlk1KFSpEuWH6CAv+f7U+J/IclVVRT3avc7DH8AgPMK0nta3Fk7jkd54yWGUTf
-         bdOSSPd1kp7nA==
-Received: by mail-ej1-f70.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso4334566ejc.21
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 03:02:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RXUmSRm1O1VoA9wS7MAMGWoCbD7WOkk+zqEQ16+dydg=;
-        b=ZGAA96pYmzz33fA1HwbAopXTmjKZmo/zJ+Zw6JcWIjj7aAZ3XngQ33uCdzDGvIdRV3
-         M0DRtpkufhn4p2u8E51G9ZaY3MfMxObzCdp70KpSw01nQsWLbY2rsT34CkMYfvEUNfXV
-         KnQBtcPt3VWgjYKgGCvqsG3QmI6/wSAt/CL8C7AP87hALop+noLKsSvat8TLUGOhhWGT
-         CFDEjLjt+ZmdFvsWkIs0TeFFjKjgY+HUkk4tVkpoAQfcIjZMe4hV3YsSlRIJWqKHUO80
-         q0Ia0qtUPKZ48JQdMDiG0HhdzW8VwzeUsZyWmsWicHP/odjDanOqyFqSW9SdBeiLgwyS
-         DVIw==
-X-Gm-Message-State: AOAM5337bkRyk9FQDVGOC2YvdjKq9bl3Uz5HvSOgVm4Iu8zgeCXk8AjZ
-        v2ajntG2hN4CVBBKhiTBPC1rW1aw+uT8jcBbyRlp5ZwTHPQkckzG2a3cRoUhGLBxVSWoGNe8rRh
-        HxMuA4kLrAYqRdMVo4M+KUvjFc+ElXdBmUbic0rcOig==
-X-Received: by 2002:a05:6402:2790:b0:412:8379:f248 with SMTP id b16-20020a056402279000b004128379f248mr14812878ede.285.1645959754636;
-        Sun, 27 Feb 2022 03:02:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyOM38cLX4uJ8ipUpfRHTzICOBLEWeXU+W9FDRpLDjRd8H4IszimlckdjrXsnhAtzX8cIRIrQ==
-X-Received: by 2002:a05:6402:2790:b0:412:8379:f248 with SMTP id b16-20020a056402279000b004128379f248mr14812867ede.285.1645959754460;
-        Sun, 27 Feb 2022 03:02:34 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id lx9-20020a170906af0900b006d0d3179e11sm3245068ejb.105.2022.02.27.03.02.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 03:02:33 -0800 (PST)
-Message-ID: <1924a900-20db-93b5-4f9b-37a56467f7e8@canonical.com>
-Date:   Sun, 27 Feb 2022 12:02:32 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 717D0B80B98;
+        Sun, 27 Feb 2022 11:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16AB8C340F2;
+        Sun, 27 Feb 2022 11:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645960215;
+        bh=VDx1NMN5Fnle4AH471Xi19ig0epwy/svHVYRHa6+6Yc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eGhS1nNeRe/x3rWpCOFSYmNaMa6lon8i/F+6LjkDLEriqdqxrPPtKop7DHWUhQVkT
+         mU9ncwzkibInpoBbXAZmjYH2IwMOpquV3x465TuMniWMvWM6ncaQxXbA6LO6RGk+ir
+         WQ28MR0R1mtQBQ1J5v1mGJw/eijbby9+AEXYdbqBqSllmE8s4FsbXVSkEZiB9MlU1M
+         b1VGSuXU/m6n6Mtuiaqqplgwaa6wPlhKOP1NxeS6+dA6RaDf3otvcSUv5C1e0KsdnB
+         cesAWl2Hk8P9yVBd7PQ76SGCi68WEyOyF3eCXJ2RgAgBWhErj5V4irOHG6fTCXczCa
+         OIEScvl0K4vdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E99DFF03839;
+        Sun, 27 Feb 2022 11:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 2/3] dt-bindings: edac: npcm-edac.yaml
-Content-Language: en-US
-To:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, mchehab@kernel.org,
-        bp@alien8.de, robh+dt@kernel.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Medad CChien <ctcchien@nuvoton.com>
-References: <20220224074729.5206-1-ctcchien@nuvoton.com>
- <20220224074729.5206-3-ctcchien@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220224074729.5206-3-ctcchien@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/3] net: use kfree_skb_reason() for ip/neighbour
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164596021495.1414.14538654076309776973.git-patchwork-notify@kernel.org>
+Date:   Sun, 27 Feb 2022 11:10:14 +0000
+References: <20220226041831.2058437-1-imagedong@tencent.com>
+In-Reply-To: <20220226041831.2058437-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        imagedong@tencent.com, edumazet@google.com, alobakin@pm.me,
+        cong.wang@bytedance.com, paulb@nvidia.com, talalahmad@google.com,
+        keescook@chromium.org, ilias.apalodimas@linaro.org,
+        memxor@gmail.com, flyingpeng@tencent.com, mengensun@tencent.com,
+        daniel@iogearbox.net, yajun.deng@linux.dev, roopa@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 08:47, Medad CChien wrote:
-> Add the device tree bindings for the EDAC driver npcm-edac.
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sat, 26 Feb 2022 12:18:28 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> ---
->  .../devicetree/bindings/edac/npcm-edac.yaml   | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/npcm-edac.yaml
+> In the series "net: use kfree_skb_reason() for ip/udp packet receive",
+> reasons for skb drops are added to the packet receive process of IP
+> layer. Link:
 > 
-> diff --git a/Documentation/devicetree/bindings/edac/npcm-edac.yaml b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
-> new file mode 100644
-> index 000000000000..228ace1025dc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/npcm-edac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NPCM Memory Controller EDAC
-> +
-> +maintainers:
-> +  - Medad CChien <ctcchien@nuvoton.com>
-> +
-> +description: |
-> +  EDAC node is defined to describe on-chip error detection and correction for
-> +  Nuvoton NPCM Memory Controller.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,npcm8xx-edac
-> +      - nuvoton,npcm7xx-edac
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
+> https://lore.kernel.org/netdev/20220205074739.543606-1-imagedong@tencent.com/
+> 
+> [...]
 
-Why do you need it? There are no children nodes allowed.
+Here is the summary with links:
+  - [net-next,v3,1/3] net: ip: add skb drop reasons for ip egress path
+    https://git.kernel.org/netdev/net-next/c/5e187189ec32
+  - [net-next,v3,2/3] net: neigh: use kfree_skb_reason() for __neigh_event_send()
+    https://git.kernel.org/netdev/net-next/c/a5736edda10c
+  - [net-next,v3,3/3] net: neigh: add skb drop reasons to arp_error_report()
+    https://git.kernel.org/netdev/net-next/c/56d4b4e48ace
 
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: uncorrectable error interrupt
-> +      - description: correctable error interrupt
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - const: ue
-> +      - const: ce
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    ahb {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        mc: memory-controller@f0824000 {
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +            reg = <0x0 0xf0824000 0x0 0x1000>;
-> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +            compatible = "nuvoton,npcm7xx-edac";
-
-First compatible, then reg, then the rest, please.
-
-> +        };
-> +    };
-> +
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Best regards,
-Krzysztof

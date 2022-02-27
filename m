@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1383A4C5DE3
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1014C5DF7
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiB0Rui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 12:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S230136AbiB0SJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiB0Ruh (ORCPT
+        with ESMTP id S229489AbiB0SJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:50:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B295C3DDE9;
-        Sun, 27 Feb 2022 09:50:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C7AA60FF7;
-        Sun, 27 Feb 2022 17:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92D4C340EF;
-        Sun, 27 Feb 2022 17:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645984199;
-        bh=bqyY3XQdRlzIGOWzFJrkb/oKUh63XEB+VuO9HJ3geNk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Bu65S8Mdj6BE/d7Ux8sTDXYbJA3pBAHP/NTA8ktur3Dh2CZ6bJ0/8notLz7rKRLl9
-         U5Z8jUXayPRS7V3IM2Rro+U1wlRp9Ao/J/b1cWghUyvF/qXsZzHjvXI58td34kNaw2
-         GsgyAJNF/fS0X8UbYEUull970geXbaLOeqvrdSNLrb1vS9B7V2jT47A6UMmXDPit5D
-         0vfwYauN6FHKvnp8LH/cXSofUnv69teeUAQtXgpBJoTF6SRaOiScLCH81qAwomAeYY
-         h29MjzjtZ6ir1gsav7TNvNJS7FhwEFjyKvogxEInTf93L1oufN3WWfujToo4to9o4v
-         3K6xp/Y5DGwGw==
-Date:   Sun, 27 Feb 2022 17:57:01 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     lars@metafoo.de, matthias.bgg@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, linus.walleij@linaro.org,
-        ardeleanalex@gmail.com, Tom Rix <trix@redhat.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] iio: adc: mt6360: strengthen return check of
- mt6360_adc_read_channel
-Message-ID: <20220227175701.4cacbe3d@jic23-huawei>
-In-Reply-To: <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-References: <20220227164357.84742-1-trix@redhat.com>
-        <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 27 Feb 2022 13:09:53 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F8E5AA63;
+        Sun, 27 Feb 2022 10:09:15 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id k7so1413775ilo.8;
+        Sun, 27 Feb 2022 10:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xC1AEvib8Cf944AeDGf2M/f6rb9ZO4jKeFVIH15Nbqk=;
+        b=DjLbC97iDYNMPnSfMYcYuR7ZmA6TphGvtXjUpwS0GCSsJn0B3FGWTXnBy/1EKkvQzN
+         K7WEOm+RJe51gRu0uUeEZK75RFW7agFiAF5WZLW9IBTXq0xy6fKQPdXftZX4iOl6aqc8
+         PU8S0lucMlfUFvD9Is7TosZUz7+SV63HqKBU7sRQzJdTvRj1a1Ui5vRFpGyxwycklla4
+         ncH1ESWKPzUKjq4IZtvbBFaxv+gF5jglaK7t8B4uQOzBHWXczEFaLTNyIwqw6FtXL946
+         Bu7TUlvw9NnQYwUF9NG5XioFz8khWJjItWMJfGQ4f7s6LKH42Y+95XfrefOjK2FHLXCt
+         /IaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xC1AEvib8Cf944AeDGf2M/f6rb9ZO4jKeFVIH15Nbqk=;
+        b=6kvQC/+zubD479MfS+wuB5zyRznJgWw5H1ZXKfbLmr5BNUB0BqOdslkZ3aRKkkiWfL
+         iBWtoYncC9DSiUrwOtVi6ADGFAHEcypc4ugyO1FQu+DVZzqqqi9iUGfd9VykwIH2NiW3
+         AETpsIN7On55U4+Dqxr7Uj8zYvRyC9voeW6s4n0ZhpgLU7SxH+zx36q6tNGWBJoeIkQK
+         9VT+0l7aLuXNNkRMLMdFAvLxhOtxoRPD2dyzEFE24LPfCmuvHx2pWihpMQDuug5n7qtQ
+         8azm/3fWiXN0DhF1d9oD7gRxYZWU66U2tdqqXeajD7SOZjiRah6w1UmE6OMBJN2mgoad
+         SKGA==
+X-Gm-Message-State: AOAM531p/WQ32JY1hE3hNXJJKzwcUKeZk0pK7qJwUw1TZXQlSA2PO3rS
+        AiprCQd1rX7suYWrcB3OE+p3h1alXA+FyjGaUmY=
+X-Google-Smtp-Source: ABdhPJxvYPkV0VhY3Nxwq1nnZZ3cC8FXlIxU37f/ajKBusrVgs3BqdM0ArwdXZ+dStcHjAA9zbidtAhl7zTHVFLk1tc=
+X-Received: by 2002:a05:6e02:188b:b0:2c2:5444:afb9 with SMTP id
+ o11-20020a056e02188b00b002c25444afb9mr14962600ilu.237.1645985355120; Sun, 27
+ Feb 2022 10:09:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
+ <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+ <20220227113245.GY614@gate.crashing.org>
+In-Reply-To: <20220227113245.GY614@gate.crashing.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 27 Feb 2022 19:09:03 +0100
+Message-ID: <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 18:01:47 +0100
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+On Sun, Feb 27, 2022 at 1:09 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> How will you define dividing by zero so that its behaviour is reasonable
+> for every program, for example?
 
-> Le 27/02/2022 =C3=A0 17:43, trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org =
-a=20
-> =C3=A9crit=C2=A0:
-> > From: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> >=20
-> > Clang static analysis reports this issue
-> > mt6360-adc.c:277:20: warning: Assigned value is
-> >    garbage or undefined
-> >    data.values[i++] =3D val;
-> >                     ^ ~~~
-> >=20
-> > val is set by a successful call to m6360_adc_read_channel().
-> > A negative return is checked but within m6360_adc_read_channel,
-> > a non zero check is done.
-> > Strengthen the check to non zero. =20
->=20
-> Hi, my understanding of m6360_adc_read_channel() is that on success, it=20
-> returns IIO_VAL_INT (i.e. 1).
->=20
-> So, I think that with your patch, we will now always fail because 'ret'=20
-> is never 0 at this point.
+The solution is to let the developer specify what they need to happen.
+That choice should include the unsafe possibility (i.e. unchecked),
+because sometimes that is precisely what we need.
 
-Firstly I'm glad you were more awake than me Christophe as I missed that
-entirely. :(
+> Invoking an error handler at runtime
+> has most of the same unwanted effects, except is is never silent.  You
 
-So two ways we could deal with the warning (which is valid given there
-is no way clang could sensibly tell that all those if (ret) actually
-mean if (ret < 0).
+It may not be what it is needed in some cases (thus the necessity to
+be able to choose), but at least one can predict what happens and
+different compilers, versions, flags, inputs, etc. would agree.
 
-I don't like changing them to if (ret < 0) inside _adc_read_channel()
-because generally it ends up cleaner to just do if (ret) based handling
-for regmap calls.  So we could just assign a default to val that is never
-used or we could change that function to return 0 on success and adjust
-the other call site to return IIO_VAL_INT if there isn't an error.
-
-The second one would make the other caller rather messier so I'd suggest
-just giving val a default and adding a comment saying it's for warning
-suppression purposes...
-
-Jonathan
-
-
->=20
-> CJ
->=20
-> >=20
-> > Signed-off-by: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-> > ---
-> >   drivers/iio/adc/mt6360-adc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
-> > index 07c0e67683910..9fb6dc305a392 100644
-> > --- a/drivers/iio/adc/mt6360-adc.c
-> > +++ b/drivers/iio/adc/mt6360-adc.c
-> > @@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int i=
-rq, void *p)
-> >   	memset(&data, 0, sizeof(data));
-> >   	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->maskle=
-ngth) {
-> >   		ret =3D mt6360_adc_read_channel(mad, bit, &val);
-> > -		if (ret < 0) {
-> > +		if (ret) {
-> >   			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val=
-\n", bit);
-> >   			goto out;
-> >   		} =20
->=20
-
+Cheers,
+Miguel

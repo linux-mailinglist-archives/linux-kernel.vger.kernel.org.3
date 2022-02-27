@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8894C5ED1
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7948D4C5EC6
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiB0Ujl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 15:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S231889AbiB0UjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 15:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiB0Ui6 (ORCPT
+        with ESMTP id S231892AbiB0Ui7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 15:38:58 -0500
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A05BB6D1AB;
-        Sun, 27 Feb 2022 12:38:15 -0800 (PST)
+        Sun, 27 Feb 2022 15:38:59 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 099606D84F;
+        Sun, 27 Feb 2022 12:38:17 -0800 (PST)
 X-IronPort-AV: E=Sophos;i="5.90,141,1643641200"; 
-   d="scan'208";a="112525459"
+   d="scan'208";a="111718897"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 28 Feb 2022 05:38:14 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 28 Feb 2022 05:38:17 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9A57A40E81B7;
-        Mon, 28 Feb 2022 05:38:12 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 06A3240E81B0;
+        Mon, 28 Feb 2022 05:38:14 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
@@ -32,9 +32,9 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
-Subject: [PATCH 08/12] arm64: dts: renesas: r9a07g054: Fillup the WDT{0,1,2} stub nodes
-Date:   Sun, 27 Feb 2022 20:37:40 +0000
-Message-Id: <20220227203744.18355-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 09/12] arm64: dts: renesas: r9a07g054: Add SSI{1,2,3} nodes and fillup the SSI0 stub node
+Date:   Sun, 27 Feb 2022 20:37:41 +0000
+Message-Id: <20220227203744.18355-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -47,70 +47,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fillup the WDT{0,1,2} stub nodes in RZ/V2L (R9A07G054) SoC DTSI.
+Add SSI{1,2,3} nodes and fillup the SSI0 stub node in RZ/V2L
+(R9A07G054) SoC DTSI.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 36 ++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 80 +++++++++++++++++++++-
+ 1 file changed, 79 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-index 50cb2f0e6e73..a3623e70f02c 100644
+index a3623e70f02c..e3a9f78b7fb8 100644
 --- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
 +++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-@@ -614,18 +614,48 @@
- 		};
+@@ -96,9 +96,87 @@
+ 		ranges;
  
- 		wdt0: watchdog@12800800 {
-+			compatible = "renesas,r9a07g054-wdt",
-+				     "renesas,rzg2l-wdt";
- 			reg = <0 0x12800800 0 0x400>;
--			/* place holder */
-+			clocks = <&cpg CPG_MOD R9A07G054_WDT0_PCLK>,
-+				 <&cpg CPG_MOD R9A07G054_WDT0_CLK>;
-+			clock-names = "pclk", "oscclk";
-+			interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "wdt", "perrout";
-+			resets = <&cpg R9A07G054_WDT0_PRESETN>;
+ 		ssi0: ssi@10049c00 {
++			compatible = "renesas,r9a07g054-ssi",
++				     "renesas,rz-ssi";
+ 			reg = <0 0x10049c00 0 0x400>;
++			interrupts = <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 327 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 328 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 329 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "int_req", "dma_rx", "dma_tx", "dma_rt";
++			clocks = <&cpg CPG_MOD R9A07G054_SSI0_PCLK2>,
++				 <&cpg CPG_MOD R9A07G054_SSI0_PCLK_SFR>,
++				 <&audio_clk1>, <&audio_clk2>;
++			clock-names = "ssi", "ssi_sfr", "audio_clk1", "audio_clk2";
++			resets = <&cpg R9A07G054_SSI0_RST_M2_REG>;
++			dmas = <&dmac 0x2655>, <&dmac 0x2656>;
++			dma-names = "tx", "rx";
 +			power-domains = <&cpg>;
+ 			#sound-dai-cells = <0>;
+-			/* place holder */
++			status = "disabled";
++		};
++
++		ssi1: ssi@1004a000 {
++			compatible = "renesas,r9a07g054-ssi",
++				     "renesas,rz-ssi";
++			reg = <0 0x1004a000 0 0x400>;
++			interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 331 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 332 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 333 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "int_req", "dma_rx", "dma_tx", "dma_rt";
++			clocks = <&cpg CPG_MOD R9A07G054_SSI1_PCLK2>,
++				 <&cpg CPG_MOD R9A07G054_SSI1_PCLK_SFR>,
++				 <&audio_clk1>, <&audio_clk2>;
++			clock-names = "ssi", "ssi_sfr", "audio_clk1", "audio_clk2";
++			resets = <&cpg R9A07G054_SSI1_RST_M2_REG>;
++			dmas = <&dmac 0x2659>, <&dmac 0x265a>;
++			dma-names = "tx", "rx";
++			power-domains = <&cpg>;
++			#sound-dai-cells = <0>;
++			status = "disabled";
++		};
++
++		ssi2: ssi@1004a400 {
++			compatible = "renesas,r9a07g054-ssi",
++				     "renesas,rz-ssi";
++			reg = <0 0x1004a400 0 0x400>;
++			interrupts = <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 335 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 336 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 337 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "int_req", "dma_rx", "dma_tx", "dma_rt";
++			clocks = <&cpg CPG_MOD R9A07G054_SSI2_PCLK2>,
++				 <&cpg CPG_MOD R9A07G054_SSI2_PCLK_SFR>,
++				 <&audio_clk1>, <&audio_clk2>;
++			clock-names = "ssi", "ssi_sfr", "audio_clk1", "audio_clk2";
++			resets = <&cpg R9A07G054_SSI2_RST_M2_REG>;
++			dmas = <&dmac 0x265f>;
++			dma-names = "rt";
++			power-domains = <&cpg>;
++			#sound-dai-cells = <0>;
++			status = "disabled";
++		};
++
++		ssi3: ssi@1004a800 {
++			compatible = "renesas,r9a07g054-ssi",
++				     "renesas,rz-ssi";
++			reg = <0 0x1004a800 0 0x400>;
++			interrupts = <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 339 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 341 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "int_req", "dma_rx", "dma_tx", "dma_rt";
++			clocks = <&cpg CPG_MOD R9A07G054_SSI3_PCLK2>,
++				 <&cpg CPG_MOD R9A07G054_SSI3_PCLK_SFR>,
++				 <&audio_clk1>, <&audio_clk2>;
++			clock-names = "ssi", "ssi_sfr", "audio_clk1", "audio_clk2";
++			resets = <&cpg R9A07G054_SSI3_RST_M2_REG>;
++			dmas = <&dmac 0x2661>, <&dmac 0x2662>;
++			dma-names = "tx", "rx";
++			power-domains = <&cpg>;
++			#sound-dai-cells = <0>;
 +			status = "disabled";
  		};
  
- 		wdt1: watchdog@12800c00 {
-+			compatible = "renesas,r9a07g054-wdt",
-+				     "renesas,rzg2l-wdt";
- 			reg = <0 0x12800C00 0 0x400>;
--			/* place holder */
-+			clocks = <&cpg CPG_MOD R9A07G054_WDT1_PCLK>,
-+				 <&cpg CPG_MOD R9A07G054_WDT1_CLK>;
-+			clock-names = "pclk", "oscclk";
-+			interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "wdt", "perrout";
-+			resets = <&cpg R9A07G054_WDT1_PRESETN>;
-+			power-domains = <&cpg>;
-+			status = "disabled";
- 		};
- 
- 		wdt2: watchdog@12800400 {
-+			compatible = "renesas,r9a07g054-wdt",
-+				     "renesas,rzg2l-wdt";
- 			reg = <0 0x12800400 0 0x400>;
--			/* place holder */
-+			clocks = <&cpg CPG_MOD R9A07G054_WDT2_PCLK>,
-+				 <&cpg CPG_MOD R9A07G054_WDT2_CLK>;
-+			clock-names = "pclk", "oscclk";
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "wdt", "perrout";
-+			resets = <&cpg R9A07G054_WDT2_PRESETN>;
-+			power-domains = <&cpg>;
-+			status = "disabled";
- 		};
- 
- 		ostm0: timer@12801000 {
+ 		spi1: spi@1004b000 {
 -- 
 2.17.1
 

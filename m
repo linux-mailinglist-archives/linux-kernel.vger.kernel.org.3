@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC7D4C58D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 02:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0194C58DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 02:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiB0BCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 20:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S229572AbiB0BIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 20:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiB0BCu (ORCPT
+        with ESMTP id S229501AbiB0BH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 20:02:50 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADD2B9BFC
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:02:15 -0800 (PST)
+        Sat, 26 Feb 2022 20:07:58 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CFE111C
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:07:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645923735; x=1677459735;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9PAN6UZlU60xLSHp+SiSnT40QYgt4AHZ2B3SnqsZDOA=;
-  b=PDZAEN/fxQd1aWec+nM9vpm5FKNOo/D5w9oiKrjB5O3/iuP/HACCdYE2
-   utsq78Uyanhgkyop9Y9fElO8cTJQ9IHk/0CCWM5yR538+hAfYJedGoXHY
-   e68GoUnrTTP+tbMXFm1COR0XzjhNdZZ5bawCCFN2GwoI/PKolAN3HCYWf
-   lzNan5+sDVcJGOECay1oCJuuwwWqI+MXGKYt0oUrHqgM5TZzkOuZdZkmc
-   UTx6kt+YG6yDUvDpUtaphzbdKglfO0h+VyPfH86RNnSwQ2jafwztjwja9
-   7tkrxX72wgWJuxfdYMJLiiF8rMDN6N4386L6+BckIvTSYkDVZvYwq5MNi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="339130693"
+  t=1645924043; x=1677460043;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TI7zL5UAwq6ggJ6H296ASYJslAopsQ14aVM//XVCzAg=;
+  b=mCt+W5t7rQgi7MojBl62YpqT2RT8F7m5gwLOHNEeta5w3YRyWO9v07+t
+   wyTRj4MWsd4uIx1+xfh6ykj2+5Vw6lFrUq7TK6KxFMOAOr4ofHl14+m2M
+   c0HyLi33E5l/SujRYttBWMUj0LaSSOmA9rtZ4IiUt7dh+5cwG/f3fyDM1
+   gd6hJeI/ijHiXPkWP2CAQUzw0Q3jQxB8jN5hzX/skRRViheSLPynANp04
+   yekYIohplFk2pHUm0+euFGkgww75Y/B6+1yWQ+ozooq5LhNhtTrpU9fsD
+   UDSDrnppjHUCp3ucBnFWy5az6hYrwS5wtBn+8pUb054MOUZApAbKTIaWl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="313412684"
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="339130693"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:02:14 -0800
+   d="scan'208";a="313412684"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:07:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="798086316"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Feb 2022 17:02:13 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nO7wy-00065c-G5; Sun, 27 Feb 2022 01:02:12 +0000
-Date:   Sun, 27 Feb 2022 09:01:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:next/linux-next/master 114/370]
- arch/m68k/mm/init.c:138:10: error: redefinition of 'vm_get_page_prot'
-Message-ID: <202202270856.AEAWFqnv-lkp@intel.com>
+   d="scan'208";a="492333779"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 26 Feb 2022 17:07:16 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id C1E1B94; Sun, 27 Feb 2022 03:07:33 +0200 (EET)
+Date:   Sun, 27 Feb 2022 04:07:33 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 10/30] x86/tdx: Handle CPUID via #VE
+Message-ID: <20220227010733.abapkmyaroglcafl@black.fi.intel.com>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-11-kirill.shutemov@linux.intel.com>
+ <51b6613d-eabd-941d-19b2-95b33ec27e99@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+In-Reply-To: <51b6613d-eabd-941d-19b2-95b33ec27e99@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,159 +72,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/master
-head:   06aeb1495c39c86ccfaf1adadc1d2200179f16eb
-commit: 8d8d82a114a972cf7b5f2f4154aafbb338f33fb7 [114/370] m68k/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
-config: m68k-randconfig-r024-20220227 (https://download.01.org/0day-ci/archive/20220227/202202270856.AEAWFqnv-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/8d8d82a114a972cf7b5f2f4154aafbb338f33fb7
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block next/linux-next/master
-        git checkout 8d8d82a114a972cf7b5f2f4154aafbb338f33fb7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+On Thu, Feb 24, 2022 at 11:04:04AM -0800, Dave Hansen wrote:
+> On 2/24/22 07:56, Kirill A. Shutemov wrote:
+> >  static bool virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+> >  {
+> > -	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> > -	return false;
+> > +	switch (ve->exit_reason) {
+> > +	case EXIT_REASON_CPUID:
+> > +		return handle_cpuid(regs);
+> > +	default:
+> > +		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> > +		return false;
+> > +	}
+> >  }
+> 
+> What does this mean for userspace?  What kinds of things are we ceding
+> to the (untrusted) VMM to supply to userspace?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Here's what I see called from userspace.
+CPUID(AX=0x2)
+CPUID(AX=0xb, CX=0x0)
+CPUID(AX=0xb, CX=0x1)
+CPUID(AX=0x40000000, CX=0xfffaba17)
+CPUID(AX=0x80000007, CX=0x121)
 
-All errors (new ones prefixed by >>):
+> >  /* Handle the kernel #VE */
+> > @@ -200,6 +235,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+> >  		return read_msr(regs);
+> >  	case EXIT_REASON_MSR_WRITE:
+> >  		return write_msr(regs);
+> > +	case EXIT_REASON_CPUID:
+> > +		return handle_cpuid(regs);
+> >  	default:
+> >  		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> >  		return false;
+> What kinds of random CPUID uses in the kernel at runtime need this
+> handling?
 
->> arch/m68k/mm/init.c:138:10: error: redefinition of 'vm_get_page_prot'
-     138 | pgprot_t vm_get_page_prot(unsigned long vm_flags)
-         |          ^~~~~~~~~~~~~~~~
-   In file included from arch/m68k/mm/init.c:14:
-   include/linux/mm.h:2844:24: note: previous definition of 'vm_get_page_prot' with type 'pgprot_t(long unsigned int)'
-    2844 | static inline pgprot_t vm_get_page_prot(unsigned long vm_flags)
-         |                        ^~~~~~~~~~~~~~~~
-   In file included from arch/m68k/include/asm/thread_info.h:6,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/mm_types_task.h:13,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from arch/m68k/mm/init.c:11:
-   arch/m68k/mm/init.c: In function 'vm_get_page_prot':
->> arch/m68k/mm/init.c:144:33: error: 'CF_PAGE_VALID' undeclared (first use in this function)
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                 ^~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
-   arch/m68k/mm/init.c:144:33: note: each undeclared identifier is reported only once for each function it appears in
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                 ^~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:144:49: error: 'CF_PAGE_ACCESSED' undeclared (first use in this function); did you mean 'FGP_ACCESSED'?
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:145:33: error: 'CF_PAGE_READABLE' undeclared (first use in this function); did you mean 'PAGE_READONLY'?
-     145 |                                 CF_PAGE_READABLE);
-         |                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:148:33: error: 'CF_PAGE_WRITABLE' undeclared (first use in this function); did you mean 'NR_PAGETABLE'?
-     148 |                                 CF_PAGE_WRITABLE);
-         |                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:154:33: error: 'CF_PAGE_EXEC' undeclared (first use in this function)
-     154 |                                 CF_PAGE_EXEC);
-         |                                 ^~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:174:52: error: 'CF_PAGE_SHARED' undeclared (first use in this function); did you mean 'PAGE_SHARED'?
-     174 |                                 CF_PAGE_READABLE | CF_PAGE_SHARED);
-         |                                                    ^~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
+CPUID(AX=0x2)
+CPUID(AX=0x6, CX=0x0)
+CPUID(AX=0xb, CX=0x0)
+CPUID(AX=0xb, CX=0x1)
+CPUID(AX=0xb, CX=0x2)
+CPUID(AX=0xf, CX=0x0)
+CPUID(AX=0xf, CX=0x1)
+CPUID(AX=0x10, CX=0x0)
+CPUID(AX=0x10, CX=0x1)
+CPUID(AX=0x10, CX=0x2)
+CPUID(AX=0x10, CX=0x3)
+CPUID(AX=0x16, CX=0x0)
+CPUID(AX=0x1f, CX=0x0)
+CPUID(AX=0x40000000, CX=0x0)
+CPUID(AX=0x40000000, CX=0xfffaba17)
+CPUID(AX=0x40000001, CX=0x0)
+CPUID(AX=0x80000002, CX=0x0)
+CPUID(AX=0x80000003, CX=0x0)
+CPUID(AX=0x80000004, CX=0x0)
+CPUID(AX=0x80000007, CX=0x0)
+CPUID(AX=0x80000007, CX=0x121)
+
+> Is it really OK that we let the VMM inject arbitrary CPUID
+> values into random CPUID uses in the kernel... silently?
+
+We realise that this is possible vector of attack and plan to implement
+proper filtering. But it is beyon core enabling.
+
+> Is this better than just returning 0's, for instance?
+
+Plain 0 injection breaks the boot. More complicated solution is need.
 
 
-vim +/vm_get_page_prot +138 arch/m68k/mm/init.c
-
-   131	
-   132	#ifdef CONFIG_COLDFIRE
-   133	/*
-   134	 * Page protections for initialising protection_map. See mm/mmap.c
-   135	 * for use. In general, the bit positions are xwr, and P-items are
-   136	 * private, the S-items are shared.
-   137	 */
- > 138	pgprot_t vm_get_page_prot(unsigned long vm_flags)
-   139	{
-   140		switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-   141		case VM_NONE:
-   142			return PAGE_NONE;
-   143		case VM_READ:
- > 144			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 145					CF_PAGE_READABLE);
-   146		case VM_WRITE:
-   147			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 148					CF_PAGE_WRITABLE);
-   149		case VM_WRITE | VM_READ:
-   150			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   151					CF_PAGE_READABLE | CF_PAGE_WRITABLE);
-   152		case VM_EXEC:
-   153			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 154					CF_PAGE_EXEC);
-   155		case VM_EXEC | VM_READ:
-   156			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   157					CF_PAGE_READABLE | CF_PAGE_EXEC);
-   158		case VM_EXEC | VM_WRITE:
-   159			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   160					CF_PAGE_WRITABLE | CF_PAGE_EXEC);
-   161		case VM_EXEC | VM_WRITE | VM_READ:
-   162			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   163					CF_PAGE_READABLE | CF_PAGE_WRITABLE |
-   164					CF_PAGE_EXEC);
-   165		case VM_SHARED:
-   166			return PAGE_NONE;
-   167		case VM_SHARED | VM_READ:
-   168			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   169					CF_PAGE_READABLE);
-   170		case VM_SHARED | VM_WRITE:
-   171			return PAGE_SHARED;
-   172		case VM_SHARED | VM_WRITE | VM_READ:
-   173			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 174					CF_PAGE_READABLE | CF_PAGE_SHARED);
-   175		case VM_SHARED | VM_EXEC:
-   176			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   177					CF_PAGE_EXEC);
-   178		case VM_SHARED | VM_EXEC | VM_READ:
-   179			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   180					CF_PAGE_READABLE | CF_PAGE_EXEC);
-   181		case VM_SHARED | VM_EXEC | VM_WRITE:
-   182			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   183					CF_PAGE_SHARED | CF_PAGE_EXEC);
-   184		case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-   185			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   186					CF_PAGE_READABLE | CF_PAGE_SHARED |
-   187					CF_PAGE_EXEC);
-   188		default:
-   189			BUILD_BUG();
-   190		}
-   191	}
-   192	#endif
-   193	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+ Kirill A. Shutemov

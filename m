@@ -2,110 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CFE4C593E
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 05:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97E24C5941
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 05:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiB0EUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 23:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S229967AbiB0EZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 23:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiB0EUT (ORCPT
+        with ESMTP id S229921AbiB0EZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 23:20:19 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F028C46
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:19:43 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so13186450oos.10
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DOWQCle1yWXb74A6NwPdy7M5JNT4HpDC3FQ0vyWPTag=;
-        b=IeylE/7EPIwORvE0KS/7Ameqd+Ni1fvuGcTyhvl9Q+CBocq+kWqmhUOzDExwG+binD
-         b9NOZrJNqg8PSGZTql6noit2xRsPQlDHlz2uEkbZfPnkpQPgohVAEbkaulVLzCgms9aY
-         mEMavWAD1EwN9ULfjmyBqjYWuob6fPjV9j0Xi9zyvLdCkbe649ctm4rO+ougQiWPqKQq
-         TWZ0UYDBIL8HXreHEWovO+gTBa/jFnU8FvJ/jGr5lxO6qr80PzxK7DmeDtFSqBaugTx2
-         Igm6D4I9aQ9VS4Z/qLMgBpDCSW6nsLnhMIRg662la8bTYY36QaOI6/l/mg3DTU0Jzttq
-         7aQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DOWQCle1yWXb74A6NwPdy7M5JNT4HpDC3FQ0vyWPTag=;
-        b=ztS3bDn/+zeUwbc8el7lidLhE0FiFbD4uAOFfE4FjTxQ6/lTU95U9dIkPVt/LM/Tz6
-         2Il4tNig5v1/pbT7iNsTPfWVHreN610u1JY5/a4kJ0VTXfvA65b6QRa06wFQ5PplnTiW
-         J3w4vKIqqLYw5CJN2fc70zIkH0Xh4YBXFd7Rwz59yhgjc8MG7DNfCNVPwLoLhu84bHJF
-         cro58PWiskntwPYLK/LuAzsoEodEFcVUyvzJYvTQ+CUXbfVw4mpd1VdJBYY75MfM2vF5
-         8u3ODh3gX8jPvE9zkKhGBakDfptUQejchC5z92YUA+3jDIQhwplSbeuH9eXSn1J8wCOL
-         C/OA==
-X-Gm-Message-State: AOAM532jJmRAm83akYTpq8omO122wYQ7k7HD1yGlnELbKEJSFOiV86vq
-        mybKp3jIXly03DFGkaFgFxQGetwp5rk2IYFUmHWn2A==
-X-Google-Smtp-Source: ABdhPJzIp2ckX/5Fmg/5ZskGI2KaKSC4oRyfJHOpnu/S5EGTP1fU2fyV7LXsE25qAb1bhAdDLKuJeW4Nln8qhWSEhBA=
-X-Received: by 2002:a4a:301c:0:b0:2dc:dcf1:8a62 with SMTP id
- q28-20020a4a301c000000b002dcdcf18a62mr6116378oof.7.1645935582815; Sat, 26 Feb
- 2022 20:19:42 -0800 (PST)
+        Sat, 26 Feb 2022 23:25:26 -0500
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D3A286A61;
+        Sat, 26 Feb 2022 20:24:50 -0800 (PST)
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 21R4OJQH003168;
+        Sun, 27 Feb 2022 13:24:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 21R4OJQH003168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645935859;
+        bh=QMpLpFvK50geS0pNLEKH725VNQkb2vBonv3zKogEUhU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qaz7a4wqvAPO6nmHRGNyWFAqhm83Y+SV2XsaZ2qfgZovUZn8oiMwdRN/wQg961jpM
+         gshCm23qvbd77r+xArOKVW7T4eHDeS1X/hoM6lXz0AIw7asf+swCGYA1fRKfu5QBJG
+         hQhoo8KQt/arplcRBrCrUxBnBsXCcOXOxVIZ0agnGNr1q1HszgNB5W4bGVrUwboe/P
+         5zthUlHlMQWDfZY6GKz+S5qN+1xA2DeIqilW5pO812sVjz5MZ6c5KvRx1iSokK3bZt
+         5LNufzq7DI62N31P0o9rCG7YzbRA43ROahW/Sa3OUcGmK0vbIPv5t6I5atALh9Ix41
+         fW/uBFhucYShQ==
+X-Nifty-SrcIP: [209.85.214.170]
+Received: by mail-pl1-f170.google.com with SMTP id b22so8035110pls.7;
+        Sat, 26 Feb 2022 20:24:19 -0800 (PST)
+X-Gm-Message-State: AOAM5333dPfkNNumKcrEC9VnBGUGHXyrYuNFhxqhQXUFdVavGBR8ugUP
+        OeIQYk3kG0MSiKQ6daeFTPvWb7xDmJ9UUnp+YxU=
+X-Google-Smtp-Source: ABdhPJx82Fht5/y6E94Ik8jhTKs8bwEQszU5prGNOMpqi8fxSns9dt8Gv357NxdOgnc1Ymg2WhhzTnihOP75sTIIYT4=
+X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
+ m23-20020a17090aab1700b001b9b61aaadbmr10547760pjq.77.1645935858727; Sat, 26
+ Feb 2022 20:24:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224123248.67073-1-bhupesh.sharma@linaro.org>
- <CAA8EJprRgsZRSXBQumveAn029j+w6xO8K2kZUO4rzZaefuYe7Q@mail.gmail.com>
- <CAH=2NtxQBS=c0W0cpX5EdNi12PrqiKEuzyvEtF8WrVE6nsU_rg@mail.gmail.com> <a6d28a2e-69fc-9bdf-da0d-28be35d9bfc2@linaro.org>
-In-Reply-To: <a6d28a2e-69fc-9bdf-da0d-28be35d9bfc2@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Sun, 27 Feb 2022 09:49:31 +0530
-Message-ID: <CAH=2NtwveafJxjNAY_2eRE1sKhEL2wKJhcF7a1THsJW_QiwSpQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: phy: qcom,qmp: Mark '#clock-cells' as a
- 'optional' property
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        robh+dt@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
+References: <20220226123755.85213-1-masahiroy@kernel.org> <CA+icZUUm1zpbSyOW3xKUsqo9bBjAehw6KvVBjGxpYy4XBjO4yw@mail.gmail.com>
+In-Reply-To: <CA+icZUUm1zpbSyOW3xKUsqo9bBjAehw6KvVBjGxpYy4XBjO4yw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 27 Feb 2022 13:23:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARx40BnsL-8sTV+62URe2cr1K1G7MeKN-MMZ0nPw3NFVQ@mail.gmail.com>
+Message-ID: <CAK7LNARx40BnsL-8sTV+62URe2cr1K1G7MeKN-MMZ0nPw3NFVQ@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: change .config format to use =n instead of "is
+ not set"
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 at 05:08, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Sun, Feb 27, 2022 at 6:38 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On 25/02/2022 12:16, Bhupesh Sharma wrote:
-> > Hi Dmitry,
+> On Sat, Feb 26, 2022 at 2:34 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > >
-> > Thanks for your review comments.
+> > The .config file uses "# CONFIG_FOO is not set" form to represent
+> > disabled options. In the old days, it was useful because the .config
+> > was directly included from Makefiles. For example, you can use
+> > "ifdef CONFIG_FOO" in Makefiles to check if the option is enabled.
 > >
-> > On Thu, 24 Feb 2022 at 20:22, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> >>
-> >> On Thu, 24 Feb 2022 at 15:33, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> >>>
-> >>> Since '#clock-cells' is not a required property for several
-> >>> QCoM boards supporting qmp-phy(s) (for e.g. sm8150, sm8250 or sm8350 SoC
-> >>> based boards), mark it as an optional property instead.
-> >>
-> >> I believe the description is not correct. the clock-cells should not
-> >> be used at all, so it should be removed from the root node.
+> > Commit c955ccafc38e ("kconfig: fix .config dependencies") introduced
+> > include/config/auto.conf, which mirrors the .config, but trims down
+> > all disabled options.
 > >
-> > Hmm.. 'clock-cells' is still used for describing qmp phy pcie nodes for certain
-> > devices like 'msm8996.dtsi'. I am not sure if removing it would impact existing
-> > dts files. But let me try cleaning them up in v2.
+> > Since then, include/config/auto.conf defines CONFIG options during the
+> > build. The .config is used just for storing the user's configuration.
+> > I do not see a strong reason to use a particular pattern of comment
+> > for disabled options.
+> >
+> > With this commit, Kconfig will output disable options in a more natural
+> > form, "CONFIG_FOO=n".
+> >
+> > Kconfig accepts both "# CONFIG_FOO is not set" and "CONFIG_FOO=n" as a
+> > valid input. You do not need to update arch/*/configs/*_defconfig files
+> > for now. "git bisect" should be able to cross the commit in both ways
+> > without any issue.
+> >
 >
-> Checked. Unless I'm mistaken, msm8996.dtsi doesn't use #clock-cells in
-> root QMP PHY nodes.
+> Good.
+>
+> Lot of people use/used the notation CONFIG_FOO=n, so did I.
+>
+> Thanks for keeping the "compatibility" with old usage "# CONFIG_FOO is not set".
+>
+> Normally, I use git diff (or scripts/diffconfig in Git tree) to
+> compare two kernel-configs, so seeing
+>
+> -CONFIG_FOO=y
+> +CONFIG_FOO=n
+>
+> ...might be at first view unfamiliar/unusual.
+> With the old notation it was easier to see that Kconfig is unset.
 
-Indeed. I meant that we made some cleanups already via
-82d61e19fccb ("arm64: dts: qcom: msm8996: Move '#clock-cells' to QMP
-PHY child node"),
-but it seems a few dts still need to be cleaned up to move the
-'#clock-cells' to QMP PHY child node instead of the root node.
+I agree on this point.
 
-I will send a fixed version in v2 :)
+"is not set" stands out much better than "=n",
+and our eyes are accustomed to this notation for 20 years.
 
-Regards,
-Bhupesh
+However, real comments do not stand out since
+we already (ab)use comments for disabled options.
+
+This is related thread
+https://patchwork.kernel.org/project/linux-kbuild/patch/20211213100043.45645-3-arielmarcovitch@gmail.com/
+
+
+
+>
+> Is this patch on top of kbuild-next Git?
+>
+
+Yes.

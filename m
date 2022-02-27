@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F964C5E4B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB994C5E52
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiB0Swn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 13:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S231265AbiB0Szt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiB0Swk (ORCPT
+        with ESMTP id S229750AbiB0Szr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 13:52:40 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A0157B36;
-        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so15602982ooi.0;
-        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
+        Sun, 27 Feb 2022 13:55:47 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E465A0AF
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:55:10 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id l19so9135027pfu.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:55:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g389SAYe0hAJZkmC0RLt66EI40xFc/FeNBhIEw+0+VU=;
-        b=QAl7avJ8lmrokQB1U1PI08LlkfQ6AvD534j6IfrB5foQjV/CJqQETQS22eD38kKmfO
-         5z05c8t7yk4mRudBRev0sBEBrnE3ojbCmjirB1Gr8rL3zgej7dl7oX8mCWL0weMOR2sf
-         iA1zyfcdRjmqp987QlzgTPgXfYKnAwTX+oYxrH0Ci3DRP4A0K1GahMFsV9RSmEJ5y/kk
-         oNAbTpOEdWr0Oreprwc3lTbBYFbzpYNFzvHhO/Qu1zbREEgtS7Ft2CSGlQ05bX0PLIro
-         qaPP2R8grt9ndJQoH3Fhp8ErkU0xV7MhvqbTENCjuHelVZ4fUtoFw9c0v9oN8tDPh4cA
-         V78Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BUutuHj2Y4sBYwPZrJt3gLoK5iq9Xx8GjQfOHIMA2K4=;
+        b=LssERTi7+6Oc9GsiOtykaNrIGp0U5bK2BuY/HFdPIvYfzS4lKrCtJPutZwYXtfGgi7
+         NhOfUN4u5XVvksPllEuJM3X0YaL3u+W0zL2LSDOTflQEbi4ODxmT7SyggMv8NE08FghK
+         6W81GWSdkfZbjNqYrry1cPcRifymCajTrSOyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g389SAYe0hAJZkmC0RLt66EI40xFc/FeNBhIEw+0+VU=;
-        b=FG84q5Afj/fS+hjJwO+QE6Tl9FBm308wPvadQLy0ZKOEZmXAlFVucCjK+mOpKyUBYG
-         d/thTLAN8db4WzeUV7XMj4Ix7s+axZx7gpiYwGU81CNM330Id33ugWrN6JCF6VNOITvq
-         uqy9I8u43OcQg/GZhx/ZvRSHbJdrUgasysvmFUJZnhHfYrx97HaLx6ZGxgIs7gmcC5C8
-         t8hZztpD7s1XlhzUtCpTGb+8O7pq6yKh00ZJljhf/I5hr+XL50IY7VLontxpumILLu/C
-         KXGuvC6rmkWqqZ3RvIUL/SxRi4oEWrdRpao2ACufrhlpxifwrH0qmcCcm8argyorIF9n
-         FPCg==
-X-Gm-Message-State: AOAM533vHUVJ/FQwOI4tr565ydW0QzIC7r66u2qzqDuSw2eWqROL625X
-        507VTp/sn5u1Qw54COY7HJGDK4Pc5S8=
-X-Google-Smtp-Source: ABdhPJy1HvJuV3xXzuXui7cBmi7vBlWZtfzMRqCto5q2gGLjjYqC0HZzyAa4++hxojj5fg/wB0UiNQ==
-X-Received: by 2002:a05:6870:c594:b0:d3:6bff:a925 with SMTP id ba20-20020a056870c59400b000d36bffa925mr6407113oab.1.1645987923260;
-        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26-20020a4ae25a000000b0031c268c5436sm3895196oot.16.2022.02.27.10.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 10:52:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ae4f358a-5e44-435a-a569-a5bd1c2128ee@roeck-us.net>
-Date:   Sun, 27 Feb 2022 10:52:00 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BUutuHj2Y4sBYwPZrJt3gLoK5iq9Xx8GjQfOHIMA2K4=;
+        b=TTCD7BvqkHrq77bPU7DbUagfRKq6hz70dLy+b+mVNAaXAKlCi128mW+rEeaBLRQdZo
+         iffIWNweK2vYiy5bZgb4RtFrH7/suF10X4cfY2N5puEZqCZKnnvjFEl5tcePn8Wr7vQI
+         ErMFyMyRwJKl/HaJvt3SI0FJcU0cC3/euTQmWNzcxx2BuBf3Gxc8GcojYVpfJZtO9L8V
+         n9EVojy5cJ3aYpTgP50ZNWPQAU3ydjSXoZr1I+STZT878UIhsgNbiHwNhN4xc7UxIPji
+         cGEIvGMD3249l0ri652XkDf45z7Ux0mfhnI2Sdus0P589QiRsAbTv1j6fBcMPgg929a4
+         P4Rg==
+X-Gm-Message-State: AOAM530rtkw1PQ3Q1IQ6IhhNF7azWOmseqaEfJ+yyaYTEn92Yhv2lvYC
+        b91eziPi0NsRAEwfScQ8wnHhsA==
+X-Google-Smtp-Source: ABdhPJy00TjfcczrXbPQJOZnPgE7hz1pTHrH+oGIaH1lig5NQe0zrVzrE1l1NTv6ss5VmpjLSU6PFA==
+X-Received: by 2002:a63:1350:0:b0:378:7fb4:63eb with SMTP id 16-20020a631350000000b003787fb463ebmr4139383pgt.457.1645988109770;
+        Sun, 27 Feb 2022 10:55:09 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm2909273pfe.20.2022.02.27.10.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 10:55:09 -0800 (PST)
+Date:   Sun, 27 Feb 2022 10:55:08 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, Dave Airlie <airlied@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] drm/dp: Fix out-of-bounds reads
+Message-ID: <202202271053.91D3CE109@keescook>
+References: <20220225035610.2552144-1-keescook@chromium.org>
+ <YhihqzqPW7qbYnB9@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer Farbwerk 360
-Content-Language: en-US
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220227105926.64862-1-savicaleksa83@gmail.com>
- <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net> <Yhu+ywPYqkzMQUZv@fedora>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yhu+ywPYqkzMQUZv@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhihqzqPW7qbYnB9@orome>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 10:11, Aleksa Savic wrote:
-> Thanks. I'll send a v3.
+On Fri, Feb 25, 2022 at 10:30:19AM +0100, Thierry Reding wrote:
+> On Thu, Feb 24, 2022 at 07:56:08PM -0800, Kees Cook wrote:
+> > Hi,
+> > 
+> > I'm sending these again, as they still need fixing. They have been
+> > rebased due to the drm_dp_helper code being moved into a subdirectory.
 > 
+> Yeah, I noticed the other day that this had been partially reverted by
+> the DP code move. I've applied this now, though it didn't apply cleanly,
+> so I'll do a couple of test builds to make sure my resolution is correct
+> and will push this out later on.
 
+Awesome; thank you!
 
-Oh, and please update the subject to something like
-"hwmon: (aquacomputer_d5next) Add support for Aquacomputer Farbwerk 360"
+Yeah, I had based on drm/drm-next rather than drm-misc/drm-misc-next. I
+wasn't sure which tree I needed to base on after the files moved.
 
-Thanks,
-Guenter
+FWIW, the resulting patches look good to me. Thanks for fixing them up!
 
+-Kees
 
+-- 
+Kees Cook

@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3604C59EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 08:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EE94C59ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 08:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiB0Hsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 02:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S230103AbiB0Hxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 02:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiB0Hsd (ORCPT
+        with ESMTP id S229974AbiB0Hxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 02:48:33 -0500
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3107F5006C
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 23:47:54 -0800 (PST)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id 74D81220DE;
-        Sun, 27 Feb 2022 07:47:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 173C72F;
-        Sun, 27 Feb 2022 07:47:31 +0000 (UTC)
-Message-ID: <5aae43769bced6d5c17f143332004285af6d1c4d.camel@perches.com>
-Subject: Re: [PATCH 1/2] ALSA: core: remove initialise static variables to 0
-From:   Joe Perches <joe@perches.com>
-To:     Meng Tang <tangmeng@uniontech.com>, perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Date:   Sat, 26 Feb 2022 23:47:51 -0800
-In-Reply-To: <20220227071253.28193-1-tangmeng@uniontech.com>
-References: <20220227071253.28193-1-tangmeng@uniontech.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 27 Feb 2022 02:53:49 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5872246676
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 23:53:13 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so2361983ilu.14
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 23:53:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=8x4prQR53xKdTVGUoxh3U1NM4w8xxnpghylkDWISnKI=;
+        b=bMhVLPos/5876EjRT8vLiAHe2XevpPt8XTEzTjsPUUX8+SKZwYDo4baM1BoeX7LmDB
+         GzVLqMzg5EyFUOaqgTa/DIpIG4mDXBDN0Sia5+M9c1MhPndf7vyIiLGGQG7LVIMEZMlN
+         cQQ/m6KVw5NOD07SR35lkRkNNIq/IiSji3X09Ibig744GuYwiyHLFJDr0L+U029xbrkF
+         b6rSIgrLB1mPqHJSVzAs7zun1NExy95q026ygQmxPdp0Bk2QspqRW0M6w3Mo2xlJaD7p
+         QDlJL9a+Z10PBodtde57tGKJj35JgXYULuH4QkzZXdHzsxlSOne/Kl4usc4ewbzkQ4Jd
+         fefg==
+X-Gm-Message-State: AOAM532E860LqEAdSJ6O2WUOQG3etqzJGDKoZpu1EBX7DVOy79yo5zfN
+        9QDlTIVp4xQGGcdptEzUBxWr13uRWPxaa+4PJe10qUIja7dU
+X-Google-Smtp-Source: ABdhPJwnM//x289HcGWdyw6/MGcyPjreaVsnsQEtDClJ29ZCA4H62iYtHU111CI/dde+EtOVB0pSCgrO2DM1+90IGs0rgaCC8QmS
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: 8xnixydnu3zmz4hwsd8h1xfo3msdj6f6
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 173C72F
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+2xEQu8yUXGYkYqv//dyUnZLZR68nqb9I=
-X-HE-Tag: 1645948051-399840
+X-Received: by 2002:a05:6602:3409:b0:641:a051:df23 with SMTP id
+ n9-20020a056602340900b00641a051df23mr11607999ioz.98.1645948392694; Sat, 26
+ Feb 2022 23:53:12 -0800 (PST)
+Date:   Sat, 26 Feb 2022 23:53:12 -0800
+In-Reply-To: <20220227074046.2963-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000043e8b805d8fb398c@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in sco_sock_timeout
+From:   syzbot <syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com>
+To:     desmondcheongzx@gmail.com, hdanton@sina.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-27 at 15:12 +0800, Meng Tang wrote:
-> Initializing the static variable to 0 causes the following error
-> when exec checkpatch:
-> 
-> ERROR: do not initialise statics to 0
-> FILE: sound/sound_core.c:142:
-> static int preclaim_oss = 0;
-> 
-> Static variable does not need to be initialised to 0, because
-> compiler will initialise all uninitialised statics to 0. Thus,
-> remove the unneeded initializations.
-[]
-> diff --git a/sound/sound_core.c b/sound/sound_core.c
-[]
-> @@ -139,7 +139,7 @@ struct sound_unit
->  #ifdef CONFIG_SOUND_OSS_CORE_PRECLAIM
->  static int preclaim_oss = 1;
->  #else
-> -static int preclaim_oss = 0;
-> +static int preclaim_oss;
->  #endif
+Hello,
 
-Probably better without the #ifdef / #else / #endif as
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-static int preclaim_oss = IS_ENABLED(CONFIG_SOUND_OSS_CORE_PRECLAIM);
+Reported-and-tested-by: syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com
 
+Tested on:
 
+commit:         922ea87f ionic: use vmalloc include
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f802340579dda19
+dashboard link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=134f85da700000
+
+Note: testing is done by a robot and is best-effort only.

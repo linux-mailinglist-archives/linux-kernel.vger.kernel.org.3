@@ -2,175 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134E04C5A87
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA314C5A8B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiB0KyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 05:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S230175AbiB0K7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 05:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiB0KyM (ORCPT
+        with ESMTP id S229964AbiB0K7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 05:54:12 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D5D45075
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:53:36 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        Sun, 27 Feb 2022 05:59:15 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F84DF46
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:58:39 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F34183FCA5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:53:33 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 61F2A3F1B7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645959213;
-        bh=DhT1dvPlzOUzKZgFedQirHd2ksfJlMM23UbjgmdtwlI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+        s=20210705; t=1645959518;
+        bh=2bOCiusGq2ul/MWsE8cSC2kGM7wquiIO9nYKtCZH63I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=jEwKsMocY4YUbYGANnNeGtexrKoVg4T43ZwmODgXkGpqJLigUp+lGTiOD3AjeZLMY
-         R79ixcXXHiArsmjzojluvKcHgM9Um05Cf5LGbBd0tyBmod+zPonsIr2TS8oDPxFbFs
-         8ZpEDWijmIw0AVyYcMVFAACRqNJyVvGoMokJnE3jY3atuXv20V/WjySNDneK14qNQ+
-         PFFIiE1w5N+SZEyEg7nWtpQ3jhj8GrqbC2I8Y/04C5vder+VtYiWKNQdbZxBcsvTu4
-         6txqC4e5jbq4W1c0v+Vzo40zTyqHJrJP0dtZrD8grpLYKfgYIa4VZHqSPFuFsiX3OF
-         3Qv5FNJD2Ug6A==
-Received: by mail-ed1-f72.google.com with SMTP id cm27-20020a0564020c9b00b004137effc24bso2257408edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:53:33 -0800 (PST)
+        b=bATA61xMq9rLGkt6t5BC9H4jpR6EW41nnCA5E1ZX4+Tck4E70nDedfeDVvq6Izoiq
+         kc/Wl7VbUNH6FpGc24aO4SUfNaKVYRAsGwwhIAIPwsg1hV5nc33lAIKDD0ZOnd4Vc6
+         c14Bp0VE5/wPE5lvRX/EWTBqynxB0ntgN1gMgOmb8eGyXCF1Yuijms4M64o9Dni8MB
+         pNdkb2MdJwhjPMa+1DMNtOelJIjPpP5foMh5Otwg4GhxxwQ+rdw7b5e9pnm00Jv2ch
+         tkjSMXQtUrBnopJbUfbVyytzVmyWMsMP91DgTxdAPDPMPNhG4pp4JubUSr+nEPQI2G
+         t2AhGb9NRCeIA==
+Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso4078235edt.20
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:58:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=DhT1dvPlzOUzKZgFedQirHd2ksfJlMM23UbjgmdtwlI=;
-        b=6HVUN5sptZIePhKAL3pY86tAwsWEAkf44sPrz7RYOEf6WkN1OJ0sZDGjiu4rkGl1AI
-         lYWEPJsxVtfx0AqIFddwOyyyhKoYVO1C1ZUaYxT7ztiB7A5a66bZzAli4ZtOx91w/NJ7
-         DomDXp1pwHlB2Desd/RZiFG+6KSo8b19c7+5mr40EqwHoWFbzTK+kFgirFV04Td4dvPJ
-         bXlEkspDA2jRrg3eOvBToQCrV6876qTsCOCNXoEemU35CBj4APlxk4uesuuriX7cRh8E
-         DlhV1d04xhd86pdz5Hm9Yo7mct+mfS0/aIILx4492PSzgjKw7SOmM6DxrO3NTDEVcPcm
-         wcsw==
-X-Gm-Message-State: AOAM530igWLtkUhKp85QVW9ZGqz1K4adY39Mwh3ohKvNEG+nZNiY4mGY
-        yE2DNqWIK4KH0aYX8RVfOgFbnjja8fzVnD2KB1ofExN/YPdiJ3/xhWjhYpPRrGOyjdpyE6pNCL4
-        f72EICJUocHcjlth3mNAOqqJpBXJ93G5zzqPU++K9sg==
-X-Received: by 2002:a05:6402:27cc:b0:412:eb0a:b687 with SMTP id c12-20020a05640227cc00b00412eb0ab687mr14957370ede.208.1645959213308;
-        Sun, 27 Feb 2022 02:53:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxyXd5YsGvKFpgDZHLeuTtX2dXv0kT6Q4No1zgTEWLt2DisZJNZw1Dd4prwoi128gF7+r0IXQ==
-X-Received: by 2002:a05:6402:27cc:b0:412:eb0a:b687 with SMTP id c12-20020a05640227cc00b00412eb0ab687mr14957353ede.208.1645959213096;
-        Sun, 27 Feb 2022 02:53:33 -0800 (PST)
+        bh=2bOCiusGq2ul/MWsE8cSC2kGM7wquiIO9nYKtCZH63I=;
+        b=ixfYLr6JDdT0a2lCx1wBoc7rDFUfE+0qd51WVmL/Ms+JnXE3zHhDR4ZotSA4E6MVbl
+         UQ5IfaubXRVfieThxLWRpO5YRRuVrOwLdU6zr6Hq1MMUpRFgtJojapjRTYlQCkQAmWUF
+         pUjnGMi1i8+wr62KZpJ4afBn5aFY6LzMR8ulFsnuWJp1hXGWTy+G9yiRjUogriOv7eMk
+         0uNyeWbLGso/op8wBZDKTFc9yAbfOjdTmXLu3esEpdLaSZfI7odFhASMimGDnXQ+keYE
+         IyNlDm0v5O0walgaBnfmg95IK3ONR9vhOYbNzZ0mbTCE4yWaeJbMdiUeMCXNTSmwRIW+
+         /gFQ==
+X-Gm-Message-State: AOAM533MkhQtEIO8zi3fKYmh3+tD8p7iipl8sPuDZpQFMq+9YavSvlT2
+        JQuHeOf3zfXTI4PApGMTrKf2j52SVupIPAaV8Oo9Tue3QcQUFxnDjV7CEWLwBojkJQm2q4Jh6nw
+        qK1kpgPX0FBBPrEri4dDH0YsCwXbjW287gi4dQJ0rtQ==
+X-Received: by 2002:a05:6402:350d:b0:410:b608:ff4f with SMTP id b13-20020a056402350d00b00410b608ff4fmr14922910edd.89.1645959518000;
+        Sun, 27 Feb 2022 02:58:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxoFbq1X2KP1qKbtNx82/SCmsEevJmYxZ2Bf2LLbkURS/vDpov5C3QYi0mxgeV/lId9Uap8Sg==
+X-Received: by 2002:a05:6402:350d:b0:410:b608:ff4f with SMTP id b13-20020a056402350d00b00410b608ff4fmr14922898edd.89.1645959517865;
+        Sun, 27 Feb 2022 02:58:37 -0800 (PST)
 Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id w14-20020a509d8e000000b00412cf368b4csm4364026ede.53.2022.02.27.02.53.31
+        by smtp.gmail.com with ESMTPSA id t2-20020aa7db02000000b00412cd5d5148sm4403973eds.47.2022.02.27.02.58.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 02:53:32 -0800 (PST)
-Message-ID: <aeb85444-e280-8c53-a0ba-f8d21f28975b@canonical.com>
-Date:   Sun, 27 Feb 2022 11:53:31 +0100
+        Sun, 27 Feb 2022 02:58:37 -0800 (PST)
+Message-ID: <e6f3ceb8-7b02-020a-7b2c-07520f6d9661@canonical.com>
+Date:   Sun, 27 Feb 2022 11:58:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: Add bindings doc for Sunplus
- EHCI driver
+Subject: Re: [PATCH 4/5] dt-bindings: hwmon: Add nuvoton,nct6775
 Content-Language: en-US
-To:     Vincent Shih <vincent.sunplus@gmail.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-References: <1645955441-6496-1-git-send-email-vincent.sunplus@gmail.com>
- <1645955441-6496-3-git-send-email-vincent.sunplus@gmail.com>
+To:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20220226133047.6226-1-zev@bewilderbeest.net>
+ <20220226133047.6226-5-zev@bewilderbeest.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1645955441-6496-3-git-send-email-vincent.sunplus@gmail.com>
+In-Reply-To: <20220226133047.6226-5-zev@bewilderbeest.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2022 10:50, Vincent Shih wrote:
-> Add bindings doc for Sunplus EHCI driver
+On 26/02/2022 14:30, Zev Weiss wrote:
+> These Super I/O chips have an i2c interface that some systems expose
+> to a BMC; the BMC's device tree can now describe that via this
+> binding.
 > 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 > ---
->  .../bindings/usb/sunplus,sp7021-usb-ehci.yaml      | 97 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 98 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
+>  .../bindings/hwmon/nuvoton,nct6775.yaml       | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-> new file mode 100644
-> index 0000000..e492f7a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ehci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SP7021 EHCI Device Tree bindings for ehci0/ehci1
-> +
-> +maintainers:
-> +  - Vincent Shih <vincent.sunplus@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-hcd.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-usb-ehci0
-> +      - sunplus,sp7021-usb-ehci1
 
-How did you address Rob's comments about using one one compatible? You
-still have two.
+Bindings should be the first patch in a series.
 
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: usbc_clk
-> +      - const: uphy_clk
-> +
-> +  resets:
-> +    maxItems: 2
-> +
-> +  reset-names:
-> +    items:
-> +      - const: usbc_rst
-> +      - const: uphy_rst
-> +
-> +  reg:
-> +    items:
-> +      - description: USBC register region
-> +      - description: UPHY register region
-> +      - description: MOON4 register region
-> +
-> +  reg-names:
-> +    items:
-> +      - const: usbc
-> +      - const: uphy
-> +      - const: moon4
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    description: names corresponding to the nvmem cells of disconnect voltage
-> +    const: disc_vol
-> +
-> +  nvmem-cells:
-> +    description: nvmem cell address of disconnect voltage
-> +    maxItems: 1
-> +
-> +  port-num:
-> +    description:  identify ehci0 (port0) and ehci1 (port1)
-
-This still should be a dedicated PHY driver referenced here.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
 Best regards,

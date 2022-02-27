@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4551C4C58C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 01:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4C04C58C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 01:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiB0ATO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 19:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S229540AbiB0AXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 19:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiB0ATN (ORCPT
+        with ESMTP id S229437AbiB0AXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 19:19:13 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CBD186BBE
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 16:18:37 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id a5so7014765pfv.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 16:18:37 -0800 (PST)
+        Sat, 26 Feb 2022 19:23:36 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245A818BA70
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 16:23:01 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so8173406pja.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 16:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=n1TJ0Y2cV3ooViKl4YV0Gg01JoStoDXO+vd94Rnxvno=;
-        b=FsPjxCbTXnQGUqDn4BqP5TqcxkgUQF/5Lnfz86M++Dz1AC/lqN/7gyMRQ8bxGAC24l
-         l1xfrXzBc8wBuEbD05QWy+oKejfRJ+BR+K6ZyTnaz8bTZOfNYrY8uov8qmzR39OGwcpC
-         UFYKfK2g3pTDpLWAi3FX1ThIfbLtzLIpwfIcys7xrRaDeqW7D4GPbKhAuUO6zrhk2O5p
-         VjmtSd0k+lB7cZ9TInEDJ6NJlPY8BWMbHp2qOvLHXvGpKaN+tBMeF8WHA5yGvI0b3U2h
-         d3+exONWiqXdaNw7qlel7MdPW+2FmKVWF9cGME+ygP69N75RJlr42RMStGVzc8bVJkma
-         aH7Q==
+        bh=dnqnUC19xO35MCy9LRDHO0Cui2vrFHNNs03zEs4NcDw=;
+        b=PrZSLUN3MtjGPfHYaaY7BMwDWIbdVnmoXTS30IMzZlpZDFnUT5yitvdblFN1ZdNjLo
+         owG3WClAMkuCWEUTCUO6HyB62hBXaW5jpm6MUrOX1a+DiKola00Kwq655ZKClUnSu4a+
+         Mtlz1lkGuykQR2wkRStiRGhiOJDlwKhS0dWl4Vjh7a41NGSA/CGpdhMRUmjyXk3PNgEx
+         WDhCaX7jC+Y8ha4vAREzLCH2xHTm2iRmx4E49+SJavbsKx+sReOgYy1acv1Sj4JsO2r1
+         pba2QDiNlaY4rHX8tAmMerHss4bUctg9hIFPA0FBvWIThFFaJo2R3j3NccmQXeFwHcKV
+         d4ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=n1TJ0Y2cV3ooViKl4YV0Gg01JoStoDXO+vd94Rnxvno=;
-        b=rVShFvFjZp1eyzVpPcp2gx7oiFrFwio5tqbzfDP6jyI7f84TpZKe1MAyCxuUOJAqU3
-         x909+pZ1rkdGKTc3xCtc1Evh5sZh1qqIccru1WCSsepj0f8Lp50oMrJ6k5Q5hcSuhgCJ
-         JPNzvdvwY7c6nuNzvjuCJxikhSF/MiiCdceRrMi3USS3BNJIfBBvawnfXE/j7hNZ13jU
-         V2AZILaTSCvYhPpi0B+vf2IxhzJNAVnVTwAufaFOABO21JgJ0oqOSaQDtl09DWWwAQQ2
-         sqLP/CCEjqEyrCh5zf6vabMT1eTQBkN0hBxhaaKvy8RQ79n50uWZVSznSUa9MIbWZ+Tt
-         kW/Q==
-X-Gm-Message-State: AOAM533hpMOr2VEMdgao90eU6H/6r3QqlEqkbB02+plNco61P+lidfJd
-        2jIojjMcbYm8LBg570eGj3E=
-X-Google-Smtp-Source: ABdhPJzaYbE9wt0hN6MMtWdOuTFNdyKrRrDJ7UMIDxzQDw8mKBv5MAvizizTGG+QwUbzX63Q1vVT3Q==
-X-Received: by 2002:a05:6a00:1691:b0:4e1:935f:94dd with SMTP id k17-20020a056a00169100b004e1935f94ddmr14605506pfc.83.1645921117113;
-        Sat, 26 Feb 2022 16:18:37 -0800 (PST)
+        bh=dnqnUC19xO35MCy9LRDHO0Cui2vrFHNNs03zEs4NcDw=;
+        b=XWOnkZ9LKeRNAEun+I1zUnF23eqK4nljATqNLlItLpXero0zn5YgbGxTDZ2EhC4rt9
+         RMTZURXKCmPCI1KsTUV3WK5ir4drTzvmxB8c8KF+DOAVLzP8qMYU+6nSBkWDVHOhrjCQ
+         ZvZ7UCjJyxMtU01B4fI5IvxX5yiTgJP1NgJlw1lX4gUQEc6FMbB98O7EdMbCVZqi0sXN
+         ZYpzeaDOk4GV1gV4w9H2pATQRHq4s+VX5qSp1gJ4NtzYSkHWfzGvGcCLYX1RuJc1btWP
+         yL5gt8bkS1tW2Y4HYB3edFOx5vY78hdTbho4nCyojuJkuO4EoeRiNdeVYvSgZPnD/C4e
+         kHcQ==
+X-Gm-Message-State: AOAM5308OR49gQbnwJou1jzDGKpFSimFqRpJcg+UY1+EEAdTOMwpYZyS
+        OOTBhaU1KYHt0fBg6L/EX3wMSULjSm9CJQ==
+X-Google-Smtp-Source: ABdhPJy1Fn+k0zmImu33O6WiH3LwjSnckxuFNoe7Wsf8iwvi/lRFbXV6YRdNIZGJHFxctNldLVmCyg==
+X-Received: by 2002:a17:90a:db15:b0:1bd:71f:8123 with SMTP id g21-20020a17090adb1500b001bd071f8123mr7067540pjv.126.1645921380516;
+        Sat, 26 Feb 2022 16:23:00 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id 124-20020a620582000000b004dee0e77128sm7412648pff.166.2022.02.26.16.18.34
+        by smtp.gmail.com with ESMTPSA id h3-20020a056a00170300b004f104c635e4sm8263288pfc.99.2022.02.26.16.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 16:18:36 -0800 (PST)
-Date:   Sun, 27 Feb 2022 00:18:32 +0000
+        Sat, 26 Feb 2022 16:23:00 -0800 (PST)
+Date:   Sun, 27 Feb 2022 00:22:55 +0000
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     David Rientjes <rientjes@google.com>,
@@ -62,7 +62,7 @@ Cc:     David Rientjes <rientjes@google.com>,
         Faiyaz Mohammed <faiyazm@codeaurora.org>
 Subject: Re: [PATCH 3/5] mm/slub: aggregate and print stack traces in debugfs
  files
-Message-ID: <YhrDWK+TfC3uyjyX@ip-172-31-19-208.ap-northeast-1.compute.internal>
+Message-ID: <YhrEXwdK2/9x93Qp@ip-172-31-19-208.ap-northeast-1.compute.internal>
 References: <20220225180318.20594-1-vbabka@suse.cz>
  <20220225180318.20594-4-vbabka@suse.cz>
 MIME-Version: 1.0
@@ -88,7 +88,11 @@ On Fri, Feb 25, 2022 at 07:03:16PM +0100, Vlastimil Babka wrote:
 > address when producing contents of debugfs files alloc_traces and
 > free_traces in debugfs. Also add the stack traces to the debugfs
 > output. This makes it much more useful to e.g. debug memory leaks.
-> 
+>
+
+I think it will be better if subject was something like
+"Differentiate by stack and print stack traces in debugfs"?
+
 > Signed-off-by: Oliver Glitta <glittao@gmail.com>
 > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > ---
@@ -129,7 +133,7 @@ On Fri, Feb 25, 2022 at 07:03:16PM +0100, Vlastimil Babka wrote:
 > -		if (track->addr == caddr) {
 > +		chandle = t->loc[pos].handle;
 > +		if ((track->addr == caddr) && (handle == chandle)) {
->
+>  
 >  			l = &t->loc[pos];
 >  			l->count++;
 > @@ -5169,6 +5175,8 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
@@ -170,55 +174,7 @@ On Fri, Feb 25, 2022 at 07:03:16PM +0100, Vlastimil Babka wrote:
 > +#endif
 >  		seq_puts(seq, "\n");
 >  	}
->
-
-Yeah this is necessary as we collect not only caller address, but also
-stacks. stacks can be different even if caller address is same. 
-So we need to aggregate by both caller address and handle.
-
-This patch looks good.
-
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
-And it works nicely. After this patch I see now it can differentiate
-by stack too.
-
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
-I like this so much. This makes {free,alloc}_traces much more useful.
-
-before patch:
-# cat alloc_traces 
-   2924 __d_alloc+0x30/0x3ac age=1/13709/14330 pid=0-184 cpus=0-3
-
-after patch:
-# cat alloc_traces 
-    757 __d_alloc+0x30/0x3b0 age=2041/7771/7874 pid=1-179 cpus=0-3
-        __slab_alloc.constprop.0+0x30/0x74
-        kmem_cache_alloc+0x2c0/0x300
-        __d_alloc+0x30/0x3b0
-        d_alloc_parallel+0xd8/0x824
-        path_openat+0xadc/0x16bc
-        do_filp_open+0xf8/0x1f4
-        do_sys_openat2+0x120/0x26c
-        __arm64_sys_openat+0xf0/0x160
-        invoke_syscall+0x60/0x190
-        el0_svc_common.constprop.0+0x7c/0x160
-        do_el0_svc+0x88/0xa4
-        el0_svc+0x3c/0x80
-        el0t_64_sync_handler+0xa8/0x130
-        el0t_64_sync+0x1a0/0x1a4
-
-    301 __d_alloc+0x30/0x3b0 age=8217/8237/8309 pid=51 cpus=1-2
-        __slab_alloc.constprop.0+0x30/0x74
-        kmem_cache_alloc+0x2c0/0x300
-        __d_alloc+0x30/0x3b0
-        d_alloc+0x30/0xd0
-        __lookup_hash+0x70/0xf0
-        filename_create+0xf4/0x220
-
-	[...]
-
+>  
 > -- 
 > 2.35.1
 > 

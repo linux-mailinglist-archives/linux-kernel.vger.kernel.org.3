@@ -2,107 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723EF4C5A6B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6532D4C5A6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiB0KIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 05:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S229904AbiB0KNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 05:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiB0KIo (ORCPT
+        with ESMTP id S229634AbiB0KNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 05:08:44 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD65DE65
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:08:07 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8F76E3FCA8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645956485;
-        bh=t39kLNlFZ66vLOwNBorCd7lyGkkC23z5r0vz3N8AmfQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=N2WJGxsACitGVbP+ojjbWwdvIqgN0adt4oICV4Ji8sDou9rhsVKsTJzlbyTdJvQTp
-         DSfFHTZ3+WkhSoItWvoZCCqBFnXM+MQFbK1ojlg1Q0eDFZiRBO/FlC60XGTIBAOyhX
-         FDn2OcW4Q6jM0AMAeEl5bfz2ulQEtjzceD+/3M8ujoM4a7u5/AyOhiPnXBayiOxZfR
-         sW9uccK/eZlABBxT5Q2PRa36EdLpa3u1VCbNtEXza/+8Q6jrcoQNQ2f9ICTMuDkr+q
-         N6CAzWQZ3Z0Ya/UnjMobVDIaVMGvxdzey4s4K7E90BVbIYQ0+0O523qbEAu/mn50fG
-         R7SeY05DEz3Qw==
-Received: by mail-ed1-f72.google.com with SMTP id b13-20020a056402278d00b0041311e02a9bso4000386ede.13
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:08:05 -0800 (PST)
+        Sun, 27 Feb 2022 05:13:16 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0E22BD5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:12:38 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id u12so14707871ybd.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YN5gXSHoby1JhWgy0jxqxZICsBW2QIk/PtIVlJI1hvU=;
+        b=rJnEcVUeF28k2edHMPFZC2EO8rxyxAxJYv49OYC1Ro+QhIzCUCBWZvIjt/xAu38CrO
+         fUMimmPDcvBQXsPngPaD6M5BUJcffKi8fusU5M3E404hq/cy4BCAXiK43kfsrDS8nGK6
+         81WBGST8T4ArZ6pSl4KiiLi2dE3H38OOTzbVHrPKvpPgpZik//msTjTjm0R2tuNm8tws
+         d8GCEzznR/2/0UqGVlIOoUpIAB/9/Pc1mDLIx4YWkr7mIssffrO/EoLMCvfm5vYaKwJe
+         vXpO3lC9aU4XSkZMRu2an9E7BlaGmaRd51AuItWIeHXpToME8mkEa4h0Yeo9zq8kIARy
+         jrNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t39kLNlFZ66vLOwNBorCd7lyGkkC23z5r0vz3N8AmfQ=;
-        b=76BzziBIMHwwAMptmh1/JarwswN25zoIeB+MUtnE83VgjAvHH6U2hiMsEsOMVYvgyV
-         6/QXwlivUea4voOrw9Ys0Bjq3V0A5IxxV8NqXodSAISbUcA5dfuNMUBunhD8sMpL6Yk1
-         e/Hk3rbxp7FjyoC7fHAvK5pHxQNd+JYlSAnHTXMrkypILBPQp4rYsBvU+pQE9lqsytVw
-         XUlBemiI+EcJDu9yKY+PbYRPRU7XZiomfmjEy2+AcMt1hUwSZcbWVDdqOt62Qi0KGwY/
-         8jVqk3e5/pB2EnOglgagX+VSq0tnYFdZcv5/gxErIf2D9lnDEfYQDkBVyv4QUuVLJHmG
-         vseQ==
-X-Gm-Message-State: AOAM532fVQM8ww2Q8WvNQiw9hV3duqKxhDBlkNmE5BOCrWBQd4gLol0F
-        ro55vfVKP5ofIgpudhbqfSYefJHDBQ9ThZc6PT8aqfIE6mbc0+gCmXheZq4+Ju1Aa3q25CzBfde
-        oGnoI8Q2/c6nbDaOoubPKurHzh3NVYNd1iAP8nO3zoA==
-X-Received: by 2002:a05:6402:3549:b0:412:b31c:5509 with SMTP id f9-20020a056402354900b00412b31c5509mr14865078edd.224.1645956484758;
-        Sun, 27 Feb 2022 02:08:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQAnvtCXE0xO0XRte1z2S3jF4ZnFOgFimpWcSv/fQckmAOJ3pVtCTn5WpkGMmHECl8gicPlQ==
-X-Received: by 2002:a05:6402:3549:b0:412:b31c:5509 with SMTP id f9-20020a056402354900b00412b31c5509mr14865061edd.224.1645956484614;
-        Sun, 27 Feb 2022 02:08:04 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id dn14-20020a05640222ee00b00410b88abd6fsm4324340edb.45.2022.02.27.02.08.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 02:08:04 -0800 (PST)
-Message-ID: <530d4625-8f31-32ca-b770-d75b6514343e@canonical.com>
-Date:   Sun, 27 Feb 2022 11:08:03 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YN5gXSHoby1JhWgy0jxqxZICsBW2QIk/PtIVlJI1hvU=;
+        b=5hVWPvUv8jC6f/ulo893JvbWtDzcsi92eJrIm5nJUpQyz9V8s5iCyChPsS6VHBParf
+         c7D11JRPanYT831jTXwoe78TdN7O9djr+IIGxqkJchA9Vy+lQg9F79Ym0fAiidN7+kSQ
+         mb6wq0QsukNx06oO+sM/cst6rUMagN9RQmBXCs59tKhDpQl+iAUU373pe/Z0gS08ga78
+         mECuREfkglXWHkEVTswbwPr3fwlnJ+ndWq+jmRXwRY3M+KTCTXGy6VucHbVy1ONqc0Uh
+         enXl773B5gWXV3IgJS0+GeYn9gYcb8f8KXLoLglxklQbaXLOG6FkQOrQ0S5aN7DRBz12
+         XaNQ==
+X-Gm-Message-State: AOAM5301FnYTATW0sTfoByH7iwAngnFbcc0GIX53eBj8KZFudrqb0u04
+        rG0bwWfYyhpBP+d1cjZyuei7stvaofJx8xqT1rtz8g==
+X-Google-Smtp-Source: ABdhPJwlaLq9aI2Vm0ffDhMefpXJ3KAId9EfQSy0et+XHJjaU0jx09HPqwTfoypR/5Y1+2RIZZqaK5VyWbfRnYo5icA=
+X-Received: by 2002:a25:ba04:0:b0:623:ed7a:701d with SMTP id
+ t4-20020a25ba04000000b00623ed7a701dmr13888483ybg.209.1645956757868; Sun, 27
+ Feb 2022 02:12:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: timer: Convert rda,8810pl-timer to YAML
-Content-Language: en-US
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-unisoc@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220225173734.GA7573@standask-GA-A55M-S2HP>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220225173734.GA7573@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220223080400.139367-1-gilad@benyossef.com> <Yhbjq3cVsMVUQLio@sol.localdomain>
+ <YhblA1qQ9XLb2nmO@sol.localdomain> <CAOtvUMfFhQABmmZe7EH-o=ULEChm_t=KY7ORBRgm94O=1MiuFw@mail.gmail.com>
+ <YhfWzLBq2A2nr5Ey@sol.localdomain>
+In-Reply-To: <YhfWzLBq2A2nr5Ey@sol.localdomain>
+From:   Gilad Ben-Yossef <gilad@benyossef.com>
+Date:   Sun, 27 Feb 2022 12:12:38 +0200
+Message-ID: <CAOtvUMcDcouMPmVUYpYEPdxPS+7_r9S_OXz1FR5tQJM6hWzRmA@mail.gmail.com>
+Subject: Re: [PATCH] crypto: drbg: fix crypto api abuse
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ofir Drang <ofir.drang@arm.com>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        stable <stable@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 18:37, Stanislav Jakubek wrote:
-> Convert RDA Micro Timer bindings to DT schema format.
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
->  .../bindings/timer/rda,8810pl-timer.txt       | 20 --------
->  .../bindings/timer/rda,8810pl-timer.yaml      | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 48 insertions(+), 21 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
->  create mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
-> 
+On Thu, Feb 24, 2022 at 9:04 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Thu, Feb 24, 2022 at 09:07:47AM +0200, Gilad Ben-Yossef wrote:
+> > Hi Eric,
+> >
+> > On Thu, Feb 24, 2022 at 3:53 AM Eric Biggers <ebiggers@kernel.org> wrot=
+e:
+> > >
+> > > On Wed, Feb 23, 2022 at 05:47:25PM -0800, Eric Biggers wrote:
+> > > > On Wed, Feb 23, 2022 at 10:04:00AM +0200, Gilad Ben-Yossef wrote:
+> > > > > the drbg code was binding the same buffer to two different
+> > > > > scatter gather lists and submitting those as source and
+> > > > > destination to a crypto api operation, thus potentially
+> > > > > causing HW crypto drivers to perform overlapping DMA
+> > > > > mappings which are not aware it is the same buffer.
+> > > > >
+> > > > > This can have serious consequences of data corruption of
+> > > > > internal DRBG buffers and wrong RNG output.
+> > > > >
+> > > > > Fix this by reusing the same scatter gatther list for both
+> > > > > src and dst.
+> > > > >
+> > > > > Signed-off-by: Gilad Ben-Yossef <gilad@benyossef.com>
+> > > > > Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> > > > > Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> > > > > Tested-on: r8a7795-salvator-x
+> > > > > Tested-on: xilinx-zc706
+> > > > > Fixes: 43490e8046b5d ("crypto: drbg - in-place cipher operation f=
+or CTR")
+> > > > > Cc: stable@vger.kernel.org
+> > > >
+> > > > Where is it documented and tested that the API doesn't allow this?
+> > > > I wasn't aware of this case; it sounds perfectly allowed to me.
+> > > > There might be a lot of other users who do this, not just drbg.c.
+> > > >
+> > >
+> > > Just quickly looking through the code I maintain, there is another pl=
+ace that
+> > > uses scatterlists like this: in fscrypt_crypt_block() in fs/crypto/cr=
+ypto.c, the
+> > > source and destination can be the same.  That's just the code I maint=
+ain; I'm
+> > > sure if you looked through the whole kernel you'd find a lot more.
+> > >
+> > > This sounds more like a driver bug, and a case we need to add self-te=
+sts for.
+> >
+> > Thank you for the feedback. That is a very good question. Indeed, I
+> > agree with you that in an ideal world the internal implementation detai=
+ls of DMA
+> > mapping would not pop up and interfere with higher level layer logic.
+> >
+> > Let me describe my point of view and I would be very happy to hear
+> > where I am wrong:
+> >
+> > The root cause underlying this is that, of course,  hardware crypto
+> > drivers map the sglists passed to them for DMA . Indeed, we require
+> > input to crypto
+> > API as sglists of DMAable buffers (and not, say stack allocated buffers=
+) because
+> > of this. So far I am just stating the obvious...
+> >
+> > Now, it looks like the DMA api, accessed via dma_map_sg(), does not
+> > like overlapping mappings. The bug report that triggered this patch (se=
+e:
+> > https://lkml.org/lkml/2022/2/20/240) was an oops message including this
+> > warning: "DMA-API: ccree e6601000.crypto: cacheline tracking EEXIST,
+> > overlapping mappings aren't supported".
+> >
+> > The messages comes from add_dma_entry() in kernel.dma/debug.c,
+> > because, as stated in the commit message that added this check in May 2=
+021:
+> >
+> > "Since, overlapping mappings are not supported by the DMA API we
+> > should report an error if active_cacheline_insert returns -EEXIST."
+> > (https://lkml.org/lkml/2021/5/18/572)
+> >
+> > For now, I will take it at a given that this is proper and you do not
+> > consider this
+> > an issue in the DMA API.
+> >
+> > Now, driver writers are of course aware of this DMA API limitation and =
+thus we
+> > check if the src sglist is the same as the dst sglist and if so only ma=
+p once.
+> > However, the underlying assumption is that the buffers pointed by diffe=
+rent
+> > sglists do not overlap. We do not iterate over all the sglist trying
+> > to find overlaps.
+> >
+> > When I see "we", it is because this behavior is not unique to the ccree=
+ driver:
+> >
+> > Here is the same logic from a marvell cesa driver:
+> > https://elixir.bootlin.com/linux/latest/source/drivers/crypto/marvell/c=
+esa/cipher.c#L326
+> >
+> > Here it is again in the camm driver:
+> > https://elixir.bootlin.com/linux/latest/source/drivers/crypto/caam/caam=
+alg.c#L1619
+> >
+> > I do believe that at least all crypto HW drivers apply the same logic.
+> >
+> > Of course, we can ask that every HW crypto driver (and possibly any oth=
+er
+> > sglist using HW driver) will add logic that scans each sglist for
+> > overlapping buffers
+> > and if found use a more sophisticated mapping (easy for a simple
+> > sglist that has one buffer
+> > identical to some other sglist, maybe more complicated if the overlap
+> > is not identity).
+> > The storage drivers sort of already do on some level, although I think
+> > on a higher abstraction
+> > layer than the drivers themselves if I'm not mistaken, though for
+> > performance reasons.
+> > This is certainly DOABLE in the sense that it can be achieved.
+> >
+> > However, I don't think this is desirable. This will add non trivial
+> > code with non trivial runtime
+> > costs just to spot these cases. And we will need to fix ALL the hw
+> > drivers, because, to the best
+> > of my knowledge, none of them do this right now.
+> >
+> > The remaining option is to enforce the rule of no overlap between
+> > different sglists passed to the
+> > crypto API. This seems much easier to me. Indeed, the fix I sent is a
+> > one liner. I suspect all
+> > other fixes are similar and I assume (but did not check) that there
+> > are not many of those.
+> > Indeed, I think it is much easier to impose the required limitation at
+> > the API caller level.
+> > It is not pretty, nor "just", but easier, I think.
+> >
+> > I hope I've managed to explain my logic here.
+> >
+> > I will note that even if we decide to follow the other route, we do
+> > need to document and fix
+> > probably every hw crypto (and possibly others) driver out there,
+> > because AFAIK, no one is taking
+> > into account this possibility right now.
+>
+> Decryption in dm-crypt is another example where different scatterlists ar=
+e used
+> for in-place data.  (This is because like the fscrypt case, it has a help=
+er
+> function which handles both in-place and out-of-place data.)
+>
+> I don't think it is reasonable to "fix" all these users who are using the=
+ crypto
+> API in a perfectly reasonable way.
+
+I understand what you are saying, but assuming the issue is real, the
+alternative seems to be
+to fix all the HW crypto drivers by adding code that will impact their
+performance, so it's a matter
+of choosing the lesser of two evils.
+
+>
+> Are you saying that dm-crypt, fscrypt, drbg, etc. never worked with any h=
+ardware
+> crypto driver?  How could that possibly be the case?  Perhaps something c=
+hanged
+> in the DMA API recently that is causing this.  Or maybe it is specific to=
+ the
+> implementation of the DMA API on the platform you are testing.
+
+That is a very good question. I became aware of this via a bug report
+of Corentin Labbe
+which saw the problem on a Salvator-X board. I have never seen the
+specific issue anywhere else.
+
+Having said that, the following is also true:
+- The code that checks for this condition was only added in 2021.
+- I am not sure why the DMA api prohibits aliased mappings, but I can
+guess, and if my guess is correct this situation will only happen on a
+platform that both: 1. uses a crypto HW accelerator driven by DMA and
+2. uses some form of IO MMU. I guess the combination might have been
+very rare in the past.
+
+I think the right thing to do right now is to verify that we indeed
+have a general issue and not something specific to one singular
+platform
+So the question becomes - do indeed the DMA api forbits aliased
+mappings and if so, under what conditions?
+
+Any ideas on how to check this?
+
+Gilad
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+>
+> - Eric
 
 
-Best regards,
-Krzysztof
+
+--=20
+Gilad Ben-Yossef
+Chief Coffee Drinker
+
+values of =CE=B2 will give rise to dom!

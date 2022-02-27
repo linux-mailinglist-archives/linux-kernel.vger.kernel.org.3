@@ -2,148 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171544C5EFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA084C5EFD
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 22:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiB0VPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 16:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S231285AbiB0VNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 16:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiB0VPE (ORCPT
+        with ESMTP id S229519AbiB0VNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 16:15:04 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDCA54FA6
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:14:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MSHiJmaCx+YgB5vlG6bA5xlXl/LKu0IcG+ctpKysVzoU2H89CxAb6CN93SC5jMwMHyZufoB2OxLaQp032Enue2/jrvcMWLKUB3S/lY/0EV5q+i+4kMEDPjmUXI61YK03uYt2Sq6UG2r1S7PsJO0XYbfdCzRX1IGTMDEr9LHu9nQNjfUC/Zn2xYJpzc97ijTJZdX0PmylBRMIeTH5T9lrnzX3U9/FB2iqYWJBiiiGSwPVIkE/7F1p8ufM4Hp33DkGP1gNi5dDgyH2AYnLDA6mwraaDRtD7tVwxsDAYUnKLNY3LeIRqSK+2nkVvuKvDv1IQSCYyAB3OVoFkKJ3XJxvgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JMYVp8TSF6inOK0TmpUJbSCZPx+nHTjDUV7lXeJjHsY=;
- b=mtgVZskbJxeBb6S6yLJ+UGN016Eg/OcOlJDsoqBbg6ntTM7ZiU2tOnce3EHNgI5d4hojiCzOF/bzIcRTA7w3ANBZSDDdr0qTcHk/u9UommubDUAtmu1Vgn7rU4acikm8onhzTXRs806bKcKjl3U6acPjy2JNPWGmDbLcKFcaQYLvLUVYs17dEpK443d0Af/tHH3tR732Gru7D9BA3SBVJ+KjnNrB2lOLyC06ewx+5jSHd1IxoYAMCWOXnXdNN+KRS00V6qTSkFQ5j1zzwUxi1gxEBhSbXwpu9jl5ozcSCPsUVN/yeqbgUXA2JZxB/Z41GldQIMd5GTA4vD7MKDeaIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JMYVp8TSF6inOK0TmpUJbSCZPx+nHTjDUV7lXeJjHsY=;
- b=BN6pT3Zrh2kc7Ux+e3Bhym68f9einvEWsCrj/mluFxa14b2J9gwxDykATWaoaR3LzZOYdx7yXLia76ja+aW2kZdhio73Z5I9rvP8PGUXQA5R30gxd4tQl9jhe50Ya7encV+8RrCKT+rUNZ1FaDNTowH+b7OERocuUfmtUXaIug8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from BY3PR05MB8081.namprd05.prod.outlook.com (2603:10b6:a03:366::15)
- by CO1PR05MB8102.namprd05.prod.outlook.com (2603:10b6:303:db::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.10; Sun, 27 Feb
- 2022 21:14:21 +0000
-Received: from BY3PR05MB8081.namprd05.prod.outlook.com
- ([fe80::283c:d671:e4e5:31f8]) by BY3PR05MB8081.namprd05.prod.outlook.com
- ([fe80::283c:d671:e4e5:31f8%9]) with mapi id 15.20.5038.013; Sun, 27 Feb 2022
- 21:14:20 +0000
-From:   Jorgen Hansen <jhansen@vmware.com>
-To:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     gregkh@linuxfoundation.org, pv-drivers@vmware.com,
-        bryantan@vmware.com, rjalisatgi@vmware.com,
-        Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: [PATCH] VMCI: Update maintainers for VMCI
-Date:   Sun, 27 Feb 2022 13:05:39 -0800
-Message-Id: <20220227210539.19665-1-jhansen@vmware.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0104.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::19) To BY3PR05MB8081.namprd05.prod.outlook.com
- (2603:10b6:a03:366::15)
+        Sun, 27 Feb 2022 16:13:50 -0500
+X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 13:13:12 PST
+Received: from 7.mo552.mail-out.ovh.net (7.mo552.mail-out.ovh.net [188.165.59.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C38A2251B;
+        Sun, 27 Feb 2022 13:13:11 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.16.105])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 44B8422DC0;
+        Sun, 27 Feb 2022 21:06:46 +0000 (UTC)
+Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Sun, 27 Feb
+ 2022 22:06:45 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-96R00115e110f1-ecce-4d7f-bb2b-9bf0158c7309,
+                    3C1F276A0880C75D3AA0293DFE804433F7F83470) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <ceace047-6d07-1ca3-c1ae-7137456975c5@kaod.org>
+Date:   Sun, 27 Feb 2022 22:06:44 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6aa0c4d9-b80f-4fef-218f-08d9fa361f06
-X-MS-TrafficTypeDiagnostic: CO1PR05MB8102:EE_
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <CO1PR05MB8102CAE373B96E355C0FCB32DA009@CO1PR05MB8102.namprd05.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rbaktQLfJvwF/+pbXi2Qo7K+R6cGKe+cq0D4ExPOkB50f+xkOlKgvFssrN8pEt6ZXGGofzjy1OD+zX0qTVPgOx0YqEgQ3BRuAckbcCfESsrGZmnOlWlGfN3yW3OhqS/D4iUi/KbCj/7s0xDYDvl5PBzog11y1cXxE+tXcoKa3+iLh3AaAr0MD2sBQFqaqckOFTBAtqSMYu8CS+QrMbaCCoMJTwSeypMiwXEPsQqhlBpf3VkbT0ztjtaf0jEKExxI+A/eT3OBx9DdI7zaDP934e/HK80Bx0BTKscH7wcmn4SeTP4/OKH+5jayWjXmvdTIyxT6A0aK7hlZIUQyT857UpSJPngjqkZLonkkEOjy6JzD5RK3caGLexZyj9zLEFS5dFD7j5fTGdGzMttZHFXCz55xeR+31tZkK6DTxo9AIymTln8M7wUTjfUr2m1Lfdga1FS/a9GCr+ryFkv1aMCk3c270vghHGSMnmwZBcsAIWY1TOdPHWtsBZ44e9H0u7feFjc1OwX7esOgQtrodQnac8oFWlMjthIV6tAZU4C7IvXZbCZgqYdLNmakWzx+XDefBsWB64/E8IGDnbctj9TzlAiMsN2pUE48jqFCnHTk1qXZxnMs9bYW9/3MpzVjQNlZURIrQSIDggO0eamIqZH9KnGRvhviPoOZW7x73NzIpk8fvmEMnZcQ8yYXMzR65VLSJ0o1hbBptewHnh50h4cnLswRZoLjFCWBw/jnCuRN6uzeAyG7ImycOoRyc3xHdjud
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8081.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(316002)(66946007)(8936002)(54906003)(508600001)(6486002)(38100700002)(86362001)(4326008)(1076003)(2616005)(83380400001)(38350700002)(26005)(186003)(8676002)(107886003)(2906002)(6506007)(66556008)(6512007)(66476007)(5660300002)(52116002)(6666004)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fW3AWyo21+gAlwO2h5wdLhtyKe3FsFjsj1L1VKm3vLyd1JHDdsT9OTeEOHoJ?=
- =?us-ascii?Q?8fUNUHqdn2W5A/q9EuRuOuTB36a33LFNJDMb1ritHO/dUNtzAWmf7l6S+qtr?=
- =?us-ascii?Q?D4p5bnpJxVTNLIqDUXF1Dj59knC1LOLDPg+jAOrDcMoO8z7aVizfalWuSmYd?=
- =?us-ascii?Q?QoyTDQTfU2hQrm85/zF3fqYl3AqgomiNloyZmCYETAaDnwcy6Xla1ixSR5yC?=
- =?us-ascii?Q?s4MOsq4eoJ2hSVmPh+Shr60Rm2HchIQBcHt08gNt7Ka+YhyzrpmRK8DDUxGS?=
- =?us-ascii?Q?UgcK6ScTd2dTzh3fL1WtIDuKR8hHbC049hfli6EKJtwNcDJJp4sBiFiFq5gm?=
- =?us-ascii?Q?kst7vGIOtNRJXIan1fT4wDVy9TbRaAGRMv7/BODueXfeE2CbwXBKgorb1Lg7?=
- =?us-ascii?Q?NxQjeqVEt8XZajcDJzq09b+9N1zWHxmB5tmn3jm4s0kFklKCn6FNzMEJ730s?=
- =?us-ascii?Q?k5L9EE9JZ/55gTeGfKwrREhgltLq40HEJzh+qjQ+wh2HOfgVIJ+4ahKRyJAM?=
- =?us-ascii?Q?XxfWKkW5g+TRCoVJbOPS70eEuFGPAoV+kn4lKF7rixPkjDRDFRmOacX00sP5?=
- =?us-ascii?Q?T7G7gonxz2J6YfbdvlXXDsVJPBxTjJb+w9YMt4IuO5Z/bKXf7je1HVOJ+/NQ?=
- =?us-ascii?Q?0sFcuERndKoPVnrL+3/UQJCRn2q8erLkk+ioWFICcFaLEMxFGC0pCeVGpxrp?=
- =?us-ascii?Q?AO9wXWJ9w9Pt9tUgAdVF9WpY0sJR48x2p8xMrGkSr5PyqStKUKpyyu5AbOtV?=
- =?us-ascii?Q?qbiuriCoB7MniGOh0/ZwsMHJi/Jdpe7QV6F5aFrhpofrojw6XEuwlgV7EjHR?=
- =?us-ascii?Q?zBhZ5SyrAu2RxxAM7q3Pupxe4ugzBzELDGSmHP8YLL/8+UrHOb7BJ2YT9LEQ?=
- =?us-ascii?Q?+8zM0W5lmTO03uCSgE1ub+DkIFJhAYuqJsxm8zH9oP0AwxJtkSePra7LRY8L?=
- =?us-ascii?Q?Lqo1FMEcyDumRB49FPYOzwU9PkXPfG7DWXFbWnmgR/9DOGhE7lZZfV9pMDom?=
- =?us-ascii?Q?juziV7v6tDH/l12/n26Fl52VEwX6v9o6oDhFNVvU3xNWUCV/hdxRi4+ASV0u?=
- =?us-ascii?Q?dbFBrawaZ6JtvKL3/GNm5r47YWRag3zTvHRW1cJ8tbUMZ/NFJm4C4pdaiPI2?=
- =?us-ascii?Q?TYJwb02ZX4zFqLKhk6m0wqKYj9Z2jZMkOVKNiSmCPe1Oj1pj2B/XvEBZEg53?=
- =?us-ascii?Q?gJ/BfV3UsJniEH/A8sf2S4znM/6kG/3QasKfm8xuxqdFaAdxBd38+RIGeB2V?=
- =?us-ascii?Q?+KtXg2GAQjd4FmtqqNaVU0ryVqdeNiW7QDPXiDv/vlXQqHSRiW9mEgAB9gEz?=
- =?us-ascii?Q?aWPasa9wB26TQDcobb0G4+BF6f+irKiDu2WbQ+63B1M49BOyCD06+vOhRlg4?=
- =?us-ascii?Q?S/2ni7FwQW9GC0lsg5nQ6IQAo9PF8KwsAHQQiC7lnMbx5+/Lnb1wy9kRcb+/?=
- =?us-ascii?Q?6kj4CEUMbRmdMtIyFAVGebHkDJWgTRJt+RDdoDygp5Un8ZlnaM3RCAgGGixI?=
- =?us-ascii?Q?c1SKLl9DhKsYM2nk0GGxkGG5f/0x7rbnA/Qurvy+YeVkKQu1mMfWO+gxrCLO?=
- =?us-ascii?Q?4F/y6ONrFUuDIxGFiJD6GFyTSWiB1gxYcE6dOIwRpB1wvmQbAIokXcWrT7ja?=
- =?us-ascii?Q?RlFuZnlXrg1J+evZvJqfgZg=3D?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa0c4d9-b80f-4fef-218f-08d9fa361f06
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8081.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2022 21:14:20.8121
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2TQiwBDcYELVbWOp6+zLYYGGM1nkra/pFSkHoHSmqDnKmKIGCuYl1tlG+tufEWZLoabXMND5Sqjayiip5j+T3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR05MB8102
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 04/10] spi: aspeed: Add support for direct mapping
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-5-clg@kaod.org>
+ <20220225091219.bv62jm3nehg4e4z4@ti.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20220225091219.bv62jm3nehg4e4z4@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.96]
+X-ClientProxiedBy: DAG9EX2.mxp5.local (172.16.2.82) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 0b4b9ae5-d348-4927-88b8-76128bb7f478
+X-Ovh-Tracer-Id: 16710043469378063236
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgddugeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepkeeljeefveejheeihfegleegleduudeluedvffetudeigedvgfetveefteekteefnecuffhomhgrihhnpegsuhhfrdhinhenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove myself as maintainer for the VMCI driver, and add Bryan
-and Rajesh.
+On 2/25/22 10:12, Pratyush Yadav wrote:
+> On 14/02/22 10:42AM, Cédric Le Goater wrote:
+>> Use direct mapping to read the flash device contents. This operation
+>> mode is called "Command mode" on Aspeed SoC SMC controllers. It uses a
+>> Control Register for the settings to apply when a memory operation is
+>> performed on the flash device mapping window.
+>>
+>> If the window is not big enough, fall back to the "User mode" to
+>> perform the read.
+>>
+>> Direct mapping for writes will come later when validated.
+>>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   drivers/spi/spi-aspeed-smc.c | 67 ++++++++++++++++++++++++++++++++++--
+>>   1 file changed, 65 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+>> index 0aeff6f468af..8d33fcb7736a 100644
+>> --- a/drivers/spi/spi-aspeed-smc.c
+>> +++ b/drivers/spi/spi-aspeed-smc.c
+>> @@ -345,8 +345,8 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
+>>   		if (!op->addr.nbytes)
+>>   			ret = aspeed_spi_read_reg(chip, op);
+>>   		else
+>> -			ret = aspeed_spi_read_user(chip, op, op->addr.val,
+>> -						   op->data.nbytes, op->data.buf.in);
+>> +			memcpy_fromio(op->data.buf.in, chip->ahb_base + op->addr.val,
+>> +				      op->data.nbytes);
+> 
+> Why change this? exec_op should be independent from dirmap APIs. And you
+> don't even do the ahb_window_size checks here.
 
-Acked-by: Rajesh Jalisatgi <rjalisatgi@vmware.com>
-Acked-by: Bryan Tan <bryantan@vmware.com>
-Acked-by: Vishnu Dasa <vdasa@vmware.com>
-Signed-off-by: Jorgen Hansen <jhansen@vmware.com>
----
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+no indeed. Now that direct map is configured, all reads of flash contents
+should go through the direct map op. This is mostly for the RDSFDP command
+which has a different address space and uses 3B.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bb6c9b5a3253..ecf22b62161e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20717,7 +20717,8 @@ S:	Supported
- F:	drivers/ptp/ptp_vmw.c
- 
- VMWARE VMCI DRIVER
--M:	Jorgen Hansen <jhansen@vmware.com>
-+M:	Bryan Tan <bryantan@vmware.com>
-+M:	Rajesh Jalisatgi <rjalisatgi@vmware.com>
- M:	Vishnu Dasa <vdasa@vmware.com>
- L:	linux-kernel@vger.kernel.org
- L:	pv-drivers@vmware.com (private)
--- 
-2.25.1
+Theoretically, we should be able to use memcpy_fromio() and memcpy_toio()
+for all commands but not all controllers (6 of them) support this mode.
+
+Thanks,
+
+C.
+
+
+> 
+>>   	} else {
+>>   		if (!op->addr.nbytes)
+>>   			ret = aspeed_spi_write_reg(chip, op);
+>> @@ -426,10 +426,73 @@ static int aspeed_spi_chip_set_default_window(struct aspeed_spi_chip *chip)
+>>   	return chip->ahb_window_size ? 0 : -1;
+>>   }
+>>   
+>> +static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>> +{
+>> +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+>> +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
+>> +	struct spi_mem_op *op = &desc->info.op_tmpl;
+>> +	u32 ctl_val;
+>> +	int ret = 0;
+>> +
+>> +	chip->clk_freq = desc->mem->spi->max_speed_hz;
+>> +
+>> +	/* Only for reads */
+>> +	if (op->data.dir != SPI_MEM_DATA_IN)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	if (desc->info.length > chip->ahb_window_size)
+>> +		dev_warn(aspi->dev, "CE%d window (%dMB) too small for mapping",
+>> +			 chip->cs, chip->ahb_window_size >> 20);
+>> +
+>> +	/* Define the default IO read settings */
+>> +	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
+>> +	ctl_val |= aspeed_spi_get_io_mode(op) |
+>> +		op->cmd.opcode << CTRL_COMMAND_SHIFT |
+>> +		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
+>> +		CTRL_IO_MODE_READ;
+>> +
+>> +	/* Tune 4BYTE address mode */
+>> +	if (op->addr.nbytes) {
+>> +		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
+>> +
+>> +		if (op->addr.nbytes == 4)
+>> +			addr_mode |= (0x11 << chip->cs);
+>> +		else
+>> +			addr_mode &= ~(0x11 << chip->cs);
+>> +		writel(addr_mode, aspi->regs + CE_CTRL_REG);
+>> +	}
+>> +
+>> +	/* READ mode is the controller default setting */
+>> +	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
+>> +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>> +
+>> +	dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
+>> +		 chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_READ]);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int aspeed_spi_dirmap_read(struct spi_mem_dirmap_desc *desc,
+>> +				  u64 offset, size_t len, void *buf)
+>> +{
+>> +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+>> +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
+>> +
+>> +	/* Switch to USER command mode if mapping window is too small */
+>> +	if (chip->ahb_window_size < offset + len)
+>> +		aspeed_spi_read_user(chip, &desc->info.op_tmpl, offset, len, buf);
+>> +	else
+>> +		memcpy_fromio(buf, chip->ahb_base + offset, len);
+>> +
+>> +	return len;
+>> +}
+>> +
+>>   static const struct spi_controller_mem_ops aspeed_spi_mem_ops = {
+>>   	.supports_op = aspeed_spi_supports_op,
+>>   	.exec_op = aspeed_spi_exec_op,
+>>   	.get_name = aspeed_spi_get_name,
+>> +	.dirmap_create = aspeed_spi_dirmap_create,
+>> +	.dirmap_read = aspeed_spi_dirmap_read,
+>>   };
+>>   
+>>   static void aspeed_spi_chip_set_type(struct aspeed_spi_chip *chip, int type)
+>> -- 
+>> 2.34.1
+>>
+> 
 

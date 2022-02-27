@@ -2,153 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EFE4C5D98
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 17:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C824C5D99
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 17:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiB0Qx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 11:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S230384AbiB0Q62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 11:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiB0Qx4 (ORCPT
+        with ESMTP id S229446AbiB0Q61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 11:53:56 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D664161D;
-        Sun, 27 Feb 2022 08:53:17 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id l25so11429115oic.13;
-        Sun, 27 Feb 2022 08:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DLB+KjA+36FGogaPpx9tIXiVFKHZ9ogYrk3Bus4BHP0=;
-        b=qWGBB4hiNQqW8gdR7/0UwngjJT+6gqYg7TB4J+LXyigNwiSQ6G4KwvMrGUDi8bbtAZ
-         +30xHBPqF4ou2ZrvZWe2uEPQEgRPmYMbzugy0iJhb3PvEKbOVx6O/1ZdJLYQAmvgiNu+
-         fDwI/bxBN1inANF8wj3VM+51fkDm6m+tdegOyUbXqO/bhOep8ETiEgyTYWb2JHdFh5C3
-         Pki5V5teVw0LZP+b+k5BZgUekFEBpeuSvGgq2JxyisL/37FiM3Naumpup5pagvUnYQDA
-         IqWwJQTT+MTOsYhAXSuLBCZNTShqGjc5OA1EAY2RzKI/SCteimOmfKMYzchW9bfUELXF
-         XHjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DLB+KjA+36FGogaPpx9tIXiVFKHZ9ogYrk3Bus4BHP0=;
-        b=eGrrDcJ6DaV8zkgDw20LOuiHBL4AklsQLYqEYJ8TT598YXsAuCvwDD4G+bBN0k8KSA
-         VmxtXoa+NUfAZp1JQKQR9X8thwl/MpNtXhk/IzppIdpTwN5DgCwBcgixLHaXe+nbAs+q
-         0p1L2hg17vcwA4juyLeK1+Ys0aUYhbFLo1iCGRsUVaKJlW1X465OVy4jrClycozoyEuE
-         dKdf0ToG7YKu1ZdUvV8FpK/QsuRI/o4PviCmTHZvIIupJjuDz8/pAK5iZi8KtkBXtJLt
-         n1JNMcrnxm1DUM7Km0igGLDgX6jlzcEiau/Ai8kYvRYUJrhdQn9Ph75APyib4LR+S9G8
-         lbyA==
-X-Gm-Message-State: AOAM531A7t3Whg2YIafHQ6iUWzuZVxQZMNfkYkwnjExxJDGuNojbhEFV
-        kFeCQEgWwTn113QT/mWW6LE=
-X-Google-Smtp-Source: ABdhPJx9tE9vO89tCY1gqpvCC0eLKudt/2Yql6y4vG1v5SvmDtWMY1I+odPma2cbzqLN+JuXZ29jAQ==
-X-Received: by 2002:a05:6808:1718:b0:2d7:416e:d9d9 with SMTP id bc24-20020a056808171800b002d7416ed9d9mr7845154oib.76.1645980796337;
-        Sun, 27 Feb 2022 08:53:16 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r4-20020a9d5cc4000000b005af6f4ff5e2sm3973316oti.61.2022.02.27.08.53.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 08:53:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a45f4294-8f2d-e0ac-abf5-b48f13c3d49e@roeck-us.net>
-Date:   Sun, 27 Feb 2022 08:53:14 -0800
+        Sun, 27 Feb 2022 11:58:27 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959BC3F8AD
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 08:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=oyR9bICvSF8oqaSCI3XCH9sBS6Bwfxy+ufW0snswUSs=; b=RnYYHAlSQrIWR5htPz/V+VDojs
+        ZMIx/HWiehHfoipJKokqY0zG+lJh7M3ZDnD7uT9gabDYrRqyUzfnx79j0ozzLZtVzzNGO52uFAyO6
+        8n9mQL+PhTCzM2e/Sw1tAGLM21KtuqT+oqICVI/hMVsXsgyuAxDiQmvX6xx5hRoI+TAOHcTrBOwZY
+        A8s54lvymLMJ8oLW9BzKungOiSQNK9sWEKb5052s0vvpIEdWhF5r5xg8NXYTVi5m0xqRW/SB1vRns
+        6G71ey7UoK3+DBz5lKvoD52TfhjTJt08nSafvCtMJStlnuTWFX8TK1dVeNF/gD8nkdbVI9KZFwSeR
+        8YsDXXTQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOMrh-00DbSl-75; Sun, 27 Feb 2022 16:57:45 +0000
+Message-ID: <449d6ceb-7308-9543-c23c-831bebffda21@infradead.org>
+Date:   Sun, 27 Feb 2022 08:57:40 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/1] drivers/hwmon/pmbus: Add mutex to regulator ops
+ Thunderbird/91.6.1
+Subject: Re: [PATCH -next] misc: rtsx: fix build for CONFIG_PM not set
 Content-Language: en-US
-To:     Zev Weiss <zweiss@equinix.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io>
- <20220226234220.GV5754@packtop>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220226234220.GV5754@packtop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei WANG <wei_wang@realsil.com.cn>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220226222457.13668-1-rdunlap@infradead.org>
+ <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/22 15:42, Zev Weiss wrote:
-> On Fri, Feb 25, 2022 at 08:06:09AM PST, Marcello Sylvester Bauer wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> On PMBUS devices with multiple pages, the regulator ops need to be
->> protected with the update mutex. This prevents accidentally changing
->> the page in a separate thread while operating on the PMBUS_OPERATION
->> register.
->>
->> Tested on Infineon xdpe11280 while a separate thread polls for sensor
->> data.
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+
+
+On 2/27/22 04:04, Arnd Bergmann wrote:
+> On Sat, Feb 26, 2022 at 11:24 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> 
 >> ---
->> drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
->> 1 file changed, 13 insertions(+), 3 deletions(-)
+>>  drivers/misc/cardreader/rtsx_pcr.c |    2 ++
+>>  1 file changed, 2 insertions(+)
 >>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 776ee2237be2..f79930162256 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2386,10 +2386,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->> {
->> 	struct device *dev = rdev_get_dev(rdev);
->> 	struct i2c_client *client = to_i2c_client(dev->parent);
->> +	struct pmbus_data *data = i2c_get_clientdata(client);
->> 	u8 page = rdev_get_id(rdev);
->> 	int ret;
+>> --- linux-next-20220225.orig/drivers/misc/cardreader/rtsx_pcr.c
+>> +++ linux-next-20220225/drivers/misc/cardreader/rtsx_pcr.c
+>> @@ -1054,6 +1054,7 @@ static int rtsx_pci_acquire_irq(struct r
+>>         return 0;
+>>  }
 >>
->> +	mutex_lock(&data->update_lock);
->> 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
->> +	mutex_unlock(&data->update_lock);
->> +
->> 	if (ret < 0)
->> 		return ret;
->>
->> @@ -2400,11 +2404,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
->> {
->> 	struct device *dev = rdev_get_dev(rdev);
->> 	struct i2c_client *client = to_i2c_client(dev->parent);
->> +	struct pmbus_data *data = i2c_get_clientdata(client);
->> 	u8 page = rdev_get_id(rdev);
->> +	int ret;
->>
->> -	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
->> -				      PB_OPERATION_CONTROL_ON,
->> -				      enable ? PB_OPERATION_CONTROL_ON : 0);
->> +	mutex_lock(&data->update_lock);
->> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
->> +				     PB_OPERATION_CONTROL_ON,
->> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
->> +	mutex_unlock(&data->update_lock);
->> +
->> +	return ret;
->> }
->>
->> static int pmbus_regulator_enable(struct regulator_dev *rdev)
->> -- 
->> 2.35.1
->>
->>
+>> +#ifdef CONFIG_PM
+>>  static void rtsx_enable_aspm(struct rtsx_pcr *pcr)
+>>  {
+>>         if (pcr->ops->set_aspm)
+>> @@ -1085,6 +1086,7 @@ static void rtsx_pm_power_saving(struct
+>>  {
+>>         rtsx_comm_pm_power_saving(pcr);
+>>  }
+>> +#endif
 > 
-> Looks like this doesn't cover pmbus_regulator_get_error_flags(), which
-> was added recently -- perhaps rebase onto hwmon-next?
-> 
+> Now that we have DEFINE_SIMPLE_DEV_PM_OPS() etc, I think we should
+> no longer add more __maybe_unused annotations or #ifdef CONFIG_PM checks
+> but just use the new macros for any new files or whenever a warning like
+> this shows up.
 
-I applied the patch and made the necessary changes in
-pmbus_regulator_get_error_flags(), so no need to send a patch for it.
+In this case it looks like DEFINE_RUNTIME_DEV_PM_OPS() is better.
+Using DEFINE_SIMPLE_DEV_PM_OPS() still produces build warnings/errors
+for unused functions. And I do see 4 drivers that are already using
+DEFINE_RUNTIME_DEV_PM_OPS().
 
-Guenter
+Patch coming right up.
+
+thanks.
+-- 
+~Randy

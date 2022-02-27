@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A104C5946
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 05:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DAC4C5948
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 05:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiB0Ed3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 23:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S229993AbiB0ErC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 23:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiB0Ed0 (ORCPT
+        with ESMTP id S229954AbiB0Eq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 23:33:26 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7CD64C7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:32:45 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id i1so8050079plr.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:32:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V0NXTTUtgA/oGX4k6vizOWmOH7IBA/cr6jGaV8/q6Dk=;
-        b=X5aHHgUHO3GW2wcXJuA03R6s3sgCr5tVp2HbVQrkQEZMuu2LgJC2N0WJ4T+8JSJGPm
-         1R/VJnu9nZkHk4iRSysho7l3SZVUc4BIOMRRQDXpcQs58l+xML8UHWq0sMI64XAU6X5F
-         M+euc4ystkce1cTNrJnxmGMGZKmejdgF6A3ws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V0NXTTUtgA/oGX4k6vizOWmOH7IBA/cr6jGaV8/q6Dk=;
-        b=P5Px4s5cQOw/duj4eJSCHY1qtB9oFK0QS9HeTNhg2uhkScsqw+AqH3cjmuN2Cuc/Hq
-         PHsVoD+caLFbWspnP+Uehi7YDqCcUm7IO/uGBtMqaaA2yUICbr7hCOmLuu4OOfYwXGDt
-         hjhmGzgBEDfmxf2ZKTglGBqpQdVkiCv0G8AmuzMmHKt+W73SD0LQrSo9dXOsQjCZjJBS
-         b7aYIvGJPpbqYc5rr2SnnVYJwMpDjYdrYygtQeUBXy1/vIF1JA5DpEb3X7k0/P58AK8O
-         0n9eT1cExUHU+uQOTdO1uVbaN+Wk6FqRoBulFEbZcgTBgEyH51Da3CrlS/ArL7E/Iej/
-         29Xg==
-X-Gm-Message-State: AOAM531FLvfq4UHZMkvk1CKp+5k+3YXOcPCd1Wf8ykl7y88GGJWL6ZFi
-        QX0w6MSllL7zzRAr4R7KOHzQSi5t/So/3w==
-X-Google-Smtp-Source: ABdhPJxPX/Wfc0ac5Oc0+o1xz/dTND1kMRds8wHhylRrZKCJaZaMAlIfBDdnpE5Wp3ix500Rxl1WXw==
-X-Received: by 2002:a17:902:cf05:b0:14d:5249:3b1f with SMTP id i5-20020a170902cf0500b0014d52493b1fmr14649864plg.135.1645936365066;
-        Sat, 26 Feb 2022 20:32:45 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm13281756pju.44.2022.02.26.20.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 20:32:44 -0800 (PST)
-Date:   Sat, 26 Feb 2022 20:32:43 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [kees:for-next/hardening 8/8] mm/usercopy.c:61:29: error:
- 'current_stack_pointer' undeclared; did you mean
- 'current_user_stack_pointer'?
-Message-ID: <202202262032.F5B53F8@keescook>
-References: <202202270550.5SPauZxm-lkp@intel.com>
+        Sat, 26 Feb 2022 23:46:58 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0D438B1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 20:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645937182; x=1677473182;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J9brR3dWfvc9iONLNJEvKXN5ZkVjBrVepT4rUMLkVDE=;
+  b=VL9YQyZZDzRIlINruybCziapWaNzcMI5CvbJFIwyysBy7siROj3JDNtV
+   A+gISk+2b6LeAPXiJTj8DIvIM6RFevnnF4j7LBcZzVIc5+WN03ACGxhit
+   Ha9nuz2M4r105DQpmb72chjJA0+NgTOv66o8WRTgDFFdA5FN6FDiPPRhj
+   OmzR9HqvHdhpRVg8aSyXFlWb6l8Zcdxj8szilaEZKCdCfWePNmaskdzZ7
+   NsIK02fm3GJDexrQ/R35HnjeVYTlBUZDOrq+jws3Xis3AObH1RVJ1Z0Nl
+   d+JvbC331KHEGrAHJyJ14gZUozVgNC9KS0S4dZNJG1C4q4h/eh41iuduk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="277348500"
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="277348500"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 20:46:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="492361226"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 Feb 2022 20:46:20 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOBRs-0006DI-8s; Sun, 27 Feb 2022 04:46:20 +0000
+Date:   Sun, 27 Feb 2022 12:45:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [hare-scsi-devel:tls-upcall.v2 135/159] af_tlsh.c:undefined
+ reference to `inet6_recvmsg'
+Message-ID: <202202271243.bF63bqM0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202270550.5SPauZxm-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 05:47:56AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-> head:   3dd3738f624d9cf94b96e023880d1ec69c21327e
-> commit: 3dd3738f624d9cf94b96e023880d1ec69c21327e [8/8] m68k: Implement "current_stack_pointer"
-> config: m68k-sun3x_defconfig (https://download.01.org/0day-ci/archive/20220227/202202270550.5SPauZxm-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=3dd3738f624d9cf94b96e023880d1ec69c21327e
->         git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
->         git fetch --no-tags kees for-next/hardening
->         git checkout 3dd3738f624d9cf94b96e023880d1ec69c21327e
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   21b520ae0b338bd30496feb1ca90a2820dab7a65
+commit: 49f638e40e8a12b036a9943b76baa0c54c14d504 [135/159] net/tls: Add support for PF_TLSH (a TLS handshake listener)
+config: riscv-randconfig-r014-20220226 (https://download.01.org/0day-ci/archive/20220227/202202271243.bF63bqM0-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=49f638e40e8a12b036a9943b76baa0c54c14d504
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout 49f638e40e8a12b036a9943b76baa0c54c14d504
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Ah! Good catch. The new macro needed to be outside the #ifdef; I missed.
-Fixed now.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--Kees
+All errors (new ones prefixed by >>):
 
-> 
-> All errors (new ones prefixed by >>):
-> 
->    mm/usercopy.c: In function 'check_stack_object':
-> >> mm/usercopy.c:61:29: error: 'current_stack_pointer' undeclared (first use in this function); did you mean 'current_user_stack_pointer'?
->       61 |                 if ((void *)current_stack_pointer < obj + len)
->          |                             ^~~~~~~~~~~~~~~~~~~~~
->          |                             current_user_stack_pointer
->    mm/usercopy.c:61:29: note: each undeclared identifier is reported only once for each function it appears in
->    mm/usercopy.c: In function '__check_object_size':
->    mm/usercopy.c:297:47: error: 'current_stack_pointer' undeclared (first use in this function); did you mean 'current_user_stack_pointer'?
->      297 |                                 ptr - (void *)current_stack_pointer :
->          |                                               ^~~~~~~~~~~~~~~~~~~~~
->          |                                               current_user_stack_pointer
-> 
-> 
-> vim +61 mm/usercopy.c
-> 
-> f5509cc18daa7f Kees Cook    2016-06-07  24  
-> f5509cc18daa7f Kees Cook    2016-06-07  25  /*
-> f5509cc18daa7f Kees Cook    2016-06-07  26   * Checks if a given pointer and length is contained by the current
-> f5509cc18daa7f Kees Cook    2016-06-07  27   * stack frame (if possible).
-> f5509cc18daa7f Kees Cook    2016-06-07  28   *
-> f5509cc18daa7f Kees Cook    2016-06-07  29   * Returns:
-> f5509cc18daa7f Kees Cook    2016-06-07  30   *	NOT_STACK: not at all on the stack
-> f5509cc18daa7f Kees Cook    2016-06-07  31   *	GOOD_FRAME: fully within a valid stack frame
-> 2792d84e6da5e0 Kees Cook    2022-02-16  32   *	GOOD_STACK: within the current stack (when can't frame-check exactly)
-> f5509cc18daa7f Kees Cook    2016-06-07  33   *	BAD_STACK: error condition (invalid stack position or bad stack frame)
-> f5509cc18daa7f Kees Cook    2016-06-07  34   */
-> f5509cc18daa7f Kees Cook    2016-06-07  35  static noinline int check_stack_object(const void *obj, unsigned long len)
-> f5509cc18daa7f Kees Cook    2016-06-07  36  {
-> f5509cc18daa7f Kees Cook    2016-06-07  37  	const void * const stack = task_stack_page(current);
-> f5509cc18daa7f Kees Cook    2016-06-07  38  	const void * const stackend = stack + THREAD_SIZE;
-> f5509cc18daa7f Kees Cook    2016-06-07  39  	int ret;
-> f5509cc18daa7f Kees Cook    2016-06-07  40  
-> f5509cc18daa7f Kees Cook    2016-06-07  41  	/* Object is not on the stack at all. */
-> f5509cc18daa7f Kees Cook    2016-06-07  42  	if (obj + len <= stack || stackend <= obj)
-> f5509cc18daa7f Kees Cook    2016-06-07  43  		return NOT_STACK;
-> f5509cc18daa7f Kees Cook    2016-06-07  44  
-> f5509cc18daa7f Kees Cook    2016-06-07  45  	/*
-> f5509cc18daa7f Kees Cook    2016-06-07  46  	 * Reject: object partially overlaps the stack (passing the
-> 5ce1be0e40fe64 Randy Dunlap 2020-08-11  47  	 * check above means at least one end is within the stack,
-> f5509cc18daa7f Kees Cook    2016-06-07  48  	 * so if this check fails, the other end is outside the stack).
-> f5509cc18daa7f Kees Cook    2016-06-07  49  	 */
-> f5509cc18daa7f Kees Cook    2016-06-07  50  	if (obj < stack || stackend < obj + len)
-> f5509cc18daa7f Kees Cook    2016-06-07  51  		return BAD_STACK;
-> f5509cc18daa7f Kees Cook    2016-06-07  52  
-> f5509cc18daa7f Kees Cook    2016-06-07  53  	/* Check if object is safely within a valid frame. */
-> f5509cc18daa7f Kees Cook    2016-06-07  54  	ret = arch_within_stack_frames(stack, stackend, obj, len);
-> f5509cc18daa7f Kees Cook    2016-06-07  55  	if (ret)
-> f5509cc18daa7f Kees Cook    2016-06-07  56  		return ret;
-> f5509cc18daa7f Kees Cook    2016-06-07  57  
-> 2792d84e6da5e0 Kees Cook    2022-02-16  58  	/* Finally, check stack depth if possible. */
-> 2792d84e6da5e0 Kees Cook    2022-02-16  59  #ifdef CONFIG_ARCH_HAS_CURRENT_STACK_POINTER
-> 2792d84e6da5e0 Kees Cook    2022-02-16  60  	if (IS_ENABLED(CONFIG_STACK_GROWSUP)) {
-> 2792d84e6da5e0 Kees Cook    2022-02-16 @61  		if ((void *)current_stack_pointer < obj + len)
-> 2792d84e6da5e0 Kees Cook    2022-02-16  62  			return BAD_STACK;
-> 2792d84e6da5e0 Kees Cook    2022-02-16  63  	} else {
-> 2792d84e6da5e0 Kees Cook    2022-02-16  64  		if (obj < (void *)current_stack_pointer)
-> 2792d84e6da5e0 Kees Cook    2022-02-16  65  			return BAD_STACK;
-> 2792d84e6da5e0 Kees Cook    2022-02-16  66  	}
-> 2792d84e6da5e0 Kees Cook    2022-02-16  67  #endif
-> 2792d84e6da5e0 Kees Cook    2022-02-16  68  
-> f5509cc18daa7f Kees Cook    2016-06-07  69  	return GOOD_STACK;
-> f5509cc18daa7f Kees Cook    2016-06-07  70  }
-> f5509cc18daa7f Kees Cook    2016-06-07  71  
-> 
-> :::::: The code at line 61 was first introduced by commit
-> :::::: 2792d84e6da5e0fd7d3b22fd70bc69b7ee263609 usercopy: Check valid lifetime via stack depth
-> 
-> :::::: TO: Kees Cook <keescook@chromium.org>
-> :::::: CC: Kees Cook <keescook@chromium.org>
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+   riscv32-linux-ld: net/tls/af_tlsh.o: in function `.L36':
+>> af_tlsh.c:(.text+0xce): undefined reference to `inet6_recvmsg'
+   riscv32-linux-ld: net/tls/af_tlsh.o: in function `.L41':
+>> af_tlsh.c:(.text+0xfa): undefined reference to `inet6_sendmsg'
+   riscv32-linux-ld: net/tls/af_tlsh.o: in function `tlsh_getname':
+>> af_tlsh.c:(.text+0x1dc): undefined reference to `inet6_getname'
+   riscv32-linux-ld: net/tls/af_tlsh.o: in function `.L166':
+>> af_tlsh.c:(.text+0x7e6): undefined reference to `inet6_release'
 
--- 
-Kees Cook
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

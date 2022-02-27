@@ -2,126 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE92D4C5A79
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAE14C5A7C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 11:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiB0KYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 05:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S230174AbiB0K10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 05:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiB0KYx (ORCPT
+        with ESMTP id S229643AbiB0K1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 05:24:53 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0731DA7F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:24:17 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D01A33F1D9
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645957455;
-        bh=gFalKRe8JlGPelOo/R9VR3IL4dqyePAFZHwDnlwRlEk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jLh60SiGk1ssq7pESJe+eHLauvQRxegd9y4n5MepDLsTf7G/se5F+ZvJjBpVEqCwq
-         BJ+7tkFSX2/JdS269FU8Rew781ru9i2ukSQ4xvFh4E8P60jMfRGKP7jzWfJlIMxRuR
-         ii1hm9g3VUt7JlkDpPO131VuAngiQm3AxZFagFCPQEtytZ2/w+XVTfLrm8iVIVg4UV
-         AmF4Y0irG+GRFZ62ZmZEYo8j2SmOuvoXfKALFGhnyChSoTN5oabPb9HOmmAEQvF+no
-         FZ/d5p8OxpWn101hA6z+VI7nJvALatzHaYo6AOQs4ZvUjyJb/gVK2eCnHROsx0QCYJ
-         A7emELjVLb5QQ==
-Received: by mail-ed1-f71.google.com with SMTP id m12-20020a056402510c00b00413298c3c42so4058983edd.15
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:24:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gFalKRe8JlGPelOo/R9VR3IL4dqyePAFZHwDnlwRlEk=;
-        b=i7OR4gGSrKRi46zTZKZwZbBAGRRDo97ql+Xs1hDlwfTfT4zM1jIvxcb86WfJ1q1rOH
-         IgXpf1I6k6JN7LgMs2ihlKWnDtnqyF+gyVxYFmV7R2C8z/ta+IjOa2vK5g0nO1dSt1LW
-         1q+CVovcTn7A9sI7aVCbn4Xf61Ld2Jb0uniRu5kpNiIuycJghgxAGBFa8jyNhjJ0/hlh
-         M9EgBtH1h/ymETQyp4J70p1d6Zh2z7jHjEHi8LSTI0Z3gmRd53qGmSOySEJTVGzzl95m
-         oWt5qAc1H4QLB6XG41YeSKZ5u4zAJ9koyxle7Gx0gD3y4vdS6o1OTKOzavAM6MXVnuZu
-         SW8w==
-X-Gm-Message-State: AOAM532q2d0JLAFK8WO9kE6eFhOe0Rdqbr8gwruT0Ip4Lxrak+1gAYIQ
-        1X2w3wLl+Wvv0G4ptRBwf7dbQoSukRzUi7OQRU3fj5JEBu2tsuZTOiCdka+ad7um6t5BYiBB4Wx
-        AmoFvL89FDySi4F+hHj+NOShdvifXdjxqp1fGNPRXwA==
-X-Received: by 2002:a17:906:d968:b0:6d0:fc05:bdc3 with SMTP id rp8-20020a170906d96800b006d0fc05bdc3mr11342161ejb.719.1645957455521;
-        Sun, 27 Feb 2022 02:24:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwl3Y8M/TgNxwE3/0YwpdpPk65xBu71Ro8HLF5s9NgyHBBUg649P8bP26tAeg/OT/XsQvSm8w==
-X-Received: by 2002:a17:906:d968:b0:6d0:fc05:bdc3 with SMTP id rp8-20020a170906d96800b006d0fc05bdc3mr11342141ejb.719.1645957455350;
-        Sun, 27 Feb 2022 02:24:15 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id el9-20020a170907284900b006cf8e3c83e3sm3243768ejc.168.2022.02.27.02.24.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 02:24:14 -0800 (PST)
-Message-ID: <8ba5fb1b-2b5f-e625-0dbe-2acc3b6656e7@canonical.com>
-Date:   Sun, 27 Feb 2022 11:24:13 +0100
+        Sun, 27 Feb 2022 05:27:24 -0500
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448681E3CA
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 02:26:48 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id OGlJnnK7L0wirOGlJn9P0g; Sun, 27 Feb 2022 11:26:46 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 27 Feb 2022 11:26:46 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <ef21ffe9-0e9f-0526-7cde-a16b219c8aec@wanadoo.fr>
+Date:   Sun, 27 Feb 2022 11:26:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 01/15] dt-bindings: ufs: add common platform bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wei Xu <xuwei5@hisilicon.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jan Kotas <jank@cadence.com>, Li Wei <liwei213@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Yaniv Gardi <ygardi@codeaurora.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
- <20220222145854.358646-2-krzysztof.kozlowski@canonical.com>
- <YhktWpoJekR2Lj0D@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YhktWpoJekR2Lj0D@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] habanalabs: add an option to delay a device reset
+Content-Language: fr
+To:     Oded Gabbay <ogabbay@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Tomer Tayar <ttayar@habana.ai>
+References: <20220227094430.1059796-1-ogabbay@kernel.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220227094430.1059796-1-ogabbay@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 20:26, Rob Herring wrote:
-> On Tue, Feb 22, 2022 at 03:58:40PM +0100, Krzysztof Kozlowski wrote:
->> Add bindings for common parts (platform) of Universal Flash Storage
->> (UFS) Host Controllers in dtschema format.
->>
->> The 'freq-table-hz' is not correct in dtschema, because '-hz' suffix
->> defines uint32 type, not an array.  Therefore deprecate 'freq-table-hz'
->> and use 'freq-table' instead.
+Hi,
+
+Le 27/02/2022 à 10:44, Oded Gabbay a écrit :
+> From: Tomer Tayar <ttayar@habana.ai>
 > 
-> -hz is an array type. We can extend it to matrix if needed.
+> Several H/W events can be sent adjacently, even due to a single error.
+> If a hard-reset is triggered as part of handling one of these events,
+> the following events won't be handled.
+> The debug info from these missed events is important, sometimes even
+> more important than the one that was handled.
 > 
-> I do think this property is a bit questionable. Do we really need a 
-> minimum in DT and if not, wouldn't assigned-clocks-rate work? Or an OPP 
-> table.
+> To allow handling these close events, add an option to delay a device
+> reset and use it when resetting due to H/W events.
 > 
+> Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> ---
+>   drivers/misc/habanalabs/common/device.c     | 8 +++++++-
+>   drivers/misc/habanalabs/common/habanalabs.h | 4 ++++
+>   drivers/misc/habanalabs/gaudi/gaudi.c       | 2 +-
+>   3 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+> index d52381d1fbd2..651326cd22fb 100644
+> --- a/drivers/misc/habanalabs/common/device.c
+> +++ b/drivers/misc/habanalabs/common/device.c
+> @@ -13,6 +13,8 @@
+>   #include <linux/pci.h>
+>   #include <linux/hwmon.h>
+>   
+> +#define HL_RESET_DELAY_USEC		10000	/* 10ms */
+> +
+>   enum hl_device_status hl_device_status(struct hl_device *hdev)
+>   {
+>   	enum hl_device_status status;
+> @@ -980,7 +982,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+>   {
+>   	bool hard_reset, from_hard_reset_thread, fw_reset, hard_instead_soft = false,
+>   			reset_upon_device_release = false, schedule_hard_reset = false,
+> -			skip_wq_flush = false;
+> +			skip_wq_flush, delay_reset;
+>   	u64 idle_mask[HL_BUSY_ENGINES_MASK_EXT_SIZE] = {0};
+>   	struct hl_ctx *ctx;
+>   	int i, rc;
+> @@ -994,6 +996,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+>   	from_hard_reset_thread = !!(flags & HL_DRV_RESET_FROM_RESET_THR);
+>   	fw_reset = !!(flags & HL_DRV_RESET_BYPASS_REQ_TO_FW);
+>   	skip_wq_flush = !!(flags & HL_DRV_RESET_DEV_RELEASE);
+> +	delay_reset = !!(flags && HL_DRV_RESET_DELAY);
 
-I think the proper solution is OPP table, see also comments from Bjorn:
-https://lore.kernel.org/all/YhUodbzxx4wbr+gy@ripper/
+s/&&/&/ ?
 
-I would rather refrain from converting it to OPP tables, because I won't
-be able to test any changes in the driver.
+CJ
 
+>   
+>   	if (!hard_reset && !hdev->asic_prop.supports_soft_reset) {
+>   		hard_instead_soft = true;
+> @@ -1043,6 +1046,9 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+>   		hdev->reset_info.in_reset = 1;
+>   		spin_unlock(&hdev->reset_info.lock);
+>   
+> +		if (delay_reset)
+> +			usleep_range(HL_RESET_DELAY_USEC, HL_RESET_DELAY_USEC << 1);
+> +
+>   		handle_reset_trigger(hdev, flags);
+>   
+>   		/* This still allows the completion of some KDMA ops */
+> diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+> index cef4717d0916..1edaf6ab67bd 100644
+> --- a/drivers/misc/habanalabs/common/habanalabs.h
+> +++ b/drivers/misc/habanalabs/common/habanalabs.h
+> @@ -142,6 +142,9 @@ enum hl_mmu_page_table_location {
+>    *
+>    * - HL_DRV_RESET_FW_FATAL_ERR
+>    *       Set if reset is due to a fatal error from FW
+> + *
+> + * - HL_DRV_RESET_DELAY
+> + *       Set if a delay should be added before the reset
+>    */
+>   
+>   #define HL_DRV_RESET_HARD		(1 << 0)
+> @@ -151,6 +154,7 @@ enum hl_mmu_page_table_location {
+>   #define HL_DRV_RESET_DEV_RELEASE	(1 << 4)
+>   #define HL_DRV_RESET_BYPASS_REQ_TO_FW	(1 << 5)
+>   #define HL_DRV_RESET_FW_FATAL_ERR	(1 << 6)
+> +#define HL_DRV_RESET_DELAY		(1 << 7)
+>   
+>   #define HL_MAX_SOBS_PER_MONITOR	8
+>   
+> diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+> index 0eed0efae040..21c2b678ff72 100644
+> --- a/drivers/misc/habanalabs/gaudi/gaudi.c
+> +++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+> @@ -8199,7 +8199,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+>   					| HL_DRV_RESET_BYPASS_REQ_TO_FW
+>   					| fw_fatal_err_flag);
+>   	else if (hdev->hard_reset_on_fw_events)
+> -		hl_device_reset(hdev, HL_DRV_RESET_HARD | fw_fatal_err_flag);
+> +		hl_device_reset(hdev, HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag);
+>   	else
+>   		hl_fw_unmask_irq(hdev, event_type);
+>   }
 
-Best regards,
-Krzysztof

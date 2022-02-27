@@ -2,400 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41F4C5919
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C454C5924
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiB0DOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 22:14:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S229852AbiB0D3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 22:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiB0DOb (ORCPT
+        with ESMTP id S229843AbiB0D3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:14:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4D7F29CBE9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645931635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f/26ubjoltjj4CBjusBWCl7axdUNBpCkP32rmYaM0Bg=;
-        b=cxniCNbXM97DQbPT8IyS/PMTdPs+5qCrlpGfFpXBpecTAQIaS6RpRmlT1eq1jbkTSBcyED
-        vhRnlN9nTghb8zK16yEld1RpHB486q0gnCxlbjuoKr9wzn9G9XDV7TR8cfMX3XbioyngTi
-        lJLOpYTtdwwULhGIODtCzFJtt//XvV4=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-cxM2WCiHMo2ZK3dSqKe61w-1; Sat, 26 Feb 2022 22:13:53 -0500
-X-MC-Unique: cxM2WCiHMo2ZK3dSqKe61w-1
-Received: by mail-qv1-f69.google.com with SMTP id g13-20020a0cf08d000000b004329146b1ccso8347929qvk.6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:13:53 -0800 (PST)
+        Sat, 26 Feb 2022 22:29:40 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886C21F5D0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:29:04 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id ba20so9927373qvb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7uVsTdS9A3VvM3V9jvyobaIfl/vvSxzX/obLWEqItyo=;
+        b=Gus3oS9RSn7V1sr7kHl81y1aya0zl1pkxCw11w+XDvu9TPjWigg3K7tlfZovWKB4ae
+         LoFSKEOnw1/CPf1ue5bg4+ZnXYbF9Y+zkicAyImn/QMeG0xf8RkYkMwE7td7V+XucgUg
+         0gDiET8OWcLiR/uTHn2wUh3WcY8POKYYZw/O/qikdZt/B8Oxa+/h0kWL0zlh0jNugHBG
+         Rv5B++uhoDoF5bNd2dF70oz4vn2VMV+FnUr/zAIOwkrn52j00Kfgxx5zPdTqm8q/d8vi
+         I5UERrNvI3oCAHu2jLszQfE2Ir4z01/zstiDc3a//KS3VlYN7Eft03BJzMvOQq3z/VZH
+         WOlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f/26ubjoltjj4CBjusBWCl7axdUNBpCkP32rmYaM0Bg=;
-        b=WFYZr9zO5hokZ39QCOx7q1Mjc01MA35+k1mQOaeo5qGZkVIn7K61qASMj/s5SNmNRj
-         Z1Og6O7j15/fIZ1cMpRM2/GdHBhw7sJW2C3/9Oz0UGPNgUS2KZPGaP28tt3Hnzu8Cd+K
-         wtATlmX+5rjbcxj4rqsWhM1aj4jb0AkXMxdiOO1kiyAiORDEXzxy9yDm+NJQdRC42XKg
-         5WIekPhP5NqbSGIXdWye/36T2ZX85xASv7jOqnbLRH/g5I1VJI3dE8lvhcnKEMqR+yLD
-         yRq7mVAAlNJGz27NpBuvEb3nFOMM9Yyoinphs1s7U+9tR1dgBUO7Kqcf4yOz6Bwtyb2E
-         Ycng==
-X-Gm-Message-State: AOAM530Zm0Z+sLu+fWGe30TTKaMO2OuKg8da5/Qx/lSbW6lekGhY5aAC
-        Xyt40a0SRxa2wdH+fMsepDfgXIJiHHFOKFK+JfzLAWx4/Kk1RYLjknbbyTRGP8oqd3TeMbgPwl/
-        4WVSlmfsbr0krbsuIpvLrrDnh
-X-Received: by 2002:ac8:7f4c:0:b0:2de:37ad:99b2 with SMTP id g12-20020ac87f4c000000b002de37ad99b2mr12023006qtk.641.1645931632908;
-        Sat, 26 Feb 2022 19:13:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy7sse+5hLKCdJRhA+h2qLYIsMKmVEDwjFVlLa+baTXMOsQC7YPuENXppzMWDNCNmJYq/GIBQ==
-X-Received: by 2002:ac8:7f4c:0:b0:2de:37ad:99b2 with SMTP id g12-20020ac87f4c000000b002de37ad99b2mr12022995qtk.641.1645931632521;
-        Sat, 26 Feb 2022 19:13:52 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id bq42-20020a05620a46aa00b006494fb49246sm3292338qkb.86.2022.02.26.19.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 19:13:51 -0800 (PST)
-Date:   Sat, 26 Feb 2022 19:13:48 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 34/39] objtool: Validate IBT assumptions
-Message-ID: <20220227031348.drbmkcmoqur53aay@treble>
-References: <20220224145138.952963315@infradead.org>
- <20220224151324.018939604@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7uVsTdS9A3VvM3V9jvyobaIfl/vvSxzX/obLWEqItyo=;
+        b=g5seU3HeC5Hfl0VlALtqJ8huXx8KJzcpIST0VtPGHwRhX0+8nozFKO2xWmbE4nJ9KV
+         X2RTvCrrlC/CdtZ/P+oBCt3LXIntqtxKJ734bKr0xFp+vcrJiDm19Du8MX8HKh29R2j5
+         ZJhZW/Ir8fOH9a0NkTWU0n8AzLHfLCKwRBJQxDQpMXxz/zaAXgZb3wtsst9Vzl4EGB7J
+         IOWpAate9O+AtZiWbasduJ86zn1HzSN1UdFDFz+bf5au6XZSHNvy7vPD8PFj0NqMAN9x
+         WrJYkfD7SyJ1vZfef5YzkzJ/xpJZYhpD+9pBTzcVpvtBU3UZV+K66APiaOD9By7xKoZR
+         ywrQ==
+X-Gm-Message-State: AOAM532OV/usnSVqaTdlzy/EUKWe7mjEOj9qTHkk4aifuBKzGUw3wIQL
+        dXa8D+uBRg+1qp7TcUy/x2cfKjOkCzq8xqJwvNtMoqhOimxFiw==
+X-Google-Smtp-Source: ABdhPJy7XFThPExoHd3VFYJIkPak1UpwZE6oPWxM0M9mvJOEkCCe6XwmadvukE4ueQzyWqWGH926oT69VQqrOB0s4xU=
+X-Received: by 2002:a0c:d807:0:b0:42c:1ff7:7242 with SMTP id
+ h7-20020a0cd807000000b0042c1ff77242mr10578010qvj.119.1645932543232; Sat, 26
+ Feb 2022 19:29:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220224151324.018939604@infradead.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220226200911.230030-1-marijn.suijten@somainline.org> <20220226200911.230030-2-marijn.suijten@somainline.org>
+In-Reply-To: <20220226200911.230030-2-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 27 Feb 2022 06:28:52 +0300
+Message-ID: <CAA8EJppH2AKe7DK7mPhtz2CCW19WdJ0-NJihmFPDswRwTtKcfw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: qcom: Fix sorting of SDX_GCC_65 in Makefile
+ and Kconfig
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:52:12PM +0100, Peter Zijlstra wrote:
-> +++ b/tools/objtool/check.c
-> @@ -380,6 +380,7 @@ static int decode_instructions(struct ob
->  			memset(insn, 0, sizeof(*insn));
->  			INIT_LIST_HEAD(&insn->alts);
->  			INIT_LIST_HEAD(&insn->stack_ops);
-> +			INIT_LIST_HEAD(&insn->call_node);
+On Sun, 27 Feb 2022 at 02:38, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
+>
+> In order to keep at least the list of `CONFIG_SM_` drivers sorted
+> alphabetically, SDX_GCC_65 should have been moved one line up.  This in
+> turn makes it easier and cleaner to add the followup SM_DISPCC_6125
+> driver in the right place, right before SM_DISPCC_8250.
+>
+> Fixes: d79afa201328 ("clk: qcom: Add SDX65 GCC support")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Is this needed?  'call_node' isn't actually a list head, otherwise this
-would presumably be fixing a major bug.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
->  			insn->sec = sec;
->  			insn->offset = offset;
-> @@ -1176,6 +1177,14 @@ static int add_jump_destinations(struct
->  	unsigned long dest_off;
->  
->  	for_each_insn(file, insn) {
-> +		if (insn->type == INSN_ENDBR && insn->func) {
-> +			if (insn->offset == insn->func->offset) {
-> +				file->nr_endbr++;
-> +			} else {
-> +				file->nr_endbr_int++;
-> +			}
-> +		}
+> ---
+>  drivers/clk/qcom/Kconfig  | 14 +++++++-------
+>  drivers/clk/qcom/Makefile |  2 +-
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index f5b54bfc992f..161b257da9ca 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -574,13 +574,6 @@ config SDX_GCC_55
+>           Say Y if you want to use peripheral devices such as UART,
+>           SPI, I2C, USB, SD/UFS, PCIe etc.
+>
+> -config SM_CAMCC_8250
+> -       tristate "SM8250 Camera Clock Controller"
+> -       select SM_GCC_8250
+> -       help
+> -         Support for the camera clock controller on SM8250 devices.
+> -         Say Y if you want to support camera devices and camera functionality.
+> -
+>  config SDX_GCC_65
+>         tristate "SDX65 Global Clock Controller"
+>         select QCOM_GDSC
+> @@ -589,6 +582,13 @@ config SDX_GCC_65
+>           Say Y if you want to use peripheral devices such as UART,
+>           SPI, I2C, USB, SD/UFS, PCIe etc.
+>
+> +config SM_CAMCC_8250
+> +       tristate "SM8250 Camera Clock Controller"
+> +       select SM_GCC_8250
+> +       help
+> +         Support for the camera clock controller on SM8250 devices.
+> +         Say Y if you want to support camera devices and camera functionality.
 > +
+>  config SM_DISPCC_8250
+>         tristate "SM8150 and SM8250 Display Clock Controller"
+>         depends on SM_GCC_8150 || SM_GCC_8250
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index d96d6793fc7d..3e4eb843b8d2 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -84,8 +84,8 @@ obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
+>  obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+>  obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
+>  obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
+> -obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+>  obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
+> +obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+>  obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
+>  obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
+>  obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
+> --
+> 2.35.1
+>
 
-This doesn't have much to do with adding jump destinations.  I'm
-thinking this would fit better in decode_instructions() in the
-sym_for_each_insn() loop.
-
->  		if (!is_static_jump(insn))
->  			continue;
->  
-> @@ -1192,10 +1201,14 @@ static int add_jump_destinations(struct
->  		} else if (insn->func) {
->  			/* internal or external sibling call (with reloc) */
->  			add_call_dest(file, insn, reloc->sym, true);
-> -			continue;
-> +
-> +			dest_sec = reloc->sym->sec;
-> +			dest_off = reloc->sym->offset +
-> +				   arch_dest_reloc_offset(reloc->addend);
-> +
->  		} else if (reloc->sym->sec->idx) {
->  			dest_sec = reloc->sym->sec;
-> -			dest_off = reloc->sym->sym.st_value +
-> +			dest_off = reloc->sym->offset +
->  				   arch_dest_reloc_offset(reloc->addend);
->  		} else {
->  			/* non-func asm code jumping to another file */
-> @@ -1205,6 +1218,10 @@ static int add_jump_destinations(struct
->  		insn->jump_dest = find_insn(file, dest_sec, dest_off);
->  		if (!insn->jump_dest) {
->  
-> +			/* external symbol */
-> +			if (!vmlinux && insn->func)
-> +				continue;
-> +
->  			/*
->  			 * This is a special case where an alt instruction
->  			 * jumps past the end of the section.  These are
-> @@ -1219,6 +1236,16 @@ static int add_jump_destinations(struct
->  			return -1;
->  		}
->  
-> +		if (ibt && insn->jump_dest->type == INSN_ENDBR &&
-> +		    insn->jump_dest->func &&
-> +		    insn->jump_dest->offset == insn->jump_dest->func->offset) {
-> +			if (reloc) {
-> +				WARN_FUNC("Direct RELOC jump to ENDBR", insn->sec, insn->offset);
-> +			} else {
-> +				WARN_FUNC("Direct IMM jump to ENDBR", insn->sec, insn->offset);
-> +			}
-> +		}
-> +
-
-I have several concerns about all the above (and corresponding changes
-elsewhere), but it looks like this was moved to separate patches, for
-ease of NACKing :-)
-
->  		/*
->  		 * Cross-function jump.
->  		 */
-> @@ -1246,7 +1273,8 @@ static int add_jump_destinations(struct
->  				insn->jump_dest->func->pfunc = insn->func;
->  
->  			} else if (insn->jump_dest->func->pfunc != insn->func->pfunc &&
-> -				   insn->jump_dest->offset == insn->jump_dest->func->offset) {
-> +				   ((insn->jump_dest->offset == insn->jump_dest->func->offset) ||
-> +				    (insn->jump_dest->offset == insn->jump_dest->func->offset + 4))) {
->  				/* internal sibling call (without reloc) */
->  				add_call_dest(file, insn, insn->jump_dest->func, true);
-
-How about something more precise/readable/portable:
-
-static bool same_func(struct instruction *insn1, struct instruction *insn2)
-{
-	return insn1->func->pfunc == insn2->func->pfunc;
-}
-
-static bool is_first_func_insn(struct instruction *insn)
-{
-	return insn->offset == insn->func->offset ||
-	       (insn->type == INSN_ENDBR &&
-	        insn->offset == insn->func->offset + insn->len);
-}
-
-			...
-
-  			} else if (!same_func(insn, insn->jump_dest) &&
-				   is_first_func_insn(insn->jump_dest))
-
-
-> +static void validate_ibt_insn(struct objtool_file *file, struct instruction *insn);
-
-I'd rather avoid forward declares and stay with the existing convention.
-
-> +
->  /*
->   * Follow the branch starting at the given instruction, and recursively follow
->   * any other branches (jumps).  Meanwhile, track the frame pointer state at
-> @@ -3101,6 +3164,17 @@ static int validate_branch(struct objtoo
->  
->  		if (insn->hint) {
->  			state.cfi = *insn->cfi;
-> +			if (ibt) {
-> +				struct symbol *sym;
-> +
-> +				if (insn->cfi->type == UNWIND_HINT_TYPE_REGS_PARTIAL &&
-> +				    (sym = find_symbol_by_offset(insn->sec, insn->offset)) &&
-> +				    insn->type != INSN_ENDBR && !insn->noendbr) {
-> +					WARN_FUNC("IRET_REGS hint without ENDBR: %s",
-> +						  insn->sec, insn->offset,
-> +						  sym->name);
-> +				}
-
-No need to print sym->name here, WARN_FUNC() already does it?
-
-> +			}
->  		} else {
->  			/* XXX track if we actually changed state.cfi */
->  
-> @@ -3260,7 +3334,12 @@ static int validate_branch(struct objtoo
->  			state.df = false;
->  			break;
->  
-> +		case INSN_NOP:
-> +			break;
-> +
->  		default:
-> +			if (ibt)
-> +				validate_ibt_insn(file, insn);
-
-This is kind of subtle.  It would be more robust/clear to move this call
-out of the switch statement and check explicitly for the exclusion of
-jump/call instructions from within validate_ibt_insn().
-
->  			break;
->  		}
->  
-> @@ -3506,6 +3585,130 @@ static int validate_functions(struct obj
->  	return warnings;
->  }
->  
-> +static struct instruction *
-> +validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
-> +{
-> +	struct instruction *dest;
-> +	struct section *sec;
-> +	unsigned long off;
-> +
-> +	sec = reloc->sym->sec;
-> +	off = reloc->sym->offset + reloc->addend;
-
-This math assumes non-PC-relative.  If it's R_X86_64_PC32 or
-R_X86_64_PLT32 then it needs +4 added.
-
-There are actually a few cases of this in startup_64().  Those are
-harmless, but there might conceivably be other code which isn't?
-
-> +
-> +	dest = find_insn(file, sec, off);
-> +	if (!dest)
-> +		return NULL;
-> +
-> +	if (dest->type == INSN_ENDBR)
-> +		return NULL;
-> +
-> +	if (reloc->sym->static_call_tramp)
-> +		return NULL;
-> +
-> +	return dest;
-> +}
-> +
-> +static void warn_noendbr(const char *msg, struct section *sec, unsigned long offset,
-> +			 struct instruction *target)
-> +{
-> +	WARN_FUNC("%srelocation to !ENDBR: %s+0x%lx", sec, offset, msg,
-> +		  target->func ? target->func->name : target->sec->name,
-> +		  target->func ? target->offset - target->func->offset : target->offset);
-> +}
-> +
-> +static void validate_ibt_target(struct objtool_file *file, struct instruction *insn,
-> +				struct instruction *target)
-> +{
-> +	if (target->func && target->func == insn->func) {
-
-(Here and elsewhere) Instead of 'target' can we call it 'dest' for
-consistency with existing code?
-
-> +		/*
-> +		 * Anything from->to self is either _THIS_IP_ or IRET-to-self.
-> +		 *
-> +		 * There is no sane way to annotate _THIS_IP_ since the compiler treats the
-> +		 * relocation as a constant and is happy to fold in offsets, skewing any
-> +		 * annotation we do, leading to vast amounts of false-positives.
-> +		 *
-> +		 * There's also compiler generated _THIS_IP_ through KCOV and
-> +		 * such which we have no hope of annotating.
-> +		 *
-> +		 * As such, blanked accept self-references without issue.
-
-"blanket"
-
-> +		 */
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Annotated non-control flow target.
-> +	 */
-> +	if (target->noendbr)
-> +		return;
-
-I don't think the comment really adds anything.  What's a "non-control
-flow target" anyway...
-
-> +
-> +	warn_noendbr("", insn->sec, insn->offset, target);
-> +}
-> +
-> +static void validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
-> +{
-> +	struct reloc *reloc = insn_reloc(file, insn);
-> +	struct instruction *target;
-> +
-> +	for (;;) {
-> +		if (!reloc)
-> +			return;
-> +
-> +		target = validate_ibt_reloc(file, reloc);
-> +		if (target)
-> +			validate_ibt_target(file, insn, target);
-> +
-> +		reloc = find_reloc_by_dest_range(file->elf, insn->sec, reloc->offset + 1,
-> +						 (insn->offset + insn->len) - (reloc->offset + 1));
-> +	}
-
-I'm confused about what this loop is trying to do.  Why would an
-instruction have more than one reloc?  It at least needs a comment.
-
-Also a proper for() loop would be easier to follow:
-
-	for (reloc = insn_reloc(file, insn);
-	     reloc;
-	     reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-					      reloc->offset + 1,
-					      (insn->offset + insn->len) - (reloc->offset + 1)) {
-
-> +}
-> +
-> +static int validate_ibt(struct objtool_file *file)
-> +{
-> +	struct section *sec;
-> +	struct reloc *reloc;
-> +
-> +	for_each_sec(file, sec) {
-> +		bool is_data;
-> +
-> +		/* already done in validate_branch() */
-> +		if (sec->sh.sh_flags & SHF_EXECINSTR)
-> +			continue;
-> +
-> +		if (!sec->reloc)
-> +			continue;
-> +
-> +		if (!strncmp(sec->name, ".orc", 4))
-> +			continue;
-> +
-> +		if (!strncmp(sec->name, ".discard", 8))
-> +			continue;
-> +
-> +		if (!strncmp(sec->name, ".debug", 6))
-> +			continue;
-> +
-> +		if (!strcmp(sec->name, "_error_injection_whitelist"))
-> +			continue;
-> +
-> +		if (!strcmp(sec->name, "_kprobe_blacklist"))
-> +			continue;
-> +
-> +		is_data = strstr(sec->name, ".data") || strstr(sec->name, ".rodata");
-> +
-> +		list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
-> +			struct instruction *target;
-> +
-> +			target = validate_ibt_reloc(file, reloc);
-> +			if (is_data && target && !target->noendbr) {
-> +				warn_noendbr("data ", reloc->sym->sec,
-> +					     reloc->sym->offset + reloc->addend,
-
-Another case where the addend math would be wrong if it were
-pc-relative.  Not sure if that's possible here or not.
 
 -- 
-Josh
-
+With best wishes
+Dmitry

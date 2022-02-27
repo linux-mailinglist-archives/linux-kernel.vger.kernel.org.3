@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96ED4C5F48
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588254C5F49
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiB0WAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 17:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S232014AbiB0WCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 17:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiB0WAP (ORCPT
+        with ESMTP id S230458AbiB0WCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 17:00:15 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3C56AA72
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:59:38 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id d187so9322897pfa.10
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 13:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZrKI3DSZdTxekUPySsEMaohdk0Ebr8lmd+pDdB2Ygvc=;
-        b=AEhyForKjbDZKEq/PFv6p/G2ZB3dSs895NqBGgn0JW1Tpv1osByHflyrOYUBKFe77q
-         rEzyndlbiiho8KtHMqzE7la0X+pbnixp070cQjW5ARtttgU/Am64dO7sDyfRknxLrR3K
-         B5709/Td+SGSynJoMRndSLIvppWg0zHQ/RNreCH4AAiQbKAvmExz7Q5DXgKbdUajZAdz
-         6GSAmhxXaOW1i2nQEZWU8VAkNeBD9W+wTXXgmD0ohNTFh0XI/Ziv8rrDbVUm955l6TZL
-         0ByyWm6Mlf4+963avEfu65LwMhX6InrJK8z7CPhZ9K5MzRYcNmotW4008jGVKXEw8WvJ
-         gqKQ==
+        Sun, 27 Feb 2022 17:02:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B1916C1E7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:01:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645999298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cu46C1+p5Z2okY9b0dKEBxEay9/qjlT1Qhpw4rLUHes=;
+        b=b5tEwhdbYcALCcJ4RuKAbxaz3FVW/1cKHfsxq+eKmHehFAoRhSWTIwA17atjhz9F6BqK5r
+        Kj2n8qzn0QcdQo1dlObMdUWfydOH7X+mXV43/RiYNNBMvOJ/vw18QjhUWe+6I5a5SI5Hbh
+        TwSyi4+UzBEq0LKAWDUs5qAAFVKNnxk=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-T_j8bzwtNp2TEmXVO7LLOw-1; Sun, 27 Feb 2022 17:01:36 -0500
+X-MC-Unique: T_j8bzwtNp2TEmXVO7LLOw-1
+Received: by mail-qv1-f69.google.com with SMTP id q14-20020a0cf5ce000000b004326eec23acso10561325qvm.20
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:01:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZrKI3DSZdTxekUPySsEMaohdk0Ebr8lmd+pDdB2Ygvc=;
-        b=0Tm8VFtTovgFYEavW4m2i6MTv1NRc3AssPuwMr6gZwpvR9b+0NrUa6XhXnthktL/U3
-         Jbftwcb6Kyi9E9VQQmP3O/4eX34GXU2sGxwa2+Q7KH4W4WTfnDwVhpfE+n0TI1s2mTPA
-         mZvDHPs1/hQYZsLvsOtR+XtVKGgIMZ/jpVMB3uC5cLToWOuWt5uov/26LpGhFO3Bf3Ix
-         WQe9Ah0PdFBnwXj9swLV0HRAnTfTDmw8upcKllS3PVNhzequNc1A2yS/zlknwkJN2O/8
-         j7x/tvd9m7wsA9FasduwLEOIGzIWYgah2IdfwPRzeo6PzL0fdZ0GWREnonsKp/zMwOZD
-         JQrQ==
-X-Gm-Message-State: AOAM532+9SqBj/C6uZOyhgA7FzFpj732HxM2gWLyvNl+RgoOi82yRIGW
-        tulbJK9NZ3co4unWluX80jLBPw==
-X-Google-Smtp-Source: ABdhPJyaSQFLGaa+8maa8wDtePuQmdliyTg6t1OPFEjFv3DiD8FgQGuKlD2bA9CLsLw5mSJh0YHR0g==
-X-Received: by 2002:a05:6a00:8ca:b0:4e0:2ed3:5630 with SMTP id s10-20020a056a0008ca00b004e02ed35630mr18547182pfu.3.1645999178369;
-        Sun, 27 Feb 2022 13:59:38 -0800 (PST)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id f31-20020a631f1f000000b003742e45f7d7sm8492806pgf.32.2022.02.27.13.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 13:59:37 -0800 (PST)
-Message-ID: <8b5b35fa-3c70-adc8-ca3a-4829388c4d12@kernel.dk>
-Date:   Sun, 27 Feb 2022 14:59:35 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cu46C1+p5Z2okY9b0dKEBxEay9/qjlT1Qhpw4rLUHes=;
+        b=RMUCnZN/E8BTFNMZrvwkFGmSGX0EMwInZK74kGHupiKXjPXgeuRwIlYQS2L7jKWn4o
+         OhetwSTp6BZkx3VfkAbddJy+8K3H/xao3HnPia7yuyQroK10kdVKSd13MM2ad5viMPQF
+         PGPlr6290BXRMy4w5i4B9wEST4V36J3hIneJUegyk1PuJ2Xcx7spPKvHGg9auOepBrv8
+         QoEwW8GlfJ5nAA/NoXPxjLUATavyWZu5mzSu7s0+etdjDWXJHNmu5h8vDalRs2U5QPib
+         D5wB/x/uJ3q+kp2kXYqpD43lAOoqwNdDIHynqa6VN7d7HgUS82LEBNnwFD6YNrTXiT1g
+         2B0Q==
+X-Gm-Message-State: AOAM533TPSpuDWz3VwEl7MoaL7gafU7GhXNfTMIWD5Kw9YyqkPTGmiZj
+        TVanUQQvT71Ubevd2ppYH2jYt8ifnAHhXxqiPAJnWUckJoqSiLX9AS0qUhMNDgE5zMnhC8kigd2
+        zMmQPOR4B/b0ms2hU5eR/uEVG
+X-Received: by 2002:a0c:c784:0:b0:432:304c:a383 with SMTP id k4-20020a0cc784000000b00432304ca383mr12049590qvj.100.1645999296296;
+        Sun, 27 Feb 2022 14:01:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyJjmQIkWrwxek7pSlDac4e+FnTb1QHQ+fKpFNR9do+JasixFssPsd0lPHDPtuZuyEI2vnRlw==
+X-Received: by 2002:a0c:c784:0:b0:432:304c:a383 with SMTP id k4-20020a0cc784000000b00432304ca383mr12049562qvj.100.1645999295943;
+        Sun, 27 Feb 2022 14:01:35 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::d])
+        by smtp.gmail.com with ESMTPSA id p25-20020a05620a057900b005f1928e8cd0sm4107044qkp.134.2022.02.27.14.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 14:01:35 -0800 (PST)
+Date:   Sun, 27 Feb 2022 14:01:30 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, David Rientjes <rientjes@google.com>
+Subject: Re: [PATCHv4 01/30] x86/mm: Fix warning on build with
+ X86_MEM_ENCRYPT=y
+Message-ID: <20220227220130.23yjme7jucxo266l@treble>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-2-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 4/6] block, bio, fs: convert most filesystems to
- pin_user_pages_fast()
-Content-Language: en-US
-To:     jhubbard.send.patches@gmail.com, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <20220227093434.2889464-1-jhubbard@nvidia.com>
- <20220227093434.2889464-5-jhubbard@nvidia.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220227093434.2889464-5-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220224155630.52734-2-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,21 +86,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 2:34 AM, jhubbard.send.patches@gmail.com wrote:
-> From: John Hubbard <jhubbard@nvidia.com>
+On Thu, Feb 24, 2022 at 06:56:01PM +0300, Kirill A. Shutemov wrote:
+> So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
+> the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
+> which triggers a warning:
 > 
-> Use pin_user_pages_fast(), pin_user_page(), and unpin_user_page() calls,
-> in place of get_user_pages_fast(), get_page() and put_page().
+> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
+> 	function 'mem_encrypt_init' [-Wmissing-prototypes]
 > 
-> This converts the Direct IO parts of most filesystems over to using
-> FOLL_PIN (pin_user_page*()) page pinning.
+> Fix it by moving mem_encrypt_init() declaration outside of #ifdef
+> CONFIG_AMD_MEM_ENCRYPT.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
+> Acked-by: David Rientjes <rientjes@google.com>
 
-The commit message needs to explain why a change is being made, not what
-is being done. The latter I can just look at the code for.
+The patch title, warning, and "Fixes" tag tend to give the impression
+this is fixing a real user-visible bug.  But the bug is theoretical, as
+it's not possible to enable X86_MEM_ENCRYPT without AMD_MEM_ENCRYPT,
+until patch 27.
 
-Didn't even find it in in your cover letter, had to go to the original
-posting for that.
+IMO it would be preferable to just squash this change with patch 27.
+
+Having it as a separate patch is also fine, but it shouldn't be
+described as a fix or use the Fixes tag.  It's more of a preparatory
+patch.
 
 -- 
-Jens Axboe
+Josh
 

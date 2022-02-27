@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4844C5A22
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779084C5A27
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 10:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiB0JLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 04:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S229542AbiB0JUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 04:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiB0JLp (ORCPT
+        with ESMTP id S229512AbiB0JUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 04:11:45 -0500
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B48D6D4EF;
-        Sun, 27 Feb 2022 01:11:08 -0800 (PST)
-Received: from grover.. (133-32-176-37.west.xps.vectant.ne.jp [133.32.176.37]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 21R9AVvT024355;
-        Sun, 27 Feb 2022 18:10:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21R9AVvT024355
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645953032;
-        bh=mOcLKSAIGUfePOBI6By4Xw9RDNdqliYg+gQKo6ayREY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u+OvsUi5UrQcZL572ybd+7hoT1bMDmH6vZCZMl7d/dSHUCB8gnkUT5iXVqWOsQCmv
-         kXFe2PPQoGZCTklE8bLQQC5X2TgRWZscIdXVkDrETRYUrS44wNSAhJgdK/ILeOixzZ
-         cqsKhVo+1Qra14yEgasbuYbFBbxSAmpvHL29pgBZRb5rlgGi3IylwEbcs2dXaz0mMv
-         de7jmBlljwOlnmMd9L0qNAZrqcP+ExeqNsSvZzMDl1EBfBFBHvW7rSJ7D98Uawdd51
-         z1jlewjTPSYY1rF4vaNJqVH+DBexY/1KaMHupMUavXnlKjwl68mMR+ymG1xxRE3Vn5
-         0aJ5XjGeyOx6Q==
-X-Nifty-SrcIP: [133.32.176.37]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] arch: syscalls: simplify uapi/kapi directory creation
-Date:   Sun, 27 Feb 2022 18:10:24 +0900
-Message-Id: <20220227091024.207786-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Sun, 27 Feb 2022 04:20:47 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DED2612A
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 01:20:09 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645953607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BrHQ4F8L8u/trpTIwjTyy0+OXrLjzg78x3go4LiZZEA=;
+        b=cxZAu8XY0IFzPFbjsHI6vocTv5imCi5EBkorWOMBa8FAn311OIDGg4KNpkFX8ZcDRX03JN
+        FEW6inSZj0nz2wD71DxFUSzLsA5/7IgUePpyh+rYdTdd3uwaUyy5COTL6UULeZ9au9nVTZ
+        MfgciY9Bpk1o3YdL/g74TKJnp4R8nOju3FYlKGfqHTphwHAx08C5U+XeGXz4vdJYprC0r7
+        VOCplTVrc/DsrIOpU4s2mtCTjGOOOW1rWc1GcYXx/vDgyGvvgle23zDQkwEe5H6vuDjDqi
+        BwS8JU3LVPtQ7znzv/3vjo2fC4NoRhv+6ucc/n2TQVeOfJB6T95bYQ17vV+7iA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645953607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BrHQ4F8L8u/trpTIwjTyy0+OXrLjzg78x3go4LiZZEA=;
+        b=FP9oGPfcscPm4h1/FOIP3A0dmGEP1elBiumSrkBOa578hcTEGwmxQ6DcU1hzROX6dJDBJZ
+        XU2y9j1CixXLFeDQ==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [GIT pull] irq/urgent for 5.17-rc6
+Message-ID: <164595358628.38081.10035138977548213816.tglx@xen13>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Date:   Sun, 27 Feb 2022 10:20:07 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,208 +53,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-$(shell ...) expands to empty. There is no need to assign it to _dummy.
+Linus,
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+please pull the latest irq/urgent branch from:
 
- arch/alpha/kernel/syscalls/Makefile      | 3 +--
- arch/arm/tools/Makefile                  | 3 +--
- arch/ia64/kernel/syscalls/Makefile       | 3 +--
- arch/m68k/kernel/syscalls/Makefile       | 3 +--
- arch/microblaze/kernel/syscalls/Makefile | 3 +--
- arch/mips/kernel/syscalls/Makefile       | 3 +--
- arch/parisc/kernel/syscalls/Makefile     | 3 +--
- arch/powerpc/kernel/syscalls/Makefile    | 3 +--
- arch/s390/kernel/syscalls/Makefile       | 3 +--
- arch/sh/kernel/syscalls/Makefile         | 3 +--
- arch/sparc/kernel/syscalls/Makefile      | 3 +--
- arch/x86/entry/syscalls/Makefile         | 3 +--
- arch/xtensa/kernel/syscalls/Makefile     | 3 +--
- 13 files changed, 13 insertions(+), 26 deletions(-)
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2022-=
+02-27
 
-diff --git a/arch/alpha/kernel/syscalls/Makefile b/arch/alpha/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/alpha/kernel/syscalls/Makefile
-+++ b/arch/alpha/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/arm/tools/Makefile b/arch/arm/tools/Makefile
-index 4a5c50f67ced..81f13bdf32f2 100644
---- a/arch/arm/tools/Makefile
-+++ b/arch/arm/tools/Makefile
-@@ -29,8 +29,7 @@ kapi:	$(kapi-hdrs-y) $(gen-y)
- uapi:	$(uapi-hdrs-y)
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)') \
--          $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')
-+$(shell mkdir -p $(kapi) $(uapi))
- 
- quiet_cmd_gen_mach = GEN     $@
-       cmd_gen_mach = $(AWK) -f $(real-prereqs) > $@
-diff --git a/arch/ia64/kernel/syscalls/Makefile b/arch/ia64/kernel/syscalls/Makefile
-index 14f40ecf8b65..d009f927a048 100644
---- a/arch/ia64/kernel/syscalls/Makefile
-+++ b/arch/ia64/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/m68k/kernel/syscalls/Makefile b/arch/m68k/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/m68k/kernel/syscalls/Makefile
-+++ b/arch/m68k/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/microblaze/kernel/syscalls/Makefile b/arch/microblaze/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/microblaze/kernel/syscalls/Makefile
-+++ b/arch/microblaze/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/syscalls/Makefile
-index 10bf90dc02c0..e6b21de65cca 100644
---- a/arch/mips/kernel/syscalls/Makefile
-+++ b/arch/mips/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syshdr := $(srctree)/scripts/syscallhdr.sh
- sysnr := $(srctree)/$(src)/syscallnr.sh
-diff --git a/arch/parisc/kernel/syscalls/Makefile b/arch/parisc/kernel/syscalls/Makefile
-index d63f18dd058d..8440c16dfb22 100644
---- a/arch/parisc/kernel/syscalls/Makefile
-+++ b/arch/parisc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/powerpc/kernel/syscalls/Makefile b/arch/powerpc/kernel/syscalls/Makefile
-index 5476f62eb80f..9d7bd81510b8 100644
---- a/arch/powerpc/kernel/syscalls/Makefile
-+++ b/arch/powerpc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/s390/kernel/syscalls/Makefile b/arch/s390/kernel/syscalls/Makefile
-index b98f25029b8e..fb85e797946d 100644
---- a/arch/s390/kernel/syscalls/Makefile
-+++ b/arch/s390/kernel/syscalls/Makefile
-@@ -21,8 +21,7 @@ uapi:	$(uapi-hdrs-y)
- 
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)') \
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- filechk_syshdr = $(CONFIG_SHELL) '$(systbl)' -H -a $(syshdr_abi_$(basetarget)) -f "$2" < $<
- 
-diff --git a/arch/sh/kernel/syscalls/Makefile b/arch/sh/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/sh/kernel/syscalls/Makefile
-+++ b/arch/sh/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/sparc/kernel/syscalls/Makefile b/arch/sparc/kernel/syscalls/Makefile
-index d63f18dd058d..8440c16dfb22 100644
---- a/arch/sparc/kernel/syscalls/Makefile
-+++ b/arch/sparc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/x86/entry/syscalls/Makefile b/arch/x86/entry/syscalls/Makefile
-index 5b3efed0e4e8..9104039cd8f2 100644
---- a/arch/x86/entry/syscalls/Makefile
-+++ b/arch/x86/entry/syscalls/Makefile
-@@ -3,8 +3,7 @@ out := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(out)' ] || mkdir -p '$(out)') \
--	  $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')
-+$(shell mkdir -p $(out) $(uapi))
- 
- syscall32 := $(src)/syscall_32.tbl
- syscall64 := $(src)/syscall_64.tbl
-diff --git a/arch/xtensa/kernel/syscalls/Makefile b/arch/xtensa/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/xtensa/kernel/syscalls/Makefile
-+++ b/arch/xtensa/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
--- 
-2.32.0
+up to:  ba1366f3d039: PCI: vmd: Prevent recursive locking on interrupt alloca=
+tion
+
+
+A single fix for a regression caused by the recent PCI/MSI rework which
+resulted in a recursive locking problem in the VMD driver. The cure is to
+cache the relevant information upfront instead of retrieving it at runtime.
+
+Thanks,
+
+	tglx
+
+------------------>
+Thomas Gleixner (1):
+      PCI: vmd: Prevent recursive locking on interrupt allocation
+
+
+ drivers/pci/controller/vmd.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index cc166c683638..eb05cceab964 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -99,11 +99,13 @@ struct vmd_irq {
+  * @srcu:	SRCU struct for local synchronization.
+  * @count:	number of child IRQs assigned to this vector; used to track
+  *		sharing.
++ * @virq:	The underlying VMD Linux interrupt number
+  */
+ struct vmd_irq_list {
+ 	struct list_head	irq_list;
+ 	struct srcu_struct	srcu;
+ 	unsigned int		count;
++	unsigned int		virq;
+ };
+=20
+ struct vmd_dev {
+@@ -253,7 +255,6 @@ static int vmd_msi_init(struct irq_domain *domain, struct=
+ msi_domain_info *info,
+ 	struct msi_desc *desc =3D arg->desc;
+ 	struct vmd_dev *vmd =3D vmd_from_bus(msi_desc_to_pci_dev(desc)->bus);
+ 	struct vmd_irq *vmdirq =3D kzalloc(sizeof(*vmdirq), GFP_KERNEL);
+-	unsigned int index, vector;
+=20
+ 	if (!vmdirq)
+ 		return -ENOMEM;
+@@ -261,10 +262,8 @@ static int vmd_msi_init(struct irq_domain *domain, struc=
+t msi_domain_info *info,
+ 	INIT_LIST_HEAD(&vmdirq->node);
+ 	vmdirq->irq =3D vmd_next_irq(vmd, desc);
+ 	vmdirq->virq =3D virq;
+-	index =3D index_from_irqs(vmd, vmdirq->irq);
+-	vector =3D pci_irq_vector(vmd->dev, index);
+=20
+-	irq_domain_set_info(domain, virq, vector, info->chip, vmdirq,
++	irq_domain_set_info(domain, virq, vmdirq->irq->virq, info->chip, vmdirq,
+ 			    handle_untracked_irq, vmd, NULL);
+ 	return 0;
+ }
+@@ -685,7 +684,8 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
+ 			return err;
+=20
+ 		INIT_LIST_HEAD(&vmd->irqs[i].irq_list);
+-		err =3D devm_request_irq(&dev->dev, pci_irq_vector(dev, i),
++		vmd->irqs[i].virq =3D pci_irq_vector(dev, i);
++		err =3D devm_request_irq(&dev->dev, vmd->irqs[i].virq,
+ 				       vmd_irq, IRQF_NO_THREAD,
+ 				       vmd->name, &vmd->irqs[i]);
+ 		if (err)
+@@ -969,7 +969,7 @@ static int vmd_suspend(struct device *dev)
+ 	int i;
+=20
+ 	for (i =3D 0; i < vmd->msix_count; i++)
+-		devm_free_irq(dev, pci_irq_vector(pdev, i), &vmd->irqs[i]);
++		devm_free_irq(dev, vmd->irqs[i].virq, &vmd->irqs[i]);
+=20
+ 	return 0;
+ }
+@@ -981,7 +981,7 @@ static int vmd_resume(struct device *dev)
+ 	int err, i;
+=20
+ 	for (i =3D 0; i < vmd->msix_count; i++) {
+-		err =3D devm_request_irq(dev, pci_irq_vector(pdev, i),
++		err =3D devm_request_irq(dev, vmd->irqs[i].virq,
+ 				       vmd_irq, IRQF_NO_THREAD,
+ 				       vmd->name, &vmd->irqs[i]);
+ 		if (err)
 

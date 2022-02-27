@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8589C4C5E10
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB64C5DFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiB0S1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 13:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S230176AbiB0SMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiB0S1a (ORCPT
+        with ESMTP id S229489AbiB0SME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 13:27:30 -0500
-X-Greylist: delayed 944 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 10:26:52 PST
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9075654A8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 10:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=D6fceNIjKpwnS1biMuEu0ownwYQK1blsQ+uEVVtQEQo=; b=P0E4Nr4DmqSsmCEHU5jqJRzO5T
-        wFVMmg3qXLKqDSiW5jEtJsG7ICRgDchzvZQr1M515LsQp3T7zajfHyexNCInWp+G0sv4g4iR9Egtq
-        SNessDhV10bUUkr1eZlF2JPcqWs3/PE6HgqUeaP2/Dz7lLyuptyKDbpvKdA5sBCixDpCbR+bKh9yy
-        zrBDho0XW9ntOcoYoY4yGxpIUexIiNCKXOH6RwezM7gq5k/vTYmcx0xUQZAUONkS0mzYQVLqCklaI
-        1Vswu/A5swVD3SDzXMo8mR01UBYr61DlsYG+gB2Olbe7FDkgEdcUXgPrKIb2W5QELoj761OIZTjD5
-        I/PW/yig==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-        by mx.treblig.org with esmtp (Exim 4.94.2)
-        (envelope-from <linux@treblig.org>)
-        id 1nOO0f-0006o3-C9; Sun, 27 Feb 2022 18:11:04 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     akpm@linux-foundation.org, pasha.tatashin@soleen.com,
-        songmuchun@bytedance.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] mm: Use strtobool for param parsing
-Date:   Sun, 27 Feb 2022 18:10:39 +0000
-Message-Id: <20220227181038.126926-1-linux@treblig.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 27 Feb 2022 13:12:04 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02835AA66;
+        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id h15so14491640edv.7;
+        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
+        b=mCna3VHZDBV/ehGjjh9gJuiZ3d6mSnMU2mTQiVRUzLnpUZXSrvNDm3RgzYDVLRv06S
+         it9lTLQNhOBn0INuUc5ymovisl4lZfXFmTAx0ra/VvBuH/6uPfcoUkE8CO/2puVYSuHv
+         zu4+ApFs3TbrRcSuwUzt8MvAvfkcM9kso09rJ3ln/rQtpXANZTTfbSXSWOkRVglOyPeY
+         mSi83bei30FD+a6oRcb1Sq7a91dqsF0edmCvcIdJPA0/2KZKcRG1/iAWQxLhLwUd/lNS
+         RCkp62emiSkTIGlHNnu4D97ST1q3ADKg5VpwKpAct8Ota64KDztJ5iUce2oIsOtjUmmE
+         AsXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
+        b=ZSW4sjG9cxjeThQ+e9fVvlZKjBAsQBDRJTf+lvLDYU0jJSFDKUjM4MkB7d6bEZC+Ip
+         RnVpm69Atjxxe2pVDwJy4OQOqsX6Gnl/lEiCnHPJuGOVxyqtkzSSXOhgeVjUZbszkUBa
+         7VlJg0D7yT1SLp92+7H0LOh+aup9O4+JmIW+EBAUG0kZpYqBF+2ZEKcIl0gQJuIBua08
+         WFLdCtFi2w/x2xWUNlXqW+XUOCLUEjfjExIcsj2utzh+hh/cCn/B6E5UBIS5kQRgPlYb
+         00xvul8eBGRyvmloyfe+L8KqiqRBptsO/vhkg7qhiFKikfATF8JJj00QJ4SGFkXchldu
+         GgwA==
+X-Gm-Message-State: AOAM533sUC0ANZkmFbheA3SwaUJ0T2ZIjg2fnrE52Z6VrYCXYAdyYc9D
+        9/zkG7Aj0DMl5UJ+qMIQAZhi7EsxWcocAyJp
+X-Google-Smtp-Source: ABdhPJwkoKI9LGdfq+SBKpPijHSVg3658GE2tCtyAPH5wnbfF0ml4bQtTLWyBhjQAjIWnbB9pKVKFA==
+X-Received: by 2002:aa7:d694:0:b0:410:d89a:656e with SMTP id d20-20020aa7d694000000b00410d89a656emr16664734edr.402.1645985486517;
+        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id by10-20020a0564021b0a00b00412ddfc6d12sm5068591edb.0.2022.02.27.10.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
+Date:   Sun, 27 Feb 2022 19:11:23 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer Farbwerk 360
+Message-ID: <Yhu+ywPYqkzMQUZv@fedora>
+References: <20220227105926.64862-1-savicaleksa83@gmail.com>
+ <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,59 +72,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use strtobool rather than open coding "on" and "off" parsing in
-mm/hugetlb_vmemmap.c and mm/page_table_check.c.
+Thanks. I'll send a v3.
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- mm/hugetlb_vmemmap.c  | 12 +-----------
- mm/page_table_check.c | 10 +---------
- 2 files changed, 2 insertions(+), 20 deletions(-)
-
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index c540c21e26f5b..919411386e547 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -192,17 +192,7 @@ static int __init early_hugetlb_free_vmemmap_param(char *buf)
- 		return 0;
- 	}
- 
--	if (!buf)
--		return -EINVAL;
--
--	if (!strcmp(buf, "on"))
--		hugetlb_free_vmemmap_enabled = true;
--	else if (!strcmp(buf, "off"))
--		hugetlb_free_vmemmap_enabled = false;
--	else
--		return -EINVAL;
--
--	return 0;
-+	return strtobool(buf, &hugetlb_free_vmemmap_enabled);
- }
- early_param("hugetlb_free_vmemmap", early_hugetlb_free_vmemmap_param);
- 
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 3763bd077861a..2458281bff893 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -23,15 +23,7 @@ EXPORT_SYMBOL(page_table_check_disabled);
- 
- static int __init early_page_table_check_param(char *buf)
- {
--	if (!buf)
--		return -EINVAL;
--
--	if (strcmp(buf, "on") == 0)
--		__page_table_check_enabled = true;
--	else if (strcmp(buf, "off") == 0)
--		__page_table_check_enabled = false;
--
--	return 0;
-+	return strtobool(buf, &__page_table_check_enabled);
- }
- 
- early_param("page_table_check", early_page_table_check_param);
--- 
-2.35.1
-
+Aleksa

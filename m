@@ -2,107 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A474C5DAB
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC464C5DAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiB0RTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 12:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S229602AbiB0RVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 12:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiB0RTU (ORCPT
+        with ESMTP id S229458AbiB0RVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:19:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B30113E89
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645982322; x=1677518322;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jbL7slDERTMyYql2ymMr6DnFSb/2JvhP5zFVTczr5Mk=;
-  b=ADUEZbcR6Gk2pQ1W4R4CMG4lG4q2L5q28YLTVY302MyltNc1I1E6xB+G
-   haYqgUsqQRdUCc7CD3y/DJgpCjlNPqnDANY1ShrDPCpQZKzNfdXKqAS62
-   PFuGfdHW7YYXkDEjNtw9o7zz2VSpQM/YpXC5cppVIFACti86lPQ0jAdfG
-   V5AhBosDwdV+2DIO2J346r+cewwdOcGKKmmgrwTF842kHP94yIAXn0Rhn
-   ysTQ7lnO9QlgnKk/pB9nnDFJR+R6wngQmKxKO3iRACFsZKbtJvwvExmfZ
-   TthlCc5XbUrdDS8UaX/Nu9QbeezedOd7N0Pn0WtMenrQgnl4k8mjz1Cfe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="251583934"
-X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
-   d="scan'208";a="251583934"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 09:18:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,141,1643702400"; 
-   d="scan'208";a="640644028"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Feb 2022 09:18:39 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nONBv-0006ey-16; Sun, 27 Feb 2022 17:18:39 +0000
-Date:   Mon, 28 Feb 2022 01:18:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [jic23-iio:testing 231/235] iio-test-rescale.c:undefined reference
- to `kunit_binary_assert_format'
-Message-ID: <202202280119.ftKfZpaB-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 27 Feb 2022 12:21:00 -0500
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C7B6C958;
+        Sun, 27 Feb 2022 09:20:23 -0800 (PST)
+Received: from [45.44.224.220] (port=56330 helo=localhost)
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nONDZ-0003LN-By; Sun, 27 Feb 2022 12:20:21 -0500
+Date:   Sun, 27 Feb 2022 12:20:20 -0500
+Message-Id: <53ae4884ede7faab1f409ec635f723a0745d3656.1645981935.git.olivier@trillion01.com>
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Hao Xu <haoxu@linux.alibaba.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] io_uring: Add support for napi_busy_poll
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   95df41f4ef19f5884269e6c62dc1d128a23c94cb
-commit: 683352565c0396077086ae0bec530d03e6b3c6df [231/235] iio: test: add basic tests for the iio-rescale driver
-config: m68k-randconfig-m031-20220227 (https://download.01.org/0day-ci/archive/20220228/202202280119.ftKfZpaB-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=683352565c0396077086ae0bec530d03e6b3c6df
-        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-        git fetch --no-tags jic23-iio testing
-        git checkout 683352565c0396077086ae0bec530d03e6b3c6df
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+The sqpoll thread can be used for performing the napi busy poll in a
+similar way that it does io polling for file systems supporting direct
+access bypassing the page cache.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The other way that io_uring can be used for napi busy poll is by
+calling io_uring_enter() to get events.
 
-All errors (new ones prefixed by >>):
+If the user specify a timeout value, it is distributed between polling
+and sleeping by using the systemwide setting
+/proc/sys/net/core/busy_poll.
 
-   m68k-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_offset':
->> iio-test-rescale.c:(.text+0xaa): undefined reference to `kunit_binary_assert_format'
->> m68k-linux-ld: iio-test-rescale.c:(.text+0x134): undefined reference to `kunit_binary_str_assert_format'
-   m68k-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_scale':
-   iio-test-rescale.c:(.text+0x35e): undefined reference to `kunit_binary_assert_format'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0x4a6): undefined reference to `kunit_binary_assert_format'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0x514): undefined reference to `kunit_binary_assert_format'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0x600): undefined reference to `kunit_binary_assert_format'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0x66e): undefined reference to `kunit_binary_assert_format'
-   m68k-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_offset':
->> iio-test-rescale.c:(.text+0x20): undefined reference to `kunit_kmalloc_array'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0xfa): undefined reference to `kunit_do_assertion'
-   m68k-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_scale':
-   iio-test-rescale.c:(.text+0x2e0): undefined reference to `kunit_kmalloc_array'
-   m68k-linux-ld: iio-test-rescale.c:(.text+0x3ae): undefined reference to `kunit_do_assertion'
-   m68k-linux-ld: net/core/sock.o: in function `sk_destruct':
-   (.text+0x411a): undefined reference to `__sk_defer_free_flush'
+The changes have been tested with this program:
+https://github.com/lano1106/io_uring_udp_ping
 
+and the result is:
+Without sqpoll:
+NAPI busy loop disabled:
+rtt min/avg/max/mdev = 40.631/42.050/58.667/1.547 us
+NAPI busy loop enabled:
+rtt min/avg/max/mdev = 30.619/31.753/61.433/1.456 us
+
+With sqpoll:
+NAPI busy loop disabled:
+rtt min/avg/max/mdev = 42.087/44.438/59.508/1.533 us
+NAPI busy loop enabled:
+rtt min/avg/max/mdev = 35.779/37.347/52.201/0.924 us
+
+v2:
+ * Evaluate list_empty(&ctx->napi_list) outside io_napi_busy_loop() to keep
+   __io_sq_thread() execution as fast as possible
+ * In io_cqring_wait(), move up the sig block to avoid needless computation
+   if the block exits the function
+ * In io_cqring_wait(), protect ctx->napi_list from race condition by
+   splicing it into a local list
+ * In io_cqring_wait(), allow busy polling when uts is missing
+ * Fix kernel test robot issues
+
+Co-developed-by: Hao Xu <haoxu@linux.alibaba.com>
+Signed-off-by: Hao Xu <haoxu@linux.alibaba.com>
+Signed-off-by: Olivier Langlois <olivier@trillion01.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ fs/io_uring.c | 238 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 229 insertions(+), 9 deletions(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 4715980e9015..2759a60339d2 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -63,6 +63,7 @@
+ #include <net/sock.h>
+ #include <net/af_unix.h>
+ #include <net/scm.h>
++#include <net/busy_poll.h>
+ #include <linux/anon_inodes.h>
+ #include <linux/sched/mm.h>
+ #include <linux/uaccess.h>
+@@ -395,6 +396,10 @@ struct io_ring_ctx {
+ 	struct list_head	sqd_list;
+ 
+ 	unsigned long		check_cq_overflow;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	/* used to track busy poll napi_id */
++	struct list_head	napi_list;
++#endif
+ 
+ 	struct {
+ 		unsigned		cached_cq_tail;
+@@ -1464,6 +1469,9 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	INIT_WQ_LIST(&ctx->locked_free_list);
+ 	INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
+ 	INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	INIT_LIST_HEAD(&ctx->napi_list);
++#endif
+ 	return ctx;
+ err:
+ 	kfree(ctx->dummy_ubuf);
+@@ -5399,6 +5407,103 @@ IO_NETOP_FN(send);
+ IO_NETOP_FN(recv);
+ #endif /* CONFIG_NET */
+ 
++#ifdef CONFIG_NET_RX_BUSY_POLL
++
++#define NAPI_TIMEOUT			(60 * SEC_CONVERSION)
++
++struct napi_entry {
++	struct list_head	list;
++	unsigned int		napi_id;
++	unsigned long		timeout;
++};
++
++/*
++ * Add busy poll NAPI ID from sk.
++ */
++static void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++	unsigned int napi_id;
++	struct socket *sock;
++	struct sock *sk;
++	struct napi_entry *ne;
++
++	if (!net_busy_loop_on())
++		return;
++
++	sock = sock_from_file(file);
++	if (!sock)
++		return;
++
++	sk = sock->sk;
++	if (!sk)
++		return;
++
++	napi_id = READ_ONCE(sk->sk_napi_id);
++
++	/* Non-NAPI IDs can be rejected */
++	if (napi_id < MIN_NAPI_ID)
++		return;
++
++	list_for_each_entry(ne, &ctx->napi_list, list) {
++		if (ne->napi_id == napi_id) {
++			ne->timeout = jiffies + NAPI_TIMEOUT;
++			return;
++		}
++	}
++
++	ne = kmalloc(sizeof(*ne), GFP_KERNEL);
++	if (!ne)
++		return;
++
++	ne->napi_id = napi_id;
++	ne->timeout = jiffies + NAPI_TIMEOUT;
++	list_add_tail(&ne->list, &ctx->napi_list);
++}
++
++static inline void io_check_napi_entry_timeout(struct napi_entry *ne)
++{
++	if (time_after(jiffies, ne->timeout)) {
++		list_del(&ne->list);
++		kfree(ne);
++	}
++}
++
++/*
++ * Busy poll if globally on and supporting sockets found
++ */
++static bool io_napi_busy_loop(struct list_head *napi_list)
++{
++	struct napi_entry *ne, *n;
++
++	list_for_each_entry_safe(ne, n, napi_list, list) {
++		napi_busy_loop(ne->napi_id, NULL, NULL, true,
++			       BUSY_POLL_BUDGET);
++		io_check_napi_entry_timeout(ne);
++	}
++	return !list_empty(napi_list);
++}
++
++static void io_free_napi_list(struct io_ring_ctx *ctx)
++{
++	while (!list_empty(&ctx->napi_list)) {
++		struct napi_entry *ne =
++			list_first_entry(&ctx->napi_list, struct napi_entry,
++					 list);
++
++		list_del(&ne->list);
++		kfree(ne);
++	}
++}
++#else
++static inline void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++}
++
++static inline void io_free_napi_list(struct io_ring_ctx *ctx)
++{
++}
++#endif /* CONFIG_NET_RX_BUSY_POLL */
++
+ struct io_poll_table {
+ 	struct poll_table_struct pt;
+ 	struct io_kiocb *req;
+@@ -5777,6 +5882,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
+ 		__io_poll_execute(req, mask);
+ 		return 0;
+ 	}
++	io_add_napi(req->file, req->ctx);
+ 
+ 	/*
+ 	 * Release ownership. If someone tried to queue a tw while it was
+@@ -7519,7 +7625,11 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
+ 		    !(ctx->flags & IORING_SETUP_R_DISABLED))
+ 			ret = io_submit_sqes(ctx, to_submit);
+ 		mutex_unlock(&ctx->uring_lock);
+-
++#ifdef CONFIG_NET_RX_BUSY_POLL
++		if (!list_empty(&ctx->napi_list) &&
++		    io_napi_busy_loop(&ctx->napi_list))
++			++ret;
++#endif
+ 		if (to_submit && wq_has_sleeper(&ctx->sqo_sq_wait))
+ 			wake_up(&ctx->sqo_sq_wait);
+ 		if (creds)
+@@ -7650,6 +7760,9 @@ struct io_wait_queue {
+ 	struct io_ring_ctx *ctx;
+ 	unsigned cq_tail;
+ 	unsigned nr_timeouts;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	unsigned busy_poll_to;
++#endif
+ };
+ 
+ static inline bool io_should_wake(struct io_wait_queue *iowq)
+@@ -7711,6 +7824,87 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 	return 1;
+ }
+ 
++#ifdef CONFIG_NET_RX_BUSY_POLL
++static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
++					struct io_wait_queue *iowq)
++{
++	unsigned busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
++	struct timespec64 pollto = ns_to_timespec64(1000 * (s64)busy_poll_to);
++
++	if (timespec64_compare(ts, &pollto) > 0) {
++		*ts = timespec64_sub(*ts, pollto);
++		iowq->busy_poll_to = busy_poll_to;
++	} else {
++		s64 to = timespec64_to_ns(ts);
++
++		do_div(to, 1000);
++		iowq->busy_poll_to = to;
++		ts->tv_sec = 0;
++		ts->tv_nsec = 0;
++	}
++}
++
++static inline bool io_busy_loop_timeout(unsigned long start_time,
++					unsigned long bp_usec)
++{
++	if (bp_usec) {
++		unsigned long end_time = start_time + bp_usec;
++		unsigned long now = busy_loop_current_time();
++
++		return time_after(now, end_time);
++	}
++	return true;
++}
++
++static bool io_busy_loop_end(void *p, unsigned long start_time)
++{
++	struct io_wait_queue *iowq = p;
++
++	return signal_pending(current) ||
++	       io_should_wake(iowq) ||
++	       io_busy_loop_timeout(start_time, iowq->busy_poll_to);
++}
++
++static void io_blocking_napi_busy_loop(struct list_head *napi_list,
++				       struct io_wait_queue *iowq)
++{
++	unsigned long start_time =
++		list_is_singular(napi_list) ? 0 :
++		busy_loop_current_time();
++
++	do {
++		if (list_is_singular(napi_list)) {
++			struct napi_entry *ne =
++				list_first_entry(napi_list,
++						 struct napi_entry, list);
++
++			napi_busy_loop(ne->napi_id, io_busy_loop_end, iowq,
++				       true, BUSY_POLL_BUDGET);
++			io_check_napi_entry_timeout(ne);
++			break;
++		}
++	} while (io_napi_busy_loop(napi_list) &&
++		 !io_busy_loop_end(iowq, start_time));
++}
++
++static void io_putback_napi_list(struct io_ring_ctx *ctx,
++				 struct list_head *napi_list)
++{
++	struct napi_entry *cne, *lne;
++
++	mutex_lock(&ctx->uring_lock);
++	list_for_each_entry(cne, &ctx->napi_list, list)
++		list_for_each_entry(lne, napi_list, list)
++			if (cne->napi_id == lne->napi_id) {
++				list_del(&lne->list);
++				kfree(lne);
++				break;
++			}
++	list_splice(napi_list, &ctx->napi_list);
++	mutex_unlock(&ctx->uring_lock);
++}
++#endif /* CONFIG_NET_RX_BUSY_POLL */
++
+ /*
+  * Wait until events become available, if we don't already have some. The
+  * application must reap them itself, as they reside on the shared cq ring.
+@@ -7723,6 +7917,9 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 	struct io_rings *rings = ctx->rings;
+ 	ktime_t timeout = KTIME_MAX;
+ 	int ret;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	LIST_HEAD(local_napi_list);
++#endif
+ 
+ 	do {
+ 		io_cqring_overflow_flush(ctx);
+@@ -7732,14 +7929,6 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 			break;
+ 	} while (1);
+ 
+-	if (uts) {
+-		struct timespec64 ts;
+-
+-		if (get_timespec64(&ts, uts))
+-			return -EFAULT;
+-		timeout = ktime_add_ns(timespec64_to_ktime(ts), ktime_get_ns());
+-	}
+-
+ 	if (sig) {
+ #ifdef CONFIG_COMPAT
+ 		if (in_compat_syscall())
+@@ -7753,6 +7942,30 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 			return ret;
+ 	}
+ 
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	iowq.busy_poll_to = 0;
++	if (!(ctx->flags & IORING_SETUP_SQPOLL)) {
++		mutex_lock(&ctx->uring_lock);
++		list_splice_init(&ctx->napi_list, &local_napi_list);
++		mutex_unlock(&ctx->uring_lock);
++	}
++#endif
++	if (uts) {
++		struct timespec64 ts;
++
++		if (get_timespec64(&ts, uts))
++			return -EFAULT;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++		if (!list_empty(&local_napi_list))
++			io_adjust_busy_loop_timeout(&ts, &iowq);
++#endif
++		timeout = ktime_add_ns(timespec64_to_ktime(ts), ktime_get_ns());
++	}
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	else if (!list_empty(&local_napi_list))
++		iowq.busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
++#endif
++
+ 	init_waitqueue_func_entry(&iowq.wq, io_wake_function);
+ 	iowq.wq.private = current;
+ 	INIT_LIST_HEAD(&iowq.wq.entry);
+@@ -7761,6 +7974,12 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 	iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
+ 
+ 	trace_io_uring_cqring_wait(ctx, min_events);
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	if (iowq.busy_poll_to)
++		io_blocking_napi_busy_loop(&local_napi_list, &iowq);
++	if (!list_empty(&local_napi_list))
++		io_putback_napi_list(ctx, &local_napi_list);
++#endif
+ 	do {
+ 		/* if we can't even flush overflow, don't wait for more */
+ 		if (!io_cqring_overflow_flush(ctx)) {
+@@ -9450,6 +9669,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 		__io_sqe_files_unregister(ctx);
+ 	if (ctx->rings)
+ 		__io_cqring_overflow_flush(ctx, true);
++	io_free_napi_list(ctx);
+ 	mutex_unlock(&ctx->uring_lock);
+ 	io_eventfd_unregister(ctx);
+ 	io_destroy_buffers(ctx);
+-- 
+2.35.1
+

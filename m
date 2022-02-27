@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178C24C58E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 02:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554914C58EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 03:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiB0BZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 20:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S229651AbiB0Bx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 20:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiB0BZP (ORCPT
+        with ESMTP id S229533AbiB0Bxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 20:25:15 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7344615A232;
-        Sat, 26 Feb 2022 17:24:39 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21R1JEtP000676;
-        Sat, 26 Feb 2022 19:19:14 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21R1JEI3000675;
-        Sat, 26 Feb 2022 19:19:14 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Sat, 26 Feb 2022 19:19:13 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sat, 26 Feb 2022 20:53:51 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C070252E36
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 17:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645926796; x=1677462796;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bE4VIKgBw3KUTe6gb/Ux3bw6tp20+o5UM0Bc15Qd8Dc=;
+  b=XflOipTbvKybnPKyyensjNbAJeYcqaH8RNd0RGvYQsdtKH90e1BSReho
+   Nl7Y5CWnHgAB3Cvowx3yEkju74GkyzoMW/PHzjLYlxQsoJM30GPZ8fXPB
+   pADX0ywVxZO62Qufrexk5Sp8VMo9Rm5f+KTzxp9FH/RZNCs1lV+ZbhSqq
+   MNuLUa3frSm9loPBq9okVryeTl8QAJT4kDoPDqa3NxqNn1+0lvXIW5vjb
+   9RrLofxBJTxyq40w4qst+YLbM7gTFMOx10AvKf/IMsjFGjblqSE1J2m26
+   UCqz4B3Zy8o+OWMP0nmX6Y/7svsKX3lMx+7Vo2x+Ug0+1IO9+bg1JCx/H
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="236201816"
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="236201816"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 17:53:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="534021377"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 26 Feb 2022 17:53:14 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nO8kL-00068E-P8; Sun, 27 Feb 2022 01:53:13 +0000
+Date:   Sun, 27 Feb 2022 09:52:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator after the loop
-Message-ID: <20220227011913.GX614@gate.crashing.org>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com> <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com> <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com> <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com> <CAHk-=wjAG2TZj5rEhiHyuD7KoffTLhikXy7OSj2f8QXAf7M=2A@mail.gmail.com>
-Mime-Version: 1.0
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:next/linux-next/master 210/370] mips64-linux-ld:
+ undefined reference to `node_data'
+Message-ID: <202202270950.3wI5UHsb-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjAG2TZj5rEhiHyuD7KoffTLhikXy7OSj2f8QXAf7M=2A@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 03:03:09PM -0800, Linus Torvalds wrote:
-> On Sat, Feb 26, 2022 at 2:14 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > Could gcc follow the clang behavior then and skip the warning and
-> > sanitizer for this case when -fno-strict-overflow or -fwrapv are used?
-> 
-> Well, for the kernel, that horse has already left the barn, and we'd
-> have to use -Wno-shift-negative-value anyway.
-> 
-> But yes, from a sanity standpoint, it would be good to shut that
-> warning up automatically if compiling for a 2's complement machine (ie
-> "all of them") with -fwrapv.
-> 
-> Considering that gcc doesn't support any non-2's-complement machines
-> anyway afaik,
+tree:   https://github.com/ammarfaizi2/linux-block next/linux-next/master
+head:   06aeb1495c39c86ccfaf1adadc1d2200179f16eb
+commit: e2ad74daf436b686b3c8456ea277bfdc94188c8e [210/370] mm: handle uninitialized numa nodes gracefully
+config: mips-randconfig-r011-20220227 (https://download.01.org/0day-ci/archive/20220227/202202270950.3wI5UHsb-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e2ad74daf436b686b3c8456ea277bfdc94188c8e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block next/linux-next/master
+        git checkout e2ad74daf436b686b3c8456ea277bfdc94188c8e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-   * 'Whether signed integer types are represented using sign and
-     magnitude, two's complement, or one's complement, and whether the
-     extraordinary value is a trap representation or an ordinary value
-     (C99 and C11 6.2.6.2).'
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-     GCC supports only two's complement integer types, and all bit
-     patterns are ordinary values.
+All errors (new ones prefixed by >>):
 
-> and that the C standards people are also fixing the
-> standard, and gcc has never done anything odd in this area in the
-> first place, I think the warning is probably best removed entirely.
+   mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
+   (.init.text+0x1d94): undefined reference to `node_data'
+>> mips64-linux-ld: (.init.text+0x1dac): undefined reference to `node_data'
 
-Well, not removed, it correctly identifies (formally) undefined
-behaviour after all; but I agree it should not be in -Wextra.
-
--Wall should include the warnings that have a very good balance for
-usefulness, number of false postives, seriousness of problems found.
--Wextra is exactly the same conditions, just a slightly lower bar.
-
--Wall should be useful for everyone.  -Wall -W should be good for most
-people.
-
-> But we'll have to do it manually for the existing situation.
-
-Yes, sorry about that :-/
-
-
-Segher
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

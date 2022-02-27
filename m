@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3771E4C5A13
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 09:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A174C5A15
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 09:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiB0IbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 03:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S230180AbiB0IbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 03:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiB0IbD (ORCPT
+        with ESMTP id S230161AbiB0IbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 27 Feb 2022 03:31:03 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DC04160F
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B9F4160E
         for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 00:30:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1645950628; x=1677486628;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RX7guhZRVsR1nIUxY5slKJ+duPcYqpYAj8ekDfSN8bc=;
-  b=awMT7kgjkZ/tcn1NcvwNRIe2XHtON7OiNNqBEFVeYiGMZAtkvALd7A2O
-   DDqCurHhNxgajeAIkF2b70VCLD2ISgw45r7QWTX2vha2HzaVrC9crEA29
-   v3D3ysxmmif6shCR8b4DrLo9pBvnUDX+QlvOVsll4IfR+eHI3LlCciA8W
-   5qdyRaCDyqnrROJNSaFKr/qLrRfsiniGNK4c+VLnRaGvVnjLuIeHbHNkx
-   I0HbQexi0Tj/7AOJ+fnxKAKWwTi1Ve9EUNnkZhccaINvySR4/sOi7yUUF
-   DU3I5WY5F5wrZry2Tx3Oy3e6S4pBUkwq3UnXsI5fhJjDRJcxW7CZJF/j/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="236221236"
+  bh=j10G1VcLXMBXLEFFIwFDntw3fr0Vz7dkZs8XQ0beStE=;
+  b=RE25MaJc0GD8OMrgjO97Rp10hBc8Or2AuaQ85JCBoXdisP8GJHeN4qjB
+   TmcAHBMJqjpVoyxhwR+n6T09dbTsSM9hF92yUHOL6G5NnU9F0ZYNdKEvN
+   kuVg4KY76dcO4cw6hZMYHPIZCGkYJ1qb62tVyYM2QVy+QDTDkJmwOylwV
+   0jIcdJOPjLO9k1AET0UkCRAMbvO4LDl+7TWM6V7ZURMQKX5r+UN/EBlLO
+   6Z50CU+LHIhGYof3uVtdjNGbeySEAIj65/WXOYNCLtBk2p/5mfINqS6s1
+   7CMNVz2uJsKyzxaG9J1rjHP4G1EmuBCfGqn8bENXQ0zOgScFJQcraVj08
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="251549522"
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="236221236"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 00:30:27 -0800
+   d="scan'208";a="251549522"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 00:30:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
-   d="scan'208";a="799049999"
+   d="scan'208";a="777796788"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Feb 2022 00:30:26 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 00:30:26 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nOEwj-0006Na-AV; Sun, 27 Feb 2022 08:30:25 +0000
-Date:   Sun, 27 Feb 2022 16:29:30 +0800
+        id 1nOEwj-0006Nc-Bn; Sun, 27 Feb 2022 08:30:25 +0000
+Date:   Sun, 27 Feb 2022 16:29:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: {standard input}:2277: Error: pcrel offset for branch to .LS000B too
- far (0x3c)
-Message-ID: <202202271612.W32UJAj2-lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
+Subject: [atishp04:sstc_v1 14/14] arch/riscv/kvm/vcpu_timer.c:312:48:
+ warning: shift count >= width of type
+Message-ID: <202202271658.AtS8XIAq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2293be58d6a18cab800e25e42081bacb75c05752
-commit: cf536e185869d4815d506e777bcca6edd9966a6e Makefile: extend 32B aligned debug option to 64B aligned
-date:   9 months ago
-config: csky-randconfig-r003-20220227 (https://download.01.org/0day-ci/archive/20220227/202202271612.W32UJAj2-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
+tree:   https://github.com/atishp04/linux sstc_v1
+head:   8904ca0d06f70e6d150b60b72d5ce21044ac9208
+commit: 8904ca0d06f70e6d150b60b72d5ce21044ac9208 [14/14] RISC-V: KVM: Support sstc extension
+config: riscv-randconfig-c006-20220227 (https://download.01.org/0day-ci/archive/20220227/202202271658.AtS8XIAq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cf536e185869d4815d506e777bcca6edd9966a6e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cf536e185869d4815d506e777bcca6edd9966a6e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/atishp04/linux/commit/8904ca0d06f70e6d150b60b72d5ce21044ac9208
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v1
+        git checkout 8904ca0d06f70e6d150b60b72d5ce21044ac9208
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   {standard input}: Assembler messages:
->> {standard input}:2277: Error: pcrel offset for branch to .LS000B too far (0x3c)
+>> arch/riscv/kvm/vcpu_timer.c:312:48: warning: shift count >= width of type [-Wshift-count-overflow]
+           csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
+                                                         ^  ~~
+   arch/riscv/include/asm/csr.h:283:38: note: expanded from macro 'csr_write'
+           unsigned long __v = (unsigned long)(val);               \
+                                               ^~~
+   arch/riscv/kvm/vcpu_timer.c:337:45: warning: shift count >= width of type [-Wshift-count-overflow]
+           csr->vstimecmp |= csr_read(CSR_VSTIMECMPH) >> 32;
+                                                      ^  ~~
+   2 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for LOCKDEP
-   Depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && (FRAME_POINTER || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
-   Selected by
-   - PROVE_LOCKING && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-   - LOCK_STAT && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-   - DEBUG_LOCK_ALLOC && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+
+vim +312 arch/riscv/kvm/vcpu_timer.c
+
+   295	
+   296	void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+   297	{
+   298		struct kvm_vcpu_timer *vst;
+   299		struct kvm_vcpu_csr *csr;
+   300	
+   301		kvm_riscv_vcpu_update_timedelta(vcpu);
+   302	
+   303		if (!cpu_sstc_ext_available)
+   304			return;
+   305	
+   306		vst = &vcpu->arch.vstimer;
+   307		csr = &vcpu->arch.guest_csr;
+   308	#ifdef CONFIG_64BIT
+   309		csr_write(CSR_VSTIMECMP, csr->vstimecmp);
+   310	#else
+   311		csr_write(CSR_VSTIMECMP, (u32)csr->vstimecmp);
+ > 312		csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
+   313	#endif
+   314	
+   315		/* vstimer should be enabled for the remaining operations */
+   316		if (unlikely(!vst->init_done))
+   317			return;
+   318	
+   319		if (kvm_vcpu_is_blocking(vcpu))
+   320			kvm_riscv_vcpu_timer_blocking(vcpu);
+   321	}
+   322	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

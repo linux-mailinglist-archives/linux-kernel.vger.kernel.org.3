@@ -2,196 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F244C5958
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7D94C5990
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiB0FVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 00:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S230023AbiB0F2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 00:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiB0FVq (ORCPT
+        with ESMTP id S230033AbiB0F2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 00:21:46 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B0A1A9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:21:07 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id j2so10784028oie.7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:21:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=p2FWvVh852y2LuuIcxOEeOh71QGBakz57Fy4Yg2jNNk=;
-        b=KA7CUCmtmuqwszPd+rLI9ma1GA48BscFi+N6WDfKdfsAoVrlvoilC1tabQctfgtt3M
-         FcQ4B8NXp8iTxwzFiXmhyWenouBWK/KBCSdcFIye0WaFmCkg0Qdfbnd4dnjNCExcysll
-         j++5OjqKJiD0rswZOI76zprXBM5FbnibqxbhC1RZDQNHNU0PNiJ4jaI5TeSc6mQEti/Q
-         AhEWzKAR/Ha51rdBm2yhOqmyo7BBpqwGZSQ3RxOXhVLUsOr41MrP0f9GUg5q2dEFmBAy
-         Q9TYZzN9t8nOeYluwKuE5cLUSg5FWFLhjiTy/GOls52uGKrQKpEOy4+WAJiq+XDW9hy1
-         ZfZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=p2FWvVh852y2LuuIcxOEeOh71QGBakz57Fy4Yg2jNNk=;
-        b=joRoTG/d41q6R/7Mk7Eg3tqs4Tb0UF7z+4dYTVCuzZLrooySigbgWf7zz/cZvnRXAd
-         HPFz35EvCOTOPDZybTabedpmhvMVpObxj0sMIzOC0oVdSowCAR6DrhzLW8MQSPJvO9YI
-         5uukaa2APl1+SqhbsXH2UfOgXELw0JY/ib055an3gLVoFvb6uxqSN4ttatdjfOMkkgOR
-         K9tc5iFqWe61B/QhNFjmFUTgie+bQ7QLrjmFI85aKatWlt8FaYzvyX4OQiBXs9A+IWYk
-         n15EaCiXeFmKHXj4Zcumk6W4QenXrii+SdGgra9DBe5W4rMOrsJ6jpNzspW43YrfpwvU
-         ra4g==
-X-Gm-Message-State: AOAM533ke+qzg67E8LrDuyFvCIrhfUcP4gSieHtwRNuW44UksuNGDtGl
-        JV98CssRTWoSuT8FMl4a1X2q5A==
-X-Google-Smtp-Source: ABdhPJx6ungPL3K2I3A01hBjvb+zC2oK7mINCnfZ+jEAhf8zrgU9LlxSxNMKTYBYD1LkQHJQsjEBvw==
-X-Received: by 2002:aca:4b96:0:b0:2d7:2d16:f18e with SMTP id y144-20020aca4b96000000b002d72d16f18emr6583764oia.74.1645939266668;
-        Sat, 26 Feb 2022 21:21:06 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id q6-20020a9d57c6000000b005ad5a1edd4csm3302900oti.22.2022.02.26.21.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 21:21:06 -0800 (PST)
-Date:   Sat, 26 Feb 2022 21:20:54 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>, cgel.zte@gmail.com,
-        kirill@shutemov.name, songliubraving@fb.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
-Subject: [PATCH] memfd: fix F_SEAL_WRITE after shmem huge page allocated
-In-Reply-To: <8986d97-3933-8fa7-abba-aabd67924bc2@google.com>
-Message-ID: <a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com>
-References: <20220215073743.1769979-1-cgel.zte@gmail.com> <1f486393-3829-4618-39a1-931afc580835@oracle.com> <d6e74520-88bc-9f57-e189-8e4f389726e@google.com> <Yg5RDDRLVsuT/Rfw@casper.infradead.org> <8986d97-3933-8fa7-abba-aabd67924bc2@google.com>
+        Sun, 27 Feb 2022 00:28:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B7213FB5
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645939644; x=1677475644;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dThaRCARWgD0WYtApn63KdLoojWjy8sjVprrcytnsSE=;
+  b=a5riqrwOxpXDRuTsfZCzl0FFoyAWP/tz8ZuU+6S50siv5bnDtQrOfuWX
+   nuLCWOCmq/jynB/g8/FMtmUVYrpXdIJKDEMh/Iw19TpHo1zda/F5JrNfw
+   2VUdTdPTCtbfjHaJALb9YQOU++nKAxKJPbuiPMyVpO7bGhtffVF4D8VeS
+   mkWoyQwYDkaC0KHCChom6i0zczgf5A3FtEAqWfuqYzuf/jfx3J0huYIAM
+   8O3CopSDphLWoO/y36bcaf3Gupp4cjE0yEcCwE0MG+2+tdbJrIxxC9NJA
+   VZg0UzALkY7EsfvLaFFtG5rQX+3r7i+A5KCdkbL1K0Zu1zkeX1gsQSSO3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="252436018"
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="252436018"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 21:27:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,140,1643702400"; 
+   d="scan'208";a="640542586"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Feb 2022 21:27:22 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOC5Z-0006G1-V2; Sun, 27 Feb 2022 05:27:21 +0000
+Date:   Sun, 27 Feb 2022 13:26:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [atishp04:sstc_v1 14/14] arch/riscv/kvm/vcpu_timer.c:312:55:
+ warning: right shift count >= width of type
+Message-ID: <202202271321.biwCXG9G-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wangyong reports: after enabling tmpfs filesystem to support
-transparent hugepage with the following command:
+tree:   https://github.com/atishp04/linux sstc_v1
+head:   8904ca0d06f70e6d150b60b72d5ce21044ac9208
+commit: 8904ca0d06f70e6d150b60b72d5ce21044ac9208 [14/14] RISC-V: KVM: Support sstc extension
+config: riscv-randconfig-r001-20220227 (https://download.01.org/0day-ci/archive/20220227/202202271321.biwCXG9G-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/atishp04/linux/commit/8904ca0d06f70e6d150b60b72d5ce21044ac9208
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v1
+        git checkout 8904ca0d06f70e6d150b60b72d5ce21044ac9208
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
- echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-the docker program tries to add F_SEAL_WRITE through the following
-command, but it fails unexpectedly with errno EBUSY:
+All warnings (new ones prefixed by >>):
 
- fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
+   In file included from arch/riscv/include/asm/ptrace.h:10,
+                    from arch/riscv/include/asm/processor.h:13,
+                    from arch/riscv/include/asm/irqflags.h:10,
+                    from include/linux/irqflags.h:16,
+                    from arch/riscv/include/asm/bitops.h:14,
+                    from include/linux/bitops.h:33,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from ./arch/riscv/include/generated/asm/div64.h:1,
+                    from include/linux/math.h:5,
+                    from include/linux/math64.h:6,
+                    from include/linux/time64.h:5,
+                    from include/linux/restart_block.h:10,
+                    from include/linux/thread_info.h:14,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/percpu.h:6,
+                    from include/linux/context_tracking_state.h:5,
+                    from include/linux/hardirq.h:5,
+                    from include/linux/kvm_host.h:7,
+                    from arch/riscv/kvm/vcpu_timer.c:11:
+   arch/riscv/kvm/vcpu_timer.c: In function 'kvm_riscv_vcpu_timer_restore':
+>> arch/riscv/kvm/vcpu_timer.c:312:55: warning: right shift count >= width of type [-Wshift-count-overflow]
+     312 |         csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
+         |                                                       ^~
+   arch/riscv/include/asm/csr.h:283:45: note: in definition of macro 'csr_write'
+     283 |         unsigned long __v = (unsigned long)(val);               \
+         |                                             ^~~
+   arch/riscv/kvm/vcpu_timer.c: In function 'kvm_riscv_vcpu_timer_save':
+   arch/riscv/kvm/vcpu_timer.c:337:52: warning: right shift count >= width of type [-Wshift-count-overflow]
+     337 |         csr->vstimecmp |= csr_read(CSR_VSTIMECMPH) >> 32;
+         |                                                    ^~
 
-That is because memfd_tag_pins() and memfd_wait_for_pins() were never
-updated for shmem huge pages: checking page_mapcount() against
-page_count() is hopeless on THP subpages - they need to check
-total_mapcount() against page_count() on THP heads only.
 
-Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
-(compared != 1): either can be justified, but given the non-atomic
-total_mapcount() calculation, it is better now to be strict.  Bear in
-mind that total_mapcount() itself scans all of the THP subpages, when
-choosing to take an XA_CHECK_SCHED latency break.
+vim +312 arch/riscv/kvm/vcpu_timer.c
 
-Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
-page has been swapped out since memfd_tag_pins(), then its refcount must
-have fallen, and so it can safely be untagged.
+   295	
+   296	void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+   297	{
+   298		struct kvm_vcpu_timer *vst;
+   299		struct kvm_vcpu_csr *csr;
+   300	
+   301		kvm_riscv_vcpu_update_timedelta(vcpu);
+   302	
+   303		if (!cpu_sstc_ext_available)
+   304			return;
+   305	
+   306		vst = &vcpu->arch.vstimer;
+   307		csr = &vcpu->arch.guest_csr;
+   308	#ifdef CONFIG_64BIT
+   309		csr_write(CSR_VSTIMECMP, csr->vstimecmp);
+   310	#else
+   311		csr_write(CSR_VSTIMECMP, (u32)csr->vstimecmp);
+ > 312		csr_write(CSR_VSTIMECMPH, (u32)csr->vstimecmp >> 32);
+   313	#endif
+   314	
+   315		/* vstimer should be enabled for the remaining operations */
+   316		if (unlikely(!vst->init_done))
+   317			return;
+   318	
+   319		if (kvm_vcpu_is_blocking(vcpu))
+   320			kvm_riscv_vcpu_timer_blocking(vcpu);
+   321	}
+   322	
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: wangyong <wang.yong12@zte.com.cn>
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Cc: <stable@vger.kernel.org>
 ---
-Andrew, please remove
-fix-shmem-huge-page-failed-to-set-f_seal_write-attribute-problem.patch
-fix-shmem-huge-page-failed-to-set-f_seal_write-attribute-problem-fix.patch
-from mmotm, and replace them by this patch against 5.17-rc5:
-wangyong's patch did not handle the case of pte-mapped huge pages, and I
-had this one from earlier, when I found the same issue with MFD_HUGEPAGE
-(but MFD_HUGEPAGE did not go in, so I didn't post this one, forgetting
-the transparent_hugepage/shmem_enabled case).
-
- mm/memfd.c |   40 ++++++++++++++++++++++++++++------------
- 1 file changed, 28 insertions(+), 12 deletions(-)
-
---- 5.17-rc5/mm/memfd.c
-+++ linux/mm/memfd.c
-@@ -31,20 +31,28 @@
- static void memfd_tag_pins(struct xa_state *xas)
- {
- 	struct page *page;
--	unsigned int tagged = 0;
-+	int latency = 0;
-+	int cache_count;
- 
- 	lru_add_drain();
- 
- 	xas_lock_irq(xas);
- 	xas_for_each(xas, page, ULONG_MAX) {
--		if (xa_is_value(page))
--			continue;
--		page = find_subpage(page, xas->xa_index);
--		if (page_count(page) - page_mapcount(page) > 1)
-+		cache_count = 1;
-+		if (!xa_is_value(page) &&
-+		    PageTransHuge(page) && !PageHuge(page))
-+			cache_count = HPAGE_PMD_NR;
-+
-+		if (!xa_is_value(page) &&
-+		    page_count(page) - total_mapcount(page) != cache_count)
- 			xas_set_mark(xas, MEMFD_TAG_PINNED);
-+		if (cache_count != 1)
-+			xas_set(xas, page->index + cache_count);
- 
--		if (++tagged % XA_CHECK_SCHED)
-+		latency += cache_count;
-+		if (latency < XA_CHECK_SCHED)
- 			continue;
-+		latency = 0;
- 
- 		xas_pause(xas);
- 		xas_unlock_irq(xas);
-@@ -73,7 +81,8 @@ static int memfd_wait_for_pins(struct ad
- 
- 	error = 0;
- 	for (scan = 0; scan <= LAST_SCAN; scan++) {
--		unsigned int tagged = 0;
-+		int latency = 0;
-+		int cache_count;
- 
- 		if (!xas_marked(&xas, MEMFD_TAG_PINNED))
- 			break;
-@@ -87,10 +96,14 @@ static int memfd_wait_for_pins(struct ad
- 		xas_lock_irq(&xas);
- 		xas_for_each_marked(&xas, page, ULONG_MAX, MEMFD_TAG_PINNED) {
- 			bool clear = true;
--			if (xa_is_value(page))
--				continue;
--			page = find_subpage(page, xas.xa_index);
--			if (page_count(page) - page_mapcount(page) != 1) {
-+
-+			cache_count = 1;
-+			if (!xa_is_value(page) &&
-+			    PageTransHuge(page) && !PageHuge(page))
-+				cache_count = HPAGE_PMD_NR;
-+
-+			if (!xa_is_value(page) && cache_count !=
-+			    page_count(page) - total_mapcount(page)) {
- 				/*
- 				 * On the last scan, we clean up all those tags
- 				 * we inserted; but make a note that we still
-@@ -103,8 +116,11 @@ static int memfd_wait_for_pins(struct ad
- 			}
- 			if (clear)
- 				xas_clear_mark(&xas, MEMFD_TAG_PINNED);
--			if (++tagged % XA_CHECK_SCHED)
-+
-+			latency += cache_count;
-+			if (latency < XA_CHECK_SCHED)
- 				continue;
-+			latency = 0;
- 
- 			xas_pause(&xas);
- 			xas_unlock_irq(&xas);
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

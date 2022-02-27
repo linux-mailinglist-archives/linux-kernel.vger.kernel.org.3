@@ -2,149 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93304C5ED9
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB684C5EDC
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiB0Uwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 15:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S231348AbiB0U5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 15:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiB0Uwm (ORCPT
+        with ESMTP id S229482AbiB0U5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 15:52:42 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9BC6CA56;
-        Sun, 27 Feb 2022 12:52:05 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id bq11so14860773edb.2;
-        Sun, 27 Feb 2022 12:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z1ZiN7+HYTmPnWKRoprEVX0bDh5aoOqwKR44umyuBnc=;
-        b=Zf8bWunWTeV2YZSJjRrBN09d5dmBapzHaNBQrsPwqGtJWYYzqN43dRmbrmcB6MS/af
-         7qjQMKGpPmTEblVepX+4mJHAmKKWZx+ZVR3A31e3t9eSQ3NviCom+7lLOqIngkinN9dg
-         gM8YblLTaOxqldX04nC1ZewAmIG4S6psZK09xFYkrEHW/F+A+qhow57UVdU77fN23Sa6
-         Ri60eghsYyPDN/RsE5CbRd6QqEyOXS4fhtlorza6cpqc1vLf1LZdiUH4wBFAkKsCdISn
-         pUbzeEY4U46dcP5WuQaJqfkTq2plX11jM4OsyqK7CBRq2RW+P/rlxIQ+R/HtLUTBFAkc
-         6tig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1ZiN7+HYTmPnWKRoprEVX0bDh5aoOqwKR44umyuBnc=;
-        b=iXZ8rg7AZhAjaLCKcp4z0G2lIInS3bcM6yFpAwwhj01EMUyAJm3He4g0GhDS4zrOuF
-         dEuNdIvDaLbrs3kRjD8gB7nsajtJmUD4fwW64kmrmz7KoSD4tvVNn8Vj1Xzy75a50qEj
-         sgdSAofR8gpzsAipLzDwGkiknuqL+zaPGZG5n5GN0cXgRxLR/3iJQHH4ds5VED0rO5tt
-         sH0AXKC7u2KcwUg/Z+7QX7sNkz7YdEtxqcjVYse5TLwnv7/3dqE4+ro9cB1eJr+TtSla
-         AHOuNGheU3uu3eXM/Wmt1uAY1Pjp7h8GTwF7e/rHk1wedO+218RkUh5QZ6hr8rE/6oAM
-         gO1g==
-X-Gm-Message-State: AOAM53344HOImqZSLJX0uui5IAl9XL/pqAc/0zZMSdChCFEE3rV9nrgZ
-        GEQ9ZJBOqltYkMwZT8PG/y+B6DR1Bzs8mOxVY2w=
-X-Google-Smtp-Source: ABdhPJw9LzCp9nh96a/8BcX1Zoc1Z5NOv4vzNOYAd49IifSS/tujrO1CbuwamzfbKRP5GNeNaQwcYwWM5QwIEMeyYJs=
-X-Received: by 2002:a50:d496:0:b0:413:2cf1:efb6 with SMTP id
- s22-20020a50d496000000b004132cf1efb6mr16536681edi.150.1645995123598; Sun, 27
- Feb 2022 12:52:03 -0800 (PST)
+        Sun, 27 Feb 2022 15:57:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99F9E2FFE7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 12:56:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F5121063;
+        Sun, 27 Feb 2022 12:56:22 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0F233F66F;
+        Sun, 27 Feb 2022 12:56:20 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        peter.hilber@opensynergy.com, cristian.marussi@arm.com
+Subject: [RFC PATCH 00/16] Introduce SCMI test driver and related Kselftest
+Date:   Sun, 27 Feb 2022 20:55:52 +0000
+Message-Id: <20220227205608.30812-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <cover.1645558375.git.riteshh@linux.ibm.com> <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
- <CAK896s7V7wj0Yiu0NQEFvmS9-oivJUosgMYW5UBJ4cX2YCSh6g@mail.gmail.com>
- <20220223135755.plbr2fvt66k3xyn5@riteshh-domain> <CAK896s7GsY_qGPZpA0KvmfsA7frkP0=nO8Fg3qd-ObmL-g+8AA@mail.gmail.com>
-In-Reply-To: <CAK896s7GsY_qGPZpA0KvmfsA7frkP0=nO8Fg3qd-ObmL-g+8AA@mail.gmail.com>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Sun, 27 Feb 2022 12:51:52 -0800
-Message-ID: <CAD+ocbySFC=fzqotCdg5hsNE8D3H_7eoU2QdHE0jmsa+z_x0qw@mail.gmail.com>
-Subject: Re: [External] [RFC 9/9] ext4: fast_commit missing tracking updates
- to a file
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > So, yes these are few corner cases which I want to take a deeper look at.
-> > I vaugely understand that this reset inode is done since we anyway might have
-> > done the full commit for previous tid, so we can reset the inode track range.
-> >
-> > So, yes, we should carefully review this as well that if jbd2 commit happens for
-> > an inode which is still part of MAIN_Q, then does it make sense to still
-> > call ext4_fc_reset_inode() for that inode in ext4_fc_track_template()?
-What this code assumes here is that if tid != ei->i_sync_tid, then the
-fast commit information present in the inode cannot be trusted. This
-is useful when the inode is added to the fast commit queue for the
-first ever or first time during the current transaction. Also note the
-"update" parameter, if update is set to false, then the track
-functions know that this is the first time the track function is
-called since the last (fast / full) commit.
+Hi all,
 
-I think the simple invariant that we need to follow is that, once an
-inode is committed (either by fast or full commit)
-ext4_fc_reset_inode() should be called exactly once before any track
-functions get called. So, if we can ensure that reset gets called on
-all inodes that were committed by fast commit / full commit exactly
-once before any track functions update the fc info, then we don't
-really need this reset call here.
+this RFC series is meant to introduce and gather some initial feedback on
+a new possible SCMI test infrastructure.
 
-> > > > 2. Also is this an expected behavior from the design perspective of
-> > > >    fast_commit. i.e.
-> > > >    a. the inode can be part of two tids?
-From a design perspective, in fast commits, inode updates are not
-strictly tied to tids. We reuse i_sync_tid only to detect if the
-updates to an inode are committed or not. But at a high level, inode
-can be in 3 states from fc perspective - (1) inode is not modified
-since last fast commit / full commit (2) inode is modified since last
-fast commit / full commit (3) inode is being committed by fast commit.
-Well, this makes me think that these states can also be represented by
-inode states, and maybe if we do that we can get rid of reliance on
-i_sync_tid altogether? This needs a bit more thought.
-> > > >    b. And that while a full commit is in progress, the inode can still
-> > > >    receive updates but using a new transaction tid.
-Yeah, inode can still receive updates if a full commit is ongoing. If
-a fast commit is ongoing on a particular update, then the inode will
-not receive updates. EXT4_FC_STATE_COMMITTING will protect against it.
-In the new patch that I'm working on (sorry for the delay on that),
-what I'm doing is that handles that modify inode wait if the inode is
-being committed.
+The aim is to be able to test the core SCMI Kernel stack in isolation
+exercising directly the SCMI protocol interface defined in scmi_protocol.h
+without relying on the normal SCMI driver users already present in the
+Kernel (like clk-scmi or cpufreq-scmi).
 
-- Harshad
-> > > >
-> > > > Frankly speaking, since I was also working on other things, so I haven't
-> > > > yet got the chance to completely analyze the situation yet.
-> > > > Once I have those things sorted, I will spend more time on this, to
-> > > > understand it more. Meanwhile if you already have some answers to above
-> > > > queries/observations, please do share those here.
-> > > >
-> > > > Links
-> > > > =========
-> > > > [1] https://raw.githubusercontent.com/riteshharjani/LinuxStudy/master/ext4/fast_commit/fc_inode_missing_updates_ino_979.txt
-> > > >
-> > > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> > > > ---
-> > > >  fs/ext4/fast_commit.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> > > > index 8803ba087b07..769b584c2552 100644
-> > > > --- a/fs/ext4/fast_commit.c
-> > > > +++ b/fs/ext4/fast_commit.c
-> > > > @@ -1252,6 +1252,8 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
-> > > >         spin_lock(&sbi->s_fc_lock);
-> > > >         list_for_each_entry_safe(iter, iter_n, &sbi->s_fc_q[FC_Q_MAIN],
-> > > >                                  i_fc_list) {
-> > > > +               if (full && iter->i_sync_tid > tid)
-> > > > +                       continue;
-> > > >                 list_del_init(&iter->i_fc_list);
-> > > >                 ext4_clear_inode_state(&iter->vfs_inode,
-> > > >                                        EXT4_STATE_FC_COMMITTING);
-> > > > --
-> > > > 2.31.1
-> > > >
+The reason for this approach is twofold, on one side the SCMI protocol
+operations interface in scmi_protocol.h is not necessarily used to its full
+exent by the existenting SCMI drivers users, on the other side we don't
+want to be constrained in our testing by possible internal constraints
+imposed by such subsystems on a production system (for good resasons) or by
+the usage patterns enforced by their related API.
+As an example the CLK subsystem enforces refcounts on enable/disable ops
+and the limited debugfs that is made available for testing does not cover
+all the possible SCMI operations and it is hardly configurable at compile
+time since such flexibility in setting clk rates is deemed dangerous on a
+production system. (for good reasons in fact)
+
+In order to do so, a new SCMI test driver is introduced which is in all
+regards a regular SCMI driver (like cpufreq-scmi or clk-scmi) that, first
+of all, at probe time, registers as a user for each and every SCMI protocol
+(if supported by the underlying SCMI platform server and by this testing
+driver) and then takes care to expose on a dedicated SCMI debugfs each
+and every SCMI protocol operation and some informational data.
+
+The only fundamental differences with a regular SCMI production driver
+(like clk-scmi or cpufreq-scmi) are that it:
+
+ - registers itself for ALL the available and supported SCMI protocols
+   (not just one)
+ - excludes from the SCMI stack any other production SCMI driver
+   (unless cohexistence is allowed by an explicit Kconfig in patch 16/16)
+
+The idea is, on one side, to avoid any possible interference during testing
+from concurrently running production drivers possibly accessing the same
+SCMI protocol stack and, on the other side, avoid the possibility of
+deploying by mistake a system in production which exposes also all the
+SCMI interface in debugfs via the SCMI testing driver.
+
+Once the SCMI protocols interface is exposed in debugfs as such we can
+happily script our testcases in terms of kselftest as esemplified in patch
+15/16. (only reported here as an example ... the KSelftests are RFC^2 and
+to be fully re-written)
+
+The resulting SCMI debugfs is roughly structured as detailed down below.
+
+At the top layer, there are two main informational directories (info/ and
+transport/ holding some general data related to SCMI stack versioning and
+current transport configuration and then there is one directory for each
+SCMI protocol that has been found available on the system (as advertised
+by the backend SCMI server) and that this driver currently supports.
+
+/sys/kernel/debug/scmi/
+├── info
+├── protocol_0x14
+├── protocol_0x15
+└── transport
+
+Looking inside the protocol directory we found:
+
+/sys/kernel/debug/scmi/protocol_0x14/
+├── 000
+│   ├── enable
+│   ├── enable_atomic_irqs_off
+│   ├── enable_atomic_irqs_on
+│   ├── info
+│   │   ├── enable_latency
+│   │   ├── name
+│   │   ├── num_rates
+│   │   ├── rate_discrete
+│   │   └── rates
+│   └── rate_get_set
+├── 001
+│   ├── enable
+│   ├── enable_atomic_irqs_off
+│   ├── enable_atomic_irqs_on
+│   ├── info
+│   │   ├── enable_latency
+│   │   ├── name
+│   │   ├── num_rates
+│   │   ├── rate_discrete
+│   │   └── rates
+│   └── rate_get_set
+├── 002
+│   ├── enable
+│   ├── enable_atomic_irqs_off
+│   ├── enable_atomic_irqs_on
+│   ├── info
+│   │   ├── enable_latency
+│   │   ├── max_rate
+│   │   ├── min_rate
+│   │   ├── name
+│   │   ├── rate_discrete
+│   │   └── step_size
+│   └── rate_get_set
+└── version
+
+- one toplevel 'version' entry to state SCMI Clock protocol version
+  supported by the platform
+
+- one subdirectory for each resource (clocks in this case) that has been
+  found on the system and named by its ID: inside these resource subdir we
+  found a resource specific info/ subdir describing the resource and the
+  SCMI protocol operations available as exposed by the SCMI protocol.
+  (mostly reflecting operations defined in scmi_protocol.h)
+
+Note that, the operations exposed here could be some variations of the
+basic SCMI operations (like the above enable/disable with IRQs on/off).
+
+The KSelftest are basically structured in the same way, a bunch of tests
+scripts organized by protocol directories mimicking this layout.
+
+The fundamental issue with all of this is that, the above level of freedom
+in testing the SCMI stack pose a serious risk of shooting ourselves in the
+foot:
+
+ - what if some clock test just kills the machine disablling something
+   fundamental at runtime ?
+
+ - what if instead our clock rate test is so good that spots an issue
+   with the SCMI backend server (inadvertenly) and we fry the board ?
+
+All of the above depends really on what SCMI backend we use for testing:
+we should stick to more conservative tests on real HW, while we could
+engage in more radical and invasive testcases at the presence of some more
+virtualized backend where, ideally, nothing is real and everything is
+mocked.
+
+For this reasons the SCMI debugfs exposes some detailed information about
+the running backend SCMI stack like 
+
+/sys/kernel/debug/scmi/info/
+├── impl_ver
+├── major_ver
+├── minor_ver
+├── num_agents
+├── num_protocols
+├── sub_vendor_id
+└── vendor_id
+
+so that the examples tests in the Kselftest patch have been structured to
+check for the running SCMI incarnation and eventually skip the most
+invasive testcases (like clk rate set) if not in presence of a mocked
+virtualized backend.
+
+In other words this driver and the KSelftest try to stay agnostic and be
+as general as possible so that can be used, with different extents, on a
+number of different backend SCMI server implementations.
+
+All the current SCMI debugfs entries are mre extensively documented in
+Documentation/ABI/testing,
+
+Remaining TODO:
+
+- implement test driver support for all the other std protocols
+- more tests (restructuring these armm64/scmi KSelftests)
+- expose stats/timeouts/errors
+- expose Base protocol ?
+  (note that for its nature the SCMI Test driver loads only after the
+   SCMI core stack has been loaded and the Base operations have been
+   issued already to gather basic info from the platform)
+
+This series is based on top of sudeep/for-next/scmi/updates [1]
+
+commit 38a0e5b735d6 ("clk: scmi: Support atomic clock enable/disable API")
+
+Thanks,
+Cristian
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-next/scmi/updates
+
+Cristian Marussi (16):
+  firmware: arm_scmi: Simplify scmi_devm_notifier_unregister
+  firmware: arm_scmi: Make protocols init fail on basic errors
+  firmware: arm_scmi: Add multiple protocols registration support
+  firmware: arm_scmi: Add .version_get protocol operation
+  firmware: arm_scmi: Expose information on configured transport
+  firmware: arm_scmi: Define a common SCMI_MAX_PROTOCOLS value
+  debugfs: Add signed versions of debugfs_create_u32/64 helpers
+  firmware: arm_scmi: Add SCMI Testing driver
+  firmware: arm_scmi: testing: Add Clock protocol full support
+  firmware: arm_scmi: testing: Add Sensor protocol basic support
+  firmware: arm_scmi: Add test driver generic notification helpers
+  firmware: arm_scmi: Add Sensor notifications testing support
+  firmware: arm_scmi: Add testing Power protocol support
+  firmware: arm_scmi: Add testing Voltage protocol support
+  selftests: arm64: Add initial SCMI testcases
+  [DEBUG]: firmware: arm_scmi: Add Kconfig to allow SCMI Testing driver
+    coexistence
+
+ Documentation/ABI/testing/debugfs-scmi        | 269 ++++++++
+ drivers/firmware/arm_scmi/Kconfig             |  18 +
+ drivers/firmware/arm_scmi/Makefile            |   2 +
+ drivers/firmware/arm_scmi/base.c              |   5 +-
+ drivers/firmware/arm_scmi/bus.c               |   4 +-
+ drivers/firmware/arm_scmi/clock.c             |   9 +-
+ drivers/firmware/arm_scmi/common.h            |  24 +-
+ drivers/firmware/arm_scmi/driver.c            |  46 +-
+ drivers/firmware/arm_scmi/notify.c            |  34 +-
+ drivers/firmware/arm_scmi/perf.c              |  11 +-
+ drivers/firmware/arm_scmi/power.c             |  11 +-
+ drivers/firmware/arm_scmi/reset.c             |  11 +-
+ .../arm_scmi/scmi_test_driver/Makefile        |   5 +
+ .../arm_scmi/scmi_test_driver/scmi_test.c     | 160 +++++
+ .../arm_scmi/scmi_test_driver/test_clocks.c   | 287 ++++++++
+ .../arm_scmi/scmi_test_driver/test_common.c   | 285 ++++++++
+ .../arm_scmi/scmi_test_driver/test_common.h   | 108 +++
+ .../arm_scmi/scmi_test_driver/test_powers.c   | 105 +++
+ .../arm_scmi/scmi_test_driver/test_sensors.c  | 627 ++++++++++++++++++
+ .../arm_scmi/scmi_test_driver/test_voltages.c |  51 ++
+ drivers/firmware/arm_scmi/sensors.c           |   5 +-
+ drivers/firmware/arm_scmi/system.c            |  11 +-
+ drivers/firmware/arm_scmi/voltage.c           |   1 +
+ fs/debugfs/file.c                             |  74 +++
+ fs/libfs.c                                    |  12 +-
+ include/linux/debugfs.h                       |   4 +
+ include/linux/scmi_protocol.h                 |  47 +-
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ tools/testing/selftests/arm64/scmi/Makefile   |   6 +
+ tools/testing/selftests/arm64/scmi/config     |   1 +
+ .../arm64/scmi/kselftest_scmi_lib.sh          | 118 ++++
+ .../selftests/arm64/scmi/run_scmi_tests.sh    |  69 ++
+ .../testcases/protocol_0x14/clock_enable.sh   |  33 +
+ .../protocol_0x14/clock_rate_read.sh          |  18 +
+ .../protocol_0x14/clock_rate_write.sh         |  29 +
+ .../testcases/protocol_0x15/sensor_reading.sh |  17 +
+ 36 files changed, 2463 insertions(+), 56 deletions(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-scmi
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/Makefile
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_clocks.c
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_common.c
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_powers.c
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_sensors.c
+ create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
+ create mode 100644 tools/testing/selftests/arm64/scmi/Makefile
+ create mode 100644 tools/testing/selftests/arm64/scmi/config
+ create mode 100644 tools/testing/selftests/arm64/scmi/kselftest_scmi_lib.sh
+ create mode 100755 tools/testing/selftests/arm64/scmi/run_scmi_tests.sh
+ create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_enable.sh
+ create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_read.sh
+ create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_write.sh
+ create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x15/sensor_reading.sh
+
+-- 
+2.17.1
+

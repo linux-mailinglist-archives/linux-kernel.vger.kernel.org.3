@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DF04C59D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 08:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284D64C59DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 08:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiB0G4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 01:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S230071AbiB0HL2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Feb 2022 02:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiB0G4f (ORCPT
+        with ESMTP id S229984AbiB0HL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 01:56:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06F712A
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 22:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=uGkwfFG4oU2IF8mA/LqOVsaAtXKwdEqo5q9NlTqW6Ec=; b=tFxG6LJoMhStLrLnbYRZVqD7Tw
-        E3FYoNCTtueEYnqHYSO80ZXl6SzegIrNC5IrXFLppG00CEdyR/kCTahiULtivSeoqhldEr7ELzMlT
-        jfG5l13oGqF+I5Oeq2EY6k6nLcP+CWeLpy8AY1c8Nfg4Ss5WUQA1v9XUj/X/+wkL8jq/C3eqZhJYj
-        hoiIwAwOS8dDYv5AchG+VXxl/oMrU771IfhJltvYHZ2Fyd7h+hpIiy+3ilTuT+/qpdaxjTRSy19vg
-        VD2j3Nk4TkAG/8ZpPaQJ2yoojBAiT6C4b0HBW54sdloOzBqsuPCBdI7asIb1bFAZuO6En+RvASvkY
-        Ghdciz9Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nODSw-007N3w-58; Sun, 27 Feb 2022 06:55:34 +0000
-Message-ID: <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
-Date:   Sat, 26 Feb 2022 22:55:28 -0800
+        Sun, 27 Feb 2022 02:11:27 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A49AB403F9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 23:10:50 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-286-9XdmrcSQOhGG3MJ0OheetQ-1; Sun, 27 Feb 2022 07:10:47 +0000
+X-MC-Unique: 9XdmrcSQOhGG3MJ0OheetQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Sun, 27 Feb 2022 07:10:45 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Sun, 27 Feb 2022 07:10:45 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Segher Boessenkool' <segher@kernel.crashing.org>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: RE: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Topic: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Index: AQHYK3er/AEA45TQBUCd0AhQFcgB96ym+KOQ
+Date:   Sun, 27 Feb 2022 07:10:45 +0000
+Message-ID: <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com>
+ <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+ <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <20220226124249.GU614@gate.crashing.org>
+ <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
+ <20220227010956.GW614@gate.crashing.org>
+In-Reply-To: <20220227010956.GW614@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
- configuration and build error
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Roger Quadros <rogerq@kernel.org>
-Cc:     miquel.raynal@bootlin.com, krzysztof.kozlowski@canonical.com,
-        vigneshr@ti.com, nm@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220220004415.GA1519274@roeck-us.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220220004415.GA1519274@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/19/22 16:44, Guenter Roeck wrote:
-> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:
->> The root of the problem is that we are selecting symbols that have
->> dependencies. This can cause random configurations that can fail.
->> The cleanest solution is to avoid using select.
->>
->> This driver uses interfaces from the OMAP_GPMC driver so we have to
->> depend on it instead.
->>
->> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configuration and build error")
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+From: Segher Boessenkool
+> Sent: 27 February 2022 01:10
 > 
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> On Sat, Feb 26, 2022 at 11:14:15PM +0100, Arnd Bergmann wrote:
+> > On Sat, Feb 26, 2022 at 1:42 PM Segher Boessenkool
+> > <segher@kernel.crashing.org> wrote:
+> > > On Wed, Feb 23, 2022 at 11:23:39AM -0800, Linus Torvalds wrote:
+> >
+> > >
+> > > The only reason the warning exists is because it is undefined behaviour
+> > > (not implementation-defined or anything).  The reason it is that in the
+> > > standard is that it is hard to implement and even describe for machines
+> > > that are not two's complement.  However relevant that is today :-)
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+I thought only right shifts of negative values were 'undefined'.
+And that was to allow cpu that only had logical shift right
+(ie ones that didn't propagate the sign) to be conformant.
+I wonder when the last cpu like that was?
 
-Thanks.
+Quite why the standards keeps using the term 'undefined behaviour'
+beats me - there ought to be something for 'undefined value'.
 
-> 
->> ---
->>  drivers/mtd/nand/raw/Kconfig | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
->> index 36e697456ec4..9b078e78f3fa 100644
->> --- a/drivers/mtd/nand/raw/Kconfig
->> +++ b/drivers/mtd/nand/raw/Kconfig
->> @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
->>  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
->>  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
->>  	depends on HAS_IOMEM
->> -	select MEMORY
->> -	select OMAP_GPMC
->> +	depends on OMAP_GPMC
->>  	help
->>  	  Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
->>  	  and Keystone platforms.
->> -- 
->> 2.17.1
->>
+	David
 
--- 
-~Randy
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

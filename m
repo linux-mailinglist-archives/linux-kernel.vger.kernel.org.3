@@ -2,219 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAB64C5AC1
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7974C5AC8
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 12:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiB0L6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 06:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S230328AbiB0L7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 06:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiB0L6g (ORCPT
+        with ESMTP id S229848AbiB0L7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 06:58:36 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6F61B786;
-        Sun, 27 Feb 2022 03:57:58 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 313E03200DA8;
-        Sun, 27 Feb 2022 06:57:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 27 Feb 2022 06:57:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=LHnbTtvZh1F0Dh
-        tswLT8iTo1M9auO3PUzzd56DEi4/0=; b=RrXS5VRdvbBrnsrwu8P2ZJUjQ56j1p
-        L7u/Uz1rDrWawiUyjvdE8e+Z4YLYub5AoIcqvxfcMXMtw1OrgGhdgSpe+EYACb7d
-        CgCLBVvdlbFA4ZVX9JGBFwH1xI694kNhdWaW/UPz5bkVf2Rjt9m1nhpemPpQAKP0
-        5mym2CIQ2aq8QHRwX/xb/Asqc0GcO2QONJMr1HhTsV/qtACQPnjo4iu5d3S9VXGK
-        f/rLbLskbCXPZqnGoWXVz+4O14SS4a3Funpha+Guhk4OQk8YRH3PRJvFtHoJ5D0+
-        SnLLg69HH2LtgfqCXM4dOIPtB0J/22wsBjz+R5F9pEl4GmIsaYQxV1Sw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=LHnbTt
-        vZh1F0DhtswLT8iTo1M9auO3PUzzd56DEi4/0=; b=UuJXtkDYzzmDv3+PlvrF75
-        IMSF+7TIjjIQ2zGFSCAJDUBZQxFwofks4FSECuCpKl1vIEe5hdPtmTxC1/FoIaRj
-        NLRbj/CNsNtM1nVSPkaCvOCS/z0F/HbgeGRKm2JTkXoC7UapkSpECtJRVEH5RZOq
-        QPodUEULOaR8Td6jBH/BgqFQThktGkGbHX9hAOrqio36yQAWjU32pOcMfMpU9rJ1
-        AcvlQKlhPlU09mMtX4RlV4kry6GpExnibfiMCm6/jSDsUBesjydfsfcO772pj1Rp
-        2v4uS02Fjpw4+nHPdnadIHTeGyVtByvh/PF9hIX/uwiCx8r7cdQT67U2tOhv4iVw
-        ==
-X-ME-Sender: <xms:RGcbYhXthoKQia9AKkoSozz16sSA9n1xtgdbsp0R_5KH1ZzDm-CL_w>
-    <xme:RGcbYhnsxdnbdg_eaa8OEzqS187Es-FBZl-RALc_0006Zi0y3cgFDovX6glNqXoaQ
-    nh0oBpLL_dt9V_Pjb0>
-X-ME-Received: <xmr:RGcbYtZU0NcEOO3_FJ6lrex6s1wcKB7crA2HxjQvcyVzvZ6uzkXEJN7BKg56dlccqIM5FGQ07vtVGVQ1hD9CrLAZO1FdQG30llDbmy0gY0YbAA3CY7y61rFje7gr9QE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgdeffecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghnucfr
-    vghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrh
-    hnpeetvdekteeluefffffhkeetteffgefggfevheeileeufedvtdeuffevveelhfefjeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnh
-    esshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:RGcbYkXPFx4eFBXiBqAxD4v2_H5_hPvQ0XnZtZ1bamPgLMuIKGjRIw>
-    <xmx:RGcbYrkCO1r19ScyiBj-roI26PzcOM6Sj20Ydt7zFchKiegAmkO8Eg>
-    <xmx:RGcbYhf7BOERXdmCMcTBrHKbhP0bWBq1brxGFf2-SW8PPHlr2HKe1g>
-    <xmx:RGcbYpWu1iRebcoDB5JBwZOBXh-gm4Z_cRQy0C4jCFhKA_w1Q2_Fjw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Feb 2022 06:57:55 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Sun, 27 Feb 2022 06:59:39 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFAC3CFEF;
+        Sun, 27 Feb 2022 03:59:02 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id x5so13662787edd.11;
+        Sun, 27 Feb 2022 03:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=hD3VFGB83X+vH7ZF+K9wjycTN2eHYXgx7yYeU3ztz+k=;
+        b=OGpuVbDy8w0iSayXASZ82L5zMNlc8v4rzF+1qPlATQhg02R7Mfj5d+qV4gBu7tOfCP
+         /1ZkuFDIxy5ovL7YNy0R3rqTXj1aEIwnAQgYTMa3X5HD43IgfXIno/2e844Is8xgup46
+         fJ3jaWnq7WOaZLsqM0+P64EenPiPibuPohiyHa65ZEiolIcWyfE0paKS4MjYndG613L8
+         xLjatv0sXby5mVZ6hxVKk3QT0+04qM8Kg8KTgnvkXdQbSt8whk9pA8Mol8rulk+HWzyY
+         obi/fgOa7wsMIiTkmB4E6ILnE7EBSOjyAsP8EDH84bFVDlwof65ozdQZTl2rMSaZ5Moe
+         0R0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=hD3VFGB83X+vH7ZF+K9wjycTN2eHYXgx7yYeU3ztz+k=;
+        b=1wNaPy9rvNBpfV6Z/hPFkbzyUthIGitE8xbGDvyQCPhECNTDPKgkf8XxG7FKt+AIEa
+         IouYtzlDTUIrtAR74qwwWwhHPadVJZbpVCO+mcueISuyqM2YtMQOeiduUbhCOxHTVjYf
+         d1Fho7EwLdgTGddquvgcl/G2ZEZuRPU4dfZX6AV1dEOUoGJ7RzlX9Vgw0Hz05/Wf2Db7
+         Umdvqw9rk+8kyRcysjs28EPAAji8G6u32rfliOnkbxKGcx4x/v0KfJuUV3NvHvr10IsR
+         dgkIMf3pWOYLuogyDkaUehWEXAiMrbKWMGhhiNOU4X9FTiJhun6feXft1lw4eCwcANgm
+         iymQ==
+X-Gm-Message-State: AOAM531ACm0oqqfkjiAWvgh5v/CZ6JZRch2xVn5v1dGHrooRA9DTPUE3
+        k72YmHwpYCQEk4CSuB9Aa60rBTWK1EtEvQ==
+X-Google-Smtp-Source: ABdhPJxcgj25YScKfb6Amya4ea0kT0WM7LdRTNXfmnQbaq55LGB3JFJ6gN6G1ShtWKli88e5qGwuTw==
+X-Received: by 2002:aa7:daca:0:b0:410:d02a:1bf3 with SMTP id x10-20020aa7daca000000b00410d02a1bf3mr15257855eds.455.1645963140863;
+        Sun, 27 Feb 2022 03:59:00 -0800 (PST)
+Received: from localhost.localdomain ([155.133.219.250])
+        by smtp.gmail.com with ESMTPSA id dn14-20020a05640222ee00b00410b88abd6fsm4474577edb.45.2022.02.27.03.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 03:59:00 -0800 (PST)
+From:   Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Kestrel <kestrelseventyfour@gmail.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] nvmem: Add Apple eFuse driver
-Date:   Sun, 27 Feb 2022 12:57:43 +0100
-Message-Id: <20220227115743.69059-2-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220227115743.69059-1-sven@svenpeter.dev>
-References: <20220227115743.69059-1-sven@svenpeter.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: [PATCH v2 0/3] Add support for WASP SoC on AVM router boards 
+Date:   Sun, 27 Feb 2022 12:58:29 +0100
+Message-Id: <20220227115832.13490-1-kestrelseventyfour@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apple SoCs contain eFuses used to store factory-programmed data such
-as calibration values for the PCIe or the Type-C PHY. They are organized
-as 32bit values exposed as MMIO.
+There is a popular set of Lantiq xrx200 router boards by AVM in
+Germany (AVM Fritzbox 3390, 3490, 5490, 5491 and 7490) which
+have the strange implementation of having the wifi cards
+connected to a separate memory only ATH79 based SoC. It has no
+persistent storage and no access to any resource on the Lantiq
+host, but is connect to the Lantiq GSWIP switch on an additional
+fixed internal network port.
+This kernel module is to support booting the secondary SoC called
+Wireless Assistant Support Processor (WASP).
+After turning it on, a small network boot firmware is sent to
+the SoC by using mdio and when it is started, an initramfs
+linux image is sent to the SoC using raw ethernet frames.
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- MAINTAINERS                  |  1 +
- drivers/nvmem/Kconfig        | 12 +++++++
- drivers/nvmem/Makefile       |  2 ++
- drivers/nvmem/apple-efuses.c | 67 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 82 insertions(+)
- create mode 100644 drivers/nvmem/apple-efuses.c
+The whole procedure takes about 6 seconds, if there is no error.
+So far tested on 3490, 5490 and 7490 devices based on OpenWrt.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1bc57af09c80..031198aec108 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1781,6 +1781,7 @@ F:	drivers/i2c/busses/i2c-pasemi-core.c
- F:	drivers/i2c/busses/i2c-pasemi-platform.c
- F:	drivers/irqchip/irq-apple-aic.c
- F:	drivers/mailbox/apple-mailbox.c
-+F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index da414617a54d..ef6a13c8a4d6 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
- 	  This driver provides support for Broadcom's NVRAM that can be accessed
- 	  using I/O mapping.
- 
-+config NVMEM_APPLE_EFUSES
-+	tristate "Apple eFuse support"
-+	depends on ARCH_APPLE || COMPILE_TEST
-+	default ARCH_APPLE
-+	help
-+	  Say y here to enabled support for reading eFuses on Apple SoCs
-+	  such as the M1. These are e.g. used to store factory programmed
-+	  calibration data required for the PCIe or the USB-C PHY.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called nvmem-apple-efuses.
-+
- endif
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index dcbbde35b6a8..1a8e54691d3e 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
- nvmem-rmem-y			:= rmem.o
- obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
- nvmem_brcm_nvram-y		:= brcm_nvram.o
-+obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
-+nvmem-apple-efuses-y 		:= apple-efuses.o
-diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
-new file mode 100644
-index 000000000000..925fc0033b83
---- /dev/null
-+++ b/drivers/nvmem/apple-efuses.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Apple SoC eFuse driver
-+ *
-+ * Copyright (C) The Asahi Linux Contributors
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/platform_device.h>
-+
-+static int apple_efuses_read(void *context, unsigned int offset, void *val,
-+			     size_t bytes)
-+{
-+	void __iomem *fuses = context;
-+	u32 *dst = val;
-+
-+	while (bytes >= sizeof(u32)) {
-+		*dst++ = readl_relaxed(fuses + offset);
-+		bytes -= sizeof(u32);
-+		offset += sizeof(u32);
-+	}
-+
-+	return 0;
-+}
-+
-+static int apple_efuses_probe(struct platform_device *pdev)
-+{
-+	struct resource *res;
-+	struct nvmem_config config = {
-+		.dev = &pdev->dev,
-+		.read_only = true,
-+		.reg_read = apple_efuses_read,
-+		.stride = sizeof(u32),
-+		.word_size = sizeof(u32),
-+		.name = "apple_efuses_nvmem",
-+		.id = NVMEM_DEVID_AUTO,
-+	};
-+
-+	config.priv = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(config.priv))
-+		return PTR_ERR(config.priv);
-+
-+	config.size = resource_size(res);
-+
-+	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
-+}
-+
-+static const struct of_device_id apple_efuses_of_match[] = {
-+	{ .compatible = "apple,efuses", },
-+	{}
-+};
-+
-+static struct platform_driver apple_efuses_driver = {
-+	.driver = {
-+		.name = "apple_efuses",
-+		.of_match_table = apple_efuses_of_match,
-+	},
-+	.probe = apple_efuses_probe,
-+};
-+
-+module_platform_driver(apple_efuses_driver);
-+
-+MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
-+MODULE_LICENSE("GPL");
+Patch 1/3 adds the vendor name
+Patch 2/3 adds the dt-bindings
+Patch 3/3 adds the remoteproc driver
+
+To build and run, there is OpenWrt PR 5075.
+
+Please review.
+
+Changes in v2:
+  - Remove firmware names from dt-binding and add as kmod parameters
+  - Rename other bindings with vender prefix and fix gpios suffix
+  - Change descriptions in dt-binding
+  - Replace/Remove asynch load of firmware with request_firmware_direct
+  - Fix comments to use the errno define instead of the number
+  - Implement wait loops with read_poll_timeout() macro
+  - Wrap read_poll_timeout() macro in function saving 6k module size
+  - Return -ETIMEDOUT for all errors returned by read_poll_timeout
+  - Replace mdio writes/reads with mdiobus_write and mdiobus_read and add
+    return codes and their handling
+  - Remove mutex for mdiobus_lock and add return code checking for mdio ops
+  - Replaced the mdio register array with directly specifying registers
+  - As a result of the previous 3 changes remove the functions for mdio
+  - Consolidate error messages for mdio writes into a single one saved 1k
+    for module size
+  - Replaced mdelay with usleep_range saved 0,7k module size
+  - Remove unneeded include <linux/interrupt.h> and <linux/error.h>
+  - Wrap all blocks with {} and fix some indentation errors
+  - Change const len in to size_t in avm_wasp_netboot_write_chunk
+  - Make all methods static to fix kernel bot warning
+  - Change read variable name in avm_wasp_load_initramfs_image
+  - Change ssize_t variables to size_t in avm_wasp_load_initramfs_image
+  - avm_wasp_netboot_write_chunk change for loop for 2 byte divisibility
+  - Change uint32_t to u32
+  - Change int count = -1 to u32 with U32_MAX initialisation
+  - Add check for firmware len divisable by 4
+  - Replace big endian bit shift operations with be32_to_cpu
+  - Change loop to write 14 byte firmware chuncks like suggested
+  - Change WASP_CHUNK_SIZE to ARRAY_SIZE(mac_data) for readability
+  - Change int done to boolean
+  - Change unsigned ints to u32
+  - Change int to size_t for send_len
+  - Use int for numbytes because kernel_recvmsg returns error or number
+  - Two sockets are not needed, so reduce to one socket usage
+  - Remove struct timeval definition, replace with __kernel_old_timeval
+  - __kernel_old_timeval is depracated, but arch mips is 32bit platform
+  - Replace &avmwasp->pdev->dev with local dev
+  - Check if wasp network interface is up and fail if not in start method
+  - Remove setsockopt for SO_REUSEADDR and SO_BINDTODEVICE
+  - Remove packet_counter
+  - Move firmware and firmware_end out of RESP_DISCOVER to make sure that
+    they are initialized if RESP_DISCOVER is not happening first
+  - indend break;
+  - Move second half of the send/receive paket while loop to RESP_OK and
+    let RESP_DISCOVER fall through
+  - Remove bringing up the wasp network interface
+  - Check if wasp network interface is up in probe and defer if not
+  - Remove the check for the root device and replace it with match data
+    for WASP device identification
+  - Move of_read and find of mdio bus to rproc_start but delete reference
+    after using it in the rproc_start method
+  - Replace dev_set_drvdata with platform_set_drvdata
+  - Remove avm_wasp_rproc_boot_addr because its not needed and move
+    setting the fw struct pointer to avm_wasp_rproc_load
+  - Move avm_wasp.h definitions to kernel module
+
+Reported-by: kernel test robot <lkp@intel.com>
+Daniel Kestrel (3):
+  dt-bindings: vendor-prefixes: Add AVM
+  dt-bindings: remoteproc: Add AVM WASP
+  remoteproc: Add AVM WASP driver
+
+ .../bindings/remoteproc/avm,wasp-rproc.yaml   |   56 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ drivers/remoteproc/Kconfig                    |   10 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/avm_wasp.c                 | 1051 +++++++++++++++++
+ 5 files changed, 1120 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+ create mode 100644 drivers/remoteproc/avm_wasp.c
+
 -- 
-2.25.1
+2.17.1
 

@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660284C59C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 06:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31B64C59CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 07:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiB0Fya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 00:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S230046AbiB0GSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 01:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiB0FyY (ORCPT
+        with ESMTP id S229920AbiB0GSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 00:54:24 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5853610D5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:53:49 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id h17so2557646plc.5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 21:53:49 -0800 (PST)
+        Sun, 27 Feb 2022 01:18:04 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AB82DDE;
+        Sat, 26 Feb 2022 22:17:28 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id o8so8634200pgf.9;
+        Sat, 26 Feb 2022 22:17:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TBvazhbiMSJHiFRR8rtsztnvbns4XgMHNyrmX4NjfhY=;
-        b=JS6dGDwtp+g07D0ANKPKJloW3mTpltjYKKF/C4VxIAMQNqjXMU/DzJXXFiml4noxZl
-         YHuS0iHlT3Dw+BzkgR4x//1nRwt4l7Io+GX3Fz/ZAsMy2Z5t31/beYFSlaSftJsoisRt
-         DTeOEdZHWvV+DuLOVOVXg5x01+p5ToBEsq2Oyi+NRCPpTXSAqmcJ11aCtQHsqcr6laO/
-         ZP/lndswMYzxN2FYKU1Ha8tiV7QW51mloOdszdoklbhq4BnC14o0qWBd6/wtz5kPygxz
-         0fsrdH2xg9G/zWjugpIu4+V5vfNXilxqI7dFAQYM41dlKhKadhHu8ORXvoxAOPEBHoMX
-         pCzQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ow8n9bnT7hSkaP9jr1cS5lcPgbno/KHHbNMAFcjqosI=;
+        b=pLWATeuoF6Rho2C/qM1ObggjqCTCKSIYrmdUZXDGKsszkUsAcjDi8VTX5dBAAheyrc
+         2eLojOdeb2kcq1mma3uEI8OUkGk26ttPxm8x3MSBLv08iAAlkpKYBpjC/08jQI8CI6g7
+         mNTlEeepAa7CPOnQwdggaSjivRcEMvtwVnkI0rwbjzZqdq3Yk+OshYxU4s/sij/K1dcS
+         CYYILFIBcnoy7ZXwgSbgGYPV5U2DYKSXKjk/BuAA0Gdr7+/snYtbGwJMnqjfG25q1NiG
+         YE0EA8C6V7uyinJ7fGojLVAL7sWjiuk5pgwHshd1MK98BogSKQHXMomLJq7bf/rjT7dB
+         HxPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TBvazhbiMSJHiFRR8rtsztnvbns4XgMHNyrmX4NjfhY=;
-        b=nlB4YRzgRMHnaihxPzVy9c3Cqubpz3TLeEgk6kUaqRcUDfFIOTPHLknfwqtFT2vKdM
-         ox6f4ke57OgBjUI0QovDqFEd9GWB/kYSdqDipA+2+MsghVTXjRC+kdVIqQhE+5y27Dgb
-         Q72X65pV2w5mKRf/uqZleEEERvZ6vZkDTz+GASNHrh3Otgvype1MBBItIrmEXBADVGTX
-         e3udmc/kPBJu62Y8fUYcHi2fEjBeSoyrLqb47EpbaV9Is6yw+mtHJxlJe5G8pD184DCP
-         IagIIKyc/vJf3ESTR7ckK1/5ryG+0r8OtYUIbf+1/QruM/fjKuO3jepwCIP55MwN+GUe
-         QvUA==
-X-Gm-Message-State: AOAM53294agZXNXGoyIMaQRrGhSQek3rb+gtvoxAQuoYbORUzgSMTD6f
-        TPtjInYJ/2pAV8iC5m3N+DMEXw==
-X-Google-Smtp-Source: ABdhPJwApFx8t+Bs5NDGGq+radi7MKoxi719NQVN5s+mt2a3EiPcLw4wD1OW5kBIeQ685vC1I4Pf4A==
-X-Received: by 2002:a17:90a:bb8d:b0:1bc:72a9:a07d with SMTP id v13-20020a17090abb8d00b001bc72a9a07dmr10705858pjr.9.1645941228842;
-        Sat, 26 Feb 2022 21:53:48 -0800 (PST)
-Received: from localhost.localdomain ([2409:8a28:e6f:a720:d522:416f:1b2a:d253])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056a00234900b004f3b1c23497sm8547647pfj.101.2022.02.26.21.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 21:53:48 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH 2/2] kselftest/vm: fix tests build with old libc
-Date:   Sun, 27 Feb 2022 13:53:30 +0800
-Message-Id: <20220227055330.43087-2-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220227055330.43087-1-zhouchengming@bytedance.com>
-References: <20220227055330.43087-1-zhouchengming@bytedance.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ow8n9bnT7hSkaP9jr1cS5lcPgbno/KHHbNMAFcjqosI=;
+        b=CAiT0Eilt3VU2TQO6kkNZcpv5KOtQtmzXABY18eDW7+5/7GaW49NwtHK4z7Hb1V0Kh
+         c3v9u6Hsjz9dyNofglmJ+BRcPP8QkZs87GZ3Si03+KoqhQ+JacY5UA3Bqmgf7YMoqsrx
+         ZhLJ8A3wPEKpoBgf9Lccm0+3P61yjky19Z2XxrOP3yqpoumSwd2bSytjXQQ1tXz6JQAx
+         5CewMHSMuJxT107M7szde5HNycy7OtAIMnn/7lCDxmNHk+IIIyKw9Y4vu+smUBt23l2a
+         xlzL3hOY7V0UDGMQtAUgolpDOv3uaFVAKlYhaX0Bo/DgWeCYhqY24MRKNRz/qNqukaPA
+         Cf4A==
+X-Gm-Message-State: AOAM531soG9hOyp/hln9wxSXq0xpcFYyWabl6l5OA0fq0Ppd1+Sh5lNF
+        a5fOVNaiBSRZnKMO9s8CokkMfxGJNlmm+Vn3+b8wZibshQ==
+X-Google-Smtp-Source: ABdhPJy1AveXJn8qgloASy8DlTcYT+KqBr50ybb+b17ayKSx1dDtKKCqD4uBZzJB1bfxpLxka+6SDhFJU63Wx843Tfo=
+X-Received: by 2002:a05:6a00:1991:b0:4e1:a7dd:96e5 with SMTP id
+ d17-20020a056a00199100b004e1a7dd96e5mr15890456pfl.2.1645942647724; Sat, 26
+ Feb 2022 22:17:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <CAMhUBjmetJqbERvQ8513b-wHuV68hqLTuUVWiORyJyXP26gO7Q@mail.gmail.com>
+ <YhpBPQuqPNmqasxE@ls3530>
+In-Reply-To: <YhpBPQuqPNmqasxE@ls3530>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sun, 27 Feb 2022 14:17:16 +0800
+Message-ID: <CAMhUBjn_cGF_Htap+iJri991tXPQiqwn_EPY6XuPu+bH07m=eg@mail.gmail.com>
+Subject: Re: [BUG] fbdev: sm712fb: Page fault in smtcfb_read
+To:     Helge Deller <deller@gmx.de>
+Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error message when I build vm tests on debian10 (GLIBC 2.28):
+On Sat, Feb 26, 2022 at 11:03 PM Helge Deller <deller@gmx.de> wrote:
+>
+> * Zheyu Ma <zheyuma97@gmail.com>:
+> > I found a minor in the smtcfb_read() function of the driver sm712fb.
+> >
+> > This read function can not handle the case that the size of the
+> > buffer is 3 and does not check for it, which may cause a page fault.
+> >
+> > The following log reveals it:
+> >
+> > [ 2432.614490] BUG: unable to handle page fault for address: ffffc90001ffffff
+> > [ 2432.618474] RIP: 0010:smtcfb_read+0x230/0x3e0
+> > [ 2432.626551] Call Trace:
+> > [ 2432.626770]  <TASK>
+> > [ 2432.626950]  vfs_read+0x198/0xa00
+> > [ 2432.627225]  ? do_sys_openat2+0x27d/0x350
+> > [ 2432.627552]  ? __fget_light+0x54/0x340
+> > [ 2432.627871]  ksys_read+0xce/0x190
+> > [ 2432.628143]  do_syscall_64+0x43/0x90
+>
+> Could you try the attached patch ?
 
-userfaultfd.c: In function ‘userfaultfd_pagemap_test’:
-userfaultfd.c:1393:37: error: ‘MADV_PAGEOUT’ undeclared (first use
-in this function); did you mean ‘MADV_RANDOM’?
-  if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                     ^~~~~~~~~~~~
-                                     MADV_RANDOM
+Good, the patch works for me, thanks.
 
-This patch includes these newer definitions from UAPI linux/mman.h,
-is useful to fix tests build on systems without these definitions in
-glibc sys/mman.h.
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+>
+>
+> diff --git a/drivers/video/fbdev/sm712fb.c b/drivers/video/fbdev/sm712fb.c
+> index 0dbc6bf8268a..ab45212ccf66 100644
+> --- a/drivers/video/fbdev/sm712fb.c
+> +++ b/drivers/video/fbdev/sm712fb.c
+> @@ -1047,7 +1047,7 @@ static ssize_t smtcfb_read(struct fb_info *info, char __user *buf,
+>         if (count + p > total_size)
+>                 count = total_size - p;
+>
+> -       buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
+> +       buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+>         if (!buffer)
+>                 return -ENOMEM;
+>
+> @@ -1059,25 +1059,11 @@ static ssize_t smtcfb_read(struct fb_info *info, char __user *buf,
+>         while (count) {
+>                 c = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+>                 dst = buffer;
+> -               for (i = c >> 2; i--;) {
+> -                       *dst = fb_readl(src++);
+> -                       *dst = big_swap(*dst);
+> +               for (i = (c + 3) >> 2; i--;) {
+> +                       u32 val = fb_readl(src++);
+> +                       *dst = big_swap(val);
+>                         dst++;
+>                 }
+> -               if (c & 3) {
+> -                       u8 *dst8 = (u8 *)dst;
+> -                       u8 __iomem *src8 = (u8 __iomem *)src;
+> -
+> -                       for (i = c & 3; i--;) {
+> -                               if (i & 1) {
+> -                                       *dst8++ = fb_readb(++src8);
+> -                               } else {
+> -                                       *dst8++ = fb_readb(--src8);
+> -                                       src8 += 2;
+> -                               }
+> -                       }
+> -                       src = (u32 __iomem *)src8;
+> -               }
+>
+>                 if (copy_to_user(buf, buffer, c)) {
+>                         err = -EFAULT;
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 2f49c9af1b58..3fc1d2ee2948 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -46,6 +46,7 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
--- 
-2.20.1
-
+Regards,
+Zheyu Ma

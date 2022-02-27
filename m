@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB804C5C8C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 16:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DEF4C5C92
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 16:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiB0PbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 10:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S231523AbiB0PbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 10:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiB0Pa5 (ORCPT
+        with ESMTP id S231453AbiB0Pa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 10:30:57 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5943F337;
-        Sun, 27 Feb 2022 07:30:20 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id bt3so6934290qtb.0;
-        Sun, 27 Feb 2022 07:30:20 -0800 (PST)
+        Sun, 27 Feb 2022 10:30:59 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFAB3FBC0;
+        Sun, 27 Feb 2022 07:30:21 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id b23so6957342qtt.6;
+        Sun, 27 Feb 2022 07:30:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RL6lgc9JQzCOWChXKBrpjhVjZkUp1FLcriOwSbYz2iE=;
-        b=hvgOgznrh30xXh+nkSrsBMPkCB4ujzOxoGmBK/u9VRcgkqwymxg6Mxu8hYKJG8vCnc
-         YfmFcT74a7dYNXyvozTgKNHdwRcPRmd8KP0iZX2dIbRbL/9rT6caMH7Tfke0C811BgeN
-         QvWQvpWPeh5n8G4wUOZ2BV4IdUF1Djv68inIz+GeeIQHbV8+zqmWxMU4hhdPwPWP23Ky
-         2bbbvy+DX0naoadktFKmGu2zqbYwZpZLaTi4NKwoTQh3ZXFaYFQJvc05p3g5tlBR28p/
-         MAteWdW/xil/F+uzEsEwvIUJQ2KHObSBEDbTJNTfVwstTk11sOiwQR2S4fo1AsHWoIXN
-         G+ZA==
+        bh=gwYHMhbRHXQxrol3Z4onOOebIeXrEkEaF8cW1M7ix2U=;
+        b=fX7jIl7DhRISNYbrdZ7o3NlddSPJm6wn8+Fz2legfMrw0fWC7J3Dbw7TDnR5wOJdCY
+         gpAxFOW7fOZ5tpfbGQXrfwbIxARXhi3BEoV5C9q1Mvv2TV+huO9eBaVRwR/Z4JCN4pou
+         o+cd7icR01yEHh3RgUzTVtwekz8ocngD+m/wPuborxjbKudpyPSG3yTEUng1HKgNl5RR
+         ubdjJB/NSYy+tqlkdG9UFnHkbezAj3KhR0ghlQbU70td2rW5szs8VL6YEWXJsic1R8PK
+         pbusKyUqtKRy+NJVzqvm1M7K+xUXmehhDsRtAKIqpOeuxqX9i6sUSKFgPBeG7/3zPYXW
+         Jmlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RL6lgc9JQzCOWChXKBrpjhVjZkUp1FLcriOwSbYz2iE=;
-        b=kFSMuOpUG3+AID/TD+Hru9G4uBti+0kHO/8xQXmzHRYPnR5eQaTfMQ0lY1dm2/ZHlu
-         BZo1PzI4zuz792bGtW+zHvkQfOG2O3s3djN7pzvILaGFOVfSFGWGWcdCUOgFRPXDjmBx
-         vEUehgmY3rzgn7cf3JK2b6XbjQEhSl3f/xUpUXzlrI5WgQGF9MuBD1+2qzWoo3nyVFZ/
-         DVyussw2WzhWJhSKhrh9MGRmv92HE2fhxFj4/3x35f0rOsZ5m8clqZ+6lWnUzP+dkUz5
-         vc9q5NGFIkzq/sr8rAPeK3+nAinoo2dAd8z2ttMR30+/3thc6DqQ5Uqx77ZjdvtAOkt8
-         VkiQ==
-X-Gm-Message-State: AOAM532gv4X1UA2cQ+uZjE5RlXUJB1ez6oh4cKkU7pVbEd/O4vzvs9bQ
-        P6uD8W1vvd1gL7CnQ0VqB+Q=
-X-Google-Smtp-Source: ABdhPJwsjJ4rXnuZsZt6SzbdunncOBf1dPZk6WG4fCqgA687+tb1CfuSAGeppBjNxh0cIZG0GwXynA==
-X-Received: by 2002:ac8:5993:0:b0:2dd:c4df:35aa with SMTP id e19-20020ac85993000000b002ddc4df35aamr13528206qte.369.1645975819897;
-        Sun, 27 Feb 2022 07:30:19 -0800 (PST)
+        bh=gwYHMhbRHXQxrol3Z4onOOebIeXrEkEaF8cW1M7ix2U=;
+        b=UZjlBObTV7iISz+8twe9rR2MlW6tmn52RkMxLEDaQ8rgiJnHM+oWIeXW03w7OjYlM8
+         PFIiB9vTV5vqe9G0hod1YE2v8pKtucwATQPm5HvXaeD8q4FRZt3+kuhC7fh9pZdWQVeK
+         RCqK9Kp3ocXrh019ijrc98M5iwrDBn3B7yB9scO1vD+hK6epiXBNSPuuylirVJicomtM
+         kceLIdYa5a+FefF7NgmeKZMKPh0d/9qjjhwb//gDX0TOxM+HfJ6rJwdL/516p7432OH7
+         6ta3GFwcRYN+mnVPXfgysBGo8tPizEkortslIdC37SxlI6MDxWX0DG0JGpo5YmJv/CcL
+         xc3Q==
+X-Gm-Message-State: AOAM530RKXzCpIodna3yZQSJCEOEV1JxXiK5WoEq18NN+dplU6bfr2yj
+        ppa26judjfyZL6BnLWdwLCk=
+X-Google-Smtp-Source: ABdhPJxQRsI7Khsgyq5bCDJkTk1UuWXiSFiSgTumT5vnLv5/CZeunbwcFbAYiHp8junh5Dy5tZskpg==
+X-Received: by 2002:ac8:5805:0:b0:2de:23d0:1c28 with SMTP id g5-20020ac85805000000b002de23d01c28mr13602302qtg.585.1645975820913;
+        Sun, 27 Feb 2022 07:30:20 -0800 (PST)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a080a00b0062ce6f3f5d7sm3845767qks.16.2022.02.27.07.30.19
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a080a00b0062ce6f3f5d7sm3845767qks.16.2022.02.27.07.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 07:30:19 -0800 (PST)
+        Sun, 27 Feb 2022 07:30:20 -0800 (PST)
 From:   Peter Geis <pgwipeout@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>
+        Heiko Stuebner <heiko@sntech.de>
 Cc:     linux-rockchip@lists.infradead.org, michael.riesch@wolfvision.net,
-        Peter Geis <pgwipeout@gmail.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/7] dt-bindings: soc: grf: fix rk3568 usb definitions
-Date:   Sun, 27 Feb 2022 10:30:10 -0500
-Message-Id: <20220227153016.950473-2-pgwipeout@gmail.com>
+        jbx6244@gmail.com, Peter Geis <pgwipeout@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/7] dt-bindings: soc: grf: add rk3566-pipe-grf compatible
+Date:   Sun, 27 Feb 2022 10:30:11 -0500
+Message-Id: <20220227153016.950473-3-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220227153016.950473-1-pgwipeout@gmail.com>
 References: <20220227153016.950473-1-pgwipeout@gmail.com>
@@ -77,42 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rockchip,rk3568-pipe-grf and rockchip,rk3568-pipe-phy-grf
-compatibles were incorrectly assigned to the syscon, simple-mfd
-enumeration, vice only the syscon enumeration.
-This leads a dtbs_check failure.
-
-Move these to the syscon enumeration.
-
-Fixes: b3df807e1fb0 ("dt-bindings: soc: grf: add naneng combo phy register compatible")
+The rk3566 requires special handling for the dwc3-otg clock in order for
+the port to function correctly.
+Add a binding for the rk3566-pipe-grf so we can handle setup with the
+grf driver.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-index 072318fcd57b..5079e9d24af6 100644
+index 5079e9d24af6..75a2b8bb25fb 100644
 --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
 +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -15,6 +15,8 @@ properties:
+@@ -15,6 +15,7 @@ properties:
        - items:
            - enum:
                - rockchip,rk3288-sgrf
-+              - rockchip,rk3568-pipe-grf
-+              - rockchip,rk3568-pipe-phy-grf
++              - rockchip,rk3566-pipe-grf
+               - rockchip,rk3568-pipe-grf
+               - rockchip,rk3568-pipe-phy-grf
                - rockchip,rk3568-usb2phy-grf
-               - rockchip,rv1108-usbgrf
-           - const: syscon
-@@ -39,8 +41,6 @@ properties:
-               - rockchip,rk3399-grf
-               - rockchip,rk3399-pmugrf
-               - rockchip,rk3568-grf
--              - rockchip,rk3568-pipe-grf
--              - rockchip,rk3568-pipe-phy-grf
-               - rockchip,rk3568-pmugrf
-               - rockchip,rv1108-grf
-               - rockchip,rv1108-pmugrf
 -- 
 2.25.1
 

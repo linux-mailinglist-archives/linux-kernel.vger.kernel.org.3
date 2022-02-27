@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8BE4C5E16
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3434C5E1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 19:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiB0S2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 13:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S230474AbiB0S3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 13:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiB0S2o (ORCPT
+        with ESMTP id S230357AbiB0S3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 13:28:44 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5605A6319;
-        Sun, 27 Feb 2022 10:28:07 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id d10so20598335eje.10;
-        Sun, 27 Feb 2022 10:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=if4Fre52/w2KJvlhq2Fh0w9ZPnSn2eaHXlg8jB08NKE=;
-        b=LMjDPtWjqobgSKHRsOsUWPOvbU42FVKWl88Qz3dUU1cv7rDQSEg/b6TgcI0XLKHy18
-         EQP6iq/Z7XRXur9ijiYNWOOemFo+Tx71SCwEeGcz6jERwch7WCLAZ/FNn1UAS9QsQTqc
-         G1JAwC9TX7bkpA/3AQsrU2pyy5TZcGHNei57SvEBdpWMo+ECB18IWbh8bW6bBvR9ao6C
-         zCvn4FCmk8P9rOkzoXGJkInDSfgSMm6Tp5W/RYtLTVjkoQUn8CwE9deA7MDIZhvCvKTI
-         12qBGQ+esv1pqyVqlTFE/NkYwjzQAqJrvyiHpxOZ+eTMd2wgZcPtboQVqQjABNkSMM2P
-         1/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=if4Fre52/w2KJvlhq2Fh0w9ZPnSn2eaHXlg8jB08NKE=;
-        b=1hN148s5pZ3tq7p29mg3GRdaN9r59zuNZrRkqc3rULDGoQq1V994c0Dens6ui0QP8s
-         cx9RmUjFTc1y2Gy2eVaUAFN0+xwFOT6mNzj0389jVG7khWRuhOQrsCpxWI0cw1YCGnen
-         ubGvQVIVv5L/mpSJgwp5FwC2usl/Hc0BULbA+egfebNI7anVNUjxqUIx2z3tEg3RE0VD
-         b6Xewv8uArS4HN05WNhEfXx6hmAnrKJTXYJ7vcNlqhIFSD6tVyyB7YFGVQALG3tj2/5t
-         w6SOmeGsp8ImF/GUjem7AngsHKmU+9xqNosUL0/OoipIi1UhhgmP41OQDLTSWlsJ7fpW
-         8Ykg==
-X-Gm-Message-State: AOAM533yV5AJ95oBORFVmmXx6dQigXDpR5whMqs1nX6uD8/lL4L3OBaP
-        7D8FLEGWjnMPIgv0OTCEF36cgeW2AYpxIR9qNE2SClL1
-X-Google-Smtp-Source: ABdhPJwbJgpJOI9EugajVR/mYoWiY1yIhqIr+QW5dep+mQNnvd6+haCVQXEJHZo4gUhuO6EzscGhGcJtD76Q5iUsa8s=
-X-Received: by 2002:a17:906:3650:b0:6ce:a6e0:3e97 with SMTP id
- r16-20020a170906365000b006cea6e03e97mr13357842ejb.15.1645986485655; Sun, 27
- Feb 2022 10:28:05 -0800 (PST)
+        Sun, 27 Feb 2022 13:29:02 -0500
+X-Greylist: delayed 78247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 10:28:23 PST
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F396326;
+        Sun, 27 Feb 2022 10:28:22 -0800 (PST)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout2.routing.net (Postfix) with ESMTP id AA78D5FBF6;
+        Sun, 27 Feb 2022 18:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1645986500;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u4mYWaeD+lK1rhFLIPWnn/G9vhAGh1u9NboRs/RE/ow=;
+        b=JU02zlGxUNEjhxwe27o+7eMPenGEWQmkCPdSIpBR5qunebhSp461VrVf9zJq0NioEDcy2Y
+        yr1DUrgO3XLl73oSzLG6eAeukjQICH61Z+5l+GlIrcSGH7RrWpNMXVVVPTqpyBiuqvSwLK
+        wauW4nXFOoJSg6psFVakxfQsoI3tXl4=
+Received: from localhost.localdomain (fttx-pool-80.245.76.205.bambit.de [80.245.76.205])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id C713B4054D;
+        Sun, 27 Feb 2022 18:28:19 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     "devicetree @ vger . kernel . org Damien Le Moal" 
+        <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v3 0/3] Add sata nodes to rk356x
+Date:   Sun, 27 Feb 2022 19:27:57 +0100
+Message-Id: <20220227182800.275572-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1645558375.git.riteshh@linux.ibm.com> <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
- <20220223093713.fw7c54xmllxrmmld@quack3.lan>
-In-Reply-To: <20220223093713.fw7c54xmllxrmmld@quack3.lan>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Sun, 27 Feb 2022 10:27:54 -0800
-Message-ID: <CAD+ocbwweF5vZh3AHRFnCQJCUC045KgoY+F2Z1aOHyxdrcxK5A@mail.gmail.com>
-Subject: Re: [RFC 1/9] ext4: Remove unused enum EXT4_FC_COMMIT_FAILED
-To:     Jan Kara <jack@suse.cz>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: b31bc3f0-f46f-4773-805b-b34a3d2c2b1d
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+This Series converts the binding for ahci-platform to yaml and adds
+sata nodes to rockchip rk356x device trees.
 
-- Harshad
+v3:
+  - add conversion to sata-series
+  - fix some errors in dt_binding_check and dtbs_check
+  - move to unevaluated properties = false
+  - add power-domain to yaml
+  - move sata0 to rk3568.dtsi
+  - drop clock-names and interrupt-names
 
-On Wed, 23 Feb 2022 at 01:37, Jan Kara <jack@suse.cz> wrote:
->
-> On Wed 23-02-22 02:04:09, Ritesh Harjani wrote:
-> > Below commit removed all references of EXT4_FC_COMMIT_FAILED.
-> > commit 0915e464cb274 ("ext4: simplify updating of fast commit stats")
-> >
-> > Just remove it since it is not used anymore.
-> >
-> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
->
-> Sure. Feel free to add:
->
-> Reviewed-by: Jan Kara <jack@suse.cz>
->
->                                                                         Honza
->
-> > ---
-> >  fs/ext4/fast_commit.h | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/fs/ext4/fast_commit.h b/fs/ext4/fast_commit.h
-> > index 02afa52e8e41..80414dcba6e1 100644
-> > --- a/fs/ext4/fast_commit.h
-> > +++ b/fs/ext4/fast_commit.h
-> > @@ -93,7 +93,6 @@ enum {
-> >       EXT4_FC_REASON_RENAME_DIR,
-> >       EXT4_FC_REASON_FALLOC_RANGE,
-> >       EXT4_FC_REASON_INODE_JOURNAL_DATA,
-> > -     EXT4_FC_COMMIT_FAILED,
-> >       EXT4_FC_REASON_MAX
-> >  };
-> >
-> > --
-> > 2.31.1
-> >
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+Frank Wunderlich (3):
+  dt-bindings: Convert ahci-platform DT bindings to yaml
+  dt-bindings: Add power-domains property to ahci-platform
+  arm64: dts: rockchip: Add sata nodes to rk356x
+
+ .../devicetree/bindings/ata/ahci-platform.txt |  79 ----------
+ .../bindings/ata/ahci-platform.yaml           | 143 ++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  14 ++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  26 ++++
+ 4 files changed, 183 insertions(+), 79 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/ata/ahci-platform.txt
+ create mode 100644 Documentation/devicetree/bindings/ata/ahci-platform.yaml
+
+-- 
+2.25.1
+

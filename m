@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13AE4C5E8D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D06B4C5E89
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 21:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiB0UX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 15:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S231603AbiB0UV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 15:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiB0UXz (ORCPT
+        with ESMTP id S229812AbiB0UV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 15:23:55 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD4E83E0EC;
-        Sun, 27 Feb 2022 12:23:17 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21RKHPMx016218;
-        Sun, 27 Feb 2022 14:17:25 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21RKHOOd016217;
-        Sun, 27 Feb 2022 14:17:24 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Sun, 27 Feb 2022 14:17:24 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakob <jakobkoschel@gmail.com>,
+        Sun, 27 Feb 2022 15:21:28 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D261955755;
+        Sun, 27 Feb 2022 12:20:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6FJD30xyz4xcZ;
+        Mon, 28 Feb 2022 07:20:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1645993244;
+        bh=bj4kQe2ga8DdybKfRKNaqFOjWtocJLyBV0Y3f+6szJc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fvDMSZE9l2gjzHY7ZxHfhbPz0tTliKc3uLxm7/3z1mmt7Ol0f2IHwMUxDsvUCq188
+         u+WpcvTtB2ciiE4PPwsUHUaTB6QOZwzq6tbxplKENWMtVoEzvSHbFPZMYm65pxdqxO
+         N4hNnnvoxvI0FY7w490vsfYDpwpDPW6MnP/UHKs9cm1ahsdOW5PSSlLX/pWTN13nOP
+         z2acZh3RweGxsovhQt9lnMJvl8FLB/z3JzT79ips2/bLMs4MMcarrelhp7hQcLcba7
+         FQlLnHcVl1vlyjgnV5WyIcyDgMS86Qxyu3ZOpjW4iVsrYmkEGRXOsuL41kKfIai45G
+         v9PzOsFEiLfDA==
+Date:   Mon, 28 Feb 2022 07:20:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator after the loop
-Message-ID: <20220227201724.GZ614@gate.crashing.org>
-References: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com> <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com> <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com> <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com> <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com> <20220227113245.GY614@gate.crashing.org> <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20220228072042.5314e22b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/C7ouye5q8627jOdzauxjfu7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 07:09:03PM +0100, Miguel Ojeda wrote:
-> On Sun, Feb 27, 2022 at 1:09 PM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> >
-> > How will you define dividing by zero so that its behaviour is reasonable
-> > for every program, for example?
-> 
-> The solution is to let the developer specify what they need to happen.
-> That choice should include the unsafe possibility (i.e. unchecked),
-> because sometimes that is precisely what we need.
+--Sig_/C7ouye5q8627jOdzauxjfu7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Requiring to annotate every place that has UB (or *can* have UB!) by the
-user is even less friendly than having so much UB is already :-(
+Hi all,
 
-I don't see how you will fit this into the C syntax, btw?
+In commit
 
-> > Invoking an error handler at runtime
-> > has most of the same unwanted effects, except is is never silent.  You
-> 
-> It may not be what it is needed in some cases (thus the necessity to
-> be able to choose), but at least one can predict what happens and
-> different compilers, versions, flags, inputs, etc. would agree.
+  765559b10ce5 ("ibmvnic: initialize rc before completing wait")
 
-You need a VM like Java's to get even *close* to that.  This is not the
-C target: it is slower than wanted/expected, it is hosted instead of
-embedded, and it comes with a whole host of issues of its own.  One of
-the strengths of C is its tiny runtime, a few kB is a lot already!
+Fixes tag
 
-I completely agree that if you design a new "systems" language, you want
-to have much less undefined behaviour than C has.  But it is self-
-delusion to think you can eradicate all (or even most).
+  Fixes: 6b278c0cb378 ("ibmvnic delay complete()")
 
-And there are much bigger problems in any case!  If you think that if
-programmers could no longer write programs that invoke undefined
-behaviour they will write much better programs, programs with fewer
-serious functionality or security problems, even just a factor of two
-better, well...
+has these problem(s):
 
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
 
-Segher
+So
+
+Fixes: 6b278c0cb378 ("ibmvnic: delay complete()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/C7ouye5q8627jOdzauxjfu7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIb3RoACgkQAVBC80lX
+0Gyfmgf+L3yqbcnI6avxhcU+ivOnkGKhZfuy0IzwqVG4WghKtXRvfhsYs9c+1Bml
+IVfT3OyeGRns/9du8i7mVJWdOS7p+ITgDjdQXl5OHG7nXkRgRx/WJUo/bja/VzfC
+EjgoZt5kc+Y1QM1tFbdG/t6xQPK2y/kIe37KBZyqXs22vliNgkSzOu+SDAoirsbV
+sgfovsasGl2Xn/+QsEhwb4/W66MIsq8l7rOUlThFcfZWO119hhysN5C2Vg6289ke
+OGIno95mxafmZtg6ByKWX8i0FYmbj6I/1PdAnquQHSUbIBQ74dS3EfJdNGkdn/qE
+qu6VdBKE4l7J/PolMp0jtO5d6L+OCw==
+=eBrp
+-----END PGP SIGNATURE-----
+
+--Sig_/C7ouye5q8627jOdzauxjfu7--

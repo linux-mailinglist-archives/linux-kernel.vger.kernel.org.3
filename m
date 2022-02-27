@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EACA4C5B5C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE66F4C5B65
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiB0Nlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 08:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S231228AbiB0Nsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 08:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiB0Nlo (ORCPT
+        with ESMTP id S231219AbiB0Nsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 08:41:44 -0500
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4BF5D663
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 05:41:06 -0800 (PST)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 21RDeA2M026055-21RDeA2P026055
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Sun, 27 Feb 2022 21:40:15 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: cgroup: remove WARN_ON at bpf_cgroup_link_release
-Date:   Sun, 27 Feb 2022 21:40:08 +0800
-Message-Id: <20220227134009.1298488-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 27 Feb 2022 08:48:52 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761882DC9
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 05:48:11 -0800 (PST)
+X-UUID: 1b39c2a6e4e84b62879c77927a8e5592-20220227
+X-UUID: 1b39c2a6e4e84b62879c77927a8e5592-20220227
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 344440268; Sun, 27 Feb 2022 21:48:01 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sun, 27 Feb 2022 21:48:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 27 Feb 2022 21:48:00 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <linus.walleij@linaro.org>, <linux-kernel@vger.kernel.org>
+CC:     <andreyknvl@gmail.com>, <anshuman.khandual@arm.com>,
+        <ardb@kernel.org>, <arnd@arndb.de>, <dvyukov@google.com>,
+        <geert+renesas@glider.be>, <glider@google.com>,
+        <kasan-dev@googlegroups.com>, <lecopzer.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <lukas.bulwahn@gmail.com>, <mark.rutland@arm.com>,
+        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>,
+        <rmk+kernel@armlinux.org.uk>, <ryabinin.a.a@gmail.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH v3 0/2] arm: kasan: support CONFIG_KASAN_VMALLOC
+Date:   Sun, 27 Feb 2022 21:47:24 +0800
+Message-ID: <20220227134726.27584-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+Since the framework of KASAN_VMALLOC is well-developed,
+It's easy to support for ARM that simply not to map shadow of VMALLOC
+area on kasan_init.
 
-When syzkaller injects fault into memory allocation at
-bpf_prog_array_alloc, the kernel encounters a memory failure and
-returns non-zero, thus leading to one WARN_ON at
-bpf_cgroup_link_release. The stack trace is as follows:
+Since the virtual address of vmalloc for Arm is also between
+MODULE_VADDR and 0x100000000 (ZONE_HIGHMEM), which means the shadow
+address has already included between KASAN_SHADOW_START and
+KASAN_SHADOW_END.
+Thus we need to change nothing for memory map of Arm.
 
- __kmalloc+0x7e/0x3d0
- bpf_prog_array_alloc+0x4f/0x60
- compute_effective_progs+0x132/0x580
- ? __sanitizer_cov_trace_pc+0x1a/0x40
- update_effective_progs+0x5e/0x260
- __cgroup_bpf_detach+0x293/0x760
- bpf_cgroup_link_release+0xad/0x400
- bpf_link_free+0xca/0x190
- bpf_link_put+0x161/0x1b0
- bpf_link_release+0x33/0x40
- __fput+0x286/0x9f0
+This can fix ARM_MODULE_PLTS with KASan, support KASan for higmem
+and provide the first step to support CONFIG_VMAP_STACK with Arm.
+    
 
-Fix this by removing the WARN_ON for __cgroup_bpf_detach.
+Test on
+1. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping.
+2. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping + LPAE.
+3. Qemu with memory 2G and vmalloc=500M for 2G/2G mapping.
 
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- kernel/bpf/cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v3:
+    rebase on 5.17-rc5.
+    Add simple doc for "arm: kasan: support CONFIG_KASAN_VMALLOC"
+    Tweak commit message.
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 514b4681a90a..fdbdcee6c9fa 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -896,8 +896,8 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
- 		return;
- 	}
- 
--	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
--				    cg_link->type));
-+	__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
-+				    cg_link->type);
- 
- 	cg = cg_link->cgroup;
- 	cg_link->cgroup = NULL;
+v2:
+    rebase on 5.17-rc3
+
+
+Lecopzer Chen (2):
+  arm: kasan: support CONFIG_KASAN_VMALLOC
+  arm: kconfig: fix MODULE_PLTS for KASAN with KASAN_VMALLOC
+
+ arch/arm/Kconfig                 |  2 ++
+ arch/arm/include/asm/kasan_def.h | 11 ++++++++++-
+ arch/arm/mm/kasan_init.c         |  6 +++++-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+
 -- 
 2.25.1
 

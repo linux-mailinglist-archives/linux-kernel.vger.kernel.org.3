@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4894C5B53
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814C14C5B55
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiB0N1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 08:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S231200AbiB0N32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 08:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiB0N1G (ORCPT
+        with ESMTP id S230141AbiB0N31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 08:27:06 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D1357B3C;
-        Sun, 27 Feb 2022 05:26:28 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id s1so13843396edd.13;
-        Sun, 27 Feb 2022 05:26:28 -0800 (PST)
+        Sun, 27 Feb 2022 08:29:27 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594DB50E2F;
+        Sun, 27 Feb 2022 05:28:51 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id z2so8564865plg.8;
+        Sun, 27 Feb 2022 05:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yBrVzJ9RNWnI4B6sopzRypLorlhMA3JejhjXEw8wiRM=;
-        b=BrJ+UXE7YNgn3/+guNDpc0cZ/+0yN6s7GkZqJdF33vBGXiIJfXeMtNFGKy1iTvI+rj
-         3eiirR32/WGVY2E/ZO0tc2+98Ane+PEEyirbJGD8s8Y019NA2phzLLvDKfRfrt4KUl7x
-         ZRpWFSxADlT4wfcAqNzjrHrGqFY7GNT3eYGDmbrroRi4aJvTjnbNALYJLrTedX2Gq2iB
-         IJWpoYKMbqwTT01v39DMuqx0J4uAmIc42sHoCon+z67k96Oztgz/s8P6seGgflDkq7G/
-         lMwkhwJEPpUT1coX7x57gAYuXAWXCYRZQDffmCO++x0n18q9S3P6Z8tH6QlEJcPxqN4B
-         xYvA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YytAN5dKnBXABN9R6VMCMuydpIbYgYlScavYReEx7ew=;
+        b=m5LTy1SWMU7o9xBWDSw5yii9D4bIsK9xxH44qyPuW2hxB/brLo+o2SFKdfq124Ex8u
+         o2RhtUvaf+kInfg0mNINzIHIN7dcNl3ugsWdCBciJuV4onXPSYPuyxuy6rR6pAAhR6Os
+         N2wFzC44FGjqpbOhOkWPeCh9KtI1OdMC6DjHJb8oFmKk04+wuGCAewxO0V3N/ykxBmqO
+         2UkOlWz9lFVQs8PQfw4CysNaqVRcMol9NQXJt3p3oG9ObPj49jTPhxby/POm4MVJec2S
+         /8RL/hxtQO8MAvMYBhxyN8XJ6HmmDET8dhSmVjYcCekRivvTxpPloF5VtYZuM6hYsBfn
+         kQUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yBrVzJ9RNWnI4B6sopzRypLorlhMA3JejhjXEw8wiRM=;
-        b=gnOTCg5PZCTTxg2DUTZhfM3WEP0hwGbOiuE2EPaBpSdWaQpWBcx3stuAnPU4Ii0t0c
-         PzViT5xF0dKZdVRSKG7/rG4Whl3/+E0gAxvnUmyNSw9tb3kwcuzAufmwUzWQeY57Nmcw
-         +Guvh3SyFzIy4fmnDFqxMbDPUF6GzwPMX/KdICNCveRbdzIWTTQrQECzsCwas1n6cn5P
-         cpj8rf1/LMfoMqqdjJ5DSvp27D/4ENpTNHZtMZytxY5IWJtxe8xJzRzSXD6Ik7WpvAf+
-         XhfkhxWqnF9VnZWr6GuE9D6O/rJGcVjWjCBIMcbAssfwaA9XrMNrC9qbPa/G9qlTzvBF
-         GZRg==
-X-Gm-Message-State: AOAM532sUyw3xiQIVvkOs40ONr5YZFQU5cNjaWWcMmM9gG/9JmqH3leY
-        HyqNC2g4z4eGFKdADY1A1HFvodXmGAF9BUlMO60=
-X-Google-Smtp-Source: ABdhPJxCL/yjBNxfZ5dK/RXXsQehV7AjlpffnozroAcSGYE6XZ011tmcLEv7qApjN+prPC+W3vu3+twMY1fYmym+3Fg=
-X-Received: by 2002:a05:6402:198:b0:410:83e3:21d7 with SMTP id
- r24-20020a056402019800b0041083e321d7mr15410375edv.159.1645968386751; Sun, 27
- Feb 2022 05:26:26 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YytAN5dKnBXABN9R6VMCMuydpIbYgYlScavYReEx7ew=;
+        b=JxKa2FoMB2I4TKU+BqTqHF1NUbItwgenI6FOzr1TCD9T5mgSUWddjOz8nQz0vXgvm+
+         o3Mw410HMcRqjDxqpzGbOYxENtiXe4DvmYWfb1BMThoAxYpmewHpsNGCD/08QH9g3gLG
+         Jm1ZYaueHU2Xe32EATLw1G0JWIid7B581d4QMP/J+4JbbGd99up4YTsQDk5nKdrP+fVC
+         5HjL+7SU9cRqPnWRft5L9EdCfsTicPzHYJApSFLA75QEcWzSKH68Sgz/TAx3LOOdcIRk
+         YlOuLeqiyf/T/Lb3UMFS6+a39VYrVNN/LI3S6BlmfF643KnH7lKew5XKxSjnoBEJDmLl
+         W6Ig==
+X-Gm-Message-State: AOAM5338MUImUKaem4n//lm4HP+iig1ANOA+5p1khV1s6yFECe2IOWhW
+        gXm10uFBOnzMKHwjDW/17oM=
+X-Google-Smtp-Source: ABdhPJzqAGdVLaYORwo2L8nu+5XmBGueeIjEI5BAm2IeN4ma+tG+jN7uf9Aoj9Ztd8ug8bHCLkL2CA==
+X-Received: by 2002:a17:902:ce08:b0:14f:85c1:773e with SMTP id k8-20020a170902ce0800b0014f85c1773emr15690425plg.99.1645968530920;
+        Sun, 27 Feb 2022 05:28:50 -0800 (PST)
+Received: from localhost.localdomain ([103.149.162.113])
+        by smtp.gmail.com with ESMTPSA id x3-20020a17090ad68300b001b8bcd47c35sm14532651pju.6.2022.02.27.05.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 05:28:50 -0800 (PST)
+From:   Dongli Si <kvmx86@gmail.com>
+X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
+To:     peterz@infradead.org, joerg.roedel@amd.com
+Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@redhat.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf/x86/amd: Don't touch the Host-only bit inside the guest hypervisor
+Date:   Sun, 27 Feb 2022 21:26:40 +0800
+Message-Id: <20220227132640.3-1-sidongli1997@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220213025739.2561834-1-liambeguin@gmail.com>
- <20220227125559.72d5d79a@jic23-huawei> <20220227130546.5ed0bae1@jic23-huawei>
-In-Reply-To: <20220227130546.5ed0bae1@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 27 Feb 2022 15:25:50 +0200
-Message-ID: <CAHp75VdNg--SAZ=8XqfZuhQ4iX3b9_O3psWHZZL8kO5hf7n14g@mail.gmail.com>
-Subject: Re: [PATCH v15 00/10] iio: afe: add temperature rescaling support
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Liam Beguin <liambeguin@gmail.com>, Peter Rosin <peda@axentia.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 2:58 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Sun, 27 Feb 2022 12:55:59 +0000
-> Jonathan Cameron <jic23@kernel.org> wrote:
-> > On Sat, 12 Feb 2022 21:57:29 -0500
-> > Liam Beguin <liambeguin@gmail.com> wrote:
-> >
-> > > Jonathan, Peter, Andy,
-> > >
-> > > This series focuses on adding temperature rescaling support to the IIO
-> > > Analog Front End (AFE) driver.
-> > >
-> > > The main changes to the AFE driver include an initial Kunit test suite,
-> > > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
-> > > and temperature transducer sensors.
+From: Dongli Si <sidongli1997@gmail.com>
 
-...
+When using nested virtualization and if use "perf record" in an AMD Rome
+and Milan guest hypervisor (L1), dmesg report an error message like this:
 
-> > I was waiting for Andy to reply to this. Took a quick look back at
-> > what was outstanding and realised he had given a
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > for v13.
->
-> Actually given the units.h change is a perhaps non trivial perhaps that's
-> why you dropped Andy's RB.  I'll still apply the series, but it Andy
-> confirms his view on that tag before I push this out as something I can't
-> rebase I'll add it if appropriate.
+[ ] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076) at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
 
-Since it was a separate patch, I'm fine with not including it due to
-strong argument from Peter.
+The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host, while
+the guest hypervisor (L1) performance monitor unit should avoid such use.
 
-> > I'm assuming there wasn't a strong reason to drop that in the meantime
-> > and it's a simple omission / crossed emails issue.
-> >
-> > As such,
-> >
-> > Series applied to the togreg branch of iio.git and pushed out
-> > as testing to get some build coverage from 0-day.
+Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
+Signed-off-by: Dongli Si <sidongli1997@gmail.com>
+---
+ arch/x86/events/amd/core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 9687a8aef01c..3fafd1e46ada 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -8,6 +8,7 @@
+ #include <linux/jiffies.h>
+ #include <asm/apicdef.h>
+ #include <asm/nmi.h>
++#include <asm/hypervisor.h>
+ 
+ #include "../perf_event.h"
+ 
+@@ -1027,7 +1028,8 @@ void amd_pmu_enable_virt(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 
+-	cpuc->perf_ctr_virt_mask = 0;
++	if (hypervisor_is_type(X86_HYPER_NATIVE))
++		cpuc->perf_ctr_virt_mask = 0;
+ 
+ 	/* Reload all events */
+ 	amd_pmu_disable_all();
 -- 
-With Best Regards,
-Andy Shevchenko
+2.32.0
+

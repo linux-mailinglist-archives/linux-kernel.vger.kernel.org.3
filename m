@@ -2,188 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEED14C5916
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41F4C5919
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 04:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiB0DJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Feb 2022 22:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S229727AbiB0DOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Feb 2022 22:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiB0DJS (ORCPT
+        with ESMTP id S229588AbiB0DOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:09:18 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFBD2067F6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:08:42 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id y5so8068455pfe.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=Fb1Fr4SQCkBg3RadE/zeIUDZwL5WObSG9FVSGnzglws=;
-        b=f6xFBweIX4Xb/dPvy1x296+2mivpE9bZWl0oucGJPWCpTNVt7Mjp1waOXUuUYemwY4
-         lhKvPdGfyILePk8HSCdgpDrkzmrx/t7Ds/ljy4I1LnVtE56THltTe+B3MIDD2sJAtr/c
-         dxe92Lxr1tWEYLG3T56WHsjlNGeKOkqYqvS1BsFlAXeQh4iBmW9eJdwqPe/4keENwSqo
-         pdB92uS6kEOKcQGiohfrAT+iQ+FJ3nc5fBU3JDGWNYed/nf1aNyC1bovamT+2viDAcX9
-         D8VitCHS+Gday4Lm/vEnRJy+VgcCzqYIuYBE5oxygf5RxORJMxlZ5FhIMYo5tH1tQo5d
-         C9Zg==
+        Sat, 26 Feb 2022 22:14:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4D7F29CBE9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:13:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645931635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f/26ubjoltjj4CBjusBWCl7axdUNBpCkP32rmYaM0Bg=;
+        b=cxniCNbXM97DQbPT8IyS/PMTdPs+5qCrlpGfFpXBpecTAQIaS6RpRmlT1eq1jbkTSBcyED
+        vhRnlN9nTghb8zK16yEld1RpHB486q0gnCxlbjuoKr9wzn9G9XDV7TR8cfMX3XbioyngTi
+        lJLOpYTtdwwULhGIODtCzFJtt//XvV4=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-477-cxM2WCiHMo2ZK3dSqKe61w-1; Sat, 26 Feb 2022 22:13:53 -0500
+X-MC-Unique: cxM2WCiHMo2ZK3dSqKe61w-1
+Received: by mail-qv1-f69.google.com with SMTP id g13-20020a0cf08d000000b004329146b1ccso8347929qvk.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Feb 2022 19:13:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fb1Fr4SQCkBg3RadE/zeIUDZwL5WObSG9FVSGnzglws=;
-        b=aAXeyPmmRtyUMG2t6f+rMa4Q/41RUnyK/Yq/szlX0vbrLlG4qqdqTd4WI/fe6fjh8u
-         k++hO41YE2sW3k0ajZB4HHyqO+/bitcXTTdl6iadQ3Iq+osVPtHjWRiUuZwG3FPOmPGZ
-         sojff7ga8LSwFIT7n09kEIozuXS8AtUVVnET2YN2YpOL/Ihq9Y/YoS/VmtoAq498/SVb
-         PmpByD4+rJPHVdgCdOvgtAx460J1TnXTt53y27BNvBGJqgcgjJdDoPdCyvQwUyI2t5IU
-         e9pPsWWSsVhFKghsxqpk7eK3LHIOkRAn0fSxJJ2jWRipn6X7Rj+TnUe06xSjmm64bVs+
-         f/jA==
-X-Gm-Message-State: AOAM530Jgc5C+ENS8nqkA5pJnX9g6GgQtVSmoYGo/VG1u9r5puDBSQbF
-        fDJrtHiUtyMm9CB35K+mReI=
-X-Google-Smtp-Source: ABdhPJz7GlKSXZVPOMRVYgkstyoZ2bcGj7eL1zWf7U/EukfxMle1vLRvZN76+hmbDqzPXyRaR+A2Xw==
-X-Received: by 2002:a05:6a00:2346:b0:4f0:fece:1247 with SMTP id j6-20020a056a00234600b004f0fece1247mr15077112pfj.29.1645931322075;
-        Sat, 26 Feb 2022 19:08:42 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id z8-20020aa79588000000b004e1dc67ead3sm7915907pfj.126.2022.02.26.19.08.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f/26ubjoltjj4CBjusBWCl7axdUNBpCkP32rmYaM0Bg=;
+        b=WFYZr9zO5hokZ39QCOx7q1Mjc01MA35+k1mQOaeo5qGZkVIn7K61qASMj/s5SNmNRj
+         Z1Og6O7j15/fIZ1cMpRM2/GdHBhw7sJW2C3/9Oz0UGPNgUS2KZPGaP28tt3Hnzu8Cd+K
+         wtATlmX+5rjbcxj4rqsWhM1aj4jb0AkXMxdiOO1kiyAiORDEXzxy9yDm+NJQdRC42XKg
+         5WIekPhP5NqbSGIXdWye/36T2ZX85xASv7jOqnbLRH/g5I1VJI3dE8lvhcnKEMqR+yLD
+         yRq7mVAAlNJGz27NpBuvEb3nFOMM9Yyoinphs1s7U+9tR1dgBUO7Kqcf4yOz6Bwtyb2E
+         Ycng==
+X-Gm-Message-State: AOAM530Zm0Z+sLu+fWGe30TTKaMO2OuKg8da5/Qx/lSbW6lekGhY5aAC
+        Xyt40a0SRxa2wdH+fMsepDfgXIJiHHFOKFK+JfzLAWx4/Kk1RYLjknbbyTRGP8oqd3TeMbgPwl/
+        4WVSlmfsbr0krbsuIpvLrrDnh
+X-Received: by 2002:ac8:7f4c:0:b0:2de:37ad:99b2 with SMTP id g12-20020ac87f4c000000b002de37ad99b2mr12023006qtk.641.1645931632908;
+        Sat, 26 Feb 2022 19:13:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy7sse+5hLKCdJRhA+h2qLYIsMKmVEDwjFVlLa+baTXMOsQC7YPuENXppzMWDNCNmJYq/GIBQ==
+X-Received: by 2002:ac8:7f4c:0:b0:2de:37ad:99b2 with SMTP id g12-20020ac87f4c000000b002de37ad99b2mr12022995qtk.641.1645931632521;
+        Sat, 26 Feb 2022 19:13:52 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id bq42-20020a05620a46aa00b006494fb49246sm3292338qkb.86.2022.02.26.19.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 19:08:41 -0800 (PST)
-Date:   Sun, 27 Feb 2022 03:08:35 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Zqiang <qiang.zhang@windriver.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH] lib/stackdepot: Use page allocator if both slab and memblock
- is unavailable
-Message-ID: <YhrrM7NTYXG5JluY@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Sat, 26 Feb 2022 19:13:51 -0800 (PST)
+Date:   Sat, 26 Feb 2022 19:13:48 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 34/39] objtool: Validate IBT assumptions
+Message-ID: <20220227031348.drbmkcmoqur53aay@treble>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151324.018939604@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220225180318.20594-3-vbabka@suse.cz>
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <20220224151324.018939604@infradead.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 2dba5eb1c73b ("lib/stackdepot: allow optional init and
-stack_table allocation by kvmalloc()"), stack_depot_init() is called
-later if CONFIG_STACKDEPOT_ALWAYS_INIT=n to remove unnecessary memory
-usage. It allocates stack_table using memblock_alloc() or kvmalloc()
-depending on availability of slab allocator.
+On Thu, Feb 24, 2022 at 03:52:12PM +0100, Peter Zijlstra wrote:
+> +++ b/tools/objtool/check.c
+> @@ -380,6 +380,7 @@ static int decode_instructions(struct ob
+>  			memset(insn, 0, sizeof(*insn));
+>  			INIT_LIST_HEAD(&insn->alts);
+>  			INIT_LIST_HEAD(&insn->stack_ops);
+> +			INIT_LIST_HEAD(&insn->call_node);
 
-But when stack_depot_init() is called while creating boot slab caches,
-both slab allocator and memblock is not available. So kernel crashes.
-Allocate stack_table from page allocator when both slab allocator and
-memblock is unavailable.
+Is this needed?  'call_node' isn't actually a list head, otherwise this
+would presumably be fixing a major bug.
 
-Limit size of stack_table when using page allocator because vmalloc()
-is also unavailable in kmem_cache_init(). it must not be larger than
-(PAGE_SIZE << (MAX_ORDER - 1)).
+>  			insn->sec = sec;
+>  			insn->offset = offset;
+> @@ -1176,6 +1177,14 @@ static int add_jump_destinations(struct
+>  	unsigned long dest_off;
+>  
+>  	for_each_insn(file, insn) {
+> +		if (insn->type == INSN_ENDBR && insn->func) {
+> +			if (insn->offset == insn->func->offset) {
+> +				file->nr_endbr++;
+> +			} else {
+> +				file->nr_endbr_int++;
+> +			}
+> +		}
+> +
 
-This patch was tested on both CONFIG_STACKDEPOT_ALWAYS_INIT=y and n.
+This doesn't have much to do with adding jump destinations.  I'm
+thinking this would fit better in decode_instructions() in the
+sym_for_each_insn() loop.
 
-Fixes: 2dba5eb1c73b ("lib/stackdepot: allow optional init and stack_table allocation by kvmalloc()")
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- lib/stackdepot.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+>  		if (!is_static_jump(insn))
+>  			continue;
+>  
+> @@ -1192,10 +1201,14 @@ static int add_jump_destinations(struct
+>  		} else if (insn->func) {
+>  			/* internal or external sibling call (with reloc) */
+>  			add_call_dest(file, insn, reloc->sym, true);
+> -			continue;
+> +
+> +			dest_sec = reloc->sym->sec;
+> +			dest_off = reloc->sym->offset +
+> +				   arch_dest_reloc_offset(reloc->addend);
+> +
+>  		} else if (reloc->sym->sec->idx) {
+>  			dest_sec = reloc->sym->sec;
+> -			dest_off = reloc->sym->sym.st_value +
+> +			dest_off = reloc->sym->offset +
+>  				   arch_dest_reloc_offset(reloc->addend);
+>  		} else {
+>  			/* non-func asm code jumping to another file */
+> @@ -1205,6 +1218,10 @@ static int add_jump_destinations(struct
+>  		insn->jump_dest = find_insn(file, dest_sec, dest_off);
+>  		if (!insn->jump_dest) {
+>  
+> +			/* external symbol */
+> +			if (!vmlinux && insn->func)
+> +				continue;
+> +
+>  			/*
+>  			 * This is a special case where an alt instruction
+>  			 * jumps past the end of the section.  These are
+> @@ -1219,6 +1236,16 @@ static int add_jump_destinations(struct
+>  			return -1;
+>  		}
+>  
+> +		if (ibt && insn->jump_dest->type == INSN_ENDBR &&
+> +		    insn->jump_dest->func &&
+> +		    insn->jump_dest->offset == insn->jump_dest->func->offset) {
+> +			if (reloc) {
+> +				WARN_FUNC("Direct RELOC jump to ENDBR", insn->sec, insn->offset);
+> +			} else {
+> +				WARN_FUNC("Direct IMM jump to ENDBR", insn->sec, insn->offset);
+> +			}
+> +		}
+> +
 
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index bf5ba9af0500..606f80ae2bf7 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -73,6 +73,14 @@ static int next_slab_inited;
- static size_t depot_offset;
- static DEFINE_RAW_SPINLOCK(depot_lock);
- 
-+static unsigned int stack_hash_size = (1 << CONFIG_STACK_HASH_ORDER);
-+static inline unsigned int stack_hash_mask(void)
-+{
-+	return stack_hash_size - 1;
-+}
-+
-+#define STACK_HASH_SEED 0x9747b28c
-+
- static bool init_stack_slab(void **prealloc)
- {
- 	if (!*prealloc)
-@@ -142,10 +150,6 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 	return stack;
- }
- 
--#define STACK_HASH_SIZE (1L << CONFIG_STACK_HASH_ORDER)
--#define STACK_HASH_MASK (STACK_HASH_SIZE - 1)
--#define STACK_HASH_SEED 0x9747b28c
--
- static bool stack_depot_disable;
- static struct stack_record **stack_table;
- 
-@@ -172,18 +176,28 @@ __ref int stack_depot_init(void)
- 
- 	mutex_lock(&stack_depot_init_mutex);
- 	if (!stack_depot_disable && !stack_table) {
--		size_t size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
-+		size_t size = (stack_hash_size * sizeof(struct stack_record *));
- 		int i;
- 
- 		if (slab_is_available()) {
- 			pr_info("Stack Depot allocating hash table with kvmalloc\n");
- 			stack_table = kvmalloc(size, GFP_KERNEL);
-+		} else if (totalram_pages() > 0) {
-+			/* Reduce size because vmalloc may be unavailable */
-+			size = min(size, PAGE_SIZE << (MAX_ORDER - 1));
-+			stack_hash_size = size / sizeof(struct stack_record *);
-+
-+			pr_info("Stack Depot allocating hash table with __get_free_pages\n");
-+			stack_table = (struct stack_record **)
-+				      __get_free_pages(GFP_KERNEL, get_order(size));
- 		} else {
- 			pr_info("Stack Depot allocating hash table with memblock_alloc\n");
- 			stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
- 		}
-+
- 		if (stack_table) {
--			for (i = 0; i < STACK_HASH_SIZE;  i++)
-+			pr_info("Stack Depot hash table size=%u\n", stack_hash_size);
-+			for (i = 0; i < stack_hash_size;  i++)
- 				stack_table[i] = NULL;
- 		} else {
- 			pr_err("Stack Depot hash table allocation failed, disabling\n");
-@@ -363,7 +377,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		goto fast_exit;
- 
- 	hash = hash_stack(entries, nr_entries);
--	bucket = &stack_table[hash & STACK_HASH_MASK];
-+	bucket = &stack_table[hash & stack_hash_mask()];
- 
- 	/*
- 	 * Fast path: look the stack trace up without locking.
+I have several concerns about all the above (and corresponding changes
+elsewhere), but it looks like this was moved to separate patches, for
+ease of NACKing :-)
+
+>  		/*
+>  		 * Cross-function jump.
+>  		 */
+> @@ -1246,7 +1273,8 @@ static int add_jump_destinations(struct
+>  				insn->jump_dest->func->pfunc = insn->func;
+>  
+>  			} else if (insn->jump_dest->func->pfunc != insn->func->pfunc &&
+> -				   insn->jump_dest->offset == insn->jump_dest->func->offset) {
+> +				   ((insn->jump_dest->offset == insn->jump_dest->func->offset) ||
+> +				    (insn->jump_dest->offset == insn->jump_dest->func->offset + 4))) {
+>  				/* internal sibling call (without reloc) */
+>  				add_call_dest(file, insn, insn->jump_dest->func, true);
+
+How about something more precise/readable/portable:
+
+static bool same_func(struct instruction *insn1, struct instruction *insn2)
+{
+	return insn1->func->pfunc == insn2->func->pfunc;
+}
+
+static bool is_first_func_insn(struct instruction *insn)
+{
+	return insn->offset == insn->func->offset ||
+	       (insn->type == INSN_ENDBR &&
+	        insn->offset == insn->func->offset + insn->len);
+}
+
+			...
+
+  			} else if (!same_func(insn, insn->jump_dest) &&
+				   is_first_func_insn(insn->jump_dest))
+
+
+> +static void validate_ibt_insn(struct objtool_file *file, struct instruction *insn);
+
+I'd rather avoid forward declares and stay with the existing convention.
+
+> +
+>  /*
+>   * Follow the branch starting at the given instruction, and recursively follow
+>   * any other branches (jumps).  Meanwhile, track the frame pointer state at
+> @@ -3101,6 +3164,17 @@ static int validate_branch(struct objtoo
+>  
+>  		if (insn->hint) {
+>  			state.cfi = *insn->cfi;
+> +			if (ibt) {
+> +				struct symbol *sym;
+> +
+> +				if (insn->cfi->type == UNWIND_HINT_TYPE_REGS_PARTIAL &&
+> +				    (sym = find_symbol_by_offset(insn->sec, insn->offset)) &&
+> +				    insn->type != INSN_ENDBR && !insn->noendbr) {
+> +					WARN_FUNC("IRET_REGS hint without ENDBR: %s",
+> +						  insn->sec, insn->offset,
+> +						  sym->name);
+> +				}
+
+No need to print sym->name here, WARN_FUNC() already does it?
+
+> +			}
+>  		} else {
+>  			/* XXX track if we actually changed state.cfi */
+>  
+> @@ -3260,7 +3334,12 @@ static int validate_branch(struct objtoo
+>  			state.df = false;
+>  			break;
+>  
+> +		case INSN_NOP:
+> +			break;
+> +
+>  		default:
+> +			if (ibt)
+> +				validate_ibt_insn(file, insn);
+
+This is kind of subtle.  It would be more robust/clear to move this call
+out of the switch statement and check explicitly for the exclusion of
+jump/call instructions from within validate_ibt_insn().
+
+>  			break;
+>  		}
+>  
+> @@ -3506,6 +3585,130 @@ static int validate_functions(struct obj
+>  	return warnings;
+>  }
+>  
+> +static struct instruction *
+> +validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
+> +{
+> +	struct instruction *dest;
+> +	struct section *sec;
+> +	unsigned long off;
+> +
+> +	sec = reloc->sym->sec;
+> +	off = reloc->sym->offset + reloc->addend;
+
+This math assumes non-PC-relative.  If it's R_X86_64_PC32 or
+R_X86_64_PLT32 then it needs +4 added.
+
+There are actually a few cases of this in startup_64().  Those are
+harmless, but there might conceivably be other code which isn't?
+
+> +
+> +	dest = find_insn(file, sec, off);
+> +	if (!dest)
+> +		return NULL;
+> +
+> +	if (dest->type == INSN_ENDBR)
+> +		return NULL;
+> +
+> +	if (reloc->sym->static_call_tramp)
+> +		return NULL;
+> +
+> +	return dest;
+> +}
+> +
+> +static void warn_noendbr(const char *msg, struct section *sec, unsigned long offset,
+> +			 struct instruction *target)
+> +{
+> +	WARN_FUNC("%srelocation to !ENDBR: %s+0x%lx", sec, offset, msg,
+> +		  target->func ? target->func->name : target->sec->name,
+> +		  target->func ? target->offset - target->func->offset : target->offset);
+> +}
+> +
+> +static void validate_ibt_target(struct objtool_file *file, struct instruction *insn,
+> +				struct instruction *target)
+> +{
+> +	if (target->func && target->func == insn->func) {
+
+(Here and elsewhere) Instead of 'target' can we call it 'dest' for
+consistency with existing code?
+
+> +		/*
+> +		 * Anything from->to self is either _THIS_IP_ or IRET-to-self.
+> +		 *
+> +		 * There is no sane way to annotate _THIS_IP_ since the compiler treats the
+> +		 * relocation as a constant and is happy to fold in offsets, skewing any
+> +		 * annotation we do, leading to vast amounts of false-positives.
+> +		 *
+> +		 * There's also compiler generated _THIS_IP_ through KCOV and
+> +		 * such which we have no hope of annotating.
+> +		 *
+> +		 * As such, blanked accept self-references without issue.
+
+"blanket"
+
+> +		 */
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Annotated non-control flow target.
+> +	 */
+> +	if (target->noendbr)
+> +		return;
+
+I don't think the comment really adds anything.  What's a "non-control
+flow target" anyway...
+
+> +
+> +	warn_noendbr("", insn->sec, insn->offset, target);
+> +}
+> +
+> +static void validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
+> +{
+> +	struct reloc *reloc = insn_reloc(file, insn);
+> +	struct instruction *target;
+> +
+> +	for (;;) {
+> +		if (!reloc)
+> +			return;
+> +
+> +		target = validate_ibt_reloc(file, reloc);
+> +		if (target)
+> +			validate_ibt_target(file, insn, target);
+> +
+> +		reloc = find_reloc_by_dest_range(file->elf, insn->sec, reloc->offset + 1,
+> +						 (insn->offset + insn->len) - (reloc->offset + 1));
+> +	}
+
+I'm confused about what this loop is trying to do.  Why would an
+instruction have more than one reloc?  It at least needs a comment.
+
+Also a proper for() loop would be easier to follow:
+
+	for (reloc = insn_reloc(file, insn);
+	     reloc;
+	     reloc = find_reloc_by_dest_range(file->elf, insn->sec,
+					      reloc->offset + 1,
+					      (insn->offset + insn->len) - (reloc->offset + 1)) {
+
+> +}
+> +
+> +static int validate_ibt(struct objtool_file *file)
+> +{
+> +	struct section *sec;
+> +	struct reloc *reloc;
+> +
+> +	for_each_sec(file, sec) {
+> +		bool is_data;
+> +
+> +		/* already done in validate_branch() */
+> +		if (sec->sh.sh_flags & SHF_EXECINSTR)
+> +			continue;
+> +
+> +		if (!sec->reloc)
+> +			continue;
+> +
+> +		if (!strncmp(sec->name, ".orc", 4))
+> +			continue;
+> +
+> +		if (!strncmp(sec->name, ".discard", 8))
+> +			continue;
+> +
+> +		if (!strncmp(sec->name, ".debug", 6))
+> +			continue;
+> +
+> +		if (!strcmp(sec->name, "_error_injection_whitelist"))
+> +			continue;
+> +
+> +		if (!strcmp(sec->name, "_kprobe_blacklist"))
+> +			continue;
+> +
+> +		is_data = strstr(sec->name, ".data") || strstr(sec->name, ".rodata");
+> +
+> +		list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
+> +			struct instruction *target;
+> +
+> +			target = validate_ibt_reloc(file, reloc);
+> +			if (is_data && target && !target->noendbr) {
+> +				warn_noendbr("data ", reloc->sym->sec,
+> +					     reloc->sym->offset + reloc->addend,
+
+Another case where the addend math would be wrong if it were
+pc-relative.  Not sure if that's possible here or not.
+
 -- 
-2.33.1
+Josh
+

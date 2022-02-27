@@ -2,77 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E6A4C5DEF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1383A4C5DE3
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 18:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiB0R5U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Feb 2022 12:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        id S229932AbiB0Rui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 12:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiB0R5T (ORCPT
+        with ESMTP id S229644AbiB0Ruh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:57:19 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7B44BFF3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 09:56:42 -0800 (PST)
-Date:   Sun, 27 Feb 2022 17:56:31 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH -next] misc: rtsx: fix build for CONFIG_PM not set
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei WANG <wei_wang@realsil.com.cn>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Message-Id: <7U5Z7R.RNKITPUWCPX32@crapouillou.net>
-In-Reply-To: <CAK8P3a3=5uud3jd7N3FEAnaLapX-0OYaiscBFNEQm2hzkTmj7g@mail.gmail.com>
-References: <20220226222457.13668-1-rdunlap@infradead.org>
-        <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
-        <449d6ceb-7308-9543-c23c-831bebffda21@infradead.org>
-        <CAK8P3a30RbSk3Y5CyRrOjfTiq0c9XGxC3qjAD0154j3a7k+xQQ@mail.gmail.com>
-        <0D5Z7R.NUOWBMRT4GQ2@crapouillou.net>
-        <CAK8P3a3=5uud3jd7N3FEAnaLapX-0OYaiscBFNEQm2hzkTmj7g@mail.gmail.com>
+        Sun, 27 Feb 2022 12:50:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B295C3DDE9;
+        Sun, 27 Feb 2022 09:50:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C7AA60FF7;
+        Sun, 27 Feb 2022 17:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92D4C340EF;
+        Sun, 27 Feb 2022 17:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645984199;
+        bh=bqyY3XQdRlzIGOWzFJrkb/oKUh63XEB+VuO9HJ3geNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bu65S8Mdj6BE/d7Ux8sTDXYbJA3pBAHP/NTA8ktur3Dh2CZ6bJ0/8notLz7rKRLl9
+         U5Z8jUXayPRS7V3IM2Rro+U1wlRp9Ao/J/b1cWghUyvF/qXsZzHjvXI58td34kNaw2
+         GsgyAJNF/fS0X8UbYEUull970geXbaLOeqvrdSNLrb1vS9B7V2jT47A6UMmXDPit5D
+         0vfwYauN6FHKvnp8LH/cXSofUnv69teeUAQtXgpBJoTF6SRaOiScLCH81qAwomAeYY
+         h29MjzjtZ6ir1gsav7TNvNJS7FhwEFjyKvogxEInTf93L1oufN3WWfujToo4to9o4v
+         3K6xp/Y5DGwGw==
+Date:   Sun, 27 Feb 2022 17:57:01 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     lars@metafoo.de, matthias.bgg@gmail.com, nathan@kernel.org,
+        ndesaulniers@google.com, linus.walleij@linaro.org,
+        ardeleanalex@gmail.com, Tom Rix <trix@redhat.com>,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] iio: adc: mt6360: strengthen return check of
+ mt6360_adc_read_channel
+Message-ID: <20220227175701.4cacbe3d@jic23-huawei>
+In-Reply-To: <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
+References: <20220227164357.84742-1-trix@redhat.com>
+        <5477fb05-d72f-ccc0-1c07-8f2f40d9dde0@wanadoo.fr>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 27 Feb 2022 18:01:47 +0100
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+
+> Le 27/02/2022 =C3=A0 17:43, trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org =
+a=20
+> =C3=A9crit=C2=A0:
+> > From: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+> >=20
+> > Clang static analysis reports this issue
+> > mt6360-adc.c:277:20: warning: Assigned value is
+> >    garbage or undefined
+> >    data.values[i++] =3D val;
+> >                     ^ ~~~
+> >=20
+> > val is set by a successful call to m6360_adc_read_channel().
+> > A negative return is checked but within m6360_adc_read_channel,
+> > a non zero check is done.
+> > Strengthen the check to non zero. =20
+>=20
+> Hi, my understanding of m6360_adc_read_channel() is that on success, it=20
+> returns IIO_VAL_INT (i.e. 1).
+>=20
+> So, I think that with your patch, we will now always fail because 'ret'=20
+> is never 0 at this point.
+
+Firstly I'm glad you were more awake than me Christophe as I missed that
+entirely. :(
+
+So two ways we could deal with the warning (which is valid given there
+is no way clang could sensibly tell that all those if (ret) actually
+mean if (ret < 0).
+
+I don't like changing them to if (ret < 0) inside _adc_read_channel()
+because generally it ends up cleaner to just do if (ret) based handling
+for regmap calls.  So we could just assign a default to val that is never
+used or we could change that function to return 0 on success and adjust
+the other call site to return IIO_VAL_INT if there isn't an error.
+
+The second one would make the other caller rather messier so I'd suggest
+just giving val a default and adding a comment saying it's for warning
+suppression purposes...
+
+Jonathan
 
 
-Le dim., févr. 27 2022 at 18:51:38 +0100, Arnd Bergmann 
-<arnd@arndb.de> a écrit :
-> On Sun, Feb 27, 2022 at 6:46 PM Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->>  Le dim., févr. 27 2022 at 18:30:16 +0100, Arnd Bergmann
->> 
->>  There could be a DEFINE_DEV_PM_OPS(), but I don't think that's 
->> really
->>  needed - you can very well declare your struct dev_pm_ops without 
->> using
->>  one of these macros. Just make sure to use the SYSTEM_SLEEP_PM_OPS /
->>  RUNTIME_PM_OPS macros for the callbacks and pm_ptr() for the 
->> device.pm
->>  pointer.
-> 
-> Ah, of course, so it comes down to
-> s/SET_SYSTEM_SLEEP_PM_OPS/SYSTEM_SLEEP_PM_OPS/ while
-> removing all the #ifdef an __maybe_unused annotations. The pm_ptr()
-> in driver.pm makes this slightly more optimized AFAICT, but has no
-> effect on behavior, right?
-
-The use of SYSTEM_SLEEP_PM_OPS makes sure that the callbacks are 
-dropped if the dev_pm_ops is dead code, and the pm_ptr() must be used 
-for the compiler to know that the dev_pm_ops is dead code.
-
--Paul
-
+>=20
+> CJ
+>=20
+> >=20
+> > Signed-off-by: Tom Rix <trix-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+> > ---
+> >   drivers/iio/adc/mt6360-adc.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/iio/adc/mt6360-adc.c b/drivers/iio/adc/mt6360-adc.c
+> > index 07c0e67683910..9fb6dc305a392 100644
+> > --- a/drivers/iio/adc/mt6360-adc.c
+> > +++ b/drivers/iio/adc/mt6360-adc.c
+> > @@ -269,7 +269,7 @@ static irqreturn_t mt6360_adc_trigger_handler(int i=
+rq, void *p)
+> >   	memset(&data, 0, sizeof(data));
+> >   	for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->maskle=
+ngth) {
+> >   		ret =3D mt6360_adc_read_channel(mad, bit, &val);
+> > -		if (ret < 0) {
+> > +		if (ret) {
+> >   			dev_warn(&indio_dev->dev, "Failed to get channel %d conversion val=
+\n", bit);
+> >   			goto out;
+> >   		} =20
+>=20
 

@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814C14C5B55
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808744C5B58
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 14:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiB0N32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 08:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S231207AbiB0NdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 08:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiB0N31 (ORCPT
+        with ESMTP id S231203AbiB0NdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 08:29:27 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594DB50E2F;
-        Sun, 27 Feb 2022 05:28:51 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id z2so8564865plg.8;
-        Sun, 27 Feb 2022 05:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YytAN5dKnBXABN9R6VMCMuydpIbYgYlScavYReEx7ew=;
-        b=m5LTy1SWMU7o9xBWDSw5yii9D4bIsK9xxH44qyPuW2hxB/brLo+o2SFKdfq124Ex8u
-         o2RhtUvaf+kInfg0mNINzIHIN7dcNl3ugsWdCBciJuV4onXPSYPuyxuy6rR6pAAhR6Os
-         N2wFzC44FGjqpbOhOkWPeCh9KtI1OdMC6DjHJb8oFmKk04+wuGCAewxO0V3N/ykxBmqO
-         2UkOlWz9lFVQs8PQfw4CysNaqVRcMol9NQXJt3p3oG9ObPj49jTPhxby/POm4MVJec2S
-         /8RL/hxtQO8MAvMYBhxyN8XJ6HmmDET8dhSmVjYcCekRivvTxpPloF5VtYZuM6hYsBfn
-         kQUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YytAN5dKnBXABN9R6VMCMuydpIbYgYlScavYReEx7ew=;
-        b=JxKa2FoMB2I4TKU+BqTqHF1NUbItwgenI6FOzr1TCD9T5mgSUWddjOz8nQz0vXgvm+
-         o3Mw410HMcRqjDxqpzGbOYxENtiXe4DvmYWfb1BMThoAxYpmewHpsNGCD/08QH9g3gLG
-         Jm1ZYaueHU2Xe32EATLw1G0JWIid7B581d4QMP/J+4JbbGd99up4YTsQDk5nKdrP+fVC
-         5HjL+7SU9cRqPnWRft5L9EdCfsTicPzHYJApSFLA75QEcWzSKH68Sgz/TAx3LOOdcIRk
-         YlOuLeqiyf/T/Lb3UMFS6+a39VYrVNN/LI3S6BlmfF643KnH7lKew5XKxSjnoBEJDmLl
-         W6Ig==
-X-Gm-Message-State: AOAM5338MUImUKaem4n//lm4HP+iig1ANOA+5p1khV1s6yFECe2IOWhW
-        gXm10uFBOnzMKHwjDW/17oM=
-X-Google-Smtp-Source: ABdhPJzqAGdVLaYORwo2L8nu+5XmBGueeIjEI5BAm2IeN4ma+tG+jN7uf9Aoj9Ztd8ug8bHCLkL2CA==
-X-Received: by 2002:a17:902:ce08:b0:14f:85c1:773e with SMTP id k8-20020a170902ce0800b0014f85c1773emr15690425plg.99.1645968530920;
-        Sun, 27 Feb 2022 05:28:50 -0800 (PST)
-Received: from localhost.localdomain ([103.149.162.113])
-        by smtp.gmail.com with ESMTPSA id x3-20020a17090ad68300b001b8bcd47c35sm14532651pju.6.2022.02.27.05.28.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 05:28:50 -0800 (PST)
-From:   Dongli Si <kvmx86@gmail.com>
-X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
-To:     peterz@infradead.org, joerg.roedel@amd.com
-Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@redhat.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf/x86/amd: Don't touch the Host-only bit inside the guest hypervisor
-Date:   Sun, 27 Feb 2022 21:26:40 +0800
-Message-Id: <20220227132640.3-1-sidongli1997@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 27 Feb 2022 08:33:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD412BF;
+        Sun, 27 Feb 2022 05:32:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 19812CE0EA9;
+        Sun, 27 Feb 2022 13:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC263C340E9;
+        Sun, 27 Feb 2022 13:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645968742;
+        bh=MDxfpEkZxbZP0NEaZp1YTMdHCQwoV1UW5mdbq06+8B0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dGpEzc5KVGdhcIL2OrlJkfkoxuOaBSeFYSYde3h/d5gmepWc4YfR4mfP44UVxZq8Z
+         87KAZXiFO1HFIujBWh0V/BHTlotNYl/YrKUmpByZUVjXahoZruVuqpzNwn78B+Vijj
+         8k3EqWCwToXIbAQpJ+sCGQuJXcUaBDyM/twX9e0yFsZ/muY0D8bmjBhFe3Kz8VTCaA
+         OpHhF4OYsskcV0WLpOlxJRa41FWLAtv3Vn6SautX66TY060M9fmaAETP6EhCutZwIr
+         3/atiDWUo8WicY0AhL9hreHj+9wbebuGhA2aT8FBgIL45OiwdAds/L6HlyUqMCHpoH
+         BQNbbI9FMRgUw==
+Date:   Sun, 27 Feb 2022 13:39:25 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Liam Beguin <liambeguin@gmail.com>, Peter Rosin <peda@axentia.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v15 00/10] iio: afe: add temperature rescaling support
+Message-ID: <20220227133925.19707a87@jic23-huawei>
+In-Reply-To: <CAHp75VdNg--SAZ=8XqfZuhQ4iX3b9_O3psWHZZL8kO5hf7n14g@mail.gmail.com>
+References: <20220213025739.2561834-1-liambeguin@gmail.com>
+        <20220227125559.72d5d79a@jic23-huawei>
+        <20220227130546.5ed0bae1@jic23-huawei>
+        <CAHp75VdNg--SAZ=8XqfZuhQ4iX3b9_O3psWHZZL8kO5hf7n14g@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Si <sidongli1997@gmail.com>
+On Sun, 27 Feb 2022 15:25:50 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-When using nested virtualization and if use "perf record" in an AMD Rome
-and Milan guest hypervisor (L1), dmesg report an error message like this:
+> On Sun, Feb 27, 2022 at 2:58 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> > On Sun, 27 Feb 2022 12:55:59 +0000
+> > Jonathan Cameron <jic23@kernel.org> wrote:  
+> > > On Sat, 12 Feb 2022 21:57:29 -0500
+> > > Liam Beguin <liambeguin@gmail.com> wrote:
+> > >  
+> > > > Jonathan, Peter, Andy,
+> > > >
+> > > > This series focuses on adding temperature rescaling support to the IIO
+> > > > Analog Front End (AFE) driver.
+> > > >
+> > > > The main changes to the AFE driver include an initial Kunit test suite,
+> > > > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+> > > > and temperature transducer sensors.  
+> 
+> ...
+> 
+> > > I was waiting for Andy to reply to this. Took a quick look back at
+> > > what was outstanding and realised he had given a
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > for v13.  
+> >
+> > Actually given the units.h change is a perhaps non trivial perhaps that's
+> > why you dropped Andy's RB.  I'll still apply the series, but it Andy
+> > confirms his view on that tag before I push this out as something I can't
+> > rebase I'll add it if appropriate.  
+> 
+> Since it was a separate patch, I'm fine with not including it due to
+> strong argument from Peter.
+Thanks. I've added your Rb and pushed out a fresh testing branch.
 
-[ ] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076) at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
+Jonathan
 
-The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host, while
-the guest hypervisor (L1) performance monitor unit should avoid such use.
-
-Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
-Signed-off-by: Dongli Si <sidongli1997@gmail.com>
----
- arch/x86/events/amd/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 9687a8aef01c..3fafd1e46ada 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -8,6 +8,7 @@
- #include <linux/jiffies.h>
- #include <asm/apicdef.h>
- #include <asm/nmi.h>
-+#include <asm/hypervisor.h>
- 
- #include "../perf_event.h"
- 
-@@ -1027,7 +1028,8 @@ void amd_pmu_enable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
--	cpuc->perf_ctr_virt_mask = 0;
-+	if (hypervisor_is_type(X86_HYPER_NATIVE))
-+		cpuc->perf_ctr_virt_mask = 0;
- 
- 	/* Reload all events */
- 	amd_pmu_disable_all();
--- 
-2.32.0
+> 
+> > > I'm assuming there wasn't a strong reason to drop that in the meantime
+> > > and it's a simple omission / crossed emails issue.
+> > >
+> > > As such,
+> > >
+> > > Series applied to the togreg branch of iio.git and pushed out
+> > > as testing to get some build coverage from 0-day.  
+> 
+> 
 

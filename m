@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6B94C5F84
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AAA4C5F86
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Feb 2022 23:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiB0Wn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 17:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
+        id S232099AbiB0WoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 17:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiB0Wn5 (ORCPT
+        with ESMTP id S232093AbiB0Wn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 17:43:57 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2873D3EB9F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:19 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id bq11so15090073edb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:19 -0800 (PST)
+        Sun, 27 Feb 2022 17:43:58 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A9A3EB9F;
+        Sun, 27 Feb 2022 14:43:21 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id q4so8758400ilt.0;
+        Sun, 27 Feb 2022 14:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q8l4d/g0eKsVGAXwcSHou4m9texHyFwjSyXWV84L8X0=;
-        b=aS+Cuu53E5xh6ezL4BQQcygkZ7taEG098ncxgu4s2QZu+Pf48uAsX8EMwnsNmZzs5O
-         eo+kkcQwg/L9tnVyFaERl40XHOJRfEwQ+3p4bNjtTIEqFgNZTrhkUr5c7jHIQo0R2QlD
-         6Z3HbL6vTEGo3aFlsNtdBL0CtUa6ZZQikH6w4=
+        bh=Z4bnNwe7U2Vh4XIKAHcu6wdoajMLlbGI9CQD4DbPubI=;
+        b=JIN504u2qQKThwiQ0dRzJl4Q1JGJc/rswp3AoRX7y2BC/ZNBM+/cn7UAXV99gtQ16s
+         bBgiUUvet/5oYcL8u0Hi8FS7T8KhouECYUL2WVPC82JuOoW76dUOKv8DpZGCwarRcdAs
+         YBoA0VY19lGkuUfWuBYiYK05rtybnWFusXwQO7BYx8juikiLo0cQZJqWugmOW9uEBZX8
+         OmtnKMihq4nmXhNnUt0dY147hFrkej9Ajnb7LSa126wnESmFZJmsoT+JikLlewrLrhoB
+         UIoRV/+8eGUCWoNst8NVdZ62gnltE4xDzI1dLXochfsNXL8g+ondEc5FoBV4alw6CBf1
+         3iJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q8l4d/g0eKsVGAXwcSHou4m9texHyFwjSyXWV84L8X0=;
-        b=tKVf3dM3wxXxe3e/nq33SWVMqbT7ZfAGMbMtgJt4btIN7NKCVsHTi8AgG0sTbCTiKK
-         OVH4l8JLtVFqhf85S5B1YPJAaarvcQHh7dQO5Rl3q9ZE9+rnZXGxClAzbVlcQWg4+u3F
-         l0Yd5B97QMPaoOIPuqvl/nLA3PYSOp2RVtpz1YSYwfmFY3cXWmopZM1nwU2MMfCRgAw+
-         0lpDbz8Ir5tQAAtpjTwB3LNONkINSfSQqEYmNU9S+fG8s0FRXVXhVUyzUVBNaRNFD5Kv
-         J5oSRABQgEn37Nv8cBN0RkBF14CmGKuqZQXjRGgVjOgscTFqn5xQJ6VyZWhqiENykcaS
-         Hvdg==
-X-Gm-Message-State: AOAM532HgC+PtIev3bwsLz7uTEMaI2umWLq6z+bmdhyVQluHkPZZtG40
-        T6vRy/xRybPoCgepmQ7lGO8lR9su7VQxyY4NQFM=
-X-Google-Smtp-Source: ABdhPJwQVRiyQwPGkhxP7ZJd0d2LPUJodxR1yrn9SzYb2q9Zg+BGU1vKuXwXUKXdG/dsAJ6zBMDOmw==
-X-Received: by 2002:a05:6402:d0d:b0:412:d49c:74d3 with SMTP id eb13-20020a0564020d0d00b00412d49c74d3mr16731948edb.207.1646001797509;
-        Sun, 27 Feb 2022 14:43:17 -0800 (PST)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm5169747edz.29.2022.02.27.14.43.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 14:43:17 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id d3so12722168wrf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 14:43:17 -0800 (PST)
-X-Received: by 2002:a2e:aaa2:0:b0:244:bf42:3e6e with SMTP id
- bj34-20020a2eaaa2000000b00244bf423e6emr12796324ljb.176.1646001378532; Sun, 27
- Feb 2022 14:36:18 -0800 (PST)
+        bh=Z4bnNwe7U2Vh4XIKAHcu6wdoajMLlbGI9CQD4DbPubI=;
+        b=6W1DmWmGvK27dlobVD8EK4kyxAkjhKz9rcllK0AKPFybHPE4uGfj/B0sYHWsforCaZ
+         KqQM8sVGV6+IeirjaMelSN4vmQewEZ6T3fT9DS4LatUkd8aWA+s7oMXS0vUQRMBeLtwg
+         Eo1Ds0GvnDrUIfOI+EWI9VKJ3y6As/uBlFlweMQoepE5XdpNTP+SDcQnSLdbcLbC5Fbj
+         VmDsb2nJxWX5KLiJTzPmVYW2tzt3pphN6wdAj1JYIfDhWa2rf8GVeedD/YxQU4O0ZmTB
+         yP76f9MEQdVIKT0IuDzfxLZrhJ4J0ODrcualT7b5kp5gzNyntDOhZK2jCCDCLTopwDzt
+         HppA==
+X-Gm-Message-State: AOAM533yuxNGDtKWAYJYuxlY4+l3nyJZgjwkw4RTCs7DVHSVtqErcFeD
+        FsgAoGJbsDpjE+sH/hVx6gI4vGAv9lca6CejHOE=
+X-Google-Smtp-Source: ABdhPJx+SeevTo5vtSZhGvvpVA1ddy2bLL8U09bLcO/C5jYWsYcKNU24IfCWMR7ECyUwpgphUUaEuawHmtZKNIZFiMg=
+X-Received: by 2002:a05:6e02:b24:b0:2be:88f8:c4ed with SMTP id
+ e4-20020a056e020b2400b002be88f8c4edmr16277966ilu.72.1646001800972; Sun, 27
+ Feb 2022 14:43:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227215408.3180023-1-arnd@kernel.org>
-In-Reply-To: <20220227215408.3180023-1-arnd@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 27 Feb 2022 14:36:02 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
-Message-ID: <CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com>
-Subject: Re: [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
+ <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+ <20220227113245.GY614@gate.crashing.org> <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
+ <20220227201724.GZ614@gate.crashing.org>
+In-Reply-To: <20220227201724.GZ614@gate.crashing.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 27 Feb 2022 23:43:09 +0100
+Message-ID: <CANiq72nbLHvHX4Nk3oGutL=y3MghrFHs6HsmqN8HA8XwSv-4Ow@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     David Laight <David.Laight@aculab.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob <jakobkoschel@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 1:54 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Sun, Feb 27, 2022 at 9:19 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
 >
-> Since the differences between gnu99, gnu11 and gnu17 are fairly minimal
-> and mainly impact warnings at the -Wpedantic level that the kernel
-> never enables, the easiest way is to just leave out the -std=gnu89
-> argument entirely, and rely on the compiler default language setting,
-> which is gnu11 for gcc-5, and gnu1x/gnu17 for all other supported
-> versions of gcc or clang.
+> Requiring to annotate every place that has UB (or *can* have UB!) by the
+> user is even less friendly than having so much UB is already :-(
 
-Honestly, I'd rather keep the C version we support as some explicit
-thing, instead of "whatever the installed compiler is".
+Sure, but I did not suggest to annotate every place -- at least not in C.
 
-Not only do I suspect that you can set it in gcc spec files (so the
-standard version might actually be site-specific, not compiler version
-specific), but particularly with clang, I'd like that "GNU extensions
-enabled" to be explicit. Yes, maybe it's the default, but let's make
-sure.
+What I said is that in cases like your division by zero example, there
+is no one-fits-all solution. For instance, for integer arithmetic,
+leaving the choice (e.g. wrapping, saturating, unchecked...) to the
+user is a better approach.
 
-The C version level has traditionally had a lot of odd semantic
-meaning details - you mention "inline", others have existed. So it's
-not just the actual new features that some C version implements, it's
-those kind of "same syntax, different meaning" issues. I really don't
-think that's something we want in the kernel any more.
+> You need a VM like Java's to get even *close* to that.  This is not the
+> C target: it is slower than wanted/expected, it is hosted instead of
+> embedded, and it comes with a whole host of issues of its own.  One of
+> the strengths of C is its tiny runtime, a few kB is a lot already!
+>
+> I completely agree that if you design a new "systems" language, you want
+> to have much less undefined behaviour than C has.  But it is self-
+> delusion to think you can eradicate all (or even most).
 
-Been there, done that, and we did the explicit standards level for a reason.
+Nobody is suggesting to remove "all UB" in that sense or to use
+VM-supported languages.
 
-It may be true that c99/c11/c17 are all very similar, and don't have
-those issues. Or maybe they do.
+However, you can """eradicate all UB""" in a sense: you can offer to
+write most code in a subset that does not allow any potential-UB
+operations. This can even be "all" code, depending on how you count
+(e.g. all application code).
 
-And I don't want somebody with a newer compiler version to not notice
-that he or she ended up using a c17 feature, just because _that_
-compiler supported it, and then other people get build errors because
-their compilers use gnu11 instead by default.
+Obviously, you still need the unchecked operations to implement the
+safe APIs. This is why I mentioned them.
 
-Put another way: I see absolutely no upside to allowing different
-users using higher/lower versions of the standard. There are only
-downsides.
+> And there are much bigger problems in any case!  If you think that if
+> programmers could no longer write programs that invoke undefined
+> behaviour they will write much better programs, programs with fewer
+> serious functionality or security problems, even just a factor of two
+> better, well...
 
-If gnu11 is supported by gcc-5.1 and up, and all the relevant clang
-versions, then let's just pick that.
+Actually, according to several reports from Google, Microsoft, etc.,
+it _is_ the biggest problem (~70%) when talking about security bugs.
 
-And if there are any possible future advantages to gnu17 (or eventual
-gnu2x versions), let's document those, so that we can say "once our
-compiler version requirements go up sufficiently, we'll move to gnuXX
-because we want to take advantage of YY".
+So it is a good bet that it will translate into "better" programs, at
+least on that axis, unless it is showed that removing UB somehow
+increases the rate of other errors.
 
-Please?
+As for functionality problems, there are several ways to improve upon
+C too, though it is harder to show data on that.
 
-                   Linus
-
-                   Linus
+Cheers,
+Miguel

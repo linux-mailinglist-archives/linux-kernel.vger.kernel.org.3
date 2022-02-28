@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485C14C7765
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C0C4C74FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239978AbiB1SQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S237400AbiB1Rtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240156AbiB1SH6 (ORCPT
+        with ESMTP id S239095AbiB1Rnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:07:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45BD5D662;
-        Mon, 28 Feb 2022 09:48:29 -0800 (PST)
+        Mon, 28 Feb 2022 12:43:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59279BAE7;
+        Mon, 28 Feb 2022 09:35:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 874C860180;
-        Mon, 28 Feb 2022 17:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0DEC340E7;
-        Mon, 28 Feb 2022 17:48:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5888614C9;
+        Mon, 28 Feb 2022 17:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8349C340E7;
+        Mon, 28 Feb 2022 17:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070508;
-        bh=6ttKOQ9m0Pb17Q3CVH254bmmxO+Df4LgDPnSSCUWaO4=;
+        s=korg; t=1646069740;
+        bh=ZiqWtC7lTeskoDYpo8BmFDZ0NEqc4zUEXVUcbwg7D5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FoSUAOxPLhHtpSAo9iSj4DxfujtpoE4FRP7VcDmTnQSH4bkKdjElUuLwF/mCXeJW+
-         xF2wMrk3LkdDBqy+0YbVLr4IzsZUC6pWDaWwPGB6stioy90kG8rTtkzYCJCsGr4nPT
-         p5WZsHZQSlBt50kSLZXudiXN7zCaYepCWtiFdSSQ=
+        b=sHOlbHomJvs22oxNK0fWL0TQe0RifXHnF+YJ4nYpVars/UIxdxYB8f2mJVMWRgISC
+         8pn//+AM1Zz6Y72Lw4NczWMyMBRYia3iPCHQHsXl36+Nr007qH3VIC3GtCQ4mtdx3s
+         snzBbqi1iU9wf0UN1RzuIfG09To6gDZBleq50OM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Puma Hsu <pumahsu@google.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.16 133/164] xhci: re-initialize the HC during resume if HCE was set
-Date:   Mon, 28 Feb 2022 18:24:55 +0100
-Message-Id: <20220228172412.110335743@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.10 75/80] tty: n_gsm: fix proper link termination after failed open
+Date:   Mon, 28 Feb 2022 18:24:56 +0100
+Message-Id: <20220228172320.800541582@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Puma Hsu <pumahsu@google.com>
+From: daniel.starke@siemens.com <daniel.starke@siemens.com>
 
-commit 8b328f8002bcf29ef517ee4bf234e09aabec4d2e upstream.
+commit e3b7468f082d106459e86e8dc6fb9bdd65553433 upstream.
 
-When HCE(Host Controller Error) is set, it means an internal
-error condition has been detected. Software needs to re-initialize
-the HC, so add this check in xhci resume.
+Trying to open a DLCI by sending a SABM frame may fail with a timeout.
+The link is closed on the initiator side without informing the responder
+about this event. The responder assumes the link is open after sending a
+UA frame to answer the SABM frame. The link gets stuck in a half open
+state.
 
+This patch fixes this by initiating the proper link termination procedure
+after link setup timeout instead of silently closing it down.
+
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Cc: stable@vger.kernel.org
-Signed-off-by: Puma Hsu <pumahsu@google.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220215123320.1253947-2-mathias.nyman@linux.intel.com
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220218073123.2121-3-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci.c |   19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/tty/n_gsm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, b
- 	int			retval = 0;
- 	bool			comp_timer_running = false;
- 	bool			pending_portevent = false;
-+	bool			reinit_xhc = false;
- 
- 	if (!hcd->state)
- 		return 0;
-@@ -1107,10 +1108,11 @@ int xhci_resume(struct xhci_hcd *xhci, b
- 	set_bit(HCD_FLAG_HW_ACCESSIBLE, &xhci->shared_hcd->flags);
- 
- 	spin_lock_irq(&xhci->lock);
--	if ((xhci->quirks & XHCI_RESET_ON_RESUME) || xhci->broken_suspend)
--		hibernated = true;
- 
--	if (!hibernated) {
-+	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
-+		reinit_xhc = true;
-+
-+	if (!reinit_xhc) {
- 		/*
- 		 * Some controllers might lose power during suspend, so wait
- 		 * for controller not ready bit to clear, just as in xHC init.
-@@ -1143,12 +1145,17 @@ int xhci_resume(struct xhci_hcd *xhci, b
- 			spin_unlock_irq(&xhci->lock);
- 			return -ETIMEDOUT;
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1485,7 +1485,7 @@ static void gsm_dlci_t1(struct timer_lis
+ 			dlci->mode = DLCI_MODE_ADM;
+ 			gsm_dlci_open(dlci);
+ 		} else {
+-			gsm_dlci_close(dlci);
++			gsm_dlci_begin_close(dlci); /* prevent half open link */
  		}
--		temp = readl(&xhci->op_regs->status);
- 	}
  
--	/* If restore operation fails, re-initialize the HC during resume */
--	if ((temp & STS_SRE) || hibernated) {
-+	temp = readl(&xhci->op_regs->status);
-+
-+	/* re-initialize the HC on Restore Error, or Host Controller Error */
-+	if (temp & (STS_SRE | STS_HCE)) {
-+		reinit_xhc = true;
-+		xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
-+	}
- 
-+	if (reinit_xhc) {
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
- 			del_timer_sync(&xhci->comp_mode_recovery_timer);
+ 		break;
 
 

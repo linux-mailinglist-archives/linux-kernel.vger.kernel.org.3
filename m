@@ -2,92 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3234C6755
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A994C682F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiB1Ks3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S232085AbiB1KwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234899AbiB1KsX (ORCPT
+        with ESMTP id S234965AbiB1Kvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:48:23 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBD7117D;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id z16so10806067pfh.3;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dmv2wxlTh57NFmjOyo6WM3d2dcwIoJ6zIPvnRBUGp4M=;
-        b=U5BsIH37v6iIZb68WkEqkFN38nlgyEfhAuwS3ds3q8JucqnUczKGRqVfo6pCP8ij8Y
-         OAsHlGBb9GCd8bzEkjfGhHrAScexB02Rp/b3aivFudpFOBNxaur5L16KpKGJsOssAggE
-         /W7EW/rWQBFTpn7bgaU0mcfvSn2yjbSlIIUSx3AdCmgWgKZ7t4267ZRoR+9D6Bf+uUWc
-         6nHK1rdhSROMYqOUee7ImFVjlvhFkGyZPYVsnLHZPn3F4YEcncYWQiMDrHZ1+FCu1+6R
-         85ckuIiCa4mcQrTJnx5V9cIWPy5XXkOdFd0UVhk7T6o0uiOTt9lXKHvn55+EUbafVZvE
-         0ZwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dmv2wxlTh57NFmjOyo6WM3d2dcwIoJ6zIPvnRBUGp4M=;
-        b=l6Z4IIgoejPcQ3mu8Nt5afwakXlQfNjjV5q+3TY9ADgvbyw/mtxR/bjPtqyggxIYqJ
-         NPo3mzCF/NCOlPCOdFohEtitSQepxAz67iOTPnuIDwmk1Ug3t/v4Lt+rsxvjzYsMQv48
-         LkIouGxoQgpBWAevfTjrJwgPYcT+g233eiGc5ELNt2orx7FntigHWnZ5wciBWFw44wiQ
-         MeRdPCpjOjzqyM5qDISzFbtq2q50ByGV7/cfblP0lgL3zRSwYffnhOWQC2rlUUqKkHza
-         ZHToHxzReuP57oJBbaLe9V8kNiKa7y9BtpjZ0soqvhp775G3ZzkGCVr/txFKyp9NFJAV
-         ZcoQ==
-X-Gm-Message-State: AOAM532gmv9HNWcrCzJcJ711WQ3eZ3U6kjwiimlVQ6QYiazQsJkeO0GL
-        dESePnAzJmW1O8TOJ65zrwI=
-X-Google-Smtp-Source: ABdhPJzcudyeDv250wamHY6BmPBvsgMjr2JcoJJTkLbIxAkyl45iOpALVBROybJ3VGkMT7U1y2BAGw==
-X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr21014314pfe.60.1646045264545;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056a00194400b004f0fbeb6006sm13028078pfk.88.2022.02.28.02.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Message-ID: <f0e068ce-49bf-a13d-53ff-d81b4f5a8a65@gmail.com>
-Date:   Mon, 28 Feb 2022 18:47:38 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] can: usb: delete a redundant dev_kfree_skb() in
- ems_usb_start_xmit()
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220228083639.38183-1-hbh25y@gmail.com>
- <20220228085536.pa5wdq3w4ul5wqn5@pengutronix.de>
- <75c14302-b928-1e09-7cd1-78b8c2695f06@gmail.com>
- <20220228104514.der655r4jkl42e7o@pengutronix.de>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220228104514.der655r4jkl42e7o@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 05:51:33 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E2C56514B;
+        Mon, 28 Feb 2022 02:50:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2BD0311FB;
+        Mon, 28 Feb 2022 02:50:53 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.47.185])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5C9B33F73D;
+        Mon, 28 Feb 2022 02:50:45 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: [PATCH V3 15/30] riscv/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 28 Feb 2022 16:17:38 +0530
+Message-Id: <1646045273-9343-16-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All right. :)
+This defines and exports a platform specific custom vm_get_page_prot() via
+subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+macros can be dropped which are no longer needed.
 
-On 2022/2/28 18:45, Marc Kleine-Budde wrote:
-> On 28.02.2022 18:44:06, Hangyu Hua wrote:
->> I get it. I'll remake a patch that matches your suggestions.
-> 
-> Not needed, it's already applied:
->>> Added patch to can/testing.
-> 
-> Marc
-> 
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/riscv/Kconfig               |  1 +
+ arch/riscv/include/asm/pgtable.h | 16 ------------
+ arch/riscv/mm/init.c             | 42 ++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 16 deletions(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..9391742f9286 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -31,6 +31,7 @@ config RISCV
+ 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+ 	select ARCH_STACKWALK
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7e949f25c933..d2bb14cac28b 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -183,24 +183,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
+ extern pgd_t swapper_pg_dir[];
+ 
+ /* MAP_PRIVATE permissions: xwr (copy-on-write) */
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READ
+-#define __P010	PAGE_COPY
+-#define __P011	PAGE_COPY
+-#define __P100	PAGE_EXEC
+-#define __P101	PAGE_READ_EXEC
+-#define __P110	PAGE_COPY_EXEC
+-#define __P111	PAGE_COPY_READ_EXEC
+ 
+ /* MAP_SHARED permissions: xwr */
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READ
+-#define __S010	PAGE_SHARED
+-#define __S011	PAGE_SHARED
+-#define __S100	PAGE_EXEC
+-#define __S101	PAGE_READ_EXEC
+-#define __S110	PAGE_SHARED_EXEC
+-#define __S111	PAGE_SHARED_EXEC
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ static inline int pmd_present(pmd_t pmd)
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index c27294128e18..8cb5d1eeb287 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -1050,3 +1050,45 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+ 	return vmemmap_populate_basepages(start, end, node, NULL);
+ }
+ #endif
++
++#ifdef CONFIG_MMU
++pgprot_t vm_get_page_prot(unsigned long vm_flags)
++{
++	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	/* MAP_PRIVATE permissions: xwr (copy-on-write) */
++	case VM_NONE:
++		return PAGE_NONE;
++	case VM_READ:
++		return PAGE_READ;
++	case VM_WRITE:
++	case VM_WRITE | VM_READ:
++		return PAGE_COPY;
++	case VM_EXEC:
++		return PAGE_EXEC;
++	case VM_EXEC | VM_READ:
++		return PAGE_READ_EXEC;
++	case VM_EXEC | VM_WRITE:
++		return PAGE_COPY_EXEC;
++	case VM_EXEC | VM_WRITE | VM_READ:
++		return PAGE_COPY_READ_EXEC;
++	/* MAP_SHARED permissions: xwr */
++	case VM_SHARED:
++		return PAGE_NONE;
++	case VM_SHARED | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED | VM_WRITE:
++	case VM_SHARED | VM_WRITE | VM_READ:
++		return PAGE_SHARED;
++	case VM_SHARED | VM_EXEC:
++		return PAGE_EXEC;
++	case VM_SHARED | VM_EXEC | VM_READ:
++		return PAGE_READ_EXEC;
++	case VM_SHARED | VM_EXEC | VM_WRITE:
++	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
++		return PAGE_SHARED_EXEC;
++	default:
++		BUILD_BUG();
++	}
++}
++EXPORT_SYMBOL(vm_get_page_prot);
++#endif /* CONFIG_MMU */
+-- 
+2.25.1
+

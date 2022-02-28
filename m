@@ -2,273 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614A54C7BC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BDC4C7BC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiB1VVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S230210AbiB1VVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiB1VVN (ORCPT
+        with ESMTP id S230200AbiB1VVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:21:13 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222D9EF798
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:20:32 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id s1so11791824plg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6j4iszzj0cZB59eyvH7KEYjUiOAtYTKI6HW7ZxtRKCc=;
-        b=j7cqxe9dxOnSEyontZOrJTyHnCh8VoPiQ1ztMVKNiiwQbNROJv2abR4woQbmuJOnnJ
-         CkH68B50DbTfDtfedwYpIipLJFiCnhnhWat3ZbcCgwCU0PLFsLeHiRYiMMGzyAXph5aJ
-         oY285bDUElEYgc7S6ZzsXPxjiR7r+7tKeCm/W0T4NhWHRIqnjcNjpTaaI4vH0xika2u6
-         vH9VibDy7ZEyiN3yMxqHClKT5ADdNQcwdetTO3rkLHLwMYtPb2nj4WV3s/zHbtXMCNTZ
-         Ns2lx12jHz+9QVTq1ccTJ2JiUYKPFlH+fueJ9E3jZUxpph1f9qbr28h9AmWHvxGwfByd
-         6X3g==
+        Mon, 28 Feb 2022 16:21:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F393EEFF9B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646083240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u6wu1+m7/y8nI6BZGp4jNazhv0Rsh6xTe2mPvqYxCIw=;
+        b=FwFs7TKJ6fuql8ALMi5WZ+/x75VA9yoqZbFK788HlzQTLO7Z6SK8EceCurm1bKIlnOJEUo
+        TXcfEUVOSbonP59OtnPI7hYM8g/97Ee3JbfRHaJWm/2sKmbJKBdDE7Pe3GvBpdPV9TQ4WC
+        9jZB30uMNE/ZJgQIe/7rfzTuqxFtjhI=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-x4cYb9ggM-2cKMzboAs-Vg-1; Mon, 28 Feb 2022 16:20:38 -0500
+X-MC-Unique: x4cYb9ggM-2cKMzboAs-Vg-1
+Received: by mail-oo1-f69.google.com with SMTP id z4-20020a4ad1a4000000b0031beb2043f7so9264044oor.20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:20:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6j4iszzj0cZB59eyvH7KEYjUiOAtYTKI6HW7ZxtRKCc=;
-        b=fCPXCPzbwTrZxJO2IZoedj3ccYVOmL9mv8l0818lmoy4WsLWgYjUa9H5paaT+MSi96
-         DScGVrMN1j7cewvYtYFJEzpXoTik1bSLcQq0RVSAavFeXKd8gFyppy/tY79XLc9VbEtb
-         U1M2cfGqoMNV0T39/vPte8z6Et/CpTeGjYOGE82ScDwvEdkY4HWxCNb0yniJ4W4myZvp
-         +WYD6Cz1WEAiNOGq+7Eyzl0MHLGLttQD1uzhp0Lgp8UZ/46cW8PGzewCd7FMPfQwtL8h
-         4BapBsGRUlJ5SJcfuqB6xTPCHAJbZwqV8+peKXsWMgCvXZrk9Tw83mwJUN8imAYDbRlh
-         o78g==
-X-Gm-Message-State: AOAM530iZz/4H0rFKm6z9O1oXy5qBnjRe6gZU6eSbI87p3GxZvnVlDIi
-        XFSivOPO6AqU2AgUYoLg4B4=
-X-Google-Smtp-Source: ABdhPJzlNCgdWKxkzYFD0xDIOBCeBV4wyCFJ101m9eyB0Tp1qAP2XRYbfGZwyqA7E8+cLWJ5uKT/Tw==
-X-Received: by 2002:a17:90a:5293:b0:1bc:a544:a638 with SMTP id w19-20020a17090a529300b001bca544a638mr18650367pjh.174.1646083232293;
-        Mon, 28 Feb 2022 13:20:32 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id y16-20020a056a00191000b004e155b2623bsm15105219pfi.178.2022.02.28.13.20.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=u6wu1+m7/y8nI6BZGp4jNazhv0Rsh6xTe2mPvqYxCIw=;
+        b=mGyNO8CVGDFM2ry3u6PQqkmHNstUfmuocrZ59hIoymqJLpqiBfm4vi3MdRxCZMJcll
+         VTGe+9rx7+mWNImHMkWUOdKs8Hxk/HXlvGXp3H7QzVzhoema02qvLxMSmzcZ9yQ/tO5/
+         YZKau7dCCaJQIrmmnnyk9bPcMFt6zIKlhcdKXH70tvQ3BjRQ1b6KQJ4hcICusB1TQWQG
+         MwlOSxbD6MuHRQKyJmI7o/1yO9S1ARCOdvZIcCHHIuLzrQjYJkjX44hLdUuEw4uVeTHa
+         c2GzDJhUVE1EGrOcmfCswAVLfkaRP3TtZ4M1EEmeFMVTJyAKi8DmdZ/noWJAunCEmhJR
+         H+wQ==
+X-Gm-Message-State: AOAM5317S6dDhnYxD0pCtxB9YMDUBB6IyB3gAniD0UqOetNDPcV/lObv
+        dl4lBRoDwCKgq0n5wV1eQNYegcjc4nnXsSKTaVmdvaC+4EEeTzlC6qQxT0FSkC3l0G9EkbLpvC0
+        +5kR5Ggrc0xMTe77dyBbZ99o9
+X-Received: by 2002:a05:6871:79b:b0:d3:4039:7e7c with SMTP id o27-20020a056871079b00b000d340397e7cmr9367043oap.121.1646083237873;
+        Mon, 28 Feb 2022 13:20:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwHK6xVIr8qQr3M46nx2bUSEdvIL0NZBwiWDciAqFz2Oi4tFkHyMFlLCQIvyTFhjzN3Y8aPjg==
+X-Received: by 2002:a05:6871:79b:b0:d3:4039:7e7c with SMTP id o27-20020a056871079b00b000d340397e7cmr9367028oap.121.1646083237618;
+        Mon, 28 Feb 2022 13:20:37 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id v5-20020a544d05000000b002d7652b3c52sm4722517oix.25.2022.02.28.13.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 13:20:31 -0800 (PST)
-Date:   Mon, 28 Feb 2022 21:20:26 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>
-Subject: Re: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
-Message-ID: <Yh08mp/q7vBUEl3V@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220225180318.20594-1-vbabka@suse.cz>
- <YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <f194f876-1c46-f3ae-573e-d3ddd6dcf4cc@suse.cz>
- <Yh0qGY48JeH7TzdQ@linux.ibm.com>
+        Mon, 28 Feb 2022 13:20:37 -0800 (PST)
+Date:   Mon, 28 Feb 2022 14:20:34 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220228142034.024e7be6.alex.williamson@redhat.com>
+In-Reply-To: <20220228202919.GP219866@nvidia.com>
+References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+        <20220228090121.1903-10-shameerali.kolothum.thodi@huawei.com>
+        <20220228145731.GH219866@nvidia.com>
+        <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
+        <20220228180520.GO219866@nvidia.com>
+        <20220228131614.27ad37dc.alex.williamson@redhat.com>
+        <20220228202919.GP219866@nvidia.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh0qGY48JeH7TzdQ@linux.ibm.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 10:01:29PM +0200, Mike Rapoport wrote:
-> On Mon, Feb 28, 2022 at 08:10:18PM +0100, Vlastimil Babka wrote:
-> > On 2/26/22 08:19, Hyeonggon Yoo wrote:
-> > > On Fri, Feb 25, 2022 at 07:03:13PM +0100, Vlastimil Babka wrote:
-> > >> Hi,
-> > >> 
-> > >> this series combines and revives patches from Oliver's last year
-> > >> bachelor thesis (where I was the advisor) that make SLUB's debugfs
-> > >> files alloc_traces and free_traces more useful.
-> > >> The resubmission was blocked on stackdepot changes that are now merged,
-> > >> as explained in patch 2.
-> > >> 
+On Mon, 28 Feb 2022 16:29:19 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Mon, Feb 28, 2022 at 01:16:14PM -0700, Alex Williamson wrote:
+> > On Mon, 28 Feb 2022 14:05:20 -0400
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >   
+> > > On Mon, Feb 28, 2022 at 06:01:44PM +0000, Shameerali Kolothum Thodi wrote:
+> > >   
+> > > > +static long hisi_acc_vf_save_unl_ioctl(struct file *filp,
+> > > > +                                      unsigned int cmd, unsigned long arg)
+> > > > +{
+> > > > +       struct hisi_acc_vf_migration_file *migf = filp->private_data;
+> > > > +       loff_t *pos = &filp->f_pos;
+> > > > +       struct vfio_device_mig_precopy precopy;
+> > > > +       unsigned long minsz;
+> > > > +
+> > > > +       if (cmd != VFIO_DEVICE_MIG_PRECOPY)
+> > > > +               return -EINVAL;    
 > > > 
-> > > Hello. I just started review/testing this series.
+> > > ENOTTY
+> > >   
+> > > > +
+> > > > +       minsz = offsetofend(struct vfio_device_mig_precopy, dirty_bytes);
+> > > > +
+> > > > +       if (copy_from_user(&precopy, (void __user *)arg, minsz))
+> > > > +               return -EFAULT;
+> > > > +       if (precopy.argsz < minsz)
+> > > > +               return -EINVAL;
+> > > > +
+> > > > +       mutex_lock(&migf->lock);
+> > > > +       if (*pos > migf->total_length) {
+> > > > +               mutex_unlock(&migf->lock);
+> > > > +               return -EINVAL;
+> > > > +       }
+> > > > +
+> > > > +       precopy.dirty_bytes = 0;
+> > > > +       precopy.initial_bytes = migf->total_length - *pos;
+> > > > +       mutex_unlock(&migf->lock);
+> > > > +       return copy_to_user((void __user *)arg, &precopy, minsz) ? -EFAULT : 0;
+> > > > +}    
 > > > 
-> > > it crashed on my system (arm64)
+> > > Yes
+> > > 
+> > > And I noticed this didn't include the ENOMSG handling, read() should
+> > > return ENOMSG when it reaches EOS for the pre-copy:
+> > > 
+> > > + * During pre-copy the migration data FD has a temporary "end of stream" that is
+> > > + * reached when both initial_bytes and dirty_byte are zero. For instance, this
+> > > + * may indicate that the device is idle and not currently dirtying any internal
+> > > + * state. When read() is done on this temporary end of stream the kernel driver
+> > > + * should return ENOMSG from read(). Userspace can wait for more data (which may
+> > > + * never come) by using poll.  
 > > 
-> > Hmm, interesting. On x86_64 this works for me and stackdepot is allocated
-> > from memblock. arm64 must have memblock freeing happen earlier or something.
-> > (CCing memblock experts)
-> > 
-> > > I ran with boot parameter slub_debug=U, and without KASAN.
-> > > So CONFIG_STACKDEPOT_ALWAYS_INIT=n.
-> > > 
-> > > void * __init memblock_alloc_try_nid(
-> > >                         phys_addr_t size, phys_addr_t align,
-> > >                         phys_addr_t min_addr, phys_addr_t max_addr,
-> > >                         int nid)
-> > > {
-> > >         void *ptr;
-> > > 
-> > >         memblock_dbg("%s: %llu bytes align=0x%llx nid=%d from=%pa max_addr=%pa %pS\n",
-> > >                      __func__, (u64)size, (u64)align, nid, &min_addr,
-> > >                      &max_addr, (void *)_RET_IP_);
-> > >         ptr = memblock_alloc_internal(size, align,
-> > >                                            min_addr, max_addr, nid, false);
-> > >         if (ptr)
-> > >                 memset(ptr, 0, size); <--- Crash Here
-> > > 
-> > >         return ptr;
-> > > }
-> > > 
-> > > It crashed during create_boot_cache() -> stack_depot_init() ->
-> > > memblock_alloc().
-> > > 
-> > > I think That's because, in kmem_cache_init(), both slab and memblock is not
-> > > available. (AFAIU memblock is not available after mem_init() because of
-> > > memblock_free_all(), right?)
-> > 
-> > Hm yes I see, even in x86_64 version mem_init() calls memblock_free_all().
-> > But then, I would expect stack_depot_init() to detect that memblock_alloc()
-> > returns NULL, we print ""Stack Depot hash table allocation failed,
-> > disabling" and disable it. Instead it seems memblock_alloc() returns
-> > something that's already potentially used by somebody else? Sounds like a bug?
+> > I'm confused by your previous reply that the use of curr_state should
+> > be eliminated, isn't this ioctl only valid while the device is in the
+> > PRE_COPY or PRE_COPY_P2P states?  Otherwise the STOP_COPY state would
+> > have some expectation to be able to use this ioctl for devices
+> > supporting PRE_COPY.    
 > 
-
-It's really weird, but memblock_alloc() did not fail after
-memblock_free_all(). it just crashed while initializing memory returned
-by memblock.
-
-> If stack_depot_init() is called from kmem_cache_init(), there will be a
-> confusion what allocator should be used because we use slab_is_available()
-> to stop using memblock and start using kmalloc() instead in both
-> stack_depot_init() and in memblock.
+> I think it is fine to keep working on stop copy, though the
+> implementation here isn't quite right for that..
 > 
-> Hyeonggon, did you run your tests with panic on warn at any chance?
->
-
-Yeah, I think this stack trace would help:
-
-[    0.000000] Stack Depot allocating hash table with memblock_alloc
-[    0.000000] Unable to handle kernel paging request at virtual address ffff000097400000
-[    0.000000] Mem abort info:
-[    0.000000]   ESR = 0x96000047
-[    0.000000]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.000000]   SET = 0, FnV = 0
-[    0.000000]   EA = 0, S1PTW = 0
-[    0.000000]   FSC = 0x07: level 3 translation fault
-[    0.000000] Data abort info:
-[    0.000000]   ISV = 0, ISS = 0x00000047
-[    0.000000]   CM = 0, WnR = 1
-[    0.000000] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041719000
-[    0.000000] [ffff000097400000] pgd=18000000dcff8003, p4d=18000000dcff8003, pud=18000000dcbfe003, pmd=18000000dcb43003, pte=00680000d7400706
-[    0.000000] Internal error: Oops: 96000047 [#1] PREEMPT SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.17.0-rc1-11918-gbf5d03166d75 #51
-[    0.000000] Hardware name: linux,dummy-virt (DT)
-[    0.000000] pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : __memset+0x16c/0x188
-[    0.000000] lr : memblock_alloc_try_nid+0xcc/0xe4
-[    0.000000] sp : ffff800009a33cd0
-[    0.000000] x29: ffff800009a33cd0 x28: 0000000041720018 x27: ffff800009362640
-[    0.000000] x26: ffff800009362640 x25: 0000000000000000 x24: 0000000000000000
-[    0.000000] x23: 0000000000002000 x22: ffff80000932bb50 x21: 00000000ffffffff
-[    0.000000] x20: ffff000097400000 x19: 0000000000800000 x18: ffffffffffffffff
-[    0.000000] x17: 373578302f383278 x16: 302b657461657263 x15: 0000001000000000
-[    0.000000] x14: 0000000000000360 x13: 0000000000009f8c x12: 00000000dcb0c070
-[    0.000000] x11: 0000001000000000 x10: 00000000004ea000 x9 : 0000000000000000
-[    0.000000] x8 : ffff000097400000 x7 : 0000000000000000 x6 : 000000000000003f
-[    0.000000] x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
-[    0.000000] x2 : 00000000007fffc0 x1 : 0000000000000000 x0 : ffff000097400000
-[    0.000000] Call trace:
-[    0.000000]  __memset+0x16c/0x188
-[    0.000000]  stack_depot_init+0xc8/0x100
-[    0.000000]  __kmem_cache_create+0x454/0x570
-[    0.000000]  create_boot_cache+0xa0/0xe0
-[    0.000000]  kmem_cache_init+0xf8/0x204
-[    0.000000]  start_kernel+0x3ec/0x668
-[    0.000000]  __primary_switched+0xc0/0xc8
-[    0.000000] Code: 91010108 54ffff4a 8b040108 cb050042 (d50b7428)
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-[    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-
-
-Thanks!
-
-> > > Thanks!
-> > > 
-> > > /*
-> > >  * Set up kernel memory allocators
-> > >  */
-> > > static void __init mm_init(void)
-> > > {
-> > >         /*
-> > >          * page_ext requires contiguous pages,
-> > >          * bigger than MAX_ORDER unless SPARSEMEM.
-> > >          */
-> > >         page_ext_init_flatmem();
-> > >         init_mem_debugging_and_hardening();
-> > >         kfence_alloc_pool();
-> > >         report_meminit();
-> > >         stack_depot_early_init();
-> > >         mem_init();
-> > >         mem_init_print_info();
-> > >         kmem_cache_init();
-> > >         /*
-> > >          * page_owner must be initialized after buddy is ready, and also after
-> > >          * slab is ready so that stack_depot_init() works properly
-> > >          */)
-> > > 
-> > >> Patch 1 is a new preparatory cleanup.
-> > >> 
-> > >> Patch 2 originally submitted here [1], was merged to mainline but
-> > >> reverted for stackdepot related issues as explained in the patch.
-> > >> 
-> > >> Patches 3-5 originally submitted as RFC here [2]. In this submission I
-> > >> have omitted the new file 'all_objects' (patch 3/3 in [2]) as it might
-> > >> be considered too intrusive so I will postpone it for later. The docs
-> > >> patch is adjusted accordingly.
-> > >> 
-> > >> Also available in git, based on v5.17-rc1:
-> > >> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v1
-> > >> 
-> > >> I'd like to ask for some review before I add this to the slab tree.
-> > >> 
-> > >> [1] https://lore.kernel.org/all/20210414163434.4376-1-glittao@gmail.com/
-> > >> [2] https://lore.kernel.org/all/20210521121127.24653-1-glittao@gmail.com/
-> > >> 
-> > >> Oliver Glitta (4):
-> > >>   mm/slub: use stackdepot to save stack trace in objects
-> > >>   mm/slub: aggregate and print stack traces in debugfs files
-> > >>   mm/slub: sort debugfs output by frequency of stack traces
-> > >>   slab, documentation: add description of debugfs files for SLUB caches
-> > >> 
-> > >> Vlastimil Babka (1):
-> > >>   mm/slub: move struct track init out of set_track()
-> > >> 
-> > >>  Documentation/vm/slub.rst |  61 +++++++++++++++
-> > >>  init/Kconfig              |   1 +
-> > >>  mm/slub.c                 | 152 +++++++++++++++++++++++++-------------
-> > >>  3 files changed, 162 insertions(+), 52 deletions(-)
-> > >> 
-> > >> -- 
-> > >> 2.35.1
-> > >> 
-> > >> 
-> > > 
-> > 
+> if (migf->total_length > QM_MATCH_SIZE)
+>    precopy.dirty_bytes = migf->total_length - QM_MATCH_SIZE - *pos;
+> else
+>    precopy.dity_bytes = 0;
 > 
-> -- 
-> Sincerely yours,
-> Mike.
+> if (*pos < QM_MATCH_SIZE)
+>     precopy.initial_bytes = QM_MATCH_SIZE - *pos;
+> else
+>     precopy.initial_Bytes = 0;
+> 
+> Unless you think we should block it.
 
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
+What's the meaning of initial_bytes and dirty_bytes while in STOP_COPY?
+It seems like these become meaningless and if so, why shouldn't the
+ioctl simply return -EINVAL if the device state doesn't match the
+window where it's useful?
+
+> > I'd like to see the uapi clarify exactly what states allow this
+> > ioctl and define the behavior of the ioctl when transitioning out of
+> > those states with an open data_fd, ie. is it defined to return an
+> > -errno once in STOP_COPY?  Thanks,  
+> 
+> The ioctl is on the data_fd, so it should follow all the normal rules
+> of the data_fd just like read() - ie all ioctls/read/write fails when
+> teh state is moved outside one where the data_fd is valid.
+> 
+> That looks like another issue with the above, it doesn't chck
+> migf->disabled.
+> 
+> Should we add another sentence about this?
+
+Right, of course the ioctl goes away when the data_fd is invalid, the
+question is more that we've created this PRE_COPY_* specific ioctl and
+what does it mean to call it when not in a device state where the
+data_fd is still valid but this ioctl is really not.  We should
+specify how the driver is intended to respond to this ioctl in
+STOP_COPY.  Thanks,
+
+Alex
+

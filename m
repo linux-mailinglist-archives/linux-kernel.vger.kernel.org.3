@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA11D4C7667
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8EC4C761C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240641AbiB1SDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S237492AbiB1R7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239680AbiB1RxS (ORCPT
+        with ESMTP id S240376AbiB1RyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E767BAA2EC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:40:47 -0800 (PST)
-Date:   Mon, 28 Feb 2022 17:40:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646070043;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 28 Feb 2022 12:54:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADDEEB16F0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646070113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=J9gn+lq1OxgspfBuH8uvwct2hS/UCwEfO2G29M1/3f8=;
-        b=cxPiqNfpSdXlqHi5fadnPig8ssk3b+7bgpM2d0i2Bup5Qe13CMvtyXzQK1nJkwn9sreZIy
-        ZksYcRVkfo17ShTL+2xmWqgN5DASMTnnNsmTK7RUCKJnYse8lu1AMmEdy9cjo7ZXhzvvWY
-        iYltHyJ4VTjPRcokM7YJLRBMY8NDzQtyLrx9azSGJrasqEPBKt++jLLZM9glsprEzV4nrs
-        PhBikcR5cjJuvxbvzUzOXP1QPPHZMvYoveFGAsCNA5xQzlig4iISQyuN26nrRMtJK6exH1
-        DeBGtmhgzPPX2PRWwv88efsgbi1GlBtGrNhJtYR1uoYMertwg0aNJ0DcAEpqrA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646070043;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J9gn+lq1OxgspfBuH8uvwct2hS/UCwEfO2G29M1/3f8=;
-        b=XTMe+aOEpn/wQJu05p6eNIW2Jgnk2hKHTPDezjHd8iC9/lSyremxQq550tRK7BQso2nveM
-        I25tfiX58kGKd1Aw==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/qcom-pdc: Kill PDC_NO_PARENT_IRQ
-Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220224101226.88373-2-maz@kernel.org>
-References: <20220224101226.88373-2-maz@kernel.org>
+        bh=+pMff1CjJQQtrDDYhTBw5IeTxg6x2wxXAOITJ3SlaQg=;
+        b=eV7PRb1vEJ/vXcb9yIpntLGmMO/jmrGizWHFs8EgLmpA6tHPqN00+yukZTvi7pACLSXair
+        dIVjY7VRkINIVubJxlekc+jdrybIydHg2qO4W2LDt3NNWHUzPHzIq1MHGn/OGrjnOWIpja
+        EQJk6AkeMnpOsxNZncE+Iq/4eux/9PY=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-v0AjD8v6N4CxB-Zauq7QDQ-1; Mon, 28 Feb 2022 12:41:51 -0500
+X-MC-Unique: v0AjD8v6N4CxB-Zauq7QDQ-1
+Received: by mail-pl1-f199.google.com with SMTP id y3-20020a1709029b8300b0014c8bcb70a1so5120422plp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:41:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+pMff1CjJQQtrDDYhTBw5IeTxg6x2wxXAOITJ3SlaQg=;
+        b=YYu4Atwti6OfAQ4l+IAyobX7hIsDNr72pa/34I6kuiMijaJ3fPxlp8084oeSZAtYva
+         w4kJ89SUeTV47Mg3h8ubb8VTEKGY7vFHfYlUnkkIAVrUWN/DzGgGUqGldM5pMK59B3Be
+         WzGasVtTdfSh6RlwHrRUIAQY4E6y3W5bR+otCxDD/l98O1J0JwA/P0m3p6iqeofLwrr2
+         dL70KuenBCS0tTMf1gPm70KLn6/Akq0I+l8wx/uIfYjXpK4pVFCV0lauXLUFgwBEz5W7
+         jUMDJPIjgORHcpxP0TdZO3qgrEI+GqBhdK41vlPJ/92k08ZzIH26NZ/oSj8OvGaBnvP9
+         ZloA==
+X-Gm-Message-State: AOAM531/D+cIVrUt+LRvr+HMIWecEM88yVgShp4Bahs5gXRsDGyeK37O
+        nPGDxo3PjZQZrgZjSV3UDPd6+k8HxymgDRFGLbP1JbFsgy6jl80GwoT7fuocY3/xgffG3KKqANq
+        xGkNbwH/J17O3p2aE4wIgH023sGflBzsgD9OEYUvP
+X-Received: by 2002:a05:6a00:1c4c:b0:4f4:236b:4382 with SMTP id s12-20020a056a001c4c00b004f4236b4382mr1298665pfw.29.1646070108101;
+        Mon, 28 Feb 2022 09:41:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxhNSW6RN5nrKEatCvn7DkBEzajnGbEnhX4158KlrGGVvwRKbmMoUbrvuMj891xUnUhZdN02WQep+maI+2Mpfw=
+X-Received: by 2002:a05:6a00:1c4c:b0:4f4:236b:4382 with SMTP id
+ s12-20020a056a001c4c00b004f4236b4382mr1298642pfw.29.1646070107819; Mon, 28
+ Feb 2022 09:41:47 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <164607004262.16921.13704832568538557968.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <20220224110828.2168231-3-benjamin.tissoires@redhat.com> <CAPhsuW6m-HpfKLke1b7ni1j5Je3b3J0fa+MfJNnq2C9baOry1A@mail.gmail.com>
+In-Reply-To: <CAPhsuW6m-HpfKLke1b7ni1j5Je3b3J0fa+MfJNnq2C9baOry1A@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 28 Feb 2022 18:41:36 +0100
+Message-ID: <CAO-hwJKCEtQi-VHikw_tLxa5to0Y40KO7HSQrQtzcth_MawQ5A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/6] HID: bpf: allow to change the report
+ descriptor from an eBPF program
+To:     Song Liu <song@kernel.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,135 +88,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Sat, Feb 26, 2022 at 8:31 AM Song Liu <song@kernel.org> wrote:
+>
+> On Thu, Feb 24, 2022 at 3:09 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > The report descriptor is the dictionary of the HID protocol specific
+> > to the given device.
+> > Changing it is a common habit in the HID world, and making that feature
+> > accessible from eBPF allows to fix devices without having to install a
+> > new kernel.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> [...]
+>
+> > diff --git a/include/linux/hid.h b/include/linux/hid.h
+> > index 8fd79011f461..66d949d10b78 100644
+> > --- a/include/linux/hid.h
+> > +++ b/include/linux/hid.h
+> > @@ -1213,10 +1213,16 @@ do {                                                                    \
+> >
+> >  #ifdef CONFIG_BPF
+> >  u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *rd, int *size);
+> > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size);
+> >  int hid_bpf_module_init(void);
+> >  void hid_bpf_module_exit(void);
+> >  #else
+> >  static inline u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *rd, int *size) { return rd; }
+> > +static inline u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+> > +                                      unsigned int *size)
+> > +{
+> > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > +}
+> >  static inline int hid_bpf_module_init(void) { return 0; }
+> >  static inline void hid_bpf_module_exit(void) {}
+> >  #endif
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 5978b92cacd3..a7a8d9cfcf24 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -999,6 +999,7 @@ enum bpf_attach_type {
+> >         BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+> >         BPF_PERF_EVENT,
+> >         BPF_HID_DEVICE_EVENT,
+> > +       BPF_HID_RDESC_FIXUP,
+> >         __MAX_BPF_ATTACH_TYPE
+> >  };
+> >
+> > diff --git a/include/uapi/linux/bpf_hid.h b/include/uapi/linux/bpf_hid.h
+> > index 243ac45a253f..c0801d7174c3 100644
+> > --- a/include/uapi/linux/bpf_hid.h
+> > +++ b/include/uapi/linux/bpf_hid.h
+> > @@ -18,6 +18,7 @@ struct hid_device;
+> >  enum hid_bpf_event {
+> >         HID_BPF_UNDEF = 0,
+> >         HID_BPF_DEVICE_EVENT,
+> > +       HID_BPF_RDESC_FIXUP,
+> >  };
+> >
+> >  /* type is HID_BPF_DEVICE_EVENT */
+> > @@ -26,12 +27,19 @@ struct hid_bpf_ctx_device_event {
+> >         unsigned long size;
+> >  };
+> >
+> > +/* type is HID_BPF_RDESC_FIXUP */
+> > +struct hid_bpf_ctx_rdesc_fixup {
+> > +       __u8 data[HID_BPF_MAX_BUFFER_SIZE];
+> > +       unsigned long size;
+> > +};
+>
+> This looks same as HID_BPF_DEVICE_EVENT, do we really need to
+> separate the two?
 
-Commit-ID:     9fbc4f3979658ad30f3239d6a3660892976a8206
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/9fbc4f3979658ad30f3239d6a3660892976a8206
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Thu, 24 Feb 2022 10:12:22 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 28 Feb 2022 17:32:25 
+I wanted to separate them because the other types have other requirements.
 
-irqchip/qcom-pdc: Kill PDC_NO_PARENT_IRQ
+However, they all need a "data" with "size" associated. So I'll add
+data and size to the common definition of the struct, leaving only the
+specifics in the union (which means that DEVICE_EVENT and RDESC_FIXUP
+won't have a definition in the union). I'll see the look of it before
+submitting v2.
 
-PDC_NO_PARENT_IRQ is pretty pointless, as all it indicates is
-that the PDC terminates the interrupt hierarchy. Which is
-exactly the same as not having a mapping in the GIC space.
-This is also bad practice to treat the absence of a hwirq
-as a hwirq itself.
+Cheers,
+Benjamin
 
-Just explicitly use the region mapping pointer, and drop
-the definition.
-
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220224101226.88373-2-maz@kernel.org
----
- drivers/irqchip/qcom-pdc.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
-index 173e652..3b214c4 100644
---- a/drivers/irqchip/qcom-pdc.c
-+++ b/drivers/irqchip/qcom-pdc.c
-@@ -30,14 +30,14 @@
- #define IRQ_ENABLE_BANK		0x10
- #define IRQ_i_CFG		0x110
- 
--#define PDC_NO_PARENT_IRQ	~0UL
--
- struct pdc_pin_region {
- 	u32 pin_base;
- 	u32 parent_base;
- 	u32 cnt;
- };
- 
-+#define pin_to_hwirq(r, p)	((r)->parent_base + (p) - (r)->pin_base)
-+
- static DEFINE_RAW_SPINLOCK(pdc_lock);
- static void __iomem *pdc_base;
- static struct pdc_pin_region *pdc_region;
-@@ -186,19 +186,17 @@ static struct irq_chip qcom_pdc_gic_chip = {
- 	.irq_set_affinity	= irq_chip_set_affinity_parent,
- };
- 
--static irq_hw_number_t get_parent_hwirq(int pin)
-+static struct pdc_pin_region *get_pin_region(int pin)
- {
- 	int i;
--	struct pdc_pin_region *region;
- 
- 	for (i = 0; i < pdc_region_cnt; i++) {
--		region = &pdc_region[i];
--		if (pin >= region->pin_base &&
--		    pin < region->pin_base + region->cnt)
--			return (region->parent_base + pin - region->pin_base);
-+		if (pin >= pdc_region[i].pin_base &&
-+		    pin < pdc_region[i].pin_base + pdc_region[i].cnt)
-+			return &pdc_region[i];
- 	}
- 
--	return PDC_NO_PARENT_IRQ;
-+	return NULL;
- }
- 
- static int qcom_pdc_translate(struct irq_domain *d, struct irq_fwspec *fwspec,
-@@ -221,7 +219,8 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
- {
- 	struct irq_fwspec *fwspec = data;
- 	struct irq_fwspec parent_fwspec;
--	irq_hw_number_t hwirq, parent_hwirq;
-+	struct pdc_pin_region *region;
-+	irq_hw_number_t hwirq;
- 	unsigned int type;
- 	int ret;
- 
-@@ -234,8 +233,8 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
- 	if (ret)
- 		return ret;
- 
--	parent_hwirq = get_parent_hwirq(hwirq);
--	if (parent_hwirq == PDC_NO_PARENT_IRQ)
-+	region = get_pin_region(hwirq);
-+	if (!region)
- 		return irq_domain_disconnect_hierarchy(domain->parent, virq);
- 
- 	if (type & IRQ_TYPE_EDGE_BOTH)
-@@ -247,7 +246,7 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
- 	parent_fwspec.fwnode      = domain->parent->fwnode;
- 	parent_fwspec.param_count = 3;
- 	parent_fwspec.param[0]    = 0;
--	parent_fwspec.param[1]    = parent_hwirq;
-+	parent_fwspec.param[1]    = pin_to_hwirq(region, hwirq);
- 	parent_fwspec.param[2]    = type;
- 
- 	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
-@@ -265,7 +264,8 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
- {
- 	struct irq_fwspec *fwspec = data;
- 	struct irq_fwspec parent_fwspec;
--	irq_hw_number_t hwirq, parent_hwirq;
-+	struct pdc_pin_region *region;
-+	irq_hw_number_t hwirq;
- 	unsigned int type;
- 	int ret;
- 
-@@ -281,8 +281,8 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
- 	if (ret)
- 		return ret;
- 
--	parent_hwirq = get_parent_hwirq(hwirq);
--	if (parent_hwirq == PDC_NO_PARENT_IRQ)
-+	region = get_pin_region(hwirq);
-+	if (!region)
- 		return irq_domain_disconnect_hierarchy(domain->parent, virq);
- 
- 	if (type & IRQ_TYPE_EDGE_BOTH)
-@@ -294,7 +294,7 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
- 	parent_fwspec.fwnode      = domain->parent->fwnode;
- 	parent_fwspec.param_count = 3;
- 	parent_fwspec.param[0]    = 0;
--	parent_fwspec.param[1]    = parent_hwirq;
-+	parent_fwspec.param[1]    = pin_to_hwirq(region, hwirq);
- 	parent_fwspec.param[2]    = type;
- 
- 	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,

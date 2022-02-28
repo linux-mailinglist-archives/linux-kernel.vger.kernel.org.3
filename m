@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB2C4C6B44
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED6B4C6B48
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiB1Luy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S236018AbiB1Lu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbiB1Luv (ORCPT
+        with ESMTP id S234423AbiB1Luv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 06:50:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E216D971;
-        Mon, 28 Feb 2022 03:50:12 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9D6593A9;
+        Mon, 28 Feb 2022 03:50:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4872B810BF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AB14610A3;
         Mon, 28 Feb 2022 11:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55B3EC340F4;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 640F4C340F8;
         Mon, 28 Feb 2022 11:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1646049010;
-        bh=BgYtvwcmMAzp2F72cRhoyjhWd222YLpUXgARFox3H7w=;
+        bh=BmsfSKcZuGovauzItirHH1LKDVWGBOyN50g10SbtrMY=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QLhoZhMsRpkWEApjCACkY+GUp2CWtQObZgPhjNSostUgihywc1etqmwvy+2x6f5+5
-         q5lGFsFV3aj7LCGHg53JO6kRzE6dic6q6aVWI+NNJuklFlxaIpBULfWqee3zff+D+q
-         JhfvetNGFwJOvSWJciKqRQ8lJ1lWm7BJ55t2YaSajRhK9amwqylMitujmJeqh/C2Z3
-         ga0YLmkCvZHT2grXxQCnx8OwjP8DAcJA/WPALMJIBMe2hs/T1s/nd3xBeXjXtJL4J1
-         UcIOD4ZeQ8VWokxs1FapED4rGrxOxoK/fPpv7uFcYG72JeNau5ORruLsykHerAh3oV
-         aSbj6tJOWAe+A==
+        b=Yir59Ls9c7Yoy/NaGYlRFLpUCKvumUNoW1gSeUcB3+Gkz0K+iSQKHzTouS9OnLcI8
+         ohKRrkW4fDZoVUUzyKvT++iWiJtpjpuCEDiKw+B6dO+BPH9I71b1BLULhxQa62zS/q
+         e5y72dMD6HmUG6JonMbSESNGsi3O3DlxLlTIEtOA/Fzpg2HfwX/2MwwtiPf/JmQOfe
+         TrhQ/d0WBZvOy7ur5O4Oz11G3LbbibLlEn5dNZtvYM+wGvitsQmElvQ7RUag2B8/fk
+         PY5QzgwVY3e+HC4Zb0tAyVOkEWSKO2rfLjsBRD21lnZblkBEyr3GhmdCtFvAQmMZqu
+         Wt20PebZalNBg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4049EF0383A;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B010EAC09E;
         Mon, 28 Feb 2022 11:50:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] atm: firestream: check the return value of ioremap() in
- fs_init()
+Subject: Re: [PATCH net] net: ipa: fix a build dependency
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164604901026.16787.11574408572805234440.git-patchwork-notify@kernel.org>
+Message-Id: <164604901029.16787.14124027324200684971.git-patchwork-notify@kernel.org>
 Date:   Mon, 28 Feb 2022 11:50:10 +0000
-References: <20220225125230.26707-1-baijiaju1990@gmail.com>
-In-Reply-To: <20220225125230.26707-1-baijiaju1990@gmail.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     3chas3@gmail.com, linux-atm-general@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220225201530.182085-1-elder@linaro.org>
+In-Reply-To: <20220225201530.182085-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, rdunlap@infradead.org,
+        bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
+        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,19 +66,24 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 25 Feb 2022 04:52:30 -0800 you wrote:
-> The function ioremap() in fs_init() can fail, so its return value should
-> be checked.
+On Fri, 25 Feb 2022 14:15:30 -0600 you wrote:
+> An IPA build problem arose in the linux-next tree the other day.
+> The problem is that a recent commit adds a new dependency on some
+> code, and the Kconfig file for IPA doesn't reflect that dependency.
+> As a result, some configurations can fail to build (particularly
+> when COMPILE_TEST is enabled).
 > 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-> ---
->  drivers/atm/firestream.c | 2 ++
->  1 file changed, 2 insertions(+)
+> The recent patch adds calls to qmp_get(), qmp_put(), and qmp_send(),
+> and those are built based on the QCOM_AOSS_QMP config option.  If
+> that symbol is not defined, stubs are defined, so we just need to
+> ensure QCOM_AOSS_QMP is compatible with QCOM_IPA, or it's not
+> defined.
+> 
+> [...]
 
 Here is the summary with links:
-  - atm: firestream: check the return value of ioremap() in fs_init()
-    https://git.kernel.org/netdev/net/c/d4e26aaea7f8
+  - [net] net: ipa: fix a build dependency
+    https://git.kernel.org/netdev/net/c/caef14b7530c
 
 You are awesome, thank you!
 -- 

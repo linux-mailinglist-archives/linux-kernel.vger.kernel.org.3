@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866594C7795
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72354C778E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240613AbiB1SYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S236437AbiB1SXn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 13:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240031AbiB1SYi (ORCPT
+        with ESMTP id S240559AbiB1SX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:24:38 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F23F79C4D;
-        Mon, 28 Feb 2022 10:04:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646071480; x=1677607480;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PhTJdotKJ2wTOUcIThvtagW0Hjoxa9a1PK57pi8jxnU=;
-  b=S+J5RBTdpwt3DsUiX/Rxysm2t6/Ha/sDhHIlv6H7T9/op/W6CgUz/E9J
-   UV0Dw0LwrSIZd0NjF0FEz0XSJbS76DG+4/7MnP62opSRg8k2r8P8Jqtlk
-   HLJq0EwMK2OgzlyjcrKRhcmjqqHRGiCI2JXinksRn9ZrfsdeZDxAGQLJV
-   MbWo2uwN0ENowBxDo7u+59wUER+L7+o9GmV2czCvsO92934yeDWsfulWD
-   5GRI3+N3U+hj5gTlyQM1fSi6pXaw1/tQb38mAUoCoyM1gPq9UdTj0rbi8
-   CKLRgGt7TKRwwezR1qTAuaBB0iB8kdCqUcA3tx4fXD/fCTDa4DNeXa4XQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232919519"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="232919519"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:04:37 -0800
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="510184837"
-Received: from ensymall-mobl.amr.corp.intel.com (HELO [10.212.116.28]) ([10.212.116.28])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:04:35 -0800
-Message-ID: <28a7aa9b-8322-54df-1cfa-275805e2b044@linux.intel.com>
-Date:   Mon, 28 Feb 2022 12:01:21 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/3] soundwire: qcom: add in-band wake up interrupt
- support
+        Mon, 28 Feb 2022 13:23:26 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1C699EF6;
+        Mon, 28 Feb 2022 10:01:59 -0800 (PST)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6p8314Lpz67yk2;
+        Tue,  1 Mar 2022 02:00:35 +0800 (CST)
+Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 19:01:45 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 18:01:45 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Mon, 28 Feb 2022 18:01:44 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Topic: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Index: AQHYLIIBaGfq6jzuvUWvoNXYZoVi1qypDgGAgAAyBYA=
+Date:   Mon, 28 Feb 2022 18:01:44 +0000
+Message-ID: <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
+References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+ <20220228090121.1903-10-shameerali.kolothum.thodi@huawei.com>
+ <20220228145731.GH219866@nvidia.com>
+In-Reply-To: <20220228145731.GH219866@nvidia.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        robh+dt@kernel.org, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
- <20220228172528.3489-4-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220228172528.3489-4-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.94.1]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,41 +73,131 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> @@ -1424,6 +1464,11 @@ static int swrm_runtime_resume(struct device *dev)
->  	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
->  	int ret;
->  
-> +	if (ctrl->wake_irq > 0) {
-> +		if (!irqd_irq_disabled(irq_get_irq_data(ctrl->wake_irq)))
-> +			disable_irq_nosync(ctrl->wake_irq);
-> +	}
-> +
->  	clk_prepare_enable(ctrl->hclk);
 
-This one is quite interesting. If you disable the IRQ mechanism but
-haven't yet resumed the clock, that leaves a time window where the
-peripheral could attempt to drive the line high. what happens in that case?
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 28 February 2022 14:58
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
+> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
+> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
+> <prime.zeng@hisilicon.com>; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
+> Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+> migration
+> 
+> On Mon, Feb 28, 2022 at 09:01:20AM +0000, Shameer Kolothum wrote:
+> 
+> > +static int hisi_acc_vf_stop_copy(struct hisi_acc_vf_core_device
+> *hisi_acc_vdev,
+> > +				 struct hisi_acc_vf_migration_file *migf)
+> > +{
+> > +	struct acc_vf_data *vf_data = &migf->vf_data;
+> 
+> This now needs to hold the migf->lock
+> 
+> > +
+> > +	if ((cur == VFIO_DEVICE_STATE_STOP || cur ==
+> VFIO_DEVICE_STATE_PRE_COPY) &&
+> > +	    new == VFIO_DEVICE_STATE_RUNNING) {
+> > +		hisi_acc_vf_start_device(hisi_acc_vdev);
+> 
+> This should be two stanzas STOP->RUNNING should do start_device
+> 
+> And PRE_COPY->RUNNING should do disable_fds, and presumably nothing
+> else - the device was never stopped.
+> 
 
->  
->  	if (ctrl->clock_stop_not_supported) {
-> @@ -1491,6 +1536,11 @@ static int __maybe_unused swrm_runtime_suspend(struct device *dev)
->  
->  	usleep_range(300, 305);
->  
-> +	if (ctrl->wake_irq > 0) {
-> +		if (irqd_irq_disabled(irq_get_irq_data(ctrl->wake_irq)))
-> +			enable_irq(ctrl->wake_irq);
-> +	}
-> +
+Ok. I will take care of all the above.
 
-and this one is similar, you could have a case where the peripheral
-signals a wake immediately after the ClockStopNow frame, but you may not
-yet have enabled the wake detection interrupt.
+> > +	} else if (cmd == VFIO_DEVICE_MIG_PRECOPY) {
+> > +		struct vfio_device_mig_precopy precopy;
+> > +		enum vfio_device_mig_state curr_state;
+> > +		unsigned long minsz;
+> > +		int ret;
+> > +
+> > +		minsz = offsetofend(struct vfio_device_mig_precopy, dirty_bytes);
+> > +
+> > +		if (copy_from_user(&precopy, (void __user *)arg, minsz))
+> > +			return -EFAULT;
+> > +		if (precopy.argsz < minsz)
+> > +			return -EINVAL;
+> > +
+> > +		ret = hisi_acc_vfio_pci_get_device_state(core_vdev, &curr_state);
+> > +		if (!ret && curr_state == VFIO_DEVICE_STATE_PRE_COPY) {
+> > +			precopy.initial_bytes = QM_MATCH_SIZE;
+> > +			precopy.dirty_bytes = QM_MATCH_SIZE;
+> 
+> dirty_bytes should be 0
+> 
+> initial_bytes should be calculated based on the current file
+> descriptor offset.
+> 
+> The use of curr_state should be eliminated
+> 
+> This ioctl should be on the saving file_operations, not here
+> 
+> + * This ioctl is used on the migration data FD in the precopy phase of the
+> + * migration data transfer. It returns an estimate of the current data sizes
+> 
+> I see there is a bug in the qemu version:
+> 
+> @@ -215,12 +218,13 @@ static void vfio_save_precopy_pending(QEMUFile
+> *f, void *>
+>                                        uint64_t *res_postcopy_only)
+>  {
+>      VFIODevice *vbasedev = opaque;
+> +    VFIOMigration *migration = vbasedev->migration;
+>      struct vfio_device_mig_precopy precopy = {
+>          .argsz = sizeof(precopy),
+>      };
+>      int ret;
+> 
+> -    ret = ioctl(vbasedev->fd, VFIO_DEVICE_MIG_PRECOPY, &precopy);
+> +    ret = ioctl(migration->data_fd, VFIO_DEVICE_MIG_PRECOPY, &precopy);
+>      if (ret) {
+>          return;
+>      }
+> 
+> I'll update my github.
 
-Would that imply that the wake is missed?
+Ok. Thanks for that.
 
+And for the VFIO_DEVICE_MIG_PRECOPY ioctl, this is what I have now,
 
++static long hisi_acc_vf_save_unl_ioctl(struct file *filp,
++                                      unsigned int cmd, unsigned long arg)
++{
++       struct hisi_acc_vf_migration_file *migf = filp->private_data;
++       loff_t *pos = &filp->f_pos;
++       struct vfio_device_mig_precopy precopy;
++       unsigned long minsz;
++
++       if (cmd != VFIO_DEVICE_MIG_PRECOPY)
++               return -EINVAL;
++
++       minsz = offsetofend(struct vfio_device_mig_precopy, dirty_bytes);
++
++       if (copy_from_user(&precopy, (void __user *)arg, minsz))
++               return -EFAULT;
++       if (precopy.argsz < minsz)
++               return -EINVAL;
++
++       mutex_lock(&migf->lock);
++       if (*pos > migf->total_length) {
++               mutex_unlock(&migf->lock);
++               return -EINVAL;
++       }
++
++       precopy.dirty_bytes = 0;
++       precopy.initial_bytes = migf->total_length - *pos;
++       mutex_unlock(&migf->lock);
++       return copy_to_user((void __user *)arg, &precopy, minsz) ? -EFAULT : 0;
++}
++
 
->  	return 0;
->  }
->  
+I had a quick run with the above Qemu changes, and looks ok. Please let me know.
+
+Thanks,
+Shameer

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AF14C73F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990694C75F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238510AbiB1Rh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S239299AbiB1R5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238207AbiB1RfS (ORCPT
+        with ESMTP id S240253AbiB1RyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:35:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7679688798;
-        Mon, 28 Feb 2022 09:31:19 -0800 (PST)
+        Mon, 28 Feb 2022 12:54:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9867DB12F2;
+        Mon, 28 Feb 2022 09:41:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18D7361357;
-        Mon, 28 Feb 2022 17:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CB0C340E7;
-        Mon, 28 Feb 2022 17:31:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2631615B4;
+        Mon, 28 Feb 2022 17:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE0BC340F0;
+        Mon, 28 Feb 2022 17:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069478;
-        bh=epMXXlbGNSFUVnUKm1TddebGD0G60b9EZdMjrNxAv0g=;
+        s=korg; t=1646070113;
+        bh=5KaqpvvluzjEctSnCemTvMxDjNe7IYUy995fPKndeGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buag19bilsKR2bMb+hwsM4X7vlJ1XfBkgJJWd6Uj9ntGc39++DL/ZbfCgtpsYUyKG
-         LM09qR31Vi2v//61xrcW3hx/EvDe8jnBQr6LAURw+ijWEJw0W+BY20oynoBlOVfUgm
-         BGGjn11e2hOIaHJRNLE+o24qt5tNKmwuQMDvFrrY=
+        b=x0xCdOKVJCfftkCEMKlL95QeR0kvbVo/q0auswIuph78iKYs7W0gwJNEzcjlROhVX
+         rXcumEcyvXXayi9N7AN83bUhy8c3s5sqg3A1AycHJJO1SCRI3ObcSQWzaCE59DlfTM
+         U50wYfD46kHOXHvKu/wJ+Ap5zolcetnY5D4DnPDQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
-        Mark Bloch <mbloch@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.4 27/53] net/mlx5: Fix possible deadlock on rule deletion
+        stable@vger.kernel.org,
+        Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 091/139] bnxt_en: Increase firmware message response DMA wait time
 Date:   Mon, 28 Feb 2022 18:24:25 +0100
-Message-Id: <20220228172250.254197486@linuxfoundation.org>
+Message-Id: <20220228172357.182578542@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +57,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Gottlieb <maorg@nvidia.com>
+From: Michael Chan <michael.chan@broadcom.com>
 
-commit b645e57debca846f51b3209907546ea857ddd3f5 upstream.
+[ Upstream commit b891106da52b2c12dbaf73400f6d225b06a38d80 ]
 
-Add missing call to up_write_ref_node() which releases the semaphore
-in case the FTE doesn't have destinations, such in drop rule case.
+When polling for the firmware message response, we first poll for the
+response message header.  Once the valid length is detected in the
+header, we poll for the valid bit at the end of the message which
+signals DMA completion.  Normally, this poll time for DMA completion
+is extremely short (0 to a few usec).  But on some devices under some
+rare conditions, it can be up to about 20 msec.
 
-Fixes: 465e7baab6d9 ("net/mlx5: Fix deletion of duplicate rules")
-Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
-Reviewed-by: Mark Bloch <mbloch@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Increase this delay to 50 msec and use udelay() for the first 10 usec
+for the common case, and usleep_range() beyond that.
+
+Also, change the error message to include the above delay time when
+printing the timeout value.
+
+Fixes: 3c8c20db769c ("bnxt_en: move HWRM API implementation into separate file")
+Reviewed-by: Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fs_core.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c | 12 +++++++++---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h |  2 +-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-@@ -1947,6 +1947,8 @@ void mlx5_del_flow_rules(struct mlx5_flo
- 		fte->node.del_hw_func = NULL;
- 		up_write_ref_node(&fte->node, false);
- 		tree_put_node(&fte->node, false);
-+	} else {
-+		up_write_ref_node(&fte->node, false);
- 	}
- 	kfree(handle);
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
+index 8171f4912fa01..3a0eeb3737767 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
+@@ -595,18 +595,24 @@ static int __hwrm_send(struct bnxt *bp, struct bnxt_hwrm_ctx *ctx)
+ 
+ 		/* Last byte of resp contains valid bit */
+ 		valid = ((u8 *)ctx->resp) + len - 1;
+-		for (j = 0; j < HWRM_VALID_BIT_DELAY_USEC; j++) {
++		for (j = 0; j < HWRM_VALID_BIT_DELAY_USEC; ) {
+ 			/* make sure we read from updated DMA memory */
+ 			dma_rmb();
+ 			if (*valid)
+ 				break;
+-			usleep_range(1, 5);
++			if (j < 10) {
++				udelay(1);
++				j++;
++			} else {
++				usleep_range(20, 30);
++				j += 20;
++			}
+ 		}
+ 
+ 		if (j >= HWRM_VALID_BIT_DELAY_USEC) {
+ 			if (!(ctx->flags & BNXT_HWRM_CTX_SILENT))
+ 				netdev_err(bp->dev, "Error (timeout: %u) msg {0x%x 0x%x} len:%d v:%d\n",
+-					   hwrm_total_timeout(i),
++					   hwrm_total_timeout(i) + j,
+ 					   le16_to_cpu(ctx->req->req_type),
+ 					   le16_to_cpu(ctx->req->seq_id), len,
+ 					   *valid);
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
+index 9a9fc4e8041b6..380ef69afb51b 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
+@@ -94,7 +94,7 @@ static inline unsigned int hwrm_total_timeout(unsigned int n)
  }
+ 
+ 
+-#define HWRM_VALID_BIT_DELAY_USEC	150
++#define HWRM_VALID_BIT_DELAY_USEC	50000
+ 
+ static inline bool bnxt_cfa_hwrm_message(u16 req_type)
+ {
+-- 
+2.34.1
+
 
 

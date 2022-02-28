@@ -2,199 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE874C6CCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6637C4C6CDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236558AbiB1MmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S236601AbiB1Moo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiB1MmP (ORCPT
+        with ESMTP id S236575AbiB1Mof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:42:15 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4EB74878
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:41:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=IR4abFvHdW12CaulzRpJ7ldY+fqUsw7Tyy0gpgznxxI=; b=OoW4TgUzT4R+MfenewyNryXeUW
-        iUL2PXMIjxTZ5yJDCOM6yL0WBzWRJJ6Y463Kahd9peAFJng7WXdTXf1JgTu2QY7KO3mXw3mumoU/r
-        q30VivZukzwo+BIyGQ/rrRKYztZZpf8WPJXi8TtN8ev7iU/01cpfUCDWt8B5lpLP4vIOPNURRit4t
-        60hDFVt3uDc/endDjmoChnaQKjPMTe2ec7jFN4xF2oVq6OT+BQnRJmHfF0Lg8jjJjCZpcZQlQrHjJ
-        ixUur7ZpsLXDr15j7MCNssueEMdMdmssra5Dod6ibAr+/eYEhicDGIsRbrCoxKfKskpVwe9zdWz3q
-        CNts/IFQ==;
-Received: from [2.53.163.181] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOfLJ-00CHew-Lq; Mon, 28 Feb 2022 12:41:34 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] f2fs: pass the bio operation to bio_alloc_bioset
-Date:   Mon, 28 Feb 2022 14:41:23 +0200
-Message-Id: <20220228124123.856027-3-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220228124123.856027-1-hch@lst.de>
-References: <20220228124123.856027-1-hch@lst.de>
+        Mon, 28 Feb 2022 07:44:35 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0872546B1F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:43:57 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id u16so11023015pfg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jD1phax98UJcXV+Cv3FDbMAtH0P4W4DpNusHGjo2btE=;
+        b=hXCLIv+AYqZHsRWPB3o1M732OqgGYyBuuhQtNFLtJNe2NjrpA2ApYEoOBd23mEPp39
+         fDKH1PYs1FBcWt8nI4OGcjkk4qIeQK28EB7wEmJcHH/An+qOmAiaAtC7WjYMoQxymg1M
+         n2jRI171Kp6Rcp5JhPis/9hqMyZt1WBYdPUgOBnzqUX+uofLMU4pqkqn7pDHaDJ6CVqy
+         OUVZEbvJOIPnqBOVUpTQAjpSiz+seCjPR/VixXAUI5oSp1bzNRjHjCoVh6wN4FKgl3ad
+         WgSs/YvBFl2Db0q0Rd0mVgVP92rmJtPwhyIzOSHJDeU98rzaas4LS/0XPL2ctzOnuLXX
+         GhtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jD1phax98UJcXV+Cv3FDbMAtH0P4W4DpNusHGjo2btE=;
+        b=c6qPl3IE6iE41uG4PbUk91r2HE5COeIjDJjHCoA1/D/V1q19ycgreOPX9kDjAFv1wn
+         6Cad4ZQEh9M80UW9mKIq0UNfM5VWhVkjp7IDuohKffvjsOURYou2G0G8hhp62le1zRDP
+         Vv9YKiNwJFmi5m/Wc7iTiSB0Gue6l6EHUhXbaKxYWQRfx29JIdfIakHIAWPPJHKpjHLA
+         dKJf8nmJZIterocu6Ze+zIveUChQ0VXSUDUfcA+oQep5XRpKCROMpU9W9pqKOpNo3vmW
+         R0E9fWADtOd2uxlWBuxslK0cfFyU0tPeJpKwW+rTJd9AH1DkkFHktqa3tMISMZ/mnA/q
+         lRtQ==
+X-Gm-Message-State: AOAM531nNLYLSMwqREYJ2E3yiQ5U5Rsr2kU6Is2vha/CU7BeS+3lwNHa
+        3IoIwZuy5eH3DNw8OTKqVwnm
+X-Google-Smtp-Source: ABdhPJwr1lOE00uxSdPsRm09kPG1wmM9WecZHnBggeV72LxP/LVc4w8ONwUyKvLx+r74DSaIdXbzvg==
+X-Received: by 2002:a05:6a00:10d0:b0:4e1:7504:25c7 with SMTP id d16-20020a056a0010d000b004e1750425c7mr21419683pfu.77.1646052236371;
+        Mon, 28 Feb 2022 04:43:56 -0800 (PST)
+Received: from localhost.localdomain ([117.207.25.37])
+        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.43.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 04:43:56 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elder@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 00/27] Add initial support for MHI endpoint stack
+Date:   Mon, 28 Feb 2022 18:13:17 +0530
+Message-Id: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor block I/O code so that the bio operation and known flags are set
-at bio allocation time.  Only the later updated flags are updated on the
-fly.
+Hello,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/f2fs/data.c | 70 +++++++++++++++++++++-----------------------------
- 1 file changed, 29 insertions(+), 41 deletions(-)
+This series adds initial support for the Qualcomm specific Modem Host Interface
+(MHI) bus in endpoint devices like SDX55 modems. The MHI bus in endpoint devices
+communicates with the MHI bus in host machines like x86 over any physical bus
+like PCIe. The MHI host support is already in mainline [1] and been used by PCIe
+based modems and WLAN devices running vendor code (downstream).
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 59dd0347c4bc8..fc077bce679d9 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -388,6 +388,24 @@ int f2fs_target_device_index(struct f2fs_sb_info *sbi, block_t blkaddr)
- 	return 0;
- }
- 
-+static void __attach_io_flag(struct f2fs_io_info *fio, unsigned int io_flag)
-+{
-+	unsigned int temp_mask = (1 << NR_TEMP_TYPE) - 1;
-+	unsigned int fua_flag = io_flag & temp_mask;
-+	unsigned int meta_flag = (io_flag >> NR_TEMP_TYPE) & temp_mask;
-+
-+	/*
-+	 * data/node io flag bits per temp:
-+	 *      REQ_META     |      REQ_FUA      |
-+	 *    5 |    4 |   3 |    2 |    1 |   0 |
-+	 * Cold | Warm | Hot | Cold | Warm | Hot |
-+	 */
-+	if ((1 << fio->temp) & meta_flag)
-+		fio->op_flags |= REQ_META;
-+	if ((1 << fio->temp) & fua_flag)
-+		fio->op_flags |= REQ_FUA;
-+}
-+
- static struct bio *__bio_alloc(struct f2fs_io_info *fio, int npages)
- {
- 	struct f2fs_sb_info *sbi = fio->sbi;
-@@ -395,8 +413,14 @@ static struct bio *__bio_alloc(struct f2fs_io_info *fio, int npages)
- 	sector_t sector;
- 	struct bio *bio;
- 
-+	if (fio->type == DATA)
-+		__attach_io_flag(fio, sbi->data_io_flag);
-+	else if (fio->type == NODE)
-+		__attach_io_flag(fio, sbi->node_io_flag);
-+
- 	bdev = f2fs_target_device(sbi, fio->new_blkaddr, &sector);
--	bio = bio_alloc_bioset(bdev, npages, 0, GFP_NOIO, &f2fs_bioset);
-+	bio = bio_alloc_bioset(bdev, npages, fio->op | fio->op_flags, GFP_NOIO,
-+			       &f2fs_bioset);
- 	bio->bi_iter.bi_sector = sector;
- 	if (is_read_io(fio->op)) {
- 		bio->bi_end_io = f2fs_read_end_io;
-@@ -501,34 +525,6 @@ void f2fs_submit_bio(struct f2fs_sb_info *sbi,
- 	__submit_bio(sbi, bio, type);
- }
- 
--static void __attach_io_flag(struct f2fs_io_info *fio)
--{
--	struct f2fs_sb_info *sbi = fio->sbi;
--	unsigned int temp_mask = (1 << NR_TEMP_TYPE) - 1;
--	unsigned int io_flag, fua_flag, meta_flag;
--
--	if (fio->type == DATA)
--		io_flag = sbi->data_io_flag;
--	else if (fio->type == NODE)
--		io_flag = sbi->node_io_flag;
--	else
--		return;
--
--	fua_flag = io_flag & temp_mask;
--	meta_flag = (io_flag >> NR_TEMP_TYPE) & temp_mask;
--
--	/*
--	 * data/node io flag bits per temp:
--	 *      REQ_META     |      REQ_FUA      |
--	 *    5 |    4 |   3 |    2 |    1 |   0 |
--	 * Cold | Warm | Hot | Cold | Warm | Hot |
--	 */
--	if ((1 << fio->temp) & meta_flag)
--		fio->op_flags |= REQ_META;
--	if ((1 << fio->temp) & fua_flag)
--		fio->op_flags |= REQ_FUA;
--}
--
- static void __submit_merged_bio(struct f2fs_bio_info *io)
- {
- 	struct f2fs_io_info *fio = &io->fio;
-@@ -536,9 +532,6 @@ static void __submit_merged_bio(struct f2fs_bio_info *io)
- 	if (!io->bio)
- 		return;
- 
--	__attach_io_flag(fio);
--	bio_set_op_attrs(io->bio, fio->op, fio->op_flags);
--
- 	if (is_read_io(fio->op))
- 		trace_f2fs_prepare_read_bio(io->sbi->sb, fio->type, io->bio);
- 	else
-@@ -596,10 +589,9 @@ static void __f2fs_submit_merged_write(struct f2fs_sb_info *sbi,
- 	/* change META to META_FLUSH in the checkpoint procedure */
- 	if (type >= META_FLUSH) {
- 		io->fio.type = META_FLUSH;
--		io->fio.op = REQ_OP_WRITE;
--		io->fio.op_flags = REQ_META | REQ_PRIO | REQ_SYNC;
-+		io->bio->bi_opf |= REQ_META | REQ_PRIO | REQ_SYNC;
- 		if (!test_opt(sbi, NOBARRIER))
--			io->fio.op_flags |= REQ_PREFLUSH | REQ_FUA;
-+			io->bio->bi_opf |= REQ_PREFLUSH | REQ_FUA;
- 	}
- 	__submit_merged_bio(io);
- 	up_write(&io->io_rwsem);
-@@ -680,9 +672,6 @@ int f2fs_submit_page_bio(struct f2fs_io_info *fio)
- 	if (fio->io_wbc && !is_read_io(fio->op))
- 		wbc_account_cgroup_owner(fio->io_wbc, page, PAGE_SIZE);
- 
--	__attach_io_flag(fio);
--	bio_set_op_attrs(bio, fio->op, fio->op_flags);
--
- 	inc_page_count(fio->sbi, is_read_io(fio->op) ?
- 			__read_io_type(page): WB_DATA_TYPE(fio->page));
- 
-@@ -876,10 +865,8 @@ int f2fs_merge_page_bio(struct f2fs_io_info *fio)
- alloc_new:
- 	if (!bio) {
- 		bio = __bio_alloc(fio, BIO_MAX_VECS);
--		__attach_io_flag(fio);
- 		f2fs_set_bio_crypt_ctx(bio, fio->page->mapping->host,
- 				       fio->page->index, fio, GFP_NOIO);
--		bio_set_op_attrs(bio, fio->op, fio->op_flags);
- 
- 		add_bio_entry(fio->sbi, bio, page, fio->temp);
- 	} else {
-@@ -988,7 +975,8 @@ static struct bio *f2fs_grab_read_bio(struct inode *inode, block_t blkaddr,
- 	sector_t sector;
- 	struct block_device *bdev = f2fs_target_device(sbi, blkaddr, &sector);
- 
--	bio = bio_alloc_bioset(bdev, bio_max_segs(nr_pages), REQ_OP_READ,
-+	bio = bio_alloc_bioset(bdev, bio_max_segs(nr_pages),
-+			       REQ_OP_READ | op_flag,
- 			       for_write ? GFP_NOIO : GFP_KERNEL, &f2fs_bioset);
- 	if (!bio)
- 		return ERR_PTR(-ENOMEM);
+Overview
+========
+
+This series aims at adding the MHI support in the endpoint devices with the goal
+of getting data connectivity using the mainline kernel running on the modems.
+Modems here refer to the combination of an APPS processor (Cortex A grade) and
+a baseband processor (DSP). The MHI bus is located in the APPS processor and it
+transfers data packets from the baseband processor to the host machine.
+
+The MHI Endpoint (MHI EP) stack proposed here is inspired by the downstream
+code written by Qualcomm. But the complete stack is mostly re-written to adapt
+to the "bus" framework and made it modular so that it can work with the upstream
+subsystems like "PCI Endpoint". The code structure of the MHI endpoint stack
+follows the MHI host stack to maintain uniformity.
+
+With this initial MHI EP stack (along with few other drivers), we can establish
+the network interface between host and endpoint over the MHI software channels
+(IP_SW0) and can do things like IP forwarding, SSH, etc...
+
+Stack Organization
+==================
+
+The MHI EP stack has the concept of controller and device drivers as like the
+MHI host stack. The MHI EP controller driver can be a PCI Endpoint Function
+driver and the MHI device driver can be a MHI EP Networking driver or QRTR
+driver. The MHI EP controller driver is tied to the PCI Endpoint subsystem and
+handles all bus related activities like mapping the host memory, raising IRQ,
+passing link specific events etc... The MHI EP networking driver is tied to the
+Networking stack and handles all networking related activities like
+sending/receiving the SKBs from netdev, statistics collection etc...
+
+This series only contains the MHI EP code, whereas the PCIe EPF driver and MHI
+EP Networking drivers are not yet submitted and can be found here [2]. Though
+the MHI EP stack doesn't have the build time dependency, it cannot function
+without them.
+
+Test setup
+==========
+
+This series has been tested on Telit FN980 TLB board powered by Qualcomm SDX55
+(a.k.a X55 modem) and Qualcomm SM8450 based dev board.
+
+For testing the stability and performance, networking tools such as iperf, ssh
+and ping are used.
+
+Limitations
+===========
+
+We are not _yet_ there to get the data packets from the modem as that involves
+the Qualcomm IP Accelerator (IPA) integration with MHI endpoint stack. But we
+are planning to add support for it in the coming days.
+
+References
+==========
+
+MHI bus: https://www.kernel.org/doc/html/latest/mhi/mhi.html
+Linaro connect presentation around this topic: https://connect.linaro.org/resources/lvc21f/lvc21f-222/
+
+Thanks,
+Mani
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/bus/mhi
+[2] https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-sdx55-drivers
+
+Changes in v4:
+
+* Collected reviews from Hemant and Alex.
+* Removed the A7 suffix from register names and functions.
+* Added a couple of cleanup patches.
+* Reworked the mhi_ep_queue_skb() API.
+* Switched to separate workers for command and transfer rings.
+* Used a common workqueue for state and ring management.
+* Reworked the channel ring management.
+* Other misc changes as per review from Alex.
+
+Changes in v3:
+
+* Splitted the patch 20/23 into two.
+* Fixed the error handling in patch 21/23.
+* Removed spurious change in patch 01/23.
+* Added check for xfer callbacks in client driver probe.
+
+Changes in v2:
+
+v2 mostly addresses the issues seen while testing the stack on SM8450 that is a
+SMP platform and also incorporates the review comments from Alex.
+
+Major changes are:
+
+* Added a cleanup patch for getting rid of SHIFT macros and used the bitfield
+  operations.
+* Added the endianess patches that were submitted to MHI list and used the
+  endianess conversion in EP patches also.
+* Added support for multiple event rings.
+* Fixed the MSI generation based on the event ring index.
+* Fixed the doorbell list handling by making use of list splice and not locking
+  the entire list manipulation.
+* Added new APIs for wrapping the reading and writing to host memory (Dmitry).
+* Optimized the read_channel and queue_skb function logics.
+* Added Hemant's R-o-b tag.
+
+Manivannan Sadhasivam (25):
+  bus: mhi: Move host MHI code to "host" directory
+  bus: mhi: Use bitfield operations for register read and write
+  bus: mhi: Use bitfield operations for handling DWORDs of ring elements
+  bus: mhi: Cleanup the register definitions used in headers
+  bus: mhi: host: Rename "struct mhi_tre" to "struct mhi_ring_element"
+  bus: mhi: Move common MHI definitions out of host directory
+  bus: mhi: Make mhi_state_str[] array static inline and move to
+    common.h
+  bus: mhi: ep: Add support for registering MHI endpoint controllers
+  bus: mhi: ep: Add support for registering MHI endpoint client drivers
+  bus: mhi: ep: Add support for creating and destroying MHI EP devices
+  bus: mhi: ep: Add support for managing MMIO registers
+  bus: mhi: ep: Add support for ring management
+  bus: mhi: ep: Add support for sending events to the host
+  bus: mhi: ep: Add support for managing MHI state machine
+  bus: mhi: ep: Add support for processing MHI endpoint interrupts
+  bus: mhi: ep: Add support for powering up the MHI endpoint stack
+  bus: mhi: ep: Add support for powering down the MHI endpoint stack
+  bus: mhi: ep: Add support for handling MHI_RESET
+  bus: mhi: ep: Add support for handling SYS_ERR condition
+  bus: mhi: ep: Add support for processing command rings
+  bus: mhi: ep: Add support for reading from the host
+  bus: mhi: ep: Add support for processing channel rings
+  bus: mhi: ep: Add support for queueing SKBs to the host
+  bus: mhi: ep: Add support for suspending and resuming channels
+  bus: mhi: ep: Add uevent support for module autoloading
+
+Paul Davey (2):
+  bus: mhi: Fix pm_state conversion to string
+  bus: mhi: Fix MHI DMA structure endianness
+
+ drivers/bus/Makefile                     |    2 +-
+ drivers/bus/mhi/Kconfig                  |   28 +-
+ drivers/bus/mhi/Makefile                 |    9 +-
+ drivers/bus/mhi/common.h                 |  326 +++++
+ drivers/bus/mhi/core/internal.h          |  722 ----------
+ drivers/bus/mhi/ep/Kconfig               |   10 +
+ drivers/bus/mhi/ep/Makefile              |    2 +
+ drivers/bus/mhi/ep/internal.h            |  222 +++
+ drivers/bus/mhi/ep/main.c                | 1623 ++++++++++++++++++++++
+ drivers/bus/mhi/ep/mmio.c                |  272 ++++
+ drivers/bus/mhi/ep/ring.c                |  197 +++
+ drivers/bus/mhi/ep/sm.c                  |  148 ++
+ drivers/bus/mhi/host/Kconfig             |   31 +
+ drivers/bus/mhi/{core => host}/Makefile  |    4 +-
+ drivers/bus/mhi/{core => host}/boot.c    |   17 +-
+ drivers/bus/mhi/{core => host}/debugfs.c |   40 +-
+ drivers/bus/mhi/{core => host}/init.c    |  131 +-
+ drivers/bus/mhi/host/internal.h          |  382 +++++
+ drivers/bus/mhi/{core => host}/main.c    |   66 +-
+ drivers/bus/mhi/{ => host}/pci_generic.c |    0
+ drivers/bus/mhi/{core => host}/pm.c      |   36 +-
+ include/linux/mhi_ep.h                   |  284 ++++
+ include/linux/mod_devicetable.h          |    2 +
+ scripts/mod/file2alias.c                 |   10 +
+ 24 files changed, 3649 insertions(+), 915 deletions(-)
+ create mode 100644 drivers/bus/mhi/common.h
+ delete mode 100644 drivers/bus/mhi/core/internal.h
+ create mode 100644 drivers/bus/mhi/ep/Kconfig
+ create mode 100644 drivers/bus/mhi/ep/Makefile
+ create mode 100644 drivers/bus/mhi/ep/internal.h
+ create mode 100644 drivers/bus/mhi/ep/main.c
+ create mode 100644 drivers/bus/mhi/ep/mmio.c
+ create mode 100644 drivers/bus/mhi/ep/ring.c
+ create mode 100644 drivers/bus/mhi/ep/sm.c
+ create mode 100644 drivers/bus/mhi/host/Kconfig
+ rename drivers/bus/mhi/{core => host}/Makefile (54%)
+ rename drivers/bus/mhi/{core => host}/boot.c (96%)
+ rename drivers/bus/mhi/{core => host}/debugfs.c (90%)
+ rename drivers/bus/mhi/{core => host}/init.c (92%)
+ create mode 100644 drivers/bus/mhi/host/internal.h
+ rename drivers/bus/mhi/{core => host}/main.c (97%)
+ rename drivers/bus/mhi/{ => host}/pci_generic.c (100%)
+ rename drivers/bus/mhi/{core => host}/pm.c (97%)
+ create mode 100644 include/linux/mhi_ep.h
+
 -- 
-2.30.2
+2.25.1
 

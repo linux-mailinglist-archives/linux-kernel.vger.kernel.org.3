@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72354C778E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A86154C7797
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiB1SXn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 13:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
+        id S238018AbiB1SZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240559AbiB1SX0 (ORCPT
+        with ESMTP id S240474AbiB1SYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:23:26 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1C699EF6;
-        Mon, 28 Feb 2022 10:01:59 -0800 (PST)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6p8314Lpz67yk2;
-        Tue,  1 Mar 2022 02:00:35 +0800 (CST)
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 19:01:45 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 18:01:45 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Mon, 28 Feb 2022 18:01:44 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYLIIBaGfq6jzuvUWvoNXYZoVi1qypDgGAgAAyBYA=
-Date:   Mon, 28 Feb 2022 18:01:44 +0000
-Message-ID: <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
-References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
- <20220228090121.1903-10-shameerali.kolothum.thodi@huawei.com>
- <20220228145731.GH219866@nvidia.com>
-In-Reply-To: <20220228145731.GH219866@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.94.1]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 28 Feb 2022 13:24:36 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0745971CB3;
+        Mon, 28 Feb 2022 10:04:33 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id n14so16733860wrq.7;
+        Mon, 28 Feb 2022 10:04:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VaJ7vYxiYDppNFuFvcEyYJgrljTaiSuZmK98Y+vY7wA=;
+        b=obM0ggc5iSG7+04jAJpVvM5h8etlFLjmoe4ZZzOTzBcDwFsuhkVO6s1roPpWq1YY2e
+         w4zuUXbjfJz1VoC3A662BS3NzR0t1zoJoMYFf2e5luAQqjP3126oAW+Zg0g2q/ZdFwWk
+         e+HkxNtaNf8rwIpVk2O8pm66muF7nUj5YcB1tdSePCn7gdQ9Fqh8jWHTYcBXQoj9dcJo
+         ZesQnXxaL2zja28D99QyC50dHVtYWGDCHSXVRUgFZ9JymjrBnrMRLkajEZwCaMW+gUBN
+         awKBE4/e8bAG7z25vJGrzkGIRgvmewZY4NOINQ5RAonQJlzElctNPnRmdia/W70r7N0E
+         o2fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VaJ7vYxiYDppNFuFvcEyYJgrljTaiSuZmK98Y+vY7wA=;
+        b=L8kJIN6X+xl0Wm9B6mu2UBl46XO8rbK7sOYE6MWAOF9b0omyGGxbn+5ljM+ndyaX63
+         ddyvLEvZif1zW5ZwmGeP+qQ8ymorrGr2UxwOLRdCS2KLnD8SlNESrcmioQbdgvpZa5Tw
+         UtG1uKhnsxP2DKJaTtCkRhV9ENhiXD9nCZng/Xoh02xz7fRCzTAtLucV1pL3SBZPrBe4
+         4XajTq+kVetyOua7fAFSHgQ9BGeYPk4am7JwyZRDoXb2vr3fxVPqN36gHo0kkGLfmqHQ
+         is8HYWYExxS2jR8nqFwzBsMlak2Dn/EkmfYC1Xt3aLxjymWpeHLo9jnUi+npPS+yAPGW
+         3wAw==
+X-Gm-Message-State: AOAM531E+m6nIk5Lsy74dKVnuUYux/frYnVAijktuNaUulDjLa2oCkXz
+        Zcv0GqrvtkMRClqhhIgSoqs=
+X-Google-Smtp-Source: ABdhPJz81jTbv3NaGz+ja9PXaKPd0Fkk+Zfd69cpLTOt2pT1n5NhmnRVNBauIgQZyRJh5mxeY3fULA==
+X-Received: by 2002:adf:dd12:0:b0:1ea:9398:8f4f with SMTP id a18-20020adfdd12000000b001ea93988f4fmr15899502wrm.458.1646071472587;
+        Mon, 28 Feb 2022 10:04:32 -0800 (PST)
+Received: from elementary ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d56c6000000b001edb64e69cdsm11208628wrw.15.2022.02.28.10.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 10:04:32 -0800 (PST)
+Date:   Mon, 28 Feb 2022 19:04:30 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        kieran.bingham+renesas@ideasonboard.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: rcar-du: switch to devm_drm_of_get_bridge
+Message-ID: <20220228180430.GA14803@elementary>
+References: <20220221073757.12181-1-jose.exposito89@gmail.com>
+ <20220221085619.bqyr2etq4xjjqa4p@houat>
+ <YhOCRQhDClgsBAtV@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhOCRQhDClgsBAtV@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,132 +74,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 21, 2022 at 02:15:01PM +0200, Laurent Pinchart wrote:
+> On Mon, Feb 21, 2022 at 09:56:19AM +0100, Maxime Ripard wrote:
+> > I guess lvds->panel can be removed from the rcar_lvds struct as well?
+> 
+> It's used in rcar_lvds_get_lvds_mode() though, so this patch introduces
+> a regression.
 
-
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 28 February 2022 14:58
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
-> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
-> 
-> On Mon, Feb 28, 2022 at 09:01:20AM +0000, Shameer Kolothum wrote:
-> 
-> > +static int hisi_acc_vf_stop_copy(struct hisi_acc_vf_core_device
-> *hisi_acc_vdev,
-> > +				 struct hisi_acc_vf_migration_file *migf)
-> > +{
-> > +	struct acc_vf_data *vf_data = &migf->vf_data;
-> 
-> This now needs to hold the migf->lock
-> 
-> > +
-> > +	if ((cur == VFIO_DEVICE_STATE_STOP || cur ==
-> VFIO_DEVICE_STATE_PRE_COPY) &&
-> > +	    new == VFIO_DEVICE_STATE_RUNNING) {
-> > +		hisi_acc_vf_start_device(hisi_acc_vdev);
-> 
-> This should be two stanzas STOP->RUNNING should do start_device
-> 
-> And PRE_COPY->RUNNING should do disable_fds, and presumably nothing
-> else - the device was never stopped.
-> 
-
-Ok. I will take care of all the above.
-
-> > +	} else if (cmd == VFIO_DEVICE_MIG_PRECOPY) {
-> > +		struct vfio_device_mig_precopy precopy;
-> > +		enum vfio_device_mig_state curr_state;
-> > +		unsigned long minsz;
-> > +		int ret;
-> > +
-> > +		minsz = offsetofend(struct vfio_device_mig_precopy, dirty_bytes);
-> > +
-> > +		if (copy_from_user(&precopy, (void __user *)arg, minsz))
-> > +			return -EFAULT;
-> > +		if (precopy.argsz < minsz)
-> > +			return -EINVAL;
-> > +
-> > +		ret = hisi_acc_vfio_pci_get_device_state(core_vdev, &curr_state);
-> > +		if (!ret && curr_state == VFIO_DEVICE_STATE_PRE_COPY) {
-> > +			precopy.initial_bytes = QM_MATCH_SIZE;
-> > +			precopy.dirty_bytes = QM_MATCH_SIZE;
-> 
-> dirty_bytes should be 0
-> 
-> initial_bytes should be calculated based on the current file
-> descriptor offset.
-> 
-> The use of curr_state should be eliminated
-> 
-> This ioctl should be on the saving file_operations, not here
-> 
-> + * This ioctl is used on the migration data FD in the precopy phase of the
-> + * migration data transfer. It returns an estimate of the current data sizes
-> 
-> I see there is a bug in the qemu version:
-> 
-> @@ -215,12 +218,13 @@ static void vfio_save_precopy_pending(QEMUFile
-> *f, void *>
->                                        uint64_t *res_postcopy_only)
->  {
->      VFIODevice *vbasedev = opaque;
-> +    VFIOMigration *migration = vbasedev->migration;
->      struct vfio_device_mig_precopy precopy = {
->          .argsz = sizeof(precopy),
->      };
->      int ret;
-> 
-> -    ret = ioctl(vbasedev->fd, VFIO_DEVICE_MIG_PRECOPY, &precopy);
-> +    ret = ioctl(migration->data_fd, VFIO_DEVICE_MIG_PRECOPY, &precopy);
->      if (ret) {
->          return;
->      }
-> 
-> I'll update my github.
-
-Ok. Thanks for that.
-
-And for the VFIO_DEVICE_MIG_PRECOPY ioctl, this is what I have now,
-
-+static long hisi_acc_vf_save_unl_ioctl(struct file *filp,
-+                                      unsigned int cmd, unsigned long arg)
-+{
-+       struct hisi_acc_vf_migration_file *migf = filp->private_data;
-+       loff_t *pos = &filp->f_pos;
-+       struct vfio_device_mig_precopy precopy;
-+       unsigned long minsz;
-+
-+       if (cmd != VFIO_DEVICE_MIG_PRECOPY)
-+               return -EINVAL;
-+
-+       minsz = offsetofend(struct vfio_device_mig_precopy, dirty_bytes);
-+
-+       if (copy_from_user(&precopy, (void __user *)arg, minsz))
-+               return -EFAULT;
-+       if (precopy.argsz < minsz)
-+               return -EINVAL;
-+
-+       mutex_lock(&migf->lock);
-+       if (*pos > migf->total_length) {
-+               mutex_unlock(&migf->lock);
-+               return -EINVAL;
-+       }
-+
-+       precopy.dirty_bytes = 0;
-+       precopy.initial_bytes = migf->total_length - *pos;
-+       mutex_unlock(&migf->lock);
-+       return copy_to_user((void __user *)arg, &precopy, minsz) ? -EFAULT : 0;
-+}
-+
-
-I had a quick run with the above Qemu changes, and looks ok. Please let me know.
-
-Thanks,
-Shameer
+True, my bad. Sorry about that.

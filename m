@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2F14C6F6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF714C6F66
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiB1O2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S237065AbiB1O1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiB1O1t (ORCPT
+        with ESMTP id S229845AbiB1O13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:27:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E3573061;
-        Mon, 28 Feb 2022 06:27:10 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id x5so17813796edd.11;
-        Mon, 28 Feb 2022 06:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/fXkjBKuEDR4qpYn2ujxjEbDpHzrM+R4EAAb1AiNHio=;
-        b=lLYjGCYLSL+av8OkcVAc4/oCnI/WeeRgq29iylTKybgQlc4MGL8Q/SHKtzbrfvhbxI
-         0GX5FmsK6X5LjNXzfD0vHJrPr/79Ie/HnMIj1ax7+jmO18bjcqQp8rt98niTVc+P4mEl
-         HCYRfeUZTI2XTspDLVtcpqzL0ndyTiLboWta0DqzbPO9PefB6elVGbarZc+hLXEDtUK9
-         OD5/2b1YudoTvlldsZLM5cUwkwGpJQC7b5/7m82OAWioLcq0MDvtfv+8xujrtLi5G20Q
-         8hB+wPesBi2UNUeiodZpOq82c+ECkgFJvzoIWli3eRBma0m0Kp/v+P+fCKPxy9Bq3H4H
-         VYmg==
+        Mon, 28 Feb 2022 09:27:29 -0500
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C51373061;
+        Mon, 28 Feb 2022 06:26:50 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id t22so13134748vsa.4;
+        Mon, 28 Feb 2022 06:26:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/fXkjBKuEDR4qpYn2ujxjEbDpHzrM+R4EAAb1AiNHio=;
-        b=ufcUyEXZXtXaJiujSj+wEHo6GKvDIsXJkcrWdoywnW3qirpzTlbzbt5O796+M3urdP
-         PQHLUmjEtMinIhthD6BsJcscXo8Pu3j7fT+z42lApwparGHJzT/JeDS+ZqDEsMmzBdGo
-         LYzegtcRQVG/SyuSxxFziTGXg694wmbVnfwge89TQZCFIOrXVwswgxyNh5EbxUKHsKP8
-         6UtiGYTi8rPgwSZ4KS4WOz1BigFbpF7Ilyq+ZjzuLeppGkCiFlYmRw1nHey2daPKlmzC
-         pBu+c8RjcYrY0l/6YsariPKziL0XYIJrwyxiQMcZt2G0aGEegcIowRRPSves0dNToZxi
-         LHDg==
-X-Gm-Message-State: AOAM533sJdtzjb60nkDw+3MBT4anjdiSpEw3PaMEXJ4WygeQr5Chi2r/
-        7h702Oq19uLBmj0m1p2NTuQ=
-X-Google-Smtp-Source: ABdhPJwAE6H2XbhwQwrAKKYbCx+L/5tctqMz/DEmewhfUE0UjDRfcU5OHoR/Ppy2sF3GLnFeRL9w+Q==
-X-Received: by 2002:a05:6402:42c6:b0:412:8cbc:8f3d with SMTP id i6-20020a05640242c600b004128cbc8f3dmr19826123edc.310.1646058429475;
-        Mon, 28 Feb 2022 06:27:09 -0800 (PST)
-Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id bm23-20020a170906c05700b006d597fd51c6sm4458707ejb.145.2022.02.28.06.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 06:27:09 -0800 (PST)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrew Morton <akpm@osdl.org>,
-        Ricardo Cerqueira <v4l@cerqueira.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: saa7134: fix incorrect use to determine if list is empty
-Date:   Mon, 28 Feb 2022 15:26:26 +0100
-Message-Id: <20220228142628.577433-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rHVfZaJmFUUxRDQIT5T7S/1vPYYPoz8peXZ1+ZnXKGg=;
+        b=2Ws8LTW2VKWXPa5VjufKbtaRdPmDehrgKSygWsYKb/qQl1633kYsmu2Q7eOCLqZgsp
+         0E5b0JDL0iPydM9/j0tRkfYUjrmb9TmNyRzKmElmHHN1ExDoV18N6XFTfmDaEL7g0/qU
+         kdufsBeU/QPJCpDfU4x0ZniVVARxhBjRnjE8E4AeSCiaYuOo0e/3uqKF32lsXL1+vS6k
+         23f5gGDfRbH2AsYjHiwST/AG98AtD6UGW5HECM9YlBwrB7vkOmACre6DDjEJzdXHRlpW
+         DR0qMl0buDlSnTLvvb3kxBn22n1FiVBDMSe8gM4lImDJKBCLplX9kOXmvrAtkg4BKajk
+         4R+w==
+X-Gm-Message-State: AOAM531b5Kh5kn7H2F9yQyWocGr030JhP2HokjCJ3YUBUG3OzfbKcSpF
+        nekBEKrtKE6asfTiVl/2tETMqfDL6xJ6eg==
+X-Google-Smtp-Source: ABdhPJxJBe8kFwXiLQ0in7GgJKfoSIk0LfgsB1/plJqIaBs3tfbN45or2P5Izdcb+/e6CGDN7KLC0Q==
+X-Received: by 2002:a67:4284:0:b0:31c:1e12:bc0f with SMTP id p126-20020a674284000000b0031c1e12bc0fmr7127346vsa.23.1646058409578;
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056102025900b0031c34d0f8d5sm1332033vsq.3.2022.02.28.06.26.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id u10so13093928vsu.13;
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+X-Received: by 2002:a67:b00e:0:b0:30d:dc98:6024 with SMTP id
+ z14-20020a67b00e000000b0030ddc986024mr8274728vse.57.1646058408965; Mon, 28
+ Feb 2022 06:26:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Feb 2022 15:26:37 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWn=jvt_6rt_Z5OpdfStNT2B6sz_WhZvKrptHqOkqe5mg@mail.gmail.com>
+Message-ID: <CAMuHMdWn=jvt_6rt_Z5OpdfStNT2B6sz_WhZvKrptHqOkqe5mg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: renesas,wdt: Document RZ/V2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'dev' will *always* be set by list_for_each_entry().
-It is incorrect to assume that the iterator value will be NULL if the
-list is empty.
+On Sun, Feb 27, 2022 at 11:53 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/V2L WDT bindings. RZ/V2L WDT is identical to one found
+> on the RZ/G2L SoC. No driver changes are required as generic compatible
+> string "renesas,rzg2l-wdt" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Instead of checking the pointer it should be checked if
-the list is empty.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Fixes: 79dd0c69f05f ("V4L: 925: saa7134 alsa is now a standalone module")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/media/pci/saa7134/saa7134-alsa.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
-index fb24d2ed3621..d3cde05a6eba 100644
---- a/drivers/media/pci/saa7134/saa7134-alsa.c
-+++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-@@ -1214,7 +1214,7 @@ static int alsa_device_exit(struct saa7134_dev *dev)
- 
- static int saa7134_alsa_init(void)
- {
--	struct saa7134_dev *dev = NULL;
-+	struct saa7134_dev *dev;
- 
- 	saa7134_dmasound_init = alsa_device_init;
- 	saa7134_dmasound_exit = alsa_device_exit;
-@@ -1229,7 +1229,7 @@ static int saa7134_alsa_init(void)
- 			alsa_device_init(dev);
- 	}
- 
--	if (dev == NULL)
-+	if (list_empty(&saa7134_devlist))
- 		pr_info("saa7134 ALSA: no saa7134 cards found\n");
- 
- 	return 0;
+                        Geert
 
-base-commit: 7ee022567bf9e2e0b3cd92461a2f4986ecc99673
--- 
-2.25.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

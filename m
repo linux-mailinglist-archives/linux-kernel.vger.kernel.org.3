@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8762C4C7678
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA544C767C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbiB1SCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S240562AbiB1SDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbiB1Ryq (ORCPT
+        with ESMTP id S239194AbiB1RzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:46 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51531F15;
-        Mon, 28 Feb 2022 09:44:06 -0800 (PST)
+        Mon, 28 Feb 2022 12:55:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A5F2459E;
+        Mon, 28 Feb 2022 09:44:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BA91DCE17D1;
-        Mon, 28 Feb 2022 17:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF66EC340E7;
-        Mon, 28 Feb 2022 17:44:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37343B81085;
+        Mon, 28 Feb 2022 17:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F93C36AEA;
+        Mon, 28 Feb 2022 17:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070243;
-        bh=UnNGVip4Y/0gnGThrejUdG0CPXjBsSWZUAHZ1Nnm1A0=;
+        s=korg; t=1646070272;
+        bh=zMGA4gTIdGdhdcERmCkpemte6p3KrE72mw8Fs2CsqBI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m7Nxyt39KLBeBIxMmTh/5n62SVn4znAKypXL8hMkYgNcKGfBfBlnT/c1o4VnfQbvx
-         HAM01bbFDd6y8GhM+vA3mh8UBINsjoUTik6Q6oeeM0v30Wfz19mvI3Qf25gokNEqt6
-         HCALYthX1bwIo7GyyMBrfTTqYABklH5u8VBNLKjQ=
+        b=1k7UB9GNriA6JXfRtAFT36YILPxxOPteJbOMbUir/8F2oCuYqRawfj8DYjzzMP6/K
+         XlmilpoU8v14KUdkiL3v858DbnZWEl26Y3m0VDVH1ahrda2NKM307B5ULiEDlzzC+T
+         MsNgwIBGbuQGxuzMHqSF2zlAHvhvaObKsL4h+Pc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.16 020/164] drm/amdgpu: disable MMHUB PG for Picasso
-Date:   Mon, 28 Feb 2022 18:23:02 +0100
-Message-Id: <20220228172401.831732389@linuxfoundation.org>
+        stable@vger.kernel.org, Chen Gong <curry.gong@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 5.16 021/164] drm/amdgpu: do not enable asic reset for raven2
+Date:   Mon, 28 Feb 2022 18:23:03 +0100
+Message-Id: <20220228172401.949310843@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -54,35 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Chen Gong <curry.gong@amd.com>
 
-commit f626dd0ff05043e5a7154770cc7cda66acee33a3 upstream.
+commit 1e2be869c8a7247a7253ef4f461f85e2f5931b95 upstream.
 
-MMHUB PG needs to be disabled for Picasso for stability reasons.
+The GPU reset function of raven2 is not maintained or tested, so it should be
+very unstable.
 
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Now the amdgpu_asic_reset function is added to amdgpu_pmops_suspend, which
+causes the S3 test of raven2 to fail, so the asic_reset of raven2 is ignored
+here.
+
+Fixes: daf8de0874ab5b ("drm/amdgpu: always reset the asic in suspend (v2)")
+Signed-off-by: Chen Gong <curry.gong@amd.com>
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/soc15.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/soc15.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/drivers/gpu/drm/amd/amdgpu/soc15.c
 +++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-@@ -1114,8 +1114,11 @@ static int soc15_common_early_init(void
- 				AMD_CG_SUPPORT_SDMA_LS |
- 				AMD_CG_SUPPORT_VCN_MGCG;
+@@ -619,8 +619,8 @@ soc15_asic_reset_method(struct amdgpu_de
+ static int soc15_asic_reset(struct amdgpu_device *adev)
+ {
+ 	/* original raven doesn't have full asic reset */
+-	if ((adev->apu_flags & AMD_APU_IS_RAVEN) &&
+-	    !(adev->apu_flags & AMD_APU_IS_RAVEN2))
++	if ((adev->apu_flags & AMD_APU_IS_RAVEN) ||
++	    (adev->apu_flags & AMD_APU_IS_RAVEN2))
+ 		return 0;
  
-+			/*
-+			 * MMHUB PG needs to be disabled for Picasso for
-+			 * stability reasons.
-+			 */
- 			adev->pg_flags = AMD_PG_SUPPORT_SDMA |
--				AMD_PG_SUPPORT_MMHUB |
- 				AMD_PG_SUPPORT_VCN;
- 		} else {
- 			adev->cg_flags = AMD_CG_SUPPORT_GFX_MGCG |
+ 	switch (soc15_asic_reset_method(adev)) {
 
 

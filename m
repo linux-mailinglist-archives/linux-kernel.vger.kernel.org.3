@@ -2,207 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EFE4C6543
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA14E4C6551
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiB1JDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S234227AbiB1JEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbiB1JDO (ORCPT
+        with ESMTP id S234226AbiB1JEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:03:14 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2065.outbound.protection.outlook.com [40.107.21.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F3E9FD7;
-        Mon, 28 Feb 2022 01:02:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b6gWrDCQgal1WU7LpHipW8lJgsRbAHKFVOHtr22+zHiV6YBwqWuIUuFcS5yuCEJGCHCVqFpepHXvVcHFC/7i6UpDqP4jULQgHU0zvf5/RmzUnsKBodnsB6EMAnutYmMTxStlvWxV/WuwdxnZ91qankBTxh5YPefWZ1DlGXwnVkW0oJe33J6B6E7cVIpREbj8wdpEaLBHWzC0RdqHkBW9mmaWNiBG6fEDju8Eo5PmdOKD4yZQw0Yk0s87Mr+0Dy/Ag9fmGtfkdOxskO9gZdlEt/8ljM2N1w3SsRY83nmvlR0TQYhYMxJ3VMKFcpnRouWE2MIzby1Sq8DRnlK8827AVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OA6pnhE+2RmvYs9ns/e0hR2fGC6LvEILfC5YKRSL9MU=;
- b=fddu/hqmMrcezCM98WTu2H+sU4sbzlCFWRZUDQdO89W5WqCGQRHqdNBERQa/l1Pw9l9qxB82uKujeNJ/1GGbJm3xjb3tFpyJeEmuLTVQjzz+lHnpfGoO5/TkcU3TZWU1XUTVPl8gSFPC1O7caUjYJ+vy0tbbpVuP0xDD1ACDRKQHSyZ5VU1XVRxHM5r3zfba3NmWFECSoVcHdWay0qwdRv10DqfNGkDmSnCjL6JMja1LSR04FkkBToPS3eXd+Ra8GPBh5FWW1Er0hh0EzI6dCv/BZbPU5J8/v+hd42+qARNWNCEzJdiG6aGwPlzQ4Ep7o8vsl3AVwDNGmgkFZHNDhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OA6pnhE+2RmvYs9ns/e0hR2fGC6LvEILfC5YKRSL9MU=;
- b=HW1ffYEJP0zp2Fq+rtcRkYxMt2yOETQdCmUzfvj1nOW8VcYf0+Rr7D9gTLTFC17xOwa5LXqlpJhmzfmtWBPur0gNSIywWCbGiHxt2HtFqqdH2FOA0jNCeTVxGTcZevyp7fOoOror/NHTUJDpe9HPuq6tTb13DjR7jRaL2EG8jKg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by VE1PR04MB7278.eurprd04.prod.outlook.com (2603:10a6:800:1b1::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Mon, 28 Feb
- 2022 09:02:33 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::ddca:beb1:95b0:1ae1]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::ddca:beb1:95b0:1ae1%4]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 09:02:33 +0000
-Message-ID: <6344d1828760d4d8625a87243fcc5f5b1096b9d4.camel@oss.nxp.com>
-Subject: Re: [PATCH 2/2] drm/atomic: Force bridge self-refresh-exit on CRTC
- switch
-From:   Liu Ying <victor.liu@oss.nxp.com>
-To:     Brian Norris <briannorris@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Sean Paul <seanpaul@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        stable@vger.kernel.org, Sean Paul <sean@poorly.run>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Date:   Mon, 28 Feb 2022 17:02:35 +0800
-In-Reply-To: <20220215155417.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid>
-References: <20220215235420.1284208-1-briannorris@chromium.org>
-         <20220215155417.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.4-0ubuntu1 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR04CA0167.apcprd04.prod.outlook.com (2603:1096:4::29)
- To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+        Mon, 28 Feb 2022 04:04:04 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4CE201AF;
+        Mon, 28 Feb 2022 01:03:05 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21S23AnE021067;
+        Mon, 28 Feb 2022 10:02:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=r2K3KfZiBxSqGnFUFhrDt37OlVAmowgJ0HAxohwVpRI=;
+ b=RRsSlEeSqc3ljzwyFUldtIOrW0rF3l/RpzpyKlo5WOIFX11yX2gncogfqU/EalUxpzue
+ iAamm8nNmrSHyWr0BiJMem097ykCHKuQyOLJQIa4SiU3YIiP9eJPPJ3uI0uKiGGYXRzS
+ UvEAtjwHcteYoeeIpz3VcgTtrW2MN+/59zjdp3uDZ7z/pSIOO/Maum/wgZMtqViccuh9
+ usv8SyjgcShAxuzg5i/F1X4W6k4yYRzD/hRu+ETz2sk2EEGVBa8hpuSRyx7yPbIFFci8
+ 2IKBeG05vm5l1tidomPMSrmmNt6PtG2Q6YfgKOHN2Xncd7ZdbUUakAzlf+vR4mhk+Zhy sQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eg7pkvcyt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Feb 2022 10:02:54 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E448B10002A;
+        Mon, 28 Feb 2022 10:02:48 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D97362171E4;
+        Mon, 28 Feb 2022 10:02:48 +0100 (CET)
+Received: from [10.211.4.83] (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 28 Feb
+ 2022 10:02:48 +0100
+Message-ID: <f6c4ce33-cf94-6794-3825-06a7ffe0a472@foss.st.com>
+Date:   Mon, 28 Feb 2022 10:02:47 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8de38c92-49f0-485c-5579-08d9fa990e8b
-X-MS-TrafficTypeDiagnostic: VE1PR04MB7278:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB7278DECABCD26B9AFADF37FAD9019@VE1PR04MB7278.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ienPtfAj5eIkqZxQoe0Prq15gvq3CRTLeZww5cEeToajQahFQuvhpnhiabAfiqmLBh2BO9ngndlOEEP7UQeBiMCkOZRCS49B9R7y+WBxdN3g8kax84qHKrg1S4+lVA66GByEzKBFtmq2dQb5GLNyk4xLCQ1JF17u1ZEoSqevRGMRh4vezPgJn8rHHnlCzsnkciaWo2EjyLffyl4WxaloUoP1edGYAnxu4YFExqogEy+GAZ+/ih2Qg+rPrPFYg9sAU/noPU7E785qLTCcOqizhnHX4weGB2TsoY+/sKB5DMNXZOc7GzfcaNbdwvZ3Zcq0ZmRILVJQd45RQdVmj8SO7TYU0KH/hh5w52D+Pdydhzp7hjn7uGuJANzY1hA7Y82mL1oORDTftsEMnf0fbAYp/L8HwEPO59Vx0M+D07fM6C6DUFue29bB2MPlIaEW7tzWrGmm08tKpGOUmrr8VSVCJb1v6gUosqI4BHQpXM8kn1RHryI8QZyBfqP6SQ3vOYlY/94Q+MFGfA80XBl75irNS3TIlywFFvGIGTyeG9PVGNhWly7ZLrJ9XPbM+kOOUh5B/IsovBBL7sXNZOjgbWsINakcAoDmqntQjUX3QIbU//+a7W1StxAHUA0DPuRq1Pi/28nYkbV+Mgm3TqlbJSEoQ5Y65Q/h7dIi8FDdwnpZDii3pVFaqTrJtXl3IuvOFu2qx/J2ppCrpxfkItwWZIx1Mg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2616005)(6512007)(66946007)(86362001)(66556008)(4326008)(66476007)(6486002)(8676002)(54906003)(38350700002)(5660300002)(316002)(508600001)(52116002)(110136005)(38100700002)(26005)(186003)(6506007)(2906002)(83380400001)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWp6RElxMUZ4SzlwRXFqOXFHQ2JVYU5kSFo4am1HbzR1Tm12OHhJNmRsY3c2?=
- =?utf-8?B?WkgrWWw0Vncxa0NjOGZLTkgycG0zN2gvemx6OEJaMytvaktnNkJ6YlpHZENS?=
- =?utf-8?B?aTluNWdjejZZN29rRFRCeDkvQ3VzQnkxWnFZVy95UDdQQ1lxcUtSRUtnUW5p?=
- =?utf-8?B?TnMxMUVDckJxMVBySmtqZzVQWDdaWjNuZjVlZzArdGNjcHZ0QzQ0UE5yV21i?=
- =?utf-8?B?U2djUTlTL1dZTlR1MWVnbjRWeG5sSXJhT3ludjQ0ZmhQUXZCQWZVTjh1c0hr?=
- =?utf-8?B?RGM1VGsvOGlyaTVzejBWYnZTbmJZajVvNlNNM1lMbkcwT2diRWdEVXBlaWtB?=
- =?utf-8?B?aUxITWF5eEpGV1NzNk02aTVsYVYzakpmdWJYOU9SZTV6WW5vZFNiUVFGZGhM?=
- =?utf-8?B?dCsrd1dkd3JtY0R6NDlaZW5TeTdxb2U1Ui9hSXY0U1FnQXlXYTVpSGpBSHdP?=
- =?utf-8?B?SWRjdlZhTWVBOEVkOG43KzE2dzVxcXhwbG41dUticGhpaWdpTFo2cVR6eXU2?=
- =?utf-8?B?cTRqVnRpYVNaWHZ0dmx0L1JiY2E5RG9oSTFwOW5SYTNGZyswNWdWdGZ2R0ZP?=
- =?utf-8?B?bWhNRHVaRnFzdmphVnlqbWJBN0JCNldPWVJhT1dlSWZ2a1hhVlBjbHlmN29P?=
- =?utf-8?B?L1kyWG5BOEZiMHlxeERPeHFDY1l3UXVWdkRLaDZvcUJvczlsbTZFdDdzTGJJ?=
- =?utf-8?B?eDhxajlISmRhSS9mWGxFdUFxMG93SGtQZ3JHZFNIUmhPM1gxckNvbU16MHBW?=
- =?utf-8?B?YUlzL3krMS9Md05iMDM4Z1pPZFFsUTNlejlVYzBTd2ZucWo0WEFkV0xZS0JE?=
- =?utf-8?B?ck42QzBWeVZEVlk5dVRFZmYydzlsZGJIbGphM0FKUTNMSG9pTHArdkZNWEZv?=
- =?utf-8?B?aW9raWt0S3lORWo5RFJKUmwzRm1vbkgrY2U4L2gyVTM1OFFQZWorbVR4YkRi?=
- =?utf-8?B?T1NXMmtndVkwYlVkZTJhNzNCS3NxLzFYeXJtN0tQWm9WT2pEYmsvZGhEWmRz?=
- =?utf-8?B?OC9hdE0yQ3IyN2l4NW9MaTNFTURENWJ2SmNVejB2Nzg1T3d1aUt2bDhjdEFW?=
- =?utf-8?B?S0EwK1R4Ni9zKzRTSm1hNXIzN2N5aDRsdmRqWGQyL3VJS0QyUzNCb1Y3L092?=
- =?utf-8?B?ZlBZanVNYjB5dVZ0aFc1azIzS2kyUm1KZVFxUlNyZ1lJaWZyOXVNODRCd3NI?=
- =?utf-8?B?b2xQMUNZU2xmS1l2emZJOVNvQzZEZFdocEtoUUZibXZqU01walRHVXRzQVpm?=
- =?utf-8?B?MVdGOVk4cFBEbWJiMEMvbkhVMitJUUJzaWJIbGVDOG0vUVdJRUpRWkJoSzhF?=
- =?utf-8?B?b1hMVGFnKzBYSHRGSEV5eHZ5VElvclIzemx0Y2tWaE1EUGhQcC82T3YxU0lm?=
- =?utf-8?B?MmdoR2VKeCtaVG5BRjhxOGE4aWJ4WElXWE1XQU40cU93NjVMUHg2TFd3UkxQ?=
- =?utf-8?B?UFdRWXhpRWt5R1FLUTRxRnZKdVJ2eTBweUhmZWZkeThPeXRXSmFXY3FHZVFo?=
- =?utf-8?B?UjNCMlRLZFIzT09QeWFjbkp6QmdJOUgwVTNjZm1ndlNzSGVEZURhZnVjRWlr?=
- =?utf-8?B?NVJTR2pYcWRxeWpHQXM2UXNKNzQzU1dEZUxab3U4RGttVDRwSTk0MEp1eFZy?=
- =?utf-8?B?WGhNQzR5QWdUQkRKSWRxWVVVL3gvaDJhdk04MkNpcGlRYkRKR3pNdGMxbmdp?=
- =?utf-8?B?SkxNbms5WDQyMXN3ZHlmcFN5MDFmKzZNUW4zRGRJVjhiLzZsd0FMZklDbmQv?=
- =?utf-8?B?NUsybEViSi9IcUtHQUltUk8rWCtaRmEvTWJHekRHYkZia0QzMTE3SzY3OVM4?=
- =?utf-8?B?bTNsNXB3akdoYURabytLRkVaSXcwbk1Cd0NBa2xKNkFES0tjV3gwUkh4eWZq?=
- =?utf-8?B?K2R0Z0x1TVV2Y1JoRDYvb3FDL0NyTTVLVzlCa1ZSNlh1Qy9iMjgyMjQyYlFY?=
- =?utf-8?B?alNJS3ByMmFlUTBhaGxLeS9odHJ1bGg3blpRUS8vb21MRUFqNHlTVGFjZ2ht?=
- =?utf-8?B?b0VBTms1bFYwcjBjNVZaVi9rZ3I3N2hWRjhaK0h2eWVLMjd3dzV2TXM0ajdH?=
- =?utf-8?B?azRnUGZYKzV1MkZlYzA3UjhuY0FNOXROdU4vOHpReFNjYnFXRlpRSktRZ1Rv?=
- =?utf-8?B?RCt1U2ZaU3JNZXl0UDU0azVIbzU0Mk9sQzhjYjN1UHpTcHBTSVRQZng1Rkdx?=
- =?utf-8?Q?20NNR4ujESL4Q2RpuNTo/Sw=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8de38c92-49f0-485c-5579-08d9fa990e8b
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 09:02:33.4666
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IKSS/8q4kC+/krDnDRixZosioDJfJ0WhNJTI6DS66I6L7AigyWCkiq9jLZWRdAZKRTnzVW5J+dtBftbWxv6rAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7278
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 00/11] Restructure the rpmsg_char driver and introduce
+ rpmsg_ctrl driver
+Content-Language: en-US
+To:     Philipp Rossak <embed3d@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <julien.massot@iot.bzh>, Xiang Xiao <xiaoxiang@xiaomi.com>
+References: <20220124102524.295783-1-arnaud.pouliquen@foss.st.com>
+ <ab97c2a5-7705-eae8-9bc2-908e7a9cb709@gmail.com>
+ <670ee336-9ad4-401e-e3b2-02531e975e51@foss.st.com>
+ <15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-28_03,2022-02-26_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brian,
+Hi Philipp,
 
-On Tue, 2022-02-15 at 15:54 -0800, Brian Norris wrote:
-> It's possible to change which CRTC is in use for a given
-> connector/encoder/bridge while we're in self-refresh without fully
-> disabling the connector/encoder/bridge along the way. This can confuse
-> the bridge encoder/bridge, because
-> (a) it needs to track the SR state (trying to perform "active"
->     operations while the panel is still in SR can be Bad(TM)); and
-> (b) it tracks the SR state via the CRTC state (and after the switch, the
->     previous SR state is lost).
+On 2/25/22 22:45, Philipp Rossak wrote:
+> Hi Arnaud,
 > 
-> Thus, we need to either somehow carry the self-refresh state over to the
-> new CRTC, or else force an encoder/bridge self-refresh transition during
-> such a switch.
+> On 24.02.22 09:29, Arnaud POULIQUEN wrote:
+>> Hi Philipp,
+>>
+>> On 2/23/22 22:28, Philipp Rossak wrote:
+>>> Hi Arnaud,
+>>>
+>>> thanks for working on this! I'm currently testing/using this patch
+>>> series on my imx7d project because it adds the capability that the
+>>> remote processor can register it's endpoints dynamically (as mentioned
+>>> in the objectives).
+>>
+>> Thanks for your feedback on this work!
+>> Don't hesitate to add your tested-by, this help maintainers for the
+>> reviews.
+>>
+> I will do this.
+>>>
+>>> After a few tests, debugging, and checking the openamp specification [1]
+>>> I think that you missed the second ns_announcement that should be sent
+>>> from linux master to the slave after it created the channel/endpoint.
+>>> Without this second announcement the remote processor is not able to
+>>> send messages to the linux master because it doesn't know the
+>>> destination address until it receives a message from the linux master.
+>>
+>> Yes I detected this issues, it is not related to the series
+>> but to the remoteproc_virtio backend.
+>>
+>> As you mentioned, after the ns announcement from Linux, the remote
+>> processor
+>> send first messages. But the Linux virtio does not do the match
+>> between the
+>> local channel created and the remote endpoint.
+>>
 > 
-> I choose the latter, so we disable the encoder (and exit PSR) before
-> attaching it to the new CRTC (where we can continue to assume a clean
-> (non-self-refresh) state).
-> 
-> This fixes PSR issues seen on Rockchip RK3399 systems with
-> drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
-> 
->  drivers/gpu/drm/drm_atomic_helper.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-> index 9603193d2fa1..74161d007894 100644
-> --- a/drivers/gpu/drm/drm_atomic_helper.c
-> +++ b/drivers/gpu/drm/drm_atomic_helper.c
-> @@ -1011,9 +1011,19 @@ crtc_needs_disable(struct drm_crtc_state *old_state,
->  		return drm_atomic_crtc_effectively_active(old_state);
->  
->  	/*
-> -	 * We need to run through the crtc_funcs->disable() function if the CRTC
-> -	 * is currently on, if it's transitioning to self refresh mode, or if
-> -	 * it's in self refresh mode and needs to be fully disabled.
-> +	 * We need to disable bridge(s) and CRTC if we're transitioning out of
-> +	 * self-refresh and changing CRTCs at the same time, because the
-> +	 * bridge tracks self-refresh status via CRTC state.
-> +	 */
-> +	if (old_state->self_refresh_active && new_state->enable &&
-> +	    old_state->crtc != new_state->crtc)
-> +		return true;
+> I'm not sure if we talk about the same. I'm basically talking about the
+> dynamic binding, not dynamic endpoint creation.
 
-I think 'new_state->enable' should be changed to 'new_state->active',
-because 'active' is the one to enable/disable the CRTC while 'enable'
-reflects whether a mode blob is set to CRTC state.  The overall logic
-added above is ok to me. Let's see if others have any comments.
+Regarding your following description, yes it is not exactly the same issue.
+  
 
-Regards,
-Liu Ying
+> I think I already found the issue. I will try to get a bit more into
+> detail.
+> 
+> 1. Linux: starts co-processor via remoteproc
+> 2. co-processor: boots and reaches the point where it creates the
+> endpoint like it is done in this ST example[1].
+> Be aware the src address is RPMSG_ADDR_ANY
+> 3. co-processor: reaches the point where it sends the ns_announcement to
+> linux ns endpoint
+> 4. linux: receives the ns announcment, creates the channel, bindes the
+> endpoint and checks here [2] if the source address is not RPMSG_ADDR_ANY
+> and in this case it is not sending a ns_announcement (that's the issue
+> when we use dynamic endpoints)
 
-> +
-> +	/*
-> +	 * We also need to run through the crtc_funcs->disable() function if
-> +	 * the CRTC is currently on, if it's transitioning to self refresh
-> +	 * mode, or if it's in self refresh mode and needs to be fully
-> +	 * disabled.
->  	 */
->  	return old_state->active ||
->  	       (old_state->self_refresh_active && !new_state->active) ||
+The ns annoucement is used to notify the remote processor that a new channel
+has been created locally. Today the ns anoucement is not used to inform that
 
+The local endpoint has been binded.
+
+This behavior is something that as already been identified as a limitation in
+the virtio rpmsg.
+
+Xiang Xiao had proposed some time ago a mechanism for the OpenAMP [5], the
+Linux part is missing. We need a common solution between Linux and OpenAMP, but
+that also compatible with legacy. 
+From MPOV Xiang's approach seem a good starting point.  
+If you are interesting on working on this enhancement of the rpmsg virtio, feel
+free to do so.
+
+> 5. linux: according the openamp spec [3] it should now send the
+> ns_announcement to the co-processor (slave)
+> 6. co-processor: should receive the ns announcement and binds now the
+> endpoint
+> 7. co-processor: can now send messages to linux
+> 
+> This is basically what I'm expecting.
+> 
+> 
+> Do you think this is a bug or is the dynamic endpoint binding not
+> handled? This line is there since ever [4] ...
+
+As you mentioned this is a legacy limitation that should be addressed.
+It is not related to this work.
+
+Thanks,
+Arnaud
+
+> 
+> Any other thoughts about this?
+> 
+>> This is a feature that is missing in the rpmsg virtio, and perhaps in
+>> rpmsg protocol
+>> itself (a ns annoucement ack message or something similar).
+>>
+>>
+>> A fix for the remoteproc virtio is available here:
+>> https://github.com/arnopo/meta-st-stm32mp-oss/commit/3e57fe73bd19c9bb835ac5a118e50727758b0b96
+>>
+>>
+>> Don't hesitate to give me feedback on the fix, if you test it.
+> 
+> I added it to my branch and till now I don't see any side effects
+>>
+>> I plan to propose the fix after this series.
+>>
+>> Thanks,
+>> Arnaud
+>>
+>>>
+>>> Cheers,
+>>> Philipp
+>>>
+> 
+> Cheers,
+> Philipp
+> 
+> [1]:
+> https://github.com/STMicroelectronics/STM32CubeMP1/blob/master/Projects/STM32MP157C-DK2/Applications/OpenAMP/OpenAMP_raw/Src/openamp.c#L242
+> 
+> 
+> [2]:
+> https://elixir.bootlin.com/linux/v5.17-rc5/source/drivers/rpmsg/virtio_rpmsg_bus.c#L425
+> 
+> 
+> [3]:
+> https://github.com/OpenAMP/open-amp/blob/main/docs/img/coprocessor-rpmsg-ns.png
+> 
+> 
+> [4]:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bcabbccabffe7326f046f25737ba1084f463c65c
+> 
+
+[5] https://github.com/OpenAMP/open-amp/pull/160

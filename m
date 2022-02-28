@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761A14C76A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80D64C7289
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239764AbiB1SFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S234043AbiB1R0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239824AbiB1R65 (ORCPT
+        with ESMTP id S233854AbiB1R0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:58:57 -0500
+        Mon, 28 Feb 2022 12:26:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B5B580C5;
-        Mon, 28 Feb 2022 09:45:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9C87EB0D;
+        Mon, 28 Feb 2022 09:25:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D3D6090B;
-        Mon, 28 Feb 2022 17:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FC0C340E7;
-        Mon, 28 Feb 2022 17:44:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A65E61365;
+        Mon, 28 Feb 2022 17:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4F1C340E7;
+        Mon, 28 Feb 2022 17:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070297;
-        bh=8qBI7gZERXpRyiJ/Rc32j/N4WaHgIoGnhInB+ZudHF0=;
+        s=korg; t=1646069149;
+        bh=S8+WJVaVRlGGAe9E/IVQCsR4pqsJuyXLbwC/EvQkn5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O4PR413/aOAUav7mxv9jCrzh9sIsZ2TBLcTGl4bWxGZ2Td3LJpbOZaJ+2o61UinDD
-         /Tq3GntHYjKd3nVUpYUx8DqYl3b6TxtHJOVMckbwQMedtwA3LAugvREaP0L0gBFEms
-         P/NEVHhmUogkN3ByZ668ZCYzkwhcc3BuYwoDLSSE=
+        b=fYuChwK0z2LORJghxFq5exrJ6F+jPZt+JtDAVpNSkQXDO8Tq2AI/FJvCyXD+K/MQJ
+         szEy8ysV5T9AxiW5eqqPL4/b2p0Dzm/FkPvvadXwcTqnH2G5kqmTKqm7UxT7K9p8kp
+         C6brKXwzvuTvwNYfKt52hIEt0ixSJ0SAPVlTqdrI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.16 056/164] bpf: Fix crash due to incorrect copy_map_value
+        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 11/29] openvswitch: Fix setting ipv6 fields causing hw csum failure
 Date:   Mon, 28 Feb 2022 18:23:38 +0100
-Message-Id: <20220228172405.253762544@linuxfoundation.org>
+Message-Id: <20220228172142.549697891@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +54,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: Paul Blakey <paulb@nvidia.com>
 
-commit a8abb0c3dc1e28454851a00f8b7333d9695d566c upstream.
+commit d9b5ae5c1b241b91480aa30408be12fe91af834a upstream.
 
-When both bpf_spin_lock and bpf_timer are present in a BPF map value,
-copy_map_value needs to skirt both objects when copying a value into and
-out of the map. However, the current code does not set both s_off and
-t_off in copy_map_value, which leads to a crash when e.g. bpf_spin_lock
-is placed in map value with bpf_timer, as bpf_map_update_elem call will
-be able to overwrite the other timer object.
+Ipv6 ttl, label and tos fields are modified without first
+pulling/pushing the ipv6 header, which would have updated
+the hw csum (if available). This might cause csum validation
+when sending the packet to the stack, as can be seen in
+the trace below.
 
-When the issue is not fixed, an overwriting can produce the following
-splat:
+Fix this by updating skb->csum if available.
 
-[root@(none) bpf]# ./test_progs -t timer_crash
-[   15.930339] bpf_testmod: loading out-of-tree module taints kernel.
-[   16.037849] ==================================================================
-[   16.038458] BUG: KASAN: user-memory-access in __pv_queued_spin_lock_slowpath+0x32b/0x520
-[   16.038944] Write of size 8 at addr 0000000000043ec0 by task test_progs/325
-[   16.039399]
-[   16.039514] CPU: 0 PID: 325 Comm: test_progs Tainted: G           OE     5.16.0+ #278
-[   16.039983] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ArchLinux 1.15.0-1 04/01/2014
-[   16.040485] Call Trace:
-[   16.040645]  <TASK>
-[   16.040805]  dump_stack_lvl+0x59/0x73
-[   16.041069]  ? __pv_queued_spin_lock_slowpath+0x32b/0x520
-[   16.041427]  kasan_report.cold+0x116/0x11b
-[   16.041673]  ? __pv_queued_spin_lock_slowpath+0x32b/0x520
-[   16.042040]  __pv_queued_spin_lock_slowpath+0x32b/0x520
-[   16.042328]  ? memcpy+0x39/0x60
-[   16.042552]  ? pv_hash+0xd0/0xd0
-[   16.042785]  ? lockdep_hardirqs_off+0x95/0xd0
-[   16.043079]  __bpf_spin_lock_irqsave+0xdf/0xf0
-[   16.043366]  ? bpf_get_current_comm+0x50/0x50
-[   16.043608]  ? jhash+0x11a/0x270
-[   16.043848]  bpf_timer_cancel+0x34/0xe0
-[   16.044119]  bpf_prog_c4ea1c0f7449940d_sys_enter+0x7c/0x81
-[   16.044500]  bpf_trampoline_6442477838_0+0x36/0x1000
-[   16.044836]  __x64_sys_nanosleep+0x5/0x140
-[   16.045119]  do_syscall_64+0x59/0x80
-[   16.045377]  ? lock_is_held_type+0xe4/0x140
-[   16.045670]  ? irqentry_exit_to_user_mode+0xa/0x40
-[   16.046001]  ? mark_held_locks+0x24/0x90
-[   16.046287]  ? asm_exc_page_fault+0x1e/0x30
-[   16.046569]  ? asm_exc_page_fault+0x8/0x30
-[   16.046851]  ? lockdep_hardirqs_on+0x7e/0x100
-[   16.047137]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   16.047405] RIP: 0033:0x7f9e4831718d
-[   16.047602] Code: b4 0c 00 0f 05 eb a9 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 6c 0c 00 f7 d8 64 89 01 48
-[   16.048764] RSP: 002b:00007fff488086b8 EFLAGS: 00000206 ORIG_RAX: 0000000000000023
-[   16.049275] RAX: ffffffffffffffda RBX: 00007f9e48683740 RCX: 00007f9e4831718d
-[   16.049747] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fff488086d0
-[   16.050225] RBP: 00007fff488086f0 R08: 00007fff488085d7 R09: 00007f9e4cb594a0
-[   16.050648] R10: 0000000000000000 R11: 0000000000000206 R12: 00007f9e484cde30
-[   16.051124] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-[   16.051608]  </TASK>
-[   16.051762] ==================================================================
+Trace resulted by ipv6 ttl dec and then sending packet
+to conntrack [actions: set(ipv6(hlimit=63)),ct(zone=99)]:
+[295241.900063] s_pf0vf2: hw csum failure
+[295241.923191] Call Trace:
+[295241.925728]  <IRQ>
+[295241.927836]  dump_stack+0x5c/0x80
+[295241.931240]  __skb_checksum_complete+0xac/0xc0
+[295241.935778]  nf_conntrack_tcp_packet+0x398/0xba0 [nf_conntrack]
+[295241.953030]  nf_conntrack_in+0x498/0x5e0 [nf_conntrack]
+[295241.958344]  __ovs_ct_lookup+0xac/0x860 [openvswitch]
+[295241.968532]  ovs_ct_execute+0x4a7/0x7c0 [openvswitch]
+[295241.979167]  do_execute_actions+0x54a/0xaa0 [openvswitch]
+[295242.001482]  ovs_execute_actions+0x48/0x100 [openvswitch]
+[295242.006966]  ovs_dp_process_packet+0x96/0x1d0 [openvswitch]
+[295242.012626]  ovs_vport_receive+0x6c/0xc0 [openvswitch]
+[295242.028763]  netdev_frame_hook+0xc0/0x180 [openvswitch]
+[295242.034074]  __netif_receive_skb_core+0x2ca/0xcb0
+[295242.047498]  netif_receive_skb_internal+0x3e/0xc0
+[295242.052291]  napi_gro_receive+0xba/0xe0
+[295242.056231]  mlx5e_handle_rx_cqe_mpwrq_rep+0x12b/0x250 [mlx5_core]
+[295242.062513]  mlx5e_poll_rx_cq+0xa0f/0xa30 [mlx5_core]
+[295242.067669]  mlx5e_napi_poll+0xe1/0x6b0 [mlx5_core]
+[295242.077958]  net_rx_action+0x149/0x3b0
+[295242.086762]  __do_softirq+0xd7/0x2d6
+[295242.090427]  irq_exit+0xf7/0x100
+[295242.093748]  do_IRQ+0x7f/0xd0
+[295242.096806]  common_interrupt+0xf/0xf
+[295242.100559]  </IRQ>
+[295242.102750] RIP: 0033:0x7f9022e88cbd
+[295242.125246] RSP: 002b:00007f9022282b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffda
+[295242.132900] RAX: 0000000000000005 RBX: 0000000000000010 RCX: 0000000000000000
+[295242.140120] RDX: 00007f9022282ba8 RSI: 00007f9022282a30 RDI: 00007f9014005c30
+[295242.147337] RBP: 00007f9014014d60 R08: 0000000000000020 R09: 00007f90254a8340
+[295242.154557] R10: 00007f9022282a28 R11: 0000000000000246 R12: 0000000000000000
+[295242.161775] R13: 00007f902308c000 R14: 000000000000002b R15: 00007f9022b71f40
 
-Fixes: 68134668c17f ("bpf: Add map side support for bpf timers.")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220209070324.1093182-2-memxor@gmail.com
+Fixes: 3fdbd1ce11e5 ("openvswitch: add ipv6 'set' action")
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Link: https://lore.kernel.org/r/20220223163416.24096-1-paulb@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/bpf.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/net/checksum.h    |    5 +++++
+ net/openvswitch/actions.c |   46 ++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 43 insertions(+), 8 deletions(-)
 
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -224,7 +224,8 @@ static inline void copy_map_value(struct
- 	if (unlikely(map_value_has_spin_lock(map))) {
- 		s_off = map->spin_lock_off;
- 		s_sz = sizeof(struct bpf_spin_lock);
--	} else if (unlikely(map_value_has_timer(map))) {
-+	}
-+	if (unlikely(map_value_has_timer(map))) {
- 		t_off = map->timer_off;
- 		t_sz = sizeof(struct bpf_timer);
+--- a/include/net/checksum.h
++++ b/include/net/checksum.h
+@@ -143,6 +143,11 @@ static inline void csum_replace2(__sum16
+ 	*sum = ~csum16_add(csum16_sub(~(*sum), old), new);
+ }
+ 
++static inline void csum_replace(__wsum *csum, __wsum old, __wsum new)
++{
++	*csum = csum_add(csum_sub(*csum, old), new);
++}
++
+ struct sk_buff;
+ void inet_proto_csum_replace4(__sum16 *sum, struct sk_buff *skb,
+ 			      __be32 from, __be32 to, bool pseudohdr);
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -391,12 +391,43 @@ static void set_ipv6_addr(struct sk_buff
+ 	memcpy(addr, new_addr, sizeof(__be32[4]));
+ }
+ 
+-static void set_ipv6_fl(struct ipv6hdr *nh, u32 fl, u32 mask)
++static void set_ipv6_dsfield(struct sk_buff *skb, struct ipv6hdr *nh, u8 ipv6_tclass, u8 mask)
+ {
++	u8 old_ipv6_tclass = ipv6_get_dsfield(nh);
++
++	ipv6_tclass = OVS_MASKED(old_ipv6_tclass, ipv6_tclass, mask);
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)(old_ipv6_tclass << 12),
++			     (__force __wsum)(ipv6_tclass << 12));
++
++	ipv6_change_dsfield(nh, ~mask, ipv6_tclass);
++}
++
++static void set_ipv6_fl(struct sk_buff *skb, struct ipv6hdr *nh, u32 fl, u32 mask)
++{
++	u32 ofl;
++
++	ofl = nh->flow_lbl[0] << 16 |  nh->flow_lbl[1] << 8 |  nh->flow_lbl[2];
++	fl = OVS_MASKED(ofl, fl, mask);
++
+ 	/* Bits 21-24 are always unmasked, so this retains their values. */
+-	OVS_SET_MASKED(nh->flow_lbl[0], (u8)(fl >> 16), (u8)(mask >> 16));
+-	OVS_SET_MASKED(nh->flow_lbl[1], (u8)(fl >> 8), (u8)(mask >> 8));
+-	OVS_SET_MASKED(nh->flow_lbl[2], (u8)fl, (u8)mask);
++	nh->flow_lbl[0] = (u8)(fl >> 16);
++	nh->flow_lbl[1] = (u8)(fl >> 8);
++	nh->flow_lbl[2] = (u8)fl;
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)htonl(ofl), (__force __wsum)htonl(fl));
++}
++
++static void set_ipv6_ttl(struct sk_buff *skb, struct ipv6hdr *nh, u8 new_ttl, u8 mask)
++{
++	new_ttl = OVS_MASKED(nh->hop_limit, new_ttl, mask);
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)(nh->hop_limit << 8),
++			     (__force __wsum)(new_ttl << 8));
++	nh->hop_limit = new_ttl;
+ }
+ 
+ static void set_ip_ttl(struct sk_buff *skb, struct iphdr *nh, u8 new_ttl,
+@@ -514,18 +545,17 @@ static int set_ipv6(struct sk_buff *skb,
+ 		}
  	}
+ 	if (mask->ipv6_tclass) {
+-		ipv6_change_dsfield(nh, ~mask->ipv6_tclass, key->ipv6_tclass);
++		set_ipv6_dsfield(skb, nh, key->ipv6_tclass, mask->ipv6_tclass);
+ 		flow_key->ip.tos = ipv6_get_dsfield(nh);
+ 	}
+ 	if (mask->ipv6_label) {
+-		set_ipv6_fl(nh, ntohl(key->ipv6_label),
++		set_ipv6_fl(skb, nh, ntohl(key->ipv6_label),
+ 			    ntohl(mask->ipv6_label));
+ 		flow_key->ipv6.label =
+ 		    *(__be32 *)nh & htonl(IPV6_FLOWINFO_FLOWLABEL);
+ 	}
+ 	if (mask->ipv6_hlimit) {
+-		OVS_SET_MASKED(nh->hop_limit, key->ipv6_hlimit,
+-			       mask->ipv6_hlimit);
++		set_ipv6_ttl(skb, nh, key->ipv6_hlimit, mask->ipv6_hlimit);
+ 		flow_key->ip.ttl = nh->hop_limit;
+ 	}
+ 	return 0;
 
 

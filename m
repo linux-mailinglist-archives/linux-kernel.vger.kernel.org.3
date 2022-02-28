@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026784C7686
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971B34C768E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234641AbiB1SFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S239036AbiB1SFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbiB1R4g (ORCPT
+        with ESMTP id S239345AbiB1R4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:56:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9281E33EAC;
-        Mon, 28 Feb 2022 09:44:47 -0800 (PST)
+        Mon, 28 Feb 2022 12:56:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4233556408;
+        Mon, 28 Feb 2022 09:44:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DB0C60916;
-        Mon, 28 Feb 2022 17:44:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D3CC340E7;
-        Mon, 28 Feb 2022 17:44:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3C9060919;
+        Mon, 28 Feb 2022 17:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6059C340E7;
+        Mon, 28 Feb 2022 17:44:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070286;
-        bh=PfSQgCHnQZoKW0fY4R7n2AimA3dTMH2a7R/C0MEP7xo=;
+        s=korg; t=1646070289;
+        bh=gR1Khe48yhq652cwdqx1YEL7CXXU2N/upzAcP42hFCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B3wepPKB8Co1fqN6jGwpvvG4rWPxKAYiqGt4lq/DJGfQx1E9Ud7CQ9IKVJj1twzaq
-         02R31Feq+vQutqgXN9+v7YKjNg1+rnjP52TfttqXoLfc7QbzOsIeEAVaOXHLOni8Xu
-         PvgFS/KKEMcQmDv4U8L4toOx3nzHp4s7PqGXS9+s=
+        b=BBKqOi7eaX4nu0tQWJA9C+Kkwl/I+NaW4xAOzfVBTgCaqeJHMyn0nKAgJvvrIBrvN
+         Fz3da1zwonL9JPNm8E2yzlPhSIWxxQvkcgQdTCgROCCYETfXzj4Z3xMtf+Nb48l1cA
+         MBxMpaDjm0FnaEkAFjEkpGaxac0JjAijSNajZfMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jacob Keller <jacob.e.keller@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.16 052/164] ice: fix concurrent reset and removal of VFs
-Date:   Mon, 28 Feb 2022 18:23:34 +0100
-Message-Id: <20220228172404.898842214@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>
+Subject: [PATCH 5.16 053/164] ice: check the return of ice_ptp_gettimex64
+Date:   Mon, 28 Feb 2022 18:23:35 +0100
+Message-Id: <20220228172404.972654706@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -55,191 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacob Keller <jacob.e.keller@intel.com>
+From: Tom Rix <trix@redhat.com>
 
-commit fadead80fe4c033b5e514fcbadd20b55c4494112 upstream.
+commit ed22d9c8d128293fc7b0b086c7d3654bcb99a8dd upstream.
 
-Commit c503e63200c6 ("ice: Stop processing VF messages during teardown")
-introduced a driver state flag, ICE_VF_DEINIT_IN_PROGRESS, which is
-intended to prevent some issues with concurrently handling messages from
-VFs while tearing down the VFs.
+Clang static analysis reports this issue
+time64.h:69:50: warning: The left operand of '+'
+  is a garbage value
+  set_normalized_timespec64(&ts_delta, lhs.tv_sec + rhs.tv_sec,
+                                       ~~~~~~~~~~ ^
+In ice_ptp_adjtime_nonatomic(), the timespec64 variable 'now'
+is set by ice_ptp_gettimex64().  This function can fail
+with -EBUSY, so 'now' can have a gargbage value.
+So check the return.
 
-This change was motivated by crashes caused while tearing down and
-bringing up VFs in rapid succession.
-
-It turns out that the fix actually introduces issues with the VF driver
-caused because the PF no longer responds to any messages sent by the VF
-during its .remove routine. This results in the VF potentially removing
-its DMA memory before the PF has shut down the device queues.
-
-Additionally, the fix doesn't actually resolve concurrency issues within
-the ice driver. It is possible for a VF to initiate a reset just prior
-to the ice driver removing VFs. This can result in the remove task
-concurrently operating while the VF is being reset. This results in
-similar memory corruption and panics purportedly fixed by that commit.
-
-Fix this concurrency at its root by protecting both the reset and
-removal flows using the existing VF cfg_lock. This ensures that we
-cannot remove the VF while any outstanding critical tasks such as a
-virtchnl message or a reset are occurring.
-
-This locking change also fixes the root cause originally fixed by commit
-c503e63200c6 ("ice: Stop processing VF messages during teardown"), so we
-can simply revert it.
-
-Note that I kept these two changes together because simply reverting the
-original commit alone would leave the driver vulnerable to worse race
-conditions.
-
-Fixes: c503e63200c6 ("ice: Stop processing VF messages during teardown")
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Fixes: 06c16d89d2cb ("ice: register 1588 PTP clock device object for E810 devices")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice.h             |    1 
- drivers/net/ethernet/intel/ice/ice_main.c        |    2 +
- drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c |   42 +++++++++++++----------
- 3 files changed, 27 insertions(+), 18 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_ptp.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -280,7 +280,6 @@ enum ice_pf_state {
- 	ICE_VFLR_EVENT_PENDING,
- 	ICE_FLTR_OVERFLOW_PROMISC,
- 	ICE_VF_DIS,
--	ICE_VF_DEINIT_IN_PROGRESS,
- 	ICE_CFG_BUSY,
- 	ICE_SERVICE_SCHED,
- 	ICE_SERVICE_DIS,
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -1772,7 +1772,9 @@ static void ice_handle_mdd_event(struct
- 				 * reset, so print the event prior to reset.
- 				 */
- 				ice_print_vf_rx_mdd_event(vf);
-+				mutex_lock(&pf->vf[i].cfg_lock);
- 				ice_reset_vf(&pf->vf[i], false);
-+				mutex_unlock(&pf->vf[i].cfg_lock);
- 			}
- 		}
- 	}
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-@@ -617,8 +617,6 @@ void ice_free_vfs(struct ice_pf *pf)
- 	struct ice_hw *hw = &pf->hw;
- 	unsigned int tmp, i;
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -1121,9 +1121,12 @@ exit:
+ static int ice_ptp_adjtime_nonatomic(struct ptp_clock_info *info, s64 delta)
+ {
+ 	struct timespec64 now, then;
++	int ret;
  
--	set_bit(ICE_VF_DEINIT_IN_PROGRESS, pf->state);
--
- 	if (!pf->vf)
- 		return;
+ 	then = ns_to_timespec64(delta);
+-	ice_ptp_gettimex64(info, &now, NULL);
++	ret = ice_ptp_gettimex64(info, &now, NULL);
++	if (ret)
++		return ret;
+ 	now = timespec64_add(now, then);
  
-@@ -636,22 +634,26 @@ void ice_free_vfs(struct ice_pf *pf)
- 	else
- 		dev_warn(dev, "VFs are assigned - not disabling SR-IOV\n");
- 
--	/* Avoid wait time by stopping all VFs at the same time */
--	ice_for_each_vf(pf, i)
--		ice_dis_vf_qs(&pf->vf[i]);
--
- 	tmp = pf->num_alloc_vfs;
- 	pf->num_qps_per_vf = 0;
- 	pf->num_alloc_vfs = 0;
- 	for (i = 0; i < tmp; i++) {
--		if (test_bit(ICE_VF_STATE_INIT, pf->vf[i].vf_states)) {
-+		struct ice_vf *vf = &pf->vf[i];
-+
-+		mutex_lock(&vf->cfg_lock);
-+
-+		ice_dis_vf_qs(vf);
-+
-+		if (test_bit(ICE_VF_STATE_INIT, vf->vf_states)) {
- 			/* disable VF qp mappings and set VF disable state */
--			ice_dis_vf_mappings(&pf->vf[i]);
--			set_bit(ICE_VF_STATE_DIS, pf->vf[i].vf_states);
--			ice_free_vf_res(&pf->vf[i]);
-+			ice_dis_vf_mappings(vf);
-+			set_bit(ICE_VF_STATE_DIS, vf->vf_states);
-+			ice_free_vf_res(vf);
- 		}
- 
--		mutex_destroy(&pf->vf[i].cfg_lock);
-+		mutex_unlock(&vf->cfg_lock);
-+
-+		mutex_destroy(&vf->cfg_lock);
- 	}
- 
- 	if (ice_sriov_free_msix_res(pf))
-@@ -687,7 +689,6 @@ void ice_free_vfs(struct ice_pf *pf)
- 				i);
- 
- 	clear_bit(ICE_VF_DIS, pf->state);
--	clear_bit(ICE_VF_DEINIT_IN_PROGRESS, pf->state);
- 	clear_bit(ICE_FLAG_SRIOV_ENA, pf->flags);
- }
- 
-@@ -1613,6 +1614,8 @@ bool ice_reset_all_vfs(struct ice_pf *pf
- 	ice_for_each_vf(pf, v) {
- 		vf = &pf->vf[v];
- 
-+		mutex_lock(&vf->cfg_lock);
-+
- 		vf->driver_caps = 0;
- 		ice_vc_set_default_allowlist(vf);
- 
-@@ -1627,6 +1630,8 @@ bool ice_reset_all_vfs(struct ice_pf *pf
- 		ice_vf_pre_vsi_rebuild(vf);
- 		ice_vf_rebuild_vsi(vf);
- 		ice_vf_post_vsi_rebuild(vf);
-+
-+		mutex_unlock(&vf->cfg_lock);
- 	}
- 
- 	if (ice_is_eswitch_mode_switchdev(pf))
-@@ -1677,6 +1682,8 @@ bool ice_reset_vf(struct ice_vf *vf, boo
- 	u32 reg;
- 	int i;
- 
-+	lockdep_assert_held(&vf->cfg_lock);
-+
- 	dev = ice_pf_to_dev(pf);
- 
- 	if (test_bit(ICE_VF_RESETS_DISABLED, pf->state)) {
-@@ -2176,9 +2183,12 @@ void ice_process_vflr_event(struct ice_p
- 		bit_idx = (hw->func_caps.vf_base_id + vf_id) % 32;
- 		/* read GLGEN_VFLRSTAT register to find out the flr VFs */
- 		reg = rd32(hw, GLGEN_VFLRSTAT(reg_idx));
--		if (reg & BIT(bit_idx))
-+		if (reg & BIT(bit_idx)) {
- 			/* GLGEN_VFLRSTAT bit will be cleared in ice_reset_vf */
-+			mutex_lock(&vf->cfg_lock);
- 			ice_reset_vf(vf, true);
-+			mutex_unlock(&vf->cfg_lock);
-+		}
- 	}
- }
- 
-@@ -2255,7 +2265,9 @@ ice_vf_lan_overflow_event(struct ice_pf
- 	if (!vf)
- 		return;
- 
-+	mutex_lock(&vf->cfg_lock);
- 	ice_vc_reset_vf(vf);
-+	mutex_unlock(&vf->cfg_lock);
- }
- 
- /**
-@@ -4651,10 +4663,6 @@ void ice_vc_process_vf_msg(struct ice_pf
- 	struct device *dev;
- 	int err = 0;
- 
--	/* if de-init is underway, don't process messages from VF */
--	if (test_bit(ICE_VF_DEINIT_IN_PROGRESS, pf->state))
--		return;
--
- 	dev = ice_pf_to_dev(pf);
- 	if (ice_validate_vf_id(pf, vf_id)) {
- 		err = -EINVAL;
+ 	return ice_ptp_settime64(info, (const struct timespec64 *)&now);
 
 

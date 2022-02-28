@@ -2,103 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AE84C7C83
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 864DF4C7CB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiB1Vzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S231300AbiB1WCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiB1Vzf (ORCPT
+        with ESMTP id S230464AbiB1WCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:55:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3138426550;
-        Mon, 28 Feb 2022 13:54:55 -0800 (PST)
+        Mon, 28 Feb 2022 17:02:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CAF9EBB6;
+        Mon, 28 Feb 2022 14:01:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85BBD61216;
-        Mon, 28 Feb 2022 21:54:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561F0C340F2;
-        Mon, 28 Feb 2022 21:54:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ih5F4FRE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646085292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0gYo+w+F9Yr9jXeKd4yhlIselJQUhTYBVZBr6ICmc44=;
-        b=Ih5F4FREcrCYLk5lw1LYw/3HpDY//WblCvSVj3bAxTYy1u8mnNT+u+M65gLh33zQ3fjbIc
-        q9YZW/dRNDs269fTyRUxqE+Qs9nx1eI100D28JGZLhSwxO8lGoTNswdnsYjHBDvvhplE5q
-        GQ+0usGDCbQ/ovrAkyMhAlFlgukzzVc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 41a9ebdc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 28 Feb 2022 21:54:52 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id b35so23321533ybi.13;
-        Mon, 28 Feb 2022 13:54:51 -0800 (PST)
-X-Gm-Message-State: AOAM531gJa5iOwiBkPn12oMb/hEclDlJ0FKFPMQNuzh4ERvGhRWU6WYG
-        VoNp/lbD3iJ5vEh1uaRrFEWM42xZY9HCywAWnVo=
-X-Google-Smtp-Source: ABdhPJwNe9vFPbC4DSpnChci/IikmDINZcY4NEsYLNZXyhxmNiIP/uNzExOmckdLCqpmu7NklpucicQIVD7qYlRH09g=
-X-Received: by 2002:a25:b905:0:b0:61e:23e4:949f with SMTP id
- x5-20020a25b905000000b0061e23e4949fmr21728876ybj.373.1646085290051; Mon, 28
- Feb 2022 13:54:50 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHmME9qHnvwrxEue4Pdm_E1qZQGXFuR9orJSKCWj8fH5TSh6fA@mail.gmail.com>
- <20220228183355.9090-1-Jason@zx2c4.com> <CAHp75VcjrD3kwN1BfWpjKXaVpG7MHfftMUscSGhcJfStm4b-Xg@mail.gmail.com>
- <CAMj1kXFmEAKJRHCiuXyGECCmOs0+xX9AVeBDxfuD0XuX2TQ2Uw@mail.gmail.com> <Yh0+LA8B1jw8tnl9@smile.fi.intel.com>
-In-Reply-To: <Yh0+LA8B1jw8tnl9@smile.fi.intel.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 28 Feb 2022 22:54:39 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qW4EiYU6_kTffMdK5ijJY1DF6YRt=gDjj1vKqDxB0Raw@mail.gmail.com>
-Message-ID: <CAHmME9qW4EiYU6_kTffMdK5ijJY1DF6YRt=gDjj1vKqDxB0Raw@mail.gmail.com>
-Subject: Re: [PATCH 2/3 v6] ACPI: allow longer device IDs
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29AD1B81698;
+        Mon, 28 Feb 2022 22:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677EEC340F1;
+        Mon, 28 Feb 2022 22:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646085677;
+        bh=bmzYeqH+wd1Y/i05gxZoeqc9TywPR9wpt0imv9Fx7Nw=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=lb9MoeFhEeGqaET4WoooJnliR/Aftbuf2qgeJWcsJRMUD7lxaPDCkpbBw1fltPmKc
+         jIEBu8SnVjgO3Aaf+8FYuXvVgG5MgAciJgva3R/8WVNn/ktDFk3hANDz2GKUoZWtxI
+         SvipV/Wo2m8Yu0T44/FsB9ncJWS6zqb8Cis19xBBpG1gsQAhwdKCM2xymmzy1B6vAh
+         NLgpj3CkfoCj7XXB9+t8bZHUSaMtCcXi/0/BYE3ppk5zRyoiwaHoQXmDsDHRdh2g9L
+         BKDOg0IEHzQ+qInzyklcGdLSrMWPhR+ZxEuCQewyXU3mL+4cdRVVpWMroWAhmtcL3w
+         /5xJdekiDQkIw==
+Date:   Mon, 28 Feb 2022 23:59:07 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        =?ISO-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Jakob Koschel <jakobkoschel@gmail.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_2/6=5D_treewide=3A_remove_using?= =?US-ASCII?Q?_list_iterator_after_loop_body_as_a_ptr?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+Message-ID: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-On Mon, Feb 28, 2022 at 10:28 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> My point is that this is clear abuse of the spec and:
-> 1) we have to enable the broken, because it is already in the wild with
->    the comment that this is an issue
+
+On February 28, 2022 10:42:53 PM GMT+02:00, James Bottomley <James=2EBotto=
+mley@HansenPartnership=2Ecom> wrote:
+>On Mon, 2022-02-28 at 21:07 +0100, Christian K=C3=B6nig wrote:
+>> Am 28=2E02=2E22 um 20:56 schrieb Linus Torvalds:
+>> > On Mon, Feb 28, 2022 at 4:19 AM Christian K=C3=B6nig
+>> > <christian=2Ekoenig@amd=2Ecom> wrote:
+>> > > I don't think that using the extra variable makes the code in any
+>> > > way
+>> > > more reliable or easier to read=2E
+>> > So I think the next step is to do the attached patch (which
+>> > requires
+>> > that "-std=3Dgnu11" that was discussed in the original thread)=2E
+>> >=20
+>> > That will guarantee that the 'pos' parameter of
+>> > list_for_each_entry()
+>> > is only updated INSIDE the for_each_list_entry() loop, and can
+>> > never
+>> > point to the (wrongly typed) head entry=2E
+>> >=20
+>> > And I would actually hope that it should actually cause compiler
+>> > warnings about possibly uninitialized variables if people then use
+>> > the
+>> > 'pos' pointer outside the loop=2E Except
+>> >=20
+>> >   (a) that code in sgx/encl=2Ec currently initializes 'tmp' to NULL
+>> > for
+>> > inexplicable reasons - possibly because it already expected this
+>> > behavior
+>> >=20
+>> >   (b) when I remove that NULL initializer, I still don't get a
+>> > warning,
+>> > because we've disabled -Wno-maybe-uninitialized since it results in
+>> > so
+>> > many false positives=2E
+>> >=20
+>> > Oh well=2E
+>> >=20
+>> > Anyway, give this patch a look, and at least if it's expanded to do
+>> > "(pos) =3D NULL" in the entry statement for the for-loop, it will
+>> > avoid the HEAD type confusion that Jakob is working on=2E And I think
+>> > in a cleaner way than the horrid games he plays=2E
+>> >=20
+>> > (But it won't avoid possible CPU speculation of such type
+>> > confusion=2E That, in my opinion, is a completely different issue)
+>>=20
+>> Yes, completely agree=2E
+>>=20
+>> > I do wish we could actually poison the 'pos' value after the loop
+>> > somehow - but clearly the "might be uninitialized" I was hoping for
+>> > isn't the way to do it=2E
+>> >=20
+>> > Anybody have any ideas?
+>>=20
+>> I think we should look at the use cases why code is touching (pos)
+>> after the loop=2E
+>>=20
+>> Just from skimming over the patches to change this and experience
+>> with the drivers/subsystems I help to maintain I think the primary
+>> pattern looks something like this:
+>>=20
+>> list_for_each_entry(entry, head, member) {
+>>      if (some_condition_checking(entry))
+>>          break;
+>> }
+>> do_something_with(entry);
 >
-> AND
 >
-> 2) issue an ECR / work with MS to make sure they understand the problem.
+>Actually, we usually have a check to see if the loop found anything,
+>but in that case it should something like
 >
-> This can be done in parallel. What I meant as a prerequisite is to start doing
-> 2) while we have 1) on table.
+>if (list_entry_is_head(entry, head, member)) {
+>    return with error;
+>}
+>do_somethin_with(entry);
+>
+>Suffice?  The list_entry_is_head() macro is designed to cope with the
+>bogus entry on head problem=2E
 
-Oh, okay, that makes sense. If you want to get (2) going, by all means
-go for it. I have no idea how to do this myself; Ard said something
-about joining the UEFI forum as an individual something or another but
-I don't think I'm the man for the job there. Is this something that
-Intel can do with their existing membership (is that the right term?)
-at the UEFI forum? Or maybe a Microsoft engineer on the list?
+Won't suffice because the end goal of this work is to limit scope of entry=
+ only to loop=2E Hence the need for additional variable=2E
 
-From my side, regarding (1), I'm basically just waiting for Rafael's
-"Acked-by" (or an explicit nack) so I can put this in my tree and move
-on.
+Besides, there are no guarantees that people won't do_something_with(entry=
+) without the check or won't compare entry to NULL to check if the loop fin=
+ished with break or not=2E
 
-Jason
+>James
+
+
+--=20
+Sincerely yours,
+Mike

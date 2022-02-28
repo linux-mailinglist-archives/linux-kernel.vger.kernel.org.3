@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342E54C7557
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB5B4C737A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240633AbiB1Ry1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S238217AbiB1Rf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239091AbiB1RvW (ORCPT
+        with ESMTP id S238544AbiB1Rdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:51:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ABEA647B;
-        Mon, 28 Feb 2022 09:39:23 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DCA532DD;
+        Mon, 28 Feb 2022 09:30:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D896C61545;
-        Mon, 28 Feb 2022 17:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE057C340E7;
-        Mon, 28 Feb 2022 17:39:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1312A6140B;
+        Mon, 28 Feb 2022 17:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18116C340E7;
+        Mon, 28 Feb 2022 17:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069962;
-        bh=CHBTQVhMAnW3Sp0x6Fd7Ta9G5gSlr9kt0uqjKa04OJI=;
+        s=korg; t=1646069410;
+        bh=49R9t0N1JPLnjLMJR67fXWWq82987iXgrJZe1ehXUGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TlUUMSYbaczW9syMrOqsqU6TnBZHtsRpR2J7Z8yQfGHsE3NQ7VgZBb2OPiq974aMb
-         9Wt2D5W8LaKSPq/MhXh+/9gSggujQVp9lgMZCQnCZzQoBBPTmkRx/AYd+CYS5QnZWM
-         tMi7/s5+xQN5AFvKS6+zzydiUOHdP8YAgA3T7d6M=
+        b=ujboSzYVpaFHtu5ul9bhC7E20x5gkvIdt/9laBqo8VpK8U8AHP1D5b/dq9jk28t91
+         d3nv+cTUFI1FfgQEUVqdYLrPoLSLeQlmeNvkxIKpEChXphmMgl4J3kroQR8nE3s2hU
+         et5fTddtQW1B3EJ1e4wQ/X1DkqbGyrnBGOvdOOy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 5.15 074/139] surface: surface3_power: Fix battery readings on batteries without a serial number
+        stable@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Willis Kung <williskung@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH 5.4 10/53] x86/fpu: Correct pkru/xstate inconsistency
 Date:   Mon, 28 Feb 2022 18:24:08 +0100
-Message-Id: <20220228172355.508600289@linuxfoundation.org>
+Message-Id: <20220228172249.060996561@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Brian Geffon <bgeffon@google.com>
 
-commit 21d90aaee8d5c2a097ef41f1430d97661233ecc6 upstream.
+When eagerly switching PKRU in switch_fpu_finish() it checks that
+current is not a kernel thread as kernel threads will never use PKRU.
+It's possible that this_cpu_read_stable() on current_task
+(ie. get_current()) is returning an old cached value. To resolve this
+reference next_p directly rather than relying on current.
 
-The battery on the 2nd hand Surface 3 which I recently bought appears to
-not have a serial number programmed in. This results in any I2C reads from
-the registers containing the serial number failing with an I2C NACK.
+As written it's possible when switching from a kernel thread to a
+userspace thread to observe a cached PF_KTHREAD flag and never restore
+the PKRU. And as a result this issue only occurs when switching
+from a kernel thread to a userspace thread, switching from a non kernel
+thread works perfectly fine because all that is considered in that
+situation are the flags from some other non kernel task and the next fpu
+is passed in to switch_fpu_finish().
 
-This was causing mshw0011_bix() to fail causing the battery readings to
-not work at all.
+This behavior only exists between 5.2 and 5.13 when it was fixed by a
+rewrite decoupling PKRU from xstate, in:
+  commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
 
-Ignore EREMOTEIO (I2C NACK) errors when retrieving the serial number and
-continue with an empty serial number to fix this.
+Unfortunately backporting the fix from 5.13 is probably not realistic as
+it's part of a 60+ patch series which rewrites most of the PKRU handling.
 
-Fixes: b1f81b496b0d ("platform/x86: surface3_power: MSHW0011 rev-eng implementation")
-BugLink: https://github.com/linux-surface/linux-surface/issues/608
-Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220224101848.7219-1-hdegoede@redhat.com
+Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
+Signed-off-by: Brian Geffon <bgeffon@google.com>
+Signed-off-by: Willis Kung <williskung@google.com>
+Tested-by: Willis Kung <williskung@google.com>
+Cc: <stable@vger.kernel.org> # v5.4.x
+Cc: <stable@vger.kernel.org> # v5.10.x
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/surface/surface3_power.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/fpu/internal.h |   13 ++++++++-----
+ arch/x86/kernel/process_32.c        |    6 ++----
+ arch/x86/kernel/process_64.c        |    6 ++----
+ 3 files changed, 12 insertions(+), 13 deletions(-)
 
---- a/drivers/platform/surface/surface3_power.c
-+++ b/drivers/platform/surface/surface3_power.c
-@@ -233,14 +233,21 @@ static int mshw0011_bix(struct mshw0011_
- 	}
- 	bix->last_full_charg_capacity = ret;
+--- a/arch/x86/include/asm/fpu/internal.h
++++ b/arch/x86/include/asm/fpu/internal.h
+@@ -560,9 +560,11 @@ static inline void __fpregs_load_activat
+  * The FPU context is only stored/restored for a user task and
+  * PF_KTHREAD is used to distinguish between kernel and user threads.
+  */
+-static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
++static inline void switch_fpu_prepare(struct task_struct *prev, int cpu)
+ {
+-	if (static_cpu_has(X86_FEATURE_FPU) && !(current->flags & PF_KTHREAD)) {
++	struct fpu *old_fpu = &prev->thread.fpu;
++
++	if (static_cpu_has(X86_FEATURE_FPU) && !(prev->flags & PF_KTHREAD)) {
+ 		if (!copy_fpregs_to_fpstate(old_fpu))
+ 			old_fpu->last_cpu = -1;
+ 		else
+@@ -581,10 +583,11 @@ static inline void switch_fpu_prepare(st
+  * Load PKRU from the FPU context if available. Delay loading of the
+  * complete FPU state until the return to userland.
+  */
+-static inline void switch_fpu_finish(struct fpu *new_fpu)
++static inline void switch_fpu_finish(struct task_struct *next)
+ {
+ 	u32 pkru_val = init_pkru_value;
+ 	struct pkru_state *pk;
++	struct fpu *next_fpu = &next->thread.fpu;
  
--	/* get serial number */
-+	/*
-+	 * Get serial number, on some devices (with unofficial replacement
-+	 * battery?) reading any of the serial number range addresses gets
-+	 * nacked in this case just leave the serial number empty.
-+	 */
- 	ret = i2c_smbus_read_i2c_block_data(client, MSHW0011_BAT0_REG_SERIAL_NO,
- 					    sizeof(buf), buf);
--	if (ret != sizeof(buf)) {
-+	if (ret == -EREMOTEIO) {
-+		/* no serial number available */
-+	} else if (ret != sizeof(buf)) {
- 		dev_err(&client->dev, "Error reading serial no: %d\n", ret);
- 		return ret;
-+	} else {
-+		snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
+ 	if (!static_cpu_has(X86_FEATURE_FPU))
+ 		return;
+@@ -598,7 +601,7 @@ static inline void switch_fpu_finish(str
+ 	 * PKRU state is switched eagerly because it needs to be valid before we
+ 	 * return to userland e.g. for a copy_to_user() operation.
+ 	 */
+-	if (!(current->flags & PF_KTHREAD)) {
++	if (!(next->flags & PF_KTHREAD)) {
+ 		/*
+ 		 * If the PKRU bit in xsave.header.xfeatures is not set,
+ 		 * then the PKRU component was in init state, which means
+@@ -607,7 +610,7 @@ static inline void switch_fpu_finish(str
+ 		 * in memory is not valid. This means pkru_val has to be
+ 		 * set to 0 and not to init_pkru_value.
+ 		 */
+-		pk = get_xsave_addr(&new_fpu->state.xsave, XFEATURE_PKRU);
++		pk = get_xsave_addr(&next_fpu->state.xsave, XFEATURE_PKRU);
+ 		pkru_val = pk ? pk->pkru : 0;
  	}
--	snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
+ 	__write_pkru(pkru_val);
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -229,14 +229,12 @@ __switch_to(struct task_struct *prev_p,
+ {
+ 	struct thread_struct *prev = &prev_p->thread,
+ 			     *next = &next_p->thread;
+-	struct fpu *prev_fpu = &prev->fpu;
+-	struct fpu *next_fpu = &next->fpu;
+ 	int cpu = smp_processor_id();
  
- 	/* get cycle count */
- 	ret = i2c_smbus_read_word_data(client, MSHW0011_BAT0_REG_CYCLE_CNT);
+ 	/* never put a printk in __switch_to... printk() calls wake_up*() indirectly */
+ 
+ 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
+-		switch_fpu_prepare(prev_fpu, cpu);
++		switch_fpu_prepare(prev_p, cpu);
+ 
+ 	/*
+ 	 * Save away %gs. No need to save %fs, as it was saved on the
+@@ -292,7 +290,7 @@ __switch_to(struct task_struct *prev_p,
+ 
+ 	this_cpu_write(current_task, next_p);
+ 
+-	switch_fpu_finish(next_fpu);
++	switch_fpu_finish(next_p);
+ 
+ 	/* Load the Intel cache allocation PQR MSR. */
+ 	resctrl_sched_in();
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -505,15 +505,13 @@ __switch_to(struct task_struct *prev_p,
+ {
+ 	struct thread_struct *prev = &prev_p->thread;
+ 	struct thread_struct *next = &next_p->thread;
+-	struct fpu *prev_fpu = &prev->fpu;
+-	struct fpu *next_fpu = &next->fpu;
+ 	int cpu = smp_processor_id();
+ 
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ENTRY) &&
+ 		     this_cpu_read(irq_count) != -1);
+ 
+ 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
+-		switch_fpu_prepare(prev_fpu, cpu);
++		switch_fpu_prepare(prev_p, cpu);
+ 
+ 	/* We must save %fs and %gs before load_TLS() because
+ 	 * %fs and %gs may be cleared by load_TLS().
+@@ -565,7 +563,7 @@ __switch_to(struct task_struct *prev_p,
+ 	this_cpu_write(current_task, next_p);
+ 	this_cpu_write(cpu_current_top_of_stack, task_top_of_stack(next_p));
+ 
+-	switch_fpu_finish(next_fpu);
++	switch_fpu_finish(next_p);
+ 
+ 	/* Reload sp0. */
+ 	update_task_stack(next_p);
 
 

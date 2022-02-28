@@ -2,48 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B124C6E73
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467784C6E7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiB1NmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S236699AbiB1NpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236697AbiB1Nl4 (ORCPT
+        with ESMTP id S231336AbiB1NpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:41:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C327C7AB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sQtTKWJmjpY/ri7IYv25rVo1Rbt+2LizJ2pbjnDNo3Q=; b=cvw+XDmD0ZgdE5aLkvbVfFMS6l
-        c/Ie3dW6zQ7w9oV5vT+5yQHgXAajqWaWo5YqvDupVLpOpqcHFv2KYVXXcUjUTm31WXDHpVC49VLEO
-        HMz3fciGM/DoaYcOQ5QrnqTVm0hUXLqLu44j+stFj862JqqkA3DhO4HeXR9HK+WUkEd+9bAxvZ3yR
-        PYNA0mUA363VIX9cdRz1cXyYAcnIe5UJmpY7EbWKjj/CScoJY04MM5ktWL1zWJoEQ90pqe14wU0Uv
-        jXAYhhKNqSORA8Dgw25HMlvXhmlUBU0mLmFnFFt2hwaEone8bwzZpMG9y+HOuBWnyAQw64xGzl6qD
-        UIz2MqoA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOgH0-00CdxV-6a; Mon, 28 Feb 2022 13:41:10 +0000
-Date:   Mon, 28 Feb 2022 05:41:10 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        willy@infradead.org, kirill@shutemov.name, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: Export PageHeadHuge()
-Message-ID: <YhzQ9izSfN7JQ9Go@infradead.org>
-References: <2494562.1646054576@warthog.procyon.org.uk>
+        Mon, 28 Feb 2022 08:45:12 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1059041988;
+        Mon, 28 Feb 2022 05:44:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 830BE1F899;
+        Mon, 28 Feb 2022 13:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646055872;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S71zosWP0qbc18ePiTgFDhbq1Yuo06MT71tp5Uj+ZSI=;
+        b=HKttq5PL6FFWYPNiyBYQw2eN+tuG84zd2ERBQhKnMPTa6r0JG54oqy4yRZ6Bg6IrpW06Ug
+        fgCgIePKVgdSz5XyaLu9J2TQhrkQqVAam9Zf+QfHPsMPd/21WYt5wIHIhgtVSDRbh9kSWU
+        H0ss4eUwxk6fgUP25HfTtU6xRyeskCg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646055872;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S71zosWP0qbc18ePiTgFDhbq1Yuo06MT71tp5Uj+ZSI=;
+        b=RaQpsLoyWuJO9TZFCeG+kbUosmvLSIDB+MessTX5ffBvbR+rgiCW5W2szdOS13PtdwnE/4
+        nJDojKLZ4JyETuAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1977813ADA;
+        Mon, 28 Feb 2022 13:44:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4Fp5A8DRHGIFSwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 28 Feb 2022 13:44:32 +0000
+Date:   Mon, 28 Feb 2022 14:44:30 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>, dvyukov@google.com,
+        ebiggers@kernel.org, jmorris@namei.org, keescook@chromium.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com
+Subject: Re: [PATCH 2/2] integrity: double check iint_cache was initialized
+Message-ID: <YhzRvhsOPxrKHzq9@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20210322154207.6802-2-zohar@linux.ibm.com>
+ <20220224142025.2587-1-pvorel@suse.cz>
+ <418628ea-f524-05a1-8bfc-a688fa2d625d@schaufler-ca.com>
+ <YhfDhYQYZTU0clAf@pevik>
+ <9405bcfc-78bd-8e7f-41d4-b919221f73e4@schaufler-ca.com>
+ <c4842493db13fd6f05eda54c1ef4c94e9d687850.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2494562.1646054576@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <c4842493db13fd6f05eda54c1ef4c94e9d687850.camel@linux.ibm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,32 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 01:22:56PM +0000, David Howells wrote:
->     
-> Export PageHeadHuge() - it's used by folio_test_hugetlb() and thence by
-> such as folio_file_page() and folio_contains().  Matthew suggested I use
-> the first of those instead of doing the same calculation manually - but
-> I can't call it from a module.
-> 
-> Kirill suggested rearranging things to put it in a header, but that
-> introduces header dependencies because of where constants are defined.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: willy@infradead.org
-> Link: https://lore.kernel.org/r/163707085314.3221130.14783857863702203440.stgit@warthog.procyon.org.uk/
-> 
-> ---
->  mm/hugetlb.c |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 61895cc01d09..5768df43b05c 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1854,6 +1854,7 @@ int PageHeadHuge(struct page *page_head)
->  
->  	return page_head[1].compound_dtor == HUGETLB_PAGE_DTOR;
->  }
-> +EXPORT_SYMBOL(PageHeadHuge);
+Hi Mimi, all,
 
-EXPORT_SYMBOL_GPL for anything hugepage related, please.
+> Hi Petr, Casey,
+
+> On Thu, 2022-02-24 at 10:51 -0800, Casey Schaufler wrote:
+> > On 2/24/2022 9:42 AM, Petr Vorel wrote:
+
+> > It was always my expectation, which appears to have been poorly
+> > communicated, that "making integrity an LSM" meant using the LSM
+> > hook infrastructure. Just adding "integrity" to lsm= doesn't make
+> > it an LSM to my mind.
+
+> Agreed.  The actual commit that introduced the change was 3d6e5f6dcf65
+> ("LSM: Convert security_initcall() into DEFINE_LSM()").
+I wonder whether we can improve things now.
+
+Kind regards,
+Petr

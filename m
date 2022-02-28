@@ -2,192 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872F84C672E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5425D4C6731
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbiB1Kif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        id S233373AbiB1Km5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiB1KiW (ORCPT
+        with ESMTP id S229565AbiB1Kmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:38:22 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE0034667;
-        Mon, 28 Feb 2022 02:37:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gdpbbpAgX2F8/UFSejwk1qsOlst34Wx82F0/8tFs3RlFjJKijVPNUzHHKZzGsd6h2//k+cx++9qqe/jNXOb5AWxKUvb1si4udgs2KfP1y5PyQwvNNB+eGYwYu4g2a9cmkf08RCQwwaCgh0MtYbm6R9r7hTmqlN9VnPWtaqlsLoDhBOKXIWloOcy384orDDtimCKI9EQPNgt0r9e20jLnm0USWjWvRnxM9uUPnaX8JHHVarXyBstHkqIPV1pWkfxhjGm3yp9txM8s/kdznr59Wv8riyxAUunUqeHpo1CfLa6EV9QcDdehOY3JVgvIJmSUCZR786vgtMF5fW5qtrFMJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A2WkNKQyC1ZXnMFZ9T3XTkRPnzibQht85VTocQhwvZ8=;
- b=cV/zanf5HeKYMkUGNDEsV+YlkIDXnX4AFMictdVI2JKvJj/yKBjsr0kgdtPksweBx9x6RD/6KQcg1GVTMZLG+d7Flzkz32lQbxxMolpWS21w9ytFdkPmSyIma6XLbXTkXZoAZdlEe3Q6TtoQESQ903GCN/aKU0ZXwh/i92fVV+tt8WimJpY+sTtV9oKIT2hi2FIFL1GWDGAXBZgW6jfEl8oDl4b/Nq4E2cpoUFHOxxgTCCl1UbyECDJfPWAEJZbA04QpjMSCZZzGnPr1UtaJZj9BVGuIBM2laZBVYPPU8FD5VQjfBiqX9P4QSW3lNENYxLFGsJ8Q1apgzNfuvWqYFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
- dkim=pass header.d=quantatw.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A2WkNKQyC1ZXnMFZ9T3XTkRPnzibQht85VTocQhwvZ8=;
- b=fMorruJ5KNpmg4BqIzYl173wETHdpMOrs+jOU7oH8qLzD5R7kuub7yC/QLIVeopEdUHS5oS6khjr/gOCll81YZjxH7gNOXTq9ELziNExOH8aOtJzG+Fy4+FuyyOHw/z0EIJ78+nYAElXx11aT/dpVopqdBLzLlergAh/8+TxVJk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quantatw.com;
-Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
- by SL2PR04MB3002.apcprd04.prod.outlook.com (2603:1096:100:3b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 10:37:38 +0000
-Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
- ([fe80::b57e:962a:3820:eab]) by HK0PR04MB3282.apcprd04.prod.outlook.com
- ([fe80::b57e:962a:3820:eab%3]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 10:37:38 +0000
-From:   Potin Lai <potin.lai@quantatw.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Potin Lai <potin.lai@quantatw.com>
-Subject: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging properties for ADM1275
-Date:   Mon, 28 Feb 2022 18:37:16 +0800
-Message-Id: <20220228103716.10774-3-potin.lai@quantatw.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220228103716.10774-1-potin.lai@quantatw.com>
-References: <20220228103716.10774-1-potin.lai@quantatw.com>
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0131.apcprd02.prod.outlook.com
- (2603:1096:202:16::15) To HK0PR04MB3282.apcprd04.prod.outlook.com
- (2603:1096:203:89::17)
+        Mon, 28 Feb 2022 05:42:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D7CD387A4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646044934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m9JNZucF6cOUWHfUrK9ypxvqnvV+SEApFPtcKfU80kI=;
+        b=cNvIYLFV8i+GtxiYbTnNri20u8naruDFfDsMRSFTNL2ZOGo5iJnD49oAN5m5OUN+lwJJq2
+        azOXvNiZTMXmkIDFeSF6UcdPZh6QrZxp8xwjTFR6I6JsZFdw0Rp3kTvwhcLbxg/Nf+SGHC
+        XBJKtDr2gkM52o2rx4CWs4pVkb4o4e0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-_Tv_IIVCMG6-xJfHajpGWQ-1; Mon, 28 Feb 2022 05:42:12 -0500
+X-MC-Unique: _Tv_IIVCMG6-xJfHajpGWQ-1
+Received: by mail-ed1-f70.google.com with SMTP id b13-20020a056402278d00b0041311e02a9bso5564955ede.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:42:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m9JNZucF6cOUWHfUrK9ypxvqnvV+SEApFPtcKfU80kI=;
+        b=slDdq2mFQ+HawoM+rbByNWiE4dK1t742+4nKi8CUT8exQl3ZErggRYN5ZhURUxntxX
+         JCD1P8S+Eoay7vtFZHDHkjlwxjxA5c18hRNoPQjAPH1KkTDWeIRsCfDnWXqpRsiKWPBq
+         0IcLNrO4k6+3o15fLfd5cU8kBvEFaNdhTonHGnol/Bi2afVm67nSVZlaPaxFt0TAfqDf
+         pLjzNkcfjcljAYJ8aqTSIkL/UUZZ/YnNSgq3eIbFMS7tzxe0TVscGeUmPgndNTum/qrP
+         vhmnqB3rWoToANaVgquxmDD5ifkmVFSl57xzR+MwzcK+0FtZ6YrqfQhV1gnDSzsMHD7n
+         IQKQ==
+X-Gm-Message-State: AOAM531TsjV07aJCCHPjgsu2DTJH/B1ILnLY8Rl8RmXW/rDfomz16WTb
+        NCC01MtUtVJ3pI18ITrS2VNUb5RO1cxHL+SfPr8XZYLnOqxRgQvGNV+tQBle9EPyIEI3LdNPg0L
+        WdXNa2z4gJVeyaRJnld46BV4n
+X-Received: by 2002:a05:6402:1e8e:b0:412:cfd8:4d12 with SMTP id f14-20020a0564021e8e00b00412cfd84d12mr18673696edf.343.1646044931221;
+        Mon, 28 Feb 2022 02:42:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyiKa2FUpEeX9d8vFLT+kjzm7dftt1aVsPZaA1svifqCoGu+USwFbrZ4AVlxwwGqaEFanDFFQ==
+X-Received: by 2002:a05:6402:1e8e:b0:412:cfd8:4d12 with SMTP id f14-20020a0564021e8e00b00412cfd84d12mr18673684edf.343.1646044930928;
+        Mon, 28 Feb 2022 02:42:10 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm4244832ejj.74.2022.02.28.02.42.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 02:42:10 -0800 (PST)
+Message-ID: <6c7be14f-fba9-f230-6b02-b2ae9fb1f893@redhat.com>
+Date:   Mon, 28 Feb 2022 11:42:09 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4f08a110-ea88-4f92-c92e-08d9faa65707
-X-MS-TrafficTypeDiagnostic: SL2PR04MB3002:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR04MB30020056B224D76B707C8D618E019@SL2PR04MB3002.apcprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cYXVAu2VuN8Y/PCk0n6oVc5p0zZ5pEtzGrInmYlnClHsMxNlvsRBNcHRuOsO+pudukMx7g3TinmpNjzHn/gy8xX36MhgU/fnz25H313XtvDaQuG+QVk/cixDqcWSIWpu4StixTKfF9CJlzppe2uF8ML0alLzj9T5XL4meALBgGjEtIeJc7mSndlURYuh7b1isWHPmH/8Wqfhg6V09bbNhwlu3Eu6vSo+wfYF5h8+UBOcsF9M6A2F93DG/XKXmg3om4t+wJ4xWbsLWZoTuA3ihP1U2QhRAhr2/jm8tExxyG3xJNeXGTqc4R03Dm9QD1K/jwifX6hzLQd6jHxN2TptSVlKm14C9RU0DfGXD0VMldHCRYudNq06a34yeL0lVTPVvB8ISe9ZSm76KXqAvAR2FfLBo+G4hPgTYgeMpQ/xmUPI1XGs/YjPXRC1UlUzRhPL/CKTNm95w191UScAAmVMrMI0Xj3PaCVBC/bFH6h+iAYIhZrh61NYcFoiG590KxZhzKKvxTE4kqdL8QT33nevR1FCvGXs2QbhCNhLnaY6HNjzZjMIvn2wIUojE2lbKXVCFATeSTmI+QwXCz4CF68GtemVjoOqzBtgdAeR3e1/jguo5AhigL4vXWM/lMpU3j1zjTfjj+H4/z3oZFfPIPE9e1/XGcQmZhwnznyftNxR+L7y6AUHdNfQTn4OvDW1sB8zHZxrXycki52tc2vwoD7jSQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(86362001)(83380400001)(316002)(36756003)(4326008)(54906003)(66476007)(66556008)(66946007)(110136005)(5660300002)(6512007)(6506007)(6666004)(52116002)(8936002)(508600001)(44832011)(107886003)(2906002)(26005)(186003)(1076003)(2616005)(6486002)(38350700002)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vKeibPEBCWccnmD1EDRnhALeV8GosVRx4gDxHl0Wmwd2iqEvxxxUBPAnIkvR?=
- =?us-ascii?Q?ckguilyuYrJR+49UcQ35OMNXUCA7sOtElQoz9iDOHtMEK093EjnS0Q8eYfa3?=
- =?us-ascii?Q?lBdvMdn9EPDG1TRxZ7q3Lz98jQOEFadbI1X42gVe9wXxjOH/G1Ukj/1ka+p8?=
- =?us-ascii?Q?VBRm9PJhW67Vm6aSZpeaOvDm5zjQ4ErlEp9l3eUamywWJbsr0/yGFSUg9qe9?=
- =?us-ascii?Q?LeNHnFijDCNwHPFO/O0DjqJEGjGT0ADynk2b5QGtqtt9ROmCndCaNV+khO4z?=
- =?us-ascii?Q?03RVFZVjmvAZtH9b9VNFyHEw5+KMspm1Q8ADwX3QijMOKMcOyebNI68hfCkU?=
- =?us-ascii?Q?5BEkpOp+MWyIINKNZZoAbjYqarRgdVaGGiGpXpBRkRqz+TxIqgxCmvEIrC++?=
- =?us-ascii?Q?le4HwgOJB0hbv21ZJbUKOCx0YhkcvKdQXSNiyFcCvTd+lnaZKA6MkOhEwOfv?=
- =?us-ascii?Q?uLRpCbn1/Ukuz/jlhpqrJU8Kd7B2yhQOrpVfP34vL56SDt45EsArzjH+hs+3?=
- =?us-ascii?Q?IW5OIP4aeWVPoceMMz9YCVZoO2jhx+A21Upe2QONSMZcLkRhSRpqmitoUz29?=
- =?us-ascii?Q?j+6kOKlZ0Z7wOKtSOJMO7GbYdXDOx3BbFBJG6nYcDVvXw2SaSrnlnQScVsay?=
- =?us-ascii?Q?Ns30h9ZQ2of3IqpJdvh12PHomi4rryTsTzTsrC7A3lokQgc6h+EeuZGcx+GT?=
- =?us-ascii?Q?zrm1BldbUGHlCRQtN/NszTd1yiTO3bPnlPYCcLzpIoa0RrPPtPjfOB26xihC?=
- =?us-ascii?Q?pqxe1ehZ9aPGzyBMM+xVvhrcdb61i53SjFUkdKc3fenO0CN78JsP4DQ7Hzm5?=
- =?us-ascii?Q?hoF/SqOCB7IbLz0dSpHkPgK8u2HrxhPS51MRec5Z7xpqwxFToRmsdDRhbEnN?=
- =?us-ascii?Q?JWv/ktM137cOCqY25yg67Z+kjmo0z39MAGFv5N401+28oe2T30Y3FCShAmFk?=
- =?us-ascii?Q?SMLppcFnpreBdfbMaM+d6OgcXRzQsZnZX9TUKhItoHb6++wB3cbVI2655sed?=
- =?us-ascii?Q?7yrkDaTFboUDyxlLyFRvf1BzMiD7BhRLUf48YWVIqFKUO755Avz0LDhmDCwY?=
- =?us-ascii?Q?jsj6nSuSkoQOh3lx4Ex74DVcWjkOPwvPTdnLlz2Q6hSg8iSfQRD5Of+vhiGJ?=
- =?us-ascii?Q?G8YcNHGsOzL7VjvgsIrZfnWamLOGh9ZlGZy8/1qnaOCskh00NE3fBtOzQfa1?=
- =?us-ascii?Q?wWD2+vOdIW8VEckSJFeJRG8lz4hzcoXywxNcJZnFHJWKIBuYN9GdI4667utY?=
- =?us-ascii?Q?EW7uUMQnRU/tiWnxcnMpwi1hurg/1sxzLjLjzprV1T9bOusDAFSpldw1ZSlD?=
- =?us-ascii?Q?82GlF/PnxHnLUnY11dND8Y+ZVSvEihjXt7gjG8imOR5kPalS4yTPKX43UKcL?=
- =?us-ascii?Q?eUwWI1fmEET7pmhKj/EyBnoxhkt7EGYwy6a//eCMSzbUuPURC6rCoYDYhC7O?=
- =?us-ascii?Q?UuzfEB5kQoAC5GvqWnCmGIKC92iEAYf+huXqWUGmaVIOaHbJb9kq01gXBqkr?=
- =?us-ascii?Q?d9gLN/Rm4nWEZwDS/03CiPpID4nNLJX5+uRwRIog7z1QwxuP4xWRbRfFnxDQ?=
- =?us-ascii?Q?hO1GNDpxUD8n6CowMaq2SiFRWDP7UKCp/dy+LXLxlFzIpNPY80yn22ufjpvq?=
- =?us-ascii?Q?PM0J7n5LCORroyDMf17Gp28=3D?=
-X-OriginatorOrg: quantatw.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f08a110-ea88-4f92-c92e-08d9faa65707
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 10:37:38.2841
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /HfP1AiUcebfVCyLfc2pHzu/mc4ykuUXvxoS+ExS+FpEbwTdE2asjbPgO8iH8VPTVtKD6X/ddfsfJr1mmk8fMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR04MB3002
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [x86/PCI] 62fabd56fa:
+ BUG:KASAN:use-after-free_in_pci_acpi_root_prepare_resources
+Content-Language: en-US
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        lkp@lists.01.org, lkp@intel.com
+References: <20220228040021.GB29932@xsang-OptiPlex-9020>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220228040021.GB29932@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation of new properties for sample averaging in PMON_CONFIG
-register.
+Hi,
 
-New properties:
-- adi,volt-curr-sample-average
-- adi,power-sample-average
+On 2/28/22 05:00, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-9):
+> 
+> commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 ("x86/PCI: Disable exclusion of E820 reserved addresses in some cases")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
 
-Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+Ugh, yeah this is my bad, the code now looks like this:
 
-doc
----
- .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
+                       if (resource_is_pcicfg_ioport(entry->res))
+                               resource_list_destroy_entry(entry);
+                       if (resource_is_efi_mmio_region(entry->res)) {
+                               dev_info(&device->dev,
+                                       "host bridge window %pR is marked by EFI as 
+                                       entry->res);
+                               pci_use_e820 = false;
+                       }
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-index 223393d7cafd..bc4206b257a8 100644
---- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-@@ -37,6 +37,43 @@ properties:
-     description:
-       Shunt resistor value in micro-Ohm.
- 
-+  adi,volt-curr-sample-average:
-+    description: |
-+      Number of samples to be used to report voltage and current values.
-+      If the configured value is not a power of 2, sample averaging number
-+      will be configured with smaller and closest power of 2.
-+
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 128
-+    default: 1
-+
-+  adi,power-sample-average:
-+    description: |
-+      Number of samples to be used to report power values.
-+      If the configured value is not a power of 2, sample averaging number
-+      will be configured with smaller and closest power of 2.
-+
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 128
-+    default: 1
-+
-+if:
-+  not:
-+    properties:
-+      compatible:
-+        contains:
-+          enum:
-+          - adi,adm1272
-+          - adi,adm1278
-+          - adi,adm1293
-+          - adi,adm1294
-+then:
-+  properties:
-+    adi,power-sample-average:
-+      description: This property is not allowed.
-+
- required:
-   - compatible
-   - reg
-@@ -53,5 +90,7 @@ examples:
-             compatible = "adi,adm1272";
-             reg = <0x10>;
-             shunt-resistor-micro-ohms = <500>;
-+            adi,volt-curr-sample-average = <128>;
-+            adi,power-sample-average = <128>;
-         };
-     };
--- 
-2.17.1
+So yeah the second check is defering a just destroyed entry in case of
+resource_is_pcicfg_ioport() returning true.
+
+This also makes me realize that resource_is_efi_mmio_region should
+check the type of the resource.
+
+I'll send a new version fixing both, sorry about this.
+
+Regards,
+
+Hans
+
+
+
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> [ 2.507461][ T1] BUG: KASAN: use-after-free in pci_acpi_root_prepare_resources (include/linux/list.h:150 include/linux/resource_ext.h:48 include/linux/resource_ext.h:59 arch/x86/pci/acpi.c:361) 
+> [    2.507461][    T1] Read of size 8 at addr ffff8881433c6190 by task swapper/0/1
+> [    2.507461][    T1]
+> [    2.507461][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc5-00001-g62fabd56faaf #1
+> [    2.507461][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> [    2.507461][    T1] Call Trace:
+> [    2.507461][    T1]  <TASK>
+> [ 2.507461][ T1] dump_stack_lvl (lib/dump_stack.c:107) 
+> [ 2.507461][ T1] print_address_description+0x21/0x180 
+> [ 2.507461][ T1] ? pci_acpi_root_prepare_resources (include/linux/list.h:150 include/linux/resource_ext.h:48 include/linux/resource_ext.h:59 arch/x86/pci/acpi.c:361) 
+> [ 2.507461][ T1] kasan_report.cold (mm/kasan/report.c:443 mm/kasan/report.c:459) 
+> [ 2.507461][ T1] ? vscnprintf (lib/vsprintf.c:2974) 
+> [ 2.507461][ T1] ? pci_acpi_root_prepare_resources (include/linux/list.h:150 include/linux/resource_ext.h:48 include/linux/resource_ext.h:59 arch/x86/pci/acpi.c:361) 
+> [ 2.507461][ T1] pci_acpi_root_prepare_resources (include/linux/list.h:150 include/linux/resource_ext.h:48 include/linux/resource_ext.h:59 arch/x86/pci/acpi.c:361) 
+> [ 2.507461][ T1] ? pci_acpi_root_init_info.cold (arch/x86/pci/acpi.c:188 arch/x86/pci/acpi.c:219 arch/x86/pci/acpi.c:267) 
+> [ 2.507461][ T1] ? acpi_get_parent (drivers/acpi/acpica/nsxfobj.c:127) 
+> [ 2.507461][ T1] acpi_pci_root_create (drivers/acpi/pci_root.c:897) 
+> [ 2.507461][ T1] pci_acpi_scan_root (arch/x86/pci/acpi.c:431) 
+> [ 2.507461][ T1] ? pci_acpi_root_init_info (arch/x86/pci/acpi.c:390) 
+> [ 2.507461][ T1] ? decode_osc_bits+0x18a/0x18a 
+> [ 2.507461][ T1] ? acpi_pci_find_companion (drivers/pci/pci-acpi.c:108) 
+> [ 2.507461][ T1] acpi_pci_root_add.cold (drivers/acpi/pci_root.c:604) 
+> [ 2.507461][ T1] ? get_root_bridge_busnr_callback (drivers/acpi/pci_root.c:524) 
+> [ 2.507461][ T1] ? klist_next (lib/klist.c:403) 
+> [ 2.507461][ T1] ? acpi_bus_get_status_handle (drivers/acpi/bus.c:97) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2181 drivers/acpi/scan.c:2228) 
+> [ 2.507461][ T1] ? acpi_generic_device_attach (drivers/acpi/scan.c:2194) 
+> [ 2.507461][ T1] ? __device_attach (drivers/base/dd.c:942) 
+> [ 2.507461][ T1] ? device_bind_driver (drivers/base/dd.c:942) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2248 (discriminator 3)) 
+> [ 2.507461][ T1] ? acpi_generic_device_attach (drivers/acpi/scan.c:2194) 
+> [ 2.507461][ T1] ? __device_attach (drivers/base/dd.c:942) 
+> [ 2.507461][ T1] ? device_bind_driver (drivers/base/dd.c:942) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2248 (discriminator 3)) 
+> [ 2.507461][ T1] ? acpi_generic_device_attach (drivers/acpi/scan.c:2194) 
+> [ 2.507461][ T1] ? up (include/linux/list.h:292 kernel/locking/semaphore.c:187) 
+> [ 2.507461][ T1] ? acpi_os_signal_semaphore (drivers/acpi/osl.c:1305) 
+> [ 2.507461][ T1] ? acpi_ut_release_read_lock (drivers/acpi/acpica/utlock.c:111) 
+> [ 2.507461][ T1] ? acpi_bus_check_add_2 (drivers/acpi/scan.c:2116) 
+> [ 2.507461][ T1] ? acpi_walk_namespace (drivers/acpi/acpica/nsxfeval.c:616 drivers/acpi/acpica/nsxfeval.c:554) 
+> [ 2.507461][ T1] acpi_bus_scan (drivers/acpi/scan.c:2441) 
+> [ 2.507461][ T1] ? acpi_bus_check_add_1 (drivers/acpi/scan.c:2423) 
+> [ 2.507461][ T1] acpi_scan_init (drivers/acpi/scan.c:2603) 
+> [ 2.507461][ T1] ? acpi_match_madt (drivers/acpi/scan.c:2553) 
+> [ 2.507461][ T1] ? acpi_ut_release_mutex (drivers/acpi/acpica/utmutex.c:329) 
+> [ 2.507461][ T1] ? acpi_install_address_space_handler (drivers/acpi/acpica/evxfregn.c:88) 
+> [ 2.507461][ T1] acpi_init (drivers/acpi/bus.c:1335) 
+> [ 2.507461][ T1] ? acpi_bus_init (drivers/acpi/bus.c:1311) 
+> [ 2.507461][ T1] do_one_initcall (init/main.c:1300) 
+> [ 2.507461][ T1] ? perf_trace_initcall_level (init/main.c:1291) 
+> [ 2.507461][ T1] ? parameq (kernel/params.c:170) 
+> [ 2.507461][ T1] ? kasan_unpoison (mm/kasan/shadow.c:108 mm/kasan/shadow.c:142) 
+> [ 2.507461][ T1] ? __kasan_slab_alloc (mm/kasan/common.c:431 mm/kasan/common.c:469) 
+> [ 2.507461][ T1] kernel_init_freeable (init/main.c:1372 init/main.c:1389 init/main.c:1408 init/main.c:1613) 
+> [ 2.507461][ T1] ? console_on_rootfs (init/main.c:1584) 
+> [ 2.507461][ T1] ? _raw_spin_lock_irq (arch/x86/include/asm/atomic.h:202 include/linux/atomic/atomic-instrumented.h:543 include/asm-generic/qspinlock.h:82 include/linux/spinlock.h:185 include/linux/spinlock_api_smp.h:120 kernel/locking/spinlock.c:170) 
+> [ 2.507461][ T1] ? _raw_spin_lock (kernel/locking/spinlock.c:169) 
+> [ 2.507461][ T1] ? rest_init (init/main.c:1494) 
+> [ 2.507461][ T1] kernel_init (init/main.c:1504) 
+> [ 2.507461][ T1] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    2.507461][    T1]  </TASK>
+> [    2.507461][    T1]
+> [    2.507461][    T1] Allocated by task 1:
+> [ 2.507461][ T1] kasan_save_stack (mm/kasan/common.c:39) 
+> [ 2.507461][ T1] __kasan_kmalloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515 mm/kasan/common.c:524) 
+> [ 2.507461][ T1] resource_list_create_entry (kernel/resource.c:1783) 
+> [ 2.507461][ T1] acpi_dev_new_resource_entry (drivers/acpi/resource.c:564) 
+> [ 2.507461][ T1] acpi_dev_process_resource (drivers/acpi/resource.c:601 drivers/acpi/resource.c:575) 
+> [ 2.507461][ T1] acpi_walk_resource_buffer (drivers/acpi/acpica/rsxface.c:548) 
+> [ 2.507461][ T1] acpi_walk_resources (include/acpi/platform/aclinuxex.h:62 drivers/acpi/acpica/rsxface.c:624 drivers/acpi/acpica/rsxface.c:594) 
+> [ 2.507461][ T1] __acpi_dev_get_resources (drivers/acpi/resource.c:635 drivers/acpi/resource.c:614) 
+> [ 2.507461][ T1] acpi_pci_probe_root_resources (drivers/acpi/pci_root.c:777) 
+> [ 2.507461][ T1] pci_acpi_root_prepare_resources (arch/x86/pci/acpi.c:358) 
+> [ 2.507461][ T1] acpi_pci_root_create (drivers/acpi/pci_root.c:897) 
+> [ 2.507461][ T1] pci_acpi_scan_root (arch/x86/pci/acpi.c:431) 
+> [ 2.507461][ T1] acpi_pci_root_add.cold (drivers/acpi/pci_root.c:604) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2181 drivers/acpi/scan.c:2228) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2248 (discriminator 3)) 
+> [ 2.507461][ T1] acpi_bus_scan (drivers/acpi/scan.c:2441) 
+> [ 2.507461][ T1] acpi_scan_init (drivers/acpi/scan.c:2603) 
+> [ 2.507461][ T1] acpi_init (drivers/acpi/bus.c:1335) 
+> [ 2.507461][ T1] do_one_initcall (init/main.c:1300) 
+> [ 2.507461][ T1] kernel_init_freeable (init/main.c:1372 init/main.c:1389 init/main.c:1408 init/main.c:1613) 
+> [ 2.507461][ T1] kernel_init (init/main.c:1504) 
+> [ 2.507461][ T1] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    2.507461][    T1]
+> [    2.507461][    T1] Freed by task 1:
+> [ 2.507461][ T1] kasan_save_stack (mm/kasan/common.c:39) 
+> [ 2.507461][ T1] kasan_set_track (mm/kasan/common.c:45) 
+> [ 2.507461][ T1] kasan_set_free_info (mm/kasan/generic.c:372) 
+> [ 2.507461][ T1] __kasan_slab_free (mm/kasan/common.c:368 mm/kasan/common.c:328 mm/kasan/common.c:374) 
+> [ 2.507461][ T1] kfree (mm/slub.c:1754 mm/slub.c:3509 mm/slub.c:4562) 
+> [ 2.507461][ T1] pci_acpi_root_prepare_resources (include/linux/resource_ext.h:53 include/linux/resource_ext.h:60 arch/x86/pci/acpi.c:361) 
+> [ 2.507461][ T1] acpi_pci_root_create (drivers/acpi/pci_root.c:897) 
+> [ 2.507461][ T1] pci_acpi_scan_root (arch/x86/pci/acpi.c:431) 
+> [ 2.507461][ T1] acpi_pci_root_add.cold (drivers/acpi/pci_root.c:604) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2181 drivers/acpi/scan.c:2228) 
+> [ 2.507461][ T1] acpi_bus_attach (drivers/acpi/scan.c:2248 (discriminator 3)) 
+> [ 2.507461][ T1] acpi_bus_scan (drivers/acpi/scan.c:2441) 
+> [ 2.507461][ T1] acpi_scan_init (drivers/acpi/scan.c:2603) 
+> [ 2.507461][ T1] acpi_init (drivers/acpi/bus.c:1335) 
+> 
+> 
+> To reproduce:
+> 
+>         # build kernel
+> 	cd linux
+> 	cp config-5.17.0-rc5-00001-g62fabd56faaf .config
+> 	make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+> 	make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+> 	cd <mod-install-dir>
+> 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+> 
+> 
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+> 
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+> 
+> 
+> 
+> ---
+> 0DAY/LKP+ Test Infrastructure                   Open Source Technology Center
+> https://lists.01.org/hyperkitty/list/lkp@lists.01.org       Intel Corporation
+> 
+> Thanks,
+> Oliver Sang
+> 
 

@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3DF4C6E96
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F300B4C6E98
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235883AbiB1Nuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S235630AbiB1NvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiB1Nus (ORCPT
+        with ESMTP id S230155AbiB1NvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:50:48 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4B45130C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:50:09 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id r8so1110505ioj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=21fUVB6TefM/c8yrxJzAiD3KXehP2wSXZEAs7TxW/KY=;
-        b=nSyYgrW7HeGcBTLlKTDK06+o3qEhHtwxUbd+v8vQI5ECADYYX+IZqiIawh7SP3IF/Z
-         xActt/jSbw0m3wbOIFsNAnKFKqDMo0Z8pktmlCzw9tfFokzr66CHbcbj0bRHIZv1/f15
-         zf1UyBut2iCjDc5cZKqW1Whkjb7BQ170/j54o1Ch8t/0r5GvfkC7bkAY1nGuL3a5Xqqx
-         vAUcnwBGZb9GM88lsCxX2TJFAXQJm2m8EHITMD2+Te/ztnFBFYrNGNzDqPgehyupOPuS
-         /4DsHREBuIo/Lq+zglhQ+5Nwj+UVn7Gwhec82EpZH4tVTiwhbY5rHjWt5MdCos6CPi1Q
-         rESA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=21fUVB6TefM/c8yrxJzAiD3KXehP2wSXZEAs7TxW/KY=;
-        b=xGKIROMZ0a9+liTenvrokGWYkujaLO0G+2Mw64PkEYDjJ8akxkdAvKkYM3xX5MnyUr
-         E6d0QIEeIrviJJaS43M7ShYiem5wTW1MTaqnxMSo0v2nnlUD6sxoqNtpSHa/eZBnpLoU
-         4egI8md/MCWr7ca8QNcDcZI7ykcSgpuNn6+94WnMn3UKjC06ZZ6DCs4Wck+s40aZE2iY
-         T6vTbNRxrTEgrOuHmSvLDYqcBqLXD2MZ3Mug/Tich42hEDb1WedlMDfKftkSuSHfMXzH
-         NTNpogs5f4L+iXyG0vEextUM8CcgHs6E4zdgo5eQj2K6AETtYP1hJsHi34Doo8KhWUTC
-         e5lg==
-X-Gm-Message-State: AOAM533uP513sWfpdu/Lm/UwDvqKWXXXrewlp9U/1KdscG/qrajaA2qZ
-        eIEVq9QYSZhY5pNwbjhr38Kp3ljAGiFIHZTSZy44+3mIjdk=
-X-Google-Smtp-Source: ABdhPJyLRAV+HX54WbTOI1iHvdGZyWmKDJa3Tou4qCEjmH/5eSQuxhAXhcTg/qLW06hIparb5Wf2Ew4MDJs9+7cOztY=
-X-Received: by 2002:a05:6638:1117:b0:30d:1e9f:26ca with SMTP id
- n23-20020a056638111700b0030d1e9f26camr17376369jal.256.1646056208675; Mon, 28
- Feb 2022 05:50:08 -0800 (PST)
+        Mon, 28 Feb 2022 08:51:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737385130C;
+        Mon, 28 Feb 2022 05:50:43 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id C45121F438C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646056242;
+        bh=01LHGkJJ+DpNYyT1azd35ZIb6hFj6cZ6HVkPFWhLSpg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EVphFN2nlSfP7QnVMQPprWeHY3LGcr4CNLIyJwc93JAON0XRrHPUEBxJtTps4YWN/
+         teZLX3YIek+zUtUDvBSoQrBSI/MMaewUqah04AgMl1Q2EoUcX49lKK3o3X3lDFTBeQ
+         Ciwc4QZJbinmesi65g4Cksnl/DPy8HmKBYR1dBf3CG73Y2GP3KeK5HTIkqXRSKZgHR
+         6g7KLIla/2XXP7PKHafiVilugVgEELIR4r3POzlUd375pz3+5AaS+yT3BOAkd7enBY
+         wLsHX+VBenM5SuXKynOeeyhdGojSDhCTFd+XPt7gt+38YBVce7LBPgpfWq7bQghohU
+         ob9f2ZHuNUTSg==
+Message-ID: <7ba0ee87-c193-9834-d0b4-ff3e06ced82b@collabora.com>
+Date:   Mon, 28 Feb 2022 14:50:37 +0100
 MIME-Version: 1.0
-References: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
- <bd43bd47c8eaa4c22c1a1549cee66f7ef960b1fc.camel@med.uni-goettingen.de>
- <CAHk-=whFMxks63sfMQ-0_YO1GsTmoLfsO4ciMtoiCHNgaG_+GA@mail.gmail.com>
- <979af7ae9b7e8baf080ef6f8d42d48d7f5d2c5b4.camel@tugraz.at>
- <CANiq72k_PUBPVL1Fx4HLm_WO66RuSsi0oSsKRhssCYRNGbY84Q@mail.gmail.com> <dc52af7ebc044c94337e138f6e1ae807559b4825.camel@tugraz.at>
-In-Reply-To: <dc52af7ebc044c94337e138f6e1ae807559b4825.camel@tugraz.at>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 28 Feb 2022 14:49:57 +0100
-Message-ID: <CANiq72mcuXDRM-xMDPuL7uDLUfXDhARTBJJsVj4fnR15T1v=TA@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Martin Uecker <uecker@tugraz.at>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v5 00/34] MT8195 IOMMU SUPPORT
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>, Yong Wu <yong.wu@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, libo.kang@mediatek.com,
+        chengci.xu@mediatek.com
+References: <20220217113453.13658-1-yong.wu@mediatek.com>
+ <YhzBSsn/zUlGg5JE@8bytes.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <YhzBSsn/zUlGg5JE@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 8:08 AM Martin Uecker <uecker@tugraz.at> wrote:
->
-> Technically, this is true but not really in practice. If signed
-> overflow would be defined to wrap, then code would start to
-> rely on it and detecting it becomes useless because there are
-> too many false positives.  In your own small controlled code
-> base it could work though.
+Il 28/02/22 13:34, Joerg Roedel ha scritto:
+> Hi Yong Wu,
+> 
+> On Thu, Feb 17, 2022 at 07:34:19PM +0800, Yong Wu wrote:
+>> Yong Wu (34):
+>>    dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+>>    dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
+>>    iommu/mediatek: Fix 2 HW sharing pgtable issue
+>>    iommu/mediatek: Add list_del in mtk_iommu_remove
+>>    iommu/mediatek: Remove clk_disable in mtk_iommu_remove
+>>    iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
+>>    iommu/mediatek: Add mutex for data in the mtk_iommu_domain
+>>    iommu/mediatek: Adapt sharing and non-sharing pgtable case
+>>    iommu/mediatek: Add 12G~16G support for multi domains
+>>    iommu/mediatek: Add a flag DCM_DISABLE
+>>    iommu/mediatek: Add a flag NON_STD_AXI
+>>    iommu/mediatek: Remove the granule in the tlb flush
+>>    iommu/mediatek: Always enable output PA over 32bits in isr
+>>    iommu/mediatek: Add SUB_COMMON_3BITS flag
+>>    iommu/mediatek: Add IOMMU_TYPE flag
+>>    iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
+>>    iommu/mediatek: Adjust device link when it is sub-common
+>>    iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
+>>    iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
+>>    iommu/mediatek: Add infra iommu support
+>>    iommu/mediatek: Add PCIe support
+>>    iommu/mediatek: Add mt8195 support
+>>    iommu/mediatek: Only adjust code about register base
+>>    iommu/mediatek: Just move code position in hw_init
+>>    iommu/mediatek: Separate mtk_iommu_data for v1 and v2
+>>    iommu/mediatek: Remove mtk_iommu.h
+>>    iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
+>>    iommu/mediatek: Add mtk_iommu_bank_data structure
+>>    iommu/mediatek: Initialise bank HW for each a bank
+>>    iommu/mediatek: Change the domid to iova_region_id
+>>    iommu/mediatek: Get the proper bankid for multi banks
+>>    iommu/mediatek: Initialise/Remove for multi bank dev
+>>    iommu/mediatek: Backup/restore regsiters for multi banks
+>>    iommu/mediatek: mt8195: Enable multi banks for infra iommu
+> 
+> This doesn't apply cleanly, can you please send a version rebased to
+> v5.17-rc4?
+> 
+> Thanks,
+> 
+> 	Joerg
 
-Either code is written with signed overflow in mind, or not. That is
-what actually matters for detection, not whether it is UB in the
-standard or not.
+Hello Joerg,
 
-If a project starts relying on overflow wrapping, then they are taking
-the same stance as projects that already rely on `-fwrapv`. That is
-their choice, same as today.
+this series depends on the following series:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=592275
 
-But making it non-UB in the standard does not force a project to
-consider it "not an error", which is what actually matters for being
-able to use UBSan effectively or not.
+...which is also well tested and ready to be merged in.
 
-In fact, if you are just concerned about detectability or `-fwrapv`
-being the wrong default, there is still a way out without keeping it
-UB: we could consider it an error (thus people is not encouraged to
-rely on it), yet not UB. That is what Rust does, and why I suggested
-the past exploring the move of some existing UB in C into an
-"erroneous behavior, yet defined" area.
+Applying Yong's series without the mentioned series from Dafna would not work.
 
-And, for the cherry on top, if users had a way to write exactly what
-they mean (per operation or per type), then we can flag exactly the
-cases that are not intentional, and users can still use unchecked
-operations for performance sensitive code, etc.
 
-Cheers,
-Miguel
+Thanks,
+Angelo

@@ -2,271 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D1F4C7247
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031684C725A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiB1ROT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S231981AbiB1RQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiB1ROQ (ORCPT
+        with ESMTP id S231156AbiB1RQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:14:16 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F873E0E9;
-        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id d17so11599985pfl.0;
-        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
-        b=QoPKTXdaWxuI97HO/tb60FmRflBJDLnM9D0BpxTh1kzsFDhsxXqVhLwHH7nD+U6pFr
-         Tu9awJDeu+8JZpw8huEWlR69mOXkxgGzAfIgFcnb2Y/wsju7VHItpRcggGe/83PwJYd+
-         y61pQiO58zlejrm3T2UOP9u8L6MPf2RlBo1yp5YMRHkhhdO9HGRoBEQrd5Fl2F5d/0fz
-         GI3wtcKSb40zyaLWj5vwdvRL37k0Re+6UqrZqDdO5kvpHoYECgivP3whKGguWMIIVxAQ
-         5Km3HbYl8+f8fPg9/i/3X5TA1OmtDsnHWLnpFp7F+8HACLY9SFlH5I2+EO9kbHIHYLIr
-         4puA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
-        b=zaXgu4UKtHzlUQI2s83OSqEb598FXhgXeFOSS55MlxEyJ8gr7+fCQ48Ag5DovLl4aD
-         RCj9XPBjeFAD1s9ADZQ4zCbF+eA94FPYVAzXUM0fbBUn/x623LxwPHm0lPk2nhkTkybQ
-         ldL+jRVnfjt0DyJxWQE7zHGXggtvP2AETiPKGZv6eJh/YZAIeo3JN0VJhZTO11BTLxfr
-         Jc3fzNz8Qmm43KdS91k8MEq3gff/r06OHjcu0qN/6yZTh1AgQJ3RT7A/d5f4MwaT96te
-         /v74HWjDay1FaLm3jm8fkj8ZC9XE+H6QqkJ4ljdxkBhFSdQxecs2G75EtRwwWz5JCqpB
-         72fA==
-X-Gm-Message-State: AOAM532GJPEsQRjnm+aWxJxkOTSuGkF1ip8bk0b91KTuM1QpvBxo4kBp
-        8JXzoG+IBlgbidfIj5JnLeI+ID1r+pg=
-X-Google-Smtp-Source: ABdhPJy9d6FK0t99nrIJoPHep4GbDBhhAD2UxAzkKxjDaMN5psK18I7hwcADqnDD5TwQqr2ci8vgNg==
-X-Received: by 2002:a63:a501:0:b0:372:f7dc:6ced with SMTP id n1-20020a63a501000000b00372f7dc6cedmr18226266pgf.26.1646068416482;
-        Mon, 28 Feb 2022 09:13:36 -0800 (PST)
-Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090aca9700b001bc943a20b2sm17429917pjt.35.2022.02.28.09.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 09:13:35 -0800 (PST)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v3] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-Date:   Mon, 28 Feb 2022 09:12:52 -0800
-Message-Id: <20220228171252.1827788-1-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 12:16:06 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9682E70CE2;
+        Mon, 28 Feb 2022 09:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646068526; x=1677604526;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wy3mr4XjYMV/acNZkxjYvh8ckQJX8upX4/iAoBhu4Is=;
+  b=PoJHC0fB1hhQe0dvH9sTwIdPBTeijABEAXooZsWpZqoVhXDr56lMfhxh
+   t87m3RE5KsslsUxqot+5Pq1qsXONcJwDCyRnpvqNqylWzAbqp3oz80UIu
+   RlibouLZ/WLgmY36M7G98D7h6aQXmuZ0dW4nSbVw/dUQGzwvDURNDBxo8
+   Ze6bnuU4YGWZySMFLqsjU4dx2KHNSRgLfzuqGNnsjxr6+rGM+1k7HcSjK
+   pE7foiC/AYPdrW2zSfSIOzTlazxr+SWdH92NmLl60D3kPxyYrstF0X+3U
+   jXYGz4N3gQf+9fYr5/7s/P5sFiWOLHgyKvISAy/LplvDCFPb7ayo/Z9fr
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313652615"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="313652615"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:13:06 -0800
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="593289987"
+Received: from adigar-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.152.236])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:13:05 -0800
+Message-ID: <bcfcf159c62a2a071a7bc7020f811fd9383af6de.camel@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] Thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Mon, 28 Feb 2022 09:13:05 -0800
+In-Reply-To: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+         <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the extcon device exists, get the mode from the extcon device. If
-the controller is DRD and the driver is unable to determine the mode,
-only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+Hi Daniel,
+On Thu, 2022-02-24 at 22:41 +0100, Daniel Lezcano wrote:
+> 
+> Hi,
+> 
+> What shall I do with this series? Is everyone ok with it?
+> 
+Some comments
+1. White space errors while applying
+$git am ../daniel/\[PATCH\ v1\ 1_4\]\ tools_lib_thermal_\ Add\ a\
+thermal\ library.mbox
+Applying: tools/lib/thermal: Add a thermal library
+.git/rebase-apply/patch:234: trailing whitespace.
+clean: 
+.git/rebase-apply/patch:715: trailing whitespace.
+				     
+nla_get_u32(attrs[THERMAL_GENL_ATTR_TZ_TEMP]), arg); 
+.git/rebase-apply/patch:878: trailing whitespace.
+	
+.git/rebase-apply/patch:879: trailing whitespace.
+struct thermal_handler; 
+.git/rebase-apply/patch:1103: trailing whitespace.
+}	
+warning: squelched 5 whitespace errors
+warning: 10 lines add whitespace errors.
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
+$git am ../daniel/\[PATCH\ v1\ 2_4\]\ tools_thermal_\ Add\ util\
+library.mbox
+Applying: tools/thermal: Add util library
+.git/rebase-apply/patch:152: trailing whitespace.
+clean: 
+.git/rebase-apply/patch:259: trailing whitespace.
+	
+.git/rebase-apply/patch:285: trailing whitespace.
+	
+.git/rebase-apply/patch:385: trailing whitespace.
+		
+.git/rebase-apply/patch:392: trailing whitespace.
+		/* 
+warning: squelched 1 whitespace error
+warning: 6 lines add whitespace errors.
+$git am ../daniel/\[PATCH\ v1\ 3_4\]\ tools_thermal_\ A\ temperature\
+capture\ tool.mbox
+Applying: tools/thermal: A temperature capture tool
+.git/rebase-apply/patch:165: trailing whitespace.
+	regex_t regex;	
+.git/rebase-apply/patch:205: trailing whitespace.
+	
+.git/rebase-apply/patch:208: trailing whitespace.
+	
+.git/rebase-apply/patch:249: trailing whitespace.
+		
+.git/rebase-apply/patch:265: trailing whitespace.
+	
+warning: squelched 13 whitespace errors
+warning: 18 lines add whitespace errors.
 
-Changes since [v2] of the patch:
-
-   - Fixed "Minor formatting change", to reflect what was meant by
-     review comment
-
-Changes since [v1] of the patch:
-
-   - Reworded commit message
-   - Minor formatting change
-
-
-[v2] https://lore.kernel.org/linux-usb/20220221192020.346622-1-andrew.smirnov@gmail.com/
-[v1] https://lore.kernel.org/linux-usb/20220206014532.372109-1-andrew.smirnov@gmail.com/T/#u
-
-previons discussion:
-
-https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+$ git am ../daniel/\[PATCH\ v1\ 4_4\]\ tools_thermal_\ Add\ thermal\
+daemon\ skeleton.mbox
+Applying: tools/thermal: Add thermal daemon skeleton
+.git/rebase-apply/patch:170: trailing whitespace.
+}		
+.git/rebase-apply/patch:186: trailing whitespace.
+	
+.git/rebase-apply/patch:197: trailing whitespace.
+	
+.git/rebase-apply/patch:199: trailing whitespace.
+	
+.git/rebase-apply/patch:348: trailing whitespace.
+	
+warning: squelched 3 whitespace errors
+warning: 8 lines add whitespace errors.
 
 
+2. No help or man page
+thermal_engine has some options. There is no --help or man
 
- drivers/usb/dwc3/core.c | 55 ++++++++++++++++++++++++++++++++++++++++-
- drivers/usb/dwc3/drd.c  | 50 -------------------------------------
- 2 files changed, 54 insertions(+), 51 deletions(-)
+3. Silent failure
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index f2448d0a9d39..5e7a19959a9d 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -23,6 +23,7 @@
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/of.h>
-+#include <linux/of_graph.h>
- #include <linux/acpi.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/reset.h>
-@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
- 		 * mode. If the controller supports DRD but the dr_mode is not
- 		 * specified or set to OTG, then set the mode to peripheral.
- 		 */
--		if (mode == USB_DR_MODE_OTG &&
-+		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
- 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
- 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
- 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
- 	}
- }
+For example:
+$sudo ./thermal-engine 
 
-+static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
-+{
-+	struct device *dev = dwc->dev;
-+	struct device_node *np_phy;
-+	struct extcon_dev *edev = NULL;
-+	const char *name;
-+
-+	if (device_property_read_bool(dev, "extcon"))
-+		return extcon_get_edev_by_phandle(dev, 0);
-+
-+	/*
-+	 * Device tree platforms should get extcon via phandle.
-+	 * On ACPI platforms, we get the name from a device property.
-+	 * This device property is for kernel internal use only and
-+	 * is expected to be set by the glue code.
-+	 */
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-+		edev = extcon_get_extcon_dev(name);
-+		if (!edev)
-+			return ERR_PTR(-EPROBE_DEFER);
-+
-+		return edev;
-+	}
-+
-+	/*
-+	 * Try to get an extcon device from the USB PHY controller's "port"
-+	 * node. Check if it has the "port" node first, to avoid printing the
-+	 * error message from underlying code, as it's a valid case: extcon
-+	 * device (and "port" node) may be missing in case of "usb-role-switch"
-+	 * or OTG mode.
-+	 */
-+	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
-+	if (of_graph_is_present(np_phy)) {
-+		struct device_node *np_conn;
-+
-+		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
-+		if (np_conn)
-+			edev = extcon_find_edev_by_node(np_conn);
-+		of_node_put(np_conn);
-+	}
-+	of_node_put(np_phy);
-+
-+	return edev;
-+}
-+
- static int dwc3_probe(struct platform_device *pdev)
- {
- 	struct device		*dev = &pdev->dev;
-@@ -1561,6 +1607,13 @@ static int dwc3_probe(struct platform_device *pdev)
- 		goto err2;
- 	}
+4.
+sudo ./thermometer 
+Options;
+ * config: 'thermometer.conf'
+ * log level: '7'
+ * postfix: -2022-02-28_16:51:33
+ * output: .
 
-+	dwc->edev = dwc3_get_extcon(dwc);
-+	if (IS_ERR(dwc->edev)) {
-+		ret = PTR_ERR(dwc->edev);
-+		dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
-+		goto err3;
-+	}
-+
- 	ret = dwc3_get_dr_mode(dwc);
- 	if (ret)
- 		goto err3;
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index e2b68bb770d1..9a414edc439a 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -8,7 +8,6 @@
-  */
+What an user can do?
 
- #include <linux/extcon.h>
--#include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
+Thanks,
+Srinivas
+ 
+> 
+> 
+> On 18/02/2022 13:53, Daniel Lezcano wrote:
+> > This series provides a thermal library providing the basic callback
+> > oriented
+> > netlink communication and events with the thermal framework, a
+> > temperature
+> > capture tool and a thermal monitoring skeleton using the thermal
+> > library.
+> > 
+> > Changelog:
+> >   - V1:
+> >      - Took into account RFC comments (unsubscribe, error enum,
+> > thermal daemon
+> >        renamed to thermal-engine)
+> > 
+> > Daniel Lezcano (4):
+> >    tools/lib/thermal: Add a thermal library
+> >    tools/thermal: Add util library
+> >    tools/thermal: A temperature capture tool
+> >    tools/thermal: Add thermal daemon skeleton
+> > 
+> >   tools/Makefile                                |  36 +-
+> >   tools/lib/thermal/.gitignore                  |   2 +
+> >   tools/lib/thermal/Build                       |   5 +
+> >   tools/lib/thermal/Makefile                    | 165 ++++++++
+> >   tools/lib/thermal/commands.c                  | 351
+> > ++++++++++++++++
+> >   tools/lib/thermal/events.c                    | 164 ++++++++
+> >   tools/lib/thermal/include/thermal.h           | 141 +++++++
+> >   tools/lib/thermal/libthermal.map              |  25 ++
+> >   tools/lib/thermal/libthermal.pc.template      |  12 +
+> >   tools/lib/thermal/sampling.c                  |  75 ++++
+> >   tools/lib/thermal/thermal.c                   | 126 ++++++
+> >   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
+> >   tools/lib/thermal/thermal_nl.h                |  46 ++
+> >   tools/thermal/lib/Build                       |   3 +
+> >   tools/thermal/lib/Makefile                    | 158 +++++++
+> >   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> >   tools/thermal/lib/log.c                       |  77 ++++
+> >   tools/thermal/lib/log.h                       |  31 ++
+> >   tools/thermal/lib/mainloop.c                  | 135 ++++++
+> >   tools/thermal/lib/mainloop.h                  |  14 +
+> >   tools/thermal/lib/thermal-tools.h             |  10 +
+> >   tools/thermal/lib/uptimeofday.c               |  40 ++
+> >   tools/thermal/lib/uptimeofday.h               |  12 +
+> >   tools/thermal/thermal-engine/Build            |   2 +
+> >   tools/thermal/thermal-engine/Makefile         |  27 ++
+> >   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
+> >   tools/thermal/thermometer/Build               |   2 +
+> >   tools/thermal/thermometer/Makefile            |  23 +
+> >   tools/thermal/thermometer/thermometer.c       | 393
+> > ++++++++++++++++++
+> >   tools/thermal/thermometer/thermometer.conf    |   5 +
+> >   30 files changed, 2591 insertions(+), 3 deletions(-)
+> >   create mode 100644 tools/lib/thermal/.gitignore
+> >   create mode 100644 tools/lib/thermal/Build
+> >   create mode 100644 tools/lib/thermal/Makefile
+> >   create mode 100644 tools/lib/thermal/commands.c
+> >   create mode 100644 tools/lib/thermal/events.c
+> >   create mode 100644 tools/lib/thermal/include/thermal.h
+> >   create mode 100644 tools/lib/thermal/libthermal.map
+> >   create mode 100644 tools/lib/thermal/libthermal.pc.template
+> >   create mode 100644 tools/lib/thermal/sampling.c
+> >   create mode 100644 tools/lib/thermal/thermal.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.h
+> >   create mode 100644 tools/thermal/lib/Build
+> >   create mode 100644 tools/thermal/lib/Makefile
+> >   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+> >   create mode 100644 tools/thermal/lib/log.c
+> >   create mode 100644 tools/thermal/lib/log.h
+> >   create mode 100644 tools/thermal/lib/mainloop.c
+> >   create mode 100644 tools/thermal/lib/mainloop.h
+> >   create mode 100644 tools/thermal/lib/thermal-tools.h
+> >   create mode 100644 tools/thermal/lib/uptimeofday.c
+> >   create mode 100644 tools/thermal/lib/uptimeofday.h
+> >   create mode 100644 tools/thermal/thermal-engine/Build
+> >   create mode 100644 tools/thermal/thermal-engine/Makefile
+> >   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+> >   create mode 100644 tools/thermal/thermometer/Build
+> >   create mode 100644 tools/thermal/thermometer/Makefile
+> >   create mode 100644 tools/thermal/thermometer/thermometer.c
+> >   create mode 100644 tools/thermal/thermometer/thermometer.conf
+> > 
+> 
+> 
 
-@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
-
--static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
--{
--	struct device *dev = dwc->dev;
--	struct device_node *np_phy;
--	struct extcon_dev *edev = NULL;
--	const char *name;
--
--	if (device_property_read_bool(dev, "extcon"))
--		return extcon_get_edev_by_phandle(dev, 0);
--
--	/*
--	 * Device tree platforms should get extcon via phandle.
--	 * On ACPI platforms, we get the name from a device property.
--	 * This device property is for kernel internal use only and
--	 * is expected to be set by the glue code.
--	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
--		edev = extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
--
--	/*
--	 * Try to get an extcon device from the USB PHY controller's "port"
--	 * node. Check if it has the "port" node first, to avoid printing the
--	 * error message from underlying code, as it's a valid case: extcon
--	 * device (and "port" node) may be missing in case of "usb-role-switch"
--	 * or OTG mode.
--	 */
--	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
--	if (of_graph_is_present(np_phy)) {
--		struct device_node *np_conn;
--
--		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
--		if (np_conn)
--			edev = extcon_find_edev_by_node(np_conn);
--		of_node_put(np_conn);
--	}
--	of_node_put(np_phy);
--
--	return edev;
--}
--
- #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
- #define ROLE_SWITCH 1
- static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
-@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
- 	int ret, irq;
-
--	dwc->edev = dwc3_get_extcon(dwc);
--	if (IS_ERR(dwc->edev))
--		return PTR_ERR(dwc->edev);
--
- 	if (ROLE_SWITCH &&
- 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
- 		ret = dwc3_setup_role_switch(dwc);
---
-2.25.1

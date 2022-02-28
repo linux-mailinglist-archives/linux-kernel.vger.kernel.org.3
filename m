@@ -2,41 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AD14C6E2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B774C6E36
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbiB1NaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S236218AbiB1Nbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235283AbiB1NaN (ORCPT
+        with ESMTP id S235283AbiB1Nbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:30:13 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB44A7B54F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:29:33 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:a4f2:4931:edd0:99e3])
-        by michel.telenet-ops.be with bizsmtp
-        id 0dVW2700W5QlnJa06dVWy5; Mon, 28 Feb 2022 14:29:31 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nOg5i-002DyN-Di; Mon, 28 Feb 2022 14:29:30 +0100
-Date:   Mon, 28 Feb 2022 14:29:30 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>
-Subject: Re: Build regressions/improvements in v5.17-rc6
-In-Reply-To: <20220228092810.815034-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2202281425430.530334@ramsan.of.borg>
-References: <20220228092810.815034-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 28 Feb 2022 08:31:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD95B32EE5;
+        Mon, 28 Feb 2022 05:31:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B369B80D90;
+        Mon, 28 Feb 2022 13:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16CE9C340F0;
+        Mon, 28 Feb 2022 13:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646055058;
+        bh=/VuYTTGgeEib3boM9Ub2hTNazbf2SqMji6n9B3orojI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RxTGsogK/V7McELULdz3MvlwygpAWPsnAc+UpNS4QL229/0eUVRAtlYWh1jUCjahn
+         1u6LXGYmz+LfiW03HZSJ+LgHz+pESJgYX9qCZXh7FAFch9V4z1mfGm4Vq1cOXc4Cjh
+         tCi2YLlkNAwZxbzEcpzdtWIBkQn/2xsHls3wTO7fN33szxMQWMRsDjS4WM38PSgIgu
+         kvxDXk3J+JFTNaZ34G7aj4Z6srx3SAACQJjh4MdJtLvF/9DYOSo6U8jUWljr3Mws2q
+         WJde7W6im2prdC9xj/5XTnvviksR43wU6sq+EnKnx3CECE+GvIcDMagtWWZVFqem9G
+         I/q38MwD5qH+g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE84CE5D087;
+        Mon, 28 Feb 2022 13:30:57 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: add config to allow loading modules with BTF
+ mismatches
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164605505797.13902.1254314206143134404.git-patchwork-notify@kernel.org>
+Date:   Mon, 28 Feb 2022 13:30:57 +0000
+References: <20220223012814.1898677-1-connoro@google.com>
+In-Reply-To: <20220223012814.1898677-1-connoro@google.com>
+To:     Connor O'Brien <connoro@google.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        shung-hsi.yu@suse.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, msuchanek@suse.de
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,24 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v5.17-rc6[1] to v5.17-rc5[3], the summaries are:
->  - build errors: +1/-2
+Hello:
 
-   + error: verifier.c: relocation truncated to fit: R_NDS32_WORD_9_PCREL_RELA against `.text':  => (.text+0x10228)
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-nds32le-gcc8/nds32-allyesconfig
+On Wed, 23 Feb 2022 01:28:14 +0000 you wrote:
+> BTF mismatch can occur for a separately-built module even when the ABI
+> is otherwise compatible and nothing else would prevent successfully
+> loading. Add a new config to control how mismatches are handled. By
+> default, preserve the current behavior of refusing to load the
+> module. If MODULE_ALLOW_BTF_MISMATCH is enabled, load the module but
+> ignore its BTF information.
+> 
+> [...]
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3/ (all 99 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/cfb92440ee71adcc2105b0890bb01ac3cddb8507/ (all 99 configs)
+Here is the summary with links:
+  - [bpf-next] bpf: add config to allow loading modules with BTF mismatches
+    https://git.kernel.org/bpf/bpf-next/c/5e214f2e43e4
 
-Gr{oetje,eeting}s,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
- 						Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds

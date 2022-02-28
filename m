@@ -2,120 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633B54C60C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D7E4C6117
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbiB1CHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 21:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S232445AbiB1C2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 21:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiB1CHN (ORCPT
+        with ESMTP id S229714AbiB1C2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:07:13 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F9C6B084;
-        Sun, 27 Feb 2022 18:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646013995; x=1677549995;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dBj8IZqKdQrN7LWqpr45uLHPvsxj4KiRmjJ+NZe7L/4=;
-  b=Z8c7wj1o95ptdUePhqY22HSfUGp5TZDRRC48hvsGB0XFi/oFNt0/0iGx
-   7vFYGO+/t9S3NkxgPpioJPNHUW7bS4zkalLdM8BEYTWg5bQ2jQ1BSvaVS
-   SHeDUq9Agp3NqR1J+lLwbJYU980oKt/YyhdQQTMvywlIHw2gVlV98VJo6
-   v7zak3+K3lV7TMVJJI9JPTXLHSogAZk5Dx1neF0nWHTiB49kKzPSGbHu/
-   Qrh3Dk98UW2/PrI7TauNxZnpOyimwnmG41b/C39Gv5R5NIV9FvN7jmR3b
-   n23UJQDDqBuqw866al+JgZMx6aP8FMy39VgkDzXzo2QjFivyRtW5CPjM9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="252707116"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="252707116"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 18:06:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="777935759"
-Received: from w3.sh.intel.com ([10.74.142.175])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2022 18:06:33 -0800
-From:   Yonghua Huang <yonghua.huang@intel.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        reinette.chatre@intel.com, zhi.a.wang@intel.com,
-        yu1.wang@intel.com, fei1.Li@intel.com,
-        Yonghua Huang <yonghua.huang@intel.com>,
-        Fei Li <fei1.li@intel.com>
-Subject: [PATCH] virt: acrn: obtain pa from VMA with PFNMAP flag
-Date:   Mon, 28 Feb 2022 05:22:12 +0300
-Message-Id: <20220228022212.419406-1-yonghua.huang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 27 Feb 2022 21:28:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED30B522E8;
+        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70952D6E;
+        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
+Received: from [10.163.47.185] (unknown [10.163.47.185])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E4803F73D;
+        Sun, 27 Feb 2022 18:27:53 -0800 (PST)
+Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Dinh Nguyen <dinguyen@kernel.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
+ <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
+ <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
+ <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
+ <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
+ <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <bd239f45-3c9a-5faf-ba0e-610f2383720b@arm.com>
+Date:   Mon, 28 Feb 2022 07:57:51 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- acrn_vm_ram_map can't pin the user pages with VM_PFNMAP flag
- by calling get_user_pages_fast(), the PA(physical pages)
- may be mapped by kernel driver and set PFNMAP flag.
 
- This patch fixes logic to setup EPT mapping for PFN mapped RAM region
- by checking the memory attribute before adding EPT mapping for them.
 
-Fixes: 88f537d5e8dd ("virt: acrn: Introduce EPT mapping management")
-Signed-off-by: Yonghua Huang <yonghua.huang@intel.com>
-Signed-off-by: Fei Li <fei1.li@intel.com>
----
- drivers/virt/acrn/mm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+On 2/25/22 8:08 PM, Dinh Nguyen wrote:
+> 
+> 
+> On 2/25/22 08:29, Dinh Nguyen wrote:
+>>
+>>
+>> On 2/25/22 02:52, Anshuman Khandual wrote:
+>>>
+>>>
+>>> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
+>>>> Hi Anshuman,
+>>>>
+>>>> On 2/13/22 20:30, Anshuman Khandual wrote:
+>>>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>>>>> macros can be dropped which are no longer needed.
+>>>>>
+>>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>>>>> Cc: linux-kernel@vger.kernel.org
+>>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+>>>>> ---
+>>>>>    arch/nios2/Kconfig               |  1 +
+>>>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
+>>>>>    arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
+>>>>>    3 files changed, 46 insertions(+), 16 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+>>>>> index 33fd06f5fa41..85a58a357a3b 100644
+>>>>> --- a/arch/nios2/Kconfig
+>>>>> +++ b/arch/nios2/Kconfig
+>>>>> @@ -6,6 +6,7 @@ config NIOS2
+>>>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
+>>>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>>>>>        select ARCH_HAS_DMA_SET_UNCACHED
+>>>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
+>>>>>        select ARCH_NO_SWAP
+>>>>>        select COMMON_CLK
+>>>>>        select TIMER_OF
+>>>>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+>>>>> index 4a995fa628ee..2678dad58a63 100644
+>>>>> --- a/arch/nios2/include/asm/pgtable.h
+>>>>> +++ b/arch/nios2/include/asm/pgtable.h
+>>>>> @@ -40,24 +40,8 @@ struct mm_struct;
+>>>>>     */
+>>>>>      /* Remove W bit on private pages for COW support */
+>>>>> -#define __P000    MKP(0, 0, 0)
+>>>>> -#define __P001    MKP(0, 0, 1)
+>>>>> -#define __P010    MKP(0, 0, 0)    /* COW */
+>>>>> -#define __P011    MKP(0, 0, 1)    /* COW */
+>>>>> -#define __P100    MKP(1, 0, 0)
+>>>>> -#define __P101    MKP(1, 0, 1)
+>>>>> -#define __P110    MKP(1, 0, 0)    /* COW */
+>>>>> -#define __P111    MKP(1, 0, 1)    /* COW */
+>>>>>      /* Shared pages can have exact HW mapping */
+>>>>> -#define __S000    MKP(0, 0, 0)
+>>>>> -#define __S001    MKP(0, 0, 1)
+>>>>> -#define __S010    MKP(0, 1, 0)
+>>>>> -#define __S011    MKP(0, 1, 1)
+>>>>> -#define __S100    MKP(1, 0, 0)
+>>>>> -#define __S101    MKP(1, 0, 1)
+>>>>> -#define __S110    MKP(1, 1, 0)
+>>>>> -#define __S111    MKP(1, 1, 1)
+>>>>>      /* Used all over the kernel */
+>>>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+>>>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+>>>>> index 613fcaa5988a..311b2146a248 100644
+>>>>> --- a/arch/nios2/mm/init.c
+>>>>> +++ b/arch/nios2/mm/init.c
+>>>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+>>>>>    {
+>>>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
+>>>>>    }
+>>>>> +
+>>>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>>>> +{
+>>>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+>>>>> +    case VM_NONE:
+>>>>> +        return MKP(0, 0, 0);
+>>>>> +    case VM_READ:
+>>>>> +        return MKP(0, 0, 1);
+>>>>> +    /* COW */
+>>>>> +    case VM_WRITE:
+>>>>> +        return MKP(0, 0, 0);
+>>>>> +    /* COW */
+>>>>> +    case VM_WRITE | VM_READ:
+>>>>> +        return MKP(0, 0, 1);
+>>>>> +    case VM_EXEC:
+>>>>> +        return MKP(1, 0, 0);
+>>>>> +    case VM_EXEC | VM_READ:
+>>>>> +        return MKP(1, 0, 1);
+>>>>> +    /* COW */
+>>>>> +    case VM_EXEC | VM_WRITE:
+>>>>> +        return MKP(1, 0, 0);
+>>>>> +    /* COW */
+>>>>> +    case VM_EXEC | VM_WRITE | VM_READ:
+>>>>> +        return MKP(1, 0, 1);
+>>>>> +    case VM_SHARED:
+>>>>> +        return MKP(0, 0, 0);
+>>>>> +    case VM_SHARED | VM_READ:
+>>>>> +        return MKP(0, 0, 1);
+>>>>> +    case VM_SHARED | VM_WRITE:
+>>>>> +        return MKP(0, 1, 0);
+>>>>> +    case VM_SHARED | VM_WRITE | VM_READ:
+>>>>> +        return MKP(0, 1, 1);
+>>>>> +    case VM_SHARED | VM_EXEC:
+>>>>> +        return MKP(1, 0, 0);
+>>>>> +    case VM_SHARED | VM_EXEC | VM_READ:
+>>>>> +        return MKP(1, 0, 1);
+>>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
+>>>>> +        return MKP(1, 1, 0);
+>>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+>>>>> +        return MKP(1, 1, 1);
+>>>>> +    default:
+>>>>> +        BUILD_BUG();
+>>>>> +    }
+>>>>> +}
+>>>>> +EXPORT_SYMBOL(vm_get_page_prot);
+>>>>
+>>>> I'm getting this compile error after applying this patch when build NIOS2:
+>>>
+>>> Hmm, that is strange.
+>>>
+>>> Did you apply the entire series or atleast upto the nios2 patch ? Generic
+>>> vm_get_page_prot() should not be called (which is build complaining here)
+>>> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
+>>>
+>>> Ran a quick build test on nios2 for the entire series and also just upto
+>>> this particular patch, build was successful.
+>>>
+>>
+>> Ok, I did not apply the whole series, just this patch.
+>>
+> 
+> 
+> Is someone taking this whole series or should I just take this patch?
 
-diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
-index c4f2e15c8a2b..3b1b1e7a844b 100644
---- a/drivers/virt/acrn/mm.c
-+++ b/drivers/virt/acrn/mm.c
-@@ -162,10 +162,34 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
- 	void *remap_vaddr;
- 	int ret, pinned;
- 	u64 user_vm_pa;
-+	unsigned long pfn;
-+	struct vm_area_struct *vma;
- 
- 	if (!vm || !memmap)
- 		return -EINVAL;
- 
-+	mmap_read_lock(current->mm);
-+	vma = vma_lookup(current->mm, memmap->vma_base);
-+	if (vma && ((vma->vm_flags & VM_PFNMAP) != 0)) {
-+		if ((memmap->vma_base + memmap->len) > vma->vm_end) {
-+			mmap_read_unlock(current->mm);
-+			return -EINVAL;
-+		}
-+
-+		ret = follow_pfn(vma, memmap->vma_base, &pfn);
-+		mmap_read_unlock(current->mm);
-+		if (ret < 0) {
-+			dev_dbg(acrn_dev.this_device,
-+				"Failed to lookup PFN at VMA:%pK.\n", (void *)memmap->vma_base);
-+			return ret;
-+		}
-+
-+		return acrn_mm_region_add(vm, memmap->user_vm_pa,
-+			 PFN_PHYS(pfn), memmap->len,
-+			 ACRN_MEM_TYPE_WB, memmap->attr);
-+	}
-+	mmap_read_unlock(current->mm);
-+
- 	/* Get the page number of the map region */
- 	nr_pages = memmap->len >> PAGE_SHIFT;
- 	pages = vzalloc(nr_pages * sizeof(struct page *));
-
-base-commit: 73878e5eb1bd3c9656685ca60bc3a49d17311e0c
--- 
-2.25.1
-
+I expect the series (latest instead) will go via the mm tree, but will
+really appreciate your tags if you find the series acceptable.

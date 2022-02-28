@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BED4C72C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01244C7321
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiB1R2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S236687AbiB1Rca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236828AbiB1R2B (ORCPT
+        with ESMTP id S237435AbiB1Rb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:01 -0500
+        Mon, 28 Feb 2022 12:31:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943D175E7D;
-        Mon, 28 Feb 2022 09:27:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71718887AA;
+        Mon, 28 Feb 2022 09:28:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 757D06136C;
-        Mon, 28 Feb 2022 17:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D15C340E7;
-        Mon, 28 Feb 2022 17:27:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F30526143A;
+        Mon, 28 Feb 2022 17:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB1BC340E7;
+        Mon, 28 Feb 2022 17:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069233;
-        bh=2zvg6oDjmjAan848l3vmaj/3GJAGyiCXrLg5Ps/bTKk=;
+        s=korg; t=1646069326;
+        bh=ozyNr422uQ0GUh+t+nCUierq9Y7DXfgHQf5Yd8yQQ4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZbzp1BCMw/5Hb6S6YIbX/lzIvxGgbUYdEK1XsWEyIb83axHMgyA+wbHdZYh2Wwet
-         DXJexgH4pBAZbNES8rF1IGiHtcOUE5notpQEqrcZnpXDNeyhmT44qItzYmiAf63SIg
-         sqvono5hP5iQkk1DxX/RH8beTGeYfLUGW/x9Pb28=
+        b=O8ipY0gkwh8I8v5hNVCbb9JTHQOz8WQLJz66IBwl85Qj6HS7TanvIz+wiV0xxUBHc
+         R78DX61wh7U5naIxRIu/DW9ptVoMycOckqy2ovtlXxk4IPpYM71+jUSQMPYadIGYvA
+         vyieFKZS5ImgV4QKfPWmMIdPBFHZDkdCVkPYlW8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Matthias Reichl <hias@horus.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 4.14 12/31] drm/edid: Always set RGB444
+        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 02/34] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
 Date:   Mon, 28 Feb 2022 18:24:08 +0100
-Message-Id: <20220228172201.062133722@linuxfoundation.org>
+Message-Id: <20220228172208.634839251@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
+References: <20220228172207.090703467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Stefano Garzarella <sgarzare@redhat.com>
 
-commit ecbd4912a693b862e25cba0a6990a8c95b00721e upstream.
+commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
 
-In order to fill the drm_display_info structure each time an EDID is
-read, the code currently will call drm_add_display_info with the parsed
-EDID.
+vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+ownership. It expects current->mm to be valid.
 
-drm_add_display_info will then call drm_reset_display_info to reset all
-the fields to 0, and then set them to the proper value depending on the
-EDID.
+vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+the user has not done close(), so when we are in do_exit(). In this
+case current->mm is invalid and we're releasing the device, so we
+should clean it anyway.
 
-In the color_formats case, we will thus report that we don't support any
-color format, and then fill it back with RGB444 plus the additional
-formats described in the EDID Feature Support byte.
+Let's check the owner only when vhost_vsock_stop() is called
+by an ioctl.
 
-However, since that byte only contains format-related bits since the 1.4
-specification, this doesn't happen if the EDID is following an earlier
-specification. In turn, it means that for one of these EDID, we end up
-with color_formats set to 0.
+When invoked from release we can not fail so we don't check return
+code of vhost_vsock_stop(). We need to stop vsock even if it's not
+the owner.
 
-The EDID 1.3 specification never really specifies what it means by RGB
-exactly, but since both HDMI and DVI will use RGB444, it's fairly safe
-to assume it's supposed to be RGB444.
-
-Let's move the addition of RGB444 to color_formats earlier in
-drm_add_display_info() so that it's always set for a digital display.
-
-Fixes: da05a5a71ad8 ("drm: parse color format support for digital displays")
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Reported-by: Matthias Reichl <hias@horus.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220203115416.1137308-1-maxime@cerno.tech
+Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_edid.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vhost/vsock.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -4418,6 +4418,7 @@ static void drm_add_display_info(struct
- 	if (!(edid->input & DRM_EDID_INPUT_DIGITAL))
- 		return;
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -569,16 +569,18 @@ err:
+ 	return ret;
+ }
  
-+	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
- 	drm_parse_cea_ext(connector, edid);
+-static int vhost_vsock_stop(struct vhost_vsock *vsock)
++static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+ {
+ 	size_t i;
+-	int ret;
++	int ret = 0;
  
- 	/*
-@@ -4466,7 +4467,6 @@ static void drm_add_display_info(struct
- 	DRM_DEBUG("%s: Assigning EDID-1.4 digital sink color depth as %d bpc.\n",
- 			  connector->name, info->bpc);
+ 	mutex_lock(&vsock->dev.mutex);
  
--	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
- 	if (edid->features & DRM_EDID_FEATURE_RGB_YCRCB444)
- 		info->color_formats |= DRM_COLOR_FORMAT_YCRCB444;
- 	if (edid->features & DRM_EDID_FEATURE_RGB_YCRCB422)
+-	ret = vhost_dev_check_owner(&vsock->dev);
+-	if (ret)
+-		goto err;
++	if (check_owner) {
++		ret = vhost_dev_check_owner(&vsock->dev);
++		if (ret)
++			goto err;
++	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
+ 		struct vhost_virtqueue *vq = &vsock->vqs[i];
+@@ -693,7 +695,12 @@ static int vhost_vsock_dev_release(struc
+ 	 * inefficient.  Room for improvement here. */
+ 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+ 
+-	vhost_vsock_stop(vsock);
++	/* Don't check the owner, because we are in the release path, so we
++	 * need to stop the vsock device in any case.
++	 * vhost_vsock_stop() can not fail in this case, so we don't need to
++	 * check the return code.
++	 */
++	vhost_vsock_stop(vsock, false);
+ 	vhost_vsock_flush(vsock);
+ 	vhost_dev_stop(&vsock->dev);
+ 
+@@ -791,7 +798,7 @@ static long vhost_vsock_dev_ioctl(struct
+ 		if (start)
+ 			return vhost_vsock_start(vsock);
+ 		else
+-			return vhost_vsock_stop(vsock);
++			return vhost_vsock_stop(vsock, true);
+ 	case VHOST_GET_FEATURES:
+ 		features = VHOST_VSOCK_FEATURES;
+ 		if (copy_to_user(argp, &features, sizeof(features)))
 
 

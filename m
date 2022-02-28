@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DF94C72D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186C24C73FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiB1R3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S236240AbiB1Rj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbiB1R1x (ORCPT
+        with ESMTP id S238542AbiB1Rh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:27:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179998932A;
-        Mon, 28 Feb 2022 09:27:03 -0800 (PST)
+        Mon, 28 Feb 2022 12:37:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B8D517CB;
+        Mon, 28 Feb 2022 09:32:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A040AB815A6;
-        Mon, 28 Feb 2022 17:27:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71C1C340F0;
-        Mon, 28 Feb 2022 17:26:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD5E61358;
+        Mon, 28 Feb 2022 17:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5874DC340E7;
+        Mon, 28 Feb 2022 17:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069220;
-        bh=pkOCGlI0oawlvjr58pfeQHv4Iga9CO17MGI1+uxuUoM=;
+        s=korg; t=1646069571;
+        bh=Yw6SyZzdlpXfPY/msMJMT04oO7U+wsIO7oEnIK954Oo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dJW4Rk3s8lIf4nOjfSOKJyd30ZrnzsBJvsYYacuQem57+J7elMvKKnXwFzFrQrw7S
-         GYuedIuNTF0G2m4Vy+rqOtUlGj0zVOQGWoopbcFkpKw6MBc9O/IfgJmKMvijTCT6GJ
-         YbNpno/ZcUQzgfqLo0tv/DHfdLEmt5o/YFzH6UN0=
+        b=Q+IE83pH5qU2EAw1ZeU3IwZQyXPMo5gL7t/czI3FawRMigW9ZE4+aAm2lpL6UdLV4
+         K9IAKDz+L6+8+zYsO6HtZCPe68esZnR2tYIgm7xb/a9+YDR6uIyFdkieKbnWam0D20
+         5LUG1v6JOFU5Es4LLsuVOAKp+NYPIOVHMw616JeY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Carel Si <beibei.si@intel.com>, Jann Horn <jannh@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Baokun Li <libaokun1@huawei.com>
-Subject: [PATCH 4.9 29/29] fget: clarify and improve __fget_files() implementation
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Nick Gregory <Nick.Gregory@Sophos.com>
+Subject: [PATCH 5.10 15/80] netfilter: nf_tables_offload: incorrect flow offload action array size
 Date:   Mon, 28 Feb 2022 18:23:56 +0100
-Message-Id: <20220228172144.557686370@linuxfoundation.org>
+Message-Id: <20220228172313.447748713@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,138 +54,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit e386dfc56f837da66d00a078e5314bc8382fab83 upstream.
+commit b1a5983f56e371046dcf164f90bfaf704d2b89f6 upstream.
 
-Commit 054aa8d439b9 ("fget: check that the fd still exists after getting
-a ref to it") fixed a race with getting a reference to a file just as it
-was being closed.  It was a fairly minimal patch, and I didn't think
-re-checking the file pointer lookup would be a measurable overhead,
-since it was all right there and cached.
+immediate verdict expression needs to allocate one slot in the flow offload
+action array, however, immediate data expression does not need to do so.
 
-But I was wrong, as pointed out by the kernel test robot.
+fwd and dup expression need to allocate one slot, this is missing.
 
-The 'poll2' case of the will-it-scale.per_thread_ops benchmark regressed
-quite noticeably.  Admittedly it seems to be a very artificial test:
-doing "poll()" system calls on regular files in a very tight loop in
-multiple threads.
+Add a new offload_action interface to report if this expression needs to
+allocate one slot in the flow offload action array.
 
-That means that basically all the time is spent just looking up file
-descriptors without ever doing anything useful with them (not that doing
-'poll()' on a regular file is useful to begin with).  And as a result it
-shows the extra "re-check fd" cost as a sore thumb.
-
-Happily, the regression is fixable by just writing the code to loook up
-the fd to be better and clearer.  There's still a cost to verify the
-file pointer, but now it's basically in the noise even for that
-benchmark that does nothing else - and the code is more understandable
-and has better comments too.
-
-[ Side note: this patch is also a classic case of one that looks very
-  messy with the default greedy Myers diff - it's much more legible with
-  either the patience of histogram diff algorithm ]
-
-Link: https://lore.kernel.org/lkml/20211210053743.GA36420@xsang-OptiPlex-9020/
-Link: https://lore.kernel.org/lkml/20211213083154.GA20853@linux.intel.com/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Tested-by: Carel Si <beibei.si@intel.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Fixes: be2861dc36d7 ("netfilter: nft_{fwd,dup}_netdev: add offload support")
+Reported-and-tested-by: Nick Gregory <Nick.Gregory@Sophos.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file.c |   73 ++++++++++++++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 57 insertions(+), 16 deletions(-)
+ include/net/netfilter/nf_tables.h         |    2 +-
+ include/net/netfilter/nf_tables_offload.h |    2 --
+ net/netfilter/nf_tables_offload.c         |    3 ++-
+ net/netfilter/nft_dup_netdev.c            |    6 ++++++
+ net/netfilter/nft_fwd_netdev.c            |    6 ++++++
+ net/netfilter/nft_immediate.c             |   12 +++++++++++-
+ 6 files changed, 26 insertions(+), 5 deletions(-)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -692,28 +692,69 @@ void do_close_on_exec(struct files_struc
- 	spin_unlock(&files->file_lock);
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -825,7 +825,7 @@ struct nft_expr_ops {
+ 	int				(*offload)(struct nft_offload_ctx *ctx,
+ 						   struct nft_flow_rule *flow,
+ 						   const struct nft_expr *expr);
+-	u32				offload_flags;
++	bool				(*offload_action)(const struct nft_expr *expr);
+ 	const struct nft_expr_type	*type;
+ 	void				*data;
+ };
+--- a/include/net/netfilter/nf_tables_offload.h
++++ b/include/net/netfilter/nf_tables_offload.h
+@@ -67,8 +67,6 @@ struct nft_flow_rule {
+ 	struct flow_rule	*rule;
+ };
+ 
+-#define NFT_OFFLOAD_F_ACTION	(1 << 0)
+-
+ void nft_flow_rule_set_addr_type(struct nft_flow_rule *flow,
+ 				 enum flow_dissector_key_id addr_type);
+ 
+--- a/net/netfilter/nf_tables_offload.c
++++ b/net/netfilter/nf_tables_offload.c
+@@ -94,7 +94,8 @@ struct nft_flow_rule *nft_flow_rule_crea
+ 
+ 	expr = nft_expr_first(rule);
+ 	while (nft_expr_more(rule, expr)) {
+-		if (expr->ops->offload_flags & NFT_OFFLOAD_F_ACTION)
++		if (expr->ops->offload_action &&
++		    expr->ops->offload_action(expr))
+ 			num_actions++;
+ 
+ 		expr = nft_expr_next(expr);
+--- a/net/netfilter/nft_dup_netdev.c
++++ b/net/netfilter/nft_dup_netdev.c
+@@ -67,6 +67,11 @@ static int nft_dup_netdev_offload(struct
+ 	return nft_fwd_dup_netdev_offload(ctx, flow, FLOW_ACTION_MIRRED, oif);
  }
  
--static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
-+static inline struct file *__fget_files_rcu(struct files_struct *files,
-+		unsigned int fd, fmode_t mask, unsigned int refs)
- {
--	struct files_struct *files = current->files;
--	struct file *file;
-+	for (;;) {
-+		struct file *file;
-+		struct fdtable *fdt = rcu_dereference_raw(files->fdt);
-+		struct file __rcu **fdentry;
- 
--	rcu_read_lock();
--loop:
--	file = fcheck_files(files, fd);
--	if (file) {
--		/* File object ref couldn't be taken.
--		 * dup2() atomicity guarantee is the reason
--		 * we loop to catch the new file (or NULL pointer)
-+		if (unlikely(fd >= fdt->max_fds))
-+			return NULL;
-+
-+		fdentry = fdt->fd + array_index_nospec(fd, fdt->max_fds);
-+		file = rcu_dereference_raw(*fdentry);
-+		if (unlikely(!file))
-+			return NULL;
-+
-+		if (unlikely(file->f_mode & mask))
-+			return NULL;
-+
-+		/*
-+		 * Ok, we have a file pointer. However, because we do
-+		 * this all locklessly under RCU, we may be racing with
-+		 * that file being closed.
-+		 *
-+		 * Such a race can take two forms:
-+		 *
-+		 *  (a) the file ref already went down to zero,
-+		 *      and get_file_rcu_many() fails. Just try
-+		 *      again:
- 		 */
--		if (file->f_mode & mask)
--			file = NULL;
--		else if (!get_file_rcu_many(file, refs))
--			goto loop;
--		else if (__fcheck_files(files, fd) != file) {
-+		if (unlikely(!get_file_rcu_many(file, refs)))
-+			continue;
-+
-+		/*
-+		 *  (b) the file table entry has changed under us.
-+		 *       Note that we don't need to re-check the 'fdt->fd'
-+		 *       pointer having changed, because it always goes
-+		 *       hand-in-hand with 'fdt'.
-+		 *
-+		 * If so, we need to put our refs and try again.
-+		 */
-+		if (unlikely(rcu_dereference_raw(files->fdt) != fdt) ||
-+		    unlikely(rcu_dereference_raw(*fdentry) != file)) {
- 			fput_many(file, refs);
--			goto loop;
-+			continue;
- 		}
-+
-+		/*
-+		 * Ok, we have a ref to the file, and checked that it
-+		 * still exists.
-+		 */
-+		return file;
- 	}
++static bool nft_dup_netdev_offload_action(const struct nft_expr *expr)
++{
++	return true;
 +}
 +
-+
-+static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
-+{
-+	struct files_struct *files = current->files;
-+	struct file *file;
-+
-+	rcu_read_lock();
-+	file = __fget_files_rcu(files, fd, mask, refs);
- 	rcu_read_unlock();
+ static struct nft_expr_type nft_dup_netdev_type;
+ static const struct nft_expr_ops nft_dup_netdev_ops = {
+ 	.type		= &nft_dup_netdev_type,
+@@ -75,6 +80,7 @@ static const struct nft_expr_ops nft_dup
+ 	.init		= nft_dup_netdev_init,
+ 	.dump		= nft_dup_netdev_dump,
+ 	.offload	= nft_dup_netdev_offload,
++	.offload_action	= nft_dup_netdev_offload_action,
+ };
  
- 	return file;
+ static struct nft_expr_type nft_dup_netdev_type __read_mostly = {
+--- a/net/netfilter/nft_fwd_netdev.c
++++ b/net/netfilter/nft_fwd_netdev.c
+@@ -77,6 +77,11 @@ static int nft_fwd_netdev_offload(struct
+ 	return nft_fwd_dup_netdev_offload(ctx, flow, FLOW_ACTION_REDIRECT, oif);
+ }
+ 
++static bool nft_fwd_netdev_offload_action(const struct nft_expr *expr)
++{
++	return true;
++}
++
+ struct nft_fwd_neigh {
+ 	enum nft_registers	sreg_dev:8;
+ 	enum nft_registers	sreg_addr:8;
+@@ -219,6 +224,7 @@ static const struct nft_expr_ops nft_fwd
+ 	.dump		= nft_fwd_netdev_dump,
+ 	.validate	= nft_fwd_validate,
+ 	.offload	= nft_fwd_netdev_offload,
++	.offload_action	= nft_fwd_netdev_offload_action,
+ };
+ 
+ static const struct nft_expr_ops *
+--- a/net/netfilter/nft_immediate.c
++++ b/net/netfilter/nft_immediate.c
+@@ -213,6 +213,16 @@ static int nft_immediate_offload(struct
+ 	return 0;
+ }
+ 
++static bool nft_immediate_offload_action(const struct nft_expr *expr)
++{
++	const struct nft_immediate_expr *priv = nft_expr_priv(expr);
++
++	if (priv->dreg == NFT_REG_VERDICT)
++		return true;
++
++	return false;
++}
++
+ static const struct nft_expr_ops nft_imm_ops = {
+ 	.type		= &nft_imm_type,
+ 	.size		= NFT_EXPR_SIZE(sizeof(struct nft_immediate_expr)),
+@@ -224,7 +234,7 @@ static const struct nft_expr_ops nft_imm
+ 	.dump		= nft_immediate_dump,
+ 	.validate	= nft_immediate_validate,
+ 	.offload	= nft_immediate_offload,
+-	.offload_flags	= NFT_OFFLOAD_F_ACTION,
++	.offload_action	= nft_immediate_offload_action,
+ };
+ 
+ struct nft_expr_type nft_imm_type __read_mostly = {
 
 

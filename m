@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBFC4C635F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 07:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139414C636B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbiB1GvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 01:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S233469AbiB1G4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 01:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiB1GvW (ORCPT
+        with ESMTP id S230046AbiB1G4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 01:51:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966FE66FB7;
-        Sun, 27 Feb 2022 22:50:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F28D61004;
-        Mon, 28 Feb 2022 06:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9679FC340F6;
-        Mon, 28 Feb 2022 06:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646031043;
-        bh=2vbR4V4J6Cl+G68h2G7HleCPAcHpAjpd5tVKzN3DzfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rG9vBVuLZVmRU5mV+q2sCGqqiMY4Be4m9BXjNnwq5ZHCV4KCMOXXHIf10GvlfGs6G
-         A1MBytsQt+8GYtqHnZhzjV7oklq5SfV2Nug+Gzm7d73u971rZQGhJT9IizJqdmxvoP
-         zGIZ82TDL5CoTklP/UufP01m8lOT2Thg+lt+a7gDa6AnPH8x6h+Q0rpPnhzCiZuhds
-         KiSIGQsJEFC5tMmwCLG9BitLWcjqYbaJMtrtvh4aZAK5ZC3dlaQVu7G2RItGpGanfJ
-         Krp6IEyGU4a03Ix/j/BV//Za4Gm0PLmaFF1qqx9i73jo165hv8Zc4cRIQFn5+xbvcy
-         li3l6jr/LB/7g==
-Date:   Mon, 28 Feb 2022 08:50:34 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] MIPS: Refactor early_parse_memmap() to fix
- memmap= parameter
-Message-ID: <YhxwuixN+9D8mRF2@kernel.org>
-References: <1646029866-6692-1-git-send-email-yangtiezhu@loongson.cn>
- <1646029866-6692-4-git-send-email-yangtiezhu@loongson.cn>
+        Mon, 28 Feb 2022 01:56:49 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C5D53E1A;
+        Sun, 27 Feb 2022 22:56:11 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 0AD721F4382C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646031370;
+        bh=rE18sn0vl3KdSuH6my5m3OeJ1UdSDBnjTNzG6MNt/KA=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=av2etI9C64z7kH8oby+4RXIFve1/MfABYDgxG9Bg82wMbpSVpSvfJXxLXEW68XAVp
+         QFtfBoYsKRuvuEJAUq3k0UdAE+vIW2PiRAO/LGfWf7R2mc8wx8kDlR8/UHqq2pEVhB
+         fstuG9miep2o8vXjMeVsfwzjERibRm/VyezHWNKR3/oVbIFICJpL1Xny+s6daJrn0c
+         higv1t4Uiw5GFewtpN6DLULRmsKGeJhWeWvk6u3BKDA8+1xo5eStu10fc63XgQcs3h
+         kq3a8hie9mmyByxpC+8fi2vCCCVl+fxzYLVrkimrAa6RZ9QpWQqWVqX/gT72T+5p98
+         OnXzlJf2t+3yw==
+Message-ID: <52f17759-c7b9-c13b-2c58-f9f2656d26f6@collabora.com>
+Date:   Mon, 28 Feb 2022 11:55:58 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646029866-6692-4-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        kernelci@groups.io, Will Deacon <will@kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220224212335.3045905-1-usama.anjum@collabora.com>
+ <edf398a7-b1a1-c7c9-5128-f37cfc3a5c95@linuxfoundation.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <edf398a7-b1a1-c7c9-5128-f37cfc3a5c95@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,134 +59,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 02:31:05PM +0800, Tiezhu Yang wrote:
-> According to Documentation/admin-guide/kernel-parameters.txt,
-> the kernel command-line parameter memmap= means "Force usage
-> of a specific region of memory", but when add "memmap=3G@64M"
-> to the command-line, kernel boot hangs in sparse_init().
-> 
-> In order to support memmap=limit@base, refactor the function
-> early_parse_memmap() and then use memblock_mem_range_remove_map()
-> to limit the memory region.
-> 
-> With this patch, when add "memmap=3G@64M" to the command-line,
-> the kernel boots successfully, we can see the following messages:
-> 
->   [    0.000000] Memory limited to 64MB-3136MB
->   ...
->   [    0.000000] Early memory node ranges
->   [    0.000000]   node   0: [mem 0x0000000004000000-0x000000000effffff]
->   [    0.000000]   node   0: [mem 0x0000000090200000-0x00000000ffffffff]
->   [    0.000000]   node   0: [mem 0x0000000120000000-0x00000001653fffff]
->   ...
->   [    0.000000] Memory: 3070816K/3147776K available (...)
-> 
-> When add "memmap=128M@64M nr_cpus=1 init 3" to the command-line,
-> the kernel also boots successfully, we can see the following messages:
-> 
->   [    0.000000] Memory limited to 64MB-192MB
->   ...
->   [    0.000000] Early memory node ranges
->   [    0.000000]   node   0: [mem 0x0000000004000000-0x000000000c1fffff]
->   ...
->   [    0.000000] Memory: 95312K/133120K available (...)
-> 
-> After login, the output of free command is consistent with the
-> above log.
-> 
-> By the way, this commit only supports memmap=limit@base format,
-> the other formats such as memmap=limit#base, memmap=limit$base
-> and memmap=limit!base can be added if they are necessary in the
-> future.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/kernel/setup.c | 42 +++++++++---------------------------------
->  1 file changed, 9 insertions(+), 33 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index 6b6d718..e3b1f2e 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -340,6 +340,7 @@ static void __init bootmem_init(void)
->  
->  static int usermem __initdata;
->  static phys_addr_t memory_limit;
-> +static phys_addr_t memory_base;
->  
->  static int __init early_parse_mem(char *p)
->  {
-> @@ -355,42 +356,17 @@ early_param("mem", early_parse_mem);
->  
->  static int __init early_parse_memmap(char *p)
->  {
-> -	char *oldp;
-> -	u64 start_at, mem_size;
-> -
->  	if (!p)
-> -		return -EINVAL;
-> +		return 1;
->  
-> -	if (!strncmp(p, "exactmap", 8)) {
-> -		pr_err("\"memmap=exactmap\" invalid on MIPS\n");
-> -		return 0;
-> -	}
-> +	memory_limit = memparse(p, &p) & PAGE_MASK;
-> +	if (*p == '@')
-> +		memory_base = memparse(p + 1, &p) & PAGE_MASK;
->  
-> -	oldp = p;
-> -	mem_size = memparse(p, &p);
-> -	if (p == oldp)
-> -		return -EINVAL;
-> -
-> -	if (*p == '@') {
-> -		start_at = memparse(p+1, &p);
-> -		memblock_add(start_at, mem_size);
-> -	} else if (*p == '#') {
-> -		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on MIPS\n");
-> -		return -EINVAL;
-> -	} else if (*p == '$') {
-> -		start_at = memparse(p+1, &p);
-> -		memblock_add(start_at, mem_size);
-> -		memblock_reserve(start_at, mem_size);
-> -	} else {
-> -		pr_err("\"memmap\" invalid format!\n");
-> -		return -EINVAL;
+Hi,
 
-This breaks backward compatibility for systems that use memmap=X#Y and
-memmap=X$Y.
+Andrew had already accepted the patch. I'll send an iteration.
 
-For your use case it is enough to implement "memmap=exactmap" that will
-drop memory provided by the firmware and only use ranges supplied in
-memmap=
-
-> -	}
-> +	pr_notice("Memory limited to %lldMB-%lldMB\n",
-> +		  memory_base >> 20, (memory_base + memory_limit) >> 20);
->  
-> -	if (*p == '\0') {
-> -		usermem = 1;
-> -		return 0;
-> -	} else
-> -		return -EINVAL;
-> +	return 0;
->  }
->  early_param("memmap", early_parse_memmap);
->  
-> @@ -667,7 +643,7 @@ static void __init arch_mem_init(char **cmdline_p)
->  		__pa_symbol(&__nosave_end) - __pa_symbol(&__nosave_begin));
->  
->  	/* Limit the memory. */
-> -	memblock_enforce_memory_limit(memory_limit);
-> +	memblock_mem_range_remove_map(memory_base, memory_limit);
->  	memblock_allow_resize();
->  
->  	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-> -- 
-> 2.1.0
+On 2/26/22 5:35 AM, Shuah Khan wrote:
+>> +#define PAGEMAP_PATH        "/proc/self/pagemap"
 > 
+> Why is this names PATH - it is the file name right?
+I'll update the names of the macros.
 
--- 
-Sincerely yours,
-Mike.
+>> +
+>> +int clear_refs;
+>> +int pagemap;
+>> +
+> 
+> Get rid of these globals and pass these in - please find name
+> that clearly indicates them as fds
+> 
+I'll update their names to indicate fds. This is a standalone test
+application. Shouldn't the usage of global variables be fine?
+
+>> +static int check_page(char *start, int page_num, int clear)
+>> +{
+>> +    unsigned long pfn = (unsigned long)start / pagesize;
+>> +    uint64_t entry;
+>> +    int ret;
+>> +
+>> +    ret = pread(pagemap, &entry, sizeof(entry), (pfn + page_num) *
+>> sizeof(entry));
+>> +    if (ret != sizeof(entry))
+>> +        ksft_exit_fail_msg("reading pagemap failed\n");
+>> +    if (clear)
+>> +        clear_all_refs();
+>> +
+>> +    return ((entry >> 55) & 1);
+> 
+> Add a define for 55 insead of hardcoding with a meaningful name
+> that describes what this value is.
+> 
+Sure.
+
+>> +}
+>> +
+>> +static void test_simple(void)
+>> +{
+>> +    int i;
+>> +    char *map;
+>> +
+>> +    map = aligned_alloc(pagesize, mmap_size);
+>> +    if (!map)
+>> +        ksft_exit_fail_msg("mmap failed\n");
+>> +
+>> +    clear_all_refs();
+> 
+> If clear_all_refs() fails and exits, when does map get freed?
+I'll fix this.
+
+>> +/*
+>> + * read_pmd_pagesize(), check_for_pattern() and check_huge() adapted
+>> + * from 'tools/testing/selftest/vm/split_huge_page_test.c'
+> 
+> Don't use the full path here - just use the file name
+I'll update the comment.
+
+>> +
+>> +int main(int argc, char **argv)
+>> +{
+>> +    ksft_print_header();
+>> +    ksft_set_plan(5);
+>> +
+>> +    pagemap = open(PAGEMAP_PATH, O_RDONLY);
+>> +    if (pagemap < 0)
+>> +        ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP_PATH);
+> 
+> Can non-root user open this file? If not, when non-root user fails to
+> open, it is a skip not fail
+Yes, non-root user can open this file. I'll check the usage of skip
+macros as well.
+
+>> +    test_simple();
+>> +    test_vma_reuse();
+>> +    test_hugepage();
+> 
+> What happens when these tests fail?
+They are independent. Each of them marks the test pass or fail on its
+own. If one of them fails, others will keep on executing next.
+
+>> +
+>> +    return ksft_exit_pass();
+>> +}
+>>
+> 
+> Where do CLEAR_REFS_PATH etc. get closed. Please take a look
+> at the error paths carefully. I would like to see the output for
+> this test. Please include it in the change log.
+I'll update and include the output as well.
+
+> thanks,
+> -- Shuah

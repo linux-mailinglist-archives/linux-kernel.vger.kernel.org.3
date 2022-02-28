@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC764C74C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D6A4C7762
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiB1Rqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S236024AbiB1SPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbiB1Rnv (ORCPT
+        with ESMTP id S240642AbiB1SJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:43:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661A59BBA1;
-        Mon, 28 Feb 2022 09:35:57 -0800 (PST)
+        Mon, 28 Feb 2022 13:09:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343B5E76B;
+        Mon, 28 Feb 2022 09:48:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B1EBACE17AC;
-        Mon, 28 Feb 2022 17:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D76C340E7;
-        Mon, 28 Feb 2022 17:35:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A73860909;
+        Mon, 28 Feb 2022 17:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B00C340E7;
+        Mon, 28 Feb 2022 17:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069754;
-        bh=HPk5hm2HB6OtjumJUjenYe8eRWx4uz9qEzBAfyzBkdo=;
+        s=korg; t=1646070527;
+        bh=Ld3mo65E0/KE6WkoUpUGYPKrTJ2wuyv9AoP0+dIK3uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MS9STqSTbPyOulapWIdVlxH1wt/o35oS5FXvzT8aYlossjfQ0zovlA1jcKh92BZKF
-         hIya1MWY3Gz8/yAZ8WqpAGGIuxGV7ZZgQl/GJgKtdqu3UhoVfN/z9gXocCl+YPShuC
-         aS9JamZ1B3bGDHAjKYWEOYyZHzvzELl6bH+Eq8xw=
+        b=kgMIFp0kd/C9EHZyMqDnv/UGSujzmye9vKg2DGryvxJhA6kO45qy4fwDsgY0XrBF1
+         JNGUCmYJckv4sAzDWI5ryCB+3OqN/0a7y5kwL1rKK2gOpBh9K01un81IGEMEY1J7MF
+         xlIT/FGBRJzG3MwkI+KiNENV5+DljzL7DSs6oRG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 5.10 80/80] memblock: use kfree() to release kmalloced memblock regions
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 139/164] btrfs: defrag: dont defrag extents which are already at max capacity
 Date:   Mon, 28 Feb 2022 18:25:01 +0100
-Message-Id: <20220228172321.477435372@linuxfoundation.org>
+Message-Id: <20220228172412.565652216@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +54,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Qu Wenruo <wqu@suse.com>
 
-commit c94afc46cae7ad41b2ad6a99368147879f4b0e56 upstream.
+commit 979b25c300dbcbcb750e88715018e04e854de6c6 upstream.
 
-memblock.{reserved,memory}.regions may be allocated using kmalloc() in
-memblock_double_array(). Use kfree() to release these kmalloced regions
-indicated by memblock_{reserved,memory}_in_slab.
+[BUG]
+For compressed extents, defrag ioctl will always try to defrag any
+compressed extents, wasting not only IO but also CPU time to
+compress/decompress:
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Fixes: 3010f876500f ("mm: discard memblock data later")
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+   mkfs.btrfs -f $DEV
+   mount -o compress $DEV $MNT
+   xfs_io -f -c "pwrite -S 0xab 0 128K" $MNT/foobar
+   sync
+   xfs_io -f -c "pwrite -S 0xcd 128K 128K" $MNT/foobar
+   sync
+   echo "=== before ==="
+   xfs_io -c "fiemap -v" $MNT/foobar
+   btrfs filesystem defrag $MNT/foobar
+   sync
+   echo "=== after ==="
+   xfs_io -c "fiemap -v" $MNT/foobar
+
+Then it shows the 2 128K extents just get COW for no extra benefit, with
+extra IO/CPU spent:
+
+    === before ===
+    /mnt/btrfs/file1:
+     EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+       0: [0..255]:        26624..26879       256   0x8
+       1: [256..511]:      26632..26887       256   0x9
+    === after ===
+    /mnt/btrfs/file1:
+     EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+       0: [0..255]:        26640..26895       256   0x8
+       1: [256..511]:      26648..26903       256   0x9
+
+This affects not only v5.16 (after the defrag rework), but also v5.15
+(before the defrag rework).
+
+[CAUSE]
+>From the very beginning, btrfs defrag never checks if one extent is
+already at its max capacity (128K for compressed extents, 128M
+otherwise).
+
+And the default extent size threshold is 256K, which is already beyond
+the compressed extent max size.
+
+This means, by default btrfs defrag ioctl will mark all compressed
+extent which is not adjacent to a hole/preallocated range for defrag.
+
+[FIX]
+Introduce a helper to grab the maximum extent size, and then in
+defrag_collect_targets() and defrag_check_next_extent(), reject extents
+which are already at their max capacity.
+
+Reported-by: Filipe Manana <fdmanana@suse.com>
+CC: stable@vger.kernel.org # 5.16
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memblock.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ fs/btrfs/ioctl.c |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -366,14 +366,20 @@ void __init memblock_discard(void)
- 		addr = __pa(memblock.reserved.regions);
- 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
- 				  memblock.reserved.max);
--		__memblock_free_late(addr, size);
-+		if (memblock_reserved_in_slab)
-+			kfree(memblock.reserved.regions);
-+		else
-+			__memblock_free_late(addr, size);
- 	}
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -1020,6 +1020,13 @@ static struct extent_map *defrag_lookup_
+ 	return em;
+ }
  
- 	if (memblock.memory.regions != memblock_memory_init_regions) {
- 		addr = __pa(memblock.memory.regions);
- 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
- 				  memblock.memory.max);
--		__memblock_free_late(addr, size);
-+		if (memblock_memory_in_slab)
-+			kfree(memblock.memory.regions);
-+		else
-+			__memblock_free_late(addr, size);
- 	}
++static u32 get_extent_max_capacity(const struct extent_map *em)
++{
++	if (test_bit(EXTENT_FLAG_COMPRESSED, &em->flags))
++		return BTRFS_MAX_COMPRESSED;
++	return BTRFS_MAX_EXTENT_SIZE;
++}
++
+ static bool defrag_check_next_extent(struct inode *inode, struct extent_map *em,
+ 				     bool locked)
+ {
+@@ -1036,6 +1043,12 @@ static bool defrag_check_next_extent(str
+ 		goto out;
+ 	if (test_bit(EXTENT_FLAG_PREALLOC, &next->flags))
+ 		goto out;
++	/*
++	 * If the next extent is at its max capacity, defragging current extent
++	 * makes no sense, as the total number of extents won't change.
++	 */
++	if (next->len >= get_extent_max_capacity(em))
++		goto out;
+ 	/* Physically adjacent and large enough */
+ 	if ((em->block_start + em->block_len == next->block_start) &&
+ 	    (em->block_len > SZ_128K && next->block_len > SZ_128K))
+@@ -1233,6 +1246,13 @@ static int defrag_collect_targets(struct
+ 		if (range_len >= extent_thresh)
+ 			goto next;
  
- 	memblock_memory = NULL;
++		/*
++		 * Skip extents already at its max capacity, this is mostly for
++		 * compressed extents, which max cap is only 128K.
++		 */
++		if (em->len >= get_extent_max_capacity(em))
++			goto next;
++
+ 		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
+ 							  locked);
+ 		if (!next_mergeable) {
 
 

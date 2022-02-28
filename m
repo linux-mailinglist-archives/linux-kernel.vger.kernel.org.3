@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E514C7287
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9C84C7526
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbiB1R0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S239038AbiB1Rvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbiB1R0Z (ORCPT
+        with ESMTP id S240013AbiB1Ro6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:26:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFF75E6B;
-        Mon, 28 Feb 2022 09:25:46 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CD427CE4;
+        Mon, 28 Feb 2022 09:37:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD25DB815A5;
-        Mon, 28 Feb 2022 17:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11042C340F4;
-        Mon, 28 Feb 2022 17:25:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EABE61357;
+        Mon, 28 Feb 2022 17:37:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A3AC340E7;
+        Mon, 28 Feb 2022 17:37:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069143;
-        bh=Vv7wFnUGlLa3rURQC2K9jde3PYf5CPhS7IZInxX0iB0=;
+        s=korg; t=1646069850;
+        bh=VcvQDz9VZtmgeBdwB1Xfn3XxoSMMVM530yEXxV6FkUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mYck5cBhKsgarVNK0pTvm2l+/iT7xQl5uEjfKIuvR/78zCOOtEcL+TzMQKdGCFHhF
-         nkScTEPDTtu0uT66ddNWeQq6DQ+4DstVN0DCmnYDj1d0g+HlT7lZ0LW5Dl+fjm6SbJ
-         SyE1aW8qd48oMSJopETavQkRTC34SyR/OMgtCxok=
+        b=yl03wHa/ZF6x6CLXBIK4TukTQQtkNVaD/lr9bEREQxQq9Fa0zBVy+JaESYjNT+cNE
+         Ok8Zb0C0YPpd+fMMO5VJq+nnGQow6JpbWjbmugkAqytIS1HvuCthceSipDHlLRukM8
+         vWU4R16SvayNpb62JINqNuZKfl3FoXU63mv+XvAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, david regan <dregan@mail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 4.9 01/29] mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
+        stable@vger.kernel.org, Mikko Perttunen <mperttunen@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.15 034/139] gpu: host1x: Always return syncpoint value when waiting
 Date:   Mon, 28 Feb 2022 18:23:28 +0100
-Message-Id: <20220228172141.922269337@linuxfoundation.org>
+Message-Id: <20220228172351.358052186@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,45 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: david regan <dregan@mail.com>
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-commit 36415a7964711822e63695ea67fede63979054d9 upstream.
+commit 184b58fa816fb5ee1854daf0d430766422bf2a77 upstream.
 
-The brcmnand driver contains a bug in which if a page (example 2k byte)
-is read from the parallel/ONFI NAND and within that page a subpage (512
-byte) has correctable errors which is followed by a subpage with
-uncorrectable errors, the page read will return the wrong status of
-correctable (as opposed to the actual status of uncorrectable.)
+The new TegraDRM UAPI uses syncpoint waiting with timeout set to
+zero to indicate reading the syncpoint value. To support that we
+need to return the syncpoint value always when waiting.
 
-The bug is in function brcmnand_read_by_pio where there is a check for
-uncorrectable bits which will be preempted if a previous status for
-correctable bits is detected.
-
-The fix is to stop checking for bad bits only if we already have a bad
-bits status.
-
-Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
-Signed-off-by: david regan <dregan@mail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/trinity-478e0c09-9134-40e8-8f8c-31c371225eda-1643237024774@3c-app-mailcom-lxa02
-[florian: make patch apply to 4.14, file was renamed]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 44e961381354 ("drm/tegra: Implement syncpoint wait UAPI")
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/brcmnand/brcmnand.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/host1x/syncpt.c |   19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
 
---- a/drivers/mtd/nand/brcmnand/brcmnand.c
-+++ b/drivers/mtd/nand/brcmnand/brcmnand.c
-@@ -1637,7 +1637,7 @@ static int brcmnand_read_by_pio(struct m
- 					mtd->oobsize / trans,
- 					host->hwcfg.sector_size_1k);
+--- a/drivers/gpu/host1x/syncpt.c
++++ b/drivers/gpu/host1x/syncpt.c
+@@ -225,27 +225,12 @@ int host1x_syncpt_wait(struct host1x_syn
+ 	void *ref;
+ 	struct host1x_waitlist *waiter;
+ 	int err = 0, check_count = 0;
+-	u32 val;
  
--		if (!ret) {
-+		if (ret != -EBADMSG) {
- 			*err_addr = brcmnand_read_reg(ctrl,
- 					BRCMNAND_UNCORR_ADDR) |
- 				((u64)(brcmnand_read_reg(ctrl,
+ 	if (value)
+-		*value = 0;
+-
+-	/* first check cache */
+-	if (host1x_syncpt_is_expired(sp, thresh)) {
+-		if (value)
+-			*value = host1x_syncpt_load(sp);
++		*value = host1x_syncpt_load(sp);
+ 
++	if (host1x_syncpt_is_expired(sp, thresh))
+ 		return 0;
+-	}
+-
+-	/* try to read from register */
+-	val = host1x_hw_syncpt_load(sp->host, sp);
+-	if (host1x_syncpt_is_expired(sp, thresh)) {
+-		if (value)
+-			*value = val;
+-
+-		goto done;
+-	}
+ 
+ 	if (!timeout) {
+ 		err = -EAGAIN;
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB41A4C7746
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4510E4C75FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239961AbiB1SOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S239713AbiB1R6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:58:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241725AbiB1SKR (ORCPT
+        with ESMTP id S240664AbiB1Ry3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:10:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28D68C7CE;
-        Mon, 28 Feb 2022 09:50:30 -0800 (PST)
+        Mon, 28 Feb 2022 12:54:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97819DF66;
+        Mon, 28 Feb 2022 09:42:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 453C3CE1795;
-        Mon, 28 Feb 2022 17:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFB3C340E7;
-        Mon, 28 Feb 2022 17:49:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 310B6B815B8;
+        Mon, 28 Feb 2022 17:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8762DC340E7;
+        Mon, 28 Feb 2022 17:42:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070595;
-        bh=YQezQJUNcFWu3d2mWXA9MSAfCs1H1MFpPFZm7wJocsc=;
+        s=korg; t=1646070156;
+        bh=MO36n/M99U6IL4V75gmdNp4IhLFS2AB+rBq5TnOYexA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eYKJ3UqqjvFwECnjAeN3dwQVxt477GIkO1rFM46jhTBZyKx1ERnnAWRyJNArwJ4W2
-         UdcWkhyGiIpqY4/3EE0h5XwgiIz4mDibjQw3S3KbLGy/2Zsq+IWe5S/FZoA0Jtt4NX
-         RYv7LUiUTPUehHBjqSwI1XAN/LGyjg0Az7TYKVdU=
+        b=WCagVHJxjDW9cZ0Yk+pP/MF/1cNz0JmDmE8s0OLTCpSX7jkQVnIjaVZe2ma/sQdvb
+         iyzmrytDuUoMQUUjwoyaXmxidY9LbgPz4c1aeqBh++rdiltGbyV5DgDISiNXtinCTz
+         Tg30FW+rJokxVjpU+qC6Hcn5E7qOWwbRR8odeRnQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuansheng Liu <chuansheng.liu@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.16 146/164] thermal: int340x: fix memory leak in int3400_notify()
-Date:   Mon, 28 Feb 2022 18:25:08 +0100
-Message-Id: <20220228172413.106173595@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.15 135/139] pinctrl: k210: Fix bias-pull-up
+Date:   Mon, 28 Feb 2022 18:25:09 +0100
+Message-Id: <20220228172401.892752402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuansheng Liu <chuansheng.liu@intel.com>
+From: Sean Anderson <seanga2@gmail.com>
 
-commit 3abea10e6a8f0e7804ed4c124bea2d15aca977c8 upstream.
+commit e9f7b9228a94778edb7a63fde3c0a3c5bb793064 upstream.
 
-It is easy to hit the below memory leaks in my TigerLake platform:
+Using bias-pull-up would actually cause the pin to have its pull-down
+enabled. Fix this.
 
-unreferenced object 0xffff927c8b91dbc0 (size 32):
-  comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
-  hex dump (first 32 bytes):
-    4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400 The
-    72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  rmal.kkkkkkkkkk.
-  backtrace:
-    [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
-    [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
-    [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
-    [<ffffffffc04cb662>] int3400_notify+0x82/0x120 [int3400_thermal]
-    [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
-    [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
-    [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
-    [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
-    [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
-    [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
-
-Fix it by calling kfree() accordingly.
-
-Fixes: 38e44da59130 ("thermal: int3400_thermal: process "thermal table changed" event")
-Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
-Cc: 4.14+ <stable@vger.kernel.org> # 4.14+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: d4c34d09ab03 ("pinctrl: Add RISC-V Canaan Kendryte K210 FPIOA driver")
+Link: https://lore.kernel.org/r/20220209182822.640905-1-seanga2@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pinctrl/pinctrl-k210.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle h
- 	thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d", therm_event);
- 	thermal_prop[4] = NULL;
- 	kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE, thermal_prop);
-+	kfree(thermal_prop[0]);
-+	kfree(thermal_prop[1]);
-+	kfree(thermal_prop[2]);
-+	kfree(thermal_prop[3]);
- }
- 
- static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
+--- a/drivers/pinctrl/pinctrl-k210.c
++++ b/drivers/pinctrl/pinctrl-k210.c
+@@ -527,7 +527,7 @@ static int k210_pinconf_set_param(struct
+ 	case PIN_CONFIG_BIAS_PULL_UP:
+ 		if (!arg)
+ 			return -EINVAL;
+-		val |= K210_PC_PD;
++		val |= K210_PC_PU;
+ 		break;
+ 	case PIN_CONFIG_DRIVE_STRENGTH:
+ 		arg *= 1000;
 
 

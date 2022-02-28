@@ -2,264 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614074C7805
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2A94C780A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiB1SjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S240682AbiB1SkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240481AbiB1Sig (ORCPT
+        with ESMTP id S240688AbiB1Sjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:38:36 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763204F45F;
-        Mon, 28 Feb 2022 10:26:30 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V5oRhK-_1646072786;
-Received: from 192.168.31.208(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V5oRhK-_1646072786)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 01 Mar 2022 02:26:27 +0800
-Message-ID: <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
-Date:   Tue, 1 Mar 2022 02:26:26 +0800
+        Mon, 28 Feb 2022 13:39:54 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D3F45AD0;
+        Mon, 28 Feb 2022 10:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646072959; x=1677608959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DG0iph9aIuoUSLMv9ZA0QMn6ZepGeNmJgoaLALZu/EQ=;
+  b=TUsxG9Ai4tjF58L1Kxt+tAtAHOsmfehUMnMLA1JrLKopUh9uK2SMRWH4
+   YqrbeGdGTPPUj6sXZNMGcjeX+7hBL/PxX2VYB3PRw6njFfmvRqTR0/NSY
+   Sh5eiVn8ErTyajo6loYvTVaQ+ywLTHDVtkL3b17sw2ISapyp7zyorGUpy
+   RReJxrToaR03AVQcRKonNfrD2WJavlx6K9TEaETSjLMjRn2z72oFEmBKP
+   VkVU7BnQaOE5/aVUEo3b2z6Nojc9gY+umZDuJuqsW08dVfRQHaJlTmciW
+   JM3eztzskSZ/SM1Cio6VDx+MeDPql73hv4klnupMWmqQPNcoKbElbVFqQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253145646"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="253145646"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:29:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="640978446"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 10:29:16 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOklo-0007gW-0K; Mon, 28 Feb 2022 18:29:16 +0000
+Date:   Tue, 1 Mar 2022 02:28:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
+Message-ID: <202203010254.tIHIltE2-lkp@intel.com>
+References: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-Content-Language: en-US
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
- <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
- <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
-From:   Hao Xu <haoxu@linux.alibaba.com>
-In-Reply-To: <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
 
-On 2/25/22 13:32, Olivier Langlois wrote:
-> On Mon, 2022-02-21 at 13:23 +0800, Hao Xu wrote:
->>> @@ -5776,6 +5887,7 @@ static int __io_arm_poll_handler(struct
->>> io_kiocb *req,
->>>                  __io_poll_execute(req, mask);
->>>                  return 0;
->>>          }
->>> +       io_add_napi(req->file, req->ctx);
->> I think this may not be the right place to do it. the process will
->> be:
->> arm_poll sockfdA--> get invalid napi_id from sk->napi_id --> event
->> triggered --> arm_poll for sockfdA again --> get valid napi_id
->> then why not do io_add_napi() in event
->> handler(apoll_task_func/poll_task_func).
-> You have a valid concern that the first time a socket is passed to
-> io_uring that napi_id might not be assigned yet.
->
-> OTOH, getting it after data is available for reading does not help
-> neither since busy polling must be done before data is received.
->
-> for both places, the extracted napi_id will only be leveraged at the
-> next polling.
+I love your patch! Perhaps something to improve:
 
-Hi Olivier,
+[auto build test WARNING on v5.17-rc6]
+[cannot apply to broonie-spi/for-next next-20220228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I think we have some gap here. AFAIK, it's not 'might not', it is
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/Add-support-for-components-requiring-trailing-clock-after-transfer/20220228-231740
+base:    7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
+config: hexagon-buildonly-randconfig-r004-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010254.tIHIltE2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7eb07c4d26401389204fcc6cf685c18c89b64ef8
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/Add-support-for-components-requiring-trailing-clock-after-transfer/20220228-231740
+        git checkout 7eb07c4d26401389204fcc6cf685c18c89b64ef8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
 
-'definitely not', the sk->napi_id won't be valid until the poll callback.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Some driver's code FYR: (drivers/net/ethernet/intel/e1000/e1000_main.c)
+All warnings (new ones prefixed by >>):
 
-e1000_receive_skb-->napi_gro_receive-->napi_skb_finish-->gro_normal_one
-
-and in gro_normal_one(), it does:
-
-           if (napi->rx_count >= gro_normal_batch)
-                   gro_normal_list(napi);
+>> drivers/spi/spi-fsl-spi.c:435:14: warning: incompatible integer to pointer conversion initializing 'const void *' with an expression of type 'unsigned long' [-Wint-conversion]
+                           .tx_buf = empty_zero_page,
+                                     ^~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-The gro_normal_list() delivers the info up to the specifical network 
-protocol like tcp.
+vim +435 drivers/spi/spi-fsl-spi.c
 
-And then sk->napi_id is set, meanwhile the poll callback is triggered.
+   356	
+   357	static int fsl_spi_do_one_msg(struct spi_master *master,
+   358				      struct spi_message *m)
+   359	{
+   360		struct mpc8xxx_spi *mpc8xxx_spi = spi_master_get_devdata(master);
+   361		struct spi_device *spi = m->spi;
+   362		struct spi_transfer *t, *first;
+   363		unsigned int cs_change;
+   364		const int nsecs = 50;
+   365		int status, last_bpw;
+   366	
+   367		/*
+   368		 * In CPU mode, optimize large byte transfers to use larger
+   369		 * bits_per_word values to reduce number of interrupts taken.
+   370		 */
+   371		if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
+   372			list_for_each_entry(t, &m->transfers, transfer_list) {
+   373				if (t->len < 256 || t->bits_per_word != 8)
+   374					continue;
+   375				if ((t->len & 3) == 0)
+   376					t->bits_per_word = 32;
+   377				else if ((t->len & 1) == 0)
+   378					t->bits_per_word = 16;
+   379			}
+   380		}
+   381	
+   382		/* Don't allow changes if CS is active */
+   383		cs_change = 1;
+   384		list_for_each_entry(t, &m->transfers, transfer_list) {
+   385			if (cs_change)
+   386				first = t;
+   387			cs_change = t->cs_change;
+   388			if (first->speed_hz != t->speed_hz) {
+   389				dev_err(&spi->dev,
+   390					"speed_hz cannot change while CS is active\n");
+   391				return -EINVAL;
+   392			}
+   393		}
+   394	
+   395		last_bpw = -1;
+   396		cs_change = 1;
+   397		status = -EINVAL;
+   398		list_for_each_entry(t, &m->transfers, transfer_list) {
+   399			if (cs_change || last_bpw != t->bits_per_word)
+   400				status = fsl_spi_setup_transfer(spi, t);
+   401			if (status < 0)
+   402				break;
+   403			last_bpw = t->bits_per_word;
+   404	
+   405			if (cs_change) {
+   406				fsl_spi_chipselect(spi, BITBANG_CS_ACTIVE);
+   407				ndelay(nsecs);
+   408			}
+   409			cs_change = t->cs_change;
+   410			if (t->len)
+   411				status = fsl_spi_bufs(spi, t, m->is_dma_mapped);
+   412			if (status) {
+   413				status = -EMSGSIZE;
+   414				break;
+   415			}
+   416			m->actual_length += t->len;
+   417	
+   418			spi_transfer_delay_exec(t);
+   419	
+   420			if (cs_change) {
+   421				ndelay(nsecs);
+   422				fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
+   423				ndelay(nsecs);
+   424			}
+   425		}
+   426	
+   427		if (status || !cs_change) {
+   428			ndelay(nsecs);
+   429			fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
+   430		}
+   431	
+   432		if (!status && spi->trailing_bits) {
+   433			struct spi_transfer t = {
+   434				.len = 1,
+ > 435				.tx_buf = empty_zero_page,
+   436			};
+   437	
+   438			if (spi->trailing_bits < 4)
+   439				t.bits_per_word = 4;
+   440			else if (spi->trailing_bits > 8)
+   441				t.bits_per_word = 16;
+   442			else
+   443				t.bits_per_word = spi->trailing_bits;
+   444	
+   445			status = fsl_spi_setup_transfer(spi, &t);
+   446			if (!status)
+   447				status = fsl_spi_bufs(spi, &t, 0);
+   448		}
+   449		m->status = status;
+   450	
+   451		fsl_spi_setup_transfer(spi, NULL);
+   452		spi_finalize_current_message(master);
+   453		return 0;
+   454	}
+   455	
 
-So that's why I call the napi polling technology a 'speculation'. It's 
-totally for the
-
-future data. Correct me if I'm wrong especially for the poll callback 
-triggering part.
-
->
-> Your suggestion is superior because it might be the only working way
-> for MULTIPOLL requests.
->
-> However, I choose __io_arm_poll_handler() because if napi_busy_poll()
-> is desired without a sqpoll thread, the context must be locked when
-> calling io_add_napi(). This is the case when __io_arm_poll_handler() is
-> called AFAIK.
->
-> and I don't think that the context is locked when
-> (apoll_task_func/poll_task_func) are called.
->
-> I acknowledge that this is an issue that needs to be fixed but right
-> now I am not sure how to address this so let me share v2 of the patch
-> and plan a v3 for at least this pending issue.
->
->>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>> +static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
->>> +                                       struct io_wait_queue *iowq)
->>> +{
->>> +       unsigned busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
->>> +       struct timespec64 pollto = ns_to_timespec64(1000 *
->>> (s64)busy_poll_to);
->>> +
->>> +       if (timespec64_compare(ts, &pollto) > 0) {
->>> +               *ts = timespec64_sub(*ts, pollto);
->>> +               iowq->busy_poll_to = busy_poll_to;
->>> +       } else {
->>> +               iowq->busy_poll_to = timespec64_to_ns(ts) / 1000;
->> How about timespec64_tons(ts) >> 10, since we don't need accurate
->> number.
-> Fantastic suggestion! The kernel test robot did also detect an issue
-> with that statement. I did discover do_div() in the meantime but what
-> you suggest is better, IMHO...
->
->>> +static void io_blocking_napi_busy_loop(struct io_ring_ctx *ctx,
->>> +                                      struct io_wait_queue *iowq)
->>> +{
->>> +       unsigned long start_time =
->>> +               list_is_singular(&ctx->napi_list) ? 0 :
->>> +               busy_loop_current_time();
->>> +
->>> +       do {
->>> +               if (list_is_singular(&ctx->napi_list)) {
->>> +                       struct napi_entry *ne =
->>> +                               list_first_entry(&ctx->napi_list,
->>> +                                                struct napi_entry,
->>> list);
->>> +
->>> +                       napi_busy_loop(ne->napi_id,
->>> io_busy_loop_end, iowq,
->>> +                                      true, BUSY_POLL_BUDGET);
->>> +                       io_check_napi_entry_timeout(ne);
->>> +                       break;
->>> +               }
->>> +       } while (io_napi_busy_loop(ctx) &&
->> Why don't we setup busy_loop_end callback for normal(non-singular)
->> case,
->> we can record the number of napi_entry, and divide the time frame to
->> each entry.
-> This is from intuition that iterating through all the napi devices in a
-> 'sprinkler' pattern is the correct way to proceed when handling several
-> devices.
->
-> If you busy poll the first devices for a certain amount of time and a
-> packet is received in the last device, you won't know until you reach
-> it which will be much later than with the proposed 'sprinkler' way.
->
-> singular case is treated differently because entering/exiting
-> napi_busy_loop() incur setup overhead that you don't need for that
-> special case.
->
->>> +                !io_busy_loop_end(iowq, start_time));
->>> +}
->>> +#endif /* CONFIG_NET_RX_BUSY_POLL */
->>> +
->>>    /*
->>>     * Wait until events become available, if we don't already have
->>> some. The
->>>     * application must reap them itself, as they reside on the
->>> shared cq ring.
->>> @@ -7729,12 +7906,20 @@ static int io_cqring_wait(struct
->>> io_ring_ctx *ctx, int min_events,
->>>                  if (!io_run_task_work())
->>>                          break;
->>>          } while (1);
->>> -
->>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>> +       iowq.busy_poll_to = 0;
->>> +#endif
->>>          if (uts) {
->>>                  struct timespec64 ts;
->>>    
->>>                  if (get_timespec64(&ts, uts))
->>>                          return -EFAULT;
->>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>> +               if (!(ctx->flags & IORING_SETUP_SQPOLL) &&
->>> +                   !list_empty(&ctx->napi_list)) {
->>> +                       io_adjust_busy_loop_timeout(&ts, &iowq);
->>> +               }
->>> +#endif
->>>                  timeout = timespec64_to_jiffies(&ts);
->>>          }
->>>    
->>> @@ -7759,6 +7944,10 @@ static int io_cqring_wait(struct io_ring_ctx
->>> *ctx, int min_events,
->>>          iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
->>>    
->>>          trace_io_uring_cqring_wait(ctx, min_events);
->>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>> +       if (iowq.busy_poll_to)
->>> +               io_blocking_napi_busy_loop(ctx, &iowq);
->> We may not need locks for the napi_list, the reason is we don't need
->> to
->> poll an accurate list, the busy polling/NAPI itself is kind of
->> speculation. So the deletion is not an emergency.
->> To say the least, we can probably delay the deletion to some safe
->> place
->> like the original task's task work though this may cause other
->> problems...
-> There are 2 concerns here.
->
-> 1. Iterating a list while another thread modify it is not thread-safe
-> unless you use a lock.
->
-> If we offer napi_busy_poll() without sqpoll with the modification in
-> io_cqring_wait(), this is a real possibility. A thread could call
-> io_uring_enter(IORING_ENTER_GETEVENTS) while another thread calls
-> io_uring_enter() to submit new sqes that could trigger a call to
-> io_add_napi().
-
-Thanks, I forgot the io_add_napi() part. Yes, we have to ensure
-
-the entry to be added will be really added...so lock is necessary.
-
-I knew there may be multiple threads accesses the napi_list like
-
-you described above, but if there were only deletion, then lock might
-
-be avoided since we just want it not to crash.
-
->
-> If napi_busy_poll() is only offered through sqpoll thread, this becomes
-> a non-issue since the only thread accessing/modifying the napi_list
-> field is the sqpoll thread.
->
-> Providing the patch benchmark result with v2 could help deciding what
-> to do with this choice.
->
-> 2. You are correct when you say that deletion is not an emergency.
->
-> However, the design guideline that I did follow when writing the patch
-> is that napi_busy_poll support should not impact users not using this
-> feature. Doing the deletion where that patch is doing it fullfill this
-> goal.
->
-> Comparing a timeout value with the jiffies variable is very cheap and
-> will only be performed when napi_busy_poll is used.
->
-> The other option would be to add a refcount to each napi_entry and
-> decrement it if needed everytime a request is discarded. Doing that
-> that check for every requests that io_uring discards on completion, I
-> am very confident that this would negatively impact various performance
-> benchmarks that Jens routinely perform...
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

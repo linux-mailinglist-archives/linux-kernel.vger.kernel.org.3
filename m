@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325234C72CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEF14C76BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiB1R3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S239663AbiB1SGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236227AbiB1R1y (ORCPT
+        with ESMTP id S239466AbiB1R7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:27:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170CA8933D;
-        Mon, 28 Feb 2022 09:27:04 -0800 (PST)
+        Mon, 28 Feb 2022 12:59:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD33E96839;
+        Mon, 28 Feb 2022 09:45:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B98C61349;
-        Mon, 28 Feb 2022 17:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBE7C340E7;
-        Mon, 28 Feb 2022 17:27:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7388B815CC;
+        Mon, 28 Feb 2022 17:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BE0C340E7;
+        Mon, 28 Feb 2022 17:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069223;
-        bh=917T7g5NADCLUB+jfAC4t5c2Tgf/uZE24UZy1cRKwXg=;
+        s=korg; t=1646070322;
+        bh=e9qSJssGN+HZrIwdyr6Y6yzckhlwCSUpu93cFoY6+y8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HpziQAee8+6oKKY8pscfcoVcTYJJTvwlIe4PTPRAi7jPg0DdDGs1TODdoqFuJYBEU
-         DkSnbHtvNhRkQCqnEawB4Fu+TWSubI5kl/wc7JJccUCGPsuy24w7CENb/9ZVt097q7
-         JPUtZvm5jdSMN/dAswOo9HGV9y7PVl86gejTQk/U=
+        b=Uyzdydi/07K4ljM9xeFR9UDMs0Aepk0EKmxY5i/kS+JoIG/oa8UlhZMG5jIzr8lx8
+         +r4PhzYRJBRE9S0BBQy3lP0NkSxKy0YRe1HQ2TI/Leq4muaLgBuuRr0ryyF31w58+u
+         JGMckzsdxGAs4T0zq+w31SU1UIU75+znzBbIY9NA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.9 21/29] tracefs: Set the group ownership in apply_options() not parse_options()
-Date:   Mon, 28 Feb 2022 18:23:48 +0100
-Message-Id: <20220228172143.892637061@linuxfoundation.org>
+        stable@vger.kernel.org, Mauri Sandberg <maukka@ext.kapsi.fi>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 067/164] net: mv643xx_eth: process retval from of_get_mac_address
+Date:   Mon, 28 Feb 2022 18:23:49 +0100
+Message-Id: <20220228172406.228283840@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Mauri Sandberg <maukka@ext.kapsi.fi>
 
-commit 851e99ebeec3f4a672bb5010cf1ece095acee447 upstream.
+commit 42404d8f1c01861b22ccfa1d70f950242720ae57 upstream.
 
-Al Viro brought it to my attention that the dentries may not be filled
-when the parse_options() is called, causing the call to set_gid() to
-possibly crash. It should only be called if parse_options() succeeds
-totally anyway.
+Obtaining a MAC address may be deferred in cases when the MAC is stored
+in an NVMEM block, for example, and it may not be ready upon the first
+retrieval attempt and return EPROBE_DEFER.
 
-He suggested the logical place to do the update is in apply_options().
+It is also possible that a port that does not rely on NVMEM has been
+already created when getting the defer request. Thus, also the resources
+allocated previously must be freed when doing a roll-back.
 
-Link: https://lore.kernel.org/all/20220225165219.737025658@goodmis.org/
-Link: https://lkml.kernel.org/r/20220225153426.1c4cab6b@gandalf.local.home
-
-Cc: stable@vger.kernel.org
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 76723bca2802 ("net: mv643xx_eth: add DT parsing support")
+Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220223142337.41757-1-maukka@ext.kapsi.fi
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/tracefs/inode.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/marvell/mv643xx_eth.c |   24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -265,7 +265,6 @@ static int tracefs_parse_options(char *d
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
--			set_gid(tracefs_mount->mnt_root, gid);
- 			break;
- 		case Opt_mode:
- 			if (match_octal(&args[0], &option))
-@@ -292,7 +291,9 @@ static int tracefs_apply_options(struct
- 	inode->i_mode |= opts->mode;
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -2700,6 +2700,16 @@ MODULE_DEVICE_TABLE(of, mv643xx_eth_shar
  
- 	inode->i_uid = opts->uid;
--	inode->i_gid = opts->gid;
+ static struct platform_device *port_platdev[3];
+ 
++static void mv643xx_eth_shared_of_remove(void)
++{
++	int n;
 +
-+	/* Set all the group ids to the mount option */
-+	set_gid(sb->s_root, opts->gid);
++	for (n = 0; n < 3; n++) {
++		platform_device_del(port_platdev[n]);
++		port_platdev[n] = NULL;
++	}
++}
++
+ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
+ 					  struct device_node *pnp)
+ {
+@@ -2736,7 +2746,9 @@ static int mv643xx_eth_shared_of_add_por
+ 		return -EINVAL;
+ 	}
  
+-	of_get_mac_address(pnp, ppd.mac_addr);
++	ret = of_get_mac_address(pnp, ppd.mac_addr);
++	if (ret)
++		return ret;
+ 
+ 	mv643xx_eth_property(pnp, "tx-queue-size", ppd.tx_queue_size);
+ 	mv643xx_eth_property(pnp, "tx-sram-addr", ppd.tx_sram_addr);
+@@ -2800,21 +2812,13 @@ static int mv643xx_eth_shared_of_probe(s
+ 		ret = mv643xx_eth_shared_of_add_port(pdev, pnp);
+ 		if (ret) {
+ 			of_node_put(pnp);
++			mv643xx_eth_shared_of_remove();
+ 			return ret;
+ 		}
+ 	}
  	return 0;
  }
+ 
+-static void mv643xx_eth_shared_of_remove(void)
+-{
+-	int n;
+-
+-	for (n = 0; n < 3; n++) {
+-		platform_device_del(port_platdev[n]);
+-		port_platdev[n] = NULL;
+-	}
+-}
+ #else
+ static inline int mv643xx_eth_shared_of_probe(struct platform_device *pdev)
+ {
 
 

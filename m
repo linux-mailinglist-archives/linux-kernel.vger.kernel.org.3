@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1EE4C74A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139AA4C766E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238658AbiB1RqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        id S240360AbiB1SD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238800AbiB1RnD (ORCPT
+        with ESMTP id S239864AbiB1Rxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:43:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF909A4D7;
-        Mon, 28 Feb 2022 09:35:13 -0800 (PST)
+        Mon, 28 Feb 2022 12:53:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0211BAD125;
+        Mon, 28 Feb 2022 09:41:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C6B72CE17C8;
-        Mon, 28 Feb 2022 17:35:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9365C340E7;
-        Mon, 28 Feb 2022 17:35:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A197F61540;
+        Mon, 28 Feb 2022 17:41:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA557C340E7;
+        Mon, 28 Feb 2022 17:41:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069710;
-        bh=bdeZ2090sDqU+izv81ASqcBTYUENGg4bAPv8rFcJ7GI=;
+        s=korg; t=1646070064;
+        bh=E6574w75kqATyqu0nXYHqLTZcMPRkRFDJ7mSeoReHQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J40PupWfLXIhC5rz7DccAz/yRzPv7RDX/Q/uHf5WzcuQpQFFge218lmX1r5gs+22l
-         6jQXBJ89nHhWghgiCDcuWj9B/EbdVEvKntftX6/4IMnP1iZZ1La7Ew2I6YuJVJ1W7k
-         B0WZPqxFH1p35ZsK4grRvUF+1Brxj5/Qo/D52pag=
+        b=p08fgbR42osb8HT1UboHmXbtmdjNiCUHULG+r+xyijKCoclSil+eboGv0VdTZk+vL
+         EmIeKH3vhmPkKOVMTVJylN++MKIb1rfhV+ql5QUyWXqYWUBomBEDx2Y8PSxLD8Bo/5
+         KAp0Vsbmk62LNOCR857aYg8MqLSgLQbhmlOfk0IA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 5.10 65/80] usb: dwc2: drd: fix soft connect when gadget is unconfigured
+        stable@vger.kernel.org, stable@kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.15 112/139] usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
 Date:   Mon, 28 Feb 2022 18:24:46 +0100
-Message-Id: <20220228172319.625573384@linuxfoundation.org>
+Message-Id: <20220228172359.409814981@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit 32fde84362c40961726a5c91f35ad37355ccc0c6 upstream.
+commit d7c93a903f33ff35aa0e6b5a8032eb9755b00826 upstream.
 
-When the gadget driver hasn't been (yet) configured, and the cable is
-connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-HOST tries to enumerate it.
-At the host side, this can result in a stuck USB port or worse. When
-getting lucky, some dmesg can be observed at the host side:
- new high-speed USB device number ...
- device descriptor read/64, error -110
+Commit e0082698b689 ("usb: dwc3: ulpi: conditionally resume ULPI PHY")
+fixed an issue where ULPI transfers would timeout if any requests where
+send to the phy sometime after init, giving it enough time to auto-suspend.
 
-Fix it in drd, by checking the enabled flag before calling
-dwc2_hsotg_core_connect(). It will be called later, once configured,
-by the normal flow:
-- udc_bind_to_driver
- - usb_gadget_connect
-   - dwc2_hsotg_pullup
-     - dwc2_hsotg_core_connect
+Commit e5f4ca3fce90 ("usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend
+regression") changed the behavior to instead of clearing the
+DWC3_GUSB2PHYCFG_SUSPHY bit, add an extra sleep when it is set.
 
-Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/1644999135-13478-1-git-send-email-fabrice.gasnier@foss.st.com
+But on Bay Trail devices, when phy_set_mode() gets called during init,
+this leads to errors like these:
+[   28.451522] tusb1210 dwc3.ulpi: error -110 writing val 0x01 to reg 0x0a
+[   28.464089] tusb1210 dwc3.ulpi: error -110 writing val 0x01 to reg 0x0a
+
+Add "snps,dis_u2_susphy_quirk" to the settings for Bay Trail devices to
+fix this. This restores the old behavior for Bay Trail devices, since
+previously the DWC3_GUSB2PHYCFG_SUSPHY bit would get cleared on the first
+ulpi_read/_write() and then was never set again.
+
+Fixes: e5f4ca3fce90 ("usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend regression")
+Cc: stable@kernel.org
+Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220213130524.18748-2-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/core.h |    2 ++
- drivers/usb/dwc2/drd.c  |    6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1406,6 +1406,7 @@ void dwc2_hsotg_core_connect(struct dwc2
- void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
- int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
- #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-+#define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
- int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
- int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
- int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
-@@ -1434,6 +1435,7 @@ static inline int dwc2_hsotg_set_test_mo
- 					   int testmode)
- { return 0; }
- #define dwc2_is_device_connected(hsotg) (0)
-+#define dwc2_is_device_enabled(hsotg) (0)
- static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
- { return 0; }
- static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
---- a/drivers/usb/dwc2/drd.c
-+++ b/drivers/usb/dwc2/drd.c
-@@ -109,8 +109,10 @@ static int dwc2_drd_role_sw_set(struct u
- 		already = dwc2_ovr_avalid(hsotg, true);
- 	} else if (role == USB_ROLE_DEVICE) {
- 		already = dwc2_ovr_bvalid(hsotg, true);
--		/* This clear DCTL.SFTDISCON bit */
--		dwc2_hsotg_core_connect(hsotg);
-+		if (dwc2_is_device_enabled(hsotg)) {
-+			/* This clear DCTL.SFTDISCON bit */
-+			dwc2_hsotg_core_connect(hsotg);
-+		}
- 	} else {
- 		if (dwc2_is_device_mode(hsotg)) {
- 			if (!dwc2_ovr_bvalid(hsotg, false))
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -119,6 +119,13 @@ static const struct property_entry dwc3_
+ 	{}
+ };
+ 
++static const struct property_entry dwc3_pci_intel_byt_properties[] = {
++	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
++	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
++	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
++	{}
++};
++
+ static const struct property_entry dwc3_pci_mrfld_properties[] = {
+ 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
+ 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+@@ -161,6 +168,10 @@ static const struct software_node dwc3_p
+ 	.properties = dwc3_pci_intel_properties,
+ };
+ 
++static const struct software_node dwc3_pci_intel_byt_swnode = {
++	.properties = dwc3_pci_intel_byt_properties,
++};
++
+ static const struct software_node dwc3_pci_intel_mrfld_swnode = {
+ 	.properties = dwc3_pci_mrfld_properties,
+ };
+@@ -344,7 +355,7 @@ static const struct pci_device_id dwc3_p
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BYT),
+-	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
++	  (kernel_ulong_t) &dwc3_pci_intel_byt_swnode, },
+ 
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MRFLD),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_mrfld_swnode, },
 
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A2F4C6CF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1034C6D00
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbiB1MqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S234779AbiB1Mqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiB1MqH (ORCPT
+        with ESMTP id S236710AbiB1MqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:46:07 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1432F75C20
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:14 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id u16so11026340pfg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:14 -0800 (PST)
+        Mon, 28 Feb 2022 07:46:14 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11A76E38
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:19 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 132so11271555pga.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OzxxAcSZ3QzNXpGWZ3mCL6qTxkzBqAQS2IireUric5Y=;
-        b=xgkTzjwKHjrxOUhcXl++/6hx3IKreYJSI//ey+ZlPw03zUhNl2niilRYFaczu95rcW
-         AWuteZKexkELRFd7h0xhW7sqo9DOlfpfvAvARsUlcZ/YBHN3q0t/dcrTw0O37/8e7iSF
-         hPbYqQXEyW2nfsIeOjIP10bavbS73C6NVC3yFZvO4+W/HvZDHYAQB8XQ2fqZUsj6D30G
-         7QmjoreE/xo7Dqp2H/z6zMb8ndarXQCJPpLsMsW/CZYb41RIO4Ji3EpEB6J1OvrcPpQ2
-         Eo1TwOsr3+NE8lciVmrAbgAkIiFj2iPljp3Wfn+rCj4DnT1ZQnA/i/zwXNSpv/l0FBCU
-         uLyg==
+        bh=rZep28DhIdqNfp5J0eB33gO8gDlbZ2SZXLI7+YnFIhM=;
+        b=WPu8k+dZJe8z8MeH8JjrfcoT59S/UDfwx98X+IWC7XEpr2XNjSBeV85wy5Y+oJNr4z
+         yr0bnjDP2RUYqSoIlBuFt+HAmCOglq0dm/iq0OmAWUHyTCFpiBzwFBdhGq+F6frjRfho
+         3iyv1+jevOwPT8D3cnZdCsO/kslUudma+3SXR5w0bQRuzqqPsfQaEIxmzIPrifdR0xUq
+         jnk56nd2xsQVvgKbbS0Hrx0AAvxiHBhewsCK+qBpkTFiCIva152SOBJDwxc0nKOQelrD
+         P5O0R9BQF/5yoGIa+wK9iekaxVgeUYCSxUsMIqNd6YY3+eXbG4NZQ4pNrOUgGEiuH9aj
+         UQLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OzxxAcSZ3QzNXpGWZ3mCL6qTxkzBqAQS2IireUric5Y=;
-        b=jYbENJ0YQ3Hy8Gu28PvWVhBjP8f+n6C6ae7GBZdjaRrJ8luCWUuvhK0IYdd50qUuZh
-         viHQ6phl5CmmXlB3khgiVsHpFBwwe8s783531eona47eauETd2NgPI+9d6Upr6hv0qpH
-         4MG9I7ZTfjvAhbv+aNACLmRtfvM4S3G5bFgsi2+tPNhDtZTIad3xTb96GhqnniE/gDtP
-         FWHKzlTQA+Bjqf9+TBOssIrzaKClBhaeIulSTN04/4fbYa4k6PZFSNMSfhI/WIRuSDT7
-         k3iIHrID+ViWRDw4DEsVVofi6Vo2/Pb4yI2Uoi2OhhXeJCm5RBfMHFT9jp9eB7lMHfOX
-         V5Wg==
-X-Gm-Message-State: AOAM531O4ue0+eIYjHelSZPYfNcUqRYOo9NuhXHzsePlxLZZBpaWKkmF
-        OUbwh0Zlo4hon3SSYNenFAc7
-X-Google-Smtp-Source: ABdhPJz9UF9zFkFSbdhTGwhnqmGMLsMZbC70CUVHi2Y5xxs5dgqdzgDn6e9K6ZsOkObqNKGzTI6Iwg==
-X-Received: by 2002:a65:52cc:0:b0:374:3ee6:c632 with SMTP id z12-20020a6552cc000000b003743ee6c632mr16912963pgp.91.1646052313523;
-        Mon, 28 Feb 2022 04:45:13 -0800 (PST)
+        bh=rZep28DhIdqNfp5J0eB33gO8gDlbZ2SZXLI7+YnFIhM=;
+        b=h5gcMuIiioymxGHKCDwoR9Y+u21XXlX98bRNaz0iHF9zlueYX44Ft12SA85mq6XFEG
+         XwW5aFJiOXQEgAVxeYUrT8dB0VRU4ojdW0M8ruCvpFf1ktyrAFSXpvtVc4Xd2vvw/+KL
+         wUf4FWAcH+3IHOnHYFPvdlV5oJJUMvtYCKFfEDVclvpIsYrniroUMiGAaCs+iE2+5BeP
+         rcC+owhGLxc4gvTSopoZWZBHsMf3yfCB0TDLguCJIJYhMS4qkQXQvfitrlfYiD1GUBUg
+         4GrMqCID8SEAwGmOUoUPEHxJVsi7DaEAZDUOEhntx5RvbZMcyILg0qNdvhs/IZbzXVWI
+         pAjQ==
+X-Gm-Message-State: AOAM530KqcmA5+qAudmYP990ZKHYLxWbjMJ9D9uIAiMQE1qzSILcM4kM
+        2D+ourxT6gbbxw9UV3/j6oFo
+X-Google-Smtp-Source: ABdhPJxndLbOp3LP+7nUx5QdEZPg44A4JMetsCaOc6fbLOuPvRrNcq38XJH01Lkbm9LtfA9AkQ+WmQ==
+X-Received: by 2002:a05:6a00:b92:b0:4f1:4b2:737f with SMTP id g18-20020a056a000b9200b004f104b2737fmr21511709pfj.31.1646052318829;
+        Mon, 28 Feb 2022 04:45:18 -0800 (PST)
 Received: from localhost.localdomain ([117.207.25.37])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.45.08
+        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:45:13 -0800 (PST)
+        Mon, 28 Feb 2022 04:45:18 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
@@ -57,9 +57,9 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, elder@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 14/27] bus: mhi: ep: Add support for ring management
-Date:   Mon, 28 Feb 2022 18:13:31 +0530
-Message-Id: <20220228124344.77359-15-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 15/27] bus: mhi: ep: Add support for sending events to the host
+Date:   Mon, 28 Feb 2022 18:13:32 +0530
+Message-Id: <20220228124344.77359-16-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
 References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
@@ -75,282 +75,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for managing the MHI ring. The MHI ring is a circular queue
-of data structures used to pass the information between host and the
-endpoint.
+Add support for sending the events to the host over MHI bus from the
+endpoint. Following events are supported:
 
-MHI support 3 types of rings:
+1. Transfer completion event
+2. Command completion event
+3. State change event
+4. Execution Environment (EE) change event
 
-1. Transfer ring
-2. Event ring
-3. Command ring
-
-All rings reside inside the host memory and the MHI EP device maps it to
-the device memory using blocks like PCIe iATU. The mapping is handled in
-the MHI EP controller driver itself.
+An event is sent whenever an operation has been completed in the MHI EP
+device. Event is sent using the MHI event ring and additionally the host
+is notified using an IRQ if required.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/ep/Makefile   |   2 +-
- drivers/bus/mhi/ep/internal.h |  18 ++++
- drivers/bus/mhi/ep/ring.c     | 197 ++++++++++++++++++++++++++++++++++
- 3 files changed, 216 insertions(+), 1 deletion(-)
- create mode 100644 drivers/bus/mhi/ep/ring.c
+ drivers/bus/mhi/common.h      | 22 +++++++++
+ drivers/bus/mhi/ep/internal.h |  4 ++
+ drivers/bus/mhi/ep/main.c     | 90 +++++++++++++++++++++++++++++++++++
+ include/linux/mhi_ep.h        |  8 ++++
+ 4 files changed, 124 insertions(+)
 
-diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
-index a1555ae287ad..7ba0e04801eb 100644
---- a/drivers/bus/mhi/ep/Makefile
-+++ b/drivers/bus/mhi/ep/Makefile
-@@ -1,2 +1,2 @@
- obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
--mhi_ep-y := main.o mmio.o
-+mhi_ep-y := main.o mmio.o ring.o
+diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
+index ec75ba1e6686..5b30e2d0832e 100644
+--- a/drivers/bus/mhi/common.h
++++ b/drivers/bus/mhi/common.h
+@@ -165,6 +165,22 @@
+ #define MHI_TRE_GET_EV_LINKSPEED(tre)	FIELD_GET(GENMASK(31, 24), (MHI_TRE_GET_DWORD(tre, 1)))
+ #define MHI_TRE_GET_EV_LINKWIDTH(tre)	FIELD_GET(GENMASK(7, 0), (MHI_TRE_GET_DWORD(tre, 0)))
+ 
++/* State change event */
++#define MHI_SC_EV_PTR			0
++#define MHI_SC_EV_DWORD0(state)		cpu_to_le32(FIELD_PREP(GENMASK(31, 24), state))
++#define MHI_SC_EV_DWORD1(type)		cpu_to_le32(FIELD_PREP(GENMASK(23, 16), type))
++
++/* EE event */
++#define MHI_EE_EV_PTR			0
++#define MHI_EE_EV_DWORD0(ee)		cpu_to_le32(FIELD_PREP(GENMASK(31, 24), ee))
++#define MHI_EE_EV_DWORD1(type)		cpu_to_le32(FIELD_PREP(GENMASK(23, 16), type))
++
++
++/* Command Completion event */
++#define MHI_CC_EV_PTR(ptr)		cpu_to_le64(ptr)
++#define MHI_CC_EV_DWORD0(code)		cpu_to_le32(FIELD_PREP(GENMASK(31, 24), code))
++#define MHI_CC_EV_DWORD1(type)		cpu_to_le32(FIELD_PREP(GENMASK(23, 16), type))
++
+ /* Transfer descriptor macros */
+ #define MHI_TRE_DATA_PTR(ptr)		cpu_to_le64(ptr)
+ #define MHI_TRE_DATA_DWORD0(len)	cpu_to_le32(FIELD_PREP(GENMASK(15, 0), len))
+@@ -175,6 +191,12 @@
+ 								FIELD_PREP(BIT(9), ieot) |  \
+ 								FIELD_PREP(BIT(8), ieob) |  \
+ 								FIELD_PREP(BIT(0), chain))
++#define MHI_TRE_DATA_GET_PTR(tre)	le64_to_cpu((tre)->ptr)
++#define MHI_TRE_DATA_GET_LEN(tre)	FIELD_GET(GENMASK(15, 0), MHI_TRE_GET_DWORD(tre, 0))
++#define MHI_TRE_DATA_GET_CHAIN(tre)	FIELD_GET(BIT(0), MHI_TRE_GET_DWORD(tre, 1))
++#define MHI_TRE_DATA_GET_IEOB(tre)	FIELD_GET(BIT(8), MHI_TRE_GET_DWORD(tre, 1))
++#define MHI_TRE_DATA_GET_IEOT(tre)	FIELD_GET(BIT(9), MHI_TRE_GET_DWORD(tre, 1))
++#define MHI_TRE_DATA_GET_BEI(tre)	FIELD_GET(BIT(10), MHI_TRE_GET_DWORD(tre, 1))
+ 
+ /* RSC transfer descriptor macros */
+ #define MHI_RSCTRE_DATA_PTR(ptr, len)	cpu_to_le64(FIELD_PREP(GENMASK(64, 48), len) | ptr)
 diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
-index 139e939fcf57..b3b8770f2f4e 100644
+index b3b8770f2f4e..8753ae93eda3 100644
 --- a/drivers/bus/mhi/ep/internal.h
 +++ b/drivers/bus/mhi/ep/internal.h
-@@ -114,6 +114,11 @@ union mhi_ep_ring_ctx {
- 	struct mhi_generic_ctx generic;
- };
+@@ -195,4 +195,8 @@ void mhi_ep_mmio_get_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state *s
+ void mhi_ep_mmio_init(struct mhi_ep_cntrl *mhi_cntrl);
+ void mhi_ep_mmio_update_ner(struct mhi_ep_cntrl *mhi_cntrl);
  
-+struct mhi_ep_ring_item {
-+	struct list_head node;
-+	struct mhi_ep_ring *ring;
-+};
++/* MHI EP core functions */
++int mhi_ep_send_state_change_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state state);
++int mhi_ep_send_ee_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_ee_type exec_env);
 +
- struct mhi_ep_ring {
- 	struct mhi_ep_cntrl *mhi_cntrl;
- 	union mhi_ep_ring_ctx *ring_ctx;
-@@ -126,6 +131,9 @@ struct mhi_ep_ring {
- 	u32 db_offset_h;
- 	u32 db_offset_l;
- 	u32 ch_id;
-+	u32 er_index;
-+	u32 irq_vector;
-+	bool started;
- };
+ #endif
+diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+index d76387c4d5fa..903f9bd3e03d 100644
+--- a/drivers/bus/mhi/ep/main.c
++++ b/drivers/bus/mhi/ep/main.c
+@@ -18,6 +18,94 @@
  
- struct mhi_ep_cmd {
-@@ -151,6 +159,16 @@ struct mhi_ep_chan {
- 	bool skip_td;
- };
+ static DEFINE_IDA(mhi_ep_cntrl_ida);
  
-+/* MHI Ring related functions */
-+void mhi_ep_ring_init(struct mhi_ep_ring *ring, enum mhi_ep_ring_type type, u32 id);
-+void mhi_ep_ring_reset(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring);
-+int mhi_ep_ring_start(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring,
-+		      union mhi_ep_ring_ctx *ctx);
-+size_t mhi_ep_ring_addr2offset(struct mhi_ep_ring *ring, u64 ptr);
-+int mhi_ep_ring_add_element(struct mhi_ep_ring *ring, struct mhi_ring_element *element);
-+void mhi_ep_ring_inc_index(struct mhi_ep_ring *ring);
-+int mhi_ep_update_wr_offset(struct mhi_ep_ring *ring);
-+
- /* MMIO related functions */
- u32 mhi_ep_mmio_read(struct mhi_ep_cntrl *mhi_cntrl, u32 offset);
- void mhi_ep_mmio_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 val);
-diff --git a/drivers/bus/mhi/ep/ring.c b/drivers/bus/mhi/ep/ring.c
-new file mode 100644
-index 000000000000..1029eed2cc28
---- /dev/null
-+++ b/drivers/bus/mhi/ep/ring.c
-@@ -0,0 +1,197 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Linaro Ltd.
-+ * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+ */
-+
-+#include <linux/mhi_ep.h>
-+#include "internal.h"
-+
-+size_t mhi_ep_ring_addr2offset(struct mhi_ep_ring *ring, u64 ptr)
++static int mhi_ep_send_event(struct mhi_ep_cntrl *mhi_cntrl, u32 ring_idx,
++			     struct mhi_ring_element *el, bool bei)
 +{
-+	return (ptr - ring->rbase) / sizeof(struct mhi_ring_element);
-+}
-+
-+static u32 mhi_ep_ring_num_elems(struct mhi_ep_ring *ring)
-+{
-+	return le64_to_cpu(ring->ring_ctx->generic.rlen) / sizeof(struct mhi_ring_element);
-+}
-+
-+void mhi_ep_ring_inc_index(struct mhi_ep_ring *ring)
-+{
-+	ring->rd_offset = (ring->rd_offset + 1) % ring->ring_size;
-+}
-+
-+static int __mhi_ep_cache_ring(struct mhi_ep_ring *ring, size_t end)
-+{
-+	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
 +	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-+	size_t start, copy_size;
++	union mhi_ep_ring_ctx *ctx;
++	struct mhi_ep_ring *ring;
 +	int ret;
 +
-+	/* Don't proceed in the case of event ring. This happens during mhi_ep_ring_start(). */
-+	if (ring->type == RING_TYPE_ER)
-+		return 0;
-+
-+	/* No need to cache the ring if write pointer is unmodified */
-+	if (ring->wr_offset == end)
-+		return 0;
-+
-+	start = ring->wr_offset;
-+	if (start < end) {
-+		copy_size = (end - start) * sizeof(struct mhi_ring_element);
-+		ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
-+						(start * sizeof(struct mhi_ring_element)),
-+						&ring->ring_cache[start], copy_size);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		copy_size = (ring->ring_size - start) * sizeof(struct mhi_ring_element);
-+		ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
-+						(start * sizeof(struct mhi_ring_element)),
-+						&ring->ring_cache[start], copy_size);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (end) {
-+			ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase,
-+							&ring->ring_cache[0],
-+							end * sizeof(struct mhi_ring_element));
-+			if (ret < 0)
-+				return ret;
++	mutex_lock(&mhi_cntrl->event_lock);
++	ring = &mhi_cntrl->mhi_event[ring_idx].ring;
++	ctx = (union mhi_ep_ring_ctx *)&mhi_cntrl->ev_ctx_cache[ring_idx];
++	if (!ring->started) {
++		ret = mhi_ep_ring_start(mhi_cntrl, ring, ctx);
++		if (ret) {
++			dev_err(dev, "Error starting event ring (%u)\n", ring_idx);
++			goto err_unlock;
 +		}
 +	}
 +
-+	dev_dbg(dev, "Cached ring: start %zu end %zu size %zu\n", start, end, copy_size);
-+
-+	return 0;
-+}
-+
-+static int mhi_ep_cache_ring(struct mhi_ep_ring *ring, u64 wr_ptr)
-+{
-+	size_t wr_offset;
-+	int ret;
-+
-+	wr_offset = mhi_ep_ring_addr2offset(ring, wr_ptr);
-+
-+	/* Cache the host ring till write offset */
-+	ret = __mhi_ep_cache_ring(ring, wr_offset);
-+	if (ret)
-+		return ret;
-+
-+	ring->wr_offset = wr_offset;
-+
-+	return 0;
-+}
-+
-+int mhi_ep_update_wr_offset(struct mhi_ep_ring *ring)
-+{
-+	u64 wr_ptr;
-+
-+	wr_ptr = mhi_ep_mmio_get_db(ring);
-+
-+	return mhi_ep_cache_ring(ring, wr_ptr);
-+}
-+
-+/* TODO: Support for adding multiple ring elements to the ring */
-+int mhi_ep_ring_add_element(struct mhi_ep_ring *ring, struct mhi_ring_element *el)
-+{
-+	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-+	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-+	size_t old_offset = 0;
-+	u32 num_free_elem;
-+	int ret;
-+
-+	ret = mhi_ep_update_wr_offset(ring);
++	/* Add element to the event ring */
++	ret = mhi_ep_ring_add_element(ring, el);
 +	if (ret) {
-+		dev_err(dev, "Error updating write pointer\n");
-+		return ret;
++		dev_err(dev, "Error adding element to event ring (%u)\n", ring_idx);
++		goto err_unlock;
 +	}
 +
-+	if (ring->rd_offset < ring->wr_offset)
-+		num_free_elem = (ring->wr_offset - ring->rd_offset) - 1;
-+	else
-+		num_free_elem = ((ring->ring_size - ring->rd_offset) + ring->wr_offset) - 1;
++	mutex_unlock(&mhi_cntrl->event_lock);
 +
-+	/* Check if there is space in ring for adding at least an element */
-+	if (!num_free_elem) {
-+		dev_err(dev, "No space left in the ring\n");
-+		return -ENOSPC;
-+	}
-+
-+	old_offset = ring->rd_offset;
-+	mhi_ep_ring_inc_index(ring);
-+
-+	dev_dbg(dev, "Adding an element to ring at offset (%zu)\n", ring->rd_offset);
-+
-+	/* Update rp in ring context */
-+	ring->ring_ctx->generic.rp = cpu_to_le64((ring->rd_offset * sizeof(*el)) + ring->rbase);
-+
-+	ret = mhi_cntrl->write_to_host(mhi_cntrl, el, ring->rbase + (old_offset * sizeof(*el)),
-+				       sizeof(*el));
-+	if (ret < 0)
-+		return ret;
++	/*
++	 * Raise IRQ to host only if the BEI flag is not set in TRE. Host might
++	 * set this flag for interrupt moderation as per MHI protocol.
++	 */
++	if (!bei)
++		mhi_cntrl->raise_irq(mhi_cntrl, ring->irq_vector);
 +
 +	return 0;
++
++err_unlock:
++	mutex_unlock(&mhi_cntrl->event_lock);
++
++	return ret;
 +}
 +
-+void mhi_ep_ring_init(struct mhi_ep_ring *ring, enum mhi_ep_ring_type type, u32 id)
++static int mhi_ep_send_completion_event(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring,
++					struct mhi_ring_element *tre, u32 len, enum mhi_ev_ccs code)
 +{
-+	ring->type = type;
-+	if (ring->type == RING_TYPE_CMD) {
-+		ring->db_offset_h = EP_CRDB_HIGHER;
-+		ring->db_offset_l = EP_CRDB_LOWER;
-+	} else if (ring->type == RING_TYPE_CH) {
-+		ring->db_offset_h = CHDB_HIGHER_n(id);
-+		ring->db_offset_l = CHDB_LOWER_n(id);
-+		ring->ch_id = id;
-+	} else {
-+		ring->db_offset_h = ERDB_HIGHER_n(id);
-+		ring->db_offset_l = ERDB_LOWER_n(id);
-+	}
++	struct mhi_ring_element event = {};
++
++	event.ptr = cpu_to_le64(ring->rbase + (ring->rd_offset * (sizeof(*tre))));
++	event.dword[0] = MHI_TRE_EV_DWORD0(code, len);
++	event.dword[1] = MHI_TRE_EV_DWORD1(ring->ch_id, MHI_PKT_TYPE_TX_EVENT);
++
++	return mhi_ep_send_event(mhi_cntrl, ring->er_index, &event, !!MHI_TRE_DATA_GET_BEI(tre));
 +}
 +
-+int mhi_ep_ring_start(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring,
-+			union mhi_ep_ring_ctx *ctx)
++int mhi_ep_send_state_change_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state state)
 +{
-+	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-+	int ret;
++	struct mhi_ring_element event = {};
 +
-+	ring->mhi_cntrl = mhi_cntrl;
-+	ring->ring_ctx = ctx;
-+	ring->ring_size = mhi_ep_ring_num_elems(ring);
-+	ring->rbase = le64_to_cpu(ring->ring_ctx->generic.rbase);
++	event.dword[0] = MHI_SC_EV_DWORD0(state);
++	event.dword[1] = MHI_SC_EV_DWORD1(MHI_PKT_TYPE_STATE_CHANGE_EVENT);
 +
-+	if (ring->type == RING_TYPE_CH)
-+		ring->er_index = le32_to_cpu(ring->ring_ctx->ch.erindex);
-+
-+	if (ring->type == RING_TYPE_ER)
-+		ring->irq_vector = le32_to_cpu(ring->ring_ctx->ev.msivec);
-+
-+	/* During ring init, both rp and wp are equal */
-+	ring->rd_offset = mhi_ep_ring_addr2offset(ring, le64_to_cpu(ring->ring_ctx->generic.rp));
-+	ring->wr_offset = mhi_ep_ring_addr2offset(ring, le64_to_cpu(ring->ring_ctx->generic.rp));
-+
-+	/* Allocate ring cache memory for holding the copy of host ring */
-+	ring->ring_cache = kcalloc(ring->ring_size, sizeof(struct mhi_ring_element), GFP_KERNEL);
-+	if (!ring->ring_cache)
-+		return -ENOMEM;
-+
-+	ret = mhi_ep_cache_ring(ring, le64_to_cpu(ring->ring_ctx->generic.wp));
-+	if (ret) {
-+		dev_err(dev, "Failed to cache ring\n");
-+		kfree(ring->ring_cache);
-+		return ret;
-+	}
-+
-+	ring->started = true;
-+
-+	return 0;
++	return mhi_ep_send_event(mhi_cntrl, 0, &event, 0);
 +}
 +
-+void mhi_ep_ring_reset(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring)
++int mhi_ep_send_ee_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_ee_type exec_env)
 +{
-+	ring->started = false;
-+	kfree(ring->ring_cache);
-+	ring->ring_cache = NULL;
++	struct mhi_ring_element event = {};
++
++	event.dword[0] = MHI_EE_EV_DWORD0(exec_env);
++	event.dword[1] = MHI_SC_EV_DWORD1(MHI_PKT_TYPE_EE_EVENT);
++
++	return mhi_ep_send_event(mhi_cntrl, 0, &event, 0);
 +}
++
++static int mhi_ep_send_cmd_comp_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_ev_ccs code)
++{
++	struct mhi_ep_ring *ring = &mhi_cntrl->mhi_cmd->ring;
++	struct mhi_ring_element event = {};
++
++	event.ptr = cpu_to_le64(ring->rbase + (ring->rd_offset *
++					       (sizeof(struct mhi_ring_element))));
++	event.dword[0] = MHI_CC_EV_DWORD0(code);
++	event.dword[1] = MHI_CC_EV_DWORD1(MHI_PKT_TYPE_CMD_COMPLETION_EVENT);
++
++	return mhi_ep_send_event(mhi_cntrl, 0, &event, 0);
++}
++
+ static void mhi_ep_release_device(struct device *dev)
+ {
+ 	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+@@ -227,6 +315,8 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+ 		goto err_free_ch;
+ 	}
+ 
++	mutex_init(&mhi_cntrl->event_lock);
++
+ 	/* Set MHI version and AMSS EE before enumeration */
+ 	mhi_ep_mmio_write(mhi_cntrl, EP_MHIVER, config->mhi_version);
+ 	mhi_ep_mmio_set_env(mhi_cntrl, MHI_EE_AMSS);
+diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+index 8e1de062f820..44a4669382ad 100644
+--- a/include/linux/mhi_ep.h
++++ b/include/linux/mhi_ep.h
+@@ -59,10 +59,14 @@ struct mhi_ep_db_info {
+  * @mhi_event: Points to the event ring configurations table
+  * @mhi_cmd: Points to the command ring configurations table
+  * @sm: MHI Endpoint state machine
++ * @ch_ctx_cache: Cache of host channel context data structure
++ * @ev_ctx_cache: Cache of host event context data structure
++ * @cmd_ctx_cache: Cache of host command context data structure
+  * @ch_ctx_host_pa: Physical address of host channel context data structure
+  * @ev_ctx_host_pa: Physical address of host event context data structure
+  * @cmd_ctx_host_pa: Physical address of host command context data structure
+  * @chdb: Array of channel doorbell interrupt info
++ * @event_lock: Lock for protecting event rings
+  * @raise_irq: CB function for raising IRQ to the host
+  * @alloc_addr: CB function for allocating memory in endpoint for storing host context
+  * @map_addr: CB function for mapping host context to endpoint
+@@ -89,11 +93,15 @@ struct mhi_ep_cntrl {
+ 	struct mhi_ep_cmd *mhi_cmd;
+ 	struct mhi_ep_sm *sm;
+ 
++	struct mhi_chan_ctxt *ch_ctx_cache;
++	struct mhi_event_ctxt *ev_ctx_cache;
++	struct mhi_cmd_ctxt *cmd_ctx_cache;
+ 	u64 ch_ctx_host_pa;
+ 	u64 ev_ctx_host_pa;
+ 	u64 cmd_ctx_host_pa;
+ 
+ 	struct mhi_ep_db_info chdb[4];
++	struct mutex event_lock;
+ 
+ 	void (*raise_irq)(struct mhi_ep_cntrl *mhi_cntrl, u32 vector);
+ 	void __iomem *(*alloc_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t *phys_addr,
 -- 
 2.25.1
 

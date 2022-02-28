@@ -2,225 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796264C66C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F974C66C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234270AbiB1KEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
+        id S231975AbiB1KEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiB1KDz (ORCPT
+        with ESMTP id S233158AbiB1KEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:03:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0A486167
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646042549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LQykvnwn3SvuemPhxL6ZnbbVzqao/qIJLsXksMomzg8=;
-        b=bteBBcogLIz9H1OIWQ13ZcQHQsVIzMXLeneQyCrlEJD72NKUz5y33n6NZ+TiDcumm/XBqg
-        GYHf5DhxyTyevKIaHwHDTPaKYorCnD6nMLwX/ZOi3I1rN8MgqYoC07aHmQmNtr7RUhZbIN
-        KuOSY3CoEjpY+4Z/QfwQBGVPr50CdNs=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-R4W5scAyM9iMRXQCwyZdvA-1; Mon, 28 Feb 2022 05:02:25 -0500
-X-MC-Unique: R4W5scAyM9iMRXQCwyZdvA-1
-Received: by mail-qt1-f200.google.com with SMTP id w11-20020ac84d0b000000b002dddbca1e3dso5979255qtv.15
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:02:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=LQykvnwn3SvuemPhxL6ZnbbVzqao/qIJLsXksMomzg8=;
-        b=sn4pX9UUcKJSWsAj0MDwxTx0sUjuOrNIt7/OCvLbYqS4gwtKXTRfCOSbywcUapq66Y
-         sNr+Kxmc6WX4OjMxDb1JaO9FlBRrZXJOBviTssFmS6Pa8iFAaKVnXfuPyF6wYgi8IIVd
-         A6WtoT0zMIwrhJLc6O+uYm5CyJ73aI4FSaH08YhIkQl8Xr5aVTJLyW/ChjEijvLrMVGu
-         T5SJ3LjbafrKU2mTWtB8nxvq4avqsCHnmXvEbk6K+cTYtrBmoonPqWZ3VkPSqjyFbI3M
-         v2uoqeCUCYb5OLFx2yOu9o6vdR7Xe7GPtLDIKPiEB5BScGNiZx4O+Q19zfPFKn/UefbQ
-         Fy0g==
-X-Gm-Message-State: AOAM533cD4m0eV2JarKiJbQ+X7ZR30uJyv0q7GFY5Drc2iZjMPkxTnGV
-        0tJ5yTA3Y6QsWFRba8EkwLwz+RI0t6pbAqHvT4ZlKpOAuwL76ryJB5SYkZwnMPbqV2RVednRSx1
-        nTen0vBQujVkLWL4Wlc4ophn4
-X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr11054854qkd.142.1646042544527;
-        Mon, 28 Feb 2022 02:02:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzlJPDHDfa3H5fRTOWAtYRpgsWoC6Sm9bnbFfHNNg9fn2aCVPAskop5qSLWf0BQLd3CqPJQvg==
-X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr11054838qkd.142.1646042544244;
-        Mon, 28 Feb 2022 02:02:24 -0800 (PST)
-Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
-        by smtp.gmail.com with ESMTPSA id d4-20020a05620a136400b0060dda40b3ecsm4792367qkl.30.2022.02.28.02.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 02:02:23 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 4/4] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM
- fast hypercall
-In-Reply-To: <6d01c59eab7f31eef1b4249a85869600410336b7.camel@redhat.com>
-References: <20220222154642.684285-1-vkuznets@redhat.com>
- <20220222154642.684285-5-vkuznets@redhat.com>
- <6d01c59eab7f31eef1b4249a85869600410336b7.camel@redhat.com>
-Date:   Mon, 28 Feb 2022 11:02:20 +0100
-Message-ID: <87v8wzcnrn.fsf@redhat.com>
+        Mon, 28 Feb 2022 05:04:14 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726272D1C3;
+        Mon, 28 Feb 2022 02:03:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZMbpMndPQOE8PNdB5xHjLfJkEF0mSPc1Cl/rlyJ4dVKiTFb4q+4/QVLGoZmIIL/058CfjsA/bjOmSuCuTqw6H9DrtHCINN+51NkcOTcKdGPaZblXwCfovoFE483jWKNuH1R6FZLEjwypegq0f7RPjWKxKA8BjT/SteL44bbwqseQrfTou8To1h2RRt25R4PMU82SgT5dH+Rq2fuygiwtWXvqonXo9Ix5rNVxc0CthfM23gPzd3KkA6HvA9pnkZMiTBKuWrVZMWntOy+R4UB4wGoS1rDp099+zvcD4FpmJg2yy771JFJkdt8nWb/0hFVqyaJhQ9wRzQBvbrIguHVynA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y/Uu9HUAr6DHKPpkxrTh+l3FmT1N3LSt0R7pkJ2mBLU=;
+ b=GRtgMuo364MZanUxnmfvmn7FSpi1EwYSI4IbF9EqZxD9/JD3oDK8SIUGEJ0wEz5Dn3Wsg/rBXklXbWkTIU9SJJRuMOgS0oJBn4ybU55M/sT4K9sTtEi4ZOqnx5YlKb8+/tY2GjDFNc5q3W/R7yDJbmH2ivGmlIAD99oLc80s1WAsHvferij+Ni1xqbJOVDchrJm3DpFBUWbiUxb2KyJmXy9Gn2PTLFMU+GHUYGHP0EoJX8GyzQEkdAxfxX4/raAZrdKbnKiJgzY3M9mW8NvdhW+XIMusHQ13K+E9yKnsqIoYh4DSdbCFV8FcrUM6T4nOI0SQz4TGd4wXW/vEr3crUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y/Uu9HUAr6DHKPpkxrTh+l3FmT1N3LSt0R7pkJ2mBLU=;
+ b=U8bsY5dNaaOK7l8nbhI+uO3doFfTaNnGpptMVvuT19T9u8jCmOirgTccdK0dOG3ih+q1cZhYFEIu0my6czOkrPpu+CeLPrr9y3aVFn7YfzQ2CD/ih3OgSeStZRAv4acDbM63lDRcx4FuUUioskNyPz/kWXzJHRqHK0l80PK0Ux9iSx94G14SzlSYf+UoGjkwZOBMzcoNs3VdFdkta9FhmnwDyICRfxNl8wJPm6wfprcqg6YraWnRapdkvN0jDs15tI97V27SIHFen7vPOTq+IkjgSu/WTDwWI2cNcJQw+V6ia/cHnbfzhC4yMPiL8/GCHiKGwdn9T5jSLso0J3b86Q==
+Received: from MW4PR04CA0091.namprd04.prod.outlook.com (2603:10b6:303:83::6)
+ by BL1PR12MB5753.namprd12.prod.outlook.com (2603:10b6:208:390::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Mon, 28 Feb
+ 2022 10:03:34 +0000
+Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:83:cafe::d3) by MW4PR04CA0091.outlook.office365.com
+ (2603:10b6:303:83::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21 via Frontend
+ Transport; Mon, 28 Feb 2022 10:03:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5017.22 via Frontend Transport; Mon, 28 Feb 2022 10:03:34 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 28 Feb
+ 2022 10:03:34 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 28 Feb 2022
+ 02:03:32 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Mon, 28 Feb 2022 02:03:30 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-gpio@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH] gpio: tegra186: Add IRQ per bank for Tegra241
+Date:   Mon, 28 Feb 2022 15:33:17 +0530
+Message-ID: <20220228100317.59885-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d414f05-81ac-4588-b07d-08d9faa194ea
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5753:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5753ECF29FB09589D0DF5B38C0019@BL1PR12MB5753.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9mGjv5dnRE1aVOlGUqC7roKXVAccq2tolFxEQS8RB/eygfviLHNM2UqCKZW+hAzDhqZnfrgZc+xbpB8mgZclBm4uy6w+262p5yjnZR2A40Vr2OTUqT6k2gs0ywTxXOD10X3KWuh8RVW8H+mN6ZI2PAToj0ln5LzEboSplDCPMiEKuK1NA25Y4EmFpdyiN8gGDJ0xc2bUghWSSvLUhmKoD5rYr4FJf+YgdQgSbfCR/Fe2gMu0muVB1T5SwJfxruJ0DjefTRoKi4Oy9vp7zJk537rXx4WhxX58/BsbQc/ih2uQwm8iyGII2/mqIEjixyCcggItdwrjAL0ZEoadjfRJBej7f24c413WlhZvsOCKFTGqM+tFUEAykvPUGiJmH/p7j6HV/P4c0EkQ8Qorg1HlzZKIt+m1WlarJLoRKeC42xDnyYrL15tAf3QudWWJzVIppvs6MfKCS2e5K8EbUOxsl7CbNq6nHjVv0Z2fTzpiMQt5lZ++znQmYpfBQxVvShPqhnqm/ZPiYoV9I4ecVxnILs4jnGrlzGdz1vfgyQiY6Acircc9lA5sRydmg7lcTRbM0I0i9RGvBbHWoEim06EVZ1/xLxlrpkQ29IiFIZb/GYNZZ/sIbw8fAWVSSsvJZx3AIwIbjdC7VXvcCVpJEGQNsAsYh9F2Vo+bH1646E2vAhH3/dqghrw2w/SwwtVPBq/VTb6V40fXBKm/FZY8613nbQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(107886003)(426003)(336012)(36756003)(2616005)(4744005)(82310400004)(26005)(2906002)(8936002)(4326008)(8676002)(70586007)(70206006)(47076005)(36860700001)(86362001)(186003)(316002)(5660300002)(1076003)(356005)(81166007)(40460700003)(7696005)(110136005)(15650500001)(83380400001)(508600001)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 10:03:34.3629
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d414f05-81ac-4588-b07d-08d9faa194ea
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5753
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim Levitsky <mlevitsk@redhat.com> writes:
+Add the number of interrupts per bank for Tegra241 (Grace).
 
-> On Tue, 2022-02-22 at 16:46 +0100, Vitaly Kuznetsov wrote:
->> It has been proven on practice that at least Windows Server 2019 tries
->> using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
->> and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
->> hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
->> information is missing in TLFS as of 6.0b. Currently, KVM returns an error
->> (HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
->> 
->> Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
->> all its parameters fit into RDX:R8 and this is handled by KVM correctly.
->> 
->> Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/hyperv.c | 52 ++++++++++++++++++++++++++++---------------
->>  1 file changed, 34 insertions(+), 18 deletions(-)
->> 
->> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
->> index 6dda93bf98ae..3060057bdfd4 100644
->> --- a/arch/x86/kvm/hyperv.c
->> +++ b/arch/x86/kvm/hyperv.c
->> @@ -1890,6 +1890,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  	int sparse_banks_len;
->>  	u32 vector;
->>  	bool all_cpus;
->> +	int i;
->>  
->>  	if (hc->code == HVCALL_SEND_IPI) {
->>  		if (!hc->fast) {
->> @@ -1910,9 +1911,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  
->>  		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
->>  	} else {
->> -		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
->> -					    sizeof(send_ipi_ex))))
->> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		if (!hc->fast) {
->> +			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
->> +						    sizeof(send_ipi_ex))))
->> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		} else {
->> +			send_ipi_ex.vector = (u32)hc->ingpa;
->> +			send_ipi_ex.vp_set.format = hc->outgpa;
->> +			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
->> +		}
->>  
->>  		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
->>  					 send_ipi_ex.vp_set.format,
->> @@ -1920,8 +1927,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  
->>  		vector = send_ipi_ex.vector;
->>  		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
->> -		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
->> -			sizeof(sparse_banks[0]);
->> +		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
-> Is this change intentional? 
->
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+---
+ drivers/gpio/gpio-tegra186.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yes it is. Previously, 'sparse_banks_len' was the number of bytes to
-read, now it's in u64-s.
-
-(see below)
-
-> I haven't fully reviewed this, because kvm/queue seem to have a bit different
-> version of this, and I didn't fully follow on all of this.
->
->>  
->>  		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
->>  
->> @@ -1931,12 +1937,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  		if (!sparse_banks_len)
->>  			goto ret_success;
->>  
->> -		if (kvm_read_guest(kvm,
->> -				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
->> -							vp_set.bank_contents),
->> -				   sparse_banks,
->> -				   sparse_banks_len))
->> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		if (!hc->fast) {
->> +			if (kvm_read_guest(kvm,
->> +					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
->> +								vp_set.bank_contents),
->> +					   sparse_banks,
->> +					   sparse_banks_len * sizeof(sparse_banks[0])))
-
-^^^ here ^^^
-
->> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		} else {
->> +			/*
->> +			 * The lower half of XMM0 is already consumed, each XMM holds
->> +			 * two sparse banks.
->> +			 */
->> +			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
->> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-
-And here. This is the reason for change: it's more convenient to count
-it 'xmm halves' than in bytes.
-
->> +			for (i = 0; i < sparse_banks_len; i++) {
->> +				if (i % 2)
->> +					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
->> +				else
->> +					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
->> +			}
->> +		}
->>  	}
->>  
->>  check_and_send_ipi:
->> @@ -2098,6 +2119,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
->>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
->>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
->>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
->> +	case HVCALL_SEND_IPI_EX:
->>  		return true;
->>  	}
->>  
->> @@ -2265,14 +2287,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->>  		ret = kvm_hv_flush_tlb(vcpu, &hc);
->>  		break;
->>  	case HVCALL_SEND_IPI:
->> -		if (unlikely(hc.rep)) {
->> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->> -			break;
->> -		}
->> -		ret = kvm_hv_send_ipi(vcpu, &hc);
->> -		break;
->>  	case HVCALL_SEND_IPI_EX:
->> -		if (unlikely(hc.fast || hc.rep)) {
->> +		if (unlikely(hc.rep)) {
->>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->>  			break;
->>  		}
->
->
-
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index 8d298beffd86..031fe105b58e 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -1075,6 +1075,7 @@ static const struct tegra_gpio_soc tegra241_main_soc = {
+ 	.ports = tegra241_main_ports,
+ 	.name = "tegra241-gpio",
+ 	.instance = 0,
++	.num_irqs_per_bank = 8,
+ };
+ 
+ #define TEGRA241_AON_GPIO_PORT(_name, _bank, _port, _pins)	\
+@@ -1095,6 +1096,7 @@ static const struct tegra_gpio_soc tegra241_aon_soc = {
+ 	.ports = tegra241_aon_ports,
+ 	.name = "tegra241-gpio-aon",
+ 	.instance = 1,
++	.num_irqs_per_bank = 8,
+ };
+ 
+ static const struct of_device_id tegra186_gpio_of_match[] = {
 -- 
-Vitaly
+2.17.1
 

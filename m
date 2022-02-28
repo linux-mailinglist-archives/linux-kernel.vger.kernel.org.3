@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157BF4C76D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD3E4C7473
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240430AbiB1SI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S238202AbiB1RpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240764AbiB1SEA (ORCPT
+        with ESMTP id S238359AbiB1RlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:04:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45602BB04;
-        Mon, 28 Feb 2022 09:47:44 -0800 (PST)
+        Mon, 28 Feb 2022 12:41:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B4939F4;
+        Mon, 28 Feb 2022 09:34:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B95FB810DB;
-        Mon, 28 Feb 2022 17:47:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E918C340E7;
-        Mon, 28 Feb 2022 17:47:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2719BB815A6;
+        Mon, 28 Feb 2022 17:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A393C340E7;
+        Mon, 28 Feb 2022 17:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070442;
-        bh=F9gJERXBsZJBDheWrV6kP9fWLD21CujIcydQ8FHt2JU=;
+        s=korg; t=1646069679;
+        bh=HNlEnn31gDfp78Stg/+wfklDNtibWpDYzDPpIk7TOvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZNoTszv2P3XXCVV1P3npjjjWP3l84Tr5c/e2SB93wDo8/EXeiD43x4Fkn8W+yhzT
-         6mFguFOF3wXzZldPkM+HJ9E9o2WCGdrqLww2Lgu17Z3YefkpnnDCq0luoBIfmILvwx
-         kON3LyqgU4GvDzIPWd6g+ePA1M3orWi0qkjAXTJk=
+        b=A07PLgZGVsnut3Qr9ON+rO5LIs/Bg1u1Na3jFW8EfRmz1K88mjeaNcvK9FJuX+zHq
+         MBWNrq224dj2NBKccZLmUTDcyVj1v/w8x0KesDXlRJB8drDdPt3EVUVZLAPIXPGa09
+         wgxa7n1XzVpQNTDWJeQxErWLlWJzWfbOJ+L36e1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 111/164] bpf: Fix crash due to out of bounds access into reg2btf_ids.
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.10 52/80] tracing: Have traceon and traceoff trigger honor the instance
 Date:   Mon, 28 Feb 2022 18:24:33 +0100
-Message-Id: <20220228172410.347859308@linuxfoundation.org>
+Message-Id: <20220228172318.001204707@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +56,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 45ce4b4f9009102cd9f581196d480a59208690c1 ]
+commit 302e9edd54985f584cfc180098f3554774126969 upstream.
 
-When commit e6ac2450d6de ("bpf: Support bpf program calling kernel function") added
-kfunc support, it defined reg2btf_ids as a cheap way to translate the verifier
-reg type to the appropriate btf_vmlinux BTF ID, however
-commit c25b2ae13603 ("bpf: Replace PTR_TO_XXX_OR_NULL with PTR_TO_XXX | PTR_MAYBE_NULL")
-moved the __BPF_REG_TYPE_MAX from the last member of bpf_reg_type enum to after
-the base register types, and defined other variants using type flag
-composition. However, now, the direct usage of reg->type to index into
-reg2btf_ids may no longer fall into __BPF_REG_TYPE_MAX range, and hence lead to
-out of bounds access and kernel crash on dereference of bad pointer.
+If a trigger is set on an event to disable or enable tracing within an
+instance, then tracing should be disabled or enabled in the instance and
+not at the top level, which is confusing to users.
 
-Fixes: c25b2ae13603 ("bpf: Replace PTR_TO_XXX_OR_NULL with PTR_TO_XXX | PTR_MAYBE_NULL")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220216201943.624869-1-memxor@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220223223837.14f94ec3@rorschach.local.home
+
+Cc: stable@vger.kernel.org
+Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
+Tested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/btf.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/trace/trace_events_trigger.c |   52 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 46 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 1621f9d45fbda..c9da250fee38c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5676,7 +5676,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			}
- 			if (check_ctx_reg(env, reg, regno))
- 				return -EINVAL;
--		} else if (is_kfunc && (reg->type == PTR_TO_BTF_ID || reg2btf_ids[reg->type])) {
-+		} else if (is_kfunc && (reg->type == PTR_TO_BTF_ID ||
-+			   (reg2btf_ids[base_type(reg->type)] && !type_flag(reg->type)))) {
- 			const struct btf_type *reg_ref_t;
- 			const struct btf *reg_btf;
- 			const char *reg_ref_tname;
-@@ -5694,7 +5695,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 				reg_ref_id = reg->btf_id;
- 			} else {
- 				reg_btf = btf_vmlinux;
--				reg_ref_id = *reg2btf_ids[reg->type];
-+				reg_ref_id = *reg2btf_ids[base_type(reg->type)];
- 			}
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -940,6 +940,16 @@ static void
+ traceon_trigger(struct event_trigger_data *data, void *rec,
+ 		struct ring_buffer_event *event)
+ {
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (tracer_tracing_is_on(file->tr))
++			return;
++
++		tracer_tracing_on(file->tr);
++		return;
++	}
++
+ 	if (tracing_is_on())
+ 		return;
  
- 			reg_ref_t = btf_type_skip_modifiers(reg_btf, reg_ref_id,
--- 
-2.34.1
-
+@@ -950,8 +960,15 @@ static void
+ traceon_count_trigger(struct event_trigger_data *data, void *rec,
+ 		      struct ring_buffer_event *event)
+ {
+-	if (tracing_is_on())
+-		return;
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (tracer_tracing_is_on(file->tr))
++			return;
++	} else {
++		if (tracing_is_on())
++			return;
++	}
+ 
+ 	if (!data->count)
+ 		return;
+@@ -959,13 +976,26 @@ traceon_count_trigger(struct event_trigg
+ 	if (data->count != -1)
+ 		(data->count)--;
+ 
+-	tracing_on();
++	if (file)
++		tracer_tracing_on(file->tr);
++	else
++		tracing_on();
+ }
+ 
+ static void
+ traceoff_trigger(struct event_trigger_data *data, void *rec,
+ 		 struct ring_buffer_event *event)
+ {
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (!tracer_tracing_is_on(file->tr))
++			return;
++
++		tracer_tracing_off(file->tr);
++		return;
++	}
++
+ 	if (!tracing_is_on())
+ 		return;
+ 
+@@ -976,8 +1006,15 @@ static void
+ traceoff_count_trigger(struct event_trigger_data *data, void *rec,
+ 		       struct ring_buffer_event *event)
+ {
+-	if (!tracing_is_on())
+-		return;
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (!tracer_tracing_is_on(file->tr))
++			return;
++	} else {
++		if (!tracing_is_on())
++			return;
++	}
+ 
+ 	if (!data->count)
+ 		return;
+@@ -985,7 +1022,10 @@ traceoff_count_trigger(struct event_trig
+ 	if (data->count != -1)
+ 		(data->count)--;
+ 
+-	tracing_off();
++	if (file)
++		tracer_tracing_off(file->tr);
++	else
++		tracing_off();
+ }
+ 
+ static int
 
 

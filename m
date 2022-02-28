@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033834C7DDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018E04C7DD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiB1Wyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S231617AbiB1WyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiB1Wyp (ORCPT
+        with ESMTP id S231613AbiB1WyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:54:45 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F243D15A20;
-        Mon, 28 Feb 2022 14:54:03 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a8so27854704ejc.8;
-        Mon, 28 Feb 2022 14:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GsxpUBdbWqhwvtlxJIKUlO0M2+Pr5nAVEC771c3QJ/k=;
-        b=qchEkZ+1MqfOevkqUl4bSWLuZ7qjRLt9ku6OqIaZEEvQ1Qk7/DLqfnsHlKbEjJ10us
-         LBhkjSIMZFSgCJvtojYCJpCHh8YzxsTVbhucBhA3VsJ7C2TAf3Lwqgr+BzzmjPD/0yBs
-         UPo3BEBR0JiOfO+4v6eAy2FQqGoH8T+gF8QsSywoL7HNpkTyUPBGPPXBrUD9j3OCBk+l
-         a5MnWFXFk1Dh2LVWDtF8lL7/kc1gLTmo5cRoTBoQVJ4CG+tmbr2WsDPYw2OiPBTnmV0t
-         /g37eAyk1nRwEr1HkAsix34OpgNgU2BJczZO3qlGo0gA8biAcALfGZ0VoP8EEnvquJUA
-         Nsjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GsxpUBdbWqhwvtlxJIKUlO0M2+Pr5nAVEC771c3QJ/k=;
-        b=5dLqgCPEbvaoyZBCbFSH2f0YwVrW5APitT35avcmRtd1cN3ad7pLsnSceia6NZgS+l
-         czASbRKUYb0NeYIs87BDoLdhgocXwel/2U15IWEgvlg6RR6SnkrstLu3p54WD2FthRKu
-         V7g6/FliUmqLXDjzTyfZJ+emOkLFiTSb/2jyXDstkJ66EMC8O/RrY7OhtkEDaVlcf3im
-         ln2CY7ZoWPK18BpFZbnFf3jS4i+om+a4LNQwVDVPCLLrwX3TEpabqP0S9Rk78aVXjVM1
-         nRZydnR9kfOw5lMBBt7gks/Hs6cC4lBjS55TOqoxO6FXWQ3bmgxp6JyFaOrhR1glU//N
-         e3Tg==
-X-Gm-Message-State: AOAM5329SM5X//iobKfIrm/ep+0jrLhgHTcWKUGksnOVsumCLL0W+PaG
-        NVJC6xeJysa4tELCUwMXeD4R/FwZfMpedA==
-X-Google-Smtp-Source: ABdhPJyur+cHELdmew+tmID4EL9f/bRsLWeA8a6eqRSDwNoW6BmeK9qZpctr7JW7zqp7OBQXQFCesA==
-X-Received: by 2002:a17:906:814f:b0:6a8:49fa:a3f5 with SMTP id z15-20020a170906814f00b006a849faa3f5mr7020486ejw.421.1646088842504;
-        Mon, 28 Feb 2022 14:54:02 -0800 (PST)
-Received: from nlaptop.localdomain (ptr-dtfv0poj8u7zblqwbt6.18120a2.ip6.access.telenet.be. [2a02:1811:cc83:eef0:f2b6:6987:9238:41ca])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b006d5b915f27dsm4736885ejn.169.2022.02.28.14.52.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 14:53:22 -0800 (PST)
-From:   Niels Dossche <dossche.niels@gmail.com>
-To:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Niels Dossche <dossche.niels@gmail.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH] btrfs: add lockdep_assert_held to need_preemptive_reclaim
-Date:   Mon, 28 Feb 2022 23:52:16 +0100
-Message-Id: <20220228225215.16552-1-dossche.niels@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Feb 2022 17:54:15 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F38226;
+        Mon, 28 Feb 2022 14:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646088814; x=1677624814;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3yIm7V15EpTQEteU1KS+l9s/+KA1nJQQU0c8OZGB6jE=;
+  b=E/xTgLexv9H32ir7n2YEtCZhVkPPkwIJeLh0yC7p/A97MVuF4CM/bQMq
+   u/p20IkJRnViF9arsC7dvXd7HLVUcmLeat+m9L6axpo3unY3hDhIapRkD
+   sqUYVf8IcgpiwsJHD5MW4qKyRJwkDLCVO+73/KMMPuAcJvIzpUCyZ+FCR
+   uKsUecWwNDRFHyKtuzIOdgnhnJrG0/WbWmrG/os2EMmaa0479TTxxHYNY
+   ljGI1RENCMWae7Bm/NtDxZy7h7oWExR/l1WKZWItKEgwbPiat+ihnnZKQ
+   qLXsC4xJjlXpUQ307QPmlCSOP7V2eVRDORjxRqiZ0sQjfQNvEO6xhYTUl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250587968"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="250587968"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 14:53:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="803506507"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2022 14:53:31 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOotW-0007rm-RC; Mon, 28 Feb 2022 22:53:30 +0000
+Date:   Tue, 1 Mar 2022 06:52:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Won Chung <wonchung@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Won Chung <wonchung@google.com>
+Subject: Re: [PATCH] usb:typec: Add sysfs support for Type C connector's
+ physical location
+Message-ID: <202203010628.Aac5rBDB-lkp@intel.com>
+References: <20220228190649.362070-1-wonchung@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228190649.362070-1-wonchung@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,35 +71,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a previous patch I extended the locking for member accesses of
-space_info. It was then suggested to also add a lockdep assertion for
-space_info->lock to need_preemptive_reclaim.
+Hi Won,
 
-Suggested-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on chrome-platform/for-next linus/master v5.17-rc6 next-20220228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: hexagon-randconfig-r041-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010628.Aac5rBDB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
+        git checkout 93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/class.c:1649:7: warning: no previous prototype for function 'get_pld' [-Wmissing-prototypes]
+   void *get_pld(struct device *dev)
+         ^
+   drivers/usb/typec/class.c:1649:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *get_pld(struct device *dev)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/get_pld +1649 drivers/usb/typec/class.c
+
+  1648	
+> 1649	void *get_pld(struct device *dev)
+  1650	{
+  1651	#ifdef CONFIG_ACPI
+  1652		struct acpi_pld_info *pld;
+  1653		acpi_status status;
+  1654	
+  1655		if (!has_acpi_companion(dev))
+  1656			return NULL;
+  1657	
+  1658		status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
+  1659		if (ACPI_FAILURE(status))
+  1660			return NULL;
+  1661		return pld;
+  1662	#else
+  1663		return NULL;
+  1664	#endif
+  1665	}
+  1666	
+
 ---
- fs/btrfs/space-info.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
-index 294242c194d8..5464bd168d5b 100644
---- a/fs/btrfs/space-info.c
-+++ b/fs/btrfs/space-info.c
-@@ -734,9 +734,13 @@ static bool need_preemptive_reclaim(struct btrfs_fs_info *fs_info,
- {
- 	u64 global_rsv_size = fs_info->global_block_rsv.reserved;
- 	u64 ordered, delalloc;
--	u64 thresh = div_factor_fine(space_info->total_bytes, 90);
-+	u64 thresh;
- 	u64 used;
- 
-+	lockdep_assert_held(&space_info->lock);
-+
-+	thresh = div_factor_fine(space_info->total_bytes, 90);
-+
- 	/* If we're just plain full then async reclaim just slows us down. */
- 	if ((space_info->bytes_used + space_info->bytes_reserved +
- 	     global_rsv_size) >= thresh)
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF54C6FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941604C6FB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbiB1OmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S237247AbiB1Omr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbiB1OmM (ORCPT
+        with ESMTP id S232032AbiB1Omn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:42:12 -0500
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F03612A8C;
-        Mon, 28 Feb 2022 06:41:33 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id t25so6108550uaa.3;
-        Mon, 28 Feb 2022 06:41:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=209/Hf4nH00Ju/2a2j/NloHG1AU0BZ+wP4Cp3BK+aEk=;
-        b=Cpc6jU/yasZLIfZd/O+REjSGJOsvLHhiNhIXWFpyn+/WwykbswmvLJlqmo05eoS4Be
-         lqCnUek3u1MO5z1StJuvo0ew475gOCHFVFPpBmb5GLGsMWjmHCVIxjWrAf60Bs8o5TiO
-         IFeD+HA/4FMLo0gIp0oCVlhJ0vIzs1XAvVMD5k61vVkrK/jnj7YEoNTX5Cf0GCUrXi2W
-         FmgGR+8mmr5nLiTeHVC0DqO/94HR50FBWr36KfXTUCvA2ICCay3HMxSkqdn/JNpsaTN5
-         Jbm4HErEezKl1mzcN2EvcKlF4HF1hewUCugcOgi3jYZgaWDfVMsKQaYiWf5ZOgfafYmM
-         PHGA==
-X-Gm-Message-State: AOAM5325jYXIk7wfhPLPXEuND8Big6Sp+0F3lYayvnqZ9DfINB/th2v4
-        5XEr00UcIyqX4WpHXbiMBrt9o6EaWj0hbQ==
-X-Google-Smtp-Source: ABdhPJydw5lnGoZRIU0GcbS7Qbf6+7CFKn3KnJhNqyxoKzX8kMHZZT+ej+KH1tLpFTpxCDvl7RoIcw==
-X-Received: by 2002:ab0:4911:0:b0:346:3893:b9be with SMTP id z17-20020ab04911000000b003463893b9bemr7362744uac.94.1646059292013;
-        Mon, 28 Feb 2022 06:41:32 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id u190-20020a1fabc7000000b003334be45eeesm577421vke.34.2022.02.28.06.41.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:41:31 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id 10so6102569uar.9;
-        Mon, 28 Feb 2022 06:41:31 -0800 (PST)
-X-Received: by 2002:ab0:6253:0:b0:341:8be9:7a1 with SMTP id
- p19-20020ab06253000000b003418be907a1mr7934443uao.114.1646059291145; Mon, 28
- Feb 2022 06:41:31 -0800 (PST)
+        Mon, 28 Feb 2022 09:42:43 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A507EDAC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:42:03 -0800 (PST)
+Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MxVbb-1o8w5504iX-00xwMN for <linux-kernel@vger.kernel.org>; Mon, 28 Feb
+ 2022 15:42:02 +0100
+Received: by mail-wm1-f47.google.com with SMTP id i188so146255wma.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:42:01 -0800 (PST)
+X-Gm-Message-State: AOAM530v3mwmFi/aSb6QxCY/nOCOAD+Aitah42X0ljfUF9x2rQC/GeH1
+        pvS4NIqAIu8nyjreoVAnQMub8z1Y/fRvEgxivWM=
+X-Google-Smtp-Source: ABdhPJwk5L+QJI8Ubt5qFj7ABYks38P424wjdir/FSthOlrgADQbn1sfQhvydVSPUW/DGwF6B2NNpmzTkRAyHlnnUZ4=
+X-Received: by 2002:a05:600c:154b:b0:381:8148:64d with SMTP id
+ f11-20020a05600c154b00b003818148064dmr362035wmg.98.1646059321645; Mon, 28 Feb
+ 2022 06:42:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:41:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW2pNUhtrkEv92fd8J-8W0TM_UamJaNcfd+3D4+FXdX6w@mail.gmail.com>
-Message-ID: <CAMuHMdW2pNUhtrkEv92fd8J-8W0TM_UamJaNcfd+3D4+FXdX6w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+References: <20220228120704.346bn5c56e53qylb@finless>
+In-Reply-To: <20220228120704.346bn5c56e53qylb@finless>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 28 Feb 2022 15:41:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1PW8afbjvsUNe2UHXBcQHxGXXPodYiK9AgfW-3tTQR0w@mail.gmail.com>
+Message-ID: <CAK8P3a1PW8afbjvsUNe2UHXBcQHxGXXPodYiK9AgfW-3tTQR0w@mail.gmail.com>
+Subject: Re: [GIT PULL 2/3] TI K3 defconfig updates for v5.18
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        Vignesh Raghavendra <vigneshr@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:TrLUOGzNhBzBKFvqumwl+h6IlkyXEVJqYwhZwWUEbNxjqp9TSyp
+ ND756lm6oSWI2HJKs3AtwKuJi/0iZaedZDLknLbqrRm2QEsRqHVTC4rVJK1vEgV3ZT23+pC
+ X+6wpvPnQgmY+/sOz+KtbP0mMp+rV+XPBjugB+QvCn74UJo4R+VHwWBRenW+zQNCA2IzKAw
+ lH9mV+ZocdoVxHoGJ046A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Y2ALICaAX3U=:AL9ML3wk/0bbQnXU3t445e
+ Q/ICx4l+343B51Bv6ZZNsLFhrVmWVc/MHzQFoOFeM/0kafOxO+CQkaQOMYSbKX+iMfGRRlY8a
+ AqNqGphdNw4hAXzgvFMEQGFU8rX56EVZsAm6kKMAFq51AdkZAgi0VLJ/PaSFA1OkS2vXgAJhu
+ 51f7xSUrOEExyvOOzETDkQRzGxFlX1kJDYGYQvsayw0BdWSa4QkwJTqeNME8RGOaDsZ/gqjo9
+ FzwqxgVIxlgYvgQ0RHIHV8Z+TyUoZV4XjYQpeIaRZeQfrP2sViu4p4Ztnt/GUzoQXmadiy9mV
+ zP5ej8CAlGFPAP9FnVLg7ubWIAW5Nsma3HjBxPpUxPEdybBsKfY6Tt9qBbOFHw9AdMG6LQ2u7
+ tK/d42ssa+Jq6pIlN8Viqa7RY4fS7cPZh1dqzVcs6RDpE5g+IqjRqJ3KQWEujcrK/w8CoKdTU
+ DRqeHXyw23pJx3E1KyMq/Nd0oesd0M2uJzWNVWmWDepuoEgt+keeJOrzeFSaMnG9wZv7vTB7v
+ OZGiwt4mpA5f0Jl661n5Q72ZQYXEUapheDAIsMURxr/Te6UC77wSFDL7vh8YUlxiH9G642Otc
+ cr82vQWnCPeaRgK0UoBT4DfsrY0vcW6i7gJix5E2o626iPnqqA49W7KYs/eyvktOBUjCqt2fd
+ DdgbCOkzxhA+ghAz24Wwx4RZtqnDZ5PEI89aXqJ0ENYnhQth4SeYlzyOQb6XwIddTi5c=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Sun, Feb 27, 2022 at 10:47 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/V2L I2C bindings. RZ/V2L I2C is identical to one found on
-> the RZ/G2L SoC. No driver changes are required as RZ/G2L compatible
-> string "renesas,riic-rz" will be used as a fallback.
+On Mon, Feb 28, 2022 at 1:07 PM Nishanth Menon <nm@ti.com> wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Hi ARM SoC maintainers,
+>
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+>
+>   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.18
+>
+> for you to fetch changes up to 3bc04fba357a269f4b7ff824b146d82ad1ebf9de:
+>
+>   arm64: defconfig: Enable USB controller drivers for TI K3 SoC (2022-01-24 13:40:42 -0600)
+>
+> ----------------------------------------------------------------
+> TI K3 defconfig updates for v5.18
+>
+> * Enable USB modules
 
-> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> @@ -20,6 +20,7 @@ properties:
->            - renesas,riic-r7s72100   # RZ/A1H
->            - renesas,riic-r7s9210    # RZ/A2M
->            - renesas,riic-r9a07g044  # RZ/G2{L,LC}
-> +          - renesas,riic-r9a07g054  # RZ/V2L
->        - const: renesas,riic-rz      # RZ/A or RZ/G2L
+It looks like I had this one applied already from the 5.17 submissions. My plan
+was to drop it all, but it looks like I made a minor mistake here. As
+the contents
+are identical, I'll just keep the old version.
 
-The last comment looks a bit strange now. Perhaps just drop it?
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+        Arnd

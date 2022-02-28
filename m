@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4F14C6EA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E836B4C6EA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbiB1N5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:57:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S236832AbiB1N5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiB1N5f (ORCPT
+        with ESMTP id S236805AbiB1N5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:57:35 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F847D007;
-        Mon, 28 Feb 2022 05:56:56 -0800 (PST)
-Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Mon, 28 Feb 2022
- 21:56:54 +0800
-From:   Yu Tu <yu.tu@amlogic.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Tu <yu.tu@amlogic.com>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH V3] tty: serial: meson: Fix the compile link error reported by kernel test robot
-Date:   Mon, 28 Feb 2022 21:55:30 +0800
-Message-ID: <20220228135530.6918-1-yu.tu@amlogic.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 28 Feb 2022 08:57:47 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6757D016;
+        Mon, 28 Feb 2022 05:57:08 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id b13so10281920qkj.12;
+        Mon, 28 Feb 2022 05:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Q8rfAYWCPuCFZWUbMwuXl1w3LX/ZhxGllWhtuSRFCM=;
+        b=XmcfNyiUVum9tKD+wGJadl/B39imKzB11lORzzu1JLqYGEzZHtwIIKRS/L/robEZIk
+         Hedvm0IK0YoyRKLbu88OSmwQyvvkhqHFQ52EnVbNS4dY0cfI6CYRZ1YABxWCL3nCD/gU
+         c5BWQYU1MU3GBWP432jcEGTsaEToAC+QVQ+z/38DO4fdvdZfGBsgZ/XXbk86VXoZD7Ni
+         fCwxZPJvetv+wltkdg5bgcjM1w7Tah5ncE36d6cI0YggqJJ6mton4CwaviQFkuHl/dYQ
+         oQfGERMn/wWUAHXVn06CiMEQuEpPwGSEb1ymvAUrMKAmrZFwDNdJsH+ddIKPqQ0lcqs8
+         J9vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Q8rfAYWCPuCFZWUbMwuXl1w3LX/ZhxGllWhtuSRFCM=;
+        b=3vkerWnsl72mXFwixZsm4JPI9pCYmw0ZqhtAb79s/MxMcniAM6/dLsh8VrNhSqokKr
+         7ahxJSXbxmCPaMfQTuttf5AavASD9whWtbLZPGJ+aNYetwS3GgGiz5FwaO3CPVJKLdje
+         pwCRgg306hSRvfmbNv5yzhPYCT4H2FcUrN1Z+LCD4f4QZe4CHwdRtNsClTE9UCkNRsO0
+         cJblCN9m0rIaCUlSm7/s07Qm1FwB2CSBoZKc9rDo5Sx0+zSXYJAhZtWvVs1IMG/QJbNe
+         iRL3CRwiswIaDHug9cto+khkcm4AYgnLqwSYOSY7VgY5LK858kCL5QP6XPqTZG4IAGRz
+         KZdQ==
+X-Gm-Message-State: AOAM532WBcyWqlYCrxPhv8Og/3yYIwQdMFAuioYntT5Jh/KjlWpMZSUY
+        qc6ZJ2kj1LBPS9gKvj/hG1c=
+X-Google-Smtp-Source: ABdhPJyTz57PuiLNW+lonT9pwGs9q/VaYGWFFnMuoqKJha0FF8v+OMU7hAd+MXRLdyY3f+G2SdDyPQ==
+X-Received: by 2002:a05:620a:2404:b0:508:b101:6f97 with SMTP id d4-20020a05620a240400b00508b1016f97mr2618410qkn.369.1646056627394;
+        Mon, 28 Feb 2022 05:57:07 -0800 (PST)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id b8-20020a05620a088800b00648bfd00a41sm4932244qka.80.2022.02.28.05.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 05:57:07 -0800 (PST)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        michael.riesch@wolfvision.net, jbx6244@gmail.com,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/8]  enable usb support on rk356x
+Date:   Mon, 28 Feb 2022 08:56:51 -0500
+Message-Id: <20220228135700.1089526-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.11.248]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describes the calculation of the UART baud rate clock using a clock
-frame. Forgot to add in Kconfig kernel test Robot compilation error
-due to COMMON_CLK dependency.
+Good Morning,
 
-Fixes: ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Yu Tu <yu.tu@amlogic.com>
----
- drivers/tty/serial/Kconfig      |  1 +
- drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
- 2 files changed, 27 insertions(+), 11 deletions(-)
+This is my patch series that I have maintained out of tree until the
+combophy driver landed.
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e952ec5c7a7c..a0f2b82fc18b 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
- config SERIAL_MESON
- 	tristate "Meson serial port support"
- 	depends on ARCH_MESON || COMPILE_TEST
-+	depends on COMMON_CLK
- 	select SERIAL_CORE
- 	help
- 	  This enables the driver for the on-chip UARTs of the Amlogic
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index bf6be5468aaf..972f210f3492 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -780,28 +780,37 @@ static int meson_uart_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_out_clk_disable;
-+	}
- 
- 	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
- 
- 	if (meson_ports[pdev->id]) {
- 		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto err_out_clk_disable;
- 	}
- 
- 	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
--	if (!port)
--		return -ENOMEM;
-+	if (!port) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
--	if (IS_ERR(port->membase))
--		return PTR_ERR(port->membase);
-+	if (IS_ERR(port->membase)) {
-+		ret = PTR_ERR(port->membase);
-+		goto err_out_clk_disable;
-+	}
- 
- 	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
- 				    GFP_KERNEL);
--	if (!private_data)
--		return -ENOMEM;
-+	if (!private_data) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	if (device_get_match_data(&pdev->dev))
- 		private_data->use_xtal_clk = true;
-@@ -822,7 +831,7 @@ static int meson_uart_probe(struct platform_device *pdev)
- 
- 	ret = meson_uart_probe_clocks(port);
- 	if (ret)
--		return ret;
-+		goto err_out_clk_disable;
- 
- 	meson_ports[pdev->id] = port;
- 	platform_set_drvdata(pdev, port);
-@@ -831,9 +840,15 @@ static int meson_uart_probe(struct platform_device *pdev)
- 	meson_uart_reset(port);
- 
- 	ret = uart_add_one_port(&meson_uart_driver, port);
--	if (ret)
-+	if (ret) {
- 		meson_ports[pdev->id] = NULL;
-+		goto err_out_clk_disable;
-+	}
-+
-+	return 0;
- 
-+err_out_clk_disable:
-+	clk_disable_unprepare(pclk);
- 	return ret;
- }
- 
+Patch 1 fixes the grf dt binding from the combophy merge.
+Patch 2 adds the dt bindings for the grf changes necessary.
+Patch 3 adds the SoC specific binding.
+Patch 4 adds support to the grf driver to set the rk3566 otg clock
+source.
+Patch 5 is a downstream patch ported forward to shut down the usb3 clock
+when the controller is operating in usb2 mode.
+Patch 6 adds the dwc3 nodes to the rk356x device tree includes.
+Patch 7 enables the dwc3 nodes on the Quartz64 Model A.
+Patch 8 enables the dwc3 nodes on the rk3568-evb.
 
-base-commit: c2faf737abfb10f88f2d2612d573e9edc3c42c37
+Note, there are functional changes from previous versions.
+
+Please review and apply.
+
+Very Respectfully,
+Peter Geis
+
+Changelog:
+v4:
+- Add SoC specific binding, fall back to core.
+ 
+v3:
+- Drop the dwc-of-simple method in favor of using dwc core.
+- Drop all quirks except snps,dis_u2_susphy_quirk, which is necessary to
+  prevent device detection failures in some states.
+- Drop the reset-names.
+
+v2:
+- Add a dt-bindings fix for grf.yaml
+- Unify the reset names.
+- Constrain the force usb2 clock dwc3 patch to only supported variants of
+the ip.
+- Change dwc3-of-simple to support of-match-data.
+- Drop the PCLK-PIPE clk.
+- Rename the usb nodes to be more friendly.
+- Add the rk3568-evb enable patch.
+
+Bin Yang (1):
+  usb: dwc3: core: do not use 3.0 clock when operating in 2.0 mode
+
+Michael Riesch (2):
+  dt-bindings: usb: add rk3568 compatible to rockchip, dwc3
+  arm64: dts: rockchip: add usb3 support to rk3568-evb1-v10
+
+Peter Geis (5):
+  dt-bindings: soc: grf: fix rk3568 usb definitions
+  dt-bindings: soc: grf: add rk3566-pipe-grf compatible
+  soc: rockchip: set dwc3 clock for rk3566
+  arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
+  arm64: dts: rockchip: enable dwc3 on quartz64-a
+
+ .../devicetree/bindings/soc/rockchip/grf.yaml |  5 +-
+ .../bindings/usb/rockchip,dwc3.yaml           |  2 +
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 37 +++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566.dtsi      | 11 +++++
+ .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 46 +++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  9 ++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 35 +++++++++++++-
+ drivers/soc/rockchip/grf.c                    | 17 +++++++
+ drivers/usb/dwc3/core.c                       |  5 ++
+ drivers/usb/dwc3/core.h                       |  1 +
+ 10 files changed, 165 insertions(+), 3 deletions(-)
+
 -- 
-2.33.1
+2.25.1
 

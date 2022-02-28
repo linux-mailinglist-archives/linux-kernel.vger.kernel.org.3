@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AF4C66BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796264C66C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiB1KD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
+        id S234270AbiB1KEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbiB1KCt (ORCPT
+        with ESMTP id S234011AbiB1KDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:02:49 -0500
+        Mon, 28 Feb 2022 05:03:55 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E77336E0E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:58:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0A486167
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:02:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646042321;
+        s=mimecast20190719; t=1646042549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=aa8PdEAcGufSdiHlrYI98SIoUuXszzG1ntEv83vyr9M=;
-        b=X88bSKZ0dUPx/jinNxV3kPxpsPC9dMuHnljPWj6hfrT1+KGO0bEkgTJ+jESX1l3spakOKL
-        7hveRbYfbi4/MmoPGheoXJm4mJO67hWZJiPXAQj42yvBqM1jWeH0be5V6PO2QASjLNVwvu
-        AUgJzcKuq1V1207Nosnaz7AxOG71bcg=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=LQykvnwn3SvuemPhxL6ZnbbVzqao/qIJLsXksMomzg8=;
+        b=bteBBcogLIz9H1OIWQ13ZcQHQsVIzMXLeneQyCrlEJD72NKUz5y33n6NZ+TiDcumm/XBqg
+        GYHf5DhxyTyevKIaHwHDTPaKYorCnD6nMLwX/ZOi3I1rN8MgqYoC07aHmQmNtr7RUhZbIN
+        KuOSY3CoEjpY+4Z/QfwQBGVPr50CdNs=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658-CNBit3fmMSa6u1fpQRtFXA-1; Mon, 28 Feb 2022 04:58:37 -0500
-X-MC-Unique: CNBit3fmMSa6u1fpQRtFXA-1
-Received: by mail-qv1-f69.google.com with SMTP id d15-20020a0cb2cf000000b00432e2ddeefaso6015407qvf.23
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:58:37 -0800 (PST)
+ us-mta-324-R4W5scAyM9iMRXQCwyZdvA-1; Mon, 28 Feb 2022 05:02:25 -0500
+X-MC-Unique: R4W5scAyM9iMRXQCwyZdvA-1
+Received: by mail-qt1-f200.google.com with SMTP id w11-20020ac84d0b000000b002dddbca1e3dso5979255qtv.15
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:02:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=aa8PdEAcGufSdiHlrYI98SIoUuXszzG1ntEv83vyr9M=;
-        b=NMudYajA697tOocKns35wiFdD8q9waQt64qpYTpfWXpvssUA+w3s32muEzN2lodc+f
-         lFmjZnHkU+e81CkfWqxpq794DBvzR0/E//zQtp23QdFEi4LzmMMSiywsPVg+9d2spIwD
-         gN+x1EFFo4IMMBgd5w9EejS8kFzDEZgViT97936IylHJboozt+BCfmNlcS5Yv20QMPpf
-         LwRlyXFZc6cigP4ZxSUeH8QZmPTt0DzXQf4Ch4EzNsKPshIU3AS54fTVc+a60mIcNbv4
-         hbq+gBq3Wy5RO7YlJOeyRbZL/eOf6tBRQyqJKRq4Kng2gczbSdK0uJzCRQ5AjyUIP3lY
-         0SgA==
-X-Gm-Message-State: AOAM530M6He6pXeyTAe2buCmxC+gXfmRmjKgQmqNs4vdPL+WwZ+BTO3R
-        JeClIiCQ4l5zyBQdtHSI6YW2TyKTYzfN62SxjGX6JH+9pixXPAMsKc1IAtDUkcuRt664IJtPGtn
-        BO9HscJl21CC010UEDcVenszE
-X-Received: by 2002:a0c:cdc9:0:b0:42d:b04:4d9e with SMTP id a9-20020a0ccdc9000000b0042d0b044d9emr13580299qvn.64.1646042317395;
-        Mon, 28 Feb 2022 01:58:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyo4xrAts4HPJKrn8HlYd8J0DNmB0KTGjISkhsfaMgrIblP695pg/lQKPjldmsC5IyKfzlgSA==
-X-Received: by 2002:a0c:cdc9:0:b0:42d:b04:4d9e with SMTP id a9-20020a0ccdc9000000b0042d0b044d9emr13580292qvn.64.1646042317153;
-        Mon, 28 Feb 2022 01:58:37 -0800 (PST)
+        bh=LQykvnwn3SvuemPhxL6ZnbbVzqao/qIJLsXksMomzg8=;
+        b=sn4pX9UUcKJSWsAj0MDwxTx0sUjuOrNIt7/OCvLbYqS4gwtKXTRfCOSbywcUapq66Y
+         sNr+Kxmc6WX4OjMxDb1JaO9FlBRrZXJOBviTssFmS6Pa8iFAaKVnXfuPyF6wYgi8IIVd
+         A6WtoT0zMIwrhJLc6O+uYm5CyJ73aI4FSaH08YhIkQl8Xr5aVTJLyW/ChjEijvLrMVGu
+         T5SJ3LjbafrKU2mTWtB8nxvq4avqsCHnmXvEbk6K+cTYtrBmoonPqWZ3VkPSqjyFbI3M
+         v2uoqeCUCYb5OLFx2yOu9o6vdR7Xe7GPtLDIKPiEB5BScGNiZx4O+Q19zfPFKn/UefbQ
+         Fy0g==
+X-Gm-Message-State: AOAM533cD4m0eV2JarKiJbQ+X7ZR30uJyv0q7GFY5Drc2iZjMPkxTnGV
+        0tJ5yTA3Y6QsWFRba8EkwLwz+RI0t6pbAqHvT4ZlKpOAuwL76ryJB5SYkZwnMPbqV2RVednRSx1
+        nTen0vBQujVkLWL4Wlc4ophn4
+X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr11054854qkd.142.1646042544527;
+        Mon, 28 Feb 2022 02:02:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlJPDHDfa3H5fRTOWAtYRpgsWoC6Sm9bnbFfHNNg9fn2aCVPAskop5qSLWf0BQLd3CqPJQvg==
+X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr11054838qkd.142.1646042544244;
+        Mon, 28 Feb 2022 02:02:24 -0800 (PST)
 Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
-        by smtp.gmail.com with ESMTPSA id v72-20020a37614b000000b00648ebe9d4a5sm4879265qkb.116.2022.02.28.01.58.34
+        by smtp.gmail.com with ESMTPSA id d4-20020a05620a136400b0060dda40b3ecsm4792367qkl.30.2022.02.28.02.02.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 01:58:36 -0800 (PST)
+        Mon, 28 Feb 2022 02:02:23 -0800 (PST)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+To:     Maxim Levitsky <mlevitsk@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: x86: hyper-v: Drop redundant 'ex' parameter
- from kvm_hv_send_ipi()
-In-Reply-To: <506c34bc80d1bb740ddf38e6476ad0e16c097282.camel@redhat.com>
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 4/4] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM
+ fast hypercall
+In-Reply-To: <6d01c59eab7f31eef1b4249a85869600410336b7.camel@redhat.com>
 References: <20220222154642.684285-1-vkuznets@redhat.com>
- <20220222154642.684285-2-vkuznets@redhat.com>
- <506c34bc80d1bb740ddf38e6476ad0e16c097282.camel@redhat.com>
-Date:   Mon, 28 Feb 2022 10:58:33 +0100
-Message-ID: <87y21vcnxy.fsf@redhat.com>
+ <20220222154642.684285-5-vkuznets@redhat.com>
+ <6d01c59eab7f31eef1b4249a85869600410336b7.camel@redhat.com>
+Date:   Mon, 28 Feb 2022 11:02:20 +0100
+Message-ID: <87v8wzcnrn.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,80 +85,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Maxim Levitsky <mlevitsk@redhat.com> writes:
 
 > On Tue, 2022-02-22 at 16:46 +0100, Vitaly Kuznetsov wrote:
->> 'struct kvm_hv_hcall' has all the required information already,
->> there's no need to pass 'ex' additionally.
+>> It has been proven on practice that at least Windows Server 2019 tries
+>> using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
+>> and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
+>> hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
+>> information is missing in TLFS as of 6.0b. Currently, KVM returns an error
+>> (HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
 >> 
->> No functional change intended.
+>> Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
+>> all its parameters fit into RDX:R8 and this is handled by KVM correctly.
 >> 
+>> Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
 >> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 >> ---
->>  arch/x86/kvm/hyperv.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>  arch/x86/kvm/hyperv.c | 52 ++++++++++++++++++++++++++++---------------
+>>  1 file changed, 34 insertions(+), 18 deletions(-)
 >> 
 >> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
->> index 6e38a7d22e97..15b6a7bd2346 100644
+>> index 6dda93bf98ae..3060057bdfd4 100644
 >> --- a/arch/x86/kvm/hyperv.c
 >> +++ b/arch/x86/kvm/hyperv.c
->> @@ -1875,7 +1875,7 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
->>  	}
->>  }
->>  
->> -static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
->> +static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  {
->>  	struct kvm *kvm = vcpu->kvm;
->>  	struct hv_send_ipi_ex send_ipi_ex;
->> @@ -1889,7 +1889,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>> @@ -1890,6 +1890,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>>  	int sparse_banks_len;
 >>  	u32 vector;
 >>  	bool all_cpus;
+>> +	int i;
 >>  
->> -	if (!ex) {
->> +	if (hc->code == HVCALL_SEND_IPI) {
->
-> I am thinking, if we already touch this code,
-> why not to use switch here instead on the hc->code,
-> so that we can catch this function being called with something else than
-> HVCALL_SEND_IPI_EX
-
-I'm not against this second line of defense but kvm_hv_send_ipi() is
-only called explicitly from kvm_hv_hypercall()'s switch so something is
-really screwed up if we end up seeing something different from
-HVCALL_SEND_IPI_EX/HVCALL_SEND_IPI here.
-
-I'm now working on a bigger series for TLB flush improvements, will use
-your suggestion there, thanks!
-
->
+>>  	if (hc->code == HVCALL_SEND_IPI) {
 >>  		if (!hc->fast) {
->>  			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
->>  						    sizeof(send_ipi))))
->> @@ -2279,14 +2279,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->>  			break;
->>  		}
->> -		ret = kvm_hv_send_ipi(vcpu, &hc, false);
->> +		ret = kvm_hv_send_ipi(vcpu, &hc);
+>> @@ -1910,9 +1911,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>>  
+>>  		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+>>  	} else {
+>> -		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+>> -					    sizeof(send_ipi_ex))))
+>> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>> +		if (!hc->fast) {
+>> +			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+>> +						    sizeof(send_ipi_ex))))
+>> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>> +		} else {
+>> +			send_ipi_ex.vector = (u32)hc->ingpa;
+>> +			send_ipi_ex.vp_set.format = hc->outgpa;
+>> +			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
+>> +		}
+>>  
+>>  		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+>>  					 send_ipi_ex.vp_set.format,
+>> @@ -1920,8 +1927,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>>  
+>>  		vector = send_ipi_ex.vector;
+>>  		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+>> -		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
+>> -			sizeof(sparse_banks[0]);
+>> +		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
+> Is this change intentional? 
+>
+
+Yes it is. Previously, 'sparse_banks_len' was the number of bytes to
+read, now it's in u64-s.
+
+(see below)
+
+> I haven't fully reviewed this, because kvm/queue seem to have a bit different
+> version of this, and I didn't fully follow on all of this.
+>
+>>  
+>>  		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+>>  
+>> @@ -1931,12 +1937,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>>  		if (!sparse_banks_len)
+>>  			goto ret_success;
+>>  
+>> -		if (kvm_read_guest(kvm,
+>> -				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+>> -							vp_set.bank_contents),
+>> -				   sparse_banks,
+>> -				   sparse_banks_len))
+>> -			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>> +		if (!hc->fast) {
+>> +			if (kvm_read_guest(kvm,
+>> +					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+>> +								vp_set.bank_contents),
+>> +					   sparse_banks,
+>> +					   sparse_banks_len * sizeof(sparse_banks[0])))
+
+^^^ here ^^^
+
+>> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>> +		} else {
+>> +			/*
+>> +			 * The lower half of XMM0 is already consumed, each XMM holds
+>> +			 * two sparse banks.
+>> +			 */
+>> +			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
+>> +				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+
+And here. This is the reason for change: it's more convenient to count
+it 'xmm halves' than in bytes.
+
+>> +			for (i = 0; i < sparse_banks_len; i++) {
+>> +				if (i % 2)
+>> +					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
+>> +				else
+>> +					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
+>> +			}
+>> +		}
+>>  	}
+>>  
+>>  check_and_send_ipi:
+>> @@ -2098,6 +2119,7 @@ static bool is_xmm_fast_hypercall(struct kvm_hv_hcall *hc)
+>>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+>>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
+>>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
+>> +	case HVCALL_SEND_IPI_EX:
+>>  		return true;
+>>  	}
+>>  
+>> @@ -2265,14 +2287,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>>  		ret = kvm_hv_flush_tlb(vcpu, &hc);
 >>  		break;
+>>  	case HVCALL_SEND_IPI:
+>> -		if (unlikely(hc.rep)) {
+>> -			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>> -			break;
+>> -		}
+>> -		ret = kvm_hv_send_ipi(vcpu, &hc);
+>> -		break;
 >>  	case HVCALL_SEND_IPI_EX:
->>  		if (unlikely(hc.fast || hc.rep)) {
+>> -		if (unlikely(hc.fast || hc.rep)) {
+>> +		if (unlikely(hc.rep)) {
 >>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
 >>  			break;
 >>  		}
->> -		ret = kvm_hv_send_ipi(vcpu, &hc, true);
->> +		ret = kvm_hv_send_ipi(vcpu, &hc);
->>  		break;
->>  	case HVCALL_POST_DEBUG_DATA:
->>  	case HVCALL_RETRIEVE_DEBUG_DATA:
 >
->
->
-> Other than this minor nitpick:
->
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
->
->
-> Best regards,
-> 	Maxim Levitsky
 >
 
 -- 

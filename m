@@ -2,109 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125CD4C7E41
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E74B24C7E42
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiB1XZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:25:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S229792AbiB1X03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiB1XZV (ORCPT
+        with ESMTP id S229529AbiB1X02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:25:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB02BC3311;
-        Mon, 28 Feb 2022 15:24:41 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B22F478;
-        Tue,  1 Mar 2022 00:24:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646090679;
-        bh=GequZV5BwVjpKPb+Q/rQWeSXyCGPG/WT/t2NCTE3e44=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Xi4ptyLzFjcJ0ffGr6xtQG2NQb6Tbk4Id3luptcVQKUalOnq7cbUIgwJlty9rVGMd
-         TevFoHW2bEgBDHUj46YHrjIPfOEZY5t5NTiAEOz//i69Gtnx9P0eytbjrV05xq5ocC
-         MbG5jVP6lmrsARn2BaUJRbkXne/VCRmLhDAR3bOw=
-Content-Type: text/plain; charset="utf-8"
+        Mon, 28 Feb 2022 18:26:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A7AC3311
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:25:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fCfuRH4s50AAt2MwUz3kzZenb4+CLJUMfZe9pE/B82w=; b=N545VQlozc98xk9T4Q5E0pyMm0
+        BQcqTY9UVW5NUE8VxaW4ogSd4Yn1X2nqQqopTxs/lJlm1G0hDebmGPb08nlH/mHfFOwegLmWJhzeN
+        t3wfF59eEXaBT439ypD5Nm9GExWLcTpO91yNjHr/93IRWsPyv2XoDFEr7+7QNa+4j0qkTLAd/2kOJ
+        WbjxF2QSDROvWfCMLJ6lD2gkJ5Ks8xjmubX142CPs7do+lKmw+YRPAKr5zZEP1nGRvzstE34Q6kzp
+        J9mOa3xaO+ZYymb7V4HLrZ9enNu6Ikq5lTyDFufyAZ6lnoSnHKthJfhOM6r5GJnhY2rFmB+1bLpHa
+        wwCLrLpQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOpOF-0090aY-Fj; Mon, 28 Feb 2022 23:25:15 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ACFAA986271; Tue,  1 Mar 2022 00:25:13 +0100 (CET)
+Date:   Tue, 1 Mar 2022 00:25:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, alexei.starovoitov@gmail.com,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-ID: <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.892372059@infradead.org>
+ <20220228150705.aab2d654b973109bab070ffe@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220228183955.25508-1-jose.exposito89@gmail.com>
-References: <20220228183955.25508-1-jose.exposito89@gmail.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: switch to devm_drm_of_get_bridge
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-pwm@vger.kernel.org, jonas@kwiboo.se, airlied@linux.ie,
-        robert.foss@linaro.org, dri-devel@lists.freedesktop.org,
-        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, thierry.reding@gmail.com,
-        Laurent.pinchart@ideasonboard.com, u.kleine-koenig@pengutronix.de,
-        =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        lee.jones@linaro.org, maxime@cerno.tech
-To:     =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        andrzej.hajda@intel.com
-Date:   Mon, 28 Feb 2022 23:24:36 +0000
-Message-ID: <164609067646.2361501.15747139249939190799@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jos=C3=A9
+On Mon, Feb 28, 2022 at 03:07:05PM +0900, Masami Hiramatsu wrote:
+> Hi Peter,
+> 
+> So, instead of this change, can you try below?
+> This introduce the arch_adjust_kprobe_addr() and use it in the kprobe_addr()
+> so that it can handle the case that user passed the probe address in 
+> _text+OFFSET format.
 
-Quoting Jos=C3=A9 Exp=C3=B3sito (2022-02-28 18:39:54)
-> The function "drm_of_find_panel_or_bridge" has been deprecated in
-> favor of "devm_drm_of_get_bridge".
->=20
-> Switch to the new function and reduce boilerplate.
->=20
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/brid=
-ge/ti-sn65dsi86.c
-> index dab8f76618f3..fb8e16ed7e90 100644
-> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> @@ -1232,15 +1232,9 @@ static int ti_sn_bridge_probe(struct auxiliary_dev=
-ice *adev,
->  {
->         struct ti_sn65dsi86 *pdata =3D dev_get_drvdata(adev->dev.parent);
->         struct device_node *np =3D pdata->dev->of_node;
-> -       struct drm_panel *panel;
->         int ret;
-> =20
-> -       ret =3D drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
-> -       if (ret)
-> -               return dev_err_probe(&adev->dev, ret,
-> -                                    "could not find any panel node\n");
-> -
-> -       pdata->next_bridge =3D devm_drm_panel_bridge_add(pdata->dev, pane=
-l);
-> +       pdata->next_bridge =3D devm_drm_of_get_bridge(pdata->dev, np, 1, =
-0);
+It works a little... at the very least it still needs
+arch_kprobe_on_func_entry() allowing offset 4.
 
-Yikes, I was about to rely on this panel variable to determine if the
-device is a panel or a display port connector. (Well, I am relying on
-it, and patches are hoping to be reposted this week).
+But looking at this, we've got:
 
-Is there expected to be another way to identify if the next connection
-is a panel or a bridge?
+kprobe_on_func_entry(addr, sym, offset)
+  _kprobe_addr(addr, sym, offset)
+    if (sym)
+      addr = kprobe_lookup_name()
+           = kallsyms_lookup_name()
+    arch_adjust_kprobe_addr(addr+offset)
+      skip_endbr()
+        kallsyms_loopup_size_offset(addr, ...)
+  kallsyms_lookup_size_offset(addr, NULL, &offset)
+  arch_kprobe_on_func_entry(offset)
 
-Regards
+Which is _3_ kallsyms lookups and 3 weak/arch hooks.
 
---
-Kieran
+Surely we can make this a little more streamlined? The below seems to
+work.
 
+I think with a little care and testing it should be possible to fold all
+the magic of PowerPC's kprobe_lookup_name() into this one hook as well,
+meaning we can get rid of kprobe_lookup_name() entirely.  Naveen?
 
->         if (IS_ERR(pdata->next_bridge)) {
->                 DRM_ERROR("failed to create panel bridge\n");
->                 return PTR_ERR(pdata->next_bridge);
-> --=20
-> 2.25.1
->
+This then gets us down to a 1 kallsyms call and 1 arch hook. Hmm?
+
+---
+ arch/powerpc/kernel/kprobes.c  |   34 +++++++++++++++---------
+ arch/x86/kernel/kprobes/core.c |   17 ++++++++++++
+ include/linux/kprobes.h        |    3 +-
+ kernel/kprobes.c               |   56 ++++++++++++++++++++++++++++++++++-------
+ 4 files changed, 87 insertions(+), 23 deletions(-)
+
+--- a/arch/powerpc/kernel/kprobes.c
++++ b/arch/powerpc/kernel/kprobes.c
+@@ -105,6 +105,27 @@ kprobe_opcode_t *kprobe_lookup_name(cons
+ 	return addr;
+ }
+ 
++static bool arch_kprobe_on_func_entry(unsigned long offset)
++{
++#ifdef PPC64_ELF_ABI_v2
++#ifdef CONFIG_KPROBES_ON_FTRACE
++	return offset <= 16;
++#else
++	return offset <= 8;
++#endif
++#else
++	return !offset;
++#endif
++}
++
++/* XXX try and fold the magic of kprobe_lookup_name() in this */
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
++					 bool *on_func_entry)
++{
++	*on_func_entry = arch_kprobe_on_func_entry(offset);
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
+ void *alloc_insn_page(void)
+ {
+ 	void *page;
+@@ -218,19 +239,6 @@ static nokprobe_inline void set_current_
+ 	kcb->kprobe_saved_msr = regs->msr;
+ }
+ 
+-bool arch_kprobe_on_func_entry(unsigned long offset)
+-{
+-#ifdef PPC64_ELF_ABI_v2
+-#ifdef CONFIG_KPROBES_ON_FTRACE
+-	return offset <= 16;
+-#else
+-	return offset <= 8;
+-#endif
+-#else
+-	return !offset;
+-#endif
+-}
+-
+ void arch_prepare_kretprobe(struct kretprobe_instance *ri, struct pt_regs *regs)
+ {
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->link;
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -52,6 +52,7 @@
+ #include <asm/insn.h>
+ #include <asm/debugreg.h>
+ #include <asm/set_memory.h>
++#include <asm/ibt.h>
+ 
+ #include "common.h"
+ 
+@@ -301,6 +302,22 @@ static int can_probe(unsigned long paddr
+ 	return (addr == paddr);
+ }
+ 
++/* If the x86 support IBT (ENDBR) it must be skipped. */
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
++					 bool *on_func_entry)
++{
++	if (is_endbr(*(u32 *)addr)) {
++		*on_func_entry = !offset || offset == 4;
++		if (*on_func_entry)
++			offset = 4;
++
++	} else {
++		*on_func_entry = !offset;
++	}
++
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
+ /*
+  * Copy an instruction with recovering modified instruction by kprobes
+  * and adjust the displacement if the instruction uses the %rip-relative
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
+ extern void kprobes_inc_nmissed_count(struct kprobe *p);
+ extern bool arch_within_kprobe_blacklist(unsigned long addr);
+ extern int arch_populate_kprobe_blacklist(void);
+-extern bool arch_kprobe_on_func_entry(unsigned long offset);
+ extern int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset);
+ 
+ extern bool within_kprobe_blacklist(unsigned long addr);
+@@ -384,6 +383,8 @@ static inline struct kprobe_ctlblk *get_
+ }
+ 
+ kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset, bool *on_func_entry);
++
+ int register_kprobe(struct kprobe *p);
+ void unregister_kprobe(struct kprobe *p);
+ int register_kprobes(struct kprobe **kps, int num);
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1489,24 +1489,63 @@ bool within_kprobe_blacklist(unsigned lo
+ }
+ 
+ /*
++ * arch_adjust_kprobe_addr - adjust the address
++ * @addr: symbol base address
++ * @offset: offset within the symbol
++ * @on_func_entry: was this @addr+@offset on the function entry
++ *
++ * Typically returns @addr + @offset, except for special cases where the
++ * function might be prefixed by a CFI landing pad, in that case any offset
++ * inside the landing pad is mapped to the first 'real' instruction of the
++ * symbol.
++ *
++ * Specifically, for things like IBT/BTI, skip the resp. ENDBR/BTI.C
++ * instruction at +0.
++ */
++kprobe_opcode_t *__weak arch_adjust_kprobe_addr(unsigned long addr,
++						unsigned long offset,
++						bool *on_func_entry)
++{
++	*on_func_entry = !offset;
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
++/*
+  * If 'symbol_name' is specified, look it up and add the 'offset'
+  * to it. This way, we can specify a relative address to a symbol.
+  * This returns encoded errors if it fails to look up symbol or invalid
+  * combination of parameters.
+  */
+-static kprobe_opcode_t *_kprobe_addr(kprobe_opcode_t *addr,
+-			const char *symbol_name, unsigned int offset)
++static kprobe_opcode_t *
++_kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
++	     unsigned long offset, bool *on_func_entry)
+ {
+ 	if ((symbol_name && addr) || (!symbol_name && !addr))
+ 		goto invalid;
+ 
+ 	if (symbol_name) {
++		/*
++		 * Input: @sym + @offset
++		 * Output: @addr + @offset
++		 *
++		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
++		 *       argument into it's output!
++		 */
+ 		addr = kprobe_lookup_name(symbol_name, offset);
+ 		if (!addr)
+ 			return ERR_PTR(-ENOENT);
++	} else {
++		/*
++		 * Input: @addr + @offset
++		 * Output: @addr' + @offset'
++		 */
++		if (!kallsyms_lookup_size_offset((unsigned long)addr + offset,
++						 NULL, &offset))
++			return ERR_PTR(-ENOENT);
++		addr = (kprobe_opcode_t *)((unsigned long)addr - offset);
+ 	}
+ 
+-	addr = (kprobe_opcode_t *)(((char *)addr) + offset);
++	addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
+ 	if (addr)
+ 		return addr;
+ 
+@@ -1516,7 +1555,8 @@ static kprobe_opcode_t *_kprobe_addr(kpr
+ 
+ static kprobe_opcode_t *kprobe_addr(struct kprobe *p)
+ {
+-	return _kprobe_addr(p->addr, p->symbol_name, p->offset);
++	bool on_func_entry;
++	return _kprobe_addr(p->addr, p->symbol_name, p->offset, &on_func_entry);
+ }
+ 
+ /*
+@@ -2067,15 +2107,13 @@ bool __weak arch_kprobe_on_func_entry(un
+  */
+ int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset)
+ {
+-	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset);
++	bool on_func_entry;
++	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset, &on_func_entry);
+ 
+ 	if (IS_ERR(kp_addr))
+ 		return PTR_ERR(kp_addr);
+ 
+-	if (!kallsyms_lookup_size_offset((unsigned long)kp_addr, NULL, &offset))
+-		return -ENOENT;
+-
+-	if (!arch_kprobe_on_func_entry(offset))
++	if (!on_func_entry)
+ 		return -EINVAL;
+ 
+ 	return 0;

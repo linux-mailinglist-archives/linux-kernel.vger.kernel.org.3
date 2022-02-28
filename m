@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CC74C6E15
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D714C6E1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiB1NYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S235069AbiB1N0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235712AbiB1NYZ (ORCPT
+        with ESMTP id S230288AbiB1N0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:24:25 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A217E26576;
-        Mon, 28 Feb 2022 05:23:45 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeMjazBxiKEAIAA--.10706S6;
-        Mon, 28 Feb 2022 21:23:39 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] MIPS: Remove not used variable usermem
-Date:   Mon, 28 Feb 2022 21:23:37 +0800
-Message-Id: <1646054617-16799-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxeMjazBxiKEAIAA--.10706S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFW7Xw4kJr48CryfXr1rtFb_yoWfJFb_tr
-        47tF4kZr15Z3Wj9rWDXw4fWFWIyan2qFZa9wnYv3yayw15Jr1UurWYyF9xXrn5urs5ArZY
-        yrZ0vFn0kF4xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr
-        1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUCJm7UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Mon, 28 Feb 2022 08:26:13 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409542657E;
+        Mon, 28 Feb 2022 05:25:34 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7E1A22223A;
+        Mon, 28 Feb 2022 14:25:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1646054732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=abmqdbBeNgx6suTFoI0RuzJ2gA54tHckW0E9a+phtN4=;
+        b=GbAm5Gl/9TbdVh6xpsFmGKmHkQbCc1t1Wkk2gEA44/Osy3W+6A3Q5XNv2xSoeUSk+Ex1c9
+        Gzs8mN5suVA4CQro1sFidtY0mo88t/gpbpNEKqcAcEt1lAD60d0gMG98MYX1JD8j6TwTc4
+        gUhBtdyDwnCeMWJsce7cAaKPyxM7nOA=
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, heiko.thiery@gmail.com,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] arm64: dts: imx8mn-evk: add QSPI flash
+Date:   Mon, 28 Feb 2022 14:25:23 +0100
+Message-Id: <20220228132523.2679099-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,36 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now, the variable usermem is not used any more, just remove it.
+There is a 32MiB Micron MT25QU256ABA1 serial NOR flash on the EVK board.
+Add a device tree node for it.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Tested on a 8MNANOD3L-EVK.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/mips/kernel/setup.c | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index c940405..89fdaae 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -338,7 +338,6 @@ static void __init bootmem_init(void)
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
+index c3f15192b76c..dc75d6d13bb3 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
+@@ -110,6 +110,22 @@ vddio: vddio-regulator {
+ 	};
+ };
  
- #endif	/* CONFIG_SGI_IP27 */
++&flexspi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexspi>;
++	status = "okay";
++
++	flash0: flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		spi-max-frequency = <166000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
++	};
++};
++
+ &i2c1 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default";
+@@ -267,6 +283,17 @@ MX8MN_IOMUXC_SAI2_RXC_GPIO4_IO22	0x19
+ 		>;
+ 	};
  
--static int usermem __initdata;
- static phys_addr_t memory_limit;
- static phys_addr_t memory_base;
- 
-@@ -628,10 +627,6 @@ static void __init arch_mem_init(char **cmdline_p)
- 	*cmdline_p = command_line;
- 
- 	parse_early_param();
--
--	if (usermem)
--		pr_info("User-defined physical RAM map overwrite\n");
--
- 	check_kernel_sections_mem();
- 
- 	early_init_fdt_reserve_self();
++	pinctrl_flexspi: flexspigrp {
++		fsl,pins = <
++			MX8MN_IOMUXC_NAND_ALE_QSPI_A_SCLK               0x1c2
++			MX8MN_IOMUXC_NAND_CE0_B_QSPI_A_SS0_B            0x82
++			MX8MN_IOMUXC_NAND_DATA00_QSPI_A_DATA0           0x82
++			MX8MN_IOMUXC_NAND_DATA01_QSPI_A_DATA1           0x82
++			MX8MN_IOMUXC_NAND_DATA02_QSPI_A_DATA2           0x82
++			MX8MN_IOMUXC_NAND_DATA03_QSPI_A_DATA3           0x82
++		>;
++	};
++
+ 	pinctrl_gpio_led: gpioledgrp {
+ 		fsl,pins = <
+ 			MX8MN_IOMUXC_NAND_READY_B_GPIO3_IO16	0x19
 -- 
-2.1.0
+2.30.2
 

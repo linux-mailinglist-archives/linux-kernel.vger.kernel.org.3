@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CF44C61DC
+	by mail.lfdr.de (Postfix) with ESMTP id 760804C61DD
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 04:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232907AbiB1Dg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 22:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S232942AbiB1Dg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 22:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiB1Dg0 (ORCPT
+        with ESMTP id S232803AbiB1Dg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 22:36:26 -0500
+        Sun, 27 Feb 2022 22:36:28 -0500
 Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E85B8A8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 19:35:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBAF5BD12
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 19:35:49 -0800 (PST)
 Received: from droid01-cd.amlogic.com (10.98.11.200) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Mon, 28 Feb 2022
- 11:35:45 +0800
+ 11:35:46 +0800
 From:   Shunzhou Jiang <shunzhou.jiang@amlogic.com>
 To:     <shunzhou.jiang@amlogic.com>
 CC:     <linux-arm-kernel@lists.infradead.org>,
@@ -26,10 +26,12 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <narmstrong@baylibre.com>, <khilman@baylibre.com>,
         <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
         <jianxin.pan@amlogic.com>
-Subject: [PATCH V5 0/2] Power: meson-s4: add s4 power domain driver
-Date:   Mon, 28 Feb 2022 11:35:40 +0800
-Message-ID: <20220228033542.3594861-1-shunzhou.jiang@amlogic.com>
+Subject: [PATCH V5 1/2] dt-bindings: power: add Amlogic s4 power domains bindings
+Date:   Mon, 28 Feb 2022 11:35:41 +0800
+Message-ID: <20220228033542.3594861-2-shunzhou.jiang@amlogic.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220228033542.3594861-1-shunzhou.jiang@amlogic.com>
+References: <20220228033542.3594861-1-shunzhou.jiang@amlogic.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -43,21 +45,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds Power controller driver support for Meson-S4 SoC
-Likes Meson-A1, the power domains register only can access in secure world
+Add the bindings for the Amlogic Secure power domains, controlling the
+secure power domains.
 
-Shunzhou Jiang (2):
-  dt-bindings: power: add Amlogic s4 power domains bindings
-  soc: s4: Add support for power domains controller
+The bindings targets the Amlogic s4, in which the power domains registers
+are in secure world.
 
+Signed-off-by: Shunzhou Jiang <shunzhou.jiang@amlogic.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
  .../power/amlogic,meson-sec-pwrc.yaml         |  3 ++-
- drivers/soc/amlogic/meson-secure-pwrc.c       | 22 +++++++++++++++++++
- include/dt-bindings/power/meson-s4-power.h    | 19 ++++++++++++++++
- 3 files changed, 43 insertions(+), 1 deletion(-)
+ include/dt-bindings/power/meson-s4-power.h    | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
  create mode 100644 include/dt-bindings/power/meson-s4-power.h
 
-
-base-commit: 3448a018ded03ccd4093d6675f4a39eb2d1a18ef
+diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+index 5dae04d2936c..7657721a4e96 100644
+--- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
++++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+@@ -12,13 +12,14 @@ maintainers:
+   - Jianxin Pan <jianxin.pan@amlogic.com>
+ 
+ description: |+
+-  Secure Power Domains used in Meson A1/C1 SoCs, and should be the child node
++  Secure Power Domains used in Meson A1/C1/S4 SoCs, and should be the child node
+   of secure-monitor.
+ 
+ properties:
+   compatible:
+     enum:
+       - amlogic,meson-a1-pwrc
++      - amlogic,meson-s4-pwrc
+ 
+   "#power-domain-cells":
+     const: 1
+diff --git a/include/dt-bindings/power/meson-s4-power.h b/include/dt-bindings/power/meson-s4-power.h
+new file mode 100644
+index 000000000000..462dd2cb938b
+--- /dev/null
++++ b/include/dt-bindings/power/meson-s4-power.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
++/*
++ * Copyright (c) 2021 Amlogic, Inc.
++ * Author: Shunzhou Jiang <shunzhou.jiang@amlogic.com>
++ */
++
++#ifndef _DT_BINDINGS_MESON_S4_POWER_H
++#define _DT_BINDINGS_MESON_S4_POWER_H
++
++#define PWRC_S4_DOS_HEVC_ID	0
++#define PWRC_S4_DOS_VDEC_ID	1
++#define PWRC_S4_VPU_HDMI_ID	2
++#define PWRC_S4_USB_COMB_ID	3
++#define PWRC_S4_GE2D_ID		4
++#define PWRC_S4_ETH_ID		5
++#define PWRC_S4_DEMOD_ID	6
++#define PWRC_S4_AUDIO_ID	7
++
++#endif
 -- 
 2.34.1
 

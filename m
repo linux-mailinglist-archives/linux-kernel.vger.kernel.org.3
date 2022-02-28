@@ -2,142 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF044C677F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9164C681C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbiB1Kt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S235088AbiB1Kvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiB1Ktj (ORCPT
+        with ESMTP id S235007AbiB1Kv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:49:39 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3B15D1B5;
-        Mon, 28 Feb 2022 02:48:59 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4376458027D;
-        Mon, 28 Feb 2022 05:48:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 28 Feb 2022 05:48:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=1vVga+h9htbpuVX4XD8VlM10uiiq7ZO3+UmFQE
-        c01vQ=; b=G+ZJOtIyw2/WazvvDKJTEgXHqoMoF3VJv2oKOGq4HDeWkTpOd8WBaT
-        4rHcpBbDc+9Q40E3VRnQZVyZ/TnAHgiMv+n0jHOCoqgKJb3y5c2rfx6jE89SIb6V
-        wuJl+VrQBakHz1bRaiUzukCY3YwHyArUCT2bEJjwBw4fBaNLxo87f39svsg6rW4M
-        FrMUpwRPrVgJt2SgGfjXyh4rTUGiwuracGqh9pypGThpKvggMHATxHjho+kSf+Pw
-        heMa0F3/JUt9L4e2D7WaaUrptrbQLO8XFLDibfMwypC1vdK9qeVxb0NoqswZmsY8
-        Z8Mrhat28uTSDyacKEGujZRc9zr/khHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1vVga+h9htbpuVX4X
-        D8VlM10uiiq7ZO3+UmFQEc01vQ=; b=Nh+yscHoWuHDO/JIgKuLzs9zoLl0tZ1mY
-        ytVar5473XvqOezOvfLch4dZ8miNo2Z2FCrbhGra/iXZZdTGj82hJZ68h7V5YRmO
-        qktlxsL8Cx7Lvz3+2nygzNzE9AHjwGj87qTX5C+amkmj2In5kCJolrxtOIDvYkTY
-        Tbue0a8O+ceonP7NqFL1vPkI3KRKftK+bVsX/cJM7Lr7z8vJZIBiSrvH46HxZ7Ra
-        lJGmWt7sv13cPZClOiB/gFeqAjLI33HUDPddiy2dFm1uZyNwtg3B/aQgCLLlC4PB
-        A1DMifsXZpaLTCmKf/PeqVXgw6O28YXpIKL45K2B4I2vA+2RFg9IA==
-X-ME-Sender: <xms:m6gcYpgoaOlXM9gadUBqEGIAviqtLOe-Nbf7EFYWzlYEpnLZERGT7A>
-    <xme:m6gcYuD053lZfrxnnUQtlFblUFSPo_WOMfaqeXe9XLBvJjrhtJz_Lx2q8W_-Pv2RD
-    uGpitA8Be-iJw>
-X-ME-Received: <xmr:m6gcYpHbpEOohqqrGSPr4j0Eli8Xd9nAJL7TGNVlr2KLUHVHL91HzCLHWwCMO9LUARfDg-L3EYLU869VfSBzFb25Y3o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:m6gcYuQuBVdHYfmN6Kvl3QfdijgiNSdtGgbI1hwtxnedBylDivM-Pw>
-    <xmx:m6gcYmyTyePgk8ZBswPOe7HUw3YRsapruwGegxM362ndjbrUM4N_ZQ>
-    <xmx:m6gcYk5pvScL-ey9GzG6KyC7NFnr5xGHbFmsISqoiWWB8gRNSWUiqg>
-    <xmx:m6gcYrrYq0YcPQnLfgZ3tW_Y0OF1eHNO5snpJM6jCnDUonnH4CWn_Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Feb 2022 05:48:58 -0500 (EST)
-Date:   Mon, 28 Feb 2022 11:48:56 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tty tree with the spi tree
-Message-ID: <YhyomKViVd3iPYDE@kroah.com>
-References: <20220228191316.411f1475@canb.auug.org.au>
+        Mon, 28 Feb 2022 05:51:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B7063BCE;
+        Mon, 28 Feb 2022 02:50:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8665F60B14;
+        Mon, 28 Feb 2022 10:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EF1C340E7;
+        Mon, 28 Feb 2022 10:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646045447;
+        bh=RGxEAwdzbR9egvtFInpa3m0a3G+1maC22+8uUJecp+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2mr4o0ihvx67u6tNw0ZQeK8ySDxIIZCnqC4Ex4voBp9cJOAwzLtVgodPoUWwqQh6K
+         Pq2Eo6lAjCsN1L0eP39op+X0xNeqTqIOQPRIGAml0Xcl7auXm21Ibxjj/AduI8S862
+         87O8cic3X/60Za8DC5rd0XOSXhsp77pYqumwDpDM=
+Date:   Mon, 28 Feb 2022 11:50:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+Message-ID: <YhypAxDfWpDhPUbc@kroah.com>
+References: <20220228103142.3301082-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228191316.411f1475@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 07:13:16PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Today's linux-next merge of the tty tree got a conflict in:
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
 > 
->   MAINTAINERS
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=gnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is the
+> minimum compiler version used for building kernels, that is no longer a
+> concern. Similarly, the behavior of 'inline' functions changes between
+> gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> include __attribute__((gnu_inline)) in order to allow building with
+> clang a while ago.
 > 
-> between commit:
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Werror, which happens with the
+> 'make W=1' option, as well as for three drivers in the kernel that always
+> enable -Werror, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
 > 
->   f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
 > 
-> from the spi tree and commits:
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
 > 
->   b48b9f6deacf ("dt-bindings: serial: Add bindings doc for Sunplus SoC UART Driver")
->   9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
-> 
-> from the tty tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc MAINTAINERS
-> index e6b3e94de842,4a30001f6d7b..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -18635,13 -18549,12 +18642,19 @@@ S:	Maintaine
->   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
->   F:	drivers/rtc/rtc-sunplus.c
->   
->  +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
->  +M:	Li-hao Kuo <lhjeff911@gmail.com>
->  +L:	linux-spi@vger.kernel.org
->  +S:	Maintained
->  +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
->  +F:	drivers/spi/spi-sunplus-sp7021.c
->  +
-> + SUNPLUS UART DRIVER
-> + M:	Hammer Hsieh <hammerh0314@gmail.com>
-> + S:	Maintained
-> + F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
-> + F:	drivers/tty/serial/sunplus-uart.c
-> + 
->   SUPERH
->   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->   M:	Rich Felker <dalias@libc.org>
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> [v2]
+>  - added -std=gnu11 back, rather than just relying on the default
+>  - minor changes to changelog text
+> ---
+>  Documentation/process/programming-language.rst              | 4 ++--
+>  .../translations/it_IT/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_TW/process/programming-language.rst     | 4 ++--
+>  Makefile                                                    | 6 +++---
+>  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
+>  drivers/gpu/drm/i915/Makefile                               | 1 +
+>  drivers/staging/greybus/tools/Makefile                      | 3 ++-
+>  fs/btrfs/Makefile                                           | 1 +
+>  scripts/Makefile.extrawarn                                  | 1 +
+>  10 files changed, 17 insertions(+), 13 deletions(-)
 
-Looks correct, thanks!
+For the greybus tools section:
 
-greg k-h
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

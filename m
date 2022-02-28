@@ -2,182 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AFE4C722B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541854C7236
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbiB1RHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S237965AbiB1RIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238089AbiB1RGy (ORCPT
+        with ESMTP id S235657AbiB1RIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:06:54 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331F286E1D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:06:15 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 05AB03FCA7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646067974;
-        bh=h4FOiTIqGWppiNVb4WN93SVinniWb4652lod3S4x79M=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=hl9DgZYy5NEhk+rLI6nZHK8qfjjvhkxZ+QWrv1IO8bb+VR7E2QVftpk5GNBXNESiB
-         y0NDhN+N/tT2nKRzoraH0hF92Y+7hKgOpuuXapsL9gsjdHbevU7P/QZ9kjZyHxX/4/
-         jx5E7VO+TGa10MflyBFrslUjgKpJS3hUEi4+AAGqMJTcKfv+B+ZGdIfM0N+5Wi0zQs
-         v4ckfF67g3iGokr9ERTcPH5TDjjfKGORWB/84dyKNAA5pmz3kqgsltCoLkljPT3rjv
-         O6pNp2cLrXJZ8osR822biM3jy6idHC1lA52cpEFdJi5dETgamjsKRAJrMBj0B0hDjG
-         MalyrHi/pP6/A==
-Received: by mail-ed1-f71.google.com with SMTP id r9-20020a05640251c900b00412d54ea618so6207492edd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:06:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h4FOiTIqGWppiNVb4WN93SVinniWb4652lod3S4x79M=;
-        b=NB9MldmcS10Xm5UcONc05JysVb5ksRKy04W9ThOPxywz6VgK+rKHooq1UssvgHFeaQ
-         deTLr2nxFmqLi04O1R+NHgauV/6OuP3MJ2Qk7IhqtdXYuDOnLCrkXYBB7FkyH8WjWNip
-         3G5zooTpwqyMJ9XQ2oX9BPESYASDutrIvMfbhFKRZnwnw9LQRiFzgpaq9L+hfI6BTJP3
-         A856qi00YSIbXtwwykoU3ra7H3+AZKnqHLpEFzdmVy8/KKAqJIbwjMDBWALOHAVK2C6U
-         K644STmOv8gxJDmasjhafXySSwoxz06k9uNn7ZOt1wHcvWydzxKJPPsRKpNnBUT5DKBe
-         Szrg==
-X-Gm-Message-State: AOAM531M1uP2qn9Bw2IqEtPlPfD0oi+62tHD3P+JVqweEzWHhI6SOGxS
-        ZRwTwPUN45o0z/rl9GMS331gdTgAR9TUKEreYmn6bl1db+b3WfM5XSIWeCdvdJgsAIp+BMoBX1d
-        /J+IBrcAl6TzzWfM4m4vTcIZi5qJ9OwiCs3D+MDeYzw==
-X-Received: by 2002:a17:906:199a:b0:6d1:aa59:2927 with SMTP id g26-20020a170906199a00b006d1aa592927mr15322015ejd.215.1646067973496;
-        Mon, 28 Feb 2022 09:06:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxnrW6Z2hgpLyaCXJWZUUQ0z1Tt4gdOb4FulD2fvmZoIPy6sejI1yUTOFOiqsKx5QAi7Ae9Lw==
-X-Received: by 2002:a17:906:199a:b0:6d1:aa59:2927 with SMTP id g26-20020a170906199a00b006d1aa592927mr15321996ejd.215.1646067973232;
-        Mon, 28 Feb 2022 09:06:13 -0800 (PST)
-Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id pj4-20020a170906d78400b006ce88d5ce8dsm4521931ejb.108.2022.02.28.09.06.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 09:06:12 -0800 (PST)
-Message-ID: <22b1de71-a72a-ecb8-44a2-cf055d2a4fc5@canonical.com>
-Date:   Mon, 28 Feb 2022 18:06:12 +0100
+        Mon, 28 Feb 2022 12:08:48 -0500
+X-Greylist: delayed 240 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 09:08:06 PST
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758533E12;
+        Mon, 28 Feb 2022 09:08:05 -0800 (PST)
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 21SH7qjg001599;
+        Tue, 1 Mar 2022 02:07:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 21SH7qjg001599
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646068072;
+        bh=98mZh3DSkLLdEUaUpwDchiQq5D3wILeXQhtbg+uZ5C0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=D7+3GydIml5G5ULFdTIEOoeqAwyMiUllHF3GnHTuWW10nvZHqUydYyT+Jh/PjJc0C
+         9dGdscCwyV7M2qIK+TzlPN1lAgIFyW+LG8jTroxw3JcjB6xKD7AirJYq0hUGTm8FH0
+         G+ADSE21IaerZgVAUzhrazbpc1LG5nCdoDPIyOH+HiPFxvUV/fpB4XJyJl5QpYMKTS
+         4ZTfUYOn5AT4FiPGSuUklu/G/I3NUW/sdn3Ghx5EQK34yrsnKdstPivvN6BQ2Vg4IY
+         ckEBCcFgDL3VltZ5/Wnp4REwrg9Mbqj+hvGqQh0dDV6gu6iHvDuGU/mp/Vm9sD7zLJ
+         M5BfVt3YSVuhQ==
+X-Nifty-SrcIP: [209.85.215.171]
+Received: by mail-pg1-f171.google.com with SMTP id bc27so3199726pgb.4;
+        Mon, 28 Feb 2022 09:07:52 -0800 (PST)
+X-Gm-Message-State: AOAM533ZQQRv9BZdlSf1H6fD9183Jw+blY7bLetooRw1g+AKcoSk6sxc
+        xqUAdO8d0vJTNfQ7K1s2koHl/S6hFhx4aqW5jdo=
+X-Google-Smtp-Source: ABdhPJyLr4NM5Xb8MWbTJd6oMf6oOtnn2XpS61KrD/xyflT+Su6ouIqvNpJKrYGOOASYu0nk5xFAElbhZTOY0HMSDmM=
+X-Received: by 2002:a63:e758:0:b0:378:8511:cfe7 with SMTP id
+ j24-20020a63e758000000b003788511cfe7mr7050358pgk.126.1646068071650; Mon, 28
+ Feb 2022 09:07:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Aw: Re: Re: Re: [PATCH v3 1/3] dt-bindings: Convert ahci-platform
- DT bindings to yaml
-Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220227182800.275572-1-linux@fw-web.de>
- <20220227182800.275572-2-linux@fw-web.de>
- <4c3303f5-7af5-9974-7bea-b7f0d6c7ef53@canonical.com>
- <trinity-ac45bde6-392d-4810-8aad-9a06d2bcd85a-1646050780475@3c-app-gmx-bs53>
- <8fbbce9e-4fd9-d420-43ef-953e846d29f1@canonical.com>
- <trinity-f1b6ce3a-6f22-4cf8-bf51-a5e7f007dda7-1646057347735@3c-app-gmx-bs53>
- <ddd09f4f-782f-67e9-ec2f-dd5818ae26c5@canonical.com>
- <trinity-bfe6b2d5-52cd-458d-92b2-66216620a4b3-1646067718759@3c-app-gmx-bs53>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <trinity-bfe6b2d5-52cd-458d-92b2-66216620a4b3-1646067718759@3c-app-gmx-bs53>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220228103142.3301082-1-arnd@kernel.org> <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
+In-Reply-To: <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 1 Mar 2022 02:07:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATbX3TfETQTAr=e5kQLMDSXSn_KetDKTAaeZSq9k_70Uw@mail.gmail.com>
+Message-ID: <CAK7LNATbX3TfETQTAr=e5kQLMDSXSn_KetDKTAaeZSq9k_70Uw@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org, Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2022 18:01, Frank Wunderlich wrote:
-> Hi
-> 
->> Gesendet: Montag, 28. Februar 2022 um 15:35 Uhr
->> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
->>>> Gesendet: Montag, 28. Februar 2022 um 13:38 Uhr
->>>> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
-> 
->>>> No, this has to be oneOf. See for example
->>>> Documentation/devicetree/bindings/gpio/gpio-vf610.yaml or many other files.
-> 
->>> compatible:
->>>   oneOf:
->>>     - enum:
->>>       - brcm,iproc-ahci
->>>       - cavium,octeon-7130-ahci
->>>       - hisilicon,hisi-ahci
->>>       - ibm,476gtr-ahci
->>>       - marvell,armada-3700-ahci
->>>       - marvell,armada-380-ahci
->>>       - snps,dwc-ahci
->>>       - snps,spear-ahci
->>>     - items:
->>>       - const: generic-ahci
->>>       - enum:
->>>         - brcm,iproc-ahci
->>>         - cavium,octeon-7130-ahci
->>>         - hisilicon,hisi-ahci
->>>         - ibm,476gtr-ahci
->>>         - marvell,armada-3700-ahci
->>>         - marvell,armada-380-ahci
->>>         - snps,dwc-ahci
->>>         - snps,spear-ahci
->>
->> That could be one way, but instead I propose to have only second part
->> (so enum + generic-ahci) for all compatibles mentioned in
->> ahci_platform.c, which do not customize the driver behavior for these
->> compatibles..
-> 
-> tried many ways of defining it, but none passes with the examples. either to short (first example) or too long (second)
-> 
-> as far as i understand the logic it should be similar to this:
-> 
-> properties:
->   compatible:
->     oneOf:
->       - items:
->         - enum:
->           - marvell,berlin2q-achi
-
-You need to extend this enum with all the entries I mentioned before.
-
->         - const: generic-ahci
->       - items:
-
-No items here, directly enum.
-
->         - enum:
->           - brcm,iproc-ahci
->           - cavium,octeon-7130-ahci
->           - hisilicon,hisi-ahci
->           - ibm,476gtr-ahci
->           - marvell,armada-3700-ahci
->           - marvell,armada-380-ahci
->           - snps,dwc-ahci
->           - snps,spear-ahci
-> 
-> this passes the dt-binding_check (examples) for me, but i guess there are many more compatibles defined with the generic.
-> 
-> dtbs_check found some more like
-> 
-> 'brcm,iproc-ahci'
-> 'marvell,armada-8k-ahci'
-> and many more
-> 
-> it looks like these are also checked in the enum, so the yaml itself look correct, but needs some kind of wildcard instead of the "marvell,berlin2q-achi" as second for the generic-ahci compatible
-> 
-> regards Frank
+On Mon, Feb 28, 2022 at 8:25 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Hi Arnd,
+>
+> This is great!
+>
+> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > During a patch discussion, Linus brought up the option of changing
+> > the C standard version from gnu89 to gnu99, which allows using variable
+> > declaration inside of a for() loop. While the C99, C11 and later standards
+> > introduce many other features, most of these are already available in
+> > gnu89 as GNU extensions as well.
+> >
+> > An earlier attempt to do this when gcc-5 started defaulting to
+> > -std=gnu11 failed because at the time that caused warnings about
+> > designated initializers with older compilers. Now that gcc-5.1 is the
+> > minimum compiler version used for building kernels, that is no longer a
+> > concern. Similarly, the behavior of 'inline' functions changes between
+> > gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> > include __attribute__((gnu_inline)) in order to allow building with
+> > clang a while ago.
+> >
+> > One minor issue that remains is an added gcc warning for shifts of
+> > negative integers when building with -Werror, which happens with the
+> > 'make W=1' option, as well as for three drivers in the kernel that always
+> > enable -Werror, but it was only observed with the i915 driver so far.
+> > To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> > in a Makefile.
+> >
+> > Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> > warning that appears in a system header on arm, this still needs a
+> > workaround.
+>
+> FWIW, I had a go at moving to c99 a few weeks ago (to be able to use
+> for-loop-declarations in some concurrency primitives), and when I tried, I also
+> saw declaration-after-statement warnings when building modpost.c, which is easy
+> enough to fix:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=treewide/gnu99&id=505775bd6fd0bc1883f3271f826963066bbdc194
+>
 
 
-Best regards,
-Krzysztof
+I do not understand this statement:
+
+"Usually such warnings are implciitly enabled as part of `-std=gnu89`,
+ and in preparation for changing the standard used, this patch explciitly
+enales the warnings with `-Wdeclaration-after-statement`, which takes
+effect regardless of which version of the C standard is in use."
+
+
+
+modpost is already built with -std=gnu89.
+
+If  Wdeclaration-after-statement is implied by gnu89,
+why did nobody notice this before?
+
+
+-- 
+Best Regards
+Masahiro Yamada

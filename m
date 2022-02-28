@@ -2,147 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEADC4C7D14
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4038C4C7D25
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiB1WMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S230415AbiB1WPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiB1WMh (ORCPT
+        with ESMTP id S231360AbiB1WPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:12:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0232BC7904
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:11:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EAE5B81681
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC05FC340EE;
-        Mon, 28 Feb 2022 22:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646086314;
-        bh=8N9m4m7fgIVhig+Sl3sSZ8XvIZEeaE/jG6b8CDpmhHg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=N/B2p266PFmLAbWF3PsItviDxDTwqoAJVFwY6BX2OsPBcZBUd6hfazE8Sc9JpjazM
-         5M/Q+2LbymNXcYW5vZVl3vDY0wkY1pz9JQ58WbZuy+cFQo6dhkL6ulhpN+fAYw+wnf
-         4cgkdohDuNKvmBwufpcgdBEmi1gERm93NeK2FZww0gHKNNwIdnO4G5N/O7LVsOflj2
-         JceIJ+1HC+YWAWaXHXp3hZY3EJ+zJbRzO8BHzkMDcPJP0nAF0zbQFO5t9qbrpm4AfB
-         1IUZlraBTZqL5eiFMjv9NVuzSg4oyYnypOE5Epnjf9vVR2YcQgVIwGFQQNdeT6iHM+
-         ukkezLk9FpMAQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8A2F45C0379; Mon, 28 Feb 2022 14:11:54 -0800 (PST)
-Date:   Mon, 28 Feb 2022 14:11:54 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     rostedt@goodmis.org, bristot@kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mtosatti@redhat.com
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Message-ID: <20220228221154.GN4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
+        Mon, 28 Feb 2022 17:15:49 -0500
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B0EE1B74;
+        Mon, 28 Feb 2022 14:14:46 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; bh=CMg65jXpaFZltUQYgNoVUODmgfV4a5Gt/jgOwLpN2Vk=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220111215046; t=1646086466; v=1; x=1646518466;
+ b=liCwhzLM5gcBk9AbRejqNqqD03KZZjvsbftjT52rBX+PyrAJWiCo0hlshB3hxd8NANeQVI4A
+ KsG/n++GPEZcsWueUArKoi6tgLgbTt/G+1dlldQkow2gkTIetZjX6dYInMravLdk5Kqg5uQjCHo
+ y2wQLkaLEqLYxr4q0h1IG1RVwOmRV/Psn0BnJQekN8/VUILqebObj32oAMawLxij3MDZdh07jA7
+ 7+EQ7Roj3ZNECHml9j8VErF+h0Ns/v//HiUoGn3GRQu/GVGPVxdt4o7jeodJjQ/LKFZWIgeb/4y
+ q+I98cGOqpJa0ZOZT8w1zTU2o2SWft3lxpNUhmWFkzgQ4GcFN0OrDc+KW8OTZD48lnC+1GZyD0n
+ z0zjonAnVjmxiychDM41eK5O1awo4cilKOosIrPUiZafcJDZAjPRVkmj0fbgcPx6dsM/0/iZIyj
+ z3y7twdwch0hg73Gh7ZkXBIIYhq+vaV0X7/qsQSVywp3ZWiPYsJ5r18p+TbEkOq/CHjnnepoPux
+ Fp7PfuqEE9RKIIN510H0kPblNbd7aAXfDB3NvqqL1EQC5ipfWpAXdJ+T5jhtZYcxrjGWl4v1EKO
+ nrDF/NGjXsM7QANPbbDxYAf70VhbgY8AhE9ch0LuKvXTQ54M9Rgbogx6wFw0X6HR6QGm96WdjHP
+ Bu2xll2bPis=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 516b5765; Mon, 28 Feb
+ 2022 17:14:26 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228141423.259691-1-nsaenzju@redhat.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 28 Feb 2022 17:14:26 -0500
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        stable@vger.kernel.org,
+        =?UTF-8?Q?Magnus_Gro=C3=9F?= <magnus.gross@rwth-aachen.de>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 5.16 v2] binfmt_elf: Avoid total_mapping_size for ET_EXEC
+In-Reply-To: <20220228205518.1265798-1-keescook@chromium.org>
+References: <20220228205518.1265798-1-keescook@chromium.org>
+Message-ID: <ce8af9c13bcea9230c7689f3c1e0e2cd@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 03:14:23PM +0100, Nicolas Saenz Julienne wrote:
-> At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-> kernel might have the side effect of extending grace periods too much.
-> This will eventually entice RCU to schedule a task on the isolated CPU
-> to end the overly extended grace period, adding unwarranted noise to the
-> CPU being traced in the process.
+On 2022-02-28 15:55, Kees Cook wrote:
+> Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
+> MAP_FIXED_NOREPLACE").
 > 
-> So, check if we're the only ones running on this isolated CPU and that
-> we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
-> between measurements.
+> At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
+> contiguous (but _are_ file-offset contiguous). This would result in
+> giant mapping attempts to cover the entire span, including the virtual
+> address range hole. Disable total_mapping_size for ET_EXEC, which
+> reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
 > 
-> Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
-> loop's cond_resched() will go though a quiescent state for them.
+> $ readelf -lW /usr/bin/gcc
+> ...
+> Program Headers:
+>   Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   
+> ...
+> ...
+>   LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 
+> ...
+>   LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 
+> ...
+> ...
+>        ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
 > 
-> Note that this same exact problem is what extended quiescent states were
-> created for. But adapting them to this specific use-case isn't trivial
-> as it'll imply reworking entry/exit and dynticks/context tracking code.
+> File offset range     : 0x000000-0x00bb4c
+> 			0x00bb4c bytes
 > 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> Virtual address range : 0x4000000000000000-0x600000000000bcb0
+> 			0x200000000000bcb0 bytes
+> 
+> Ironically, this is the reverse of the problem that originally caused
+> problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem 
+> is
+> with holes. Future work could restore full coverage if 
+> load_elf_binary()
+> were to perform mappings in a separate phase from the loading (where
+> it could resolve both overlaps and holes).
+> 
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+> Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Fixes: 5f501d555653 ("binfmt_elf: reintroduce using 
+> MAP_FIXED_NOREPLACE")
+> Link:
+> https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+> Here's the v5.16 backport.
+> ---
+>  fs/binfmt_elf.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
 > 
-> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> index 870a08da5b48..4928358f6e88 100644
-> --- a/kernel/trace/trace_osnoise.c
-> +++ b/kernel/trace/trace_osnoise.c
-> @@ -21,7 +21,9 @@
->  #include <linux/uaccess.h>
->  #include <linux/cpumask.h>
->  #include <linux/delay.h>
-> +#include <linux/tick.h>
->  #include <linux/sched/clock.h>
-> +#include <linux/sched/isolation.h>
->  #include <uapi/linux/sched/types.h>
->  #include <linux/sched.h>
->  #include "trace.h"
-> @@ -1295,6 +1297,7 @@ static int run_osnoise(void)
->  	struct osnoise_sample s;
->  	unsigned int threshold;
->  	u64 runtime, stop_in;
-> +	unsigned long flags;
->  	u64 sum_noise = 0;
->  	int hw_count = 0;
->  	int ret = -1;
-> @@ -1386,6 +1389,22 @@ static int run_osnoise(void)
->  					osnoise_stop_tracing();
->  		}
->  
-> +		/*
-> +		 * Check if we're the only ones running on this nohz_full CPU
-> +		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
-> +		 * QS since there is no way for RCU to know we're not making
-> +		 * use of it.
-> +		 *
-> +		 * Otherwise it'll be done through cond_resched().
-> +		 */
-> +		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
-> +		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
-> +		    tick_nohz_tick_stopped()) {
-> +			local_irq_save(flags);
-> +			rcu_momentary_dyntick_idle();
-> +			local_irq_restore(flags);
-
-What is supposed to happen in this case is that RCU figures out that
-there is a nohz_full CPU running for an extended period of time in the
-kernel and takes matters into its own hands.  This goes as follows on
-a HZ=1000 kernel with default RCU settings:
-
-o	At about 20 milliseconds into the grace period, RCU makes
-	cond_resched() report quiescent states, among other things.
-	As you say, this does not help for CONFIG_PREEMPT=n kernels.
-
-o	At about 30 milliseconds into the grace period, RCU forces an
-	explicit context switch on the wayward CPU.  This should get
-	the CPU's attention even in CONFIG_PREEMPT=y kernels.
-
-So what is happening for you instead?
-
-							Thanx, Paul
-
-> +		}
-> +
->  		/*
->  		 * For the non-preemptive kernel config: let threads runs, if
->  		 * they so wish.
-> -- 
-> 2.35.1
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index f8c7f26f1fbb..911a9e7044f4 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -1135,14 +1135,25 @@ static int load_elf_binary(struct linux_binprm 
+> *bprm)
+>  			 * is then page aligned.
+>  			 */
+>  			load_bias = ELF_PAGESTART(load_bias - vaddr);
+> -		}
 > 
+> -		/*
+> -		 * Calculate the entire size of the ELF mapping (total_size).
+> -		 * (Note that load_addr_set is set to true later once the
+> -		 * initial mapping is performed.)
+> -		 */
+> -		if (!load_addr_set) {
+> +			/*
+> +			 * Calculate the entire size of the ELF mapping
+> +			 * (total_size), used for the initial mapping,
+> +			 * due to first_pt_load which is set to false later
+> +			 * once the initial mapping is performed.
+> +			 *
+> +			 * Note that this is only sensible when the LOAD
+> +			 * segments are contiguous (or overlapping). If
+> +			 * used for LOADs that are far apart, this would
+> +			 * cause the holes between LOADs to be mapped,
+> +			 * running the risk of having the mapping fail,
+> +			 * as it would be larger than the ELF file itself.
+> +			 *
+> +			 * As a result, only ET_DYN does this, since
+> +			 * some ET_EXEC (e.g. ia64) may have virtual
+> +			 * memory holes between LOADs.
+> +			 *
+> +			 */
+>  			total_size = total_mapping_size(elf_phdata,
+>  							elf_ex->e_phnum);
+>  			if (!total_size) {
+
+This does the trick!  Thank you so much!!

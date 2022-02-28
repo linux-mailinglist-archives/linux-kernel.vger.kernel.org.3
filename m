@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3514C62C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 07:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23864C62C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 07:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbiB1GH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 01:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S233143AbiB1GJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 01:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiB1GHz (ORCPT
+        with ESMTP id S230410AbiB1GJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 01:07:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB46B5C36F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 22:07:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Feb 2022 01:09:11 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9FA627A;
+        Sun, 27 Feb 2022 22:08:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D88BB80E25
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 330F4C340E7;
-        Mon, 28 Feb 2022 06:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646028431;
-        bh=qyBB/Qnf5VtZLdtQuEPQsjVHBfbCH4s2psJLLtXb/Mk=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6VLN5yjfz4xcd;
+        Mon, 28 Feb 2022 17:08:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646028508;
+        bh=n2y7O4kpz0V/jwE+qIFGvh2yrh1G0JEsfwA7phX8efk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S9c7dG7KdXwrdacTTpMMUUXyKOMzPJu1LWVsjjqosnj8hSIyReZcc8kiWu++f+TNE
-         balnjtJ7+E5bn82gBpKWpZb6uVBkQVxPLyxwChgO+0u90rh2QmWdKF6bFH5mKIzCyA
-         TG+fnNMeSvLjv+/Ijc2AyX9Xx1gxOFVJzQN90QTuR/bmOhTJaDfWeWIacpnfvtVdR+
-         HZKcgGXGRcl1IXq9BntTjm3pgJ7uNpci+GvT68nxyLf4aXZvKJLLBcnnJp+qduajv1
-         iDnbhwCgs29SKTYCYdNHW1Zpx6en8zy2A8f/TOI3xFFUzOHJq0YUn7a78AXM9t5hFu
-         sNfaXAEQzqv8g==
-Date:   Mon, 28 Feb 2022 15:07:05 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org,
-        alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-Id: <20220228150705.aab2d654b973109bab070ffe@kernel.org>
-In-Reply-To: <20220224151322.892372059@infradead.org>
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.892372059@infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        b=XOMZpnAjvrR8FwrPe8gMSYWTmsskP1bm33mOEZpQAgzxQmwt7YXu+iCGwJfK/QaVA
+         cMADijAx9Nycrz2IezP/O99OXn4z1x9fxkHcA18039EcwaJef646u5VQpsE+g+hyHK
+         wVl4blCG7FHi8NEYBIGbJKXaO2PkkQE5eGVZIRyj1SRoJXhmUORh4w47sgEDmFe9vq
+         KH07t18uI++5NunznF1ErfzOr9QSwtqZ+MlucMjmOZ5CZek7dJwsI/p3Z1kGpq/gpT
+         lZuonRevR5yrlCM/7KhZKjsEna1IHriKdz6NuBVVbemjzrlNd4LZ3z3GEeZD3epmpF
+         ZrcHrM3etv2MA==
+Date:   Mon, 28 Feb 2022 17:08:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     broonie@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Message-ID: <20220228170826.4dedaf6a@canb.auug.org.au>
+In-Reply-To: <YhZo7xnNRKz8U1Lf@google.com>
+References: <20220223165416.2359767-1-broonie@kernel.org>
+        <YhZo7xnNRKz8U1Lf@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/D/S4iBvUBUBuV9b78r06kp9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,156 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+--Sig_/D/S4iBvUBUBuV9b78r06kp9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So, instead of this change, can you try below?
-This introduce the arch_adjust_kprobe_addr() and use it in the kprobe_addr()
-so that it can handle the case that user passed the probe address in 
-_text+OFFSET format.
+Hi Lee,
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Date: Mon, 28 Feb 2022 15:01:48 +0900
-Subject: [PATCH] x86: kprobes: Skip ENDBR instruction probing
+On Wed, 23 Feb 2022 17:03:43 +0000 Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Wed, 23 Feb 2022, broonie@kernel.org wrote:
+>=20
+> > After merging the mfd tree, today's linux-next build (KCONFIG_NAME)
+> > failed like this:
+> >=20
+> > /tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:255:35: error: redefiniti=
+on of 'sprd_pmic_spi_ids'
+> >   255 | static const struct spi_device_id sprd_pmic_spi_ids[] =3D {
+> >       |                                   ^~~~~~~~~~~~~~~~~
+> > /tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:242:35: note: previous de=
+finition of 'sprd_pmic_spi_ids' was here
+> >   242 | static const struct spi_device_id sprd_pmic_spi_ids[] =3D {
+> >       |                                   ^~~~~~~~~~~~~~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   6fc90b92e9c7ef348 ("mfd: sprd: Add SPI device ID table")
+> >=20
+> > I used the MFD tree from yesterday instead. =20
+>=20
+> Thanks.
+>=20
+> Will fix for tomorrow.
 
-This adjust the kprobe probe address to skip the ENDBR and put the kprobe
-next to the ENDBR so that the kprobe doesn't disturb IBT.
+I am still getting this build failure.  It is an x86_64 allmodconfig
+build.
+--=20
+Cheers,
+Stephen Rothwell
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- arch/x86/kernel/kprobes/core.c |  7 +++++++
- include/linux/kprobes.h        |  2 ++
- kernel/kprobes.c               | 11 ++++++++++-
- 3 files changed, 19 insertions(+), 1 deletion(-)
+--Sig_/D/S4iBvUBUBuV9b78r06kp9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 745f42cf82dc..a90cfe50d800 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -52,6 +52,7 @@
- #include <asm/insn.h>
- #include <asm/debugreg.h>
- #include <asm/set_memory.h>
-+"include <asm/ibt.h>
- 
- #include "common.h"
- 
-@@ -301,6 +302,12 @@ static int can_probe(unsigned long paddr)
- 	return (addr == paddr);
- }
- 
-+/* If the x86 support IBT (ENDBR) it must be skipped. */
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr)
-+{
-+	return (kprobe_opcode_t *)skip_endbr((void *)addr);
-+}
-+
- /*
-  * Copy an instruction with recovering modified instruction by kprobes
-  * and adjust the displacement if the instruction uses the %rip-relative
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 19b884353b15..485d7832a613 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -384,6 +384,8 @@ static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
- }
- 
- kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr);
-+
- int register_kprobe(struct kprobe *p);
- void unregister_kprobe(struct kprobe *p);
- int register_kprobes(struct kprobe **kps, int num);
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 94cab8c9ce56..312f10e85c93 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1488,6 +1488,15 @@ bool within_kprobe_blacklist(unsigned long addr)
- 	return false;
- }
- 
-+/*
-+ * If the arch supports the feature like IBT which will put a trap at
-+ * the entry of the symbol, it must be adjusted in this function.
-+ */
-+kprobe_opcode_t *__weak arch_adjust_kprobe_addr(unsigned long addr)
-+{
-+	return (kprobe_opcode_t *)addr;
-+}
-+
- /*
-  * If 'symbol_name' is specified, look it up and add the 'offset'
-  * to it. This way, we can specify a relative address to a symbol.
-@@ -1506,7 +1515,7 @@ static kprobe_opcode_t *_kprobe_addr(kprobe_opcode_t *addr,
- 			return ERR_PTR(-ENOENT);
- 	}
- 
--	addr = (kprobe_opcode_t *)(((char *)addr) + offset);
-+	addr = arch_adjust_kprobe_addr((unsigned long)addr + offset);
- 	if (addr)
- 		return addr;
- 
--- 
-2.25.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcZtoACgkQAVBC80lX
+0GwgxggAh5RT0UWsJBp7THQuCYw2w+197XuDECXayx/jx1nUaMAMFlasEuDKGTNJ
+3sFj+RCbiTL0Th4RXs7KQjmjaLo201eVYMCKWlAmYcH2PM71UMIIZDq/ZFzGzlUB
+vSs0YIa4kMaUv7OVmVAmMIjVeJeXrMuzc252IfkXu+ZN6EEnRwB95wa6ym2fodgT
+wfPWnJTG9PNlkczn/gZwRAWfPvcqN6hP8r79XB/Fi9aq7/sp5LyTr9I/tNRPcRIS
+CqNB01PnAb/iYJ85wcCOuHDL1fpJI531B9FB2kQWiOCeDP61O+r5poXdowtNNHO8
+hdT4Fmo6rb3K4sxorYPh9J8h51Zycw==
+=pTwe
+-----END PGP SIGNATURE-----
 
-On Thu, 24 Feb 2022 15:51:53 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> With IBT on, sym+0 is no longer the __fentry__ site.
-> 
-> NOTE: the architecture has a special case and *does* allow placing an
-> INT3 breakpoint over ENDBR in which case #BP has precedence over #CP
-> and as such we don't need to disallow probing these instructions.
-> 
-> NOTE: irrespective of the above; there is a complication in that
-> direct branches to functions are rewritten to not execute ENDBR, so
-> any breakpoint thereon might miss lots of actual function executions.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/kernel/kprobes/core.c |   11 +++++++++++
->  kernel/kprobes.c               |   15 ++++++++++++---
->  2 files changed, 23 insertions(+), 3 deletions(-)
-> 
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -1156,3 +1162,8 @@ int arch_trampoline_kprobe(struct kprobe
->  {
->  	return 0;
->  }
-> +
-> +bool arch_kprobe_on_func_entry(unsigned long offset)
-> +{
-> +	return offset <= 4*HAS_KERNEL_IBT;
-> +}
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -67,10 +67,19 @@ static bool kprobes_all_disarmed;
->  static DEFINE_MUTEX(kprobe_mutex);
->  static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
->  
-> -kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
-> -					unsigned int __unused)
-> +kprobe_opcode_t * __weak kprobe_lookup_name(const char *name, unsigned int offset)
->  {
-> -	return ((kprobe_opcode_t *)(kallsyms_lookup_name(name)));
-> +	kprobe_opcode_t *addr = NULL;
-> +
-> +	addr = ((kprobe_opcode_t *)(kallsyms_lookup_name(name)));
-> +#ifdef CONFIG_KPROBES_ON_FTRACE
-> +	if (addr && !offset) {
-> +		unsigned long faddr = ftrace_location((unsigned long)addr);
-> +		if (faddr)
-> +			addr = (kprobe_opcode_t *)faddr;
-> +	}
-> +#endif
-> +	return addr;
->  }
->  
->  /*
-> 
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+--Sig_/D/S4iBvUBUBuV9b78r06kp9--

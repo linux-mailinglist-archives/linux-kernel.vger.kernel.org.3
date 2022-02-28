@@ -2,130 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560484C723F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D1F4C7247
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbiB1RMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S229751AbiB1ROT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiB1RMq (ORCPT
+        with ESMTP id S231156AbiB1ROQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:12:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A66488787
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646068326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZX6qo1v/jKQ+nTOg8nPNmC8+jN9MEtMjq9O50exG1fQ=;
-        b=A7tHFsCLVI8bzSxlyIfLa6LfOr39u7xNgwxg6KOvvLC/xjTu0bJCB9oJsM8q5+Z47IG3zY
-        oVuuJzoIYKsLc5he54gnMx5fO0fyI25eHxDSOoZEgyzruLGrldPefdYWvIFNCytRQqIz7A
-        h/1VAOK8TgcoTJdki9OZQZiAXiI5pwA=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-iRxIg8C3NH6Iyg37PVwo6Q-1; Mon, 28 Feb 2022 12:12:05 -0500
-X-MC-Unique: iRxIg8C3NH6Iyg37PVwo6Q-1
-Received: by mail-qv1-f71.google.com with SMTP id g2-20020a0562141cc200b004123b0abe18so12751436qvd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:12:05 -0800 (PST)
+        Mon, 28 Feb 2022 12:14:16 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F873E0E9;
+        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id d17so11599985pfl.0;
+        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
+        b=QoPKTXdaWxuI97HO/tb60FmRflBJDLnM9D0BpxTh1kzsFDhsxXqVhLwHH7nD+U6pFr
+         Tu9awJDeu+8JZpw8huEWlR69mOXkxgGzAfIgFcnb2Y/wsju7VHItpRcggGe/83PwJYd+
+         y61pQiO58zlejrm3T2UOP9u8L6MPf2RlBo1yp5YMRHkhhdO9HGRoBEQrd5Fl2F5d/0fz
+         GI3wtcKSb40zyaLWj5vwdvRL37k0Re+6UqrZqDdO5kvpHoYECgivP3whKGguWMIIVxAQ
+         5Km3HbYl8+f8fPg9/i/3X5TA1OmtDsnHWLnpFp7F+8HACLY9SFlH5I2+EO9kbHIHYLIr
+         4puA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZX6qo1v/jKQ+nTOg8nPNmC8+jN9MEtMjq9O50exG1fQ=;
-        b=n07NZ1MwEQcAaFpb0NWM1vhik8//28x4EBmRQ3nqBpI2UWjiX/8pHuEzt4Y1gB1ieD
-         iTj43quFHqHaMiny+NGvgDMFr58xg3K5zj226pvmqnXuk4HDaAAmWXymPhuCPCzGZtXy
-         GlRPhEpC67ICafQqrtY8J53MMQ7sbG6/AZicOJJCbtYq3gJW4e1VnCTCmz47h99AVzTH
-         Ijsi38diqPE3V0vnVd2zE8MIYhlKnQpw/gphvS4QTSxjK/vVtw278SLBl+G0NyPKEENg
-         iUYHn+IPVE/35WGnJYYItsTDTHA/P/Kq6tv4pqV8VuztwpxwzDqrqwYAQQm3u7ZBjyMy
-         PlyA==
-X-Gm-Message-State: AOAM533Rv+LhmHfLBjiVk6y/PkAZ5/9In019qW091PwU/aE2uB+3M0XY
-        5g4An7kovSqyhyfT7LJVaJEK/clN4rCCtZMM4FVloo6cmOgl8lyepvwKbZzqh/y/wtP19t7GZ5s
-        lZfW9YJb7Icj9McTc2edCNKgG
-X-Received: by 2002:a05:6214:c2a:b0:433:3463:7079 with SMTP id a10-20020a0562140c2a00b0043334637079mr1864850qvd.32.1646068324725;
-        Mon, 28 Feb 2022 09:12:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwh1dfCNsb5avhgyr0Ys+Z3P/6xCFr1NJAS1as5YaLdjeBAdkNCjsNwWtzvJjWri9IQSCGHng==
-X-Received: by 2002:a05:6214:c2a:b0:433:3463:7079 with SMTP id a10-20020a0562140c2a00b0043334637079mr1864823qvd.32.1646068324427;
-        Mon, 28 Feb 2022 09:12:04 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id r14-20020a05622a034e00b002de72634a7asm7046032qtw.37.2022.02.28.09.12.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
+        b=zaXgu4UKtHzlUQI2s83OSqEb598FXhgXeFOSS55MlxEyJ8gr7+fCQ48Ag5DovLl4aD
+         RCj9XPBjeFAD1s9ADZQ4zCbF+eA94FPYVAzXUM0fbBUn/x623LxwPHm0lPk2nhkTkybQ
+         ldL+jRVnfjt0DyJxWQE7zHGXggtvP2AETiPKGZv6eJh/YZAIeo3JN0VJhZTO11BTLxfr
+         Jc3fzNz8Qmm43KdS91k8MEq3gff/r06OHjcu0qN/6yZTh1AgQJ3RT7A/d5f4MwaT96te
+         /v74HWjDay1FaLm3jm8fkj8ZC9XE+H6QqkJ4ljdxkBhFSdQxecs2G75EtRwwWz5JCqpB
+         72fA==
+X-Gm-Message-State: AOAM532GJPEsQRjnm+aWxJxkOTSuGkF1ip8bk0b91KTuM1QpvBxo4kBp
+        8JXzoG+IBlgbidfIj5JnLeI+ID1r+pg=
+X-Google-Smtp-Source: ABdhPJy9d6FK0t99nrIJoPHep4GbDBhhAD2UxAzkKxjDaMN5psK18I7hwcADqnDD5TwQqr2ci8vgNg==
+X-Received: by 2002:a63:a501:0:b0:372:f7dc:6ced with SMTP id n1-20020a63a501000000b00372f7dc6cedmr18226266pgf.26.1646068416482;
+        Mon, 28 Feb 2022 09:13:36 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090aca9700b001bc943a20b2sm17429917pjt.35.2022.02.28.09.13.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 09:12:03 -0800 (PST)
-Date:   Mon, 28 Feb 2022 09:11:59 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
-        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, David Rientjes <rientjes@google.com>
-Subject: Re: [PATCHv4 01/30] x86/mm: Fix warning on build with
- X86_MEM_ENCRYPT=y
-Message-ID: <20220228171159.pkp3t46pxbs6o2ul@treble>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-2-kirill.shutemov@linux.intel.com>
- <20220227220130.23yjme7jucxo266l@treble>
- <20220228162056.gul22bjr4w6zjslq@black.fi.intel.com>
- <20220228164007.nfrg7xvrl4blzzrm@treble>
- <080f9306-8c72-c7bd-010a-f0ed32c4b692@intel.com>
+        Mon, 28 Feb 2022 09:13:35 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v3] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Date:   Mon, 28 Feb 2022 09:12:52 -0800
+Message-Id: <20220228171252.1827788-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <080f9306-8c72-c7bd-010a-f0ed32c4b692@intel.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:51:20AM -0800, Dave Hansen wrote:
-> On 2/28/22 08:40, Josh Poimboeuf wrote:
-> >> maintainer-tip.rst seems disagree with you:
-> >>
-> >>    A Fixes tag should be added even for changes which do not need to be
-> >>    backported to stable kernels, i.e. when addressing a recently introduced
-> >>    issue which only affects tip or the current head of mainline.
-> >>
-> >> I will leave it as is.
-> > How does that disagree with me?
-> > 
-> > The "Fixes" tag is for bug fixes.  If it's not possible to trigger the
-> > warning and there's no user impact, it's not a bug.
-> 
-> Does having Fixes: *break* anything?
+If the extcon device exists, get the mode from the extcon device. If
+the controller is DRD and the driver is unable to determine the mode,
+only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
 
-People rely on the "Fixes:" tag for actual bug fixes.  Using it here --
-along with the rest of the "this is fixing a bug" tone of the title and
-description -- is guaranteed to confuse stable maintainers and distros
-doing backports.
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
 
-Again, if nothing's broken from the standpoint of the user then it's not
-a bug and shouldn't be reported that way.
+Changes since [v2] of the patch:
 
-> If not, I think I'd generally rather have the metadata with more
-> information as opposed to less information.
+   - Fixed "Minor formatting change", to reflect what was meant by
+     review comment
 
-I would call it misinformation.  How is that useful?
+Changes since [v1] of the patch:
 
-It's ok to reference a related commit in the patch description itself.
-Just don't abuse the "Fixes" tag.
+   - Reworded commit message
+   - Minor formatting change
 
-But IMO, for the least amount of confusion, it makes more sense to
-squash this with the patch which actually requires it.
 
--- 
-Josh
+[v2] https://lore.kernel.org/linux-usb/20220221192020.346622-1-andrew.smirnov@gmail.com/
+[v1] https://lore.kernel.org/linux-usb/20220206014532.372109-1-andrew.smirnov@gmail.com/T/#u
 
+previons discussion:
+
+https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+
+
+
+ drivers/usb/dwc3/core.c | 55 ++++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/drd.c  | 50 -------------------------------------
+ 2 files changed, 54 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f2448d0a9d39..5e7a19959a9d 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+ 		 * mode. If the controller supports DRD but the dr_mode is not
+ 		 * specified or set to OTG, then set the mode to peripheral.
+ 		 */
+-		if (mode == USB_DR_MODE_OTG &&
++		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+ 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+ 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+ 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	}
+ }
+
++static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
++{
++	struct device *dev = dwc->dev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
++	const char *name;
++
++	if (device_property_read_bool(dev, "extcon"))
++		return extcon_get_edev_by_phandle(dev, 0);
++
++	/*
++	 * Device tree platforms should get extcon via phandle.
++	 * On ACPI platforms, we get the name from a device property.
++	 * This device property is for kernel internal use only and
++	 * is expected to be set by the glue code.
++	 */
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
++		edev = extcon_get_extcon_dev(name);
++		if (!edev)
++			return ERR_PTR(-EPROBE_DEFER);
++
++		return edev;
++	}
++
++	/*
++	 * Try to get an extcon device from the USB PHY controller's "port"
++	 * node. Check if it has the "port" node first, to avoid printing the
++	 * error message from underlying code, as it's a valid case: extcon
++	 * device (and "port" node) may be missing in case of "usb-role-switch"
++	 * or OTG mode.
++	 */
++	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
++
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
++	of_node_put(np_phy);
++
++	return edev;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+ 	struct device		*dev = &pdev->dev;
+@@ -1561,6 +1607,13 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		goto err2;
+ 	}
+
++	dwc->edev = dwc3_get_extcon(dwc);
++	if (IS_ERR(dwc->edev)) {
++		ret = PTR_ERR(dwc->edev);
++		dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
++		goto err3;
++	}
++
+ 	ret = dwc3_get_dr_mode(dwc);
+ 	if (ret)
+ 		goto err3;
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..9a414edc439a 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -8,7 +8,6 @@
+  */
+
+ #include <linux/extcon.h>
+-#include <linux/of_graph.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+
+@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+
+-static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+-{
+-	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
+-	struct extcon_dev *edev = NULL;
+-	const char *name;
+-
+-	if (device_property_read_bool(dev, "extcon"))
+-		return extcon_get_edev_by_phandle(dev, 0);
+-
+-	/*
+-	 * Device tree platforms should get extcon via phandle.
+-	 * On ACPI platforms, we get the name from a device property.
+-	 * This device property is for kernel internal use only and
+-	 * is expected to be set by the glue code.
+-	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
+-
+-	/*
+-	 * Try to get an extcon device from the USB PHY controller's "port"
+-	 * node. Check if it has the "port" node first, to avoid printing the
+-	 * error message from underlying code, as it's a valid case: extcon
+-	 * device (and "port" node) may be missing in case of "usb-role-switch"
+-	 * or OTG mode.
+-	 */
+-	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
+-
+-		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+-		if (np_conn)
+-			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+-	}
+-	of_node_put(np_phy);
+-
+-	return edev;
+-}
+-
+ #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+ #define ROLE_SWITCH 1
+ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+
+-	dwc->edev = dwc3_get_extcon(dwc);
+-	if (IS_ERR(dwc->edev))
+-		return PTR_ERR(dwc->edev);
+-
+ 	if (ROLE_SWITCH &&
+ 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+ 		ret = dwc3_setup_role_switch(dwc);
+--
+2.25.1

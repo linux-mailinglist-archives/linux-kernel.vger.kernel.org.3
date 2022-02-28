@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9004C76C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B756A4C72CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237961AbiB1SGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S233875AbiB1R2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239773AbiB1SCg (ORCPT
+        with ESMTP id S236688AbiB1R16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:02:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9FA9D06C;
-        Mon, 28 Feb 2022 09:46:06 -0800 (PST)
+        Mon, 28 Feb 2022 12:27:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB73888E6;
+        Mon, 28 Feb 2022 09:27:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7281B81187;
-        Mon, 28 Feb 2022 17:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 302FDC340F3;
-        Mon, 28 Feb 2022 17:45:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 149C8B815AE;
+        Mon, 28 Feb 2022 17:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66230C340E7;
+        Mon, 28 Feb 2022 17:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070344;
-        bh=/msaSY+WqBTLpnAYFKfOlGUPi776Si31St0tFMJTiVQ=;
+        s=korg; t=1646069225;
+        bh=dM3YbWc+hniMJG+idj343cewE1ilHNBcVeEZfFdS7jg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TB7Ara9qYqwy1M05bPZ0fzeCIDrS9gFJ+8/3hs42/ypRwQ0Djj5HYfB569MjOd1b5
-         nNnkfPbBIZL0rC4kMrnVx6p1KPDKr26A/JhWsI3aF7VtGqLt5Lef4CBfAOclxpa5Cn
-         FQ1h5BGfANuElnHQ79NMNWaRykcsg88GwrpDpd9Q=
+        b=mXJroHeDJiuMNAAE8/TzmfSDqkUz2sIjxgmPdqHZCPdECJ1GvX6zoBaiJoB9eGI7s
+         jKZSdDaWijI8LkQxTS7Z+NAsXUwfx6+fFkfWMK1EpQ2QiCGGkqUXfLCAaOLliWkmWE
+         NXmaV/Qhvl/GQYFsZiUq5v0rz6VWF6ehirgFAUxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matt Roper <matthew.d.roper@intel.com>,
-        Swathi Dhanavanthri <swathi.dhanavanthri@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.16 075/164] drm/i915/dg2: Print PHY name properly on calibration error
+        stable@vger.kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 4.14 01/31] cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug
 Date:   Mon, 28 Feb 2022 18:23:57 +0100
-Message-Id: <20220228172406.853274007@linuxfoundation.org>
+Message-Id: <20220228172159.925162848@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,34 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Roper <matthew.d.roper@intel.com>
+From: Zhang Qiao <zhangqiao22@huawei.com>
 
-commit 28adef861233c6fce47372ebd2070b55eaa8e899 upstream.
+commit 05c7b7a92cc87ff8d7fde189d0fade250697573c upstream.
 
-We need to use phy_name() to convert the PHY value into a human-readable
-character in the error message.
+As previously discussed(https://lkml.org/lkml/2022/1/20/51),
+cpuset_attach() is affected with similar cpu hotplug race,
+as follow scenario:
 
-Fixes: a6a128116e55 ("drm/i915/dg2: Wait for SNPS PHY calibration during display init")
-Signed-off-by: Matt Roper <matthew.d.roper@intel.com>
-Reviewed-by: Swathi Dhanavanthri <swathi.dhanavanthri@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220215163545.2175730-1-matthew.d.roper@intel.com
-(cherry picked from commit 84073e568eec7b586b2f6fd5fb2fb08f59edec54)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+     cpuset_attach()				cpu hotplug
+    ---------------------------            ----------------------
+    down_write(cpuset_rwsem)
+    guarantee_online_cpus() // (load cpus_attach)
+					sched_cpu_deactivate
+					  set_cpu_active()
+					  // will change cpu_active_mask
+    set_cpus_allowed_ptr(cpus_attach)
+      __set_cpus_allowed_ptr_locked()
+       // (if the intersection of cpus_attach and
+         cpu_active_mask is empty, will return -EINVAL)
+    up_write(cpuset_rwsem)
+
+To avoid races such as described above, protect cpuset_attach() call
+with cpu_hotplug_lock.
+
+Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
+Cc: stable@vger.kernel.org # v2.6.32+
+Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+Acked-by: Waiman Long <longman@redhat.com>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_snps_phy.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/cgroup/cpuset.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/gpu/drm/i915/display/intel_snps_phy.c
-+++ b/drivers/gpu/drm/i915/display/intel_snps_phy.c
-@@ -34,7 +34,7 @@ void intel_snps_phy_wait_for_calibration
- 		if (intel_de_wait_for_clear(dev_priv, ICL_PHY_MISC(phy),
- 					    DG2_PHY_DP_TX_ACK_MASK, 25))
- 			DRM_ERROR("SNPS PHY %c failed to calibrate after 25ms.\n",
--				  phy);
-+				  phy_name(phy));
- 	}
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1532,6 +1532,7 @@ static void cpuset_attach(struct cgroup_
+ 	cgroup_taskset_first(tset, &css);
+ 	cs = css_cs(css);
+ 
++	cpus_read_lock();
+ 	mutex_lock(&cpuset_mutex);
+ 
+ 	/* prepare for attach */
+@@ -1587,6 +1588,7 @@ static void cpuset_attach(struct cgroup_
+ 		wake_up(&cpuset_attach_wq);
+ 
+ 	mutex_unlock(&cpuset_mutex);
++	cpus_read_unlock();
  }
  
+ /* The various types of files and directories in a cpuset file system */
 
 

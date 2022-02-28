@@ -2,155 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72C34C6560
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EED4C656E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiB1JFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S234100AbiB1JIV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 04:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiB1JF3 (ORCPT
+        with ESMTP id S231265AbiB1JIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:05:29 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF82A26A;
-        Mon, 28 Feb 2022 01:04:50 -0800 (PST)
-Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Mon, 28 Feb 2022
- 17:04:47 +0800
-From:   Yu Tu <yu.tu@amlogic.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Tu <yu.tu@amlogic.com>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH V2] tty: serial: meson: Fix the compile link error reported by kernel test robot
-Date:   Mon, 28 Feb 2022 17:03:51 +0800
-Message-ID: <20220228090351.9976-1-yu.tu@amlogic.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 28 Feb 2022 04:08:18 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33559BC13;
+        Mon, 28 Feb 2022 01:07:35 -0800 (PST)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6ZHg1qLBz67NYn;
+        Mon, 28 Feb 2022 17:06:23 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 10:07:33 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Mon, 28 Feb 2022 10:07:33 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyjZeaAgACU/jCAAKZjAIAEHfiw
+Date:   Mon, 28 Feb 2022 09:07:33 +0000
+Message-ID: <8eeb74eea6564e3c819a2caca58b714a@huawei.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+         <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+         <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+ <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+In-Reply-To: <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.11.248]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describes the calculation of the UART baud rate clock using a clock
-frame. Forgot to add in Kconfig kernel test Robot compilation error
-due to COMMON_CLK dependency.
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Friday, February 25, 2022 8:11 PM
+> On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Friday, February 25, 2022 1:22 AM
+> > > Hi Roberto,
+> > >
+> > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > implementation of integrity-focused LSMs based on eBPF.
+> > >
+> > > I've previously requested adding eBPF module measurements and signature
+> > > verification support in IMA.  There seemed to be some interest, but
+> > > nothing has been posted.
+> >
+> > Hi Mimi
+> >
+> > for my use case, DIGLIM eBPF, IMA integrity verification is
+> > needed until the binary carrying the eBPF program is executed
+> > as the init process. I've been thinking to use an appended
+> > signature to overcome the limitation of lack of xattrs in the
+> > initial ram disk.
+> 
+> I would still like to see xattrs supported in the initial ram disk.
+> Assuming you're still interested in pursuing it, someone would need to
+> review and upstream it.  Greg?
 
-Fixes: 44023b8e1f14 ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Yu Tu <yu.tu@amlogic.com>
----
- drivers/tty/serial/Kconfig      |  1 +
- drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
- 2 files changed, 27 insertions(+), 11 deletions(-)
+I could revise this work. However, since appended signatures
+would work too, I would propose to extend this appraisal
+mode to executables, if it is fine for you.
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e952ec5c7a7c..a0f2b82fc18b 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
- config SERIAL_MESON
- 	tristate "Meson serial port support"
- 	depends on ARCH_MESON || COMPILE_TEST
-+	depends on COMMON_CLK
- 	select SERIAL_CORE
- 	help
- 	  This enables the driver for the on-chip UARTs of the Amlogic
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index bf6be5468aaf..972f210f3492 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -780,28 +780,37 @@ static int meson_uart_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_out_clk_disable;
-+	}
- 
- 	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
- 
- 	if (meson_ports[pdev->id]) {
- 		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto err_out_clk_disable;
- 	}
- 
- 	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
--	if (!port)
--		return -ENOMEM;
-+	if (!port) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
--	if (IS_ERR(port->membase))
--		return PTR_ERR(port->membase);
-+	if (IS_ERR(port->membase)) {
-+		ret = PTR_ERR(port->membase);
-+		goto err_out_clk_disable;
-+	}
- 
- 	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
- 				    GFP_KERNEL);
--	if (!private_data)
--		return -ENOMEM;
-+	if (!private_data) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	if (device_get_match_data(&pdev->dev))
- 		private_data->use_xtal_clk = true;
-@@ -822,7 +831,7 @@ static int meson_uart_probe(struct platform_device *pdev)
- 
- 	ret = meson_uart_probe_clocks(port);
- 	if (ret)
--		return ret;
-+		goto err_out_clk_disable;
- 
- 	meson_ports[pdev->id] = port;
- 	platform_set_drvdata(pdev, port);
-@@ -831,9 +840,15 @@ static int meson_uart_probe(struct platform_device *pdev)
- 	meson_uart_reset(port);
- 
- 	ret = uart_add_one_port(&meson_uart_driver, port);
--	if (ret)
-+	if (ret) {
- 		meson_ports[pdev->id] = NULL;
-+		goto err_out_clk_disable;
-+	}
-+
-+	return 0;
- 
-+err_out_clk_disable:
-+	clk_disable_unprepare(pclk);
- 	return ret;
- }
- 
+> > At that point, the LSM is attached and it can enforce an
+> > execution policy, allowing or denying execution and mmap
+> > of files depending on the digest lists (reference values) read
+> > by the user space side.
+> >
+> > After the LSM is attached, IMA's job would be just to calculate
+> > the file digests (currently, I'm using an audit policy to ensure
+> > that the digest is available when the eBPF program calls
+> > bpf_ima_inode_hash()).
+> >
+> > The main benefit of this patch set is that the audit policy
+> > would not be required and digests are calculated only when
+> > requested by the eBPF program.
+> 
+> Roberto, there's an existing eBPF integrity gap that needs to be
+> closed, perhaps not for your usecase, but in general.  Is that
+> something you can look into?
 
-base-commit: c2faf737abfb10f88f2d2612d573e9edc3c42c37
--- 
-2.33.1
+It could be possible I look into it.
 
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua

@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B934C77D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C15E4C77E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiB1Sdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:33:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S240511AbiB1SeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241085AbiB1SdE (ORCPT
+        with ESMTP id S240546AbiB1Sdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:33:04 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8130B25C5D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YR1/jlTZSQPxD81csOAIAfLa4i4Sxv2/d+YrNe2qW7A=; b=mgQm10fUVc9kgc4Wgk3J5S1tEy
-        ZVUa9ujYT89jNZnWgbg+tdJuwBTdMkj+8bNxgSeW+YjGu9U95HEFEiPsVx8HpRRUwXJKpSOQIuBoW
-        Jll8UiiMU3grQc+McvEtzRjq+gxZQwFXWQKk+F1tl9rqSj8hyf5GD4cPMgvhm9iVJcAqjWtT16qIh
-        3uvZlrB1WXoLyRY4wJ062pjDfnfJNui/VQuor4H3YNeAVf6kD9E0Aneyz0n0VEQmrzILEjCyDsJxU
-        T4NJtSeRNjnF+dgUEsd/AyEbPxQjzshS4Zx53VgwcJDLtTjUNv4lLw8QVA9blj3CBzO8FuEXA7XV4
-        W9R2PLYg==;
-Received: from [165.90.126.25] (helo=killbill.home)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nOkaE-0003pp-3P; Mon, 28 Feb 2022 19:17:18 +0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch
-Cc:     Jiawei.Gu@amd.com, andrey.grodzovsky@amd.com,
-        christian.koenig@amd.com, Melissa Wen <mwen@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/v3d: centralize error handling when init scheduler fails
-Date:   Mon, 28 Feb 2022 17:16:47 -0100
-Message-Id: <20220228181647.3794298-1-mwen@igalia.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 28 Feb 2022 13:33:41 -0500
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2FB7C7AE;
+        Mon, 28 Feb 2022 10:19:13 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id b35so22228626ybi.13;
+        Mon, 28 Feb 2022 10:19:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w+StE5EDrX4KonZXXrEcAwaI/5yqzkjCqX+Vj4i9MMQ=;
+        b=WEIuor3xIzRiN8woA7Rcg50X0GuVsL5DpyLnJdCvy8E3ZpdmjLqEk2sIeB0rThYByW
+         8UzokdCy1u7RksAqWY8b0/SpNCXRjoQdeR7fDjG32F4jdm4ndBJol/8muEMBsrxmsmdo
+         T+pXbA+CGOOY9WwsG3e9YJAXotRRTHyq/uaW6fbMUyevFvyuA+9qmNd/UM19fwWtemFG
+         /ModbKAHBvNdebwPK0qq16UhZi5IvcjRqi9ZZkcUJDyyvzAnByXpQjajattQxgPHXOIc
+         eE+qNkj9dIdDwxZEtcSXk6WdYBpGtYxw5C9jwOxTP8PNHzKQU4lg4ChqOmC0HJauEf0O
+         vGkg==
+X-Gm-Message-State: AOAM532h7WxVBFUm0YlTb0+wzmRMNnedJdJQA4X7pYzQ0Z1mwDPWRR1N
+        HRsHevlgdbLhjJRpsYNRLW4+rokj7Asv3gsclbI=
+X-Google-Smtp-Source: ABdhPJzWsCzDi+CFokdvxLYx8iy1cRJSPWBfOjOBbMf8ycRw2gUE3AI/ZxXAtE+1gGwxMpftuEdKMtEjV390ThV5muM=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr18395899ybe.365.1646072352451; Mon, 28
+ Feb 2022 10:19:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220226220639.1173594-1-Jason@zx2c4.com> <20220226220639.1173594-3-Jason@zx2c4.com>
+ <0c73d29e-e558-efb9-d0d7-c612b2bb7e90@amazon.com> <YhtyBHUyFysmZ9bC@zx2c4.com>
+ <CAHmME9pocD1CoZbnF7p4k0ws7-R0Vc9H4i5TRJ_MCX-d3AZhFw@mail.gmail.com>
+In-Reply-To: <CAHmME9pocD1CoZbnF7p4k0ws7-R0Vc9H4i5TRJ_MCX-d3AZhFw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 28 Feb 2022 19:19:01 +0100
+Message-ID: <CAJZ5v0h_Z9XS9ZgSF4CWrZ4RU7=Oa02MY3_g0Y_rcgRNzsizfQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] ACPI: allow longer device IDs
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Alexander Graf <graf@amazon.com>, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove redundant error message (since now it is very similar to what
-we do in drm_sched_init) and centralize all error handling in a
-unique place, as we follow the same steps in any case of failure.
++Mika, Andy and Hans in case they have something to add
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- drivers/gpu/drm/v3d/v3d_sched.c | 40 +++++++++++----------------------
- 1 file changed, 13 insertions(+), 27 deletions(-)
+On Mon, Feb 28, 2022 at 12:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hey again,
+>
+> On Sun, Feb 27, 2022 at 1:43 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Alex,
+> >
+> > On Sun, Feb 27, 2022 at 12:42:03PM +0100, Alexander Graf wrote:
+> > > > To allow device drivers to match identifiers that exceed the 9 byte
+> > > > limit, this simply ups the length to 16, just like it was before the
+> > > > aforementioned commit. Empirical testing indicates that this
+> > >
+> > >
+> > > This is only true for 64bit systems where padding automatically bloated
+> > > to 9 byte array to 16. I still believe the patch is fine as it is, but
+> > > there will be minor .rodata overhead on 32bit targets which you may want
+> > > to quantify in the patch description.
+> >
+> > Good point. So I just tried this out with a 32-bit i686 kernel and the
+> > results are the same again for the size of vmlinux. I then ran `objdump
+> > --headers` and looked at the size of the .rodata section, where it's
+> > also the same. I'm not quite sure what to make of this, as it's not what
+> > I was expecting, but I think I tested it right. So maybe we're lucky
+> > here?
+>
+> I tried a little harder to get _some_ difference on 32-bit, and
+> managed to get one by doing i386_defconfig and then switching off
+> modules to make all M into Y, and then compared sizes:
+>
+> vmlinux: 25590780 -> 25598972, so a 0.032% increase.
+> bzImage: 8698944 -> 8699424, so a 0.0055% increase.
+>
+> So it does increase, ever so slightly, but a) on 32-bit, and b) a
+> super, super tiny amount.
+>
+> In other words, I still think this patch is very much a-okay. But very
+> eager to hear from Rafael on the approach.
 
-diff --git a/drivers/gpu/drm/v3d/v3d_sched.c b/drivers/gpu/drm/v3d/v3d_sched.c
-index 39459ae96f30..06238e6d7f5c 100644
---- a/drivers/gpu/drm/v3d/v3d_sched.c
-+++ b/drivers/gpu/drm/v3d/v3d_sched.c
-@@ -392,34 +392,24 @@ v3d_sched_init(struct v3d_dev *v3d)
- 			     hw_jobs_limit, job_hang_limit,
- 			     msecs_to_jiffies(hang_limit_ms), NULL,
- 			     NULL, "v3d_bin", v3d->drm.dev);
--	if (ret) {
--		dev_err(v3d->drm.dev, "Failed to create bin scheduler: %d.", ret);
-+	if (ret)
- 		return ret;
--	}
- 
- 	ret = drm_sched_init(&v3d->queue[V3D_RENDER].sched,
- 			     &v3d_render_sched_ops,
- 			     hw_jobs_limit, job_hang_limit,
- 			     msecs_to_jiffies(hang_limit_ms), NULL,
- 			     NULL, "v3d_render", v3d->drm.dev);
--	if (ret) {
--		dev_err(v3d->drm.dev, "Failed to create render scheduler: %d.",
--			ret);
--		v3d_sched_fini(v3d);
--		return ret;
--	}
-+	if (ret)
-+		goto fail;
- 
- 	ret = drm_sched_init(&v3d->queue[V3D_TFU].sched,
- 			     &v3d_tfu_sched_ops,
- 			     hw_jobs_limit, job_hang_limit,
- 			     msecs_to_jiffies(hang_limit_ms), NULL,
- 			     NULL, "v3d_tfu", v3d->drm.dev);
--	if (ret) {
--		dev_err(v3d->drm.dev, "Failed to create TFU scheduler: %d.",
--			ret);
--		v3d_sched_fini(v3d);
--		return ret;
--	}
-+	if (ret)
-+		goto fail;
- 
- 	if (v3d_has_csd(v3d)) {
- 		ret = drm_sched_init(&v3d->queue[V3D_CSD].sched,
-@@ -427,27 +417,23 @@ v3d_sched_init(struct v3d_dev *v3d)
- 				     hw_jobs_limit, job_hang_limit,
- 				     msecs_to_jiffies(hang_limit_ms), NULL,
- 				     NULL, "v3d_csd", v3d->drm.dev);
--		if (ret) {
--			dev_err(v3d->drm.dev, "Failed to create CSD scheduler: %d.",
--				ret);
--			v3d_sched_fini(v3d);
--			return ret;
--		}
-+		if (ret)
-+			goto fail;
- 
- 		ret = drm_sched_init(&v3d->queue[V3D_CACHE_CLEAN].sched,
- 				     &v3d_cache_clean_sched_ops,
- 				     hw_jobs_limit, job_hang_limit,
- 				     msecs_to_jiffies(hang_limit_ms), NULL,
- 				     NULL, "v3d_cache_clean", v3d->drm.dev);
--		if (ret) {
--			dev_err(v3d->drm.dev, "Failed to create CACHE_CLEAN scheduler: %d.",
--				ret);
--			v3d_sched_fini(v3d);
--			return ret;
--		}
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	return 0;
-+
-+fail:
-+	v3d_sched_fini(v3d);
-+	return ret;
- }
- 
- void
--- 
-2.34.1
+Increasing the ACPI_ID_LEN value is fine with me, but the patch
+changelog is not entirely accurate.
 
+The ACPI subsystem uses struct acpi_device_id mostly (if not only) for
+device ID matching and it is generally used for creating lists of ACPI
+device IDs in drivers (and allow/deny lists etc).  The device IDs
+extracted from the ACPI tables can be longer than ACPI_ID_LEN.
+
+This means that drivers cannot match device IDs longer than 8
+characters (excluding the terminating 0), because the IDs in the lists
+used by them for ID matching cannot be longer than this and not
+because the ACPI subsystem is limited by that value.

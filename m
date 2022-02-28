@@ -2,44 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEA74C7E2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7474C7E2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiB1XQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S229665AbiB1XR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiB1XQa (ORCPT
+        with ESMTP id S229654AbiB1XR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:16:30 -0500
-Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597674AE2E;
-        Mon, 28 Feb 2022 15:15:50 -0800 (PST)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.21])
-        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nOoo1-0002WO-9x; Mon, 28 Feb 2022 22:47:49 +0000
-Message-ID: <023a2015-cf04-9673-8e8a-88fe88ee085e@codethink.co.uk>
-Date:   Mon, 28 Feb 2022 23:15:39 +0000
+        Mon, 28 Feb 2022 18:17:26 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C680253B6C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:16:46 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id d15so9167954pjg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:16:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
+        b=H84ukViLP1I1WQwJ555fTIX5iY07fF8mJhYhLLqFrxRU/v/5c13BT2oHieKtQ28QtB
+         vTu/WJ1QzVGt7t0JrWP9EZxzFSuISG7rgQ18dkd1w1PdOvc/6kHgHln31L/hqrFgSqbN
+         iT+TUK5ORx7x3+XzVmrBCQtrgm3FCzB0zo30Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qcyuF/rJ3v9adXS1wD5x79Nrhi3MVFgnMBiDVeVK628=;
+        b=S4m7ElfRZRgsNLDw7OMlhVTWX9s/SNNFr0FmRupDU0QPEUdtxPfP91wlKDFFV8U4J2
+         YibNTbRgfPgsZELvFmyskyuO6VjYhdvAN6n5d52iHdmkmXJNW769sUZpoEnUT9MwkkLs
+         oJjn8N/Qo8hVZilMMu3L1G9BIuYSlJ+dKYCHEGKfYS2PG9DUVOyzIsNX3MwhOyQzeCs8
+         wN99ckTYgMz5hI3czDbkeJSajdwRii3aM90hZM9suZf7SiAP2vUFDunjXByXTHaUOmbe
+         WMZl4oeo5+I0ENFPnG9/Yl4Mfa8g1iHFV7Ln9CA4v8jjiodCQI+6zORlLN2trCTbtGtI
+         jJEQ==
+X-Gm-Message-State: AOAM532vd7S8aGJS2K3Id32OPE2CCd/N0jEmLWixSUO6SBvaLX2lMNn7
+        Nxam1uflZ1K+zkWTBcRMSUevTQ==
+X-Google-Smtp-Source: ABdhPJyUO4WdPD4D+EwN7uSB3399f8EhL9c8HcIjeCpMcQrsQdmLfXFfXqDsDs2KAc/EYgd95j5zzQ==
+X-Received: by 2002:a17:90a:6542:b0:1bd:149f:1c29 with SMTP id f2-20020a17090a654200b001bd149f1c29mr13946279pjs.240.1646090206307;
+        Mon, 28 Feb 2022 15:16:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id np11-20020a17090b4c4b00b001bd4aa67bafsm774491pjb.3.2022.02.28.15.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 15:16:45 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:16:45 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+Message-ID: <202202251823.45E09CF@keescook>
+References: <20220225221625.3531852-1-keescook@chromium.org>
+ <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCHv4 2/2] PCI: fu740: Force gen1 for initial device probe
-Content-Language: en-GB
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220223205141.GA149346@bhelgaas>
- <alpine.DEB.2.21.2202232100220.27002@angie.orcam.me.uk>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <alpine.DEB.2.21.2202232100220.27002@angie.orcam.me.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225154518.0d1159fdc6f37ee38e39e90c@linux-foundation.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,47 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 21:19, Maciej W. Rozycki wrote:
-> On Wed, 23 Feb 2022, Bjorn Helgaas wrote:
+On Fri, Feb 25, 2022 at 03:45:18PM -0800, Andrew Morton wrote:
+> On Fri, 25 Feb 2022 14:16:25 -0800 Kees Cook <keescook@chromium.org> wrote:
 > 
->>> +	dw_pcie_dbi_ro_wr_dis(dw);
->>> +}
->>> +
->>>   static int fu740_pcie_start_link(struct dw_pcie *pci)
->>>   {
->>>   	struct device *dev = pci->dev;
->>>   	struct fu740_pcie *afp = dev_get_drvdata(dev);
->>>   
->>> +	/* Force PCIe gen1 otherwise Unmatched board does not probe */
->>> +	fu740_pcie_force_gen1(pci, afp);
->>
->> I guess the "Unmatched" board is the only thing we need to care about
->> here?  Are there or will there be other boards that don't need this?
+> > If ksize() is used on an allocation, the compiler cannot make any
+> > assumptions about its size any more (as hinted by __alloc_size). Force
+> > it to forget.
+> > 
+> > One caller was using a container_of() construction that needed to be
+> > worked around.
 > 
->   I wonder if this is the other side of a supposed erratum observed here:
+> Please, when fixing something do fully explain what that thing is.  I,
+> for one, simply cannot understand why this change is being proposed.
 > 
-> <https://lore.kernel.org/all/alpine.DEB.2.21.2202010240190.58572@angie.orcam.me.uk/>
+> Especially when proposing a -stable backport!  Tell readers what was
+> the end-user impact of the bug.
 > 
-> Downstream there's the same ASMedia ASM2824 PCIe switch whose downstream
-> ports don't want to train with a Pericom part above Gen1.
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1599
 > 
->   Of course we don't know an ASM2824 is there until we have successfully
-> negotiated the link, so we may have to generalise my proposal if we can
-> find a way similar to what I have done for U-boot that does not disturb
-> Linux's operation.  This is because there are PCIe option cards out there
-> with the ASM2824 onboard, so it could be possible for the problem to
-> trigger anywhere where the conditions for the erratum are met.
-> 
->   Also in that case retraining should work with the cap removed to get a
-> higher final speed just as with the Pericom part.
+> Even that didn't tell me.  Is it just a clang warning?  Does the kernel
+> post your private keys on reddit then scribble all over your disk
+> drive?  I dunno.
 
-Possibly. I have just been working on a patch to better force Gen1
-speeds and then restore the config which is working on my Unmatched
-board.
-
+Yup, sorry. I tend to get so deep changes like this that I forget to
+give an appropriately detailed summary. As others have mentioned, this
+is trying to fix a miscompilation issue, triggered by what can be
+considered either a mis-application of __alloc_size, or a failure to
+correctly disable compiler optimizations in the face of ksize().
 
 -- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
+Kees Cook

@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF64C7AB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411424C7AC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiB1Umd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S229828AbiB1Uml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiB1Um3 (ORCPT
+        with ESMTP id S229832AbiB1Umf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:42:29 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EAC17AB2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:50 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso259546pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:50 -0800 (PST)
+        Mon, 28 Feb 2022 15:42:35 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2194220F6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:55 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id h13so14576185qvk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wer/Oz2nOAI419q72n4sbW/GCj0W5Nx8xz2+Rlt0xdI=;
-        b=EPfWBDQTZQfFwTLJ9+iWGHrZjstF+IJdDCO2XmrpedQZl8eoQHqJA+/JViu23cwxXh
-         4cMj/vzH9luSjFoMSUEnTyFggS72ppUy5QkoOhB1ZLmlYGZVjojhreHYu2ecNsLh0VEG
-         gCNAXqAhIEMo9kYwHuvCozq3SDVVbHt3LuY2o=
+         :content-disposition:in-reply-to;
+        bh=ZHoT4YkDpxrU7Vyv15+4IoJxGiHGy+fxfQCPVHMyNlA=;
+        b=IbMt+hmssmUwWFZCBD4jXXibUd/GYg4PUPVQyPb7shcvyXk4zvqUPCNEs6i52K84Qg
+         51DB/ywRU7R5gkGz3pJRDfPBUZqVCWAWGn16ccopuaHNjJ4uYJoHpGNTOTI8fyXT4XLS
+         26DGDC5O1hSenVBvuswkw94yp2QdmzEoa9XtFqPoE6owUUUjKC1WYn47SXqB5JHD5ZyX
+         vYSFkRxJDCu9Pwc1im4EmuS7rPP39U4ZpOg5HXLN5dB8VbEusUggrB/IZI2uMtLyrNYY
+         dxxseV8oklAgTLfjcBlgB2t9om8zJLVqNQm893NPoX8xRdyTYVqKdMtwkGRp6P2StKLW
+         4F8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wer/Oz2nOAI419q72n4sbW/GCj0W5Nx8xz2+Rlt0xdI=;
-        b=kexXhujcmJyP3jcoruuGRi/83yiYE6sDDmWugAuCImKCEP2KrkAos/HcQUAU+4LuKY
-         LY5r6X5BGi73sOEf8K4fKmKPD3zjAyusyC0lG1D+KtqnRY4gGIW+9MIU9vziD8QDoS2J
-         JNgl9nTMc9ItgvzaQPVtRJxkw32sevbXy2eucEOsUuJ7qMi5z8xP/JdQ0ZD+73gVkTLO
-         aKkr/aEYhCMv5pvNOkIhO2yefF4PvcHAN3PIoKz7Gq2taFbGXnVBKtVMLnlxt6BtvHYT
-         3vGIgUVt+fR2LGw25R1SpRIKLz35pUm+gMGjkih0PRLrm1rJ40ABs/PtXCUqWa/7t7Te
-         TO3w==
-X-Gm-Message-State: AOAM533d/aPatAiZDHaZ29yEUKc14EomnyKpbbYPX3D89Ua4FKg4e+IX
-        8xQWzi+Y2dWcsrzIAZedgA1nRQ==
-X-Google-Smtp-Source: ABdhPJy3Ync6bess6WVePu+xmx/XAAZ+UJXR4GrnPlEoCAlv3kx6LFgNA1dRDLp+plPQLZbHhc+glA==
-X-Received: by 2002:a17:903:2482:b0:150:15ed:3cd3 with SMTP id p2-20020a170903248200b0015015ed3cd3mr21772341plw.147.1646080908566;
-        Mon, 28 Feb 2022 12:41:48 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t38-20020a056a0013a600b004e1a0c14000sm15037898pfg.209.2022.02.28.12.41.48
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZHoT4YkDpxrU7Vyv15+4IoJxGiHGy+fxfQCPVHMyNlA=;
+        b=SqUHYlXtP+/KAJ5GzyXseJdwLdLWNaPfmaNq1PPdLcwMP0KNL0LY4lUoTZFDGJru1P
+         narpxQkIQH473cBbdJbjcGnI82qqDGoJ6+655tFrSQB25RP4UTp2OxgqCfnu5Di39Bnd
+         vjrFUGtJzKTyHY3QGzI9ATaSxvJdVe6PBU8Xm/b32+VTQmWQu48bE+iuyrwAbfGEI46+
+         0c46oX7iGpiYkoW4MGmfFgdYiOLDxJwr8gesrRnaKclbOPpcb8w95e/vcnqfFzywIq+u
+         4iPiphVgP5Y9igcuZIGAUrmqV2SG7efSLKwDMULXfzGPAKQMInWc4nltubRIVcnIHqve
+         GO1w==
+X-Gm-Message-State: AOAM530tDqBkwPm4CXncPEQ+Iqo2RWuwtZoYe13MQpgv1RdJ7DvoLzvX
+        cIWpabR1BsW3HV2R2xmPF7ULcUTp8AZ15Fsa
+X-Google-Smtp-Source: ABdhPJyGUcFi1j7CzOPTFj6oe/VL5uI9RSyxXYTWHin3yyyJVJfDrN1/Ko3OcrnKEPGGieHj2kUubg==
+X-Received: by 2002:ac8:5e4a:0:b0:2de:3a8b:f775 with SMTP id i10-20020ac85e4a000000b002de3a8bf775mr17903095qtx.40.1646080914723;
+        Mon, 28 Feb 2022 12:41:54 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05622a13c700b002de9f3894c2sm7771762qtk.50.2022.02.28.12.41.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 12:41:48 -0800 (PST)
-Date:   Mon, 28 Feb 2022 12:41:47 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Magnus =?iso-8859-1?Q?Gro=DF?= <magnus.gross@rwth-aachen.de>
-Cc:     akpm@linux-foundation.org, anthony.yznaga@oracle.com,
-        glaubitz@physik.fu-berlin.de, linux-fsdevel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        matoro_bugzilla_kernel@matoro.tk,
-        matoro_mailinglist_kernel@matoro.tk, regressions@leemhuis.info,
-        regressions@lists.linux.dev, viro@zeniv.linux.org.uk
-Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
-Message-ID: <202202281240.8BCFBB47ED@keescook>
-References: <202202260344.63C15C3356@keescook>
- <Yhyn9cjDV8XfXLHm@fractal.localdomain>
+        Mon, 28 Feb 2022 12:41:54 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:41:52 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Niels Dossche <dossche.niels@gmail.com>
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clm@fb.com, dsterba@suse.com,
+        Niels Dossche <niels.dossche@ugent.be>
+Subject: Re: [PATCH] btrfs: extend locking to all space_info members accesses
+Message-ID: <Yh0zkPCdTlkFSfsQ@localhost.localdomain>
+References: <20220225212028.75021-1-niels.dossche@ugent.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yhyn9cjDV8XfXLHm@fractal.localdomain>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220225212028.75021-1-niels.dossche@ugent.be>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:46:13AM +0100, Magnus Groß wrote:
-> > When the kernel tries to map these with a combined allocation, it asks
-> > for a giant mmap of the file, but the file is, of course, not at all
-> > that large, and the mapping is rejected.
+On Fri, Feb 25, 2022 at 10:20:28PM +0100, Niels Dossche wrote:
+> bytes_pinned is always accessed under space_info->lock, except in
+> btrfs_preempt_reclaim_metadata_space, however the other members are
+> accessed under that lock. The reserved member of the rsv's are also
+> partially accessed under a lock and partially not. Move all these
+> accesses into the same lock to ensure consistency.
 > 
-> > So... I'm trying to think about how best to deal with this. If I or
-> > anyone else can't think of an elegant solution, I'll send a revert for
-> > the offending patch next week.
-> 
-> Shouldn't we just be able to patch total_mapping_size() again to instead
-> sum up all p_memsz fields, instead of comparing minimum and maximum
-> p_vaddr?
+> Signed-off-by: Niels Dossche <niels.dossche@ugent.be>
+> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
 
-I don't think so, and I need to have a "minimal change" to fix this so
-it's more obviously correct.
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
 
-And, apologies, I failed to Cc you on this patch:
-https://lore.kernel.org/linux-hardening/20220228194613.1149432-1-keescook@chromium.org/
+Thanks,
 
--- 
-Kees Cook
+Josef

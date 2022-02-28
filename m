@@ -2,173 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2944C6E52
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADCF4C6E57
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbiB1Ngk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S235396AbiB1Nht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:37:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiB1Ngi (ORCPT
+        with ESMTP id S235243AbiB1Nho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:36:38 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E675C0B;
-        Mon, 28 Feb 2022 05:35:58 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 28 Feb
- 2022 21:35:56 +0800
-Message-ID: <837c988c-1347-8aa6-cffd-2130f8894cb0@amlogic.com>
-Date:   Mon, 28 Feb 2022 21:35:55 +0800
+        Mon, 28 Feb 2022 08:37:44 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F8D7A9BC;
+        Mon, 28 Feb 2022 05:37:06 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m14so21399520lfu.4;
+        Mon, 28 Feb 2022 05:37:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=ybYQe3xQ9S5Kw+QobqlTw6DrtwPzxToutzfXG54v3Ws=;
+        b=Ktwvg8Yzec6SCgspCgAtCNeyZaMmjOQ46tGIrmha3/VYC41lz8DPB4mivi3vUqSsEw
+         oeEUmmQpYXJqFVv9r42hKGR2oCuvn4AXFPpcl71mOt8itQY97F3SAhs7DbJib8U9BZ94
+         r6wGFLakuFTgA2mg29yyuB4hI2tklxskJncfskyOzNDqAwJTVXDC6NIxHI8d9u5CNxWi
+         syjwnzPaH3EDKhelG4ZXJYXwkdBg098WWsuTCcdKF5QBDLXyqKBh7WVVf29lluRWlBBc
+         42yWmHwP8KudzEkO2M99lXH6x+uukDnCa9MYNYIg5+fnL2jFwXeKyAUbNLWJRJP+mhtb
+         M4YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=ybYQe3xQ9S5Kw+QobqlTw6DrtwPzxToutzfXG54v3Ws=;
+        b=x2o94rp0YbkIx9IX/GUIP1DZYZps7Z2EYyCRGSqHLFSovJ51y5whcs2MS3RdC3ZIKU
+         AlRxg4G7XOjB+jfo/PI13ngpgWM+TI9z9zziFAzg6tNA/0rykqOf9DqMKpZmk5fAsGkI
+         +sY4l9v9W1MDAw68Eg994UB0D39e/nU7rpKx4C2VQngGRCkOs62kzYwSs49E9M9s2uiA
+         EryfPpAH6EH4Pv+JvIq7AMioGfVfp+FIje8gDTRd+U2qZdpk+nYuqgc9+kfkF8J8AN7w
+         H0J+nzLMmUNIojRKWawy/Ac1fvZJ/b3MPycA0ucs5bga7C6oTzrIFRiTn7SAf7/W3IFL
+         lOjA==
+X-Gm-Message-State: AOAM53319irHWCA2z37DQuvI6F/c3XLMYViyBPjauv7vGivPUgJOrqRF
+        c+Ag/AHaYy7gNtr3RWDMhQzUcXvcH+eK0Gpl
+X-Google-Smtp-Source: ABdhPJzxuNQT3KR9Xiwm1kYNxgPWclTDtSHQ9GVjCcpk/N+zn55E2612m5c9F+PMD0JWC1l9DWlfJA==
+X-Received: by 2002:a19:e302:0:b0:445:8acb:10db with SMTP id a2-20020a19e302000000b004458acb10dbmr7369063lfh.513.1646055424258;
+        Mon, 28 Feb 2022 05:37:04 -0800 (PST)
+Received: from wse-c0127.beijerelectronics.com ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id i16-20020a2e5410000000b0024647722a4asm1326640ljb.29.2022.02.28.05.37.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 05:37:03 -0800 (PST)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH iproute2-next V2 0/4] Add support for locked bridge ports (for 802.1X)
+Date:   Mon, 28 Feb 2022 14:36:46 +0100
+Message-Id: <20220228133650.31358-1-schultz.hans+netdev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V2] tty: serial: meson: Fix the compile link error
- reported by kernel test robot
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220228090351.9976-1-yu.tu@amlogic.com>
- <790952bd-b066-0b41-545c-1f65cd4244af@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <790952bd-b066-0b41-545c-1f65cd4244af@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
-	Thank you very much for your reply.
+This patch set is to complement the kernel locked port patches, such
+that iproute2 can be used to lock/unlock a port and check if a port
+is locked or not. To lock or unlock a port use the command:
 
-On 2022/2/28 17:52, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> i,
-> 
-> On 28/02/2022 10:03, Yu Tu wrote:
->> Describes the calculation of the UART baud rate clock using a clock
->> frame. Forgot to add in Kconfig kernel test Robot compilation error
->> due to COMMON_CLK dependency.
->>
->> Fixes: 44023b8e1f14 ("tty: serial:meson: Describes the calculation of 
->> the UART baud rate clock using a clock frame“)
-> 
-> AFAIK this commit is not in an uptream/feature branch, so you should 
-> simply fix your `Use CCF to describe the UART baud rate clock` instead.
-> 
-I'll correct it right away as you suggested.
+bridge link set dev DEV locked {on | off}
 
-> Neil
-> 
->> Reported-by: kernel test robot <lkp@intel.com>
->> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   drivers/tty/serial/Kconfig      |  1 +
->>   drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
->>   2 files changed, 27 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
->> index e952ec5c7a7c..a0f2b82fc18b 100644
->> --- a/drivers/tty/serial/Kconfig
->> +++ b/drivers/tty/serial/Kconfig
->> @@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
->>   config SERIAL_MESON
->>       tristate "Meson serial port support"
->>       depends on ARCH_MESON || COMPILE_TEST
->> +    depends on COMMON_CLK
->>       select SERIAL_CORE
->>       help
->>         This enables the driver for the on-chip UARTs of the Amlogic
->> diff --git a/drivers/tty/serial/meson_uart.c 
->> b/drivers/tty/serial/meson_uart.c
->> index bf6be5468aaf..972f210f3492 100644
->> --- a/drivers/tty/serial/meson_uart.c
->> +++ b/drivers/tty/serial/meson_uart.c
->> @@ -780,28 +780,37 @@ static int meson_uart_probe(struct 
->> platform_device *pdev)
->>           return ret;
->>       irq = platform_get_irq(pdev, 0);
->> -    if (irq < 0)
->> -        return irq;
->> +    if (irq < 0) {
->> +        ret = irq;
->> +        goto err_out_clk_disable;
->> +    }
->>       of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
->>       if (meson_ports[pdev->id]) {
->>           dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
->> -        return -EBUSY;
->> +        ret = -EBUSY;
->> +        goto err_out_clk_disable;
->>       }
->>       port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), 
->> GFP_KERNEL);
->> -    if (!port)
->> -        return -ENOMEM;
->> +    if (!port) {
->> +        ret = -ENOMEM;
->> +        goto err_out_clk_disable;
->> +    }
->>       port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
->> -    if (IS_ERR(port->membase))
->> -        return PTR_ERR(port->membase);
->> +    if (IS_ERR(port->membase)) {
->> +        ret = PTR_ERR(port->membase);
->> +        goto err_out_clk_disable;
->> +    }
->>       private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
->>                       GFP_KERNEL);
->> -    if (!private_data)
->> -        return -ENOMEM;
->> +    if (!private_data) {
->> +        ret = -ENOMEM;
->> +        goto err_out_clk_disable;
->> +    }
->>       if (device_get_match_data(&pdev->dev))
->>           private_data->use_xtal_clk = true;
->> @@ -822,7 +831,7 @@ static int meson_uart_probe(struct platform_device 
->> *pdev)
->>       ret = meson_uart_probe_clocks(port);
->>       if (ret)
->> -        return ret;
->> +        goto err_out_clk_disable;
->>       meson_ports[pdev->id] = port;
->>       platform_set_drvdata(pdev, port);
->> @@ -831,9 +840,15 @@ static int meson_uart_probe(struct 
->> platform_device *pdev)
->>       meson_uart_reset(port);
->>       ret = uart_add_one_port(&meson_uart_driver, port);
->> -    if (ret)
->> +    if (ret) {
->>           meson_ports[pdev->id] = NULL;
->> +        goto err_out_clk_disable;
->> +    }
->> +
->> +    return 0;
->> +err_out_clk_disable:
->> +    clk_disable_unprepare(pclk);
->>       return ret;
->>   }
->>
->> base-commit: c2faf737abfb10f88f2d2612d573e9edc3c42c37
-> 
+
+To show the detailed setting of a port, including if the locked flag is
+enabled for the port(s), use the command:
+
+bridge -d link show [dev DEV]
+
+
+Hans Schultz (4):
+  bridge: link: add command to set port in locked mode
+  ip: iplink_bridge_slave: add locked port flag support
+  man8/bridge.8: add locked port feature description and cmd syntax
+  man8/ip-link.8: add locked port feature description and cmd syntax
+
+ bridge/link.c                | 13 +++++++++++++
+ include/uapi/linux/if_link.h |  1 +
+ ip/iplink_bridge_slave.c     |  9 +++++++++
+ man/man8/bridge.8            | 11 +++++++++++
+ man/man8/ip-link.8.in        |  6 ++++++
+ 5 files changed, 40 insertions(+)
+
+-- 
+2.30.2
+

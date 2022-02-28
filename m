@@ -2,72 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D734C70E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7434C70E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237609AbiB1Plq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 10:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S231742AbiB1Plz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiB1Plm (ORCPT
+        with ESMTP id S237608AbiB1Ply (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:41:42 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F9BC7EB15
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:41:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-AFvCgAEnOC6V2d2xCYs19g-1; Mon, 28 Feb 2022 15:40:59 +0000
-X-MC-Unique: AFvCgAEnOC6V2d2xCYs19g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 15:40:56 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 28 Feb 2022 15:40:56 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Manivannan Sadhasivam' <manivannan.sadhasivam@linaro.org>
-CC:     "mhi@lists.linux.dev" <mhi@lists.linux.dev>,
-        "quic_hemantk@quicinc.com" <quic_hemantk@quicinc.com>,
-        "quic_bbhatt@quicinc.com" <quic_bbhatt@quicinc.com>,
-        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
-        "vinod.koul@linaro.org" <vinod.koul@linaro.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "quic_vbadigan@quicinc.com" <quic_vbadigan@quicinc.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "quic_skananth@quicinc.com" <quic_skananth@quicinc.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "elder@linaro.org" <elder@linaro.org>
-Subject: RE: [PATCH v4 05/27] bus: mhi: Use bitfield operations for handling
- DWORDs of ring elements
-Thread-Topic: [PATCH v4 05/27] bus: mhi: Use bitfield operations for handling
- DWORDs of ring elements
-Thread-Index: AQHYLKD5KBrT0mkrcEuEmuVBLjzK3Kyo+w/ggAAO0ACAAAu88A==
-Date:   Mon, 28 Feb 2022 15:40:56 +0000
-Message-ID: <8433702975794b5389563393bf7bc405@AcuMS.aculab.com>
-References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
- <20220228124344.77359-6-manivannan.sadhasivam@linaro.org>
- <90b1d3954b8c4157a4045db82b562271@AcuMS.aculab.com>
- <20220228144336.GB12451@workstation>
-In-Reply-To: <20220228144336.GB12451@workstation>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 28 Feb 2022 10:41:54 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6994C7EB23
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:41:13 -0800 (PST)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C14271BF215;
+        Mon, 28 Feb 2022 15:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646062869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K8tsZThgKft3qP4HSBatGAgCaNYLDfrbq75zRz5W1SA=;
+        b=kLvkovtrQ4QLgwOf4DxCC4CISYznEeyG1gMt4QPzLOB8QAgQqBN5nzSLTdu+iH4z6Hijwr
+        E6TMLlNU4quO/5zrcje2BvmU9d1hcIc7eMEGq9ZH5e0QT2boAe1ribA5PZoaxDujlaHu9y
+        O4kkYnB32k7xsZzsq0QOu3Km//48yu+t2wDlyv6+6DAnDYaL/Q4pRfUtIupupcd/B6AAK5
+        nGTqeyRMleiWKOXSb0cNgSXnzpIRhllYw5IB3Bp3vVdaWbeEaXAlQwiDY4H15YT/mBTBWf
+        0a73ifR65GcOVV48f3lBTuqfIwivNWV4vUxrtaNgiRt+gMu1Q2y2LqxvLwyqJQ==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Remap IO space to bus
+ address 0x0
+In-Reply-To: <20220218212526.16021-1-pali@kernel.org>
+References: <20220218212526.16021-1-pali@kernel.org>
+Date:   Mon, 28 Feb 2022 16:41:06 +0100
+Message-ID: <87o82r0zjh.fsf@BL-laptop>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,65 +53,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: 'Manivannan Sadhasivam'
-> Sent: 28 February 2022 14:44
-> 
-> On Mon, Feb 28, 2022 at 02:00:07PM +0000, David Laight wrote:
-> > From: Manivannan Sadhasivam
-> > > Sent: 28 February 2022 12:43
-> > >
-> > > Instead of using the hardcoded bits in DWORD definitions, let's use the
-> > > bitfield operations to make it more clear how the DWORDs are structured.
-> >
-> > That all makes it as clear as mud.
-> 
-> It depends on how you see it ;)
-> 
-> For instance,
-> 
-> #define MHI_TRE_GET_CMD_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
-> 
-> vs
-> 
-> #define MHI_TRE_GET_CMD_TYPE(tre) (FIELD_GET(GENMASK(23, 16), (MHI_TRE_GET_DWORD(tre, 1))))
-> 
-> The later one makes it more obvious that the "type" field resides between bit 23
-> and 16. Plus it avoids the extra masking.
+Hello Pali,
 
-No, (x >> 16) & 0xff is obviously bits 23 to 16.
-I can guess or try to remember what FIELD_GET() and GENMASK() do
-but it is really hard work.
+> Remap PCI I/O space to the bus address 0x0 in the Armada 37xx
+> device-tree in order to support legacy I/O port based cards which have
+> hardcoded I/O ports in low address space.
+>
+> Some legacy PCI I/O based cards do not support 32-bit I/O addressing.
+>
+> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
+> 'ranges' DT property") this driver can work with I/O windows which
+> have
 
-Both lines are actually too long to read - especially given the
-number of times they are repeated with very minor changes.
+Should we add a "Fixes: 64f160e19e92 ("PCI: aardvark: Configure PCIe
+resources from 'ranges' DT property")" tag ?
 
-I actually wonder if you shouldn't just have a struct like:
-struct mhi_cmd {
-	__le64   address;
-	__le16   len;
-	u8       state;
-	u8       vid;
-	__le16   xxx; /* I can't see what this is */
-	u8       chid;
-	u8       cmd;
-};
+Gregory
 
-although you might need the odd anonymous union/struct
-to get the overlays in.
+> a different address for CPU than for PCI bus (unless there is some
+> conflict with other A37xx mapping), without needing additional support
+> for this in the firmware.
+>
+> Note that DDR on A37xx is mapped to bus address 0x0 and that mapping of
+> I/O space can be set to address 0x0 too because MEM space and I/O space
+> are separate and so they do not conflict.
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arc=
+h/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> index 6581092c2c90..7d1b9153a901 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> @@ -163,7 +163,7 @@
+>  	 */
+>  	#address-cells =3D <3>;
+>  	#size-cells =3D <2>;
+> -	ranges =3D <0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* =
+Port 0 IO */
+> +	ranges =3D <0x81000000 0 0x00000000   0 0xe8000000   0 0x01000000   /* =
+Port 0 IO */
+>  		  0x82000000 0 0xe9000000   0 0xe9000000   0 0x07000000>; /* Port 0 ME=
+M */
+>=20=20
+>  	/* enabled by U-Boot if PCIe module is present */
+> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
+ot/dts/marvell/armada-37xx.dtsi
+> index 549c3f7c5b27..a099b7787429 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> @@ -515,7 +515,7 @@
+>  			 * (totaling 127 MiB) for MEM.
+>  			 */
+>  			ranges =3D <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /=
+* Port 0 MEM */
+> -				  0x81000000 0 0xeff00000   0 0xeff00000   0 0x00100000>; /* Port 0 =
+IO*/
+> +				  0x81000000 0 0x00000000   0 0xeff00000   0 0x00100000>; /* Port 0 =
+IO */
+>  			interrupt-map-mask =3D <0 0 0 7>;
+>  			interrupt-map =3D <0 0 0 1 &pcie_intc 0>,
+>  					<0 0 0 2 &pcie_intc 1>,
+> --=20
+> 2.20.1
+>
 
-Even using something like:
-#define MAKE_WORD0(len, state, vid) (htole16(len) | state << 16 | vid << 16)
-would make for easier reading.
-
-Oh yes, there are some 64bit fields here.
-So a 'word' is 64 bits, so a 'double word' would be 128 bits!
-
-WTF is a DWORD anyway????
-Are you going to start using DWORD_PTR as well ?????
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

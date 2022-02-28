@@ -2,54 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C712B4C71A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB204C71A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237890AbiB1QYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S237901AbiB1QYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiB1QYE (ORCPT
+        with ESMTP id S237895AbiB1QYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:24:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBB49F23;
-        Mon, 28 Feb 2022 08:23:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5E75B81229;
-        Mon, 28 Feb 2022 16:23:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FD8C340E7;
-        Mon, 28 Feb 2022 16:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646065402;
-        bh=4uwUbtFzUaPQDZkQalpW48JK5+hWGBKg6MdMcnnUZM8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=bHFmNnssY5Wmor9erI1rBF/Nrqyn6U0q4md+d76eNWWpYLtwvmt1Un+e0ubpKGaUS
-         NhxReyE0A1hdAAofrECxThFI+RvJdGK4kUTF82sdYmA8tf3qUi1hMyfE8bGw5y0HaL
-         LLw1zDkoyX1tflw6SRVHuI/l3HnWhYWiTamRlZpuhNJgFcVrKt/rgvDiqSET/Cfgnx
-         HAn50WvP45NdTTun1u+AI4tst8J9zLDAPE8aiCsyUSBW32Ye/uC71Z1ANHkOINCkKN
-         QcgKmyuq2Zt4qLgkh98AH1qeyC26kBsz/RqBqyJ8tuYefstecWvBhplJG9ZEZZwbbG
-         ZkJhlTK4dUVHg==
-From:   SeongJae Park <sj@kernel.org>
-To:     xhao@linux.alibaba.com
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        gregkh@linuxfoundation.org, linux-damon@amazon.com,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/13] mm/damon: Implement a minimal stub for sysfs-based DAMON interface
-Date:   Mon, 28 Feb 2022 16:23:18 +0000
-Message-Id: <20220228162318.4046-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Mon, 28 Feb 2022 11:24:34 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F1E5677E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:23:54 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id h16so15224215iol.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QxHj11NmKEuyc0G2RD6G+kXcZ9Pm2N3LC7JblOU15Do=;
+        b=ZiHaHT9f4OnOfnsDY4ChjFkcYK1DO1rzO11j0VhRZ6cBHyD2PJTzscX7i9DA6QNeIg
+         JGZawxSsrzR3O62E52p0b5OI5ZdGdGjKVHKR3cziHQ898gFoUc3L201rKe2S8S7weBhg
+         70+Q82iTXOzLiAvJQSRSDRTKTjFpbcGA4whysXisfr8cokDQizIH4hnB0PXnjIAl6Ng5
+         YghnB+i+schye76/Lh6cKG1VPgmvqVqKfj4HLocCrYGKzg1chBzj8USwLrsGsqF41u1G
+         oRunTORanq9EqY/PWqYz1H3RHqkosTI9HZoCAiCG6X08fZHr7Ui5VhHSmQWvL6YZraAO
+         RcAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QxHj11NmKEuyc0G2RD6G+kXcZ9Pm2N3LC7JblOU15Do=;
+        b=ng/ZyYZxSrN68RxDeyWx3RAQVZODxx0uIbIb+KIA0uL3+DbIMrZ0YeKhv3pcyWCaLn
+         TRmmXthsurgBYqSAQei+UYUFl5/QIe+FPzC0yub6mc+Xlrqb+xGoe0YdOKBu8lQmP4bG
+         1fH/ZqgyoO3W5fUjX4UxMwdYJDdLJioJeW4Y0HBeAatq64h3F5+fMmFsPznr51x2SxzQ
+         iif9uO+mPdAKpr4agujcDXMaOQjiV7AE3dIx4FamCaMgXN+QarkVN0ntHvtrXi8K0+to
+         Bm0AZT38igWM+FHutZAMvsBopU7ywaZnkpPGHD0gkgOviP92Yqg2OK9AThVkA81xa7lM
+         Ij7w==
+X-Gm-Message-State: AOAM530gnBsKm7R3DUsoQtzAsybDBa8Iz2UFbN1n/P5HnQeo+DtrXCOV
+        CnNhc/2JYPR0FXlFrXV144aD2w==
+X-Google-Smtp-Source: ABdhPJyeL72l3ruTPjseVeq+zJTKGeNdf0b4TTz6Mi0UApBv+h+mKKRrehCw0yu/8KTA/K8Z7Pr6Bw==
+X-Received: by 2002:a05:6602:2011:b0:640:dc49:ed8 with SMTP id y17-20020a056602201100b00640dc490ed8mr15582277iod.125.1646065434134;
+        Mon, 28 Feb 2022 08:23:54 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id q7-20020a5d87c7000000b0064132d5bd73sm5983611ios.4.2022.02.28.08.23.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 08:23:53 -0800 (PST)
+Message-ID: <85531c16-6891-3fc4-fd02-2ed75a3c1def@linaro.org>
+Date:   Mon, 28 Feb 2022 10:23:52 -0600
 MIME-Version: 1.0
-In-Reply-To: <0f1051ce-2ce7-8659-f881-b5889018b8a2@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 13/27] bus: mhi: ep: Add support for managing MMIO
+ registers
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+ <20220228124344.77359-14-manivannan.sadhasivam@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220228124344.77359-14-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,186 +81,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
-
-On Tue, 1 Mar 2022 00:09:35 +0800 xhao@linux.alibaba.com wrote:
-
-> Hi SeongJae:
+On 2/28/22 6:43 AM, Manivannan Sadhasivam wrote:
+> Add support for managing the Memory Mapped Input Output (MMIO) registers
+> of the MHI bus. All MHI operations are carried out using the MMIO registers
+> by both host and the endpoint device.
 > 
-> On 2/28/22 4:13 PM, SeongJae Park wrote:
-> > DAMON's debugfs-based user interface served very well, so far.  However,
-> > it unnecessarily depends on debugfs, while DAMON is not aimed to be used
-> > for only debugging.  Also, the interface receives multiple values via
-> > one file.  For example, schemes file receives 18 values separated by
-> > white spaces.  As a result, it is ineffient, hard to be used, and
-> > difficult to be extended.  Especially, keeping backward compatibility of
-> > user space tools is getting only challenging.  It would be better to
-> > implement another reliable and flexible interface and deprecate the
-> > debugfs interface in long term.
-> >
-> > To this end, this commit implements a stub of a part of the new user
-> > interface of DAMON using sysfs.  Specifically, this commit implements
-> > the sysfs control parts for virtual address space monitoring.
-> >
-> > More specifically, the idea of the new interface is, using directory
-> > hierarchies and making one file for one value.  The hierarchy that this
-> > commit is introducing is as below.  In the below figure,
-> > parents-children relations are represented with indentations, each
-> > directory is having ``/`` suffix, and files in each directory are
-> > separated by comma (",").
-> >
-> >      /sys/kernel/mm/damon/admin
-> >      │ kdamonds/nr_kdamonds
-> >      │ │ 0/state,pid
-> >      │ │ │ contexts/nr_contexts
-> >      │ │ │ │ 0/operations
-> >      │ │ │ │ │ monitoring_attrs/
-> >      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
-> >      │ │ │ │ │ │ nr_regions/min,max
-> >      │ │ │ │ │ targets/nr_targets
-> >      │ │ │ │ │ │ 0/pid_target
-> >      │ │ │ │ │ │ ...
-> >      │ │ │ │ ...
-> >      │ │ ...
-> >
-> > Writing a number <N> to each 'nr' file makes directories of name <0> to
-> > <N-1> in the directory of the 'nr' file.  That's all this commit does.
-> > Writing proper values to relevant files will construct the DAMON
-> > contexts, and writing a special keyword, 'on', to 'state' files for each
-> > kdamond will ask DAMON to start the constructed contexts.
-> >
-> > For a short example, using below commands for
-> > monitoring virtual address spaces of a given workload is imaginable:
-> >
-> >      # cd /sys/kernel/mm/damon/admin/
-> >      # echo 1 > kdamonds/nr_kdamonds
-> >      # echo 1 > kdamonds/0/contexts/nr_contexts
-> >      # echo vaddr > kdamonds/0/contexts/0/operations
-> >      # echo 1 > kdamonds/0/contexts/0/targets/nr_targets
-> >      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid_target
-> >      # echo on > kdamonds/0/state
-> >
-> > Please note that this commit is implementing only the sysfs part stub as
-> > abovely mentioned.  This commit doesn't implement the special keywords
-> > for 'state' files.  Following commits will do that.
-> >
-> > Signed-off-by: SeongJae Park <sj@kernel.org>
-> > ---
-> >   mm/damon/Kconfig  |    7 +
-> >   mm/damon/Makefile |    1 +
-> >   mm/damon/sysfs.c  | 1082 +++++++++++++++++++++++++++++++++++++++++++++
-> >   3 files changed, 1090 insertions(+)
-> >   create mode 100644 mm/damon/sysfs.c
-> >
-> > diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
-> > index 01bad77ad7ae..9b559c76d6dd 100644
-> > --- a/mm/damon/Kconfig
-> > +++ b/mm/damon/Kconfig
-> > @@ -52,6 +52,13 @@ config DAMON_VADDR_KUNIT_TEST
-> >   
-> >   	  If unsure, say N.
-> >   
-> > +config DAMON_SYSFS
-> > +	bool "DAMON sysfs interface"
-> > +	depends on DAMON && SYSFS
-> > +	help
-> > +	  This builds the sysfs interface for DAMON.  The user space can use
-> > +	  the interface for arbitrary data access monitoring.
-> > +
-> >   config DAMON_DBGFS
-> >   	bool "DAMON debugfs interface"
-> >   	depends on DAMON_VADDR && DAMON_PADDR && DEBUG_FS
-> > diff --git a/mm/damon/Makefile b/mm/damon/Makefile
-> > index aebbf6c14c51..dbf7190b4144 100644
-> > --- a/mm/damon/Makefile
-> > +++ b/mm/damon/Makefile
-> > @@ -3,5 +3,6 @@
-> >   obj-y				:= core.o
-> >   obj-$(CONFIG_DAMON_VADDR)	+= ops-common.o vaddr.o
-> >   obj-$(CONFIG_DAMON_PADDR)	+= ops-common.o paddr.o
-> > +obj-$(CONFIG_DAMON_SYSFS)	+= sysfs.o
-> >   obj-$(CONFIG_DAMON_DBGFS)	+= dbgfs.o
-> >   obj-$(CONFIG_DAMON_RECLAIM)	+= reclaim.o
-> > diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> > new file mode 100644
-> > index 000000000000..87cf28ae6a6f
-> > --- /dev/null
-> > +++ b/mm/damon/sysfs.c
-> > @@ -0,0 +1,1082 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * DAMON sysfs Interface
-> > + *
-> > + * Copyright (c) 2022 SeongJae Park <sj@kernel.org>
-> > + */
-> > +
-> > +#include <linux/damon.h>
-> > +#include <linux/kobject.h>
-> > +#include <linux/pid.h>
-> > +#include <linux/sched.h>
-> > +#include <linux/slab.h>
-> > +
-> > +static DEFINE_MUTEX(damon_sysfs_lock);
-> > +
-> > +/*
-> > + * unsigned long range directory
-> > + */
-> > +
-> > +struct damon_sysfs_ul_range {
-> > +	struct kobject kobj;
-> > +	unsigned long min;
-> > +	unsigned long max;
-> > +};
-> > +
-> > +static struct damon_sysfs_ul_range *damon_sysfs_ul_range_alloc(
-> > +		unsigned long min,
-> > +		unsigned long max)
-> > +{
-> > +	struct damon_sysfs_ul_range *range = kmalloc(sizeof(*range),
-> > +			GFP_KERNEL);
-> > +
-> > +	if (!range)
-> > +		return NULL;
-> > +	range->kobj = (struct kobject){};
-> > +	range->min = min;
-> > +	range->max = max;
-> > +
-> > +	return range;
-> > +}
-> > +
-> > +static ssize_t min_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > +		char *buf)
-> > +{
-> > +	struct damon_sysfs_ul_range *range = container_of(kobj,
-> > +			struct damon_sysfs_ul_range, kobj);
-> > +
-> > +	return sysfs_emit(buf, "%lu\n", range->min);
-> > +}
-> > +
+> The MMIO registers reside inside the endpoint device memory (fixed
+> location based on the platform) and the address is passed by the MHI EP
+> controller driver during its registration.
+
+I thought it might have been a mistake that MHI_MASK_ROWS_CH_EV_DB
+was used when iterating over channels and events.  Now I see it
+represents the number of "rows" of 32-bit doorbell registers for
+either events or channels.
+
+I guess it might be reasonable to assume the number of event "rows"
+is the same as the number of channel rows.  But *maybe* consider
+defining them separately, like:
+   MHI_MASK_ROWS_CH_DB
+   MHI_MASK_ROWS_EV_DB
+
+I also have one more comment below.
+
+Whether or not you implement one or both of these suggestions:
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/bus/mhi/ep/Makefile   |   2 +-
+>   drivers/bus/mhi/ep/internal.h |  26 ++++
+>   drivers/bus/mhi/ep/main.c     |   6 +-
+>   drivers/bus/mhi/ep/mmio.c     | 272 ++++++++++++++++++++++++++++++++++
+>   include/linux/mhi_ep.h        |  18 +++
+>   5 files changed, 322 insertions(+), 2 deletions(-)
+>   create mode 100644 drivers/bus/mhi/ep/mmio.c
 > 
-> I have do some test about interface "min" and "max",  it looks have some 
-> bugs.
-> 
-> [root@rt2k03395 nr_regions]# echo 10 > max
-> [root@rt2k03395 nr_regions]# echo 20 > min
-> [root@rt2k03395 nr_regions]# ls
-> [root@rt2k03395 nr_regions]# cat max
-> 10
-> [root@rt2k03395 nr_regions]# cat min
-> 20
-> 
-> how about do some fix like this:
 
-It's an intended behavior.  The intention is to let the users put input in any
-order (e.g., writing min first and then max later), and check the validity just
-before applying the input to DAMON, which is, when writing 'on' to the 'status'
-file.  One additional advantage of this is confining the validity check in one
-place and therefore management of the code could be a little bit simpler.
+. . .
 
-So, I think the fix is not really needed.
+> diff --git a/drivers/bus/mhi/ep/mmio.c b/drivers/bus/mhi/ep/mmio.c
+> new file mode 100644
+> index 000000000000..311c5d94c4d2
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/mmio.c
+> @@ -0,0 +1,272 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Linaro Ltd.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/io.h>
+> +#include <linux/mhi_ep.h>
+> +
+> +#include "internal.h"
+> +
+
+. . .
+
+> +bool mhi_ep_mmio_read_chdb_status_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	bool chdb = 0;
+> +	u32 i;
+> +
+> +	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++) {
+> +		mhi_cntrl->chdb[i].status = mhi_ep_mmio_read(mhi_cntrl, MHI_CHDB_INT_STATUS_n(i));
+> +		chdb |= !!mhi_cntrl->chdb[i].status;
+
+This is fine, but I think I'd prefer this to be:
+
+		if (mhi_cntrl->chdb[i].status)
+			chdb = true;
+
+Because you're using a bitwise operator to set a Boolean value.
 
 
-Thanks,
-SJ
+> +	}
+> +
+> +	/* Return whether a channel doorbell interrupt occurred or not */
+> +	return chdb;
+> +}
+> +
 
-[...]
+. . .

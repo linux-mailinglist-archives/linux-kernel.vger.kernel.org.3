@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6294C73E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FD04C744A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbiB1RjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S238468AbiB1RmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238308AbiB1RhO (ORCPT
+        with ESMTP id S238349AbiB1RhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 12:37:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCEF89CF8;
-        Mon, 28 Feb 2022 09:32:06 -0800 (PST)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE91F8AE54;
+        Mon, 28 Feb 2022 09:32:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E547A61358;
-        Mon, 28 Feb 2022 17:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04297C340E7;
-        Mon, 28 Feb 2022 17:32:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ACE7BCE17BE;
+        Mon, 28 Feb 2022 17:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999E5C340E7;
+        Mon, 28 Feb 2022 17:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069525;
-        bh=OdVa2ugLA2SYLg1Q1Zk4v0F51Z57H51iaDsKFNlaeLQ=;
+        s=korg; t=1646069527;
+        bh=c3+ZF2Am26AFS69yXSGDqrLPBKoFtoySafESdM+LLg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZXFMlQH+HaXBCOyuCa+3zewQVBQzEoJPUuplD7R9BSicI2sc2aqy0kob8e2SQiYA
-         sj77w/65Ws78Im1gK2Y3K8z5QPYaqS384Ld3j4RDOTAVbpmiQuyqtNuKQXrofzw4+O
-         hUMqHlrgUDBkr0rTxvWQOdvRcG6caF/M/2k7zvqg=
+        b=QQ+yX7qc0mQ8juWZ4/SDktg1aK5hlsTj2sYwla1cG709SMaXC3UeKvoknPMw85NKO
+         6K6niKh/RCf1QKn4Tumx9BrT1g1f1tKO7EH92+d6Zl0NjuxQG/ab8DfP9tE/eD+SqF
+         LxPR1XWezv7jrcJswDxm4KeAt4KoCLjW+mgKy2dI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.4 51/53] Revert "drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR"
-Date:   Mon, 28 Feb 2022 18:24:49 +0100
-Message-Id: <20220228172252.022032029@linuxfoundation.org>
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH 5.4 52/53] memblock: use kfree() to release kmalloced memblock regions
+Date:   Mon, 28 Feb 2022 18:24:50 +0100
+Message-Id: <20220228172252.234235570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
 References: <20220228172248.232273337@linuxfoundation.org>
@@ -54,96 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karol Herbst <kherbst@redhat.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-This reverts commit c9ec3d85c0eef7c71cdc68db758e0f0e378132c0.
+commit c94afc46cae7ad41b2ad6a99368147879f4b0e56 upstream.
 
-This commit causes a regression if 4cdd2450bf739bada353e82d27b00db9af8c3001
-is not applied as well. This was fixed for 5.16, 5.15 and 5.10.
+memblock.{reserved,memory}.regions may be allocated using kmalloc() in
+memblock_double_array(). Use kfree() to release these kmalloced regions
+indicated by memblock_{reserved,memory}_in_slab.
 
-On older stable branches backporting this commit is complicated as relevant
-code changed quite a bit. Furthermore most of the affected hardware barely
-works on those and users would want to use the newer kernels anyway.
-
-Cc: stable@vger.kernel.org # 5.4 4.19 and 4.14
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Link: https://gitlab.freedesktop.org/drm/nouveau/-/issues/149
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Fixes: 3010f876500f ("mm: discard memblock data later")
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c |   37 ++++++++++---------------
- 1 file changed, 16 insertions(+), 21 deletions(-)
+ mm/memblock.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
-@@ -88,13 +88,20 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev
- 	return 0;
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -348,14 +348,20 @@ void __init memblock_discard(void)
+ 		addr = __pa(memblock.reserved.regions);
+ 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
+ 				  memblock.reserved.max);
+-		__memblock_free_late(addr, size);
++		if (memblock_reserved_in_slab)
++			kfree(memblock.reserved.regions);
++		else
++			__memblock_free_late(addr, size);
+ 	}
+ 
+ 	if (memblock.memory.regions != memblock_memory_init_regions) {
+ 		addr = __pa(memblock.memory.regions);
+ 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
+ 				  memblock.memory.max);
+-		__memblock_free_late(addr, size);
++		if (memblock_memory_in_slab)
++			kfree(memblock.memory.regions);
++		else
++			__memblock_free_late(addr, size);
+ 	}
  }
- 
--static void
-+static int
- nvkm_pmu_reset(struct nvkm_pmu *pmu)
- {
- 	struct nvkm_device *device = pmu->subdev.device;
- 
- 	if (!pmu->func->enabled(pmu))
--		return;
-+		return 0;
-+
-+	/* Inhibit interrupts, and wait for idle. */
-+	nvkm_wr32(device, 0x10a014, 0x0000ffff);
-+	nvkm_msec(device, 2000,
-+		if (!nvkm_rd32(device, 0x10a04c))
-+			break;
-+	);
- 
- 	/* Reset. */
- 	if (pmu->func->reset)
-@@ -105,37 +112,25 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
- 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
- 			break;
- 	);
-+
-+	return 0;
- }
- 
- static int
- nvkm_pmu_preinit(struct nvkm_subdev *subdev)
- {
- 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
--	nvkm_pmu_reset(pmu);
--	return 0;
-+	return nvkm_pmu_reset(pmu);
- }
- 
- static int
- nvkm_pmu_init(struct nvkm_subdev *subdev)
- {
- 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
--	struct nvkm_device *device = pmu->subdev.device;
--
--	if (!pmu->func->init)
--		return 0;
--
--	if (pmu->func->enabled(pmu)) {
--		/* Inhibit interrupts, and wait for idle. */
--		nvkm_wr32(device, 0x10a014, 0x0000ffff);
--		nvkm_msec(device, 2000,
--			if (!nvkm_rd32(device, 0x10a04c))
--				break;
--		);
--
--		nvkm_pmu_reset(pmu);
--	}
--
--	return pmu->func->init(pmu);
-+	int ret = nvkm_pmu_reset(pmu);
-+	if (ret == 0 && pmu->func->init)
-+		ret = pmu->func->init(pmu);
-+	return ret;
- }
- 
- static int
+ #endif
 
 

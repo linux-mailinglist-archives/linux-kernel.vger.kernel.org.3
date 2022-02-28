@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ADA4C7213
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A88E4C7217
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiB1RCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S238096AbiB1RDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiB1RCq (ORCPT
+        with ESMTP id S238038AbiB1RDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:02:46 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0A786E0F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:06 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id a1so13551590qvl.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Y9cZVaut3aLdlKX+slS0PsytKlmPKaShOXQetxBEnLs=;
-        b=RWahVHidsmUKk3zmU4u+GXNAQsPIO4fG+FWWtFLwh/nIJSVim2DRTMT+dtX8WkXnNw
-         IhLL4C1HcJ9ZDzbcAYB1aCCOT3FAMdOlWQIR3BBfX/MfsCGxMk4tisEiRuqi6TuyNCSf
-         fBYFIesGaDPEnn1TYpMJJTswWKjm+RtORcQOwTZFeT3QdpqpLHMeudiuIWfQsTYU0437
-         Pi1+oFeFvCH2Diy8u1i22uQajV/YXRjXV3bwVdIFb+oScDEvFIPnjxKdB4/90MLk1imj
-         iHRrkReVr4m6Z/SLB/qIhO18kTkqzsJx7zFvyvWA3udBE+sywy8GuIo2uGsBc3yBFJ0w
-         4lMA==
+        Mon, 28 Feb 2022 12:03:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85C41DF4B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646067751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bTJs+XJuztigw3GbZ3t30dvbSAKamp+b28u3hPimDdk=;
+        b=DJokzQ5c8Iy0OP7UpQSJKS+AOQaLK+/vhMerDM29W9jogHBmD1bTK+9KaUCTOdppPPzc5g
+        4ySixw1XMemtxC/NP/6X8GlnSgCala9EzSn3iLWUEIItxQHk3PxF3iPbNC9odHZdTNhhJC
+        h3XpIgDjBaSich67qVAaxu4zXbKEpO4=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-4-2kcuvXMD6L1z5-gr9s6g-1; Mon, 28 Feb 2022 12:02:30 -0500
+X-MC-Unique: 4-2kcuvXMD6L1z5-gr9s6g-1
+Received: by mail-qk1-f197.google.com with SMTP id 2-20020a370a02000000b0060df1ac78baso11619359qkk.20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Y9cZVaut3aLdlKX+slS0PsytKlmPKaShOXQetxBEnLs=;
-        b=laCrlfcDcD9vOlYl0eZFazdTh4xVUkz0xLz69ttZKfRV/s4klAn0gP68TgOmaIbLxw
-         JO0bcV1GVplxP3IlvuVTYGNoReTXD8gdGq/2UfLz/XgwjbxrBKkJ19pwbLmQ6XvKvAqC
-         PJKnZvsqQN85bJyg72r/R9tPAgwgpjFjPd/kbccuCv5wAqDK5Ldy4/H72w8MkVJ7L+RE
-         WfUeCdvfx9FE/bke8GTbSK8jKc2iqc0zxfjMFUYvKeZJF6YZY3r97ptUDnITOzRrR+VE
-         66P3HaTkqUU5mXEj64hAq89VoqeYqVyLwyDDfDLl9qETixq+/FBQovIZ914Yjmejb0NL
-         tnNQ==
-X-Gm-Message-State: AOAM532xwKMJPD+dO1VuZjtKwq1Ib222AlHi+jHcln+W4BBro1vWndmG
-        /naHSD4g4VZFgyJOgoXfAI7Jow==
-X-Google-Smtp-Source: ABdhPJwnakSt4EAfE7IsVjU7wlxEV+JgWuYIQRAupe57mnq3QS7Jav+/osBrc1CyPEkT1Hqcy4qtRw==
-X-Received: by 2002:ad4:5605:0:b0:432:e77e:8023 with SMTP id ca5-20020ad45605000000b00432e77e8023mr7904254qvb.8.1646067726011;
-        Mon, 28 Feb 2022 09:02:06 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac84e94000000b002de8f564305sm7506949qtp.1.2022.02.28.09.02.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bTJs+XJuztigw3GbZ3t30dvbSAKamp+b28u3hPimDdk=;
+        b=unzlS1KDt5Y576Mu4EmW82lYIWJRX8c3paTJikgFvBNL88mssuuswa/30nGX5LAnXN
+         zjoViSKaG9XCvWNeDx34q8/LEcajhJ+CIznpff1APR10OAqilgTMeLH6iYR5nuXM1j5O
+         hCP4gTY8EoXYGf5vN6VNvMzIbOu8UJ4TLX52tEJ6MF2g+lPJXlEZLukpe8AqASdj4rdG
+         DlvLNdf+zvuCqs8SfNohHK718YMsjS3a2JFBuGFYE7OXyAvzq0/taqr6x87E2l1nRnBl
+         DKN3pK+7temCxmyvZHN09hgQGf0Q+t5jnoAyxAmYulvjPLlpJNMeknwFA3Ucc9GAIkpK
+         cOZw==
+X-Gm-Message-State: AOAM532BhV+qzuBhzQ739PKWZUnpxbUmf59xlNSCoyG4fCgSD/HXLzaK
+        AWS769FelEpJBePnxi8gBqjSEXtIW/ajYyOSztsXtv1LXrMm1bxNuEVKCy3swyn0BMFuV7IBUZt
+        ZdzYNibMT3SmSjr3WSeTlVSHc
+X-Received: by 2002:a05:622a:13d0:b0:2de:7076:72ef with SMTP id p16-20020a05622a13d000b002de707672efmr16576284qtk.394.1646067749623;
+        Mon, 28 Feb 2022 09:02:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJygNruTCrsribOVoPoUO6Evv/v5EGaBw/himskSmDc9znLsXDPafPJNecelMcHhqYRswtO/YA==
+X-Received: by 2002:a05:622a:13d0:b0:2de:7076:72ef with SMTP id p16-20020a05622a13d000b002de707672efmr16576233qtk.394.1646067749291;
+        Mon, 28 Feb 2022 09:02:29 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id i20-20020ac85c14000000b002de4b6004a7sm7048642qti.27.2022.02.28.09.02.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 09:02:05 -0800 (PST)
-Message-ID: <73f460d843cee2781c9d08cdc421f0fd64f9ccc7.camel@ndufresne.ca>
-Subject: Re: Re: [RFC PATCH 2/8] media: Add P010 format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Date:   Mon, 28 Feb 2022 12:02:04 -0500
-In-Reply-To: <5696849.MhkbZ0Pkbq@kista>
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
-         <20220227144926.3006585-3-jernej.skrabec@gmail.com>
-         <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
-         <5696849.MhkbZ0Pkbq@kista>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Mon, 28 Feb 2022 09:02:28 -0800 (PST)
+Date:   Mon, 28 Feb 2022 09:02:24 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, sdeep@vmware.com,
+        Sean Christopherson <seanjc@google.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv4 29/30] ACPICA: Avoid cache flush on TDX guest
+Message-ID: <20220228170224.igzvf7e3tc6ujrfq@treble>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-30-kirill.shutemov@linux.intel.com>
+ <20220227220526.3rrmy3u7j2xpelcn@treble>
+ <CAPcyv4jqHQDhpSE24-Y6amC9Y-z4vVnXy6Lvo1j2hdCvzPACvQ@mail.gmail.com>
+ <20220228163713.5eewdwcqhmulsp4z@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220228163713.5eewdwcqhmulsp4z@black.fi.intel.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,106 +101,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 28 février 2022 à 17:32 +0100, Jernej Škrabec a écrit :
-> Dne ponedeljek, 28. februar 2022 ob 13:48:53 CET je Nicolas Dufresne 
-> napisal(a):
-> > Le dimanche 27 février 2022 à 15:49 +0100, Jernej Skrabec a écrit :
-> > > Add P010 format, which is commonly used for 10-bit videos.
+On Mon, Feb 28, 2022 at 07:37:13PM +0300, Kirill A. Shutemov wrote:
+> On Sun, Feb 27, 2022 at 05:34:45PM -0800, Dan Williams wrote:
+> > On Sun, Feb 27, 2022 at 2:05 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > >
+> > > On Thu, Feb 24, 2022 at 06:56:29PM +0300, Kirill A. Shutemov wrote:
+> > > > +/*
+> > > > + * ACPI_FLUSH_CPU_CACHE() flushes caches on entering sleep states.
+> > > > + * It is required to prevent data loss.
+> > > > + *
+> > > > + * While running inside TDX guest, the kernel can bypass cache flushing.
+> > > > + * Changing sleep state in a virtual machine doesn't affect the host system
+> > > > + * sleep state and cannot lead to data loss.
+> > > > + *
+> > > > + * TODO: Is it safe to generalize this from TDX guests to all guest kernels?
+> > > > + */
+> > > > +#define ACPI_FLUSH_CPU_CACHE()                                       \
+> > > > +do {                                                         \
+> > > > +     if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))        \
+> > > > +             wbinvd();                                       \
+> > > > +} while (0)
+> > >
+> > > If it's safe, why not do it for all VMs?  Is there something specific
+> > > about TDX which makes this more obviously known to be safe than for
+> > > regular VMs?
+> > >
+> > > The patch description and the above comment make it sound like "we're
+> > > not really sure this is safe, so we'll just use TDX as a testing ground
+> > > for the idea." Which doesn't really inspire a lot of confidence in the
+> > > stability of TD sleep states.
 > > 
-> > There is a much more complete patch that was sent previously (with 
-> documentation
-> > and all):
-> > 
-> > https://patchwork.kernel.org/project/linux-rockchip/patch/
-> 20210618131526.566762-5-benjamin.gaignard@collabora.com/
+> > Agree, why is this marked as "TODO"? The cache flushes associated with
+> > ACPI sleep states are to flush cache before bare metal power loss to
+> > CPU caches and bare metal transition of DDR in self-refresh mode. If a
+> > cache flush is required it is the responsibility of the hypervisor.
+> > Either it is safe for all guests or it is unsafe for all guests, not
+> > TD specific.
 > 
-> Great, I'll take it for next revision. Although I'm not sure what "much more 
-> complete" means. Only additional thing is documentation.
+> Do we have "any VM" check? I can't find it right away.
 
-When adding uAPI, doc is really important, so having the format documented means
-the other patch is "much more" ready to be merged.
+X86_FEATURE_HYPERVISOR
 
-cheers,
-Nicolas
-
-> 
-> Best regards,
-> Jernej
-> 
-> > 
-> > regards,
-> > Nicolas
-> > 
-> > > 
-> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > > ---
-> > >  drivers/media/v4l2-core/v4l2-common.c | 2 ++
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c  | 1 +
-> > >  include/uapi/linux/videodev2.h        | 1 +
-> > >  3 files changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-
-> core/v4l2-common.c
-> > > index 1db0020e08c0..4ede36546e9c 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > > @@ -275,6 +275,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 
-> format)
-> > >  		{ .format = V4L2_PIX_FMT_YUV422P, .pixel_enc = 
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, 
-> .hdiv = 2, .vdiv = 1 },
-> > >  		{ .format = V4L2_PIX_FMT_GREY,    .pixel_enc = 
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, 
-> .hdiv = 1, .vdiv = 1 },
-> > >  
-> > > +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = 
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, 
-> .hdiv = 2, .vdiv = 2 },
-> > > +
-> > >  		/* Tiled YUV formats */
-> > >  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = 
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, 
-> .hdiv = 2, .vdiv = 2 },
-> > >  		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = 
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, 
-> .hdiv = 2, .vdiv = 2 },
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-
-> core/v4l2-ioctl.c
-> > > index 048f326c57b9..a8d999e23e5b 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1295,6 +1295,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc 
-> *fmt)
-> > >  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 
-> (M420)"; break;
-> > >  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
-> > >  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
-> > > +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CbCr 4:2:0"; 
-> break;
-> > >  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
-> > >  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
-> > >  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
-> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/
-> videodev2.h
-> > > index 772dbadd1a24..211bc11a48cb 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -597,6 +597,7 @@ struct v4l2_pix_format {
-> > >  /* two planes -- one Y, one Cr + Cb interleaved  */
-> > >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 
-> 4:2:0  */
-> > >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 
-> 4:2:0  */
-> > > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 
-> 4:2:0 10-bit */
-> > >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 
-> 4:2:2  */
-> > >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 
-> 4:2:2  */
-> > >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 
-> 4:4:4  */
-> > 
-> > 
-> 
-> 
+-- 
+Josh
 

@@ -2,102 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633FA4C643D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA7E4C6440
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbiB1IAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S233793AbiB1IAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiB1IAD (ORCPT
+        with ESMTP id S233785AbiB1IAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:00:03 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227E04EF46;
-        Sun, 27 Feb 2022 23:59:25 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id y11so10390940pfa.6;
-        Sun, 27 Feb 2022 23:59:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UGFHXK2sDdYpn7z8FJXWp22uhUlSHArEwLvEYjihUnk=;
-        b=fmB4cqkaoDVw6sfwRQgWeP8+qrBTtLVMb/rSWpHX6jLAK544PnkoR2Vd//4VrYIvUB
-         w0/KCB1DwQRWjq8e+1fUwLQM+JphY0E77EiJGZonJ6RW7zg81yGiTnOB0ZsvEsmKEcV9
-         ajqZUzrpKCxx4YBYWip1Jvkwobsz6nlE5bp23/dfIWchkvrYkNSKoq6SkDDJ9210Vb/x
-         AX0p6id6A9Ov0kKvC/LEqT5JP2qecRmRwEXe4P8OkZL3goNQ9lh1ScBqK7poqXkB7xFQ
-         H8TfiXG0/4cD+xbqLkQR0AVr3kPfuaAewuZnjM1+9ytI/cKnpdD9m5FfDG0ca9FC54rD
-         rGtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UGFHXK2sDdYpn7z8FJXWp22uhUlSHArEwLvEYjihUnk=;
-        b=pOlk0aZUHhD9M6qUaICTcbPFJ3U1aAkV3Khusd6uVuYd/zcn3hizJfdn7DcOJDokKu
-         DdIi8HFZhXktkV0L+2ZhmoOsILNv5/9mSIjd9XXY8fDesZ8M3sXj1mNp3E4bDXXe557T
-         7Gs+weQA3qZHjkFTCKp0L9yOa7dUtU/RPz1DbxcFoTCKjGiaYM922Rtwy8iqf1lUEBv+
-         g45l7G9XVeLkifgJX31pu4sOb1+7+VWw29FDSQgxsFBpZUG4Zs9uGjz0JdNT0hgoA8CP
-         opEk8e3xeYEhkn9jdejugwdGQIuXJfqPdyhuOz5sgLxvCq8RK+xWbJnQYi/aPOIng79n
-         zJWA==
-X-Gm-Message-State: AOAM531VOlE5vtwZ3EeiKYU8uOnOSpFbHOO/I96nzyneZW4xzJ2Aukty
-        fjKwMQRn36qR9/mGZIrtCB0=
-X-Google-Smtp-Source: ABdhPJwvvE9UO/GKXMFXs2IPtyqWN6hvo+pVPWONXqoE2I7GvFZTvAXFHkilH2Hu5lKNzfFDDQQEHg==
-X-Received: by 2002:a63:6cb:0:b0:36c:e2d:8857 with SMTP id 194-20020a6306cb000000b0036c0e2d8857mr16108553pgg.214.1646035164542;
-        Sun, 27 Feb 2022 23:59:24 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:43a2:93b6:ebd7:94fd])
-        by smtp.gmail.com with ESMTPSA id v14-20020a056a00148e00b004e1cee6f6b4sm12613123pfu.47.2022.02.27.23.59.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 23:59:23 -0800 (PST)
-Date:   Sun, 27 Feb 2022 23:59:21 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        Sean O'Brien <seobrien@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: Re: [PATCH v4 1/4] Input: Extract ChromeOS vivaldi physmap show
- function
-Message-ID: <YhyA2TWIDMld8cq8@google.com>
-References: <20220216195901.1326924-1-swboyd@chromium.org>
- <20220216195901.1326924-2-swboyd@chromium.org>
+        Mon, 28 Feb 2022 03:00:07 -0500
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [IPv6:2001:1600:4:17::190a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00024FC66
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:59:28 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K6XpN2CGLzMq0qN;
+        Mon, 28 Feb 2022 08:59:24 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K6XpL1ZyHzljTgK;
+        Mon, 28 Feb 2022 08:59:22 +0100 (CET)
+Message-ID: <274f63e6-ed9a-e49f-8779-6e4980f51b33@digikod.net>
+Date:   Mon, 28 Feb 2022 08:59:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216195901.1326924-2-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Shuah Khan <shuah@kernel.org>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20220221155311.166278-1-mic@digikod.net>
+ <20220221155311.166278-3-mic@digikod.net>
+ <ae52c028-05c7-c22e-fc47-d97ee4a2f6c7@gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v1 2/7] landlock: Fix landlock_add_rule(2) signature
+In-Reply-To: <ae52c028-05c7-c22e-fc47-d97ee4a2f6c7@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
 
-On Wed, Feb 16, 2022 at 11:58:58AM -0800, Stephen Boyd wrote:
-> diff --git a/include/linux/input/vivaldi-fmap.h b/include/linux/input/vivaldi-fmap.h
-> new file mode 100644
-> index 000000000000..57563d9da022
-> --- /dev/null
-> +++ b/include/linux/input/vivaldi-fmap.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _VIVALDI_KEYMAP_H
-> +#define _VIVALDI_KEYMAP_H
-> +
-> +#include <linux/types.h>
-> +
-> +#define VIVALDI_MIN_FN_ROW_KEY	1
-> +#define VIVALDI_MAX_FN_ROW_KEY	24
+On 26/02/2022 22:26, Alejandro Colomar (man-pages) wrote:
+> Hi Mickaël,
+> 
+> On 21/2/22 16:53, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> Replace the enum landlock_rule_type with an int in the syscall signature
+>> of landlock_add_rule to avoid an implementation-defined size.  In
+>> practice an enum type is like an int (at least with GCC and clang), but
+>> compilers may accept options (e.g. -fshort-enums) that would have an
+>> impact on that [1].  This change is mostly a cosmetic fix according to
+>> the current kernel compilers and used options.
+> 
+> There are two proposals for C2x that might bring C++ syntax to C for 
+> enums, i.e., being able to specify the underlying type of an enum.
+> 
+> See:
+> <http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2904.htm>
+> <http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2908.htm>
+> 
+> Since the current kernel is safe from that enum problem, it may be 
+> better to wait and see what the standard decides to do with enum.  I 
+> guess they'll add this feature sooner or later.
 
-These 2 are actually details of HID, we had a #define in atkbd which I
-lifted as VIVALDI_MAX_FUNCTION_ROW_KEYS and put here, and dropped it
-from atkbd and made cros_ec keyboard driver use it as well.
+Ok, interesting, I'll remove this patch then. I'd be curious to know 
+when this will impact Linux though.
 
-Thanks.
+Thanks!
 
--- 
-Dmitry
+> 
+> Regards,
+> Alex
+> 
+>>
+>> Link: 
+>> https://lore.kernel.org/r/8a22a3c2-468c-e96c-6516-22a0f029aa34@gmail.com/ 
+>> [1]
+>> Reported-by: Alejandro Colomar <alx.manpages@gmail.com>
+>> Cc: Nathan Chancellor <nathan@kernel.org>
+>> Cc: Nick Desaulniers <ndesaulniers@google.com>
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> Link: https://lore.kernel.org/r/20220221155311.166278-3-mic@digikod.net
+>> ---
+>>   include/linux/syscalls.h     | 3 +--
+>>   security/landlock/syscalls.c | 7 ++++---
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+>> index 819c0cb00b6d..a5956f91caf2 100644
+>> --- a/include/linux/syscalls.h
+>> +++ b/include/linux/syscalls.h
+>> @@ -71,7 +71,6 @@ struct clone_args;
+>>   struct open_how;
+>>   struct mount_attr;
+>>   struct landlock_ruleset_attr;
+>> -enum landlock_rule_type;
+>>   #include <linux/types.h>
+>>   #include <linux/aio_abi.h>
+>> @@ -1053,7 +1052,7 @@ asmlinkage long sys_pidfd_send_signal(int pidfd, 
+>> int sig,
+>>   asmlinkage long sys_pidfd_getfd(int pidfd, int fd, unsigned int flags);
+>>   asmlinkage long sys_landlock_create_ruleset(const struct 
+>> landlock_ruleset_attr __user *attr,
+>>           size_t size, __u32 flags);
+>> -asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum 
+>> landlock_rule_type rule_type,
+>> +asmlinkage long sys_landlock_add_rule(int ruleset_fd, int rule_type,
+>>           const void __user *rule_attr, __u32 flags);
+>>   asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 
+>> flags);
+>>   asmlinkage long sys_memfd_secret(unsigned int flags);
+>> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+>> index fd4b24022a06..3b40fc5d0216 100644
+>> --- a/security/landlock/syscalls.c
+>> +++ b/security/landlock/syscalls.c
+>> @@ -277,8 +277,9 @@ static int get_path_from_fd(const s32 fd, struct 
+>> path *const path)
+>>    *
+>>    * @ruleset_fd: File descriptor tied to the ruleset that should be 
+>> extended
+>>    *        with the new rule.
+>> - * @rule_type: Identify the structure type pointed to by @rule_attr 
+>> (only
+>> - *             LANDLOCK_RULE_PATH_BENEATH for now).
+>> + * @rule_type: Identify the structure type pointed to by @rule_attr 
+>> as defined
+>> + *             by enum landlock_rule_type (only 
+>> LANDLOCK_RULE_PATH_BENEATH for
+>> + *             now).
+>>    * @rule_attr: Pointer to a rule (only of type &struct
+>>    *             landlock_path_beneath_attr for now).
+>>    * @flags: Must be 0.
+>> @@ -301,7 +302,7 @@ static int get_path_from_fd(const s32 fd, struct 
+>> path *const path)
+>>    * - EFAULT: @rule_attr inconsistency.
+>>    */
+>>   SYSCALL_DEFINE4(landlock_add_rule,
+>> -        const int, ruleset_fd, const enum landlock_rule_type, rule_type,
+>> +        const int, ruleset_fd, const int, rule_type,
+>>           const void __user *const, rule_attr, const __u32, flags)
+>>   {
+>>       struct landlock_path_beneath_attr path_beneath_attr;
+> 

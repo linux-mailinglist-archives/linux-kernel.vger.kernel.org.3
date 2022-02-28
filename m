@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D4D4C6F72
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083F4C6F7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236903AbiB1O3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S237158AbiB1OaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiB1O3F (ORCPT
+        with ESMTP id S234612AbiB1OaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:29:05 -0500
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8A21EAF3;
-        Mon, 28 Feb 2022 06:28:26 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id g21so13128262vsp.6;
-        Mon, 28 Feb 2022 06:28:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IZ6qZoqKg/a9hxQ5kCVFAIHRQEXqX2mM/Si50qd6+Ek=;
-        b=rO3WjKMJq8636QH2m8snV0UKH2Cwgxwuy6SAQjE+Y5dCxe8hZ18UY+RT561imNXxEv
-         GkokUVW7Uq5PKiJutf5/w1jmg7RPsQ/M3U9FYKXUVAICDH5Rlof8pQjPG7TpTPPApKfk
-         j0Tz5alhtF8+vN2kaNNf/fDkSnI6Bw9PujciDPZf3D9k9Q77qCf+3Iq64tWWIjh6AHw2
-         6r7vApZo0787hLTm7xZi2zo3yxMxBx8XEWdb3jSVngP4BAgluf+OrXMuSKd4pDMSiCis
-         DMIQMUh/HpyEvC/tr5xhQuJfQudNfZw2bEJYZax3KHlgWDQdlG13HK9J9cNzdxlyYph1
-         iAQA==
-X-Gm-Message-State: AOAM530v7Z/lUtJL7Ihhiq4wjXSA/wKVMZEK1O8qG+A00U6l1eCXarcI
-        hcATIxGDHecbJ6kf9dY/ZsqN4rFIYHUajw==
-X-Google-Smtp-Source: ABdhPJxQYX9NkDE3XxApsSchIcS9CUmUIGM2a49IHKTTbAURKLIzDwVQDKWVpwRyucnRLGHwY3gWTQ==
-X-Received: by 2002:a67:cc14:0:b0:300:24fa:bf44 with SMTP id q20-20020a67cc14000000b0030024fabf44mr7755623vsl.20.1646058505779;
-        Mon, 28 Feb 2022 06:28:25 -0800 (PST)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id f13-20020a67ea8d000000b0031c01ea6d05sm1358728vso.33.2022.02.28.06.28.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:28:25 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id j5so5219342vkc.12;
-        Mon, 28 Feb 2022 06:28:25 -0800 (PST)
-X-Received: by 2002:a05:6122:114e:b0:32d:4662:65a8 with SMTP id
- p14-20020a056122114e00b0032d466265a8mr7744721vko.0.1646058505049; Mon, 28 Feb
- 2022 06:28:25 -0800 (PST)
+        Mon, 28 Feb 2022 09:30:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E3D205E4;
+        Mon, 28 Feb 2022 06:29:35 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:29:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646058573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TjAcEow0NSJUp2vQoMMRWwS/iFJm6prkulbh5r924f0=;
+        b=ZcNtJQXunGmEL5PSjeClPrP4xsd45gSCe3uBzOoxuYxZ53xgvXFYyZQkBz0Osfh3jpMIJk
+        oIkhADqNfyA9wz/7QUZZ0/Ef2S4aO3si7fktSTdOF/5cjCaUU0CYlmZJYxkmlkohzjw68u
+        UvKZXiB7fADlfKE8OfCvJ9XisoyqnxMTO3a1uOjHY9Q+7fCJ98Lt/6+2C1ltmaOSv04Mmj
+        VGMrgtFd1IlbqFvtWWOGRajtuH2V27laHrwU/ND+QOeyeNtxNV8tcZpfU7JuN6iQHtr4VG
+        eC8feetSrqyQh54+rTbMsdtbe99bH++MWfZlT5Ek3zaHqT+x2tClV0nsyu84Yw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646058573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TjAcEow0NSJUp2vQoMMRWwS/iFJm6prkulbh5r924f0=;
+        b=jdmZCXfZTa3ABN0aVUinhLQmqloInp6t9d9YC+Unk/0fAIcJD6M9EpsfjOEeBJMf7tUk19
+        x/3oJXhyf8WWdQAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v2] random: do crng pre-init loading in worker rather
+ than irq
+Message-ID: <YhzcTOIQx5EkujXq@linutronix.de>
+References: <CAHmME9pTfwbs9xUJy_jrdPcrhSyVixSXBM==9EuB8v7ufWe9Pw@mail.gmail.com>
+ <20220224152937.12747-1-Jason@zx2c4.com>
+ <YhzWE1NqYQFKeL5B@linutronix.de>
+ <CAHmME9r7bRh+CeBh98UMVCFgmeMWHQ=r3b-8odgV0tR45hOTbw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220227215308.26135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227215308.26135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:28:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXYKe2e0RR2rscFQ-GUgLkX0DoNRMLJJ90_5j6Az8znzA@mail.gmail.com>
-Message-ID: <CAMuHMdXYKe2e0RR2rscFQ-GUgLkX0DoNRMLJJ90_5j6Az8znzA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHmME9r7bRh+CeBh98UMVCFgmeMWHQ=r3b-8odgV0tR45hOTbw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 10:53 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/V2L RPC-IF bindings. RZ/V2L RPC-IF is identical to one found
-> on the RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rzg2l-rpc-if" will be used as a fallback.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+On 2022-02-28 15:17:19 [+0100], Jason A. Donenfeld wrote:
+> Hey Sebastian,
+Hi Jason,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> On 2/28/22, Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+> > On 2022-02-24 16:29:37 [+0100], Jason A. Donenfeld wrote:
+> >> Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+> >> is, in part, why we take trylocks instead. But apparently this still
+> >> trips up various lock dependency analyzers. That seems like a bug in the
+> >> analyzers that should be fixed, rather than having to change things
+> >> here.
+> >
+> > Could you please post a lockdep report so I can take a look?
+> 
+> I thought the problem with lockdep was stated by you somewhere in this thread?
+> https://lore.kernel.org/lkml/YfOqsOiNfURyvFRX@linutronix.de/
+> "But even then we need to find a way to move the crng init part
+> (crng_fast_load()) out of the hard-IRQ."
+> And Jonathan posted two related (?) splats he ran into.
+> 
+> I may have gotten that all wrong, in which case, I'll just excise that
+> part from the commit message. I'm pretty sure you want this patch
+> either way, right?
 
-Gr{oetje,eeting}s,
+Oh, that report. So yes, I want that patch ;)
 
-                        Geert
+In this case the lockdep is right. The thing that it affects only
+PREEMPT_RT.
+That trylock is not the thing that lockdep complains about but the
+spin_lock_irqsave() within invalidate_batched_entropy().
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Taking a spinlock_t from IRQ context is problematic for PREEMPT_RT,
+correct. A spin_try_lock() is also problematic since another spin_lock()
+invocation would PI-boost the wrong task (the spin_try_lock() is invoked
+from an IRQ-context so the task on CPU (random task or idle) is not the
+actual owner). I'm pointing this out because there was also _another_
+problem with try_lock from hard-IRQ context which was fixed in the
+meantime.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Would it work for you to update the commit message? Basically I'm fine
+with the firs sentence but the remaining part is misleading.
+
+> Jason
+
+Sebastian

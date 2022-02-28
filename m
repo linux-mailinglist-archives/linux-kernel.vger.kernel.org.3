@@ -2,230 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE304C61D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 04:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51794C61FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 04:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbiB1D3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 22:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S232135AbiB1Dra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 22:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiB1D3E (ORCPT
+        with ESMTP id S229671AbiB1Dra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 22:29:04 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E67653B53;
-        Sun, 27 Feb 2022 19:28:24 -0800 (PST)
-Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K6Qlb0ssSzBrN3;
-        Mon, 28 Feb 2022 11:26:35 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 11:28:22 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 28 Feb
- 2022 11:28:21 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <axboe@kernel.dk>, <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH v2] blktrace: fix use after free for struct blk_trace
-Date:   Mon, 28 Feb 2022 11:43:54 +0800
-Message-ID: <20220228034354.4047385-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 27 Feb 2022 22:47:30 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3403E5F4F2;
+        Sun, 27 Feb 2022 19:46:51 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6RBr61M6z4xcZ;
+        Mon, 28 Feb 2022 14:46:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646020006;
+        bh=JGeeaVAR5956bwfVVgljUJh68aZ9vFPGConLJVz+HF8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UySSGqPFeHqrJ8DdAdVjqez3Z+EoXiBnuLCJlFMUZszuZz5W8fizV8abvPrbnB7zK
+         llUkOCRb9hb8Qsxelwanz+yS6OpJmqqkvKQjTpph5UwxFJpbF5Tzp87H3t+nKoi45P
+         01BuNuexuhbDuRQ6bYqFKh6/yAql05eBPfOLYOD6wINjAZFLpMkAXtlN06/M+sGWn4
+         yWqGJAo3jXTGjcusgRtBnx2VC8XVejTJVLZYbshBQYjwMtQ/rqfa/zLODGl2Ypredr
+         PK5ctK1TnTbx1ntzI0OacpbQIQ07JRpPeX1PN2pxDEhlt7asCdVRFDFLxsFLMLno+h
+         Mi0bxki9tzpAg==
+Date:   Mon, 28 Feb 2022 14:46:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>
+Cc:     broonie@kernel.org, DRI <dri-devel@lists.freedesktop.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Hsin-yi Wang <hsinyi@chromium.org>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm tree
+Message-ID: <20220228144644.776c5261@canb.auug.org.au>
+In-Reply-To: <20220225164231.904173-1-broonie@kernel.org>
+References: <20220225164231.904173-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xcldGrkYlQDSe48aCywZHIr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When tracing the whole disk, 'dropped' and 'msg' will be created
-under 'q->debugfs_dir' and 'bt->dir' is NULL, thus blk_trace_free()
-won't remove those files. What's worse, the following UAF can be
-triggered because of accessing stale 'dropped' and 'msg':
+--Sig_/xcldGrkYlQDSe48aCywZHIr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-==================================================================
-BUG: KASAN: use-after-free in blk_dropped_read+0x89/0x100
-Read of size 4 at addr ffff88816912f3d8 by task blktrace/1188
+Hi all,
 
-CPU: 27 PID: 1188 Comm: blktrace Not tainted 5.17.0-rc4-next-20220217+ #469
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-4
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_address_description.constprop.0.cold+0xab/0x381
- ? blk_dropped_read+0x89/0x100
- ? blk_dropped_read+0x89/0x100
- kasan_report.cold+0x83/0xdf
- ? blk_dropped_read+0x89/0x100
- kasan_check_range+0x140/0x1b0
- blk_dropped_read+0x89/0x100
- ? blk_create_buf_file_callback+0x20/0x20
- ? kmem_cache_free+0xa1/0x500
- ? do_sys_openat2+0x258/0x460
- full_proxy_read+0x8f/0xc0
- vfs_read+0xc6/0x260
- ksys_read+0xb9/0x150
- ? vfs_write+0x3d0/0x3d0
- ? fpregs_assert_state_consistent+0x55/0x60
- ? exit_to_user_mode_prepare+0x39/0x1e0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fbc080d92fd
-Code: ce 20 00 00 75 10 b8 00 00 00 00 0f 05 48 3d 01 f0 ff ff 73 31 c3 48 83 1
-RSP: 002b:00007fbb95ff9cb0 EFLAGS: 00000293 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 00007fbb95ff9dc0 RCX: 00007fbc080d92fd
-RDX: 0000000000000100 RSI: 00007fbb95ff9cc0 RDI: 0000000000000045
-RBP: 0000000000000045 R08: 0000000000406299 R09: 00000000fffffffd
-R10: 000000000153afa0 R11: 0000000000000293 R12: 00007fbb780008c0
-R13: 00007fbb78000938 R14: 0000000000608b30 R15: 00007fbb780029c8
- </TASK>
+On Fri, 25 Feb 2022 16:42:31 +0000 broonie@kernel.org wrote:
+>
+> After merging the drm tree, today's linux-next build (x86 allmodconfig)
+> failed like this:
+>=20
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c: In function 'receive=
+_timing_debugfs_show':
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array=
+ subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[20=
+0]'} [-Werror=3Darray-bounds]
+>  3077 |  u8 *str =3D read_buf, *end =3D read_buf + PAGE_SIZE;
+>       |                       ^~~
+> /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while r=
+eferencing 'read_buf'
+>  3076 |  u8 read_buf[READ_BUFFER_SIZE];
+>       |     ^~~~~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   b5c84a9edcd418 ("drm/bridge: add it6505 driver")
+>=20
+> I have used the drm tree from yesterday instead.
 
-Allocated by task 1050:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0x81/0xa0
- do_blk_trace_setup+0xcb/0x410
- __blk_trace_setup+0xac/0x130
- blk_trace_ioctl+0xe9/0x1c0
- blkdev_ioctl+0xf1/0x390
- __x64_sys_ioctl+0xa5/0xe0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+I am still getting these errors and so used the drm tree from
+next-20220224 again.
 
-Freed by task 1050:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_set_free_info+0x20/0x30
- __kasan_slab_free+0x103/0x180
- kfree+0x9a/0x4c0
- __blk_trace_remove+0x53/0x70
- blk_trace_ioctl+0x199/0x1c0
- blkdev_common_ioctl+0x5e9/0xb30
- blkdev_ioctl+0x1a5/0x390
- __x64_sys_ioctl+0xa5/0xe0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+--=20
+Cheers,
+Stephen Rothwell
 
-The buggy address belongs to the object at ffff88816912f380
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 88 bytes inside of
- 96-byte region [ffff88816912f380, ffff88816912f3e0)
-The buggy address belongs to the page:
-page:000000009a1b4e7c refcount:1 mapcount:0 mapping:0000000000000000 index:0x0f
-flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-raw: 0017ffffc0000200 ffffea00044f1100 dead000000000002 ffff88810004c780
-raw: 0000000000000000 0000000000200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+--Sig_/xcldGrkYlQDSe48aCywZHIr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Memory state around the buggy address:
- ffff88816912f280: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88816912f300: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
->ffff88816912f380: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                                                    ^
- ffff88816912f400: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88816912f480: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-==================================================================
+-----BEGIN PGP SIGNATURE-----
 
-Fixes: c0ea57608b69 ("blktrace: remove debugfs file dentries from struct blk_trace")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
-Changes in v2:
- - don't save file dentry in blk_trace, and lookup them in
- blk_trace_free
- - use a new title.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcRaQACgkQAVBC80lX
+0GxUyQf/WHKezO+KT8gBi/Py4nVVfOkOJWyyes2+r4+S4bKBGRVb4tfhRR10fswy
+/tOxorz+iAW++BRqJzf5vfNqtIgmmHn8oD7sGQzb0h2chbRCs86g/5hWIg970ET1
+AFht11bLIv/QuIEd5fzZEt1qjFZSxNB0MupR1f+hQuqtV57LMj4WvtQsdJG75y0h
+i5ApJzWWUIcojgunD742cE0+G4QnjKEawlK1oZJW6j0rWQurAFzK11u9DrJUOWdK
+UGvFOxmCFg7hTlPl549WilBwBJkI24t5f7JyW8dweJrKCznG9Dk7Ek5m9SJq7GpC
+SI98fu6ugnYPC6DcvRJlXi5hHjxSIg==
+=69Je
+-----END PGP SIGNATURE-----
 
- kernel/trace/blktrace.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
-index 19514edc44f7..9efdc2c25b9a 100644
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -310,10 +310,20 @@ static void __blk_add_trace(struct blk_trace *bt, sector_t sector, int bytes,
- 	local_irq_restore(flags);
- }
- 
--static void blk_trace_free(struct blk_trace *bt)
-+static void blk_trace_free(struct request_queue *q, struct blk_trace *bt)
- {
- 	relay_close(bt->rchan);
--	debugfs_remove(bt->dir);
-+
-+	/*
-+	 * If 'bt->dir' is not set, then both 'dropped' and 'msg' are created
-+	 * under 'q->debugfs_dir', thus lookup and remove them.
-+	 */
-+	if (!bt->dir) {
-+		debugfs_remove(debugfs_lookup("dropped", q->debugfs_dir));
-+		debugfs_remove(debugfs_lookup("msg", q->debugfs_dir));
-+	} else {
-+		debugfs_remove(bt->dir);
-+	}
- 	free_percpu(bt->sequence);
- 	free_percpu(bt->msg_data);
- 	kfree(bt);
-@@ -335,10 +345,10 @@ static void put_probe_ref(void)
- 	mutex_unlock(&blk_probe_mutex);
- }
- 
--static void blk_trace_cleanup(struct blk_trace *bt)
-+static void blk_trace_cleanup(struct request_queue *q, struct blk_trace *bt)
- {
- 	synchronize_rcu();
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	put_probe_ref();
- }
- 
-@@ -352,7 +362,7 @@ static int __blk_trace_remove(struct request_queue *q)
- 		return -EINVAL;
- 
- 	if (bt->trace_state != Blktrace_running)
--		blk_trace_cleanup(bt);
-+		blk_trace_cleanup(q, bt);
- 
- 	return 0;
- }
-@@ -572,7 +582,7 @@ static int do_blk_trace_setup(struct request_queue *q, char *name, dev_t dev,
- 	ret = 0;
- err:
- 	if (ret)
--		blk_trace_free(bt);
-+		blk_trace_free(q, bt);
- 	return ret;
- }
- 
-@@ -1616,7 +1626,7 @@ static int blk_trace_remove_queue(struct request_queue *q)
- 
- 	put_probe_ref();
- 	synchronize_rcu();
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	return 0;
- }
- 
-@@ -1647,7 +1657,7 @@ static int blk_trace_setup_queue(struct request_queue *q,
- 	return 0;
- 
- free_bt:
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	return ret;
- }
- 
--- 
-2.31.1
-
+--Sig_/xcldGrkYlQDSe48aCywZHIr--

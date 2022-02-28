@@ -2,819 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DDE4C7AF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B5A4C7AEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiB1Upy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S229900AbiB1Uqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiB1Upv (ORCPT
+        with ESMTP id S229715AbiB1Uqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:45:51 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2328B1AD8C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:45:09 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id s1-20020a056830148100b005acfdcb1f4bso10483713otq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:45:09 -0800 (PST)
+        Mon, 28 Feb 2022 15:46:32 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6824222B06
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:45:51 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21SIJH9t010133;
+        Mon, 28 Feb 2022 20:45:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=1wKjj3LnwUWytX/Ia3WLTLQfLa8LC04ESZNTlgZQOEI=;
+ b=lC23NQlfrrd2pQnPdQAMEo1ip5xVwnTTBzMrvNwsHbDRbEIA6k+Vo9FNwUscGpQ5RxmR
+ 4Yk+pcJ8BKquIojX+INN7yGzEiCoS9RBmKm4bj0GFYAz0XkXmqNQ4K9FxvjY4GLgaXJE
+ 2MdsZdJt9bJER5dmIYF+zOuC4hr1Dv8NFSLe9kiTwLXuLEfS2YC3XrbhT4lZPQuUeZv7
+ g2H52LWkf+5O/pd0U5gXE6AQ1QeDaAIrcZZFps9ydqDfeX86PcGmx1oVl0E2/wzWC0rd
+ XabPSSpFe6lVr+s9pbVR4/QpBT7pNnry+2Y9WznKgmdOIqnRBvr4Czm2+/2KxfjTYZuw jQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh1k40tdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Feb 2022 20:45:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21SKjJ2q068547;
+        Mon, 28 Feb 2022 20:45:21 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
+        by userp3020.oracle.com with ESMTP id 3efdnkh3jy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Feb 2022 20:45:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KpKw0++e5B0dNEPyH7Ij5zOB+b3A+7sUBoDQfxv+gJlaBbeZdcjflq3o8M9dZ5SwLJvD4w63QUyDurorhCQUyB+A/BWOX8bkh3lLJYWPUeUgGGJ+sYn6mJrEy90oAWmT+zKAJv5mg14OjnmM1fsc7qg29DiAyeP4bUw59qW2F3xjLrj44D3tTORlZGUOpCTIwnY5IwHIowglret4OwiadRuXcAeCNRSUXmXuf8y+VOT7Ch+4BJ48m4gwsOp6sbk7tJLW+Cw/Nls7KKS6aeaF2fT5wMZ9nV06yqCQnp/nmEqASafUtUyOyA1O04eeoMzJFf1A+5z8k6ZvFMLRt2rHlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1wKjj3LnwUWytX/Ia3WLTLQfLa8LC04ESZNTlgZQOEI=;
+ b=daihD9HgHpQRln8mgDRIpiRm9KdEukG27Wu+tQ4X72b3r3O8cHZjWoXw1zBlE3tI6E6uNgXUqIniCG95U/eletUytI0D1Vz/YUrGD/YEbsVtCfWaUqDNu6JvySsWEyBWAoh9RZnaRkaMG2xF4BpH2utStHqfeXMwvl62lg7n31I8uYjM8kuEwOXv9dyYVoecKaaJ7bfkm6L0FMBCB0RRzGia7mgFM3AupMVu8i43Spvs/XjTCUBb33V1YVChcKHKzl/Zz2q1LbIPiKUhAtZhiR0Qb5mQdehsx+bkGTSSdeQuItUB/E427cTHpnkXR8pcZFdis2o62Vx/HgBNl9zgVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=37rZJQ74Nddiz7Fa72xJmyUnMXPSg63y6oFhaM6t5b4=;
-        b=NM50C5gv0OC8WiIyWnd3vm589lRC8/8/tjDlXlWNTPonzkEzk2eUiEUAygw8fTIGCf
-         MJh3fWCEx+aow7yTfpeqlsLA/RytPSHUSwfouXntBWQU6CBbj/efolAtxHj++h2V9e4t
-         nux3HDfrksMFt/IL35qyiF1VNwyVIEIl/pDN4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=37rZJQ74Nddiz7Fa72xJmyUnMXPSg63y6oFhaM6t5b4=;
-        b=1y/lQ/hXNUenb6L4Jfnp9L5Z6tVWKo9wjVgocWFkBE5Di3RkFDJKc19hxkD9gMKY5C
-         yDvql9tLshCFxWIKU3EjUZ7tHQCjd3zUmFfjkcfHIuy8BvC45mptD7nFfr5tIqO3s+cy
-         Jex7T6mDSXw7QADfaLT9NAc2KgrnI6I6J5oZxyb29Fv3X4AXj+1rfdUKGuUPjID9oWgp
-         J/gO/gMVgf1Rzzy15PGa1Mh7rbmExfAW2PZ+wLT6HnjPGoH+YYXOulRNxj1FuzEoyfRT
-         +E+xKLWsLyYnD0c87itLuL3hqi3WZ6V2ROFOabQpBksUONLamzXjiCuvEsaX8qUvQ2u9
-         GWfw==
-X-Gm-Message-State: AOAM5334p3EcpP+dm1tb6MIzabdQh6O3B4lQGrkJbUPx3SAuap6AkkJh
-        B6gvTWqlpjA0tNsFza/lZ8u7ORSFYptDig==
-X-Google-Smtp-Source: ABdhPJzBaJe76D/goF6oG4OHizr7qnqqsB0ldxOa9aG0bohctIlOMXrXo1Ngy+Hm4Q47AU6/p9/45w==
-X-Received: by 2002:a05:6830:43:b0:5ad:1b56:efeb with SMTP id d3-20020a056830004300b005ad1b56efebmr10133075otp.304.1646081108257;
-        Mon, 28 Feb 2022 12:45:08 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000d6d215bf88sm4942917oaq.37.2022.02.28.12.45.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:45:07 -0800 (PST)
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] cpupower update for Linux 5.18-rc1
-Message-ID: <ae1801b4-9c1f-b0eb-f3c6-dd888b689efe@linuxfoundation.org>
-Date:   Mon, 28 Feb 2022 13:45:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------A69A2C635D1C6FA99A1D04FC"
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1wKjj3LnwUWytX/Ia3WLTLQfLa8LC04ESZNTlgZQOEI=;
+ b=gvg/icPTVj6ajSdzWaQsobNHRSbsr/fLzbbWE4waZ0y9857yyckHteYRxdv2jpioGSbwP+7TqcBd3qvHXdYJgHv+XXulKYhjI6WjbTUL4OA6qb+kJ8AiJoA4XGus+W5lAkH2+/FNW9kzKW2eUqAYv1BkuGCp/9eQkE4oAINDYYU=
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
+ by MWHPR10MB1999.namprd10.prod.outlook.com (2603:10b6:300:10a::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Mon, 28 Feb
+ 2022 20:45:17 +0000
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::6d20:6694:a16:56f7]) by BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::6d20:6694:a16:56f7%3]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
+ 20:45:17 +0000
+Message-ID: <8e3e4716-22e7-8684-394c-b5a457906975@oracle.com>
+Date:   Mon, 28 Feb 2022 15:45:13 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v3 0/1] xen: fix HVM kexec kernel panic
 Content-Language: en-US
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Dongli Zhang <dongli.zhang@oracle.com>,
+        xen-devel@lists.xenproject.org, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        joe.jin@oracle.com
+References: <20220224215049.2845-1-dongli.zhang@oracle.com>
+ <9de1059b-6b48-e2c8-60bc-f29b42b217f7@oracle.com>
+ <36014dbd-e63c-cf49-dafd-2d7a8b84db5d@oracle.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+In-Reply-To: <36014dbd-e63c-cf49-dafd-2d7a8b84db5d@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN7PR04CA0059.namprd04.prod.outlook.com
+ (2603:10b6:806:120::34) To BLAPR10MB5009.namprd10.prod.outlook.com
+ (2603:10b6:208:321::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b4b2d61-127c-4e75-d85b-08d9fafb3a83
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1999:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1999A5401E0512596C8AF1A28A019@MWHPR10MB1999.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IB0KzyDtqkq+i5vFBqTvNjT1fYbOMUPLtKSp4Z/JmXS9fpFU0ekslLjaGvCcOE76YcNOOpX2b6rvkonIqhBWaEMUIU9Y5+hByte+hbjO1xtTr2aphtVFS+xKpOZllc2dBLLtmPj0vM6sw4fcwraZ2l+PDrO94QqSjAVNGZflTy5GBSIQj/x0VZBOE/AdTR4bhVrV2hRCXL/Mwi7+Qd/3xbXWanv8gaT8bcwJ4JLExpOma01/B+FQ9hesxqwY09LDeyvsRDtS79yQaPP37Wq7TCOaDeK9Gqf58lAZGnruGor29G63bc9T2Sl98+05YAkWaWT9eilc9iYChCsM1lWQTiDZQdHbjpKdftjqEudNK85K2yeO1JenRZiO62xqvKxB328wuXrrjUXFxJiMruGYHLXaVpXB/lYLnQrzwr04HYzBxbk6YaL1udM3nxjX81KiVSGM7N+h35fqs/B7IPKB3A434UsXBIEFPZ0cnC7jh4wJ1a++yL/paO22LYAkcEr3XnM2sswOHNto6eQPKXg9ZiOKqlnmb9bMXBT5lbM4Z6GG0cn8P0qpKS29uQ0rr2BDWVL061/+fyQ9zPVAKU0iyXRLmCJdAO5odrVsszp9DT6ZUFAW0Oa/x+i36ol09IOeTpP5IPZlfT4FCIpP6G0kBB2e0/2DbDz/MPl6vyes2Hcl8gar/3elX0hpmPYUyw7atWC5KtT6O2YepBQno+3GhpOlM6xmypijSsxbxSBezrlGe+YP8iRQ5QUkPQJ6KUg6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(8936002)(38100700002)(86362001)(5660300002)(31696002)(44832011)(7416002)(2616005)(6486002)(316002)(26005)(186003)(6506007)(6512007)(107886003)(31686004)(6666004)(53546011)(508600001)(36756003)(4326008)(8676002)(83380400001)(66476007)(66946007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0ZtUVVSZDFLeUtXVFRjWHBBdVppbjVZcWpTVitGaHdva1pVN2JObEtnbkg4?=
+ =?utf-8?B?NW9udGovcUIxcVNQOUtmTy9PMnpIbCtveTJtakVUczhlcmMyLzBQdGFoeEdn?=
+ =?utf-8?B?NjR3OXE1bVZrUnMzcG1oK29BT0xzQzlyZXRPQzhOa2xTRzdueXI3QUt1SHEv?=
+ =?utf-8?B?eEtXV3VBelhEQlR2cXJ2TTE0bkFCeDBzb2NvTFRNdDgwR2dCWFNJL1VLdkxU?=
+ =?utf-8?B?MWRHRUMyZ0tkZEJpMTNJdHg5Z0QwMlpIUDBRQkxrSElzV2g3S2x0czFFalUv?=
+ =?utf-8?B?aVM0Q2JuWlo0WWN5bmRiRDZBYjMrb1RIOGJqWlFvcXgyRDhrVXVRMWd2QXlQ?=
+ =?utf-8?B?emx2NTlRWDRFZGd3YmxKWFVBMWpuMG5Oek1zZzZjL2pzQ001bzY3aXdQNnlO?=
+ =?utf-8?B?bjdvZUdLemQ3TlAzdHV6bFhGNEErRWxOVmxOd0xETWF1Tk9FV2Q2Ri9HRmE4?=
+ =?utf-8?B?WUJLVlh3OG1Zc0ZYWkcvSW92M21GWXlnY08relcxTG82RkFLeFF1RXRNSi81?=
+ =?utf-8?B?TFhGYlY5TVhaajJZaW05dWdyZnYvN09LUWFBaWt2QUsxQ0hzbTVpdEU3MmZZ?=
+ =?utf-8?B?ZGNCamV0UE9BajQvN0NXRUZkMUJ3QVBlK1ZEVmkrMDlJbHhwZHk0b1hONlND?=
+ =?utf-8?B?OTJaemoxNnpHZjZXSVBpY0pLM0JpekZyTmlDRjJjUmZWRnZFaDJNK0R0Q2xw?=
+ =?utf-8?B?WkJIM3pQRmYxTmhIWUF2Y3VtYzNVc2RtZ2ZSYmtNc1JHcE5NV2hZMVRWUm1r?=
+ =?utf-8?B?Z3l4QXlRMWJJOWZmeUZPWkJqbnYvbWZxSC92TE9ZYW9sRU5PSG9hc0k3M0hx?=
+ =?utf-8?B?VTJIRW5MRjdZb3Y4SVJpdlcxVnB0SWdhTEJBa2lGZ1dqcWljbFFHMzhUdTJD?=
+ =?utf-8?B?UEtQelJINVc3UHFOdDlielh6ZldTN2Z0TlBjdkNKOXhjWHZVcEtyak9qOHlP?=
+ =?utf-8?B?VlArenBqUUJ3N2VDVUFYUzgyVXZWaXh6enlaREcyM2NGY0JsRjRUZzJWemQw?=
+ =?utf-8?B?MWsxc0hhSjlnQ08ycDVvOTFWalFYczlJNkxLamFpcW5abUVydjFWNktsdkFR?=
+ =?utf-8?B?QmFpTUxDcExlUnMzcVlUeHd1amtKeCtFZWRqbXBySWFJUFlHQjhNbXRoOFpF?=
+ =?utf-8?B?Y25lU0FvL3puVmpkWkM0SWRacHVtcG4zU2o1cG5YbjVEdUxmMXczcVg0dVMr?=
+ =?utf-8?B?MlpzajdXMkRhN1NIZ015S2RPNXpScENIcHpDU0ExSVVvYzd2bWZRNWhKLzA2?=
+ =?utf-8?B?N2xnYVo3bG9jQXQxNTJYUURqOThINDIzV3k5aHVKSUhhQ2RTYW1IR2pOWHRh?=
+ =?utf-8?B?Sm1OQ2g4VWt4R1hrdUNsNDdyM1pEOGt0d1ovYmdqbjIzRXU3YTlHTklWaHhM?=
+ =?utf-8?B?S0xxbEtCcGVnTVhDL2xDdWtNU21BVG9BL3dlYTVKK2grOXY1MG9vMEZYOTdi?=
+ =?utf-8?B?eFFhMHhYZkdtWXZEYVIwMVJQTm5pa1V1SldacW5RMFVoZ01NRmIzV2xFYWE2?=
+ =?utf-8?B?QkZsaXNKdjl5dDRveWt6UlNQNms0c2tPOFFaS0oyZnd5N0tJZzhrd3k1TW5n?=
+ =?utf-8?B?ZXZhRnJIWFA0TjFWSkhYV1U5TkdjN3RueDZWVWUxWk16NmpZUDR6MjZzVXlW?=
+ =?utf-8?B?dW02eUQwWnJZbnN1Wkpwd3VYWGpWSEZtN3IrdTVISTFFYzJkUlRkZ0NGeVpk?=
+ =?utf-8?B?elMzTHVaSVdhZFpLNnVxUHR5bElmeXAxRTJUK0U0U3RFL2Y1Vit6OGtXeFJJ?=
+ =?utf-8?B?NVU3NHpGcEw3cHpSLzU0YitqODZtMHhFOWdLNFR0bTZVcHJLeVlKMEVrbmoy?=
+ =?utf-8?B?dXA4NE93TDA1Q05oNTVQdlViM3l1RmxpMTByc0czbGhoRlU1YktHcVlETTJQ?=
+ =?utf-8?B?QW9WNnc0alpvNFdHL1Z2YlBtNks2ZkJOcjNmV2tyV3RvOU81ajdVWFFmUUwz?=
+ =?utf-8?B?bE95dEZ6ZEFFcW1URGZTeFBnM0FReUpSQU9lMk13RFc5d1pQNGttR0JIWkUv?=
+ =?utf-8?B?U0w4Mkx2SjR2R1VPOTJpTFJobVd1OFNFQ3JiQWRNRjBqelBlWHhXV2I2Q09J?=
+ =?utf-8?B?L1FuWjRzRzhqR0JFZ3N4RU52QTZud2l2SlhZYnAxcHQ3aGI1bVA3K3lsejhy?=
+ =?utf-8?B?ZTJQMTZjWERyYjdsK243b2tpbU1MYWs0Y25GVXZlWGp5SFFvdFdUSnkyTkxH?=
+ =?utf-8?B?ZkpRU21QNk5pVzNVVDE3emgrZUdKOVFSVlJUU2xlSFpNbm0vWEt1c2luQW4w?=
+ =?utf-8?Q?TkGTEYnQIyKWn6E38fjz+Ewm8RJjbM77yNjsac6Kns=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b4b2d61-127c-4e75-d85b-08d9fafb3a83
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 20:45:17.7589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U6IHEUtWpBtFsXlTcvByx0SHxwtzSVVbZ7lhxcSPEi16aAwjp+7zH2a6GL31ogOMnzw531dmx1dajwF+oAk01o1lKd8rLpMMeT54uvP1SU4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1999
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10272 signatures=684655
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 phishscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202280103
+X-Proofpoint-ORIG-GUID: aIpQspA_c5pa9-fSlnkase4cvay-cBy2
+X-Proofpoint-GUID: aIpQspA_c5pa9-fSlnkase4cvay-cBy2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------A69A2C635D1C6FA99A1D04FC
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Rafael,
 
-Please pull the following cpupower update for Linux 5.18-rc1
+On 2/25/22 8:17 PM, Dongli Zhang wrote:
+> Hi Boris,
+> 
+> On 2/25/22 2:39 PM, Boris Ostrovsky wrote:
+>>
+>> On 2/24/22 4:50 PM, Dongli Zhang wrote:
+>>> This is the v3 of the patch to fix xen kexec kernel panic issue when the
+>>> kexec is triggered on VCPU >= 32.
+>>>
+>>> PANIC: early exception 0x0e IP 10:ffffffffa96679b6 error 0 cr2 0x20
+>>> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+>>> 5.17.0-rc4xen-00054-gf71077a4d84b-dirty #1
+>>> [    0.000000] Hardware name: Xen HVM domU, BIOS 4.4.4OVM 12/15/2020
+>>> [    0.000000] RIP: 0010:pvclock_clocksource_read+0x6/0xb0
+>>> ... ...
+>>> [    0.000000] RSP: 0000:ffffffffaae03e10 EFLAGS: 00010082 ORIG_RAX:
+>>> 0000000000000000
+>>> [    0.000000] RAX: 0000000000000000 RBX: 0000000000010000 RCX: 0000000000000002
+>>> [    0.000000] RDX: 0000000000000003 RSI: ffffffffaac37515 RDI: 0000000000000020
+>>> [    0.000000] RBP: 0000000000011000 R08: 0000000000000000 R09: 0000000000000001
+>>> [    0.000000] R10: ffffffffaae03df8 R11: ffffffffaae03c68 R12: 0000000040000004
+>>> [    0.000000] R13: ffffffffaae03e50 R14: 0000000000000000 R15: 0000000000000000
+>>> [    0.000000] FS:  0000000000000000(0000) GS:ffffffffab588000(0000)
+>>> knlGS:0000000000000000
+>>> [    0.000000] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> [    0.000000] CR2: 0000000000000020 CR3: 00000000ea410000 CR4: 00000000000406a0
+>>> [    0.000000] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>> [    0.000000] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>> [    0.000000] Call Trace:
+>>> [    0.000000]  <TASK>
+>>> [    0.000000]  ? xen_clocksource_read+0x24/0x40
+>>
+>>
+>> This is done to set xen_sched_clock_offset which I think will not be used for a
+>> while, until sched_clock is called (and the other two uses are for suspend/resume)
+>>
+>>
+>> Can we simply defer 'xen_sched_clock_offset = xen_clocksource_read();' until
+>> after all vcpu areas are properly set? Or are there other uses of
+>> xen_clocksource_read() before ?
+>>
+> 
+> I have tested that below patch will panic kdump kernel.
+> 
 
-This cpupower update for Linux 5.18-rc1 adds AMD P-State Support to
-cpupower tool. AMD P-State kernel support went into 5.17-rc1.
 
-diff is attached.
 
-thanks,
--- Shuah
+Oh well, so much for that then. Yes, sched_clock() is at least called from printk path.
 
-----------------------------------------------------------------
-The following changes since commit 101025ff8e47d3c938ad2ae646a1794b9a8aa730:
 
-   tools/power/cpupower/{ToDo => TODO}: Rename the todo file (2022-01-24 09:07:11 -0700)
+I guess we will have to go with v2 then, we don't want to start seeing time going back, even if only with older hypervisors. The only thing I might ask is that you roll the logic inside xen_hvm_init_time_ops(). Something like
 
-are available in the Git repository at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-5.18-rc1
+xen_hvm_init_time_ops()
+{
+	/*
+	 * Wait until per_cpu(xen_vcpu, 0) is initialized which may happen
+	 * later (e.g. when kdump kernel runs on >=MAX_VIRT_CPUS vcpu)
+	 */
+	if (__this_cpu_read(xen_vcpu_nr(0)) == NULL)
+		return;
 
-for you to fetch changes up to 8382dce5e4835c045f33b8958a5f559d212cdd11:
+	...
 
-   cpupower: Add "perf" option to print AMD P-State information (2022-02-23 17:46:21 -0700)
-
-----------------------------------------------------------------
-linux-cpupower-5.18-rc1
-
-This cpupower update for Linux 5.18-rc1 adds AMD P-State Support to
-cpupower tool. AMD P-State kernel support went into 5.17-rc1.
-
-----------------------------------------------------------------
-Huang Rui (10):
-       cpupower: Add AMD P-State capability flag
-       cpupower: Add the function to check AMD P-State enabled
-       cpupower: Initial AMD P-State capability
-       cpupower: Add the function to get the sysfs value from specific table
-       cpupower: Introduce ACPI CPPC library
-       cpupower: Add AMD P-State sysfs definition and access helper
-       cpupower: Enable boost state support for AMD P-State module
-       cpupower: Move print_speed function into misc helper
-       cpupower: Add function to print AMD P-State performance capabilities
-       cpupower: Add "perf" option to print AMD P-State information
-
-  tools/power/cpupower/Makefile                      |  6 +-
-  tools/power/cpupower/lib/acpi_cppc.c               | 59 +++++++++++++++
-  tools/power/cpupower/lib/acpi_cppc.h               | 21 ++++++
-  tools/power/cpupower/lib/cpufreq.c                 | 23 ++++--
-  tools/power/cpupower/lib/cpufreq.h                 | 12 +++
-  tools/power/cpupower/man/cpupower-frequency-info.1 |  3 +
-  tools/power/cpupower/utils/cpufreq-info.c          | 87 +++++++++-------------
-  tools/power/cpupower/utils/helpers/amd.c           | 77 +++++++++++++++++++
-  tools/power/cpupower/utils/helpers/cpuid.c         | 13 ++++
-  tools/power/cpupower/utils/helpers/helpers.h       | 22 ++++++
-  tools/power/cpupower/utils/helpers/misc.c          | 60 +++++++++++++++
-  11 files changed, 321 insertions(+), 62 deletions(-)
-  create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
-  create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
-----------------------------------------------------------------
-
---------------A69A2C635D1C6FA99A1D04FC
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-cpupower-5.18-rc1.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-cpupower-5.18-rc1.diff"
-
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 3b1594447f29..e9b6de314654 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -143,9 +143,9 @@ UTIL_HEADERS = utils/helpers/helpers.h utils/idle_monitor/cpupower-monitor.h \
- 	utils/helpers/bitmask.h \
- 	utils/idle_monitor/idle_monitors.h utils/idle_monitor/idle_monitors.def
- 
--LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h
--LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c
--LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o
-+LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h lib/acpi_cppc.h
-+LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c lib/acpi_cppc.c
-+LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o lib/acpi_cppc.o
- LIB_OBJS :=	$(addprefix $(OUTPUT),$(LIB_OBJS))
- 
- override CFLAGS +=	-pipe
-diff --git a/tools/power/cpupower/lib/acpi_cppc.c b/tools/power/cpupower/lib/acpi_cppc.c
-new file mode 100644
-index 000000000000..c401ac331e9f
---- /dev/null
-+++ b/tools/power/cpupower/lib/acpi_cppc.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+
-+#include "cpupower_intern.h"
-+#include "acpi_cppc.h"
-+
-+/* ACPI CPPC sysfs access ***********************************************/
-+
-+static int acpi_cppc_read_file(unsigned int cpu, const char *fname,
-+			       char *buf, size_t buflen)
-+{
-+	char path[SYSFS_PATH_MAX];
-+
-+	snprintf(path, sizeof(path), PATH_TO_CPU "cpu%u/acpi_cppc/%s",
-+		 cpu, fname);
-+	return cpupower_read_sysfs(path, buf, buflen);
-+}
-+
-+static const char * const acpi_cppc_value_files[] = {
-+	[HIGHEST_PERF] = "highest_perf",
-+	[LOWEST_PERF] = "lowest_perf",
-+	[NOMINAL_PERF] = "nominal_perf",
-+	[LOWEST_NONLINEAR_PERF] = "lowest_nonlinear_perf",
-+	[LOWEST_FREQ] = "lowest_freq",
-+	[NOMINAL_FREQ] = "nominal_freq",
-+	[REFERENCE_PERF] = "reference_perf",
-+	[WRAPAROUND_TIME] = "wraparound_time"
-+};
-+
-+unsigned long acpi_cppc_get_data(unsigned int cpu, enum acpi_cppc_value which)
-+{
-+	unsigned long long value;
-+	unsigned int len;
-+	char linebuf[MAX_LINE_LEN];
-+	char *endp;
-+
-+	if (which >= MAX_CPPC_VALUE_FILES)
-+		return 0;
-+
-+	len = acpi_cppc_read_file(cpu, acpi_cppc_value_files[which],
-+				  linebuf, sizeof(linebuf));
-+	if (len == 0)
-+		return 0;
-+
-+	value = strtoull(linebuf, &endp, 0);
-+
-+	if (endp == linebuf || errno == ERANGE)
-+		return 0;
-+
-+	return value;
-+}
-diff --git a/tools/power/cpupower/lib/acpi_cppc.h b/tools/power/cpupower/lib/acpi_cppc.h
-new file mode 100644
-index 000000000000..85ca83080316
---- /dev/null
-+++ b/tools/power/cpupower/lib/acpi_cppc.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ACPI_CPPC_H__
-+#define __ACPI_CPPC_H__
-+
-+enum acpi_cppc_value {
-+	HIGHEST_PERF,
-+	LOWEST_PERF,
-+	NOMINAL_PERF,
-+	LOWEST_NONLINEAR_PERF,
-+	LOWEST_FREQ,
-+	NOMINAL_FREQ,
-+	REFERENCE_PERF,
-+	WRAPAROUND_TIME,
-+	MAX_CPPC_VALUE_FILES
-+};
-+
-+unsigned long acpi_cppc_get_data(unsigned int cpu,
-+				 enum acpi_cppc_value which);
-+
-+#endif /* _ACPI_CPPC_H */
-diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
-index c3b56db8b921..1516d23c17c9 100644
---- a/tools/power/cpupower/lib/cpufreq.c
-+++ b/tools/power/cpupower/lib/cpufreq.c
-@@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
- 	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
- };
- 
--
--static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
--						 enum cpufreq_value which)
-+unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-+						 const char **table,
-+						 unsigned int index,
-+						 unsigned int size)
- {
- 	unsigned long value;
- 	unsigned int len;
- 	char linebuf[MAX_LINE_LEN];
- 	char *endp;
- 
--	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
-+	if (!table || index >= size || !table[index])
- 		return 0;
- 
--	len = sysfs_cpufreq_read_file(cpu, cpufreq_value_files[which],
--				linebuf, sizeof(linebuf));
-+	len = sysfs_cpufreq_read_file(cpu, table[index], linebuf,
-+				      sizeof(linebuf));
- 
- 	if (len == 0)
- 		return 0;
-@@ -109,6 +110,14 @@ static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
- 	return value;
- }
- 
-+static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
-+						 enum cpufreq_value which)
-+{
-+	return cpufreq_get_sysfs_value_from_table(cpu, cpufreq_value_files,
-+						  which,
-+						  MAX_CPUFREQ_VALUE_READ_FILES);
-+}
-+
- /* read access to files which contain one string */
- 
- enum cpufreq_string {
-@@ -124,7 +133,7 @@ static const char *cpufreq_string_files[MAX_CPUFREQ_STRING_FILES] = {
- 
- 
- static char *sysfs_cpufreq_get_one_string(unsigned int cpu,
--					   enum cpufreq_string which)
-+					  enum cpufreq_string which)
- {
- 	char linebuf[MAX_LINE_LEN];
- 	char *result;
-diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
-index 95f4fd9e2656..2f3c84035806 100644
---- a/tools/power/cpupower/lib/cpufreq.h
-+++ b/tools/power/cpupower/lib/cpufreq.h
-@@ -203,6 +203,18 @@ int cpufreq_modify_policy_governor(unsigned int cpu, char *governor);
- int cpufreq_set_frequency(unsigned int cpu,
- 				unsigned long target_frequency);
- 
-+/*
-+ * get the sysfs value from specific table
-+ *
-+ * Read the value with the sysfs file name from specific table. Does
-+ * only work if the cpufreq driver has the specific sysfs interfaces.
-+ */
-+
-+unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-+						 const char **table,
-+						 unsigned int index,
-+						 unsigned int size);
-+
- #ifdef __cplusplus
- }
- #endif
-diff --git a/tools/power/cpupower/man/cpupower-frequency-info.1 b/tools/power/cpupower/man/cpupower-frequency-info.1
-index 6aa8d239dff9..dd545b499480 100644
---- a/tools/power/cpupower/man/cpupower-frequency-info.1
-+++ b/tools/power/cpupower/man/cpupower-frequency-info.1
-@@ -53,6 +53,9 @@ human\-readable output for the \-f, \-w, \-s and \-y parameters.
- \fB\-n\fR \fB\-\-no-rounding\fR
- Output frequencies and latencies without rounding off values.
- .TP  
-+\fB\-c\fR \fB\-\-perf\fR
-+Get performances and frequencies capabilities of CPPC, by reading it from hardware (only available on the hardware with CPPC).
-+.TP
- .SH "REMARKS"
- .LP 
- By default only values of core zero are displayed. How to display settings of
-diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-index f9895e31ff5a..0646f615fe2d 100644
---- a/tools/power/cpupower/utils/cpufreq-info.c
-+++ b/tools/power/cpupower/utils/cpufreq-info.c
-@@ -84,43 +84,6 @@ static void proc_cpufreq_output(void)
- }
- 
- static int no_rounding;
--static void print_speed(unsigned long speed)
--{
--	unsigned long tmp;
--
--	if (no_rounding) {
--		if (speed > 1000000)
--			printf("%u.%06u GHz", ((unsigned int) speed/1000000),
--				((unsigned int) speed%1000000));
--		else if (speed > 1000)
--			printf("%u.%03u MHz", ((unsigned int) speed/1000),
--				(unsigned int) (speed%1000));
--		else
--			printf("%lu kHz", speed);
--	} else {
--		if (speed > 1000000) {
--			tmp = speed%10000;
--			if (tmp >= 5000)
--				speed += 10000;
--			printf("%u.%02u GHz", ((unsigned int) speed/1000000),
--				((unsigned int) (speed%1000000)/10000));
--		} else if (speed > 100000) {
--			tmp = speed%1000;
--			if (tmp >= 500)
--				speed += 1000;
--			printf("%u MHz", ((unsigned int) speed/1000));
--		} else if (speed > 1000) {
--			tmp = speed%100;
--			if (tmp >= 50)
--				speed += 100;
--			printf("%u.%01u MHz", ((unsigned int) speed/1000),
--				((unsigned int) (speed%1000)/100));
--		}
--	}
--
--	return;
--}
--
- static void print_duration(unsigned long duration)
- {
- 	unsigned long tmp;
-@@ -183,9 +146,12 @@ static int get_boost_mode_x86(unsigned int cpu)
- 	printf(_("    Supported: %s\n"), support ? _("yes") : _("no"));
- 	printf(_("    Active: %s\n"), active ? _("yes") : _("no"));
- 
--	if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
--	     cpupower_cpu_info.family >= 0x10) ||
--	     cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
-+	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-+	    cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-+		return 0;
-+	} else if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-+		    cpupower_cpu_info.family >= 0x10) ||
-+		   cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
- 		ret = decode_pstates(cpu, b_states, pstates, &pstate_no);
- 		if (ret)
- 			return ret;
-@@ -254,11 +220,11 @@ static int get_boost_mode(unsigned int cpu)
- 	if (freqs) {
- 		printf(_("  boost frequency steps: "));
- 		while (freqs->next) {
--			print_speed(freqs->frequency);
-+			print_speed(freqs->frequency, no_rounding);
- 			printf(", ");
- 			freqs = freqs->next;
- 		}
--		print_speed(freqs->frequency);
-+		print_speed(freqs->frequency, no_rounding);
- 		printf("\n");
- 		cpufreq_put_available_frequencies(freqs);
- 	}
-@@ -277,7 +243,7 @@ static int get_freq_kernel(unsigned int cpu, unsigned int human)
- 		return -EINVAL;
- 	}
- 	if (human) {
--		print_speed(freq);
-+		print_speed(freq, no_rounding);
- 	} else
- 		printf("%lu", freq);
- 	printf(_(" (asserted by call to kernel)\n"));
-@@ -296,7 +262,7 @@ static int get_freq_hardware(unsigned int cpu, unsigned int human)
- 		return -EINVAL;
- 	}
- 	if (human) {
--		print_speed(freq);
-+		print_speed(freq, no_rounding);
- 	} else
- 		printf("%lu", freq);
- 	printf(_(" (asserted by call to hardware)\n"));
-@@ -316,9 +282,9 @@ static int get_hardware_limits(unsigned int cpu, unsigned int human)
- 
- 	if (human) {
- 		printf(_("  hardware limits: "));
--		print_speed(min);
-+		print_speed(min, no_rounding);
- 		printf(" - ");
--		print_speed(max);
-+		print_speed(max, no_rounding);
- 		printf("\n");
- 	} else {
- 		printf("%lu %lu\n", min, max);
-@@ -350,9 +316,9 @@ static int get_policy(unsigned int cpu)
- 		return -EINVAL;
- 	}
- 	printf(_("  current policy: frequency should be within "));
--	print_speed(policy->min);
-+	print_speed(policy->min, no_rounding);
- 	printf(_(" and "));
--	print_speed(policy->max);
-+	print_speed(policy->max, no_rounding);
- 
- 	printf(".\n                  ");
- 	printf(_("The governor \"%s\" may decide which speed to use\n"
-@@ -436,7 +402,7 @@ static int get_freq_stats(unsigned int cpu, unsigned int human)
- 	struct cpufreq_stats *stats = cpufreq_get_stats(cpu, &total_time);
- 	while (stats) {
- 		if (human) {
--			print_speed(stats->frequency);
-+			print_speed(stats->frequency, no_rounding);
- 			printf(":%.2f%%",
- 				(100.0 * stats->time_in_state) / total_time);
- 		} else
-@@ -472,6 +438,17 @@ static int get_latency(unsigned int cpu, unsigned int human)
- 	return 0;
- }
- 
-+/* --performance / -c */
-+
-+static int get_perf_cap(unsigned int cpu)
-+{
-+	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-+	    cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE)
-+		amd_pstate_show_perf_and_freq(cpu, no_rounding);
-+
-+	return 0;
-+}
-+
- static void debug_output_one(unsigned int cpu)
- {
- 	struct cpufreq_available_frequencies *freqs;
-@@ -486,11 +463,11 @@ static void debug_output_one(unsigned int cpu)
- 	if (freqs) {
- 		printf(_("  available frequency steps:  "));
- 		while (freqs->next) {
--			print_speed(freqs->frequency);
-+			print_speed(freqs->frequency, no_rounding);
- 			printf(", ");
- 			freqs = freqs->next;
- 		}
--		print_speed(freqs->frequency);
-+		print_speed(freqs->frequency, no_rounding);
- 		printf("\n");
- 		cpufreq_put_available_frequencies(freqs);
- 	}
-@@ -500,6 +477,7 @@ static void debug_output_one(unsigned int cpu)
- 	if (get_freq_hardware(cpu, 1) < 0)
- 		get_freq_kernel(cpu, 1);
- 	get_boost_mode(cpu);
-+	get_perf_cap(cpu);
- }
- 
- static struct option info_opts[] = {
-@@ -518,6 +496,7 @@ static struct option info_opts[] = {
- 	{"proc",	 no_argument,		 NULL,	 'o'},
- 	{"human",	 no_argument,		 NULL,	 'm'},
- 	{"no-rounding", no_argument,	 NULL,	 'n'},
-+	{"performance", no_argument,	 NULL,	 'c'},
- 	{ },
- };
- 
-@@ -531,7 +510,7 @@ int cmd_freq_info(int argc, char **argv)
- 	int output_param = 0;
- 
- 	do {
--		ret = getopt_long(argc, argv, "oefwldpgrasmybn", info_opts,
-+		ret = getopt_long(argc, argv, "oefwldpgrasmybnc", info_opts,
- 				  NULL);
- 		switch (ret) {
- 		case '?':
-@@ -554,6 +533,7 @@ int cmd_freq_info(int argc, char **argv)
- 		case 'e':
- 		case 's':
- 		case 'y':
-+		case 'c':
- 			if (output_param) {
- 				output_param = -1;
- 				cont = 0;
-@@ -660,6 +640,9 @@ int cmd_freq_info(int argc, char **argv)
- 		case 'y':
- 			ret = get_latency(cpu, human);
- 			break;
-+		case 'c':
-+			ret = get_perf_cap(cpu);
-+			break;
- 		}
- 		if (ret)
- 			return ret;
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index 97f2c857048e..c519cc89c97f 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -8,7 +8,10 @@
- #include <pci/pci.h>
- 
- #include "helpers/helpers.h"
-+#include "cpufreq.h"
-+#include "acpi_cppc.h"
- 
-+/* ACPI P-States Helper Functions for AMD Processors ***************/
- #define MSR_AMD_PSTATE_STATUS	0xc0010063
- #define MSR_AMD_PSTATE		0xc0010064
- #define MSR_AMD_PSTATE_LIMIT	0xc0010061
-@@ -146,4 +149,78 @@ int amd_pci_get_num_boost_states(int *active, int *states)
- 	pci_cleanup(pci_acc);
- 	return 0;
- }
-+
-+/* ACPI P-States Helper Functions for AMD Processors ***************/
-+
-+/* AMD P-State Helper Functions ************************************/
-+enum amd_pstate_value {
-+	AMD_PSTATE_HIGHEST_PERF,
-+	AMD_PSTATE_MAX_FREQ,
-+	AMD_PSTATE_LOWEST_NONLINEAR_FREQ,
-+	MAX_AMD_PSTATE_VALUE_READ_FILES,
-+};
-+
-+static const char *amd_pstate_value_files[MAX_AMD_PSTATE_VALUE_READ_FILES] = {
-+	[AMD_PSTATE_HIGHEST_PERF] = "amd_pstate_highest_perf",
-+	[AMD_PSTATE_MAX_FREQ] = "amd_pstate_max_freq",
-+	[AMD_PSTATE_LOWEST_NONLINEAR_FREQ] = "amd_pstate_lowest_nonlinear_freq",
-+};
-+
-+static unsigned long amd_pstate_get_data(unsigned int cpu,
-+					 enum amd_pstate_value value)
-+{
-+	return cpufreq_get_sysfs_value_from_table(cpu,
-+						  amd_pstate_value_files,
-+						  value,
-+						  MAX_AMD_PSTATE_VALUE_READ_FILES);
-+}
-+
-+void amd_pstate_boost_init(unsigned int cpu, int *support, int *active)
-+{
-+	unsigned long highest_perf, nominal_perf, cpuinfo_min,
-+		      cpuinfo_max, amd_pstate_max;
-+
-+	highest_perf = amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF);
-+	nominal_perf = acpi_cppc_get_data(cpu, NOMINAL_PERF);
-+
-+	*support = highest_perf > nominal_perf ? 1 : 0;
-+	if (!(*support))
-+		return;
-+
-+	cpufreq_get_hardware_limits(cpu, &cpuinfo_min, &cpuinfo_max);
-+	amd_pstate_max = amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ);
-+
-+	*active = cpuinfo_max == amd_pstate_max ? 1 : 0;
-+}
-+
-+void amd_pstate_show_perf_and_freq(unsigned int cpu, int no_rounding)
-+{
-+	printf(_("    AMD PSTATE Highest Performance: %lu. Maximum Frequency: "),
-+	       amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF));
-+	/*
-+	 * If boost isn't active, the cpuinfo_max doesn't indicate real max
-+	 * frequency. So we read it back from amd-pstate sysfs entry.
-+	 */
-+	print_speed(amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ), no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Nominal Performance: %lu. Nominal Frequency: "),
-+	       acpi_cppc_get_data(cpu, NOMINAL_PERF));
-+	print_speed(acpi_cppc_get_data(cpu, NOMINAL_FREQ) * 1000,
-+		    no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Lowest Non-linear Performance: %lu. Lowest Non-linear Frequency: "),
-+	       acpi_cppc_get_data(cpu, LOWEST_NONLINEAR_PERF));
-+	print_speed(amd_pstate_get_data(cpu, AMD_PSTATE_LOWEST_NONLINEAR_FREQ),
-+		    no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Lowest Performance: %lu. Lowest Frequency: "),
-+	       acpi_cppc_get_data(cpu, LOWEST_PERF));
-+	print_speed(acpi_cppc_get_data(cpu, LOWEST_FREQ) * 1000, no_rounding);
-+	printf(".\n");
-+}
-+
-+/* AMD P-State Helper Functions ************************************/
- #endif /* defined(__i386__) || defined(__x86_64__) */
-diff --git a/tools/power/cpupower/utils/helpers/cpuid.c b/tools/power/cpupower/utils/helpers/cpuid.c
-index 72eb43593180..eae91f11d187 100644
---- a/tools/power/cpupower/utils/helpers/cpuid.c
-+++ b/tools/power/cpupower/utils/helpers/cpuid.c
-@@ -149,6 +149,19 @@ int get_cpu_info(struct cpupower_cpu_info *cpu_info)
- 		if (ext_cpuid_level >= 0x80000008 &&
- 		    cpuid_ebx(0x80000008) & (1 << 4))
- 			cpu_info->caps |= CPUPOWER_CAP_AMD_RDPRU;
-+
-+		if (cpupower_amd_pstate_enabled()) {
-+			cpu_info->caps |= CPUPOWER_CAP_AMD_PSTATE;
-+
-+			/*
-+			 * If AMD P-State is enabled, the firmware will treat
-+			 * AMD P-State function as high priority.
-+			 */
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB_MSR;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_HW_PSTATE;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_PSTATEDEF;
-+		}
- 	}
- 
- 	if (cpu_info->vendor == X86_VENDOR_INTEL) {
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index 33ffacee7fcb..96e4bede078b 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -11,6 +11,7 @@
- 
- #include <libintl.h>
- #include <locale.h>
-+#include <stdbool.h>
- 
- #include "helpers/bitmask.h"
- #include <cpupower.h>
-@@ -73,6 +74,7 @@ enum cpupower_cpu_vendor {X86_VENDOR_UNKNOWN = 0, X86_VENDOR_INTEL,
- #define CPUPOWER_CAP_AMD_HW_PSTATE	0x00000100
- #define CPUPOWER_CAP_AMD_PSTATEDEF	0x00000200
- #define CPUPOWER_CAP_AMD_CPB_MSR	0x00000400
-+#define CPUPOWER_CAP_AMD_PSTATE		0x00000800
- 
- #define CPUPOWER_AMD_CPBDIS		0x02000000
- 
-@@ -135,6 +137,16 @@ extern int decode_pstates(unsigned int cpu, int boost_states,
- 
- extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
- 				     int *active, int * states);
-+
-+/* AMD P-State stuff **************************/
-+bool cpupower_amd_pstate_enabled(void);
-+void amd_pstate_boost_init(unsigned int cpu,
-+			   int *support, int *active);
-+void amd_pstate_show_perf_and_freq(unsigned int cpu,
-+				   int no_rounding);
-+
-+/* AMD P-State stuff **************************/
-+
- /*
-  * CPUID functions returning a single datum
-  */
-@@ -167,6 +179,15 @@ static inline int cpufreq_has_boost_support(unsigned int cpu, int *support,
- 					    int *active, int * states)
- { return -1; }
- 
-+static inline bool cpupower_amd_pstate_enabled(void)
-+{ return false; }
-+static inline void amd_pstate_boost_init(unsigned int cpu, int *support,
-+					 int *active)
-+{}
-+static inline void amd_pstate_show_perf_and_freq(unsigned int cpu,
-+						 int no_rounding)
-+{}
-+
- /* cpuid and cpuinfo helpers  **************************/
- 
- static inline unsigned int cpuid_eax(unsigned int op) { return 0; };
-@@ -184,5 +205,6 @@ extern struct bitmask *offline_cpus;
- void get_cpustate(void);
- void print_online_cpus(void);
- void print_offline_cpus(void);
-+void print_speed(unsigned long speed, int no_rounding);
- 
- #endif /* __CPUPOWERUTILS_HELPERS__ */
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index fc6e34511721..9547b29254a7 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -3,9 +3,11 @@
- #include <stdio.h>
- #include <errno.h>
- #include <stdlib.h>
-+#include <string.h>
- 
- #include "helpers/helpers.h"
- #include "helpers/sysfs.h"
-+#include "cpufreq.h"
- 
- #if defined(__i386__) || defined(__x86_64__)
- 
-@@ -39,6 +41,8 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
- 			if (ret)
- 				return ret;
- 		}
-+	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-+		amd_pstate_boost_init(cpu, support, active);
- 	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
- 		*support = *active = 1;
- 	return 0;
-@@ -83,6 +87,22 @@ int cpupower_intel_set_perf_bias(unsigned int cpu, unsigned int val)
- 	return 0;
- }
- 
-+bool cpupower_amd_pstate_enabled(void)
-+{
-+	char *driver = cpufreq_get_driver(0);
-+	bool ret = false;
-+
-+	if (!driver)
-+		return ret;
-+
-+	if (!strcmp(driver, "amd-pstate"))
-+		ret = true;
-+
-+	cpufreq_put_driver(driver);
-+
-+	return ret;
-+}
-+
- #endif /* #if defined(__i386__) || defined(__x86_64__) */
- 
- /* get_cpustate
-@@ -144,3 +164,43 @@ void print_offline_cpus(void)
- 		printf(_("cpupower set operation was not performed on them\n"));
- 	}
- }
-+
-+/*
-+ * print_speed
-+ *
-+ * Print the exact CPU frequency with appropriate unit
-+ */
-+void print_speed(unsigned long speed, int no_rounding)
-+{
-+	unsigned long tmp;
-+
-+	if (no_rounding) {
-+		if (speed > 1000000)
-+			printf("%u.%06u GHz", ((unsigned int)speed / 1000000),
-+			       ((unsigned int)speed % 1000000));
-+		else if (speed > 1000)
-+			printf("%u.%03u MHz", ((unsigned int)speed / 1000),
-+			       (unsigned int)(speed % 1000));
-+		else
-+			printf("%lu kHz", speed);
-+	} else {
-+		if (speed > 1000000) {
-+			tmp = speed % 10000;
-+			if (tmp >= 5000)
-+				speed += 10000;
-+			printf("%u.%02u GHz", ((unsigned int)speed / 1000000),
-+			       ((unsigned int)(speed % 1000000) / 10000));
-+		} else if (speed > 100000) {
-+			tmp = speed % 1000;
-+			if (tmp >= 500)
-+				speed += 1000;
-+			printf("%u MHz", ((unsigned int)speed / 1000));
-+		} else if (speed > 1000) {
-+			tmp = speed % 100;
-+			if (tmp >= 50)
-+				speed += 100;
-+			printf("%u.%01u MHz", ((unsigned int)speed / 1000),
-+			       ((unsigned int)(speed % 1000) / 100));
-+		}
-+	}
-+}
-
---------------A69A2C635D1C6FA99A1D04FC--
+-boris

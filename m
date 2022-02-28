@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE514C7D29
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD14C7D2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiB1WQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S231404AbiB1WSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiB1WQf (ORCPT
+        with ESMTP id S231439AbiB1WR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:16:35 -0500
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6366AE1B74;
-        Mon, 28 Feb 2022 14:15:55 -0800 (PST)
-Received: by mail-oo1-f42.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso20406279oon.5;
-        Mon, 28 Feb 2022 14:15:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OEmvWFYcUlvLI2qOQZZbyye8qQFK9MgvtHyOAXPOp8U=;
-        b=McxFFoHj1F6birwbR/G2gJwMs0PBaVuXV4Or9FFpGHcFpVX5nMgUU/lKRpidfCALrc
-         jNDnSnjHShUodESImjwyrG6ceUEHhPKW+lEgJEC9wbozS4ZOc6KV9ASke925ljnPIHLV
-         Ft22CVrP1+Yer0ZAUhz6O2UjpC9Be+QMT9heKyjzbCeMbisk7Npnr9kDlbth4xUt7PHk
-         nRzpzFGCyivVliZ+RV20oM3qfCLNi0sfgmWsFY9stRSLKc0/dUyXM7cKilhclXCjefhm
-         laJRJu2Zs8AOtW/JHpUiW3jlzpNNJFcsv7WqIp0Ciw4b2I5ufhGAroNSeZ7WoYy07RdU
-         8R2Q==
-X-Gm-Message-State: AOAM531naWdDGpfUzE9ldGgU1jtA7imrpYygxkay/wMZn0kxof9d+CrA
-        b8YtKK7xR4Umtphg44Qj3w==
-X-Google-Smtp-Source: ABdhPJz03WhL44Cw8TDPnrAAhE5YNR7G6nXVzt9q331dU3Co2p6qYpvGwJfUqyb2mMaeRoSteXVOaw==
-X-Received: by 2002:a4a:db95:0:b0:31c:23c8:554d with SMTP id s21-20020a4adb95000000b0031c23c8554dmr10094963oou.64.1646086554672;
-        Mon, 28 Feb 2022 14:15:54 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a05687044c100b000cd7b642bedsm5027977oai.14.2022.02.28.14.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 14:15:54 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: Add compatibles for undocumented trivial syscons
-Date:   Mon, 28 Feb 2022 16:15:37 -0600
-Message-Id: <20220228221537.1700071-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 28 Feb 2022 17:17:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5375E541E;
+        Mon, 28 Feb 2022 14:17:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B6A2612B9;
+        Mon, 28 Feb 2022 22:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40280C340EE;
+        Mon, 28 Feb 2022 22:17:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="P/zIgOUK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646086635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sAKetnr2EhMoW3k+0j02uuYtCp2oLcTPh7O9hPB+Aw4=;
+        b=P/zIgOUKRnMBFNSiD1fww8gYaDuWROWP+ND1MrrLQIYv4NgW5ZIuND5YURZl0nrnnZAdKG
+        2HfFE2+hiT0Ued3SdYbRNmOHG88NUXqvuMuOrT1KeRpEI9UA6scNbplSiuQ56/KEOBEPmM
+        XbF4PNGQEtMhwsTGrNW8Lc3EoDXb+bk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 48c81fe5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 28 Feb 2022 22:17:15 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id p19so23480228ybc.6;
+        Mon, 28 Feb 2022 14:17:14 -0800 (PST)
+X-Gm-Message-State: AOAM532DGRv7OT6Mb9M03CDJbJ+1ke/pgcSVzQgMEIml1HVLsuR3We2X
+        YltedZTgvf+t+NL2EF5Mga2S7eONY9OgcfsLRGo=
+X-Google-Smtp-Source: ABdhPJx6/Go5x/wo1BzS9P2jXa+wbkcJxKyTGIJj8bKgs2uVEKsxk1ylGZOMVZCrXnA6zMiZuC3v2FXCJrmkJ6AqwTw=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr21147415ybt.271.1646086633504; Mon, 28
+ Feb 2022 14:17:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAHmME9qHnvwrxEue4Pdm_E1qZQGXFuR9orJSKCWj8fH5TSh6fA@mail.gmail.com>
+ <20220228183355.9090-1-Jason@zx2c4.com> <CAHp75VcjrD3kwN1BfWpjKXaVpG7MHfftMUscSGhcJfStm4b-Xg@mail.gmail.com>
+ <CAMj1kXFmEAKJRHCiuXyGECCmOs0+xX9AVeBDxfuD0XuX2TQ2Uw@mail.gmail.com>
+ <Yh0+LA8B1jw8tnl9@smile.fi.intel.com> <CAHmME9qW4EiYU6_kTffMdK5ijJY1DF6YRt=gDjj1vKqDxB0Raw@mail.gmail.com>
+ <MN0PR21MB3098981B77F513976A62CA57D7019@MN0PR21MB3098.namprd21.prod.outlook.com>
+In-Reply-To: <MN0PR21MB3098981B77F513976A62CA57D7019@MN0PR21MB3098.namprd21.prod.outlook.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 28 Feb 2022 23:17:02 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o7eE5Ldci90VeoQTt3=YOCYCaUiBWEKu7HTN-H4MJyyQ@mail.gmail.com>
+Message-ID: <CAHmME9o7eE5Ldci90VeoQTt3=YOCYCaUiBWEKu7HTN-H4MJyyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3 v6] ACPI: allow longer device IDs
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'intel,lgm-syscon', 'marvell,armada-3700-usb2-host-misc',
-'mediatek,mt8135-pctl-a-syscfg', and 'mediatek,mt8135-pctl-b-syscfg' are
-all used in DT binding examples and/or dts files, but are not
-documented. Add them to syscon.yaml as they are all trivial cases.
+On Mon, Feb 28, 2022 at 11:14 PM Michael Kelley (LINUX)
+<mikelley@microsoft.com> wrote:
+> the wild to consume the new identifier.   As a result, at this point Hyper-V
+> is not planning to change anything.
+>
+> It's a lousy state-of-affairs, but as mentioned previously in this thread,
+> it seems to be one that we will have to live with.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/mfd/syscon.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+I should note that QEMU and VMware also support this too. So, yea, I
+guess that boat has sailed.
 
-diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-index eeac1cbc5a17..29d4a97f7108 100644
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@ -44,6 +44,10 @@ properties:
-               - hisilicon,hi6220-sramctrl
-               - hisilicon,pcie-sas-subctrl
-               - hisilicon,peri-subctrl
-+              - intel,lgm-syscon
-+              - marvell,armada-3700-usb2-host-misc
-+              - mediatek,mt8135-pctl-a-syscfg
-+              - mediatek,mt8135-pctl-b-syscfg
-               - microchip,sparx5-cpu-syscon
-               - mstar,msc313-pmsleep
-               - rockchip,px30-qos
--- 
-2.32.0
+Should that Hyper-V team do the ECR thing Andy was talking about?
 
+Jason

@@ -2,88 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C404C69F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6954C694F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbiB1LOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S234916AbiB1LEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiB1LLE (ORCPT
+        with ESMTP id S234784AbiB1LEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:11:04 -0500
-X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 03:09:41 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D95E6E8F1;
-        Mon, 28 Feb 2022 03:09:40 -0800 (PST)
-Received: from evilbit.green-communications.fr ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.103]) with ESMTPSA (Nemesis)
- id 1MqZE0-1o25Ic3yFs-00mcLC; Mon, 28 Feb 2022 12:04:23 +0100
-From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: genetlink: Fix TZ_GET_TRIP NULL pointer dereference
-Date:   Mon, 28 Feb 2022 12:03:51 +0100
-Message-Id: <20220228110351.20518-2-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr>
-References: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr>
+        Mon, 28 Feb 2022 06:04:33 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2154C24598;
+        Mon, 28 Feb 2022 03:03:55 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so5797163wme.0;
+        Mon, 28 Feb 2022 03:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HvlBrGZe3k30BhTU3ooPh1DKTxRvIE/QsqhoPXiARb8=;
+        b=YZDzVUA06hC7fLLgFFGDrJUe/L/Jhq8JcpzlSH+Tgsd8NHfbVCW0npEiPlXkWZsjbw
+         cpkqPoYNF0qz47H7UqE6lglNuuW1aleetoteSyZHHtJS61PD8QeEjmcPgO7Kkofbe+7o
+         D8lVZQOcqgUhG1AVNJtjxpIcRhsJB2yS5VFEuOMjsHTqlxI9kFGvaU4Sl1CPWoT1LEPT
+         N67gzU9S4QkkTuFLT3KKeWwa6ATJObC3K7geSv6b03W/FOv+95S8lJCgjq7H583TsltU
+         8s3X8yEvQsC63IVY5rT2yq3Gq/ws3Jb5Xz+BAvW+wojNJ8iuivq7kBAWJODQZFHL+mA+
+         qWBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HvlBrGZe3k30BhTU3ooPh1DKTxRvIE/QsqhoPXiARb8=;
+        b=ZEIdvOyVjDPIk+J2U3VZpS2GPROqwieflmv4s9KIrB9zs3fbFYz0Tx1YT8S/TiLQUq
+         /DpkSvEUNZ3fNNhBACZSwPga7AdTG0ZoLdfAxfU7SPe45f8JQQJsEvtttm7KktPeTMfw
+         cz8GUQIWDo2ZMfmEQYpZl9M/U7TNK9qJUDsyTgMm8y66osAI51kHwKNTHWTT1MYom1/5
+         mB/9pLsRyK6nvV+8xjGbJsQ4mZbBwDdPoDU/NyMFJW4K1i+cTJSVHWKKnV4d9ofdKvz0
+         HoINPzCmNY2mMawWRhm73b8HiM79KgrO8+Q3iejl/XnmtAEfyzGQ5NBoCTx7SJQHYP79
+         ftDg==
+X-Gm-Message-State: AOAM532JidNLeVU7gdfJRpuVznJicKjxJk18DzM34SeleQVr+kWkoRd4
+        dZ40njiMXmwtWBcG93lD6lE=
+X-Google-Smtp-Source: ABdhPJxw/8fh3j3lFYsbND79fHSYnmbZI1uniemUFfXnBo3sWPkcxqViNkBdJYKkKImNjmciYhDIaA==
+X-Received: by 2002:a7b:c057:0:b0:37b:ebad:c9c8 with SMTP id u23-20020a7bc057000000b0037bebadc9c8mr12989438wmc.61.1646046233624;
+        Mon, 28 Feb 2022 03:03:53 -0800 (PST)
+Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
+        by smtp.gmail.com with ESMTPSA id 10-20020adf808a000000b001edd413a952sm10342670wrl.95.2022.02.28.03.03.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 03:03:53 -0800 (PST)
+Message-ID: <1b0ad14d-5843-b8f8-ad6b-d3366a611dde@gmail.com>
+Date:   Mon, 28 Feb 2022 12:03:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Z23tdDyKIgIMHnYp/38gWcoqsVjOYU4hm9ReJpXzE/mCJ5x6hUX
- 4iYXgS7D7k995wnC7lbYkdxiO6y58eg2A4BYDeBxh/BsztFyOi2L+KGdGz5YY8Z/fthO/WF
- 8hLl/FdDWsDTM3QdE2nV6x6aStzK6DuVKs1H1b7JCuyYrMCNSczoHVCeT3t/U1mFuCm7PAY
- VSTkkA+XZPRjJP9AIVg8w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wZmt3fsaZFA=:cLOupJGsEzb0sPlifnbInd
- 8UsZi9s9FlvobtrUwKhn66i2XKvST2QxIjulNPv+psAnUS7Wu+y7lDVQUFDcC49taSHXNm8ZD
- obJaOCjZfuCeOqlxrDky9F2HP6E25n3/cRofyUVuD69Y8f8CHE0bgoV1wFN8Y3gG7sUiF5Ki7
- ZG7xf7F/8VjsOcjZux+iuAKEJvBAT9tU/0a172kER7xPiDLaqyPr9YF+S2/pkyQ4RVFnkwe6W
- 6w5MQJA9pMQW5HR3mFL32be3SX4bdvTXMhv08oVlkg43y+YkboW1zjoCC9/dTcphnp9Q/10QB
- 843Tx8aGmPsU8SJxVzvlzjtitQ186WYlKtHkvDL2CGJpkchyGLoGh+Bq+RtGeUhmhjYhy4QLM
- dA2RP7K528SLyBi7orqbTI2NTZ/Ri893WGXBDfnBcElP97aPMnj5OUWCpC8ejMIMVhC8j8eQU
- vCSpnsbBzD3ySiRE0FkhdU1B0GKFW7e4Uem04WlDcjeL/ZmLWybIBbS8yj1QV9kxB5FfPzARf
- IyX4O6JiyCX2eF8fILMsX/3XsL9ZiYEbgOAusemGL2oVqxVk929C6jb2AC/BSJO0+RRFoPnYu
- /W8peUrW7zo0Lhwrn0qqkr7eh1rakXitvdA+gRG72BKpH+NO4YhkEbK2H2ApnhNDoWWoZmU3L
- YhY/gjqiWbRTfqpST581q3WB3eoGeJw87tPXg88RRrVxpr35sRDT4eIjDP3MuCWWUAp2ovDAr
- OBPzulVOjfkdUpxu8TTwJVWM1h7bk+tn1lFcQg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [v2 0/2] Mediatek MT8186 power domain support
+Content-Language: en-US
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220215104917.5726-1-chun-jie.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220215104917.5726-1-chun-jie.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not call get_trip_hyst() if the thermal zone does not define one.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- drivers/thermal/thermal_netlink.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-index a16dd4d5d710..73e68cce292e 100644
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -419,11 +419,12 @@ static int thermal_genl_cmd_tz_get_trip(struct param *p)
- 	for (i = 0; i < tz->trips; i++) {
- 
- 		enum thermal_trip_type type;
--		int temp, hyst;
-+		int temp, hyst = 0;
- 
- 		tz->ops->get_trip_type(tz, i, &type);
- 		tz->ops->get_trip_temp(tz, i, &temp);
--		tz->ops->get_trip_hyst(tz, i, &hyst);
-+		if (tz->ops->get_trip_hyst)
-+			tz->ops->get_trip_hyst(tz, i, &hyst);
- 
- 		if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
- 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
--- 
-2.35.1
+On 15/02/2022 11:49, Chun-Jie Chen wrote:
+> This patch series adds power domain support for MT8186
+> and depends on [1] based on 5.17-rc1.
+>
+Whole series applied,
 
+Thanks.
+
+Matthias
+
+
+
+> change since v1:
+> - change to dual license in dt-binding
+> 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=609799
+> 
+> Chun-Jie Chen (2):
+>    dt-bindings: power: Add MT8186 power domains
+>    soc: mediatek: pm-domains: Add support for mt8186
+> 
+>   .../power/mediatek,power-controller.yaml      |   1 +
+>   drivers/soc/mediatek/mt8186-pm-domains.h      | 344 ++++++++++++++++++
+>   drivers/soc/mediatek/mtk-pm-domains.c         |   5 +
+>   include/dt-bindings/power/mt8186-power.h      |  32 ++
+>   include/linux/soc/mediatek/infracfg.h         |  48 +++
+>   5 files changed, 430 insertions(+)
+>   create mode 100644 drivers/soc/mediatek/mt8186-pm-domains.h
+>   create mode 100644 include/dt-bindings/power/mt8186-power.h
+> 
+> --
+> 2.18.0
+> 

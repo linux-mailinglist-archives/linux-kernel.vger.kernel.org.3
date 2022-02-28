@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73004C76C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DFC4C7452
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiB1SGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S238512AbiB1Rmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239681AbiB1SB7 (ORCPT
+        with ESMTP id S238493AbiB1Rh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:01:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101549BAE7;
-        Mon, 28 Feb 2022 09:45:52 -0800 (PST)
+        Mon, 28 Feb 2022 12:37:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042B945ADD;
+        Mon, 28 Feb 2022 09:32:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B45EAB815C3;
-        Mon, 28 Feb 2022 17:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17331C340E7;
-        Mon, 28 Feb 2022 17:45:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D63C561359;
+        Mon, 28 Feb 2022 17:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8ACC340E7;
+        Mon, 28 Feb 2022 17:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070336;
-        bh=sL2qIDlLMQCZsZRyjpxIFuykDZqrO1sZdzxDqVRJY7s=;
+        s=korg; t=1646069566;
+        bh=TP4BwGbN624ZpZnVOC+khdGnLxAgv8yriN6zeGOsyyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBbQA2rLvpw3snU64ZatyJ/FncAoOymrb3xoLv+7PG5rWUlqVMhaE8I8uYnsFQQam
-         OXAjqzQJn6tJb4yDuLa44joOcYGYbQ4VHIBNzPtw/wkLEMbpIkvTTHr5oVY+Nn41lC
-         9HwExHT/x63qkJlRd88ExkI4J7cnvU1Isv+WKilg=
+        b=h7fZ6gQ+7Y7/uPdxtdy8aM8Y1dWAKqoT6rU3n2iXmKqdJfWTctoBae+QZogURjsDe
+         viS5LFtiTgr2RafLwkTckbwtdz4bwursiGCV3Ysg92QoQ6R/Hcw1gpIGzoQfGqToWS
+         RMlfY0DNYyGfD1M1Du1m1r/bZ/krlHfXFXGo2jT4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roi Dayan <roid@nvidia.com>,
-        Maor Dickman <maord@nvidia.com>, Oz Shlomo <ozsh@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 072/164] net/mlx5e: TC, Reject rules with drop and modify hdr action
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Ross Maynard <bids.7405@bigpond.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 13/80] USB: zaurus: support another broken Zaurus
 Date:   Mon, 28 Feb 2022 18:23:54 +0100
-Message-Id: <20220228172406.612943451@linuxfoundation.org>
+Message-Id: <20220228172313.217510281@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roi Dayan <roid@nvidia.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 23216d387c40b090b221ad457c95912fb47eb11e upstream.
+commit 6605cc67ca18b9d583eb96e18a20f5f4e726103c upstream.
 
-This kind of action is not supported by firmware and generates a
-syndrome.
+This SL-6000 says Direct Line, not Ethernet
 
-kernel: mlx5_core 0000:08:00.0: mlx5_cmd_check:777:(pid 102063): SET_FLOW_TABLE_ENTRY(0x936) op_mod(0x0) failed, status bad parameter(0x3), syndrome (0x8708c3)
+v2: added Reporter and Link
 
-Fixes: d7e75a325cb2 ("net/mlx5e: Add offloading of E-Switch TC pedit (header re-write) actions")
-Signed-off-by: Roi Dayan <roid@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
-Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: Ross Maynard <bids.7405@bigpond.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215361
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/usb/cdc_ether.c |   12 ++++++++++++
+ drivers/net/usb/zaurus.c    |   12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -3440,6 +3440,12 @@ actions_match_supported(struct mlx5e_pri
- 	}
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -570,6 +570,11 @@ static const struct usb_device_id	produc
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
  
- 	if (actions & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
-+	    actions & MLX5_FLOW_CONTEXT_ACTION_DROP) {
-+		NL_SET_ERR_MSG_MOD(extack, "Drop with modify header action is not supported");
-+		return false;
-+	}
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
 +
-+	if (actions & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
- 	    !modify_header_match_supported(priv, &parse_attr->spec, flow_action,
- 					   actions, ct_flow, ct_clear, extack))
- 		return false;
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible;
+  * wire-incompatible with true CDC Ethernet implementations.
+  * (And, it seems, needlessly so...)
+@@ -625,6 +630,13 @@ static const struct usb_device_id	produc
+ 	.driver_info		= 0,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++		 | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor               = 0x04DD,
++	.idProduct              = 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info		= 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	/* reported with some C860 units */
+--- a/drivers/net/usb/zaurus.c
++++ b/drivers/net/usb/zaurus.c
+@@ -256,6 +256,11 @@ static const struct usb_device_id	produc
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
+ 
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
++
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible. */
+ {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+@@ -315,6 +320,13 @@ static const struct usb_device_id	produc
+ 	.driver_info = ZAURUS_PXA_INFO,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			    | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	/* reported with some C860 units */
 
 

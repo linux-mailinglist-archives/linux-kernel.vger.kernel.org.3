@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01244C7321
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342E54C7557
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiB1Rca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S240633AbiB1Ry1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiB1Rb0 (ORCPT
+        with ESMTP id S239091AbiB1RvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:31:26 -0500
+        Mon, 28 Feb 2022 12:51:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71718887AA;
-        Mon, 28 Feb 2022 09:28:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ABEA647B;
+        Mon, 28 Feb 2022 09:39:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F30526143A;
-        Mon, 28 Feb 2022 17:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB1BC340E7;
-        Mon, 28 Feb 2022 17:28:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D896C61545;
+        Mon, 28 Feb 2022 17:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE057C340E7;
+        Mon, 28 Feb 2022 17:39:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069326;
-        bh=ozyNr422uQ0GUh+t+nCUierq9Y7DXfgHQf5Yd8yQQ4g=;
+        s=korg; t=1646069962;
+        bh=CHBTQVhMAnW3Sp0x6Fd7Ta9G5gSlr9kt0uqjKa04OJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8ipY0gkwh8I8v5hNVCbb9JTHQOz8WQLJz66IBwl85Qj6HS7TanvIz+wiV0xxUBHc
-         R78DX61wh7U5naIxRIu/DW9ptVoMycOckqy2ovtlXxk4IPpYM71+jUSQMPYadIGYvA
-         vyieFKZS5ImgV4QKfPWmMIdPBFHZDkdCVkPYlW8E=
+        b=TlUUMSYbaczW9syMrOqsqU6TnBZHtsRpR2J7Z8yQfGHsE3NQ7VgZBb2OPiq974aMb
+         9Wt2D5W8LaKSPq/MhXh+/9gSggujQVp9lgMZCQnCZzQoBBPTmkRx/AYd+CYS5QnZWM
+         tMi7/s5+xQN5AFvKS6+zzydiUOHdP8YAgA3T7d6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Subject: [PATCH 4.19 02/34] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.15 074/139] surface: surface3_power: Fix battery readings on batteries without a serial number
 Date:   Mon, 28 Feb 2022 18:24:08 +0100
-Message-Id: <20220228172208.634839251@linuxfoundation.org>
+Message-Id: <20220228172355.508600289@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-References: <20220228172207.090703467@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
+commit 21d90aaee8d5c2a097ef41f1430d97661233ecc6 upstream.
 
-vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
-ownership. It expects current->mm to be valid.
+The battery on the 2nd hand Surface 3 which I recently bought appears to
+not have a serial number programmed in. This results in any I2C reads from
+the registers containing the serial number failing with an I2C NACK.
 
-vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
-the user has not done close(), so when we are in do_exit(). In this
-case current->mm is invalid and we're releasing the device, so we
-should clean it anyway.
+This was causing mshw0011_bix() to fail causing the battery readings to
+not work at all.
 
-Let's check the owner only when vhost_vsock_stop() is called
-by an ioctl.
+Ignore EREMOTEIO (I2C NACK) errors when retrieving the serial number and
+continue with an empty serial number to fix this.
 
-When invoked from release we can not fail so we don't check return
-code of vhost_vsock_stop(). We need to stop vsock even if it's not
-the owner.
-
-Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b1f81b496b0d ("platform/x86: surface3_power: MSHW0011 rev-eng implementation")
+BugLink: https://github.com/linux-surface/linux-surface/issues/608
+Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220224101848.7219-1-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vsock.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/platform/surface/surface3_power.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -569,16 +569,18 @@ err:
- 	return ret;
- }
+--- a/drivers/platform/surface/surface3_power.c
++++ b/drivers/platform/surface/surface3_power.c
+@@ -233,14 +233,21 @@ static int mshw0011_bix(struct mshw0011_
+ 	}
+ 	bix->last_full_charg_capacity = ret;
  
--static int vhost_vsock_stop(struct vhost_vsock *vsock)
-+static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
- {
- 	size_t i;
--	int ret;
-+	int ret = 0;
- 
- 	mutex_lock(&vsock->dev.mutex);
- 
--	ret = vhost_dev_check_owner(&vsock->dev);
--	if (ret)
--		goto err;
-+	if (check_owner) {
-+		ret = vhost_dev_check_owner(&vsock->dev);
-+		if (ret)
-+			goto err;
-+	}
- 
- 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
- 		struct vhost_virtqueue *vq = &vsock->vqs[i];
-@@ -693,7 +695,12 @@ static int vhost_vsock_dev_release(struc
- 	 * inefficient.  Room for improvement here. */
- 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
- 
--	vhost_vsock_stop(vsock);
-+	/* Don't check the owner, because we are in the release path, so we
-+	 * need to stop the vsock device in any case.
-+	 * vhost_vsock_stop() can not fail in this case, so we don't need to
-+	 * check the return code.
+-	/* get serial number */
++	/*
++	 * Get serial number, on some devices (with unofficial replacement
++	 * battery?) reading any of the serial number range addresses gets
++	 * nacked in this case just leave the serial number empty.
 +	 */
-+	vhost_vsock_stop(vsock, false);
- 	vhost_vsock_flush(vsock);
- 	vhost_dev_stop(&vsock->dev);
+ 	ret = i2c_smbus_read_i2c_block_data(client, MSHW0011_BAT0_REG_SERIAL_NO,
+ 					    sizeof(buf), buf);
+-	if (ret != sizeof(buf)) {
++	if (ret == -EREMOTEIO) {
++		/* no serial number available */
++	} else if (ret != sizeof(buf)) {
+ 		dev_err(&client->dev, "Error reading serial no: %d\n", ret);
+ 		return ret;
++	} else {
++		snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
+ 	}
+-	snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
  
-@@ -791,7 +798,7 @@ static long vhost_vsock_dev_ioctl(struct
- 		if (start)
- 			return vhost_vsock_start(vsock);
- 		else
--			return vhost_vsock_stop(vsock);
-+			return vhost_vsock_stop(vsock, true);
- 	case VHOST_GET_FEATURES:
- 		features = VHOST_VSOCK_FEATURES;
- 		if (copy_to_user(argp, &features, sizeof(features)))
+ 	/* get cycle count */
+ 	ret = i2c_smbus_read_word_data(client, MSHW0011_BAT0_REG_CYCLE_CNT);
 
 

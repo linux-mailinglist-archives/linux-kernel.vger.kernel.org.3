@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3218F4C7894
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0BF4C7895
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiB1TQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 14:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S229965AbiB1TQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 14:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiB1TQm (ORCPT
+        with ESMTP id S229876AbiB1TQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 14:16:42 -0500
+        Mon, 28 Feb 2022 14:16:46 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B046E4D0D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:15:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00DEE4D30;
+        Mon, 28 Feb 2022 11:15:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2629B8162E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FECC340F3;
-        Mon, 28 Feb 2022 19:15:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98AABB815CB;
+        Mon, 28 Feb 2022 19:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE39C340F1;
+        Mon, 28 Feb 2022 19:15:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646075752;
-        bh=cMbSw8Fb7GWoqvCsagH+i3hAKkm+1SuWh32xT/umKsE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CRk5bysDvfwYe58YEv2XrSE90z6K9q1CUrz/HEhuuyFt06SWE1qsGMQanTOsfduEC
-         nMsnpXddH6OdGlZwI8YvzGFfzkBXBodzgpWvJk0fhlVoS4hvhg/Nna+SMttc9bl7up
-         1BgsnMWmhJltgaC0z81T5TX67WG+z1fivjxEnIqFGob6U4H5KwBxTNKt27X88+QxFq
-         BRrFU3qdrWHI8Dwrni+tcCUIk97sMyg6hvaQyW91PVGNQ1qolk/vvRq9OdQsDKJPUQ
-         BA5NAXgGC8PwW3iATE6kOU018u783WqebHDcpd2JttVY/qeYr2DS+VQFUMDvtXFFUc
-         TC4ns6ICflyWQ==
+        s=k20201202; t=1646075756;
+        bh=3bz7Qsk+snnXqiot5wWBZHY9JSrCtvtcLoIgzffSDeo=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=bKW3ESh7tv0gSsPTb5mEFFgrQeiokQxiZOcnp5MTxI+YZwiZu5V3aQKrDkufSZmCr
+         OGnZW+oZDnSBuD809U730F9n11csXcyR+ZaBEFXH9NXWa4/JvxFpSDL9N+cPPZo3FC
+         ZPi3xs3sE0anePHr17TA42bvJQLX4lJ/CpNImk2IP4lyXEzesvi9uE9jj/yvzMf9td
+         uJ7XI/DiovqcO+KD7BXT4QG6OOt+xRFV2xsUpN1gx1e56IB0R6tEq8mFymaS3/BDIb
+         kY8TLCHBEVj6o3TCFE8YS5k8cSjzPN9gwPcxy95HDSnYSG749MQ58zerECrGoKkcil
+         FOYPBqifMrczQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sunil-kumar.Dommati@amd.com, Jaroslav Kysela <perex@perex.cz>,
-        Alexander.Deucher@amd.com, dan.carpenter@oracle.com,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, krisman@collabora.com,
-        open list <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220225193054.24916-1-Vijendar.Mukunda@amd.com>
-References: <20220225193054.24916-1-Vijendar.Mukunda@amd.com>
-Subject: Re: [PATCH V2 1/4] ASoC: amd: vg: fix for pm resume callback sequence
-Message-Id: <164607575019.3538791.4372801541502826813.b4-ty@kernel.org>
-Date:   Mon, 28 Feb 2022 19:15:50 +0000
+To:     linux-arm-msm@vger.kernel.org, perex@perex.cz,
+        linux-kernel@vger.kernel.org, bgoswami@codeaurora.org,
+        tiwai@suse.com, lgirdwood@gmail.com, swboyd@chromium.org,
+        agross@kernel.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, bjorn.andersson@linaro.org,
+        srinivas.kandagatla@linaro.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        rohitkr@codeaurora.org, quic_plai@quicinc.com
+In-Reply-To: <1645898959-11231-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1645898959-11231-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: Re: [PATCH v5 0/2] Add power domains support for digital macro codecs
+Message-Id: <164607575278.3538791.10960449349795091046.b4-ty@kernel.org>
+Date:   Mon, 28 Feb 2022 19:15:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,15 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Feb 2022 01:00:22 +0530, Vijendar Mukunda wrote:
-> The previous condition is used to cross check only the active
-> stream status for I2S HS instance playback and capture use cases.
+On Sat, 26 Feb 2022 23:39:17 +0530, Srinivasa Rao Mandadapu wrote:
+> This patch set is to add power domains support for RX, TX and VA macros.
 > 
-> Modified logic to invoke sequence for two i2s controller instances.
-> 
-> This also fixes warnings reported by kernel robot:
-> "warning: variable 'frmt_val' set but not used"
-> "warning: variable 'reg_val' set but not used"
+> Changes since v4:
+>     -- Fix uninitialized variable return error
+> Changes since v3:
+>     -- Add dt-bindings support.
+> Changes since v2:
+>     -- Remove redundant local variable.
+>     -- Update pds error handling sequence.
+>     -- Update module description.
+>     -- Clean up pds init function.
+>     -- Remove redundant arguments.
+> Changes since v1:
+>     -- Add missing macros in Kconfig.
 > 
 > [...]
 
@@ -77,14 +84,10 @@ Applied to
 
 Thanks!
 
-[1/4] ASoC: amd: vg: fix for pm resume callback sequence
-      commit: 83b713619ee1b15e09eae11a92a7f3305534223d
-[2/4] ASoC: amd: vg: update DAI link name
-      commit: 5363d7304e31692f8f6da86ed7a49d3c28a2e32a
-[3/4] ASoC: amd: vg: remove warnings and errors pointed out by checkpatch pl
-      commit: 728a592619cfb9be8b66600d04ef9fee9237fe7e
-[4/4] ASoC: amd: vangogh: fix uninitialized symbol warning in machine driver
-      commit: 6f989800639a7a29ab9a02e165b04dc144dd4f2b
+[1/2] ASoC: codecs: Add power domains support in digital macro codecs
+      commit: 9e3d83c52844f955aa2975f78cee48bf9f72f5e1
+[2/2] ASoC: qcom: dt-bindings: Add bindings for power domains in lpass digital codecs
+      commit: 6619c7d4379aca716a90f7581be2853071c086f6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

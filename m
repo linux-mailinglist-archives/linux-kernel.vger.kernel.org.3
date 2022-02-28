@@ -2,160 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21354C7E31
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088CD4C7E37
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiB1XSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S229704AbiB1XW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiB1XSr (ORCPT
+        with ESMTP id S229732AbiB1XWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:18:47 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912B83FBF7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:18:06 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s14so19798435edw.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:18:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ng4LgEMIm2ZmUALh0wWhtFzvLwEBPi1PEXH7f99he44=;
-        b=UcalAtgGjlIwzx3+xqpfMMaSA+UIKPp2JQD8fF1yqEpiQ0kzSf8wbW2lrxYMICigY4
-         z7efQTSrHexP+Bzvzqj67TrfRKFsg0fUVpU7jfvKpls13Fqv1r3kyWDfCalgrvr1eLpJ
-         UUo8EAT+TW/ArMaAS0LL1FvVCIqzlz8IpdZKEpEXBOWPp755E0V8cOYTXvrMp2+AkQpt
-         m/THDPcHTWk+O2FqsxBmN5J2a2clKFu0QtdfgkMWrfV5GjaD/bo+PItPiY8u/tIqk+mi
-         PBnIKZKkDVz5lTuuCNuBgvtYwY/uYWD8PFKw6B9uVFzQJSYFIUxsfkI68Qtd5j2ZVR1q
-         twaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ng4LgEMIm2ZmUALh0wWhtFzvLwEBPi1PEXH7f99he44=;
-        b=nCcbP5V2etH0geZ52mmGN+4S7ZS6tk4mj+LnCcKIfjXSiOTZWbYlOiq9F6v7SJexyq
-         mapOpj5SpBCYuLwBcMIXyBTUgIAUhsxIc8VuG8FWRs03OvyPH+Ak6Vr7Pt3nQFuUXuG0
-         +dfsMQCkZl6w8/pHiBGj8mGBpJTgxPN7zocB9s10xYOZ6cR+Ofj10covk+zodt4FZrWs
-         zBbyveLo4nI6+57m9f2HSaGvuLbMXALuEovR+YxqZBdOeKeqkqPh/Zxx27xCPVRgaAJh
-         OnOzj0qw3Pe4tmIQLSi3IC1VK/J7a22x2eJr4r9vQ1jK/xQNb2gM+ZiWLe5MhnI1EjtR
-         AvFA==
-X-Gm-Message-State: AOAM533q1BCq1MbpuEPGceoTXr7OI3LGXTFYPwbxJj6SwRdinzHIqZdn
-        HSQMP37UtFrj5Jr29tQRdH6V2w37jHhOsl7u4l5Rzg==
-X-Google-Smtp-Source: ABdhPJxwokUiklXKZIjrW6pYM3G4wNkwPkn+R0wZeLRCT52J8+Qv6rRQzZQyE2NIfqAVvBsu1Q/jKr2DWPW1vJBSyLI=
-X-Received: by 2002:aa7:c982:0:b0:406:3862:a717 with SMTP id
- c2-20020aa7c982000000b004063862a717mr21982583edt.358.1646090285006; Mon, 28
- Feb 2022 15:18:05 -0800 (PST)
+        Mon, 28 Feb 2022 18:22:53 -0500
+Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD819A27A2;
+        Mon, 28 Feb 2022 15:22:10 -0800 (PST)
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=rainbowdash)
+        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nOpLD-000510-L9; Mon, 28 Feb 2022 23:22:07 +0000
+Received: from ben by rainbowdash with local (Exim 4.95)
+        (envelope-from <ben@rainbowdash>)
+        id 1nOpLD-00CHuf-3I;
+        Mon, 28 Feb 2022 23:22:07 +0000
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     helgaas@kernel.org, linux-pci@vger.kernel.org
+Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
+Subject: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on some boards
+Date:   Mon, 28 Feb 2022 23:22:06 +0000
+Message-Id: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-6-seanjc@google.com>
-In-Reply-To: <20220226001546.360188-6-seanjc@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 28 Feb 2022 15:17:53 -0800
-Message-ID: <CANgfPd_G7yiByHfrJDvmQq8b--P7a9BqcLs8SHyxPM2pfrMJAg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/28] KVM: x86/mmu: Document that zapping invalidated
- roots doesn't need to flush
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Remove the misleading flush "handling" when zapping invalidated TDP MMU
-> roots, and document that flushing is unnecessary for all flavors of MMUs
-> when zapping invalid/obsolete roots/pages.  The "handling" in the TDP MMU
-> is dead code, as zap_gfn_range() is called with shared=true, in which
-> case it will never return true due to the flushing being handled by
-> tdp_mmu_zap_spte_atomic().
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+The fu740 PCIe core does not probe any devices on the SiFive Unmatched
+board without this fix (or having U-Boot explicitly start the PCIe via
+either boot-script or user command). The fix is to start the link at
+Gen1 speeds and once the link is up then change the speed back.
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+The U-Boot driver claims to set the link-speed to Gen1 to get the probe
+to work (and U-Boot does print link up at Gen1) in the following code:
+https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
 
-> ---
->  arch/x86/kvm/mmu/mmu.c     | 10 +++++++---
->  arch/x86/kvm/mmu/tdp_mmu.c | 15 ++++++++++-----
->  2 files changed, 17 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 5a931c89d27b..1c4b84e80841 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5615,9 +5615,13 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
->         }
->
->         /*
-> -        * Trigger a remote TLB flush before freeing the page tables to ensure
-> -        * KVM is not in the middle of a lockless shadow page table walk, which
-> -        * may reference the pages.
-> +        * Kick all vCPUs (via remote TLB flush) before freeing the page tables
-> +        * to ensure KVM is not in the middle of a lockless shadow page table
-> +        * walk, which may reference the pages.  The remote TLB flush itself is
-> +        * not required and is simply a convenient way to kick vCPUs as needed.
-> +        * KVM performs a local TLB flush when allocating a new root (see
-> +        * kvm_mmu_load()), and the reload in the caller ensure no vCPUs are
-> +        * running with an obsolete MMU.
->          */
->         kvm_mmu_commit_zap_page(kvm, &kvm->arch.zapped_obsolete_pages);
->  }
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index e35bd88d92fd..5994db5d5226 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -843,12 +843,20 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
->  void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
->  {
->         struct kvm_mmu_page *root;
-> -       bool flush = false;
->
->         lockdep_assert_held_read(&kvm->mmu_lock);
->
->         for_each_invalid_tdp_mmu_root_yield_safe(kvm, root) {
-> -               flush = zap_gfn_range(kvm, root, 0, -1ull, true, flush, true);
-> +               /*
-> +                * A TLB flush is unnecessary, invalidated roots are guaranteed
-> +                * to be unreachable by the guest (see kvm_tdp_mmu_put_root()
-> +                * for more details), and unlike the legacy MMU, no vCPU kick
-> +                * is needed to play nice with lockless shadow walks as the TDP
-> +                * MMU protects its paging structures via RCU.  Note, zapping
-> +                * will still flush on yield, but that's a minor performance
-> +                * blip and not a functional issue.
-> +                */
-> +               (void)zap_gfn_range(kvm, root, 0, -1ull, true, false, true);
->
->                 /*
->                  * Put the reference acquired in kvm_tdp_mmu_invalidate_roots().
-> @@ -856,9 +864,6 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
->                  */
->                 kvm_tdp_mmu_put_root(kvm, root, true);
->         }
-> -
-> -       if (flush)
-> -               kvm_flush_remote_tlbs(kvm);
->  }
->
->  /*
-> --
-> 2.35.1.574.g5d30c73bfb-goog
->
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+--
+Note, this patch has had significant re-work since the previous 4
+sets, including trying to fix style, message, reliance on the U-Boot
+fix and the comments about usage of LINK_CAP and reserved fields.
+---
+ drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
+ 1 file changed, 50 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+index 842b7202b96e..16ad52f53490 100644
+--- a/drivers/pci/controller/dwc/pcie-fu740.c
++++ b/drivers/pci/controller/dwc/pcie-fu740.c
+@@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
+ {
+ 	struct device *dev = pci->dev;
+ 	struct fu740_pcie *afp = dev_get_drvdata(dev);
++	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
++	int ret;
++	u32 orig, tmp;
++
++	/*
++	 * Force Gen1 when starting link, due to some devices not
++	 * probing at higher speeds. This happens with the PCIe switch
++	 * on the Unmatched board. The fix in U-Boot is to force Gen1
++	 * and hope later resets will clear this capaility.
++	 */
++
++	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
++	dw_pcie_dbi_ro_wr_en(pci);
++
++	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
++	orig = tmp & PCI_EXP_LNKCAP_SLS;
++	tmp &= ~PCI_EXP_LNKCAP_SLS;
++	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
++	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+ 
+ 	/* Enable LTSSM */
+ 	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
+-	return 0;
++
++	ret = dw_pcie_wait_for_link(pci);
++	if (ret) {
++		dev_err(dev, "error: link did not start\n");
++		goto err;
++	}
++
++	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
++	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
++		dev_dbg(dev, "changing speed back to original\n");
++
++		tmp &= ~PCI_EXP_LNKCAP_SLS;
++		tmp |= orig;
++		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
++
++		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
++		tmp |= PORT_LOGIC_SPEED_CHANGE;
++		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
++
++		ret = dw_pcie_wait_for_link(pci);
++		if (ret) {
++			dev_err(dev, "error: link did not start at new speed\n");
++			goto err;
++		}
++	}
++
++	ret = 0;
++err:
++	// todo - if we do have an unliekly error, what do we do here?
++	dw_pcie_dbi_ro_wr_dis(pci);
++	return ret;
+ }
+ 
+ static int fu740_pcie_host_init(struct pcie_port *pp)
+-- 
+2.34.1
+

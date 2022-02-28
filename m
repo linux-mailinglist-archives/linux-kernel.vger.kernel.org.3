@@ -2,488 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AF74C7EAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9238D4C7EB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiB1XpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S229956AbiB1XsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiB1Xoq (ORCPT
+        with ESMTP id S231446AbiB1Xry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:44:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 192281029F9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:43:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646091838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8gs1h6MeNSrDRhQvsG3BFOK6Pi8aXzkhGBMLa9C27C0=;
-        b=VLLtDCWQg0mVJj+xoD1kmxTAyR4Ymf63p9lvkTtkBPV0bNvruOxi//lEjuCRT9R2hzzpfx
-        nd95eJuWpShpdCSH8M5H/yqpoBpTVF26emQ3lwMJuLqbWxMK307d5aZC0jzoyC+wAoYI8R
-        thWoB5QDhvKQkTUmJVYGAiDEHi21t6o=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-anLvML7VPkCm90Xw6MyS7A-1; Mon, 28 Feb 2022 18:43:56 -0500
-X-MC-Unique: anLvML7VPkCm90Xw6MyS7A-1
-Received: by mail-wr1-f72.google.com with SMTP id e26-20020adfa45a000000b001ea860cd35cso2578945wra.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:43:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8gs1h6MeNSrDRhQvsG3BFOK6Pi8aXzkhGBMLa9C27C0=;
-        b=b0QD329BtD/XPP2/AGFgUI1/CfQuyeBusov1BphnTdhf6cu5syEBcgmBP4C0WaC/w7
-         tAl6CBEJ6YteYWR6USbo0KBMg7Al2spq61kAzIWcBDbB5rwO88I4dsI3XGGZ9WAVRc2L
-         8bIiPrlrXCRSmovZoCY85IdkaWx4IyRW40SJf3Tg2MZJiCPqVG7RmUD3Yw7eKpP9fuf8
-         gF8JyPwgcqSrfK9VgWiebszAI8uEi28rcg88XyOzrMFXSkb+r9W34ezMIr7heffPA41F
-         aqFiO1dchHmK15lb0PUMjJxdukO1nKYEyVZmoFo31RKDw5XI2v5JQE+k136H+INK4ezS
-         s7Ag==
-X-Gm-Message-State: AOAM530q0ZFdNhP+vz1V5Vqdco6sSteOtMstiKj4X6uGGzbU0/AfbGxN
-        ZrlPkNE6eOjVvoLRTXtVMU5pOgInD9aT3THWFW9Ee4SLdITrvVxJTQb/nKXOwydBsrlaGFuEDOU
-        e/TDNPEJTpqUkJXiQpo1xsXA=
-X-Received: by 2002:adf:db84:0:b0:1ed:d428:a944 with SMTP id u4-20020adfdb84000000b001edd428a944mr17729035wri.359.1646091835377;
-        Mon, 28 Feb 2022 15:43:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz2/f3AcsKvoKW2xnVSj/XYJvznFTiBRM8hUIuJM7K6VLARDbxQsGB8yW6bCtLpRoddd9CHMw==
-X-Received: by 2002:adf:db84:0:b0:1ed:d428:a944 with SMTP id u4-20020adfdb84000000b001edd428a944mr17729010wri.359.1646091835030;
-        Mon, 28 Feb 2022 15:43:55 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm768089wmh.31.2022.02.28.15.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 15:43:53 -0800 (PST)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com
-Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org
-Subject: [PATCH v9 14/14] module: Move version support into a separate file
-Date:   Mon, 28 Feb 2022 23:43:22 +0000
-Message-Id: <20220228234322.2073104-15-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220228234322.2073104-1-atomlin@redhat.com>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
+        Mon, 28 Feb 2022 18:47:54 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC9010E548;
+        Mon, 28 Feb 2022 15:47:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AX9JFBVJONe47Nw7Za9BwMVE63hvzlZXWFTuw83H/GQNV+fGq2WtavrSjOltlGDlhPuVL9I2/3kri/La+OIHb+JEFcEOcgkyuVZ+F9zQTSQ7EQxUEQbaPyEVuRYX72E5ZarzCkKOd3plBj+7tyIH09xIrdAIXUy7eCbkqoxfByUTcPyIls3wx0X08kQbk8CQEcGY74zAQsHAK5IVw32FKRpjlaYerV6O3006rCrXlhIEElMFJ7ZeD6Ktij2m6r8xkYEroTDvH4VI8cNJlnO9XHbyIMaRuylYni1+7QiHENM6RdH8BpQHftYjUJWNFVFw4q4IX1BX5mdiyG+f6Oy23Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x6Efx1Xj9YAqGQdrgT9QD2RAnS6wKagFKdBJvNqxKwU=;
+ b=YtkgDCSvZHz52f7SVmXDQbSJ9S/NnXKP/GEQPUEaj7kB7+cvbWyO6smtk9Emt6Cataseq7Y8pfdIxWdwzNOzULQC2N5mKt4qMCQnWcLgk/1SIr1K/li+qNoBDpuGe8IFoFdW8A2zw7f2MXdm//t8U9lWBoVDcYISZO8jGpqyqR805dyWUIYIdmLY7PluY/R2kGRP+okvmtWE3YzKDNH/d6gEJCaTEhuOyanb4W3rXvpRtWsnWFPFNk2wKSomdda7TH7biqO2iQMhuu7lPNqwUl8GNMh+1Mb7YeayDR4vECiWt0XDTNdvczsG+yUGSE9ZbNOMvaMW/BUU/Ih3X8CK2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x6Efx1Xj9YAqGQdrgT9QD2RAnS6wKagFKdBJvNqxKwU=;
+ b=ugvKJqzIFG0lKM71T1vhgclB/rgR0MjfkVYbCK0z7X0HcG+TmTSbvEeau0TPosRUIo+1yDy9N7ErSnAJWQsGqKFvBL3by98I7HO7zCXkTWAQqo++JxkepZHCkcfB6MkLI67F9LYRnA7Qgr+c97JenlEzGSDFx3eby1QNfkUTlB+FlrHWF5/BzDlTImv/0mt7HssZBvtwow50//6BAaxeUwFncAK/w4tB+3aCI9G6bGWjDIxfAjw6g/rqA0P+nvElm6RTNnlBpt+5V4IjoAlE8kMcCKl5NWnqCcpRJ11IoCXWtZ/AYo0xFiCqXmEjhOoxV8aLZrGDUYjgi264qBvMIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BY5PR12MB3873.namprd12.prod.outlook.com (2603:10b6:a03:1a3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Mon, 28 Feb
+ 2022 23:47:11 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
+ 23:47:11 +0000
+Date:   Mon, 28 Feb 2022 19:47:09 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220228234709.GV219866@nvidia.com>
+References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+ <20220228090121.1903-10-shameerali.kolothum.thodi@huawei.com>
+ <20220228145731.GH219866@nvidia.com>
+ <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
+ <20220228180520.GO219866@nvidia.com>
+ <20220228131614.27ad37dc.alex.williamson@redhat.com>
+ <20220228202919.GP219866@nvidia.com>
+ <20220228142034.024e7be6.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228142034.024e7be6.alex.williamson@redhat.com>
+X-ClientProxiedBy: BL1PR13CA0091.namprd13.prod.outlook.com
+ (2603:10b6:208:2b9::6) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8fde11d3-91d5-4fcc-1673-08d9fb14a376
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3873:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB38739D55FBA21B3C88BF0C65C2019@BY5PR12MB3873.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nGbkFKu5t4eqzyEkuDwFxdCy0ag8tZXVwCJ8jKL8JJ0M0oaj5DIuib9058k3S9t7ORauJmrt341lNAbd7t8BecRzCAYhEjjtXC17iLfdqmj2fGWlroMBGnTJAmpGZAFcmjfnW3w5BjrC9dzFDDi9Dtf8G9zNxBKaimIKxv4GiGtT5NKpajd6KqZR05qza26rJu4PRM8+rs0bhAcNH/hqZrG3qlbAuueM+Da+o6Q9AuMJpkYHdr5T0YdSK9+EqI70JUmj8q2NGNh4oUkX7Kg/4JgaXwfkpRm8Iig+zEMt+7/Na3BEJ6BTiGN+GRThLsh/rKBrcQcglHDtcNQpRg71desEyRkKcdx1RB8TG26BmXgp6BVG9k8OLs9WwadNnTZ9g+5dI+AkNnFiACHiS+iFB+DC/tXMAZg16ldMEZhySBKOS4PDK3qBwQw48g573o4Ez0UrYSx3lo4C3myt8U26UJBH6hbLl9wHD/sErUN3J7jesQV+tSQyMOSupnzA0pQ9nCYitqBGIDIZlojxM0L42SVsXywtAZE4HabDdUFdM7ngmYwftsHbbjIUI5kZGiH4nAm/Pc7zzqYI3WbPhLOymUVcCK45ki9vg5hjYUMQ0+8loGc/Y6/c9jDgnCPfunzADsNLGcyaFzcWHo0G0y1oZ8/r7Qn83zHub+i5YWj6yx1hXZjTxl9hu1hAlf+1dJY2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(66476007)(2906002)(86362001)(6486002)(36756003)(33656002)(186003)(26005)(2616005)(508600001)(1076003)(6506007)(6512007)(8676002)(4326008)(6916009)(7416002)(8936002)(66556008)(5660300002)(83380400001)(316002)(66946007)(54906003)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sHsCxMXjNLBbvf/RMJQJgvesxzJ2ljFwW4uBQVcILhLt8F4fpO9AtSMOhAtd?=
+ =?us-ascii?Q?zje2TAlzK/fNEqozGUJqtkTuZGWGVQn4vCNIQBJ69XlKNUKh7Mv3dFhvvZ2R?=
+ =?us-ascii?Q?1jbolR9cTZ0Of8stPIKtYxhZ+RajK7Qeb9UuSixolqs47eJGdzPWrMIqdxl2?=
+ =?us-ascii?Q?mH8uXqU844GIthniBf/rZSYWARHhbfOxv4TVuh9z1CbQAA5bf2xM55tTsvs+?=
+ =?us-ascii?Q?QO1PDBdPrE825EbznnJOoXQkdmh6//rv2QuJTwsVBb3jdeFh4WjMby2si/3e?=
+ =?us-ascii?Q?ITOYjJAUzBMQi65s2ddBbIPFO6pGlhBeUnqxjXn6/7WykONvEsIJ/a9AOa/8?=
+ =?us-ascii?Q?C6JZvqtLh12QLXv4BtViIQpMwSjZuyUTor5Vt68lxQzprWDym+Piy9xGTyqP?=
+ =?us-ascii?Q?m0U87rKQacbj141UZDliY6f7f9tm6ZMwkVTBOofwyAPAGj8mU9+aClcRL0/r?=
+ =?us-ascii?Q?2/Jbo3I0blMn9k3uRyrLGT/Ogg7TD5fD2ic2mIMCwzRg1tkNmVRlAgoqVuNW?=
+ =?us-ascii?Q?/zUYDeeFFRDXF99pT7EoBWYwl9fMPvpgPPCq3xrNErdoHLYi4kzURtQl+r1s?=
+ =?us-ascii?Q?5B7DqhV3GoI71CgYQq4jI4WQ+/03Z2aSm8kbHAJ14k0x+jZkPYVLjalzFm2i?=
+ =?us-ascii?Q?lTLvw94PNh7ST9JxnP9ABTobg57XlDGAtAlcsGwLqt06wTL45EpWFVVn1VJr?=
+ =?us-ascii?Q?dH8Ug+NowQSqnWie3Z6xJu+ReEQ0G+td8pQLb2kIfXIrk3uSvo70mSQ1syha?=
+ =?us-ascii?Q?48SfUmr4S/LHSk7X22X6U3JgtHObpD+gGE/FvXUisBQLYt9sqowp6F779rk2?=
+ =?us-ascii?Q?iGFOF6hv8UNckthLl3oySuXvfJLYfcT450Nsmz2WKgGg9d/kDgEs3ao4zhdu?=
+ =?us-ascii?Q?MxU53chnxJgpts+Vyvmz8CWJNsHMsvwsIve4essVdummp9+fEXgZ1pNJrkWV?=
+ =?us-ascii?Q?nI7jQJNXA0hrhByysF5ejVPThIFF9XV+VS3UPYn9OC55V//z5JXDbZBdTTy6?=
+ =?us-ascii?Q?HbJWA6Y/pC7cnD5Gpu53Ad6DqU5nPRaMXNHGkY+jXTIoNHCOHDDijzrxBjor?=
+ =?us-ascii?Q?jCkR0CTBDKbqUQcSAKdg5sZYv/rm0Jtwoz0nHCosKnGw0Rlc7WHfMVaJd6bs?=
+ =?us-ascii?Q?FAmE9erZB5njha7Vsw5auf1A6IUuXDn4PHrPokUgXKIAXEHSTB2yVovaBH0Z?=
+ =?us-ascii?Q?oiWJM0b4pi1Cns7RnRX9wiEsfvwYAFT/zUp8/ygpcOlfAS6XLMzOOPtJoCnv?=
+ =?us-ascii?Q?odx1dlKg7cAkAPzH7WQkT7e9m2hltlzL/CoDnHZ91Ta0dHlzct/+OlYRgaix?=
+ =?us-ascii?Q?JEwz+IEW+dax4bU7C6lfITqb5AnQO7a3AeNU4mBPAuBZvnIE3uXupC3un1ep?=
+ =?us-ascii?Q?lPj1dBD9jT1f8goosrSEeoj2Y4Dmh2CYr0jLTXHATsPmZwkhMvcQDQ0xQV5g?=
+ =?us-ascii?Q?zaDbRtlOEvITLPHfL4XoOJ4qMs/uq+yTjjKeSLgAKymwQTHpeogXntur0mAW?=
+ =?us-ascii?Q?U8ZKjlVowtGCG81ZQoL/6lqHypVOwbTUujrn9CcQ/ysJyL2g9Gy1MK4me2bO?=
+ =?us-ascii?Q?LNm5JYMXvFcqra+9AUg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8fde11d3-91d5-4fcc-1673-08d9fb14a376
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 23:47:11.2791
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /IjHWm8az0f/S9e2sGgu3snOXaNyYcy2ojzux5SjzZ7yehZWKQva6SyMHguMpr8/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3873
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change.
+On Mon, Feb 28, 2022 at 02:20:34PM -0700, Alex Williamson wrote:
 
-This patch migrates module version support out of core code into
-kernel/module/version.c. In addition simple code refactoring to
-make this possible.
+> > Unless you think we should block it.
+> 
+> What's the meaning of initial_bytes and dirty_bytes while in
+> STOP_COPY?
 
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |  48 ++++++++++++
- kernel/module/main.c     | 156 ++-------------------------------------
- kernel/module/version.c  | 109 +++++++++++++++++++++++++++
- 4 files changed, 166 insertions(+), 148 deletions(-)
- create mode 100644 kernel/module/version.c
+Same as during pre-copy - both numbers are the bytes remaining to be
+read() from the FD in each bucket. They should continue to decline as
+read() progresses regardless of what state the data_fd is in.
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index cf8dcdc6b55f..a46e6361017f 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -17,3 +17,4 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
- obj-$(CONFIG_SYSFS) += sysfs.o
-+obj-$(CONFIG_MODVERSIONS) += version.o
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 62d749ef695e..3fc139d5074b 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -70,7 +70,27 @@ struct load_info {
- 	} index;
- };
- 
-+enum mod_license {
-+	NOT_GPL_ONLY,
-+	GPL_ONLY,
-+};
-+
-+struct find_symbol_arg {
-+	/* Input */
-+	const char *name;
-+	bool gplok;
-+	bool warn;
-+
-+	/* Output */
-+	struct module *owner;
-+	const s32 *crc;
-+	const struct kernel_symbol *sym;
-+	enum mod_license license;
-+};
-+
- int mod_verify_sig(const void *mod, struct load_info *info);
-+int try_to_force_load(struct module *mod, const char *reason);
-+bool find_symbol(struct find_symbol_arg *fsa);
- struct module *find_module_all(const char *name, size_t len, bool even_unformed);
- int cmp_name(const void *name, const void *sym);
- long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
-@@ -225,3 +245,31 @@ static inline int mod_sysfs_setup(struct module *mod,
- static inline void mod_sysfs_teardown(struct module *mod) { }
- static inline void init_param_lock(struct module *mod) { }
- #endif /* CONFIG_SYSFS */
-+
-+#ifdef CONFIG_MODVERSIONS
-+int check_version(const struct load_info *info,
-+		  const char *symname, struct module *mod, const s32 *crc);
-+void module_layout(struct module *mod, struct modversion_info *ver, struct kernel_param *kp,
-+		   struct kernel_symbol *ks, struct tracepoint * const *tp);
-+int check_modstruct_version(const struct load_info *info, struct module *mod);
-+int same_magic(const char *amagic, const char *bmagic, bool has_crcs);
-+#else /* !CONFIG_MODVERSIONS */
-+static inline int check_version(const struct load_info *info,
-+				const char *symname,
-+				struct module *mod,
-+				const s32 *crc)
-+{
-+	return 1;
-+}
-+
-+static inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	return 1;
-+}
-+
-+static inline int same_magic(const char *amagic, const char *bmagic, bool has_crcs)
-+{
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+#endif /* CONFIG_MODVERSIONS */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index bcc4f7a82649..0749afdc34b5 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -86,6 +86,12 @@ struct mod_tree_root mod_tree __cacheline_aligned = {
- static unsigned long module_addr_min = -1UL, module_addr_max;
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
- 
-+struct symsearch {
-+	const struct kernel_symbol *start, *stop;
-+	const s32 *crcs;
-+	enum mod_license license;
-+};
-+
- /*
-  * Bounds of module text, for speeding up __module_address.
-  * Protected by module_mutex.
-@@ -244,28 +250,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
- 
--struct symsearch {
--	const struct kernel_symbol *start, *stop;
--	const s32 *crcs;
--	enum mod_license {
--		NOT_GPL_ONLY,
--		GPL_ONLY,
--	} license;
--};
--
--struct find_symbol_arg {
--	/* Input */
--	const char *name;
--	bool gplok;
--	bool warn;
--
--	/* Output */
--	struct module *owner;
--	const s32 *crc;
--	const struct kernel_symbol *sym;
--	enum mod_license license;
--};
--
- static bool check_exported_symbol(const struct symsearch *syms,
- 				  struct module *owner,
- 				  unsigned int symnum, void *data)
-@@ -327,7 +311,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
-  * Find an exported symbol and return it, along with, (optional) crc and
-  * (optional) module which owns it.  Needs preempt disabled or module_mutex.
-  */
--static bool find_symbol(struct find_symbol_arg *fsa)
-+bool find_symbol(struct find_symbol_arg *fsa)
- {
- 	static const struct symsearch arr[] = {
- 		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
-@@ -1001,7 +985,7 @@ size_t modinfo_attrs_count = ARRAY_SIZE(modinfo_attrs);
- 
- static const char vermagic[] = VERMAGIC_STRING;
- 
--static int try_to_force_load(struct module *mod, const char *reason)
-+int try_to_force_load(struct module *mod, const char *reason)
- {
- #ifdef CONFIG_MODULE_FORCE_LOAD
- 	if (!test_taint(TAINT_FORCED_MODULE))
-@@ -1013,115 +997,6 @@ static int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
- 
--#ifdef CONFIG_MODVERSIONS
--
--static u32 resolve_rel_crc(const s32 *crc)
--{
--	return *(u32 *)((void *)crc + *crc);
--}
--
--static int check_version(const struct load_info *info,
--			 const char *symname,
--			 struct module *mod,
--			 const s32 *crc)
--{
--	Elf_Shdr *sechdrs = info->sechdrs;
--	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
--
--	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
--	if (!crc)
--		return 1;
--
--	/* No versions at all?  modprobe --force does this. */
--	if (versindex == 0)
--		return try_to_force_load(mod, symname) == 0;
--
--	versions = (void *) sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
--
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
--			continue;
--
--		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
--			crcval = resolve_rel_crc(crc);
--		else
--			crcval = *crc;
--		if (versions[i].crc == crcval)
--			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
--		goto bad_version;
--	}
--
--	/* Broken toolchain. Warn once, then let it go.. */
--	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
--	return 1;
--
--bad_version:
--	pr_warn("%s: disagrees about version of symbol %s\n",
--	       info->name, symname);
--	return 0;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	struct find_symbol_arg fsa = {
--		.name	= "module_layout",
--		.gplok	= true,
--	};
--
--	/*
--	 * Since this should be found in kernel (which can't be removed), no
--	 * locking is necessary -- use preempt_disable() to placate lockdep.
--	 */
--	preempt_disable();
--	if (!find_symbol(&fsa)) {
--		preempt_enable();
--		BUG();
--	}
--	preempt_enable();
--	return check_version(info, "module_layout", mod, fsa.crc);
--}
--
--/* First part is kernel version, which we ignore if module has crcs. */
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	if (has_crcs) {
--		amagic += strcspn(amagic, " ");
--		bmagic += strcspn(bmagic, " ");
--	}
--	return strcmp(amagic, bmagic) == 0;
--}
--#else
--static inline int check_version(const struct load_info *info,
--				const char *symname,
--				struct module *mod,
--				const s32 *crc)
--{
--	return 1;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	return 1;
--}
--
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	return strcmp(amagic, bmagic) == 0;
--}
--#endif /* CONFIG_MODVERSIONS */
--
- static char *get_modinfo(const struct load_info *info, const char *tag);
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
- 			      char *prev);
-@@ -3247,18 +3122,3 @@ void print_modules(void)
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
- 	pr_cont("\n");
- }
--
--#ifdef CONFIG_MODVERSIONS
--/*
-- * Generate the signature for all relevant module structures here.
-- * If these change, we don't want to try to parse the module.
-- */
--void module_layout(struct module *mod,
--		   struct modversion_info *ver,
--		   struct kernel_param *kp,
--		   struct kernel_symbol *ks,
--		   struct tracepoint * const *tp)
--{
--}
--EXPORT_SYMBOL(module_layout);
--#endif
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-new file mode 100644
-index 000000000000..adaedce1dc97
---- /dev/null
-+++ b/kernel/module/version.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module version support
-+ *
-+ * Copyright (C) 2008 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/printk.h>
-+#include "internal.h"
-+
-+static u32 resolve_rel_crc(const s32 *crc)
-+{
-+	return *(u32 *)((void *)crc + *crc);
-+}
-+
-+int check_version(const struct load_info *info,
-+		  const char *symname,
-+			 struct module *mod,
-+			 const s32 *crc)
-+{
-+	Elf_Shdr *sechdrs = info->sechdrs;
-+	unsigned int versindex = info->index.vers;
-+	unsigned int i, num_versions;
-+	struct modversion_info *versions;
-+
-+	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-+	if (!crc)
-+		return 1;
-+
-+	/* No versions at all?  modprobe --force does this. */
-+	if (versindex == 0)
-+		return try_to_force_load(mod, symname) == 0;
-+
-+	versions = (void *)sechdrs[versindex].sh_addr;
-+	num_versions = sechdrs[versindex].sh_size
-+		/ sizeof(struct modversion_info);
-+
-+	for (i = 0; i < num_versions; i++) {
-+		u32 crcval;
-+
-+		if (strcmp(versions[i].name, symname) != 0)
-+			continue;
-+
-+		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
-+			crcval = resolve_rel_crc(crc);
-+		else
-+			crcval = *crc;
-+		if (versions[i].crc == crcval)
-+			return 1;
-+		pr_debug("Found checksum %X vs module %lX\n",
-+			 crcval, versions[i].crc);
-+		goto bad_version;
-+	}
-+
-+	/* Broken toolchain. Warn once, then let it go.. */
-+	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
-+	return 1;
-+
-+bad_version:
-+	pr_warn("%s: disagrees about version of symbol %s\n", info->name, symname);
-+	return 0;
-+}
-+
-+int check_modstruct_version(const struct load_info *info,
-+			    struct module *mod)
-+{
-+	struct find_symbol_arg fsa = {
-+		.name	= "module_layout",
-+		.gplok	= true,
-+	};
-+
-+	/*
-+	 * Since this should be found in kernel (which can't be removed), no
-+	 * locking is necessary -- use preempt_disable() to placate lockdep.
-+	 */
-+	preempt_disable();
-+	if (!find_symbol(&fsa)) {
-+		preempt_enable();
-+		BUG();
-+	}
-+	preempt_enable();
-+	return check_version(info, "module_layout", mod, fsa.crc);
-+}
-+
-+/* First part is kernel version, which we ignore if module has crcs. */
-+int same_magic(const char *amagic, const char *bmagic,
-+	       bool has_crcs)
-+{
-+	if (has_crcs) {
-+		amagic += strcspn(amagic, " ");
-+		bmagic += strcspn(bmagic, " ");
-+	}
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+
-+/*
-+ * Generate the signature for all relevant module structures here.
-+ * If these change, we don't want to try to parse the module.
-+ */
-+void module_layout(struct module *mod,
-+		   struct modversion_info *ver,
-+		   struct kernel_param *kp,
-+		   struct kernel_symbol *ks,
-+		   struct tracepoint * const *tp)
-+{
-+}
-+EXPORT_SYMBOL(module_layout);
--- 
-2.34.1
+The only special thing about STOP_COPY is that dirty_bytes should not
+increase as the device should not be generating new dirty data.
 
+How about:
+
+ * Drivers should attempt to return estimates so that initial_bytes +
+ * dirty_bytes matches the amount of data an immediate transition to STOP_COPY
+ * will require to be streamed. While in STOP_COPY the initial_bytes
+ * and dirty_bytes should continue to be decrease as the data_fd
+ * progresses streaming out the data.
+
+Remove the 'in the precopy phase' from the first sentance
+
+Adjust the last paragraph as:
+
++ * returning readable. ENOMSG may not be returned in STOP_COPY. Support
++ * for this ioctl is required when VFIO_MIGRATION_PRE_COPY is set.
+
+Jason

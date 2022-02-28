@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7004C62D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 07:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6744C62D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 07:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbiB1GQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 01:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
+        id S233159AbiB1GRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 01:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiB1GQr (ORCPT
+        with ESMTP id S232742AbiB1GRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 01:16:47 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42C873CA46
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 22:16:04 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-125-lgUm4UbTM6iVn5quhs8lMw-1; Mon, 28 Feb 2022 06:16:02 +0000
-X-MC-Unique: lgUm4UbTM6iVn5quhs8lMw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 06:15:59 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 28 Feb 2022 06:15:59 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-CC:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: RE: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-Thread-Topic: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-Thread-Index: AQHYK3er/AEA45TQBUCd0AhQFcgB96ym+KOQgADr1YCAAJR3MA==
-Date:   Mon, 28 Feb 2022 06:15:59 +0000
-Message-ID: <6729109ae6ad429f87270e2bef2eed2f@AcuMS.aculab.com>
-References: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
- <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
- <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
- <20220226124249.GU614@gate.crashing.org>
- <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
- <20220227010956.GW614@gate.crashing.org>
- <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
- <20220227113245.GY614@gate.crashing.org>
- <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
- <20220227201724.GZ614@gate.crashing.org>
- <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 28 Feb 2022 01:17:48 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239B23DDF6;
+        Sun, 27 Feb 2022 22:17:10 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21S6Gvev118887;
+        Mon, 28 Feb 2022 00:16:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646029017;
+        bh=RSPhcQ8emCYB2W8uauONFfLJoAk9ctEg/vyS6yYalNU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=mb2iAXvfMkkoh7kH6mxMRHOA8KNAQgBney5Y3K+K1ZppEwc1ErQRnCPx9eZHJ1aa5
+         S24WGTHQV8n6b+OqrAkSeuLtNjn/vGTFCcu9mscw+crHTn8N2rBmRgkOMlDR2xWZ0j
+         qGOchwQVlpuiXwYIzziaV+IIVxPcXWlFNkIUaSFA=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21S6GvUs019229
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 00:16:57 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
+ Feb 2022 00:16:56 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 28 Feb 2022 00:16:56 -0600
+Received: from [10.250.232.174] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21S6GqAI057462;
+        Mon, 28 Feb 2022 00:16:53 -0600
+Subject: Re: [PATCH v2] PCI: endpoint: Use blocking notifier instead of atomic
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <lorenzo.pieralisi@arm.com>, Vidya Sagar <vidyas@nvidia.com>
+CC:     <kw@linux.com>, <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <dmitry.baryshkov@linaro.org>
+References: <20220228055240.24774-1-manivannan.sadhasivam@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <e151083b-c15a-7baa-3423-84bd1881105a@ti.com>
+Date:   Mon, 28 Feb 2022 11:46:52 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <20220228055240.24774-1-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,27 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgRmVicnVhcnkgMjAyMiAyMTowNQ0KLi4u
-DQo+IEFuZCB0aGVuIHRoZSBDIHN0YW5kYXJkcyBwZW9wbGUgZGVjaWRlZCB0aGF0ICJiZWNhdXNl
-IG91ciBqb2IgaXNuJ3QgdG8NCj4gZGVzY3JpYmUgYWxsIHRoZSBhcmNoaXRlY3R1cmFsIGlzc3Vl
-cyB5b3UgY2FuIGhpdCwgd2UnbGwgY2FsbCBpdA0KPiB1bmRlZmluZWQsIGFuZCBpbiB0aGUgcHJv
-Y2VzcyBsZXQgY29tcGlsZXIgcGVvcGxlIGludGVudGlvbmFsbHkgYnJlYWsNCj4gaXQiLg0KPiAN
-Cj4gVEhBVCBpcyBhIHByb2JsZW0uDQoNCkknbSB3YWl0aW5nIGZvciB0aGVtIHRvIGRlY2lkZSB0
-aGF0IG1lbXNldChwdHIsIDAsIGxlbikgb2YNCmFueSBzdHJ1Y3R1cmUgdGhhdCBjb250YWlucyBh
-IHBvaW50ZXIgaXMgVUIgKGJlY2F1c2UgYSBOVUxMDQpwb2ludGVyIG5lZWQgbm90IGJlIHRoZSBh
-bGwgemVybyBiaXQgcGF0dGVybikgc28gZGVjaWRlDQp0byBkaXNjYXJkIHRoZSBjYWxsIGNvbXBs
-ZXRlbHkgKG9yIHNvbWUgc3VjaCkuDQoNCk5vbi16ZXJvIE5VTEwgcG9pbnRlcnMgaXMgdGhlIG9u
-bHkgcmVhc29uIGFyaXRobWV0aWMgb24gTlVMTA0KcG9pbnRlcnMgaXNuJ3QgdmFsaWQuDQoNCk9y
-IG1heWJlIHRoYXQgY2hhcmFjdGVyIHJhbmdlIHRlc3RzIGFyZSBVQiBiZWNhdXNlICcwJyB0byAn
-OScNCmRvbid0IGhhdmUgdG8gYmUgYWRqYWNlbnQgLSB0aGV5IGFyZSBldmVuIGFkamFjZW50IGlu
-IEVCQ0RJQy4NCg0KU29tZSBvZiB0aGUgJ3N0cmljdCBhbGlhc2luZycgYml0cyBhcmUgYWN0dWFs
-bHkgdXNlZnVsIHNpbmNlDQp0aGV5IGxldCB0aGUgY29tcGlsZXIgcmVvcmRlciByZWFkcyBhbmQg
-d3JpdGVzLg0KQnV0IHRoZSBkZWZpbml0aW9uIGlzIGJyYWluLWRlYWQuDQpTb21ldGltZXMgaXQg
-d291bGQgYmUgbmljZSB0byBoYXZlIGJ5dGUgd3JpdGVzIHJlb3JkZXJlZCwNCmJ1dCBldmVuIHVz
-aW5nIGludDo4IGRvZXNuJ3Qgd29yay4NCg0KSSBoYXZlIG5ldmVyIHdvcmtlZCBvdXQgd2hhdCAn
-cmVzdHJpY3QnIGFjdHVhbGx5IGRvZXMsDQppbiBhbnkgcGxhY2VzIEkndmUgdHJpZWQgaXQgZGlk
-IG5vdGhpbmcuDQpBbHRob3VnaCBJIG1heSBoYXZlIGJlZW4gaG9waW5nIGl0IHdvdWxkIHN0aWxs
-IGhlbHAgd2hlbg0KdGhlIGZ1bmN0aW9uIGdvdCBpbmxpbmVkLg0KDQoJRGF2aWQNCg0KLQ0KUmVn
-aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
-biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi Manivannan,
 
+On 28/02/22 11:22 am, Manivannan Sadhasivam wrote:
+> The use of atomic notifier causes sleeping in atomic context bug when
+> the EPC core functions are used in the notifier chain. This is due to the
+> use of epc->lock (mutex) in core functions protecting the concurrent use of
+> EPC.
+
+The notification from the controller to the function driver is used for
+propagating interrupts to function driver and should be in interrupt context.
+How it should be handled maybe left to the function driver. I don't prefer
+moving everything to blocking notifier.
+
+I'm wondering how other users for CORE_INIT didn't see this issue.
+
+Thanks,
+Kishon
+
+> 
+> So switch to blocking notifier for getting rid of the bug as it runs in
+> non-atomic context and allows sleeping in notifier chain.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+> 
+> Changes in v2:
+> 
+> * Removed the changes related to non-upstreamed patches
+> 
+>  drivers/pci/endpoint/pci-epc-core.c | 6 +++---
+>  include/linux/pci-epc.h             | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> index 3bc9273d0a08..c4347f472618 100644
+> --- a/drivers/pci/endpoint/pci-epc-core.c
+> +++ b/drivers/pci/endpoint/pci-epc-core.c
+> @@ -693,7 +693,7 @@ void pci_epc_linkup(struct pci_epc *epc)
+>  	if (!epc || IS_ERR(epc))
+>  		return;
+>  
+> -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+> +	blocking_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_epc_linkup);
+>  
+> @@ -710,7 +710,7 @@ void pci_epc_init_notify(struct pci_epc *epc)
+>  	if (!epc || IS_ERR(epc))
+>  		return;
+>  
+> -	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+> +	blocking_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_epc_init_notify);
+>  
+> @@ -774,7 +774,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+>  
+>  	mutex_init(&epc->lock);
+>  	INIT_LIST_HEAD(&epc->pci_epf);
+> -	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
+> +	BLOCKING_INIT_NOTIFIER_HEAD(&epc->notifier);
+>  
+>  	device_initialize(&epc->dev);
+>  	epc->dev.class = pci_epc_class;
+> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+> index a48778e1a4ee..04a2e74aed63 100644
+> --- a/include/linux/pci-epc.h
+> +++ b/include/linux/pci-epc.h
+> @@ -149,7 +149,7 @@ struct pci_epc {
+>  	/* mutex to protect against concurrent access of EP controller */
+>  	struct mutex			lock;
+>  	unsigned long			function_num_map;
+> -	struct atomic_notifier_head	notifier;
+> +	struct blocking_notifier_head	notifier;
+>  };
+>  
+>  /**
+> @@ -195,7 +195,7 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
+>  static inline int
+>  pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
+>  {
+> -	return atomic_notifier_chain_register(&epc->notifier, nb);
+> +	return blocking_notifier_chain_register(&epc->notifier, nb);
+>  }
+>  
+>  struct pci_epc *
+> 

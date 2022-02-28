@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67B74C7416
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072894C72F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbiB1RlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S237048AbiB1RbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238588AbiB1RiB (ORCPT
+        with ESMTP id S236622AbiB1R26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:38:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9928B5715F;
-        Mon, 28 Feb 2022 09:33:24 -0800 (PST)
+        Mon, 28 Feb 2022 12:28:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC36710F4;
+        Mon, 28 Feb 2022 09:28:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EABDC61374;
-        Mon, 28 Feb 2022 17:33:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B271C340E7;
-        Mon, 28 Feb 2022 17:33:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01CCAB815B1;
+        Mon, 28 Feb 2022 17:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535B9C340F0;
+        Mon, 28 Feb 2022 17:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069603;
-        bh=AlViE/H7ZXnf4ci5Vul7W8Ps8FfyT9x32LR/bzpcLZs=;
+        s=korg; t=1646069285;
+        bh=6D/k4W2XyKIc8/OLA2hacXN7jTCNa6Cnryitd6XkD18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=siy4q2CVDfE4pCvgYF/rblB55H/t5ZVPUQd/EsLRWYc2XArz14ksT0acaYRZuayre
-         eusmUGzuHcjW38ZkXUmfudVFja/DPrimZZeBc1DKHTt4y70+3a3nz+YA5MsrWgvznJ
-         gncBA/T43I8iK0mI9RXP3tEgfZSr5Kpgds7thrUU=
+        b=ERqK8+92x4h3YC3OhFgPVuCM4wP4RoZcbLp6h6M6EIn/DaCX6WC4ly/TUvBQOOKvP
+         n6HQVhNAgHyfo+wRWQHG/hsvOu8y1Ti7Htt/vfpkr/anKWLkb+gVMIszBMImKzPeKp
+         zXMwdJbpTOkMjAxbdm8JJ809A0cIGhWhcmsr9Lwk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH 5.10 18/80] optee: use driver internal tee_context for some rpc
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.14 03/31] parisc/unaligned: Fix fldd and fstd unaligned handlers on 32-bit kernel
 Date:   Mon, 28 Feb 2022 18:23:59 +0100
-Message-Id: <20220228172313.789030930@linuxfoundation.org>
+Message-Id: <20220228172200.189589587@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,131 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Wiklander <jens.wiklander@linaro.org>
+From: Helge Deller <deller@gmx.de>
 
-commit aceeafefff736057e8f93f19bbfbef26abd94604 upstream.
+commit dd2288f4a020d693360e3e8d72f8b9d9c25f5ef6 upstream.
 
-Adds a driver private tee_context by moving the tee_context in struct
-optee_notif to struct optee. This tee_context was previously used when
-doing internal calls to secure world to deliver notification.
+Usually the kernel provides fixup routines to emulate the fldd and fstd
+floating-point instructions if they load or store 8-byte from/to a not
+natuarally aligned memory location.
 
-The new driver internal tee_context is now also when allocating driver
-private shared memory. This decouples the shared memory object from its
-original tee_context. This is needed when the life time of such a memory
-allocation outlives the client tee_context.
+On a 32-bit kernel I noticed that those unaligned handlers didn't worked and
+instead the application got a SEGV.
+While checking the code I found two problems:
 
-This patch fixes the problem described below:
+First, the OPCODE_FLDD_L and OPCODE_FSTD_L cases were ifdef'ed out by the
+CONFIG_PA20 option, and as such those weren't built on a pure 32-bit kernel.
+This is now fixed by moving the CONFIG_PA20 #ifdef to prevent the compilation
+of OPCODE_LDD_L and OPCODE_FSTD_L only, and handling the fldd and fstd
+instructions.
 
-The addition of a shutdown hook by commit f25889f93184 ("optee: fix tee out
-of memory failure seen during kexec reboot") introduced a kernel shutdown
-regression that can be triggered after running the OP-TEE xtest suites.
+The second problem are two bugs in the 32-bit inline assembly code, where the
+wrong registers where used. The calculation of the natural alignment used %2
+(vall) instead of %3 (ior), and the first word was stored back to address %1
+(valh) instead of %3 (ior).
 
-Once the shutdown hook is called it is not possible to communicate any more
-with the supplicant process because the system is not scheduling task any
-longer. Thus if the optee driver shutdown path receives a supplicant RPC
-request from the OP-TEE we will deadlock the kernel's shutdown.
-
-Fixes: f25889f93184 ("optee: fix tee out of memory failure seen during kexec reboot")
-Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
-Reported-by: Lars Persson <larper@axis.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Cc: stable@vger.kernel.org
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-[JW: backport to 5.10-stable + update commit message]
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tee/optee/core.c          |    8 ++++++++
- drivers/tee/optee/optee_private.h |    2 ++
- drivers/tee/optee/rpc.c           |    8 +++++---
- 3 files changed, 15 insertions(+), 3 deletions(-)
+ arch/parisc/kernel/unaligned.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/tee/optee/core.c
-+++ b/drivers/tee/optee/core.c
-@@ -588,6 +588,7 @@ static int optee_remove(struct platform_
- 	/* Unregister OP-TEE specific client devices on TEE bus */
- 	optee_unregister_devices();
- 
-+	teedev_close_context(optee->ctx);
- 	/*
- 	 * Ask OP-TEE to free all cached shared memory objects to decrease
- 	 * reference counters and also avoid wild pointers in secure world
-@@ -633,6 +634,7 @@ static int optee_probe(struct platform_d
- 	struct optee *optee = NULL;
- 	void *memremaped_shm = NULL;
- 	struct tee_device *teedev;
-+	struct tee_context *ctx;
- 	u32 sec_caps;
- 	int rc;
- 
-@@ -719,6 +721,12 @@ static int optee_probe(struct platform_d
- 	optee_supp_init(&optee->supp);
- 	optee->memremaped_shm = memremaped_shm;
- 	optee->pool = pool;
-+	ctx = teedev_open(optee->teedev);
-+	if (IS_ERR(ctx)) {
-+		rc = PTR_ERR(ctx);
-+		goto err;
+--- a/arch/parisc/kernel/unaligned.c
++++ b/arch/parisc/kernel/unaligned.c
+@@ -411,7 +411,7 @@ static int emulate_std(struct pt_regs *r
+ 	__asm__ __volatile__ (
+ "	mtsp	%4, %%sr1\n"
+ "	zdep	%2, 29, 2, %%r19\n"
+-"	dep	%%r0, 31, 2, %2\n"
++"	dep	%%r0, 31, 2, %3\n"
+ "	mtsar	%%r19\n"
+ "	zvdepi	-2, 32, %%r19\n"
+ "1:	ldw	0(%%sr1,%3),%%r20\n"
+@@ -423,7 +423,7 @@ static int emulate_std(struct pt_regs *r
+ "	andcm	%%r21, %%r19, %%r21\n"
+ "	or	%1, %%r20, %1\n"
+ "	or	%2, %%r21, %2\n"
+-"3:	stw	%1,0(%%sr1,%1)\n"
++"3:	stw	%1,0(%%sr1,%3)\n"
+ "4:	stw	%%r1,4(%%sr1,%3)\n"
+ "5:	stw	%2,8(%%sr1,%3)\n"
+ "	copy	%%r0, %0\n"
+@@ -611,7 +611,6 @@ void handle_unaligned(struct pt_regs *re
+ 		ret = ERR_NOTHANDLED;	/* "undefined", but lets kill them. */
+ 		break;
+ 	}
+-#ifdef CONFIG_PA20
+ 	switch (regs->iir & OPCODE2_MASK)
+ 	{
+ 	case OPCODE_FLDD_L:
+@@ -622,14 +621,15 @@ void handle_unaligned(struct pt_regs *re
+ 		flop=1;
+ 		ret = emulate_std(regs, R2(regs->iir),1);
+ 		break;
++#ifdef CONFIG_PA20
+ 	case OPCODE_LDD_L:
+ 		ret = emulate_ldd(regs, R2(regs->iir),0);
+ 		break;
+ 	case OPCODE_STD_L:
+ 		ret = emulate_std(regs, R2(regs->iir),0);
+ 		break;
+-	}
+ #endif
 +	}
-+	optee->ctx = ctx;
- 
- 	/*
- 	 * Ensure that there are no pre-existing shm objects before enabling
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -70,6 +70,7 @@ struct optee_supp {
-  * struct optee - main service struct
-  * @supp_teedev:	supplicant device
-  * @teedev:		client device
-+ * @ctx:		driver internal TEE context
-  * @invoke_fn:		function to issue smc or hvc
-  * @call_queue:		queue of threads waiting to call @invoke_fn
-  * @wait_queue:		queue of threads from secure world waiting for a
-@@ -87,6 +88,7 @@ struct optee {
- 	struct tee_device *supp_teedev;
- 	struct tee_device *teedev;
- 	optee_invoke_fn *invoke_fn;
-+	struct tee_context *ctx;
- 	struct optee_call_queue call_queue;
- 	struct optee_wait_queue wait_queue;
- 	struct optee_supp supp;
---- a/drivers/tee/optee/rpc.c
-+++ b/drivers/tee/optee/rpc.c
-@@ -284,6 +284,7 @@ static struct tee_shm *cmd_alloc_suppl(s
- }
- 
- static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-+					  struct optee *optee,
- 					  struct optee_msg_arg *arg,
- 					  struct optee_call_ctx *call_ctx)
- {
-@@ -313,7 +314,8 @@ static void handle_rpc_func_cmd_shm_allo
- 		shm = cmd_alloc_suppl(ctx, sz);
- 		break;
- 	case OPTEE_MSG_RPC_SHM_TYPE_KERNEL:
--		shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
-+		shm = tee_shm_alloc(optee->ctx, sz,
-+				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
- 		break;
- 	default:
- 		arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-@@ -470,7 +472,7 @@ static void handle_rpc_func_cmd(struct t
- 		break;
- 	case OPTEE_MSG_RPC_CMD_SHM_ALLOC:
- 		free_pages_list(call_ctx);
--		handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
-+		handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
- 		break;
- 	case OPTEE_MSG_RPC_CMD_SHM_FREE:
- 		handle_rpc_func_cmd_shm_free(ctx, arg);
-@@ -501,7 +503,7 @@ void optee_handle_rpc(struct tee_context
- 
- 	switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
- 	case OPTEE_SMC_RPC_FUNC_ALLOC:
--		shm = tee_shm_alloc(ctx, param->a1,
-+		shm = tee_shm_alloc(optee->ctx, param->a1,
- 				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
- 		if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
- 			reg_pair_from_64(&param->a1, &param->a2, pa);
+ 	switch (regs->iir & OPCODE3_MASK)
+ 	{
+ 	case OPCODE_FLDW_L:
 
 

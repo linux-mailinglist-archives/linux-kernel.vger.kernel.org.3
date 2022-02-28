@@ -2,97 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC9A4C716D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 487924C7173
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbiB1QNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S237828AbiB1QOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237824AbiB1QNK (ORCPT
+        with ESMTP id S237817AbiB1QOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:13:10 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564F812637
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:12:29 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bg10so25824204ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:12:29 -0800 (PST)
+        Mon, 28 Feb 2022 11:14:12 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD94396AA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:13:33 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id g39so22165905lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:13:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C7YxRKyreH48dZQ9Yk60m9yefrarInHQlSucfyX1K2c=;
-        b=dytKXHw+tT3Dhd0aDmsdHtTQ6xXuj/mNxJogs8WbLKzqOu4qsyvH0GyZ4xkWtWw8gH
-         dPejxY/E3QgnqEiCvNufipZss0cvtgzkPSCLR+i6luHumAwcDeOqAhtCRMg/aJPIdR6w
-         9jS98MbQg4oI3x5yQ3RgLZHxhtWvyWv47ZuVix5koe5qTYoPi9hItK1fpfK+Kpeq2FbS
-         YOnGG8E/v5J88ghaG0S/BIbvFE5aukRhLxBesUdOYDjf7z4Costh80kY8EY5xinm3WIG
-         /5KFSLpnxXUa3lsMwFKNq6SJcca5swmpGpTS7vhNJKGN9r7MJdJI4/E36IM+u6hLNg+z
-         q8Yg==
+        bh=aj7ohy06sMocjpRr7VZziDX9Znc+y574ZQOuLLO9Ujc=;
+        b=w8xFoxchmHuUDWSWIr1m6mGNR6QoP/Fkox6tNxODLRHvHOdqf9pAqIoK8/XrJ7sHc9
+         XM5W5YdyH4w05cP766eT945ueHGFLySs0dT2QHLWngzOsr/hbmx9tevQJyU+XTL57HdT
+         ajGIIzFSBnly4VtG8mQC7Z3poAmBiopPqJ6ULBOqT4Ik6srf4xCR5L1K+EtQM5QTjWVQ
+         L47zDYUutuH2hzqZ7NahI0n1+nRJpkDhW1NRYqV4TegLZtdeU+mfG96bvfWZ01lMEOk3
+         sQFHLwC/tMagzFhuDQiAfKao32H7O9/xPui6f+K4/ahLSDIiX8sv8BUDtZekvYNthp11
+         e3mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C7YxRKyreH48dZQ9Yk60m9yefrarInHQlSucfyX1K2c=;
-        b=J/BZmJcrMgnkM79MfnB+IqWtGl57J/eU9USmJw1lgn4vY+AYYWFatyskrPl/XIfzIk
-         Yz3qOYMkP7qB35vlKHOcbb11qN9omPauVsqzoAjZ6k7eUlW9kUZSfU9sKxWpuummH+o5
-         SjFYKxZpVb9WhRO5d/5qS6rryYbIOsW81b+AZgQVOgY81vO2F7tOwXXFcF8fUGWptabm
-         MwpN9K6bXZ4hN89qhpuGsasP30shAQknIXL3Xxf61+hpvLTByU4c10nfw6hmg3Qbedmi
-         GDo/Qhm+5PkWupHwmKAXAUj5An13gPCLX7KNoDCkGECR53k3eLGHkV5I+AuuNA/XcNcJ
-         mz1A==
-X-Gm-Message-State: AOAM533AUfpF92oHl0EHmXYoya6N9PB5Hubj/Rtcz+XObjnFT6oK2Ana
-        4YB7rhTGDq3R3m2+y3rS6/2RZO96Q1+bexv5G0A3
-X-Google-Smtp-Source: ABdhPJwmNFw9jVOzTMa+rnTNBvLLbYSTrhnzeA8q7epUUzrGh/oXw1/rmJAMVcVzlFpgDwpFXk216nyT5GA8CYCzPbg=
-X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
- rl15-20020a170907216f00b006ced85f35cfmr15832693ejb.517.1646064748150; Mon, 28
- Feb 2022 08:12:28 -0800 (PST)
+        bh=aj7ohy06sMocjpRr7VZziDX9Znc+y574ZQOuLLO9Ujc=;
+        b=r1BTE7nQOAC01nZgtHkNDFN0N7XCKdU88LVLgf29XdXVLVv50HE5jW1lgX1RWjKzHy
+         W0V+4rZNrZZ5Sc+9EiGaiCy5i8h6M9CbvaBhaZN6ZdZS27xeCdJj9jadG1CeqTFPdXOU
+         ry1Lu0Q4yaoD3++n42+2oAd6cBh0Jz3eFpsHQEC+xGpzyDX94lngEoB+pQi0Fmqtnxw7
+         t2TxT0yUjaiAD5Niu3CD2rMM32C7udGszmgIOIHmFWFGTKm34e0bi8iuahjqa8KlqucY
+         AcZK7GenHKF+yeotAgMKid+JIJulD3gnkcasPeydoDUoSpPIlK42x/+1xkmDN5K1r4VI
+         gNpg==
+X-Gm-Message-State: AOAM530PG24cxMMoM4sG8+WXhMbVR5Zh//vNoh845/6qbadHtULJ5Ek/
+        5Pgg/lDgBKzDxXj2KWIkpX4lT6fc+EEuKwPhYEPQnw==
+X-Google-Smtp-Source: ABdhPJwb8L4XXbmlNDwOvZjuKWEIzxBEm2q8c2oLQ6pda77hgpnw7LP1z8YK99bj5SrelYP+NZwELijfzodQzpA0P3Q=
+X-Received: by 2002:a05:6512:3604:b0:443:5d4b:3760 with SMTP id
+ f4-20020a056512360400b004435d4b3760mr13142342lfs.358.1646064811622; Mon, 28
+ Feb 2022 08:13:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228025646.1665265-1-wanjiabing@vivo.com>
-In-Reply-To: <20220228025646.1665265-1-wanjiabing@vivo.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 28 Feb 2022 11:12:17 -0500
-Message-ID: <CAHC9VhTjKyfn5AJAOx6ZxDsFk7e8JTkV48JAk6PbHRyx=uy4HQ@mail.gmail.com>
-Subject: Re: [PATCH] docs: fix 'make htmldocs' warning in SCTP.rst
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Xin Long <lucien.xin@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiabing.wan@qq.com, selinux@vger.kernel.org
+References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+In-Reply-To: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 28 Feb 2022 17:12:55 +0100
+Message-ID: <CAPDyKFrYWgCbwk6-hNZjtx4mdn7Sx1NJLie+f8wEjS==_HXR5Q@mail.gmail.com>
+Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 9:57 PM Wan Jiabing <wanjiabing@vivo.com> wrote:
+On Tue, 22 Feb 2022 at 08:28, Ricky WU <ricky_wu@realtek.com> wrote:
 >
-> Fix following 'make htmldocs' warnings:
-> ./Documentation/security/SCTP.rst:123: WARNING: Title underline too short.
-> security_sctp_assoc_established()
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./Documentation/security/SCTP.rst:123: WARNING: Title underline too short.
-> security_sctp_assoc_established()
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./Documentation/security/SCTP.rst:273: WARNING: Title underline too short.
-> security_sctp_assoc_established()
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./Documentation/security/SCTP.rst:273: WARNING: Title underline too short.
-> security_sctp_assoc_established()
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> After 1ms stabilizing the voltage time
+> add "Host provides at least 74 Clocks
+> before issuing first command" that is
+> spec definition
 >
-> Fixes: 5e50f5d4ff31 ("security: add sctp_assoc_established hook")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
 > ---
->  Documentation/security/SCTP.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> index 2a3f14afe9f8..e016d720e453 100644
+> --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> @@ -940,10 +940,17 @@ static int sd_power_on(struct realtek_pci_sdmmc *host)
+>         if (err < 0)
+>                 return err;
+>
+> +       mdelay(1);
+> +
+>         err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
+>         if (err < 0)
+>                 return err;
+>
+> +       /* send init 74 clocks */
+> +       rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
+> +       mdelay(5);
+> +       rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
+> +
+>         if (PCI_PID(pcr) == PID_5261) {
+>                 /*
+>                  * If test mode is set switch to SD Express mandatorily,
 
-Merged into selinux/next, thanks for the patch!
+As you probably are aware of, the mmc core uses three power states
+(MMC_POWER_ON, MMC_POWER_UP and MMC_POWER_OFF) to manage the
+initialization, while it invokes the ->set_ios() callback for the mmc
+host driver. During these steps the core also tries to manage the
+different delays that are needed according to the eMMC/SD specs. You
+may have a look at mmc_power_up() in drivers/mmc/core/core.c. In the
+rtsx case, MMC_POWER_ON and MMC_POWER_UP are treated as one single
+step.
 
--- 
-paul-moore.com
+Moreover, it has turned out that some mmc HWs are actually controlling
+these delays during the initialization themselves, which makes the
+delays in the core superfluous. Therefore we have made the delays
+configurable for host drivers. For DT based platforms, we have the DT
+property "post-power-on-delay-ms" and for others, it's perfectly fine
+to update host->power_delay_ms before calling mmc_add_host().
+
+Would it be possible to take advantage of the above "features" from
+the core, to avoid hard coded and superfluous delays?
+
+Kind regards
+Uffe

@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2B54C626E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C9E4C6271
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiB1FUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 00:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S233052AbiB1FVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 00:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiB1FUP (ORCPT
+        with ESMTP id S230376AbiB1FVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 00:20:15 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613939154;
-        Sun, 27 Feb 2022 21:19:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E6BD921155;
-        Mon, 28 Feb 2022 05:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646025575; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OsOdRKyOPTsqFVySVeje99MCazN8FHXIRZGctTB3Fjc=;
-        b=1aDnYNyCMKoqi7852ELng+RjN9qj4H3oZKIs6lZKTxoiwJvkWraBZGmj+Lgr7uB+1SHFJz
-        Yh2mZu17ZFxMhdj6twoLK7xeDGS6uw7JuUWs/fN+ewmZBdcdER+polBa/xGaRr74gldhFA
-        Ag1t4rw/IZDJ70lWUTD3DCkE1pDKQVg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646025575;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OsOdRKyOPTsqFVySVeje99MCazN8FHXIRZGctTB3Fjc=;
-        b=ETy1bbk4AvRTgoyR516RJsfNTn47d24xVl6EFjxT7PerkTAmm+E/x1KFcnx2xiTY9paC/z
-        4vNKWy2UyfSPGfDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E5C712FC5;
-        Mon, 28 Feb 2022 05:19:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5BzICmBbHGIXfAAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 28 Feb 2022 05:19:28 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 28 Feb 2022 00:21:31 -0500
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A58939B83
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:20:54 -0800 (PST)
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id F2F3FE15;
+        Mon, 28 Feb 2022 05:20:52 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id BECCA60010;
+        Mon, 28 Feb 2022 05:20:13 +0000 (UTC)
+Message-ID: <e5c1ba2f7db29b78066d12dab812b7a1c0a37a81.camel@perches.com>
+Subject: Re: [PATCH v4 2/2] ALSA: core: Remove redundant variable and return
+ the last statement
+From:   Joe Perches <joe@perches.com>
+To:     Meng Tang <tangmeng@uniontech.com>, perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Date:   Sun, 27 Feb 2022 21:20:45 -0800
+In-Reply-To: <20220228050253.1649-2-tangmeng@uniontech.com>
+References: <20220228050253.1649-1-tangmeng@uniontech.com>
+         <20220228050253.1649-2-tangmeng@uniontech.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     "Jan Kara" <jack@suse.cz>, "Wu Fengguang" <fengguang.wu@intel.com>,
-        "Jaegeuk Kim" <jaegeuk@kernel.org>, "Chao Yu" <chao@kernel.org>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "Ilya Dryomov" <idryomov@gmail.com>,
-        "Miklos Szeredi" <miklos@szeredi.hu>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "Philipp Reisner" <philipp.reisner@linbit.com>,
-        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Jens Axboe" <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH 02/11] MM: document and polish read-ahead code.
-In-reply-to: <20220227204728.b2eb5dd94ecc3e86912bacad@linux-foundation.org>
-References: <164447124918.23354.17858831070003318849.stgit@noble.brown>,
- <164447147257.23354.2801426518649016278.stgit@noble.brown>,
- <20220210122440.vqth5mwsqtv6vjpq@quack3.lan>,
- <164453611721.27779.1299851963795418722@noble.neil.brown.name>,
- <20220224182622.n7abfey3asszyq3x@quack3.lan>,
- <164602251992.20161.9146570952337454229@noble.neil.brown.name>,
- <20220227204728.b2eb5dd94ecc3e86912bacad@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 16:19:24 +1100
-Message-id: <164602556430.20161.5451268677064506613@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: BECCA60010
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: hruc7nct77mkwtg4ah8jw8qrpgawattj
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19B4PH4dJJF2uojux2T7euYun9bMLaYrIU=
+X-HE-Tag: 1646025613-188090
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022, Andrew Morton wrote:
-> On Mon, 28 Feb 2022 15:28:39 +1100 "NeilBrown" <neilb@suse.de> wrote:
+On Mon, 2022-02-28 at 13:02 +0800, Meng Tang wrote:
+> Return the result from file->f_op->open() directly instead of
+> taking this in another redundant variable. Make the typical
+> return the last statement, return early and reduce the indentation
+> too.
 > 
-> > When writing documentation the intent of the author is of some interest,
-> > but the behaviour of the code is paramount.
+> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> Signed-off-by: Joe Perches <joe@perches.com>
+
+Hi Meng Tang.
+
+For the next time: it's not necessary (or even good) to add a sign-off
+for another person unless they specifically authorize one.
+
+You wrote and are submitting these changes, I merely gave you simple
+suggestions as to how you could improve them.
+
+cheers, Joe
+
+> ---
+>  sound/sound_core.c | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 > 
-> uh, er, ah, no.  The code describes the behaviour of the code.  The
-> comments are there to describe things other than the code's behaviour.
-> Things such as the author's intent.
-> 
-> Any deviation between the author's intent and the code's behaviour is
-> called a "bug", so it's pretty important to understand authorial
-> intent, no?
+> diff --git a/sound/sound_core.c b/sound/sound_core.c
+> index aa4a57e488e5..3332fe321737 100644
+> --- a/sound/sound_core.c
+> +++ b/sound/sound_core.c
+> @@ -577,20 +577,20 @@ static int soundcore_open(struct inode *inode, struct file *file)
+>  			new_fops = fops_get(s->unit_fops);
+>  	}
+>  	spin_unlock(&sound_loader_lock);
+> -	if (new_fops) {
+> -		/*
+> -		 * We rely upon the fact that we can't be unloaded while the
+> -		 * subdriver is there.
+> -		 */
+> -		int err = 0;
+> -		replace_fops(file, new_fops);
+>  
+> -		if (file->f_op->open)
+> -			err = file->f_op->open(inode,file);
+> +	if (!new_fops)
+> +		return -ENODEV;
+>  
+> -		return err;
+> -	}
+> -	return -ENODEV;
+> +	/*
+> +	 * We rely upon the fact that we can't be unloaded while the
+> +	 * subdriver is there.
+> +	 */
+> +	replace_fops(file, new_fops);
+> +
+> +	if (!file->f_op->open)
+> +		return -ENODEV;
+> +
+> +	return file->f_op->open(inode, file);
+>  }
+>  
+>  MODULE_ALIAS_CHARDEV_MAJOR(SOUND_MAJOR);
 
-When the author is writing the documentation - then yes - definitely. 
-When the "author" is several different people over a period of years,
-then it is not even certain that there is a single unified "intent".
 
-The author's intent is less interesting not so much because it is less
-relevant, but because it is less available.
-
-So when writing third-party post-hoc documentation, the focus has to be
-on the code, though with reference to the intent to whatever extent it
-is available.  Bugs then show up where the actual behaviour turns out to
-be impossible to document coherently.
-
-Thanks,
-NeilBrown

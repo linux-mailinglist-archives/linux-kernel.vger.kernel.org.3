@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19394C7AB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BF64C7AB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiB1UmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S229829AbiB1Umd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiB1UmK (ORCPT
+        with ESMTP id S229821AbiB1Um3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:42:10 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F098722B12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:30 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id s25so19099064lji.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:30 -0800 (PST)
+        Mon, 28 Feb 2022 15:42:29 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EAC17AB2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:50 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso259546pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qhbC6eV8gO++7ErI4p8jtmcwHU0MP2/Ov9cpdMFArow=;
-        b=WVa5dIiqx38h7wrDwDC1XUsKJKiBFCag4a2cDDwm9PX3cUtT8qqZ7IT4jQUgf/P4m+
-         SFGMe+WsS02R4cGzO91FNZKGdT/lUA2soxV9cxmDWvmKG61T36jSK+GypeHu4wmj47J3
-         J2dEWo9WRu5EKgz1ZgjNDbSUreOeJ25KIOWY4=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wer/Oz2nOAI419q72n4sbW/GCj0W5Nx8xz2+Rlt0xdI=;
+        b=EPfWBDQTZQfFwTLJ9+iWGHrZjstF+IJdDCO2XmrpedQZl8eoQHqJA+/JViu23cwxXh
+         4cMj/vzH9luSjFoMSUEnTyFggS72ppUy5QkoOhB1ZLmlYGZVjojhreHYu2ecNsLh0VEG
+         gCNAXqAhIEMo9kYwHuvCozq3SDVVbHt3LuY2o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qhbC6eV8gO++7ErI4p8jtmcwHU0MP2/Ov9cpdMFArow=;
-        b=kKEFQ+aKOIaxWhJGJ12sKZVy3AZcXsyh+THstX69xDpAi89nqSHjFWAkRYTK1HokfK
-         8zn2mG+HMm/s5C59H3B4hUX6lenULe1W13Pz2FMidPWiAmQ9rA8ilSQDhW1lVqhOSyXU
-         ztv2+4LB0sfFDsF2YpebHEdXcHK5dnPGfswIpjojNIW+46qeLO0C7Nlf8DLmIW3z667Q
-         ilytAITOgB7+EioHJNj4lR767qlpMvr1PRt9xkOHLUlfE06QgHq7YrObDz/OgQY3nmTl
-         +asYweIWukdKZHgs0Gwp3y4KDjMhETc4580WqGCTbRmdn30B4PrDsuL9qV2xvJ3oQIbt
-         se6w==
-X-Gm-Message-State: AOAM5325s0UimxbcWeHW+mJzvm6y3AkW6M2edgcHXoL6iaPp5/jxkRKB
-        nKS5GpNqEA8eE//+KdzHXh5KvIj2o1J/VyETcIU=
-X-Google-Smtp-Source: ABdhPJymvm4fmA9qSyND2QdW6+jFjGIjLnQ6Qv/MohUrDJiXCPJ1dbKYuqtlGed9Q+aMCn2KrnQoxQ==
-X-Received: by 2002:a2e:8e7b:0:b0:246:355:fbc0 with SMTP id t27-20020a2e8e7b000000b002460355fbc0mr14926073ljk.356.1646080889349;
-        Mon, 28 Feb 2022 12:41:29 -0800 (PST)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id y16-20020ac24470000000b00445a97a7928sm145136lfl.290.2022.02.28.12.41.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:41:29 -0800 (PST)
-Received: by mail-lf1-f52.google.com with SMTP id t13so11430869lfd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:41:28 -0800 (PST)
-X-Received: by 2002:a05:6512:e8a:b0:443:7b8c:579a with SMTP id
- bi10-20020a0565120e8a00b004437b8c579amr13784522lfb.687.1646080877791; Mon, 28
- Feb 2022 12:41:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wer/Oz2nOAI419q72n4sbW/GCj0W5Nx8xz2+Rlt0xdI=;
+        b=kexXhujcmJyP3jcoruuGRi/83yiYE6sDDmWugAuCImKCEP2KrkAos/HcQUAU+4LuKY
+         LY5r6X5BGi73sOEf8K4fKmKPD3zjAyusyC0lG1D+KtqnRY4gGIW+9MIU9vziD8QDoS2J
+         JNgl9nTMc9ItgvzaQPVtRJxkw32sevbXy2eucEOsUuJ7qMi5z8xP/JdQ0ZD+73gVkTLO
+         aKkr/aEYhCMv5pvNOkIhO2yefF4PvcHAN3PIoKz7Gq2taFbGXnVBKtVMLnlxt6BtvHYT
+         3vGIgUVt+fR2LGw25R1SpRIKLz35pUm+gMGjkih0PRLrm1rJ40ABs/PtXCUqWa/7t7Te
+         TO3w==
+X-Gm-Message-State: AOAM533d/aPatAiZDHaZ29yEUKc14EomnyKpbbYPX3D89Ua4FKg4e+IX
+        8xQWzi+Y2dWcsrzIAZedgA1nRQ==
+X-Google-Smtp-Source: ABdhPJy3Ync6bess6WVePu+xmx/XAAZ+UJXR4GrnPlEoCAlv3kx6LFgNA1dRDLp+plPQLZbHhc+glA==
+X-Received: by 2002:a17:903:2482:b0:150:15ed:3cd3 with SMTP id p2-20020a170903248200b0015015ed3cd3mr21772341plw.147.1646080908566;
+        Mon, 28 Feb 2022 12:41:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t38-20020a056a0013a600b004e1a0c14000sm15037898pfg.209.2022.02.28.12.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 12:41:48 -0800 (PST)
+Date:   Mon, 28 Feb 2022 12:41:47 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Magnus =?iso-8859-1?Q?Gro=DF?= <magnus.gross@rwth-aachen.de>
+Cc:     akpm@linux-foundation.org, anthony.yznaga@oracle.com,
+        glaubitz@physik.fu-berlin.de, linux-fsdevel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        matoro_bugzilla_kernel@matoro.tk,
+        matoro_mailinglist_kernel@matoro.tk, regressions@leemhuis.info,
+        regressions@lists.linux.dev, viro@zeniv.linux.org.uk
+Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
+Message-ID: <202202281240.8BCFBB47ED@keescook>
+References: <202202260344.63C15C3356@keescook>
+ <Yhyn9cjDV8XfXLHm@fractal.localdomain>
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org> <e3bb7d0632f8ef60f18c19976d57330e1ef00584.camel@sipsolutions.net>
-In-Reply-To: <e3bb7d0632f8ef60f18c19976d57330e1ef00584.camel@sipsolutions.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 12:41:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjNgWNa9njuBJEoafc-cRV3SbzZfh3m5YfxcZxdCw3+XQ@mail.gmail.com>
-Message-ID: <CAHk-=wjNgWNa9njuBJEoafc-cRV3SbzZfh3m5YfxcZxdCw3+XQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yhyn9cjDV8XfXLHm@fractal.localdomain>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:29 PM Johannes Berg
-<johannes@sipsolutions.net> wrote:
->
-> If we're willing to change the API for the macro, we could do
->
->   list_for_each_entry(type, pos, head, member)
->
-> and then actually take advantage of -Wshadow?
+On Mon, Feb 28, 2022 at 11:46:13AM +0100, Magnus Groß wrote:
+> > When the kernel tries to map these with a combined allocation, it asks
+> > for a giant mmap of the file, but the file is, of course, not at all
+> > that large, and the mapping is rejected.
+> 
+> > So... I'm trying to think about how best to deal with this. If I or
+> > anyone else can't think of an elegant solution, I'll send a revert for
+> > the offending patch next week.
+> 
+> Shouldn't we just be able to patch total_mapping_size() again to instead
+> sum up all p_memsz fields, instead of comparing minimum and maximum
+> p_vaddr?
 
-See my reply to Willy. There is no way -Wshadow will ever happen.
+I don't think so, and I need to have a "minimal change" to fix this so
+it's more obviously correct.
 
-I considered that (type, pos, head, member) kind of thing, to the
-point of trying it for one file, but it ends up as horrendous syntax.
-It turns out that declaring the type separately really helps, and
-avoids crazy long lines among other things.
+And, apologies, I failed to Cc you on this patch:
+https://lore.kernel.org/linux-hardening/20220228194613.1149432-1-keescook@chromium.org/
 
-It would be unacceptable for another reason too - the amount of churn
-would just be immense. Every single use of that macro (and related
-macros) would change, even the ones that really don't need it or want
-it (ie the good kinds that already only use the variable inside the
-loop).
-
-So "typeof(pos) pos" may be ugly - but it's a very localized ugly.
-
-                    Linus
+-- 
+Kees Cook

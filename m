@@ -2,326 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A524C6C0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D3D4C6C0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiB1MU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S236220AbiB1MUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236221AbiB1MUu (ORCPT
+        with ESMTP id S230449AbiB1MUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:20:50 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A53970861;
-        Mon, 28 Feb 2022 04:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646050780;
-        bh=eDnjD3CV02Uc/By04jlSmoifwR/p3yucck7qbvDxUlY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=B9BCTw46CSs6HdScf5XBawxD261BdUGbcVtvaZsdJDHi2aw34dyIzFwrX9OopqveD
-         I2FtTc+nyZ9E4u5CgcH5n9+D6ghZCxaA62EeLjBh5jeEx35r22YPOwqDwutzAbWIrT
-         /KLD3QdJm0+k9AFS8CXSWx8hQUCYiEv4XnfOeZNc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.79.12] ([80.245.79.12]) by web-mail.gmx.net
- (3c-app-gmx-bs53.server.lan [172.19.170.137]) (via HTTP); Mon, 28 Feb 2022
- 13:19:40 +0100
+        Mon, 28 Feb 2022 07:20:43 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E03370849;
+        Mon, 28 Feb 2022 04:20:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso5909907wmr.1;
+        Mon, 28 Feb 2022 04:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=B9KPXGBV8XeBFR96gx9t3FKmchXb8YlGJUSowJjg6ms=;
+        b=HpUyXhZwxIiaan3Olcan07zCz47EX5Sv/2pZkLusvEuhFfKY5sj9Ue3T84Ivqe8J7V
+         ZMhX3y0JMMacHMqIQLPt525WUIGkvWrnlTDJoegmp8bXXuRuOj/VKH1X7c8Hvd7/S9oF
+         sd1PJZCmrfniXsWT56bFzdz/BWg85a04SrqvYR0glCKiTvMF5StS+8P/3NmSz92ui0r/
+         dLRZq9H6ajWGW5zXVYNE+i/eQxa3rSclFuCo6rYWgLyZx7Qa+VFFq8AKSwJbccziWR/n
+         8Mbv0al1ZfpjNvkXmCrJY+l2NCZHRH/AnCH7GmSRfBfcYunEs0X3SKuPYD7F6NBTzkS/
+         EzeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B9KPXGBV8XeBFR96gx9t3FKmchXb8YlGJUSowJjg6ms=;
+        b=fuZTb3vwzlu34YAkBsHz5VnQ6j3wz8P99rNmDMpis+/GGaTmjCFUBwx7kcYgMV/Xmq
+         aeJBQ7K2+U39WCTe48nPfK7/i82HeB8Wa7Wn81KtKhiyM51TVgNti7AgyMuiMzL0a+59
+         m5fp3wlCk/HzDGCuoHgxMBwXnZgWvbafADoLhErrkUJGmmBPdvcKqIqZ8CWAXnpTf0D6
+         dF2nGGnWQMGhIth4+Ig2CnLuUMRBCoqRa0dgX/fp+XwN9778eDdicplN7gcCItGvAmBu
+         DXXrqSNlPYrpv0FIRxbV4nrImPpNHVeLl3S9cvAZ5/aL+yZmnm9h7lcVwS8OEPALHEbc
+         9QFg==
+X-Gm-Message-State: AOAM530RFGgWG/5acg0RhT+fbULEpxbDqsnrDkDkKMNHQvPJoTMzRfFd
+        7eHeaiwlcQYv1p49qPcL6M9B/0prbtd90A==
+X-Google-Smtp-Source: ABdhPJySWl+GKbYigYpFpy7Kr8ZzfGj4dHLEwyRIGewSS+0VgWTV0+RD7mRN2d0oFBnufCWB4/Chcw==
+X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr13248581wma.108.1646050802543;
+        Mon, 28 Feb 2022 04:20:02 -0800 (PST)
+Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
+        by smtp.gmail.com with ESMTPSA id o2-20020a056000010200b001ea9626b8fasm4033535wrx.19.2022.02.28.04.20.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 04:20:01 -0800 (PST)
+Message-ID: <817664d7-a8f1-2039-b448-c2cfdb54d667@gmail.com>
+Date:   Mon, 28 Feb 2022 13:20:00 +0100
 MIME-Version: 1.0
-Message-ID: <trinity-ac45bde6-392d-4810-8aad-9a06d2bcd85a-1646050780475@3c-app-gmx-bs53>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: mediatek: mt8186: Add binding for MM
+ iommu
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>, Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Aw: Re: [PATCH v3 1/3] dt-bindings: Convert ahci-platform DT
- bindings to yaml
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 28 Feb 2022 13:19:40 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <4c3303f5-7af5-9974-7bea-b7f0d6c7ef53@canonical.com>
-References: <20220227182800.275572-1-linux@fw-web.de>
- <20220227182800.275572-2-linux@fw-web.de>
- <4c3303f5-7af5-9974-7bea-b7f0d6c7ef53@canonical.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:WaOTMMs0zzPP9tR16fWXqpWJRLEnDSFpogU6J4ahuEh214gtupGtD2mYIKJcs+tuuRER3
- hf7ggCrwJWr2C9y1xR0SZQqrW4Abh7eZAk31qY8QgryhDv05RhLHGLKXRCl8ukDxfL5xSNIiBx9A
- 0LzDqJ4WiJXU6TVd+DB9w31d9fYxLHtsOSbnjZv1jqb38pJAyrLQgmcDFcAb+yF5gHspLU/8tLou
- 31vNidvi2cMhKejH94AM30KcnwlIBpmI8yAu8mUOvX1sLvLYKG20d4efANu9L4kpunmzmx+lpM7W
- 1A=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:76GDCbpdFcA=:wpvhXNgTMyp6Ol+GqGncQQ
- 6fq/Zf0ws8kdPkPT2yLCA9KNFu5GcRg+DNyon0A0F0UzG1d8SHcs2P15344yAAgPuXpZee3vD
- /REh6YniW6B3jCUbf1po7hCbwiZtOUADjaLU/Wyjt+DmI14IfTO8XZfiuQ7TRi6vdAFaoaSrv
- cJ69NbpJSENtDCRa9k2naZBoUrKu1OzzRGBCdZ2X+yK/DwD1g9PqyuZJwadLwQWKaspcGgop8
- ckCLM5Q6E0dorKHzhyGlyYSdVrTCMoOvGJY/fqatDvlL0ETi3VDp/EgFiCMIva3yV+S/PQop9
- Gn1XQgg7/dzktSDRE6pnpsfkembpCIIj78hYuo4itrncQ4IEa3CiuXu7fzLqXpAyhyV5yKa6g
- VEnyk4ujidYUrNwN6XoD2hhq+D384cr9gzJLwITNfpFRePOLF6MlFzMNpSljLpPZVfHSzmLBl
- wWIFCqFuyR41sZeMRFfkjSIhp4rnCKoFYOqZ29+STVq+EIYgPsyA/F7EWuz/ECgWA1+JkOWZH
- ogg9h7Ap2bmbXBmkXh0zE4QqMioDH2T8A0UTjRn3ZJXYt77LBk9Okjh5ltXLKJC7dZJKKh7/t
- g7LTPpnSbtBz9OXpNTOSL4DVvTum6FTROLBL4Yu4JERHpkvLi+EpjQQVY3XdTi7MY8A856A04
- JgNKxhGYlvMsaPrfJodkgrTG6m7o2Uw3f1Fqmxl2mPXc4E3bz9xmhbHUdHTT5uPfG+mmwZ/mU
- 13t6/8h2B/t/Vx1SJvaL7S4D0CEldIVN98gLMxOnm00wtqxcigkoJ5eF8ts9keS2203Pm6I0c
- T2Hl80h
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com
+References: <20220223072402.17518-1-yong.wu@mediatek.com>
+ <20220223072402.17518-2-yong.wu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220223072402.17518-2-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-thanks for first review.
 
-> Gesendet: Montag, 28. Februar 2022 um 11:08 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
+On 23/02/2022 08:24, Yong Wu wrote:
+> Add mt8186 iommu binding. "-mm" means the iommu is for Multimedia.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-> On 27/02/2022 19:27, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-> You missed devicetree mailing list (corrupted address).
-
-sorry, devicetree ML was To, but forget the Cc-Header (prepared addresses =
-in coverletter)
-
-> > imho all errors should be fixed in the dts not in the yaml...
-
-> > -- reg               : <registers mapping>
-> > -
-> > -Please note that when using "generic-ahci" you must also specify a So=
-C specific
-> > -compatible:
-> > -	compatible =3D "manufacturer,soc-model-ahci", "generic-ahci";
-...
-> > +properties:
-> > +  compatible:
-> > +    contains:
-> > +      enum:
-> > +        - brcm,iproc-ahci
-> > +        - cavium,octeon-7130-ahci
-> > +        - generic-ahci
-> > +        - hisilicon,hisi-ahci
-> > +        - ibm,476gtr-ahci
-> > +        - marvell,armada-380-ahci
-> > +        - marvell,armada-3700-ahci
->
-> Order entries alphabetically.
-
-ok
-
-> > +        - snps,dwc-ahci
-> > +        - snps,spear-ahci
->
-> You converted the TXT bindings explicitly, but you missed the comment
-> just below the 'reg' about generic-ahci. The generic-ahci never comes al=
-one.
-
-How should this comment be added? description above/below the compatible-p=
-roperty?
-Sorry for dumb questions...this is my first yaml ;)
-
-e.g.
-
-properties:
-  compatible:
-    description:
-      Please note that when using "generic-ahci" you must also specify a S=
-oC specific
-      compatible:
-         compatible =3D "manufacturer,soc-model-ahci", "generic-ahci";
-    contains:
-      enum:
-
-> The snps,dwc-ahci could come, although history shows that Synapsys
-> blocks are commonly re-used and they should have specific compatible.
-> Current users still have single snps,dwc-ahci, so it could be fixed a
-> bit later.
->
-> On the other hand, I expect to fix all the DTS in the same series where
-> the bindings are corrected.
-
-i don't know the marvell/broadcom-hw so i cannot fix them.
-Just converted the txt to check my rockchip sata nodes and to be more
-future-proof (no more exceptions like the marvell/broadcom)
-
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    minItems: 1
-> > +    maxItems: 3
->
-> Items should be described. Next or this patch could add also clock-names=
-.
-
-i was told to drop clock-names (same for interrupt-names and reset-names) =
-from dts
-and in txt it was not there so have not added it
-
-https://patchwork.kernel.org/comment/24755956/
-
-> > +
-> > +  interrupts:
-> > +    minItems: 1
->
-> You mean maxItems?
-
-no, minItems, as interrupts suggests 1+ (same for phys)
-
-> > +
-> > +  ahci-supply:
-> > +    description:
-> > +      regulator for AHCI controller
-> > +
-> > +  dma-coherent:
-> > +    description:
-> > +      Present if dma operations are coherent
->
-> Skip description, it's obvious. Just 'true'.
-
-ok, took this from the txt
-
-> > +
-> > +  phy-supply:
-> > +    description:
-> > +      regulator for PHY power
-> > +
-> > +  phys:
-> > +    minItems: 1
->
-> maxItems?
-> > +
-> > +  phy-names:
-> > +    minItems: 1
->
-> Describe the items.
->
-> > +
-> > +  ports-implemented:
-> > +    description:
-> > +      Mask that indicates which ports that the HBA supports
-> > +      are available for software to use. Useful if PORTS_IMPL
-> > +      is not programmed by the BIOS, which is true with
-> > +      some embedded SoCs.
-> > +    minItems: 1
->
-> You need a type and maxItems.
-
-what will be the type of a mask?
-
-> > +
-> > +  resets:
-> > +    minItems: 1
->
-> maxItems?
-
-if there is a known maximum....
-
-> > +
-> > +  target-supply:
-> > +    description:
-> > +      regulator for SATA target power
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
-> > +patternProperties:
-> > +  "^sata-port@[0-9]+$":
->
-> You limit number of ports to 10. On purpose? What about 0xa? 0xb?
-
-oh, right, there can be hexadecimal...
-thought this is only true for the main-node (address) and have only seen @=
-0, @1 and @2
-
-> > +    type: object
-> > +    description:
-> > +      Subnode with configuration of the Ports.
-> > +
-> > +    properties:
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      phys:
-> > +        minItems: 1
->
-> maxItems? Why do you put everywhere minItems? Are several phys really
-> expected?
-
-name suggests that it can be more than 1. i know from usb subsystem (dwc3 =
-usb3) that a device can have more than one phy, and because in the txt the=
-re are no ranges i set everywhere MinItems to 1 with open end as i do not =
-know all possibilities. Anything else will be trial and error...for all pr=
-operties
-
-> > +
-> > +      target-supply:
-> > +        description:
-> > +          regulator for SATA target power
-> > +
-> > +    required:
-> > +      - reg
-> > +
-> > +    anyOf:
-> > +      - required: [ phys ]
-> > +      - required: [ target-supply ]
-> > +
-> > +allOf:
-> > +- $ref: "sata-common.yaml#"
->
-> This goes before properties.
->
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +        sata@ffe08000 {
->
-> Wrong indentation. It starts just below |
-
-will fix it
-
-> > +               compatible =3D "snps,spear-ahci";
-> > +               reg =3D <0xffe08000 0x1000>;
-> > +               interrupts =3D <115>;
-> > +        };
-> > +  - |
-> > +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +        #include <dt-bindings/clock/berlin2q.h>
-> > +        sata@f7e90000 {
-> > +                compatible =3D "marvell,berlin2q-achi", "generic-ahci=
-";
->
-> This clearly won't pass your checks. I don't think you run
-> dt_binding_check. You must test your bindings first.
-
-i had them tested ...needed to add the includes...after that the dt_bindin=
-gs_check was without errors/warnings
-
-these are the commands i used:
-
-ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- make dt_binding_check DT_S=
-CHEMA_FILES=3DDocumentation/devicetree/bindings/ata/ahci-platform.yaml
-ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- make dtbs_check DT_SCHEMA_=
-FILES=3DDocumentation/devicetree/bindings/ata/ahci-platform.yaml
-
-> Best regards,
-> Krzysztof
-
-regards Frank
+> ---
+>   .../bindings/iommu/mediatek,iommu.yaml        |   4 +
+>   .../dt-bindings/memory/mt8186-memory-port.h   | 217 ++++++++++++++++++
+>   2 files changed, 221 insertions(+)
+>   create mode 100644 include/dt-bindings/memory/mt8186-memory-port.h
+> 
+> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> index c528a299afa9..d78df484bb76 100644
+> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> @@ -76,6 +76,7 @@ properties:
+>             - mediatek,mt8167-m4u  # generation two
+>             - mediatek,mt8173-m4u  # generation two
+>             - mediatek,mt8183-m4u  # generation two
+> +          - mediatek,mt8186-iommu-mm         # generation two
+>             - mediatek,mt8192-m4u  # generation two
+>             - mediatek,mt8195-iommu-vdo        # generation two
+>             - mediatek,mt8195-iommu-vpp        # generation two
+> @@ -120,6 +121,7 @@ properties:
+>         dt-binding/memory/mt8167-larb-port.h for mt8167,
+>         dt-binding/memory/mt8173-larb-port.h for mt8173,
+>         dt-binding/memory/mt8183-larb-port.h for mt8183,
+> +      dt-binding/memory/mt8186-memory-port.h for mt8186,
+>         dt-binding/memory/mt8192-larb-port.h for mt8192.
+>         dt-binding/memory/mt8195-memory-port.h for mt8195.
+>   
+> @@ -141,6 +143,7 @@ allOf:
+>                 - mediatek,mt2701-m4u
+>                 - mediatek,mt2712-m4u
+>                 - mediatek,mt8173-m4u
+> +              - mediatek,mt8186-iommu-mm
+>                 - mediatek,mt8192-m4u
+>                 - mediatek,mt8195-iommu-vdo
+>                 - mediatek,mt8195-iommu-vpp
+> @@ -153,6 +156,7 @@ allOf:
+>         properties:
+>           compatible:
+>             enum:
+> +            - mediatek,mt8186-iommu-mm
+>               - mediatek,mt8192-m4u
+>               - mediatek,mt8195-iommu-vdo
+>               - mediatek,mt8195-iommu-vpp
+> diff --git a/include/dt-bindings/memory/mt8186-memory-port.h b/include/dt-bindings/memory/mt8186-memory-port.h
+> new file mode 100644
+> index 000000000000..bda265725870
+> --- /dev/null
+> +++ b/include/dt-bindings/memory/mt8186-memory-port.h
+> @@ -0,0 +1,217 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022 MediaTek Inc.
+> + *
+> + * Author: Anan Sun <anan.sun@mediatek.com>
+> + * Author: Yong Wu <yong.wu@mediatek.com>
+> + */
+> +#ifndef _DT_BINDINGS_MEMORY_MT8186_LARB_PORT_H_
+> +#define _DT_BINDINGS_MEMORY_MT8186_LARB_PORT_H_
+> +
+> +#include <dt-bindings/memory/mtk-memory-port.h>
+> +
+> +/*
+> + * MM IOMMU supports 16GB dma address. We separate it to four ranges:
+> + * 0 ~ 4G; 4G ~ 8G; 8G ~ 12G; 12G ~ 16G, we could adjust these masters
+> + * locate in anyone bank. BUT:
+> + * a) Make sure all the ports inside a larb are in one range.
+> + * b) The iova of any master can NOT cross the 4G/8G/12G boundary.
+> + *
+> + * This is the suggested mapping in this SoC:
+> + *
+> + * modules    dma-address-region	larbs-ports
+> + * disp         0 ~ 4G                  larb0/1/2
+> + * vcodec      4G ~ 8G                  larb4/7
+> + * cam/mdp     8G ~ 12G                 the other larbs.
+> + * N/A         12G ~ 16G
+> + * CCU0   0x24000_0000 ~ 0x243ff_ffff   larb13: port 9/10
+> + * CCU1   0x24400_0000 ~ 0x247ff_ffff   larb14: port 4/5
+> + */
+> +
+> +/* MM IOMMU ports */
+> +/* LARB 0 -- MMSYS */
+> +#define IOMMU_PORT_L0_DISP_POSTMASK0	MTK_M4U_ID(0, 0)
+> +#define IOMMU_PORT_L0_REVERSED		MTK_M4U_ID(0, 1)
+> +#define IOMMU_PORT_L0_OVL_RDMA0		MTK_M4U_ID(0, 2)
+> +#define IOMMU_PORT_L0_DISP_FAKE0	MTK_M4U_ID(0, 3)
+> +
+> +/* LARB 1 -- MMSYS */
+> +#define IOMMU_PORT_L1_DISP_RDMA1	MTK_M4U_ID(1, 0)
+> +#define IOMMU_PORT_L1_OVL_2L_RDMA0	MTK_M4U_ID(1, 1)
+> +#define IOMMU_PORT_L1_DISP_RDMA0	MTK_M4U_ID(1, 2)
+> +#define IOMMU_PORT_L1_DISP_WDMA0	MTK_M4U_ID(1, 3)
+> +#define IOMMU_PORT_L1_DISP_FAKE1	MTK_M4U_ID(1, 4)
+> +
+> +/* LARB 2 -- MMSYS */
+> +#define IOMMU_PORT_L2_MDP_RDMA0		MTK_M4U_ID(2, 0)
+> +#define IOMMU_PORT_L2_MDP_RDMA1		MTK_M4U_ID(2, 1)
+> +#define IOMMU_PORT_L2_MDP_WROT0		MTK_M4U_ID(2, 2)
+> +#define IOMMU_PORT_L2_MDP_WROT1		MTK_M4U_ID(2, 3)
+> +#define IOMMU_PORT_L2_DISP_FAKE0	MTK_M4U_ID(2, 4)
+> +
+> +/* LARB 4 -- VDEC */
+> +#define IOMMU_PORT_L4_HW_VDEC_MC_EXT		MTK_M4U_ID(4, 0)
+> +#define IOMMU_PORT_L4_HW_VDEC_UFO_EXT		MTK_M4U_ID(4, 1)
+> +#define IOMMU_PORT_L4_HW_VDEC_PP_EXT		MTK_M4U_ID(4, 2)
+> +#define IOMMU_PORT_L4_HW_VDEC_PRED_RD_EXT	MTK_M4U_ID(4, 3)
+> +#define IOMMU_PORT_L4_HW_VDEC_PRED_WR_EXT	MTK_M4U_ID(4, 4)
+> +#define IOMMU_PORT_L4_HW_VDEC_PPWRAP_EXT	MTK_M4U_ID(4, 5)
+> +#define IOMMU_PORT_L4_HW_VDEC_TILE_EXT		MTK_M4U_ID(4, 6)
+> +#define IOMMU_PORT_L4_HW_VDEC_VLD_EXT		MTK_M4U_ID(4, 7)
+> +#define IOMMU_PORT_L4_HW_VDEC_VLD2_EXT		MTK_M4U_ID(4, 8)
+> +#define IOMMU_PORT_L4_HW_VDEC_AVC_MV_EXT	MTK_M4U_ID(4, 9)
+> +#define IOMMU_PORT_L4_HW_VDEC_UFO_ENC_EXT	MTK_M4U_ID(4, 10)
+> +#define IOMMU_PORT_L4_HW_VDEC_RG_CTRL_DMA_EXT	MTK_M4U_ID(4, 11)
+> +#define IOMMU_PORT_L4_HW_MINI_MDP_R0_EXT	MTK_M4U_ID(4, 12)
+> +#define IOMMU_PORT_L4_HW_MINI_MDP_W0_EXT	MTK_M4U_ID(4, 13)
+> +
+> +/* LARB 7 -- VENC */
+> +#define IOMMU_PORT_L7_VENC_RCPU		MTK_M4U_ID(7, 0)
+> +#define IOMMU_PORT_L7_VENC_REC		MTK_M4U_ID(7, 1)
+> +#define IOMMU_PORT_L7_VENC_BSDMA	MTK_M4U_ID(7, 2)
+> +#define IOMMU_PORT_L7_VENC_SV_COMV	MTK_M4U_ID(7, 3)
+> +#define IOMMU_PORT_L7_VENC_RD_COMV	MTK_M4U_ID(7, 4)
+> +#define IOMMU_PORT_L7_VENC_CUR_LUMA	MTK_M4U_ID(7, 5)
+> +#define IOMMU_PORT_L7_VENC_CUR_CHROMA	MTK_M4U_ID(7, 6)
+> +#define IOMMU_PORT_L7_VENC_REF_LUMA	MTK_M4U_ID(7, 7)
+> +#define IOMMU_PORT_L7_VENC_REF_CHROMA	MTK_M4U_ID(7, 8)
+> +#define IOMMU_PORT_L7_JPGENC_Y_RDMA	MTK_M4U_ID(7, 9)
+> +#define IOMMU_PORT_L7_JPGENC_C_RDMA	MTK_M4U_ID(7, 10)
+> +#define IOMMU_PORT_L7_JPGENC_Q_TABLE	MTK_M4U_ID(7, 11)
+> +#define IOMMU_PORT_L7_JPGENC_BSDMA	MTK_M4U_ID(7, 12)
+> +
+> +/* LARB 8 -- WPE */
+> +#define IOMMU_PORT_L8_WPE_RDMA_0	MTK_M4U_ID(8, 0)
+> +#define IOMMU_PORT_L8_WPE_RDMA_1	MTK_M4U_ID(8, 1)
+> +#define IOMMU_PORT_L8_WPE_WDMA_0	MTK_M4U_ID(8, 2)
+> +
+> +/* LARB 9 -- IMG-1 */
+> +#define IOMMU_PORT_L9_IMG_IMGI_D1	MTK_M4U_ID(9, 0)
+> +#define IOMMU_PORT_L9_IMG_IMGBI_D1	MTK_M4U_ID(9, 1)
+> +#define IOMMU_PORT_L9_IMG_DMGI_D1	MTK_M4U_ID(9, 2)
+> +#define IOMMU_PORT_L9_IMG_DEPI_D1	MTK_M4U_ID(9, 3)
+> +#define IOMMU_PORT_L9_IMG_LCE_D1	MTK_M4U_ID(9, 4)
+> +#define IOMMU_PORT_L9_IMG_SMTI_D1	MTK_M4U_ID(9, 5)
+> +#define IOMMU_PORT_L9_IMG_SMTO_D2	MTK_M4U_ID(9, 6)
+> +#define IOMMU_PORT_L9_IMG_SMTO_D1	MTK_M4U_ID(9, 7)
+> +#define IOMMU_PORT_L9_IMG_CRZO_D1	MTK_M4U_ID(9, 8)
+> +#define IOMMU_PORT_L9_IMG_IMG3O_D1	MTK_M4U_ID(9, 9)
+> +#define IOMMU_PORT_L9_IMG_VIPI_D1	MTK_M4U_ID(9, 10)
+> +#define IOMMU_PORT_L9_IMG_SMTI_D5	MTK_M4U_ID(9, 11)
+> +#define IOMMU_PORT_L9_IMG_TIMGO_D1	MTK_M4U_ID(9, 12)
+> +#define IOMMU_PORT_L9_IMG_UFBC_W0	MTK_M4U_ID(9, 13)
+> +#define IOMMU_PORT_L9_IMG_UFBC_R0	MTK_M4U_ID(9, 14)
+> +#define IOMMU_PORT_L9_IMG_WPE_RDMA1	MTK_M4U_ID(9, 15)
+> +#define IOMMU_PORT_L9_IMG_WPE_RDMA0	MTK_M4U_ID(9, 16)
+> +#define IOMMU_PORT_L9_IMG_WPE_WDMA	MTK_M4U_ID(9, 17)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA0	MTK_M4U_ID(9, 18)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA1	MTK_M4U_ID(9, 19)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA2	MTK_M4U_ID(9, 20)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA3	MTK_M4U_ID(9, 21)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA4	MTK_M4U_ID(9, 22)
+> +#define IOMMU_PORT_L9_IMG_MFB_RDMA5	MTK_M4U_ID(9, 23)
+> +#define IOMMU_PORT_L9_IMG_MFB_WDMA0	MTK_M4U_ID(9, 24)
+> +#define IOMMU_PORT_L9_IMG_MFB_WDMA1	MTK_M4U_ID(9, 25)
+> +#define IOMMU_PORT_L9_IMG_RESERVE6	MTK_M4U_ID(9, 26)
+> +#define IOMMU_PORT_L9_IMG_RESERVE7	MTK_M4U_ID(9, 27)
+> +#define IOMMU_PORT_L9_IMG_RESERVE8	MTK_M4U_ID(9, 28)
+> +
+> +/* LARB 11 -- IMG-2 */
+> +#define IOMMU_PORT_L11_IMG_IMGI_D1	MTK_M4U_ID(11, 0)
+> +#define IOMMU_PORT_L11_IMG_IMGBI_D1	MTK_M4U_ID(11, 1)
+> +#define IOMMU_PORT_L11_IMG_DMGI_D1	MTK_M4U_ID(11, 2)
+> +#define IOMMU_PORT_L11_IMG_DEPI_D1	MTK_M4U_ID(11, 3)
+> +#define IOMMU_PORT_L11_IMG_LCE_D1	MTK_M4U_ID(11, 4)
+> +#define IOMMU_PORT_L11_IMG_SMTI_D1	MTK_M4U_ID(11, 5)
+> +#define IOMMU_PORT_L11_IMG_SMTO_D2	MTK_M4U_ID(11, 6)
+> +#define IOMMU_PORT_L11_IMG_SMTO_D1	MTK_M4U_ID(11, 7)
+> +#define IOMMU_PORT_L11_IMG_CRZO_D1	MTK_M4U_ID(11, 8)
+> +#define IOMMU_PORT_L11_IMG_IMG3O_D1	MTK_M4U_ID(11, 9)
+> +#define IOMMU_PORT_L11_IMG_VIPI_D1	MTK_M4U_ID(11, 10)
+> +#define IOMMU_PORT_L11_IMG_SMTI_D5	MTK_M4U_ID(11, 11)
+> +#define IOMMU_PORT_L11_IMG_TIMGO_D1	MTK_M4U_ID(11, 12)
+> +#define IOMMU_PORT_L11_IMG_UFBC_W0	MTK_M4U_ID(11, 13)
+> +#define IOMMU_PORT_L11_IMG_UFBC_R0	MTK_M4U_ID(11, 14)
+> +#define IOMMU_PORT_L11_IMG_WPE_RDMA1	MTK_M4U_ID(11, 15)
+> +#define IOMMU_PORT_L11_IMG_WPE_RDMA0	MTK_M4U_ID(11, 16)
+> +#define IOMMU_PORT_L11_IMG_WPE_WDMA	MTK_M4U_ID(11, 17)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA0	MTK_M4U_ID(11, 18)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA1	MTK_M4U_ID(11, 19)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA2	MTK_M4U_ID(11, 20)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA3	MTK_M4U_ID(11, 21)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA4	MTK_M4U_ID(11, 22)
+> +#define IOMMU_PORT_L11_IMG_MFB_RDMA5	MTK_M4U_ID(11, 23)
+> +#define IOMMU_PORT_L11_IMG_MFB_WDMA0	MTK_M4U_ID(11, 24)
+> +#define IOMMU_PORT_L11_IMG_MFB_WDMA1	MTK_M4U_ID(11, 25)
+> +#define IOMMU_PORT_L11_IMG_RESERVE6	MTK_M4U_ID(11, 26)
+> +#define IOMMU_PORT_L11_IMG_RESERVE7	MTK_M4U_ID(11, 27)
+> +#define IOMMU_PORT_L11_IMG_RESERVE8	MTK_M4U_ID(11, 28)
+> +
+> +/* LARB 13 -- CAM */
+> +#define IOMMU_PORT_L13_CAM_MRAWI	MTK_M4U_ID(13, 0)
+> +#define IOMMU_PORT_L13_CAM_MRAWO_0	MTK_M4U_ID(13, 1)
+> +#define IOMMU_PORT_L13_CAM_MRAWO_1	MTK_M4U_ID(13, 2)
+> +#define IOMMU_PORT_L13_CAM_CAMSV_4	MTK_M4U_ID(13, 6)
+> +#define IOMMU_PORT_L13_CAM_CAMSV_5	MTK_M4U_ID(13, 7)
+> +#define IOMMU_PORT_L13_CAM_CAMSV_6	MTK_M4U_ID(13, 8)
+> +#define IOMMU_PORT_L13_CAM_CCUI		MTK_M4U_ID(13, 9)
+> +#define IOMMU_PORT_L13_CAM_CCUO		MTK_M4U_ID(13, 10)
+> +#define IOMMU_PORT_L13_CAM_FAKE		MTK_M4U_ID(13, 11)
+> +
+> +/* LARB 14 -- CAM */
+> +#define IOMMU_PORT_L14_CAM_CCUI		MTK_M4U_ID(14, 4)
+> +#define IOMMU_PORT_L14_CAM_CCUO		MTK_M4U_ID(14, 5)
+> +
+> +/* LARB 16 -- RAW-A */
+> +#define IOMMU_PORT_L16_CAM_IMGO_R1_A	MTK_M4U_ID(16, 0)
+> +#define IOMMU_PORT_L16_CAM_RRZO_R1_A	MTK_M4U_ID(16, 1)
+> +#define IOMMU_PORT_L16_CAM_CQI_R1_A	MTK_M4U_ID(16, 2)
+> +#define IOMMU_PORT_L16_CAM_BPCI_R1_A	MTK_M4U_ID(16, 3)
+> +#define IOMMU_PORT_L16_CAM_YUVO_R1_A	MTK_M4U_ID(16, 4)
+> +#define IOMMU_PORT_L16_CAM_UFDI_R2_A	MTK_M4U_ID(16, 5)
+> +#define IOMMU_PORT_L16_CAM_RAWI_R2_A	MTK_M4U_ID(16, 6)
+> +#define IOMMU_PORT_L16_CAM_RAWI_R3_A	MTK_M4U_ID(16, 7)
+> +#define IOMMU_PORT_L16_CAM_AAO_R1_A	MTK_M4U_ID(16, 8)
+> +#define IOMMU_PORT_L16_CAM_AFO_R1_A	MTK_M4U_ID(16, 9)
+> +#define IOMMU_PORT_L16_CAM_FLKO_R1_A	MTK_M4U_ID(16, 10)
+> +#define IOMMU_PORT_L16_CAM_LCESO_R1_A	MTK_M4U_ID(16, 11)
+> +#define IOMMU_PORT_L16_CAM_CRZO_R1_A	MTK_M4U_ID(16, 12)
+> +#define IOMMU_PORT_L16_CAM_LTMSO_R1_A	MTK_M4U_ID(16, 13)
+> +#define IOMMU_PORT_L16_CAM_RSSO_R1_A	MTK_M4U_ID(16, 14)
+> +#define IOMMU_PORT_L16_CAM_AAHO_R1_A	MTK_M4U_ID(16, 15)
+> +#define IOMMU_PORT_L16_CAM_LSCI_R1_A	MTK_M4U_ID(16, 16)
+> +
+> +/* LARB 17 -- RAW-B */
+> +#define IOMMU_PORT_L17_CAM_IMGO_R1_B	MTK_M4U_ID(17, 0)
+> +#define IOMMU_PORT_L17_CAM_RRZO_R1_B	MTK_M4U_ID(17, 1)
+> +#define IOMMU_PORT_L17_CAM_CQI_R1_B	MTK_M4U_ID(17, 2)
+> +#define IOMMU_PORT_L17_CAM_BPCI_R1_B	MTK_M4U_ID(17, 3)
+> +#define IOMMU_PORT_L17_CAM_YUVO_R1_B	MTK_M4U_ID(17, 4)
+> +#define IOMMU_PORT_L17_CAM_UFDI_R2_B	MTK_M4U_ID(17, 5)
+> +#define IOMMU_PORT_L17_CAM_RAWI_R2_B	MTK_M4U_ID(17, 6)
+> +#define IOMMU_PORT_L17_CAM_RAWI_R3_B	MTK_M4U_ID(17, 7)
+> +#define IOMMU_PORT_L17_CAM_AAO_R1_B	MTK_M4U_ID(17, 8)
+> +#define IOMMU_PORT_L17_CAM_AFO_R1_B	MTK_M4U_ID(17, 9)
+> +#define IOMMU_PORT_L17_CAM_FLKO_R1_B	MTK_M4U_ID(17, 10)
+> +#define IOMMU_PORT_L17_CAM_LCESO_R1_B	MTK_M4U_ID(17, 11)
+> +#define IOMMU_PORT_L17_CAM_CRZO_R1_B	MTK_M4U_ID(17, 12)
+> +#define IOMMU_PORT_L17_CAM_LTMSO_R1_B	MTK_M4U_ID(17, 13)
+> +#define IOMMU_PORT_L17_CAM_RSSO_R1_B	MTK_M4U_ID(17, 14)
+> +#define IOMMU_PORT_L17_CAM_AAHO_R1_B	MTK_M4U_ID(17, 15)
+> +#define IOMMU_PORT_L17_CAM_LSCI_R1_B	MTK_M4U_ID(17, 16)
+> +
+> +/* LARB 19 -- IPE */
+> +#define IOMMU_PORT_L19_IPE_DVS_RDMA	MTK_M4U_ID(19, 0)
+> +#define IOMMU_PORT_L19_IPE_DVS_WDMA	MTK_M4U_ID(19, 1)
+> +#define IOMMU_PORT_L19_IPE_DVP_RDMA	MTK_M4U_ID(19, 2)
+> +#define IOMMU_PORT_L19_IPE_DVP_WDMA	MTK_M4U_ID(19, 3)
+> +
+> +/* LARB 20 -- IPE */
+> +#define IOMMU_PORT_L20_IPE_FDVT_RDA	MTK_M4U_ID(20, 0)
+> +#define IOMMU_PORT_L20_IPE_FDVT_RDB	MTK_M4U_ID(20, 1)
+> +#define IOMMU_PORT_L20_IPE_FDVT_WRA	MTK_M4U_ID(20, 2)
+> +#define IOMMU_PORT_L20_IPE_FDVT_WRB	MTK_M4U_ID(20, 3)
+> +#define IOMMU_PORT_L20_IPE_RSC_RDMA0	MTK_M4U_ID(20, 4)
+> +#define IOMMU_PORT_L20_IPE_RSC_WDMA	MTK_M4U_ID(20, 5)
+> +
+> +#endif

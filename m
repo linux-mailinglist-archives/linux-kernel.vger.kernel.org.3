@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCB24C72C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2101A4C7415
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiB1R2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S238259AbiB1Rk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbiB1R2B (ORCPT
+        with ESMTP id S238623AbiB1RiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:01 -0500
+        Mon, 28 Feb 2022 12:38:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ABF86E3E;
-        Mon, 28 Feb 2022 09:27:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78C8574B7;
+        Mon, 28 Feb 2022 09:33:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FFCAB815BB;
-        Mon, 28 Feb 2022 17:27:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFA7C340E7;
-        Mon, 28 Feb 2022 17:27:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51251B815B8;
+        Mon, 28 Feb 2022 17:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57CFC340E7;
+        Mon, 28 Feb 2022 17:33:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069231;
-        bh=+T/YXPwgw5ffKQIQs/foiY43ygCWgrI5iQJB/aSZfQM=;
+        s=korg; t=1646069606;
+        bh=4kI2/S/n0O9DmlesOVz381oQ0Q7ZzS08IRJIbGGKo1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ge6bP0qcY7Hs60Ju3VwE5teffuHdlmn1ge6OxfBth+0n3PdFAcbNORVRZEH2a/YHy
-         St+sAQQjudSM2z1femjBV3sYw7PpmIvQqkrOQO+lezQU+TrFZMEd24b98h5QOZwdDm
-         umYKF32H+VsKv29FX6/Rw+CZ6f8CPwSOdiwllOvk=
+        b=UGn1aFEV3USaW6G7q0KBh2UJ3EycY6RtwJgkQV+6O0NzCCLIB7UKwH9oi/qbo75uU
+         y18DmsAzHeKPmt7qNBlFnFxJ4BgYOP7ByT6oeixR9zq572f22ACrQNG5tRyFyNrbOa
+         /f2bV46G7ZiV10jN+Ty9Fpa+YAusJ5y+6HFerRhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 11/31] openvswitch: Fix setting ipv6 fields causing hw csum failure
-Date:   Mon, 28 Feb 2022 18:24:07 +0100
-Message-Id: <20220228172200.990550703@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        syzbot <syzkaller@googlegroups.com>
+Subject: [PATCH 5.10 27/80] io_uring: add a schedule point in io_add_buffers()
+Date:   Mon, 28 Feb 2022 18:24:08 +0100
+Message-Id: <20220228172314.816217341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,149 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit d9b5ae5c1b241b91480aa30408be12fe91af834a upstream.
+commit f240762f88b4b1b58561939ffd44837759756477 upstream.
 
-Ipv6 ttl, label and tos fields are modified without first
-pulling/pushing the ipv6 header, which would have updated
-the hw csum (if available). This might cause csum validation
-when sending the packet to the stack, as can be seen in
-the trace below.
+Looping ~65535 times doing kmalloc() calls can trigger soft lockups,
+especially with DEBUG features (like KASAN).
 
-Fix this by updating skb->csum if available.
+[  253.536212] watchdog: BUG: soft lockup - CPU#64 stuck for 26s! [b219417889:12575]
+[  253.544433] Modules linked in: vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
+[  253.544451] CPU: 64 PID: 12575 Comm: b219417889 Tainted: G S         O      5.17.0-smp-DEV #801
+[  253.544457] RIP: 0010:kernel_text_address (./include/asm-generic/sections.h:192 ./include/linux/kallsyms.h:29 kernel/extable.c:67 kernel/extable.c:98)
+[  253.544464] Code: 0f 93 c0 48 c7 c1 e0 63 d7 a4 48 39 cb 0f 92 c1 20 c1 0f b6 c1 5b 5d c3 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 89 fb <48> c7 c0 00 00 80 a0 41 be 01 00 00 00 48 39 c7 72 0c 48 c7 c0 40
+[  253.544468] RSP: 0018:ffff8882d8baf4c0 EFLAGS: 00000246
+[  253.544471] RAX: 1ffff1105b175e00 RBX: ffffffffa13ef09a RCX: 00000000a13ef001
+[  253.544474] RDX: ffffffffa13ef09a RSI: ffff8882d8baf558 RDI: ffffffffa13ef09a
+[  253.544476] RBP: ffff8882d8baf4d8 R08: ffff8882d8baf5e0 R09: 0000000000000004
+[  253.544479] R10: ffff8882d8baf5e8 R11: ffffffffa0d59a50 R12: ffff8882eab20380
+[  253.544481] R13: ffffffffa0d59a50 R14: dffffc0000000000 R15: 1ffff1105b175eb0
+[  253.544483] FS:  00000000016d3380(0000) GS:ffff88af48c00000(0000) knlGS:0000000000000000
+[  253.544486] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  253.544488] CR2: 00000000004af0f0 CR3: 00000002eabfa004 CR4: 00000000003706e0
+[  253.544491] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  253.544492] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  253.544494] Call Trace:
+[  253.544496]  <TASK>
+[  253.544498] ? io_queue_sqe (fs/io_uring.c:7143)
+[  253.544505] __kernel_text_address (kernel/extable.c:78)
+[  253.544508] unwind_get_return_address (arch/x86/kernel/unwind_frame.c:19)
+[  253.544514] arch_stack_walk (arch/x86/kernel/stacktrace.c:27)
+[  253.544517] ? io_queue_sqe (fs/io_uring.c:7143)
+[  253.544521] stack_trace_save (kernel/stacktrace.c:123)
+[  253.544527] ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
+[  253.544531] ? ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
+[  253.544533] ? __kasan_kmalloc (mm/kasan/common.c:524)
+[  253.544535] ? kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
+[  253.544541] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
+[  253.544544] ? __io_queue_sqe (fs/io_uring.c:?)
+[  253.544551] __kasan_kmalloc (mm/kasan/common.c:524)
+[  253.544553] kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
+[  253.544556] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
+[  253.544560] io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
+[  253.544564] ? __kasan_slab_alloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
+[  253.544567] ? __kasan_slab_alloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
+[  253.544569] ? kmem_cache_alloc_bulk (mm/slab.h:732 mm/slab.c:3546)
+[  253.544573] ? __io_alloc_req_refill (fs/io_uring.c:2078)
+[  253.544578] ? io_submit_sqes (fs/io_uring.c:7441)
+[  253.544581] ? __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
+[  253.544584] ? __x64_sys_io_uring_enter (fs/io_uring.c:10096)
+[  253.544587] ? do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+[  253.544590] ? entry_SYSCALL_64_after_hwframe (??:?)
+[  253.544596] __io_queue_sqe (fs/io_uring.c:?)
+[  253.544600] io_queue_sqe (fs/io_uring.c:7143)
+[  253.544603] io_submit_sqe (fs/io_uring.c:?)
+[  253.544608] io_submit_sqes (fs/io_uring.c:?)
+[  253.544612] __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
+[  253.544616] __x64_sys_io_uring_enter (fs/io_uring.c:10096)
+[  253.544619] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+[  253.544623] entry_SYSCALL_64_after_hwframe (??:?)
 
-Trace resulted by ipv6 ttl dec and then sending packet
-to conntrack [actions: set(ipv6(hlimit=63)),ct(zone=99)]:
-[295241.900063] s_pf0vf2: hw csum failure
-[295241.923191] Call Trace:
-[295241.925728]  <IRQ>
-[295241.927836]  dump_stack+0x5c/0x80
-[295241.931240]  __skb_checksum_complete+0xac/0xc0
-[295241.935778]  nf_conntrack_tcp_packet+0x398/0xba0 [nf_conntrack]
-[295241.953030]  nf_conntrack_in+0x498/0x5e0 [nf_conntrack]
-[295241.958344]  __ovs_ct_lookup+0xac/0x860 [openvswitch]
-[295241.968532]  ovs_ct_execute+0x4a7/0x7c0 [openvswitch]
-[295241.979167]  do_execute_actions+0x54a/0xaa0 [openvswitch]
-[295242.001482]  ovs_execute_actions+0x48/0x100 [openvswitch]
-[295242.006966]  ovs_dp_process_packet+0x96/0x1d0 [openvswitch]
-[295242.012626]  ovs_vport_receive+0x6c/0xc0 [openvswitch]
-[295242.028763]  netdev_frame_hook+0xc0/0x180 [openvswitch]
-[295242.034074]  __netif_receive_skb_core+0x2ca/0xcb0
-[295242.047498]  netif_receive_skb_internal+0x3e/0xc0
-[295242.052291]  napi_gro_receive+0xba/0xe0
-[295242.056231]  mlx5e_handle_rx_cqe_mpwrq_rep+0x12b/0x250 [mlx5_core]
-[295242.062513]  mlx5e_poll_rx_cq+0xa0f/0xa30 [mlx5_core]
-[295242.067669]  mlx5e_napi_poll+0xe1/0x6b0 [mlx5_core]
-[295242.077958]  net_rx_action+0x149/0x3b0
-[295242.086762]  __do_softirq+0xd7/0x2d6
-[295242.090427]  irq_exit+0xf7/0x100
-[295242.093748]  do_IRQ+0x7f/0xd0
-[295242.096806]  common_interrupt+0xf/0xf
-[295242.100559]  </IRQ>
-[295242.102750] RIP: 0033:0x7f9022e88cbd
-[295242.125246] RSP: 002b:00007f9022282b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffda
-[295242.132900] RAX: 0000000000000005 RBX: 0000000000000010 RCX: 0000000000000000
-[295242.140120] RDX: 00007f9022282ba8 RSI: 00007f9022282a30 RDI: 00007f9014005c30
-[295242.147337] RBP: 00007f9014014d60 R08: 0000000000000020 R09: 00007f90254a8340
-[295242.154557] R10: 00007f9022282a28 R11: 0000000000000246 R12: 0000000000000000
-[295242.161775] R13: 00007f902308c000 R14: 000000000000002b R15: 00007f9022b71f40
-
-Fixes: 3fdbd1ce11e5 ("openvswitch: add ipv6 'set' action")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Link: https://lore.kernel.org/r/20220223163416.24096-1-paulb@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ddf0322db79c ("io_uring: add IORING_OP_PROVIDE_BUFFERS")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring <io-uring@vger.kernel.org>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220215041003.2394784-1-eric.dumazet@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/checksum.h    |    5 +++++
- net/openvswitch/actions.c |   46 ++++++++++++++++++++++++++++++++++++++--------
- 2 files changed, 43 insertions(+), 8 deletions(-)
+ fs/io_uring.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/include/net/checksum.h
-+++ b/include/net/checksum.h
-@@ -143,6 +143,11 @@ static inline void csum_replace2(__sum16
- 	*sum = ~csum16_add(csum16_sub(~(*sum), old), new);
- }
- 
-+static inline void csum_replace(__wsum *csum, __wsum old, __wsum new)
-+{
-+	*csum = csum_add(csum_sub(*csum, old), new);
-+}
-+
- struct sk_buff;
- void inet_proto_csum_replace4(__sum16 *sum, struct sk_buff *skb,
- 			      __be32 from, __be32 to, bool pseudohdr);
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -460,12 +460,43 @@ static void set_ipv6_addr(struct sk_buff
- 	memcpy(addr, new_addr, sizeof(__be32[4]));
- }
- 
--static void set_ipv6_fl(struct ipv6hdr *nh, u32 fl, u32 mask)
-+static void set_ipv6_dsfield(struct sk_buff *skb, struct ipv6hdr *nh, u8 ipv6_tclass, u8 mask)
- {
-+	u8 old_ipv6_tclass = ipv6_get_dsfield(nh);
-+
-+	ipv6_tclass = OVS_MASKED(old_ipv6_tclass, ipv6_tclass, mask);
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)(old_ipv6_tclass << 12),
-+			     (__force __wsum)(ipv6_tclass << 12));
-+
-+	ipv6_change_dsfield(nh, ~mask, ipv6_tclass);
-+}
-+
-+static void set_ipv6_fl(struct sk_buff *skb, struct ipv6hdr *nh, u32 fl, u32 mask)
-+{
-+	u32 ofl;
-+
-+	ofl = nh->flow_lbl[0] << 16 |  nh->flow_lbl[1] << 8 |  nh->flow_lbl[2];
-+	fl = OVS_MASKED(ofl, fl, mask);
-+
- 	/* Bits 21-24 are always unmasked, so this retains their values. */
--	OVS_SET_MASKED(nh->flow_lbl[0], (u8)(fl >> 16), (u8)(mask >> 16));
--	OVS_SET_MASKED(nh->flow_lbl[1], (u8)(fl >> 8), (u8)(mask >> 8));
--	OVS_SET_MASKED(nh->flow_lbl[2], (u8)fl, (u8)mask);
-+	nh->flow_lbl[0] = (u8)(fl >> 16);
-+	nh->flow_lbl[1] = (u8)(fl >> 8);
-+	nh->flow_lbl[2] = (u8)fl;
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)htonl(ofl), (__force __wsum)htonl(fl));
-+}
-+
-+static void set_ipv6_ttl(struct sk_buff *skb, struct ipv6hdr *nh, u8 new_ttl, u8 mask)
-+{
-+	new_ttl = OVS_MASKED(nh->hop_limit, new_ttl, mask);
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)(nh->hop_limit << 8),
-+			     (__force __wsum)(new_ttl << 8));
-+	nh->hop_limit = new_ttl;
- }
- 
- static void set_ip_ttl(struct sk_buff *skb, struct iphdr *nh, u8 new_ttl,
-@@ -583,18 +614,17 @@ static int set_ipv6(struct sk_buff *skb,
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4058,6 +4058,7 @@ static int io_add_buffers(struct io_prov
+ 		} else {
+ 			list_add_tail(&buf->list, &(*head)->list);
  		}
++		cond_resched();
  	}
- 	if (mask->ipv6_tclass) {
--		ipv6_change_dsfield(nh, ~mask->ipv6_tclass, key->ipv6_tclass);
-+		set_ipv6_dsfield(skb, nh, key->ipv6_tclass, mask->ipv6_tclass);
- 		flow_key->ip.tos = ipv6_get_dsfield(nh);
- 	}
- 	if (mask->ipv6_label) {
--		set_ipv6_fl(nh, ntohl(key->ipv6_label),
-+		set_ipv6_fl(skb, nh, ntohl(key->ipv6_label),
- 			    ntohl(mask->ipv6_label));
- 		flow_key->ipv6.label =
- 		    *(__be32 *)nh & htonl(IPV6_FLOWINFO_FLOWLABEL);
- 	}
- 	if (mask->ipv6_hlimit) {
--		OVS_SET_MASKED(nh->hop_limit, key->ipv6_hlimit,
--			       mask->ipv6_hlimit);
-+		set_ipv6_ttl(skb, nh, key->ipv6_hlimit, mask->ipv6_hlimit);
- 		flow_key->ip.ttl = nh->hop_limit;
- 	}
- 	return 0;
+ 
+ 	return i ? i : -ENOMEM;
 
 

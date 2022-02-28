@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938954C6D18
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AD44C6D1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbiB1Mre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S236733AbiB1Mse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236848AbiB1MrR (ORCPT
+        with ESMTP id S236918AbiB1Mrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:47:17 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8548976E01
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:15 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id bd1so10587144plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:15 -0800 (PST)
+        Mon, 28 Feb 2022 07:47:47 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E5578056
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:48 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id j17so15331266wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qwzeJF2B6Di3rDERG8soz+b1Ps+s3Pm44BHmxxR7QCY=;
-        b=qtbGBSdD/gQ1lKhk5tZ6TUn/GBPJmKrm1MxIxIzCPIGJqN+39MNgxuN9sqFmhVKrzr
-         z291TCh81mpJult+1IktilWv0MmSSu6aapiTKrWFWGGSdPKbd346r3t7VNgjlXPUea5p
-         OBZAa47+FhUnEKuD8YGJN8pD4xKnXuZ0O685ncSMMID8t2cv6lbOcX7GU//AhRb3eq1G
-         HmMcE/Cy+kaNqMXQwLG6CnCPxUSixb4NiST+caV9tF9LlaEYfTlr5fH2vDrVSIeL7q8s
-         KiOohITDLb4tu0K4yFNhLziuSdflP9d3VU9MDDhyBk5zcFUtIDQMAa1IJObVt02DR+71
-         gJOQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ENGlgL22OWGxOqpN7D6oXT0hPbVh0EZ15Mfm4UzwnvY=;
+        b=ljyjusgUpWXziHEKYTetMqrmUP11BZzq9qcRuzLvnsBBDvDFMWWBboFzEhXE0FRKgH
+         sabnPHqcCRzixCkwQ9jjzyfoUtEEo/geDmfMcpKcf7X1IJQVNNGpCM9iNudyut9JaLGD
+         gIjc44NB9u9Y+r5TngXZYQR+tzMO9RU5b3G06QuYWQ9EuamTqf/nuxDimEoZDRzsmJLP
+         bGIQNAn2i70MzrRxpINOlnLqMuFGFgn6RUz7oGwzUT9HFXcqLe5UH3Etr1nnsyAPw4xm
+         1Xbqp+ZTV1YsUtxLAkYLaSkITgK7JZ4hRVlx2Bdx0XoUUUdx0ZDxcK+pyL4iWFxsNcKd
+         AHSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qwzeJF2B6Di3rDERG8soz+b1Ps+s3Pm44BHmxxR7QCY=;
-        b=ZV6n8kOG1RlZFtF5OcU4t8CQCzKQpERKAwKFB/vThwDRG/XLpO9OiMrSWqFSxGAK45
-         3g1tpuX8w6SaJhwJLdzNBf+H3iD+u8WYCBMPDCeYZE7ZUa8h15pyxqCQtwH6hrmhYKaO
-         STDlUqM8xjkYyxMPvFnKu/kI6P3s5cMqFWmQ65TPxjf9vfUlO8vjHlZWLEDcH//YNnWh
-         nfGgIeYlh9KMxkvnI3Kl6UFJj8tm9wF8OdgKRJFy0LXpT2Tl1ZXArC6ZwW7I0+Rexhq+
-         acR444M9/Lfy17aM7ywLANll513rpqhswy74IVXWtd1r1JQqCdiW9p9UqR1g1sycICYQ
-         l+Ag==
-X-Gm-Message-State: AOAM530t9vDhVyW40RxCilHplMmIeGjklsq0mMJkpPTrb/f1mNkKpx3y
-        HI/fLkSE7Z4DSdsYFlmamv0YgHUzzuS1dsVVmD0ApHwJUzU=
-X-Google-Smtp-Source: ABdhPJyPl3dOQnPhGsi+4kZmEEqOlf28gc2APwLdJ138ZzdPOZ2ylsXazmS2xgNZ0Ss/gw0ULba1JMbNNCHB4ifv7ck=
-X-Received: by 2002:a17:90a:ca16:b0:1bc:16a7:e840 with SMTP id
- x22-20020a17090aca1600b001bc16a7e840mr16442697pjt.225.1646052372123; Mon, 28
- Feb 2022 04:46:12 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ENGlgL22OWGxOqpN7D6oXT0hPbVh0EZ15Mfm4UzwnvY=;
+        b=upkQeG3kltq5NhA4ig831ne0qpLnnoq5rcWorqai7vQiTkBlJfZtVLOY+jeLIxi+zA
+         iJ7c+n8nRcyfRFkKTZ+ZTz9AyoFWcPgQPgL6cB+aQR1mJRz0eYNzrsLKq+t9TJI41GBp
+         DgUSYSNjnlRBE2ubFP+2l3E/wZnnmoqK6luoq3UWvfLko6oSi1KndjDCaIXz/M6lQdsd
+         9/g+6yMjgXoEAjJK55OeXUC/zVP2PrUVMcfR4ySSpXVqnq1cfyMR0vxpk3G3tdqU3Ner
+         OJ0DCfzhIExuwBV7n5MoHokqBFFjYt5NUmHBMWxdX94ex+IuxF/3H0xi/15za6xDWvOB
+         hOhw==
+X-Gm-Message-State: AOAM532/MBH1JTTjHDhtLaoWXDUuoo209ZWE0xpOn0gUz4zgSrEKttTM
+        tAhwi1SJbtmQQ4+tCGGrP3resw==
+X-Google-Smtp-Source: ABdhPJwqS0yccbm1J0MBxEWU/k07soEzJwbYH8MePkGfCGdFtIgewWhv4vABIqsTTlRKUnh9dhxw/g==
+X-Received: by 2002:a5d:6b0b:0:b0:1ef:d826:723a with SMTP id v11-20020a5d6b0b000000b001efd826723amr2405653wrw.420.1646052406418;
+        Mon, 28 Feb 2022 04:46:46 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id l5-20020adff485000000b001e322a6ba79sm10577218wro.86.2022.02.28.04.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 04:46:46 -0800 (PST)
+Date:   Mon, 28 Feb 2022 12:46:44 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
+Message-ID: <YhzENKPtY+WOp566@google.com>
+References: <20220228193928.3ec6ee98@canb.auug.org.au>
+ <YhyPfcjJtIKNQtF8@google.com>
+ <Yhyn72NO/roH1gA8@kroah.com>
 MIME-Version: 1.0
-References: <20220224152456.493365-1-kernel@esmil.dk> <20220224152456.493365-2-kernel@esmil.dk>
- <87zgme6xna.fsf@DESKTOP-5JD7O8D.localdomain>
-In-Reply-To: <87zgme6xna.fsf@DESKTOP-5JD7O8D.localdomain>
-From:   Emil Renner Berthing <emil.renner.berthing@gmail.com>
-Date:   Mon, 28 Feb 2022 13:46:00 +0100
-Message-ID: <CANBLGczP5OKPsVbs3Ydm9EfHkSoCd=ksYZ6NOnTdmH3Bh2e_fw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] riscv: Avoid unaligned access when relocating modules
-To:     Samuel Bronson <naesten@gmail.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yhyn72NO/roH1gA8@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 01:45, Samuel Bronson <naesten@gmail.com> wrote:
->
-> Emil Renner Berthing <kernel@esmil.dk> writes:
->
-> > With the C-extension regular 32bit instructions are not
-> > necessarily aligned on 4-byte boundaries. RISC-V instructions
-> > are in fact an ordered list of 16bit native-endian
-> > "parcels", so access the instruction as such.
->
-> Hold on a minute, this is what it says in my copy of the Unprivileged
-> ISA:
->
-> ,----
-> | RISC-V base ISAs have either little-endian or big-endian memory systems=
-,
-> | with the privileged architecture further defining bi-endian operation.
-> | Instructions are stored in memory as a sequence of 16-bit *little-endia=
-n*
-> | parcels, regardless of memory system endianness.  Parcels forming one
-> | instruction are stored at increasing halfword addresses, with the
-> | *lowest-addressed parcel holding the lowest-numbered bits* in the
-> | instruction specification.
-> `----
-> [Emphasis mine.]
->
-> In other words, the parcels are little endian, and they're arranged in
-> little-endian order.  System endianness doesn't matter, it collapses to
-> plain old little-endian.
+On Mon, 28 Feb 2022, Greg KH wrote:
 
-Wow, this actually changed since I wrote this code, nice catch. In
-specs up until the latest it used to say "Instructions are stored in
-memory with each 16-bit parcel
-stored in a memory halfword according to the implementation=E2=80=99s natur=
-al
-endianness". I hope noone designed a big-endian core before they
-changed it.
+> On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
+> > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
+> > 
+> > > Hi all,
+> > > 
+> > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > 
+> > I did ask for this *not* to be merged when it was in -testing.
+> 
+> Sorry, I missed that, I saw your ack on the patch so that's why I took
+> it.
+> 
+> > I'll follow-up with Greg.
+> 
+> Should I revert this from my tree?
 
-> (I'm really not sure why they describe the ordering in such a
-> round-about way; I assume that's the source of the confusion here?)
+I did try to catch it before a revert would have been required.
 
-I guess the round-about way is exactly because the parcels used to be
-native-endian, but the order of the parcels alsways little-endian.
+But yes, please revert it.
 
-/Emil
+The Ack is not standard and should not be merged.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

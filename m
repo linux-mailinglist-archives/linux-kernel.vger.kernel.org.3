@@ -2,165 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4890D4C7ACC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4451A4C7A9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiB1UpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S229780AbiB1UkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiB1Uo4 (ORCPT
+        with ESMTP id S229479AbiB1UkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:44:56 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAC8BC1B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:44:17 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id ee12so4615903edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:44:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S/LNP14iVGpJY7HEU3KoWC3rGBeIOldyeXi/18P4YEg=;
-        b=JCfpf2EkV0u8p2DIwI3SoZoRhHthQMEAy9/7LEkowc8JnTmPgsFXHlzh4U3t+Q6SEk
-         Lc7ftzGO2kIrejoWkV3dzzd0jpx1zu67BigJ1Dmt6MH2aSREOTU5VOooJKZjMGKU+kco
-         F0IyOo2hDxkf3WtcbllN4ffR7kqC0AZqO0I4w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S/LNP14iVGpJY7HEU3KoWC3rGBeIOldyeXi/18P4YEg=;
-        b=dR8Njd04OsCna4MgwMbdva+xLQt4slivFDoI77rVx5oMkveh7f9fy74clo51JItWeH
-         DADKSzhDoOdzlzvB3yZHUyIzmXYRa6PDr+iDwd5Ime5AKlI5g01Pxrwku5V0M15JI9L/
-         ZKKw8mf6CDgc3ge2MkM7qdR/4ia5Ta828DcrI9arV/B4aszO2xPOnJnEz8hA0viLKy1g
-         sLSoWVfGOz77U5FGD4s0LAr5gPAUd45gADv2omnDxPVgmb5T+ILA8Pnv61xT2QdjGPCq
-         aGg7ntsPQZZcmoiJWJlicqO8ocTEJdNv6JoCjxlmFRHkbtIZfO4sp8KartPviFBUA++w
-         3x3A==
-X-Gm-Message-State: AOAM5320p9vvb5eWWvT6nwcj7719XWdZZjtNvuGOOj3Pj/NrOpLnWdig
-        eub4G+UWGedv4kVOwCjqAanl/4F3iUPHJgx9Ybo=
-X-Google-Smtp-Source: ABdhPJz1NAiShMhUgvho+SQx6luuLIs4kJPMY4xcGr6zIeqdAu3CW0qrMVRLCe/QO/Iubm7WsMj6Zw==
-X-Received: by 2002:a05:6402:b8f:b0:3fd:90e9:ddac with SMTP id cf15-20020a0564020b8f00b003fd90e9ddacmr21418105edb.405.1646081055514;
-        Mon, 28 Feb 2022 12:44:15 -0800 (PST)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm6601108edt.80.2022.02.28.12.44.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:44:15 -0800 (PST)
-Received: by mail-ej1-f50.google.com with SMTP id r13so27313423ejd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:44:15 -0800 (PST)
-X-Received: by 2002:a2e:924d:0:b0:246:370c:5618 with SMTP id
- v13-20020a2e924d000000b00246370c5618mr15158756ljg.358.1646080652034; Mon, 28
- Feb 2022 12:37:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com> <Yh0tl3Lni4weIMkl@casper.infradead.org>
-In-Reply-To: <Yh0tl3Lni4weIMkl@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 12:37:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
-Message-ID: <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
+        Mon, 28 Feb 2022 15:40:00 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1FBFC9;
+        Mon, 28 Feb 2022 12:39:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646080760; x=1677616760;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FyfdXQ0oJJy5xP7LYIM4Hoj9gpwoF/eamju/2GvJ4YU=;
+  b=aiE9s3bSiSwJjl0Vs9/9+37OCrHclvjrXSya7InxGWTy2s9MVCeuJm0Z
+   So4RtH/7zNvCNZeHTA6ebGXZHza7isMt9Jd4ED5NsSjd4yQHWfYt1m/Ge
+   Nkkxx+p3bltCaoHucKV+Gku+8L+rFPXsXOdBp9br2Bm0MqSfrg/hvCTLP
+   otUV9trJd7pHlI56BKe2ia8x10riHbSyGEZ9aZkZPfvrAcIEn+FloP8ap
+   i1+4S+38gTkddT6iJXqawypCHLR6cKgCOUJbdShrbHGFrPVFM7xiEHL8a
+   m6nFOPsgKKu+ee4dNR3Slw27WSiuKo+ZmiHEkMUQuio+57Ukws2EJUCBW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252715548"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="252715548"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 12:39:20 -0800
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="510236616"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 12:39:17 -0800
+Date:   Mon, 28 Feb 2022 20:39:11 +0000
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kyle Sanderson <kyle.leet@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        device-mapper development <dm-devel@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+Message-ID: <Yh0y75aegqS4jIP7@silpixa00400314>
+References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
+ <20220219210354.GF59715@dread.disaster.area>
+ <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
+ <YhN76/ONC9qgIKQc@silpixa00400314>
+ <CACsaVZJFane88cXxG_E1VkcMcJm8YVN+GDqQ2+tRYNpCf+m8zA@mail.gmail.com>
+ <CAHk-=whVT2GcwiJM8m-XzgJj8CjytTHi_pmgmOnSpzvGWzZM1A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whVT2GcwiJM8m-XzgJj8CjytTHi_pmgmOnSpzvGWzZM1A@mail.gmail.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:16 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> Then we can never use -Wshadow ;-(  I'd love to be able to turn it on;
-> it catches real bugs.
+On Mon, Feb 28, 2022 at 11:25:49AM -0800, Linus Torvalds wrote:
+> On Mon, Feb 28, 2022 at 12:18 AM Kyle Sanderson <kyle.leet@gmail.com> wrote:
+> >
+> > Makes sense - this kernel driver has been destroying users for many
+> > years. I'm disappointed that this critical bricking failure isn't
+> > searchable for others.
+> 
+> It does sound like we should just disable that driver entirely until
+> it is fixed.
+> 
+> Or at least the configuration that can cause problems, if there is
+> some particular sub-case.
+The dm-crypt + QAT use-case is already disabled since kernel 5.10 due to
+a different issue.
+Is it an option to port those patches to stable till I provide a fix for
+the driver? I drafted already few alternatives for the fix and I am aiming
+for a final set by end of week.
 
-Oh, we already can never use -Wshadow regardless of things like this.
-That bridge hasn't just been burned, it never existed in the first
-place.
+Thanks,
 
-The whole '-Wshadow' thing simply cannot work with local variables in
-macros - something that we've used since day 1.
-
-Try this (as a "p.c" file):
-
-        #define min(a,b) ({                     \
-                typeof(a) __a = (a);            \
-                typeof(b) __b = (b);            \
-                __a < __b ? __a : __b; })
-
-        int min3(int a, int b, int c)
-        {
-                return min(a,min(b,c));
-        }
-
-and now do "gcc -O2 -S t.c".
-
-Then try it with -Wshadow.
-
-In other words, -Wshadow is simply not acceptable. Never has been,
-never will be, and that has nothing to do with the
-
-        typeof(pos) pos
-
-kind of thing.
-
-Your argument just isn't an argument.
-
-              Linus
+-- 
+Giovanni

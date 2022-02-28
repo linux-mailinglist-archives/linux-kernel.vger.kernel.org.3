@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BE64C74DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EE44C750D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237139AbiB1Rrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S238932AbiB1Ru5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239412AbiB1RoI (ORCPT
+        with ESMTP id S239448AbiB1RoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:44:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450FB9D0F4;
-        Mon, 28 Feb 2022 09:36:20 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632999D4E4;
+        Mon, 28 Feb 2022 09:36:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85B65614CC;
-        Mon, 28 Feb 2022 17:36:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E666C340F4;
-        Mon, 28 Feb 2022 17:36:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC83B815A2;
+        Mon, 28 Feb 2022 17:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B16C340F5;
+        Mon, 28 Feb 2022 17:36:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069779;
-        bh=X9Sr+rdd3b35f9HJB8DUKe1EYqkMTwI/FJ63jaiHMT0=;
+        s=korg; t=1646069781;
+        bh=uyedKT2X1iZVhp4ujHdVP2F6tNmM6r6qtYwLCazL8ZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MlgezriOp73C5zpIO9FqTzurqrYGZ0x7A3oRueHaiAXTMGWWE+V4oPX6oX5KzzTT1
-         Nx5Z45nzMiDoPRDKlnLGnFpQ5n0WvvycawNSd8b27X/y7kGITLltsINLiH82DB/l/K
-         fH6bjiVOWcZ0n2rJ9Bq4cmCB1T/RIe/g79lEInJQ=
+        b=URwYa9boka5PFFSxcndfnXcLCShI4eYHQG5xKVsRZi+oG31CwhL0abmWYzEY1/USy
+         kmmkLYCc/vAyMxi9ylGN+EDv9zPrCQ75akNQvizpj356YsnZX0lItDD/JMoVNDxUp8
+         TFdTyYaC1TkwtrP0eq3X1VaeumrSrcfyIZ5Z89+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com, Song Liu" 
-        <songliubraving@fb.com>
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Adam Majer <amajer@suse.com>, Dirk Mueller <dmueller@suse.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 001/139] mm/filemap: Fix handling of THPs in generic_file_buffered_read()
-Date:   Mon, 28 Feb 2022 18:22:55 +0100
-Message-Id: <20220228172347.742815203@linuxfoundation.org>
+        stable@vger.kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.15 002/139] cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug
+Date:   Mon, 28 Feb 2022 18:22:56 +0100
+Message-Id: <20220228172347.834548462@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
 References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,52 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+From: Zhang Qiao <zhangqiao22@huawei.com>
 
-When a THP is present in the page cache, we can return it several times,
-leading to userspace seeing the same data repeatedly if doing a read()
-that crosses a 64-page boundary.  This is probably not a security issue
-(since the data all comes from the same file), but it can be interpreted
-as a transient data corruption issue.  Fortunately, it is very rare as
-it can only occur when CONFIG_READ_ONLY_THP_FOR_FS is enabled, and it can
-only happen to executables.  We don't often call read() on executables.
+commit 05c7b7a92cc87ff8d7fde189d0fade250697573c upstream.
 
-This bug is fixed differently in v5.17 by commit 6b24ca4a1a8d
-("mm: Use multi-index entries in the page cache").  That commit is
-unsuitable for backporting, so fix this in the clearest way.  It
-sacrifices a little performance for clarity, but this should never
-be a performance path in these kernel versions.
+As previously discussed(https://lkml.org/lkml/2022/1/20/51),
+cpuset_attach() is affected with similar cpu hotplug race,
+as follow scenario:
 
-Fixes: cbd59c48ae2b ("mm/filemap: use head pages in generic_file_buffered_read")
-Cc: stable@vger.kernel.org # v5.15, v5.16
-Link: https://lore.kernel.org/r/df3b5d1c-a36b-2c73-3e27-99e74983de3a@suse.cz/
-Analyzed-by: Adam Majer <amajer@suse.com>
-Analyzed-by: Dirk Mueller <dmueller@suse.com>
-Bisected-by: Takashi Iwai <tiwai@suse.de>
-Reported-by: Vlastimil Babka <vbabka@suse.cz>
-Tested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+     cpuset_attach()				cpu hotplug
+    ---------------------------            ----------------------
+    down_write(cpuset_rwsem)
+    guarantee_online_cpus() // (load cpus_attach)
+					sched_cpu_deactivate
+					  set_cpu_active()
+					  // will change cpu_active_mask
+    set_cpus_allowed_ptr(cpus_attach)
+      __set_cpus_allowed_ptr_locked()
+       // (if the intersection of cpus_attach and
+         cpu_active_mask is empty, will return -EINVAL)
+    up_write(cpuset_rwsem)
+
+To avoid races such as described above, protect cpuset_attach() call
+with cpu_hotplug_lock.
+
+Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
+Cc: stable@vger.kernel.org # v2.6.32+
+Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+Acked-by: Waiman Long <longman@redhat.com>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/filemap.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ kernel/cgroup/cpuset.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2354,8 +2354,12 @@ static void filemap_get_read_batch(struc
- 			break;
- 		if (PageReadahead(head))
- 			break;
--		xas.xa_index = head->index + thp_nr_pages(head) - 1;
--		xas.xa_offset = (xas.xa_index >> xas.xa_shift) & XA_CHUNK_MASK;
-+		if (PageHead(head)) {
-+			xas_set(&xas, head->index + thp_nr_pages(head));
-+			/* Handle wrap correctly */
-+			if (xas.xa_index - 1 >= max)
-+				break;
-+		}
- 		continue;
- put_page:
- 		put_page(head);
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2249,6 +2249,7 @@ static void cpuset_attach(struct cgroup_
+ 	cgroup_taskset_first(tset, &css);
+ 	cs = css_cs(css);
+ 
++	cpus_read_lock();
+ 	percpu_down_write(&cpuset_rwsem);
+ 
+ 	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
+@@ -2302,6 +2303,7 @@ static void cpuset_attach(struct cgroup_
+ 		wake_up(&cpuset_attach_wq);
+ 
+ 	percpu_up_write(&cpuset_rwsem);
++	cpus_read_unlock();
+ }
+ 
+ /* The various types of files and directories in a cpuset file system */
 
 

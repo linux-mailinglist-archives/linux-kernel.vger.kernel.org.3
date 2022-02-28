@@ -2,323 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACC64C6AA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306BD4C6A89
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbiB1LhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S235836AbiB1Lbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235864AbiB1LhB (ORCPT
+        with ESMTP id S235505AbiB1Lbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:37:01 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD970F62
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:36:22 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso5836094wmr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=xhOyzvT1endqYswdxY89LwfsPMpKGMzBrYmzIyKgpOU=;
-        b=v1vqyaGejr9klYpNo/Ox1PxEkv4+jSggX4MFhBzAjjxlFBiJBH+hYnXPMoUM+kjU8i
-         c84wvySlZEKuEgwjOZ0u2A2ShH9vz2xzgegQoB1mrKSMr7bjyqvihuzcrwmIhZ6HydEE
-         taWOhw5VvOtsgJ2v5Mmu5v8exv+CM/s8VC2S2wJ/sWjB38fCw/9lNTFD/h0m4/T+b9UU
-         bxk0BaYlXIWsvQSGZ9Rr1/YAZ/QX1sQSzRMlFzobmrqj63qZ8JsXu1ecTBdzcDdhyfmW
-         iO8oQYHDYdFUo2DV8COzOK5eUzloJucovLPDwri38QnQIgkvlCNq7UnVXUu45T+Q7GdY
-         T9mA==
+        Mon, 28 Feb 2022 06:31:46 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4088F7092D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:31:07 -0800 (PST)
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 86E703FCAD
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646047862;
+        bh=TqoJaizFHWK8/heI0IG9vgkdj098BV5WNR7J8iP/dOc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=a2ztbmJB8uIvBG+eK4KoujDWBX0DBb7EuVhzV08QNC3sy6xj8qfB399mJrq58IezK
+         GTyNFB+SRh6A7lmDClNxUyvDH03pTekgJeBj+xhCj2h/C0LlDPJL8D5YqndKuEKc5k
+         KwEr9Vf/5KmSBrJWnloc8PPzZq8U3qRmso1PVAXnYU222qpcy3LycKrxbe7Ngh9Byn
+         1y1f0DZzg5NVdY8mZE92rdfhUaMNcEqIUpbMNWZcu0UDqcgpNe/LtKry+EJRcUQKOR
+         6ekt7G1WhKxPT3kDTUkseUfk6LPzqRs8Gg/p6yb7uXotxITOBxlVWXgGnd450pOPVI
+         di6uHBz4Df9KA==
+Received: by mail-lf1-f71.google.com with SMTP id z24-20020a056512371800b0043ea4caa07cso1639795lfr.17
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:31:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=xhOyzvT1endqYswdxY89LwfsPMpKGMzBrYmzIyKgpOU=;
-        b=f/fW+1wgZUp+Jg5eSmnHHvV87FPHryykMHNXBCloGntbp4hR9YzWsG+K5Q1dY1d39F
-         MB8vMvbHxoqTXxnG/NuuVD2gpjDkuoc8ANBU+i9SE8jDmKMWLxA6yKQpNF4ap02S5MSQ
-         LEyMBUsd1Y355udBU4cMNCaLOH+E8kQQ0uzHDiNtXFgnRa5jm1dreFlTmLqB95oISTps
-         zSXkzmUXsG8TPcW0qWW2+bLTuGfaOAuXgjRS9UnH/BJAXJxLYh3ORull7Fcyv74xVP1r
-         dBvYY7AV74SXLnezxTu9oz4ovOJVB5QViTsHmjunYUARtFqmtm12dfFnJK6MDG0PIpep
-         6UjQ==
-X-Gm-Message-State: AOAM530jy7fjuVw4EirEvsbpIGJBlx+Ggot437E7+IxQPAWH0aGTcxQ6
-        klJtHuO2QGg+hSqlqJ2wz4pzHQ==
-X-Google-Smtp-Source: ABdhPJyNS1ZktAEFh83NAchTl38qLPHJ4wc/ggNRkJVRI2hqHTRihiHnBJHiemrzPsldnsHrMM5Xyw==
-X-Received: by 2002:a1c:6a0c:0:b0:381:3f5a:f30c with SMTP id f12-20020a1c6a0c000000b003813f5af30cmr11658179wmc.153.1646048180794;
-        Mon, 28 Feb 2022 03:36:20 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfdb84000000b001e8d8ac5394sm10704361wri.110.2022.02.28.03.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 03:36:20 -0800 (PST)
-References: <20220217063346.21691-1-liang.yang@amlogic.com>
- <20220217063346.21691-2-liang.yang@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 1/2] mtd: rawnand: meson: discard the common
- MMC sub clock framework
-Date:   Mon, 28 Feb 2022 12:28:57 +0100
-In-reply-to: <20220217063346.21691-2-liang.yang@amlogic.com>
-Message-ID: <1jzgmbw7d8.fsf@starbuckisacylon.baylibre.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TqoJaizFHWK8/heI0IG9vgkdj098BV5WNR7J8iP/dOc=;
+        b=dkB6FP3mMIA+7tkl/SDYhGN8FUKxaxgt321g8wWIaaOAS2IBm+HIKxrv+G3vh3CBGS
+         GLlQJ5ByNKvK/Bppvft/0YrczKA5NxLH2L6siHz9HNiaZ+I5A35ZTH5cCm77gB2/jVwr
+         ah4gaZkBLjH7UgJ6i6GEvfOwM5ugvfGIUY1VNxKArrp+OUvKiJf+LlsDNbQl0m8u/h/A
+         pUP0MAglb3zXsUzJVqlXTU+ZXo7kRa3Gyg2Srml9yg6j91RqNc/cl97WBBuHg2AM4Qre
+         ujfYAFp72q8vF9+aSF7NT7k/MbuXnhlmUMYBrJZShozbnT0MS+xAk+fz2z4vFmRit2da
+         qQbQ==
+X-Gm-Message-State: AOAM5310f29sIgzwI+DYi90nWoSpMP0nI1fufSyD+ejd0wedhTzrVzq6
+        qBbX3M/QtEXnAhQrhdFTmdRAO0qYgwAnP9cNze4OyI+D8v+EbMQ72nad2zIpoHjifrtHxdpQNIe
+        bgb1q4Cfa+A5ERbV9nCTXZhjCUwwHa0ssRg6nsExf7Q==
+X-Received: by 2002:a17:906:69ce:b0:6a7:8c03:3caa with SMTP id g14-20020a17090669ce00b006a78c033caamr14869871ejs.335.1646047848634;
+        Mon, 28 Feb 2022 03:30:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy8wXt+PKUVmt9ZYqUS8EzsJUeRWG5FxAFTct2htJDic6wAfCk0sPsop3G0sa4LoCQVSlMP6w==
+X-Received: by 2002:a17:906:69ce:b0:6a7:8c03:3caa with SMTP id g14-20020a17090669ce00b006a78c033caamr14869844ejs.335.1646047848374;
+        Mon, 28 Feb 2022 03:30:48 -0800 (PST)
+Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id cc21-20020a0564021b9500b00403bc1dfd5csm6063924edb.85.2022.02.28.03.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 03:30:47 -0800 (PST)
+Message-ID: <b428f7b0-9f3e-466c-9386-9f72f13ebbd0@canonical.com>
+Date:   Mon, 28 Feb 2022 12:30:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 01/11] driver: platform: Add helper for safer setting
+ of driver_override
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
+ <20220227135214.145599-2-krzysztof.kozlowski@canonical.com>
+ <YhypTr5754yK9WGi@abelvesa>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YhypTr5754yK9WGi@abelvesa>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/02/2022 11:51, Abel Vesa wrote:
+> On 22-02-27 14:52:04, Krzysztof Kozlowski wrote:
+>> Several core drivers and buses expect that driver_override is a
+>> dynamically allocated memory thus later they can kfree() it.
+>>
+>> However such assumption is not documented, there were in the past and
+>> there are already users setting it to a string literal. This leads to
+>> kfree() of static memory during device release (e.g. in error paths or
+>> during unbind):
+>>
+>>     kernel BUG at ../mm/slub.c:3960!
+>>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>>     ...
+>>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
+>>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
+>>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
+>>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
+>>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
+>>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
+>>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
+>>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
+>>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
+>>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
+>>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
+>>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
+>>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
+>>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
+>>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
+>>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
+>>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
+>>     (do_one_initcall) from [<c0f012c0>] (kernel_init_freeable+0x3d0/0x4d8)
+>>     (kernel_init_freeable) from [<c0a7def0>] (kernel_init+0x8/0x114)
+>>     (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+>>
+>> Provide a helper which clearly documents the usage of driver_override.
+>> This will allow later to reuse the helper and reduce amount of
+>> duplicated code.
+>>
+>> Convert the platform driver to use new helper and make the
+>> driver_override field const char (it is not modified by the core).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  drivers/base/driver.c           | 51 +++++++++++++++++++++++++++++++++
+>>  drivers/base/platform.c         | 28 +++---------------
+>>  include/linux/device/driver.h   |  2 ++
+>>  include/linux/platform_device.h |  7 ++++-
+>>  4 files changed, 63 insertions(+), 25 deletions(-)
+>>
+>> diff --git a/drivers/base/driver.c b/drivers/base/driver.c
+>> index 8c0d33e182fd..353750b0bbc5 100644
+>> --- a/drivers/base/driver.c
+>> +++ b/drivers/base/driver.c
+>> @@ -30,6 +30,57 @@ static struct device *next_device(struct klist_iter *i)
+>>  	return dev;
+>>  }
+>>  
+>> +/**
+>> + * driver_set_override() - Helper to set or clear driver override.
+>> + * @dev: Device to change
+>> + * @override: Address of string to change (e.g. &device->driver_override);
+>> + *            The contents will be freed and hold newly allocated override.
+>> + * @s: NUL terminated string, new driver name to force a match, pass empty
+>> + *     string to clear it
+>> + * @len: length of @s
+>> + *
+>> + * Helper to set or clear driver override in a device, intended for the cases
+>> + * when the driver_override field is allocated by driver/bus code.
+>> + *
+>> + * Returns: 0 on success or a negative error code on failure.
+>> + */
+>> +int driver_set_override(struct device *dev, const char **override,
+>> +			const char *s, size_t len)
+> 
+> TBH, I think it would make more sense to have this generic
+> driver_set_override receive only the dev and the string. And then,
+> each bus type will have their own implementation that handle things
+> their own way. This would allow all the drivers that will use this to
+> do something like this:
+> 
+> 	ret = driver_set_override(&pdev->dev, "override_string");
+> 
+> I think it would look more cleaner.
+> 
 
-On Thu 17 Feb 2022 at 14:33, Liang Yang <liang.yang@amlogic.com> wrote:
+The interface in general is not for the drivers. Drivers use it in
+exceptions (few cases in entire kernel) but many times they actually do
+not need to.
 
-> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK' which is
-> defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider and
-> bit6~7 is the mux for fix pll and xtal.A common MMC and NAND sub-clock has been
-> implemented and can be used by the eMMC and NAND controller (which are mutually
-> exclusive anyway). Let's use this new clock.
->
-> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 107 +++++++++++++++++-------------
->  1 file changed, 61 insertions(+), 46 deletions(-)
->
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index ac3be92872d0..c5b892d38ea0 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -10,6 +10,7 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/interrupt.h>
->  #include <linux/clk.h>
-> +#include <linux/clk-provider.h>
->  #include <linux/mtd/rawnand.h>
->  #include <linux/mtd/mtd.h>
->  #include <linux/mfd/syscon.h>
-> @@ -19,6 +20,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_address.h>
->  #include <linux/sched/task_stack.h>
->  
->  #define NFC_REG_CMD		0x00
-> @@ -104,6 +106,9 @@
->  
->  #define PER_INFO_BYTE		8
->  
-> +#define CLK_DIV_SHIFT		0
-> +#define CLK_DIV_WIDTH		6
-> +
->  struct meson_nfc_nand_chip {
->  	struct list_head node;
->  	struct nand_chip nand;
-> @@ -151,15 +156,15 @@ struct meson_nfc {
->  	struct nand_controller controller;
->  	struct clk *core_clk;
->  	struct clk *device_clk;
-> -	struct clk *phase_tx;
-> -	struct clk *phase_rx;
-> +	struct clk *nand_clk;
-> +	struct clk_divider nand_divider;
->  
->  	unsigned long clk_rate;
->  	u32 bus_timing;
->  
->  	struct device *dev;
->  	void __iomem *reg_base;
-> -	struct regmap *reg_clk;
-> +	void __iomem *sd_emmc_clock;
->  	struct completion completion;
->  	struct list_head chips;
->  	const struct meson_nfc_data *data;
-> @@ -988,6 +993,8 @@ static const struct mtd_ooblayout_ops meson_ooblayout_ops = {
->  static int meson_nfc_clk_init(struct meson_nfc *nfc)
->  {
->  	int ret;
-> +	struct clk_init_data init = {0};
-> +	struct clk_parent_data nfc_divider_parent_data[1];
->  
->  	/* request core clock */
->  	nfc->core_clk = devm_clk_get(nfc->dev, "core");
-> @@ -1002,21 +1009,26 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->  		return PTR_ERR(nfc->device_clk);
->  	}
->  
-> -	nfc->phase_tx = devm_clk_get(nfc->dev, "tx");
-> -	if (IS_ERR(nfc->phase_tx)) {
-> -		dev_err(nfc->dev, "failed to get TX clk\n");
-> -		return PTR_ERR(nfc->phase_tx);
-> -	}
-> -
-> -	nfc->phase_rx = devm_clk_get(nfc->dev, "rx");
-> -	if (IS_ERR(nfc->phase_rx)) {
-> -		dev_err(nfc->dev, "failed to get RX clk\n");
-> -		return PTR_ERR(nfc->phase_rx);
-> -	}
-> +	init.name = devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
-> +	init.ops = &clk_divider_ops;
-> +	nfc_divider_parent_data[0].fw_name = __clk_get_name(nfc->device_clk);
-
-This is broken.
-__clk_get_name() gives the actual global name of the clock
-"fw_name" is the DT name which allows to find the index on the clock
-
-From the DT doc, the fw_name is either 'core' or 'device'
-
-I don't think any clock would have such a name so I don't think this can
-actually work. Did you actually test this ?
+Adding a dedicated driver_set_override() brings intention that such
+usage is welcomed... but it's not. :)
 
 
-> +	init.parent_data = nfc_divider_parent_data;
-> +	init.num_parents = 1;
-> +	nfc->nand_divider.reg = nfc->sd_emmc_clock;
-> +	nfc->nand_divider.shift = CLK_DIV_SHIFT;
-> +	nfc->nand_divider.width = CLK_DIV_WIDTH;
-> +	nfc->nand_divider.hw.init = &init;
-> +	nfc->nand_divider.flags = CLK_DIVIDER_ONE_BASED |
-> +				  CLK_DIVIDER_ROUND_CLOSEST |
-> +				  CLK_DIVIDER_ALLOW_ZERO;
-> +
-> +	nfc->nand_clk = devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
-> +	if (IS_ERR(nfc->nand_clk))
-> +		return PTR_ERR(nfc->nand_clk);
->  
->  	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
-> -	regmap_update_bits(nfc->reg_clk,
-> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
-> +	writel(CLK_SELECT_NAND | readl(nfc->sd_emmc_clock),
-> +	       nfc->sd_emmc_clock);
->  
->  	ret = clk_prepare_enable(nfc->core_clk);
->  	if (ret) {
-> @@ -1030,29 +1042,21 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->  		goto err_device_clk;
->  	}
->  
-> -	ret = clk_prepare_enable(nfc->phase_tx);
-> -	if (ret) {
-> -		dev_err(nfc->dev, "failed to enable TX clock\n");
-> -		goto err_phase_tx;
-> -	}
-> -
-> -	ret = clk_prepare_enable(nfc->phase_rx);
-> +	ret = clk_prepare_enable(nfc->nand_clk);
->  	if (ret) {
-> -		dev_err(nfc->dev, "failed to enable RX clock\n");
-> -		goto err_phase_rx;
-> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
-> +		goto err_nand_clk;
->  	}
->  
->  	ret = clk_set_rate(nfc->device_clk, 24000000);
->  	if (ret)
-> -		goto err_disable_rx;
-> +		goto err_disable_clk;
->  
->  	return 0;
->  
-> -err_disable_rx:
-> -	clk_disable_unprepare(nfc->phase_rx);
-> -err_phase_rx:
-> -	clk_disable_unprepare(nfc->phase_tx);
-> -err_phase_tx:
-> +err_disable_clk:
-> +	clk_disable_unprepare(nfc->nand_clk);
-> +err_nand_clk:
->  	clk_disable_unprepare(nfc->device_clk);
->  err_device_clk:
->  	clk_disable_unprepare(nfc->core_clk);
-> @@ -1061,8 +1065,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->  
->  static void meson_nfc_disable_clk(struct meson_nfc *nfc)
->  {
-> -	clk_disable_unprepare(nfc->phase_rx);
-> -	clk_disable_unprepare(nfc->phase_tx);
-> +	clk_disable_unprepare(nfc->nand_clk);
->  	clk_disable_unprepare(nfc->device_clk);
->  	clk_disable_unprepare(nfc->core_clk);
->  }
-> @@ -1370,11 +1373,31 @@ static const struct of_device_id meson_nfc_id_table[] = {
->  };
->  MODULE_DEVICE_TABLE(of, meson_nfc_id_table);
->  
-> +static int meson_nfc_reg_resource(struct device *dev, struct meson_nfc *nfc)
-> +{
-> +	struct resource res;
-> +	void __iomem *base[2];
-> +	struct device_node *node = dev->of_node;
-> +	int i;
-> +
-> +	for (i = 0; i < 2; i++) {
-> +		if (of_address_to_resource(node, i, &res))
-> +			return -ENOENT;
-> +
-> +		base[i] = devm_ioremap_resource(dev, &res);
-> +		if (IS_ERR(base))
-> +			return PTR_ERR(base);
-> +	}
-> +	nfc->reg_base = base[0];
-> +	nfc->sd_emmc_clock = base[1];
-> +
-
-There is no reason to make a separate function for this.
-
-Please name your ressource and claim them properly instead of interating
-on them.
-
-
-> +	return 0;
-> +}
-> +
->  static int meson_nfc_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct meson_nfc *nfc;
-> -	struct resource *res;
->  	int ret, irq;
->  
->  	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
-> @@ -1388,20 +1411,12 @@ static int meson_nfc_probe(struct platform_device *pdev)
->  	nand_controller_init(&nfc->controller);
->  	INIT_LIST_HEAD(&nfc->chips);
->  	init_completion(&nfc->completion);
-> -
->  	nfc->dev = dev;
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	nfc->reg_base = devm_ioremap_resource(dev, res);
-> -	if (IS_ERR(nfc->reg_base))
-> -		return PTR_ERR(nfc->reg_base);
-> -
-> -	nfc->reg_clk =
-> -		syscon_regmap_lookup_by_phandle(dev->of_node,
-> -						"amlogic,mmc-syscon");
-> -	if (IS_ERR(nfc->reg_clk)) {
-> -		dev_err(dev, "Failed to lookup clock base\n");
-> -		return PTR_ERR(nfc->reg_clk);
-> +	ret = meson_nfc_reg_resource(dev, nfc);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to get reg resource\n");
-> +		return ret;
->  	}
->  
->  	irq = platform_get_irq(pdev, 0);
-
+Best regards,
+Krzysztof

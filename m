@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1D94C74CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5647B4C7552
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238927AbiB1Rr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S239150AbiB1Rwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239557AbiB1RoV (ORCPT
+        with ESMTP id S238871AbiB1Rrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:44:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840889D4E2;
-        Mon, 28 Feb 2022 09:36:35 -0800 (PST)
+        Mon, 28 Feb 2022 12:47:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6CA9F6C9;
+        Mon, 28 Feb 2022 09:38:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12EA4B815BE;
-        Mon, 28 Feb 2022 17:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53479C340E7;
-        Mon, 28 Feb 2022 17:36:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DB8F61548;
+        Mon, 28 Feb 2022 17:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EC4C340E7;
+        Mon, 28 Feb 2022 17:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069792;
-        bh=iFga6YH+/J5P1F70DLuXYIdRRbydZYEXgQ/zFZRibA8=;
+        s=korg; t=1646069894;
+        bh=tZIKfWR+H3BlXKJ0ATaZf8/I7giSuWW2xGUyyzNSUi8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AK/e9kaI5QWEGNrK1sG1PDw28fogKd66usEO0uBfSANy58c94GIaU5nzznE4JC1Xx
-         GhjqOEIGgqIA/HduyW3m+8FlpLZgmw0zO1NPZNKm9qmnwfQ8I3p4UB60Xcb+QzvSiS
-         i3gbO6/0I+ry57n9G8+vlLKgwAMOGIZf9XeTabC8=
+        b=chrfte3vZSHBzw1QB9cy4Ylzv+m5Izk2eUG0Jw6CNK9hk96yhGUz1eROHRMfPOSOH
+         amVFeZEfPTtkxUky+fKumlv62m/CDYX3LXdDJ2EPwnLB2l+UZEBicM5bbR5fz5u4St
+         cvN3Wh0f3nZ5kleKno5m1286WFC10S/9eyJDAsL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Su Yue <l@damenly.su>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 006/139] btrfs: tree-checker: check item_size for dev_item
-Date:   Mon, 28 Feb 2022 18:23:00 +0100
-Message-Id: <20220228172348.400827591@linuxfoundation.org>
+        stable@vger.kernel.org, Siarhei Volkau <lis8215@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 5.15 007/139] clk: jz4725b: fix mmc0 clock gating
+Date:   Mon, 28 Feb 2022 18:23:01 +0100
+Message-Id: <20220228172348.497204774@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
 References: <20220228172347.614588246@linuxfoundation.org>
@@ -54,44 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Su Yue <l@damenly.su>
+From: Siarhei Volkau <lis8215@gmail.com>
 
-commit ea1d1ca4025ac6c075709f549f9aa036b5b6597d upstream.
+commit 2f0754f27a230fee6e6d753f07585cee03bedfe3 upstream.
 
-Check item size before accessing the device item to avoid out of bound
-access, similar to inode_item check.
+The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
+You can find that the same bit is assigned to "mmc0" too.
+It leads to mmc0 hang for a long time after any sound activity
+also it  prevented PM_SLEEP to work properly.
+I guess it was introduced by copy-paste from jz4740 driver
+where it is really controls I2S clock gate.
 
-Signed-off-by: Su Yue <l@damenly.su>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 226dfa4726eb ("clk: Add Ingenic jz4725b CGU driver")
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220205171849.687805-2-lis8215@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/tree-checker.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/clk/ingenic/jz4725b-cgu.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/fs/btrfs/tree-checker.c
-+++ b/fs/btrfs/tree-checker.c
-@@ -965,6 +965,7 @@ static int check_dev_item(struct extent_
- 			  struct btrfs_key *key, int slot)
- {
- 	struct btrfs_dev_item *ditem;
-+	const u32 item_size = btrfs_item_size_nr(leaf, slot);
+--- a/drivers/clk/ingenic/jz4725b-cgu.c
++++ b/drivers/clk/ingenic/jz4725b-cgu.c
+@@ -139,11 +139,10 @@ static const struct ingenic_cgu_clk_info
+ 	},
  
- 	if (unlikely(key->objectid != BTRFS_DEV_ITEMS_OBJECTID)) {
- 		dev_item_err(leaf, slot,
-@@ -972,6 +973,13 @@ static int check_dev_item(struct extent_
- 			     key->objectid, BTRFS_DEV_ITEMS_OBJECTID);
- 		return -EUCLEAN;
- 	}
-+
-+	if (unlikely(item_size != sizeof(*ditem))) {
-+		dev_item_err(leaf, slot, "invalid item size: has %u expect %zu",
-+			     item_size, sizeof(*ditem));
-+		return -EUCLEAN;
-+	}
-+
- 	ditem = btrfs_item_ptr(leaf, slot, struct btrfs_dev_item);
- 	if (unlikely(btrfs_device_id(leaf, ditem) != key->offset)) {
- 		dev_item_err(leaf, slot,
+ 	[JZ4725B_CLK_I2S] = {
+-		"i2s", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
+ 		.parents = { JZ4725B_CLK_EXT, JZ4725B_CLK_PLL_HALF, -1, -1 },
+ 		.mux = { CGU_REG_CPCCR, 31, 1 },
+ 		.div = { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
+-		.gate = { CGU_REG_CLKGR, 6 },
+ 	},
+ 
+ 	[JZ4725B_CLK_SPI] = {
 
 

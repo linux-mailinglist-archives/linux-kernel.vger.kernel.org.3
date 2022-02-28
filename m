@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86154C7797
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161D54C779A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbiB1SZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S240596AbiB1SZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbiB1SYg (ORCPT
+        with ESMTP id S240151AbiB1SZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:24:36 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0745971CB3;
-        Mon, 28 Feb 2022 10:04:33 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id n14so16733860wrq.7;
-        Mon, 28 Feb 2022 10:04:33 -0800 (PST)
+        Mon, 28 Feb 2022 13:25:11 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D99EBBD
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:05:11 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z15so11700068pfe.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:05:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VaJ7vYxiYDppNFuFvcEyYJgrljTaiSuZmK98Y+vY7wA=;
-        b=obM0ggc5iSG7+04jAJpVvM5h8etlFLjmoe4ZZzOTzBcDwFsuhkVO6s1roPpWq1YY2e
-         w4zuUXbjfJz1VoC3A662BS3NzR0t1zoJoMYFf2e5luAQqjP3126oAW+Zg0g2q/ZdFwWk
-         e+HkxNtaNf8rwIpVk2O8pm66muF7nUj5YcB1tdSePCn7gdQ9Fqh8jWHTYcBXQoj9dcJo
-         ZesQnXxaL2zja28D99QyC50dHVtYWGDCHSXVRUgFZ9JymjrBnrMRLkajEZwCaMW+gUBN
-         awKBE4/e8bAG7z25vJGrzkGIRgvmewZY4NOINQ5RAonQJlzElctNPnRmdia/W70r7N0E
-         o2fw==
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NV9ie411O40GXoKdmB6XocMILdm6e2f7gQDHPVR95BM=;
+        b=gzcuQo+rhTjNEzolMnIBcji+6Lbfpi/b8/TrMXYfbkLSaqKT2CHjMocxHEp7mDdS/Z
+         r/OxOYQrYpMgUhgH0Nj7oN17hW+0EfuxDXDmUjRFXEY0xDUKRVpArBELqpLHMpx8yMXg
+         TW/hCd1d/M6XcZds2jTyKNd2NOHnF+I6ib59FyTeY+8htDmxWpkpE7iUIqwHaZybyYI8
+         G8ke+gBEUHO9szN8n+M7nnM7LUhbcbKsXr/QD9rgTDVtMiWRK0gQ6rbZFqrXH7kKQP84
+         BqzRvaMSIKUN6uweKFKmaG1z+ZVDF7HSj+ibwvrWVJNEyyg4m9HO8wHi5qv88oKQ5DLQ
+         FbLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VaJ7vYxiYDppNFuFvcEyYJgrljTaiSuZmK98Y+vY7wA=;
-        b=L8kJIN6X+xl0Wm9B6mu2UBl46XO8rbK7sOYE6MWAOF9b0omyGGxbn+5ljM+ndyaX63
-         ddyvLEvZif1zW5ZwmGeP+qQ8ymorrGr2UxwOLRdCS2KLnD8SlNESrcmioQbdgvpZa5Tw
-         UtG1uKhnsxP2DKJaTtCkRhV9ENhiXD9nCZng/Xoh02xz7fRCzTAtLucV1pL3SBZPrBe4
-         4XajTq+kVetyOua7fAFSHgQ9BGeYPk4am7JwyZRDoXb2vr3fxVPqN36gHo0kkGLfmqHQ
-         is8HYWYExxS2jR8nqFwzBsMlak2Dn/EkmfYC1Xt3aLxjymWpeHLo9jnUi+npPS+yAPGW
-         3wAw==
-X-Gm-Message-State: AOAM531E+m6nIk5Lsy74dKVnuUYux/frYnVAijktuNaUulDjLa2oCkXz
-        Zcv0GqrvtkMRClqhhIgSoqs=
-X-Google-Smtp-Source: ABdhPJz81jTbv3NaGz+ja9PXaKPd0Fkk+Zfd69cpLTOt2pT1n5NhmnRVNBauIgQZyRJh5mxeY3fULA==
-X-Received: by 2002:adf:dd12:0:b0:1ea:9398:8f4f with SMTP id a18-20020adfdd12000000b001ea93988f4fmr15899502wrm.458.1646071472587;
-        Mon, 28 Feb 2022 10:04:32 -0800 (PST)
-Received: from elementary ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id m6-20020a5d56c6000000b001edb64e69cdsm11208628wrw.15.2022.02.28.10.04.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 10:04:32 -0800 (PST)
-Date:   Mon, 28 Feb 2022 19:04:30 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        kieran.bingham+renesas@ideasonboard.com, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: rcar-du: switch to devm_drm_of_get_bridge
-Message-ID: <20220228180430.GA14803@elementary>
-References: <20220221073757.12181-1-jose.exposito89@gmail.com>
- <20220221085619.bqyr2etq4xjjqa4p@houat>
- <YhOCRQhDClgsBAtV@pendragon.ideasonboard.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NV9ie411O40GXoKdmB6XocMILdm6e2f7gQDHPVR95BM=;
+        b=z4HIScuRp9fVSDMQOGwDSL5UfgfPx6o37d89qR+PmeSYLuEOgROVLyZzJxcbqvoswX
+         J0Bw7GY8XHhrnF4R74gYpvShAgiJw7Xxsdknta9SYBDJidr97LhKtsauGPzQfJByuTGd
+         RrE8TgBvjylqk2iu1nlQ7kiWudrGZ4XE/2vmTc3pZJUUjKPOqxGBpFOH2A8k8+4c7TEA
+         wJ8efREOJAaUUbd42LhIQhIBVisCWB5sTIM7V9q9bxrEChE1M6SSDN/N4vQAfwQIHAVP
+         WZxbmQtw7gGr1yh4h6T1uNdqJ1Xk+zy2hlkwo2arcPpc+244onGEmtJBUcKB38hTrZTs
+         HwoA==
+X-Gm-Message-State: AOAM530i3bFuQtEDo/kWVjxeNt7hvntMZxxw6GHro28x0cxpbdrU1tYg
+        C+xf7Tkqh22jD1n0O9wEPRgx7DDG9xjNU7KoC4PlvA==
+X-Google-Smtp-Source: ABdhPJwchrBRVlpMRDctD2rTS7qnH0MSv+U6mU1YnMj/jx7/PZvdDqeHAthZgQ44hTG6eqyKb5R024/0KbFCAQkjVBA=
+X-Received: by 2002:a05:6a00:1307:b0:4b0:b1c:6fd9 with SMTP id
+ j7-20020a056a00130700b004b00b1c6fd9mr22992507pfu.27.1646071500373; Mon, 28
+ Feb 2022 10:05:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhOCRQhDClgsBAtV@pendragon.ideasonboard.com>
+References: <20220228101617.12694-1-johan@kernel.org>
+In-Reply-To: <20220228101617.12694-1-johan@kernel.org>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 28 Feb 2022 10:04:48 -0800
+Message-ID: <CAJ+vNU0ppYr80hV5+9tQYW1sF=szYP1N+yS5U2a71UkyoPMTXA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mm-venice: fix spi2 pin configuration
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,11 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 02:15:01PM +0200, Laurent Pinchart wrote:
-> On Mon, Feb 21, 2022 at 09:56:19AM +0100, Maxime Ripard wrote:
-> > I guess lvds->panel can be removed from the rcar_lvds struct as well?
-> 
-> It's used in rcar_lvds_get_lvds_mode() though, so this patch introduces
-> a regression.
+On Mon, Feb 28, 2022 at 2:18 AM Johan Hovold <johan@kernel.org> wrote:
+>
+> Due to what looks like a copy-paste error, the ECSPI2_MISO pad is not
+> muxed for SPI mode and causes reads from a slave-device connected to the
+> SPI header to always return zero.
+>
+> Configure the ECSPI2_MISO pad for SPI mode on the gw71xx, gw72xx and
+> gw73xx families of boards that got this wrong.
+>
+> Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
+> Cc: stable@vger.kernel.org      # 5.12
+> Cc: Tim Harvey <tharvey@gateworks.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi | 2 +-
+>  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi | 2 +-
+>  arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+> index 28012279f6f6..ecf6c9a6db90 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+> @@ -166,7 +166,7 @@ pinctrl_spi2: spi2grp {
+>                 fsl,pins = <
+>                         MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI    0xd6
+> -                       MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+> +                       MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13      0xd6
+>                 >;
+>         };
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+> index 27afa46a253a..6e0f0a2f6970 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+> @@ -231,7 +231,7 @@ pinctrl_spi2: spi2grp {
+>                 fsl,pins = <
+>                         MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI    0xd6
+> -                       MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+> +                       MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13      0xd6
+>                 >;
+>         };
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+> index a59e849c7be2..6c4c9ae9715f 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+> @@ -280,7 +280,7 @@ pinctrl_spi2: spi2grp {
+>                 fsl,pins = <
+>                         MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI    0xd6
+> -                       MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK    0xd6
+> +                       MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO    0xd6
+>                         MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13      0xd6
+>                 >;
+>         };
+> --
+> 2.34.1
+>
 
-True, my bad. Sorry about that.
+Johan,
+
+Thanks for catching this!
+
+Acked-by: Tim Harvey <tharvey@gateworks.com>
+
+Best Regards,
+
+Tim

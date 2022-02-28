@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2084C7366
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D7C4C7446
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238136AbiB1RfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
+        id S238995AbiB1Rni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238451AbiB1Rda (ORCPT
+        with ESMTP id S238391AbiB1RkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:33:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6490CFB;
-        Mon, 28 Feb 2022 09:30:03 -0800 (PST)
+        Mon, 28 Feb 2022 12:40:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFB2939BA;
+        Mon, 28 Feb 2022 09:34:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA02461484;
-        Mon, 28 Feb 2022 17:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A7EC340E7;
-        Mon, 28 Feb 2022 17:30:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73028614BB;
+        Mon, 28 Feb 2022 17:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CDFC340E7;
+        Mon, 28 Feb 2022 17:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069402;
-        bh=RUg3VvKQo9LEhzygEnODVLgGjrv7ndasMVljktpINIA=;
+        s=korg; t=1646069668;
+        bh=IiacSrL8ob66hiYq0YoGi1dM+cEsZe0gKs70eha+nJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z5AgnVMdBTJW7FuhmhfSxANuHwebq4Osi9j+IompaKTrN354Xy3sPbC+flf9s3u3D
-         C/9GJbDBMrZzjRuYwl9yMkUda429alGHq8nT5SQoo/trpr2R82dXcVzYgwZmkvQ5Sr
-         ZoJvkHamBmHjGfKTTc429qf6qDSL61ymR+A3ybKA=
+        b=guf2BuAg3XgR2ilCjvZJ5XUmAip69nvMQvgzX7LoE/hVAKXI7SpRrs/6SfuUzPibY
+         /fgylctLpT/mRAHpAOp2W6B5CSHX0p4U1rXOL7UL7m7D2K8ObP4zzuU93wwQianlE0
+         jTGQFM0VWY62LUOhftzqbx+U0+x1KrxBBvmeM+lE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.19 23/34] ata: pata_hpt37x: disable primary channel on HPT371
+        stable@vger.kernel.org,
+        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
+        Md Haris Iqbal <haris.iqbal@cloud.ionos.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 48/80] RDMA/rtrs-clt: Kill wait_for_inflight_permits
 Date:   Mon, 28 Feb 2022 18:24:29 +0100
-Message-Id: <20220228172210.344817723@linuxfoundation.org>
+Message-Id: <20220228172317.471329041@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-References: <20220228172207.090703467@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
 
-commit 8d093e02e898b24c58788b0289e3202317a96d2a upstream.
+[ Upstream commit 25a033f5a75873cfdd36eca3c702363b682afb42 ]
 
-The HPT371 chip physically has only one channel, the secondary one,
-however the primary channel registers do exist! Thus we have to
-manually disable the non-existing channel if the BIOS hasn't done this
-already. Similarly to the pata_hpt3x2n driver, always disable the
-primary channel.
+Let's wait the inflight permits before free it.
 
-Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20201217141915.56989-10-jinpu.wang@cloud.ionos.com
+Signed-off-by: Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
+Reviewed-by: Md Haris Iqbal <haris.iqbal@cloud.ionos.com>
+Signed-off-by: Jack Wang <jinpu.wang@cloud.ionos.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/pata_hpt37x.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
---- a/drivers/ata/pata_hpt37x.c
-+++ b/drivers/ata/pata_hpt37x.c
-@@ -917,6 +917,20 @@ static int hpt37x_init_one(struct pci_de
- 	pci_write_config_byte(dev, 0x5a, irqmask);
+diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+index 8937530a42d3d..5a3c11b0b3102 100644
+--- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
++++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+@@ -1328,6 +1328,12 @@ static int alloc_permits(struct rtrs_clt *clt)
  
- 	/*
-+	 * HPT371 chips physically have only one channel, the secondary one,
-+	 * but the primary channel registers do exist!  Go figure...
-+	 * So,  we manually disable the non-existing channel here
-+	 * (if the BIOS hasn't done this already).
-+	 */
-+	if (dev->device == PCI_DEVICE_ID_TTI_HPT371) {
-+		u8 mcr1;
+ static void free_permits(struct rtrs_clt *clt)
+ {
++	if (clt->permits_map) {
++		size_t sz = clt->queue_depth;
 +
-+		pci_read_config_byte(dev, 0x50, &mcr1);
-+		mcr1 &= ~0x04;
-+		pci_write_config_byte(dev, 0x50, mcr1);
++		wait_event(clt->permits_wait,
++			   find_first_bit(clt->permits_map, sz) >= sz);
 +	}
-+
-+	/*
- 	 * default to pci clock. make sure MA15/16 are set to output
- 	 * to prevent drives having problems with 40-pin cables. Needed
- 	 * for some drives such as IBM-DTLA which will not enter ready
+ 	kfree(clt->permits_map);
+ 	clt->permits_map = NULL;
+ 	kfree(clt->permits);
+@@ -2630,19 +2636,8 @@ static struct rtrs_clt *alloc_clt(const char *sessname, size_t paths_num,
+ 	return ERR_PTR(err);
+ }
+ 
+-static void wait_for_inflight_permits(struct rtrs_clt *clt)
+-{
+-	if (clt->permits_map) {
+-		size_t sz = clt->queue_depth;
+-
+-		wait_event(clt->permits_wait,
+-			   find_first_bit(clt->permits_map, sz) >= sz);
+-	}
+-}
+-
+ static void free_clt(struct rtrs_clt *clt)
+ {
+-	wait_for_inflight_permits(clt);
+ 	free_permits(clt);
+ 	free_percpu(clt->pcpu_path);
+ 
+-- 
+2.34.1
+
 
 

@@ -2,439 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4854C65E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3254C65E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiB1Jnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S231452AbiB1JoT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 04:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234410AbiB1Jnf (ORCPT
+        with ESMTP id S233558AbiB1JoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:43:35 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760113D71
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:42:53 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id z7so12651784oid.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=G0qKKKRBgRaNdfPc1uehv7o+JmYHFw6tz68sq2JtWhM=;
-        b=LWEQsBbo0uuMsIqIyvljJA9+TbP+mkMr4T0oW+c6sdKdUCVhfLia2668el+/EC7L/J
-         8mPxHKLVNSjfchNi4UtYsZkeMMztoi2FeQ6TRYpg0fj6DILrGNVW5BluJ7OqS/2VAwfE
-         zsXBTA0/C0f0RGHA9RAAIO2Wt+LiAp/OhmobBmlnGbcdC5P9wgjywYvYHFvkrOEOZLA3
-         r7mZZIWiGIjF9qqN8N8jRocOHd4A6V33+GObtULOkYp3ctRvWgTSxy+2w4WpWRzfAtAs
-         8fsWDKuzQyDEz8xQ2JYD5oZB3uByf7KywDW5DWOWWx0hqYIfvhX9PuNu5Ni2260qQeNH
-         NJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=G0qKKKRBgRaNdfPc1uehv7o+JmYHFw6tz68sq2JtWhM=;
-        b=VzSbwsnLnoFEdBXmiZyyWzA4e4DFOM9dk6F2zWC1SQjxqW2JOCyBMcuwNUY8aMN/4O
-         hPLXJFyA8wtNSIVOr9mlVOSHuGN9elN9IPSejbkH2QOyHHNV4G1oJKX+nOkfuZj2p3zl
-         4+WaWMx3bNa1/yEYKGDrtYec68GS4F8W1rG8d1VAnyb7p/TlHpbHcuDBWjerVpU3vasF
-         QFLfUtEn6tyKnZnItJrJS4GtzfK0sdY6SXL6pegD/GFgCKvbV0iiW/npNkuFrWq8//RA
-         Mf6ktzbHB6YJ8Id07kpjLAVmuM8O26R5IEpFOdlu2WXStLwmfPrXnqQ4hHeIoaGprLqv
-         hcsg==
-X-Gm-Message-State: AOAM531ktLOBrwgWfHjRCj2IXm47yT7CL1bc440f8H8IbDr/Dl0729ga
-        n8yBbkVXsdO0e05MAiFySiXuylsqLrVnow==
-X-Google-Smtp-Source: ABdhPJwCT4OOGCBVqoqEjhLyOO7deop4I2mzez1Gsk8u3FyUguLbTB0XXtcw1JMXni+YNEOE3B13gQ==
-X-Received: by 2002:a05:6808:20a9:b0:2d4:b8de:887d with SMTP id s41-20020a05680820a900b002d4b8de887dmr9718414oiw.33.1646041372765;
-        Mon, 28 Feb 2022 01:42:52 -0800 (PST)
-Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id bx10-20020a0568081b0a00b002d70da1ac54sm5936852oib.19.2022.02.28.01.42.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 01:42:52 -0800 (PST)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        kvm-riscv@lists.infradead.org, Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [RFC PATCH 6/6] RISC-V: KVM: Support sstc extension
-Date:   Mon, 28 Feb 2022 01:42:33 -0800
-Message-Id: <20220228094234.3773153-7-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220228094234.3773153-1-atishp@rivosinc.com>
-References: <20220228094234.3773153-1-atishp@rivosinc.com>
+        Mon, 28 Feb 2022 04:44:17 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A068913D79;
+        Mon, 28 Feb 2022 01:43:34 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nOcZ2-0007D9-Bx; Mon, 28 Feb 2022 10:43:32 +0100
+Message-ID: <35bafd68-b340-dfaa-dd5f-d45843104f91@leemhuis.info>
+Date:   Mon, 28 Feb 2022 10:43:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Bug 215605 - [5.14 regression] BUG: unable to handle page fault
+ while running badblocks (fsck.ext4 -c) on a raid5 md array
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org
+Cc:     Dominik Mierzejewski <dominik@greysector.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Jens Axboe <axboe@kernel.dk>
+References: <53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info>
+In-Reply-To: <53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646041414;4cfc9239;
+X-HE-SMSGID: 1nOcZ2-0007D9-Bx
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sstc extension allows the guest to program the vstimecmp CSR directly
-instead of making an SBI call to the hypervisor to program the next
-event. The timer interrupt is also directly injected to the guest by
-the hardware in this case. To maintain backward compatibility, the
-hypervisors also update the vstimecmp in an SBI set_time call if
-the hardware supports it. Thus, the older kernels in guest also
-take advantage of the sstc extension.
+[CCing Jens]
 
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/include/asm/kvm_host.h       |   4 +
- arch/riscv/include/asm/kvm_vcpu_timer.h |   3 +-
- arch/riscv/include/uapi/asm/kvm.h       |   1 +
- arch/riscv/kvm/main.c                   |   8 ++
- arch/riscv/kvm/vcpu.c                   |   4 +-
- arch/riscv/kvm/vcpu_sbi_replace.c       |  10 +-
- arch/riscv/kvm/vcpu_timer.c             | 136 +++++++++++++++++++++++-
- 7 files changed, 158 insertions(+), 8 deletions(-)
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
-diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-index 99ef6a120617..fb8c993ba022 100644
---- a/arch/riscv/include/asm/kvm_host.h
-+++ b/arch/riscv/include/asm/kvm_host.h
-@@ -135,6 +135,7 @@ struct kvm_vcpu_csr {
- 	unsigned long hvip;
- 	unsigned long vsatp;
- 	unsigned long scounteren;
-+	u64 vstimecmp;
- };
- 
- struct kvm_vcpu_arch {
-@@ -179,6 +180,9 @@ struct kvm_vcpu_arch {
- 	/* VCPU Timer */
- 	struct kvm_vcpu_timer timer;
- 
-+	/* VCPU Timer for vstimecmp */
-+	struct kvm_vcpu_timer vstimer;
-+
- 	/* MMIO instruction details */
- 	struct kvm_mmio_decode mmio_decode;
- 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_timer.h b/arch/riscv/include/asm/kvm_vcpu_timer.h
-index 375281eb49e0..10715b81db86 100644
---- a/arch/riscv/include/asm/kvm_vcpu_timer.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_timer.h
-@@ -39,6 +39,7 @@ int kvm_riscv_vcpu_timer_init(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu);
- void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu);
-+void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu);
- int kvm_riscv_guest_timer_init(struct kvm *kvm);
--
-+bool kvm_riscv_vcpu_timer_pending(struct kvm_vcpu *vcpu);
- #endif
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index e01678aa2a55..c7c313272c0b 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -97,6 +97,7 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_H,
- 	KVM_RISCV_ISA_EXT_I,
- 	KVM_RISCV_ISA_EXT_M,
-+	KVM_RISCV_ISA_EXT_SSTC,
- 	KVM_RISCV_ISA_EXT_MAX,
- };
- 
-diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-index 2e5ca43c8c49..8485f59d2db3 100644
---- a/arch/riscv/kvm/main.c
-+++ b/arch/riscv/kvm/main.c
-@@ -13,6 +13,7 @@
- #include <asm/csr.h>
- #include <asm/hwcap.h>
- #include <asm/sbi.h>
-+#include <asm/timex.h>
- 
- long kvm_arch_dev_ioctl(struct file *filp,
- 			unsigned int ioctl, unsigned long arg)
-@@ -50,6 +51,13 @@ int kvm_arch_hardware_enable(void)
- 	csr_write(CSR_HIDELEG, hideleg);
- 
- 	csr_write(CSR_HCOUNTEREN, -1UL);
-+	if (cpu_sstc_ext_available) {
-+#ifdef CONFIG_64BIT
-+		csr_write(CSR_HENVCFG, 1UL<<HENVCFG_STCE);
-+#else
-+		csr_write(CSR_HENVCFGH, 1UL<<HENVCFGH_STCE);
-+#endif
-+	}
- 
- 	csr_write(CSR_HVIP, 0);
- 
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index c314c40be313..dda1fc950178 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -141,7 +141,7 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
- 
- int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
- {
--	return kvm_riscv_vcpu_has_interrupts(vcpu, 1UL << IRQ_VS_TIMER);
-+	return kvm_riscv_vcpu_timer_pending(vcpu);
- }
- 
- void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
-@@ -373,6 +373,7 @@ static unsigned long kvm_isa_ext_arr[] = {
- 	RISCV_ISA_EXT_h,
- 	RISCV_ISA_EXT_i,
- 	RISCV_ISA_EXT_m,
-+	RISCV_ISA_EXT_SSTC,
- };
- 
- static int kvm_riscv_vcpu_get_reg_isa_ext(struct kvm_vcpu *vcpu,
-@@ -756,6 +757,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 				     vcpu->arch.isa);
- 	kvm_riscv_vcpu_host_fp_restore(&vcpu->arch.host_context);
- 
-+	kvm_riscv_vcpu_timer_save(vcpu);
- 	csr_write(CSR_HGATP, 0);
- 
- 	csr->vsstatus = csr_read(CSR_VSSTATUS);
-diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-index 1bc0608a5bfd..e34fc9e1f41b 100644
---- a/arch/riscv/kvm/vcpu_sbi_replace.c
-+++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-@@ -30,7 +30,15 @@ static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- #else
- 	next_cycle = (u64)cp->a0;
- #endif
--	kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
-+	if (cpu_sstc_ext_available) {
-+#if __riscv_xlen == 32
-+		csr_write(CSR_VSTIMECMP, next_cycle & 0xFFFFFFFF);
-+		csr_write(CSR_VSTIMECMPH, next_cycle >> 32);
-+#else
-+		csr_write(CSR_VSTIMECMP, next_cycle);
-+#endif
-+	} else
-+		kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
- 
- 	return ret;
- }
-diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-index 5c4c37ff2d48..5647c234fea3 100644
---- a/arch/riscv/kvm/vcpu_timer.c
-+++ b/arch/riscv/kvm/vcpu_timer.c
-@@ -14,6 +14,7 @@
- #include <asm/csr.h>
- #include <asm/delay.h>
- #include <asm/kvm_vcpu_timer.h>
-+#include <asm/timex.h>
- 
- static u64 kvm_riscv_current_cycles(struct kvm_guest_timer *gt)
- {
-@@ -88,10 +89,66 @@ int kvm_riscv_vcpu_timer_next_event(struct kvm_vcpu *vcpu, u64 ncycles)
- 	return 0;
- }
- 
-+static enum hrtimer_restart kvm_riscv_vcpu_vstimer_expired(struct hrtimer *h)
-+{
-+	u64 delta_ns;
-+	struct kvm_vcpu_timer *vst = container_of(h, struct kvm_vcpu_timer, hrt);
-+	struct kvm_vcpu *vcpu = container_of(vst, struct kvm_vcpu, arch.vstimer);
-+	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
-+
-+	if (kvm_riscv_current_cycles(gt) < vst->next_cycles) {
-+		delta_ns = kvm_riscv_delta_cycles2ns(vst->next_cycles, gt, vst);
-+		hrtimer_forward_now(&vst->hrt, ktime_set(0, delta_ns));
-+		return HRTIMER_RESTART;
-+	}
-+
-+	vst->next_set = false;
-+	kvm_vcpu_kick(vcpu);
-+
-+	return HRTIMER_NORESTART;
-+}
-+
-+bool kvm_riscv_vcpu_timer_pending(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_timer *vst = &vcpu->arch.vstimer;
-+	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
-+	u64 vstimecmp_val = vcpu->arch.guest_csr.vstimecmp;
-+
-+	if (!kvm_riscv_delta_cycles2ns(vstimecmp_val, gt, vst) ||
-+	    kvm_riscv_vcpu_has_interrupts(vcpu, 1UL << IRQ_VS_TIMER))
-+		return true;
-+	else
-+		return false;
-+}
-+
-+static void kvm_riscv_vcpu_timer_blocking(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_timer *vst = &vcpu->arch.vstimer;
-+	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
-+	u64 delta_ns;
-+	u64 vstimecmp_val = vcpu->arch.guest_csr.vstimecmp;
-+
-+	if (!vst->init_done)
-+		return;
-+
-+	delta_ns = kvm_riscv_delta_cycles2ns(vstimecmp_val, gt, vst);
-+	if (delta_ns) {
-+		vst->next_cycles = vstimecmp_val;
-+		hrtimer_start(&vst->hrt, ktime_set(0, delta_ns), HRTIMER_MODE_REL);
-+		vst->next_set = true;
-+	}
-+}
-+
-+static void kvm_riscv_vcpu_timer_unblocking(struct kvm_vcpu *vcpu)
-+{
-+	kvm_riscv_vcpu_timer_cancel(&vcpu->arch.vstimer);
-+}
-+
- int kvm_riscv_vcpu_get_reg_timer(struct kvm_vcpu *vcpu,
- 				 const struct kvm_one_reg *reg)
- {
- 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-+	struct kvm_vcpu_timer *vst = &vcpu->arch.vstimer;
- 	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
- 	u64 __user *uaddr = (u64 __user *)(unsigned long)reg->addr;
- 	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-@@ -112,7 +169,10 @@ int kvm_riscv_vcpu_get_reg_timer(struct kvm_vcpu *vcpu,
- 		reg_val = kvm_riscv_current_cycles(gt);
- 		break;
- 	case KVM_REG_RISCV_TIMER_REG(compare):
--		reg_val = t->next_cycles;
-+		if (cpu_sstc_ext_available)
-+			reg_val = vst->next_cycles;
-+		else
-+			reg_val = t->next_cycles;
- 		break;
- 	case KVM_REG_RISCV_TIMER_REG(state):
- 		reg_val = (t->next_set) ? KVM_RISCV_TIMER_STATE_ON :
-@@ -132,6 +192,7 @@ int kvm_riscv_vcpu_set_reg_timer(struct kvm_vcpu *vcpu,
- 				 const struct kvm_one_reg *reg)
- {
- 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-+	struct kvm_vcpu_timer *vst = &vcpu->arch.vstimer;
- 	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
- 	u64 __user *uaddr = (u64 __user *)(unsigned long)reg->addr;
- 	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-@@ -156,7 +217,10 @@ int kvm_riscv_vcpu_set_reg_timer(struct kvm_vcpu *vcpu,
- 		gt->time_delta = reg_val - get_cycles64();
- 		break;
- 	case KVM_REG_RISCV_TIMER_REG(compare):
--		t->next_cycles = reg_val;
-+		if (cpu_sstc_ext_available)
-+			vst->next_cycles = reg_val;
-+		else
-+			t->next_cycles = reg_val;
- 		break;
- 	case KVM_REG_RISCV_TIMER_REG(state):
- 		if (reg_val == KVM_RISCV_TIMER_STATE_ON)
-@@ -175,8 +239,9 @@ int kvm_riscv_vcpu_set_reg_timer(struct kvm_vcpu *vcpu,
- int kvm_riscv_vcpu_timer_init(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-+	struct kvm_vcpu_timer *vst = &vcpu->arch.vstimer;
- 
--	if (t->init_done)
-+	if (t->init_done || vst->init_done)
- 		return -EINVAL;
- 
- 	hrtimer_init(&t->hrt, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-@@ -184,6 +249,11 @@ int kvm_riscv_vcpu_timer_init(struct kvm_vcpu *vcpu)
- 	t->init_done = true;
- 	t->next_set = false;
- 
-+	hrtimer_init(&vst->hrt, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	vst->hrt.function = kvm_riscv_vcpu_vstimer_expired;
-+	vst->init_done = true;
-+	vst->next_set = false;
-+
- 	return 0;
- }
- 
-@@ -194,15 +264,21 @@ int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu)
- 	ret = kvm_riscv_vcpu_timer_cancel(&vcpu->arch.timer);
- 	vcpu->arch.timer.init_done = false;
- 
-+	ret = kvm_riscv_vcpu_timer_cancel(&vcpu->arch.vstimer);
-+	vcpu->arch.vstimer.init_done = false;
-+
- 	return ret;
- }
- 
- int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu)
- {
--	return kvm_riscv_vcpu_timer_cancel(&vcpu->arch.timer);
-+	kvm_riscv_vcpu_timer_cancel(&vcpu->arch.timer);
-+	kvm_riscv_vcpu_timer_cancel(&vcpu->arch.vstimer);
-+
-+	return 0;
- }
- 
--void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-+static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
- 
-@@ -214,6 +290,56 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
- #endif
- }
- 
-+void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_timer *vst;
-+	struct kvm_vcpu_csr *csr;
-+
-+	kvm_riscv_vcpu_update_timedelta(vcpu);
-+
-+	if (!cpu_sstc_ext_available)
-+		return;
-+
-+	vst = &vcpu->arch.vstimer;
-+	csr = &vcpu->arch.guest_csr;
-+#ifdef CONFIG_64BIT
-+	csr_write(CSR_VSTIMECMP, csr->vstimecmp);
-+#else
-+	csr_write(CSR_VSTIMECMP, (u32)csr->vstimecmp);
-+	csr_write(CSR_VSTIMECMPH, (u32)(csr->vstimecmp >> 32));
-+#endif
-+
-+	/* vstimer should be enabled for the remaining operations */
-+	if (unlikely(!vst->init_done))
-+		return;
-+
-+	if (kvm_vcpu_is_blocking(vcpu))
-+		kvm_riscv_vcpu_timer_blocking(vcpu);
-+}
-+
-+void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_csr *csr;
-+	struct kvm_vcpu_timer *vst;
-+
-+	if (!cpu_sstc_ext_available)
-+		return;
-+
-+	csr = &vcpu->arch.guest_csr;
-+	vst = &vcpu->arch.vstimer;
-+#ifdef CONFIG_64BIT
-+	csr->vstimecmp = csr_read(CSR_VSTIMECMP);
-+#else
-+	csr->vstimecmp = csr_read(CSR_VSTIMECMP);
-+	csr->vstimecmp |= (u64)csr_read(CSR_VSTIMECMPH) >> 32;
-+#endif
-+	/* vstimer should be enabled for the remaining operations */
-+	if (unlikely(!vst->init_done))
-+		return;
-+
-+	kvm_riscv_vcpu_timer_unblocking(vcpu);
-+}
-+
- int kvm_riscv_guest_timer_init(struct kvm *kvm)
- {
- 	struct kvm_guest_timer *gt = &kvm->arch.timer;
--- 
-2.30.2
+What's up here? Below regression was reported two weeks ago and I
+forwarded it nearly a week ago, nevertheless the reporter afaics didn't
+get a single reply. Is the issue discussed somewhere else and I just
+missed it? Is the report not accurate for some reason or missing
+something important? Or did the report fall throug the cracks?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+#regzbot poke
+
+On 22.02.22 09:59, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported about a week ago, that's why I decided
+> to forward it to the lists and add a few relevant people to the CC. To
+> quote from https://bugzilla.kernel.org/show_bug.cgi?id=215605
+> 
+>>  Dominik Mierzejewski 2022-02-14 10:36:36 UTC
+>>
+>> Created attachment 300450 [details]
+>> kernel-5.16.8 dmesg with crash
+>>
+>> I'm experiencing kernel crash when running badblocks (fsck.ext4 -c) on a raid5 md array in my Intel Atom-based NAS box (Thecus N5550):
+>> [  720.911993] kernel: BUG: unable to handle page fault for address: ffffdbc681023bc8
+>> [  720.912073] kernel: #PF: supervisor read access in kernel mode
+>> [  720.912120] kernel: #PF: error_code(0x0000) - not-present page
+>> [  720.912166] kernel: PGD 11ffc6067 P4D 11ffc6067 PUD 0 
+>> [  720.912213] kernel: Oops: 0000 [#1] PREEMPT SMP NOPTI
+>> [  720.912256] kernel: CPU: 1 PID: 1406 Comm: badblocks Not tainted 5.16.8-200.fc35.x86_64 #1
+>> [  720.912321] kernel: Hardware name: Intel Corporation Milstead Platform/Granite Well, BIOS CDV W Series 05 08/27/2015
+>> [  720.912400] kernel: RIP: 0010:kfree+0x58/0x3e0
+>> [  720.912449] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 4
+>> 8 8b 55 08 48 8d 42 ff
+>> [  720.912598] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
+>> [  720.912648] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800 RCX: ffff9284c3758ff8
+>> [  720.912708] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091 RDI: ffff9db4008efd58
+>> [  720.912767] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88 R09: ffff9284c3759000
+>> [  720.912826] kernel: R10: 0000000000000028 R11: ffff9284c213db48 R12: ffff9db4008efd58
+>> [  720.912885] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000 R15: ffff9db4008efd58
+>> [  720.912945] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc80000(0000) knlGS:0000000000000000
+>> [  720.913012] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [  720.913062] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000 CR4: 00000000000006e0
+>> [  720.913122] kernel: Call Trace:
+>> [  720.913150] kernel:  <TASK>
+>> [  720.913179] kernel:  raid5_make_request+0xb31/0xb90 [raid456]
+>> [  720.913247] kernel:  ? do_wait_intr_irq+0xa0/0xa0
+>> [  720.913292] kernel:  ? __blk_queue_split+0x30a/0x470
+>> [  720.913339] kernel:  md_handle_request+0x119/0x180
+>> [  720.913386] kernel:  md_submit_bio+0x67/0xa0
+>> [  720.913425] kernel:  __submit_bio_fops+0x91/0x160
+>> [  720.913468] kernel:  submit_bio_noacct+0xd7/0x2c0
+>> [  720.913510] kernel:  __blkdev_direct_IO_simple+0x198/0x290
+>> [  720.913576] kernel:  ? __fpu_restore_sig+0x193/0x570
+>> [  720.913623] kernel:  ? sysvec_apic_timer_interrupt+0xaf/0xd0
+>> [  720.913676] kernel:  ? __blkdev_direct_IO_simple+0x290/0x290
+>> [  720.913728] kernel:  generic_file_read_iter+0x9b/0x160
+>> [  720.913775] kernel:  new_sync_read+0x105/0x180
+>> [  720.913820] kernel:  vfs_read+0xf1/0x190
+>> [  720.913858] kernel:  ksys_read+0x4f/0xc0
+>> [  720.913896] kernel:  do_syscall_64+0x38/0x90
+>> [  720.913936] kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> [  720.913985] kernel: RIP: 0033:0x7f73e676d772
+>> [  720.914024] kernel: Code: c0 e9 b2 fe ff ff 50 48 8d 3d da 2e 0c 00 e8 b5 f9 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
+>> [  720.914166] kernel: RSP: 002b:00007fff1b8fcbb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+>> [  720.914231] kernel: RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f73e676d772
+>> [  720.917149] kernel: RDX: 0000000000040000 RSI: 00007f73e65d3000 RDI: 0000000000000004
+>> [  720.920078] kernel: RBP: 0000000000001000 R08: 00000000015105c0 R09: 0000000000000080
+>> [  720.922980] kernel: R10: 00007fff1b8fca00 R11: 0000000000000246 R12: 00000015105c0000
+>> [  720.925875] kernel: R13: 0000000000000004 R14: 00007f73e65d3000 R15: 0000000000040000
+>> [  720.928795] kernel:  </TASK>
+>> [  720.931704] kernel: Modules linked in: sctp ip6_udp_tunnel udp_tunnel rpcrdma rdma_cm iw_cm ib_cm ib_core sit tunnel4 ip_tunnel rfkill ipt_REJECT nf_reject_ipv4 iptable_filter xt_nat iptable_nat nf_nat iptable_mangle nf_conntrack_pptp xt_CT iptable_raw xt_multiport xt_set ip6t_REJECT nf_reject_ipv6 xt_LOG nf_log_syslog xt_limit xt_state xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6table_filter ip6_tables ip_set_hash_netport ip_set_hash_net ip_set drivetemp it87 nfnetlink hwmon_vid vfat fat iTCO_wdt intel_pmc_bxt iTCO_vendor_support at24 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx intel_powerclamp raid1 coretemp snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_usb_audio i2c_i801 gma500_gfx i2c_smbus snd_usbmidi_lib joydev snd_hwdep snd_rawmidi snd_seq_device mc snd_pcm lpc_ich i2c_algo_bit snd_timer drm_kms_helper snd cec soundcore nfsd auth_rpcgss
+>> [  720.931885] kernel:  nfs_acl lockd grace drm fuse sunrpc zram ip_tables hid_logitech_hidpp serio_raw r8152 sata_sil24 video mii hid_jabra e1000e hid_logitech_dj
+>> [  720.952122] kernel: CR2: ffffdbc681023bc8
+>> [  720.955651] kernel: ---[ end trace de2c3d5b971ae71d ]---
+>> [  720.959186] kernel: RIP: 0010:kfree+0x58/0x3e0
+>> [  720.962723] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 48 8b 55 08 48 8d 42 ff
+>> [  720.966472] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
+>> [  720.970238] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800 RCX: ffff9284c3758ff8
+>> [  720.973993] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091 RDI: ffff9db4008efd58
+>> [  720.977723] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88 R09: ffff9284c3759000
+>> [  720.981464] kernel: R10: 0000000000000028 R11: ffff9284c213db48 R12: ffff9db4008efd58
+>> [  720.985228] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000 R15: ffff9db4008efd58
+>> [  720.988995] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc80000(0000) knlGS:0000000000000000
+>> [  720.992774] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [  720.996535] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000 CR4: 00000000000006e0
+>>
+>> There was a crash earlier which caused the array to become degraded, but I wasn't able to capture the backtrace due to journal corruption. After resyncing the array I tried running fsck on the filesystem and it's causing a kernel crash each time.
+>>
+>> I've reproduced the crash with the following kernels:
+>> 5.16.8-200.fc35.x86_64
+>> 5.15.18-200.fc35.x86_64
+>> 5.14.10-300.fc35.x86_64
+>>
+>> It doesn't happen with 5.13 kernels. I've been running fsck.ext4 -c on the array for the last 10 hours without a crash. It found 27 read errors which it corrected.
+>>
+>> Steps to reproduce:
+>> 1. fsck.ext4 -c -v /dev/md126
+>> 2. crash
+>>
+>> The array was degraded as a result of a previous crash, but it recovered itself with no errors reported. Obviously, there remained some read errors which badblocks found and which the kernel tripped over.
+>>
+>> Crash with 5.14.10 looks different:
+>> Feb 13 17:55:06 kernel: general protection fault, probably for non-canonical address 0xef6dfcf53c7d6fc3: 0000 [#1] SMP NOPTI
+>> Feb 13 17:55:06 kernel: CPU: 2 PID: 831 Comm: md126_raid5 Not tainted 5.14.10-300.fc35.x86_64 #1
+>> Feb 13 17:55:06 kernel: Hardware name: Intel Corporation Milstead Platform/Granite Well, BIOS CDV W Series 05 08/27/2015
+>> Feb 13 17:55:06 kernel: RIP: 0010:bio_endio+0x87/0x130
+>> Feb 13 17:55:06 kernel: Code: 02 00 48 8b 45 08 48 85 c0 74 09 0f b7 55 14 f6 c6 01 75 2f 48 81 7d 38 50 48 5e bb 75 38 0f b6 45 1a 48 8b 5d 40 84 c0 74 09 <80> 7b 1a 00 75 03 88 43 1a 48 89 ef 48 89 dd e8 d5 fe ff ff e9 6a
+>> Feb 13 17:55:06 kernel: RSP: 0000:ffffa5bb80597b48 EFLAGS: 00010206
+>> Feb 13 17:55:06 kernel: RAX: 000000000000000a RBX: ef6dfcf53c7d6fa9 RCX: ffff92b840865b50
+>> Feb 13 17:55:06 kernel: RDX: 0000000000000082 RSI: ffff92b8497f46c0 RDI: ffff92b84881f180
+>> Feb 13 17:55:06 kernel: RBP: ffff92b8497f46c0 R08: 0000000000000001 R09: 0000000000000000
+>> Feb 13 17:55:06 kernel: R10: ffff92b74a722c01 R11: 0000000000000001 R12: 0000000000000000
+>> Feb 13 17:55:06 kernel: R13: 0000000000000000 R14: ffff92b74a722cd0 R15: ffff92b844748860
+>> Feb 13 17:55:06 kernel: FS:  0000000000000000(0000) GS:ffff92b85bd00000(0000) knlGS:0000000000000000
+>> Feb 13 17:55:06 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> Feb 13 17:55:06 kernel: CR2: 0000557d787a2028 CR3: 000000003c194000 CR4: 00000000000006e0
+>> Feb 13 17:55:06 kernel: Call Trace:
+>> Feb 13 17:55:06 kernel:  ops_complete_biofill+0x98/0xe0 [raid456]
+>> Feb 13 17:55:06 kernel:  async_trigger_callback+0x7d/0xc1 [async_tx]
+>> Feb 13 17:55:06 kernel:  raid_run_ops+0x98c/0x15b0 [raid456]
+>> Feb 13 17:55:06 kernel:  ? handle_stripe_clean_event+0x400/0x400 [raid456]
+>> Feb 13 17:55:06 kernel:  handle_stripe+0xe91/0x1dc0 [raid456]
+>> Feb 13 17:55:06 kernel:  handle_active_stripes.constprop.0+0x390/0x560 [raid456]
+>> Feb 13 17:55:06 kernel:  raid5d+0x39d/0x5d0 [raid456]
+>> Feb 13 17:55:06 kernel:  ? prepare_to_wait_event+0x5d/0x170
+>> Feb 13 17:55:06 kernel:  md_thread+0x98/0x140
+>> Feb 13 17:55:06 kernel:  ? finish_wait+0x80/0x80
+>> Feb 13 17:55:06 kernel:  ? md_write_inc+0x50/0x50
+>> Feb 13 17:55:06 kernel:  kthread+0x124/0x150
+>> Feb 13 17:55:06 kernel:  ? set_kthread_struct+0x40/0x40
+>> Feb 13 17:55:06 kernel:  ret_from_fork+0x1f/0x30
+>> Feb 13 17:55:06 kernel: Modules linked in: rpcrdma rdma_cm iw_cm ib_cm ib_core rfkill ip6t_REJECT nf_reject_ipv6 ip6table_filter ip6_tables xt_set ipt_REJECT nf_reject_ipv4 xt_LOG nf_log_syslog xt_limit xt_multiport xt_state xt_conntrack iptable_filter xt_nat iptable_nat nf_nat iptable_mangle nf_conntrack_pptp xt_CT nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 iptable_raw ip_set_hash_netport ip_set_hash_net ip_set drivetemp it87 nfnetlink hwmon_vid vfat fat snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi iTCO_wdt snd_hda_intel intel_pmc_bxt snd_intel_dspcfg iTCO_vendor_support raid456 snd_intel_sdw_acpi snd_hda_codec async_raid6_recov at24 async_memcpy async_pq async_xor async_tx snd_hda_core gma500_gfx snd_hwdep i2c_algo_bit drm_kms_helper snd_pcm intel_powerclamp i2c_i801 snd_timer coretemp i2c_smbus snd cec soundcore lpc_ich nfsd auth_rpcgss nfs_acl lockd drm grace fuse sunrpc ip_tables raid1 serio_raw video sata_sil24 e1000e
+>> Feb 13 17:55:06 kernel: ---[ end trace 97447bed31e596e0 ]---
+>> Feb 13 17:55:06 kernel: RIP: 0010:bio_endio+0x87/0x130
+>> Feb 13 17:55:06 kernel: Code: 02 00 48 8b 45 08 48 85 c0 74 09 0f b7 55 14 f6 c6 01 75 2f 48 81 7d 38 50 48 5e bb 75 38 0f b6 45 1a 48 8b 5d 40 84 c0 74 09 <80> 7b 1a 00 75 03 88 43 1a 48 89 ef 48 89 dd e8 d5 fe ff ff e9 6a
+>> Feb 13 17:55:06 kernel: RSP: 0000:ffffa5bb80597b48 EFLAGS: 00010206
+>> Feb 13 17:55:06 kernel: RAX: 000000000000000a RBX: ef6dfcf53c7d6fa9 RCX: ffff92b840865b50
+>> Feb 13 17:55:06 kernel: RDX: 0000000000000082 RSI: ffff92b8497f46c0 RDI: ffff92b84881f180
+>> Feb 13 17:55:06 kernel: RBP: ffff92b8497f46c0 R08: 0000000000000001 R09: 0000000000000000
+>> Feb 13 17:55:06 kernel: R10: ffff92b74a722c01 R11: 0000000000000001 R12: 0000000000000000
+>> Feb 13 17:55:06 kernel: R13: 0000000000000000 R14: ffff92b74a722cd0 R15: ffff92b844748860
+>> Feb 13 17:55:06 kernel: FS:  0000000000000000(0000) GS:ffff92b85bd00000(0000) knlGS:0000000000000000
+>> Feb 13 17:55:06 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> Feb 13 17:55:06 kernel: CR2: 0000557d787a2028 CR3: 000000003c194000 CR4: 00000000000006e0
+>> Feb 13 17:55:06 kernel: ------------[ cut here ]------------
+>> Feb 13 17:55:06 kernel: WARNING: CPU: 2 PID: 831 at kernel/exit.c:739 do_exit+0x37/0xa90
+>> Feb 13 17:55:06 kernel: Modules linked in: rpcrdma rdma_cm iw_cm ib_cm ib_core rfkill ip6t_REJECT nf_reject_ipv6 ip6table_filter ip6_tables xt_set ipt_REJECT nf_reject_ipv4 xt_LOG nf_log_syslog xt_limit xt_multiport xt_state xt_conntrack iptable_filter xt_nat iptable_nat nf_nat iptable_mangle nf_conntrack_pptp xt_CT nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 iptable_raw ip_set_hash_netport ip_set_hash_net ip_set drivetemp it87 nfnetlink hwmon_vid vfat fat snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi iTCO_wdt snd_hda_intel intel_pmc_bxt snd_intel_dspcfg iTCO_vendor_support raid456 snd_intel_sdw_acpi snd_hda_codec async_raid6_recov at24 async_memcpy async_pq async_xor async_tx snd_hda_core gma500_gfx snd_hwdep i2c_algo_bit drm_kms_helper snd_pcm intel_powerclamp i2c_i801 snd_timer coretemp i2c_smbus snd cec soundcore lpc_ich nfsd auth_rpcgss nfs_acl lockd drm grace fuse sunrpc ip_tables raid1 serio_raw video sata_sil24 e1000e
+>> Feb 13 17:55:06 kernel: CPU: 2 PID: 831 Comm: md126_raid5 Tainted: G      D           5.14.10-300.fc35.x86_64 #1
+>> Feb 13 17:55:06 kernel: Hardware name: Intel Corporation Milstead Platform/Granite Well, BIOS CDV W Series 05 08/27/2015
+>> Feb 13 17:55:06 kernel: RIP: 0010:do_exit+0x37/0xa90
+>> Feb 13 17:55:06 kernel: Code: 55 48 89 fd 53 65 48 8b 1c 25 c0 7b 01 00 48 83 ec 28 48 8b 83 a8 0c 00 00 48 85 c0 74 0e 48 8b 10 48 39 d0 0f 84 56 04 00 00 <0f> 0b 65 8b 0d a0 2c f3 44 89 c8 25 00 ff ff 00 89 44 24 0c 0f 85
+>> Feb 13 17:55:06 kernel: RSP: 0000:ffffa5bb80597ef8 EFLAGS: 00010212
+>> Feb 13 17:55:06 kernel: RAX: ffffa5bb80597e50 RBX: ffff92b8437d8000 RCX: 0000000000000000
+>> Feb 13 17:55:06 kernel: RDX: ffff92b844217548 RSI: ffff92b85bd18a00 RDI: 000000000000000b
+>> Feb 13 17:55:06 kernel: RBP: 000000000000000b R08: 0000000000000000 R09: ffffa5bb805977a0
+>> Feb 13 17:55:06 kernel: R10: ffffa5bb80597798 R11: ffffffffbcf47468 R12: 000000000000000b
+>> Feb 13 17:55:06 kernel: R13: 0000000000000000 R14: ffff92b8437d8000 R15: 0000000000000000
+>> Feb 13 17:55:06 kernel: FS:  0000000000000000(0000) GS:ffff92b85bd00000(0000) knlGS:0000000000000000
+>> Feb 13 17:55:06 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> Feb 13 17:55:06 kernel: CR2: 0000557d787a2028 CR3: 000000003c194000 CR4: 00000000000006e0
+>> Feb 13 17:55:06 kernel: Call Trace:
+>> Feb 13 17:55:06 kernel:  ? kthread+0x124/0x150
+>> Feb 13 17:55:06 kernel:  rewind_stack_do_exit+0x17/0x20
+>> Feb 13 17:55:06 kernel: RIP: 0000:0x0
+>> Feb 13 17:55:06 kernel: Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+>> Feb 13 17:55:06 kernel: RSP: 0000:0000000000000000 EFLAGS: 00000000 ORIG_RAX: 0000000000000000
+>> Feb 13 17:55:06 kernel: RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>> Feb 13 17:55:06 kernel: RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>> Feb 13 17:55:06 kernel: RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+>> Feb 13 17:55:06 kernel: R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+>> Feb 13 17:55:06 kernel: R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>> Feb 13 17:55:06 kernel: ---[ end trace 97447bed31e596e1 ]---
+>>
+>> Downstream bug report: https://bugzilla.redhat.com/show_bug.cgi?id=2053936 .
+> 
+> Could somebody take a look into this? Or was this discussed somewhere
+> else already? Or even fixed?
+> 
+> FWIW, I searched the list and wondered if these might be related, but I
+> was unable to tell for sure:
+> 
+> https://lore.kernel.org/all/164244747275.86917.2623783912687807916@richardiv.omgwallhack.org/
+> https://lore.kernel.org/all/20211216145222.15370-4-mariusz.tkaczyk@linux.intel.com/
+> 
+> Anyway, to get this tracked:
+> 
+> #regzbot introduced: v5.13..v5.14.10
+> #regzbot from: Dominik Mierzejewski <dominik@greysector.net>
+> #regzbot title: md: unable to handle page fault while running badblocks
+> (fsck.ext4 -c) on a raid5 md array
+> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215605
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+> 

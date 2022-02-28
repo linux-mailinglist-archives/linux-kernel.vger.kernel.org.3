@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121214C76C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7124C7316
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239856AbiB1SHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S234456AbiB1Rb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240018AbiB1SC5 (ORCPT
+        with ESMTP id S235581AbiB1Ral (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:02:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F409C9D0D9;
-        Mon, 28 Feb 2022 09:46:28 -0800 (PST)
+        Mon, 28 Feb 2022 12:30:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B0275C07;
+        Mon, 28 Feb 2022 09:28:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF5C9B815A2;
-        Mon, 28 Feb 2022 17:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264F8C340E7;
-        Mon, 28 Feb 2022 17:46:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52AD961366;
+        Mon, 28 Feb 2022 17:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D42C340E7;
+        Mon, 28 Feb 2022 17:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070366;
-        bh=Bpsb1rp0neLYVsyJi0rU++lKp9fmwiwEbLY+ew+FR2g=;
+        s=korg; t=1646069304;
+        bh=n1C6owpLgNwjx+El9E0AT/7N/2KvJH9zm209lQ/YAnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WhycuOR0WnqKYKdvmQgJzJOCb6/hZng8haLqHgk4zLTlW/9Z5B863a/CMi8iTXlFC
-         4y3xIcjDhovln/YUSYfqGCaDR5PoA/e0aRH8yqZZ54IUM2egHFylBsCuunmxwku2Cz
-         Jzy2R72LC4u7VawqbD/YfkEpRyjV64iNg28xYLDM=
+        b=fSTsV0WQhPaZXXabtlzr+SVMd+y72ORQuMv6J1IoRqjltdF9YrREJDumvLEd3QuuL
+         oozuxAZo2fx+bbe5yYPXw0zhTC+mfSUc5rL2q+by6Gftx9DKI8INqqMwhOztkWa+JB
+         7DCXjVkZM3N/4FPuG++G15KXUbYY6N7i2som/IUw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 082/164] nfp: flower: Fix a potential leak in nfp_tunnel_add_shared_mac()
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>
+Subject: [PATCH 4.14 08/31] ping: remove pr_err from ping_lookup
 Date:   Mon, 28 Feb 2022 18:24:04 +0100
-Message-Id: <20220228172407.398113380@linuxfoundation.org>
+Message-Id: <20220228172200.673878080@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,50 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit 3a14d0888eb4b0045884126acc69abfb7b87814d upstream.
+commit cd33bdcbead882c2e58fdb4a54a7bd75b610a452 upstream.
 
-ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
-inclusive.
-So NFP_MAX_MAC_INDEX (0xff) is a valid id.
+As Jakub noticed, prints should be avoided on the datapath.
+Also, as packets would never come to the else branch in
+ping_lookup(), remove pr_err() from ping_lookup().
 
-In order for the error handling path to work correctly, the 'invalid'
-value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
-inclusive.
-
-So set it to -1.
-
-Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20220218131535.100258-1-simon.horman@corigine.com
+Fixes: 35a79e64de29 ("ping: fix the dif and sdif check in ping_lookup")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Link: https://lore.kernel.org/r/1ef3f2fcd31bd681a193b1fcf235eee1603819bd.1645674068.git.lucien.xin@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/ping.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -922,8 +922,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app
- 			  int port, bool mod)
- {
- 	struct nfp_flower_priv *priv = app->priv;
--	int ida_idx = NFP_MAX_MAC_INDEX, err;
- 	struct nfp_tun_offloaded_mac *entry;
-+	int ida_idx = -1, err;
- 	u16 nfp_mac_idx = 0;
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -192,7 +192,6 @@ static struct sock *ping_lookup(struct n
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
+ 	} else {
+-		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
+ 		return NULL;
+ 	}
  
- 	entry = nfp_tunnel_lookup_offloaded_macs(app, netdev->dev_addr);
-@@ -997,7 +997,7 @@ err_remove_hash:
- err_free_entry:
- 	kfree(entry);
- err_free_ida:
--	if (ida_idx != NFP_MAX_MAC_INDEX)
-+	if (ida_idx != -1)
- 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
- 
- 	return err;
 
 

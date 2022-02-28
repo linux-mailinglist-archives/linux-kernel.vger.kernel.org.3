@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAAA4C69E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E9C4C69E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbiB1LKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S232841AbiB1LLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiB1LJs (ORCPT
+        with ESMTP id S235596AbiB1LLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:09:48 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A226D96F;
-        Mon, 28 Feb 2022 03:09:09 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id d187so10821093pfa.10;
-        Mon, 28 Feb 2022 03:09:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gkpVN31t/Eo1GFbtPY7KJm4bzowxIotybpf1qkjJYWA=;
-        b=e7q7GaOlrjqhw4wZSZZkOjSswhSoiRcCyyhJLTMrTTRiYOlGlsvsYIER7wjHPtYcsO
-         +sXXxbPH3kbyt09diTODIc7SpGDqNWkn+lRheuiWw1j9F9xltL+s/6gJm7z6mNQktI22
-         PUy9soMoFKmplSmnwgUpNf3MiTsgZwVb0ogKoB+mWnNZ+Gy/jZHybtMnNh//Xfgrky3V
-         GCxgyWVokhcP62cPE2/QzSjG2QkWkqpyyER4VK5Sia60ATPXETIdz6edI4c3b+jSa1X+
-         ZzLWNGO9oNayYqYLKYMW2fV7IXTVfBLe19NvGjiHkVrthVNEElcChNTpp5Xm4GuKr3hz
-         Mu6g==
+        Mon, 28 Feb 2022 06:11:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B69A7085C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646046561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mk8A/cRIjUQBRWWsNYUbvFqswRRH6zL512hJ5ISpuac=;
+        b=g7fHDQjLO4kMnSZTGIJyZPFuVdlFcVDLnGrD/n26W+m+T5iF7omRkpjau+I95UovaZYAW6
+        yX9BOewRutl6EwKn27RF+gq/mP16oKcJUZri7pneB25L0jTQTP5t+ayQKV4YNnLbNty+Rd
+        OCWpEHXQdjjXqT+L0yUjtqV51KEci1s=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-luONIc8SPrGh_djl1X6MIg-1; Mon, 28 Feb 2022 06:09:20 -0500
+X-MC-Unique: luONIc8SPrGh_djl1X6MIg-1
+Received: by mail-qt1-f199.google.com with SMTP id x26-20020ac84a1a000000b002ddcbd9e933so6066583qtq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:09:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gkpVN31t/Eo1GFbtPY7KJm4bzowxIotybpf1qkjJYWA=;
-        b=29ixLfn3Ti9YBQsLuEgVnqcLsPFhZAK9dT2LuWPJjHyumQFCsZT1WNWxVRcRdPNIXb
-         anJIeEw+t18ipA+92YXbpWNvC9U3Ptuszm/yLZTf+LD9jaqWHhg8qm0eYyDuPa0NJCPq
-         ybL8haAxyqYJMss17ljaZfgVFx6FFqtqPBkwWykHYmSLmz9s+s1obe988xJk70fBwJ/E
-         TECMtbpsnL+sGuy1wUAR9M3siKDpnfcqdkeWWEXpGm/x47eNNW2cDqo9CBkUtwa99mRX
-         oyaNF3+q3f48POISy0A00IKlWJP+SMugpl+TLK2WCMVsZB0V4WvQiOSOWlYQd6yvNEvT
-         +vqA==
-X-Gm-Message-State: AOAM531Dyi0zsM1MDB3ukr3I7ed/RDLMsT27GjPuv+SsznUDMtP7KyUY
-        rl9Y4hZ/Mdy+ZDdXVzbjShg=
-X-Google-Smtp-Source: ABdhPJy8LwgcYXgh2fp2qYyRnv9aOc3hbJeqRAeSeufjtJFBpQK6wmjAp4ZSo1sfUYuT++jGsnRUjQ==
-X-Received: by 2002:a65:6d0a:0:b0:373:9242:3a13 with SMTP id bf10-20020a656d0a000000b0037392423a13mr16964961pgb.452.1646046548643;
-        Mon, 28 Feb 2022 03:09:08 -0800 (PST)
-Received: from localhost.localdomain ([122.161.51.77])
-        by smtp.gmail.com with ESMTPSA id d17-20020a056a00245100b004c283dcbbccsm12700239pfj.176.2022.02.28.03.09.06
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=mk8A/cRIjUQBRWWsNYUbvFqswRRH6zL512hJ5ISpuac=;
+        b=1fButGjckQjGlo1P6pRt70E2s6Pap0xXOLPPIliLxMsSC241Z/OcCRbxVqpLSl6BaD
+         zBF96sIfAKr7Q/aUDbVWx7ET4WAklSEt8u127NRmUzNfoxg2j/JBO0u5STZp5vB2obSj
+         HpI4ARBOaq/v4pid9XyRgC1I5qrVPXY/idL5CnJtXoUZWg9z1oGa+To1ONsuVvwfn/xN
+         978LqTFEjZRIofF0kt8XzIF8VxLx0/UR6CAbVIYg9qnx7d1Ke/oLc4/5gKYArqgBO8Mb
+         UfshXcszw8/8lcAYUbXOaxULT5gmVM2rKJ9k+kno4XWb6uVwWRQzLGjtCV5wIQODBZ7/
+         XeFQ==
+X-Gm-Message-State: AOAM532dix2Dj8c9PLzPG+GP1AcU6+zXLSsJf01Y17N7/SFrH/d0BXOn
+        B4kcnjABQHSef4Op/EmMd48uNGeqstqPa+6nbdk9Y6nKoGejR8SmC/pvEiGDJ9qS1mgANGqjTiE
+        V000IVxY5zhOuL8Vg/eRXR55Y
+X-Received: by 2002:ac8:590c:0:b0:2de:4c71:354e with SMTP id 12-20020ac8590c000000b002de4c71354emr16194170qty.315.1646046559789;
+        Mon, 28 Feb 2022 03:09:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyF44gxifV5SBNXIq21oM3Wnww4M1ERoBoKJLH46fR/MI/Pe/poA+ls11pAGSqMnwJ88bUw7A==
+X-Received: by 2002:ac8:590c:0:b0:2de:4c71:354e with SMTP id 12-20020ac8590c000000b002de4c71354emr16194153qty.315.1646046559535;
+        Mon, 28 Feb 2022 03:09:19 -0800 (PST)
+Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
+        by smtp.gmail.com with ESMTPSA id t22-20020a05622a181600b002dd4f62308dsm6667218qtc.57.2022.02.28.03.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 03:09:08 -0800 (PST)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Anup Patel <anup.patel@broadcom.com>
-Subject: [PATCH] arm64: dts: ns2: Fix spi-cpol and spi-cpha property
-Date:   Mon, 28 Feb 2022 16:39:03 +0530
-Message-Id: <20220228110903.97478-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 03:09:18 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Siddharth Chandrasekaran <sidcha@amazon.de>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 0/4] KVM: x86: hyper-v: XMM fast hypercalls fixes
+In-Reply-To: <YhypT9pGu600wRLf@147dda3edfb6.ant.amazon.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
+ <b466b80c-21d1-f298-b4cd-a4b58988f767@redhat.com>
+ <871qzrdr6x.fsf@redhat.com>
+ <f398b5de-c867-98a4-a716-b18939cfd0ef@redhat.com>
+ <YhypT9pGu600wRLf@147dda3edfb6.ant.amazon.com>
+Date:   Mon, 28 Feb 2022 12:09:14 +0100
+Message-ID: <87sfs3cko5.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Broadcom ns2 platform has spi-cpol and spi-cpho properties set
-incorrectly. As per spi-slave-peripheral-prop.yaml, these properties are
-of flag or boolean type and not integer type. Fix the values.
+Siddharth Chandrasekaran <sidcha@amazon.de> writes:
 
-CC: Ray Jui <rjui@broadcom.com>
-CC: Scott Branden <sbranden@broadcom.com>
-CC: Florian Fainelli <f.fainelli@gmail.com>
-Fixes: d69dbd9f41a7c (arm64: dts: Add ARM PL022 SPI DT nodes for NS2)
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
-Hi,
+> On Fri, Feb 25, 2022 at 02:17:04PM +0100, Paolo Bonzini wrote:
+>> On 2/25/22 14:13, Vitaly Kuznetsov wrote:
+>> > Let's say we have 1 half of XMM0 consumed. Now:
+>> > 
+>> >   i = 0;
+>> >   j = 1;
+>> >   if (1)
+>> >       sparse_banks[0] = sse128_lo(hc->xmm[0]);
+>> > 
+>> >   This doesn't look right as we need to get the upper half of XMM0.
+>> > 
+>> >   I guess it should be reversed,
+>> > 
+>> >       if (j % 2)
+>> >           sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
+>> >       else
+>> >           sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
+>
+> Maybe I am missing parts of this series.. I dont see this change in any
+> of the 4 patches Vitaly sent. Yes, they look swapped to me too.
+>
 
-This patch is on top of git://github.com/broadcom/cygnus-linux.git,
-master branch which is not updated since 4.14 kernel.
-Hope the reference is correct. Thanks!
+There was a conflict with a patch series from Sean:
+https://lore.kernel.org/kvm/20211207220926.718794-1-seanjc@google.com/
 
+and this is a part of the resolution:
 
- arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+commit c0f1eaeb9e628bf86bf50f11cb4a2b671528391e
+Merge: 4dfc4ec2b7f5 47d3e5cdfe60
+Author: Paolo Bonzini <pbonzini@redhat.com>
+Date:   Fri Feb 25 06:28:10 2022 -0500
 
-diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-index ec19fbf928a1..12a4b1c03390 100644
---- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-+++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-@@ -111,8 +111,8 @@
- 		compatible = "silabs,si3226x";
- 		reg = <0>;
- 		spi-max-frequency = <5000000>;
--		spi-cpha = <1>;
--		spi-cpol = <1>;
-+		spi-cpha;
-+		spi-cpol;
- 		pl022,hierarchy = <0>;
- 		pl022,interface = <0>;
- 		pl022,slave-tx-disable = <0>;
-@@ -135,8 +135,8 @@
- 		at25,byte-len = <0x8000>;
- 		at25,addr-mode = <2>;
- 		at25,page-size = <64>;
--		spi-cpha = <1>;
--		spi-cpol = <1>;
-+		spi-cpha;
-+		spi-cpol;
- 		pl022,hierarchy = <0>;
- 		pl022,interface = <0>;
- 		pl022,slave-tx-disable = <0>;
+    Merge branch 'kvm-hv-xmm-hypercall-fixes' into HEAD
+
 -- 
-2.25.1
+Vitaly
 

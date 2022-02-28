@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455FF4C736C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A6A4C7422
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbiB1RfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S234931AbiB1RmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238491AbiB1Rdc (ORCPT
+        with ESMTP id S238377AbiB1Rhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:33:32 -0500
+        Mon, 28 Feb 2022 12:37:43 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72C890FD1;
-        Mon, 28 Feb 2022 09:30:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4001DFB6;
+        Mon, 28 Feb 2022 09:32:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 361F861358;
-        Mon, 28 Feb 2022 17:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44098C340E7;
-        Mon, 28 Feb 2022 17:29:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1513861459;
+        Mon, 28 Feb 2022 17:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A21BC340E7;
+        Mon, 28 Feb 2022 17:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069399;
-        bh=iWtJxw0Dvmyos91wBBX6jH8zF9P3fUrnoFXSYspI3gI=;
+        s=korg; t=1646069536;
+        bh=93VhQEaHboX50eHHlwuPWGL8BptRVPbGklzyVUlkH8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dliR35/bv9ogwZMNnZjmOJbRQtnqdvRslzp4im7qqrBzfRwrM/QDk+02RMlQo8WXS
-         f/CR6mhcoCfJkXOrFwPmlm+pFMIK52V80fTwiwEQ+1DyoxA4w5tDBCyetJkH+7cmwq
-         VNRw3Vn7pSiYf/AK+9SY5XY4ablwfOtc9M7KKT7I=
+        b=zVEhAjn3gyAzr9lJ+8wSKcbaG/f/ocv8Nzq7hgFhNLhcj+I+qHBrESCkJ9yl4bS7y
+         f45bQwMPTi/jXQhDaNxzwGCb2z+LU570GyZDt4lusTOWu9zUMTLDQOEK5d5/oy69Fp
+         AO6Y03939TQ106SdG5IXxoonNLysMbBV2zk/F1cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 22/34] iio: adc: men_z188_adc: Fix a resource leak in an error handling path
+        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Laibin Qiu <qiulaibin@huawei.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 30/53] configfs: fix a race in configfs_{,un}register_subsystem()
 Date:   Mon, 28 Feb 2022 18:24:28 +0100
-Message-Id: <20220228172210.259192484@linuxfoundation.org>
+Message-Id: <20220228172250.470518132@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-References: <20220228172207.090703467@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-commit e0a2e37f303828d030a83f33ffe14b36cb88d563 upstream.
+[ Upstream commit 84ec758fb2daa236026506868c8796b0500c047d ]
 
-If iio_device_register() fails, a previous ioremap() is left unbalanced.
+When configfs_register_subsystem() or configfs_unregister_subsystem()
+is executing link_group() or unlink_group(),
+it is possible that two processes add or delete list concurrently.
+Some unfortunate interleavings of them can cause kernel panic.
 
-Update the error handling path and add the missing iounmap() call, as
-already done in the remove function.
+One of cases is:
+A --> B --> C --> D
+A <-- B <-- C <-- D
 
-Fixes: 74aeac4da66f ("iio: adc: Add MEN 16z188 ADC driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/320fc777863880247c2aff4a9d1a54ba69abf080.1643445149.git.christophe.jaillet@wanadoo.fr
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     delete list_head *B        |      delete list_head *C
+--------------------------------|-----------------------------------
+configfs_unregister_subsystem   |   configfs_unregister_subsystem
+  unlink_group                  |     unlink_group
+    unlink_obj                  |       unlink_obj
+      list_del_init             |         list_del_init
+        __list_del_entry        |           __list_del_entry
+          __list_del            |             __list_del
+            // next == C        |
+            next->prev = prev   |
+                                |               next->prev = prev
+            prev->next = next   |
+                                |                 // prev == B
+                                |                 prev->next = next
+
+Fix this by adding mutex when calling link_group() or unlink_group(),
+but parent configfs_subsystem is NULL when config_item is root.
+So I create a mutex configfs_subsystem_mutex.
+
+Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/men_z188_adc.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/configfs/dir.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/iio/adc/men_z188_adc.c
-+++ b/drivers/iio/adc/men_z188_adc.c
-@@ -106,6 +106,7 @@ static int men_z188_probe(struct mcb_dev
- 	struct z188_adc *adc;
- 	struct iio_dev *indio_dev;
- 	struct resource *mem;
-+	int ret;
+diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+index 2992cebb78661..d73d88d9c2598 100644
+--- a/fs/configfs/dir.c
++++ b/fs/configfs/dir.c
+@@ -36,6 +36,14 @@
+  */
+ DEFINE_SPINLOCK(configfs_dirent_lock);
  
- 	indio_dev = devm_iio_device_alloc(&dev->dev, sizeof(struct z188_adc));
- 	if (!indio_dev)
-@@ -132,8 +133,14 @@ static int men_z188_probe(struct mcb_dev
- 	adc->mem = mem;
- 	mcb_set_drvdata(dev, indio_dev);
- 
--	return iio_device_register(indio_dev);
-+	ret = iio_device_register(indio_dev);
-+	if (ret)
-+		goto err_unmap;
- 
-+	return 0;
++/*
++ * All of link_obj/unlink_obj/link_group/unlink_group require that
++ * subsys->su_mutex is held.
++ * But parent configfs_subsystem is NULL when config_item is root.
++ * Use this mutex when config_item is root.
++ */
++static DEFINE_MUTEX(configfs_subsystem_mutex);
 +
-+err_unmap:
-+	iounmap(adc->base);
- err:
- 	mcb_release_mem(mem);
- 	return -ENXIO;
+ static void configfs_d_iput(struct dentry * dentry,
+ 			    struct inode * inode)
+ {
+@@ -1884,7 +1892,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
+ 
+ 	sd = root->d_fsdata;
++	mutex_lock(&configfs_subsystem_mutex);
+ 	link_group(to_config_group(sd->s_element), group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 
+ 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
+ 
+@@ -1909,7 +1919,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 	inode_unlock(d_inode(root));
+ 
+ 	if (err) {
++		mutex_lock(&configfs_subsystem_mutex);
+ 		unlink_group(group);
++		mutex_unlock(&configfs_subsystem_mutex);
+ 		configfs_release_fs();
+ 	}
+ 	put_fragment(frag);
+@@ -1956,7 +1968,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
+ 
+ 	dput(dentry);
+ 
++	mutex_lock(&configfs_subsystem_mutex);
+ 	unlink_group(group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 	configfs_release_fs();
+ }
+ 
+-- 
+2.34.1
+
 
 

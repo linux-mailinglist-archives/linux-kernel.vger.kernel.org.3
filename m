@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6228A4C72C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C379E4C73AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbiB1R2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S237173AbiB1Rhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbiB1R16 (ORCPT
+        with ESMTP id S232930AbiB1Rex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:27:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DB089CFA;
-        Mon, 28 Feb 2022 09:27:09 -0800 (PST)
+        Mon, 28 Feb 2022 12:34:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A0F7DE3E;
+        Mon, 28 Feb 2022 09:31:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15AA261357;
-        Mon, 28 Feb 2022 17:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F490C340F0;
-        Mon, 28 Feb 2022 17:27:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89590B815A6;
+        Mon, 28 Feb 2022 17:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F43C340E7;
+        Mon, 28 Feb 2022 17:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069228;
-        bh=O2F04uEV820YnXbDhXQj5SJ4t6h3DukeBJd5WnRFAs8=;
+        s=korg; t=1646069470;
+        bh=hlaVVHROS+1+1hqghdgDQ6aqQYuXHJ1E37LvManwwR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TyunaZQSkNAhMZPTcm666x952xeu2a20PDhyX8vrp7Roe9rAJ/1VjgCQ55j0JVOib
-         VI7LlOZkq0bXVk6Jgadl5JNEUfe8CkLuPfjlOiNeS1KKac7+EiDhvqLGLZ6R9ac+zF
-         7efdc93fvOT9NSOFjI8xQUbwVAwIm8YS7RUwJxIs=
+        b=fHWh6dg6Qu6o2FfaoTOdarJ6bBie16xcWg3UpESXTNODOysJOYfh2A3q2w++oFhWM
+         xSiYQvbIIEHOYQUE2B2rLkKDmgpBKGdqxpJLzLg/OBDiYQ9BZ3O1ZklYjp4204Cd9A
+         tCXyxoXVCcj8yU0qHs/54reO4iOxjMyp3Wd6o1jo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tao Liu <thomas.liu@ucloud.cn>,
-        Willem de Bruijn <willemb@google.com>,
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Ross Maynard <bids.7405@bigpond.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 10/31] gso: do not skip outer ip header in case of ipip and net_failover
+Subject: [PATCH 5.4 08/53] USB: zaurus: support another broken Zaurus
 Date:   Mon, 28 Feb 2022 18:24:06 +0100
-Message-Id: <20220228172200.932578882@linuxfoundation.org>
+Message-Id: <20220228172248.917252022@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,103 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Liu <thomas.liu@ucloud.cn>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit cc20cced0598d9a5ff91ae4ab147b3b5e99ee819 upstream.
+commit 6605cc67ca18b9d583eb96e18a20f5f4e726103c upstream.
 
-We encounter a tcp drop issue in our cloud environment. Packet GROed in
-host forwards to a VM virtio_net nic with net_failover enabled. VM acts
-as a IPVS LB with ipip encapsulation. The full path like:
-host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
- -> ipip encap -> net_failover tx -> virtio_net tx
+This SL-6000 says Direct Line, not Ethernet
 
-When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
-SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
-did because it supports TSO and GSO_IPXIP4. But network_header points to
-inner ip header.
+v2: added Reporter and Link
 
-Call Trace:
- tcp4_gso_segment        ------> return NULL
- inet_gso_segment        ------> inner iph, network_header points to
- ipip_gso_segment
- inet_gso_segment        ------> outer iph
- skb_mac_gso_segment
-
-Afterwards virtio_net transmits the pkt, only inner ip header is modified.
-And the outer one just keeps unchanged. The pkt will be dropped in remote
-host.
-
-Call Trace:
- inet_gso_segment        ------> inner iph, outer iph is skipped
- skb_mac_gso_segment
- __skb_gso_segment
- validate_xmit_skb
- validate_xmit_skb_list
- sch_direct_xmit
- __qdisc_run
- __dev_queue_xmit        ------> virtio_net
- dev_hard_start_xmit
- __dev_queue_xmit        ------> net_failover
- ip_finish_output2
- ip_output
- iptunnel_xmit
- ip_tunnel_xmit
- ipip_tunnel_xmit        ------> ipip
- dev_hard_start_xmit
- __dev_queue_xmit
- ip_finish_output2
- ip_output
- ip_forward
- ip_rcv
- __netif_receive_skb_one_core
- netif_receive_skb_internal
- napi_gro_receive
- receive_buf
- virtnet_poll
- net_rx_action
-
-The root cause of this issue is specific with the rare combination of
-SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
-SKB_GSO_DODGY is set from external virtio_net. We need to reset network
-header when callbacks.gso_segment() returns NULL.
-
-This patch also includes ipv6_gso_segment(), considering SIT, etc.
-
-Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
-Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: Ross Maynard <bids.7405@bigpond.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215361
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/af_inet.c     |    5 ++++-
- net/ipv6/ip6_offload.c |    2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/usb/cdc_ether.c |   12 ++++++++++++
+ drivers/net/usb/zaurus.c    |   12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1268,8 +1268,11 @@ struct sk_buff *inet_gso_segment(struct
- 	}
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -571,6 +571,11 @@ static const struct usb_device_id	produc
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
  
- 	ops = rcu_dereference(inet_offloads[proto]);
--	if (likely(ops && ops->callbacks.gso_segment))
-+	if (likely(ops && ops->callbacks.gso_segment)) {
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
-+	}
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
++
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible;
+  * wire-incompatible with true CDC Ethernet implementations.
+  * (And, it seems, needlessly so...)
+@@ -626,6 +631,13 @@ static const struct usb_device_id	produc
+ 	.driver_info		= 0,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++		 | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor               = 0x04DD,
++	.idProduct              = 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info		= 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	/* reported with some C860 units */
+--- a/drivers/net/usb/zaurus.c
++++ b/drivers/net/usb/zaurus.c
+@@ -256,6 +256,11 @@ static const struct usb_device_id	produc
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
  
- 	if (IS_ERR_OR_NULL(segs))
- 		goto out;
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -96,6 +96,8 @@ static struct sk_buff *ipv6_gso_segment(
- 	if (likely(ops && ops->callbacks.gso_segment)) {
- 		skb_reset_transport_header(skb);
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
- 	}
- 
- 	if (IS_ERR_OR_NULL(segs))
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
++
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible. */
+ {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+@@ -315,6 +320,13 @@ static const struct usb_device_id	produc
+ 	.driver_info = ZAURUS_PXA_INFO,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			    | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	/* reported with some C860 units */
 
 

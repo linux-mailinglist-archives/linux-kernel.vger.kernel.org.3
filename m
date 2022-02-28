@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F044C6633
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BB74C6658
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiB1J5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S231304AbiB1J6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiB1J5H (ORCPT
+        with ESMTP id S234577AbiB1J6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:57:07 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A5B66222;
-        Mon, 28 Feb 2022 01:56:27 -0800 (PST)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6bNB57Ffz67nQH;
-        Mon, 28 Feb 2022 17:55:22 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Mon, 28 Feb 2022 10:56:24 +0100
-Received: from [10.47.86.223] (10.47.86.223) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 28 Feb
- 2022 09:56:23 +0000
-Message-ID: <8cdc2c64-0a89-b807-56f6-2ea67a41a641@huawei.com>
-Date:   Mon, 28 Feb 2022 09:56:23 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 1/2] drivers/perf: hisi: Add Support for CPA PMU
-To:     Qi Liu <liuqi115@huawei.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <acme@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
-References: <20220224111129.41416-1-liuqi115@huawei.com>
- <20220224111129.41416-2-liuqi115@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220224111129.41416-2-liuqi115@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.86.223]
-X-ClientProxiedBy: lhreml708-chm.china.huawei.com (10.201.108.57) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 28 Feb 2022 04:58:07 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D31C5101D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:57:19 -0800 (PST)
+Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
+        by 156.147.23.51 with ESMTP; 28 Feb 2022 18:57:18 +0900
+X-Original-SENDERIP: 156.147.1.121
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
+        by 156.147.1.121 with ESMTP; 28 Feb 2022 18:57:18 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     torvalds@linux-foundation.org
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: [PATCH v3 00/21] DEPT(Dependency Tracker)
+Date:   Mon, 28 Feb 2022 18:56:39 +0900
+Message-Id: <1646042220-28952-1-git-send-email-byungchul.park@lge.com>
+X-Mailer: git-send-email 1.9.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,422 +61,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 11:11, Qi Liu wrote:
-> On HiSilicon Hip09 platform, there is a CPA(Coherency Protocol Agent) on
-> each SICL (Super I/O Cluster) which implements packet format translation,
-> route parsing and traffic statistic.
-> 
-> CPA PMU has separate PMU registers which the driver can program freely
+I didn't want to bother you so I was planning to send the next spin
+after making more progress. However, PATCH v2 reports too many false
+positives because Dept tracked the bit_wait_table[] wrong way - I
+apologize for that. So I decided to send PATCH v3 first before going
+further for those who want to run Dept for now.
 
-I am not sure what you mean by program freely. Most IO mem drivers have 
-registers which we can program.
+There might still be some false positives but not overwhelming.
 
-> and
-> interrupt is supported to handle counter overflow. Let's support its driver
-> under the framework of HiSilicon uncore PMU driver.
-> 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> ---
->   drivers/perf/hisilicon/Makefile              |   2 +-
->   drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c | 401 +++++++++++++++++++
->   include/linux/cpuhotplug.h                   |   1 +
->   3 files changed, 403 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-> 
-> diff --git a/drivers/perf/hisilicon/Makefile b/drivers/perf/hisilicon/Makefile
-> index 506ed39e3266..6be83517acaa 100644
-> --- a/drivers/perf/hisilicon/Makefile
-> +++ b/drivers/perf/hisilicon/Makefile
-> @@ -1,6 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   obj-$(CONFIG_HISI_PMU) += hisi_uncore_pmu.o hisi_uncore_l3c_pmu.o \
->   			  hisi_uncore_hha_pmu.o hisi_uncore_ddrc_pmu.o hisi_uncore_sllc_pmu.o \
-> -			  hisi_uncore_pa_pmu.o
-> +			  hisi_uncore_pa_pmu.o hisi_uncore_cpa_pmu.o
->   
->   obj-$(CONFIG_HISI_PCIE_PMU) += hisi_pcie_pmu.o
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-> new file mode 100644
-> index 000000000000..00573719f148
-> --- /dev/null
-> +++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
-> @@ -0,0 +1,401 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * HiSilicon SoC CPA(Coherency Protocol Agent) uncore Hardware event counters support
+---
 
-/s/Hardware/hardware/
+Hi Linus and folks,
 
-> + *
-> + * Copyright (C) 2022 HiSilicon Limited
-> + * Author: Qi Liu <liuqi115@huawei.com>
-> + *
-> + * This code is based on the uncore PMUs like arm-cci and arm-ccn.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bug.h>
-> +#include <linux/cpuhotplug.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/list.h>
-> +#include <linux/smp.h>
-> +
-> +#include "hisi_uncore_pmu.h"
-> +
-> +/* CPA register definition */
-> +#define CPA_PERF_CTRL		0x1c00
-> +#define CPA_EVENT_CTRL		0x1c04
-> +#define CPA_INT_MASK		0x1c70
-> +#define CPA_INT_STATUS		0x1c78
-> +#define CPA_INT_CLEAR		0x1c7c
-> +#define CPA_EVENT_TYPE0		0x1c80
-> +#define CPA_VERSION		0x1cf0
-> +#define CPA_CNT0_LOWER		0x1d00
-> +#define CPA_CFG_REG		0x0534
-> +
-> +/* CPA operation command */
-> +#define CPA_PERF_CTRL_EN	BIT_ULL(0)
-> +#define CPA_EVTYPE_MASK		0xffUL
-> +#define CPA_PM_CTRL		BIT_ULL(9)
-> +
-> +/* CPA has 8-counters */
-> +#define CPA_NR_COUNTERS		0x8
-> +#define CPA_COUNTER_BITS	64
-> +#define CPA_NR_EVENTS		0xff
-> +#define CPA_REG_OFFSET		0x8
-> +
-> +static u32 hisi_cpa_pmu_get_counter_offset(int idx)
-> +{
-> +	return (CPA_CNT0_LOWER + idx * CPA_REG_OFFSET);
-> +}
-> +
-> +static u64 hisi_cpa_pmu_read_counter(struct hisi_pmu *cpa_pmu,
-> +				     struct hw_perf_event *hwc)
-> +{
-> +	return readq(cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
-> +}
-> +
-> +static void hisi_cpa_pmu_write_counter(struct hisi_pmu *cpa_pmu,
-> +				       struct hw_perf_event *hwc, u64 val)
-> +{
-> +	writeq(val, cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
-> +}
-> +
-> +static void hisi_cpa_pmu_write_evtype(struct hisi_pmu *cpa_pmu, int idx, u32 type)
-> +{
-> +	u32 reg, reg_idx, shift, val;
-> +
-> +	/*
-> +	 * Select the appropriate event select register(CPA_EVENT_TYPE0/1).
-> +	 * There are 2 event select registers for the 8 hardware counters.
-> +	 * Event code is 8-bits and for the former 4 hardware counters,
-> +	 * CPA_EVENT_TYPE0 is chosen. For the latter 4 hardware counters,
-> +	 * CPA_EVENT_TYPE1 is chosen.
-> +	 */
-> +	reg = CPA_EVENT_TYPE0 + (idx / 4) * 4;
-> +	reg_idx = idx % 4;
-> +	shift = CPA_REG_OFFSET * reg_idx;
-> +
-> +	/* Write event code to CPA_EVENT_TYPEx Register */
-> +	val = readl(cpa_pmu->base + reg);
-> +	val &= ~(CPA_EVTYPE_MASK << shift);
-> +	val |= type << shift;
-> +	writel(val, cpa_pmu->base + reg);
-> +}
-> +
-> +static void hisi_cpa_pmu_start_counters(struct hisi_pmu *cpa_pmu)
-> +{
-> +	u32 val;
-> +
-> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
-> +	val |= CPA_PERF_CTRL_EN;
-> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
-> +}
-> +
-> +static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
-> +{
-> +	u32 val;
-> +
-> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
-> +	val &= ~(CPA_PERF_CTRL_EN);
-> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
-> +}
-> +
-> +static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
+I've been developing a tool for detecting deadlock possibilities by
+tracking wait/event rather than lock(?) acquisition order to try to
+cover all synchonization machanisms. It's done on v5.17-rc1 tag.
 
-this seems unique for this new driver - why do we need to disable PM?
+https://github.com/lgebyungchulpark/linux-dept/commits/dept1.14_on_v5.17-rc1
 
-> +{
-> +	u32 val;
-> +
-> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
-> +	val |= CPA_PM_CTRL;
-> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
-> +}
-> +
-> +static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
-> +{
-> +	u32 val;
-> +
-> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
-> +	val &= ~CPA_PM_CTRL;
+Benifit:
 
-nit: you use () in hisi_cpa_pmu_stop_counters(), but not here, so please 
-be consistent
+	0. Works with all lock primitives.
+	1. Works with wait_for_completion()/complete().
+	2. Works with 'wait' on PG_locked.
+	3. Works with 'wait' on PG_writeback.
+	4. Works with swait/wakeup.
+	5. Works with waitqueue.
+	6. Multiple reports are allowed.
+	7. Deduplication control on multiple reports.
+	8. Withstand false positives thanks to 6.
+	9. Easy to tag any wait/event.
 
-> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
-> +}
-> +
-> +static void hisi_cpa_pmu_enable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-> +{
-> +	u32 val;
-> +
-> +	/* Enable counter index in CPA_EVENT_CTRL register */
-> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
-> +	val |= 1 << hwc->idx;
-> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
-> +
-> +	/* Power management should be disabled before counting. */
-> +	hisi_cpa_pmu_disable_pm(cpa_pmu);
-> +}
-> +
-> +static void hisi_cpa_pmu_disable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-> +{
-> +	u32 val;
-> +
-> +	hisi_cpa_pmu_enable_pm(cpa_pmu);
-> +
-> +	/* Clear counter index in CPA_EVENT_CTRL register */
-> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
-> +	val &= ~(1UL << hwc->idx);
-> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
-> +}
-> +
-> +static void hisi_cpa_pmu_enable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-> +{
-> +	u32 val;
-> +
-> +	/* Write 0 to enable interrupt */
-> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
-> +	val &= ~(1UL << hwc->idx);
-> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
-> +}
-> +
-> +static void hisi_cpa_pmu_disable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
-> +{
-> +	u32 val;
-> +
-> +	/* Write 1 to mask interrupt */
-> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
-> +	val |= 1 << hwc->idx;
-> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
-> +}
-> +
-> +static u32 hisi_cpa_pmu_get_int_status(struct hisi_pmu *cpa_pmu)
-> +{
-> +	return readl(cpa_pmu->base + CPA_INT_STATUS);
-> +}
-> +
-> +static void hisi_cpa_pmu_clear_int_status(struct hisi_pmu *cpa_pmu, int idx)
-> +{
-> +	writel(1 << idx, cpa_pmu->base + CPA_INT_CLEAR);
-> +}
-> +
-> +static const struct acpi_device_id hisi_cpa_pmu_acpi_match[] = {
-> +	{ "HISI0281", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, hisi_cpa_pmu_acpi_match);
-> +
-> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
-> +				  struct hisi_pmu *cpa_pmu)
-> +{
-> +	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
-> +				     &cpa_pmu->sccl_id)) {
-> +		dev_err(&pdev->dev, "Can not read cpa_pmu sccl-id\n");
+Future work:
 
-strange that the FW uses "scl-id" but driver uses sccl_id (I am talking 
-about sccl vs scl difference)
+	0. To make it more stable.
+	1. To separates Dept from Lockdep.
+	2. To improves performance in terms of time and space.
+	3. To use Dept as a dependency engine for Lockdep.
+	4. To add any missing tags of wait/event in the kernel.
+	5. To deduplicate stack trace.
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	cpa_pmu->ccl_id = -1;
-> +
-> +	if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
-> +				     &cpa_pmu->index_id)) {
-> +		dev_err(&pdev->dev, "Cannot read idx-id\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(cpa_pmu->base))
-> +		return PTR_ERR(cpa_pmu->base);
-> +
-> +	cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct attribute *hisi_cpa_pmu_format_attr[] = {
-> +	HISI_PMU_FORMAT_ATTR(event, "config:0-15"),
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_cpa_pmu_format_group = {
-> +	.name = "format",
-> +	.attrs = hisi_cpa_pmu_format_attr,
-> +};
-> +
-> +static struct attribute *hisi_cpa_pmu_events_attr[] = {
-> +	HISI_PMU_EVENT_ATTR(cpa_cycles,		0x00),
-> +	HISI_PMU_EVENT_ATTR(cpa_p1_wr_dat,	0x61),
-> +	HISI_PMU_EVENT_ATTR(cpa_p1_rd_dat,	0x62),
-> +	HISI_PMU_EVENT_ATTR(cpa_p0_wr_dat,	0xE1),
-> +	HISI_PMU_EVENT_ATTR(cpa_p0_rd_dat,	0xE2),
+How to interpret reports:
 
-nit: you were using lower case for hex numbers elsewhere
-
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_cpa_pmu_events_group = {
-> +	.name = "events",
-> +	.attrs = hisi_cpa_pmu_events_attr,
-> +};
-> +
-> +static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
-> +
-> +static struct attribute *hisi_cpa_pmu_cpumask_attrs[] = {
-> +	&dev_attr_cpumask.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_cpa_pmu_cpumask_attr_group = {
-> +	.attrs = hisi_cpa_pmu_cpumask_attrs,
-> +};
-> +
-> +static struct device_attribute hisi_cpa_pmu_identifier_attr =
-> +	__ATTR(identifier, 0444, hisi_uncore_pmu_identifier_attr_show, NULL);
-> +
-> +static struct attribute *hisi_cpa_pmu_identifier_attrs[] = {
-> +	&hisi_cpa_pmu_identifier_attr.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_cpa_pmu_identifier_group = {
-> +	.attrs = hisi_cpa_pmu_identifier_attrs,
-> +};
-> +
-> +static const struct attribute_group *hisi_cpa_pmu_attr_groups[] = {
-> +	&hisi_cpa_pmu_format_group,
-> +	&hisi_cpa_pmu_events_group,
-> +	&hisi_cpa_pmu_cpumask_attr_group,
-> +	&hisi_cpa_pmu_identifier_group,
-> +	NULL
-> +};
-> +
-> +static const struct hisi_uncore_ops hisi_uncore_cpa_pmu_ops = {
-> +	.write_evtype           = hisi_cpa_pmu_write_evtype,
-> +	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
-> +	.start_counters		= hisi_cpa_pmu_start_counters,
-> +	.stop_counters		= hisi_cpa_pmu_stop_counters,
-> +	.enable_counter		= hisi_cpa_pmu_enable_counter,
-> +	.disable_counter	= hisi_cpa_pmu_disable_counter,
-> +	.enable_counter_int	= hisi_cpa_pmu_enable_counter_int,
-> +	.disable_counter_int	= hisi_cpa_pmu_disable_counter_int,
-> +	.write_counter		= hisi_cpa_pmu_write_counter,
-> +	.read_counter		= hisi_cpa_pmu_read_counter,
-> +	.get_int_status		= hisi_cpa_pmu_get_int_status,
-> +	.clear_int_status	= hisi_cpa_pmu_clear_int_status,
-> +};
-> +
-> +static int hisi_cpa_pmu_dev_probe(struct platform_device *pdev,
-> +				  struct hisi_pmu *cpa_pmu)
-> +{
-> +	int ret;
-> +
-> +	ret = hisi_cpa_pmu_init_data(pdev, cpa_pmu);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hisi_uncore_pmu_init_irq(cpa_pmu, pdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	cpa_pmu->counter_bits = CPA_COUNTER_BITS;
-> +	cpa_pmu->check_event = CPA_NR_EVENTS;
-> +	cpa_pmu->pmu_events.attr_groups = hisi_cpa_pmu_attr_groups;
-> +	cpa_pmu->ops = &hisi_uncore_cpa_pmu_ops;
-> +	cpa_pmu->num_counters = CPA_NR_COUNTERS;
-> +	cpa_pmu->dev = &pdev->dev;
-> +	cpa_pmu->on_cpu = -1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
-> +{
-> +	struct hisi_pmu *cpa_pmu;
-> +	char *name;
-> +	int ret;
-> +
-> +	cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
-> +	if (!cpa_pmu)
-> +		return -ENOMEM;
-> +
-> +	ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
-> +				       &cpa_pmu->node);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
-
-sorry, but I still don't like this "- 1". From checking the chat on v1, 
-my impression was that you agreed with me on this one.
-
-> +			      cpa_pmu->index_id);
-> +
-> +	cpa_pmu->pmu = (struct pmu) {
-> +		.name		= name,
-> +		.module		= THIS_MODULE,
-> +		.task_ctx_nr	= perf_invalid_context,
-> +		.event_init	= hisi_uncore_pmu_event_init,
-> +		.pmu_enable	= hisi_uncore_pmu_enable,
-> +		.pmu_disable	= hisi_uncore_pmu_disable,
-> +		.add		= hisi_uncore_pmu_add,
-> +		.del		= hisi_uncore_pmu_del,
-> +		.start		= hisi_uncore_pmu_start,
-> +		.stop		= hisi_uncore_pmu_stop,
-> +		.read		= hisi_uncore_pmu_read,
-> +		.attr_groups	= cpa_pmu->pmu_events.attr_groups,
-> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
-> +	};
-> +
-> +	ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
-> +	if (ret) {
-> +		dev_err(cpa_pmu->dev, "CPA PMU register failed\n");
-
-I don't think that you need to mention "CPA PMU", as the driver name is 
-included in dev_err() prints
-
-> +		cpuhp_state_remove_instance_nocalls(
-> +			CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
-> +		return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, cpa_pmu);
-> +	return ret;
-> +}
-> +
-
+	1. E(event) in each context cannot be triggered because of the
+	   W(wait) that cannot be woken.
+	2. The stack trace helping find the problematic code is located
+	   in each conext's detail.
 
 Thanks,
-John
+Byungchul
+
+---
+
+Changes from v2:
+
+	1. Disable Dept on bit_wait_table[] in sched/wait_bit.c
+	   reporting a lot of false positives, which is my fault.
+	   Wait/event for bit_wait_table[] should've been tagged in a
+	   higher layer for better work, which is a future work.
+	   (feedback from Jan Kara)
+	2. Disable Dept on crypto_larval's completion to prevent a false
+	   positive.
+
+Changes from v1:
+
+	1. Fix coding style and typo. (feedback from Steven)
+	2. Distinguish each work context from another in workqueue.
+	3. Skip checking lock acquisition with nest_lock, which is about
+	   correct lock usage that should be checked by Lockdep.
+
+Changes from RFC:
+
+	1. Prevent adding a wait tag at prepare_to_wait() but __schedule().
+	   (feedback from Linus and Matthew)
+	2. Use try version at lockdep_acquire_cpus_lock() annotation.
+	3. Distinguish each syscall context from another.
+
+Byungchul Park (21):
+  llist: Move llist_{head,node} definition to types.h
+  dept: Implement Dept(Dependency Tracker)
+  dept: Embed Dept data in Lockdep
+  dept: Add a API for skipping dependency check temporarily
+  dept: Apply Dept to spinlock
+  dept: Apply Dept to mutex families
+  dept: Apply Dept to rwlock
+  dept: Apply Dept to wait_for_completion()/complete()
+  dept: Apply Dept to seqlock
+  dept: Apply Dept to rwsem
+  dept: Add proc knobs to show stats and dependency graph
+  dept: Introduce split map concept and new APIs for them
+  dept: Apply Dept to wait/event of PG_{locked,writeback}
+  dept: Apply SDT to swait
+  dept: Apply SDT to wait(waitqueue)
+  locking/lockdep, cpu/hotplus: Use a weaker annotation in AP thread
+  dept: Distinguish each syscall context from another
+  dept: Distinguish each work from another
+  dept: Disable Dept within the wait_bit layer by default
+  dept: Add nocheck version of init_completion()
+  dept: Disable Dept on struct crypto_larval's completion for now
+
+ crypto/api.c                       |    7 +-
+ include/linux/completion.h         |   50 +-
+ include/linux/dept.h               |  535 +++++++
+ include/linux/dept_page.h          |   78 ++
+ include/linux/dept_sdt.h           |   62 +
+ include/linux/hardirq.h            |    3 +
+ include/linux/irqflags.h           |   33 +-
+ include/linux/llist.h              |    8 -
+ include/linux/lockdep.h            |  158 ++-
+ include/linux/lockdep_types.h      |    3 +
+ include/linux/mutex.h              |   33 +
+ include/linux/page-flags.h         |   45 +-
+ include/linux/pagemap.h            |    7 +-
+ include/linux/percpu-rwsem.h       |   10 +-
+ include/linux/rtmutex.h            |    7 +
+ include/linux/rwlock.h             |   52 +
+ include/linux/rwlock_api_smp.h     |    8 +-
+ include/linux/rwlock_types.h       |    7 +
+ include/linux/rwsem.h              |   33 +
+ include/linux/sched.h              |    7 +
+ include/linux/seqlock.h            |   59 +-
+ include/linux/spinlock.h           |   26 +
+ include/linux/spinlock_types_raw.h |   13 +
+ include/linux/swait.h              |    4 +
+ include/linux/types.h              |    8 +
+ include/linux/wait.h               |    6 +-
+ init/init_task.c                   |    2 +
+ init/main.c                        |    4 +
+ kernel/Makefile                    |    1 +
+ kernel/cpu.c                       |    2 +-
+ kernel/dependency/Makefile         |    4 +
+ kernel/dependency/dept.c           | 2712 ++++++++++++++++++++++++++++++++++++
+ kernel/dependency/dept_hash.h      |   10 +
+ kernel/dependency/dept_internal.h  |   26 +
+ kernel/dependency/dept_object.h    |   13 +
+ kernel/dependency/dept_proc.c      |   92 ++
+ kernel/entry/common.c              |    3 +
+ kernel/exit.c                      |    1 +
+ kernel/fork.c                      |    2 +
+ kernel/locking/lockdep.c           |   12 +-
+ kernel/module.c                    |    2 +
+ kernel/sched/completion.c          |   12 +-
+ kernel/sched/core.c                |    3 +
+ kernel/sched/swait.c               |   10 +
+ kernel/sched/wait.c                |   16 +
+ kernel/sched/wait_bit.c            |    5 +-
+ kernel/softirq.c                   |    6 +-
+ kernel/trace/trace_preemptirq.c    |   19 +-
+ kernel/workqueue.c                 |    3 +
+ lib/Kconfig.debug                  |   21 +
+ mm/filemap.c                       |   68 +
+ mm/page_ext.c                      |    5 +
+ 52 files changed, 4257 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/dept.h
+ create mode 100644 include/linux/dept_page.h
+ create mode 100644 include/linux/dept_sdt.h
+ create mode 100644 kernel/dependency/Makefile
+ create mode 100644 kernel/dependency/dept.c
+ create mode 100644 kernel/dependency/dept_hash.h
+ create mode 100644 kernel/dependency/dept_internal.h
+ create mode 100644 kernel/dependency/dept_object.h
+ create mode 100644 kernel/dependency/dept_proc.c
+
+-- 
+1.9.1
+

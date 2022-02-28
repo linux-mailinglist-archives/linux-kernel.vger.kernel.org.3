@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0FF4C66D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9914C6530
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbiB1KHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S229579AbiB1JCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbiB1KHG (ORCPT
+        with ESMTP id S234150AbiB1JCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:07:06 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70062D1D4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:06:27 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nOcv6-0001BA-IF; Mon, 28 Feb 2022 11:06:20 +0100
-Received: from pengutronix.de (unknown [90.153.54.255])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 07E333F02B;
-        Mon, 28 Feb 2022 08:55:36 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 09:55:36 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: usb: delete a redundant dev_kfree_skb() in
- ems_usb_start_xmit()
-Message-ID: <20220228085536.pa5wdq3w4ul5wqn5@pengutronix.de>
-References: <20220228083639.38183-1-hbh25y@gmail.com>
+        Mon, 28 Feb 2022 04:02:32 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7F56662E;
+        Mon, 28 Feb 2022 01:01:53 -0800 (PST)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6Z9561Zhz67wrK;
+        Mon, 28 Feb 2022 17:00:41 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 10:01:51 +0100
+Received: from A2006125610.china.huawei.com (10.47.94.1) by
+ lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 09:01:44 +0000
+From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
+        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
+        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
+        <wangzhou1@hisilicon.com>
+Subject: [PATCH v6 01/10] crypto: hisilicon/qm: Move the QM header to include/linux
+Date:   Mon, 28 Feb 2022 09:01:12 +0000
+Message-ID: <20220228090121.1903-2-shameerali.kolothum.thodi@huawei.com>
+X-Mailer: git-send-email 2.12.0.windows.1
+In-Reply-To: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3b5jwxwlprqckkxj"
-Content-Disposition: inline
-In-Reply-To: <20220228083639.38183-1-hbh25y@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.47.94.1]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since we are going to introduce VFIO PCI HiSilicon ACC
+driver for live migration in subsequent patches, move
+the ACC QM header file to a common include dir.
 
---3b5jwxwlprqckkxj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+---
+ drivers/crypto/hisilicon/hpre/hpre.h                         | 2 +-
+ drivers/crypto/hisilicon/qm.c                                | 2 +-
+ drivers/crypto/hisilicon/sec2/sec.h                          | 2 +-
+ drivers/crypto/hisilicon/sgl.c                               | 2 +-
+ drivers/crypto/hisilicon/zip/zip.h                           | 2 +-
+ drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h | 0
+ 6 files changed, 5 insertions(+), 5 deletions(-)
+ rename drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h (100%)
 
-On 28.02.2022 16:36:39, Hangyu Hua wrote:
-> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
-> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the c=
-loned
-> skb.
->=20
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+diff --git a/drivers/crypto/hisilicon/hpre/hpre.h b/drivers/crypto/hisilicon/hpre/hpre.h
+index e0b4a1982ee9..9a0558ed82f9 100644
+--- a/drivers/crypto/hisilicon/hpre/hpre.h
++++ b/drivers/crypto/hisilicon/hpre/hpre.h
+@@ -4,7 +4,7 @@
+ #define __HISI_HPRE_H
+ 
+ #include <linux/list.h>
+-#include "../qm.h"
++#include <linux/hisi_acc_qm.h>
+ 
+ #define HPRE_SQE_SIZE			sizeof(struct hpre_sqe)
+ #define HPRE_PF_DEF_Q_NUM		64
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index c5b84a5ea350..ed23e1d3fa27 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -15,7 +15,7 @@
+ #include <linux/uacce.h>
+ #include <linux/uaccess.h>
+ #include <uapi/misc/uacce/hisi_qm.h>
+-#include "qm.h"
++#include <linux/hisi_acc_qm.h>
+ 
+ /* eq/aeq irq enable */
+ #define QM_VF_AEQ_INT_SOURCE		0x0
+diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+index d97cf02b1df7..c2e9b01187a7 100644
+--- a/drivers/crypto/hisilicon/sec2/sec.h
++++ b/drivers/crypto/hisilicon/sec2/sec.h
+@@ -4,7 +4,7 @@
+ #ifndef __HISI_SEC_V2_H
+ #define __HISI_SEC_V2_H
+ 
+-#include "../qm.h"
++#include <linux/hisi_acc_qm.h>
+ #include "sec_crypto.h"
+ 
+ /* Algorithm resource per hardware SEC queue */
+diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+index 057273769f26..534687401135 100644
+--- a/drivers/crypto/hisilicon/sgl.c
++++ b/drivers/crypto/hisilicon/sgl.c
+@@ -3,7 +3,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+-#include "qm.h"
++#include <linux/hisi_acc_qm.h>
+ 
+ #define HISI_ACC_SGL_SGE_NR_MIN		1
+ #define HISI_ACC_SGL_NR_MAX		256
+diff --git a/drivers/crypto/hisilicon/zip/zip.h b/drivers/crypto/hisilicon/zip/zip.h
+index 517fdbdff3ea..3dfd3bac5a33 100644
+--- a/drivers/crypto/hisilicon/zip/zip.h
++++ b/drivers/crypto/hisilicon/zip/zip.h
+@@ -7,7 +7,7 @@
+ #define pr_fmt(fmt)	"hisi_zip: " fmt
+ 
+ #include <linux/list.h>
+-#include "../qm.h"
++#include <linux/hisi_acc_qm.h>
+ 
+ enum hisi_zip_error_type {
+ 	/* negative compression */
+diff --git a/drivers/crypto/hisilicon/qm.h b/include/linux/hisi_acc_qm.h
+similarity index 100%
+rename from drivers/crypto/hisilicon/qm.h
+rename to include/linux/hisi_acc_qm.h
+-- 
+2.25.1
 
-Thanks for the patch. Please add a Fixes tag, that points to the commit
-that introduced the problem, here it's:
-
-Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB i=
-nterface")
-
-I've adjusted the subject a bit ("can: usb: ems_usb_start_xmit(): fix
-double dev_kfree_skb() in error path") and added stable on Cc.
-
-Added patch to can/testing.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---3b5jwxwlprqckkxj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIcjgUACgkQrX5LkNig
-011JaAgAgazwqrThdzTSMQPN3Jz7o80maSyjAnDnztQyxz7rmwW5gFoEHkXA61Hi
-ih20UirDRgWIFJJOkK+oKuvCEDAvrMMXi2oc5vM5lHdev5dPyNoEhw1c7dGpMA7v
-gbaArI3x0/qEBgwUIc0NUed1zPYHd86J6++4exGaVg5Ht915pFdznq8oHVrepgY/
-dEWiwQh4gjVgZwTHQ9xGouS+VV6egSz/K6GS5FUHHRm59C594vglVwYKbEwSRPSH
-fSM+FGC8c64/Jcmq9DzP8B19BC7czeEmim3cR6+oyZe99fKGAwJf015YbvGxLN1J
-pAmOrdGIsydoKimv4s6Tkf8aekXRXA==
-=HJiM
------END PGP SIGNATURE-----
-
---3b5jwxwlprqckkxj--

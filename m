@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B920F4C6415
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6C54C6418
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbiB1Hvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S233711AbiB1Hw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiB1Hvl (ORCPT
+        with ESMTP id S233723AbiB1Hww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:51:41 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061E966F87;
-        Sun, 27 Feb 2022 23:51:02 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5gZjsZ_1646034657;
-Received: from 192.168.193.153(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5gZjsZ_1646034657)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 28 Feb 2022 15:50:58 +0800
-Message-ID: <3389ef12-81c7-6aba-6c58-63e34008af0c@linux.alibaba.com>
-Date:   Sun, 27 Feb 2022 23:50:57 -0800
+        Mon, 28 Feb 2022 02:52:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0EA68FAE
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:52:13 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nOap1-0001vV-8e; Mon, 28 Feb 2022 08:51:55 +0100
+Received: from pengutronix.de (unknown [90.153.54.255])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 71C443E7DC;
+        Mon, 28 Feb 2022 07:51:48 +0000 (UTC)
+Date:   Mon, 28 Feb 2022 08:51:46 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
+        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
+        paskripkin@gmail.com, thunder.leizhen@huawei.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: usb: fix a possible memory leak in
+ esd_usb2_start_xmit
+Message-ID: <20220228075146.hvui3iow7niupij4@pengutronix.de>
+References: <20220225060019.21220-1-hbh25y@gmail.com>
+ <20220225155621.7zmfukra63qcxjo5@pengutronix.de>
+ <69b0dd44-93ac-fa33-f9c1-6f787185ab47@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] [PATCH v2] AARCH64: Add gcc Shadow Call Stack support
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, masahiroy@kernel.org, tglx@linutronix.de,
-        akpm@linux-foundation.org, mark.rutland@arm.com,
-        samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
-        mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
-        elver@google.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-References: <20220225032410.25622-1-ashimida@linux.alibaba.com>
- <202202251243.1E38256F9@keescook>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202202251243.1E38256F9@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pr4shtl3qkndepze"
+Content-Disposition: inline
+In-Reply-To: <69b0dd44-93ac-fa33-f9c1-6f787185ab47@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,87 +60,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--pr4shtl3qkndepze
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/25/22 12:58, Kees Cook wrote:
-> On Thu, Feb 24, 2022 at 07:24:10PM -0800, Dan Li wrote:
->> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> 
-> Thanks for the tweaks!
-> 
->> ---
->> FYI:
->> This function can be used to test if the shadow call stack works:
->> //noinline void __noscs scs_test(void)
->> noinline void scs_test(void)
->> {
->>      unsigned long * lr = (unsigned long *)__builtin_frame_address(0) + 1;
->>
->>      asm volatile("str xzr, [%0]\n\t": : "r"(lr) : "x30");
->> }
-> 
-> Not a big deal, but just FYI, there's a lot of whitespace trailing the
-> "}" above...
-> 
+On 28.02.2022 10:05:03, Hangyu Hua wrote:
+> I get it. But this means ems_usb_start_xmit have a redundant
+> dev_kfree_skb beacause can_put_echo_skb delete original skb and
+> can_free_echo_skb delete the cloned skb. While this code is harmless
+> do you think we need to delete it ?
 
-Ah, sorry for the mistake.
->>
->> If SCS protection is enabled, this function will return normally.
->> If the function has __noscs attribute (scs disabled), it will crash due to 0
->> address access.
-> 
-> It would be cool to turn this into an LKDTM test... (see things like the
-> CFI_FORWARD_PROTO test). I imagine this should be CFI_BACKWARD_SHADOW or
-> something...
-> 
+ACK. This dev_kfree_skb() should be deleted:
 
-OK, I'll add it in the next version.
+| 	err =3D usb_submit_urb(urb, GFP_ATOMIC);
+| 	if (unlikely(err)) {
+| 		can_free_echo_skb(netdev, context->echo_index, NULL);
+|=20
+| 		usb_unanchor_urb(urb);
+| 		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
+| 		dev_kfree_skb(skb);
 
-> Also, I assume you're using real hardware to test this? It'd be nice to
-> see if qemu can be convinced to run with the needed features. Whenever
-> I've tried this it becomes impossibly slow. :)
-> 
+Can you create a patch?
 
-I also use qemu to test the patch (qemu 6.1.0 with command "-cpu max"),
-and can feel the performance drop.
+regards,
+Marc
 
-Maybe because my test environment only has simple busybox and ltp,
-the feeling of a slow system running is not that strong for me :)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-For comparison, I simply tested the difference in kernel boot time
-in my test environment:
-//run qemu with "-cpu cortex-a57",
-[    1.254481] Run /linuxrc as init process
-//run qemu with "-cpu max"
-[    3.566091] Run /linuxrc as init process
+--pr4shtl3qkndepze
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
->> index ccbbd31b3aae..deff5b308470 100644
->> --- a/include/linux/compiler-gcc.h
->> +++ b/include/linux/compiler-gcc.h
->> @@ -97,6 +97,10 @@
->>   #define KASAN_ABI_VERSION 4
->>   #endif
->>   
->> +#ifdef CONFIG_SHADOW_CALL_STACK
->> +#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
->> +#endif
-> 
-> I initially wondered if we need a separate __no_sanitize(STUFF) patch to
-> make the compiler-clang.h macros easier, but I see there are places
-> where we do multiple ("address", "hwaddress") and have specialized
-> macros, so I think this is fine. And since GCC doesn't support
-> "__has_feature", I think this is the correct location for this.
-> 
+-----BEGIN PGP SIGNATURE-----
 
-As in:
-https://lore.kernel.org/all/26a0a816-bc3e-2ac0-d773-0819d9f225af@linux.alibaba.com/
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIcfw8ACgkQrX5LkNig
+013s5Qf/cixRpxrVZSNb0YLxaWmpHJZftGDRiFeLEL1xTAq8HiLAf4gwMj83iuTJ
+EKew+Gcumf5JPzXtx8ojvik+BW/VwXSQtm9iOwJl6nvospA2wG5qX5Zpp9nPaKwY
+KnNTuBNKoT3O+LyyN5drlaxIiDc0//X7M0WkUXC5l8nQfNo1ksU/8I37XyMJZYTm
+YvUvRH9ymviK2Ahe+qi/yCFzwS6oAp/mzMQqLPOs4jBmbQLmAxIlNrxYwi6ZBlBS
+REmg4Mr1kfc3SnR/8SIBEVbRq+6BQisAi/fCRLhcV/BUeCatKAlENQjXpehd8Gjk
+SAJfTgYdDUvf0O9/l4EL1DsgR/UDtA==
+=Aimr
+-----END PGP SIGNATURE-----
 
-I think maybe we could use "#ifdef CONFIG_SHADOW_CALL_STACK"
-instead of "#if __has_attribute(__no_sanitize_address__)" here,
-then move it to `compiler_types.h`.
-
- From my current test results, __noscs seems to work fine in
-clang compilation.
-
-Thanks,
-Dan.
+--pr4shtl3qkndepze--

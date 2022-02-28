@@ -2,156 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923CB4C70F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354AC4C70FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237647AbiB1Pw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S237656AbiB1Pwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiB1Pw0 (ORCPT
+        with ESMTP id S234220AbiB1Pwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:52:26 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2FD7A9BF;
-        Mon, 28 Feb 2022 07:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1646063507; x=1677599507;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=Wth/EYYo3P9m2asvsPuv3QxYWWCfS8QH2PyoOpuo/tA=;
-  b=B+z3p9Euss87CTUW6DquUHXzd5nXgLhEjFv/elSxqK/cgoByTRH9VSmZ
-   Jj6xH07slkPl1+iReJ6XMslpHUuVA+HrwaNl7izQdJQGOPJU5m1S2YIAX
-   /FS+mClggmvTnnR+I9OiT/0XiR5Ue5440roTdjRu3OPvUYOLACDjcjV/n
-   fT73i0Y3lnocleBTVRc0C2nEjM1YH0VBDhVkt8HnKk4lJhzQLodTROEPe
-   YRNRiG7lIkaScNI6yTDLpUKrB/krcY599OltING3sHEO7tVht9TUhOWKK
-   gt8vUp9n1ZlRj7BKQ8NBSqx3LD7zjHiPyqg5sCFejfGMR7k7mwjCKy1iX
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643644800"; 
-   d="scan'208";a="193043581"
-Received: from mail-bn8nam12lp2170.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.170])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2022 23:51:46 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b09niV99/NfJBNJxXFt95N95WPKrJgm23hxRe1uZvLweLFUb1gs09VjVjpqnMoLfNtJd97t41z7vbEkMCdOgPSOFk8J22xrBZhTt6ViAE5LllhXYZsjDPi2KbtVAp9jQ4PEtJD4hL+Uad9ZDL5l6ybdKotaXeJlxnc4T5HwOlyDJMefmoW3b4EJuAUrQTugAlqK30sha1++UJclvMX4/Tax0XdRLZZROmktTpN/wGUU29jOaVqXfOAq901o0LSB2hMoj1FDWYMIXSOeo8+cthFxgqiJDgq5Gnop5pYwseD6WTlDfXiVMwCrcmFYKOBxBPWMBjDjpxdu1Q/UxekXrEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wth/EYYo3P9m2asvsPuv3QxYWWCfS8QH2PyoOpuo/tA=;
- b=Da+ozvwW6d7gytw7qLZXGcqCglzgHpMmPOEIYjHBL15zfrIzavIUFdORJ2sNvRt67Uf7mGa+tICL4JTAEA8qksEOCOBS/kg9KmRUu8iLxuLW6rtWgY90ELM088kf5oojPX938xB7H5m3YDahxH8HYspx9k9sFU+sIBlX6arfdH4eLHFHiIQiX5MbRRzji4PnBXpSrwLTvz/PEHzaz4oeGo08ZBgmqFPDovfD/xl2sFmVibbXUO+XEGqHeh00aER23Cg9XWucKV9OVEwv2PIZeRdH3iSK9QPUPEylXdEFGeY/xy9a0O/0RdfT+3QIgBL+65wuuCrQ+dzYYn1UxkR5mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Mon, 28 Feb 2022 10:52:41 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E543A82D19
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:52:00 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id v5so10277763ilm.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:52:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wth/EYYo3P9m2asvsPuv3QxYWWCfS8QH2PyoOpuo/tA=;
- b=WMieal8ZKUO7XeZKUWhODooavVieCDItutqocIHPl2BSInM8tkqTjWpoES4R5kSJXhh8CC0bpBHBA9xbJB80lqSuGvFkujoY2MYBPqjCiEopKkj0ctFmor7rkt0AGFU/jCrQa79RobbxerVQTxjNhWYpW2Rt7yAdotkquT+OdVk=
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
- by MN2PR04MB7022.namprd04.prod.outlook.com (2603:10b6:208:1eb::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 15:51:43 +0000
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::e8b1:ea93:ffce:60f6]) by PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::e8b1:ea93:ffce:60f6%5]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 15:51:43 +0000
-From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-To:     Niels Dossche <dossche.niels@gmail.com>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "clm@fb.com" <clm@fb.com>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "dsterba@suse.com" <dsterba@suse.com>,
-        Niels Dossche <niels.dossche@ugent.be>
-Subject: Re: [PATCH] btrfs: extend locking to all space_info members accesses
-Thread-Topic: [PATCH] btrfs: extend locking to all space_info members accesses
-Thread-Index: AQHYKo2Y7wkAR6Luq0yqa+9Ld8G4Qg==
-Date:   Mon, 28 Feb 2022 15:51:43 +0000
-Message-ID: <PH0PR04MB741656BC63FF14D8995B46529B019@PH0PR04MB7416.namprd04.prod.outlook.com>
-References: <20220225212028.75021-1-niels.dossche@ugent.be>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1a84e7fc-5d15-49bd-f0bd-08d9fad237bb
-x-ms-traffictypediagnostic: MN2PR04MB7022:EE_
-x-microsoft-antispam-prvs: <MN2PR04MB7022CB2490861F890BB1682E9B019@MN2PR04MB7022.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1Px9yRkMUl4QtSYRgcrRu1vNwV0QDO51KZs1AyR4dMHDq5CxZdw8L9X37C+CCBylmTsSAgL6OB1Pj1bsZZSR3CWDYvWIHEcJ/J9lP12XUpcG/75Kb8tVq5Rg8hnzYZFEAxcarLzTnUNQj+is1dFFBcFeBwF07s5jfTX/kKuWWZahw9jBu3277C5//ZGdHBehfTcsxPh/vcte1KxgC92wyPIxP9Q2jjC79GB+/FhZzpgZjwYn6YW4NWvxyetKgWjePbJJnXXXkoxPfZL9KXG2XIJ7QKqTh5/olqXffgWuF+TQhKVbR07/R0X3R7nbOoZAHIVa/JnhVMaU7UgqYCnB69e56OGWxxweBr7abSDf5eGO1JSkssi/jjc6k66BYY/OsBnABEwun9A9q+c+R4gKhT/2o3VAsB2v94ok14Fg8Sns0JPwHfB2v8+Ek7HgG/UqUyOC4HfvyYagR6ri2GNnfwweQ/5LvJ+vxCeV9KEXFnBG5D9cZbQu4r8nUhVTssVbY9Hi9N0C3BxQaNziZHs5AGccq+bJBaTU7a8r7D8yhwXnNIs4DDMOsGAdFYcEdZncLGIiwUJ+V0XFABFCvaCkcV9ZPrnae/XWyuEQ8MlsCfg/CoZBIK6mkuNVEXlJkcam3IMFOy1KQ5xqaEBFzXjf2c3t16zO1OYFQXdZBQbK2yGw2c44obXSyQUAFFYRztbyPF3IvLFwWaYCu5A9gvN+lA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(316002)(33656002)(110136005)(54906003)(83380400001)(4744005)(86362001)(91956017)(8676002)(66476007)(66946007)(76116006)(66446008)(66556008)(64756008)(4326008)(55016003)(2906002)(8936002)(38100700002)(186003)(5660300002)(7696005)(6506007)(53546011)(122000001)(9686003)(508600001)(52536014)(82960400001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/Sk7TS0lGOyCNLXOHQcPuEiWvM4UjJcmDeRohqt6tqG5mRXDGIBahOUjKbyt?=
- =?us-ascii?Q?oTY+MTmh6I5eV6gGrrykb0XOKf5cUkiZZwBVorpqCnG/fYKlfejLA87iRXAd?=
- =?us-ascii?Q?ijCOysuxrfxVRnI8Ysan8YBQbZlMfSzhbQtKEX3UrSkr7yhAEJw8cqxv9Q+c?=
- =?us-ascii?Q?Xoly4HqWJPAx52+9p9MBuw5maVlmTTnuWNNWa3iZLIbViHi/h3bXgIrnZiiQ?=
- =?us-ascii?Q?jp59EYzS4aOUsXmoPOak3Dvfy2i2+rD2EoM3TCK3o8WzEnze1RbFO6iq0oGP?=
- =?us-ascii?Q?KZMT98BQYVaHD9b2qw8iT7vlKK1cv5+dxTIU4XR2Yp/0MlBl71qkhVzFcrEJ?=
- =?us-ascii?Q?zXAaVbfFV4cZm15E2AKgQ8Q1altZnX8dNHN+BCLCl8EqXYnIrGvgeWSRo6gq?=
- =?us-ascii?Q?tcH0bumeGWUwXUsf7NMDxfixXvOhFnkrG918pGAnrdVqWO9nKVz7JNZV6K/J?=
- =?us-ascii?Q?8weLqrPraj493fZlpem0BUSMDIKVpERQMgPliDzFR1INGFEkwYL8psXy3PNF?=
- =?us-ascii?Q?pzR4laCstNbdl71tQ4q72Hg3j0tJ2ZL4+aLmqbKJ6uvMNqJBG4BvTkskXpO+?=
- =?us-ascii?Q?edTVHr6GkgRXTuZdzOx3SIBF0U39/1LOnlYKqHfK4T7HAPEBtJWd3FK5o/1Z?=
- =?us-ascii?Q?U+3bf4Sr/A4ilzSeu2bdoWKYtJzGd4GXuAfKjFoAhhOQXN0j/9YcrnaUqmeM?=
- =?us-ascii?Q?ue19GQDgc10/FhKmm+WD+70tHcfFmUu/gBzdy/NDFA/52RtPZUFVLmoYOHoy?=
- =?us-ascii?Q?l85igwYV7AetDCR8wv9fNCuOgVofj1fNwxMsYCNMdhfVFZO1n6jhLJ8J8uvL?=
- =?us-ascii?Q?QrqIw6D08yHP9SfmdT3KtukYyrWn5tyAby8a1FFJpm3hzI2SMQ1JUyf6xIAX?=
- =?us-ascii?Q?pTdMTtnJ2dD/+m2WBlQ+w62ESXWLCe3LC/4J/K4MGGGpabmL7L1fQFLjpiGx?=
- =?us-ascii?Q?CBRLgw0n22nQGIL6MZOsfzrx6qT7m/Gp5E/fH4hTVYX0/5xq/NhuLJyRlCIy?=
- =?us-ascii?Q?zDT9GNn2inV6mLJw/9fTtXQkcmggev9dJs+6mkdblKv1qia4hDsGoFDu6KJx?=
- =?us-ascii?Q?+ttOA7rtOgFNwzTCAkYJEMQRBT8Lks8s59kLgrFOEHScXrXPbFa6zy3AbEaL?=
- =?us-ascii?Q?UztXMYy7jQ4toH0QDgdYqhbvxvsZ+pqrxwvs+ygNG/nSplqTd8gG1VKgYYD5?=
- =?us-ascii?Q?tjzw7A2pJ7OZCRkM1nX4IZSz9gZEkJyGPQw+c6Si9J1kmoF0Csj58oSnYVDQ?=
- =?us-ascii?Q?C9GgPP17/pCx6o0Ngb2lRepvPQZkuwh15RbVDSr3STtiCCB5gL6AnpqSdTND?=
- =?us-ascii?Q?MaUQ3PdHaDPho4xkS/7BfZOPJRXomp7sPHlZA2akqG4kBqBZiFscFLyeeB98?=
- =?us-ascii?Q?YGXsNpEVvyddR4cbYlIAP2tI9IXHGRMNR4agJ4sQ0+cV0Kf2AHwKj9VmaVvI?=
- =?us-ascii?Q?217rvoIaZMmyFKRX2xDJ7HHRCvsyXQoKkN/I6zCB50CwNcQdCXv0OKiCzmtL?=
- =?us-ascii?Q?4SMpR0SyLwe0LXOOHv6hLSeooU36rNMHasC4hXC2yjmYid8OYjwlESqGeyb1?=
- =?us-ascii?Q?D5JBptZlPV6xOACTa2FDoUebAIudUNDAPh5rduS9xZKQ2BalS/V0fvOKxg+R?=
- =?us-ascii?Q?DL5JD0rR6+n5DneX8GA+bTV2B0QHmayNJdhKoogsO2SpUzD3OHEAF8jfnoO1?=
- =?us-ascii?Q?ft19nGH/qxn+yFPLMB4SXbCK0DHdSu6MC4jCPWVPumv67NhtRhYljnCxWL0l?=
- =?us-ascii?Q?3APjKUAie1i3dsnauBkYweBdA5S3ZkI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n+LrXdbcpGcQ8auFYGfiJUll8i2HnwXcj9ZM2kN+ZWI=;
+        b=cCiInmhSF4UKNIZsSBshdDzZjgdoJF2anW4ZfSHf8EhF9bQmAe0+h5U0g/DF6jdZPC
+         0WcQwVOOS0mE9/30q1JVCTODRooSRxx8Xg/MqmZTEFhSdk9N+c0n/pVPYfdogbNB4Kaq
+         ttf1Yv+7M2hF0ZQmZmzgRNUWE4Gwe4VYcvuPaDAkPRp/MO4SFRUvDK0QnH+uDvU78R+H
+         ZfMo/Ih4aXtrRsAi6b9nEbszb75qsYIUqVk/ajMQi0g48khgpi6JTCVyu0dt+ORz4ThX
+         ZcuK+EP0y0qefrtgNgay9cJ8KNStQsCg3q5U4Gqmj9VypItOw8PT+lDQ3Qbkf0vGJYCX
+         G5dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n+LrXdbcpGcQ8auFYGfiJUll8i2HnwXcj9ZM2kN+ZWI=;
+        b=RqYUe2B+iFPXo6wCW/CGVCH6B3PcJMko4Yq/+TPmPWUajdhdRvfSpaf5ouE9sRQgg5
+         tgzqAEXNiWRAbz1eRuBIXrFNG7cCidhJifvfu5Phu/8RIoDav8aHavB79Q2dfafBZtih
+         mr9weVYQCRXlB9YyiwblPDSNlWjJHV4ulPMuqSDQnbw3Ama3V/tGT9k/Z9yoBjWV3zEH
+         suNxPEXejKR/mw1ew9CQj0/7S5s1PGq41lVcZdf2bVoO5uEiIAKmd98DfQ5gB4QK6f8a
+         LAQ5IR57ydoWptl3yBxR/JO72tmLJIGL1HWjjgaaPAAfb/f7TIoLMIlF4BPY6pEWaCJe
+         O6gg==
+X-Gm-Message-State: AOAM532javL4zxJ2md6xVQUh4W3qK9MwQDsnkg9OTB05dhSKISXK20TT
+        PtsBn9Dc5Oflx31OXvpsaxa0IQ==
+X-Google-Smtp-Source: ABdhPJyiELU+p4K8lD5zsnR15Ud37KFZggnoYuMacHPdu6g9dVWim9pWMBWGooBPrVZa0lMfdrN59g==
+X-Received: by 2002:a05:6e02:17c7:b0:2c2:848f:fd62 with SMTP id z7-20020a056e0217c700b002c2848ffd62mr19731019ilu.91.1646063520260;
+        Mon, 28 Feb 2022 07:52:00 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id k15-20020a92c24f000000b002c2e03c5925sm2501920ilo.8.2022.02.28.07.51.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 07:51:59 -0800 (PST)
+Message-ID: <6423c8ed-8d3a-3f17-9947-1751e7a70a18@linaro.org>
+Date:   Mon, 28 Feb 2022 09:51:58 -0600
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a84e7fc-5d15-49bd-f0bd-08d9fad237bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 15:51:43.3577
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Xpie4+/8UkiS9FAYcFkyts7+MGPdXBGMLZ4LYQbzLVvI99MZh7i1J8Nrc0xk1u6QvAd0QWjrj+RZSEksDNfCJ+zCgw4AY6zO5CRhL7SjJlI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB7022
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 05/27] bus: mhi: Use bitfield operations for handling
+ DWORDs of ring elements
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Manivannan Sadhasivam' <manivannan.sadhasivam@linaro.org>
+Cc:     "mhi@lists.linux.dev" <mhi@lists.linux.dev>,
+        "quic_hemantk@quicinc.com" <quic_hemantk@quicinc.com>,
+        "quic_bbhatt@quicinc.com" <quic_bbhatt@quicinc.com>,
+        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "vinod.koul@linaro.org" <vinod.koul@linaro.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "quic_vbadigan@quicinc.com" <quic_vbadigan@quicinc.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "quic_skananth@quicinc.com" <quic_skananth@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+ <20220228124344.77359-6-manivannan.sadhasivam@linaro.org>
+ <90b1d3954b8c4157a4045db82b562271@AcuMS.aculab.com>
+ <20220228144336.GB12451@workstation>
+ <8433702975794b5389563393bf7bc405@AcuMS.aculab.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <8433702975794b5389563393bf7bc405@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 22:21, Niels Dossche wrote:=0A=
-> bytes_pinned is always accessed under space_info->lock, except in=0A=
-> btrfs_preempt_reclaim_metadata_space, however the other members are=0A=
-> accessed under that lock. The reserved member of the rsv's are also=0A=
-> partially accessed under a lock and partially not. Move all these=0A=
-> accesses into the same lock to ensure consistency.=0A=
-=0A=
-Maybe also add a lockdep_assert_held() call to need_preemptive_reclaim().=
-=0A=
-=0A=
-As of now, it has only two callsites which both hold the lock before=0A=
-accessing bytes_pinned et al, but better safe then sorry.=0A=
-=0A=
-Anyways,=0A=
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
+On 2/28/22 9:40 AM, David Laight wrote:
+> From: 'Manivannan Sadhasivam'
+>> Sent: 28 February 2022 14:44
+>>
+>> On Mon, Feb 28, 2022 at 02:00:07PM +0000, David Laight wrote:
+>>> From: Manivannan Sadhasivam
+>>>> Sent: 28 February 2022 12:43
+>>>>
+>>>> Instead of using the hardcoded bits in DWORD definitions, let's use the
+>>>> bitfield operations to make it more clear how the DWORDs are structured.
+>>>
+>>> That all makes it as clear as mud.
+>>
+>> It depends on how you see it ;)
+>>
+>> For instance,
+>>
+>> #define MHI_TRE_GET_CMD_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
+>>
+>> vs
+>>
+>> #define MHI_TRE_GET_CMD_TYPE(tre) (FIELD_GET(GENMASK(23, 16), (MHI_TRE_GET_DWORD(tre, 1))))
+>>
+>> The later one makes it more obvious that the "type" field resides between bit 23
+>> and 16. Plus it avoids the extra masking.
+> 
+> No, (x >> 16) & 0xff is obviously bits 23 to 16.
+> I can guess or try to remember what FIELD_GET() and GENMASK() do
+> but it is really hard work.
+
+Although I suggested the use of the bitfield functions, I don't
+disagree with the above statement.
+
+The intent was to simplify some code using some standard
+helpers.  One benefit of those is that you don't need to
+define the shift, because the mask already defines that
+(so there is no chance for them mismatching).
+
+The way this got implemented did not line up with what I had
+envisioned though (and I had some discussion with Mani about
+this earlier).  So this result ended up being messier than
+I expected it would.
+
+> Both lines are actually too long to read - especially given the
+> number of times they are repeated with very minor changes.
+
+I agree with that.
+
+> I actually wonder if you shouldn't just have a struct like:
+> struct mhi_cmd {
+> 	__le64   address;
+> 	__le16   len;
+> 	u8       state;
+> 	u8       vid;
+> 	__le16   xxx; /* I can't see what this is */
+> 	u8       chid;
+> 	u8       cmd;
+> };
+
+I suggested something similar, and maybe more.  But here
+too, Mani felt what he was doing was the right way and
+that his way made things simpler overall.
+
+I'm satisfied with the code, and frankly don't want to
+delay it getting accepted any further if possible.
+
+So I'm going to say this:
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+However, Mani, please consider how you can make this
+more readable, and have a plan to update things after
+this gets accepted.  I suggested using inline functions
+to help break it down a bit.  Or perhaps you could go
+back to something like David suggests.
+
+I don't need to review this again; I assume any changes
+you make will improve the readability but will not change
+the effect of the code.
+
+					-Alex
+
+> although you might need the odd anonymous union/struct
+> to get the overlays in.
+> 
+> Even using something like:
+> #define MAKE_WORD0(len, state, vid) (htole16(len) | state << 16 | vid << 16)
+> would make for easier reading.
+> 
+> Oh yes, there are some 64bit fields here.
+> So a 'word' is 64 bits, so a 'double word' would be 128 bits!
+> 
+> WTF is a DWORD anyway????
+> Are you going to start using DWORD_PTR as well ?????
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+

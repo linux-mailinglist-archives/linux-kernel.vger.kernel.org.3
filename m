@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1B14C741D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8524C7294
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238406AbiB1Rlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S235130AbiB1R1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238556AbiB1Rh7 (ORCPT
+        with ESMTP id S234469AbiB1R0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:37:59 -0500
+        Mon, 28 Feb 2022 12:26:52 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F815620A;
-        Mon, 28 Feb 2022 09:33:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6C588793;
+        Mon, 28 Feb 2022 09:26:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 551A561357;
-        Mon, 28 Feb 2022 17:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7249BC340E7;
-        Mon, 28 Feb 2022 17:32:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C40E6136C;
+        Mon, 28 Feb 2022 17:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46200C340E7;
+        Mon, 28 Feb 2022 17:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069579;
-        bh=sSEoqc+9YPIsgkNANlmTg3KrERRDy6bUKBQeTnevo34=;
+        s=korg; t=1646069168;
+        bh=MGp52dmwQ7DlmOumLG7PkgGz+jwZUqoURvU/XT/ah+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0HhU0Tm3QH/oWmNtuuluvpyJrw36pGaYGqqZ4yrfREsTmg5kQY/7hrAkjlbh2oh6C
-         aHvvv67qWOyoMs8sfY7tGRBD4mebw7AU0qz4MQ5CceiTFCEf+eydGU/C6uPRKsoOsW
-         DRcZsy2NSlUVqaojWUpUei9iYPlAelae2tPzTf5c=
+        b=GbEqXKWgxzIo05pHs53xD6rfkc8uaF38SGTGrwc4UT4o5yMAVxMXHuifR9zes+Udi
+         0zyj9sZWMECgcbyBk8o87IcGNSLIQuzzXp7HLTKSv+7RD2klH7FqfJQ4wPur4AAsAm
+         5K3U41+vizHoh75fc3Dui8De88OEDBQPpUMz0pMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Su Yue <l@damenly.su>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.10 03/80] btrfs: tree-checker: check item_size for dev_item
-Date:   Mon, 28 Feb 2022 18:23:44 +0100
-Message-Id: <20220228172312.111075326@linuxfoundation.org>
+        stable@vger.kernel.org, Dmytro Bagrii <dimich.dmb@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 18/29] Revert "USB: serial: ch341: add new Product ID for CH341A"
+Date:   Mon, 28 Feb 2022 18:23:45 +0100
+Message-Id: <20220228172143.702416174@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Su Yue <l@damenly.su>
+From: Dmytro Bagrii <dimich.dmb@gmail.com>
 
-commit ea1d1ca4025ac6c075709f549f9aa036b5b6597d upstream.
+commit 198a7ebd5fa17b4d0be8cb70240ee1be885175c0 upstream.
 
-Check item size before accessing the device item to avoid out of bound
-access, similar to inode_item check.
+This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
 
-Signed-off-by: Su Yue <l@damenly.su>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+CH341 has Product ID 0x5512 in EPP/MEM mode which is used for
+I2C/SPI/GPIO interfaces. In asynchronous serial interface mode
+CH341 has PID 0x5523 which is already in the table.
+
+Mode is selected by corresponding jumper setting.
+
+Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
+Link: https://lore.kernel.org/r/20220210164137.4376-1-dimich.dmb@gmail.com
+Link: https://lore.kernel.org/r/YJ0OCS/sh+1ifD/q@hovoldconsulting.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/tree-checker.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/serial/ch341.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/fs/btrfs/tree-checker.c
-+++ b/fs/btrfs/tree-checker.c
-@@ -947,6 +947,7 @@ static int check_dev_item(struct extent_
- 			  struct btrfs_key *key, int slot)
- {
- 	struct btrfs_dev_item *ditem;
-+	const u32 item_size = btrfs_item_size_nr(leaf, slot);
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -70,7 +70,6 @@
  
- 	if (key->objectid != BTRFS_DEV_ITEMS_OBJECTID) {
- 		dev_item_err(leaf, slot,
-@@ -954,6 +955,13 @@ static int check_dev_item(struct extent_
- 			     key->objectid, BTRFS_DEV_ITEMS_OBJECTID);
- 		return -EUCLEAN;
- 	}
-+
-+	if (unlikely(item_size != sizeof(*ditem))) {
-+		dev_item_err(leaf, slot, "invalid item size: has %u expect %zu",
-+			     item_size, sizeof(*ditem));
-+		return -EUCLEAN;
-+	}
-+
- 	ditem = btrfs_item_ptr(leaf, slot, struct btrfs_dev_item);
- 	if (btrfs_device_id(leaf, ditem) != key->offset) {
- 		dev_item_err(leaf, slot,
+ 
+ static const struct usb_device_id id_table[] = {
+-	{ USB_DEVICE(0x1a86, 0x5512) },
+ 	{ USB_DEVICE(0x1a86, 0x5523) },
+ 	{ USB_DEVICE(0x1a86, 0x7522) },
+ 	{ USB_DEVICE(0x1a86, 0x7523) },
 
 

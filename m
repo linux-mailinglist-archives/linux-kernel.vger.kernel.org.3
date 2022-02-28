@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DFC4C7452
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89FA4C72D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238512AbiB1Rmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S234444AbiB1R3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238493AbiB1Rh4 (ORCPT
+        with ESMTP id S235836AbiB1R1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:37:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042B945ADD;
-        Mon, 28 Feb 2022 09:32:47 -0800 (PST)
+        Mon, 28 Feb 2022 12:27:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE3889CCB;
+        Mon, 28 Feb 2022 09:26:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D63C561359;
-        Mon, 28 Feb 2022 17:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8ACC340E7;
-        Mon, 28 Feb 2022 17:32:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3945AB815B4;
+        Mon, 28 Feb 2022 17:26:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E9CC340E7;
+        Mon, 28 Feb 2022 17:26:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069566;
-        bh=TP4BwGbN624ZpZnVOC+khdGnLxAgv8yriN6zeGOsyyM=;
+        s=korg; t=1646069214;
+        bh=KcD0VeXis5K6pfFfjojtXd9veRqSBEP7ZPOuwSBvwoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7fZ6gQ+7Y7/uPdxtdy8aM8Y1dWAKqoT6rU3n2iXmKqdJfWTctoBae+QZogURjsDe
-         viS5LFtiTgr2RafLwkTckbwtdz4bwursiGCV3Ysg92QoQ6R/Hcw1gpIGzoQfGqToWS
-         RMlfY0DNYyGfD1M1Du1m1r/bZ/krlHfXFXGo2jT4=
+        b=Qq+ZBdj5rE+RSShgBsXzS6UYzE6JSwhBAzJLjnkngNym/bW7TwbcTORviIfa5lMwO
+         LGYAis/fQXQM4Gdv6t6aXpyJ2mHKm4q2YiLJXBUZ6EKVzchwSy3Km73+g+nUPTGQN9
+         5m0Lw5NekWo5SWBSRpumwXi3fEYy+1d5SgF1/aAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Ross Maynard <bids.7405@bigpond.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 13/80] USB: zaurus: support another broken Zaurus
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 4.9 27/29] tty: n_gsm: fix proper link termination after failed open
 Date:   Mon, 28 Feb 2022 18:23:54 +0100
-Message-Id: <20220228172313.217510281@linuxfoundation.org>
+Message-Id: <20220228172144.391709007@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: daniel.starke@siemens.com <daniel.starke@siemens.com>
 
-commit 6605cc67ca18b9d583eb96e18a20f5f4e726103c upstream.
+commit e3b7468f082d106459e86e8dc6fb9bdd65553433 upstream.
 
-This SL-6000 says Direct Line, not Ethernet
+Trying to open a DLCI by sending a SABM frame may fail with a timeout.
+The link is closed on the initiator side without informing the responder
+about this event. The responder assumes the link is open after sending a
+UA frame to answer the SABM frame. The link gets stuck in a half open
+state.
 
-v2: added Reporter and Link
+This patch fixes this by initiating the proper link termination procedure
+after link setup timeout instead of silently closing it down.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: Ross Maynard <bids.7405@bigpond.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215361
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220218073123.2121-3-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/cdc_ether.c |   12 ++++++++++++
- drivers/net/usb/zaurus.c    |   12 ++++++++++++
- 2 files changed, 24 insertions(+)
+ drivers/tty/n_gsm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -570,6 +570,11 @@ static const struct usb_device_id	produc
- 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
- 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1506,7 +1506,7 @@ static void gsm_dlci_t1(unsigned long da
+ 			dlci->mode = DLCI_MODE_ADM;
+ 			gsm_dlci_open(dlci);
+ 		} else {
+-			gsm_dlci_close(dlci);
++			gsm_dlci_begin_close(dlci); /* prevent half open link */
+ 		}
  
-+#define ZAURUS_FAKE_INTERFACE \
-+	.bInterfaceClass	= USB_CLASS_COMM, \
-+	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
-+	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
-+
- /* SA-1100 based Sharp Zaurus ("collie"), or compatible;
-  * wire-incompatible with true CDC Ethernet implementations.
-  * (And, it seems, needlessly so...)
-@@ -625,6 +630,13 @@ static const struct usb_device_id	produc
- 	.driver_info		= 0,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+		 | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor               = 0x04DD,
-+	.idProduct              = 0x9032,	/* SL-6000 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info		= 0,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	/* reported with some C860 units */
---- a/drivers/net/usb/zaurus.c
-+++ b/drivers/net/usb/zaurus.c
-@@ -256,6 +256,11 @@ static const struct usb_device_id	produc
- 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
- 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
- 
-+#define ZAURUS_FAKE_INTERFACE \
-+	.bInterfaceClass	= USB_CLASS_COMM, \
-+	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
-+	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
-+
- /* SA-1100 based Sharp Zaurus ("collie"), or compatible. */
- {
- 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
-@@ -315,6 +320,13 @@ static const struct usb_device_id	produc
- 	.driver_info = ZAURUS_PXA_INFO,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			    | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x9032,	/* SL-6000 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long)&bogus_mdlm_info,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	/* reported with some C860 units */
+ 		break;
 
 

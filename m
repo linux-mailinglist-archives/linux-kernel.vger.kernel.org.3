@@ -2,127 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D155B4C625F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB864C6265
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiB1FNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 00:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S233052AbiB1FST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 00:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiB1FNu (ORCPT
+        with ESMTP id S232858AbiB1FSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 00:13:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDDE140F5;
-        Sun, 27 Feb 2022 21:13:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6T6X1dKjz4xcd;
-        Mon, 28 Feb 2022 16:13:08 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646025188;
-        bh=6j8rhBivrfPZGduIH4iD19AK+8/oLIOpS1F/KahJs1M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YW733fWk6C1EuZOipeQi3SFB0hk3V04iiVSHXfxVaiZ/V0upT8BjNrv8EHCWmZGgX
-         ZVXYRBdeSMifGy1XZyMkzs6SdQV5t3/CcHRdecMYCFcUO2b+MQ3OG7TsZbWM5jNRGl
-         qb7iLOYyigDQ2Ddw3aq9QNL5IwhvH0hdZOsQBgaUVIHASZqwObibUpnDcxreSlLvsv
-         1/SvhC1YPRmsZLOzf9jZ9OvC5RjBRyiOawn4d3dJA8MCir/HvI4eOKVgew09jN/fW2
-         ydpTt22CJwST5cykBis+7z1VZz2tE1l2Rb+f05KuM13kzX7YTE/q7Xig2QDaEW7NQN
-         zlPRO3U+f+0Iw==
-Date:   Mon, 28 Feb 2022 16:13:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     broonie@kernel.org, Jessica Yu <jeyu@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the modules tree
-Message-ID: <20220228161307.0467e4e1@canb.auug.org.au>
-In-Reply-To: <YhWAjCTPp3hhxEOG@bombadil.infradead.org>
-References: <20220221160721.1627006-1-broonie@kernel.org>
-        <YhWAjCTPp3hhxEOG@bombadil.infradead.org>
+        Mon, 28 Feb 2022 00:18:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16CDB29835
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:17:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646025457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsxc2s292NsRQ4hzwanA8m9ycoHJFMMtSw79mLbnNdE=;
+        b=UObONYEQYdCVxKHA11OaBuo5CFL6IpX0AW0kcT2RJcfpvyOAolx9fCGshmUQkKTrjsovM+
+        mTyalHtmtm89fXcSUcOyosoF53MlLOPfgDekv0n0iCvIQGJcPcDMC+iTRnPGy6gYfsVurx
+        k9sH/0XUEQBrIu6oUoS7PLuE+aLuCX4=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399-G7bHknfQN4eUfpqC0DpYZQ-1; Mon, 28 Feb 2022 00:17:35 -0500
+X-MC-Unique: G7bHknfQN4eUfpqC0DpYZQ-1
+Received: by mail-lf1-f71.google.com with SMTP id i24-20020a0565123e1800b0044567f5a29bso1473129lfv.5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:17:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qsxc2s292NsRQ4hzwanA8m9ycoHJFMMtSw79mLbnNdE=;
+        b=3f797p9sZsFk7ZntKC9+M1STcaQt0lkrUfizIsLIGt38siRf2nqYYltXfzgbxVLgBl
+         51F12XWkLvhuR8y5GCa8e6l/bvCHXlFIlTsafShGBAuo5e/B836GS/kDdqNJkgQbpgGd
+         W2TxwjixwashdekVjiJ7Pb1r8uVU6JXSx7CyyIM6BFBK5EJJYXw+qOWd/yYrmeGSaBQ0
+         Xdmavx11SurbtJr8l8MDow6EG79v5FqDCUWz7ayFUrjWFnkqewLQLSJ2wSBECrK4HgYt
+         bvVtwNzo5nI66ERrSSkoBRsL89H+qdyJ9T9/Elb9t4AS328If9ncIfIm3WDUXc1WyWfN
+         YBJw==
+X-Gm-Message-State: AOAM531U+z+YrAzrQCBEug7Cx6qqu0vuQ9pzKDv1ovew52rvtmBz+zwe
+        vIrLyUM1j32C39H3vVJjDT/QrXknoQ1f4VaGVfp2JJrSR/AlosVyCv4yYXMt1xjcM2OavELbLsT
+        QyOdpIpjzVAevy5+WzMV2TSowhSGTofC9LdyYcHwp
+X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id h1-20020ac24da1000000b0043874be5a88mr11252861lfe.210.1646025453591;
+        Sun, 27 Feb 2022 21:17:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwtKdDAsYdevYlXM4KkIBT28shP4GL11Q2MrukJc3at1rmEfn7iLM6V1nQQyjtFS2b6NVGWoHh9y1pwXlQ0pNA=
+X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id
+ h1-20020ac24da1000000b0043874be5a88mr11252849lfe.210.1646025453345; Sun, 27
+ Feb 2022 21:17:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aTIGVEqzLpgqEHBwoeuy5xl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224103852.311369-1-baymaxhuang@gmail.com>
+ <20220225090223.636877-1-baymaxhuang@gmail.com> <c687e1d8-e36a-8f23-342a-22b2a1efb372@gmail.com>
+ <CACGkMEtTdvbc1rk6sk=KE7J2L0=R2M-FMxK+DfJDUYMTPbPJGA@mail.gmail.com> <CANn89iKLhhwGnmEyfZuEKjtt7OwTbVyDYcFUMDYoRpdXjbMwiA@mail.gmail.com>
+In-Reply-To: <CANn89iKLhhwGnmEyfZuEKjtt7OwTbVyDYcFUMDYoRpdXjbMwiA@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 28 Feb 2022 13:17:22 +0800
+Message-ID: <CACGkMEuWLQ6fGXiew_1WGuLYsxEkT+vFequHpZW1KvH=3wcF-w@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] tun: support NAPI for packets received from
+ batched XDP buffs
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Harold Huang <baymaxhuang@gmail.com>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aTIGVEqzLpgqEHBwoeuy5xl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Tue, 22 Feb 2022 16:32:12 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
+On Mon, Feb 28, 2022 at 12:59 PM Eric Dumazet <edumazet@google.com> wrote:
 >
-> Thanks for the report Mark. Aaron, did you fix this issue on your latest
-> series?
->=20
-> On Mon, Feb 21, 2022 at 04:07:21PM +0000, broonie@kernel.org wrote:
-> > Hi all,
-> >=20
-> > After merging the modules tree, today's linux-next build (KCONFIG_NAME)
+>
+>
+> On Sun, Feb 27, 2022 at 8:20 PM Jason Wang <jasowang@redhat.com> wrote:
+>>
+>> On Mon, Feb 28, 2022 at 12:06 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+>>
+>> > How big n can be ?
+>> >
+>> > BTW I could not find where m->msg_controllen was checked in tun_sendmsg().
+>> >
+>> > struct tun_msg_ctl *ctl = m->msg_control;
+>> >
+>> > if (ctl && (ctl->type == TUN_MSG_PTR)) {
+>> >
+>> >      int n = ctl->num;  // can be set to values in [0..65535]
+>> >
+>> >      for (i = 0; i < n; i++) {
+>> >
+>> >          xdp = &((struct xdp_buff *)ctl->ptr)[i];
+>> >
+>> >
+>> > I really do not understand how we prevent malicious user space from
+>> > crashing the kernel.
+>>
+>> It looks to me the only user for this is vhost-net which limits it to
+>> 64, userspace can't use sendmsg() directly on tap.
+>>
+>
+> Ah right, thanks for the clarification.
+>
+> (IMO, either remove the "msg.msg_controllen = sizeof(ctl);" from handle_tx_zerocopy(), or add sanity checks in tun_sendmsg())
+>
+>
 
-This was a powerpc ppc64_defconfig build.
+Right, Harold, want to do that?
 
-> > failed like this:
-> >=20
-> > In file included from /tmp/next/build/include/linux/build_bug.h:5,
-> >                  from /tmp/next/build/include/linux/container_of.h:5,
-> >                  from /tmp/next/build/include/linux/list.h:5,
-> >                  from /tmp/next/build/include/linux/module.h:12,
-> >                  from /tmp/next/build/kernel/module/strict_rwx.c:8:
-> > /tmp/next/build/kernel/module/strict_rwx.c: In function 'frob_rodata':
-> > /tmp/next/build/kernel/module/strict_rwx.c:16:10: error: implicit decla=
-ration of function 'PAGE_ALIGNED'; did you mean 'IS_ALIGNED'? [-Werror=3Dim=
-plicit-function-declaration]
-> >    16 |  BUG_ON(!PAGE_ALIGNED(layout->base));
-> >       |          ^~~~~~~~~~~~
-> > /tmp/next/build/include/linux/compiler.h:78:42: note: in definition of =
-macro 'unlikely'
-> >    78 | # define unlikely(x) __builtin_expect(!!(x), 0)
-> >       |                                          ^
-> > /tmp/next/build/kernel/module/strict_rwx.c:16:2: note: in expansion of =
-macro 'BUG_ON'
-> >    16 |  BUG_ON(!PAGE_ALIGNED(layout->base));
-> >       |  ^~~~~~
-> > cc1: some warnings being treated as errors
-> >=20
-> > Caused by commit
-> >=20
-> >   e5973a14d18 ("module: Move strict rwx support to a separate file")
-> >=20
-> > I have used the -next tree from the 17th. =20
+Thanks
 
-I am still getting this build failure.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/aTIGVEqzLpgqEHBwoeuy5xl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcWeMACgkQAVBC80lX
-0Gzbqgf/eYoaiBZ5GHhyYEbitiuw9vHLgF9lt/dNgIft5Y+IhbpbXD2EmXkAWj65
-PRgdxaACdzpJyRFiRJqzo5saz+clANGAuXVJfhMMpuWIHH28PK/HPbmrP0Cs1o5k
-PJ5SNttis1YHrzsArCqNTPEuUGInZ+nBXez7vADF1u149jcape15X2GNPEOo0W8h
-UM9i94OIXun9u/0JTJjSGzYiEXwwAy+9N8EaJxv6Muv2t1dipt9ooZzM1/4Ih0Jh
-yVOyTNW73d3PVFSwMvGb+pTXFvR3zPyYVmEWTQ5U/vodv0sdYsnapkYw5EAfJGGk
-CjO7oulQ6LwZzXOOVGOIAcgICcMl6Q==
-=xEqm
------END PGP SIGNATURE-----
-
---Sig_/aTIGVEqzLpgqEHBwoeuy5xl--

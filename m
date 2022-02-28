@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C257C4C74EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FD64C7525
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238695AbiB1Rs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S237239AbiB1Rvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiB1Rov (ORCPT
+        with ESMTP id S240052AbiB1RpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:44:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3398DE011;
-        Mon, 28 Feb 2022 09:37:20 -0800 (PST)
+        Mon, 28 Feb 2022 12:45:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A477D36152;
+        Mon, 28 Feb 2022 09:37:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF296B815B3;
-        Mon, 28 Feb 2022 17:37:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8EBC340F1;
-        Mon, 28 Feb 2022 17:37:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85499614CC;
+        Mon, 28 Feb 2022 17:37:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E9DC340E7;
+        Mon, 28 Feb 2022 17:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069828;
-        bh=ZEnR+GAjDBZjpE+14yGb57cpNm+jGAGr0eqfvMrPavQ=;
+        s=korg; t=1646069858;
+        bh=oYdLpNFMJoWpUsGNteMjbuQJIBxw4NVt3rpKOLt7l1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s1kkw2G+I/F8qqz1dMSKCzeH3W22Qdnb8Bzur+M0EzZtBB7DohwDK8gyvCHIvMOJz
-         7BC4teh0YnTzczNPl+Z6kGHbOJjVOAufe0v/63r4KmL1uQPDaD+CIL+a14fIfyh3SB
-         A5ts2JIrN0h77BrRb83Nj/+V1lCKfS4jsv7untik=
+        b=KNhVp+3ho132MGHrJjxSTf/G0bj3jOAHjUYzwVB5CLkqXUtDgZuUhOdYfun7Gl8wV
+         EO83Pizc5oT50LkJgchz0ZgDBb0N4snRhhAgSjKodxBfIbP7vssi3NDJrQIrxXWFIz
+         gxq0TpjY0r1CY5BnOsoAIRJyeLeXOLHRJqw1epLQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+ca8bf833622a1662745b@syzkaller.appspotmail.com,
-        Dylan Yudaken <dylany@fb.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 009/139] io_uring: disallow modification of rsrc_data during quiesce
-Date:   Mon, 28 Feb 2022 18:23:03 +0100
-Message-Id: <20220228172348.662485432@linuxfoundation.org>
+        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.15 010/139] selinux: fix misuse of mutex_is_locked()
+Date:   Mon, 28 Feb 2022 18:23:04 +0100
+Message-Id: <20220228172348.760488567@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
 References: <20220228172347.614588246@linuxfoundation.org>
@@ -55,49 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dylan Yudaken <dylany@fb.com>
+From: Ondrej Mosnacek <omosnace@redhat.com>
 
-commit 80912cef18f16f8fe59d1fb9548d4364342be360 upstream.
+commit ce2fc710c9d2b25afc710f49bb2065b4439a62bc upstream.
 
-io_rsrc_ref_quiesce will unlock the uring while it waits for references to
-the io_rsrc_data to be killed.
-There are other places to the data that might add references to data via
-calls to io_rsrc_node_switch.
-There is a race condition where this reference can be added after the
-completion has been signalled. At this point the io_rsrc_ref_quiesce call
-will wake up and relock the uring, assuming the data is unused and can be
-freed - although it is actually being used.
+mutex_is_locked() tests whether the mutex is locked *by any task*, while
+here we want to test if it is held *by the current task*. To avoid
+false/missed WARNINGs, use lockdep_assert_is_held() and
+lockdep_assert_is_not_held() instead, which do the right thing (though
+they are a no-op if CONFIG_LOCKDEP=n).
 
-To fix this check in io_rsrc_ref_quiesce if a resource has been revived.
-
-Reported-by: syzbot+ca8bf833622a1662745b@syzkaller.appspotmail.com
 Cc: stable@vger.kernel.org
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
-Link: https://lore.kernel.org/r/20220222161751.995746-1-dylany@fb.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 2554a48f4437 ("selinux: measure state and policy capabilities")
+Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ security/selinux/ima.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7818,7 +7818,15 @@ static int io_rsrc_ref_quiesce(struct io
- 		ret = wait_for_completion_interruptible(&data->done);
- 		if (!ret) {
- 			mutex_lock(&ctx->uring_lock);
--			break;
-+			if (atomic_read(&data->refs) > 0) {
-+				/*
-+				 * it has been revived by another thread while
-+				 * we were unlocked
-+				 */
-+				mutex_unlock(&ctx->uring_lock);
-+			} else {
-+				break;
-+			}
- 		}
+--- a/security/selinux/ima.c
++++ b/security/selinux/ima.c
+@@ -77,7 +77,7 @@ void selinux_ima_measure_state_locked(st
+ 	size_t policy_len;
+ 	int rc = 0;
  
- 		atomic_inc(&data->refs);
+-	WARN_ON(!mutex_is_locked(&state->policy_mutex));
++	lockdep_assert_held(&state->policy_mutex);
+ 
+ 	state_str = selinux_ima_collect_state(state);
+ 	if (!state_str) {
+@@ -117,7 +117,7 @@ void selinux_ima_measure_state_locked(st
+  */
+ void selinux_ima_measure_state(struct selinux_state *state)
+ {
+-	WARN_ON(mutex_is_locked(&state->policy_mutex));
++	lockdep_assert_not_held(&state->policy_mutex);
+ 
+ 	mutex_lock(&state->policy_mutex);
+ 	selinux_ima_measure_state_locked(state);
 
 

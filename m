@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190FF4C736A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D68D4C73A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbiB1RfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S237672AbiB1RhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238308AbiB1RdN (ORCPT
+        with ESMTP id S237773AbiB1Reg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:33:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F078F983;
-        Mon, 28 Feb 2022 09:29:47 -0800 (PST)
+        Mon, 28 Feb 2022 12:34:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9969399C;
+        Mon, 28 Feb 2022 09:31:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEFB76145C;
-        Mon, 28 Feb 2022 17:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97CBC340F0;
-        Mon, 28 Feb 2022 17:29:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B2AF61365;
+        Mon, 28 Feb 2022 17:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2960C36AE7;
+        Mon, 28 Feb 2022 17:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069386;
-        bh=vU/qhmC0dR0bSizI4ccziVaAU5ZeYpReprMKNESwoZQ=;
+        s=korg; t=1646069454;
+        bh=MLtCPOzQia29se3vECjDQjwtcWHGH9cE0eyTMbvnry8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LpeIn1x9h1mQqQtoXTTRc/EAZvQEn+zHsSLmV9+B7SypScJGkN9nZs6W3XyQPtibr
-         NfunRS+Ulol95mr61Rz1yjYZtcoavTmQG305IkmPoUEODeqx9AAB1ggk75dcrzQvin
-         0Li4u2q/4gNPnQqzMh65oatp9cTXS4fCFxKMfjhQ=
+        b=XrSdotJG68OBZMJvaGpl1JZ4SgF3ZQkSRbVVfS9Jb5xZsh9ncMgk8MLBKjPDO6q0/
+         wwC8wRuNrgukEHKo2KEm+BV8ze1Jw9LXJxCPO9aN5lRI5e6QfACVC3HTueWjm7AJqB
+         CXJme86T+JLVZYuGS7DzE29upaZbMpZw5Yl2aNFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 4.19 17/34] gpio: tegra186: Fix chip_data type confusion
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 25/53] nfp: flower: Fix a potential leak in nfp_tunnel_add_shared_mac()
 Date:   Mon, 28 Feb 2022 18:24:23 +0100
-Message-Id: <20220228172209.845156606@linuxfoundation.org>
+Message-Id: <20220228172250.117600264@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-References: <20220228172207.090703467@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit d1e972ace42390de739cde87d96043dcbe502286 upstream.
+commit 3a14d0888eb4b0045884126acc69abfb7b87814d upstream.
 
-The tegra186 GPIO driver makes the assumption that the pointer
-returned by irq_data_get_irq_chip_data() is a pointer to a
-tegra_gpio structure. Unfortunately, it is actually a pointer
-to the inner gpio_chip structure, as mandated by the gpiolib
-infrastructure. Nice try.
+ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
+inclusive.
+So NFP_MAX_MAC_INDEX (0xff) is a valid id.
 
-The saving grace is that the gpio_chip is the first member of
-tegra_gpio, so the bug has gone undetected since... forever.
+In order for the error handling path to work correctly, the 'invalid'
+value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
+inclusive.
 
-Fix it by performing a container_of() on the pointer. This results
-in no additional code, and makes it possible to understand how
-the whole thing works.
+So set it to -1.
 
-Fixes: 5b2b135a87fc ("gpio: Add Tegra186 support")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Link: https://lore.kernel.org/r/20220211093904.1112679-1-maz@kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Simon Horman <simon.horman@corigine.com>
+Link: https://lore.kernel.org/r/20220218131535.100258-1-simon.horman@corigine.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-tegra186.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpio/gpio-tegra186.c
-+++ b/drivers/gpio/gpio-tegra186.c
-@@ -237,9 +237,12 @@ static int tegra186_gpio_of_xlate(struct
- 	return offset + pin;
- }
- 
-+#define to_tegra_gpio(x) container_of((x), struct tegra_gpio, gpio)
-+
- static void tegra186_irq_ack(struct irq_data *data)
+--- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
+@@ -588,8 +588,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app
+ 			  int port, bool mod)
  {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
+ 	struct nfp_flower_priv *priv = app->priv;
+-	int ida_idx = NFP_MAX_MAC_INDEX, err;
+ 	struct nfp_tun_offloaded_mac *entry;
++	int ida_idx = -1, err;
+ 	u16 nfp_mac_idx = 0;
  
- 	base = tegra186_gpio_get_base(gpio, data->hwirq);
-@@ -251,7 +254,8 @@ static void tegra186_irq_ack(struct irq_
+ 	entry = nfp_tunnel_lookup_offloaded_macs(app, netdev->dev_addr);
+@@ -663,7 +663,7 @@ err_remove_hash:
+ err_free_entry:
+ 	kfree(entry);
+ err_free_ida:
+-	if (ida_idx != NFP_MAX_MAC_INDEX)
++	if (ida_idx != -1)
+ 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
  
- static void tegra186_irq_mask(struct irq_data *data)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
-@@ -266,7 +270,8 @@ static void tegra186_irq_mask(struct irq
- 
- static void tegra186_irq_unmask(struct irq_data *data)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
-@@ -281,7 +286,8 @@ static void tegra186_irq_unmask(struct i
- 
- static int tegra186_irq_set_type(struct irq_data *data, unsigned int flow)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
+ 	return err;
 
 

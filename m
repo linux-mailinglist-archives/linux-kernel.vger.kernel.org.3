@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D16E4C6E09
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20194C6E17
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbiB1NXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S235821AbiB1NYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiB1NXp (ORCPT
+        with ESMTP id S235696AbiB1NYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:23:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C327826121
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646054585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PlD7TMS0jB91fn4FULs2gWc+/7qJIEEnhaVLcZF9VF0=;
-        b=WRrFxXYl2nA2pRdgyp+KL2EsoQKzLcTZHZWxPIVA8mKCdTyYzIaU9+2W/GGc23ZHl3poxE
-        VJuaQ39le6hlYbP7BFKg3FnEmQSKcG91+bYaAghh0JzTjS66n79S8i+0aaRhMKtbvTTosm
-        3v08jGCn7zYzoDxPxqIJL2B+5rwj2bM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-290-tmaySKIlOYekywmpiySahA-1; Mon, 28 Feb 2022 08:23:00 -0500
-X-MC-Unique: tmaySKIlOYekywmpiySahA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3D0488066F4;
-        Mon, 28 Feb 2022 13:22:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.0])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BAAC8838C0;
-        Mon, 28 Feb 2022 13:22:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org, akpm@linux-foundation.org
-cc:     dhowells@redhat.com, willy@infradead.org, kirill@shutemov.name,
+        Mon, 28 Feb 2022 08:24:25 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2301826AD6;
+        Mon, 28 Feb 2022 05:23:44 -0800 (PST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeMjazBxiKEAIAA--.10706S2;
+        Mon, 28 Feb 2022 21:23:38 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: Export PageHeadHuge()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2494561.1646054576.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 28 Feb 2022 13:22:56 +0000
-Message-ID: <2494562.1646054576@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 0/4] MIPS: Modify mem= and memmap= parameter
+Date:   Mon, 28 Feb 2022 21:23:33 +0800
+Message-Id: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxeMjazBxiKEAIAA--.10706S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr4xGFyxXr17Zw1DCF45KFg_yoWDKrb_tF
+        WY9F9rGw47GF43WFWrtF43XFyxtr4UXw4rtFn7K3yxKr9rAF45GF43u3yavr1vvFyvv3W5
+        J3s8Z3s3tr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU1NVyUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+In the current code, the kernel command-line parameter mem= and memmap=
+can not work well on MIPS, this patchset refactors the related code to
+fix them.
 
-Export PageHeadHuge() - it's used by folio_test_hugetlb() and thence by
-such as folio_file_page() and folio_contains().  Matthew suggested I use
-the first of those instead of doing the same calculation manually - but
-I can't call it from a module.
+For kdump on MIPS, if the users want to limit the memory region for the
+capture kernel to avoid corrupting the memory image of the panic kernel,
+use the parameter memmap=limit@base is the proper way, I will submit a
+patch to use memmap=limit@base for kexec-tools after this patchset is
+applied.
 
-Kirill suggested rearranging things to put it in a header, but that
-introduces header dependencies because of where constants are defined.
+v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+    commented by Mike Rapoport, thank you.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: willy@infradead.org
-Link: https://lore.kernel.org/r/163707085314.3221130.14783857863702203440.=
-stgit@warthog.procyon.org.uk/
+v2: Add some new patches to support memmap=limit@base
 
----
- mm/hugetlb.c |    1 +
- 1 file changed, 1 insertion(+)
+Tiezhu Yang (4):
+  MIPS: Refactor early_parse_mem() to fix mem= parameter
+  memblock: Introduce memblock_mem_range_remove_map()
+  MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+  MIPS: Remove not used variable usermem
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 61895cc01d09..5768df43b05c 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1854,6 +1854,7 @@ int PageHeadHuge(struct page *page_head)
- =
+ arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+ include/linux/memblock.h |  1 +
+ mm/memblock.c            |  9 +++++--
+ 3 files changed, 40 insertions(+), 39 deletions(-)
 
- 	return page_head[1].compound_dtor =3D=3D HUGETLB_PAGE_DTOR;
- }
-+EXPORT_SYMBOL(PageHeadHuge);
- =
-
- /*
-  * Find and lock address space (mapping) in write mode.
+-- 
+2.1.0
 

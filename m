@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA644C7534
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B764C7694
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239112AbiB1RwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S239464AbiB1SFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238586AbiB1Rpf (ORCPT
+        with ESMTP id S235414AbiB1R5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:45:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684B151E71;
-        Mon, 28 Feb 2022 09:37:56 -0800 (PST)
+        Mon, 28 Feb 2022 12:57:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C45A2DD50;
+        Mon, 28 Feb 2022 09:44:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C0D6153F;
-        Mon, 28 Feb 2022 17:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6CFC340E7;
-        Mon, 28 Feb 2022 17:37:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EF43B81187;
+        Mon, 28 Feb 2022 17:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A64C340E7;
+        Mon, 28 Feb 2022 17:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069875;
-        bh=D3q8cqG2Ibv+SluBi02J/zPBPdJPjyboVMnSitY9ASA=;
+        s=korg; t=1646070291;
+        bh=+3NWXV/ij98gyzbua8DxAV20vrwUsHuHwyrxkfxw58Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=01e+QRjFDfW8Xmx6KaFnviB3tYLttBYpA4Lc/0YRf70hFu2WHR9uF7sMCkq2ith6v
-         bxjdVH1uTb6GvQXzQUJzg4UnwopdaxElxA3L7lT5WtNswSyKOBsZkMkP0ejtz327qR
-         bhMeU3pUlkSn5Zs0OOLov1ZNEntjSwnpq4ThaU7s=
+        b=Yqa+MX/1X5PWrsFf0tHp6cGyzRTDhPgC47JlZpleaM6N304VMq2QIZ1v38Vb0kF24
+         Kf662XIb/mqleDdYO0ScJ9f2sTMbqAS7QWxOay06Za4sXcn+vb2isDeQG06ezggthM
+         6yYmyAgrZIGBz80x3aVR6u4yKet56Kcmdg77xPsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 042/139] bnxt_en: Fix active FEC reporting to ethtool
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>
+Subject: [PATCH 5.16 054/164] ice: initialize local variable tlv
 Date:   Mon, 28 Feb 2022 18:23:36 +0100
-Message-Id: <20220228172352.144920971@linuxfoundation.org>
+Message-Id: <20220228172405.047717439@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Somnath Kotur <somnath.kotur@broadcom.com>
+From: Tom Rix <trix@redhat.com>
 
-commit 84d3c83e6ea7d46cf3de3a54578af73eb24a64f2 upstream.
+commit 5950bdc88dd1d158f2845fdff8fb1de86476806c upstream.
 
-ethtool --show-fec <interface> does not show anything when the Active
-FEC setting in the chip is set to None.  Fix it to properly return
-ETHTOOL_FEC_OFF in that case.
+Clang static analysis reports this issues
+ice_common.c:5008:21: warning: The left expression of the compound
+  assignment is an uninitialized value. The computed value will
+  also be garbage
+  ldo->phy_type_low |= ((u64)buf << (i * 16));
+  ~~~~~~~~~~~~~~~~~ ^
 
-Fixes: 8b2775890ad8 ("bnxt_en: Report FEC settings to ethtool.")
-Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+When called from ice_cfg_phy_fec() ldo is the uninitialized local
+variable tlv.  So initialize.
+
+Fixes: ea78ce4dab05 ("ice: add link lenient and default override support")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/ice/ice_common.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-@@ -1942,6 +1942,9 @@ static int bnxt_get_fecparam(struct net_
- 	case PORT_PHY_QCFG_RESP_ACTIVE_FEC_FEC_RS272_IEEE_ACTIVE:
- 		fec->active_fec |= ETHTOOL_FEC_LLRS;
- 		break;
-+	case PORT_PHY_QCFG_RESP_ACTIVE_FEC_FEC_NONE_ACTIVE:
-+		fec->active_fec |= ETHTOOL_FEC_OFF;
-+		break;
- 	}
- 	return 0;
- }
+--- a/drivers/net/ethernet/intel/ice/ice_common.c
++++ b/drivers/net/ethernet/intel/ice/ice_common.c
+@@ -3319,7 +3319,7 @@ ice_cfg_phy_fec(struct ice_port_info *pi
+ 
+ 	if (fec == ICE_FEC_AUTO && ice_fw_supports_link_override(hw) &&
+ 	    !ice_fw_supports_report_dflt_cfg(hw)) {
+-		struct ice_link_default_override_tlv tlv;
++		struct ice_link_default_override_tlv tlv = { 0 };
+ 
+ 		status = ice_get_link_default_override(&tlv, pi);
+ 		if (status)
 
 

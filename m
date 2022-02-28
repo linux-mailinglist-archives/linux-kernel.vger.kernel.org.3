@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4484C6579
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208304C6580
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiB1JMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S234261AbiB1JN1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 04:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiB1JMV (ORCPT
+        with ESMTP id S234095AbiB1JNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:12:21 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C20466AEC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:11:43 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2d66f95f1d1so100464997b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Apq/HJBWO1/Vh/LXE1a0ZbONtRHS5rU8pD46HevklkY=;
-        b=SSQZkSmtXLj3U9XbRdtbqgiXRWjZTAmimsylCosT7ruNa0h07yrpE0rUg+/kqY2bTJ
-         e08yiRvm90Hyhkk8loX50L2LGZGhEWdRjq71eow0U/pQBeE0hjf/B+x/zokolDIu/Vl9
-         xbc55VLyk5nyueKCI5RmhPe7dModxOw1HRIVzL82LMKmKT0ZF2uFdUA7DhyLnAGZHOVU
-         Iu6jxbQF2qgsuGNz+XFFHu6uuB+oIV5I2xLp0K6lzEG5G4dU4xoRrKS/6k1QcKVNMhY9
-         ixIZThviS3xBQOWMeEiLAeQNnTcTwwGD189NvxoPFTXFTaoM4wnGfNW9jp9mLDsqliIl
-         XKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Apq/HJBWO1/Vh/LXE1a0ZbONtRHS5rU8pD46HevklkY=;
-        b=nPXO/v0YfZtu5BcmIVqKFOKNBY/keUb0JT8VgpafvPjGpeUQDsoVO/bMGrjO86BCR0
-         /6qNcbJQmUijjDMlJtZe44jmpa1jHIVpXOxkSX4eAXE+9IpvDkThdCJiwfp8JWLWRNkx
-         qODLQ3HKMHS6o6N8gNNwmEm/ViVpzNaa+bLZucY0iJc3/UyR6UoQHX5gYcEZJZ+zrLs5
-         itFHhc2fq5u5VWZenX3r8jHBgOjTEw6gXwQ9Bvtc5F+MoYfmDQNk/WJZ9wRmQPwjv4T7
-         3KseEIoKQvJdEHo+FKVOH4xjYe6+jvgEI95J8u+6na2pHJgPrVf/D5WazdmSFJyW0JLS
-         Nt2Q==
-X-Gm-Message-State: AOAM532HKoMBD8ROXLEIsjP30wDoVORQpawcVF2W4yxM0Mky1Ps0MBXK
-        g/y85ALRaptM06JqVebaJCxrF/KJFenUIpG/ewzzbw==
-X-Google-Smtp-Source: ABdhPJxW8K/XXK18kmFDDAPAouIU00zNNJ1SeFh1/hxBOkjMYFqYyqh5qY/E10KeDKMk4Wv/SDETpxSKB0+Lbmus4fA=
-X-Received: by 2002:a81:47c2:0:b0:2d6:5e1a:46c2 with SMTP id
- u185-20020a8147c2000000b002d65e1a46c2mr2443759ywa.66.1646039502216; Mon, 28
- Feb 2022 01:11:42 -0800 (PST)
+        Mon, 28 Feb 2022 04:13:20 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A09C14;
+        Mon, 28 Feb 2022 01:12:38 -0800 (PST)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6ZQn290Zz67yhf;
+        Mon, 28 Feb 2022 17:12:33 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 10:12:35 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Mon, 28 Feb 2022 10:12:35 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyjZeaAgACU/jCAAKZjAIAEHfiwgAAByqA=
+Date:   Mon, 28 Feb 2022 09:12:35 +0000
+Message-ID: <6a838878fdb3430b8e1d3e47aab7f22b@huawei.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+         <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+         <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+ <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com> 
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <YgOQBNIdf0UnSH+M@Red> <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
- <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
- <YhKV55t90HWm6bhv@Red> <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
- <YhOcEQEjIKBrbMIZ@Red> <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
-In-Reply-To: <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
-From:   Gilad Ben-Yossef <gilad@benyossef.com>
-Date:   Mon, 28 Feb 2022 11:11:43 +0200
-Message-ID: <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
-Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
- authsize =0
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,125 +68,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Feb 22, 2022 at 9:39 AM Gilad Ben-Yossef <gilad@benyossef.com> wrot=
-e:
->
-> On Mon, Feb 21, 2022 at 4:05 PM Corentin Labbe
-> <clabbe.montjoie@gmail.com> wrote:
+> From: Roberto Sassu
+> Sent: Monday, February 28, 2022 10:08 AM
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Friday, February 25, 2022 8:11 PM
+> > On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
+> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > Sent: Friday, February 25, 2022 1:22 AM
+> > > > Hi Roberto,
+> > > >
+> > > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > > implementation of integrity-focused LSMs based on eBPF.
+> > > >
+> > > > I've previously requested adding eBPF module measurements and signature
+> > > > verification support in IMA.  There seemed to be some interest, but
+> > > > nothing has been posted.
+> > >
+> > > Hi Mimi
+> > >
+> > > for my use case, DIGLIM eBPF, IMA integrity verification is
+> > > needed until the binary carrying the eBPF program is executed
+> > > as the init process. I've been thinking to use an appended
+> > > signature to overcome the limitation of lack of xattrs in the
+> > > initial ram disk.
 > >
-> > Le Mon, Feb 21, 2022 at 12:08:12PM +0200, Gilad Ben-Yossef a =C3=A9crit=
- :
-> > > Hi,
+> > I would still like to see xattrs supported in the initial ram disk.
+> > Assuming you're still interested in pursuing it, someone would need to
+> > review and upstream it.  Greg?
+> 
+> I could revise this work. However, since appended signatures
+> would work too, I would propose to extend this appraisal
+> mode to executables, if it is fine for you.
+
+Regarding this patch set, I kindly ask if you could accept it,
+after I make the changes suggested.
+
+The changes are simple, and waiting another kernel cycle
+seems too long.
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
+
+> > > At that point, the LSM is attached and it can enforce an
+> > > execution policy, allowing or denying execution and mmap
+> > > of files depending on the digest lists (reference values) read
+> > > by the user space side.
 > > >
-> > > On Sun, Feb 20, 2022 at 9:26 PM Corentin Labbe
-> > > <clabbe.montjoie@gmail.com> wrote:
-> > > >
-> > > ...
-> > > >
-> > > > Hello
-> > > >
-> > > > While testing your patch for this problem, I saw another warning (u=
-nrelated with your patch):
+> > > After the LSM is attached, IMA's job would be just to calculate
+> > > the file digests (currently, I'm using an audit policy to ensure
+> > > that the digest is available when the eBPF program calls
+> > > bpf_ima_inode_hash()).
 > > >
-> > > Dear Corentin, you are a treasure trove of bug reports. I love it.
-> > > Thank you! :-)
-> > >
-> > > > [   34.061953] ------------[ cut here ]------------
-> ...
-> > >
-> > > So, this is an interesting one.
-> > > What I *think* is happening is that the drbg implementation is
-> > > actually doing something naughty: it is passing the same exact memory
-> > > buffer, both as source and destination to an encryption operation to
-> > > the crypto skcipher API, BUT via two different scatter gather lists.
-> > >
-> > > I'm not sure but I believe this is not a legitimate use of the API,
-> > > but before we even go into this, let's see if this little fix helps a=
-t
-> > > all and this is indeed the root cause.
-> > >
-> > > Can you test this small change for me, please?
-> > >
-> > > diff --git a/crypto/drbg.c b/crypto/drbg.c
-> > > index 177983b6ae38..13824fd27627 100644
-> > > --- a/crypto/drbg.c
-> > > +++ b/crypto/drbg.c
-> > > @@ -1851,7 +1851,7 @@ static int drbg_kcapi_sym_ctr(struct drbg_state=
- *drbg,
-> > >                 /* Use scratchpad for in-place operation */
-> > >                 inlen =3D scratchpad_use;
-> > >                 memset(drbg->outscratchpad, 0, scratchpad_use);
-> > > -               sg_set_buf(sg_in, drbg->outscratchpad, scratchpad_use=
-);
-> > > +               sg_in =3D sg_out;
-> > >         }
-> > >
-> > >         while (outlen) {
-> > >
+> > > The main benefit of this patch set is that the audit policy
+> > > would not be required and digests are calculated only when
+> > > requested by the eBPF program.
 > >
-> > No more stacktrace !
->
-> Thank you. I will send a patch later today.
-
-> --
-> Gilad Ben-Yossef
-> Chief Coffee Drinker
->
-> values of =CE=B2 will give rise to dom!
-
-OK, it seems my direction of fixing the caller site has not been taken
-kindly by the power that be.
-Let's try something else.
-
-Can you please drop the previous patch and test this one instead?
-
-diff --git a/drivers/crypto/ccree/cc_buffer_mgr.c
-b/drivers/crypto/ccree/cc_buffer_mgr.c
-index 11e0278c8631..398843040566 100644
---- a/drivers/crypto/ccree/cc_buffer_mgr.c
-+++ b/drivers/crypto/ccree/cc_buffer_mgr.c
-@@ -377,6 +377,7 @@ int cc_map_cipher_request(struct cc_drvdata
-*drvdata, void *ctx,
-        u32 dummy =3D 0;
-        int rc =3D 0;
-        u32 mapped_nents =3D 0;
-+       int src_direction =3D (src !=3D dst ? DMA_TO_DEVICE : DMA_BIDIRECTI=
-ONAL);
-
-        req_ctx->dma_buf_type =3D CC_DMA_BUF_DLLI;
-        mlli_params->curr_pool =3D NULL;
-@@ -399,7 +400,7 @@ int cc_map_cipher_request(struct cc_drvdata
-*drvdata, void *ctx,
-        }
-
-        /* Map the src SGL */
--       rc =3D cc_map_sg(dev, src, nbytes, DMA_BIDIRECTIONAL, &req_ctx->in_=
-nents,
-+       rc =3D cc_map_sg(dev, src, nbytes, src_direction, &req_ctx->in_nent=
-s,
-                       LLI_MAX_NUM_OF_DATA_ENTRIES, &dummy, &mapped_nents);
-        if (rc)
-                goto cipher_exit;
-@@ -416,7 +417,7 @@ int cc_map_cipher_request(struct cc_drvdata
-*drvdata, void *ctx,
-                }
-        } else {
-                /* Map the dst sg */
--               rc =3D cc_map_sg(dev, dst, nbytes, DMA_BIDIRECTIONAL,
-+               rc =3D cc_map_sg(dev, dst, nbytes, DMA_FROM_DEVICE,
-                               &req_ctx->out_nents, LLI_MAX_NUM_OF_DATA_ENT=
-RIES,
-                               &dummy, &mapped_nents);
-                if (rc)
-
-
-Thanks!
-Gilad
-
---=20
-Gilad Ben-Yossef
-Chief Coffee Drinker
-
-values of =CE=B2 will give rise to dom!
+> > Roberto, there's an existing eBPF integrity gap that needs to be
+> > closed, perhaps not for your usecase, but in general.  Is that
+> > something you can look into?
+> 
+> It could be possible I look into it.
+> 
+> Roberto
+> 
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Zhong Ronghua

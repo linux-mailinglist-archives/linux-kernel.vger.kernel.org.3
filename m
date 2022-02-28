@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062804C64F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5448D4C64F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiB1IkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S234066AbiB1IlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233654AbiB1IkO (ORCPT
+        with ESMTP id S229773AbiB1IlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:40:14 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B365C22502;
-        Mon, 28 Feb 2022 00:39:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6Yhd27NCz4xcq;
-        Mon, 28 Feb 2022 19:39:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646037569;
-        bh=h0XSx1Npd7b3TyB2iNgD8xRTfa7M7bAbq+Ep+hez9xM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CYFiJwZMtuhc8DuwGj96uH4P7V+05p6YYrtUWwWP2B+9R85fmzYEdrKTYfCi/p4F/
-         lAu7sibrtafjB4YDgoCsgQUFp5Bra56D+8uPegit092Mh1/UTJftVlzCx0mwN/djLO
-         dYfWdIMrzQke6OEvisJsDArMMiJBem/wcq8ML28Uq04yoKt0pTYxRH8MEgfSXfFhU4
-         nw7W10dyiBdDZqPVNx1Ltd/rtH2Tfj5XIMJ5YN0Fct6S8OLQHJQh2GxgzDiA/1ktPA
-         RPcsCIXw8WzeIbFRmPiYKCiDeztA/z4kv3ycg+kXDltKImOQREuUbnM6+NV06/vdqI
-         n15NpEUI1RoRg==
-Date:   Mon, 28 Feb 2022 19:39:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <20220228193928.3ec6ee98@canb.auug.org.au>
+        Mon, 28 Feb 2022 03:41:12 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9E6621B;
+        Mon, 28 Feb 2022 00:40:33 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id i11so16440483eda.9;
+        Mon, 28 Feb 2022 00:40:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lU9U3y2H7TqVnOKr76UbIM5qDbprhU53RuO6iQcXBMM=;
+        b=KuRA/HCILOh35h1WjtNlZr12Xn1VpoPNsKsuCte7HiHc55pOeypTmQWcHmx1XRLKgB
+         i6WUEudncISh3tzzoy0iOdrjxyJ4UYr5igWy6FtFr9k2PYlKB3T34DYK4JtfHIZ05MLJ
+         F585x5WhLQs+t/bcnk8moVVPN9CSz/p55VVzKK/stB0LR1hXrtHUxy/jB+ninO6kDl52
+         RYmsEt5KGGG/B6159fjp3nKusVU4HV3yYq2XvJo8w3NOhk+ecj0Dx17sQa8N2TuGTwW9
+         nfdoIR42kPm6K4HdFf6b6UcMBC2peFE0OreB8nK9lEfw5+9PAOWMOn8eqr8Qv+upOMdA
+         0OrQ==
+X-Gm-Message-State: AOAM53255x1/hOdRr5+9EDsQbwRWikfCYv70W3DLu8yznupTv82X4FOi
+        0qUo3eOrOQSc1djk74l+iyg=
+X-Google-Smtp-Source: ABdhPJyts5/gqTTGMWCFC+e0qih7SB7RX2Oirk3XrA6slJNhiE6x/o/r+k1+mv+NqSeB5e5HpidKlw==
+X-Received: by 2002:a05:6402:524e:b0:410:dedd:ea37 with SMTP id t14-20020a056402524e00b00410deddea37mr806629edd.260.1646037632061;
+        Mon, 28 Feb 2022 00:40:32 -0800 (PST)
+Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id j7-20020a1709062a0700b006bc28a6b8f1sm4119215eje.222.2022.02.28.00.40.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 00:40:30 -0800 (PST)
+Message-ID: <d6031c8e-5a70-9561-f44e-0573594da34d@kernel.org>
+Date:   Mon, 28 Feb 2022 09:40:29 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jfVupS0VJoKj+fs5F1quxlL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 02/10] dt-bindings: arm: sunplus: Add bindings for
+ Sunplus SP7021 SoC boards
+Content-Language: en-US
+To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Rob Herring <robh@kernel.org>
+References: <cover.1645413746.git.qinjian@cqplus1.com>
+ <87cc20bb3ef747c4da89f9e60c0847532bb0a679.1645413746.git.qinjian@cqplus1.com>
+ <141c1b3e-b116-a0eb-78ad-dd9263880e9d@kernel.org>
+ <fd66d0c1f8d5410ca676dd523bcde61b@cqplus1.com>
+ <8ce8a3db-0f42-0b30-6688-01c1ea905425@kernel.org>
+ <66b2710bc7c048a284fa3b6270ba7bc8@cqplus1.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <66b2710bc7c048a284fa3b6270ba7bc8@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jfVupS0VJoKj+fs5F1quxlL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 28/02/2022 08:05, qinjian[覃健] wrote:
+> 
+>>>> This binding looks incomplete.
+>>>
+>>> Sunplus SP7021 is an ARM Cortex A7 based SoC.
+>>> The patch is for SP7021 SoC and SP7021 based boards.
+>>> Sorry, I don't understand your questions.
+>>> Could you explain more?
+>>
+>> You have there only one compatible but if I would expect at least two.
+>> One for SoC and one for board. Something like this:
+>> Documentation/devicetree/bindings/arm/rda.yaml
+>> but in your case enum would have only one entry.
+> 
+> Currently, we only support one board. Maybe will support more boards in future.
 
-Hi all,
+This is not the answer for my questions. I said I expect two compatibles:
+1. One for SoC,
+2. One for board.
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+And you respond "we have only one board".
 
-  drivers/mfd/simple-mfd-i2c.c
+Where is the SoC compatible?
 
-between commit:
-
-  5913eb45d036 ("mfd: simple-mfd-i2c: Enable support for the silergy,sy7636=
-a")
-
-from the mfd tree and commit:
-
-  d0cac2434c8e ("mfd: simple-mfd-i2c: Add Delta TN48M CPLD support")
-
-from the char-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/mfd/simple-mfd-i2c.c
-index f4c8fc3ee463,0d6a51ed6286..000000000000
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@@ -62,19 -62,9 +62,20 @@@ static int simple_mfd_i2c_probe(struct=20
-  	return ret;
-  }
- =20
- +static const struct mfd_cell sy7636a_cells[] =3D {
- +	{ .name =3D "sy7636a-regulator", },
- +	{ .name =3D "sy7636a-temperature", },
- +};
- +
- +static const struct simple_mfd_data silergy_sy7636a =3D {
- +	.mfd_cell =3D sy7636a_cells,
- +	.mfd_cell_size =3D ARRAY_SIZE(sy7636a_cells),
- +};
- +
-  static const struct of_device_id simple_mfd_i2c_of_match[] =3D {
-  	{ .compatible =3D "kontron,sl28cpld" },
- +	{ .compatible =3D "silergy,sy7636a", .data =3D &silergy_sy7636a},
-+ 	{ .compatible =3D "delta,tn48m-cpld" },
-  	{}
-  };
-  MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-
---Sig_/jfVupS0VJoKj+fs5F1quxlL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcikAACgkQAVBC80lX
-0GwzEwgAiNRXXCBxw6SQJCY9UVc5OUIRg4pe93kzdIfmuAkuSz2CRMEBs68KJ3Nu
-hUft5m+jR9PI/bw0wRsQ3Lfy4uNocAZKJSm1VahqgscOj6g2kz10HAFDt8OuFehA
-8P1XFQuJYzJKVHLGgihmxKi8GG9uPagSPQ1ASREQ5muKvWeTS++V7Hk9CMYCNFa1
-8rqRb5sYgbiv0AQPvYrt4Vb3+O/PWXIH+V2VIYqIMqwhVEYTL5/3Z5sueNkreInq
-TTK6mlEC+ZokO5bbILqPiuOWwy66PTTb44ap7gdgT3y648ICnzQAYiWWVFJzapt1
-/YHX5HBqlLAefUM6m1MSvzeBrD9vWg==
-=r9X/
------END PGP SIGNATURE-----
-
---Sig_/jfVupS0VJoKj+fs5F1quxlL--
+Best regards,
+Krzysztof

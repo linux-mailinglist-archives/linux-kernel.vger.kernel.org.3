@@ -2,66 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A004C714F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB0F4C7152
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237757AbiB1QJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
+        id S237767AbiB1QJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiB1QJH (ORCPT
+        with ESMTP id S237754AbiB1QJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:09:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6E732046
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:08:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EAFEBCE1736
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCE1C340F0;
-        Mon, 28 Feb 2022 16:08:24 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 11:08:22 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 0/4] trace: Introduce objtrace trigger to trace the
- kernel object
-Message-ID: <20220228110822.4b906204@gandalf.local.home>
-In-Reply-To: <CAEr6+EANLuP1=PpGvB4G1j4a-iM-mM4c69Pvo7j8GtafKPhyPw@mail.gmail.com>
-References: <20220204035644.734878-1-xiehuan09@gmail.com>
-        <20220208230830.6b8c03c0f4f11c1ed18da236@kernel.org>
-        <20220208104806.5272f2ea@gandalf.local.home>
-        <CAEr6+EANLuP1=PpGvB4G1j4a-iM-mM4c69Pvo7j8GtafKPhyPw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 28 Feb 2022 11:09:18 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E643C3CFE8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:08:37 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d6923bca1aso113931357b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:08:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+zr1KhrQOBP+ckaHGDXQrPDutiyt9xPRrC0whU+iVKI=;
+        b=jxIpSTGGji0xor+tLpfeaOQ7m7XuQsBuHWuyrbyYh7wpOFWmV+dtZw2W4MytPcQDGl
+         jNGfiy2kTT6xlkFT4zIrDsHVLTGQ7IH+r8v/g3+rHDqtl/kdCKrj1OE1o3d23SJn08XB
+         fSq5OyK0/eSgbut4b9Jwp8Bx2/+ZzMBlhzsFh0+jgi2Klwuf1LOiu88BysVVe23+QI72
+         mIsTRDGVvunw0wOvcFDiQix9uiJQilmGlKBRf7nDztKUF4TvFW6G7j1/71/urXHXP7SA
+         HeP2caYU13MoR9asC4BK3XXw/aPsShkXf5qaEfrjkcvGg9nw/GqkV0aKkRsGJ4jURDHn
+         S9/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+zr1KhrQOBP+ckaHGDXQrPDutiyt9xPRrC0whU+iVKI=;
+        b=wUi+gSdCrHSjwLDO4qfXLtBtsqiOK8uyyA7/wLwuLtvwBbMiRNxYJjaq0o4a9MmIwU
+         FgjiyVx99JQ1ubtUoaNjroWzaZPDXncVzC1LQEkGudOq/nj8gZ4vr207xEUoScmRbhZg
+         1cY9e0DP8YiD4e6EGAdnboxmddxl1JqT/j49DCdHowdVcDhb6+M1uQtdzZwp09PVci+H
+         LP9HVZBakjKAflbw4/2N0PzFuyIRqo/j7MBDtUePug8uvRE8RsRl88wD0Wn+lM7RmhbC
+         XjvsDAd7yTAGPta0mVmlpiofNOQEW0UDSgb8zJSvB2gtAsf+brpihBo6Q6OkTV8YS852
+         axQQ==
+X-Gm-Message-State: AOAM530trAv2YiNWS6A4f8Ab7Pnz0OjbFvT6lq11a/EYQ8kK4pomr3uj
+        AkfwG2A0bF3SrdejZMCBo1GGZfMe9Lk0N4e4DW7INw==
+X-Google-Smtp-Source: ABdhPJyjwcR7rC1lAz4tbkYr5YLNPh89ineoXH4dC5PWQxMjASYjP1eVJNQcPTmdgavfdK5PzENtMHc8zjdwfjxHewk=
+X-Received: by 2002:a81:1d5:0:b0:2d0:e2aa:1ae0 with SMTP id
+ 204-20020a8101d5000000b002d0e2aa1ae0mr20460032ywb.278.1646064516835; Mon, 28
+ Feb 2022 08:08:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <ME3P282MB3326B9CED47E29DFD3B7B41886019@ME3P282MB3326.AUSP282.PROD.OUTLOOK.COM>
+ <CANn89iJ=hehGt4utoiuZD4R7ut6dcfxXLRDJ36N-rfH5u91JLw@mail.gmail.com>
+In-Reply-To: <CANn89iJ=hehGt4utoiuZD4R7ut6dcfxXLRDJ36N-rfH5u91JLw@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 28 Feb 2022 08:08:25 -0800
+Message-ID: <CANn89i+_48N62mA63RpNhTtG0hGcv78Arj99jSqLt79+Gi7+rA@mail.gmail.com>
+Subject: Re: [PATCH] tcp: Remove the unused api
+To:     Chen Tao <chentao3@hotmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 00:01:06 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
+Resend in non HTML mode, sorry for duplicates.
 
-> Congratulations on joining google.  Just check out this series when
-> you are free.
-> 
-> Please don't get me wrong, I'm not pushing anyone.
-> It just doesn't feel good that I haven't responded to emails for a long time ;-)
 
-And keep responding ;-) I want to look at this series, and your emails do
-remind me (it's still in my patchwork queue, so it wont be forgotten, but
-it is getting crowded in that queue of "todo"s).
-
-Yeah, I'm hoping to start being able to do more upstream, but I'm still a
-bit in the flux of figuring out what I'm suppose to be doing at work ;-)
-
--- Steve
+On Mon, Feb 28, 2022 at 8:07 AM Eric Dumazet <edumazet@google.com> wrote:
+>
+>
+>
+> On Mon, Feb 28, 2022 at 7:02 AM Chen Tao <chentao3@hotmail.com> wrote:
+>>
+>> From: Tao Chen <chentao3@hotmail.com>
+>>
+>> It seems that no one uses the tcp_write_queue_head after the
+>> commit <75c119afe147>, so remove it.
+>
+>
+> Wrong commit, also please use the standardized way of citing commit.
+>
+> Last tcp_write_queue_head() use was removed in commit
+> 114f39feab36 ("tcp: restore autocorking")
+>
+>>
+>> Signed-off-by: Tao Chen <chentao3@hotmail.com>
+>> ---
+>>
+>
+> Other than this changelog glitch, the patch is fine, thank you.
+>

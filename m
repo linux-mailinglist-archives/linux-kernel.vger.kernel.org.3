@@ -2,96 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF86E4C6F3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22214C6F42
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237069AbiB1OXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S237077AbiB1OYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbiB1OXx (ORCPT
+        with ESMTP id S231794AbiB1OYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:23:53 -0500
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E64192BC;
-        Mon, 28 Feb 2022 06:23:14 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id i27so13070930vsr.10;
-        Mon, 28 Feb 2022 06:23:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f5mSQXselbLEuJjsTNuLw+fQoeJTjUmyz7z46v3uwMA=;
-        b=e1jke7zjfyAIypZTASxQZfxKnNswSBb1N/gujfu3ZuJpPt6tq7iagkYabTzLGEjxMp
-         I+VgOPIOZ7tfRXvvYAhjuEpjvnVOlMssT3GKW+n/W9cO3CnuM0HLQ1IblUhH1Osp6jlp
-         wffZzBmS7GY9In/jJRHiL2kaOwkolLxpcTjcCBsWKEcqrwpAmHNV32AMIaC38pONUWnt
-         BxEVr94usaqx/QK+RMwSkgCBM+z0RFxAbsHW8ceMxejIDgxXbB4Vlvck5Y5SlYwHNeUu
-         r3/yDr+s8Q/g++Fg7Q+SpsnVVjgGd9G7ALF08szo+NeEs2fAUfc2khgZdX75mcuqXjVz
-         rDpQ==
-X-Gm-Message-State: AOAM530N0LJCTpP6tgzr08NeOqr7v26BFWzHxhSyInaSpAmOa28k7wR7
-        gDEq1FW59Dnx8dC84hxoWOfH505iiA3VmA==
-X-Google-Smtp-Source: ABdhPJzACp7n3YWPXW8ElHVOLXVJo7LWKTzyM0qikiTi5T/8sqaq/EzKOTs3KJdWGWfZPuT0Fy2sog==
-X-Received: by 2002:a05:6102:3e95:b0:31b:524c:e311 with SMTP id m21-20020a0561023e9500b0031b524ce311mr7551873vsv.21.1646058193659;
-        Mon, 28 Feb 2022 06:23:13 -0800 (PST)
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
-        by smtp.gmail.com with ESMTPSA id k1-20020ab07541000000b00341f0ce5666sm1817489uaq.5.2022.02.28.06.23.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:23:13 -0800 (PST)
-Received: by mail-vk1-f174.google.com with SMTP id w128so5231582vkd.3;
-        Mon, 28 Feb 2022 06:23:13 -0800 (PST)
-X-Received: by 2002:a05:6122:8ca:b0:332:64b4:8109 with SMTP id
- 10-20020a05612208ca00b0033264b48109mr8035847vkg.7.1646058192797; Mon, 28 Feb
- 2022 06:23:12 -0800 (PST)
+        Mon, 28 Feb 2022 09:24:48 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2110.outbound.protection.outlook.com [40.107.255.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF17069CE3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:24:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n+gOllht2qKrm1XLLOHu8gxqlL/gOqBFKVgjmTruYJ9VGwn3FnY/Gy4hONYQSuOj9Z7J50CvkH7GRO3qAL980mVxbyKCRBe/Eum+38VG+aN3tX0uWs61l6CzUOkcFxl0yqrXNC+ZWqlBd7p0rEEBtRfGGe9O8TJXW5srWY8mxb63AP4brwLj0K0xgaMnVlxPXE8r/i0LJMyaKhvKDxPjU8igPCaS2zXNPg/kUtEprLWe/WNZP1SwYmvhd83ahNoWX9SCYiE/FWx+30HDqn2CCiSS/G4kojhjSGlpCiMQyD2VVszOrXtc+BDSzeqn3sY4+uNGUX50G+mBT6GvWpbBVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IEZ0auUTedp77GAT72BUUWABD00QiV1dQHhxE47xXDI=;
+ b=QWag8EBybgAP4LZGVZKsbvkdoK7VUUGCW26kNuTZoQY/pJo68ukUMt8wdTk/Z+rIYgvP8OrZ9XMJObQdZrnhao0t+/O8CrQWC1kXtZ6DidZFRRI2ZEq84QJhPl/xWrejX08MTyGCZfTn4gwO7kSoD/VlfmAvHoMVDU8DWCGiEAVEtXhcwdQLlgAbXkYiNzf7ghV5VqCs1KHaNkR5UId59QMcMSfD9w24ztwoe8Raww0PsgSqgGNH/Mwar1BtFhWgEpDPkew+1z+cM7iU5Djzh+I22I0OLYiTsgPY9XUSDMyix3pdn1snEQLQb9gPiJiEEmntIH60dYuY6vrxs2ICjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IEZ0auUTedp77GAT72BUUWABD00QiV1dQHhxE47xXDI=;
+ b=bM3hbOu/6TIMfc7LPB9GRZ7ltEDEl5BSDrheKq7dO9ciynaLa4Y7FKVNHK0VtGcw/LSGH/fAVu6dIK7oiXk0OxuQLikvWYJJ0vrB47iNgpz1KTeNFle+VNMHqmQj2Hc0w8VelDg2sIxxXHzE0O5D1PJdCb18SLigXe0lQk5ynew=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by KL1PR0601MB3832.apcprd06.prod.outlook.com (2603:1096:820:1a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
+ 2022 14:24:06 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
+ 14:24:06 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
+        GEFORCE/QUADRO GPUS),
+        nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
+        GEFORCE/QUADRO GPUS),
+        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
+        ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/nouveau/instmem: fix uninitialized_var.cocci warning
+Date:   Mon, 28 Feb 2022 22:23:50 +0800
+Message-Id: <20220228142352.18006-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR0302CA0022.apcprd03.prod.outlook.com
+ (2603:1096:202::32) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
 MIME-Version: 1.0
-References: <20220224125843.29733-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220224125843.29733-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220224125843.29733-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:23:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWyyXEXh5OTpMzj=v0xtYKWjHN1GmZ+4hUD1Z7iTb6EOg@mail.gmail.com>
-Message-ID: <CAMuHMdWyyXEXh5OTpMzj=v0xtYKWjHN1GmZ+4hUD1Z7iTb6EOg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: r9a07g054: Fillup the ADC stub node
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-iio@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6b0653f5-1705-4752-baf1-08d9fac5f9e8
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB3832:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB3832B2B3EB38C45783DD5D01C7019@KL1PR0601MB3832.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /WMNfhz42ODCRUXP36Zq5/Ae2cy/nBYe9yk9TRIxWGfnVQFW0hdz0pYI8vatlU26Ng8/VONK217P1YgCmKDFB2fZAGEoGVCaFqA7b5sK0RpVFG0PqsLNeeIzuCHr97e2q1QrtwT+o2Qw+sqm5L423W9TIPztjAnXaodu3iIEp0aIRjK/hprD3dFu9Zl3SVFGI4baD3+U4fERyAjnUtKyXN/crVAYD+8D4bS/V/z3lbepbjerAekKiNbwNvAaw/C/mez0lSwEL1zw6tBLcKxIGfU/JhNHLsH2lmYc5cWDdTPmlPrxTZ61OyaMHj0pVGO6qFQRHPmGSHY2zzIZicp4pfuY/tZokaM5+oYZ2uZvAfQmZC9EVL7LI98GBGvKiK6Afcd5SDxd3Z7+gYmH7q0N1+gKmTtpMTk9eI8HerNk0ISuAO2qel0I9BsWlXtXn1peyufqJ8zQZDIBIHZG+hUyk02DlWwTI3gBQuTHIN2MIw79BnQzy2sorhkKmBtv9E8rlqltoRk/YaLCtt3ztrXWwRjSBEqrTABAGs+JAlNC95KtSH74K9uKx1DwN7eeeOS89u649j+yN9pGcKVYGqY8eROdb8tizj9A362YXtdhUjou/s/35XD7ZDNmiIMjwZ2VVF9L7f+cJTMT4M12lE2/oTsv7eP2ba2vwNxgLMPGf807+W3AgBFshxlzUfiVyhfXTab/CJbT2nExBRnm43EmE3YN0w4w+v/jAvfjnpG6+5pios6aTSaiCGaFlVfwzwUeJWF/VTf2sWppfhTGB1o33h4O5BYn+gD6IddtkLXXzvDcXJSkwkroQzlSkGna0vEJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(52116002)(38100700002)(38350700002)(2616005)(921005)(316002)(36756003)(1076003)(6512007)(6486002)(8936002)(110136005)(508600001)(5660300002)(66476007)(66946007)(66556008)(966005)(86362001)(6506007)(6666004)(83380400001)(8676002)(7416002)(186003)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ncgtufGDOvLrHE1JmH7YZ+jqLTWEq1lj8fSfU7p2G1plP6/cDugk6JFHvL6a?=
+ =?us-ascii?Q?CMxWQzTXLGgGPkuw7w91P0KytyMAPNP2jbsgIHYu8QWwrS7luTQ/0V7ahXeX?=
+ =?us-ascii?Q?F6oMEqA+tBpwbELJKHg44DcYmvyuX7PyLtaAdhOpmWETJ8PQyRX5mlvUWccG?=
+ =?us-ascii?Q?dmgxq5y351vXM4YbUyehG5YBsVExJwi53hTF2l7g+OfpnH+JapDDNCiOm3YP?=
+ =?us-ascii?Q?Yktzf+cpZAM4iSMxRubJh3VqtL1ORGViKPfDvB4b7aMCys8dLFbMrib2FFv4?=
+ =?us-ascii?Q?6aF08tovC0Pj+17l3WTnGnJTC17HeNf5O6a/FptjhRbMZXpkj+g3r2gmnsQV?=
+ =?us-ascii?Q?WHtDBNRfR8dG+zkyYYjW22ym1h1hGnrdzhw+cjdHDm2SV6H/3DTPth35IRUt?=
+ =?us-ascii?Q?x50wn5kLy0pL0EijPK30CUNzk1+1vAD5Od8m37ReD2TPP6Se4Aa8TJ+rpW38?=
+ =?us-ascii?Q?AOd7OmpszszqzmUJxqlXIskb5XH+G6JOm0U/fCrWCrvBi6rhBQHBUN8C4Isp?=
+ =?us-ascii?Q?EJvEMduH4JI+UIJGhKoWmEUDsju7N4q27uNj1FT/TRlLD7sWcsHEFFAO/xsj?=
+ =?us-ascii?Q?7dbVw5QDK04X6Sx2hF9PzdPZRvlm6dvjKSF1wnJh4HYY7sGJl9EIcD+/UXeI?=
+ =?us-ascii?Q?EZLzYAivwnlY9nGtlUXBFxbmCo14aY/+Rj6YKYrWJLXFDctmpvDPKWM1F7Xu?=
+ =?us-ascii?Q?9AGnsNYFTFR81QV12VJxsn+UB2OMUIERuo2kjfkpsQAP/O0nQ/htb01aIScO?=
+ =?us-ascii?Q?K8KZHrznrftp383PKHbpw6ceTMgpHmQPH6Fas22+Y9s0nSue/nDiHKZVFI+H?=
+ =?us-ascii?Q?CFXUAicD/PsSWF6d6IXtzHCH+OEorioFJpSekhKYaoqmPb5GhzIraUEP2cpR?=
+ =?us-ascii?Q?YoQdOMO0yAZZmRvnHNTIIhaMnp4ujQEX4v9sNASHyTT8dfzxjQt+NaWGJwJ/?=
+ =?us-ascii?Q?8pGbAOlMGcHp8AycDJi37+fz2bHgd7NuRI31ckhhU8apxo4oQQM/AjrwSwvP?=
+ =?us-ascii?Q?FH7gv/8NXexugPfS/g/iEZCclmGMknDImRN17d7QMYnNq+sIi5tINOxS4UeO?=
+ =?us-ascii?Q?IE+aqgk1WgzQ6FyG9BhnBLFGhMV3yoFQ7vsMcOmBqES4TgCkZE5JFah+IS7S?=
+ =?us-ascii?Q?S+MT5EAP3t9NBL8oN+J3AR0Dv/nIw1Gp8Jr1VOEboA60D1viRTR0aOye/eZH?=
+ =?us-ascii?Q?/DdDmnI8QXs3E2i4ZkRccCNfbql82kB8qhLOXjYWV0RMAC+4FGC35BicQ5tn?=
+ =?us-ascii?Q?Trx+vmX8PkNC5QEKzD4VcncaqRVMLtcVDevC7kW6k8U5ryhYGlUyMM/psx7r?=
+ =?us-ascii?Q?pnO4qNvEw3naW3QujugCx70vGUEBlrMuUHZ3mJM1iQrCtLS3lmOZjABV39PZ?=
+ =?us-ascii?Q?G6HxjyX+qxdm+wi0Eu5o/tFjlVzBVFu6BG1mJpvE6RFkzrJWEEt26lZtIiNa?=
+ =?us-ascii?Q?vQKvrt6lRR5usmkbF0TcVVK93wzx0PtQd1NQN4ZSFDr8RXGrJ3A9PDVlAHE4?=
+ =?us-ascii?Q?faUb9Kp237VdDH+f/IgLD8imYieeIrP7qkdUlW4pnCSPeYcktL0KSweLplCQ?=
+ =?us-ascii?Q?rRM96WMQW5iU2KyD6tf7EkLCzmfK37z4XG+WcLm13S2AgfRDCIdH6NVmYECh?=
+ =?us-ascii?Q?141Shxtpaxm2+uNx7JRYm3k=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b0653f5-1705-4752-baf1-08d9fac5f9e8
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 14:24:05.9478
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ty1WW32Fa5MR/ljIUXuYPZo7mIJjTKKkLrYb1txj1rPf8eNUB5rEzXK0EUTG7jyuGg0dI80A3+vzz3+Iid9pEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3832
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 1:59 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Fillup the ADC stub node in RZ/V2L (R9A07G054) SoC DTSI.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Fix following coccicheck warning:
+drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c:316:11-12:
+WARNING this kind of initialization is deprecated.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.19.
+`void *map = map` has the same form of
+uninitialized_var() macro. I remove the redundant assignement. It has
+been tested with gcc (Debian 8.3.0-6) 8.3.0.
 
-Gr{oetje,eeting}s,
+The patch which removed uninitialized_var() is:
+https://lore.kernel.org/all/20121028102007.GA7547@gmail.com/
+And there is very few "/* GCC */" comments in the Linux kernel code now.
 
-                        Geert
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c b/drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c
+index 96aca0edfa3c..c51bac76174c 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c
+@@ -313,7 +313,7 @@ nv50_instobj_dtor(struct nvkm_memory *memory)
+ 	struct nv50_instobj *iobj = nv50_instobj(memory);
+ 	struct nvkm_instmem *imem = &iobj->imem->base;
+ 	struct nvkm_vma *bar;
+-	void *map = map;
++	void *map;
+ 
+ 	mutex_lock(&imem->mutex);
+ 	if (likely(iobj->lru.next))
+-- 
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

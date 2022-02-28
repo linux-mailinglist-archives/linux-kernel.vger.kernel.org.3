@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680BA4C76EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B90E4C7418
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240314AbiB1SIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S238337AbiB1RlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240144AbiB1SDB (ORCPT
+        with ESMTP id S233239AbiB1RiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D092E54685;
-        Mon, 28 Feb 2022 09:46:39 -0800 (PST)
+        Mon, 28 Feb 2022 12:38:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805A285669;
+        Mon, 28 Feb 2022 09:33:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C334B81187;
-        Mon, 28 Feb 2022 17:46:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97A2C340E7;
-        Mon, 28 Feb 2022 17:46:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63C62B815B4;
+        Mon, 28 Feb 2022 17:33:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BB2C340E7;
+        Mon, 28 Feb 2022 17:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070396;
-        bh=4SDR2zPe+STyu+dK5B43Nh1E+LcW275FuOXqcL8NV6Q=;
+        s=korg; t=1646069625;
+        bh=9UeXGo99m0LxgDlUp16RQJ3NOi3KlH6cTMp6KlLsTGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tiVxsMHzqnlayHZpAWKkpBG5y9O8F2gESyIkqR8UGDKZgyDmXm5ZuBc/yzSqOjdkT
-         spJM+Jdx05NdfRPn9KOeOsAVgHkt8l4MICuMeod+N1w2cWuXBk5ShLjiPv22EU09by
-         /9JcnWWx3xDxQEbNTTJ0AcgGZORlh3+TbbBiRKfc=
+        b=L1fGNzSeSMaoTRaNByosBmWCM39Y98GxrKl0NSnDHqlQDnCCFhHhf0d2SHjOLlBGN
+         XWsTNv++qSFSFI53fNJm26lMZHmjapH6zrUzqH3W2aZYqudxhMk7jSJL33WP3Hy56f
+         vmOYVQVzACGWPUFqhRHPX2pzkyx8dIN5VCScJAZQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariel Levkovich <lariel@nvidia.com>,
-        Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 092/164] net/mlx5: Fix wrong limitation of metadata match on ecpf
-Date:   Mon, 28 Feb 2022 18:24:14 +0100
-Message-Id: <20220228172408.161564826@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 34/80] net/sched: act_ct: Fix flow table lookup after ct clear or switching zones
+Date:   Mon, 28 Feb 2022 18:24:15 +0100
+Message-Id: <20220228172315.596722738@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ariel Levkovich <lariel@nvidia.com>
+From: Paul Blakey <paulb@nvidia.com>
 
-commit 07666c75ad17d7389b18ac0235c8cf41e1504ea8 upstream.
+commit 2f131de361f6d0eaff17db26efdb844c178432f8 upstream.
 
-Match metadata support check returns false for ecpf device.
-However, this support does exist for ecpf and therefore this
-limitation should be removed to allow feature such as stacked
-devices and internal port offloaded to be supported.
+Flow table lookup is skipped if packet either went through ct clear
+action (which set the IP_CT_UNTRACKED flag on the packet), or while
+switching zones and there is already a connection associated with
+the packet. This will result in no SW offload of the connection,
+and the and connection not being removed from flow table with
+TCP teardown (fin/rst packet).
 
-Fixes: 92ab1eb392c6 ("net/mlx5: E-Switch, Enable vport metadata matching if firmware supports it")
-Signed-off-by: Ariel Levkovich <lariel@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+To fix the above, remove these unneccary checks in flow
+table lookup.
+
+Fixes: 46475bb20f4b ("net/sched: act_ct: Software offload of established flows")
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c |    4 ----
- 1 file changed, 4 deletions(-)
+ net/sched/act_ct.c |    5 -----
+ 1 file changed, 5 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-@@ -2838,10 +2838,6 @@ bool mlx5_esw_vport_match_metadata_suppo
- 	if (!MLX5_CAP_ESW_FLOWTABLE(esw->dev, flow_source))
- 		return false;
+--- a/net/sched/act_ct.c
++++ b/net/sched/act_ct.c
+@@ -514,11 +514,6 @@ static bool tcf_ct_flow_table_lookup(str
+ 	struct nf_conn *ct;
+ 	u8 dir;
  
--	if (mlx5_core_is_ecpf_esw_manager(esw->dev) ||
--	    mlx5_ecpf_vport_exists(esw->dev))
+-	/* Previously seen or loopback */
+-	ct = nf_ct_get(skb, &ctinfo);
+-	if ((ct && !nf_ct_is_template(ct)) || ctinfo == IP_CT_UNTRACKED)
 -		return false;
 -
- 	return true;
- }
- 
+ 	switch (family) {
+ 	case NFPROTO_IPV4:
+ 		if (!tcf_ct_flow_table_fill_tuple_ipv4(skb, &tuple, &tcph))
 
 

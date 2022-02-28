@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD3E4C7473
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6734C75C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbiB1RpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        id S239463AbiB1R4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238359AbiB1RlQ (ORCPT
+        with ESMTP id S239578AbiB1RxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:41:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B4939F4;
-        Mon, 28 Feb 2022 09:34:42 -0800 (PST)
+        Mon, 28 Feb 2022 12:53:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB2A9E33;
+        Mon, 28 Feb 2022 09:40:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2719BB815A6;
-        Mon, 28 Feb 2022 17:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A393C340E7;
-        Mon, 28 Feb 2022 17:34:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D50B61540;
+        Mon, 28 Feb 2022 17:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56567C340E7;
+        Mon, 28 Feb 2022 17:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069679;
-        bh=HNlEnn31gDfp78Stg/+wfklDNtibWpDYzDPpIk7TOvg=;
+        s=korg; t=1646070025;
+        bh=0fw9T+tZAvMBuO779pLSBg40CJqtPfcQQrG7q6rLaZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A07PLgZGVsnut3Qr9ON+rO5LIs/Bg1u1Na3jFW8EfRmz1K88mjeaNcvK9FJuX+zHq
-         MBWNrq224dj2NBKccZLmUTDcyVj1v/w8x0KesDXlRJB8drDdPt3EVUVZLAPIXPGa09
-         wgxa7n1XzVpQNTDWJeQxErWLlWJzWfbOJ+L36e1E=
+        b=sY2R920us4u1icyWrJMY2GeuAy0kY63MbA2HZs6NLptwewN4zLpITf5YSZCa/n3u5
+         tfolpw/Sznyto55UJ+8sJOaOj7VKH0KXWB5FTOTBk1mGDZ6fQ/bUZU+5iBOwFp1UEy
+         of5xboglOBaaslhIfmZAq20oUf/uo7RbXPouHx5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.10 52/80] tracing: Have traceon and traceoff trigger honor the instance
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 099/139] iio: adc: ad7124: fix mask used for setting AIN_BUFP & AIN_BUFM bits
 Date:   Mon, 28 Feb 2022 18:24:33 +0100
-Message-Id: <20220228172318.001204707@linuxfoundation.org>
+Message-Id: <20220228172358.063554283@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,120 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Cosmin Tanislav <demonsingur@gmail.com>
 
-commit 302e9edd54985f584cfc180098f3554774126969 upstream.
+commit 0e33d15f1dce9e3a80a970ea7f0b27837168aeca upstream.
 
-If a trigger is set on an event to disable or enable tracing within an
-instance, then tracing should be disabled or enabled in the instance and
-not at the top level, which is confusing to users.
+According to page 90 of the datasheet [1], AIN_BUFP is bit 6 and
+AIN_BUFM is bit 5 of the CONFIG_0 -> CONFIG_7 registers.
 
-Link: https://lkml.kernel.org/r/20220223223837.14f94ec3@rorschach.local.home
+Fix the mask used for setting these bits.
 
-Cc: stable@vger.kernel.org
-Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
-Tested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+[1]: https://www.analog.com/media/en/technical-documentation/data-sheets/ad7124-8.pdf
+
+Fixes: 0eaecea6e487 ("iio: adc: ad7124: Add buffered input support")
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Link: https://lore.kernel.org/r/20220112200036.694490-1-cosmin.tanislav@analog.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events_trigger.c |   52 +++++++++++++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 6 deletions(-)
+ drivers/iio/adc/ad7124.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/trace/trace_events_trigger.c
-+++ b/kernel/trace/trace_events_trigger.c
-@@ -940,6 +940,16 @@ static void
- traceon_trigger(struct event_trigger_data *data, void *rec,
- 		struct ring_buffer_event *event)
- {
-+	struct trace_event_file *file = data->private_data;
-+
-+	if (file) {
-+		if (tracer_tracing_is_on(file->tr))
-+			return;
-+
-+		tracer_tracing_on(file->tr);
-+		return;
-+	}
-+
- 	if (tracing_is_on())
- 		return;
+--- a/drivers/iio/adc/ad7124.c
++++ b/drivers/iio/adc/ad7124.c
+@@ -76,7 +76,7 @@
+ #define AD7124_CONFIG_REF_SEL(x)	FIELD_PREP(AD7124_CONFIG_REF_SEL_MSK, x)
+ #define AD7124_CONFIG_PGA_MSK		GENMASK(2, 0)
+ #define AD7124_CONFIG_PGA(x)		FIELD_PREP(AD7124_CONFIG_PGA_MSK, x)
+-#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(7, 6)
++#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(6, 5)
+ #define AD7124_CONFIG_IN_BUFF(x)	FIELD_PREP(AD7124_CONFIG_IN_BUFF_MSK, x)
  
-@@ -950,8 +960,15 @@ static void
- traceon_count_trigger(struct event_trigger_data *data, void *rec,
- 		      struct ring_buffer_event *event)
- {
--	if (tracing_is_on())
--		return;
-+	struct trace_event_file *file = data->private_data;
-+
-+	if (file) {
-+		if (tracer_tracing_is_on(file->tr))
-+			return;
-+	} else {
-+		if (tracing_is_on())
-+			return;
-+	}
- 
- 	if (!data->count)
- 		return;
-@@ -959,13 +976,26 @@ traceon_count_trigger(struct event_trigg
- 	if (data->count != -1)
- 		(data->count)--;
- 
--	tracing_on();
-+	if (file)
-+		tracer_tracing_on(file->tr);
-+	else
-+		tracing_on();
- }
- 
- static void
- traceoff_trigger(struct event_trigger_data *data, void *rec,
- 		 struct ring_buffer_event *event)
- {
-+	struct trace_event_file *file = data->private_data;
-+
-+	if (file) {
-+		if (!tracer_tracing_is_on(file->tr))
-+			return;
-+
-+		tracer_tracing_off(file->tr);
-+		return;
-+	}
-+
- 	if (!tracing_is_on())
- 		return;
- 
-@@ -976,8 +1006,15 @@ static void
- traceoff_count_trigger(struct event_trigger_data *data, void *rec,
- 		       struct ring_buffer_event *event)
- {
--	if (!tracing_is_on())
--		return;
-+	struct trace_event_file *file = data->private_data;
-+
-+	if (file) {
-+		if (!tracer_tracing_is_on(file->tr))
-+			return;
-+	} else {
-+		if (!tracing_is_on())
-+			return;
-+	}
- 
- 	if (!data->count)
- 		return;
-@@ -985,7 +1022,10 @@ traceoff_count_trigger(struct event_trig
- 	if (data->count != -1)
- 		(data->count)--;
- 
--	tracing_off();
-+	if (file)
-+		tracer_tracing_off(file->tr);
-+	else
-+		tracing_off();
- }
- 
- static int
+ /* AD7124_FILTER_X */
 
 

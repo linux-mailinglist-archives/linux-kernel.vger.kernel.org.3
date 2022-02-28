@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C0A4C7443
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3574C7300
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbiB1Rmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S235771AbiB1Rac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbiB1Riw (ORCPT
+        with ESMTP id S235175AbiB1R2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:38:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE868F609;
-        Mon, 28 Feb 2022 09:34:00 -0800 (PST)
+        Mon, 28 Feb 2022 12:28:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9442541AB;
+        Mon, 28 Feb 2022 09:27:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27B29B815BE;
-        Mon, 28 Feb 2022 17:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB1AC340F0;
-        Mon, 28 Feb 2022 17:33:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20F166140B;
+        Mon, 28 Feb 2022 17:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0A0C340F6;
+        Mon, 28 Feb 2022 17:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069638;
-        bh=2KB33yasltd30ZmQPOUidFoxcAPmgj0nafDIvmwvRMg=;
+        s=korg; t=1646069269;
+        bh=DPO3BcLiwBn8PmDoRW5r8RbBNLCnhtbo3AwL7su6q/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W6ZGzQmHh6EOwt3f71bHBTyrSIrljxmuyOIzbz0PDSxaXf710gPHZNkTCUzMWWhVM
-         vt6TR+g2mDsqk0EMJsaML5eELmLkoNOxIWewSi3GpQgdFVZnKS+Tbpc41yLqVYwkn/
-         PgA+21v6bBKHV3Zk3FoKoVO/ahBxdGFNvZ566BRM=
+        b=c7FT4qGKiXhOYI9GAVAt+FHrHIB0eZlckaOG8yVgKwJx88lHgk221tif+RfLEvKvD
+         vGMDYeciloZz5oONBrhvu+S01xM/kgFQ6+HflfOF3Ss64cXh2tlRQ9T6j1xY7BtowN
+         moPl+xvLNKmgDRHNwXFPrx/Z7L5xz2HYnp5rxOms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fernando Fernandez Mancera <ffmancera@riseup.net>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.10 38/80] netfilter: nf_tables: fix memory leak during stateful obj update
-Date:   Mon, 28 Feb 2022 18:24:19 +0100
-Message-Id: <20220228172316.104997082@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 4.14 24/31] usb: dwc3: gadget: Let the interrupt handler disable bottom halves.
+Date:   Mon, 28 Feb 2022 18:24:20 +0100
+Message-Id: <20220228172202.213218587@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-commit dad3bdeef45f81a6e90204bcc85360bb76eccec7 upstream.
+commit 84918a89d6efaff075de570b55642b6f4ceeac6d upstream.
 
-stateful objects can be updated from the control plane.
-The transaction logic allocates a temporary object for this purpose.
+The interrupt service routine registered for the gadget is a primary
+handler which mask the interrupt source and a threaded handler which
+handles the source of the interrupt. Since the threaded handler is
+voluntary threaded, the IRQ-core does not disable bottom halves before
+invoke the handler like it does for the forced-threaded handler.
 
-The ->init function was called for this object, so plain kfree() leaks
-resources. We must call ->destroy function of the object.
+Due to changes in networking it became visible that a network gadget's
+completions handler may schedule a softirq which remains unprocessed.
+The gadget's completion handler is usually invoked either in hard-IRQ or
+soft-IRQ context. In this context it is enough to just raise the softirq
+because the softirq itself will be handled once that context is left.
+In the case of the voluntary threaded handler, there is nothing that
+will process pending softirqs. Which means it remain queued until
+another random interrupt (on this CPU) fires and handles it on its exit
+path or another thread locks and unlocks a lock with the bh suffix.
+Worst case is that the CPU goes idle and the NOHZ complains about
+unhandled softirqs.
 
-nft_obj_destroy does this, but it also decrements the module refcount,
-but the update path doesn't increment it.
+Disable bottom halves before acquiring the lock (and disabling
+interrupts) and enable them after dropping the lock. This ensures that
+any pending softirqs will handled right away.
 
-To avoid special-casing the update object release, do module_get for
-the update case too and release it via nft_obj_destroy().
-
-Fixes: d62d0ba97b58 ("netfilter: nf_tables: Introduce stateful object update operation")
-Cc: Fernando Fernandez Mancera <ffmancera@riseup.net>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Link: https://lkml.kernel.org/r/c2a64979-73d1-2c22-e048-c275c9f81558@samsung.com
+Fixes: e5f68b4a3e7b0 ("Revert "usb: dwc3: gadget: remove unnecessary _irqsave()"")
+Cc: stable <stable@kernel.org>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Link: https://lore.kernel.org/r/Yg/YPejVQH3KkRVd@linutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |   13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/usb/dwc3/gadget.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -5924,12 +5924,15 @@ static int nf_tables_updobj(const struct
- {
- 	struct nft_object *newobj;
- 	struct nft_trans *trans;
--	int err;
-+	int err = -ENOMEM;
-+
-+	if (!try_module_get(type->owner))
-+		return -ENOENT;
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3153,9 +3153,11 @@ static irqreturn_t dwc3_thread_interrupt
+ 	unsigned long flags;
+ 	irqreturn_t ret = IRQ_NONE;
  
- 	trans = nft_trans_alloc(ctx, NFT_MSG_NEWOBJ,
- 				sizeof(struct nft_trans_obj));
- 	if (!trans)
--		return -ENOMEM;
-+		goto err_trans;
++	local_bh_disable();
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	ret = dwc3_process_event_buf(evt);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
++	local_bh_enable();
  
- 	newobj = nft_obj_init(ctx, type, attr);
- 	if (IS_ERR(newobj)) {
-@@ -5946,6 +5949,8 @@ static int nf_tables_updobj(const struct
- 
- err_free_trans:
- 	kfree(trans);
-+err_trans:
-+	module_put(type->owner);
- 	return err;
+ 	return ret;
  }
- 
-@@ -7555,7 +7560,7 @@ static void nft_obj_commit_update(struct
- 	if (obj->ops->update)
- 		obj->ops->update(obj, newobj);
- 
--	kfree(newobj);
-+	nft_obj_destroy(&trans->ctx, newobj);
- }
- 
- static void nft_commit_release(struct nft_trans *trans)
-@@ -8202,7 +8207,7 @@ static int __nf_tables_abort(struct net
- 			break;
- 		case NFT_MSG_NEWOBJ:
- 			if (nft_trans_obj_update(trans)) {
--				kfree(nft_trans_obj_newobj(trans));
-+				nft_obj_destroy(&trans->ctx, nft_trans_obj_newobj(trans));
- 				nft_trans_destroy(trans);
- 			} else {
- 				trans->ctx.table->use--;
 
 

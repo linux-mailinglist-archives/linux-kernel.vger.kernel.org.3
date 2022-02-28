@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABD24C7357
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE0D4C7363
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238133AbiB1Reg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S236581AbiB1Ret (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiB1Rcy (ORCPT
+        with ESMTP id S238190AbiB1RdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:32:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087B48CD8E;
-        Mon, 28 Feb 2022 09:29:30 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59958E1A3;
+        Mon, 28 Feb 2022 09:29:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A1FD61464;
-        Mon, 28 Feb 2022 17:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF39C340E7;
-        Mon, 28 Feb 2022 17:29:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E76ECB815A6;
+        Mon, 28 Feb 2022 17:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4694CC340E7;
+        Mon, 28 Feb 2022 17:29:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069361;
-        bh=917T7g5NADCLUB+jfAC4t5c2Tgf/uZE24UZy1cRKwXg=;
+        s=korg; t=1646069364;
+        bh=DzwcJXbODgTKFsEgFpXDiJ68s9xoeQXLilc34DuJJns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SDOIvfw9I+TKnJKiHY0zBYpjsihrlWaqFTZrk+a5pQLV8DhbEV/nwqTyxnNHnyLMe
-         AQ9uDuQYO3YfnyqOgGpzGBQZ2K883DkXqFZkzvdELRlT6q7jZ9nV2n1nFfpRup2Frg
-         4xeystAAwqfQeGkvAYkzl/mI6bSSfTJL7Fmd2zJI=
+        b=aiMSOtoEOqQM7zV+fyEQaugdJqfI0QjzyjOPU4TxwWvtKyHAfTzzKMsBau3alrh4K
+         HnEnRC7QcXM4pKTc+Fwz2KTnQtGaMRWa5M7A6OJfFa0QSi6zysGhiQ+jJagwKo7yw+
+         /0g4VNq+EjRs5YOkJln5+n6CHrQoCaPdKwgu//dM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 27/34] tracefs: Set the group ownership in apply_options() not parse_options()
-Date:   Mon, 28 Feb 2022 18:24:33 +0100
-Message-Id: <20220228172210.660509352@linuxfoundation.org>
+        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 28/34] USB: serial: option: add support for DW5829e
+Date:   Mon, 28 Feb 2022 18:24:34 +0100
+Message-Id: <20220228172210.728345349@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
 References: <20220228172207.090703467@linuxfoundation.org>
@@ -54,50 +54,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Slark Xiao <slark_xiao@163.com>
 
-commit 851e99ebeec3f4a672bb5010cf1ece095acee447 upstream.
+commit 6ecb3f0b18b320320460a42e40d6fb603f6ded96 upstream.
 
-Al Viro brought it to my attention that the dentries may not be filled
-when the parse_options() is called, causing the call to set_gid() to
-possibly crash. It should only be called if parse_options() succeeds
-totally anyway.
+Dell DW5829e same as DW5821e except CAT level.
+DW5821e supports CAT16 but DW5829e supports CAT9.
+There are 2 types product of DW5829e: normal and eSIM.
+So we will add 2 PID for DW5829e.
+And for each PID, it support MBIM or RMNET.
+Let's see test evidence as below:
 
-He suggested the logical place to do the update is in apply_options().
+DW5829e MBIM mode:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
+P:  Vendor=413c ProdID=81e6 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
 
-Link: https://lore.kernel.org/all/20220225165219.737025658@goodmis.org/
-Link: https://lkml.kernel.org/r/20220225153426.1c4cab6b@gandalf.local.home
+DW5829e RMNET mode:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e6 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
+DW5829e-eSIM MBIM mode:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  6 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
+P:  Vendor=413c ProdID=81e4 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+
+DW5829e-eSIM RMNET mode:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e4 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+
+BTW, the interface 0x6 of MBIM mode is GNSS port, which not same as NMEA
+port. So it's banned from serial option driver.
+The remaining interfaces 0x2-0x5 are: MODEM, MODEM, NMEA, DIAG.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Link: https://lore.kernel.org/r/20220214021401.6264-1-slark_xiao@163.com
+[ johan: drop unnecessary reservation of interface 1 ]
 Cc: stable@vger.kernel.org
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/tracefs/inode.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/usb/serial/option.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -265,7 +265,6 @@ static int tracefs_parse_options(char *d
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
--			set_gid(tracefs_mount->mnt_root, gid);
- 			break;
- 		case Opt_mode:
- 			if (match_octal(&args[0], &option))
-@@ -292,7 +291,9 @@ static int tracefs_apply_options(struct
- 	inode->i_mode |= opts->mode;
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -198,6 +198,8 @@ static void option_instat_callback(struc
  
- 	inode->i_uid = opts->uid;
--	inode->i_gid = opts->gid;
-+
-+	/* Set all the group ids to the mount option */
-+	set_gid(sb->s_root, opts->gid);
+ #define DELL_PRODUCT_5821E			0x81d7
+ #define DELL_PRODUCT_5821E_ESIM			0x81e0
++#define DELL_PRODUCT_5829E_ESIM			0x81e4
++#define DELL_PRODUCT_5829E			0x81e6
  
- 	return 0;
- }
+ #define KYOCERA_VENDOR_ID			0x0c88
+ #define KYOCERA_PRODUCT_KPC650			0x17da
+@@ -1063,6 +1065,10 @@ static const struct usb_device_id option
+ 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+ 	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
+ 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
++	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E),
++	  .driver_info = RSVD(0) | RSVD(6) },
++	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM),
++	  .driver_info = RSVD(0) | RSVD(6) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA874C73FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDB74C7551
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238323AbiB1Rjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S239749AbiB1Rx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238490AbiB1Rhz (ORCPT
+        with ESMTP id S239092AbiB1RsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:37:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D507543AEE;
-        Mon, 28 Feb 2022 09:32:43 -0800 (PST)
+        Mon, 28 Feb 2022 12:48:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639C8A1447;
+        Mon, 28 Feb 2022 09:38:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 470FCB815AC;
-        Mon, 28 Feb 2022 17:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB6EC340E7;
-        Mon, 28 Feb 2022 17:32:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BDF6153C;
+        Mon, 28 Feb 2022 17:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0526CC340F0;
+        Mon, 28 Feb 2022 17:38:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069561;
-        bh=KwnSvAIvypkgAY4He7R23xQE0ck3L9g5jFxUpjd0lPM=;
+        s=korg; t=1646069913;
+        bh=vz++OT2NpQLcJoIMtjCiXJNuGLiWgx78RUDEY0UqYyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LHjTpN5nJsuPnfL/fxAhcvhJ6Z4xw5l9+X5klu/LMt8oZhXB6BYjwDUS5vgeePR81
-         BCyTcDRVfp//p62PkkqHdn2RCoh3k2G9e2FDbnZnyPlQ9jcHif761S4sRB/qwlNY4O
-         5w5PrLc2cl7kNMTjQQvH+mDlRg1G0IGvUogW7Es8=
+        b=dG0+xQWCCQEUEWo+wlhC+50RH6/ff3KCgqB7i6/+QcZ/ak/QpaxZnfWu1Wf2Ex9dc
+         j2M61OeC3sBa/E7i6fdEauLHJCJ9rLGj/CpgaJywC2LBDIwigqehs2JHsscsQiAjUb
+         1SQBPE6Q1HtscKtSaJJSa9HdmGMCP4nwasC8A8IE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.10 11/80] drm/i915: Correctly populate use_sagv_wm for all pipes
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 058/139] tipc: Fix end of loop tests for list_for_each_entry()
 Date:   Mon, 28 Feb 2022 18:23:52 +0100
-Message-Id: <20220228172312.814623524@linuxfoundation.org>
+Message-Id: <20220228172353.805227174@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit afc189df6bcc6be65961deb54e15ec60e7f85337 upstream.
+commit a1f8fec4dac8bc7b172b2bdbd881e015261a6322 upstream.
 
-When changing between SAGV vs. no SAGV on tgl+ we have to
-update the use_sagv_wm flag for all the crtcs or else
-an active pipe not already in the state will end up using
-the wrong watermarks. That is especially bad when we end up
-with the tighter non-SAGV watermarks with SAGV enabled.
-Usually ends up in underruns.
+These tests are supposed to check if the loop exited via a break or not.
+However the tests are wrong because if we did not exit via a break then
+"p" is not a valid pointer.  In that case, it's the equivalent of
+"if (*(u32 *)sr == *last_key) {".  That's going to work most of the time,
+but there is a potential for those to be equal.
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-Fixes: 7241c57d3140 ("drm/i915: Add TGL+ SAGV support")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220218064039.12834-2-ville.syrjala@linux.intel.com
-(cherry picked from commit 8dd8ffb824ca7b897ce9f2082ffa7e64831c22dc)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Fixes: 1593123a6a49 ("tipc: add name table dump to new netlink api")
+Fixes: 1a1a143daf84 ("tipc: add publication dump to new netlink api")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |   22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ net/tipc/name_table.c |    2 +-
+ net/tipc/socket.c     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -3996,6 +3996,17 @@ static int intel_compute_sagv_mask(struc
- 			return ret;
- 	}
- 
-+	if (intel_can_enable_sagv(dev_priv, new_bw_state) !=
-+	    intel_can_enable_sagv(dev_priv, old_bw_state)) {
-+		ret = intel_atomic_serialize_global_state(&new_bw_state->base);
-+		if (ret)
-+			return ret;
-+	} else if (new_bw_state->pipe_sagv_reject != old_bw_state->pipe_sagv_reject) {
-+		ret = intel_atomic_lock_global_state(&new_bw_state->base);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	for_each_new_intel_crtc_in_state(state, crtc,
- 					 new_crtc_state, i) {
- 		struct skl_pipe_wm *pipe_wm = &new_crtc_state->wm.skl.optimal;
-@@ -4010,17 +4021,6 @@ static int intel_compute_sagv_mask(struc
- 				       intel_can_enable_sagv(dev_priv, new_bw_state);
- 	}
- 
--	if (intel_can_enable_sagv(dev_priv, new_bw_state) !=
--	    intel_can_enable_sagv(dev_priv, old_bw_state)) {
--		ret = intel_atomic_serialize_global_state(&new_bw_state->base);
--		if (ret)
--			return ret;
--	} else if (new_bw_state->pipe_sagv_reject != old_bw_state->pipe_sagv_reject) {
--		ret = intel_atomic_lock_global_state(&new_bw_state->base);
--		if (ret)
--			return ret;
--	}
--
- 	return 0;
- }
- 
+--- a/net/tipc/name_table.c
++++ b/net/tipc/name_table.c
+@@ -967,7 +967,7 @@ static int __tipc_nl_add_nametable_publ(
+ 		list_for_each_entry(p, &sr->all_publ, all_publ)
+ 			if (p->key == *last_key)
+ 				break;
+-		if (p->key != *last_key)
++		if (list_entry_is_head(p, &sr->all_publ, all_publ))
+ 			return -EPIPE;
+ 	} else {
+ 		p = list_first_entry(&sr->all_publ,
+--- a/net/tipc/socket.c
++++ b/net/tipc/socket.c
+@@ -3749,7 +3749,7 @@ static int __tipc_nl_list_sk_publ(struct
+ 			if (p->key == *last_publ)
+ 				break;
+ 		}
+-		if (p->key != *last_publ) {
++		if (list_entry_is_head(p, &tsk->publications, binding_sock)) {
+ 			/* We never set seq or call nl_dump_check_consistent()
+ 			 * this means that setting prev_seq here will cause the
+ 			 * consistence check to fail in the netlink callback
 
 

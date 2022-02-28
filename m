@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E353D4C64E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EBF4C64E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbiB1IhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S234041AbiB1Ihp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiB1IhM (ORCPT
+        with ESMTP id S231602AbiB1Ihn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:37:12 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330BE66200;
-        Mon, 28 Feb 2022 00:36:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6YdB4rdwz4xcq;
-        Mon, 28 Feb 2022 19:36:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646037391;
-        bh=o9XiM/fNYl1/X2wj9pS/S8olSHtadAELkZb/1vzMIg0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Kk7ww8d/UD/aB0CZpdFda/ex6kPHgC6GTIh74rGu7pWVtIg/B+6LE/0w35S9RXlAD
-         7LmNHSSLbQ+XOOnW1ewHWdPu1M+dryMQ2lTZygGWVty0rHf+fYIr1KNZDMFHptmfjq
-         T6G1g8aI+McqApTT5jMbf2nw5AkJyEIU4osGlrUxHX/Lbv0buA+LzdMWlmC5WMEccP
-         v26Uf08c5f4LLqvJk7dKFR+LcAWEJmlLJkzbIdeeahpgJmQIJwvgPlKf5wj4rF/M3n
-         luu8jOdYkVknjU18gmaJ7qxE5+LyGsX1gd56f4ZvyhkX1J036ZsSmtFmrT8j+xyVez
-         EqvL0wQIKoKkQ==
-Date:   Mon, 28 Feb 2022 19:36:30 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: linux-next: manual merge of the char-misc tree with the spi and tty
- trees
-Message-ID: <20220228193630.2e079d89@canb.auug.org.au>
+        Mon, 28 Feb 2022 03:37:43 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B8366202;
+        Mon, 28 Feb 2022 00:37:05 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id bd1so10051389plb.13;
+        Mon, 28 Feb 2022 00:37:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RdJaANiEHPY4Xp6y7T90xtbRbQ1zCSCWRMALDqz2S1E=;
+        b=O+SiBscvMN4QOyf2WWIJIimqdE2rPKAVCNlbFv93sJTuOvxKetcxl1sM+knwyr3qRN
+         R9vNWvyFnwUgi5JIM+wZ4oy2WTr+Q/nf6IRhpuCytRZbZEBSqRwHEFAstg9wLj+r/W9m
+         pG0Kp7ciljhEHrpjAMZMLt9giHvxIj+ySQCVNNHTbKboORB7bFMuG33zjzB/oGMul0rH
+         5zdrVzRDSSoUtw8dVmYX4HC3bVx/G+KWBe082KLZFEm6orgltFNQWeh6AoRBLs8SH/M2
+         fBNjmSaBjiP8tOGjTMQo5lI2werXGqBfjycnD0wdmMRdGvLcsxFDYv4Q4uiqIDsb7U63
+         9nQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RdJaANiEHPY4Xp6y7T90xtbRbQ1zCSCWRMALDqz2S1E=;
+        b=m9UhO2wagAuw9ictOAfMH1U7V2KKK8nxKo/QuJGdloFT6jinGjev8jqLHxQxh/2Ye7
+         UEeFmtgc7JIIA2TSF2HKrbRXhAkhhwY9j/vgRg2pXymgVBvSK9FDJioge+AhqdQv6ixZ
+         QbOcq0zWj2+1j8rl9uHleqODL8rrvauyT2gFc20PSan1hSkhGgTOVPNtqBeTMdhmO1dY
+         wFjGHWkw6YruJI08PNVCb/LybINVN/WeoUP5s9X+kA+oKnbr/Xidd8uaUzlZuAj7yb8Z
+         cHRl3IobOubZJrtlMWp0mavUXoQIJhamwD0D6aUU3g6/3f1d4jvao3qgi+IlC1fsCN3E
+         i3XA==
+X-Gm-Message-State: AOAM532lG1LNtMSfMsWpJi8HiW8EI8qnBNrM7roKfPaZLCX9K//RZt52
+        U1IP0UBR6BIq4ms8B1Q7CAz4tFpkIK8AsdvG
+X-Google-Smtp-Source: ABdhPJzYDieLjOM8cJWQ0nnleIGse98JBYhW63ed+4WhqGry8DeDpwFdI9CmCOiyzeA+ZSGFfkesCA==
+X-Received: by 2002:a17:90a:2b0d:b0:1b5:8087:4b4e with SMTP id x13-20020a17090a2b0d00b001b580874b4emr15409414pjc.70.1646037425070;
+        Mon, 28 Feb 2022 00:37:05 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id nl12-20020a17090b384c00b001bc1bb5449bsm10146280pjb.2.2022.02.28.00.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 00:37:04 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
+        paskripkin@gmail.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] can: usb: delete a redundant dev_kfree_skb() in ems_usb_start_xmit()
+Date:   Mon, 28 Feb 2022 16:36:39 +0800
+Message-Id: <20220228083639.38183-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sNSaGWJL.9iTObOrPWLLF/X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,87 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sNSaGWJL.9iTObOrPWLLF/X
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
+can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
+skb.
 
-Hi all,
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ drivers/net/can/usb/ems_usb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
+index 7bedceffdfa3..bbec3311d893 100644
+--- a/drivers/net/can/usb/ems_usb.c
++++ b/drivers/net/can/usb/ems_usb.c
+@@ -819,7 +819,6 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 
+ 		usb_unanchor_urb(urb);
+ 		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
+-		dev_kfree_skb(skb);
+ 
+ 		atomic_dec(&dev->active_tx_urbs);
+ 
+-- 
+2.25.1
 
-  MAINTAINERS
-
-between commits:
-
-  f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
-  b48b9f6deacf ("dt-bindings: serial: Add bindings doc for Sunplus SoC UART=
- Driver")
-  9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
-
-from the spi and tty trees and commits:
-
-  9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
-  8fb29b450182 ("dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP dri=
-ver")
-
-from the char-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index d1e56ec04e14,37ea1436fc62..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -18642,19 -18578,12 +18678,25 @@@ S:	Maintaine
-  F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
-  F:	drivers/rtc/rtc-sunplus.c
- =20
-+ SUNPLUS OCOTP DRIVER
-+ M:	Vincent Shih <vincent.sunplus@gmail.com>
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
-+ F:	drivers/nvmem/sunplus-ocotp.c
-+=20
- +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
- +M:	Li-hao Kuo <lhjeff911@gmail.com>
- +L:	linux-spi@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
- +F:	drivers/spi/spi-sunplus-sp7021.c
- +
- +SUNPLUS UART DRIVER
- +M:	Hammer Hsieh <hammerh0314@gmail.com>
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
- +F:	drivers/tty/serial/sunplus-uart.c
- +
-  SUPERH
-  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-  M:	Rich Felker <dalias@libc.org>
-
---Sig_/sNSaGWJL.9iTObOrPWLLF/X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIciY4ACgkQAVBC80lX
-0Gx7BAgAlKzxcIFXzATxZb/KksQOrxcHqxRi+f8AMckNrns6dsjjNTjPEIx/KmRm
-b9tj0CLh1+22ECRQvISSHHAwoNltauqjpMTe5VW4rrHgEgRYEDn2ZL/U1u49ymMi
-td7vLld++kht5TC/+tzvn6at3O0khd75YtOEL7Y+tufvJpfIUTsUuAYVH2C4tIhg
-N//tvzxNJ15uqI7ikaQJaq38941YivWkvo4xYHNrEl6DlirXtF+i+v4ef99jWplw
-goPSxwvoFyZIEUxNfptctIxz2y6if2eEeqM4c/DRfP3hdO3Mx7PeO5R4TzjDsvMO
-bsdJA85pJvMjkjO7vG0uYwZMRw7hzg==
-=wBWw
------END PGP SIGNATURE-----
-
---Sig_/sNSaGWJL.9iTObOrPWLLF/X--

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1407B4C73DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024F44C7716
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbiB1RjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S237402AbiB1SLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238273AbiB1Rgv (ORCPT
+        with ESMTP id S239430AbiB1SE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:36:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071D488792;
-        Mon, 28 Feb 2022 09:31:58 -0800 (PST)
+        Mon, 28 Feb 2022 13:04:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A405396A7;
+        Mon, 28 Feb 2022 09:47:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3342B815A6;
-        Mon, 28 Feb 2022 17:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527E2C340E7;
-        Mon, 28 Feb 2022 17:31:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C26D560180;
+        Mon, 28 Feb 2022 17:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C22C340F0;
+        Mon, 28 Feb 2022 17:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069511;
-        bh=/IPjo5Im5eTlmflgA6jvO3M2vFnLOiss2A90CD++VY8=;
+        s=korg; t=1646070475;
+        bh=Vj7+RV1mSAdxwWoIV35hkfTUgm01kukRlhS/2oE8/tA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bq+3kQpO4S5b/FUiYEB44i2VNzEh69+P8syu2k1RM0U1ne9p0TQ94S6iUwuoqEEJa
-         4+N8rIMHaexHh06lntda2UrpIRzTOcsWwSfler1C2bThCkOsqCthYdmrWxA/RGdUHh
-         4NMX+mT1hGDbMxhoAla2WWw+1xrQGTMd3NIdPVpc=
+        b=VP5DhX6dkZ7d7Cd2ogclWbuE2hjePg81thJOqFrRh7IAQ0qyPnvUc5Jml6IarMw8j
+         w2Y5LZ7Gusho1mP5pZus5bXOfg7iDeWViy0aUGegBzVpjCEve5d7+l6/jj4WwNRRv6
+         RtaIUIwy9zD3MMQkq2iHb3sd1uZKFBXKM3x2b8ek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.4 46/53] xhci: Prevent futile URB re-submissions due to incorrect return value.
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.16 122/164] ata: pata_hpt37x: disable primary channel on HPT371
 Date:   Mon, 28 Feb 2022 18:24:44 +0100
-Message-Id: <20220228172251.616249061@linuxfoundation.org>
+Message-Id: <20220228172411.279780984@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit 243a1dd7ba48c120986dd9e66fee74bcb7751034 upstream.
+commit 8d093e02e898b24c58788b0289e3202317a96d2a upstream.
 
-The -ENODEV return value from xhci_check_args() is incorrectly changed
-to -EINVAL in a couple places before propagated further.
+The HPT371 chip physically has only one channel, the secondary one,
+however the primary channel registers do exist! Thus we have to
+manually disable the non-existing channel if the BIOS hasn't done this
+already. Similarly to the pata_hpt3x2n driver, always disable the
+primary channel.
 
-xhci_check_args() returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
-xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
-the return value of xhci_check_args <= 0.
-This causes problems for example r8152_submit_rx, calling usb_submit_urb
-in drivers/net/usb/r8152.c.
-r8152_submit_rx will never get -ENODEV after submiting an urb when xHC
-is halted because xhci_urb_enqueue returns -EINVAL in the very beginning.
-
-[commit message and header edit -Mathias]
-
-Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
+Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
 Cc: stable@vger.kernel.org
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220215123320.1253947-3-mathias.nyman@linux.intel.com
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/ata/pata_hpt37x.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1487,9 +1487,12 @@ static int xhci_urb_enqueue(struct usb_h
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
+--- a/drivers/ata/pata_hpt37x.c
++++ b/drivers/ata/pata_hpt37x.c
+@@ -920,6 +920,20 @@ static int hpt37x_init_one(struct pci_de
+ 	pci_write_config_byte(dev, 0x5a, irqmask);
  
--	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
--					true, true, __func__) <= 0)
-+	if (!urb)
- 		return -EINVAL;
-+	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-+					true, true, __func__);
-+	if (ret <= 0)
-+		return ret ? ret : -EINVAL;
- 
- 	slot_id = urb->dev->slot_id;
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
-@@ -3289,7 +3292,7 @@ static int xhci_check_streams_endpoint(s
- 		return -EINVAL;
- 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
- 	if (ret <= 0)
--		return -EINVAL;
-+		return ret ? ret : -EINVAL;
- 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
- 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
- 				" descriptor for ep 0x%x does not support streams\n",
+ 	/*
++	 * HPT371 chips physically have only one channel, the secondary one,
++	 * but the primary channel registers do exist!  Go figure...
++	 * So,  we manually disable the non-existing channel here
++	 * (if the BIOS hasn't done this already).
++	 */
++	if (dev->device == PCI_DEVICE_ID_TTI_HPT371) {
++		u8 mcr1;
++
++		pci_read_config_byte(dev, 0x50, &mcr1);
++		mcr1 &= ~0x04;
++		pci_write_config_byte(dev, 0x50, mcr1);
++	}
++
++	/*
+ 	 * default to pci clock. make sure MA15/16 are set to output
+ 	 * to prevent drives having problems with 40-pin cables. Needed
+ 	 * for some drives such as IBM-DTLA which will not enter ready
 
 

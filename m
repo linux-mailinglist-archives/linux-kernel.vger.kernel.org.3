@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F83C4C7759
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3DF4C7740
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240323AbiB1SPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S232369AbiB1SNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241455AbiB1SJz (ORCPT
+        with ESMTP id S241509AbiB1SKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:09:55 -0500
+        Mon, 28 Feb 2022 13:10:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7EBB45BC;
-        Mon, 28 Feb 2022 09:50:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2364B65FB;
+        Mon, 28 Feb 2022 09:50:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1E2360915;
-        Mon, 28 Feb 2022 17:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1141C340E7;
-        Mon, 28 Feb 2022 17:50:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BCB608D5;
+        Mon, 28 Feb 2022 17:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C608C36AF8;
+        Mon, 28 Feb 2022 17:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070601;
-        bh=BLTmIppxTsWdWze0CZzsQG7uFrPoMqr09GCc5EhtdPY=;
+        s=korg; t=1646070603;
+        bh=ZQSl1PHtTbpi0tBEr5HZNu19R3TkoKzvDwABG6xiSFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evRiHM5R7JUuk5QeFvmnkRbF7ql9ZQ7HSpKZLLcqqL0JlIhMkQxfZZ0AuDORcSA/T
-         R3v8kQo8F0iJNAp9bJOJXXMM/j3p0iIKn5qWm2FVZCmU4axJlvTBRaSGjKyNcOvnj0
-         5JMRLF1xadrv59DGiv2VavR0uu/6PWKbvaKm7HdA=
+        b=Y4I31MxtyIY5/tDMTzgEGy3eRwjHt/0aI8weeVd5Ppx7EqYFFvkvHz7P6UTRbP9zD
+         IYbQkUyYXJ2+rtszRVdt3LpJtu3FWnEzqW6IldA7H3W7YngPa7GwN29e4GLMn0if3a
+         Jw1lTp43X3GaTgU9E01tbMBvlwomhIe1rKXbto4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 148/164] tps6598x: clear int mask on probe failure
-Date:   Mon, 28 Feb 2022 18:25:10 +0100
-Message-Id: <20220228172413.258312561@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 149/164] IB/qib: Fix duplicate sysfs directory name
+Date:   Mon, 28 Feb 2022 18:25:11 +0100
+Message-Id: <20220228172413.335064838@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -55,59 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-commit aba2081e0a9c977396124aa6df93b55ed5912b19 upstream.
+commit 32f57cb1b2c8d6f20aefec7052b1bfeb7e3b69d4 upstream.
 
-The interrupt mask is enabled before any potential failure points in
-the driver, which can leave a failure path where we exit with
-interrupts enabled but the device not live. This causes an infinite
-stream of interrupts on an Apple M1 Pro laptop on USB-C.
+The qib driver load has been failing with the following message:
 
-Add a failure label that's used post enabling interrupts, where we
-mask them again before returning an error.
+  sysfs: cannot create duplicate filename '/devices/pci0000:80/0000:80:02.0/0000:81:00.0/infiniband/qib0/ports/1/linkcontrol'
 
-Suggested-by: Sven Peter <sven@svenpeter.dev>
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Link: https://lore.kernel.org/r/e6b80669-20f3-06e7-9ed5-8951a9c6db6f@kernel.dk
+The patch below has two "linkcontrol" names causing the duplication.
+
+Fix by using the correct "diag_counters" name on the second instance.
+
+Fixes: 4a7aaf88c89f ("RDMA/qib: Use attributes for the port sysfs")
+Link: https://lore.kernel.org/r/1645106372-23004-1-git-send-email-mike.marciniszyn@cornelisnetworks.com
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/tipd/core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/infiniband/hw/qib/qib_sysfs.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 6d27a5b5e3ca..7ffcda94d323 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -761,12 +761,12 @@ static int tps6598x_probe(struct i2c_client *client)
+--- a/drivers/infiniband/hw/qib/qib_sysfs.c
++++ b/drivers/infiniband/hw/qib/qib_sysfs.c
+@@ -541,7 +541,7 @@ static struct attribute *port_diagc_attr
+ };
  
- 	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
- 	if (ret < 0)
--		return ret;
-+		goto err_clear_mask;
- 	trace_tps6598x_status(status);
+ static const struct attribute_group port_diagc_group = {
+-	.name = "linkcontrol",
++	.name = "diag_counters",
+ 	.attrs = port_diagc_attributes,
+ };
  
- 	ret = tps6598x_read32(tps, TPS_REG_SYSTEM_CONF, &conf);
- 	if (ret < 0)
--		return ret;
-+		goto err_clear_mask;
- 
- 	/*
- 	 * This fwnode has a "compatible" property, but is never populated as a
-@@ -855,7 +855,8 @@ static int tps6598x_probe(struct i2c_client *client)
- 	usb_role_switch_put(tps->role_sw);
- err_fwnode_put:
- 	fwnode_handle_put(fwnode);
--
-+err_clear_mask:
-+	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
- 	return ret;
- }
- 
--- 
-2.35.1
-
 
 

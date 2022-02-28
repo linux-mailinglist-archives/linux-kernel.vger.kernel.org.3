@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEFD4C73F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF354C7480
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbiB1Rhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S238556AbiB1Rpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238203AbiB1RfR (ORCPT
+        with ESMTP id S238634AbiB1Rmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:35:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4C488793;
-        Mon, 28 Feb 2022 09:31:17 -0800 (PST)
+        Mon, 28 Feb 2022 12:42:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8299969B;
+        Mon, 28 Feb 2022 09:34:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF84DB815B4;
-        Mon, 28 Feb 2022 17:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 567FAC340F0;
-        Mon, 28 Feb 2022 17:31:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAB10614B9;
+        Mon, 28 Feb 2022 17:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD159C340F1;
+        Mon, 28 Feb 2022 17:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069464;
-        bh=YZuggJDY3P6J7A+3vXvf6+XrhLmtPaUAkcNgWg3zZdI=;
+        s=korg; t=1646069696;
+        bh=etOvP7NoP4v2nHmtWiP7+UhZSaqYO7n/CO0EwG2H8EM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1mQhl8nLOqU1haIwBzjLloEdTqrDClpLNt9R4vr37ffKmGC8b/jhm1ib0m+wsir10
-         KLHEtVtCN2N7CeFjsvveJYH1lsxKftzsoaPSmWVnwJFoa5x5ENtGC1w/Dw7tv7y/k0
-         JQ3lvSqcI+5EjezKYMENtOqwTS2wFeMVr8Oqn8D4=
+        b=i/rR29b7bGbZU4wLq8N1ECywapktFuQpEI4r/fJIJgU1n9zjyhs0Y2nLGgVz33CnO
+         NHvWg46JPId2m3rMq2/hcb5a+OpNHnf/hkc/yIZIZqa9FvYYRrmu3UY9zmlMf2eYb8
+         JoFi4Les7x89jxdKXMYbRMAcdgN6bX2sUIgvvk2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.4 06/53] drm/amdgpu: disable MMHUB PG for Picasso
-Date:   Mon, 28 Feb 2022 18:24:04 +0100
-Message-Id: <20220228172248.781814311@linuxfoundation.org>
+        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH 5.10 24/80] bpf: Do not try bpf_msg_push_data with len 0
+Date:   Mon, 28 Feb 2022 18:24:05 +0100
+Message-Id: <20220228172314.510618848@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Felix Maurer <fmaurer@redhat.com>
 
-commit f626dd0ff05043e5a7154770cc7cda66acee33a3 upstream.
+commit 4a11678f683814df82fca9018d964771e02d7e6d upstream.
 
-MMHUB PG needs to be disabled for Picasso for stability reasons.
+If bpf_msg_push_data() is called with len 0 (as it happens during
+selftests/bpf/test_sockmap), we do not need to do anything and can
+return early.
 
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Calling bpf_msg_push_data() with len 0 previously lead to a wrong ENOMEM
+error: we later called get_order(copy + len); if len was 0, copy + len
+was also often 0 and get_order() returned some undefined value (at the
+moment 52). alloc_pages() caught that and failed, but then bpf_msg_push_data()
+returned ENOMEM. This was wrong because we are most probably not out of
+memory and actually do not need any additional memory.
+
+Fixes: 6fff607e2f14b ("bpf: sk_msg program helper bpf_msg_push_data")
+Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/df69012695c7094ccb1943ca02b4920db3537466.1644421921.git.fmaurer@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/soc15.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/core/filter.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/soc15.c
-+++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-@@ -1143,8 +1143,11 @@ static int soc15_common_early_init(void
- 				AMD_CG_SUPPORT_SDMA_MGCG |
- 				AMD_CG_SUPPORT_SDMA_LS;
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2730,6 +2730,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_
+ 	if (unlikely(flags))
+ 		return -EINVAL;
  
-+			/*
-+			 * MMHUB PG needs to be disabled for Picasso for
-+			 * stability reasons.
-+			 */
- 			adev->pg_flags = AMD_PG_SUPPORT_SDMA |
--				AMD_PG_SUPPORT_MMHUB |
- 				AMD_PG_SUPPORT_VCN;
- 		} else {
- 			adev->cg_flags = AMD_CG_SUPPORT_GFX_MGCG |
++	if (unlikely(len == 0))
++		return 0;
++
+ 	/* First find the starting scatterlist element */
+ 	i = msg->sg.start;
+ 	do {
 
 

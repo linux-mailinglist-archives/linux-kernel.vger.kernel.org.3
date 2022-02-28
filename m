@@ -2,163 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618624C662E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F044C6633
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbiB1JzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S234559AbiB1J5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:57:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiB1JzF (ORCPT
+        with ESMTP id S231304AbiB1J5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:55:05 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7448B1C92D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:54:26 -0800 (PST)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 365B93FC9E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646042065;
-        bh=mna9J1nBg6HOMnow2P6fMcSmE8VXg1IqnH2FURdKmp0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=f/OD2VNO+nXtSZLHFiS1/91UX0fGEmAPWyWnDrf4xz5X/SY5YAZawiScUYFg5m3r9
-         beVPIrBsISVvy0hOr3ZQu0FGpHszTy1K3vFxFLMKbUdbkF5uUMB99IkxRaNe0j4GiQ
-         b5nhxTkUnMbClnZq07HtAMQtQl4sEwK00QJrkCmCYdJtu4UEDHpnL4Ovepm3uYXs1j
-         /MSLJVhfznzVOJkltXzdez+UisBUAj4aSKOgL/RD88xXFL49Wq9iMD5FigQZvOfYc3
-         Ndx6+HZhor5K1SUaIXLDz892YkNsWvzubD3Kw4oOTmzLmMmwM3E8joXjRoVxWlz341
-         YUjLtJdHtgA9w==
-Received: by mail-wm1-f72.google.com with SMTP id 7-20020a1c1907000000b003471d9bbe8dso3966450wmz.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:54:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mna9J1nBg6HOMnow2P6fMcSmE8VXg1IqnH2FURdKmp0=;
-        b=GN8O0Bhccizj8G7xedWoTID6on/QPvdHXRImOYhmPFs5jw1Qb3H3yUUY20VmfIZhbj
-         RjGs5mtlNG6db1Ca2vxmNgLEPtcwM2Or7cxhNZSO4y/885Yu7xaHhqYIa2Kpa92aHIg8
-         utA1cuBzN/snKwPY5VyNt1gC5ns4bh4NywEkOhD81CraKjXQwNvm8k62KI0X3uR+j/Zk
-         a9G3T2147vtb+dygzJakdYSHflR0nTRq0Ew+GshVviZdas38LIJr3R+oF/S2Hc13+nlL
-         EBFXIk87yba6zpBmJxHD2w3FJO71J4ocet1q1RFGrtkPc6vYTyR9hyz4348tCoaasew9
-         7C+A==
-X-Gm-Message-State: AOAM533wZezwaq0a0+SMKcCsh6uxcp2ahawv8BvCM+smFolfmtDqKlzp
-        evWExwX8P6BsuHTadVTu9sHjxsmipYvzkmrI1f2sxXEJRb43eiikLvAR5IIzFrA2VK3RBID8+xX
-        MIHLmXjkonPDiRyncNC/eB0klclsX6Q9AhbuqMZHLpw==
-X-Received: by 2002:a05:6000:162f:b0:1ed:bbef:f7b9 with SMTP id v15-20020a056000162f00b001edbbeff7b9mr15608220wrb.379.1646042064787;
-        Mon, 28 Feb 2022 01:54:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwF4VDklq4C5zzM72nwt08X01T/IfVu/GQ6QrQbbkJljUbB9HduFrRm9IjGHQBgzq6rkjLXyQ==
-X-Received: by 2002:a05:6000:162f:b0:1ed:bbef:f7b9 with SMTP id v15-20020a056000162f00b001edbbeff7b9mr15608187wrb.379.1646042064370;
-        Mon, 28 Feb 2022 01:54:24 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d598a000000b001efab095615sm4434539wri.29.2022.02.28.01.54.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 01:54:23 -0800 (PST)
-Message-ID: <fc3186ce-f731-a7c1-e958-b0071125b32c@canonical.com>
-Date:   Mon, 28 Feb 2022 10:54:21 +0100
+        Mon, 28 Feb 2022 04:57:07 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A5B66222;
+        Mon, 28 Feb 2022 01:56:27 -0800 (PST)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6bNB57Ffz67nQH;
+        Mon, 28 Feb 2022 17:55:22 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 10:56:24 +0100
+Received: from [10.47.86.223] (10.47.86.223) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 28 Feb
+ 2022 09:56:23 +0000
+Message-ID: <8cdc2c64-0a89-b807-56f6-2ea67a41a641@huawei.com>
+Date:   Mon, 28 Feb 2022 09:56:23 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: Add sata nodes to rk356x
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        "devicetree @ vger . kernel . org Damien Le Moal" 
-        <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>
-References: <20220227182800.275572-1-linux@fw-web.de>
- <20220227182800.275572-4-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220227182800.275572-4-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 1/2] drivers/perf: hisi: Add Support for CPA PMU
+To:     Qi Liu <liuqi115@huawei.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <acme@kernel.org>
+CC:     <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
+References: <20220224111129.41416-1-liuqi115@huawei.com>
+ <20220224111129.41416-2-liuqi115@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220224111129.41416-2-liuqi115@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.86.223]
+X-ClientProxiedBy: lhreml708-chm.china.huawei.com (10.201.108.57) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2022 19:28, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On 24/02/2022 11:11, Qi Liu wrote:
+> On HiSilicon Hip09 platform, there is a CPA(Coherency Protocol Agent) on
+> each SICL (Super I/O Cluster) which implements packet format translation,
+> route parsing and traffic statistic.
 > 
-> RK356x supports up to 3 sata controllers which were compatible with the
-> existing snps,dwc-ahci binding.
+> CPA PMU has separate PMU registers which the driver can program freely
+
+I am not sure what you mean by program freely. Most IO mem drivers have 
+registers which we can program.
+
+> and
+> interrupt is supported to handle counter overflow. Let's support its driver
+> under the framework of HiSilicon uncore PMU driver.
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
 > ---
-> changes in v3:
->   - fix combphy error by moving sata0 to rk3568.dtsi
->   - remove clock-names and interrupt-names
-> changes in v2:
->   - added sata0 + 1, but have only tested sata2
-> ---
->  arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 +++++++++++++
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 26 ++++++++++++++++++++++++
->  2 files changed, 40 insertions(+)
+>   drivers/perf/hisilicon/Makefile              |   2 +-
+>   drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c | 401 +++++++++++++++++++
+>   include/linux/cpuhotplug.h                   |   1 +
+>   3 files changed, 403 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> index 5b0f528d6818..2a2f65899d47 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> @@ -8,6 +8,19 @@
->  / {
->  	compatible = "rockchip,rk3568";
->  
-> +	sata0: sata@fc000000 {
-> +		compatible = "snps,dwc-ahci";
-> +		reg = <0 0xfc000000 0 0x1000>;
-> +		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
-> +			 <&cru CLK_SATA0_RXOOB>;
-> +		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-> +		phys = <&combphy0 PHY_TYPE_SATA>;
-> +		phy-names = "sata-phy";
-> +		ports-implemented = <0x1>;
-> +		power-domains = <&power RK3568_PD_PIPE>;
-> +		status = "disabled";
+> diff --git a/drivers/perf/hisilicon/Makefile b/drivers/perf/hisilicon/Makefile
+> index 506ed39e3266..6be83517acaa 100644
+> --- a/drivers/perf/hisilicon/Makefile
+> +++ b/drivers/perf/hisilicon/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   obj-$(CONFIG_HISI_PMU) += hisi_uncore_pmu.o hisi_uncore_l3c_pmu.o \
+>   			  hisi_uncore_hha_pmu.o hisi_uncore_ddrc_pmu.o hisi_uncore_sllc_pmu.o \
+> -			  hisi_uncore_pa_pmu.o
+> +			  hisi_uncore_pa_pmu.o hisi_uncore_cpa_pmu.o
+>   
+>   obj-$(CONFIG_HISI_PCIE_PMU) += hisi_pcie_pmu.o
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> new file mode 100644
+> index 000000000000..00573719f148
+> --- /dev/null
+> +++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> @@ -0,0 +1,401 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * HiSilicon SoC CPA(Coherency Protocol Agent) uncore Hardware event counters support
+
+/s/Hardware/hardware/
+
+> + *
+> + * Copyright (C) 2022 HiSilicon Limited
+> + * Author: Qi Liu <liuqi115@huawei.com>
+> + *
+> + * This code is based on the uncore PMUs like arm-cci and arm-ccn.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/bug.h>
+> +#include <linux/cpuhotplug.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/list.h>
+> +#include <linux/smp.h>
+> +
+> +#include "hisi_uncore_pmu.h"
+> +
+> +/* CPA register definition */
+> +#define CPA_PERF_CTRL		0x1c00
+> +#define CPA_EVENT_CTRL		0x1c04
+> +#define CPA_INT_MASK		0x1c70
+> +#define CPA_INT_STATUS		0x1c78
+> +#define CPA_INT_CLEAR		0x1c7c
+> +#define CPA_EVENT_TYPE0		0x1c80
+> +#define CPA_VERSION		0x1cf0
+> +#define CPA_CNT0_LOWER		0x1d00
+> +#define CPA_CFG_REG		0x0534
+> +
+> +/* CPA operation command */
+> +#define CPA_PERF_CTRL_EN	BIT_ULL(0)
+> +#define CPA_EVTYPE_MASK		0xffUL
+> +#define CPA_PM_CTRL		BIT_ULL(9)
+> +
+> +/* CPA has 8-counters */
+> +#define CPA_NR_COUNTERS		0x8
+> +#define CPA_COUNTER_BITS	64
+> +#define CPA_NR_EVENTS		0xff
+> +#define CPA_REG_OFFSET		0x8
+> +
+> +static u32 hisi_cpa_pmu_get_counter_offset(int idx)
+> +{
+> +	return (CPA_CNT0_LOWER + idx * CPA_REG_OFFSET);
+> +}
+> +
+> +static u64 hisi_cpa_pmu_read_counter(struct hisi_pmu *cpa_pmu,
+> +				     struct hw_perf_event *hwc)
+> +{
+> +	return readq(cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
+> +}
+> +
+> +static void hisi_cpa_pmu_write_counter(struct hisi_pmu *cpa_pmu,
+> +				       struct hw_perf_event *hwc, u64 val)
+> +{
+> +	writeq(val, cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
+> +}
+> +
+> +static void hisi_cpa_pmu_write_evtype(struct hisi_pmu *cpa_pmu, int idx, u32 type)
+> +{
+> +	u32 reg, reg_idx, shift, val;
+> +
+> +	/*
+> +	 * Select the appropriate event select register(CPA_EVENT_TYPE0/1).
+> +	 * There are 2 event select registers for the 8 hardware counters.
+> +	 * Event code is 8-bits and for the former 4 hardware counters,
+> +	 * CPA_EVENT_TYPE0 is chosen. For the latter 4 hardware counters,
+> +	 * CPA_EVENT_TYPE1 is chosen.
+> +	 */
+> +	reg = CPA_EVENT_TYPE0 + (idx / 4) * 4;
+> +	reg_idx = idx % 4;
+> +	shift = CPA_REG_OFFSET * reg_idx;
+> +
+> +	/* Write event code to CPA_EVENT_TYPEx Register */
+> +	val = readl(cpa_pmu->base + reg);
+> +	val &= ~(CPA_EVTYPE_MASK << shift);
+> +	val |= type << shift;
+> +	writel(val, cpa_pmu->base + reg);
+> +}
+> +
+> +static void hisi_cpa_pmu_start_counters(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
+> +	val |= CPA_PERF_CTRL_EN;
+> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
+> +	val &= ~(CPA_PERF_CTRL_EN);
+> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
+
+this seems unique for this new driver - why do we need to disable PM?
+
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
+> +	val |= CPA_PM_CTRL;
+> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
+> +	val &= ~CPA_PM_CTRL;
+
+nit: you use () in hisi_cpa_pmu_stop_counters(), but not here, so please 
+be consistent
+
+> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Enable counter index in CPA_EVENT_CTRL register */
+> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
+> +	val |= 1 << hwc->idx;
+> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
+> +
+> +	/* Power management should be disabled before counting. */
+> +	hisi_cpa_pmu_disable_pm(cpa_pmu);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	hisi_cpa_pmu_enable_pm(cpa_pmu);
+> +
+> +	/* Clear counter index in CPA_EVENT_CTRL register */
+> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
+> +	val &= ~(1UL << hwc->idx);
+> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Write 0 to enable interrupt */
+> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
+> +	val &= ~(1UL << hwc->idx);
+> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Write 1 to mask interrupt */
+> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
+> +	val |= 1 << hwc->idx;
+> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
+> +}
+> +
+> +static u32 hisi_cpa_pmu_get_int_status(struct hisi_pmu *cpa_pmu)
+> +{
+> +	return readl(cpa_pmu->base + CPA_INT_STATUS);
+> +}
+> +
+> +static void hisi_cpa_pmu_clear_int_status(struct hisi_pmu *cpa_pmu, int idx)
+> +{
+> +	writel(1 << idx, cpa_pmu->base + CPA_INT_CLEAR);
+> +}
+> +
+> +static const struct acpi_device_id hisi_cpa_pmu_acpi_match[] = {
+> +	{ "HISI0281", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, hisi_cpa_pmu_acpi_match);
+> +
+> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
+> +				  struct hisi_pmu *cpa_pmu)
+> +{
+> +	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+> +				     &cpa_pmu->sccl_id)) {
+> +		dev_err(&pdev->dev, "Can not read cpa_pmu sccl-id\n");
+
+strange that the FW uses "scl-id" but driver uses sccl_id (I am talking 
+about sccl vs scl difference)
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	cpa_pmu->ccl_id = -1;
+> +
+> +	if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
+> +				     &cpa_pmu->index_id)) {
+> +		dev_err(&pdev->dev, "Cannot read idx-id\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(cpa_pmu->base))
+> +		return PTR_ERR(cpa_pmu->base);
+> +
+> +	cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct attribute *hisi_cpa_pmu_format_attr[] = {
+> +	HISI_PMU_FORMAT_ATTR(event, "config:0-15"),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_format_group = {
+> +	.name = "format",
+> +	.attrs = hisi_cpa_pmu_format_attr,
+> +};
+> +
+> +static struct attribute *hisi_cpa_pmu_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(cpa_cycles,		0x00),
+> +	HISI_PMU_EVENT_ATTR(cpa_p1_wr_dat,	0x61),
+> +	HISI_PMU_EVENT_ATTR(cpa_p1_rd_dat,	0x62),
+> +	HISI_PMU_EVENT_ATTR(cpa_p0_wr_dat,	0xE1),
+> +	HISI_PMU_EVENT_ATTR(cpa_p0_rd_dat,	0xE2),
+
+nit: you were using lower case for hex numbers elsewhere
+
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_cpa_pmu_events_attr,
+> +};
+> +
+> +static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
+> +
+> +static struct attribute *hisi_cpa_pmu_cpumask_attrs[] = {
+> +	&dev_attr_cpumask.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_cpumask_attr_group = {
+> +	.attrs = hisi_cpa_pmu_cpumask_attrs,
+> +};
+> +
+> +static struct device_attribute hisi_cpa_pmu_identifier_attr =
+> +	__ATTR(identifier, 0444, hisi_uncore_pmu_identifier_attr_show, NULL);
+> +
+> +static struct attribute *hisi_cpa_pmu_identifier_attrs[] = {
+> +	&hisi_cpa_pmu_identifier_attr.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_identifier_group = {
+> +	.attrs = hisi_cpa_pmu_identifier_attrs,
+> +};
+> +
+> +static const struct attribute_group *hisi_cpa_pmu_attr_groups[] = {
+> +	&hisi_cpa_pmu_format_group,
+> +	&hisi_cpa_pmu_events_group,
+> +	&hisi_cpa_pmu_cpumask_attr_group,
+> +	&hisi_cpa_pmu_identifier_group,
+> +	NULL
+> +};
+> +
+> +static const struct hisi_uncore_ops hisi_uncore_cpa_pmu_ops = {
+> +	.write_evtype           = hisi_cpa_pmu_write_evtype,
+> +	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
+> +	.start_counters		= hisi_cpa_pmu_start_counters,
+> +	.stop_counters		= hisi_cpa_pmu_stop_counters,
+> +	.enable_counter		= hisi_cpa_pmu_enable_counter,
+> +	.disable_counter	= hisi_cpa_pmu_disable_counter,
+> +	.enable_counter_int	= hisi_cpa_pmu_enable_counter_int,
+> +	.disable_counter_int	= hisi_cpa_pmu_disable_counter_int,
+> +	.write_counter		= hisi_cpa_pmu_write_counter,
+> +	.read_counter		= hisi_cpa_pmu_read_counter,
+> +	.get_int_status		= hisi_cpa_pmu_get_int_status,
+> +	.clear_int_status	= hisi_cpa_pmu_clear_int_status,
+> +};
+> +
+> +static int hisi_cpa_pmu_dev_probe(struct platform_device *pdev,
+> +				  struct hisi_pmu *cpa_pmu)
+> +{
+> +	int ret;
+> +
+> +	ret = hisi_cpa_pmu_init_data(pdev, cpa_pmu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hisi_uncore_pmu_init_irq(cpa_pmu, pdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	cpa_pmu->counter_bits = CPA_COUNTER_BITS;
+> +	cpa_pmu->check_event = CPA_NR_EVENTS;
+> +	cpa_pmu->pmu_events.attr_groups = hisi_cpa_pmu_attr_groups;
+> +	cpa_pmu->ops = &hisi_uncore_cpa_pmu_ops;
+> +	cpa_pmu->num_counters = CPA_NR_COUNTERS;
+> +	cpa_pmu->dev = &pdev->dev;
+> +	cpa_pmu->on_cpu = -1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
+> +{
+> +	struct hisi_pmu *cpa_pmu;
+> +	char *name;
+> +	int ret;
+> +
+> +	cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
+> +	if (!cpa_pmu)
+> +		return -ENOMEM;
+> +
+> +	ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+> +				       &cpa_pmu->node);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
+
+sorry, but I still don't like this "- 1". From checking the chat on v1, 
+my impression was that you agreed with me on this one.
+
+> +			      cpa_pmu->index_id);
+> +
+> +	cpa_pmu->pmu = (struct pmu) {
+> +		.name		= name,
+> +		.module		= THIS_MODULE,
+> +		.task_ctx_nr	= perf_invalid_context,
+> +		.event_init	= hisi_uncore_pmu_event_init,
+> +		.pmu_enable	= hisi_uncore_pmu_enable,
+> +		.pmu_disable	= hisi_uncore_pmu_disable,
+> +		.add		= hisi_uncore_pmu_add,
+> +		.del		= hisi_uncore_pmu_del,
+> +		.start		= hisi_uncore_pmu_start,
+> +		.stop		= hisi_uncore_pmu_stop,
+> +		.read		= hisi_uncore_pmu_read,
+> +		.attr_groups	= cpa_pmu->pmu_events.attr_groups,
+> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
 > +	};
 > +
->  	pipe_phy_grf0: syscon@fdc70000 {
->  		compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
->  		reg = <0x0 0xfdc70000 0x0 0x1000>;
-> @@ -114,3 +127,4 @@ power-domain@RK3568_PD_PIPE {
->  		#power-domain-cells = <0>;
->  	};
->  };
+> +	ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
+> +	if (ret) {
+> +		dev_err(cpa_pmu->dev, "CPA PMU register failed\n");
+
+I don't think that you need to mention "CPA PMU", as the driver name is 
+included in dev_err() prints
+
+> +		cpuhp_state_remove_instance_nocalls(
+> +			CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, cpa_pmu);
+> +	return ret;
+> +}
 > +
 
-No need for new line here,
 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 7cdef800cb3c..484c5ace718a 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -230,6 +230,32 @@ scmi_shmem: sram@0 {
->  		};
->  	};
->  
-> +	sata1: sata@fc400000 {
-> +		compatible = "snps,dwc-ahci";
-> +		reg = <0 0xfc400000 0 0x1000>;
-> +		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
-> +			 <&cru CLK_SATA1_RXOOB>;
-
-clock-names should be added. Also to bindings.
-
-
-Best regards,
-Krzysztof
+Thanks,
+John

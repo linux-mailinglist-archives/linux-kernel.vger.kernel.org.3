@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BE84C65EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A083F4C662A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiB1Jpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        id S234553AbiB1JzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiB1Jp3 (ORCPT
+        with ESMTP id S232079AbiB1JzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:45:29 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BC069CC4;
-        Mon, 28 Feb 2022 01:44:50 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id f21so9834682qke.13;
-        Mon, 28 Feb 2022 01:44:50 -0800 (PST)
+        Mon, 28 Feb 2022 04:55:01 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A834C13F9A;
+        Mon, 28 Feb 2022 01:54:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p4so5331003wmg.1;
+        Mon, 28 Feb 2022 01:54:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m42zzm1A/Uk2fszLihUQmA9ldzbK7Fh11mCVbXlmHhY=;
-        b=BMCIAstrNglzIjoRryZMWNKrJVUS0F+gf66wVvxk/abudp6l7oRiEV9Go/1Tp2Z5UK
-         FZvgp6oJzdOMnvnNWiv4GiobNN5JtxdixkM5HIopzJq4MHyDAUH09wL2Zq8MKRGOY2G3
-         OGFe9OjLjCkrljdSbJTS3hg5mDsKWg+CbHqK0=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U0+Au0d4zAZVX8zuHvuBcFAkWKb2I4OxQR4LPXo/i04=;
+        b=lBmsKprRvQDoqaPn9bYlg31prPOjW/Yb3ltQctqmzTvtjNFxY/HTucaUpL/gguyBcQ
+         h3jPqfWwKcNVgUlz8SzdEbOIeauJXC/EswUoGMXK19kIZyJRF+HDvB8D9mtwxBRoUQiB
+         NrjGYCg81D1I5XotB+WKPsaI9IatCCLrWkDEoXG5pAvTFYWBqBViZy/61vXDrseYAClT
+         CAQnCoTv6iTATd8xs0PGIxJfDFopwl0ijS2pFQWltmOItoAlwJPoVDUCAe2ngtOD7N52
+         ogNAwFlSjiU3ZJzb6GkYEpY3GFGcKulKDqvUW+3Zek78s/X+z/AbUenEa2xDtsFTk4KH
+         7bcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m42zzm1A/Uk2fszLihUQmA9ldzbK7Fh11mCVbXlmHhY=;
-        b=1nB3lGnVZYzJT4lFFXQqVBJ0UQ1MLGw7hzU1GSnhILSSIaKb3LFBEpNfO6UGl0h8Ay
-         GHwX3NsxCfEoNrFbfZeJUvFfNb9eyNM6549bH7NR1xNOrdysu6Uq4tXGZ7MhLea+lZSO
-         kaAZskVAEFQxuGIpuNBehrHqHr3Iw2Gi/sIpG/3xLfKmMm9e4AwuPIpMnzNQl0I2N3TO
-         PcTxnwFLtaR8yHoOyFZFtFSxnsULXtIKUjcPbDeVNOTpJ9WeU/uuvZDMvb81lf5Z2gfc
-         z/dXLKdElKYUhxh7XMwhP9n2XYwqtdnZZaKjFPB6lJMWXM/gRaBSapvWm7o7NI44oi0P
-         nlrQ==
-X-Gm-Message-State: AOAM531LFkYF3BUzlpiEfDy9EZqB9vo6ZJUVZajbGY2lNC+0iqoRWb2j
-        rAjkX68um19Lu0edNLy/kJXHAZp+Wmv5vzxMZVA=
-X-Google-Smtp-Source: ABdhPJymavUC7phOQxSAzrnChJkit6X3vSfBJh8VvkrOfuYY39VSMX5xk/p7XeOex4FlAIcndtpkSyXMeeVQYGpGKKo=
-X-Received: by 2002:a37:f903:0:b0:648:ca74:b7dc with SMTP id
- l3-20020a37f903000000b00648ca74b7dcmr10471405qkj.666.1646041489765; Mon, 28
- Feb 2022 01:44:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U0+Au0d4zAZVX8zuHvuBcFAkWKb2I4OxQR4LPXo/i04=;
+        b=YdCKfYTp8fGRGBIB2mVnn0943Dal1yKTIO4KQ2jBery8LbHLlCDGadakinY+DAp7g0
+         c4/5qFfhajeNlI1hwu1zaw/wYtJNSUvmMMbPf5zzbiCotQ3aKRVdyWSjlxrptvKhOlaK
+         caJlFO2u73/S6YDh4E/a+3PnW3Qc4aWwWcD0/jPaJ7A9yySouqaTfIENHRLeDF2ciTDR
+         OFrnMPIalHeZhFxxWYr09WSyuf2XJjvdZkZaDdFlE/jtVH26gaG9s/vU2VfylhntLAqg
+         uokWVLx9GfXPhnXRbHCS2de2QM2sVuqaXDOZBaHYnXJcXB3VvCyAqqxgeV3qVaoa+XMb
+         vU2A==
+X-Gm-Message-State: AOAM533CtQxH6WgRWXPo0gcRIIr6/iVmkpSAU6Nxr0IQeDmMCmNkdGj8
+        c07VvwRrytyjA12fhZgaiB0=
+X-Google-Smtp-Source: ABdhPJynDyT2YmvMVI1b9GAPVRUaqoNLjRwFrVI46TNy1tFuIgSt6Ei0JnwCeteZP+gsMvr1dfXmLg==
+X-Received: by 2002:a1c:2b41:0:b0:380:e379:b8b0 with SMTP id r62-20020a1c2b41000000b00380e379b8b0mr12638344wmr.87.1646042061055;
+        Mon, 28 Feb 2022 01:54:21 -0800 (PST)
+Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1cf406000000b0037c4e2d3baesm13854560wma.19.2022.02.28.01.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 01:54:20 -0800 (PST)
+Message-ID: <b189dee6-a697-6db5-e834-6a5fe6f75f8f@gmail.com>
+Date:   Mon, 28 Feb 2022 10:45:51 +0100
 MIME-Version: 1.0
-References: <20211208013337.13806-1-tommy_huang@aspeedtech.com> <20211208013337.13806-5-tommy_huang@aspeedtech.com>
-In-Reply-To: <20211208013337.13806-5-tommy_huang@aspeedtech.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 28 Feb 2022 09:44:37 +0000
-Message-ID: <CACPK8XfJH=h_0f2Wp5akLWtdJwd=bmGdhrqJY8qrK9RX=4NtVQ@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] drm/aspeed: Add AST2600 chip support
-To:     Tommy Haung <tommy_huang@aspeedtech.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arm64: dts: mt8192: Add watchdog node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220207094024.22674-1-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220207094024.22674-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 01:34, Tommy Haung <tommy_huang@aspeedtech.com> wrote:
->
-> From: tommy-huang <tommy_huang@aspeedtech.com>
->
-> Add AST2600 chip support and setting.
->
-> Signed-off-by: tommy-huang <tommy_huang@aspeedtech.com>
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+On 07/02/2022 10:40, Allen-KH Cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> Add watchdog device node to MT8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+
+Applied thanks!
+
+Matthias
 
 > ---
->  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-> index d4b56b3c7597..d10246b1d1c2 100644
-> --- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-> @@ -82,9 +82,18 @@ static const struct aspeed_gfx_config ast2500_config = {
->         .scan_line_max = 128,
->  };
->
-> +static const struct aspeed_gfx_config ast2600_config = {
-> +       .dac_reg = 0xc0,
-> +       .int_clear_reg = 0x68,
-> +       .vga_scratch_reg = 0x50,
-> +       .throd_val = CRT_THROD_LOW(0x50) | CRT_THROD_HIGH(0x70),
-> +       .scan_line_max = 128,
-> +};
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index cc3953df0153..c1d4030e7e4b 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -301,6 +301,12 @@
+>   			#interrupt-cells = <2>;
+>   		};
+>   
+> +		watchdog: watchdog@10007000 {
+> +			compatible = "mediatek,mt8192-wdt";
+> +			reg = <0 0x10007000 0 0x100>;
+> +			#reset-cells = <1>;
+> +		};
 > +
->  static const struct of_device_id aspeed_gfx_match[] = {
->         { .compatible = "aspeed,ast2400-gfx", .data = &ast2400_config },
->         { .compatible = "aspeed,ast2500-gfx", .data = &ast2500_config },
-> +       { .compatible = "aspeed,ast2600-gfx", .data = &ast2600_config },
->         { },
->  };
->  MODULE_DEVICE_TABLE(of, aspeed_gfx_match);
-> --
-> 2.17.1
->
+>   		apmixedsys: syscon@1000c000 {
+>   			compatible = "mediatek,mt8192-apmixedsys", "syscon";
+>   			reg = <0 0x1000c000 0 0x1000>;

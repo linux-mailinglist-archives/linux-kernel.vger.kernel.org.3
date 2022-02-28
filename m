@@ -2,449 +2,775 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1714C6081
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28BC4C608F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 02:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiB1BAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 20:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S232090AbiB1BEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 20:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiB1A77 (ORCPT
+        with ESMTP id S229565AbiB1BEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 19:59:59 -0500
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00070.outbound.protection.outlook.com [40.107.0.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83530522E9;
-        Sun, 27 Feb 2022 16:59:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fzOV6YFxeXEFY1Y//aBiJekvxQjpOY87DbyIcQOdpUp0MmXDt5eYe68VRtUoIyi7judt6YXWfUd3khGiaUQwCWlM+8Skb49GjspPaYcdWOM1d1E2ZWxvQg56+P6MbyfdVPwV4uQOEfIzItr0eZN2eVSbKwiFOdEQvlSxeifQf8mmWGfNb0y4KLe22XEAvP2dksfi2em+Aw+jlYqedKQzAkurR6r/A11I6qzQhyBHXD+wEm3GOteKLA2mrTbtGjyGYBbcD9mp+tp092zHJbiSBg4CRa+s4BzkD+WnmL0F5A9wo3uGFKqTpsbzcM0ogM7JlgA0GvHdPrKdbdmIvJHKGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fBGgrEECbAqInweHGgVtWlxWdzj2F5lKmjC+sCzsdtY=;
- b=Cll7PuFR+yx5TJOg2bWKAO1V/BuFGTi5SnERSRXEp+sg+ufMxbCBBi2xoE/Go682zwvP+jvaS3GPFbMA8fI0bUbJFNPuH+VXJmxKCA9aLG5dzbSjQ0k/RWb3KlkgtnfUFi5xGATE7LeIEPh78343e/UP1wAmqjyEEtcRcmaeO8BkibTXRp3RwJ7Vx/QyvdSUmgRDYg/rDsAZiIBa1YsN4k0h0ABFdTTo4+Rg0ZQtWJ3gY+o9xx0hmgKGoy87ayEPW4Fz3+DzZVHBgHpD5VzIF77ZdYJONSQotEo8iknGRRf//5tng4AtH5NFOYq5TlhNWRVNd2bQPyVbV7aT9k1iMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fBGgrEECbAqInweHGgVtWlxWdzj2F5lKmjC+sCzsdtY=;
- b=G04Qg3kM3MNWs+HWuvBJLtW5BSgjDMF1TBtWZqCs7dxuAk+3n5HTFkcURjvBIVPcpsEUX3ybV0M0865ZM1Gmxj2VSVnAFdmtwlVSSn0Qzkcr+4YEFbnN/kQCNEVg3KfQGYJyrXxxheTCHdOUR/TvZ9HjBJuPixZ2xS//PYUBKhM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM0PR04MB5412.eurprd04.prod.outlook.com (2603:10a6:208:10f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Mon, 28 Feb
- 2022 00:59:19 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::552c:ed46:26dc:77cc]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::552c:ed46:26dc:77cc%4]) with mapi id 15.20.4995.018; Mon, 28 Feb 2022
- 00:59:19 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     aisheng.dong@nxp.com, festevam@gmail.com, shawnguo@kernel.org,
-        stefan@agner.ch, robh+dt@kernel.org
-Cc:     kernel@pengutronix.de, linus.walleij@linaro.org, linux-imx@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2 2/2] pinctrl: imx93: Add pinctrl driver support
-Date:   Mon, 28 Feb 2022 09:01:03 +0800
-Message-Id: <20220228010103.2725893-2-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220228010103.2725893-1-peng.fan@oss.nxp.com>
-References: <20220228010103.2725893-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0013.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::25)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        Sun, 27 Feb 2022 20:04:40 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB374FC7C;
+        Sun, 27 Feb 2022 17:04:01 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id u17-20020a056830231100b005ad13358af9so8285430ote.11;
+        Sun, 27 Feb 2022 17:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=YftxN0S2nRNQ5m4RrG78Rn9xYJP2z0ofQ3Ky2bC1fd4=;
+        b=WCYTm29GBKBntw7nPY7BEebwR5ALmttVIcwpZtusmXMP5XuBd4OWwpyFpLFwiY6Dg9
+         CM/GMQB+EMDor0K+wZAMwYGkqmOQxrduVpCaUS+IgBxl9qqbNTp/+RjEHC18Y7UbOq4Y
+         /oCdWQNQmEIp0v0cfVz00ClZXMEcRE8s0A7UFNq1U6Eh12mCL1yBqPeW0np3b3OPDGo9
+         AEg1dbhvMstB152On0KqelmNRFnxkwp4ODLpV0M9hMROyDPQMe0Mo0HEFZ5WDgz3WwBw
+         z1jQpwIA+l2qJ3JFY4vhwlZ1m+XEQwhrPYSUXnTsOrv0okH5vyyMrQr9w4qiAXShLo9N
+         NwhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=YftxN0S2nRNQ5m4RrG78Rn9xYJP2z0ofQ3Ky2bC1fd4=;
+        b=Z6hixPydA5RPNBq0SQLv2U8uH2wiYlhWc4D+L5j5TIXSGiZBxaszDU8zl0T7T3MBed
+         ExvCp4QWD5lgNGQnLTqAOIPc/nVaGSiZdVlXJvybt5zSR5cs3ol5e7yE6Pey/WOKUq/R
+         U64wOiFdmz4XS8DnJUfvQvabvkyQWmv/mOh7FciPWIdunOEub3l61bJIbEoFThLCVilE
+         VdGjRiBMnO8f2D2sGB/gVi9iAkkAkIqu9K8A69BezoviVRzLtWZglPDrMzYSt9mf+Vs7
+         KaHYZCwUk2hf4V0rrlKj+B3r5tu7oIPBE1JlabpR8cagPpNMPHh7S+2/voQ3ZCm7uUdy
+         9Kdg==
+X-Gm-Message-State: AOAM531GBgPU5OdIXwV539B67fO+HHURiSkqgagveKs7SDJuMaScf8cT
+        nWwIBTTsfMRLuxCUw1PLDHM=
+X-Google-Smtp-Source: ABdhPJyjp3sYi47/K1qnhIbSE6HFAxbeVDHYDJBAP2/FEKBUPZhy0clTyAb+V98dGsJ65wTxYEvPUg==
+X-Received: by 2002:a9d:d11:0:b0:5a2:1af6:5610 with SMTP id 17-20020a9d0d11000000b005a21af65610mr7999545oti.316.1646010241061;
+        Sun, 27 Feb 2022 17:04:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 67-20020aca0746000000b002d71928659dsm5184356oih.8.2022.02.27.17.03.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 17:04:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 27 Feb 2022 17:03:58 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Farbwerk 360
+Message-ID: <20220228010358.GA169239@roeck-us.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 44d01706-ecd5-402a-2c18-08d9fa558cbf
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5412:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB54128085DE020AB608B58F0BC9019@AM0PR04MB5412.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PZGmRlHsineY6D2+HUL9C2g+Pg32Gihe051DQvFqg0dXFn4n26U93T8Bm9qbTdiwPuEQRTW7UHHh1QUhOLAoDqtftLgQ8RYxi72cYWH+Lbuu+wfZYpOr5qAfK1M2pFDRP+cSDBcv5F+sV/nqVwAmzKotToHHw5ZD1ypOs0W7eg3lm+icXXGvJoyDt4fnTEFtx3pUa8KgezcWHQRDUCafWEX5fHF/bk47Zr+SFshMwQVlNCXHV7RLQasi28wM0QwvChD+ggvQLsnMzSQXCHybKPBvUA59TAoK57mf32BlpwpxCUBuwQkM+jkyGf9cOScRkPBzO9ZTJqpTNDl3uUuEMet+4XI2XtuPstvkzTKhBeboTPU7cedXgkxLnoGqT2SpRQDjjSiL6LwWDvGsqyTyAtBNTgX27Efum4VE36AxzekXnOca0EHOYR0aVolcQaNgoj1biHAr8MCssC5L1DzXK4kGzoqBRluwEQ39I1ztTGe7w2c9qdSclzk/6gSTe0LcuJ5GMiZ14RO9iTXwWRof7Q/jdM96NsbCVrgGzgZkU2j6g91SWQdpC6YMiiPPdEiQfswupLBASZXSZKB8Nsq0G6Xfwjcwxtjsfaz6OzT21FMw4GmQQnzHxScZ8PP2c8zq+FawNAZp61OkZAguk6WmSJdHAWTgOosik7tWoB7nbq50yDk1gAlG20SFkMf7ikkFHSnZ+LNna01mVX/IlgwnXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(66946007)(66556008)(66476007)(8676002)(4326008)(86362001)(6506007)(6486002)(52116002)(38350700002)(30864003)(6666004)(2616005)(316002)(2906002)(6512007)(8936002)(7416002)(26005)(186003)(5660300002)(508600001)(54906003)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hCuq/Udkh3QbiPNYgdXi4lJQJfGu+sEuPC1WYQLXAiIvlCQFYl+TJ/CaknuN?=
- =?us-ascii?Q?D74fF2v4L+b42k8ji21j5k4PgL5lb5hgQ25+YEQDm6hNksBJOcyNoJgt3qgM?=
- =?us-ascii?Q?WtQ6sMl+j5YJ8ZSAEJ9H1l38eGb+bWsRSooFg+vHHPraNW6FSOH2YBlD7tYN?=
- =?us-ascii?Q?Q18LXkRCKyGFnuqeaLvVX93kgA/7PA4F1Su53KgP3croMk1Xu/vsq9+37MVS?=
- =?us-ascii?Q?GFWFs2NAqueftGUY83O4fnNfz1YiYLxyHXdE1HJOWhdlLiE0P55m/BS9I78E?=
- =?us-ascii?Q?WSqpbvqhhx1fMrHZndl47lOC1d5TyvAdUngzd66RkMytW3JaIwxD903GLqZw?=
- =?us-ascii?Q?HX4p/fXOXc7lhxALhDnTdHUecERdjaCKl+RKL25SL0F3KqK8nMLg9IG0ptyw?=
- =?us-ascii?Q?IF1XcrNH8LhkFMtO5bkHgosdpfsK7uJTVlkRmk77MaT2mZVky84EcG3xCdpE?=
- =?us-ascii?Q?iN8Hz/S0sqDT9hNRzfKc2HcaaBkwbVHbha/HdBUX/uvJFKQ053yz1x8z5TcG?=
- =?us-ascii?Q?0mxFnKyI97dE9IWb96QZ/q5/QT0In5rnc4bBydOUq6K3rbqkw7WO3uClPC2d?=
- =?us-ascii?Q?h3VnUE968jF9L9Cg2Wyeig5kzmNwdHkN2kCYq0FL2Pnch2SuQf/7pIBAuhiz?=
- =?us-ascii?Q?FGxYr1yoq0UaJOrB+QUu1bOFofKiOs5p4QUjZeNfDv7A1WY2k6egk516fR7O?=
- =?us-ascii?Q?yJwqmoJZFEU0Dwt3uOqEYdHctx/1PMz//yxnyB7/lFTrLtOUrS0DUm3q2Fam?=
- =?us-ascii?Q?thKewPsh3VQ/VUyrAPfQ+nPv7W1/R6YCEBtk2YQxXlBoc4DKKdUGoMsziJwR?=
- =?us-ascii?Q?GIr8aC0QgE3ZprgAbNJqUE6ETlHcUESFhQRxlWsjp1fy95JqWDtmnbUFS6Gu?=
- =?us-ascii?Q?yyYfmEtIYOug63FW48XWML8hTWieND3Yg8eV07IFNulUfhKTiGkG5HXXtxGs?=
- =?us-ascii?Q?M3kImZMtDA43MLnCzQJtBHIDVfzw0rjj8jtkE+eLd4vVZuHAWaNz4LNFmmmv?=
- =?us-ascii?Q?fU0YwspcvLmM5k80ISFy8C5ti0Ix/5NztpaK2pEegYZDiFhZyVzxUbqXqFI4?=
- =?us-ascii?Q?duR6cIz+EnvmNQzZsRQ2eHOPBzS9xpH8X15nYUdIvMvKABVqscUabVD9boVL?=
- =?us-ascii?Q?D1zkOuIqiBzpZCDYMYtZJ3dYAuidsVmFnLaoIQs/LaPK1GLrCDdzVJLg5kg2?=
- =?us-ascii?Q?xM4j4FFcXBBvRpL7Fc8sWcQ6fQRcNg3rw7PPsfKasb2O62cE8oY824sAt8iW?=
- =?us-ascii?Q?yTJ96YO1eQjJdWTumw41TtX4G2F1khSkrHZFtYhF6O9yxm/iFxPBYxDSq1wh?=
- =?us-ascii?Q?MbjxB2Vgbw4fmIzzxLCeE5tKt+x3fVLPgPJnLMkTNbrPhSwY0PfZLJV3cdJy?=
- =?us-ascii?Q?jftfgoahkpX2WJIqIASD3LQqeDeMQ5r8uU7dyngqxZXDjAPAONqQ3oP6CpSp?=
- =?us-ascii?Q?zSeqFPb5LsINphjiB387sQ65fXqjLBTLNPEN4m2UC6G8eQ9kC2pTMRldqYhd?=
- =?us-ascii?Q?2ykYlRtW9Frzi4S/CJpv/ZYwde5HD3R9DylCf53hcY8KVp2v+lgxRPimUGFx?=
- =?us-ascii?Q?8GdpqhVvQ5dR/uAD6OpnlKeThdzWI6+bkUcMfv/UNSvCJKaxl9ZFZq2Up/+6?=
- =?us-ascii?Q?slNWtTOZrLOwlsYa0Kd6FcU=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44d01706-ecd5-402a-2c18-08d9fa558cbf
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 00:59:19.3420
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TIeuDwb8c8z7RAeWGc/uQgDNzHaJ+FHZiJDus5clvHK/S7KWBKK8vVYafful5u2EjNnFFdhUfIqFDVRy/INkUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5412
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacky Bai <ping.bai@nxp.com>
+On Sun, Feb 27, 2022 at 09:56:25PM +0100, Aleksa Savic wrote:
+> Extend aquacomputer_d5next driver to expose hardware temperature sensors
+> of the Aquacomputer Farbwerk 360 RGB controller, which communicates through
+> a proprietary USB HID protocol.
+> 
+> Four temperature sensors are available. Additionally, serial number and
+> firmware version are exposed through debugfs.
+> 
+> This driver has been tested on x86_64.
+> 
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Add i.MX93 pinctrl driver
+Applied to hwmon-next.
 
-Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
+Thanks,
+Guenter
 
-V2:
- None
-
- drivers/pinctrl/freescale/Kconfig         |   7 +
- drivers/pinctrl/freescale/Makefile        |   1 +
- drivers/pinctrl/freescale/pinctrl-imx93.c | 272 ++++++++++++++++++++++
- 3 files changed, 280 insertions(+)
- create mode 100644 drivers/pinctrl/freescale/pinctrl-imx93.c
-
-diff --git a/drivers/pinctrl/freescale/Kconfig b/drivers/pinctrl/freescale/Kconfig
-index 8bdafaf40b29..453dc47f4fa4 100644
---- a/drivers/pinctrl/freescale/Kconfig
-+++ b/drivers/pinctrl/freescale/Kconfig
-@@ -180,6 +180,13 @@ config PINCTRL_IMXRT1050
- 	help
- 	  Say Y here to enable the imxrt1050 pinctrl driver
- 
-+config PINCTRL_IMX93
-+	tristate "IMX93 pinctrl driver"
-+	depends on ARCH_MXC
-+	select PINCTRL_IMX
-+	help
-+	  Say Y here to enable the imx93 pinctrl driver
-+
- config PINCTRL_VF610
- 	bool "Freescale Vybrid VF610 pinctrl driver"
- 	depends on SOC_VF610
-diff --git a/drivers/pinctrl/freescale/Makefile b/drivers/pinctrl/freescale/Makefile
-index 565a0350bf09..9f5d1c090338 100644
---- a/drivers/pinctrl/freescale/Makefile
-+++ b/drivers/pinctrl/freescale/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_PINCTRL_IMX8QM)	+= pinctrl-imx8qm.o
- obj-$(CONFIG_PINCTRL_IMX8QXP)	+= pinctrl-imx8qxp.o
- obj-$(CONFIG_PINCTRL_IMX8DXL)	+= pinctrl-imx8dxl.o
- obj-$(CONFIG_PINCTRL_IMX8ULP)	+= pinctrl-imx8ulp.o
-+obj-$(CONFIG_PINCTRL_IMX93)	+= pinctrl-imx93.o
- obj-$(CONFIG_PINCTRL_VF610)	+= pinctrl-vf610.o
- obj-$(CONFIG_PINCTRL_MXS)	+= pinctrl-mxs.o
- obj-$(CONFIG_PINCTRL_IMX23)	+= pinctrl-imx23.o
-diff --git a/drivers/pinctrl/freescale/pinctrl-imx93.c b/drivers/pinctrl/freescale/pinctrl-imx93.c
-new file mode 100644
-index 000000000000..c0630f69e995
---- /dev/null
-+++ b/drivers/pinctrl/freescale/pinctrl-imx93.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2021 NXP
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
-+
-+#include "pinctrl-imx.h"
-+
-+enum imx93_pads {
-+	IMX93_IOMUXC_DAP_TDI = 0,
-+	IMX93_IOMUXC_DAP_TMS_SWDIO = 1,
-+	IMX93_IOMUXC_DAP_TCLK_SWCLK = 2,
-+	IMX93_IOMUXC_DAP_TDO_TRACESWO = 3,
-+	IMX93_IOMUXC_GPIO_IO00 = 4,
-+	IMX93_IOMUXC_GPIO_IO01 = 5,
-+	IMX93_IOMUXC_GPIO_IO02 = 6,
-+	IMX93_IOMUXC_GPIO_IO03 = 7,
-+	IMX93_IOMUXC_GPIO_IO04 = 8,
-+	IMX93_IOMUXC_GPIO_IO05 = 9,
-+	IMX93_IOMUXC_GPIO_IO06 = 10,
-+	IMX93_IOMUXC_GPIO_IO07 = 11,
-+	IMX93_IOMUXC_GPIO_IO08 = 12,
-+	IMX93_IOMUXC_GPIO_IO09 = 13,
-+	IMX93_IOMUXC_GPIO_IO10 = 14,
-+	IMX93_IOMUXC_GPIO_IO11 = 15,
-+	IMX93_IOMUXC_GPIO_IO12 = 16,
-+	IMX93_IOMUXC_GPIO_IO13 = 17,
-+	IMX93_IOMUXC_GPIO_IO14 = 18,
-+	IMX93_IOMUXC_GPIO_IO15 = 19,
-+	IMX93_IOMUXC_GPIO_IO16 = 20,
-+	IMX93_IOMUXC_GPIO_IO17 = 21,
-+	IMX93_IOMUXC_GPIO_IO18 = 22,
-+	IMX93_IOMUXC_GPIO_IO19 = 23,
-+	IMX93_IOMUXC_GPIO_IO20 = 24,
-+	IMX93_IOMUXC_GPIO_IO21 = 25,
-+	IMX93_IOMUXC_GPIO_IO22 = 26,
-+	IMX93_IOMUXC_GPIO_IO23 = 27,
-+	IMX93_IOMUXC_GPIO_IO24 = 28,
-+	IMX93_IOMUXC_GPIO_IO25 = 29,
-+	IMX93_IOMUXC_GPIO_IO26 = 30,
-+	IMX93_IOMUXC_GPIO_IO27 = 31,
-+	IMX93_IOMUXC_GPIO_IO28 = 32,
-+	IMX93_IOMUXC_GPIO_IO29 = 33,
-+	IMX93_IOMUXC_CCM_CLKO1 = 34,
-+	IMX93_IOMUXC_CCM_CLKO2 = 35,
-+	IMX93_IOMUXC_CCM_CLKO3 = 36,
-+	IMX93_IOMUXC_CCM_CLKO4 = 37,
-+	IMX93_IOMUXC_ENET1_MDC = 38,
-+	IMX93_IOMUXC_ENET1_MDIO = 39,
-+	IMX93_IOMUXC_ENET1_TD3 = 40,
-+	IMX93_IOMUXC_ENET1_TD2 = 41,
-+	IMX93_IOMUXC_ENET1_TD1 = 42,
-+	IMX93_IOMUXC_ENET1_TD0 = 43,
-+	IMX93_IOMUXC_ENET1_TX_CTL = 44,
-+	IMX93_IOMUXC_ENET1_TXC = 45,
-+	IMX93_IOMUXC_ENET1_RX_CTL = 46,
-+	IMX93_IOMUXC_ENET1_RXC = 47,
-+	IMX93_IOMUXC_ENET1_RD0 = 48,
-+	IMX93_IOMUXC_ENET1_RD1 = 49,
-+	IMX93_IOMUXC_ENET1_RD2 = 50,
-+	IMX93_IOMUXC_ENET1_RD3 = 51,
-+	IMX93_IOMUXC_ENET2_MDC = 52,
-+	IMX93_IOMUXC_ENET2_MDIO = 53,
-+	IMX93_IOMUXC_ENET2_TD3 = 54,
-+	IMX93_IOMUXC_ENET2_TD2 = 55,
-+	IMX93_IOMUXC_ENET2_TD1 = 56,
-+	IMX93_IOMUXC_ENET2_TD0 = 57,
-+	IMX93_IOMUXC_ENET2_TX_CTL = 58,
-+	IMX93_IOMUXC_ENET2_TXC = 59,
-+	IMX93_IOMUXC_ENET2_RX_CTL = 60,
-+	IMX93_IOMUXC_ENET2_RXC = 61,
-+	IMX93_IOMUXC_ENET2_RD0 = 62,
-+	IMX93_IOMUXC_ENET2_RD1 = 63,
-+	IMX93_IOMUXC_ENET2_RD2 = 64,
-+	IMX93_IOMUXC_ENET2_RD3 = 65,
-+	IMX93_IOMUXC_SD1_CLK = 66,
-+	IMX93_IOMUXC_SD1_CMD = 67,
-+	IMX93_IOMUXC_SD1_DATA0 = 68,
-+	IMX93_IOMUXC_SD1_DATA1 = 69,
-+	IMX93_IOMUXC_SD1_DATA2 = 70,
-+	IMX93_IOMUXC_SD1_DATA3 = 71,
-+	IMX93_IOMUXC_SD1_DATA4 = 72,
-+	IMX93_IOMUXC_SD1_DATA5 = 73,
-+	IMX93_IOMUXC_SD1_DATA6 = 74,
-+	IMX93_IOMUXC_SD1_DATA7 = 75,
-+	IMX93_IOMUXC_SD1_STROBE = 76,
-+	IMX93_IOMUXC_SD2_VSELECT = 77,
-+	IMX93_IOMUXC_SD3_CLK = 78,
-+	IMX93_IOMUXC_SD3_CMD = 79,
-+	IMX93_IOMUXC_SD3_DATA0 = 80,
-+	IMX93_IOMUXC_SD3_DATA1 = 81,
-+	IMX93_IOMUXC_SD3_DATA2 = 82,
-+	IMX93_IOMUXC_SD3_DATA3 = 83,
-+	IMX93_IOMUXC_SD2_CD_B = 84,
-+	IMX93_IOMUXC_SD2_CLK = 85,
-+	IMX93_IOMUXC_SD2_CMD = 86,
-+	IMX93_IOMUXC_SD2_DATA0 = 87,
-+	IMX93_IOMUXC_SD2_DATA1 = 88,
-+	IMX93_IOMUXC_SD2_DATA2 = 89,
-+	IMX93_IOMUXC_SD2_DATA3 = 90,
-+	IMX93_IOMUXC_SD2_RESET_B = 91,
-+	IMX93_IOMUXC_I2C1_SCL = 92,
-+	IMX93_IOMUXC_I2C1_SDA = 93,
-+	IMX93_IOMUXC_I2C2_SCL = 94,
-+	IMX93_IOMUXC_I2C2_SDA = 95,
-+	IMX93_IOMUXC_UART1_RXD = 96,
-+	IMX93_IOMUXC_UART1_TXD = 97,
-+	IMX93_IOMUXC_UART2_RXD = 98,
-+	IMX93_IOMUXC_UART2_TXD = 99,
-+	IMX93_IOMUXC_PDM_CLK = 100,
-+	IMX93_IOMUXC_PDM_BIT_STREAM0 = 101,
-+	IMX93_IOMUXC_PDM_BIT_STREAM1 = 102,
-+	IMX93_IOMUXC_SAI1_TXFS = 103,
-+	IMX93_IOMUXC_SAI1_TXC = 104,
-+	IMX93_IOMUXC_SAI1_TXD0 = 105,
-+	IMX93_IOMUXC_SAI1_RXD0 = 106,
-+	IMX93_IOMUXC_WDOG_ANY  = 107,
-+};
-+
-+/* Pad names for the pinmux subsystem */
-+static const struct pinctrl_pin_desc imx93_pinctrl_pads[] = {
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_DAP_TDI),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_DAP_TMS_SWDIO),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_DAP_TCLK_SWCLK),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_DAP_TDO_TRACESWO),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO00),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO01),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO02),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO03),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO04),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO05),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO06),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO07),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO08),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO09),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO10),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO11),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO12),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO13),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO14),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO15),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO16),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO17),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO18),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO19),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO20),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO21),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO22),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO23),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO24),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO25),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO26),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO27),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO28),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_GPIO_IO29),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_CCM_CLKO1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_CCM_CLKO2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_CCM_CLKO3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_CCM_CLKO4),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_MDC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_MDIO),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TD3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TD2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TD1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TX_CTL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_TXC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RX_CTL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RXC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RD1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RD2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET1_RD3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_MDC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_MDIO),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TD3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TD2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TD1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TX_CTL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_TXC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RX_CTL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RXC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RD1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RD2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_ENET2_RD3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_CLK),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_CMD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA4),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA5),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA6),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_DATA7),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD1_STROBE),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_VSELECT),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_CLK),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_CMD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_DATA0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_DATA1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_DATA2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD3_DATA3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_CD_B),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_CLK),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_CMD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_DATA0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_DATA1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_DATA2),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_DATA3),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SD2_RESET_B),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_I2C1_SCL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_I2C1_SDA),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_I2C2_SCL),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_I2C2_SDA),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_UART1_RXD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_UART1_TXD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_UART2_RXD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_UART2_TXD),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_PDM_CLK),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_PDM_BIT_STREAM0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_PDM_BIT_STREAM1),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SAI1_TXFS),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SAI1_TXC),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SAI1_TXD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_SAI1_RXD0),
-+	IMX_PINCTRL_PIN(IMX93_IOMUXC_WDOG_ANY),
-+};
-+
-+static const struct imx_pinctrl_soc_info imx93_pinctrl_info = {
-+	.pins = imx93_pinctrl_pads,
-+	.npins = ARRAY_SIZE(imx93_pinctrl_pads),
-+	.gpr_compatible = "fsl,imx93-iomuxc-gpr",
-+};
-+
-+static const struct of_device_id imx93_pinctrl_of_match[] = {
-+	{ .compatible = "fsl,imx93-iomuxc", },
-+	{ /* sentinel */ }
-+};
-+
-+static int imx93_pinctrl_probe(struct platform_device *pdev)
-+{
-+	return imx_pinctrl_probe(pdev, &imx93_pinctrl_info);
-+}
-+
-+static struct platform_driver imx93_pinctrl_driver = {
-+	.driver = {
-+		.name = "imx93-pinctrl",
-+		.of_match_table = imx93_pinctrl_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe = imx93_pinctrl_probe,
-+};
-+
-+static int __init imx93_pinctrl_init(void)
-+{
-+	return platform_driver_register(&imx93_pinctrl_driver);
-+}
-+arch_initcall(imx93_pinctrl_init);
-+
-+MODULE_AUTHOR("Bai Ping <ping.bai@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX93 pinctrl driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
-
+> ---
+> Changes in v4:
+> - Fix formatting issues
+> 
+> Changes in v3:
+> - Reformatted channel info and array holding device names
+> - Shortened prefix of methods and structs to aqc
+> 
+> Changes in v2:
+> - Extended the existing aquacomputer_d5next driver instead of creating
+>   a new one and extended docs
+> - Moved asm include to the end
+> - Report ENODATA if sensor is disconnected instead of 0 degrees
+> ---
+>  Documentation/hwmon/aquacomputer_d5next.rst |  49 ++-
+>  drivers/hwmon/aquacomputer_d5next.c         | 379 +++++++++++++-------
+>  2 files changed, 278 insertions(+), 150 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 1f4bb4ba2e4b..3373e27b707d 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -6,22 +6,21 @@ Kernel driver aquacomputer-d5next
+>  Supported devices:
+>  
+>  * Aquacomputer D5 Next watercooling pump
+> +* Aquacomputer Farbwerk 360 RGB controller
+>  
+>  Author: Aleksa Savic
+>  
+>  Description
+>  -----------
+>  
+> -This driver exposes hardware sensors of the Aquacomputer D5 Next watercooling
+> -pump, which communicates through a proprietary USB HID protocol.
+> +This driver exposes hardware sensors of listed Aquacomputer devices, which
+> +communicate through proprietary USB HID protocols.
+>  
+> -Available sensors are pump and fan speed, power, voltage and current, as
+> -well as coolant temperature. Also available through debugfs are the serial
+> -number, firmware version and power-on count.
+> -
+> -Attaching a fan is optional and allows it to be controlled using temperature
+> -curves directly from the pump. If it's not connected, the fan-related sensors
+> -will report zeroes.
+> +For the D5 Next pump, available sensors are pump and fan speed, power, voltage
+> +and current, as well as coolant temperature. Also available through debugfs are
+> +the serial number, firmware version and power-on count. Attaching a fan to it is
+> +optional and allows it to be controlled using temperature curves directly from the
+> +pump. If it's not connected, the fan-related sensors will report zeroes.
+>  
+>  The pump can be configured either through software or via its physical
+>  interface. Configuring the pump through this driver is not implemented, as it
+> @@ -29,33 +28,31 @@ seems to require sending it a complete configuration. That includes addressable
+>  RGB LEDs, for which there is no standard sysfs interface. Thus, that task is
+>  better suited for userspace tools.
+>  
+> +The Farbwerk 360 exposes four temperature sensors. Depending on the device,
+> +not all sysfs and debugfs entries will be available.
+> +
+>  Usage notes
+>  -----------
+>  
+> -The pump communicates via HID reports. The driver is loaded automatically by
+> +The devices communicate via HID reports. The driver is loaded automatically by
+>  the kernel and supports hotswapping.
+>  
+>  Sysfs entries
+>  -------------
+>  
+> -============ =============================================
+> -temp1_input  Coolant temperature (in millidegrees Celsius)
+> -fan1_input   Pump speed (in RPM)
+> -fan2_input   Fan speed (in RPM)
+> -power1_input Pump power (in micro Watts)
+> -power2_input Fan power (in micro Watts)
+> -in0_input    Pump voltage (in milli Volts)
+> -in1_input    Fan voltage (in milli Volts)
+> -in2_input    +5V rail voltage (in milli Volts)
+> -curr1_input  Pump current (in milli Amperes)
+> -curr2_input  Fan current (in milli Amperes)
+> -============ =============================================
+> +================ =============================================
+> +temp[1-4]_input  Temperature sensors (in millidegrees Celsius)
+> +fan[1-2]_input   Pump/fan speed (in RPM)
+> +power[1-2]_input Pump/fan power (in micro Watts)
+> +in[0-2]_input    Pump/fan voltage (in milli Volts)
+> +curr[1-2]_input  Pump/fan current (in milli Amperes)
+> +================ =============================================
+>  
+>  Debugfs entries
+>  ---------------
+>  
+> -================ ===============================================
+> -serial_number    Serial number of the pump
+> +================ =================================================
+> +serial_number    Serial number of the device
+>  firmware_version Version of installed firmware
+> -power_cycles     Count of how many times the pump was powered on
+> -================ ===============================================
+> +power_cycles     Count of how many times the device was powered on
+> +================ =================================================
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index fb9341a53051..36eba6ba6c2a 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -1,32 +1,41 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * hwmon driver for Aquacomputer D5 Next watercooling pump
+> + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360)
+>   *
+> - * The D5 Next sends HID reports (with ID 0x01) every second to report sensor values
+> - * (coolant temperature, pump and fan speed, voltage, current and power). It responds to
+> - * Get_Report requests, but returns a dummy value of no use.
+> + * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+> + * sensor values.
+>   *
+>   * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
+>   */
+>  
+> -#include <asm/unaligned.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/hid.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/module.h>
+>  #include <linux/seq_file.h>
+> +#include <asm/unaligned.h>
+>  
+> -#define DRIVER_NAME			"aquacomputer-d5next"
+> +#define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+> +#define USB_PRODUCT_ID_D5NEXT		0xf00e
+> +#define USB_PRODUCT_ID_FARBWERK360	0xf010
+>  
+> -#define D5NEXT_STATUS_REPORT_ID	0x01
+> -#define D5NEXT_STATUS_UPDATE_INTERVAL	(2 * HZ) /* In seconds */
+> +enum kinds { d5next, farbwerk360 };
+>  
+> -/* Register offsets for the D5 Next pump */
+> +static const char *const aqc_device_names[] = {
+> +	[d5next] = "d5next",
+> +	[farbwerk360] = "farbwerk360"
+> +};
+>  
+> -#define D5NEXT_SERIAL_FIRST_PART	3
+> -#define D5NEXT_SERIAL_SECOND_PART	5
+> -#define D5NEXT_FIRMWARE_VERSION	13
+> +#define DRIVER_NAME			"aquacomputer_d5next"
+> +
+> +#define STATUS_REPORT_ID		0x01
+> +#define STATUS_UPDATE_INTERVAL		(2 * HZ)	/* In seconds */
+> +#define SERIAL_FIRST_PART		3
+> +#define SERIAL_SECOND_PART		5
+> +#define FIRMWARE_VERSION		13
+> +
+> +/* Register offsets for the D5 Next pump */
+>  #define D5NEXT_POWER_CYCLES		24
+>  
+>  #define D5NEXT_COOLANT_TEMP		87
+> @@ -44,76 +53,118 @@
+>  #define D5NEXT_PUMP_CURRENT		112
+>  #define D5NEXT_FAN_CURRENT		99
+>  
+> -/* Labels for provided values */
+> +/* Register offsets for the Farbwerk 360 RGB controller */
+> +#define FARBWERK360_NUM_SENSORS		4
+> +#define FARBWERK360_SENSOR_START		0x32
+> +#define FARBWERK360_SENSOR_SIZE		0x02
+> +#define FARBWERK360_SENSOR_DISCONNECTED	0x7FFF
+>  
+> -#define L_COOLANT_TEMP			"Coolant temp"
+> +/* Labels for D5 Next */
+> +#define L_D5NEXT_COOLANT_TEMP		"Coolant temp"
+>  
+> -#define L_PUMP_SPEED			"Pump speed"
+> -#define L_FAN_SPEED			"Fan speed"
+> -
+> -#define L_PUMP_POWER			"Pump power"
+> -#define L_FAN_POWER			"Fan power"
+> -
+> -#define L_PUMP_VOLTAGE			"Pump voltage"
+> -#define L_FAN_VOLTAGE			"Fan voltage"
+> -#define L_5V_VOLTAGE			"+5V voltage"
+> -
+> -#define L_PUMP_CURRENT			"Pump current"
+> -#define L_FAN_CURRENT			"Fan current"
+> +static const char *const label_d5next_speeds[] = {
+> +	"Pump speed",
+> +	"Fan speed"
+> +};
+>  
+> -static const char *const label_speeds[] = {
+> -	L_PUMP_SPEED,
+> -	L_FAN_SPEED,
+> +static const char *const label_d5next_power[] = {
+> +	"Pump power",
+> +	"Fan power"
+>  };
+>  
+> -static const char *const label_power[] = {
+> -	L_PUMP_POWER,
+> -	L_FAN_POWER,
+> +static const char *const label_d5next_voltages[] = {
+> +	"Pump voltage",
+> +	"Fan voltage",
+> +	"+5V voltage"
+>  };
+>  
+> -static const char *const label_voltages[] = {
+> -	L_PUMP_VOLTAGE,
+> -	L_FAN_VOLTAGE,
+> -	L_5V_VOLTAGE,
+> +static const char *const label_d5next_current[] = {
+> +	"Pump current",
+> +	"Fan current"
+>  };
+>  
+> -static const char *const label_current[] = {
+> -	L_PUMP_CURRENT,
+> -	L_FAN_CURRENT,
+> +/* Labels for Farbwerk 360 temperature sensors */
+> +static const char *const label_temp_sensors[] = {
+> +	"Sensor 1",
+> +	"Sensor 2",
+> +	"Sensor 3",
+> +	"Sensor 4"
+>  };
+>  
+> -struct d5next_data {
+> +struct aqc_data {
+>  	struct hid_device *hdev;
+>  	struct device *hwmon_dev;
+>  	struct dentry *debugfs;
+> -	s32 temp_input;
+> +	enum kinds kind;
+> +	const char *name;
+> +
+> +	/* General info, same across all devices */
+> +	u32 serial_number[2];
+> +	u16 firmware_version;
+> +
+> +	/* D5 Next specific - how many times the device was powered on */
+> +	u32 power_cycles;
+> +
+> +	/* Sensor values */
+> +	s32 temp_input[4];
+>  	u16 speed_input[2];
+>  	u32 power_input[2];
+>  	u16 voltage_input[3];
+>  	u16 current_input[2];
+> -	u32 serial_number[2];
+> -	u16 firmware_version;
+> -	u32 power_cycles; /* How many times the device was powered on */
+> +
+>  	unsigned long updated;
+>  };
+>  
+> -static umode_t d5next_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+> -				 int channel)
+> +static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+> +			      int channel)
+>  {
+> -	return 0444;
+> +	const struct aqc_data *priv = data;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			if (channel == 0)
+> +				return 0444;
+> +			break;
+> +		case farbwerk360:
+> +			return 0444;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_fan:
+> +	case hwmon_power:
+> +	case hwmon_in:
+> +	case hwmon_curr:
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			return 0444;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+> -static int d5next_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+> -		       long *val)
+> +static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +		    int channel, long *val)
+>  {
+> -	struct d5next_data *priv = dev_get_drvdata(dev);
+> +	struct aqc_data *priv = dev_get_drvdata(dev);
+>  
+> -	if (time_after(jiffies, priv->updated + D5NEXT_STATUS_UPDATE_INTERVAL))
+> +	if (time_after(jiffies, priv->updated + STATUS_UPDATE_INTERVAL))
+>  		return -ENODATA;
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		*val = priv->temp_input;
+> +		if (priv->temp_input[channel] == -ENODATA)
+> +			return -ENODATA;
+> +
+> +		*val = priv->temp_input[channel];
+>  		break;
+>  	case hwmon_fan:
+>  		*val = priv->speed_input[channel];
+> @@ -134,24 +185,59 @@ static int d5next_read(struct device *dev, enum hwmon_sensor_types type, u32 att
+>  	return 0;
+>  }
+>  
+> -static int d5next_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> -			      int channel, const char **str)
+> +static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +			   int channel, const char **str)
+>  {
+> +	struct aqc_data *priv = dev_get_drvdata(dev);
+> +
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		*str = L_COOLANT_TEMP;
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			*str = L_D5NEXT_COOLANT_TEMP;
+> +			break;
+> +		case farbwerk360:
+> +			*str = label_temp_sensors[channel];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	case hwmon_fan:
+> -		*str = label_speeds[channel];
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			*str = label_d5next_speeds[channel];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	case hwmon_power:
+> -		*str = label_power[channel];
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			*str = label_d5next_power[channel];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	case hwmon_in:
+> -		*str = label_voltages[channel];
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			*str = label_d5next_voltages[channel];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	case hwmon_curr:
+> -		*str = label_current[channel];
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			*str = label_d5next_current[channel];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	default:
+>  		return -EOPNOTSUPP;
+> @@ -160,60 +246,89 @@ static int d5next_read_string(struct device *dev, enum hwmon_sensor_types type,
+>  	return 0;
+>  }
+>  
+> -static const struct hwmon_ops d5next_hwmon_ops = {
+> -	.is_visible = d5next_is_visible,
+> -	.read = d5next_read,
+> -	.read_string = d5next_read_string,
+> +static const struct hwmon_ops aqc_hwmon_ops = {
+> +	.is_visible = aqc_is_visible,
+> +	.read = aqc_read,
+> +	.read_string = aqc_read_string,
+>  };
+>  
+> -static const struct hwmon_channel_info *d5next_info[] = {
+> -	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
+> -	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL, HWMON_F_INPUT | HWMON_F_LABEL),
+> -	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT | HWMON_P_LABEL, HWMON_P_INPUT | HWMON_P_LABEL),
+> -	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
+> +static const struct hwmon_channel_info *aqc_info[] = {
+> +	HWMON_CHANNEL_INFO(temp,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL),
+> +	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL),
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>  			   HWMON_I_INPUT | HWMON_I_LABEL),
+> -	HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT | HWMON_C_LABEL, HWMON_C_INPUT | HWMON_C_LABEL),
+> +	HWMON_CHANNEL_INFO(curr,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+>  	NULL
+>  };
+>  
+> -static const struct hwmon_chip_info d5next_chip_info = {
+> -	.ops = &d5next_hwmon_ops,
+> -	.info = d5next_info,
+> +static const struct hwmon_chip_info aqc_chip_info = {
+> +	.ops = &aqc_hwmon_ops,
+> +	.info = aqc_info,
+>  };
+>  
+> -static int d5next_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
+> +static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
+> +			 int size)
+>  {
+> -	struct d5next_data *priv;
+> +	int i, sensor_value;
+> +	struct aqc_data *priv;
+>  
+> -	if (report->id != D5NEXT_STATUS_REPORT_ID)
+> +	if (report->id != STATUS_REPORT_ID)
+>  		return 0;
+>  
+>  	priv = hid_get_drvdata(hdev);
+>  
+>  	/* Info provided with every report */
+> -
+> -	priv->serial_number[0] = get_unaligned_be16(data + D5NEXT_SERIAL_FIRST_PART);
+> -	priv->serial_number[1] = get_unaligned_be16(data + D5NEXT_SERIAL_SECOND_PART);
+> -
+> -	priv->firmware_version = get_unaligned_be16(data + D5NEXT_FIRMWARE_VERSION);
+> -	priv->power_cycles = get_unaligned_be32(data + D5NEXT_POWER_CYCLES);
+> +	priv->serial_number[0] = get_unaligned_be16(data + SERIAL_FIRST_PART);
+> +	priv->serial_number[1] = get_unaligned_be16(data + SERIAL_SECOND_PART);
+> +	priv->firmware_version = get_unaligned_be16(data + FIRMWARE_VERSION);
+>  
+>  	/* Sensor readings */
+> +	switch (priv->kind) {
+> +	case d5next:
+> +		priv->power_cycles = get_unaligned_be32(data + D5NEXT_POWER_CYCLES);
+>  
+> -	priv->temp_input = get_unaligned_be16(data + D5NEXT_COOLANT_TEMP) * 10;
+> +		priv->temp_input[0] = get_unaligned_be16(data + D5NEXT_COOLANT_TEMP) * 10;
+>  
+> -	priv->speed_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_SPEED);
+> -	priv->speed_input[1] = get_unaligned_be16(data + D5NEXT_FAN_SPEED);
+> +		priv->speed_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_SPEED);
+> +		priv->speed_input[1] = get_unaligned_be16(data + D5NEXT_FAN_SPEED);
+>  
+> -	priv->power_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_POWER) * 10000;
+> -	priv->power_input[1] = get_unaligned_be16(data + D5NEXT_FAN_POWER) * 10000;
+> +		priv->power_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_POWER) * 10000;
+> +		priv->power_input[1] = get_unaligned_be16(data + D5NEXT_FAN_POWER) * 10000;
+>  
+> -	priv->voltage_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_VOLTAGE) * 10;
+> -	priv->voltage_input[1] = get_unaligned_be16(data + D5NEXT_FAN_VOLTAGE) * 10;
+> -	priv->voltage_input[2] = get_unaligned_be16(data + D5NEXT_5V_VOLTAGE) * 10;
+> +		priv->voltage_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_VOLTAGE) * 10;
+> +		priv->voltage_input[1] = get_unaligned_be16(data + D5NEXT_FAN_VOLTAGE) * 10;
+> +		priv->voltage_input[2] = get_unaligned_be16(data + D5NEXT_5V_VOLTAGE) * 10;
+>  
+> -	priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
+> -	priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
+> +		priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
+> +		priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
+> +		break;
+> +	case farbwerk360:
+> +		/* Temperature sensor readings */
+> +		for (i = 0; i < FARBWERK360_NUM_SENSORS; i++) {
+> +			sensor_value = get_unaligned_be16(data + FARBWERK360_SENSOR_START +
+> +							  i * FARBWERK360_SENSOR_SIZE);
+> +			if (sensor_value == FARBWERK360_SENSOR_DISCONNECTED)
+> +				priv->temp_input[i] = -ENODATA;
+> +			else
+> +				priv->temp_input[i] = sensor_value * 10;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+>  
+>  	priv->updated = jiffies;
+>  
+> @@ -224,7 +339,7 @@ static int d5next_raw_event(struct hid_device *hdev, struct hid_report *report,
+>  
+>  static int serial_number_show(struct seq_file *seqf, void *unused)
+>  {
+> -	struct d5next_data *priv = seqf->private;
+> +	struct aqc_data *priv = seqf->private;
+>  
+>  	seq_printf(seqf, "%05u-%05u\n", priv->serial_number[0], priv->serial_number[1]);
+>  
+> @@ -234,7 +349,7 @@ DEFINE_SHOW_ATTRIBUTE(serial_number);
+>  
+>  static int firmware_version_show(struct seq_file *seqf, void *unused)
+>  {
+> -	struct d5next_data *priv = seqf->private;
+> +	struct aqc_data *priv = seqf->private;
+>  
+>  	seq_printf(seqf, "%u\n", priv->firmware_version);
+>  
+> @@ -244,7 +359,7 @@ DEFINE_SHOW_ATTRIBUTE(firmware_version);
+>  
+>  static int power_cycles_show(struct seq_file *seqf, void *unused)
+>  {
+> -	struct d5next_data *priv = seqf->private;
+> +	struct aqc_data *priv = seqf->private;
+>  
+>  	seq_printf(seqf, "%u\n", priv->power_cycles);
+>  
+> @@ -252,29 +367,32 @@ static int power_cycles_show(struct seq_file *seqf, void *unused)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(power_cycles);
+>  
+> -static void d5next_debugfs_init(struct d5next_data *priv)
+> +static void aqc_debugfs_init(struct aqc_data *priv)
+>  {
+> -	char name[32];
+> +	char name[64];
+>  
+> -	scnprintf(name, sizeof(name), "%s-%s", DRIVER_NAME, dev_name(&priv->hdev->dev));
+> +	scnprintf(name, sizeof(name), "%s_%s-%s", "aquacomputer", priv->name,
+> +		  dev_name(&priv->hdev->dev));
+>  
+>  	priv->debugfs = debugfs_create_dir(name, NULL);
+>  	debugfs_create_file("serial_number", 0444, priv->debugfs, priv, &serial_number_fops);
+>  	debugfs_create_file("firmware_version", 0444, priv->debugfs, priv, &firmware_version_fops);
+> -	debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
+> +
+> +	if (priv->kind == d5next)
+> +		debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
+>  }
+>  
+>  #else
+>  
+> -static void d5next_debugfs_init(struct d5next_data *priv)
+> +static void aqc_debugfs_init(struct aqc_data *priv)
+>  {
+>  }
+>  
+>  #endif
+>  
+> -static int d5next_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> +static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  {
+> -	struct d5next_data *priv;
+> +	struct aqc_data *priv;
+>  	int ret;
+>  
+>  	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+> @@ -284,7 +402,7 @@ static int d5next_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  	priv->hdev = hdev;
+>  	hid_set_drvdata(hdev, priv);
+>  
+> -	priv->updated = jiffies - D5NEXT_STATUS_UPDATE_INTERVAL;
+> +	priv->updated = jiffies - STATUS_UPDATE_INTERVAL;
+>  
+>  	ret = hid_parse(hdev);
+>  	if (ret)
+> @@ -298,15 +416,28 @@ static int d5next_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  	if (ret)
+>  		goto fail_and_stop;
+>  
+> -	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "d5next", priv,
+> -							  &d5next_chip_info, NULL);
+> +	switch (hdev->product) {
+> +	case USB_PRODUCT_ID_D5NEXT:
+> +		priv->kind = d5next;
+> +		break;
+> +	case USB_PRODUCT_ID_FARBWERK360:
+> +		priv->kind = farbwerk360;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	priv->name = aqc_device_names[priv->kind];
+> +
+> +	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, priv->name, priv,
+> +							  &aqc_chip_info, NULL);
+>  
+>  	if (IS_ERR(priv->hwmon_dev)) {
+>  		ret = PTR_ERR(priv->hwmon_dev);
+>  		goto fail_and_close;
+>  	}
+>  
+> -	d5next_debugfs_init(priv);
+> +	aqc_debugfs_init(priv);
+>  
+>  	return 0;
+>  
+> @@ -317,9 +448,9 @@ static int d5next_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  	return ret;
+>  }
+>  
+> -static void d5next_remove(struct hid_device *hdev)
+> +static void aqc_remove(struct hid_device *hdev)
+>  {
+> -	struct d5next_data *priv = hid_get_drvdata(hdev);
+> +	struct aqc_data *priv = hid_get_drvdata(hdev);
+>  
+>  	debugfs_remove_recursive(priv->debugfs);
+>  	hwmon_device_unregister(priv->hwmon_dev);
+> @@ -328,36 +459,36 @@ static void d5next_remove(struct hid_device *hdev)
+>  	hid_hw_stop(hdev);
+>  }
+>  
+> -static const struct hid_device_id d5next_table[] = {
+> -	{ HID_USB_DEVICE(0x0c70, 0xf00e) }, /* Aquacomputer D5 Next */
+> -	{},
+> +static const struct hid_device_id aqc_table[] = {
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
+> +	{ }
+>  };
+>  
+> -MODULE_DEVICE_TABLE(hid, d5next_table);
+> +MODULE_DEVICE_TABLE(hid, aqc_table);
+>  
+> -static struct hid_driver d5next_driver = {
+> +static struct hid_driver aqc_driver = {
+>  	.name = DRIVER_NAME,
+> -	.id_table = d5next_table,
+> -	.probe = d5next_probe,
+> -	.remove = d5next_remove,
+> -	.raw_event = d5next_raw_event,
+> +	.id_table = aqc_table,
+> +	.probe = aqc_probe,
+> +	.remove = aqc_remove,
+> +	.raw_event = aqc_raw_event,
+>  };
+>  
+> -static int __init d5next_init(void)
+> +static int __init aqc_init(void)
+>  {
+> -	return hid_register_driver(&d5next_driver);
+> +	return hid_register_driver(&aqc_driver);
+>  }
+>  
+> -static void __exit d5next_exit(void)
+> +static void __exit aqc_exit(void)
+>  {
+> -	hid_unregister_driver(&d5next_driver);
+> +	hid_unregister_driver(&aqc_driver);
+>  }
+>  
+>  /* Request to initialize after the HID bus to ensure it's not being loaded before */
+> -
+> -late_initcall(d5next_init);
+> -module_exit(d5next_exit);
+> +late_initcall(aqc_init);
+> +module_exit(aqc_exit);
+>  
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
+> -MODULE_DESCRIPTION("Hwmon driver for Aquacomputer D5 Next pump");
+> +MODULE_DESCRIPTION("Hwmon driver for Aquacomputer devices");
+> -- 
+> 2.35.1
+> 

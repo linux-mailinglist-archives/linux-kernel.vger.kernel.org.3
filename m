@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCD74C5FFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 00:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952BC4C5FFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiB0X6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 18:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
+        id S231944AbiB1ADp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 19:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiB0X6d (ORCPT
+        with ESMTP id S229486AbiB1ADo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 18:58:33 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837B4926D
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 15:57:56 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id q8so13034227iod.2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 15:57:56 -0800 (PST)
+        Sun, 27 Feb 2022 19:03:44 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2119.outbound.protection.outlook.com [40.107.223.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB0C3150A;
+        Sun, 27 Feb 2022 16:03:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hd2c6XtY5snYheZ7raNertpLjhCt4xUznrKw90mNIYC73IgQ1iZKBRH5adWFrSCzzDGHs6GcxPQEvh5O/z42IGRYv5h1IeOrsZvxJWuDqLdNf8I8UTR3fq+UskWw5rni0shfbdBcN4NvbzB5eafgbVrEweVkuAUHRyYG1In9HGBMD2BIMZ1HNnsEAWDFkfUER/x7wxveruq4h/HKI4xu7GM1gizQnOrvA57uYC910oec886p3W+pffCPIxEUBUTLB4AGsRByk+vnN8JI52AjlK4mKBSTrQBSskyZKXQoeOOoUw0ZYeumLmX9qKJPtnukXD78IjE6jbbnt6EoR5DJ7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vmRDv+8Kp2O/7JYi+Yoddp53xb9TUJwa6yZH9pOukH4=;
+ b=jqNGQjhQfIIfNfEj5T5ij6cz8rv+CKskbg/vbdfm3EK+FrapHfPSf5YIJ8s73y6AMNzCZie7LlFmFbghauSn8SJfEdNBgi7xlhKtQZafruElb9uLo7oG9r4cHlk3ar6zMmJaoQTpNf/KiQmHTuXWNZSAEpJ7tXJpsegbl4sTFb/Mv0hi6K+UXjV5zuW6ttBK4yw1kkIrRdasP8s/uDdUL99TxoCt1FxgKzTS5gXmzTrSfwOgXTITNBlqZHvKmbrgulhyX8b6A1FKsdwtbPDR/jeQgeU8Ji1GolVhTyupWkJouYUWx+qhnCaxZIaG6yFRfsSRu2wrOfAMNQgE5Td5ZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TYixXH/oSVNIYPjWy8IDeErfQMBt7NeciGEbuByoJUQ=;
-        b=VA7Y7/hwNTpAG0EJBvjzNcqWEEoLvSuaQCNj01nO45OyMQcgooOoCeTcGzsvRipjXT
-         GR51Exj8tHYQvvBj7rj4BWHnSURg64uycJzHdUCB+hGxEtEhlwx2pPdKlhw0XhHwjAE/
-         I4bLKsSa7ST5UvIHRTX2rxKh1qtw9ZBdmZ77wJDCw6OPEltA1/Pz2/7JbQRL0duYZ4ct
-         a7VUK+N8cmAKsjrWIe0Rajg2EbIFsIgRyubHIXT65zHok28ikdqymV+/J+ecIosK77WB
-         vpTaCXz61HY+ci7o/cRo3ZW5ylwVRVT+7wiyD0oTOFySlCVCR7thfpDnSjzQN84bD+HM
-         seNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TYixXH/oSVNIYPjWy8IDeErfQMBt7NeciGEbuByoJUQ=;
-        b=5XeAEkphJOmlSQLrDsK7kTNYyfw5QQ28jnec9zNOTVjz9Tv0l/26h8mmT+xSdadHey
-         e2avw2Tt8T1tsgMvUA5/KSQrk1boIlVhfbesW3K9A3hPLXowbXyB+L2Qce8yyTiab9OS
-         k6mjNx439wpTI6VcAa+fh5xdQ6uhw1oktoSrqBvjTCfe2fZqnuUdCjVS3V/nBqdj5NTv
-         BX0Si+eJZIp0qIlEMfl4TZ6vHEdvBYOfRc2gNP9Fl21uOKYK2ILh0gbBjjw5Z8IVOt/O
-         wvn8vOZXxuLMmazji2et9QWYl72XhilLdeppwQYzi+PA7LVfKjCCgBNZLzE6mA9QfIOr
-         t3KQ==
-X-Gm-Message-State: AOAM532zaiJwC4gr0V2ivWFZVXfpM6+teBkrYZ67J+MER1tni+6DI86a
-        49pQOwJAakx2zmONz4RHKQBdIQ==
-X-Google-Smtp-Source: ABdhPJyPtYXXq4eTx/zm7hkEn1uc7x7ywQuCdrH5tLSdhR5RU9smY5dt5X0iXebRMULNf0pZ7UBpzA==
-X-Received: by 2002:a02:c64e:0:b0:311:b1b4:1a08 with SMTP id k14-20020a02c64e000000b00311b1b41a08mr14572997jan.230.1646006275352;
-        Sun, 27 Feb 2022 15:57:55 -0800 (PST)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a056602340700b006409737fa99sm5093280ioz.27.2022.02.27.15.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 15:57:54 -0800 (PST)
-Message-ID: <72ff1b04-4f37-9851-a6e6-aded72b46c83@linaro.org>
-Date:   Sun, 27 Feb 2022 17:57:52 -0600
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vmRDv+8Kp2O/7JYi+Yoddp53xb9TUJwa6yZH9pOukH4=;
+ b=ClKAa8wky7Kbg2CqIjgJhIVRq6xl3aLJICq8OX9NmWyLjdvmp4CsgQ4rpq9/dXRU9DWsqcam1n8URSVrYRHoEGnJ7t4EJV2tC2dVyQMQW2jFg0Scm6/CLXS/2pNFQkywSzhFiHz2v/YSa5UDMupBhT7XN0wmFNh9OQE2MNKpAFI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ PH0PR01MB6184.prod.exchangelabs.com (2603:10b6:510:14::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.24; Mon, 28 Feb 2022 00:03:01 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::d9a2:2761:a4c0:1e1c]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::d9a2:2761:a4c0:1e1c%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
+ 00:03:01 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: [PATCH v1 0/5] Enable second flash, update gpios pin and merge adc channels
+Date:   Mon, 28 Feb 2022 07:02:37 +0700
+Message-Id: <20220228000242.1884-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.28.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2P15301CA0011.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::21) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [greybus-dev] [PATCH] Kbuild: remove -std=gnu89 from compiler
- arguments
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-References: <20220227215408.3180023-1-arnd@kernel.org>
- <dd41c574-05b0-23bc-646c-0bd341e6e50b@linaro.org>
- <CAHk-=wg_r01OASRuSFfbEk_YHjve2BsBbkDYiEiKTaX2jm=53g@mail.gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <CAHk-=wg_r01OASRuSFfbEk_YHjve2BsBbkDYiEiKTaX2jm=53g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1b79bc2e-8c7c-441c-14ad-08d9fa4daf0b
+X-MS-TrafficTypeDiagnostic: PH0PR01MB6184:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR01MB61847560A62B6D916398AC1DF2019@PH0PR01MB6184.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ihv161V0uEoB5aN/niCsaDE4XYIwNK+leC3rXjb2GG/WH6kILrmuHW5GJ8pxYdKxvI4EoY3VHRUxOfYroesPcUT78bWoiswPkTNtPLZZu6vNK/pTOHisHP82qbTMtPOb0PF1kh0m1UJpq7ehOEvjD+VDrkf1Ec7R9HIPofejk76V9KYJvoEaO+5OcC5Awf2st+ugHoTJJ1rQGEOdbDooYy783bTSxPRs73MFkFz0u0zhUpoiSynFylJ0HNX7bfI7AsBXc6oucpNMFGbHrA6iyl+UejKZHW/W18ph0nnM0csjC28vAt07iVsMuN4HNA5kbJN8n3eGFDo9kVFx59Y86B7/1hcbPQRSXhz6tvaDxj6szz5zKJIKeyRwDOLPwALeZOVh+JVX/q0xrzkkmit9vViWBhMYpS98wB/AUfM0bF8TM4QELiD6vg6TokIpyyzZO3rDq1BtC5jD5FgHhN53uJxYWeMg6hx4mvRhqjZRopz8Hgz8GbryFy/aZ1/PqLBnsGUDCUyv6dUhdC6PiniFzUgtVc5jPD4t2Lbs3YYOCX3V6WqJNtkoHSCFqy1BoG/EAVkZev4EaxG2vNGw9Lq6xRi5uc3tS2lvCr1Znq6rmzMNu1pyA1avYOrX0OFesjbXE8nMAlSrCDlVA8OgTuK8TmZh+zK01gfBH5ww1zz/nlzjp7Sh/j1Nut4Ekf8K6FBxKLgaByEQUHVE/dEEB1Txm+Y666dJAjgLcrZAMt+7L/EYdx5od5AzYHbKigsz1s2yUBL/Y/RiphBKFrsgFD+NIi9Z3Dmk9UUrx8GUsMM2ql14VNUTvPiuoZkT6jNRRVvA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(83380400001)(66476007)(2906002)(6512007)(186003)(54906003)(26005)(38100700002)(38350700002)(110136005)(15650500001)(1076003)(107886003)(2616005)(8936002)(66946007)(52116002)(5660300002)(66556008)(6506007)(4326008)(6486002)(316002)(86362001)(508600001)(6666004)(8676002)(449214003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wp7/ezC9TjiFKKeuEJsZEvnizPydpikk6Wm0pcwy6rQUCtsTKQ3uY9DgR9Nu?=
+ =?us-ascii?Q?HDfDCDd7Opvwu85mGEyxshk9pl6csJBuFQE11ZhM1AwNoudFhm9BQW6UwSrG?=
+ =?us-ascii?Q?c9PMce9U9GteZRSpp02QSAfIk4Ec6qY29JuwOHzZgq84BQtFdYvF5Dn8fb22?=
+ =?us-ascii?Q?l/yYWNssB4GC3e2lsKxtZQbYseICUj2zgMbr0vVQPGS/ttM9PF1tt61mNH6B?=
+ =?us-ascii?Q?H/q2M6Q4oxbF922jFQKsu13AHu4LEp+AhRc7tQRnC/7bXmI4sACxipFbPRuo?=
+ =?us-ascii?Q?p5fIg7rm1RBY/DvQIBp8xiczeRRSAwgAbn1KOpX/uLynLN1bjpUyocBEhZKX?=
+ =?us-ascii?Q?kfHPRVQwqZaJ98oo+srBWBeX2Sa4NKHpwcZcAf5HQ/K6EuPnOcVArhO6k//x?=
+ =?us-ascii?Q?kshmElu1qs1k7/VIc8i3gGMSppG3zayu6wAbv4Lh776/Brpzz4xOZt7VbFvS?=
+ =?us-ascii?Q?555X/746R7A2vOasLwEG2QN4eUcbXMyetHhgTEJb1PCVTuD4/Q7SnG+AGbyW?=
+ =?us-ascii?Q?Pxu939Aq6LAKVLoRHS9+kv4SvZeTuloEcL6nKdwiqw/80kaUjNaiNLf7ogql?=
+ =?us-ascii?Q?lGPnWGZdfnP1Zkv9/f0uW6gFI6sKz1XgloB3hE3DHq3HMCcbA6XN7SlBSBgr?=
+ =?us-ascii?Q?VMiJxyRPw3v/hK2TTFRgvE1jkf/FrfNWtS3Ww7reLhQ8mItZri/gTMaDzEsL?=
+ =?us-ascii?Q?Ke3hQGWiEXY50jrlDFq6XKcb2e3zf3vlA+tj6NFD6Du6Zh3DzwSqX87dujqj?=
+ =?us-ascii?Q?LcGec/yf3xDziVlN16kOP/IQGA51g1Ty7WCPjfOqQVpCFOxo9gi2tOSouNpV?=
+ =?us-ascii?Q?VozhS7RwImKp2NQiYKjI5i5rmEzOjzwj2eXlLCA2ugD+9Ovq720faE/VU+ff?=
+ =?us-ascii?Q?Aq0N2yAfoQUKVyxXKOIROeoKRIq6fsNhhH8rJv9ukXAGcHqeC3e0oI/9lhA+?=
+ =?us-ascii?Q?3kuWk9GcYL3Vvcvds711gx9wpxN6FtmHzDTfv5RNKz639R910nL72sNhtO3B?=
+ =?us-ascii?Q?k+mfcjYnEgFjNEg9p7XWroeyW8SKZ+HnSX8Z6YGqV9D5uXQrSNJDLGCmLg8K?=
+ =?us-ascii?Q?x0B6t7zczmGxAGZWyyT+nkXEuX17ysyIixcNO82L3JQwjli80vZhtJs3xazD?=
+ =?us-ascii?Q?ZZnc8tSOLf3470nwBJrR7QvXJIHl9aVwkGTqH9oiPu4VBWVKBMV3LducrIby?=
+ =?us-ascii?Q?yxw2tn6nnBWNesqxpcQzBpkgMbfLtIzDYJQYa1LWvENrI4EFNNj9cW09iluV?=
+ =?us-ascii?Q?a2GKcEIdbKy6dg4NHvMesRa/+hAsUXqNeUtJjh3BuiBJL7cIU0kK02fKr5b8?=
+ =?us-ascii?Q?qifHsNLerbLMjZqUaMEfGa2b1yDB0C2VO7aEH90onYS6AqyztV4DD4eZItO7?=
+ =?us-ascii?Q?cFCOH0AYHNemt5gui0VqYrQEvQ7Ql6fYkBzWgwG2u46i7jfPVNo4XUySTSBv?=
+ =?us-ascii?Q?3C0mRgCR4IZ2B6BbSeFgGBFWsjS+fcMjEKoGyoVThaHRTbu/9h5eNDud/Fif?=
+ =?us-ascii?Q?7pvhvDjMPP6jS1tni+QmBHh6h5cOpH0C7AvYKwzSP4XMm/qlvESUhGUIbLIT?=
+ =?us-ascii?Q?PLpQiGfu2pPLlLS7av5RfOPHq1CFAnsYhklapX1HL5ZJE24hq+Q9ZRWZr4/b?=
+ =?us-ascii?Q?3/DsCnpN287bxxWxh9DewiPfB2PKgDNaPPp/0w2XsvIWGwpwvkgYNyen1ugF?=
+ =?us-ascii?Q?fOh6og=3D=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b79bc2e-8c7c-441c-14ad-08d9fa4daf0b
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 00:03:00.9862
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PhHy8KOv0+XC9rd9boaMfpJHIYPIE7JV98mAV3sdswTq7sMFCQ9hUMr/trtIizi3C0jZpy+6GgH/Y6elg/G0vP4/j263x3AsXlHMIdSLPg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6184
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,36 +122,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 5:11 PM, Linus Torvalds wrote:
-> On Sun, Feb 27, 2022 at 3:04 PM Alex Elder <elder@linaro.org> wrote:
->>
->> Glancing at the Greybus code, I don't believe there's any
->> reason it needs to shift a negative value.  Such warnings
->> could be fixed by making certain variables unsigned, for
->> example.
-> 
-> As mentioned in the original thread, making things unsigned actually
-> is likely to introduce bugs and make things worse.
+This patchset adds the second flash support, merge all ADC channels to
+single iio-hwmon node and update various gpios pin name.
 
-Understood.  What I meant is that the shifts were producing
-single-bit masks from plain int values that range from 0 to 10
-or something (in a for loop).  Looking again though, that it's
-not so simple.  Regardless, your point about the warning is
-good and I won't plan to "fix" this.
+Link:https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
 
-Thanks.
+Quan Nguyen (5):
+  ARM: dts: aspeed: mtjade: Enable secondary flash
+  ARM: dts: aspeed: mtjade: Update rtc-battery-voltage-read-enable pin
+  ARM: dts: aspeed: mtjade: Update host0-ready pin
+  ARM: dts: aspeed: mtjade: Rename GPIO hog nodes to match schema.
+  ARM: dts: aspeed: mtjade: Move all adc sensors into iio-hwmon node
 
-					-Alex
-> 
-> The warning is simply bogus, and the fact that it was enabled by
-> -Wextra in gcc for std=gnu99 and up was a mistake that looks likely to
-> be fixed in gcc.
-> 
-> So don't try to "fix" the code to make any possible warnings go away.
-> You may just make things worse.
-> 
-> (That is often true in general for the more esoteric warnings, but in
-> this case it's just painfully more obvious).
-> 
->                Linus
+ .../arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 26 +++++++++----------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
+
+-- 
+2.28.0
 

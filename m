@@ -2,224 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9239B4C63A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA0C4C63D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbiB1HLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S233641AbiB1Hem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiB1HLN (ORCPT
+        with ESMTP id S229882AbiB1Hej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:11:13 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F72F673D7;
-        Sun, 27 Feb 2022 23:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646032235; x=1677568235;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y3vWJXmXIxLoqN+LR4JyPDGHfXzsrgmgo7NHZTRsoHs=;
-  b=cBuXZMRxf4NjsVNjoSJKpL2ZYVz+ioLipzZ4i12f3DbUOtYZkcKqr3h4
-   fV4sV06ycBF42zMwRN+z4m45NMx3w7VgS+aVUmn0gjIy82Cp20QpCavEi
-   8OMJKZI5sKIKhIy6O2Pm0HW/uz/1ffy7O901nJKTwuBerLzYvlEzpu5L4
-   TQbDaY5hEhVLr6vLUGrbdUp6LEOF2Wstnb5L24mGo013hFg68rB42eGHZ
-   Ba0KU4l4wK11RlILN85R5fsnqSDERBLNZ/mxhX0PO40oFR+mtVnLNJxY2
-   sKhK3uLDUzqz7rtw6MjiysRwv0X/5UB5Fd82RXmCmpDQStD1GC5mMqfxK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="277475029"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="277475029"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 23:10:35 -0800
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="534337928"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 23:10:32 -0800
-Message-ID: <4b2ddc09-f68d-1cc3-3d10-f7651d811fc3@intel.com>
-Date:   Mon, 28 Feb 2022 15:10:30 +0800
+        Mon, 28 Feb 2022 02:34:39 -0500
+X-Greylist: delayed 1172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 23:34:00 PST
+Received: from mx05.melco.co.jp (mx05.melco.co.jp [192.218.140.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5EC64DD;
+        Sun, 27 Feb 2022 23:34:00 -0800 (PST)
+Received: from mr05.melco.co.jp (mr05 [133.141.98.165])
+        by mx05.melco.co.jp (Postfix) with ESMTP id 4K6WpV1qTzzMwjDM;
+        Mon, 28 Feb 2022 16:14:26 +0900 (JST)
+Received: from mr05.melco.co.jp (unknown [127.0.0.1])
+        by mr05.imss (Postfix) with ESMTP id 4K6WpV1QjXzMrrNn;
+        Mon, 28 Feb 2022 16:14:26 +0900 (JST)
+Received: from mf04_second.melco.co.jp (unknown [192.168.20.184])
+        by mr05.melco.co.jp (Postfix) with ESMTP id 4K6WpV169FzMvxdF;
+        Mon, 28 Feb 2022 16:14:26 +0900 (JST)
+Received: from mf04.melco.co.jp (unknown [133.141.98.184])
+        by mf04_second.melco.co.jp (Postfix) with ESMTP id 4K6WpV144JzMr4nD;
+        Mon, 28 Feb 2022 16:14:26 +0900 (JST)
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (unknown [104.47.23.168])
+        by mf04.melco.co.jp (Postfix) with ESMTP id 4K6WpV0tGbzMr4nB;
+        Mon, 28 Feb 2022 16:14:26 +0900 (JST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A6uj2S4Kl6hLGA29509MtUw5klhwnQdL+dfq0z6o1oU6/0dB+cMJOGKaFLZYL7FNkcSLZBj+rZ6iIHwIJm0VqPytcb5+0egXc5D2N8sEXT1kYRYQvxDyJufDWaxVQjU64MTn8lYD5nKZ+LNAh2F2lYlkJuhfHIUX5x3Fnypd/0RjjU4uGo8jgFh9FWu91IXTkjV1/OUKzrPwIF1ks/MIl4op3KZCFatwnkIScUNwtlv7dBuW9EPItYM1O1JMmuXt/j8vz/U18cuJqWYb8/cp6NLjRh7MvpHG9RiTHkcQBy4Wc7bBvkTwzZtVZZZRJl1x+6ujnO2IWeOWnwOicH2vLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IdDKR2mEvEHMqdPZdlDBJyJaplzaX6e6f2ZuZnm0faw=;
+ b=ZErOOAnjAU8/JsvBVAehFT2CH7wXGYRRmfbXB0b9zPdBJIkRLylEUaKoV9hllrrVy+xLJnloRfIbWrEOrNkQNUUi2Yx83bTX6Ja8R2D/7VlocEI8zBibzxqJRFD80ruS+em85n3qzwCNL9JKh8OVBzwJWzlnsduhFI5rFGwdSZYrpvJFcJUEYu8hE0lafXx7bZaHCfxp4spb8zhHAye+/ahsvG60el6OO3c4N4ThAkKcI2OzmpEfe5a1fhBLleeuwGslr/EFSNzA/LIw1XlSN4INtlVG6bdqVQiNyzX1SA7iWukgs3Yf9vpdJTGQZbC7BMhPhGkgdZpryoHXusmEZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dc.mitsubishielectric.co.jp; dmarc=pass action=none
+ header.from=dc.mitsubishielectric.co.jp; dkim=pass
+ header.d=dc.mitsubishielectric.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mitsubishielectricgroup.onmicrosoft.com;
+ s=selector2-mitsubishielectricgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IdDKR2mEvEHMqdPZdlDBJyJaplzaX6e6f2ZuZnm0faw=;
+ b=nOG06U2qVylvJWLcy/9Xf6Oc02UfwbcrVhtn2LrC81mmnH6pAeCW6SWfds/CtZAV5plmTA7t7dl2LWy+AKFJ2BVziHkfblrbaJaT6wFTCLmT+RRrnYvvI8DbKDCkEOZwhKhLCgDlUbpQcz+O4EWKYsGZbNgPLxGwruq9kRGITms=
+Received: from TYAPR01MB5353.jpnprd01.prod.outlook.com (2603:1096:404:803d::8)
+ by OSZPR01MB8530.jpnprd01.prod.outlook.com (2603:1096:604:18b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Mon, 28 Feb
+ 2022 07:14:25 +0000
+Received: from TYAPR01MB5353.jpnprd01.prod.outlook.com
+ ([fe80::cd6:cd27:1fe8:818]) by TYAPR01MB5353.jpnprd01.prod.outlook.com
+ ([fe80::cd6:cd27:1fe8:818%7]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
+ 07:14:25 +0000
+From:   "Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp" 
+        <Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp>
+To:     "'Yuezhang.Mo@sony.com'" <Yuezhang.Mo@sony.com>,
+        "linkinjeon@kernel.org" <linkinjeon@kernel.org>,
+        "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] exfat: do not clear VolumeDirty in writeback
+Thread-Topic: [PATCH] exfat: do not clear VolumeDirty in writeback
+Thread-Index: AQHYHKozeVmted1T5UKvjQCq+AaGCayoqY+A
+Date:   Mon, 28 Feb 2022 07:11:34 +0000
+Deferred-Delivery: Mon, 28 Feb 2022 07:14:00 +0000
+Message-ID: <TYAPR01MB5353E089F4843C6CE6A0BA1E90019@TYAPR01MB5353.jpnprd01.prod.outlook.com>
+References: <HK2PR04MB38914869B1FEE326CFE11779812D9@HK2PR04MB3891.apcprd04.prod.outlook.com>
+In-Reply-To: <HK2PR04MB38914869B1FEE326CFE11779812D9@HK2PR04MB3891.apcprd04.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-melpop: 1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dc.MitsubishiElectric.co.jp;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 96891264-64db-43eb-3982-08d9fa89f3a4
+x-ms-traffictypediagnostic: OSZPR01MB8530:EE_
+x-microsoft-antispam-prvs: <OSZPR01MB8530A7AA6F331EE96F4A8E5790019@OSZPR01MB8530.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: w2a4pALoWTMPifuWp8cAy92G1b2URndml8O0vcvDXXEa+C1U/5yrqJdoWmWVT7x6ioeCP9ymHuuXJjcSI4eouxL2UqUMxtjNPNZhxZZ7Ll1wcBjd3QG5T7ZRWtbfKI+rp+BjKHJFAl7jn1HNJ7jyOZKeQ2g3j1Gq05eEbwzsRW3E9Ed623a5RO1S/2MKVbweKRM+HXbbGzmWgHRggy+WrNb7oMvgHD6Kj21VmRZckBYaM6gWfInM2ei2z9Wr/jNHYxA38WiSaclTAt6DmwT4+N8IMmr/NVDhsPKTRwRMM+e1XOQGezvu+HO+DMWUXosClELEz2g+DQsSO7LWjWxo8+0Z5JD6Gir15FEucr+VR5EC27ccUd6blgkWlIlb8iDfs/TzVxyB2ZzD2nwLW+Ni6tpQ75761thuO384oGLwnhB7PF8oF/ZBn4Bf4xC9Hq1aHqqViNTUoGZzsOJgSqqTSx7hNf13aAw0e3MCTxtUJ+ST6i/5q/OZ1DlXSL/Sm77R4GGeEtukGWyKazZ0cWej+tWQ5y8zfmLv0/ied1OsZGUc/rpjc/WMq3suA5w6k4FF1Mk9JprnBTHy9LpebrvWBcSlagDCFnHe+nQaSTWjt2dreFmBMnD2iyBBtm+M2+r67xW+O2U1aFzRx6TJShpgFCWdadCfEFofUO7lxeAzgL96C6FKyBGVpa/vh8WcVbwww9LC4K8Hd8RR/TNeL6UgdF106USEa4qfV8Kcq9hlxALNVYGg6n4h6Cc0GV34Y284
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB5353.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(33656002)(4326008)(316002)(55016003)(66446008)(66476007)(186003)(64756008)(508600001)(8676002)(54906003)(66946007)(110136005)(66556008)(7696005)(9686003)(122000001)(71200400001)(86362001)(76116006)(2906002)(38100700002)(38070700005)(52536014)(83380400001)(4744005)(5660300002)(8936002)(6666004)(26005)(95630200002)(491001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?T1hka29GY2JLYi96TkdLR2MxQWFyWjRPZWd5U3hoL21LeHl0aVVEZ2h1?=
+ =?iso-2022-jp?B?Z2JBd1BVd00rN2VSdUJtTUJtOHV0N080TGZpSUlGbElqNWxvTnNTQ3k4?=
+ =?iso-2022-jp?B?YnBiSmJqRUNSL0tudWh2a3FML2pxd1VmQVh6SHFOemxpUUFjWmZta2pG?=
+ =?iso-2022-jp?B?bzQyWXBaVnFKTDFZNmxxbEhLZTV1WStQeVk2bHIxRmEvTTJuRHlIVEZS?=
+ =?iso-2022-jp?B?cWRFbkNwcEwxSGh3ZlVlbGZMc2MrMnhxTzdoK1dIb3ZKejFiczVyNk5k?=
+ =?iso-2022-jp?B?OGN0aVlqcUpzOE5EakorT3o2Y0tLWDAySE9UUjFWR0hNR2JmVUtQT2JC?=
+ =?iso-2022-jp?B?a1pKWlJIUjhsL1dkeTFNdVZwODFEWThLZmQ1aEFmUkQ0WG8xelEzT0dn?=
+ =?iso-2022-jp?B?QWRHWXJNYi8wMGo0SWtZZXlnMFFDcm1DVERXc0xUcFA5SDl5OVRJU2R6?=
+ =?iso-2022-jp?B?TFVmWk9odHRoTmRyMlNXMnIzOSt4a0xMTWZHWEo4ZDJqQzlBSDk3RGtW?=
+ =?iso-2022-jp?B?Rm1DenE2cmprMXJVNGliYTl4VHpQVW1ndEJyZGxMZE1iVVg5R1lrN0NZ?=
+ =?iso-2022-jp?B?UzVNdnFLdHRHa21XSFB6NFJveFlpTTBhbUJhTlRmdU8zNVNHNzJpRDd6?=
+ =?iso-2022-jp?B?aU5leUR4aXpkckZaSEh2dkhudUdFdTM0U2RWU09qL2pBMko5WW9UbHBX?=
+ =?iso-2022-jp?B?N3pmVUliMWJHVno3Qm9TcFE3TkFpdWU2UXd2TDZqMldaWGMzVUJ4cWFv?=
+ =?iso-2022-jp?B?WVZQYitxSnZNMTM1OFV3YXBGOXUwUGJlWVNkNndCOGd1YmsxRjlnY3Jn?=
+ =?iso-2022-jp?B?SnhnQ3k3UE40cld2K2RSSFZYaWZFUWhrc01VaWQ4K3VDMWNha3hES2hP?=
+ =?iso-2022-jp?B?QUJqaWJOeGR6M3cyaVhSOW9kM1NOTjUwSGMxUnF4TFMvczgrbHFYQzdI?=
+ =?iso-2022-jp?B?MDFGSlNwNUtNb0dGMytIWTNGd25NZWpScmVRSlFDUzF3c21YMWE4N1la?=
+ =?iso-2022-jp?B?WE5DUGY3emtrMEt6a3p6ZUgrQlMybnhqUjVQT2V2VUhDdkpud1h2OUla?=
+ =?iso-2022-jp?B?ajIxQTc4R2JiYThpUGIwMDIxUHVhUllrWmY1MnNnWGc3Qk1xWGJhNDYw?=
+ =?iso-2022-jp?B?N1BEVUVBdDZaRmdldXBWemtoaU41TVZUYUVScUZOMi84TndRT0FHYURk?=
+ =?iso-2022-jp?B?djcxUHdpckZoRXN0bE96bzZqQWhTd21CWVN5dXBSQUxpM0Y3VG9FbUlM?=
+ =?iso-2022-jp?B?U1RIalIyamJrcnliMGJOUGRwOU9TTHZMZ0dhV0h3TkY3dU41alBkSGl5?=
+ =?iso-2022-jp?B?Wk5Mb0pZai9jN3BoNUI4VHJRZno5RjdkNWh2MVUwQ3cxcjFCa1VSVitn?=
+ =?iso-2022-jp?B?M2NPYVRqaWpsWS9pbXE1YmRiekpzM3JVcGd4eWMrWWhZVnNmTmtMbGdq?=
+ =?iso-2022-jp?B?UEFKVVEwNmpqUWVtbjY4ZzRGMXB6TjhYTWxETGVnQVRvLzhDd1lyRDhi?=
+ =?iso-2022-jp?B?Zm5mZXVwRlZwTXZWVFpuTUpMeTBwWjlwN09vRWhUc3ZhN3hqak9hUWdr?=
+ =?iso-2022-jp?B?dm9DVlYxdTVvZVhhdzg3KzRrbzhSRG9mMUZzY1JnMi9LS2dYVG9IUVBm?=
+ =?iso-2022-jp?B?a29uMHkrV2lKbUo1N3Z5Skthczd3NzIyUG9KNnJGR2ZkQ2ZiaWJHMmdr?=
+ =?iso-2022-jp?B?MnpUc1FhVExhR2hpeU1CT2d0bVZ0RXJSbFlIdWtXSjFQV2ROUWNqOGVZ?=
+ =?iso-2022-jp?B?cmpFT21XekJDVFR1UDVoQXdqaU14aTV1RU5YaE9Zc0JxZURlZHNPQ28z?=
+ =?iso-2022-jp?B?VlczNzE0eDBnTTN6aUZuVmhSK3JXdXlhS01qeWt0T1pPWkZWaStnYUNY?=
+ =?iso-2022-jp?B?SXRXWVJPVDNDNlZ5ZzNKT3NUSEU3MU1Hd2ZZR3ppTkhoNjFaN0l4N3li?=
+ =?iso-2022-jp?B?TnVVTFBIalhkNFZ2VHFlSDIrWGc1MENtUzlsVFpSdWp0VWo0NmF3VkZy?=
+ =?iso-2022-jp?B?VUJYa1doeFpNaUV0a2pkU2tPbXhNRXp1dUtGalpEaGRLQi96MEZPS3RT?=
+ =?iso-2022-jp?B?NHhZbDZ2c25rZW5xa0czVjlVZG5ZUVQwUlZGNU13UjVsOGN5REhZbkFy?=
+ =?iso-2022-jp?B?NnNBaWNOeDQ2ajhPQ0xSbWZVUGwvdVhxQllLeTNSb0hPVlQ1QXdvemty?=
+ =?iso-2022-jp?B?U29qbllhWXVyVE9zR1kxRi9Penp2Rk42S0hmaG5ZUmFxR0JjTDRRcXZJ?=
+ =?iso-2022-jp?B?YURCU0pNelR2dDVxc0JpU214T2ttYk9ub05HaEFVK01LYWp1dVZEUVZF?=
+ =?iso-2022-jp?B?ZGU2ckVENjNsbVpJaWdvcDE5Z0EyYnhiVFE9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
- <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
- <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com>
- <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
- <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
- <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
- <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
- <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
- <71736b9d-9ed4-ea02-e702-74cae0340d66@intel.com>
- <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: dc.MitsubishiElectric.co.jp
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB5353.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96891264-64db-43eb-3982-08d9fa89f3a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 07:14:25.4256
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c5a75b62-4bff-4c96-a720-6621ce9978e5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JOENMwNAVt/0//NNxIpJ2xE0ASIppKAjvLPxmS99254aQAnTjDik130lT5NLuo1VLhOUFQf81jZ1Jwx/dBh9BA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8530
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/2022 10:24 PM, Jim Mattson wrote:
-> On Fri, Feb 25, 2022 at 10:24 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
->>
->> On 2/26/2022 12:53 PM, Jim Mattson wrote:
->>> On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
->>>>
->>>> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
->>>>>
->>>>> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
->>>>>> On 2/25/22 16:12, Xiaoyao Li wrote:
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> I don't like the idea of making things up without notifying userspace
->>>>>>>>> that this is fictional. How is my customer running nested VMs supposed
->>>>>>>>> to know that L2 didn't actually shutdown, but L0 killed it because the
->>>>>>>>> notify window was exceeded? If this information isn't reported to
->>>>>>>>> userspace, I have no way of getting the information to the customer.
->>>>>>>>
->>>>>>>> Then, maybe a dedicated software define VM exit for it instead of
->>>>>>>> reusing triple fault?
->>>>>>>>
->>>>>>>
->>>>>>> Second thought, we can even just return Notify VM exit to L1 to tell
->>>>>>> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
->>>>>>> to L1.
->>>>>>
->>>>>> That might cause NULL pointer dereferences or other nasty occurrences.
->>>>>
->>>>> IMO, a well written VMM (in L1) should handle it correctly.
->>>>>
->>>>> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
->>>>> setting Notify VM exit. If a L2 causes notify_vm_exit with
->>>>> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
->>>>> support of Notify VM Exit from VMX MSR capability. Following L1 handler
->>>>> is possible:
->>>>>
->>>>> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
->>>>>                   handle in b)
->>>>>           } else {
->>>>>                   report unexpected vm exit reason to userspace;
->>>>>           }
->>>>>
->>>>> b)      similar handler like we implement in KVM:
->>>>>           if (!vm_context_invalid)
->>>>>                   re-enter guest;
->>>>>           else
->>>>>                   report to userspace;
->>>>>
->>>>> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
->>>>> unsupported exit reason
->>>>>
->>>>> As long as it belongs to any case above, I think L1 can handle it
->>>>> correctly. Any nasty occurrence should be caused by incorrect handler in
->>>>> L1 VMM, in my opinion.
->>>>
->>>> Please test some common hypervisors (e.g. ESXi and Hyper-V).
->>>
->>> I took a look at KVM in Linux v4.9 (one of our more popular guests),
->>> and it will not handle this case well:
->>>
->>>           if (exit_reason < kvm_vmx_max_exit_handlers
->>>               && kvm_vmx_exit_handlers[exit_reason])
->>>                   return kvm_vmx_exit_handlers[exit_reason](vcpu);
->>>           else {
->>>                   WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
->>>                   kvm_queue_exception(vcpu, UD_VECTOR);
->>>                   return 1;
->>>           }
->>>
->>> At least there's an L1 kernel log message for the first unexpected
->>> NOTIFY VM-exit, but after that, there is silence. Just a completely
->>> inexplicable #UD in L2, assuming that L2 is resumable at this point.
->>
->> At least there is a message to tell L1 a notify VM exit is triggered in
->> L2. Yes, the inexplicable #UD won't be hit unless L2 triggers Notify VM
->> exit with invalid_context, which is malicious to L0 and L1.
-> 
-> There is only an L1 kernel log message *the first time*. That's not
-> good enough. And this is just one of the myriad of possible L1
-> hypervisors.
-> 
->> If we use triple_fault (i.e., shutdown), then no info to tell L1 that
->> it's caused by Notify VM exit with invalid context. Triple fault needs
->> to be extended and L1 kernel needs to be enlightened. It doesn't help
->> old guest kernel.
->>
->> If we use Machine Check, it's somewhat same inexplicable to L2 unless
->> it's enlightened. But it doesn't help old guest kernel.
->>
->> Anyway, for Notify VM exit with invalid context from L2, I don't see a
->> good solution to tell L1 VMM it's a "Notify VM exit with invalid context
->> from L2" and keep all kinds of L1 VMM happy, especially for those with
->> old kernel versions.
-> 
-> I agree that there is no way to make every conceivable L1 happy.
-> That's why the information needs to be surfaced to the L0 userspace. I
-> contend that any time L0 kvm violates the architectural specification
-> in its emulation of L1 or L2, the L0 userspace *must* be informed.
+Hi, Yuezhang.
 
-We can make the design to exit to userspace on notify vm exit 
-unconditionally with exit_qualification passed, then userspace can take 
-the same action like what this patch does in KVM that
+> And VolumeDirty will be set again when updating the parent directory. It =
+means that BootSector will be written twice in
+> each writeback, that will shorten the life of the device.
 
-  - re-enter guest when context_invalid is false;
-  - stop running the guest if context_invalid is true; (userspace can 
-definitely re-enter the guest in this case, but it needs to take the 
-fall on this)
+I have the same concern.
+From a lifespan point of view, we should probably clear dirty with just syn=
+c_fs().
 
-Then, for nested case, L0 needs to enable it transparently for L2 if 
-this feature is enabled for L1 guest (the reason as we all agreed that 
-cannot allow L1 to escape just by creating a L2). Then what should KVM 
-do when notify vm exit from L2?
+>  	sync_blockdev(sb->s_bdev);
+> -	if (exfat_clear_volume_dirty(sb))
+> +	if (__exfat_clear_volume_dirty(sb))
 
-  - Exit to L0 userspace on L2's notify vm exit. L0 userspace takes the 
-same action:
-	- re-enter if context-invalid is false;
-	- kill L1 if context-invalid is true; (I don't know if there is any 
-interface for L0 userspace to kill L2). Then it opens the potential door 
-for malicious user to kill L1 by creating a L2 to trigger fatal notify 
-vm exit. If you guys accept it, we can implement in this way.
+If SB_SYNCHRONOUS or SB_DIRSYNC is not present, isn't dirty cleared?
+
+> +int exfat_clear_volume_dirty(struct super_block *sb) {
+> +	if (sb->s_flags & (SB_SYNCHRONOUS | SB_DIRSYNC))
+> +		return __exfat_clear_volume_dirty(sb);
+
+Even when only one of SB or DIR is synced, dirty will be cleared.
+Isn't it necessary to have both SB_SYNCHRONOUS and SB_DIRSYNC?
+And, I think it would be better to use IS_SYNC or IS_DIRSYNC macro here.
+
+BR
 
 
-in conclusion, we have below solution:
-
-1. Take this patch as is. The drawback is L1 VMM receives a triple_fault 
-from L2 when L2 triggers notify vm exit with invalid context. Neither of 
-L1 VMM, L1 userspace, nor L2 kernel know it's caused due to notify vm 
-exit. There is only kernel log in L0, which seems not accessible for L1 
-user or L2 guest.
-
-2. a) Inject notify vm exit back to L1 if L2 triggers notify vm exit 
-with invalid context. The drawback is, old L1 hypervisor is not 
-enlightened of it and maybe misbehave on it.
-
-    b) Inject a synthesized SHUTDOWN exit to L1, with additional info to 
-tell it's caused by fatal notify vm exit from L2. It has the same 
-drawback that old hypervisor has no idea of it and maybe misbehave on it.
-
-3. Exit to L0 usersapce unconditionally no matter it's caused from L1 or 
-L2. Then it may open the door for L1 user to kill L1.
-
-Do you have any better solution other than above? If no, we need to pick 
-one from above though it cannot make everyone happy.
-
-thanks,
--Xiaoyao

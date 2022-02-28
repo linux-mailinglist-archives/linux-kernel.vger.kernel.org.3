@@ -2,302 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74B24C7E42
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A61F4C7E45
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiB1X03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S229883AbiB1X1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiB1X02 (ORCPT
+        with ESMTP id S229848AbiB1X04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:26:28 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A7AC3311
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fCfuRH4s50AAt2MwUz3kzZenb4+CLJUMfZe9pE/B82w=; b=N545VQlozc98xk9T4Q5E0pyMm0
-        BQcqTY9UVW5NUE8VxaW4ogSd4Yn1X2nqQqopTxs/lJlm1G0hDebmGPb08nlH/mHfFOwegLmWJhzeN
-        t3wfF59eEXaBT439ypD5Nm9GExWLcTpO91yNjHr/93IRWsPyv2XoDFEr7+7QNa+4j0qkTLAd/2kOJ
-        WbjxF2QSDROvWfCMLJ6lD2gkJ5Ks8xjmubX142CPs7do+lKmw+YRPAKr5zZEP1nGRvzstE34Q6kzp
-        J9mOa3xaO+ZYymb7V4HLrZ9enNu6Ikq5lTyDFufyAZ6lnoSnHKthJfhOM6r5GJnhY2rFmB+1bLpHa
-        wwCLrLpQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOpOF-0090aY-Fj; Mon, 28 Feb 2022 23:25:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ACFAA986271; Tue,  1 Mar 2022 00:25:13 +0100 (CET)
-Date:   Tue, 1 Mar 2022 00:25:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, alexei.starovoitov@gmail.com,
-        naveen.n.rao@linux.vnet.ibm.com
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-ID: <20220228232513.GH11184@worktop.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.892372059@infradead.org>
- <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+        Mon, 28 Feb 2022 18:26:56 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B01FC7E8F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:17 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id p14so27929091ejf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IYj0iyPbAPJYK0pqqrQFmSosxig3GLvPltNcBRpBH2o=;
+        b=iilCwxcJirrROzQlokAzirElITvzz8NVS309xa9R+fmGw9330A74LwBK3eZYQ3xy9n
+         rkHxmIEDL09h+td2iWT3rJUObUBT6IN+zk9ezdTBBr1ySUm5aMgocqlq5Wp11cPe8ZNl
+         ZqlyQsCZVSY7B2Z7kItx9x1BlIxIyzmf9rGVSmevoYvCMc3XR0zO/d7FJyGzHSdIaYoR
+         NwJ1EOZz7pG4uMAOsjdUKz0MokxuetIYWe7DB7CFqDZL1LmrOI5am0cFISjMCncJLpJt
+         9nkQE3cm2ATdP4rNDTAiLca6Hhh6myJYWOWRrKwlIg4wT3BPqIwz9IMq9iEl3Q3pbG7c
+         WfZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IYj0iyPbAPJYK0pqqrQFmSosxig3GLvPltNcBRpBH2o=;
+        b=J1Ghh4J2yaVNfVeuUM/BCt99KlOcpVkd0dMCWTQBMMjmouztqdSUwy3O482mDLD3Uo
+         gO4jPQE/0lJla/aEZkWGsjPY3S02qohR1uawnFrAr+WrGQF0YCetDVpi7AyL/wxAQiIA
+         Gkl8uRkfeiFX2pQNj4Dr8fIBU25XT5fl8P+iEPjcENcb4I7Z93MneKPniJn3l43dkIt7
+         MAhOMHHZpQOkqp2fIcfVWyoQGwOri932K/ZS8iBulaCjwIQue/C9aURE0UMiMPnw4fYw
+         HlDHPqQLtfOvq7nmsABY5tARPyGHPMEBdvB8nrdBvtp8dTatj6Hy43BAmsOC4skaX2vs
+         lEgw==
+X-Gm-Message-State: AOAM533ZZUlGDd1r4Ap8pylfvP+7u3ZdE2QyUEYQnk5kOUSfK7WBK81W
+        UNtK4x+SVjrAl107ZJPrvJi00iX6+hNjc76dYZVlwA==
+X-Google-Smtp-Source: ABdhPJxpETjZNwVKbXGVCTkT2JrkFz4ve5APlqWONORpQL2mt2RgqVbwmsnHQ8548VmwQRXdL5XR+y0muIp0FqJC3kM=
+X-Received: by 2002:a17:906:2486:b0:6cf:ced9:e4cc with SMTP id
+ e6-20020a170906248600b006cfced9e4ccmr16841097ejb.201.1646090775588; Mon, 28
+ Feb 2022 15:26:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228150705.aab2d654b973109bab070ffe@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-7-seanjc@google.com>
+In-Reply-To: <20220226001546.360188-7-seanjc@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 28 Feb 2022 15:26:04 -0800
+Message-ID: <CANgfPd-Y6Z=icq4ajhesu23AOZPNRVq+KNQ-2kyFHyVA6sx5Xg@mail.gmail.com>
+Subject: Re: [PATCH v3 06/28] KVM: x86/mmu: Require mmu_lock be held for write
+ in unyielding root iter
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 03:07:05PM +0900, Masami Hiramatsu wrote:
-> Hi Peter,
-> 
-> So, instead of this change, can you try below?
-> This introduce the arch_adjust_kprobe_addr() and use it in the kprobe_addr()
-> so that it can handle the case that user passed the probe address in 
-> _text+OFFSET format.
+On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Assert that mmu_lock is held for write by users of the yield-unfriendly
+> TDP iterator.  The nature of a shared walk means that the caller needs to
+> play nice with other tasks modifying the page tables, which is more or
+> less the same thing as playing nice with yielding.  Theoretically, KVM
+> could gain a flow where it could legitimately take mmu_lock for read in
+> a non-preemptible context, but that's highly unlikely and any such case
+> should be viewed with a fair amount of scrutiny.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-It works a little... at the very least it still needs
-arch_kprobe_on_func_entry() allowing offset 4.
+Reviewed-by: Ben Gardon <bgardon@google.com>
 
-But looking at this, we've got:
-
-kprobe_on_func_entry(addr, sym, offset)
-  _kprobe_addr(addr, sym, offset)
-    if (sym)
-      addr = kprobe_lookup_name()
-           = kallsyms_lookup_name()
-    arch_adjust_kprobe_addr(addr+offset)
-      skip_endbr()
-        kallsyms_loopup_size_offset(addr, ...)
-  kallsyms_lookup_size_offset(addr, NULL, &offset)
-  arch_kprobe_on_func_entry(offset)
-
-Which is _3_ kallsyms lookups and 3 weak/arch hooks.
-
-Surely we can make this a little more streamlined? The below seems to
-work.
-
-I think with a little care and testing it should be possible to fold all
-the magic of PowerPC's kprobe_lookup_name() into this one hook as well,
-meaning we can get rid of kprobe_lookup_name() entirely.  Naveen?
-
-This then gets us down to a 1 kallsyms call and 1 arch hook. Hmm?
-
----
- arch/powerpc/kernel/kprobes.c  |   34 +++++++++++++++---------
- arch/x86/kernel/kprobes/core.c |   17 ++++++++++++
- include/linux/kprobes.h        |    3 +-
- kernel/kprobes.c               |   56 ++++++++++++++++++++++++++++++++++-------
- 4 files changed, 87 insertions(+), 23 deletions(-)
-
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -105,6 +105,27 @@ kprobe_opcode_t *kprobe_lookup_name(cons
- 	return addr;
- }
- 
-+static bool arch_kprobe_on_func_entry(unsigned long offset)
-+{
-+#ifdef PPC64_ELF_ABI_v2
-+#ifdef CONFIG_KPROBES_ON_FTRACE
-+	return offset <= 16;
-+#else
-+	return offset <= 8;
-+#endif
-+#else
-+	return !offset;
-+#endif
-+}
-+
-+/* XXX try and fold the magic of kprobe_lookup_name() in this */
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-+					 bool *on_func_entry)
-+{
-+	*on_func_entry = arch_kprobe_on_func_entry(offset);
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
- void *alloc_insn_page(void)
- {
- 	void *page;
-@@ -218,19 +239,6 @@ static nokprobe_inline void set_current_
- 	kcb->kprobe_saved_msr = regs->msr;
- }
- 
--bool arch_kprobe_on_func_entry(unsigned long offset)
--{
--#ifdef PPC64_ELF_ABI_v2
--#ifdef CONFIG_KPROBES_ON_FTRACE
--	return offset <= 16;
--#else
--	return offset <= 8;
--#endif
--#else
--	return !offset;
--#endif
--}
--
- void arch_prepare_kretprobe(struct kretprobe_instance *ri, struct pt_regs *regs)
- {
- 	ri->ret_addr = (kprobe_opcode_t *)regs->link;
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -52,6 +52,7 @@
- #include <asm/insn.h>
- #include <asm/debugreg.h>
- #include <asm/set_memory.h>
-+#include <asm/ibt.h>
- 
- #include "common.h"
- 
-@@ -301,6 +302,22 @@ static int can_probe(unsigned long paddr
- 	return (addr == paddr);
- }
- 
-+/* If the x86 support IBT (ENDBR) it must be skipped. */
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-+					 bool *on_func_entry)
-+{
-+	if (is_endbr(*(u32 *)addr)) {
-+		*on_func_entry = !offset || offset == 4;
-+		if (*on_func_entry)
-+			offset = 4;
-+
-+	} else {
-+		*on_func_entry = !offset;
-+	}
-+
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
- /*
-  * Copy an instruction with recovering modified instruction by kprobes
-  * and adjust the displacement if the instruction uses the %rip-relative
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
- extern void kprobes_inc_nmissed_count(struct kprobe *p);
- extern bool arch_within_kprobe_blacklist(unsigned long addr);
- extern int arch_populate_kprobe_blacklist(void);
--extern bool arch_kprobe_on_func_entry(unsigned long offset);
- extern int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset);
- 
- extern bool within_kprobe_blacklist(unsigned long addr);
-@@ -384,6 +383,8 @@ static inline struct kprobe_ctlblk *get_
- }
- 
- kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset, bool *on_func_entry);
-+
- int register_kprobe(struct kprobe *p);
- void unregister_kprobe(struct kprobe *p);
- int register_kprobes(struct kprobe **kps, int num);
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1489,24 +1489,63 @@ bool within_kprobe_blacklist(unsigned lo
- }
- 
- /*
-+ * arch_adjust_kprobe_addr - adjust the address
-+ * @addr: symbol base address
-+ * @offset: offset within the symbol
-+ * @on_func_entry: was this @addr+@offset on the function entry
-+ *
-+ * Typically returns @addr + @offset, except for special cases where the
-+ * function might be prefixed by a CFI landing pad, in that case any offset
-+ * inside the landing pad is mapped to the first 'real' instruction of the
-+ * symbol.
-+ *
-+ * Specifically, for things like IBT/BTI, skip the resp. ENDBR/BTI.C
-+ * instruction at +0.
-+ */
-+kprobe_opcode_t *__weak arch_adjust_kprobe_addr(unsigned long addr,
-+						unsigned long offset,
-+						bool *on_func_entry)
-+{
-+	*on_func_entry = !offset;
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
-+/*
-  * If 'symbol_name' is specified, look it up and add the 'offset'
-  * to it. This way, we can specify a relative address to a symbol.
-  * This returns encoded errors if it fails to look up symbol or invalid
-  * combination of parameters.
-  */
--static kprobe_opcode_t *_kprobe_addr(kprobe_opcode_t *addr,
--			const char *symbol_name, unsigned int offset)
-+static kprobe_opcode_t *
-+_kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
-+	     unsigned long offset, bool *on_func_entry)
- {
- 	if ((symbol_name && addr) || (!symbol_name && !addr))
- 		goto invalid;
- 
- 	if (symbol_name) {
-+		/*
-+		 * Input: @sym + @offset
-+		 * Output: @addr + @offset
-+		 *
-+		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
-+		 *       argument into it's output!
-+		 */
- 		addr = kprobe_lookup_name(symbol_name, offset);
- 		if (!addr)
- 			return ERR_PTR(-ENOENT);
-+	} else {
-+		/*
-+		 * Input: @addr + @offset
-+		 * Output: @addr' + @offset'
-+		 */
-+		if (!kallsyms_lookup_size_offset((unsigned long)addr + offset,
-+						 NULL, &offset))
-+			return ERR_PTR(-ENOENT);
-+		addr = (kprobe_opcode_t *)((unsigned long)addr - offset);
- 	}
- 
--	addr = (kprobe_opcode_t *)(((char *)addr) + offset);
-+	addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
- 	if (addr)
- 		return addr;
- 
-@@ -1516,7 +1555,8 @@ static kprobe_opcode_t *_kprobe_addr(kpr
- 
- static kprobe_opcode_t *kprobe_addr(struct kprobe *p)
- {
--	return _kprobe_addr(p->addr, p->symbol_name, p->offset);
-+	bool on_func_entry;
-+	return _kprobe_addr(p->addr, p->symbol_name, p->offset, &on_func_entry);
- }
- 
- /*
-@@ -2067,15 +2107,13 @@ bool __weak arch_kprobe_on_func_entry(un
-  */
- int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset)
- {
--	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset);
-+	bool on_func_entry;
-+	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset, &on_func_entry);
- 
- 	if (IS_ERR(kp_addr))
- 		return PTR_ERR(kp_addr);
- 
--	if (!kallsyms_lookup_size_offset((unsigned long)kp_addr, NULL, &offset))
--		return -ENOENT;
--
--	if (!arch_kprobe_on_func_entry(offset))
-+	if (!on_func_entry)
- 		return -EINVAL;
- 
- 	return 0;
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 21 +++++++++++++++------
+>  1 file changed, 15 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 5994db5d5226..189f21e71c36 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -29,13 +29,16 @@ bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
+>         return true;
+>  }
+>
+> -static __always_inline void kvm_lockdep_assert_mmu_lock_held(struct kvm *kvm,
+> +/* Arbitrarily returns true so that this may be used in if statements. */
+> +static __always_inline bool kvm_lockdep_assert_mmu_lock_held(struct kvm *kvm,
+>                                                              bool shared)
+>  {
+>         if (shared)
+>                 lockdep_assert_held_read(&kvm->mmu_lock);
+>         else
+>                 lockdep_assert_held_write(&kvm->mmu_lock);
+> +
+> +       return true;
+>  }
+>
+>  void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+> @@ -187,11 +190,17 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+>  #define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)         \
+>         __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, ALL_ROOTS)
+>
+> -#define for_each_tdp_mmu_root(_kvm, _root, _as_id)                             \
+> -       list_for_each_entry_rcu(_root, &_kvm->arch.tdp_mmu_roots, link,         \
+> -                               lockdep_is_held_type(&kvm->mmu_lock, 0) ||      \
+> -                               lockdep_is_held(&kvm->arch.tdp_mmu_pages_lock)) \
+> -               if (kvm_mmu_page_as_id(_root) != _as_id) {              \
+> +/*
+> + * Iterate over all TDP MMU roots.  Requires that mmu_lock be held for write,
+> + * the implication being that any flow that holds mmu_lock for read is
+> + * inherently yield-friendly and should use the yielf-safe variant above.
+> + * Holding mmu_lock for write obviates the need for RCU protection as the list
+> + * is guaranteed to be stable.
+> + */
+> +#define for_each_tdp_mmu_root(_kvm, _root, _as_id)                     \
+> +       list_for_each_entry(_root, &_kvm->arch.tdp_mmu_roots, link)     \
+> +               if (kvm_lockdep_assert_mmu_lock_held(_kvm, false) &&    \
+> +                   kvm_mmu_page_as_id(_root) != _as_id) {              \
+>                 } else
+>
+>  static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+> --
+> 2.35.1.574.g5d30c73bfb-goog
+>

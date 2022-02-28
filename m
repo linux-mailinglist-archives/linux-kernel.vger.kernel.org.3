@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322704C7BDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC334C7BDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiB1VZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S230284AbiB1VZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiB1VZJ (ORCPT
+        with ESMTP id S229731AbiB1VZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:25:09 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F97C1201BB;
-        Mon, 28 Feb 2022 13:24:30 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id e6so11250042pgn.2;
-        Mon, 28 Feb 2022 13:24:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/BZ9ICbf1U+hKDT4v40btmacZirBqs9pkjE0c/BZegw=;
-        b=J6VTALh0jlhAPsV9di0Bt9jFsK8X4itmOEoLHplua8jA94wngD29TXhEqJbbRTxK0P
-         dwYqogijwYlEz5FzHUX+7gCfHJTY3IExnEjr8iPnyG3Hw2+Wl3tzwrzFosAHmJZpzw9O
-         LniBNTugcnAR3uzlzRyc3hJi6z85d6VgWL26MNITazp0Phf0QT3VSh5EUCm8hSEUA55l
-         Pmcpsw2872auO0G83rd7KE0FjysfnY3XvT1lIka4SPSXM3NhqOO9FjcrkwmCNCwUVSDT
-         u+sxaXph0Li0G+lVvpxVtU2dM6mFjQCgnsOpKuYzCAN8qIl1D+x7Pl0Tx9cI+Zw2xMUz
-         Nmtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/BZ9ICbf1U+hKDT4v40btmacZirBqs9pkjE0c/BZegw=;
-        b=71rbxHIheMTnGsMd81DqH99PJ9ZByHCNXruG/ZFBCoyoxM49rjd2FxKwmgnIdpI1za
-         DFxI6spAF4jiCagbL3XYirITHmPr1jafzb7dBWsz5oYTSNNnpP/JenigJToezs7cfVr8
-         fBErvTQ8g0iLlDpMwmH8ZbnCrXM51nGvpbfyolfYn8jjuwcR3vX4NydJWOu69MrmTcoc
-         ixIflalAxHPCnAM5NViHDbCuQmjB0RFUYXfzLk4GvdBSJyGwNowRusxgZbsDgnJNiDrS
-         iK9lNxEZYjaihRzrf43uEfJhx8zUNMuABF+SftMqUBUhz9Uq9RL5CIsU1bAr1aJ0GGU+
-         YUig==
-X-Gm-Message-State: AOAM533/RCMuYeJiCkc7/9NBK4ydKqThCyTgoRTPCMsJ50HO9NiJmpQp
-        4ysxUlGaWW0XRLRd/+OUzyo=
-X-Google-Smtp-Source: ABdhPJwlgZsp49t98S3sfpFV/5jNHYOEK9jcl0aBJV8JgDhrofRirUn/jsTGnZ3ubPBatQ8OgnCfoQ==
-X-Received: by 2002:a05:6a00:1901:b0:4f3:c0f6:5c47 with SMTP id y1-20020a056a00190100b004f3c0f65c47mr22673731pfi.69.1646083469641;
-        Mon, 28 Feb 2022 13:24:29 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id z14-20020aa7888e000000b004e5c2c0b9dcsm14761445pfe.30.2022.02.28.13.24.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 13:24:29 -0800 (PST)
-Message-ID: <48c74800-32c6-0327-52e2-96a59c1afda3@gmail.com>
-Date:   Mon, 28 Feb 2022 13:24:27 -0800
+        Mon, 28 Feb 2022 16:25:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABCF121522;
+        Mon, 28 Feb 2022 13:24:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6052261152;
+        Mon, 28 Feb 2022 21:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50E7C340F1;
+        Mon, 28 Feb 2022 21:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646083485;
+        bh=fu/dnEmqFSyXKID1VD4bFK7+fp4UW+/J+9UZTgdAkFY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WN2g5IDXNi/135TrH1b/xhDr21EzPPi+2C2HL8l2DLC0WN4tZlJipQu+sIn7gSQhx
+         E2gW7TyT05jKqLp2AYd+Mrpg0nwFinhHnAmXeSq1Gm+7Pa21qD93rcwTFnVP3jXncI
+         bnEV+yLULEMeckMvQTRQsONZw0sgblGTIcaEW/J4h3PFqQAdeahQPoi+yTn66QHJZY
+         s1erIEANtCbs5l6sfR6DE7cTmBB6CM2cF2B7XuQ6j4jrXiyCdu7RSbLHZFzfndAu1J
+         eGVg4fVJWfHUnqGSPwAluBiOEWLMyNHKRJqXKjrsHCmoQcCEY6lrdJ7E2uR2fvMIP/
+         hMsXCZCxKzdOw==
+Received: by mail-ed1-f52.google.com with SMTP id s24so19435696edr.5;
+        Mon, 28 Feb 2022 13:24:45 -0800 (PST)
+X-Gm-Message-State: AOAM530dSx+KyRUYHie6kOENWCZj3GnTl/izOnaGDt2BvhC89QtbpleS
+        0Gqu2tVCrNsG1BqXEef9Dih5u84ndPeslt5cEw==
+X-Google-Smtp-Source: ABdhPJw6dmtTyckD2gF5I1BitkqCJhhSY+2RRu5a7CXHFUyi59AMH5lvtiV0DeTGMOqwMH+01hD5mqDtnrnu4xMDfAw=
+X-Received: by 2002:aa7:d98a:0:b0:410:b844:7889 with SMTP id
+ u10-20020aa7d98a000000b00410b8447889mr21271791eds.109.1646083484031; Mon, 28
+ Feb 2022 13:24:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 4.9 00/29] 4.9.304-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220228172141.744228435@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220201181413.2719955-1-frowand.list@gmail.com>
+In-Reply-To: <20220201181413.2719955-1-frowand.list@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 28 Feb 2022 15:24:32 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKrWQ1Jn2HCxFsPKYcPXbYUgyPytvc_YrS=sgkWHv1hZA@mail.gmail.com>
+Message-ID: <CAL_JsqKrWQ1Jn2HCxFsPKYcPXbYUgyPytvc_YrS=sgkWHv1hZA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] of: unittest: add program to process EXPECT messages
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 1, 2022 at 12:14 PM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> If unittest detects a problem it will print a warning or error message
+> to the console.  Unittest also triggers warning and error messages from
+> other kernel code as a result of intentionally bad unittest data.  This
+> has led to confusion as to whether the triggered messages are an
+> expected result of a test or whether there is a real problem that is
+> independent of unittest.
+>
+> EXPECT messages were added to unittest to report each triggered message
+> that is expected, resulting in verbose console output.
+>
+> scripts/dtc/of_unittest is a new program that processes the EXPECT
+> messages to determine whether the triggered messages occurred and
+> also removes the excess verbosity of the EXPECT messages.  More
+> information is available from 'scripts/dtc/of_unittest_expect --help'.
+>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+> permissions for scripts/dtc/of_unittest should be 770
 
+Why? 755 is what the patch says and what most/all executables in the kernel are.
 
-On 2/28/2022 9:23 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.304 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.304-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Rob
 
-On ARCH_BRCMSTb using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+>
+> I will reply to this message with the usage message from
+> 'scripts/dtc/of_unittest_expect --help'.
+>
+> I will also reply with examples of raw and processed console logs.
+>
+>  Documentation/devicetree/of_unittest.rst |  27 +-
+>  scripts/dtc/of_unittest_expect           | 408 +++++++++++++++++++++++
+>  2 files changed, 432 insertions(+), 3 deletions(-)
+>  create mode 100755 scripts/dtc/of_unittest_expect

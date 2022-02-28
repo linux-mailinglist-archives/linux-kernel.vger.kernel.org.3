@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD2B4C6F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8947C4C6F0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiB1OLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S233411AbiB1ONb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiB1OLo (ORCPT
+        with ESMTP id S231997AbiB1ON3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:11:44 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD853B6F;
-        Mon, 28 Feb 2022 06:11:05 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2d07ae0b1c4so109306737b3.11;
-        Mon, 28 Feb 2022 06:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BJxYKTxrS47SVKXfCYqFiI5pez+ixoEGvmsQfyRqf6Q=;
-        b=ApEem39GpGOM1/xdtRRJXGdwGh3Ko0fovA8hxdfpMCiLbVhYPtlFAcRJ0hutScp7AQ
-         tZnK47q1didc5sRYdtRET0L60cDncH80+btbepYtdh8gFYmI/cOEQ3/CPS5Ri8yzHMJB
-         WW/FP5kjMGLVuX/z/WNi7WJp6vWWjmcOFbcm0ki39/URvwVtEaHstIe3HKuzNi+Ra24s
-         ieHj6YR4q+e4YdRGON3VEr+520JbaO27y+Ox1T66bODoUnQ8CYP+vgNe6dS6otE4nXuV
-         ddOVZjFuRj60l0XsG00J9xCCDc8n+UmLUAZA433dbL1NTb3S6PLmVwlj5g6MsCqjxu3/
-         i2Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BJxYKTxrS47SVKXfCYqFiI5pez+ixoEGvmsQfyRqf6Q=;
-        b=yYqNXGqq9eNjStW0ucvIxxrgoqTuDR9AhQhtyrNv9EdkMNq0rQkvcA6bB7chNZPy7n
-         QyBTSmEmuivdpkOuslwZx4riJ0Gk+1XZGUE6LJ6BLxA1B64SETaC8zP353OY0vonNkjS
-         1RqakrgCCy0YbJBEPxrH1NUr/T75OcRgu0sqTyIvRE7yf71QTqBFc2t67JRwzOi/TPf8
-         KEC5D+thA15kA1DRSbVj+AH79VKgKfrQCXg7i9SAfJF0D+ptQmMHRiq71oi+9Hbd6uVc
-         M18BNNMOHGx1wwokbJ/J8mb1WESFQto/cIeDVpjXqCfNJYiKy15Quw3P/nPDtUodo6hf
-         AXsA==
-X-Gm-Message-State: AOAM533Vt4shsSg1W+4fropoTtZwBvkOfH3ykP4IGmA1tgM/FLcnjdg6
-        QV7b90SBuEPXIzS53HEiCD5FNXececp8Rdddvog=
-X-Google-Smtp-Source: ABdhPJzvzulBMf956MEeHrsDwjEaCSD+FDeL+xKpBnFEob7eTPxsjcumYfxh0ZQJ6/PUjWp4ZOcdeUrRTOCV+PXzUsw=
-X-Received: by 2002:a81:1613:0:b0:2d7:c68f:bf21 with SMTP id
- 19-20020a811613000000b002d7c68fbf21mr20663108yww.414.1646057463684; Mon, 28
- Feb 2022 06:11:03 -0800 (PST)
+        Mon, 28 Feb 2022 09:13:29 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CAE37002;
+        Mon, 28 Feb 2022 06:12:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=OJ1gRNEUSqP52FWYxziDdfpkPpm8wJ65QOTUW1Ma5gs=; b=OnzF8RGS5nV7aqrahARKNDCydG
+        pzBm1owZD1yQlCjCVadmPQURAZD/Xauadw6Mxb13umjb0aUw97bLnN/STjwc+m71T3bYwxqwG00bu
+        yzLBOXs7+oyd0alB+J/wxySJe4lQ+mQafyhp6XnIV+RB64BJ6CFiCnt2OCUwE+LexiiLAYPyFc5y9
+        TaoNY/b6DvBa6Ej0gVwVjLPUc8b9hEDdAB52JRZwYQ2m5iiQX3PoKEU+hC6gZFirfgKUJD6um29M8
+        ZSHcrhRtMuulyP/8VO57elTr5/rCxCCmPZkuM4NrI/jxEsyu/k0z8rquDDYfOIqBdkpDzG/cX+eKi
+        AahWfjlw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57562)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nOglY-0008Qb-1F; Mon, 28 Feb 2022 14:12:44 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nOglV-0006E9-Dm; Mon, 28 Feb 2022 14:12:41 +0000
+Date:   Mon, 28 Feb 2022 14:12:41 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH net-next 4/4] net: phy: added master-slave config and
+ cable diagnostics for Lan937x
+Message-ID: <YhzYWXf30zcedsH1@shell.armlinux.org.uk>
+References: <20220228140510.20883-1-arun.ramadoss@microchip.com>
+ <20220228140510.20883-5-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20220227153016.950473-1-pgwipeout@gmail.com> <20220227153016.950473-6-pgwipeout@gmail.com>
- <fdacf3eb-7892-c767-ae85-1672f85684dc@wolfvision.net> <CAMdYzYoEEY6-kGVDeWj9AoA98BL5hxnc_4CnUPiuStUnSrFXLA@mail.gmail.com>
- <56f8b74d-d9a1-7c6b-67f2-29586956670d@wolfvision.net>
-In-Reply-To: <56f8b74d-d9a1-7c6b-67f2-29586956670d@wolfvision.net>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 28 Feb 2022 09:10:52 -0500
-Message-ID: <CAMdYzYpiNZ1ofzWmjf-3ew1F3RMHngz_Lo72Nu56AnirZSmRPw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228140510.20883-5-arun.ramadoss@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 8:37 AM Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
->
-> Hi Peter,
->
-> On 2/28/22 1:57 PM, Peter Geis wrote:
-> > [...]
-> >>> +
-> >>> +&usb_host0_xhci {
-> >>> +     phys = <&usb2phy0_otg>;
-> >>> +     phy-names = "usb2-phy";
-> >>> +     extcon = <&usb2phy0>;
-> >>
-> >> I wonder what the correct place for this extcon property is. You defined
-> >> it on SoC (RK3566) level, in my patch for the RK3568 EVB1 it is added on
-> >> board level. Is this common to all RK356x variants?
-> >
-> > Yes, the usb2phy is always available as an extcon unless you make a
-> > device that doesn't have usb2 capability.
-> > In that case you'd have to override the device anyways.
-> > If we want to turn on default role otg here, we'd need this defined
-> > here as well or things break.
->
-> OK, so it seems to me that the extcon could or should enter the
-> rk356x.dtsi (and can be removed from the rk3566.dtsi and the
-> rk3568-evb1-v10.dts in this series). Is that correct?
+On Mon, Feb 28, 2022 at 07:35:10PM +0530, Arun Ramadoss wrote:
+> To configure the Lan937x T1 phy as master or slave using the ethtool -s
+> <dev> master-slave <forced-master/forced-slave>, the config_aneg and
+> read status functions are added. And for the cable-diagnostics, used the
+> lan87xx routines.
+> 
+> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> ---
+>  drivers/net/phy/microchip_t1.c | 75 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+> 
+> diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
+> index 634a1423182a..3a0d4c4fab0a 100644
+> --- a/drivers/net/phy/microchip_t1.c
+> +++ b/drivers/net/phy/microchip_t1.c
+> @@ -81,6 +81,9 @@
+>  #define T1_REG_BANK_SEL			8
+>  #define T1_REG_ADDR_MASK		0xFF
+>  
+> +#define T1_MODE_STAT_REG		0x11
+> +#define T1_LINK_UP_MSK			BIT(0)
+> +
+>  #define DRIVER_AUTHOR	"Nisar Sayed <nisar.sayed@microchip.com>"
+>  #define DRIVER_DESC	"Microchip LAN87XX/LAN937x T1 PHY driver"
+>  
+> @@ -435,6 +438,11 @@ static int lan_phy_config_init(struct phy_device *phydev)
+>  	if (rc < 0)
+>  		phydev_err(phydev, "failed to initialize phy\n");
+>  
+> +	phydev->duplex = DUPLEX_FULL;
+> +	phydev->speed = SPEED_100;
+> +	phydev->pause = 0;
+> +	phydev->asym_pause = 0;
 
-Apologies it seems I just missed this.
-Yes, this could get moved to the base dtsi.
-I'd prefer to do it as part of the next series supporting otg, as I've
-only been doing OTG development on the rk3566 and would prefer it be
-fully tested.
-However if Johan prefers I can send another revision accomplishing this now.
+Shouldn't this be done in lan937x_read_status()?
 
->
-> Best regards,
-> Michael
->
-> > [...]
+Have you tested this patch with various invocations of ethtool -s ?
+E.g. autoneg on, autoneg off at various forced speeds, both suitable
+for the PHY and unsuitable? Are all these sensibly handled?
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

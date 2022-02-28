@@ -2,158 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756144C616B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F994C616D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiB1CuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 21:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        id S232649AbiB1CuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 21:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiB1Ct7 (ORCPT
+        with ESMTP id S229845AbiB1CuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:49:59 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E880420F44;
-        Sun, 27 Feb 2022 18:49:20 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21RMXx5h029559;
-        Mon, 28 Feb 2022 02:49:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=KsU5xckTz3tuX/3wSmb46SFc3DQb0o5GPCIkkZRuhP8=;
- b=OqisRc+dHr3vij+e9IY18Kwziail3ulZz57Nns2yTJXs00n0UxVw2+XDN/r16kdrgb5s
- KnhcqPBCptkjK7Jj5zJ/ahgSuxxmqNUdJ+RhRjhLEm4MYpxQyWphALYbd43WDCY72cB/
- LJ7gS/83gSGDp5GswTfn42LODtwN7/ZhUnWAleGit2snrlr3G0t5mb83EjAHYwnMvgcp
- 1ow97HsYzTf9xgcGprWy6zDkWYNKM2kaBTnk6OTUQWGhXd49Yjprn1McaUcVUX+EI+iI
- emDcfuj94XIpUhJgN9rs7vJnU29ONmC40XH9Jrw3OJPqeOhmNfvmLIu9CAwd9/R1xw47 fw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3efbttawjw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Feb 2022 02:49:02 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21S2jEFc110035;
-        Mon, 28 Feb 2022 02:49:01 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
-        by userp3020.oracle.com with ESMTP id 3efdnja348-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Feb 2022 02:49:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gmm5GkaWT7vPDaXRibkBB8KWDn6MjU9RREnIB48Xb9x6zrJMm7i4dGXOI7z7XnvCPUVLt7cI+gQ5Nvn/bP+s5h4wri5P+8B5Bt4NO4fsVK6GooIRIDEgaKVRcktQOqz7KMfMEK2k5g2oNBOFImhHPjcdb+Pk2g6ZKaiS8212VZtM/JfCIEC32aFKZftqqMu6aXkLS2gHgR1DouXtVi6RpXhMjpAhHETRg2qAIW7swy9aMl0at42eS4g9J5GVOdX307vMgdUlx22q9gXjbuDFAfyEXUOcVNaaEtJzac7HJ3dWpRIa3N7Y4hVjbJs8n8JcvtjbRYyClLfazVUWQhPV+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KsU5xckTz3tuX/3wSmb46SFc3DQb0o5GPCIkkZRuhP8=;
- b=di0hsHq5UCHhQtdFvsVnIcxHXFBhfwoxSJnHLo0K2oH99NhGrQTDDSImUVi4lDLt7YNKy9jLFalBT8j4+xwXQrYl7/QvzjXleuplJjhKY0ni72Ow9Bt9H3ECpB3VTpRexA0zvGe5clo9NSPSUVCKpHDgV8wCWg7HTmEmam6Ju+QQK6SWGfGfKoHYaquV2ys1jVJdBS2IRcC0gKWjumYZ3a0a+xY+8PbqKyX9yiSlFYZgWbBrq37To/YqH6O+p24Re2r40cGVEzQspWe6TnA1+D8PjzAQdbEifvvSXD2xGk1+d8fkwynWR5KkoLqgHf2jHzhT6utjva/rdLJFCzeEIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sun, 27 Feb 2022 21:50:19 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EF8220EC;
+        Sun, 27 Feb 2022 18:49:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KsU5xckTz3tuX/3wSmb46SFc3DQb0o5GPCIkkZRuhP8=;
- b=cF3T9RieJRvx9Bgxc1KP3xyZBDzuqffLLxzDOs8+RFbIYdsKGx4o6kiIuXkV31OPz21zzEHgS/5kZZ0PTmDzHZcTbhDIykncud1cuyYTIGY5tDDW19ekEYvttbQYB4EWlmnsgqC4A9ubN1vrpAmU512m7JXKidjDjjnwi4GGm8M=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH0PR10MB4695.namprd10.prod.outlook.com (2603:10b6:510:3f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
- 2022 02:48:59 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::180:b394:7d46:e1c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::180:b394:7d46:e1c0%6]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 02:48:59 +0000
-To:     John Garry <john.garry@huawei.com>
-Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <chenxiang66@hisilicon.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v2 0/2] scsi: libsas: Some minor improvements
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq15yoz7lke.fsf@ca-mkp.ca.oracle.com>
-References: <1645786656-221630-1-git-send-email-john.garry@huawei.com>
-Date:   Sun, 27 Feb 2022 21:48:57 -0500
-In-Reply-To: <1645786656-221630-1-git-send-email-john.garry@huawei.com> (John
-        Garry's message of "Fri, 25 Feb 2022 18:57:34 +0800")
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR07CA0004.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::14) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646016581; x=1677552581;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vCGfoqyGPkAvEtbK6UwOo3aRfR4Fv8Y/JLHnm4UphW4=;
+  b=Lt4K3PwGWadgDWokX7/GgRkLMLIqs1SMz9p2vQimPVGI2zdFV6P0q4/K
+   SR2Aaaj4djflV71MRLhO6SjvT05+IhYDh+/3RV9ih4O9RznPNlA27ui57
+   trxabx62WPnfgROaqtq2HGx4GCRBOoquLk/e2FxQa7GtqVdyvnVIzOWyb
+   o=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 27 Feb 2022 18:49:41 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 18:49:40 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Sun, 27 Feb 2022 18:49:39 -0800
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Sun, 27 Feb
+ 2022 18:49:35 -0800
+Message-ID: <174c9b00-966a-34e9-9625-cb9a18afaac3@quicinc.com>
+Date:   Mon, 28 Feb 2022 10:49:32 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 517c8463-a109-4bf3-6ab0-08d9fa64df0b
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4695:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR10MB46954F82B8112F9C9B8AB4AC8E019@PH0PR10MB4695.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: alvoxdqgwV/y0MF8DouWqC2oFWPd9C9bD3NGNj9DG2wfGN+aMdmXyg2y+Tbb4QBwbUWa1+Ur0jw3pjWjWYLXuAanj6+5whk/jp07R8jQXnaL1VmmUwsS7wDyPliv+BhnmMOC/X5ddKMsrYu2JHusalcG0K6ccuBHfffhucCiVtGSX5qj65ujZBxB+6U8e9buZrb5YRn27gCMNXyEunMxLOlRIzpu0P9wuV0ETK+ZR6xz8GiacWzvZuVV9TcLjTIdXB9cyN14e2nwNXl48R+F0B7lkEZjwcQeT2muA8oiQKCrROQgQqGm2aG2LzmBiqhFZD/BHydVaCAnyeHBp9lqF5iPJp1sOs92B64l7hdNIkTwkcM7nACSsgrf16dVeADGbdYJ1TC0TTwNT4c3JpmIHlLsw+6x+XJ6vtfGFIfzscH1DU1UAoSXkzfbYEc3YjZjm9J6jpT+88W5rv5/gGpmr2XbQfx6mLiJhN5OOvRmM+yrN3f+fCI1hu1Bl35p3/btgEr7k+4//AGXHOZOUoWSjMTrP+CV8jRvgVKFk3zjwgr/7VhcxtlAQKiThfQ1naLOqLTXsYzkJdVWviQlr6uJU28adrNQKVbdRf57+67Zde1oQ1tiYA3MId/v8Tbnf6PiXC0qTkLaa35nGcaS1tgVO5IxihNv5g3EUrTimHMNHpZ4Xb+QAJyBjoY5BqAkmdX1hO7VcE6Ehy6N/sNR/WR+og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(86362001)(6486002)(6916009)(558084003)(54906003)(36916002)(6512007)(6506007)(52116002)(508600001)(26005)(186003)(8936002)(8676002)(4326008)(66556008)(66946007)(5660300002)(66476007)(38100700002)(38350700002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ib8ZU3gwhpW8FoFNgAZ2KpBSDlVurnOV8V78TxAQX/Dz/gfHvGbnwQdqyacK?=
- =?us-ascii?Q?txHM1HEGN+D0EcGfbCE6O3TACL5mvUH4dZRewzTxJas8SHeed4YR5Bcd9Qwk?=
- =?us-ascii?Q?FECxkebyPsyc7vwNUcKQdF+RdcRxcgQvyP2wAdxIeTu0ZuybrUt8sgotcK03?=
- =?us-ascii?Q?rzbblnu4qAPhxfZVnIgI65q5II9D3TzXAFh9tmEpZGIofc2JSzOsGPGPSITO?=
- =?us-ascii?Q?uEPuDWRxlindOy3AjspbguLgK1kQDgMGm4yCXQOIwn4FzweKJbfKnfflb0+M?=
- =?us-ascii?Q?o4kZq6SOqdjKsSs65XLeNsvEV0HrGxr23gQUda+bCPxvYEmzvnEXI+nOZbdv?=
- =?us-ascii?Q?W4mOf9cW+54i91aMC+smQhaRgAVO7BLUKk4a/9If5WVV/t5uTw2rI3ccwPJk?=
- =?us-ascii?Q?qjHuTtbF8twnzz4sY18VTDzh0dXeyrTIWE+d100hWQwcw7nGFuXoUTKWuzkx?=
- =?us-ascii?Q?PKY2LxKi31d6RGrzZialmhcONcpIMXOZHXCjbV8HIGla05K0nfQOusYMPtS9?=
- =?us-ascii?Q?mIB/wD0UhYsTH18QWbKYyBrHEK7bwD003T4EePLYGMrd5YJc25SkYvfiY9bC?=
- =?us-ascii?Q?XxWBUj4Kkp9Pw+QSrrsFkw+wlBie4iSQ+ghrOs6XzIq5BQ/Ksx5s7Quu0qTn?=
- =?us-ascii?Q?am2Hmkiycc+XFpEIqOpwwcsLZBViE0PePXAq3rxcugZpd+jSGvL+t59HRdce?=
- =?us-ascii?Q?gwUp1v3lM2MdBKRTe7ovsHXTbieRZlFzKL6JGrk8aB2eJ1dCQEBD9a7WaHJc?=
- =?us-ascii?Q?15eX5jt+ASSbd9KK+wy4MSJrJO+mGxUKzZpc+SpBEBp2yAEtK2f7adezKczR?=
- =?us-ascii?Q?PwEaAUzotc58saymt8UP9jkd7O95L9xRrORq9njWQ+qlHsAraNFWFTz0tX6c?=
- =?us-ascii?Q?ZqmlKGe1mN3+8Q1r1pB9E1cEROlR1xVJpzCcegy5WhxE09C81rRczlPU2Okl?=
- =?us-ascii?Q?vPds7hCP/33CD99pzliFStek7A0gVvVNXUJbIuCjy4eSrTUfxfNCG8ueWWNE?=
- =?us-ascii?Q?BK0bpJqmzQWgnDoa8qFrYl/ctOIP47xHN5Cb3MXYnn8EVw41b2w4IfqsD72P?=
- =?us-ascii?Q?H//ztOT/Uiqv68QeiFwGbBW66EMw1bcpym/7v5yBGbG+LaBIa+T2/Az+J+ej?=
- =?us-ascii?Q?O/hp+TrIvd4TPNaYrfYCGXtg6S5wNAdlhDqXS6YeKYU5332atN2hcknWChrH?=
- =?us-ascii?Q?cuIpZEAnB/GcoTCZ6AAcMiVTdehFGWoYadZe1/9fvvYgrSkF9gQvj2UehDLA?=
- =?us-ascii?Q?jwaAaEo5l9PX/VM4sXZ5oblg4bn9CXpGhdsnTCma/vvE4YoxWbheLCYdH7d0?=
- =?us-ascii?Q?iZEhdknV9dx7+8iqOJZSs7gHNxPLI2yAm6unw+TLdhE8nj9LmOi0sFHksBHN?=
- =?us-ascii?Q?JyFSTjxVRkpFcObaK25XMTHg3Rv4WAvwuvKD0PeKEdipCQSYNOkabF7r1Vhn?=
- =?us-ascii?Q?m9uX0ymKlM3dP30dXCpqXLeHjgJa4CdHwBuqq3Oqekm1l71xU+BDEqZc2L1X?=
- =?us-ascii?Q?lmp3zhIvrGih4JEE475XMwn7kkDdlVj9in+yBgetP6kKTGrLa6C5DxBxzn7r?=
- =?us-ascii?Q?TEAQuIDBZ3HjdAY+YO7pBlK6u+S+EvgLxyhGopIrl9JS79MJ98SO3a/KtkEf?=
- =?us-ascii?Q?B5Uec8Dh/Z31l94kQ4Op4uUIjl2kk+7Yi3yrI0UOT0oFrsYgJjL2F31gdy4J?=
- =?us-ascii?Q?WYdTOg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 517c8463-a109-4bf3-6ab0-08d9fa64df0b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 02:48:59.6626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: didFcugny40hPrRVbTMDofcG/C9y1eabz4HCRFDElbcqvbE+0shj/Nmb459owbUyLEmiG6CDk3d/r0olfLQYPsyKIvxEoUgjayBdlvoza6E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4695
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10271 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=818 bulkscore=0
- adultscore=0 phishscore=0 spamscore=0 suspectscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202280015
-X-Proofpoint-GUID: QuQz-PCbINjcr-hiwH1iWVGUSZS37zeI
-X-Proofpoint-ORIG-GUID: QuQz-PCbINjcr-hiwH1iWVGUSZS37zeI
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 00/10] Coresight: Add support for TPDM and TPDA
+Content-Language: en-US
+To:     Mike Leach <mike.leach@linaro.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220209105706.18852-1-quic_jinlmao@quicinc.com>
+ <CAJ9a7VhZtNrj9S4T=dNDOWT9fEcnm1qqtp+4h3EqytidDwEd5Q@mail.gmail.com>
+ <0c87c995-142c-9c8f-5a9a-02e3a1119cce@quicinc.com>
+ <CAJ9a7Vi=yYAEiHy-hAZNLKamRi-kQMGh02LSiVC6qGbeCOOUCg@mail.gmail.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <CAJ9a7Vi=yYAEiHy-hAZNLKamRi-kQMGh02LSiVC6qGbeCOOUCg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good morning.
 
-John,
+On 2/17/2022 11:30 PM, Mike Leach wrote:
+> Hi,
+>
+>
+> On Fri, 11 Feb 2022 at 04:17, Jinlong Mao <quic_jinlmao@quicinc.com> wrote:
+>>
+>> On 2/10/2022 6:30 PM, Mike Leach wrote:
+>>> Hello  Mao,
+>>>
+>>> I have looked through this set and have a few general questions.
+>>>
+>>> My understanding based on the information in the code is that the TPDM
+>>> devices will always send data to the TPDA device, the TPDM is not
+>>> capable of directly driving the ATB itself?
+>>> The TPDA device  will then packetize the inputs and output these to
+>>> the ATB over the normal CoreSight architecture to a standard ETR / ETF
+>>> for collection.
+>>>
+>>> Looking at the TPDM driver - it is assigned a trace ID but never
+>>> actually uses it in the hardware. My assumption here is that this is
+>>> used purely to satisfy the requirement that the CoreSight core has
+>>> that all sources have a unique trace id?
+>>>
+>>> For the TPDA driver you assign an ATID as an attribute in device tree,
+>>> and then program this into the devices control register.
+>>>
+>>> The trace IDs in ETM / ETE / STM, are programmed into the hardware and
+>>> these values drive the ATID value on the trace bus. So assigning an
+>>> ATID value to the TPDA driver through device tree will lead to clashes
+>>> with the assignment of trace IDs in the other driver software.
+>>>
+>>> The topology here appears to me that you have multiple  "data source"
+>>> devices TPDM, supplying a TPDA - which is the real CoreSight "trace
+>>> source" from the viewpoint of the trace bus and CoreSight
+>>> infrastructure.
+>>> To get this to work in the current CoreSight driver stack, you have
+>>> assigned the TPDM as a source type, and the TPDA as a link to ensure
+>>> that when a TPDM is started, all the components on the path to the
+>>> sink are activated.
+>>> This is fine.
+>>>
+>>> If my assumptions above are all accurate I suggest the following improvements
+>>>
+>>> For TPDA drop the device tree assignment of ATID and instead use the
+>>> coresight_get_system_trace_id() function you introduce in the 2nd
+>>> patch in this set.
+>>>
+>>> For TPDM you have assigned a unique source sub-type
+>>> CORESIGHT_DEV_SUBTYPE_SOURCE_SYS.- this could become
+>>> CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. If the trace ID assigned to
+>>> this device is only to satisfy the unique ID requirement and is not
+>>> used elsewhere, then the sub type could become
+>>> CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. We can agree that this sub
+>>> type does not need a unique ID and acts as none ATB a source for
+>>> another component, The core code can be altered to drop the
+>>> requirement for this sub-type and trace ID can be dropped for this
+>>> component.
+>>>
+>>> You should be aware that we are in the process of re-designed how
+>>> trace IDs are allocated. The current mechanism does not scale for
+>>> large multi-core systems (currently broken for any system > 46 cores),
+>>> and as you have discovered there is a need for additional allocation
+>>> of IDs. Also the ETE / TRBE combination does not need a trace ID.  A
+>>> dynamic allocation system is being proposed.
+>>>
+>>> Regards
+>>>
+>>> Mike
+>>
+>> Hi  Mike,
+>>
+>> Your assumptions above are all correct.
+>> TPDMs connect to the same TPDA will share the atid of the TPDA.
+>> We have a PC tool to parse the TPDM trace data. It needs the fixed atid
+>> for each TPDA to identify the data.
+>> So we configure the atid for TPDA in device tree with fixed ids.
+>> I will discuss with internal tool team to see if TPDA's id can become
+>> dynamic when parse the data.
+>>
+> I understand that it is essential to know the ID when extracting the
+> trace from a sink with a coresight frame fomatter.
+> However, tools such as perf, achieve this by saving the metadata for
+> the session. If you are programming the trace ID, then it should be
+> possible to read back the same register to get the required
+> information for your trace session.
+>
+> If this is genuinely not possible for your system, then treat as a
+> fixed ID as I describe below.
+>
+>> Apart from the TPDA's atid, we also have some other sources with fixed
+>> id in HW on our internal device.
+>> Do you have any suggestion to how to allocate the IDs for the source
+>> with fixed id in HW ?
+>>
+>>
+> Fixed IDs in hardware - assuming that these devices do write directly
+> onto the trace bus using the ATID, should be accommodated by reserving
+> the fixed ID in any scheme used to allocate IDs,
+> In your case this would be to set a bit at the correct area in the bitfield.
+>
+> As mentioned we are working on an updated system to dynamically
+> allocate IDs for CoreSight sources - a reservation scheme for fixed ID
+> devices will be provided
+> .
+>
+> Regards
+>
+> Mike
 
-> This is just a couple of small improvements which we had sitting on
-> our dev branch. Please consider for 5.18.
+Thanks Mike for the code review these days.
 
-Applied to 5.18/scsi-staging, thanks!
+Discussed internally, we will use dynamical allocation for TPDA Atid.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+I will submit a new version for all your comments to the patches as of now.
+
+
+Thanks
+
+Jinlong Mao
+
+>
+>   >< Thanks
+>> Jinlong Mao
+>>
+>>
+>>>
+>>> On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
+>>>> This series adds support for the trace performance monitoring and
+>>>> diagnostics hardware (TPDM and TPDA). It is composed of two major
+>>>> elements.
+>>>> a) Changes for original coresight framework to support for TPDM and TPDA.
+>>>> b) Add driver code for TPDM and TPDA.
+>>>>
+>>>> Introduction of changes for original coresight framework
+>>>> Support TPDM as new coresight source.
+>>>> Since only STM and ETM are supported as coresight source originally.
+>>>> TPDM is a newly added coresight source. We need to change
+>>>> the original way of saving coresight path to support more types source
+>>>> for coresight driver.
+>>>> The following patch is to add support more coresight sources.
+>>>>       Use IDR to maintain all the enabled sources' paths.
+>>>>       coresight: Use bitmap to assign trace id to the sources
+>>>>
+>>>> Introduction of TPDM and TPDA
+>>>> TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+>>>> short serves as data collection component for various dataset types
+>>>> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+>>>> architecture) spec. The primary use case of the TPDM is to collect data
+>>>> from different data sources and send it to a TPDA for packetization,
+>>>> timestamping and funneling.
+>>>>       Coresight: Add coresight TPDM source driver
+>>>>       dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+>>>>       coresight-tpdm: Add DSB dataset support
+>>>>       coresight-tpdm: Add integration test support
+>>>>       docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+>>>>
+>>>> TPDA - The trace performance monitoring and diagnostics aggregator or
+>>>> TPDA in short serves as an arbitration and packetization engine for the
+>>>> performance monitoring and diagnostics network as specified in the QPMDA
+>>>> (Qualcomm performance monitoring and diagnostics architecture)
+>>>> specification. The primary use case of the TPDA is to provide
+>>>> packetization, funneling and timestamping of Monitor data as specified
+>>>> in the QPMDA specification.
+>>>> The following patch is to add driver for TPDA.
+>>>>       Coresight: Add TPDA link driver
+>>>>       dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+>>>>
+>>>> The last patch of this series is a device tree modification, which add
+>>>> the TPDM and TPDA configuration to device tree for validating.
+>>>>       ARM: dts: msm: Add coresight components for SM8250
+>>>>
+>>>> Once this series patches are applied properly, the tpdm and tpda nodes
+>>>> should be observed at the coresight path /sys/bus/coresight/devices
+>>>> e.g.
+>>>> /sys/bus/coresight/devices # ls -l | grep tpd
+>>>> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+>>>> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+>>>>
+>>>> We can use the commands are similar to the below to validate TPDMs.
+>>>> Enable coresight sink first.
+>>>>
+>>>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+>>>> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+>>>> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+>>>> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+>>>> The test data will be collected in the coresight sink which is enabled.
+>>>> If rwp register of the sink is keeping updating when do
+>>>> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+>>>> generated from TPDM to sink.
+>>>>
+>>>> Changes from V2:
+>>>> 1. Use bitmap to assign the trace id. (Mathieu Poirier)
+>>>>
+>>>> Mao Jinlong (10):
+>>>>     Use IDR to maintain all the enabled sources' paths.
+>>>>     coresight: Use bitmap to assign trace id to the sources
+>>>>     Coresight: Add coresight TPDM source driver
+>>>>     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+>>>>     coresight-tpdm: Add DSB dataset support
+>>>>     coresight-tpdm: Add integration test support
+>>>>     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+>>>>     Coresight: Add TPDA link driver
+>>>>     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+>>>>     ARM: dts: msm: Add coresight components for SM8250
+>>>>
+>>>>    .../testing/sysfs-bus-coresight-devices-tpdm  |   6 +
+>>>>    .../bindings/arm/coresight-tpda.yaml          | 129 ++++
+>>>>    .../bindings/arm/coresight-tpdm.yaml          |  81 ++
+>>>>    .../devicetree/bindings/arm/coresight.txt     |   7 +
+>>>>    MAINTAINERS                                   |   1 +
+>>>>    .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 690 ++++++++++++++++++
+>>>>    arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
+>>>>    drivers/hwtracing/coresight/Kconfig           |  33 +
+>>>>    drivers/hwtracing/coresight/Makefile          |   2 +
+>>>>    drivers/hwtracing/coresight/coresight-core.c  | 127 ++--
+>>>>    drivers/hwtracing/coresight/coresight-tpda.c  | 193 +++++
+>>>>    drivers/hwtracing/coresight/coresight-tpda.h  |  32 +
+>>>>    drivers/hwtracing/coresight/coresight-tpdm.c  | 270 +++++++
+>>>>    drivers/hwtracing/coresight/coresight-tpdm.h  |  57 ++
+>>>>    include/linux/coresight-pmu.h                 |  11 +
+>>>>    include/linux/coresight.h                     |   1 +
+>>>>    16 files changed, 1592 insertions(+), 50 deletions(-)
+>>>>    create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>>    create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+>>>>    create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+>>>>    create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+>>>>    create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+>>>>    create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+>>>>    create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+>>>>
+>>>> --
+>>>> 2.17.1
+>>>>
+>>> --
+>>> Mike Leach
+>>> Principal Engineer, ARM Ltd.
+>>> Manchester Design Centre. UK
+>
+>

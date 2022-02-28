@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2844C72EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FEA4C7396
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiB1RaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S235653AbiB1Rgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiB1R2s (ORCPT
+        with ESMTP id S238765AbiB1Rdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48138532DD;
-        Mon, 28 Feb 2022 09:27:46 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01179318C;
+        Mon, 28 Feb 2022 09:30:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E9DAB815B3;
-        Mon, 28 Feb 2022 17:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB821C340F1;
-        Mon, 28 Feb 2022 17:27:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2021F6143A;
+        Mon, 28 Feb 2022 17:30:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3D0C340E7;
+        Mon, 28 Feb 2022 17:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069264;
-        bh=HoLEQ2TaX6ubWk9PSokg3s7x9DbVFI2HCJZN2ota9Mo=;
+        s=korg; t=1646069440;
+        bh=ROkih2dOv8Nkwrhl3q24xQr0HNt/vhhvIrdDm3BjikQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SSdw+59XLuVG6NXZHh3e0SjzdoYbf1pNE+rck/YeUo4yN7CBX4aN7WiJohwF0dRqy
-         4WvgIMhVAwYRPi0frmV1vf+rveH6r4+n8x+xQSxTMbhPu2EeNDgmx830zj2NKEtJzC
-         wBnWghaRzf6UQ8nwZEU8uezlEfBy90trHGAhvHac=
+        b=QHsd7fZv7oVQYpk5utp4iWtQ/VtQvndl+HXV+YTi8IMjc2tUQahwS3xaa2SqssMA9
+         lhng6Q9Zu0AUN1JKHVF5ae5Nsys72LM5N+I+imEMQtdiKxa+ZtJxi5sQ7AiiKFd3PQ
+         72pgrQKBUYe22VDjboztcU3DSZkf5DXCVfRjpxzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.14 22/31] USB: serial: option: add support for DW5829e
+        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 20/53] openvswitch: Fix setting ipv6 fields causing hw csum failure
 Date:   Mon, 28 Feb 2022 18:24:18 +0100
-Message-Id: <20220228172201.853541602@linuxfoundation.org>
+Message-Id: <20220228172249.788638885@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,114 +54,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Paul Blakey <paulb@nvidia.com>
 
-commit 6ecb3f0b18b320320460a42e40d6fb603f6ded96 upstream.
+commit d9b5ae5c1b241b91480aa30408be12fe91af834a upstream.
 
-Dell DW5829e same as DW5821e except CAT level.
-DW5821e supports CAT16 but DW5829e supports CAT9.
-There are 2 types product of DW5829e: normal and eSIM.
-So we will add 2 PID for DW5829e.
-And for each PID, it support MBIM or RMNET.
-Let's see test evidence as below:
+Ipv6 ttl, label and tos fields are modified without first
+pulling/pushing the ipv6 header, which would have updated
+the hw csum (if available). This might cause csum validation
+when sending the packet to the stack, as can be seen in
+the trace below.
 
-DW5829e MBIM mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+Fix this by updating skb->csum if available.
 
-DW5829e RMNET mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+Trace resulted by ipv6 ttl dec and then sending packet
+to conntrack [actions: set(ipv6(hlimit=63)),ct(zone=99)]:
+[295241.900063] s_pf0vf2: hw csum failure
+[295241.923191] Call Trace:
+[295241.925728]  <IRQ>
+[295241.927836]  dump_stack+0x5c/0x80
+[295241.931240]  __skb_checksum_complete+0xac/0xc0
+[295241.935778]  nf_conntrack_tcp_packet+0x398/0xba0 [nf_conntrack]
+[295241.953030]  nf_conntrack_in+0x498/0x5e0 [nf_conntrack]
+[295241.958344]  __ovs_ct_lookup+0xac/0x860 [openvswitch]
+[295241.968532]  ovs_ct_execute+0x4a7/0x7c0 [openvswitch]
+[295241.979167]  do_execute_actions+0x54a/0xaa0 [openvswitch]
+[295242.001482]  ovs_execute_actions+0x48/0x100 [openvswitch]
+[295242.006966]  ovs_dp_process_packet+0x96/0x1d0 [openvswitch]
+[295242.012626]  ovs_vport_receive+0x6c/0xc0 [openvswitch]
+[295242.028763]  netdev_frame_hook+0xc0/0x180 [openvswitch]
+[295242.034074]  __netif_receive_skb_core+0x2ca/0xcb0
+[295242.047498]  netif_receive_skb_internal+0x3e/0xc0
+[295242.052291]  napi_gro_receive+0xba/0xe0
+[295242.056231]  mlx5e_handle_rx_cqe_mpwrq_rep+0x12b/0x250 [mlx5_core]
+[295242.062513]  mlx5e_poll_rx_cq+0xa0f/0xa30 [mlx5_core]
+[295242.067669]  mlx5e_napi_poll+0xe1/0x6b0 [mlx5_core]
+[295242.077958]  net_rx_action+0x149/0x3b0
+[295242.086762]  __do_softirq+0xd7/0x2d6
+[295242.090427]  irq_exit+0xf7/0x100
+[295242.093748]  do_IRQ+0x7f/0xd0
+[295242.096806]  common_interrupt+0xf/0xf
+[295242.100559]  </IRQ>
+[295242.102750] RIP: 0033:0x7f9022e88cbd
+[295242.125246] RSP: 002b:00007f9022282b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffda
+[295242.132900] RAX: 0000000000000005 RBX: 0000000000000010 RCX: 0000000000000000
+[295242.140120] RDX: 00007f9022282ba8 RSI: 00007f9022282a30 RDI: 00007f9014005c30
+[295242.147337] RBP: 00007f9014014d60 R08: 0000000000000020 R09: 00007f90254a8340
+[295242.154557] R10: 00007f9022282a28 R11: 0000000000000246 R12: 0000000000000000
+[295242.161775] R13: 00007f902308c000 R14: 000000000000002b R15: 00007f9022b71f40
 
-DW5829e-eSIM MBIM mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  6 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-
-DW5829e-eSIM RMNET mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-BTW, the interface 0x6 of MBIM mode is GNSS port, which not same as NMEA
-port. So it's banned from serial option driver.
-The remaining interfaces 0x2-0x5 are: MODEM, MODEM, NMEA, DIAG.
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Link: https://lore.kernel.org/r/20220214021401.6264-1-slark_xiao@163.com
-[ johan: drop unnecessary reservation of interface 1 ]
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: 3fdbd1ce11e5 ("openvswitch: add ipv6 'set' action")
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Link: https://lore.kernel.org/r/20220223163416.24096-1-paulb@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ include/net/checksum.h    |    5 +++++
+ net/openvswitch/actions.c |   46 ++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 43 insertions(+), 8 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -201,6 +201,8 @@ static void option_instat_callback(struc
+--- a/include/net/checksum.h
++++ b/include/net/checksum.h
+@@ -139,6 +139,11 @@ static inline void csum_replace2(__sum16
+ 	*sum = ~csum16_add(csum16_sub(~(*sum), old), new);
+ }
  
- #define DELL_PRODUCT_5821E			0x81d7
- #define DELL_PRODUCT_5821E_ESIM			0x81e0
-+#define DELL_PRODUCT_5829E_ESIM			0x81e4
-+#define DELL_PRODUCT_5829E			0x81e6
++static inline void csum_replace(__wsum *csum, __wsum old, __wsum new)
++{
++	*csum = csum_add(csum_sub(*csum, old), new);
++}
++
+ struct sk_buff;
+ void inet_proto_csum_replace4(__sum16 *sum, struct sk_buff *skb,
+ 			      __be32 from, __be32 to, bool pseudohdr);
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -427,12 +427,43 @@ static void set_ipv6_addr(struct sk_buff
+ 	memcpy(addr, new_addr, sizeof(__be32[4]));
+ }
  
- #define KYOCERA_VENDOR_ID			0x0c88
- #define KYOCERA_PRODUCT_KPC650			0x17da
-@@ -1066,6 +1068,10 @@ static const struct usb_device_id option
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
- 	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-+	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E),
-+	  .driver_info = RSVD(0) | RSVD(6) },
-+	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM),
-+	  .driver_info = RSVD(0) | RSVD(6) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
+-static void set_ipv6_fl(struct ipv6hdr *nh, u32 fl, u32 mask)
++static void set_ipv6_dsfield(struct sk_buff *skb, struct ipv6hdr *nh, u8 ipv6_tclass, u8 mask)
+ {
++	u8 old_ipv6_tclass = ipv6_get_dsfield(nh);
++
++	ipv6_tclass = OVS_MASKED(old_ipv6_tclass, ipv6_tclass, mask);
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)(old_ipv6_tclass << 12),
++			     (__force __wsum)(ipv6_tclass << 12));
++
++	ipv6_change_dsfield(nh, ~mask, ipv6_tclass);
++}
++
++static void set_ipv6_fl(struct sk_buff *skb, struct ipv6hdr *nh, u32 fl, u32 mask)
++{
++	u32 ofl;
++
++	ofl = nh->flow_lbl[0] << 16 |  nh->flow_lbl[1] << 8 |  nh->flow_lbl[2];
++	fl = OVS_MASKED(ofl, fl, mask);
++
+ 	/* Bits 21-24 are always unmasked, so this retains their values. */
+-	OVS_SET_MASKED(nh->flow_lbl[0], (u8)(fl >> 16), (u8)(mask >> 16));
+-	OVS_SET_MASKED(nh->flow_lbl[1], (u8)(fl >> 8), (u8)(mask >> 8));
+-	OVS_SET_MASKED(nh->flow_lbl[2], (u8)fl, (u8)mask);
++	nh->flow_lbl[0] = (u8)(fl >> 16);
++	nh->flow_lbl[1] = (u8)(fl >> 8);
++	nh->flow_lbl[2] = (u8)fl;
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)htonl(ofl), (__force __wsum)htonl(fl));
++}
++
++static void set_ipv6_ttl(struct sk_buff *skb, struct ipv6hdr *nh, u8 new_ttl, u8 mask)
++{
++	new_ttl = OVS_MASKED(nh->hop_limit, new_ttl, mask);
++
++	if (skb->ip_summed == CHECKSUM_COMPLETE)
++		csum_replace(&skb->csum, (__force __wsum)(nh->hop_limit << 8),
++			     (__force __wsum)(new_ttl << 8));
++	nh->hop_limit = new_ttl;
+ }
+ 
+ static void set_ip_ttl(struct sk_buff *skb, struct iphdr *nh, u8 new_ttl,
+@@ -550,18 +581,17 @@ static int set_ipv6(struct sk_buff *skb,
+ 		}
+ 	}
+ 	if (mask->ipv6_tclass) {
+-		ipv6_change_dsfield(nh, ~mask->ipv6_tclass, key->ipv6_tclass);
++		set_ipv6_dsfield(skb, nh, key->ipv6_tclass, mask->ipv6_tclass);
+ 		flow_key->ip.tos = ipv6_get_dsfield(nh);
+ 	}
+ 	if (mask->ipv6_label) {
+-		set_ipv6_fl(nh, ntohl(key->ipv6_label),
++		set_ipv6_fl(skb, nh, ntohl(key->ipv6_label),
+ 			    ntohl(mask->ipv6_label));
+ 		flow_key->ipv6.label =
+ 		    *(__be32 *)nh & htonl(IPV6_FLOWINFO_FLOWLABEL);
+ 	}
+ 	if (mask->ipv6_hlimit) {
+-		OVS_SET_MASKED(nh->hop_limit, key->ipv6_hlimit,
+-			       mask->ipv6_hlimit);
++		set_ipv6_ttl(skb, nh, key->ipv6_hlimit, mask->ipv6_hlimit);
+ 		flow_key->ip.ttl = nh->hop_limit;
+ 	}
+ 	return 0;
 
 

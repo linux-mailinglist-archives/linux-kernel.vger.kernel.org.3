@@ -2,159 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D244C6C67
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBE74C6C14
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiB1M0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S235392AbiB1MWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbiB1MZg (ORCPT
+        with ESMTP id S232094AbiB1MWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:25:36 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5675238
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:24:35 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 195so11230949pgc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:24:35 -0800 (PST)
+        Mon, 28 Feb 2022 07:22:12 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB4370861
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:21:33 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j22so15088008wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:21:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NevpP32QQ8SJ3jDpfuGxxyXaFtCuF+EJTDzyFWscs5o=;
-        b=ihucVeQ4jgnzm85wwJYDwQ+pBJzqK/MKwHcmdBv9j/RHbv3a1ZtU6Ux8lEzIF95Ex6
-         3lZewDApJuoKqkNiWQKFMHmfJMXbTq0vwQ9RClH0ndB8UJrqXY2ulzd8icYrClgdXqhe
-         Ra7U/pHY64X2k5ZCc4nNUh8KVGVtvo4zVwfTNo91F19Rcka/x2NatjgcwGgT+XHXTYF6
-         5uim+MWZ5ByjtbBIuAC4IyPHvYlW0iA677nEK9WjdDEd/t4Hm4CucamxAkwt2UkFjQmY
-         nTmEhw972lZUkTw2rvYOpWuDH5fLx5DiKrBqe0fLSHLL0Z3EOgl0yJESz9RaIl4tuMGa
-         bZAg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zUvIRVJi/ZgllM3Ppyfeb+eG2zPiG6PJ8f5vmqOU/74=;
+        b=Nfz1Rop9HBjK5ByYGawUYVeS1YoLoQqHb/px7OrCme6n2GJ63C0vxpcr62MG32vohL
+         3iwfHGGel2r/w4I82v/iWv+nKgI1sn/noLCa5Ok6d227vCjh4hqExtS1aUlk4MQw3xDl
+         /O8HS+WjxvCvfvB17e/QWy8SxQzyudQZLPC/mAHSzBIw1W+cb7/Sw+uwTaZThCrjuCBf
+         FENURFeaj84q4YCwZLMJttk+Zt3sMQ5rK611mQzHAVbv4urPNZnPgBUiwor1++rFOFyB
+         CFPr572dMr8+5bWP8A0t/ox+ZvXRDNWsXeogROtNFzVhRPewuG8Y86845CLr4R/XDcO6
+         4oFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NevpP32QQ8SJ3jDpfuGxxyXaFtCuF+EJTDzyFWscs5o=;
-        b=kfg9kqTwXVCzebJmVLW++5yIiQ55v7mdcy6HbxImSUeVbH6CQCtDsBr8+DBD90Bnx/
-         NWwXUNjZhnbCox0ALk0bVwzEx14nilFVE6Cg4BEhP/+cJaH02fHcTk2xQtSMFyB3vxRb
-         Wnr4wz5EX/VwfWsCZpmZ3YEUe9ZhFFzydevBO0YYWHgLLQV+UXA1PYMtH5HniX4Z1BBT
-         znuCQpPbLI1tl1Z4FlywOFQibeOAAcYhp6ljvcsiuZwqcxgblJKBTgXbrqpJnfpgs8ni
-         +/lSW3hrkbu/un6TRqtG0mBmKKM+9j7qImVpI9gk2341HWefFY48lE+1nT0SKMO1lblt
-         P0xA==
-X-Gm-Message-State: AOAM533owa+wOj7s+stbJQ30s+guEGCMi6T24O4u91QCwaPsgyLobW4G
-        cy8EvOjz0Z4O61AZAhAchlm5TQ==
-X-Google-Smtp-Source: ABdhPJzBHt0LSbQDQn3rid6vU7ULCI5I4vMu3BCDn4hLIJ8Ym2Tkr9hIKLBIhVrgEacU7E7T7cAL2g==
-X-Received: by 2002:a63:4a63:0:b0:373:a03a:8a1d with SMTP id j35-20020a634a63000000b00373a03a8a1dmr16703240pgl.460.1646051074724;
-        Mon, 28 Feb 2022 04:24:34 -0800 (PST)
-Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id ep22-20020a17090ae65600b001b92477db10sm10466753pjb.29.2022.02.28.04.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:24:34 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     willy@infradead.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, vdavydov.dev@gmail.com, shakeelb@google.com,
-        roman.gushchin@linux.dev, shy828301@gmail.com, alexs@kernel.org,
-        richard.weiyang@gmail.com, david@fromorbit.com,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
-        vbabka@suse.cz
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v6 16/16] mm: memcontrol: rename memcg_cache_id to memcg_kmem_id
-Date:   Mon, 28 Feb 2022 20:21:26 +0800
-Message-Id: <20220228122126.37293-17-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220228122126.37293-1-songmuchun@bytedance.com>
-References: <20220228122126.37293-1-songmuchun@bytedance.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zUvIRVJi/ZgllM3Ppyfeb+eG2zPiG6PJ8f5vmqOU/74=;
+        b=j8+Xnjw72q5AFiGDCOzrVJdwkncwf7g4GJgrtchqcOoCWevHzt4nblPNUjj8j2NeKI
+         fF7tdr3Z/euthdbjC/f6qgQB3jTtngrXcHu1pHekDyBozt/NSnXv5uE/woCyANN+a+S3
+         XmbArybpQM+ng64HbZVEx0t7WJtASC6VsurgHRYBg1CganULzNasUzSQ/8q87/8ZaN/S
+         wfj8tymPbHmwHA68iSPzo4+JVT0H4A7+AFzen48Ad8gKotVWGVO1Z7MxNefQri28VYwC
+         c1mkFuhwWiICmR2pC6+KHRgu3ZnA8NQlidSC7NgBbeOVMibkayKL+ZGoMW0sq/9MR5QG
+         XB5Q==
+X-Gm-Message-State: AOAM532fbpSnrxz2Oz8NpzmtQN8BJdO+JMFkVL7uSfW9Ouggs8iHFNjN
+        BmSQeyzSB6azZL1iLlEzhbA19Q==
+X-Google-Smtp-Source: ABdhPJwVyT2YPEWD2Yo08X8WeWnnWFuFbH42LA+0nXQyBNJMcm/X0KGQbgBV+am+JgWsQsAZSVOZ+w==
+X-Received: by 2002:adf:f00e:0:b0:1ed:e1d2:f10c with SMTP id j14-20020adff00e000000b001ede1d2f10cmr15734487wro.181.1646050892112;
+        Mon, 28 Feb 2022 04:21:32 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:7f2b:6650:2756:a131? ([2a01:e34:ed2f:f020:7f2b:6650:2756:a131])
+        by smtp.googlemail.com with ESMTPSA id a17-20020a5d5091000000b001edb61b2687sm14710938wrt.63.2022.02.28.04.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 04:21:31 -0800 (PST)
+Message-ID: <793819e8-1e6e-385c-d94b-c117ab3110b0@linaro.org>
+Date:   Mon, 28 Feb 2022 13:21:30 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Testing the thermal genetlink API
+Content-Language: en-US
+To:     Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memcg_cache_id() introduced by commit 2633d7a02823 ("slab/slub:
-consider a memcg parameter in kmem_create_cache") is used to index
-in the kmem_cache->memcg_params->memcg_caches array. Since
-kmem_cache->memcg_params.memcg_caches has been removed by commit
-9855609bde03 ("mm: memcg/slab: use a single set of kmem_caches for
-all accounted allocations"). So the name does not need to reflect
-cache related. Just rename it to memcg_kmem_id. And it can reflect
-kmem related.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- include/linux/memcontrol.h | 4 ++--
- mm/list_lru.c              | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hi Nicolas,
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 1fe44ec5aa03..fe44e4d36bd7 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1709,7 +1709,7 @@ static inline void memcg_kmem_uncharge_page(struct page *page, int order)
-  * A helper for accessing memcg's kmem_id, used for getting
-  * corresponding LRU lists.
-  */
--static inline int memcg_cache_id(struct mem_cgroup *memcg)
-+static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- {
- 	return memcg ? memcg->kmemcg_id : -1;
- }
-@@ -1747,7 +1747,7 @@ static inline bool memcg_kmem_enabled(void)
- 	return false;
- }
- 
--static inline int memcg_cache_id(struct mem_cgroup *memcg)
-+static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- {
- 	return -1;
- }
-diff --git a/mm/list_lru.c b/mm/list_lru.c
-index 38f711e9b56e..8b402373e965 100644
---- a/mm/list_lru.c
-+++ b/mm/list_lru.c
-@@ -75,7 +75,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
- 	if (!memcg)
- 		goto out;
- 
--	l = list_lru_from_memcg_idx(lru, nid, memcg_cache_id(memcg));
-+	l = list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
- out:
- 	if (memcg_ptr)
- 		*memcg_ptr = memcg;
-@@ -182,7 +182,7 @@ unsigned long list_lru_count_one(struct list_lru *lru,
- 	long count;
- 
- 	rcu_read_lock();
--	l = list_lru_from_memcg_idx(lru, nid, memcg_cache_id(memcg));
-+	l = list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
- 	count = l ? READ_ONCE(l->nr_items) : 0;
- 	rcu_read_unlock();
- 
-@@ -273,7 +273,7 @@ list_lru_walk_one(struct list_lru *lru, int nid, struct mem_cgroup *memcg,
- 	unsigned long ret;
- 
- 	spin_lock(&nlru->lock);
--	ret = __list_lru_walk_one(lru, nid, memcg_cache_id(memcg), isolate,
-+	ret = __list_lru_walk_one(lru, nid, memcg_kmem_id(memcg), isolate,
- 				  cb_arg, nr_to_walk);
- 	spin_unlock(&nlru->lock);
- 	return ret;
-@@ -289,7 +289,7 @@ list_lru_walk_one_irq(struct list_lru *lru, int nid, struct mem_cgroup *memcg,
- 	unsigned long ret;
- 
- 	spin_lock_irq(&nlru->lock);
--	ret = __list_lru_walk_one(lru, nid, memcg_cache_id(memcg), isolate,
-+	ret = __list_lru_walk_one(lru, nid, memcg_kmem_id(memcg), isolate,
- 				  cb_arg, nr_to_walk);
- 	spin_unlock_irq(&nlru->lock);
- 	return ret;
+thanks for using the netlink and giving those feedbacks even you are 
+unhappy with them.
+
+On 28/02/2022 12:03, Nicolas Cavallari wrote:
+> I've played a bit with the thermal netlink interface and it wasn't pleasant:
+> 
+> 1. The way attributes are used is painful.  Instead of using arrays of
+>     nested structs-like, it flattens them into a big nested attr where
+>     you have to guess when an entry starts and when it ends.
+>     libnl provides no helper for this case:
+> 
+>     [{nla_type=TZ|F_NESTED},
+> 	[{nla_type=TZ_ID}, 1]
+> 	[{nla_type=TZ_NAME}, "name1"]
+> 	[{nla_type=TZ_ID}, 2]
+> 	[{nla_type=TZ_NAME}, "name2"]
+> 	[{nla_type=TZ_ID}, 3]
+> 	[{nla_type=TZ_NAME}, "name3"]
+> 	[{nla_type=TZ_ID}, 4]
+> 	[{nla_type=TZ_NAME}, "name4"]
+>     ]
+> 
+> 2. The genl_cmd types are not unique between multicast events and
+>     command replies.  If you send genl_cmd=3 (CMD_TZ_GET_TEMP) and you
+>     get a genl_cmd=3 reply, you cannot know if it is a CMD_TZ_GET_TEMP
+>     response or a EVENT_TZ_DISABLE because both have genl_cmd=3, but
+>     completely different semantics.
+> 3. The API is heavy.  Getting the complete information about all thermal
+>     zones requires 1 + 6 * thermal_zones netlink requests, each of them
+>     only returning few information.  You need most of them to merely
+>     translate the event's TZ_ID/TZ_TRIP_ID/CDEV_ID to names.
+
+That is part of the discovery and it should happen only once when you 
+get the thermal information.
+
+> 4. THERMAL_GENL_CMD_TZ_GET_TRIP cause an oops if the thermal zone driver
+>     does not have a get_trip_hyst callback.
+>     This concerns all drivers, short of two.  A patch follows.
+
+Great, thanks for the fix.
+
+> For the record, I couldn't find any open source program using this API.
+> It's also not enabled in all distributions.
+
+The netlink support is very recent. A library has been posted [1] and 
+hopefully it can helps you to get rid of all the complexity.
+
+Thanks for testing
+
+   -- D.
+
+[1] 
+https://lore.kernel.org/all/20220218125334.995447-1-daniel.lezcano@linaro.org/
+
+
 -- 
-2.11.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

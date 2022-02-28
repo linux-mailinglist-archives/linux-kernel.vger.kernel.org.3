@@ -2,62 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542BF4C6BD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3744C6BC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbiB1MIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S236179AbiB1MHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236275AbiB1MH6 (ORCPT
+        with ESMTP id S229519AbiB1MHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:07:58 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B030366AEC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:07:18 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21SC6uwu088786;
-        Mon, 28 Feb 2022 06:06:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1646050016;
-        bh=xsy/5NJoGwHmtrLksi7cIa7ZqU2/SzM/kUJsmFAq4nQ=;
-        h=Date:From:To:CC:Subject;
-        b=PYX5Jp4f0FypET08TuLZH0RAstflL5djO9gW1FrvBaJN5k9zt+Qe+7zm5HLUBrm5s
-         tpjITpYJ8/s48QXXKbNfsI2lGqFVTPRGwG92U2+r8ydOEPIC2VOIjwa6OGm1qE/Izb
-         6+WvArZqpQnnYEzQXVbTAcWdPsuaBaws0l3l2IRA=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21SC6u1C053355
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Feb 2022 06:06:56 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
- Feb 2022 06:06:55 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 28 Feb 2022 06:06:55 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21SC6txV081800;
-        Mon, 28 Feb 2022 06:06:55 -0600
-Date:   Mon, 28 Feb 2022 06:06:55 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, <nm@ti.com>
-Subject: [GIT PULL 1/3] TI SoC driver updates for v5.18
-Message-ID: <20220228120655.wobd72acngl2bz6k@ecard>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4udoj2hk2odz47n5"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 28 Feb 2022 07:07:41 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0329366634;
+        Mon, 28 Feb 2022 04:07:02 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id vz16so24389202ejb.0;
+        Mon, 28 Feb 2022 04:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mpq6EOSgaJN9TDHyutZ1vk7Ts/tQX7VWZG2tuQLEVnE=;
+        b=P6Qm9QV+tKwfj02RvG70Y6RM578oBE7xk1h9xLRDl0Phoeno/cOg2X5jGG320h7a80
+         51RqQzzCwbkind1CCh/PsD+YJ2xLuw3nTu9DY+Zris5SVOV1FI+8DsU52Jy5KlVydcNu
+         G0XxThLJxiMxymk0pHTiYIUYA6Uj3RhvFK2FvOkFF3qdetV9R5zYggWzNl+ojj1OXKZf
+         MkNjwD1Q29EHNb+3aSEEQSq9r3HlkkV49QyRIpbAEX1BAYg/I0l3VyVoctyp9PVfLMdm
+         3mwm8jDaSc7WWe042oo4mIB/QOs4nHzHS6+i8MWcrLd/SBvvylJKxoeMQwrp3MTt3slq
+         2wxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mpq6EOSgaJN9TDHyutZ1vk7Ts/tQX7VWZG2tuQLEVnE=;
+        b=24WWfqqnsD/NG+QE4WdFpI8Hjrqa5CE2WU/U8ebn0q1mJAegySmQ/ZWnYEZZ8D71w2
+         k+tVwfwWIjHS1b9ZBn5zNVXe8ukYyQM7UpogSuFXiMXdthhAiWrzTvuFgTpZNIrr7nbu
+         TLeFEtLJa7QjePoVd8+i5agQ3eyZt/cGtxKSY896LNVu+n7mo0pMFf6sIJuLBg5ZadY7
+         leHLoMK/fqR74aYKgCQ/sHc7aGch5nlaYvLouPr+fo8llkAc72YG/FjB0e2Ab3ccX5XE
+         MVAstfebV4dpbQkfVCAy2rT319DRYfRzM25fn+f+0rD7b68x5KvyloysC6ogE54LTVo6
+         XFDw==
+X-Gm-Message-State: AOAM532LmVJI0aV4Gyf3rxAPyMs86oCeWnUhGH+HHNnO7IG4of6kuNTI
+        Sm4XOqSCnAQ6qQN519a5CTg=
+X-Google-Smtp-Source: ABdhPJw3Wj1NaKaNlFGnSPXqnbDgppea1F4wGZoXZbWDfwDJgXssQhrPLcI1GM9ROPIg4DuPtt07Tg==
+X-Received: by 2002:a17:907:248a:b0:6ce:e03c:e1df with SMTP id zg10-20020a170907248a00b006cee03ce1dfmr14689906ejb.258.1646050020495;
+        Mon, 28 Feb 2022 04:07:00 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:957a:1d13:c949:d1f3])
+        by smtp.gmail.com with ESMTPSA id d23-20020a1709067a1700b006d0ebe4af89sm4282959ejo.20.2022.02.28.04.06.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 04:07:00 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <Yhyv42ONIxTj04mg@kroah.com>
+Date:   Mon, 28 Feb 2022 13:06:57 +0100
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-sgx@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kvm@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        v9fs-developer@lists.sourceforge.net,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <79FCD5F4-0EBA-4E3F-8B3F-D450BBA10367@gmail.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com> <Yhyv42ONIxTj04mg@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,83 +110,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---4udoj2hk2odz47n5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi ARM SoC maintainers,
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+> On 28. Feb 2022, at 12:20, Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> On Mon, Feb 28, 2022 at 12:08:18PM +0100, Jakob Koschel wrote:
+>> If the list does not contain the expected element, the value of
+>> list_for_each_entry() iterator will not point to a valid structure.
+>> To avoid type confusion in such case, the list iterator
+>> scope will be limited to list_for_each_entry() loop.
+>> 
+>> In preparation to limiting scope of a list iterator to the list traversal
+>> loop, use a dedicated pointer to point to the found element.
+>> Determining if an element was found is then simply checking if
+>> the pointer is != NULL.
+>> 
+>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+>> ---
+>> arch/x86/kernel/cpu/sgx/encl.c       |  6 +++--
+>> drivers/scsi/scsi_transport_sas.c    | 17 ++++++++-----
+>> drivers/thermal/thermal_core.c       | 38 ++++++++++++++++++----------
+>> drivers/usb/gadget/configfs.c        | 22 ++++++++++------
+>> drivers/usb/gadget/udc/max3420_udc.c | 11 +++++---
+>> drivers/usb/gadget/udc/tegra-xudc.c  | 11 +++++---
+>> drivers/usb/mtu3/mtu3_gadget.c       | 11 +++++---
+>> drivers/usb/musb/musb_gadget.c       | 11 +++++---
+>> drivers/vfio/mdev/mdev_core.c        | 11 +++++---
+>> 9 files changed, 88 insertions(+), 50 deletions(-)
+> 
+> The drivers/usb/ portion of this patch should be in patch 1/X, right?
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+I kept them separate since it's a slightly different case.
+Using 'ptr' instead of '&ptr->other_member'. Regardless, I'll split
+this commit up as you mentioned.
 
-are available in the Git repository at:
+> 
+> Also, you will have to split these up per-subsystem so that the
+> different subsystem maintainers can take these in their trees.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
--soc-for-v5.18
+Thanks for the feedback.
+To clarify I understand you correctly:
+I should do one patch set per-subsystem with every instance/(file?)
+fixed as a separate commit?
 
-for you to fetch changes up to c65d68e7e95a39da31d64d67d5bea6550b91fb43:
+If I understand correctly, I'll repost accordingly.
 
-  soc: ti: k3-socinfo: Add AM62x JTAG ID (2022-02-28 05:35:19 -0600)
+> 
+> thanks,
+> 
+> greg k-h
 
-----------------------------------------------------------------
-TI Driver updates for v5.18
+thanks,
+Jakob Koschel
 
-* Fixups for k3-ringacc, smartreflex, tisci, wkup_m3_ipc
-* Device detection for am62x.
-
-----------------------------------------------------------------
-Christophe JAILLET (2):
-      soc: ti: k3-ringacc: Use devm_bitmap_zalloc() when applicable
-      firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL=
- is not defined
-
-Lad Prabhakar (1):
-      soc: ti: smartreflex: Use platform_get_irq_optional() to get the inte=
-rrupt
-
-Miaoqian Lin (1):
-      soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
-
-Peiwei Hu (1):
-      firmware: ti_sci: inproper error handling of ti_sci_probe
-
-Vignesh Raghavendra (1):
-      soc: ti: k3-socinfo: Add AM62x JTAG ID
-
- drivers/firmware/ti_sci.c              |  2 +-
- drivers/soc/ti/k3-ringacc.c            | 15 ++++++---------
- drivers/soc/ti/k3-socinfo.c            |  1 +
- drivers/soc/ti/smartreflex.c           | 13 +++++++------
- drivers/soc/ti/wkup_m3_ipc.c           |  4 ++--
- include/linux/soc/ti/ti_sci_protocol.h |  2 +-
- 6 files changed, 18 insertions(+), 19 deletions(-)
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
-49D 1736 249D
-
---4udoj2hk2odz47n5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmIcutkACgkQ3bWEnRc2
-JJ0Afg//efvyrkRqasngIXD0GUkUHNulYkidTLUr2VZldoqLVIgGXV2rJVjrjreU
-gFbuiwGbXKv5/6EFhvxOtXzYJ7Ze4pbNzLSklZFSBJ21lERp3Hh2sJJGP+ebIYEH
-68KnfzYlwbakk4H428m/zUwViTSSwc9d8UhyY7TidAP5RH/TM+bOGDjZst1P1OSB
-qMdvsKAxPLKozaF+MKYr7spbf4NkWjk2MM5sDa2geKqjWzXHL2v5S5o115ebgXwC
-J4GVL2RAxn3eJlYxBmYMYjmyTjvrkTXnbMhNVnqrtyAltDPODgjfeqdG7IxeegOZ
-L8DhQTVbAKeKO+Q7Zk8TDEew7CIUs25lwh/9uHB5Y00WNXTHYZWrvTF70bNjvP4l
-1i2BeyZ6wngvN71Fm0YnrZLIM4ZsR/ZS4UalblX2Vp3FThianf+QheJIfJPZ+rWL
-NaAKxkyhIl3GTrygxqCZrORVlYrkv860fTRsbmh+kTBwfX7WF4QCKmmCula1PpIg
-CbooeW5PF5Dva43ovi5mJLl5ju+T5zDX9nalzOOAF+KJEq3Jcir2Lcn8/LubyEoh
-Rqu93gHH3jWXEichqdjt7EsvGGe12tXmxngm5GgsimPSBIE3PnT8nuWxCDOM2j8e
-BnhUbtMUMFV5nvkTJH1raeUPdFxb2fmaXi2pxVbf2SGDL1bJfoo=
-=WYZx
------END PGP SIGNATURE-----
-
---4udoj2hk2odz47n5--

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F3D4C73BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC664C75EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiB1RjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S239228AbiB1R5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiB1Rgw (ORCPT
+        with ESMTP id S239839AbiB1Rxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:36:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C87985B4;
-        Mon, 28 Feb 2022 09:31:58 -0800 (PST)
+        Mon, 28 Feb 2022 12:53:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F99AD103;
+        Mon, 28 Feb 2022 09:41:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAB1061365;
-        Mon, 28 Feb 2022 17:31:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2B3C340F0;
-        Mon, 28 Feb 2022 17:31:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CF1CB815CE;
+        Mon, 28 Feb 2022 17:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED962C340E7;
+        Mon, 28 Feb 2022 17:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069514;
-        bh=vEPAZ3lTc+fwgGKdNcNvLHd+Ln7uEJIIVY59/b1a6eI=;
+        s=korg; t=1646070061;
+        bh=8NwO2JbQ7fN+ULKMJeEmG2Q93OYX+2DS86zbZzyzrbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sFxfHYtP1FaBxzz0FWPSLrv/YILh+AJlA4frdq02CfVh3sbT/mq8Z4eQ4BXvF34ZS
-         +R16UOZ4TblkUWhhZHYIn0aCnLnRZXOJlUZ0210L7W6HIemPnk0IPtuRKvzpKQVuAu
-         1dbakx0ExormJbBC/doCWYAdqLugIKV6SuYLLPwg=
+        b=U9hX2+fosQsvyB7AcRoJ0vgdCC7Aj2dI5k4HPImHLxEXrnyq3QDilEvmObFt7nbHP
+         nMIZ5uB0cfG2mZ2xFciKuWmv2nyo/wVy1lyqOmQsflllT6EeXJe8q/kB+ZHBEH2zCw
+         JpfqNXUflXM9bLWkiXl0PbiE4lP90Pcy/RwkIfAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.4 47/53] tty: n_gsm: fix encoding of control signal octet bit DV
+        stable@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 5.15 111/139] usb: dwc2: drd: fix soft connect when gadget is unconfigured
 Date:   Mon, 28 Feb 2022 18:24:45 +0100
-Message-Id: <20220228172251.681315920@linuxfoundation.org>
+Message-Id: <20220228172359.313215522@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: daniel.starke@siemens.com <daniel.starke@siemens.com>
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-commit 737b0ef3be6b319d6c1fd64193d1603311969326 upstream.
+commit 32fde84362c40961726a5c91f35ad37355ccc0c6 upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.6.3.7 describes the encoding of the
-control signal octet used by the MSC (modem status command). The same
-encoding is also used in convergence layer type 2 as described in chapter
-5.5.2. Table 7 and 24 both require the DV (data valid) bit to be set 1 for
-outgoing control signal octets sent by the DTE (data terminal equipment),
-i.e. for the initiator side.
-Currently, the DV bit is only set if CD (carrier detect) is on, regardless
-of the side.
+When the gadget driver hasn't been (yet) configured, and the cable is
+connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
+HOST tries to enumerate it.
+At the host side, this can result in a stuck USB port or worse. When
+getting lucky, some dmesg can be observed at the host side:
+ new high-speed USB device number ...
+ device descriptor read/64, error -110
 
-This patch fixes this behavior by setting the DV bit on the initiator side
-unconditionally.
+Fix it in drd, by checking the enabled flag before calling
+dwc2_hsotg_core_connect(). It will be called later, once configured,
+by the normal flow:
+- udc_bind_to_driver
+ - usb_gadget_connect
+   - dwc2_hsotg_pullup
+     - dwc2_hsotg_core_connect
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220218073123.2121-1-daniel.starke@siemens.com
+Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/1644999135-13478-1-git-send-email-fabrice.gasnier@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc2/core.h |    2 ++
+ drivers/usb/dwc2/drd.c  |    6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -428,7 +428,7 @@ static u8 gsm_encode_modem(const struct
- 		modembits |= MDM_RTR;
- 	if (dlci->modem_tx & TIOCM_RI)
- 		modembits |= MDM_IC;
--	if (dlci->modem_tx & TIOCM_CD)
-+	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
- 		modembits |= MDM_DV;
- 	return modembits;
- }
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1417,6 +1417,7 @@ void dwc2_hsotg_core_connect(struct dwc2
+ void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
+ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
+ #define dwc2_is_device_connected(hsotg) (hsotg->connected)
++#define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
+ int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
+ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
+ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
+@@ -1453,6 +1454,7 @@ static inline int dwc2_hsotg_set_test_mo
+ 					   int testmode)
+ { return 0; }
+ #define dwc2_is_device_connected(hsotg) (0)
++#define dwc2_is_device_enabled(hsotg) (0)
+ static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
+ { return 0; }
+ static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -109,8 +109,10 @@ static int dwc2_drd_role_sw_set(struct u
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
+ 		already = dwc2_ovr_bvalid(hsotg, true);
+-		/* This clear DCTL.SFTDISCON bit */
+-		dwc2_hsotg_core_connect(hsotg);
++		if (dwc2_is_device_enabled(hsotg)) {
++			/* This clear DCTL.SFTDISCON bit */
++			dwc2_hsotg_core_connect(hsotg);
++		}
+ 	} else {
+ 		if (dwc2_is_device_mode(hsotg)) {
+ 			if (!dwc2_ovr_bvalid(hsotg, false))
 
 

@@ -2,116 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D714C6E1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38084C6E1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbiB1N0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S235915AbiB1N01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiB1N0N (ORCPT
+        with ESMTP id S235498AbiB1N0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:26:13 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409542657E;
-        Mon, 28 Feb 2022 05:25:34 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7E1A22223A;
-        Mon, 28 Feb 2022 14:25:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1646054732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=abmqdbBeNgx6suTFoI0RuzJ2gA54tHckW0E9a+phtN4=;
-        b=GbAm5Gl/9TbdVh6xpsFmGKmHkQbCc1t1Wkk2gEA44/Osy3W+6A3Q5XNv2xSoeUSk+Ex1c9
-        Gzs8mN5suVA4CQro1sFidtY0mo88t/gpbpNEKqcAcEt1lAD60d0gMG98MYX1JD8j6TwTc4
-        gUhBtdyDwnCeMWJsce7cAaKPyxM7nOA=
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, heiko.thiery@gmail.com,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] arm64: dts: imx8mn-evk: add QSPI flash
-Date:   Mon, 28 Feb 2022 14:25:23 +0100
-Message-Id: <20220228132523.2679099-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Mon, 28 Feb 2022 08:26:24 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED757A99E;
+        Mon, 28 Feb 2022 05:25:46 -0800 (PST)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nOg21-000A8i-H2; Mon, 28 Feb 2022 14:25:41 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nOg21-000XD9-63; Mon, 28 Feb 2022 14:25:41 +0100
+Subject: Re: [PATCH bpf-next] bpf: add config to allow loading modules with
+ BTF mismatches
+To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+        Connor O'Brien <connoro@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+References: <20220223012814.1898677-1-connoro@google.com>
+ <YhW5UIQ5kf8Fr3kI@syu-laptop.lan>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <6a979467-7bfb-68eb-57d6-f5294846bac4@iogearbox.net>
+Date:   Mon, 28 Feb 2022 14:25:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <YhW5UIQ5kf8Fr3kI@syu-laptop.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26467/Mon Feb 28 10:24:05 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a 32MiB Micron MT25QU256ABA1 serial NOR flash on the EVK board.
-Add a device tree node for it.
+On 2/23/22 5:34 AM, Shung-Hsi Yu wrote:
+> On Wed, Feb 23, 2022 at 01:28:14AM +0000, Connor O'Brien wrote:
+>> BTF mismatch can occur for a separately-built module even when the ABI
+>> is otherwise compatible and nothing else would prevent successfully
+>> loading. Add a new config to control how mismatches are handled. By
+>> default, preserve the current behavior of refusing to load the
+>> module. If MODULE_ALLOW_BTF_MISMATCH is enabled, load the module but
+>> ignore its BTF information.
+>>
+>> Suggested-by: Yonghong Song <yhs@fb.com>
+>> Suggested-by: Michal Suchánek <msuchanek@suse.de>
+>> Signed-off-by: Connor O'Brien <connoro@google.com>
+> 
+> Maybe reference the discussion thread as well?
+> 
+> Link: https://lore.kernel.org/bpf/CAADnVQJ+OVPnBz8z3vNu8gKXX42jCUqfuvhWAyCQDu8N_yqqwQ@mail.gmail.com/
 
-Tested on a 8MNANOD3L-EVK.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-index c3f15192b76c..dc75d6d13bb3 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-@@ -110,6 +110,22 @@ vddio: vddio-regulator {
- 	};
- };
- 
-+&flexspi {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_flexspi>;
-+	status = "okay";
-+
-+	flash0: flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		spi-max-frequency = <166000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
- &i2c1 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
-@@ -267,6 +283,17 @@ MX8MN_IOMUXC_SAI2_RXC_GPIO4_IO22	0x19
- 		>;
- 	};
- 
-+	pinctrl_flexspi: flexspigrp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_NAND_ALE_QSPI_A_SCLK               0x1c2
-+			MX8MN_IOMUXC_NAND_CE0_B_QSPI_A_SS0_B            0x82
-+			MX8MN_IOMUXC_NAND_DATA00_QSPI_A_DATA0           0x82
-+			MX8MN_IOMUXC_NAND_DATA01_QSPI_A_DATA1           0x82
-+			MX8MN_IOMUXC_NAND_DATA02_QSPI_A_DATA2           0x82
-+			MX8MN_IOMUXC_NAND_DATA03_QSPI_A_DATA3           0x82
-+		>;
-+	};
-+
- 	pinctrl_gpio_led: gpioledgrp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_NAND_READY_B_GPIO3_IO16	0x19
--- 
-2.30.2
-
+LGTM, and added above into the commit log while applying. Thanks everyone!

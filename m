@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21094C7683
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4BA4C7378
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiB1SDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S238180AbiB1Rfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:35:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbiB1Rxc (ORCPT
+        with ESMTP id S238558AbiB1Rdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DBEAC068;
-        Mon, 28 Feb 2022 09:40:57 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA08891349;
+        Mon, 28 Feb 2022 09:30:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDC48B815AB;
-        Mon, 28 Feb 2022 17:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D2FC340E7;
-        Mon, 28 Feb 2022 17:40:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93D9961359;
+        Mon, 28 Feb 2022 17:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A605CC340E7;
+        Mon, 28 Feb 2022 17:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070039;
-        bh=urQX6y50ENfkDfckR2XgPPLuEaOQejttoMPgSiW3WW0=;
+        s=korg; t=1646069405;
+        bh=Kwqwa0spbtutmTtZrFv1L75lDRULltN9+2J0izZBtww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aQzvYMVfptxAMrb/TWomR0D7fDydFlyjxt6knVd9Ghc4liJu47rAiz7mq8uqhnl/w
-         lqI24Umd+KwYomiKg+dCJbRxRSlT9bfd9F4q80e05S51+0+FtFC8qDHxVqJJgD/kjZ
-         wNx/rQIhci+pshCs/mCEeY4oYN/0nn3ryx2hs1b4=
+        b=0PwtDMS3SchX11Kc+0D4GZUxlPGH9CcgSbdR4wMH9vCEzqylEZmRGkKHdE3BDe6vU
+         aBDztpUED3Aa+W8/06pSdAVTSKHfaErKNu2rOonrTa2fUTZROhYbpXOrpV+lKhd8yN
+         p1NdyBKuHhyvJLyp8Flqw2TPkBvkcxngM9jDGEdk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Savaton <guillaume@baierouge.fr>,
-        Samuel Holland <samuel@sholland.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 086/139] gpio: rockchip: Reset int_bothedge when changing trigger
+        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Laibin Qiu <qiulaibin@huawei.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 14/34] configfs: fix a race in configfs_{,un}register_subsystem()
 Date:   Mon, 28 Feb 2022 18:24:20 +0100
-Message-Id: <20220228172356.701598093@linuxfoundation.org>
+Message-Id: <20220228172209.596557623@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
+References: <20220228172207.090703467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,102 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-[ Upstream commit 7920af5c826cb4a7ada1ae26fdd317642805adc2 ]
+[ Upstream commit 84ec758fb2daa236026506868c8796b0500c047d ]
 
-With v2 hardware, an IRQ can be configured to trigger on both edges via
-a bit in the int_bothedge register. Currently, the driver sets this bit
-when changing the trigger type to IRQ_TYPE_EDGE_BOTH, but fails to reset
-this bit if the trigger type is later changed to something else. This
-causes spurious IRQs, and when using gpio-keys with wakeup-event-action
-set to EV_ACT_(DE)ASSERTED, those IRQs translate into spurious wakeups.
+When configfs_register_subsystem() or configfs_unregister_subsystem()
+is executing link_group() or unlink_group(),
+it is possible that two processes add or delete list concurrently.
+Some unfortunate interleavings of them can cause kernel panic.
 
-Fixes: 3bcbd1a85b68 ("gpio/rockchip: support next version gpio controller")
-Reported-by: Guillaume Savaton <guillaume@baierouge.fr>
-Tested-by: Guillaume Savaton <guillaume@baierouge.fr>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+One of cases is:
+A --> B --> C --> D
+A <-- B <-- C <-- D
+
+     delete list_head *B        |      delete list_head *C
+--------------------------------|-----------------------------------
+configfs_unregister_subsystem   |   configfs_unregister_subsystem
+  unlink_group                  |     unlink_group
+    unlink_obj                  |       unlink_obj
+      list_del_init             |         list_del_init
+        __list_del_entry        |           __list_del_entry
+          __list_del            |             __list_del
+            // next == C        |
+            next->prev = prev   |
+                                |               next->prev = prev
+            prev->next = next   |
+                                |                 // prev == B
+                                |                 prev->next = next
+
+Fix this by adding mutex when calling link_group() or unlink_group(),
+but parent configfs_subsystem is NULL when config_item is root.
+So I create a mutex configfs_subsystem_mutex.
+
+Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-rockchip.c | 56 +++++++++++++++++++-----------------
- 1 file changed, 29 insertions(+), 27 deletions(-)
+ fs/configfs/dir.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-index ce63cbd14d69a..24155c038f6d0 100644
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -410,10 +410,8 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
- 	level = rockchip_gpio_readl(bank, bank->gpio_regs->int_type);
- 	polarity = rockchip_gpio_readl(bank, bank->gpio_regs->int_polarity);
+diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+index f9628fc20fec0..796a6cd5f302f 100644
+--- a/fs/configfs/dir.c
++++ b/fs/configfs/dir.c
+@@ -50,6 +50,14 @@ DECLARE_RWSEM(configfs_rename_sem);
+  */
+ DEFINE_SPINLOCK(configfs_dirent_lock);
  
--	switch (type) {
--	case IRQ_TYPE_EDGE_BOTH:
-+	if (type == IRQ_TYPE_EDGE_BOTH) {
- 		if (bank->gpio_type == GPIO_TYPE_V2) {
--			bank->toggle_edge_mode &= ~mask;
- 			rockchip_gpio_writel_bit(bank, d->hwirq, 1,
- 						 bank->gpio_regs->int_bothedge);
- 			goto out;
-@@ -431,30 +429,34 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
- 			else
- 				polarity |= mask;
- 		}
--		break;
--	case IRQ_TYPE_EDGE_RISING:
--		bank->toggle_edge_mode &= ~mask;
--		level |= mask;
--		polarity |= mask;
--		break;
--	case IRQ_TYPE_EDGE_FALLING:
--		bank->toggle_edge_mode &= ~mask;
--		level |= mask;
--		polarity &= ~mask;
--		break;
--	case IRQ_TYPE_LEVEL_HIGH:
--		bank->toggle_edge_mode &= ~mask;
--		level &= ~mask;
--		polarity |= mask;
--		break;
--	case IRQ_TYPE_LEVEL_LOW:
--		bank->toggle_edge_mode &= ~mask;
--		level &= ~mask;
--		polarity &= ~mask;
--		break;
--	default:
--		ret = -EINVAL;
--		goto out;
-+	} else {
-+		if (bank->gpio_type == GPIO_TYPE_V2) {
-+			rockchip_gpio_writel_bit(bank, d->hwirq, 0,
-+						 bank->gpio_regs->int_bothedge);
-+		} else {
-+			bank->toggle_edge_mode &= ~mask;
-+		}
-+		switch (type) {
-+		case IRQ_TYPE_EDGE_RISING:
-+			level |= mask;
-+			polarity |= mask;
-+			break;
-+		case IRQ_TYPE_EDGE_FALLING:
-+			level |= mask;
-+			polarity &= ~mask;
-+			break;
-+		case IRQ_TYPE_LEVEL_HIGH:
-+			level &= ~mask;
-+			polarity |= mask;
-+			break;
-+		case IRQ_TYPE_LEVEL_LOW:
-+			level &= ~mask;
-+			polarity &= ~mask;
-+			break;
-+		default:
-+			ret = -EINVAL;
-+			goto out;
-+		}
++/*
++ * All of link_obj/unlink_obj/link_group/unlink_group require that
++ * subsys->su_mutex is held.
++ * But parent configfs_subsystem is NULL when config_item is root.
++ * Use this mutex when config_item is root.
++ */
++static DEFINE_MUTEX(configfs_subsystem_mutex);
++
+ static void configfs_d_iput(struct dentry * dentry,
+ 			    struct inode * inode)
+ {
+@@ -1937,7 +1945,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
+ 
+ 	sd = root->d_fsdata;
++	mutex_lock(&configfs_subsystem_mutex);
+ 	link_group(to_config_group(sd->s_element), group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 
+ 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
+ 
+@@ -1962,7 +1972,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 	inode_unlock(d_inode(root));
+ 
+ 	if (err) {
++		mutex_lock(&configfs_subsystem_mutex);
+ 		unlink_group(group);
++		mutex_unlock(&configfs_subsystem_mutex);
+ 		configfs_release_fs();
  	}
+ 	put_fragment(frag);
+@@ -2008,7 +2020,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
  
- 	rockchip_gpio_writel(bank, level, bank->gpio_regs->int_type);
+ 	dput(dentry);
+ 
++	mutex_lock(&configfs_subsystem_mutex);
+ 	unlink_group(group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 	configfs_release_fs();
+ }
+ 
 -- 
 2.34.1
 

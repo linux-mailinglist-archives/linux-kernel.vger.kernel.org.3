@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABC84C6FF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD304C7003
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237187AbiB1OtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S236353AbiB1Oth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbiB1OtH (ORCPT
+        with ESMTP id S229926AbiB1Otg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:49:07 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19DF2C119;
-        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id u10so13168125vsu.13;
-        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
+        Mon, 28 Feb 2022 09:49:36 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE743BA56;
+        Mon, 28 Feb 2022 06:48:57 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id ay7so13376976oib.8;
+        Mon, 28 Feb 2022 06:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VlG4fI6bBYkPpFcbAcTm6hy8fXOzxdf1xdGq3BMqoYc=;
+        b=IW8WA+AHr1t9GtRiZH0kfoy7+BwA7nt0t5LtGYYh6UC7qVANOORD8+NYp2VDFEaLih
+         69yLwp5vFOImHYnnHKAJmqMXiOYpYu5K40FCN6EVsxs4NDhi/NAR/kMTupV72PHmZj8/
+         s27FvOXqNvosbqWAjlfjIbTZCj7XHNIYPS+keTAhKiZKucS6GFOq3Td2UarGICuQcZSE
+         vqSzUttCvRBlCk/2ueOnGTzX4Ij7/hC0cHKg2S1zkjYzwbz8VRaOZ+6asW17dU8XAoxZ
+         vE0GBKMiItHZd6MXyzf1WiDykJme8psjV0JdWoqGlPVDq4XSWEeLUmH3g6knc+e9oczC
+         JmzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DJ23gsehcCRJL2hoURWULkun0rl03C0V1Ey0lXOHbSY=;
-        b=i3NG4tfvV/iC07EH6ziOJ6zfvvgCXGc02zCj31nd6pEZSu9XGilc4VXTB5+NhmTGp7
-         AYStCorhM1DIYiT2VjRgUwckcmw1bi1i4nVaJuTaeiY36P9mRiQOhxtMgUcKecsGIApw
-         O8HIEqmoxsjewKwaRDVGjtuoHFKJ8L6isWKljFiNGfP1APDMUItRIRzrhECqRZqMK/xz
-         B7022oRWzgoU/tD3Bmqs0TFfAGlN8JP5XecxqlBFByq+dZG7m18JmKJz7oIrRMxPAvIU
-         L0LFIqyiIctzuuwQVoP03Fjr9RjpvdzzZMv+u60HIW7VZDJ5I5oMF1W1k8LQDIw3KJ+D
-         96pg==
-X-Gm-Message-State: AOAM5336AsrK/r4V/DclPL1tpqx8wMHjWuqnCObRL6SH8nLW2QhsxDf0
-        KXo1iuOLmB0B2r3EPlIcTopne2+eD8hmgw==
-X-Google-Smtp-Source: ABdhPJxEFKePXraclsm7QPYxSyxAs3Pl32KE4X4J2ukyv3vTpIx0Nb6aU8Ib712+eEOMKS03Y1mIFQ==
-X-Received: by 2002:a05:6102:14a5:b0:31e:7404:50e0 with SMTP id d37-20020a05610214a500b0031e740450e0mr4905554vsv.62.1646059705548;
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
-        by smtp.gmail.com with ESMTPSA id j192-20020a1f23c9000000b003319491b375sm1673594vkj.32.2022.02.28.06.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-Received: by mail-vk1-f171.google.com with SMTP id j5so5252012vkc.12;
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
- ba33-20020a0561220ca100b00330b95be048mr8261499vkb.39.1646059704668; Mon, 28
- Feb 2022 06:48:24 -0800 (PST)
+        bh=VlG4fI6bBYkPpFcbAcTm6hy8fXOzxdf1xdGq3BMqoYc=;
+        b=ahKdvqfFwi8ByCEP3GL5SFSFUoHtq4KH+ezV9hRcydoUpoNONF2lKUJ5O2vcAhVywK
+         Y2xs5b5Fuiqtve+7UOGlsWCaOjqpZXQVK7MEcxgArooZcq+q1pJBz7RfrkLTFiqJmamJ
+         tXMODDwNVKzELfHCs+EInLT8pZatHJPKxe2p68pzPkpCaiatuXbVT9jLWig9yj1qC/cN
+         Cid8a/gAUmd7cG9ZjttBia6LOjMoMbSEz5ntYcZg9RlB2/1v+V9w62jJ0VqgI2B0gA8x
+         tQKtZBtpNJMd5beqraC1yYi4RB0aSiyVguD84NvOJzV8RLOSVtwV34uAhz9YJZD8JxTC
+         YMzQ==
+X-Gm-Message-State: AOAM531gATUR0IFi3zNjBQ94VtG/HTa2hbQTPHMT20ZAlzDJSmnyDi6l
+        isvVFjnhhZjPp0/LUyg2HiP0yWaHb1Ve+ZCGk9M=
+X-Google-Smtp-Source: ABdhPJxyeCNuUoc7Rc3If7ObB7hMpxFXHG9BXhesgjQMW03kyvafsvGo0AMIsg//K2PlG2nzgM4LsOSq+L/xbj8gEgI=
+X-Received: by 2002:a05:6808:124d:b0:2d7:f6e:74b0 with SMTP id
+ o13-20020a056808124d00b002d70f6e74b0mr10939977oiv.141.1646059737002; Mon, 28
+ Feb 2022 06:48:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:48:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
-Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
-Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-spi <linux-spi@vger.kernel.org>
+References: <20220225221625.3531852-1-keescook@chromium.org> <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+In-Reply-To: <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+From:   Daniel Micay <danielmicay@gmail.com>
+Date:   Mon, 28 Feb 2022 09:48:41 -0500
+Message-ID: <CA+DvKQ+PYtDyejaUoBj51D_Y7muYaR1_FhQGWGWvgQawCbp31Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+To:     Marco Elver <elver@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:00 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add RSPI binding documentation for Renesas RZ/V2L SoC.
->
-> RSPI block is identical to one found on RZ/A, so no driver changes are
-> required. The fallback compatible string "renesas,rspi-rz" will be used
-> on RZ/V2L.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+There aren't many calls to ksize in the entire Linux kernel source
+tree. Most use cases are using the memory as some kind of (chunked)
+dynamic array, where they either need to realloc or kmalloc a new
+chunk when it runs out of space. Changing the approach to this API
+would be both more efficient and fully compatible with alloc_size
+since it would simply not be added to these functions:
 
-> --- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-> @@ -22,6 +22,7 @@ properties:
->                - renesas,rspi-r7s72100  # RZ/A1H
->                - renesas,rspi-r7s9210   # RZ/A2
->                - renesas,r9a07g044-rspi # RZ/G2{L,LC}
-> +              - renesas,r9a07g054-rspi # RZ/V2L
->            - const: renesas,rspi-rz     # RZ/A and RZ/G2{L,LC}
+    kmalloc_size(size, &result_size)
+    krealloc_size(p, new_size, &result_size)
 
-The last comment looks a bit strange now. Perhaps just drop it?
+Nearly every use of ksize could be easily phased out this way. There
+are probably a few which are harder to remove. It can be gradually
+phased out by keeping around ksize temporarily but documenting that
+it's only correct to use it on memory allocated with
+kmalloc_size/krealloc_size. I think it can be phased out quite quickly
+though. Look at how many calls there are to it. It's really not a lot,
+especially if you filter out the uses of the identifier 'ksize' for
+variables rather than calls to that function.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I brought this up when I originally submitted CONFIG_FORTIFY_SOURCE.
+It's the main reason that I didn't bother trying to submit the
+alloc_size attributes myself. The most important ones are for kmalloc
+and it isn't technically correct to use it.

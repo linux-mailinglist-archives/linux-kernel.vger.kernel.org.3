@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C7F4C6FEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C274C6FF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237353AbiB1Osh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S237448AbiB1Osm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237364AbiB1OsO (ORCPT
+        with ESMTP id S237359AbiB1OsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 09:48:14 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE9D1167
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:47:33 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id s25so17731620lji.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:47:33 -0800 (PST)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994701C905
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:47:35 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id g39so21710214lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:47:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qvrX1Yzor98efrQLyBGeybuWVwz7FwGBsCyPsnCvWmA=;
-        b=Tq/MYYfTkMwkcfJLEDuM0ogDeq1m7qkW8Wk4roFxQ4cdTu7/Yr3QjgkA7/d/mGFR0V
-         zU6XfLBCYpBymzmM/lgdkIFXuJaEpFq2K6Hfl/sHj8TrQ4bu588OXfnUxd5taqvroPCr
-         WvdFFup4T2Oo+6DJ78ODJOM0mXvpVK84KYtvmdQVnovRin6sO1uzpo3wXNRo0OUuveE+
-         xEXLwPrEzgmwlgGSMLnAuiAOJS/lXlxefAr81Uya2p6tOafTUyEogbJOee8LIHbxKb5Q
-         0jc7nu6zLkwEE1VTVxUvbdXb0X/aUKo4cNQsysxjbtgJEYDnSnLuDER5oiADAtqdR+0l
-         HAsQ==
+        bh=lhOyf5GwOxdKBxOHGEH+WB1RGf3JKbPOT7zY+wvKvpo=;
+        b=S+RYY8RZ9EY5+hvJbl5XGbgTDwm4dDMevg8gng2DAjAhl+hzUfE5UpuJSqCdFVEj6S
+         1NTKYB/mBo70ZGoXWtvtyiM9JUFXiNDPjC15lzvTfVKFbE5L80OlYxlhfNBuerMl5G+n
+         ui/eQHpHBct16ZEW+G8lmCPtNEM1H+hW3N+RF+/RaN8wopIAT19HIxjs9I0BRL6QrZ++
+         R7L4VouiGAzcat4lhiB5eD4VzqEAFfMNMhp1JdxXgVlfJUcDnRk9ytRH1dbF0G9qaBh3
+         2fGj7gsDXPyuxL7Kq+mujwCFhBMaxOsEGU21ox6+WMSjuDLRfWScfZE44aYCLm442trM
+         IXrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qvrX1Yzor98efrQLyBGeybuWVwz7FwGBsCyPsnCvWmA=;
-        b=49PKfChF+qY25RR5awkheCsVZzJJyuPiri263Gisc5JGGUpOiu9cTUsk/3Gyc4LsBG
-         nEoyjGKM6cnWxo0EXsYYnDvx1witAEmunKuOY9P+ZS68ZFHu2bgV7z8l+HTOAjswXQy9
-         1RDFOw+ICtezs//NsEmX/5xQV2q+1/QhpGuuNxLLxOS4HkCL4+kt0XVpsTuTijQ3GEnz
-         eVZJaMdUV+vr1pdhZWxF/GteakDy/E3scJaLdzU+6hil1hdmyAOsua9J3NZBa95d9qhR
-         VzU4HKgeEX8J+2WlavFA3IemHlAYTbGnI9EZw490dy7oCjA9dSE9EIqEm5feS4g//+B7
-         VRgA==
-X-Gm-Message-State: AOAM533+qko1PxfV8pCnlW1XitXDI5mGtOrTA81PDo7pysThqpaCCd6m
-        8llek+95DBrgeMY4crn4+/Rcr5Ts5is=
-X-Google-Smtp-Source: ABdhPJzMQrzC03X+iY35s/ad0q+kVFv1+bEIoBaf0G9KfdX5RqaN/G0rXj+5YgmfZSFW03117E+t6Q==
-X-Received: by 2002:a05:651c:1a09:b0:246:885c:846f with SMTP id by9-20020a05651c1a0900b00246885c846fmr4904177ljb.170.1646059652164;
-        Mon, 28 Feb 2022 06:47:32 -0800 (PST)
+        bh=lhOyf5GwOxdKBxOHGEH+WB1RGf3JKbPOT7zY+wvKvpo=;
+        b=w5OmFiTtdkZaAXiWGDqLmTxZYtkNK+4iG4jjpqbLlTyahq1B6jI/eKTncpGxFuc4dX
+         xA++OPIYikG2QdMG9xU+EzCab7vsuVfgXPTPPOK0MtDY/ue+BxivJiyVOK1GoCbB9Oib
+         9r+yitONnDVUBFM3ZsC8rk8RgQ7wYhRB0itfww3fe1/5IpSZGrNlAGurjc7xX0FaMddL
+         oQ/ErIHB+af5+QfHE/23tkt3Og4KvbOLmxvOjjIZM4JlqgcKFmL5oDNvxi9VzUfczDrQ
+         P9+vTnItnjKsecWyuN7UFdR1REZ1EUgUV/MEb3lA1QaH81SMvEQ2TbnU/Jw0FwufKxFl
+         KSgw==
+X-Gm-Message-State: AOAM532WJh0WVLZKaZxIq1eqRI67OJKGPgCJEEAKzOY44jb47CofbGsv
+        82uEwKNwEGU820o6K5QDAzE=
+X-Google-Smtp-Source: ABdhPJyEeKoOELU4Hs0AN+LD8C7bjctTAL8b1xrVTD9IoYA74oJXqlKROxJpkA1Hu5bWjLvvy2pu4w==
+X-Received: by 2002:a05:6512:34d4:b0:442:a9c5:8e37 with SMTP id w20-20020a05651234d400b00442a9c58e37mr13051807lfr.362.1646059653785;
+        Mon, 28 Feb 2022 06:47:33 -0800 (PST)
 Received: from elysium.toya.net.pl (staticline-31-183-165-244.toya.net.pl. [31.183.165.244])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac252ae000000b00443f3cbc03asm993996lfm.6.2022.02.28.06.47.31
+        by smtp.gmail.com with ESMTPSA id r14-20020ac252ae000000b00443f3cbc03asm993996lfm.6.2022.02.28.06.47.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 06:47:31 -0800 (PST)
+        Mon, 28 Feb 2022 06:47:33 -0800 (PST)
 From:   Karolina Drobnik <karolinadrobnik@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     rppt@kernel.org, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org,
         Karolina Drobnik <karolinadrobnik@gmail.com>
-Subject: [PATCH 8/9] memblock tests: Add memblock_alloc_try_nid tests for bottom up
-Date:   Mon, 28 Feb 2022 15:46:50 +0100
-Message-Id: <1c0ba11b8da5dc8f71ad45175c536fa4be720984.1646055639.git.karolinadrobnik@gmail.com>
+Subject: [PATCH 9/9] memblock tests: Add TODO and README files
+Date:   Mon, 28 Feb 2022 15:46:51 +0100
+Message-Id: <d5e39b9f7dcef177ebc14282727447bc21e3b38f.1646055639.git.karolinadrobnik@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1646055639.git.karolinadrobnik@gmail.com>
 References: <cover.1646055639.git.karolinadrobnik@gmail.com>
@@ -71,554 +71,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add checks for memblock_alloc_try_nid for bottom up allocation direction.
-As the definition of this function is pretty close to the core
-memblock_alloc_range_nid, the test cases implemented here cover most of
-the code paths related to the memory allocations.
-
-The tested scenarios are:
-  - Region can be allocated within the requested range (both with aligned
-    and misaligned boundaries)
-  - Region can be allocated between two already existing entries
-  - Not enough space between already reserved regions
-  - Memory at the range boundaries is reserved but there is enough space
-    to allocate a new region
-  - The memory range is too narrow but memory can be allocated before
-    the maximum address
-  - Edge cases:
-      + Minimum address is below memblock_start_of_DRAM()
-      + Maximum address is above memblock_end_of_DRAM()
-
-Add test case wrappers to test both directions in the same context.
+Add description of the project, its structure and how to run it.
+List what is left to implement and what the known issues are.
 
 Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
 ---
- tools/testing/memblock/tests/alloc_nid_api.c | 496 ++++++++++++++++++-
- 1 file changed, 492 insertions(+), 4 deletions(-)
+ tools/testing/memblock/README | 114 ++++++++++++++++++++++++++++++++++
+ tools/testing/memblock/TODO   |  28 +++++++++
+ 2 files changed, 142 insertions(+)
+ create mode 100644 tools/testing/memblock/README
+ create mode 100644 tools/testing/memblock/TODO
 
-diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-index 75cfca47c703..03216efe3488 100644
---- a/tools/testing/memblock/tests/alloc_nid_api.c
-+++ b/tools/testing/memblock/tests/alloc_nid_api.c
-@@ -653,26 +653,514 @@ static int alloc_try_nid_top_down_cap_min_check(void)
- 	return 0;
- }
- 
--int memblock_alloc_nid_checks(void)
-+/*
-+ * A simple test that tries to allocate a memory region within min_addr and
-+ * max_addr range:
-+ *
-+ *        +                       +
-+ *   |    +-----------+           |      |
-+ *   |    |    rgn    |           |      |
-+ *   +----+-----------+-----------+------+
-+ *        ^                       ^
-+ *        |                       |
-+ *        min_addr                max_addr
-+ *
-+ * Expect to allocate a cleared region that ends before max_addr.
-+ */
-+static int alloc_try_nid_bottom_up_simple_check(void)
- {
--	reset_memblock_attributes();
--	dummy_physical_memory_init();
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
+diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
+new file mode 100644
+index 000000000000..40c0ce50e7c2
+--- /dev/null
++++ b/tools/testing/memblock/README
+@@ -0,0 +1,114 @@
++=========================
++   Memblock simulator
++=========================
 +
-+	phys_addr_t size = SZ_128;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+	phys_addr_t rgn_end;
 +
-+	setup_memblock();
++Introduction
++---------------------
 +
-+	min_addr = memblock_start_of_DRAM() + SMP_CACHE_BYTES * 2;
-+	max_addr = min_addr + SZ_512;
++Memblock is a boot time memory allocator[1] that manages memory regions before
++the actual memory management is initialized. Its APIs allow to register physical
++memory regions, mark them as available or reserved, allocate a block of memory
++within the requested range and/or in specific NUMA node, and many more.
 +
-+	allocated_ptr = memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+	rgn_end = rgn->base + rgn->size;
++Because it is used so early in the booting process, testing and debugging it is
++difficult. This test suite, usually referred as memblock simulator, is
++an attempt at testing the memblock mechanism. It runs one monolithic test that
++consist of a series of checks that exercise both the basic operations and
++allocation functionalities of memblock. The main data structure of the boot time
++memory allocator is initialized at the build time, so the checks here reuse its
++instance throughout the duration of the test. To ensure that tests don't affect
++each other, region arrays are reset in between.
 +
-+	assert(allocated_ptr);
-+	assert(*b == 0);
++As this project uses the actual memblock code and has to run in user space, some
++of the kernel definitions were stubbed in the introductory patch[2]. Most of
++them don't match the kernel implementation, so one should consult them first
++before making any significant changes to the project.
 +
-+	assert(rgn->size == size);
-+	assert(rgn->base == min_addr);
-+	assert(rgn_end < max_addr);
 +
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.reserved.total_size == size);
++Usage
++---------------------
 +
-+	return 0;
++To run the tests, build the main target and run it:
++
++$ make; ./main
++
++A successful run produces no output. It is also possible to override different
++configuration parameters. For example, to simulate enabled NUMA, use:
++
++$ make NUMA=1
++
++For the full list of options, see `make help`.
++
++
++Project structure
++---------------------
++
++The project has one target, main, which calls a group of checks for basic and
++allocation functions. Tests for each group are defined in dedicated files, as it
++can be seen here:
++
++memblock
++|-- asm       ------------------,
++|-- lib                         |-- implement function and struct stubs
++|-- linux     ------------------'
++|-- scripts
++|    |-- Makefile.include        -- handles `make` parameters
++|-- tests
++|    |-- alloc_api.(c|h)         -- memblock_alloc tests
++|    |-- alloc_helpers_api.(c|h) -- memblock_alloc_from tests
++|    |-- alloc_nid_api.(c|h)     -- memblock_alloc_try_nid tests
++|    |-- basic_api.(c|h)         -- memblock_add/memblock_reserve/... tests
++|    |-- common.(c|h)            -- helper functions for resetting memblock;
++|-- main.c        --------------.   dummy physical memory definition
++|-- Makefile                     `- test runner
++|-- README
++|-- TODO
++|-- .gitignore
++
++
++Simulating physical memory
++--------------------------
++
++Some allocation functions clear the memory in the process, so it is required for
++memblock to track valid memory ranges. To achieve this, the test suite registers
++with memblock memory stored by test_memory struct. It is a small wrapper that
++points to a block of memory allocated via malloc. For each group of allocation
++tests, dummy physical memory is allocated, added to memblock, and then released
++at the end of the test run. The structure of a test runner checking allocation
++functions is as follows:
++
++int memblock_alloc_foo_checks(void)
++{
++	reset_memblock_attributes();     /* data structure reset */
++	dummy_physical_memory_init();    /* allocate and register memory */
++
++	(...allocation checks...)
++
++	dummy_physical_memory_cleanup(); /* free the memory */
 +}
 +
-+/*
-+ * A simple test that tries to allocate a memory region within min_addr and
-+ * max_addr range, where the start address is misaligned:
-+ *
-+ *        +                     +
-+ *  |     +   +-----------+     +     |
-+ *  |     |   |    rgn    |     |     |
-+ *  +-----+---+-----------+-----+-----+
-+ *        ^   ^----.            ^
-+ *        |        |            |
-+ *     min_add     |            max_addr
-+ *                 |
-+ *                 Aligned address
-+ *                 boundary
-+ *
-+ * Expect to allocate a cleared, aligned region that ends before max_addr.
-+ */
-+static int alloc_try_nid_bottom_up_start_misaligned_check(void)
-+{
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+
-+	phys_addr_t size = SZ_128;
-+	phys_addr_t misalign = SZ_2;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+	phys_addr_t rgn_end;
-+
-+	setup_memblock();
-+
-+	min_addr = memblock_start_of_DRAM() + misalign;
-+	max_addr = min_addr + SZ_512;
-+
-+	allocated_ptr = memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+	rgn_end = rgn->base + rgn->size;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn->size == size);
-+	assert(rgn->base == min_addr + (SMP_CACHE_BYTES - misalign));
-+	assert(rgn_end < max_addr);
-+
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.reserved.total_size == size);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate a memory region, which can't fit into min_addr
-+ * and max_addr range:
-+ *
-+ *                      +    +
-+ *  |---------+         +    +      |
-+ *  |   rgn   |         |    |      |
-+ *  +---------+---------+----+------+
-+ *                      ^    ^
-+ *                      |    |
-+ *                      |    max_addr
-+ *                      |
-+ *                      min_add
-+ *
-+ * Expect to drop the lower limit and allocate a cleared memory region which
-+ * starts at the beginning of the available memory.
-+ */
-+static int alloc_try_nid_bottom_up_narrow_range_check(void)
-+{
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+
-+	phys_addr_t size = SZ_256;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+
-+	setup_memblock();
-+
-+	min_addr = memblock_start_of_DRAM() + SZ_512;
-+	max_addr = min_addr + SMP_CACHE_BYTES;
-+
-+	allocated_ptr = memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn->size == size);
-+	assert(rgn->base == memblock_start_of_DRAM());
-+
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.reserved.total_size == size);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate memory within min_addr and max_add range, when
-+ * there are two reserved regions at the borders, with a gap big enough to fit
-+ * a new region:
-+ *
-+ *                +           +
-+ *  |    +--------+-------+   +------+  |
-+ *  |    |   r2   |  rgn  |   |  r1  |  |
-+ *  +----+--------+-------+---+------+--+
-+ *                ^           ^
-+ *                |           |
-+ *                min_addr    max_addr
-+ *
-+ * Expect to merge the new region with r2. The second region does not get
-+ * updated. The total size field gets updated.
-+ */
-+
-+static int alloc_try_nid_bottom_up_reserved_with_space_check(void)
-+{
-+	struct memblock_region *rgn1 = &memblock.reserved.regions[1];
-+	struct memblock_region *rgn2 = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+	struct region r1, r2;
-+
-+	phys_addr_t r3_size = SZ_64;
-+	phys_addr_t gap_size = SMP_CACHE_BYTES;
-+	phys_addr_t total_size;
-+	phys_addr_t max_addr;
-+	phys_addr_t min_addr;
-+
-+	setup_memblock();
-+
-+	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
-+	r1.size = SMP_CACHE_BYTES;
-+
-+	r2.size = SZ_128;
-+	r2.base = r1.base - (r3_size + gap_size + r2.size);
-+
-+	total_size = r1.size + r2.size + r3_size;
-+	min_addr = r2.base + r2.size;
-+	max_addr = r1.base;
-+
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+
-+	allocated_ptr = memblock_alloc_try_nid(r3_size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn1->size == r1.size);
-+	assert(rgn1->base == max_addr);
-+
-+	assert(rgn2->size == r2.size + r3_size);
-+	assert(rgn2->base == r2.base);
-+
-+	assert(memblock.reserved.cnt == 2);
-+	assert(memblock.reserved.total_size == total_size);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate memory within min_addr and max_add range, when
-+ * there are two reserved regions at the borders, with a gap of a size equal to
-+ * the size of the new region:
-+ *
-+ *                         +   +
-+ *  |----------+    +------+   +----+  |
-+ *  |    r3    |    |  r2  |   | r1 |  |
-+ *  +----------+----+------+---+----+--+
-+ *                         ^   ^
-+ *                         |   |
-+ *                         |  max_addr
-+ *                         |
-+ *                         min_addr
-+ *
-+ * Expect to drop the lower limit and allocate memory at the beginning of the
-+ * available memory. The region counter and total size fields get updated.
-+ * Other regions are not modified.
-+ */
-+
-+static int alloc_try_nid_bottom_up_reserved_no_space_check(void)
-+{
-+	struct memblock_region *rgn1 = &memblock.reserved.regions[2];
-+	struct memblock_region *rgn2 = &memblock.reserved.regions[1];
-+	struct memblock_region *rgn3 = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+	struct region r1, r2;
-+
-+	phys_addr_t r3_size = SZ_256;
-+	phys_addr_t gap_size = SMP_CACHE_BYTES;
-+	phys_addr_t total_size;
-+	phys_addr_t max_addr;
-+	phys_addr_t min_addr;
-+
-+	setup_memblock();
-+
-+	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
-+	r1.size = SMP_CACHE_BYTES;
-+
-+	r2.size = SZ_128;
-+	r2.base = r1.base - (r2.size + gap_size);
-+
-+	total_size = r1.size + r2.size + r3_size;
-+	min_addr = r2.base + r2.size;
-+	max_addr = r1.base;
-+
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+
-+	allocated_ptr = memblock_alloc_try_nid(r3_size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn3->size == r3_size);
-+	assert(rgn3->base == memblock_start_of_DRAM());
-+
-+	assert(rgn2->size == r2.size);
-+	assert(rgn2->base == r2.base);
-+
-+	assert(rgn1->size == r1.size);
-+	assert(rgn1->base == r1.base);
-+
-+	assert(memblock.reserved.cnt == 3);
-+	assert(memblock.reserved.total_size == total_size);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate a memory region, where max_addr is
-+ * bigger than the end address of the available memory. Expect to allocate
-+ * a cleared region that starts at the min_addr
-+ */
-+static int alloc_try_nid_bottom_up_cap_max_check(void)
-+{
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+
-+	phys_addr_t size = SZ_256;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+
-+	setup_memblock();
-+
-+	min_addr = memblock_start_of_DRAM() + SZ_1K;
-+	max_addr = memblock_end_of_DRAM() + SZ_256;
-+
-+	allocated_ptr = memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn->size == size);
-+	assert(rgn->base == min_addr);
-+
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.reserved.total_size == size);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate a memory region, where min_addr is
-+ * smaller than the start address of the available memory. Expect to allocate
-+ * a cleared region at the beginning of the available memory.
-+ */
-+static int alloc_try_nid_bottom_up_cap_min_check(void)
-+{
-+	struct memblock_region *rgn = &memblock.reserved.regions[0];
-+	void *allocated_ptr = NULL;
-+	char *b;
-+
-+	phys_addr_t size = SZ_1K;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+
-+	setup_memblock();
-+
-+	min_addr = memblock_start_of_DRAM();
-+	max_addr = memblock_end_of_DRAM() - SZ_256;
- 
-+	allocated_ptr = memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+					       min_addr, max_addr, NUMA_NO_NODE);
-+	b = (char *)allocated_ptr;
-+
-+	assert(allocated_ptr);
-+	assert(*b == 0);
-+
-+	assert(rgn->size == size);
-+	assert(rgn->base == memblock_start_of_DRAM());
-+
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.reserved.total_size == size);
-+
-+	return 0;
-+}
-+
-+/* Test case wrappers */
-+static int alloc_try_nid_simple_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_simple_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_simple_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_misaligned_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_end_misaligned_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_start_misaligned_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_narrow_range_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_narrow_range_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_narrow_range_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_reserved_with_space_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_reserved_with_space_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_reserved_with_space_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_reserved_no_space_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_reserved_no_space_check();
--	alloc_try_nid_top_down_cap_min_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_reserved_no_space_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_cap_max_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_top_down_cap_max_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_cap_max_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_cap_min_check(void)
-+{
-+	memblock_set_bottom_up(false);
-+	alloc_try_nid_top_down_cap_min_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_bottom_up_cap_min_check();
-+
-+	return 0;
-+}
- 
-+static int alloc_try_nid_min_reserved_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_min_reserved_generic_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_min_reserved_generic_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_max_reserved_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_max_reserved_generic_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_max_reserved_generic_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_exact_address_check(void)
-+{
-+	memblock_set_bottom_up(false);
- 	alloc_try_nid_exact_address_generic_check();
-+	memblock_set_bottom_up(true);
-+	alloc_try_nid_exact_address_generic_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_reserved_full_merge_check(void)
-+{
-+	memblock_set_bottom_up(false);
-+	alloc_try_nid_reserved_full_merge_generic_check();
-+	memblock_set_bottom_up(true);
- 	alloc_try_nid_reserved_full_merge_generic_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_reserved_all_check(void)
-+{
-+	memblock_set_bottom_up(false);
-+	alloc_try_nid_reserved_all_generic_check();
-+	memblock_set_bottom_up(true);
- 	alloc_try_nid_reserved_all_generic_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_low_max_check(void)
-+{
-+	memblock_set_bottom_up(false);
-+	alloc_try_nid_low_max_generic_check();
-+	memblock_set_bottom_up(true);
- 	alloc_try_nid_low_max_generic_check();
- 
-+	return 0;
-+}
-+
-+int memblock_alloc_nid_checks(void)
-+{
-+	reset_memblock_attributes();
-+	dummy_physical_memory_init();
-+
-+	alloc_try_nid_simple_check();
-+	alloc_try_nid_misaligned_check();
-+	alloc_try_nid_narrow_range_check();
-+	alloc_try_nid_reserved_with_space_check();
-+	alloc_try_nid_reserved_no_space_check();
-+	alloc_try_nid_cap_max_check();
-+	alloc_try_nid_cap_min_check();
-+
-+	alloc_try_nid_min_reserved_check();
-+	alloc_try_nid_max_reserved_check();
-+	alloc_try_nid_exact_address_check();
-+	alloc_try_nid_reserved_full_merge_check();
-+	alloc_try_nid_reserved_all_check();
-+	alloc_try_nid_low_max_check();
-+
- 	dummy_physical_memory_cleanup();
- 
- 	return 0;
--- 
++There's no need to explicitly free the dummy memory from memblock via
++memblock_free() call. The entry will be erased by reset_memblock_regions(),
++called at the beginning of each test.
++
++
++Known issues
++---------------------
++
++1. Requesting a specific NUMA node via memblock_alloc_node() does not work as
++   intended. Once the fix is in place, tests for this function can be added.
++
++2. Tests for memblock_alloc_low() can't be easily implemented. The function uses
++   ARCH_LOW_ADDRESS_LIMIT marco, which can't be changed to point at the low
++   memory of the memory_block.
++
++
++References
++---------------------
++
++1. Boot time memory management documentation page:
++   https://www.kernel.org/doc/html/latest/core-api/boot-time-mm.html
++
++2. Introduce memblock simulator, lore link:
++https://lore.kernel.org/linux-mm/cover.1643796665.git.karolinadrobnik@gmail.com/
+diff --git a/tools/testing/memblock/TODO b/tools/testing/memblock/TODO
+new file mode 100644
+index 000000000000..c25b2fdec45e
+--- /dev/null
++++ b/tools/testing/memblock/TODO
+@@ -0,0 +1,28 @@
++TODO
++=====
++
++1. Add verbose output (e.g., what is being tested and how many tests cases are
++   passing)
++
++2. Add flags to Makefile:
++   + verbosity level
++   + enable memblock_dbg() messages (i.e. pass "-D CONFIG_DEBUG_MEMORY_INIT"
++     flag)
++
++3. Add tests trying to memblock_add() or memblock_reserve() 129th region.
++   This will trigger memblock_double_array(), make sure it succeeds.
++   *Important:* These tests require valid memory ranges, use dummy physical
++                memory block from common.c to implement them. It is also very
++                likely that the current MEM_SIZE won't be enough for these
++                test cases. Use realloc to adjust the size accordingly.
++
++4. Add test cases using this functions (implement them for both directions):
++   + memblock_alloc_raw()
++   + memblock_alloc_exact_nid_raw()
++   + memblock_alloc_try_nid_raw()
++
++5. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
++   for the new region
++
++6. Update comments in tests/basic_api.c to match the style used in
++   tests/alloc_*.c
+--
 2.30.2
 

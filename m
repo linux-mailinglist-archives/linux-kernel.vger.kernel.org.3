@@ -2,161 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229DC4C6008
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ED14C601D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbiB1AEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 19:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S230399AbiB1AUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 19:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiB1AD5 (ORCPT
+        with ESMTP id S229662AbiB1AUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 19:03:57 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2126.outbound.protection.outlook.com [40.107.223.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD21931DEE;
-        Sun, 27 Feb 2022 16:03:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MSfOKkNEa1XLMehppxx5qAQVZnfDdTnI0IdbdOIc3Ha/yjSa/IhO9Hl10+oDsFRG5MfFrRirNgi7T7F5fcYzZyI8LOjakSBKSZ0lAIVKXDszOw1dVp9cLmg6bXtHEI1agply5ubLw6NLOL7LcQDCk5zeLdUwMv8UTMdnyS4xO8EmvEq/FyNvi/7DgEQb8GTadYg0H6A29AcWr/tnPETU2dZdQOHN5kgw0F7LMvQSmXP5Pchxrlsm1zoSTU3x6cEjS+ZPLXxibNti0f92OdiPlwyjvjP0zCP8auX8n6cIGNmWw44pHg5cUaoAJt7bZzzAsrd6ytEbTJe5W7RpbynTyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bxBHcP3EI1//yF/EZi96SVE0Lz9wdaxcLBrprHn/SKY=;
- b=EXwbKFnYo+AuwJsEyLSpNZqXCIuUkoJ3jGp4M7/0a5UtxjioxQjfaqt25sDC6eyqBg8WU7phYoyfHfaV7Z1MwspmnzR/k5SiMnKlnBVGohnioSlAsriUXjrWvNMr6b8YXzU0cdAemTkHIMlcus58td1WzPuSH00i0iuSWyg3XnB2/Tnn/EOOiA7per3ymWqBDNSxpHChDpMfU1pzMvqAKPl4IJM2c25lT3sPJCF+I17f6E8HfeFe5mpIGLxgounDpNrepRtERpNc87BLGA9zOsyo5kOtnbGu30YXorf/qA15RDFmLsvb3bI2aE1pepMnLBkcsJ5ppbVqr123IiNJ+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bxBHcP3EI1//yF/EZi96SVE0Lz9wdaxcLBrprHn/SKY=;
- b=TU25iR8eheUqwA6nlUrxb7i+dS7wDirmzLHkOg+jWBh07WoJsvSu3pc3VBuFHCAI60AQJYRftqBtxB44AgRpGUK3rw0EXOiAdCl2jUNGAEfjM7pW0syUUJlf3ckSUtT7k3Y11mzgIOPb6gDMXlf/mOA25DeJwyKk8BhjtdGS2PE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- PH0PR01MB6184.prod.exchangelabs.com (2603:10b6:510:14::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5017.24; Mon, 28 Feb 2022 00:03:17 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::d9a2:2761:a4c0:1e1c]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::d9a2:2761:a4c0:1e1c%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 00:03:17 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        Sun, 27 Feb 2022 19:20:14 -0500
+X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 16:19:35 PST
+Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978DB6B08B;
+        Sun, 27 Feb 2022 16:19:35 -0800 (PST)
+Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.stoffel.org (Postfix) with ESMTPSA id 989E32708E;
+        Sun, 27 Feb 2022 19:14:17 -0500 (EST)
+Received: by quad.stoffel.org (Postfix, from userid 1000)
+        id DBCDDA7992; Sun, 27 Feb 2022 19:14:16 -0500 (EST)
+Date:   Sun, 27 Feb 2022 19:14:16 -0500
+From:   John Stoffel <john@quad.stoffel.home>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
         linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v1 5/5] ARM: dts: aspeed: mtjade: Move all adc sensors into iio-hwmon node
-Date:   Mon, 28 Feb 2022 07:02:42 +0700
-Message-Id: <20220228000242.1884-6-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20220228000242.1884-1-quan@os.amperecomputing.com>
-References: <20220228000242.1884-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2P15301CA0011.APCP153.PROD.OUTLOOK.COM
- (2603:1096:202:1::21) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
+Message-ID: <YhwT2Gw8vsQHPxAB@quad.stoffel.home>
+References: <20220227215408.3180023-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 261b7ede-8af2-4303-2793-08d9fa4db8e8
-X-MS-TrafficTypeDiagnostic: PH0PR01MB6184:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR01MB618438FE78ED4E2710B1ABDBF2019@PH0PR01MB6184.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JFhWVMa1dCnNTMvFGbe1iCIGCGcZnfW43fp/Jfaer/jNyCLUq+LM43DgNvDKqGIuH4mztdJv2e0uvCF7IZ8pNtkKuf8f0VsMP5CDhYyJffoiN4hmyiR+S/9YHWgZ6PK3stRjaGHr/9+TK2SRMukVS47dP9/8vC/HPD8vM2xCkAYWgCr87/AUDKMxvHCDtDqyGC81uMBkhmKlbNqqMxVnpDtJNvgdIeOlk0YbbfUpqv65xZkoh4b9jEkPjeoksTgKPxjllL1k+L772rc75F7CqoWlweIPqachDK4CE5wEKGtHnASLZ9hgE5Nm3NEQuDLcZhoAt5NBhCR7GnaME20z8N/kPQb17s3GXSJVqAep02HAxYhP3USux7sIhEX+OzDjW/8u0S7TL/k39BHgdKkbNg22Y0qBTHuBEEOPsSyV+aH4BradOLLjR+0mAp3eurzkGiFmHlvw9H1+3u7+LKK1vzaLgCU47XiulJ0xgysV2IQDYiq9zVtBPmKvBm/eNEDlfEYePoackzGe9WEsJV/xO/T4AsvztHCbnVcg8ZMtehTr2U1F0j1y9stjXNsNzpaa5b2aui0GJCi26V8W7io4Ve4sYIxtblNIG5st1VMTEJLDk2fI2c7KkNvFCHFjGY86ILs1KWY3ps+8rI8/XRa3528Bfn9rxASFXNbE5E4r/JQLjnEPyt8SuvTKsBK6/NV7HQtU3WsHIyzcteP/96YZZQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(66476007)(2906002)(6512007)(186003)(54906003)(26005)(38100700002)(38350700002)(110136005)(1076003)(107886003)(2616005)(8936002)(66946007)(52116002)(5660300002)(66556008)(6506007)(4326008)(6486002)(316002)(86362001)(508600001)(6666004)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LBjGZ5WyQfuS/7B3WOe5PS/d/+cDXjQvH2dh/ihIBWuze3cPy6ymagaUa9I/?=
- =?us-ascii?Q?3QcSOyfBhlQwlC4t5ez3aK0IAAFOphfIIMcxcRrBYpoRTUdXp2gU0k/4uJrL?=
- =?us-ascii?Q?co1iO9hVN+QAzbzFDQ6E5d6622jqUws2J/QA12+bElCs/xpRX0RCFi/KciCy?=
- =?us-ascii?Q?+XzubdPKzs+7gvqknHN78Yo2fs4Hh3rfhVbUuEFFZCa5x+f5Xh00OaU+pt0D?=
- =?us-ascii?Q?JddPxyXBmGj2Srgk8YWNYVarsRFrJ/kNJckIXE9F6BT0VgSOZyYLFYAa7twn?=
- =?us-ascii?Q?3zhC+Vcj2uS8uhd8S/C3bHajjMLH2X/YCZepyBBVA9yGO0ZxoKpHjMdfVEt1?=
- =?us-ascii?Q?QkevSlS4MooyKn0s22m64KnLrm68CHWJ1zDuVwXj5S9BlS3Tyh/9auYJQSG5?=
- =?us-ascii?Q?CwlGwgB/yvysk9iiTqIlcEVEq5t7m2UMgj7Ym0Ea0WA3BHpOJWVjb2qswd7+?=
- =?us-ascii?Q?TfJERFAq4dZXrDdbbV9TRSMqr4K721hY2EzUkQpNpbNOBEwC9hvQDDxt/Ht/?=
- =?us-ascii?Q?WvSTGjSXhZfskoSLewoN/NJ9FdjJiIiLH7vIf3gif0gZ0Vhy8WH7bKDXdE9g?=
- =?us-ascii?Q?2/hnkeOdxTWPaOPGa7ISTrLyXprkTRhD0ZxVxFK/tS5bSrmGlsdD9ho1fb3Z?=
- =?us-ascii?Q?uRl+4B53HhHhyZvkUGHHmtVcz5SRfu8QavImlwR+Nfx5rZ6k3DTwUfzmQbwU?=
- =?us-ascii?Q?vOlrrkUWPKiGfL0oy3Hm2TFS9ZCz6E1nvzbizWGEilDFVxF1Wbqb079JgJLE?=
- =?us-ascii?Q?YFa79F0H2PnXUM1tG6N6pZatrKFXq7F2PPtcv7wMU+zNnP2HrWqUG+NRYks0?=
- =?us-ascii?Q?XMFvzTEvnebr3/OoYGQgWgs4zymTWdnTQU+HC7U2PiJdN0Tl2FRqgkOcQKNZ?=
- =?us-ascii?Q?JcHZWJNI/I651y1AjQR55p4DxIQFyC76EeSiAN+qN9aBPyhRIEh4s9LpNelp?=
- =?us-ascii?Q?lXck+XOnyq1ysVlQwTO6xTwNm/tYYc2gBYWt0hH3OrQZ1fQyucRyepFYSJ82?=
- =?us-ascii?Q?WS36CmfO/4TRDxRk/7/KMmGvBDVigbUlz4FE2dYFsMWvyvjFeTgRr5l5izPq?=
- =?us-ascii?Q?rO/AnZb6q0o2333PezQZdleqrJ8dLDbPhM0qnUP1QZp1R2tzTfVc2Bqpqh9/?=
- =?us-ascii?Q?iEMofRjck9kR0MNBfyb1Iv6j/x5TZT9aNtzFIbtxrZWX2/3XHuBkDLGZotXV?=
- =?us-ascii?Q?P9mNXcPhTH/4S+PlejT70RDy1/ARdVFDFnqj4QIhXSfNAq9QJol5NC8puchV?=
- =?us-ascii?Q?0HYVCRreaweWWSzLdLo2wU1zjG42Uc2VWICOS8BVgLGc2KTR89Gik82GpUfe?=
- =?us-ascii?Q?A2OFOjpdyaZeUDNjybLi2MJKjozLiPASORk5/TIOhelFRoucsMbq0EBomybE?=
- =?us-ascii?Q?XWSpHJWWtf7AmkohdZ/dXgBJr5MTiXqZvgfxUYnRyfohL3ZXBuwwiK6TvSBf?=
- =?us-ascii?Q?usmE5BYSlKGctq+wxRfF9aUySCc5y9WVz6GmtNkHzr1TafdKPFh3W9Y4dd5e?=
- =?us-ascii?Q?u5sxGyKrXP6mULb8Iz1D86Wp4ZDcZ1JAhYOq7QM66yjHUoxsXrRJOlx5jg8D?=
- =?us-ascii?Q?GQW0ONIepeIlfe+sUDUWm6MLO2E6q+oknsN2ofjI1K/G0e0HotGM3Q23U1gG?=
- =?us-ascii?Q?F70GNnCn+Q4XDKXekfuCQBf8rNaYRdk8zSZQfSi7T71pgmNmDh19lvFVzhqm?=
- =?us-ascii?Q?AnzGv6ZvvS3RcknXbGI5hFOSnDM=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 261b7ede-8af2-4303-2793-08d9fa4db8e8
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 00:03:17.5045
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KM4WhP0v7fA9mahWs1h8zOseuyUKr7jP5x1cmSWluPeXQAZgLEjZ7r1hCQXTVHx+4A2dIXGb+g18muMalnVpolPIIs623Of+dj0wzH9vYXE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6184
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220227215408.3180023-1-arnd@kernel.org>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_ADSP_NXDOMAIN,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move adc14 and adc15 (battery sensor) into single iio-hwmon node to
-correct label to be read by single application for all adc sensors.
+On Sun, Feb 27, 2022 at 10:52:43PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+> 
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=gnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is the
+> minimum compiler version used for building kernels, that is no longer a
+> concern. Similarly, the behavior of 'inline' functions changes between
+> gnu89 and gnu89, but this was taken care of by defining 'inline' to
 
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
----
- arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+Typo here?  Second one should be gnu99 right?
+     
+> include __attribute__((gnu_inline)) in order to allow building with
+> clang a while ago.
+> 
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Werror, which happens with the
+> 'make W=1' option, as well as for three drivers in the kernel that always
+> enable -Werror, but it was only observed with the i915 driver so far.
+> 
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
+> 
+> Since the differences between gnu99, gnu11 and gnu17 are fairly minimal
+> and mainly impact warnings at the -Wpedantic level that the kernel
+> never enables, the easiest way is to just leave out the -std=gnu89
+> argument entirely, and rely on the compiler default language setting,
+> which is gnu11 for gcc-5, and gnu1x/gnu17 for all other supported
+> versions of gcc or clang.
+> 
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I put the suggestion into patch form, based on what we discussed
+> in the thread.  I only gave it minimal testing, but it would
+> be good to have it in linux-next if we want to do this in the
+> merge window.
+> ---
+>  Documentation/process/programming-language.rst             | 4 ++--
+>  .../translations/it_IT/process/programming-language.rst    | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst    | 4 ++--
+>  .../translations/zh_TW/process/programming-language.rst    | 4 ++--
+>  Makefile                                                   | 7 +++----
+>  arch/arm64/kernel/vdso32/Makefile                          | 3 +--
+>  drivers/gpu/drm/i915/Makefile                              | 1 +
+>  drivers/staging/greybus/tools/Makefile                     | 3 ++-
+>  fs/btrfs/Makefile                                          | 1 +
+>  scripts/Makefile.extrawarn                                 | 1 +
+>  10 files changed, 17 insertions(+), 15 deletions(-)
+> 
+> diff --git a/Documentation/process/programming-language.rst b/Documentation/process/programming-language.rst
+> index ec474a70a02f..894f2a6eb9db 100644
+> --- a/Documentation/process/programming-language.rst
+> +++ b/Documentation/process/programming-language.rst
+> @@ -5,8 +5,8 @@ Programming Language
+>  
+>  The kernel is written in the C programming language [c-language]_.
+>  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
+> -under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
+> -(including some C99 features). ``clang`` [clang]_ is also supported, see
+> +under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11
+> +(including some C17 features). ``clang`` [clang]_ is also supported, see
+>  docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>  
+>  This dialect contains many extensions to the language [gnu-extensions]_,
+> diff --git a/Documentation/translations/it_IT/process/programming-language.rst b/Documentation/translations/it_IT/process/programming-language.rst
+> index 41db2598ce11..aa21097737ae 100644
+> --- a/Documentation/translations/it_IT/process/programming-language.rst
+> +++ b/Documentation/translations/it_IT/process/programming-language.rst
+> @@ -10,8 +10,8 @@ Linguaggio di programmazione
+>  
+>  Il kernel è scritto nel linguaggio di programmazione C [it-c-language]_.
+>  Più precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ usando
+> -l'opzione ``-std=gnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> -dello standard ISO C90 (con l'aggiunta di alcune funzionalità da C99).
+> +l'opzione ``-std=gnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> +dello standard ISO C11 (con l'aggiunta di alcune funzionalità da C17).
+>  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
+>  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>  
+> diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+> index 2a47a1d2ec20..58d2b3bd2d85 100644
+> --- a/Documentation/translations/zh_CN/process/programming-language.rst
+> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
+> @@ -9,8 +9,8 @@
+>  ============
+>  
+>  内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
+> -在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C90的 GNU 方言（
+> -包括一些C99特性）
+> +在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言（
+> +包括一些C17特性）
+>  
+>  这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
+>  
+> diff --git a/Documentation/translations/zh_TW/process/programming-language.rst b/Documentation/translations/zh_TW/process/programming-language.rst
+> index 54e3699eadf8..235de05f7e2c 100644
+> --- a/Documentation/translations/zh_TW/process/programming-language.rst
+> +++ b/Documentation/translations/zh_TW/process/programming-language.rst
+> @@ -12,8 +12,8 @@
+>  ============
+>  
+>  內核是用C語言 :ref:`c-language <tw_c-language>` 編寫的。更準確地說，內核通常是用 :ref:`gcc <tw_gcc>`
+> -在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C90的 GNU 方言（
+> -包括一些C99特性）
+> +在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C11的 GNU 方言（
+> +包括一些C17特性）
+>  
+>  這種方言包含對語言 :ref:`gnu-extensions <tw_gnu-extensions>` 的許多擴展，當然，它們許多都在內核中使用。
+>  
+> diff --git a/Makefile b/Makefile
+> index 289ce2be8032..3ff6ba766f02 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -432,7 +432,7 @@ HOSTCXX	= g++
+>  endif
+>  
+>  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+> -			      -O2 -fomit-frame-pointer -std=gnu89
+> +			      -O2 -fomit-frame-pointer
+>  export KBUILD_USERLDFLAGS :=
+>  
+>  KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+> @@ -514,8 +514,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+>  KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+>  		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+>  		   -Werror=implicit-function-declaration -Werror=implicit-int \
+> -		   -Werror=return-type -Wno-format-security \
+> -		   -std=gnu89
+> +		   -Werror=return-type -Wno-format-security
+>  KBUILD_CPPFLAGS := -D__KERNEL__
+>  KBUILD_AFLAGS_KERNEL :=
+>  KBUILD_CFLAGS_KERNEL :=
+> @@ -782,7 +781,7 @@ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>  
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS += -Qunused-arguments
+> -# The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+> +# The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+>  KBUILD_CFLAGS += -Wno-gnu
+>  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+>  # source of a reference will be _MergedGlobals and not on of the whitelisted names.
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+> index 6c01b63ff56d..3250d0e25782 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -67,8 +67,7 @@ VDSO_CFLAGS += -DENABLE_COMPAT_VDSO=1
+>  VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+>                 -fno-strict-aliasing -fno-common \
+>                 -Werror-implicit-function-declaration \
+> -               -Wno-format-security \
+> -               -std=gnu89
+> +               -Wno-format-security
+>  VDSO_CFLAGS  += -O2
+>  # Some useful compiler-dependent flags from top-level Makefile
+>  VDSO_CFLAGS += $(call cc32-option,-Wdeclaration-after-statement,)
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+> index 1b62b9f65196..1618a6e0af4e 100644
+> --- a/drivers/gpu/drm/i915/Makefile
+> +++ b/drivers/gpu/drm/i915/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y += -Wno-unused-parameter
+>  subdir-ccflags-y += -Wno-type-limits
+>  subdir-ccflags-y += -Wno-missing-field-initializers
+>  subdir-ccflags-y += -Wno-sign-compare
+> +subdir-ccflags-y += -Wno-shift-negative-value
+>  subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+>  subdir-ccflags-y += $(call cc-disable-warning, frame-address)
+>  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
+> diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/greybus/tools/Makefile
+> index ad0ae8053b79..a3bbd73171f2 100644
+> --- a/drivers/staging/greybus/tools/Makefile
+> +++ b/drivers/staging/greybus/tools/Makefile
+> @@ -12,7 +12,8 @@ CFLAGS	+= -std=gnu99 -Wall -Wextra -g \
+>  	    -Wredundant-decls \
+>  	    -Wcast-align \
+>  	    -Wsign-compare \
+> -	    -Wno-missing-field-initializers
+> +	    -Wno-missing-field-initializers \
+> +	    -Wno-shift-negative-value
+>  
+>  CC	:= $(CROSS_COMPILE)gcc
+>  
+> diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+> index 4188ba3fd8c3..99f9995670ea 100644
+> --- a/fs/btrfs/Makefile
+> +++ b/fs/btrfs/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y += $(condflags)
+>  subdir-ccflags-y += -Wno-missing-field-initializers
+>  subdir-ccflags-y += -Wno-sign-compare
+>  subdir-ccflags-y += -Wno-type-limits
+> +subdir-ccflags-y += -Wno-shift-negative-value
+>  
+>  obj-$(CONFIG_BTRFS_FS) := btrfs.o
+>  
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 8be892887d71..650d0b8ceec3 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -36,6 +36,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
+>  KBUILD_CFLAGS += -Wno-missing-field-initializers
+>  KBUILD_CFLAGS += -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wno-type-limits
+> +KBUILD_CFLAGS += -Wno-shift-negative-value
+>  
+>  KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
+>  
+> -- 
+> 2.29.2
+> 
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-index 60b0e650957a..1b2e7ad37566 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-@@ -339,17 +339,8 @@ iio-hwmon {
- 			<&adc10mux 0>, <&adc10mux 1>,
- 			<&adc11mux 0>, <&adc11mux 1>,
- 			<&adc12mux 0>, <&adc12mux 1>,
--			<&adc13mux 0>, <&adc13mux 1>;
--	};
--
--	iio-hwmon-adc14 {
--		compatible = "iio-hwmon";
--		io-channels = <&adc 14>;
--	};
--
--	iio-hwmon-battery {
--		compatible = "iio-hwmon";
--		io-channels = <&adc 15>;
-+			<&adc13mux 0>, <&adc13mux 1>,
-+			<&adc 14>, <&adc 15>;
- 	};
- };
- 
 -- 
-2.28.0
-

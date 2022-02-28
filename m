@@ -2,257 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B157A4C63F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8FB4C6407
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiB1Hrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S233685AbiB1Hsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiB1Hrw (ORCPT
+        with ESMTP id S229664AbiB1Hsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:47:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D110166AFF
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646034433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aUXNIN60U26tD/3N7dMMfSzdsR2HBfgMEkzDNq/C3Eo=;
-        b=J+aKlgqShwnTA9HmTzNfd6RWP4FZWZ1i2cu9t9dIqkozMZqYTn4FZGMTe1lrnP92vGECz4
-        ThIa+dcLr5Z7hUa7qGmp2FUcSDKMmzB8XKaVI+UqmfYK4D8pVP81azA9owVU8jvIhRe9WA
-        u1UGmKiQHzCJcKbODDhip/ldjobhzzU=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-523-uG3f7DDkMDq3PA_TE-nk7w-1; Mon, 28 Feb 2022 02:47:09 -0500
-X-MC-Unique: uG3f7DDkMDq3PA_TE-nk7w-1
-Received: by mail-lf1-f70.google.com with SMTP id v13-20020ac2592d000000b004435f5315dbso1522433lfi.21
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:47:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aUXNIN60U26tD/3N7dMMfSzdsR2HBfgMEkzDNq/C3Eo=;
-        b=LfTYt/SqqlC02jx/hTIszl/pUqW467s6xKMlu0dmArE6W/KLNMZZVBc0OxaEbYP9rg
-         E476vqyLz5C828r1ygNacuG46r6F67MfzpOVK0Swi2SR+rQI7Z+ypMjzS5HWMawhtcgY
-         86rFRTpcdPHnxpPEgrBiI37F6rq2QyKYEsnC2gTQc5573kN4kKA9YK6TKpPYh2Xn7fmG
-         yPpHcYW3V6F9/kcN1FAzgI3YBDr3BLgBXrRWLYk4Ere06rlNvj6KISz459JBng16hZya
-         3LPuSBFtjYDRH44csYJaMmqplmjZkb0l5BBWlm7nsfiZxHlcCmc7F/2Pbqfu9MQ0onMs
-         Cwew==
-X-Gm-Message-State: AOAM5324bvSkvWXk4rHSvSR/Gy0/FgWvJfEsj/JuqZtuMqMupz/yztb/
-        zyNSYnhAH86C4DzS48MQzV+/4LLW8r4SOHQuJXd5nvJW5tPSGXjFtvVFaoNnqA20noYZhhCIH3c
-        5l9qQdspUoKa3MWXGMwnMDBYG+Qju9j/2cjwli1Fa
-X-Received: by 2002:a05:6512:3341:b0:433:b033:bd22 with SMTP id y1-20020a056512334100b00433b033bd22mr11614973lfd.190.1646034427542;
-        Sun, 27 Feb 2022 23:47:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzWaQtCTk3mFw1wzzyGlheyom7wph+t1lT88MJiKZ34pemCt5LBVKfxtLSrFj5vHtVJOMgVCeciDuad74iBnpM=
-X-Received: by 2002:a05:6512:3341:b0:433:b033:bd22 with SMTP id
- y1-20020a056512334100b00433b033bd22mr11614963lfd.190.1646034427235; Sun, 27
- Feb 2022 23:47:07 -0800 (PST)
+        Mon, 28 Feb 2022 02:48:38 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE113F50;
+        Sun, 27 Feb 2022 23:47:59 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21S7lkwQ129728;
+        Mon, 28 Feb 2022 01:47:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646034466;
+        bh=XaVajIyYolMkwb7z4/mnEHAALnLb4cevLOQSWippJ7Q=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=SZ3AE5JG+Gu4PTuDhvy9QmR/qNqeRS9joRkp6UsSKiIXOqhGy19zyh+H/NiKwltNv
+         RDfGQhv42RtlnfB28NRUV0NZeW7SS7IrxPkljAalTFPxD8dwr/ezQVHC1Q62OmRLBh
+         vL4RFy0AYFJk8Og1Sg6xeFhq7X1gub09WtNpfGyM=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21S7lksL027669
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 01:47:46 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
+ Feb 2022 01:47:46 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 28 Feb 2022 01:47:46 -0600
+Received: from [10.250.233.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21S7lhOG035509;
+        Mon, 28 Feb 2022 01:47:44 -0600
+Message-ID: <e0786653-9470-f7b3-c744-5fd9c08c25aa@ti.com>
+Date:   Mon, 28 Feb 2022 13:17:13 +0530
 MIME-Version: 1.0
-References: <20220224103852.311369-1-baymaxhuang@gmail.com> <20220228033805.1579435-1-baymaxhuang@gmail.com>
-In-Reply-To: <20220228033805.1579435-1-baymaxhuang@gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 28 Feb 2022 15:46:56 +0800
-Message-ID: <CACGkMEtFFe3mVkXYjYJZtGdU=tAB+T5TYCqySzSxR2N5e4UV1A@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] tun: support NAPI for packets received from
- batched XDP buffs
-To:     Harold Huang <baymaxhuang@gmail.com>
-Cc:     netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 1/2] arm64: dts: ti: k3-am64-main: Add GPMC memory
+ controller node
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, <nm@ti.com>
+CC:     <kishon@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220204111533.10787-1-rogerq@kernel.org>
+ <20220204111533.10787-2-rogerq@kernel.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220204111533.10787-2-rogerq@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:38 AM Harold Huang <baymaxhuang@gmail.com> wrote:
->
-> In tun, NAPI is supported and we can also use NAPI in the path of
-> batched XDP buffs to accelerate packet processing. What is more, after
-> we use NAPI, GRO is also supported. The iperf shows that the throughput of
-> single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
-> Gbps nearly reachs the line speed of the phy nic and there is still about
-> 15% idle cpu core remaining on the vhost thread.
->
-> Test topology:
-> [iperf server]<--->tap<--->dpdk testpmd<--->phy nic<--->[iperf client]
->
-> Iperf stream:
-> iperf3 -c 10.0.0.2  -i 1 -t 10
->
-> Before:
-> ...
-> [  5]   5.00-6.00   sec   558 MBytes  4.68 Gbits/sec    0   1.50 MBytes
-> [  5]   6.00-7.00   sec   556 MBytes  4.67 Gbits/sec    1   1.35 MBytes
-> [  5]   7.00-8.00   sec   556 MBytes  4.67 Gbits/sec    2   1.18 MBytes
-> [  5]   8.00-9.00   sec   559 MBytes  4.69 Gbits/sec    0   1.48 MBytes
-> [  5]   9.00-10.00  sec   556 MBytes  4.67 Gbits/sec    1   1.33 MBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.00  sec  5.39 GBytes  4.63 Gbits/sec   72          sender
-> [  5]   0.00-10.04  sec  5.39 GBytes  4.61 Gbits/sec               receiver
->
-> After:
-> ...
-> [  5]   5.00-6.00   sec  1.07 GBytes  9.19 Gbits/sec    0   1.55 MBytes
-> [  5]   6.00-7.00   sec  1.08 GBytes  9.30 Gbits/sec    0   1.63 MBytes
-> [  5]   7.00-8.00   sec  1.08 GBytes  9.25 Gbits/sec    0   1.72 MBytes
-> [  5]   8.00-9.00   sec  1.08 GBytes  9.25 Gbits/sec   77   1.31 MBytes
-> [  5]   9.00-10.00  sec  1.08 GBytes  9.24 Gbits/sec    0   1.48 MBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.00  sec  10.8 GBytes  9.28 Gbits/sec  166          sender
-> [  5]   0.00-10.04  sec  10.8 GBytes  9.24 Gbits/sec               receiver
->
-> Reported-at: https://lore.kernel.org/all/CACGkMEvTLG0Ayg+TtbN4q4pPW-ycgCCs3sC3-TF8cuRTf7Pp1A@mail.gmail.com
-> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
 
-Acked-by: Jason Wang <jasowang@redhat.com>
 
+On 04/02/22 4:45 pm, Roger Quadros wrote:
+> The GPMC is a unified memory controller dedicated for interfacing
+> with external memory devices like
+>   - Asynchronous SRAM-like memories and ASICs
+>   - Asynchronous, synchronous, and page mode burst NOR flash
+>   - NAND flash
+>   - Pseudo-SRAM devices
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 > ---
-> v2 -> v3
->  - return the queued NAPI packet from tun_xdp_one
->
->  drivers/net/tun.c | 43 ++++++++++++++++++++++++++++++-------------
->  1 file changed, 30 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index fed85447701a..969ea69fd29d 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -2388,9 +2388,10 @@ static int tun_xdp_one(struct tun_struct *tun,
->         struct virtio_net_hdr *gso = &hdr->gso;
->         struct bpf_prog *xdp_prog;
->         struct sk_buff *skb = NULL;
-> +       struct sk_buff_head *queue;
->         u32 rxhash = 0, act;
->         int buflen = hdr->buflen;
-> -       int err = 0;
-> +       int ret = 0;
->         bool skb_xdp = false;
->         struct page *page;
->
-> @@ -2405,13 +2406,13 @@ static int tun_xdp_one(struct tun_struct *tun,
->                 xdp_set_data_meta_invalid(xdp);
->
->                 act = bpf_prog_run_xdp(xdp_prog, xdp);
-> -               err = tun_xdp_act(tun, xdp_prog, xdp, act);
-> -               if (err < 0) {
-> +               ret = tun_xdp_act(tun, xdp_prog, xdp, act);
-> +               if (ret < 0) {
->                         put_page(virt_to_head_page(xdp->data));
-> -                       return err;
-> +                       return ret;
->                 }
->
-> -               switch (err) {
-> +               switch (ret) {
->                 case XDP_REDIRECT:
->                         *flush = true;
->                         fallthrough;
-> @@ -2435,7 +2436,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->  build:
->         skb = build_skb(xdp->data_hard_start, buflen);
->         if (!skb) {
-> -               err = -ENOMEM;
-> +               ret = -ENOMEM;
->                 goto out;
->         }
->
-> @@ -2445,7 +2446,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->         if (virtio_net_hdr_to_skb(skb, gso, tun_is_little_endian(tun))) {
->                 atomic_long_inc(&tun->rx_frame_errors);
->                 kfree_skb(skb);
-> -               err = -EINVAL;
-> +               ret = -EINVAL;
->                 goto out;
->         }
->
-> @@ -2455,16 +2456,27 @@ static int tun_xdp_one(struct tun_struct *tun,
->         skb_record_rx_queue(skb, tfile->queue_index);
->
->         if (skb_xdp) {
-> -               err = do_xdp_generic(xdp_prog, skb);
-> -               if (err != XDP_PASS)
-> +               ret = do_xdp_generic(xdp_prog, skb);
-> +               if (ret != XDP_PASS) {
-> +                       ret = 0;
->                         goto out;
-> +               }
->         }
->
->         if (!rcu_dereference(tun->steering_prog) && tun->numqueues > 1 &&
->             !tfile->detached)
->                 rxhash = __skb_get_hash_symmetric(skb);
->
-> -       netif_receive_skb(skb);
-> +       if (tfile->napi_enabled) {
-> +               queue = &tfile->sk.sk_write_queue;
-> +               spin_lock(&queue->lock);
-> +               __skb_queue_tail(queue, skb);
-> +               spin_unlock(&queue->lock);
-> +               ret = 1;
-> +       } else {
-> +               netif_receive_skb(skb);
-> +               ret = 0;
-> +       }
->
->         /* No need to disable preemption here since this function is
->          * always called with bh disabled
-> @@ -2475,7 +2487,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->                 tun_flow_update(tun, rxhash, tfile);
->
->  out:
-> -       return err;
-> +       return ret;
->  }
->
->  static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
-> @@ -2492,7 +2504,7 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
->         if (ctl && (ctl->type == TUN_MSG_PTR)) {
->                 struct tun_page tpage;
->                 int n = ctl->num;
-> -               int flush = 0;
-> +               int flush = 0, queued = 0;
->
->                 memset(&tpage, 0, sizeof(tpage));
->
-> @@ -2501,12 +2513,17 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
->
->                 for (i = 0; i < n; i++) {
->                         xdp = &((struct xdp_buff *)ctl->ptr)[i];
-> -                       tun_xdp_one(tun, tfile, xdp, &flush, &tpage);
-> +                       ret = tun_xdp_one(tun, tfile, xdp, &flush, &tpage);
-> +                       if (ret > 0)
-> +                               queued += ret;
->                 }
->
->                 if (flush)
->                         xdp_do_flush();
->
-> +               if (tfile->napi_enabled && queued > 0)
-> +                       napi_schedule(&tfile->napi);
-> +
->                 rcu_read_unlock();
->                 local_bh_enable();
->
-> --
-> 2.27.0
->
+>  arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 19 +++++++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-am642-evm.dts  |  4 ++++
+>  arch/arm64/boot/dts/ti/k3-am642-sk.dts   |  4 ++++
+>  3 files changed, 27 insertions(+)
+> 
 
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+
+[...]
+
+Regards
+Vignesh

@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F004C7159
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8877B4C715C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237782AbiB1QKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S237789AbiB1QLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiB1QKs (ORCPT
+        with ESMTP id S231968AbiB1QLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:10:48 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6EF50B13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646064608; x=1677600608;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qQF75t3gcJ8otswdA/PKU2/l+dYNyJI3cyfi3dETkyM=;
-  b=AVZKBh65vZRsTVzlOJp7V9ydr0r11P9QgSFMf8/EXtfwzDIk8rEgWxY0
-   q8iTnwcDS7EelH54q+NznIe+oSHqRcOsDgZgdaT9EhTnQi33ai11Ysydz
-   uBalgcO4zcubTfB6hXKLtGA8nDNWYziDrEcjyuWIxlQ3Cr45sISyzxrx2
-   S8T8Mt4//8hrTLhv2OVM5gmIB/h3NtV9MS7IE62Yr5gDXm1+d3TQ25NMo
-   KExxBlkDZP6YqhDWxfWngd2DqIVY02Pyqz9nGVwt8Qw8KbIJqjCxKgf11
-   Wcl5wo3pmMgEr4J7FV1QXnbNQXjCROMppUEFkTQ9HjcxJj8fw4Z3f7nGe
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="147518055"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 09:09:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 09:09:53 -0700
-Received: from [10.12.72.64] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 28 Feb 2022 09:09:50 -0700
-Message-ID: <3fedb4c6-baa5-2107-934d-31f8205176b4@microchip.com>
-Date:   Mon, 28 Feb 2022 17:09:50 +0100
+        Mon, 28 Feb 2022 11:11:20 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07DC50B05
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:41 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id b8so11547007pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xocpR3kEH7DQeX+jVuIfF7VJPK+XVL0jIQPIFfI+qI8=;
+        b=dhWajjV0N5cq5yyksodXUrVKqdANsgBSLIQvn6xHJ/0QOeLBz9xHBvcih5XHYq4rwA
+         RjOE1R+evHHmluSZlnSSq4lLGsysvjA8UqkOjKsDzbYJOpGxH2RJgXtRvL4vdwbVgHzg
+         gHU4l5/orEAqiO7t5Ktm0UIOq1L80gDqgaNnBpIc4Dkkm2TYy83urB/fGjMVbffjDwLK
+         zR62D8b8lMFEkREryoau4PxGO++jLEhQruLdCXq+gDWpH3N7FdWWb6BziaEYdQQwa6wu
+         AM0YJIJ8qu4g56p8oeb5l06IATj+NIbNVM+zTCy4uVrqOXRkQVHuUlGSbo95jlUS1jZJ
+         UJCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xocpR3kEH7DQeX+jVuIfF7VJPK+XVL0jIQPIFfI+qI8=;
+        b=FvGw9G1LZCOhqgZmtOl+9UjTvNAljerdRObeWSmIz6wT3QAZ5A+2t8k21dJXYPWKaH
+         nTIT3xSPOm3RNyX8abcNteeIKIzw5KEZ97FhuiyqmPBQJRHvXEQHHe8mZLrJOhENI88o
+         PlF/EHAZHKyqY0D5qbegdhg9aJGwRdZa9fdV1kToViKxUeAvr69Q1QD9ud15Pf+iyvnQ
+         oHG6o+UfKOTfVSe31xIGLXgqZxy0ShqAI+jtcU9VUcLU/QEQj48GPkr9VyBtGAvpUuoU
+         g5t0ZFjHrVS+FvRBfYpqoZXULjG4yp39v2LXvtRSK/KhgWvC3cZjZx1Tz7uEjfed2rgr
+         iTjQ==
+X-Gm-Message-State: AOAM5328erTrGM/RRiaCJ7km4XsMN8imx8GtIzTPLaxOkcSCL0bYYNDm
+        VbX18+MHXHO0Mbyqf1kNL/WL1g==
+X-Google-Smtp-Source: ABdhPJwnEoEFSQu22qln1XnyXWA2QCP/IX2mziXAw1Oqr39CegYdEMoSIFcdf8UlMLnZXFRXtC0IQQ==
+X-Received: by 2002:a17:902:ec92:b0:14f:e593:5e99 with SMTP id x18-20020a170902ec9200b0014fe5935e99mr21508133plg.42.1646064641053;
+        Mon, 28 Feb 2022 08:10:41 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n42-20020a056a000d6a00b004e1a01dcc35sm13805049pfv.150.2022.02.28.08.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 08:10:40 -0800 (PST)
+Date:   Mon, 28 Feb 2022 16:10:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peng Hao <flyingpenghao@gmail.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH]  kvm: x86: Adjust the location of pkru_mask of kvm_mmu
+ to reduce memory
+Message-ID: <Yhzz/N4+3vNh7AQn@google.com>
+References: <20220228030749.88353-1-flyingpeng@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] SoC: polarfire: fix build warning
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Conor Dooley <mail@conchuod.ie>
-CC:     Lewis Hanly <lewis.hanly@microchip.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "kernel test robot" <lkp@intel.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20220228152658.3367506-1-arnd@kernel.org>
- <b8eb2e55-b5a8-4a39-86cb-93cadbd67922@conchuod.ie>
- <CAK8P3a1NWuoHVWXVZUGJxSg=D0d3umrMzWqZ75devfOwO-JhuQ@mail.gmail.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <CAK8P3a1NWuoHVWXVZUGJxSg=D0d3umrMzWqZ75devfOwO-JhuQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228030749.88353-1-flyingpeng@tencent.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2022 at 16:41, Arnd Bergmann wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Mon, Feb 28, 2022, Peng Hao wrote:
+> From: Peng Hao <flyingpeng@tencent.com>
 > 
-> On Mon, Feb 28, 2022 at 4:35 PM Conor Dooley <mail@conchuod.ie> wrote:
->>
->> I had sent a fix for the build warning on saturday morning - but I guess
->> you missed it.
->>
->> Thanks for fixing it anyway :)
-> 
-> Thank you for your quick reply. I had indeed missed that fix. You did the
-> right thing here by sending it to Nicolas, but he hasn't had a chance to forward
-> it to soc@kernel.org yet, so it was not visible in patchwork.
-> 
-> As it turns out, your patch is correct and mine was wrong anyway, so I
-> have now replaced my patch with yours.
-> 
-> Nicolas, I hope that doesn't cause you extra work. If you have picked it
-> up into your tree, you can drop it again from there.
+> Adjust the field pkru_mask to the back of direct_map to make up 8-byte
+> alignment.This reduces the size of kvm_mmu by 8 bytes.
 
-No problem on my side: I was planning to add it to another PR to you but 
-it's far easier if you already took it directly.
+I'd prefer we just burn the extra 8 bytes, at least for now.  'prku' and 'permissions'
+are related fields, IMO splitting them to save 24 bytes per vCPU isn't a good tradeoff.
 
-Thanks Arnd, best regards,
-   Nicolas
-
-
--- 
-Nicolas Ferre
+And in the not-too-distant future, all of the 1-byte fields will hopefully go
+away, at which point were "wasting" 4 bytes no matter where 'pkru' is defined.  'ept_ad'
+can be dropped immediately, I'll send a patch for that.  We should be able to drop
+'root_level', 'shadow_root_level', and 'direct_map' once Paolo's clean up of the role
+stuff lands.

@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91F04C721E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7BF4C7219
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237067AbiB1REu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S238038AbiB1REA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiB1REr (ORCPT
+        with ESMTP id S236472AbiB1RD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:04:47 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952DE1CB0B;
-        Mon, 28 Feb 2022 09:04:05 -0800 (PST)
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 21SH3bcT021027;
-        Tue, 1 Mar 2022 02:03:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 21SH3bcT021027
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1646067818;
-        bh=sryAZLDXD/t7zVmI+J82zVk8l2yloq/oD0nvYGiN984=;
+        Mon, 28 Feb 2022 12:03:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00041CB0B;
+        Mon, 28 Feb 2022 09:03:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4927D612F2;
+        Mon, 28 Feb 2022 17:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55E0C340E7;
+        Mon, 28 Feb 2022 17:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646067798;
+        bh=W4TfgaMbzB/dbIXJ+mhv9//sCTurVx2rgNmiCaGsggY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DFAl9D3d5SV7l8OlblFtkdudyppXM87TTXLJkKaFiDrnHYA5wFLCqpf/bi6XW+/lL
-         Wxcxf4DRuPeQzgRVRD0ZLZqGJVyV92OkIiBQSKCRD0fkbmGaM77V1X8/io54DfJJE1
-         WHjVeTmICFjHCNQFMP84l0KM6p9KeusZdxBvunEoZ/3O0KaCmfcm9xJcBOxDBliQLy
-         v2hLNwthpmWXp3NyaQ3wZjDjgPQxfdr5sC/vbH+pTH2mOrDULVuZBpmLb5vfOGA989
-         Xl28AGykKx2Snuz0kqy9XcABSVfqA/+0wAkzfvVhA8SShTSlLQBtapcr4hUau+8ujK
-         GQtrmak7eUByg==
-X-Nifty-SrcIP: [209.85.210.175]
-Received: by mail-pf1-f175.google.com with SMTP id d17so11571637pfl.0;
-        Mon, 28 Feb 2022 09:03:37 -0800 (PST)
-X-Gm-Message-State: AOAM533Kduz81j7AsM7VC+DQ+9nUnmn6KGNAdT7DNcrqjsqOTNl+XNCZ
-        gEKSzMo1exb75ZkpaPM186/945eCf/hAUmmpbiA=
-X-Google-Smtp-Source: ABdhPJxISxDkNdxsVTKDDV2g7ZIxBL9oz/LlNlGrxEOGwup5cilO+xLo89K+cDWbGEDhDHUjyYzEiShtkCuCLkVGAaU=
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id
- bj2-20020a056a02018200b003745a57cbf9mr18072494pgb.616.1646067817034; Mon, 28
- Feb 2022 09:03:37 -0800 (PST)
+        b=jl+0Hznf8k7g6+rx19mhiijhFh41pTB8SWOK7Zk99uUHhtQuLfO4lmZC7yJZUZUMf
+         36pIIJea3OxyWsvIgHnPEKrHy/DxJB8SNEccu7bZ0o72s+sK/Gc76Efl38ZoSRSogT
+         fRMeGLdYJwQzwM/xdeDiwIb/WoWAS7xVpXvfKL63k215t8mgNciYmw+zL4ua9B1H/e
+         JIiuMqwhCCP3wgXoGwrwEt+KuSXIaCAw79Bqw739EJAsAoUtbT96IjPX9fQNyXtoEp
+         w42DyM9ABy/f3q8KsR5n/dJZVSrHFPhXGUOm7PEz3p47vzuGJUIKKXm7xM8HWBQQsx
+         Cr2cm2XOJQD2w==
+Received: by mail-ed1-f42.google.com with SMTP id s14so18583514edw.0;
+        Mon, 28 Feb 2022 09:03:18 -0800 (PST)
+X-Gm-Message-State: AOAM53328jSSXPqzLN9oOBka6oBHmajmcac5CQIMFMN4lZK62lQCLKfs
+        dd/SWe9RE63aKlmXEzVoLbzGMMU2qYry05kHTQ==
+X-Google-Smtp-Source: ABdhPJzZUYATENjJza9Xe14xwOlz85aDtvRJMe7hMmcZYSSl58Qus9RdYNE0HMiDZBUi9DSMMte/kCYmXNqip9EHHxI=
+X-Received: by 2002:aa7:ce92:0:b0:40f:b89c:18fe with SMTP id
+ y18-20020aa7ce92000000b0040fb89c18femr20552649edv.67.1646067796901; Mon, 28
+ Feb 2022 09:03:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org>
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 1 Mar 2022 02:02:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATVs-yRX4PnURkLv3fz3gAnuzG2GxZ2gdvmJX2g+0P-_w@mail.gmail.com>
-Message-ID: <CAK7LNATVs-yRX4PnURkLv3fz3gAnuzG2GxZ2gdvmJX2g+0P-_w@mail.gmail.com>
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org
+References: <20220222155030.988-1-pali@kernel.org> <164554589988.5595.5091384618177225445.b4-ty@arm.com>
+ <20220222161143.6ryghgtfmhnmhpmz@pali> <20220222161539.GA20114@lpieralisi>
+ <20220222161854.7oot5v6xlw2wzmsc@pali> <87h78j0y5m.fsf@BL-laptop>
+In-Reply-To: <87h78j0y5m.fsf@BL-laptop>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 28 Feb 2022 11:03:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJBCyrFpys9xx+TkD4GpW7MvxWr8rXzLARBJ4iOqY_u_g@mail.gmail.com>
+Message-ID: <CAL_JsqJBCyrFpys9xx+TkD4GpW7MvxWr8rXzLARBJ4iOqY_u_g@mail.gmail.com>
+Subject: Re: (subset) [PATCH v4 00/12] PCI: mvebu: subsystem ids, AER and INTx
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 7:32 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Feb 28, 2022 at 10:11 AM Gregory CLEMENT
+<gregory.clement@bootlin.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> Hello,
 >
-> During a patch discussion, Linus brought up the option of changing
-> the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standards
-> introduce many other features, most of these are already available in
-> gnu89 as GNU extensions as well.
+> > + Gregory
+> >
+> > On Tuesday 22 February 2022 16:15:39 Lorenzo Pieralisi wrote:
+> >> On Tue, Feb 22, 2022 at 05:11:43PM +0100, Pali Roh=C3=A1r wrote:
+> >> > On Tuesday 22 February 2022 16:06:20 Lorenzo Pieralisi wrote:
+> >> > > On Tue, 22 Feb 2022 16:50:18 +0100, Pali Roh=C3=A1r wrote:
+> >> > > > This patch series extends pci-bridge-emul.c driver to emulate PC=
+I Subsystem
+> >> > > > Vendor ID capability and PCIe extended capabilities. And then im=
+plement
+> >> > > > in pci-mvebu.c driver support for PCI Subsystem Vendor IDs, PCIe=
+ AER
+> >> > > > registers, support for legacy INTx interrupts, configuration for=
+ X1/X4
+> >> > > > mode and usage of new PCI child_ops API.
+> >> > > >
+> >> > > > Changes in v4:
+> >> > > > * rebased on c3bd7dc553eea5a3595ca3aa0adee9bf83622a1f
+> >> > > >
+> >> > > > [...]
+> >> > >
+> >> > > I can't apply dts changes, patch 12 should go via the arm-soc tree=
+.
+> >> >
+> >> > Gregory already wrote about this dts change:
+> >> > https://lore.kernel.org/linux-pci/87tud1jwpr.fsf@BL-laptop/
+> >> > "So the easier is to let merge it through the PCI subsystem with the
+> >> > other patches from this series."
+> >> >
+> >> > Are there any issues with applying this dts change via pci tree?
+> >>
+> >> I don't usually take dts changes through the PCI tree since they
+> >> can conflict with arm-soc, that's the issue - dts changes should
+> >> be managed by platform maintainers.
+> >
+> > Gregory, could you please take patch 12/12?
+> > https://lore.kernel.org/linux-pci/20220222155030.988-13-pali@kernel.org=
+/
+> > You have already Acked-by (see above previous link)
 >
-> An earlier attempt to do this when gcc-5 started defaulting to
-> -std=gnu11 failed because at the time that caused warnings about
-> designated initializers with older compilers. Now that gcc-5.1 is the
-> minimum compiler version used for building kernels, that is no longer a
-> concern. Similarly, the behavior of 'inline' functions changes between
-> gnu89 and gnu11, but this was taken care of by defining 'inline' to
-> include __attribute__((gnu_inline)) in order to allow building with
-> clang a while ago.
 >
-> One minor issue that remains is an added gcc warning for shifts of
-> negative integers when building with -Werror, which happens with the
+> Applied on mvebu/dt
+>
+> let's hope the PCI branch will be merged before the ARM branch.
 
-Is this a typo?
+Why does that matter? AIUI, legacy interrupts didn't work before and
+you need both dt and kernel to enable. Or am I misled by the commit
+messages?
 
-   building with -Werror, ...
-->
-   building with -Wextra, ...
-
-
-
-
-> 'make W=1' option, as well as for three drivers in the kernel that always
-> enable -Werror, but it was only observed with the i915 driver so far.
-
-Same here.
-
-   enable -Werror, but ...
-->
-  enable -Wextra, but ...
-
-
-
-
-Otherwise,
-
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
-Please let me know if you want me to pick up this.
-
-
-
-
-
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
+Rob

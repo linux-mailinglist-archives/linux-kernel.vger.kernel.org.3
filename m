@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E344C7747
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39F4C767E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbiB1SNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S240820AbiB1SEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240787AbiB1SJL (ORCPT
+        with ESMTP id S239430AbiB1RxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:09:11 -0500
+        Mon, 28 Feb 2022 12:53:02 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8BA5E779;
-        Mon, 28 Feb 2022 09:49:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52AA9399D;
+        Mon, 28 Feb 2022 09:40:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38E1560748;
-        Mon, 28 Feb 2022 17:49:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF74C340E7;
-        Mon, 28 Feb 2022 17:49:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92697614CC;
+        Mon, 28 Feb 2022 17:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97030C340E7;
+        Mon, 28 Feb 2022 17:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070546;
-        bh=6tDy2ua6iB4fOAElIvkDCYv79PsnJOR5zcUKUqVEqz8=;
+        s=korg; t=1646070017;
+        bh=/hYQGTqQQmB6eHTb99rmYrwWLM/X1AuUSuVmxovmtDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=COH+jKbXL7ncIoKdVUVkkqbfz8jTcG6mvDoCUH19tT9zTt1lWXbzHvSOBVN3Z6J7V
-         2cyQMh/l3UZZceSMzSnpt8zYNQe9qD2W31of5eyxDyoNyBAoxWvkTEo4deQpTAl/U5
-         eknoJSREcwXaYdrtxSvBNc4anJ9TupBrQg6h0D4U=
+        b=xJopDP9Lcx0vkDVnDDqP0QLCTnVehtN45Ne+2AVWHjPvzqCC9+Z17x5cM27E52gG5
+         12Y6NYqvrmKmHdTSC8n1hZVKCMiOOWgqjbIJl7N7Leh8OukFGM9aE3Obh66cZncJ/r
+         LEWImMYM3Ahv8DwaBwIgQkmXhnLNnD79C5BhhPwE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Laibin Qiu <qiulaibin@huawei.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 108/164] configfs: fix a race in configfs_{,un}register_subsystem()
+        stable@vger.kernel.org, Julia Pineda <julia.pineda@analog.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 096/139] iio:imu:adis16480: fix buffering for devices with no burst mode
 Date:   Mon, 28 Feb 2022 18:24:30 +0100
-Message-Id: <20220228172409.627517504@linuxfoundation.org>
+Message-Id: <20220228172357.703817331@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,98 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChenXiaoSong <chenxiaosong2@huawei.com>
+From: Nuno Sá <nuno.sa@analog.com>
 
-[ Upstream commit 84ec758fb2daa236026506868c8796b0500c047d ]
+commit b0e85f95e30d4d2dc22ea123a30dba36406879a1 upstream.
 
-When configfs_register_subsystem() or configfs_unregister_subsystem()
-is executing link_group() or unlink_group(),
-it is possible that two processes add or delete list concurrently.
-Some unfortunate interleavings of them can cause kernel panic.
+The trigger handler defined in the driver assumes that burst mode is
+being used. Hence, for devices that do not support it, we have to use
+the adis library default trigger implementation.
 
-One of cases is:
-A --> B --> C --> D
-A <-- B <-- C <-- D
-
-     delete list_head *B        |      delete list_head *C
---------------------------------|-----------------------------------
-configfs_unregister_subsystem   |   configfs_unregister_subsystem
-  unlink_group                  |     unlink_group
-    unlink_obj                  |       unlink_obj
-      list_del_init             |         list_del_init
-        __list_del_entry        |           __list_del_entry
-          __list_del            |             __list_del
-            // next == C        |
-            next->prev = prev   |
-                                |               next->prev = prev
-            prev->next = next   |
-                                |                 // prev == B
-                                |                 prev->next = next
-
-Fix this by adding mutex when calling link_group() or unlink_group(),
-but parent configfs_subsystem is NULL when config_item is root.
-So I create a mutex configfs_subsystem_mutex.
-
-Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Julia Pineda <julia.pineda@analog.com>
+Fixes: 941f130881fa9 ("iio: adis16480: support burst read function")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20220114132608.241-1-nuno.sa@analog.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/configfs/dir.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/iio/imu/adis16480.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
-index d3cd2a94d1e8c..d1f9d26322027 100644
---- a/fs/configfs/dir.c
-+++ b/fs/configfs/dir.c
-@@ -34,6 +34,14 @@
-  */
- DEFINE_SPINLOCK(configfs_dirent_lock);
- 
-+/*
-+ * All of link_obj/unlink_obj/link_group/unlink_group require that
-+ * subsys->su_mutex is held.
-+ * But parent configfs_subsystem is NULL when config_item is root.
-+ * Use this mutex when config_item is root.
-+ */
-+static DEFINE_MUTEX(configfs_subsystem_mutex);
-+
- static void configfs_d_iput(struct dentry * dentry,
- 			    struct inode * inode)
+diff --git a/drivers/iio/imu/adis16480.c b/drivers/iio/imu/adis16480.c
+index ed129321a14d..f9b4540db1f4 100644
+--- a/drivers/iio/imu/adis16480.c
++++ b/drivers/iio/imu/adis16480.c
+@@ -1403,6 +1403,7 @@ static int adis16480_probe(struct spi_device *spi)
  {
-@@ -1859,7 +1867,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
- 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
- 
- 	sd = root->d_fsdata;
-+	mutex_lock(&configfs_subsystem_mutex);
- 	link_group(to_config_group(sd->s_element), group);
-+	mutex_unlock(&configfs_subsystem_mutex);
- 
- 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
- 
-@@ -1884,7 +1894,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
- 	inode_unlock(d_inode(root));
- 
- 	if (err) {
-+		mutex_lock(&configfs_subsystem_mutex);
- 		unlink_group(group);
-+		mutex_unlock(&configfs_subsystem_mutex);
- 		configfs_release_fs();
+ 	const struct spi_device_id *id = spi_get_device_id(spi);
+ 	const struct adis_data *adis16480_data;
++	irq_handler_t trigger_handler = NULL;
+ 	struct iio_dev *indio_dev;
+ 	struct adis16480 *st;
+ 	int ret;
+@@ -1474,8 +1475,12 @@ static int adis16480_probe(struct spi_device *spi)
+ 		st->clk_freq = st->chip_info->int_clk;
  	}
- 	put_fragment(frag);
-@@ -1931,7 +1943,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
  
- 	dput(dentry);
- 
-+	mutex_lock(&configfs_subsystem_mutex);
- 	unlink_group(group);
-+	mutex_unlock(&configfs_subsystem_mutex);
- 	configfs_release_fs();
- }
++	/* Only use our trigger handler if burst mode is supported */
++	if (adis16480_data->burst_len)
++		trigger_handler = adis16480_trigger_handler;
++
+ 	ret = devm_adis_setup_buffer_and_trigger(&st->adis, indio_dev,
+-						 adis16480_trigger_handler);
++						 trigger_handler);
+ 	if (ret)
+ 		return ret;
  
 -- 
-2.34.1
+2.35.1
 
 
 

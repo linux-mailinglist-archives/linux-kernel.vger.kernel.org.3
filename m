@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353EE4C7DF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3E64C7E22
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiB1XGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S229580AbiB1XNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiB1XGM (ORCPT
+        with ESMTP id S229501AbiB1XNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:06:12 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC851DA64
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:05:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646089533; x=1677625533;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=aJFUREQF4g+hepgFPW1vGzF13KIn40MVOYBMZl7kvDw=;
-  b=BdgGNdvmIvGSyVQdwp6Kr0Qs7GahJ8hkCX7dhWHYjVKgZkZ3JwaNkgi9
-   dUd3yyssjvofcsQPnzjazzh+nSHo/HHgfr21jUXdyGHkP9kDCou+dRYhC
-   vL1sArME/Dt5YtDPNjYbgyAUPp6E+MZx4y0qYUj+NH6XoYlhkYYbQlIRn
-   u0xQ2kQmjHNe9lcy77XNiFarU+McalGEL7q86TLv9RUDKXdn3/Y68rleD
-   3RVILdWslXMxO3bRueJOjdQM87hagwEMEDcp1GB7hz1asxnXVONawu+qe
-   HQ4keR5zj+xUgk0D5dDRgqGEr0wTLyns3BTU2Oh0mVjQVgbFCADnfXlhm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232978247"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="232978247"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 15:05:33 -0800
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="550453365"
-Received: from simpleku-mobl.amr.corp.intel.com (HELO [10.209.11.92]) ([10.209.11.92])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 15:05:31 -0800
-Message-ID: <76b54855-d2b6-e224-ccb4-3f6c4cd1f7e7@intel.com>
-Date:   Mon, 28 Feb 2022 15:05:26 -0800
+        Mon, 28 Feb 2022 18:13:07 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CE51A38A;
+        Mon, 28 Feb 2022 15:12:26 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m22so12533044pja.0;
+        Mon, 28 Feb 2022 15:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JSjAfvUdT/Q3hQ4edod5NiJpJDoeQDlMN0iECfgbzdQ=;
+        b=elnXzltamAeeLdjM4rXWxHaWjdvk3ORX+x+sdDi/dCvDa0AjydkRfBWstC4cOjexyD
+         kc/6hj2d2lm6Qsne84dH2qfyA+i5uTJvwzUpHMnj1BScRGhg6X9Ic91kVqY4vDRtnKXz
+         1p9B8xMZeDhFWtWHH08QWPPhREkv0G1tTv5lFteC6iNdwuakqNmKH/4xStBtwHOhyR4b
+         H3SYygNnl03e+TrZ7E6/x9ZmAQPLLCYMK4dqronp7kfZsvQaTqiVo/sQBvF7oM+4yAEK
+         TByDf71Yqn4TS97dgZh5QfPoo/hP7UJykItramWYFNHoGBG+Mn8aibPf3VJcYDZ13rHo
+         ejKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JSjAfvUdT/Q3hQ4edod5NiJpJDoeQDlMN0iECfgbzdQ=;
+        b=o79KbRmLQJVaqZW7Z47MzcM99LhmO9V60uAJtbs122xXq1Rry/6DkJDOQBNWESyMHX
+         ZU71QUhvCHeoQZha6F39sBddTpJu+8ib44qlSdK8FCaKJmNLGZToFFdXt0IPorK0REJb
+         Db2Vl30e9bpqYDkHMqTUmTag/B7++mqrWgOQbdpYFfRa0mTw+gtpwBpTJPZXZf+qG4PW
+         oMax5fXFLK9jOoaw8yZ/k27MH4t0qFZRxFRQDOSueWWDmFPsbg5YB7/h9rQT/Ynn7owD
+         Sn3KPJKaKv6h0ryX0QpuhwxIkRitVCRbFtmYNZ5qqQRX2D9s3JeUwvmQ7o/8xKiYzJdB
+         gNPA==
+X-Gm-Message-State: AOAM533VNgXrpBN4Zows+qci/KecuAqmILUiA5Ix0eOQwDSUDuZ3GqOv
+        lPZUVCcuWoYLFZOwunPbqNg=
+X-Google-Smtp-Source: ABdhPJxjj4VOWJSj0uLiymvz1WwoPFG5hL9TAtDpDv9RwoXTlREHMA/bd2yhhCwe+2vTkClgDJihpw==
+X-Received: by 2002:a17:902:cf0d:b0:14f:e424:3579 with SMTP id i13-20020a170902cf0d00b0014fe4243579mr22763423plg.74.1646089946220;
+        Mon, 28 Feb 2022 15:12:26 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id k13-20020a056a00134d00b004f35ee59a9dsm15614759pfu.106.2022.02.28.15.12.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 15:12:25 -0800 (PST)
+Message-ID: <1b1c56aa-eeab-08e1-6c15-e2b02629fdf0@gmail.com>
+Date:   Mon, 28 Feb 2022 15:12:24 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 5.4 00/53] 5.4.182-rc1 review
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-11-kirill.shutemov@linux.intel.com>
- <51b6613d-eabd-941d-19b2-95b33ec27e99@intel.com>
- <20220227010733.abapkmyaroglcafl@black.fi.intel.com>
- <7a8c4e5e-c0ba-ee8e-a912-c71f89b4d4f2@intel.com>
- <20220228225336.k3lxk5qqm4vpaocv@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 10/30] x86/tdx: Handle CPUID via #VE
-In-Reply-To: <20220228225336.k3lxk5qqm4vpaocv@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220228172248.232273337@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,41 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/22 14:53, Kirill A. Shutemov wrote:
-> On Mon, Feb 28, 2022 at 08:41:38AM -0800, Dave Hansen wrote:
->>> We realise that this is possible vector of attack and plan to implement
->>> proper filtering. But it is beyon core enabling.
->>>
->>>> Is this better than just returning 0's, for instance?
->>> Plain 0 injection breaks the boot. More complicated solution is need.
->> OK, so we're leaving the kernel open to something that might be an
->> attack vector: we know that we don't know how this might be bad.  It's a
->> "known unknown"[1].
-> I looked deeper. The only CPUIDs that actually required are from the
-> hypervisor range (the range is reserved and never will be used by CPU, so
-> hypervisors adopt it for own use).
-> 
-> So this filtering makes kernel boot (I didn't test much beyond that).
-> 
-> 	/*
-> 	 * Only allow VMM to control range reserved for hypervisor
-> 	 * communication.
-> 	 *
-> 	 * Return all-zeros for any CPUID outside the range.
-> 	 */
-> 	if (regs->ax < 0x40000000 || regs->ax > 0x4FFFFFFF) {
-> 		regs->ax = regs->bx = regs->cx = regs->dx = 0;
-> 		return true;
-> 	}
-> 
-> We may tighten the range further (only few leafs from the range is
-> actually used during the boot), but this should be good enough for this
-> stage of enabling.
 
-Seems sane to me.  This closes off basically any ability for the VMM to
-confuse the guest with CPUID values except for the ones that *must* by
-hypervisor-controlled.
 
-Does this, in practice, keep TDX guests from detecting any features that
-it supports today?
+On 2/28/2022 9:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.182 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.182-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTb using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

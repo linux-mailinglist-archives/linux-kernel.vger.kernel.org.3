@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5364C7672
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D374C7654
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240126AbiB1SDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S239767AbiB1SCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239004AbiB1Ryq (ORCPT
+        with ESMTP id S238955AbiB1Ryq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 12:54:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D21710A7;
-        Mon, 28 Feb 2022 09:44:09 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C440D21A0;
+        Mon, 28 Feb 2022 09:44:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 163A5608D5;
-        Mon, 28 Feb 2022 17:44:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2910BC340E7;
-        Mon, 28 Feb 2022 17:44:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79E52B815A2;
+        Mon, 28 Feb 2022 17:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A5FC340E7;
+        Mon, 28 Feb 2022 17:44:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070248;
-        bh=9nxveOHMsj4ZaiMKU38DDizVd4iIeE9jIrHU6DIUYJY=;
+        s=korg; t=1646070251;
+        bh=a0qr24NteIPpBgqV3/4o2xe9muO4aBdaG98S8jcCPuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AaHpspnfhxV7xaE3YVIdU7Augq3lP62fbVHQevArlUeliqcwR05Im+mkqx5kA6duH
-         iQExJ/R+aR8yntFhOWnmvn7OpixmUS3oUURwCqANAma/7/mXRqMhr96WmAsDLOuY6u
-         qcjd4OB4X25FTApfLJW3erVZpe16/SZgDLFKbQqw=
+        b=ORggRO73n2YWOkEk+pItRDCU0op7wRTdf1yltHI8ECf6vMF/iPe81GBaPEoJwFUgK
+         tjoIZ5ZC1PivZGYnJeAlYO6okJXJvvsaF4pAJcutZV4QEai9wp6nnZlSe45+2gyXC0
+         VAVTElL5SbrO86ePd3eLtOU8dppKB/GEi4hwJvQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 039/164] mptcp: add mibs counter for ignored incoming options
-Date:   Mon, 28 Feb 2022 18:23:21 +0100
-Message-Id: <20220228172403.835017412@linuxfoundation.org>
+        "David S. Miller" <davem@davemloft.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH 5.16 040/164] selftests: mptcp: fix diag instability
+Date:   Mon, 28 Feb 2022 18:23:22 +0100
+Message-Id: <20220228172403.923738386@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -59,87 +58,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paolo Abeni <pabeni@redhat.com>
 
-commit f73c1194634506ab60af0debef04671fc431a435 upstream.
+commit 0cd33c5ffec12bd77a1c02db2469fac08f840939 upstream.
 
-The MPTCP in kernel path manager has some constraints on incoming
-addresses announce processing, so that in edge scenarios it can
-end-up dropping (ignoring) some of such announces.
+Instead of waiting for an arbitrary amount of time for the MPTCP
+MP_CAPABLE handshake to complete, explicitly wait for the relevant
+socket to enter into the established status.
 
-The above is not very limiting in practice since such scenarios are
-very uncommon and MPTCP will recover due to ADD_ADDR retransmissions.
+Additionally let the data transfer application use the slowest
+transfer mode available (-r), to cope with very slow host, or
+high jitter caused by hosting VMs.
 
-This patch adds a few MIB counters to account for such drop events
-to allow easier introspection of the critical scenarios.
-
-Fixes: f7efc7771eac ("mptcp: drop argument port from mptcp_pm_announce_addr")
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Fixes: df62f2ec3df6 ("selftests/mptcp: add diag interface tests")
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/258
+Reported-and-tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mptcp/mib.c |    2 ++
- net/mptcp/mib.h |    2 ++
- net/mptcp/pm.c  |    8 ++++++--
- 3 files changed, 10 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/mptcp/diag.sh |   44 +++++++++++++++++++++++++-----
+ 1 file changed, 37 insertions(+), 7 deletions(-)
 
---- a/net/mptcp/mib.c
-+++ b/net/mptcp/mib.c
-@@ -35,12 +35,14 @@ static const struct snmp_mib mptcp_snmp_
- 	SNMP_MIB_ITEM("AddAddr", MPTCP_MIB_ADDADDR),
- 	SNMP_MIB_ITEM("EchoAdd", MPTCP_MIB_ECHOADD),
- 	SNMP_MIB_ITEM("PortAdd", MPTCP_MIB_PORTADD),
-+	SNMP_MIB_ITEM("AddAddrDrop", MPTCP_MIB_ADDADDRDROP),
- 	SNMP_MIB_ITEM("MPJoinPortSynRx", MPTCP_MIB_JOINPORTSYNRX),
- 	SNMP_MIB_ITEM("MPJoinPortSynAckRx", MPTCP_MIB_JOINPORTSYNACKRX),
- 	SNMP_MIB_ITEM("MPJoinPortAckRx", MPTCP_MIB_JOINPORTACKRX),
- 	SNMP_MIB_ITEM("MismatchPortSynRx", MPTCP_MIB_MISMATCHPORTSYNRX),
- 	SNMP_MIB_ITEM("MismatchPortAckRx", MPTCP_MIB_MISMATCHPORTACKRX),
- 	SNMP_MIB_ITEM("RmAddr", MPTCP_MIB_RMADDR),
-+	SNMP_MIB_ITEM("RmAddrDrop", MPTCP_MIB_RMADDRDROP),
- 	SNMP_MIB_ITEM("RmSubflow", MPTCP_MIB_RMSUBFLOW),
- 	SNMP_MIB_ITEM("MPPrioTx", MPTCP_MIB_MPPRIOTX),
- 	SNMP_MIB_ITEM("MPPrioRx", MPTCP_MIB_MPPRIORX),
---- a/net/mptcp/mib.h
-+++ b/net/mptcp/mib.h
-@@ -28,12 +28,14 @@ enum linux_mptcp_mib_field {
- 	MPTCP_MIB_ADDADDR,		/* Received ADD_ADDR with echo-flag=0 */
- 	MPTCP_MIB_ECHOADD,		/* Received ADD_ADDR with echo-flag=1 */
- 	MPTCP_MIB_PORTADD,		/* Received ADD_ADDR with a port-number */
-+	MPTCP_MIB_ADDADDRDROP,		/* Dropped incoming ADD_ADDR */
- 	MPTCP_MIB_JOINPORTSYNRX,	/* Received a SYN MP_JOIN with a different port-number */
- 	MPTCP_MIB_JOINPORTSYNACKRX,	/* Received a SYNACK MP_JOIN with a different port-number */
- 	MPTCP_MIB_JOINPORTACKRX,	/* Received an ACK MP_JOIN with a different port-number */
- 	MPTCP_MIB_MISMATCHPORTSYNRX,	/* Received a SYN MP_JOIN with a mismatched port-number */
- 	MPTCP_MIB_MISMATCHPORTACKRX,	/* Received an ACK MP_JOIN with a mismatched port-number */
- 	MPTCP_MIB_RMADDR,		/* Received RM_ADDR */
-+	MPTCP_MIB_RMADDRDROP,		/* Dropped incoming RM_ADDR */
- 	MPTCP_MIB_RMSUBFLOW,		/* Remove a subflow */
- 	MPTCP_MIB_MPPRIOTX,		/* Transmit a MP_PRIO */
- 	MPTCP_MIB_MPPRIORX,		/* Received a MP_PRIO */
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -194,6 +194,8 @@ void mptcp_pm_add_addr_received(struct m
- 		mptcp_pm_add_addr_send_ack(msk);
- 	} else if (mptcp_pm_schedule_work(msk, MPTCP_PM_ADD_ADDR_RECEIVED)) {
- 		pm->remote = *addr;
-+	} else {
-+		__MPTCP_INC_STATS(sock_net((struct sock *)msk), MPTCP_MIB_ADDADDRDROP);
- 	}
- 
- 	spin_unlock_bh(&pm->lock);
-@@ -234,8 +236,10 @@ void mptcp_pm_rm_addr_received(struct mp
- 		mptcp_event_addr_removed(msk, rm_list->ids[i]);
- 
- 	spin_lock_bh(&pm->lock);
--	mptcp_pm_schedule_work(msk, MPTCP_PM_RM_ADDR_RECEIVED);
--	pm->rm_list_rx = *rm_list;
-+	if (mptcp_pm_schedule_work(msk, MPTCP_PM_RM_ADDR_RECEIVED))
-+		pm->rm_list_rx = *rm_list;
-+	else
-+		__MPTCP_INC_STATS(sock_net((struct sock *)msk), MPTCP_MIB_RMADDRDROP);
- 	spin_unlock_bh(&pm->lock);
+--- a/tools/testing/selftests/net/mptcp/diag.sh
++++ b/tools/testing/selftests/net/mptcp/diag.sh
+@@ -71,6 +71,36 @@ chk_msk_remote_key_nr()
+ 		__chk_nr "grep -c remote_key" $*
  }
  
++# $1: ns, $2: port
++wait_local_port_listen()
++{
++	local listener_ns="${1}"
++	local port="${2}"
++
++	local port_hex i
++
++	port_hex="$(printf "%04X" "${port}")"
++	for i in $(seq 10); do
++		ip netns exec "${listener_ns}" cat /proc/net/tcp | \
++			awk "BEGIN {rc=1} {if (\$2 ~ /:${port_hex}\$/ && \$4 ~ /0A/) {rc=0; exit}} END {exit rc}" &&
++			break
++		sleep 0.1
++	done
++}
++
++wait_connected()
++{
++	local listener_ns="${1}"
++	local port="${2}"
++
++	local port_hex i
++
++	port_hex="$(printf "%04X" "${port}")"
++	for i in $(seq 10); do
++		ip netns exec ${listener_ns} grep -q " 0100007F:${port_hex} " /proc/net/tcp && break
++		sleep 0.1
++	done
++}
+ 
+ trap cleanup EXIT
+ ip netns add $ns
+@@ -81,15 +111,15 @@ echo "a" | \
+ 		ip netns exec $ns \
+ 			./mptcp_connect -p 10000 -l -t ${timeout_poll} \
+ 				0.0.0.0 >/dev/null &
+-sleep 0.1
++wait_local_port_listen $ns 10000
+ chk_msk_nr 0 "no msk on netns creation"
+ 
+ echo "b" | \
+ 	timeout ${timeout_test} \
+ 		ip netns exec $ns \
+-			./mptcp_connect -p 10000 -j -t ${timeout_poll} \
++			./mptcp_connect -p 10000 -r 0 -t ${timeout_poll} \
+ 				127.0.0.1 >/dev/null &
+-sleep 0.1
++wait_connected $ns 10000
+ chk_msk_nr 2 "after MPC handshake "
+ chk_msk_remote_key_nr 2 "....chk remote_key"
+ chk_msk_fallback_nr 0 "....chk no fallback"
+@@ -101,13 +131,13 @@ echo "a" | \
+ 		ip netns exec $ns \
+ 			./mptcp_connect -p 10001 -l -s TCP -t ${timeout_poll} \
+ 				0.0.0.0 >/dev/null &
+-sleep 0.1
++wait_local_port_listen $ns 10001
+ echo "b" | \
+ 	timeout ${timeout_test} \
+ 		ip netns exec $ns \
+-			./mptcp_connect -p 10001 -j -t ${timeout_poll} \
++			./mptcp_connect -p 10001 -r 0 -t ${timeout_poll} \
+ 				127.0.0.1 >/dev/null &
+-sleep 0.1
++wait_connected $ns 10001
+ chk_msk_fallback_nr 1 "check fallback"
+ flush_pids
+ 
+@@ -119,7 +149,7 @@ for I in `seq 1 $NR_CLIENTS`; do
+ 				./mptcp_connect -p $((I+10001)) -l -w 10 \
+ 					-t ${timeout_poll} 0.0.0.0 >/dev/null &
+ done
+-sleep 0.1
++wait_local_port_listen $ns $((NR_CLIENTS + 10001))
+ 
+ for I in `seq 1 $NR_CLIENTS`; do
+ 	echo "b" | \
 
 

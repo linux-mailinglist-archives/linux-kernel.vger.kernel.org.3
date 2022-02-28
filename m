@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991F44C6741
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CC54C6747
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiB1KqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S234869AbiB1KrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiB1KqB (ORCPT
+        with ESMTP id S229565AbiB1KrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:46:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2FE5A5B7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:45:23 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nOdWm-0005z3-QJ; Mon, 28 Feb 2022 11:45:16 +0100
-Received: from pengutronix.de (unknown [90.153.54.255])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C54443F14B;
-        Mon, 28 Feb 2022 10:45:14 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 11:45:14 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: usb: delete a redundant dev_kfree_skb() in
- ems_usb_start_xmit()
-Message-ID: <20220228104514.der655r4jkl42e7o@pengutronix.de>
-References: <20220228083639.38183-1-hbh25y@gmail.com>
- <20220228085536.pa5wdq3w4ul5wqn5@pengutronix.de>
- <75c14302-b928-1e09-7cd1-78b8c2695f06@gmail.com>
+        Mon, 28 Feb 2022 05:47:10 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962865B885;
+        Mon, 28 Feb 2022 02:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1646045193; x=1677581193;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=FI1/yOOeffy6joPkP+Ti8ba5rIGLgyw7EkCVE3fYaeY=;
+  b=bzXTVCYdQT2JzDKGzPNKONQGUGVTx8NTGff3qgXKrNWDwBeRemPkQMDj
+   v0lsfW6X3RF/qVBvf/VI76LxDbIGNd8rIN8hv0KQoEDZN3AGf78bBod+r
+   jbLM6zdLv5ODHvv2ibGZ5j5oEwE9kqZpoZgAJsa3L0w9DVhSSYS6U4Gs2
+   k=;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643673600"; 
+   d="scan'208";a="66671572"
+Subject: Re: [PATCH 1/4] KVM: x86: hyper-v: Drop redundant 'ex' parameter from
+ kvm_hv_send_ipi()
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-05e8af15.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 28 Feb 2022 10:46:18 +0000
+Received: from EX13D28EUC003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-05e8af15.us-west-2.amazon.com (Postfix) with ESMTPS id B316FA2A1B;
+        Mon, 28 Feb 2022 10:46:17 +0000 (UTC)
+Received: from 147dda3edfb6.ant.amazon.com (10.43.161.89) by
+ EX13D28EUC003.ant.amazon.com (10.43.164.43) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 28 Feb 2022 10:45:59 +0000
+Date:   Mon, 28 Feb 2022 11:45:55 +0100
+From:   Siddharth Chandrasekaran <sidcha@amazon.de>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+CC:     <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        <linux-kernel@vger.kernel.org>
+Message-ID: <Yhyn4zXiFU4cnLSv@147dda3edfb6.ant.amazon.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
+ <20220222154642.684285-2-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7eh4p5gbufrubt3s"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <75c14302-b928-1e09-7cd1-78b8c2695f06@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220222154642.684285-2-vkuznets@redhat.com>
+X-Originating-IP: [10.43.161.89]
+X-ClientProxiedBy: EX13D43UWC001.ant.amazon.com (10.43.162.69) To
+ EX13D28EUC003.ant.amazon.com (10.43.164.43)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 22, 2022 at 04:46:39PM +0100, Vitaly Kuznetsov wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> 'struct kvm_hv_hcall' has all the required information already,
+> there's no need to pass 'ex' additionally.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
---7eh4p5gbufrubt3s
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Siddharth Chandrasekaran <sidcha@amazon.de>
 
-On 28.02.2022 18:44:06, Hangyu Hua wrote:
-> I get it. I'll remake a patch that matches your suggestions.
 
-Not needed, it's already applied:
-> > Added patch to can/testing.
 
-Marc
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---7eh4p5gbufrubt3s
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIcp7cACgkQrX5LkNig
-01340gf/Y+FncybB30L2oHpNPFt478Sked0wTAKMnn8MTwJA+zCDUwFwMmwM1QPN
-u4v7v1lhNozapHCkU2lCgn0OwHuu4r42zTDxT/SWOFSR53bF3DE7OaCn44/7IcSe
-qR253VIrPsA7dC0dvwAZ/EtdXc9sjJZMKP3VsibtmNZYn+3fvZEAQktCafPs1yfs
-XkF7eEB2xD1ORONY+eRyW/LIXpdcZZsl/ShE+OoyMa4Jh2Udo215hOiLnvykAfh7
-uxzMMGK+GS7kDVAESApxJWuxhcdSUxc5RDq0AX6JnL7EK5eSMKKFEXscUEI3NMBP
-XqK8orgQoTkeNokWljv/bWBSbHNL9A==
-=i5Li
------END PGP SIGNATURE-----
-
---7eh4p5gbufrubt3s--

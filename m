@@ -2,241 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1F64C6A08
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EB04C6A12
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbiB1LSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S234111AbiB1LUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbiB1LS3 (ORCPT
+        with ESMTP id S229633AbiB1LUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:18:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDF413D1D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646047068; x=1677583068;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VQvBDn7lgST9nEDYvtRN+GxLxvX8FlvhBJSvDUXvefk=;
-  b=dVhf/xAnDSe45qA+Urqe1tDA4+0HfJR8LADI4/Yacw7e7CpOY+a8I4aQ
-   H9fx8YKiTD7McGtofbsuOvHOEVyqSlCpJ2XZF3MMg1jniLrKIPkY+ZCYR
-   0F/x8a0+KHnzKHGx6Fd0Ajqb5/cvd5uFxCqFEd4o+PX/dnNSpMZPYFSYy
-   rbxje0DVmEr8mAIGonNTcfMgjoe/Hvo4zMJo31FYFGvtm7T7Ftl6Adzql
-   hF4FV4XiUfkzkC0JurgPi4kWxyVO9B5CDiab/EtdzA5e27WI+edACPl51
-   aEgTn7JYNhoWf/zZQdp7+OzGBVj05Wzv3p0ASaajOFze4T9ZyfVb0+15Q
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="150223261"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 04:17:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 04:17:47 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 04:17:44 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>, <michael@walle.cc>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2 8/8] mtd: spi-nor: spansion: Rework spi_nor_cypress_octal_dtr_enable()
-Date:   Mon, 28 Feb 2022 13:17:12 +0200
-Message-ID: <20220228111712.111737-9-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220228111712.111737-1-tudor.ambarus@microchip.com>
-References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
+        Mon, 28 Feb 2022 06:20:17 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCB43703F;
+        Mon, 28 Feb 2022 03:19:38 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21SBJVPT053399;
+        Mon, 28 Feb 2022 05:19:31 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646047171;
+        bh=QCmddZWSanoPPYfkGjSgwbt7t+tI8AZNUu186MCaM9I=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=FRPTlS5yT2nTpvVB77gjWT60uFSqJhHbO+iIO/aGN2EPpp6Ld5PFeLOFhQZvK3flE
+         lXDGzfdDxH+RzvCPjKt0CtBC3QACt2p/AVyanJ2lueGsWK6n+ncwguofoa6tdbcNJb
+         YhKT+aFBpkJRXPU+qaLKTkVS4srZcjSIqriXohns=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21SBJVqw112029
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 05:19:31 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
+ Feb 2022 05:19:31 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 28 Feb 2022 05:19:31 -0600
+Received: from [10.250.233.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21SBJSDS000953;
+        Mon, 28 Feb 2022 05:19:28 -0600
+Message-ID: <bfd85a56-5d78-695a-8687-ae05832a32c9@ti.com>
+Date:   Mon, 28 Feb 2022 16:48:58 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] dmaengine: ti: k3-udma: Avoid false error msg on chan
+ teardown
+Content-Language: en-US
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20220215044112.161634-1-vigneshr@ti.com>
+ <58fe0934-4853-714c-600d-9a2d86df5bc8@gmail.com>
+ <35276e1e-e37c-f8e7-c452-799f8e778465@ti.com>
+In-Reply-To: <35276e1e-e37c-f8e7-c452-799f8e778465@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce template operation to remove code duplication.
-Split spi_nor_cypress_octal_dtr_enable() in
-spi_nor_cypress_octal_dtr_ena() spi_nor_cypress_octal_dtr_dis() as it no
-longer made sense to try to keep everything alltogether: too many
-"if (enable)" throughout the code, which made the code difficult to read.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/mtd/spi-nor/spansion.c | 124 +++++++++++++++++----------------
- 1 file changed, 65 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
-index c5988312cc91..34ca3538a0f9 100644
---- a/drivers/mtd/spi-nor/spansion.c
-+++ b/drivers/mtd/spi-nor/spansion.c
-@@ -23,85 +23,75 @@
- #define SPINOR_REG_CYPRESS_CFR5V_OCT_DTR_DS	0
- #define SPINOR_OP_CYPRESS_RD_FAST		0xee
- 
--/**
-- * cypress_nor_octal_dtr_enable() - Enable octal DTR on Cypress flashes.
-- * @nor:		pointer to a 'struct spi_nor'
-- * @enable:              whether to enable or disable Octal DTR
-- *
-- * This also sets the memory access latency cycles to 24 to allow the flash to
-- * run at up to 200MHz.
-- *
-- * Return: 0 on success, -errno otherwise.
-- */
--static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
-+/* Cypress SPI NOR flash operations. */
-+#define CYPRESS_NOR_WR_ANY_REG_OP(naddr, addr, ndata, buf)		\
-+	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WR_ANY_REG, 0),		\
-+		   SPI_MEM_OP_ADDR(naddr, addr, 0),			\
-+		   SPI_MEM_OP_NO_DUMMY,					\
-+		   SPI_MEM_OP_DATA_OUT(ndata, buf, 0))
-+
-+static int cypress_nor_octal_dtr_en(struct spi_nor *nor)
- {
- 	struct spi_mem_op op;
- 	u8 *buf = nor->bouncebuf;
- 	int ret;
- 
--	if (enable) {
--		/* Use 24 dummy cycles for memory array reads. */
--		ret = spi_nor_write_enable(nor);
--		if (ret)
--			return ret;
-+	/* Use 24 dummy cycles for memory array reads. */
-+	*buf = SPINOR_REG_CYPRESS_CFR2V_MEMLAT_11_24;
-+	op = (struct spi_mem_op)
-+		CYPRESS_NOR_WR_ANY_REG_OP(3, SPINOR_REG_CYPRESS_CFR2V, 1, buf);
- 
--		*buf = SPINOR_REG_CYPRESS_CFR2V_MEMLAT_11_24;
--		op = (struct spi_mem_op)
--			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WR_ANY_REG, 1),
--				   SPI_MEM_OP_ADDR(3, SPINOR_REG_CYPRESS_CFR2V,
--						   1),
--				   SPI_MEM_OP_NO_DUMMY,
--				   SPI_MEM_OP_DATA_OUT(1, buf, 1));
-+	ret = spi_nor_write_reg(nor, &op, nor->reg_proto);
-+	if (ret)
-+		return ret;
- 
--		ret = spi_mem_exec_op(nor->spimem, &op);
--		if (ret)
--			return ret;
-+	ret = spi_nor_wait_till_ready(nor);
-+	if (ret)
-+		return ret;
- 
--		ret = spi_nor_wait_till_ready(nor);
--		if (ret)
--			return ret;
-+	nor->read_dummy = 24;
- 
--		nor->read_dummy = 24;
--	}
-+	/* Set the octal and DTR enable bits. */
-+	buf[0] = SPINOR_REG_CYPRESS_CFR5V_OCT_DTR_EN;
-+	op = (struct spi_mem_op)
-+		CYPRESS_NOR_WR_ANY_REG_OP(3, SPINOR_REG_CYPRESS_CFR5V, 1, buf);
- 
--	/* Set/unset the octal and DTR enable bits. */
--	ret = spi_nor_write_enable(nor);
-+	ret = spi_nor_write_reg(nor, &op, nor->reg_proto);
- 	if (ret)
- 		return ret;
- 
--	if (enable) {
--		buf[0] = SPINOR_REG_CYPRESS_CFR5V_OCT_DTR_EN;
--	} else {
--		/*
--		 * The register is 1-byte wide, but 1-byte transactions are not
--		 * allowed in 8D-8D-8D mode. Since there is no register at the
--		 * next location, just initialize the value to 0 and let the
--		 * transaction go on.
--		 */
--		buf[0] = SPINOR_REG_CYPRESS_CFR5V_OCT_DTR_DS;
--		buf[1] = 0;
--	}
-+	/* Read flash ID to make sure the switch was successful. */
-+	ret = spi_nor_read_id(nor, 4, 3, buf, SNOR_PROTO_8_8_8_DTR);
-+	if (ret)
-+		return ret;
- 
--	op = (struct spi_mem_op)
--		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WR_ANY_REG, 1),
--			   SPI_MEM_OP_ADDR(enable ? 3 : 4,
--					   SPINOR_REG_CYPRESS_CFR5V,
--					   1),
--			   SPI_MEM_OP_NO_DUMMY,
--			   SPI_MEM_OP_DATA_OUT(enable ? 1 : 2, buf, 1));
-+	if (memcmp(buf, nor->info->id, nor->info->id_len))
-+		return -EINVAL;
- 
--	if (!enable)
--		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+	return 0;
-+}
- 
--	ret = spi_mem_exec_op(nor->spimem, &op);
-+static int cypress_nor_octal_dtr_dis(struct spi_nor *nor)
-+{
-+	struct spi_mem_op op;
-+	u8 *buf = nor->bouncebuf;
-+	int ret;
-+
-+	/*
-+	 * The register is 1-byte wide, but 1-byte transactions are not allowed
-+	 * in 8D-8D-8D mode. Since there is no register at the next location,
-+	 * just initialize the value to 0 and let the transaction go on.
-+	 */
-+	buf[0] = SPINOR_REG_CYPRESS_CFR5V_OCT_DTR_DS;
-+	buf[1] = 0;
-+	op = (struct spi_mem_op)
-+		CYPRESS_NOR_WR_ANY_REG_OP(4, SPINOR_REG_CYPRESS_CFR5V, 2, buf);
-+	ret = spi_nor_write_reg(nor, &op, SNOR_PROTO_8_8_8_DTR);
- 	if (ret)
- 		return ret;
- 
- 	/* Read flash ID to make sure the switch was successful. */
--	if (enable)
--		ret = spi_nor_read_id(nor, 4, 3, buf, SNOR_PROTO_8_8_8_DTR);
--	else
--		ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
-+	ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
- 	if (ret)
- 		return ret;
- 
-@@ -111,6 +101,22 @@ static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
- 	return 0;
- }
- 
-+/**
-+ * cypress_nor_octal_dtr_enable() - Enable octal DTR on Cypress flashes.
-+ * @nor:		pointer to a 'struct spi_nor'
-+ * @enable:              whether to enable or disable Octal DTR
-+ *
-+ * This also sets the memory access latency cycles to 24 to allow the flash to
-+ * run at up to 200MHz.
-+ *
-+ * Return: 0 on success, -errno otherwise.
-+ */
-+static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
-+{
-+	return enable ? cypress_nor_octal_dtr_en(nor) :
-+			cypress_nor_octal_dtr_dis(nor);
-+}
-+
- static void s28hs512t_default_init(struct spi_nor *nor)
- {
- 	nor->params->octal_dtr_enable = cypress_nor_octal_dtr_enable;
--- 
-2.25.1
+On 28/02/22 2:52 pm, Vignesh Raghavendra wrote:
+> Hi Peter,
+> 
+> On 21/02/22 1:42 am, Péter Ujfalusi wrote:
+>> Hi Vignesh,
+>>
+>> On 15/02/2022 06:41, Vignesh Raghavendra wrote:
+>>> In cyclic mode, there is no additional descriptor pushed to collect
+>>> outstanding data on channel teardown. Therefore no need to wait for this
+>>> descriptor to come back.
+>>>
+>>> Without this terminating aplay cmd outputs false error msg like:
+>>> [  116.402800] ti-bcdma 485c0100.dma-controller: chan1 teardown timeout!
+>>
+>> are you sure it is aplay? It is MEM_TO_DEV, we only use the flush
+>> descriptor for DEV_TO_MEM. MEM_TO_DEV can 'disconnect' from the
+>> peripheral to flush out the FIFO.
+>>
+> 
+> Yes, this is with aplay. You are right that MEM_TO_DEV should have
+> worked w/o this patch.
+> 
+> 
+>> I have not seen this on am654, j721e. I can not recall seeing this on
+>> the capture side either.
+>>
+> 
+> I dont see it either
+> 
+>> The cyclic TR should be able to drain the DEV_TO_MEM by itself and the
+>> TR should terminate.
+>>
+> 
+> You are right. There seems to be a trobule with McASP + BCDMA on AM62
+> which needs more investigation. I see
+> 
+>  RT c0000000 peer RT 90000000
+>  BCNT 5dc00, peer BCNT 46400
+> 
+> So there is some data stuck in pipe which prevents channel from
+> disabling and TDCM being signaled. My guess is McASP is no longer
+> requesting more data from PDMA. Any way to look at McASP FIFO state/ DMA
+> req enable state? Wondering what else can prevent draining of data.
+> 
+> One difference is that AM62 has ti,tlv320aic3106 codec (codec is the
+> master) where J7 uses PCM.
+> 
 
+I see couple of issues with DMA usage by McASP/sound:
+
+McASP TX FIFO events are disabled first and then DMA channel is stopped.
+This does not work for K3 SoCs as some data remains stuck in DMA pipe
+and channel never goes to disable state.
+
+I see .stop_dma_first flag in snd_soc_dai_link to force DMA to be
+stopped first, but I am not quite familiar on where to set this flag?
+Even so, snd_dmaengine_pcm_trigger() calls dmaengine_terminate_async()
+and does not call dmaengine_synchronize() before disabling McASP TX, so
+channel teardown would still be unsuccessful.
+
+Alternately, we could reduce dev_warn() in udma_synchronize() to
+dev_dbg() as channel is still recoverable via  udma_reset_chan() which
+is done immediately after.
+There is a further dev_warn() message to indicate if channel refused to
+stop even after a reset?
+
+Regards
+Vignesh
+
+> Regards
+> Vignesh
+> 
+> 
+>>
+>>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+>>> ---
+>>>  drivers/dma/ti/k3-udma.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+>>> index 9abb08d353ca0..c9a1b2f312603 100644
+>>> --- a/drivers/dma/ti/k3-udma.c
+>>> +++ b/drivers/dma/ti/k3-udma.c
+>>> @@ -3924,7 +3924,7 @@ static void udma_synchronize(struct dma_chan *chan)
+>>>  
+>>>  	vchan_synchronize(&uc->vc);
+>>>  
+>>> -	if (uc->state == UDMA_CHAN_IS_TERMINATING) {
+>>> +	if (uc->state == UDMA_CHAN_IS_TERMINATING && !uc->cyclic) {
+>>>  		timeout = wait_for_completion_timeout(&uc->teardown_completed,
+>>>  						      timeout);
+>>>  		if (!timeout) {
+>>

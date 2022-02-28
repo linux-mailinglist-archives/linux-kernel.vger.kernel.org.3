@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0BF4C7895
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F97A4C789F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiB1TQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 14:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S229795AbiB1TS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 14:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiB1TQq (ORCPT
+        with ESMTP id S229532AbiB1TS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 14:16:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00DEE4D30;
-        Mon, 28 Feb 2022 11:15:58 -0800 (PST)
+        Mon, 28 Feb 2022 14:18:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08172AE0E;
+        Mon, 28 Feb 2022 11:17:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98AABB815CB;
-        Mon, 28 Feb 2022 19:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE39C340F1;
-        Mon, 28 Feb 2022 19:15:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BDD061591;
+        Mon, 28 Feb 2022 19:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1516C340F5;
+        Mon, 28 Feb 2022 19:17:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646075756;
-        bh=3bz7Qsk+snnXqiot5wWBZHY9JSrCtvtcLoIgzffSDeo=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=bKW3ESh7tv0gSsPTb5mEFFgrQeiokQxiZOcnp5MTxI+YZwiZu5V3aQKrDkufSZmCr
-         OGnZW+oZDnSBuD809U730F9n11csXcyR+ZaBEFXH9NXWa4/JvxFpSDL9N+cPPZo3FC
-         ZPi3xs3sE0anePHr17TA42bvJQLX4lJ/CpNImk2IP4lyXEzesvi9uE9jj/yvzMf9td
-         uJ7XI/DiovqcO+KD7BXT4QG6OOt+xRFV2xsUpN1gx1e56IB0R6tEq8mFymaS3/BDIb
-         kY8TLCHBEVj6o3TCFE8YS5k8cSjzPN9gwPcxy95HDSnYSG749MQ58zerECrGoKkcil
-         FOYPBqifMrczQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, perex@perex.cz,
-        linux-kernel@vger.kernel.org, bgoswami@codeaurora.org,
-        tiwai@suse.com, lgirdwood@gmail.com, swboyd@chromium.org,
-        agross@kernel.org, judyhsiao@chromium.org,
-        alsa-devel@alsa-project.org, bjorn.andersson@linaro.org,
-        srinivas.kandagatla@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        rohitkr@codeaurora.org, quic_plai@quicinc.com
-In-Reply-To: <1645898959-11231-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1645898959-11231-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH v5 0/2] Add power domains support for digital macro codecs
-Message-Id: <164607575278.3538791.10960449349795091046.b4-ty@kernel.org>
-Date:   Mon, 28 Feb 2022 19:15:52 +0000
+        s=k20201202; t=1646075848;
+        bh=JkDmyeEmmXea1GNMh+ea50O5xH/GdJK7J/MFl2xT9pI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T5+sbXQr+txub7PPNUE655CqmIIyXX2jYpT+4bQOCL/cZ0lbbvbQQaJ2qy4QRIGO8
+         R/l6aXScWqj/P/KnrnPQB9/3REIRXX0YQjN5X8U4DFqGVNcZOgSBIY3Ny3cx1/vO8s
+         W+W0m1gUd1nfG3Du6056W3QmKyU5S/4FnVMYVnAs2TUFtEv2VMzq2q8VS32fmAN2Kc
+         S2QRDE9P4moomaoC61pU1N8cwAINGmWMBjPdzUTtMR0wm6ByNgfjTFLM2afUTFl6Kr
+         b9EmhoMvT+3mZ8KwVWcCXFe4La6aL8Xs3mew063WG0Iv8qED62rvYBJRbq2w3oD6ao
+         XS0FVfbGgMMmw==
+Received: by mail-ej1-f41.google.com with SMTP id dr20so2163067ejc.6;
+        Mon, 28 Feb 2022 11:17:28 -0800 (PST)
+X-Gm-Message-State: AOAM530eQtlicSeOCKwEUladpDrzohAB1RBOx47+AvR+NdeI4jXfFDI9
+        /zQTL7JtPWNVoE5Ayv6pEAjSl2a+Q4zfosWCIQ==
+X-Google-Smtp-Source: ABdhPJzemuH2iSFIpM+lnwxjfrCpLm5SpZx3xhmzJ4VXFjGtpP47wRGXYUIVlALLhQ7zhzIrLyZ4SCgcqaxUDQf2muc=
+X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id
+ w4-20020a170906d20400b006d6df17835emr1262347ejz.20.1646075847094; Mon, 28 Feb
+ 2022 11:17:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220208091326.12495-1-yifeng.zhao@rock-chips.com> <20220208091326.12495-3-yifeng.zhao@rock-chips.com>
+In-Reply-To: <20220208091326.12495-3-yifeng.zhao@rock-chips.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 28 Feb 2022 13:17:15 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+1ixfw4+pwPcM5azPdC_4_bYCPu50jUvKnVMr6dSncpA@mail.gmail.com>
+Message-ID: <CAL_Jsq+1ixfw4+pwPcM5azPdC_4_bYCPu50jUvKnVMr6dSncpA@mail.gmail.com>
+Subject: Re: [PATCH v8 2/4] dt-bindings: phy: rockchip: Add Naneng combo PHY bindings
+To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>, Vinod <vkoul@kernel.org>
+Cc:     "heiko@sntech.de" <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>, devicetree@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Lee Jones <lee.jones@linaro.org>, wulf <wulf@rock-chips.com>,
+        David Wu <david.wu@rock-chips.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,50 +73,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Feb 2022 23:39:17 +0530, Srinivasa Rao Mandadapu wrote:
-> This patch set is to add power domains support for RX, TX and VA macros.
-> 
-> Changes since v4:
->     -- Fix uninitialized variable return error
-> Changes since v3:
->     -- Add dt-bindings support.
-> Changes since v2:
->     -- Remove redundant local variable.
->     -- Update pds error handling sequence.
->     -- Update module description.
->     -- Clean up pds init function.
->     -- Remove redundant arguments.
-> Changes since v1:
->     -- Add missing macros in Kconfig.
-> 
-> [...]
+On Tue, Feb 8, 2022 at 3:15 AM Yifeng Zhao <yifeng.zhao@rock-chips.com> wrote:
+>
+> Add the compatible strings for the Naneng combo PHY found on rockchip SoC.
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>
+> Changes in v8: None
+> Changes in v7:
+> - remove u3otg0_port_en, u3otg1_port_en and pipe_sgmii_mac_sel
+>
+> Changes in v5:
+> - modify description for ssc and ext-refclk
+> - remove apb reset
+>
+> Changes in v4:
+> - restyle
+> - remove some minItems
+> - add more properties
+> - remove reset-names
+> - move #phy-cells
+> - add rockchip,rk3568-pipe-grf
+> - add rockchip,rk3568-pipe-phy-grf
+>
+> Changes in v3: None
+> Changes in v2:
+> - Fix dtschema/dtc warnings/errors
+>
+>  .../phy/phy-rockchip-naneng-combphy.yaml      | 109 ++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
 
-Applied to
+This now fails in linux-next:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.example.dt.yaml:
+syscon@fdc50000: compatible: 'oneOf' conditional failed, one must be
+fixed:
+ ['rockchip,rk3568-pipe-grf', 'syscon'] is too short
+ 'rockchip,rk3568-pipe-grf' is not one of ['rockchip,rk3288-sgrf',
+'rockchip,rk3568-usb2phy-grf', 'rockchip,rv1108-usbgrf']
+From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.example.dt.yaml:
+syscon@fdc70000: compatible: 'oneOf' conditional failed, one must be
+fixed:
+ ['rockchip,rk3568-pipe-phy-grf', 'syscon'] is too short
+ 'rockchip,rk3568-pipe-phy-grf' is not one of ['rockchip,rk3288-sgrf',
+'rockchip,rk3568-usb2phy-grf', 'rockchip,rv1108-usbgrf']
+From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
 
-Thanks!
 
-[1/2] ASoC: codecs: Add power domains support in digital macro codecs
-      commit: 9e3d83c52844f955aa2975f78cee48bf9f72f5e1
-[2/2] ASoC: qcom: dt-bindings: Add bindings for power domains in lpass digital codecs
-      commit: 6619c7d4379aca716a90f7581be2853071c086f6
+The problem appears to be that patch 1 was applied incorrectly and the
+compatibles ended up in the wrong section (the one requiring
+'simple-mfd'). Patch 1 probably conflicts as my bot will just skip the
+patch if it conflicts which is why this had a different error report.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Rob

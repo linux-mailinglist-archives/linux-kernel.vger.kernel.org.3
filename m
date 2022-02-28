@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7AC4C7536
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F174C76B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbiB1Rwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S239816AbiB1SFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238627AbiB1Rpr (ORCPT
+        with ESMTP id S239976AbiB1R7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:45:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BFA5577B;
-        Mon, 28 Feb 2022 09:37:58 -0800 (PST)
+        Mon, 28 Feb 2022 12:59:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513FA5B3D1;
+        Mon, 28 Feb 2022 09:45:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ED096153C;
-        Mon, 28 Feb 2022 17:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884D4C340E7;
-        Mon, 28 Feb 2022 17:37:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 93CB1CE17C8;
+        Mon, 28 Feb 2022 17:45:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A705DC340F1;
+        Mon, 28 Feb 2022 17:45:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069877;
-        bh=LAjtKtrvkmugtkSrsQnYXf7+RmanVNrzW7QDkffezSc=;
+        s=korg; t=1646070306;
+        bh=/ZVeTyBo9FlTqOrfp371Pfb9lM361Um3gBqhoOGd0yU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quzNh17i8ekisaP/oAvDiuIZSpUAw6rywaQb/OKUsDPnLM4tzhFJo8LF+c8q3a4ue
-         TeSuLQPevpmPe0mnPIa+m79fNDGfdpzkBma2+YWxOhVbx/skp4yYWbwZ9p4EKgB/KN
-         jhx6QlzXNRA/6Xu2C/UO2P98JRZBR1lTAYx8GJlU=
+        b=YkgeP6nBpye8LOr6fE6Fx6a1//N9eye2OGIrzI4y+nGkj1Atng43RbYwXdempGX9k
+         SE1K9nbI/TTxGEhRY0soCBrgIknQYMdIBnSVklGPoOwoAnLYisFhBBVOgNt4k82b1d
+         RsPgM1bYzwnyoTnUY96de3F66uJ9u7XFlf9Rizgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 011/139] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
-Date:   Mon, 28 Feb 2022 18:23:05 +0100
-Message-Id: <20220228172348.849132574@linuxfoundation.org>
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 024/164] drm/i915: Disconnect PHYs left connected by BIOS on disabled ports
+Date:   Mon, 28 Feb 2022 18:23:06 +0100
+Message-Id: <20220228172402.290484867@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Imre Deak <imre.deak@intel.com>
 
-commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
+commit a40ee54e9a0958406469d46def03eec62aea0b69 upstream.
 
-vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
-ownership. It expects current->mm to be valid.
+BIOS may leave a TypeC PHY in a connected state even though the
+corresponding port is disabled. This will prevent any hotplug events
+from being signalled (after the monitor deasserts and then reasserts its
+HPD) until the PHY is disconnected and so the driver will not detect a
+connected sink. Rebooting with the PHY in the connected state also
+results in a system hang.
 
-vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
-the user has not done close(), so when we are in do_exit(). In this
-case current->mm is invalid and we're releasing the device, so we
-should clean it anyway.
+Fix the above by disconnecting TypeC PHYs on disabled ports.
 
-Let's check the owner only when vhost_vsock_stop() is called
-by an ioctl.
+Before commit 64851a32c463e5 the PHY connected state was read out even
+for disabled ports and later the PHY got disconnected as a side effect
+of a tc_port_lock/unlock() sequence (during connector probing), hence
+recovering the port's hotplug functionality.
 
-When invoked from release we can not fail so we don't check return
-code of vhost_vsock_stop(). We need to stop vsock even if it's not
-the owner.
-
-Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5014
+Fixes: 64851a32c463 ("drm/i915/tc: Add a mode for the TypeC PHY's disconnected state")
+Cc: <stable@vger.kernel.org> # v5.16+
+Cc: José Roberto de Souza <jose.souza@intel.com>
+Signed-off-by: Imre Deak <imre.deak@intel.com>
+Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220217152237.670220-1-imre.deak@intel.com
+(cherry picked from commit ed0ccf349ffd9c80e7376d4d8c608643de990e86)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vsock.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/i915/display/intel_tc.c |   26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -633,16 +633,18 @@ err:
- 	return ret;
- }
- 
--static int vhost_vsock_stop(struct vhost_vsock *vsock)
-+static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+--- a/drivers/gpu/drm/i915/display/intel_tc.c
++++ b/drivers/gpu/drm/i915/display/intel_tc.c
+@@ -691,6 +691,8 @@ void intel_tc_port_sanitize(struct intel
  {
- 	size_t i;
--	int ret;
-+	int ret = 0;
+ 	struct drm_i915_private *i915 = to_i915(dig_port->base.base.dev);
+ 	struct intel_encoder *encoder = &dig_port->base;
++	intel_wakeref_t tc_cold_wref;
++	enum intel_display_power_domain domain;
+ 	int active_links = 0;
  
- 	mutex_lock(&vsock->dev.mutex);
+ 	mutex_lock(&dig_port->tc_lock);
+@@ -702,12 +704,11 @@ void intel_tc_port_sanitize(struct intel
  
--	ret = vhost_dev_check_owner(&vsock->dev);
--	if (ret)
--		goto err;
-+	if (check_owner) {
-+		ret = vhost_dev_check_owner(&vsock->dev);
-+		if (ret)
-+			goto err;
-+	}
+ 	drm_WARN_ON(&i915->drm, dig_port->tc_mode != TC_PORT_DISCONNECTED);
+ 	drm_WARN_ON(&i915->drm, dig_port->tc_lock_wakeref);
+-	if (active_links) {
+-		enum intel_display_power_domain domain;
+-		intel_wakeref_t tc_cold_wref = tc_cold_block(dig_port, &domain);
  
- 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
- 		struct vhost_virtqueue *vq = &vsock->vqs[i];
-@@ -757,7 +759,12 @@ static int vhost_vsock_dev_release(struc
- 	 * inefficient.  Room for improvement here. */
- 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+-		dig_port->tc_mode = intel_tc_port_get_current_mode(dig_port);
++	tc_cold_wref = tc_cold_block(dig_port, &domain);
  
--	vhost_vsock_stop(vsock);
-+	/* Don't check the owner, because we are in the release path, so we
-+	 * need to stop the vsock device in any case.
-+	 * vhost_vsock_stop() can not fail in this case, so we don't need to
-+	 * check the return code.
-+	 */
-+	vhost_vsock_stop(vsock, false);
- 	vhost_vsock_flush(vsock);
- 	vhost_dev_stop(&vsock->dev);
++	dig_port->tc_mode = intel_tc_port_get_current_mode(dig_port);
++	if (active_links) {
+ 		if (!icl_tc_phy_is_connected(dig_port))
+ 			drm_dbg_kms(&i915->drm,
+ 				    "Port %s: PHY disconnected with %d active link(s)\n",
+@@ -716,10 +717,23 @@ void intel_tc_port_sanitize(struct intel
  
-@@ -872,7 +879,7 @@ static long vhost_vsock_dev_ioctl(struct
- 		if (start)
- 			return vhost_vsock_start(vsock);
- 		else
--			return vhost_vsock_stop(vsock);
-+			return vhost_vsock_stop(vsock, true);
- 	case VHOST_GET_FEATURES:
- 		features = VHOST_VSOCK_FEATURES;
- 		if (copy_to_user(argp, &features, sizeof(features)))
+ 		dig_port->tc_lock_wakeref = tc_cold_block(dig_port,
+ 							  &dig_port->tc_lock_power_domain);
+-
+-		tc_cold_unblock(dig_port, domain, tc_cold_wref);
++	} else {
++		/*
++		 * TBT-alt is the default mode in any case the PHY ownership is not
++		 * held (regardless of the sink's connected live state), so
++		 * we'll just switch to disconnected mode from it here without
++		 * a note.
++		 */
++		if (dig_port->tc_mode != TC_PORT_TBT_ALT)
++			drm_dbg_kms(&i915->drm,
++				    "Port %s: PHY left in %s mode on disabled port, disconnecting it\n",
++				    dig_port->tc_port_name,
++				    tc_port_mode_name(dig_port->tc_mode));
++		icl_tc_phy_disconnect(dig_port);
+ 	}
+ 
++	tc_cold_unblock(dig_port, domain, tc_cold_wref);
++
+ 	drm_dbg_kms(&i915->drm, "Port %s: sanitize mode (%s)\n",
+ 		    dig_port->tc_port_name,
+ 		    tc_port_mode_name(dig_port->tc_mode));
 
 

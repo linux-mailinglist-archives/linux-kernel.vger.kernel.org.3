@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8824C7502
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485C14C7765
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbiB1Rty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S239978AbiB1SQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239073AbiB1Rnm (ORCPT
+        with ESMTP id S240156AbiB1SH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:43:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B629AE62;
-        Mon, 28 Feb 2022 09:35:35 -0800 (PST)
+        Mon, 28 Feb 2022 13:07:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45BD5D662;
+        Mon, 28 Feb 2022 09:48:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58852614B9;
-        Mon, 28 Feb 2022 17:35:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3AFC340E7;
-        Mon, 28 Feb 2022 17:35:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 874C860180;
+        Mon, 28 Feb 2022 17:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0DEC340E7;
+        Mon, 28 Feb 2022 17:48:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069734;
-        bh=v5QaB1hFhjLaOCClqrmwreuVmYnWVQQ3HcouUHL0f/E=;
+        s=korg; t=1646070508;
+        bh=6ttKOQ9m0Pb17Q3CVH254bmmxO+Df4LgDPnSSCUWaO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QR4Uv8UgwKGBO4Xwy6U4hUW4SO4zZFgmG3ngkAYtUdW9u3qpmSlvQT4YJZd+ko8BE
-         v32CIfPOxYW9PO9v6c+05JoBSl3jgzT5XOs5FX4rGBGRH5vLQkTVjoQgsBk1Gi5k/p
-         bbQCaocqa0fI3cmeqMeuwlPleWNxEpY4ntlKqcTk=
+        b=FoSUAOxPLhHtpSAo9iSj4DxfujtpoE4FRP7VcDmTnQSH4bkKdjElUuLwF/mCXeJW+
+         xF2wMrk3LkdDBqy+0YbVLr4IzsZUC6pWDaWwPGB6stioy90kG8rTtkzYCJCsGr4nPT
+         p5WZsHZQSlBt50kSLZXudiXN7zCaYepCWtiFdSSQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.10 74/80] tty: n_gsm: fix encoding of control signal octet bit DV
+        stable@vger.kernel.org, Puma Hsu <pumahsu@google.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.16 133/164] xhci: re-initialize the HC during resume if HCE was set
 Date:   Mon, 28 Feb 2022 18:24:55 +0100
-Message-Id: <20220228172320.674874690@linuxfoundation.org>
+Message-Id: <20220228172412.110335743@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: daniel.starke@siemens.com <daniel.starke@siemens.com>
+From: Puma Hsu <pumahsu@google.com>
 
-commit 737b0ef3be6b319d6c1fd64193d1603311969326 upstream.
+commit 8b328f8002bcf29ef517ee4bf234e09aabec4d2e upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.6.3.7 describes the encoding of the
-control signal octet used by the MSC (modem status command). The same
-encoding is also used in convergence layer type 2 as described in chapter
-5.5.2. Table 7 and 24 both require the DV (data valid) bit to be set 1 for
-outgoing control signal octets sent by the DTE (data terminal equipment),
-i.e. for the initiator side.
-Currently, the DV bit is only set if CD (carrier detect) is on, regardless
-of the side.
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. Software needs to re-initialize
+the HC, so add this check in xhci resume.
 
-This patch fixes this behavior by setting the DV bit on the initiator side
-unconditionally.
-
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220218073123.2121-1-daniel.starke@siemens.com
+Signed-off-by: Puma Hsu <pumahsu@google.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220215123320.1253947-2-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci.c |   19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -434,7 +434,7 @@ static u8 gsm_encode_modem(const struct
- 		modembits |= MDM_RTR;
- 	if (dlci->modem_tx & TIOCM_RI)
- 		modembits |= MDM_IC;
--	if (dlci->modem_tx & TIOCM_CD)
-+	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
- 		modembits |= MDM_DV;
- 	return modembits;
- }
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, b
+ 	int			retval = 0;
+ 	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
++	bool			reinit_xhc = false;
+ 
+ 	if (!hcd->state)
+ 		return 0;
+@@ -1107,10 +1108,11 @@ int xhci_resume(struct xhci_hcd *xhci, b
+ 	set_bit(HCD_FLAG_HW_ACCESSIBLE, &xhci->shared_hcd->flags);
+ 
+ 	spin_lock_irq(&xhci->lock);
+-	if ((xhci->quirks & XHCI_RESET_ON_RESUME) || xhci->broken_suspend)
+-		hibernated = true;
+ 
+-	if (!hibernated) {
++	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
++		reinit_xhc = true;
++
++	if (!reinit_xhc) {
+ 		/*
+ 		 * Some controllers might lose power during suspend, so wait
+ 		 * for controller not ready bit to clear, just as in xHC init.
+@@ -1143,12 +1145,17 @@ int xhci_resume(struct xhci_hcd *xhci, b
+ 			spin_unlock_irq(&xhci->lock);
+ 			return -ETIMEDOUT;
+ 		}
+-		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	temp = readl(&xhci->op_regs->status);
++
++	/* re-initialize the HC on Restore Error, or Host Controller Error */
++	if (temp & (STS_SRE | STS_HCE)) {
++		reinit_xhc = true;
++		xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
++	}
+ 
++	if (reinit_xhc) {
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+ 			del_timer_sync(&xhci->comp_mode_recovery_timer);
 
 

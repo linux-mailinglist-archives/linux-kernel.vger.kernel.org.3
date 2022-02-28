@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270444C6D05
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FDC4C6CF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbiB1Mpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S236651AbiB1Mpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236712AbiB1Mpj (ORCPT
+        with ESMTP id S236676AbiB1Mpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:45:39 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9093875E7C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:44:52 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso14675913pjj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:44:52 -0800 (PST)
+        Mon, 28 Feb 2022 07:45:47 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A1277AA6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:44:58 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id k1so543790pfu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5ccQT6vj+bq/xoGQcn9v2xz+Y0edwuLMO9kFGRPpvHg=;
-        b=BecJoD29abtDVNdA76bHXNTUWFPTT8Q2ylvU1H4ECKon4Z2oqhuUlpXBYKKKxM4Anq
-         mx1HtRJtC1smxi1rbAdMlXCfAtrvnjUcX8n4t9IdZvMuA7ro2Om8ifoPkyBuPcRUAERp
-         DqVJ2MbJcujeJ9EBhvXnehs63lpVNlK7RleWwbvt2hTnZ6u6AFw74vHR3N2q4sjsFd/9
-         n8vRv9ZCz4oKvpb/FSufSCYbt02QaZm7oFP1243M2/WT10WUndzFtm/i1AE+goA5uA54
-         4xafz+QxKC2t6krTG5U6MQ1Wtf4kuXyH8cTzThhXfkJ95R3NutEEMkLgWpzXsGNG4VzU
-         jFwA==
+        bh=ZcgB3dsdYiRl3IlyzXkbVRVAGkvq7C0XqoDwm1YpiDY=;
+        b=GhYcbIp8tl+HCeZLLWNLL78a+UBg8ENdh+6DB0LKRKhWzZfGDgw2eo9oVztZXBD0TX
+         RE0GS/MiHefahHVkb1HgC2O7onA79BHR+PoNUfBuFidzwnDbsW212sIeElmxN8rwyQta
+         K4SX3rMEcOXUnDy+ftpC0JgAHS5j5ObaJHh/0UJgPpeRuZ4cr4Gy6f97NfUpjIjdknid
+         FmjwBkkR1xpBANOn72YMH7Xnow266xS0/sI1qvLjVnxQUAPSCUd5s74M2YAAtdvutmI2
+         uI0mjoUMB3+f4YDdJaCyHukNawwXZKIjDz6+G3StKP9ePZMzFyDxQm7kLiUHGL3pdDtl
+         1Xbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5ccQT6vj+bq/xoGQcn9v2xz+Y0edwuLMO9kFGRPpvHg=;
-        b=b/A0JmXJWr0KmEx33EiBvAG4c+or2A0caulU90w3URl8J0EaDdMeg7O2qQe710n6jX
-         L1MCss+lSy8A5ZHwNyVG8StMFtTfu81uQovcd/XL2j6jWTQ3Lv5j7u9X0A/3tmgU7Dsr
-         ZICa7KRo1aYpOI2ua3FG88D0XZnfK0+aZLJbWxP6tfSkwObkkxVahMzP7bjGc4vM37sJ
-         XXXcR892DBTey9m/u5tILX+VZodnvxFiPOTkve2+SOoIYq73sDzxZltIX56ZeZ9tQD7M
-         YPK5NiOjFI6yYt3KeZBqI2AeKhTDbELDm+tRlVZkQ5NG+gcwTeYO9V1Wvn3Lrd7zhBT/
-         LptA==
-X-Gm-Message-State: AOAM533WCmary324bcPfmFJP4z83vrraPKbDiKQQHR6eGPOxtZBl/QGF
-        lRRwyn7yirvGg4MbT5q7UYzy
-X-Google-Smtp-Source: ABdhPJyhNXsTfisLkqNfMVmJk+iXIONO79UKjeKU2tbaNPCw6vllgDegryPmmS0Zp6BL1c9qV0zT2w==
-X-Received: by 2002:a17:90a:8581:b0:1b2:7541:af6c with SMTP id m1-20020a17090a858100b001b27541af6cmr16605365pjn.48.1646052291943;
-        Mon, 28 Feb 2022 04:44:51 -0800 (PST)
+        bh=ZcgB3dsdYiRl3IlyzXkbVRVAGkvq7C0XqoDwm1YpiDY=;
+        b=WlGzsWi2KairRaBjlQR7x4VoUDiQOhq9j1MFF6cawt8X9MPdvA33jAwfV5xqTd/LvF
+         GyvnnpUZQsReW5pg8CTzYMgy7SZm9xSjbz0UNN6SC3OGNUpV/hXB2MfySFAm4WhEg7r+
+         86d9gJbkLUbg/T0EPbuZa6NHx2qZeZidAHyv86ybTAR8/qx+rv8mxPxgYsJFIdOD1dEq
+         c3kRWOUN3zHBpT8L8nIPs6ngzosnu701SXKQQaw4MZ8xkFfcleI17qSk/heefWFe83DH
+         zu+3QXKuZ4oFGl8BckleHBj8PUMGk7jld7XE7lM7pcfEUd3VeaHc3RknWGnCmIcMx69g
+         O+WA==
+X-Gm-Message-State: AOAM530udzvlTr78BjavfGj/R7nZ/wh5zbWVjAhTCAJhOlLCYzuSIdEA
+        3njsrOmyH5xcc9ln6N3aTzfX
+X-Google-Smtp-Source: ABdhPJwJMnbkJ1SKjLiLJpAn6iKdpFTpYoyXgypL+MzEbarFklFbYBw6RGIkoOEL3J0SOHnBsyJkqg==
+X-Received: by 2002:a63:6908:0:b0:372:d919:82ed with SMTP id e8-20020a636908000000b00372d91982edmr17305878pgc.104.1646052297522;
+        Mon, 28 Feb 2022 04:44:57 -0800 (PST)
 Received: from localhost.localdomain ([117.207.25.37])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.44.47
+        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.44.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:44:51 -0800 (PST)
+        Mon, 28 Feb 2022 04:44:57 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
@@ -56,10 +56,11 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, elder@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 10/27] bus: mhi: ep: Add support for registering MHI endpoint controllers
-Date:   Mon, 28 Feb 2022 18:13:27 +0530
-Message-Id: <20220228124344.77359-11-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Hemant Kumar <hemantk@codeaurora.org>
+Subject: [PATCH v4 11/27] bus: mhi: ep: Add support for registering MHI endpoint client drivers
+Date:   Mon, 28 Feb 2022 18:13:28 +0530
+Message-Id: <20220228124344.77359-12-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
 References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
@@ -75,633 +76,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds support for registering MHI endpoint controller drivers
-with the MHI endpoint stack. MHI endpoint controller drivers manage
-the interaction with the host machines (such as x86). They are also the
-MHI endpoint bus master in charge of managing the physical link between
-the host and endpoint device. Eventhough the MHI spec is bus agnostic,
-the current implementation is entirely based on PCIe bus.
+This commit adds support for registering MHI endpoint client drivers
+with the MHI endpoint stack. MHI endpoint client drivers bind to one
+or more MHI endpoint devices inorder to send and receive the upper-layer
+protocol packets like IP packets, modem control messages, and
+diagnostics messages over MHI bus.
 
-The endpoint controller driver encloses all information about the
-underlying physical bus like PCIe. The registration process involves
-parsing the channel configuration and allocating an MHI EP device.
-
-Channels used in the endpoint stack follows the perspective of the MHI
-host stack. i.e.,
-
-UL - From host to endpoint
-DL - From endpoint to host
-
+Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/Kconfig       |   1 +
- drivers/bus/mhi/Makefile      |   3 +
- drivers/bus/mhi/ep/Kconfig    |  10 ++
- drivers/bus/mhi/ep/Makefile   |   2 +
- drivers/bus/mhi/ep/internal.h | 154 ++++++++++++++++++++++
- drivers/bus/mhi/ep/main.c     | 236 ++++++++++++++++++++++++++++++++++
- include/linux/mhi_ep.h        | 143 ++++++++++++++++++++
- 7 files changed, 549 insertions(+)
- create mode 100644 drivers/bus/mhi/ep/Kconfig
- create mode 100644 drivers/bus/mhi/ep/Makefile
- create mode 100644 drivers/bus/mhi/ep/internal.h
- create mode 100644 drivers/bus/mhi/ep/main.c
- create mode 100644 include/linux/mhi_ep.h
+ drivers/bus/mhi/ep/main.c | 85 +++++++++++++++++++++++++++++++++++++++
+ include/linux/mhi_ep.h    | 57 +++++++++++++++++++++++++-
+ 2 files changed, 140 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bus/mhi/Kconfig b/drivers/bus/mhi/Kconfig
-index 4748df7f9cd5..b39a11e6c624 100644
---- a/drivers/bus/mhi/Kconfig
-+++ b/drivers/bus/mhi/Kconfig
-@@ -6,3 +6,4 @@
- #
- 
- source "drivers/bus/mhi/host/Kconfig"
-+source "drivers/bus/mhi/ep/Kconfig"
-diff --git a/drivers/bus/mhi/Makefile b/drivers/bus/mhi/Makefile
-index 5f5708a249f5..46981331b38f 100644
---- a/drivers/bus/mhi/Makefile
-+++ b/drivers/bus/mhi/Makefile
-@@ -1,2 +1,5 @@
- # Host MHI stack
- obj-y += host/
-+
-+# Endpoint MHI stack
-+obj-y += ep/
-diff --git a/drivers/bus/mhi/ep/Kconfig b/drivers/bus/mhi/ep/Kconfig
-new file mode 100644
-index 000000000000..90ab3b040672
---- /dev/null
-+++ b/drivers/bus/mhi/ep/Kconfig
-@@ -0,0 +1,10 @@
-+config MHI_BUS_EP
-+	tristate "Modem Host Interface (MHI) bus Endpoint implementation"
-+	help
-+	  Bus driver for MHI protocol. Modem Host Interface (MHI) is a
-+	  communication protocol used by a host processor to control
-+	  and communicate a modem device over a high speed peripheral
-+	  bus or shared memory.
-+
-+	  MHI_BUS_EP implements the MHI protocol for the endpoint devices,
-+	  such as SDX55 modem connected to the host machine over PCIe.
-diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
-new file mode 100644
-index 000000000000..64e29252b608
---- /dev/null
-+++ b/drivers/bus/mhi/ep/Makefile
-@@ -0,0 +1,2 @@
-+obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
-+mhi_ep-y := main.o
-diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
-new file mode 100644
-index 000000000000..58ec5fdc503f
---- /dev/null
-+++ b/drivers/bus/mhi/ep/internal.h
-@@ -0,0 +1,154 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022, Linaro Ltd.
-+ *
-+ */
-+
-+#ifndef _MHI_EP_INTERNAL_
-+#define _MHI_EP_INTERNAL_
-+
-+#include <linux/bitfield.h>
-+
-+#include "../common.h"
-+
-+extern struct bus_type mhi_ep_bus_type;
-+
-+#define MHI_REG_OFFSET				0x100
-+#define BHI_REG_OFFSET				0x200
-+
-+/* MHI registers */
-+#define EP_MHIREGLEN				(MHI_REG_OFFSET + MHIREGLEN)
-+#define EP_MHIVER				(MHI_REG_OFFSET + MHIVER)
-+#define EP_MHICFG				(MHI_REG_OFFSET + MHICFG)
-+#define EP_CHDBOFF				(MHI_REG_OFFSET + CHDBOFF)
-+#define EP_ERDBOFF				(MHI_REG_OFFSET + ERDBOFF)
-+#define EP_BHIOFF				(MHI_REG_OFFSET + BHIOFF)
-+#define EP_BHIEOFF				(MHI_REG_OFFSET + BHIEOFF)
-+#define EP_DEBUGOFF				(MHI_REG_OFFSET + DEBUGOFF)
-+#define EP_MHICTRL				(MHI_REG_OFFSET + MHICTRL)
-+#define EP_MHISTATUS				(MHI_REG_OFFSET + MHISTATUS)
-+#define EP_CCABAP_LOWER				(MHI_REG_OFFSET + CCABAP_LOWER)
-+#define EP_CCABAP_HIGHER			(MHI_REG_OFFSET + CCABAP_HIGHER)
-+#define EP_ECABAP_LOWER				(MHI_REG_OFFSET + ECABAP_LOWER)
-+#define EP_ECABAP_HIGHER			(MHI_REG_OFFSET + ECABAP_HIGHER)
-+#define EP_CRCBAP_LOWER				(MHI_REG_OFFSET + CRCBAP_LOWER)
-+#define EP_CRCBAP_HIGHER			(MHI_REG_OFFSET + CRCBAP_HIGHER)
-+#define EP_CRDB_LOWER				(MHI_REG_OFFSET + CRDB_LOWER)
-+#define EP_CRDB_HIGHER				(MHI_REG_OFFSET + CRDB_HIGHER)
-+#define EP_MHICTRLBASE_LOWER			(MHI_REG_OFFSET + MHICTRLBASE_LOWER)
-+#define EP_MHICTRLBASE_HIGHER			(MHI_REG_OFFSET + MHICTRLBASE_HIGHER)
-+#define EP_MHICTRLLIMIT_LOWER			(MHI_REG_OFFSET + MHICTRLLIMIT_LOWER)
-+#define EP_MHICTRLLIMIT_HIGHER			(MHI_REG_OFFSET + MHICTRLLIMIT_HIGHER)
-+#define EP_MHIDATABASE_LOWER			(MHI_REG_OFFSET + MHIDATABASE_LOWER)
-+#define EP_MHIDATABASE_HIGHER			(MHI_REG_OFFSET + MHIDATABASE_HIGHER)
-+#define EP_MHIDATALIMIT_LOWER			(MHI_REG_OFFSET + MHIDATALIMIT_LOWER)
-+#define EP_MHIDATALIMIT_HIGHER			(MHI_REG_OFFSET + MHIDATALIMIT_HIGHER)
-+
-+/* MHI BHI registers */
-+#define EP_BHI_INTVEC				(BHI_REG_OFFSET + BHI_INTVEC)
-+#define EP_BHI_EXECENV				(BHI_REG_OFFSET + BHI_EXECENV)
-+
-+/* MHI Doorbell registers */
-+#define CHDB_LOWER_n(n)				(0x400 + 0x8 * (n))
-+#define CHDB_HIGHER_n(n)			(0x404 + 0x8 * (n))
-+#define ERDB_LOWER_n(n)				(0x800 + 0x8 * (n))
-+#define ERDB_HIGHER_n(n)			(0x804 + 0x8 * (n))
-+
-+#define MHI_CTRL_INT_STATUS			0x4
-+#define MHI_CTRL_INT_STATUS_MSK			BIT(0)
-+#define MHI_CTRL_INT_STATUS_CRDB_MSK		BIT(1)
-+#define MHI_CHDB_INT_STATUS_n(n)		(0x28 + 0x4 * (n))
-+#define MHI_ERDB_INT_STATUS_n(n)		(0x38 + 0x4 * (n))
-+
-+#define MHI_CTRL_INT_CLEAR			0x4c
-+#define MHI_CTRL_INT_MMIO_WR_CLEAR		BIT(2)
-+#define MHI_CTRL_INT_CRDB_CLEAR			BIT(1)
-+#define MHI_CTRL_INT_CRDB_MHICTRL_CLEAR		BIT(0)
-+
-+#define MHI_CHDB_INT_CLEAR_n(n)			(0x70 + 0x4 * (n))
-+#define MHI_CHDB_INT_CLEAR_n_CLEAR_ALL		GENMASK(31, 0)
-+#define MHI_ERDB_INT_CLEAR_n(n)			(0x80 + 0x4 * (n))
-+#define MHI_ERDB_INT_CLEAR_n_CLEAR_ALL		GENMASK(31, 0)
-+
-+/*
-+ * Unlike the usual "masking" convention, writing "1" to a bit in this register
-+ * enables the interrupt and writing "0" will disable it..
-+ */
-+#define MHI_CTRL_INT_MASK			0x94
-+#define MHI_CTRL_INT_MASK_MASK			GENMASK(1, 0)
-+#define MHI_CTRL_MHICTRL_MASK			BIT(0)
-+#define MHI_CTRL_CRDB_MASK			BIT(1)
-+
-+#define MHI_CHDB_INT_MASK_n(n)			(0xb8 + 0x4 * (n))
-+#define MHI_CHDB_INT_MASK_n_EN_ALL		GENMASK(31, 0)
-+#define MHI_ERDB_INT_MASK_n(n)			(0xc8 + 0x4 * (n))
-+#define MHI_ERDB_INT_MASK_n_EN_ALL		GENMASK(31, 0)
-+
-+#define NR_OF_CMD_RINGS				1
-+#define MHI_MASK_ROWS_CH_EV_DB			4
-+#define MHI_MASK_CH_EV_LEN			32
-+
-+/* Generic context */
-+struct mhi_generic_ctx {
-+	__le32 reserved0;
-+	__le32 reserved1;
-+	__le32 reserved2;
-+
-+	__le64 rbase __packed __aligned(4);
-+	__le64 rlen __packed __aligned(4);
-+	__le64 rp __packed __aligned(4);
-+	__le64 wp __packed __aligned(4);
-+};
-+
-+enum mhi_ep_ring_type {
-+	RING_TYPE_CMD,
-+	RING_TYPE_ER,
-+	RING_TYPE_CH,
-+};
-+
-+/* Ring element */
-+union mhi_ep_ring_ctx {
-+	struct mhi_cmd_ctxt cmd;
-+	struct mhi_event_ctxt ev;
-+	struct mhi_chan_ctxt ch;
-+	struct mhi_generic_ctx generic;
-+};
-+
-+struct mhi_ep_ring {
-+	struct mhi_ep_cntrl *mhi_cntrl;
-+	union mhi_ep_ring_ctx *ring_ctx;
-+	struct mhi_ring_element *ring_cache;
-+	enum mhi_ep_ring_type type;
-+	u64 rbase;
-+	size_t rd_offset;
-+	size_t wr_offset;
-+	size_t ring_size;
-+	u32 db_offset_h;
-+	u32 db_offset_l;
-+	u32 ch_id;
-+};
-+
-+struct mhi_ep_cmd {
-+	struct mhi_ep_ring ring;
-+};
-+
-+struct mhi_ep_event {
-+	struct mhi_ep_ring ring;
-+};
-+
-+struct mhi_ep_chan {
-+	char *name;
-+	struct mhi_ep_device *mhi_dev;
-+	struct mhi_ep_ring ring;
-+	struct mutex lock;
-+	void (*xfer_cb)(struct mhi_ep_device *mhi_dev, struct mhi_result *result);
-+	enum mhi_ch_state state;
-+	enum dma_data_direction dir;
-+	u64 tre_loc;
-+	u32 tre_size;
-+	u32 tre_bytes_left;
-+	u32 chan;
-+	bool skip_td;
-+};
-+
-+#endif
 diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-new file mode 100644
-index 000000000000..87ca42c7b067
---- /dev/null
+index 87ca42c7b067..2bdcf1657479 100644
+--- a/drivers/bus/mhi/ep/main.c
 +++ b/drivers/bus/mhi/ep/main.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * MHI Endpoint bus stack
-+ *
-+ * Copyright (C) 2022 Linaro Ltd.
-+ * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/delay.h>
-+#include <linux/dma-direction.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/mhi_ep.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include "internal.h"
-+
-+static DEFINE_IDA(mhi_ep_cntrl_ida);
-+
-+static void mhi_ep_release_device(struct device *dev)
+@@ -198,9 +198,88 @@ void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl)
+ }
+ EXPORT_SYMBOL_GPL(mhi_ep_unregister_controller);
+ 
++static int mhi_ep_driver_probe(struct device *dev)
 +{
 +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
++	struct mhi_ep_driver *mhi_drv = to_mhi_ep_driver(dev->driver);
++	struct mhi_ep_chan *ul_chan = mhi_dev->ul_chan;
++	struct mhi_ep_chan *dl_chan = mhi_dev->dl_chan;
 +
-+	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
-+		mhi_dev->mhi_cntrl->mhi_dev = NULL;
++	ul_chan->xfer_cb = mhi_drv->ul_xfer_cb;
++	dl_chan->xfer_cb = mhi_drv->dl_xfer_cb;
 +
-+	/*
-+	 * We need to set the mhi_chan->mhi_dev to NULL here since the MHI
-+	 * devices for the channels will only get created in mhi_ep_create_device()
-+	 * if the mhi_dev associated with it is NULL.
-+	 */
-+	if (mhi_dev->ul_chan)
-+		mhi_dev->ul_chan->mhi_dev = NULL;
-+
-+	if (mhi_dev->dl_chan)
-+		mhi_dev->dl_chan->mhi_dev = NULL;
-+
-+	kfree(mhi_dev);
++	return mhi_drv->probe(mhi_dev, mhi_dev->id);
 +}
 +
-+static struct mhi_ep_device *mhi_ep_alloc_device(struct mhi_ep_cntrl *mhi_cntrl,
-+						 enum mhi_device_type dev_type)
-+{
-+	struct mhi_ep_device *mhi_dev;
-+	struct device *dev;
-+
-+	mhi_dev = kzalloc(sizeof(*mhi_dev), GFP_KERNEL);
-+	if (!mhi_dev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	dev = &mhi_dev->dev;
-+	device_initialize(dev);
-+	dev->bus = &mhi_ep_bus_type;
-+	dev->release = mhi_ep_release_device;
-+
-+	/* Controller device is always allocated first */
-+	if (dev_type == MHI_DEVICE_CONTROLLER)
-+		/* for MHI controller device, parent is the bus device (e.g. PCI EPF) */
-+		dev->parent = mhi_cntrl->cntrl_dev;
-+	else
-+		/* for MHI client devices, parent is the MHI controller device */
-+		dev->parent = &mhi_cntrl->mhi_dev->dev;
-+
-+	mhi_dev->mhi_cntrl = mhi_cntrl;
-+	mhi_dev->dev_type = dev_type;
-+
-+	return mhi_dev;
-+}
-+
-+static int mhi_ep_chan_init(struct mhi_ep_cntrl *mhi_cntrl,
-+			    const struct mhi_ep_cntrl_config *config)
-+{
-+	const struct mhi_ep_channel_config *ch_cfg;
-+	struct device *dev = mhi_cntrl->cntrl_dev;
-+	u32 chan, i;
-+	int ret = -EINVAL;
-+
-+	mhi_cntrl->max_chan = config->max_channels;
-+
-+	/*
-+	 * Allocate max_channels supported by the MHI endpoint and populate
-+	 * only the defined channels
-+	 */
-+	mhi_cntrl->mhi_chan = kcalloc(mhi_cntrl->max_chan, sizeof(*mhi_cntrl->mhi_chan),
-+				      GFP_KERNEL);
-+	if (!mhi_cntrl->mhi_chan)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < config->num_channels; i++) {
-+		struct mhi_ep_chan *mhi_chan;
-+
-+		ch_cfg = &config->ch_cfg[i];
-+
-+		chan = ch_cfg->num;
-+		if (chan >= mhi_cntrl->max_chan) {
-+			dev_err(dev, "Channel (%u) exceeds maximum available channels (%u)\n",
-+				chan, mhi_cntrl->max_chan);
-+			goto error_chan_cfg;
-+		}
-+
-+		/* Bi-directional and direction less channels are not supported */
-+		if (ch_cfg->dir == DMA_BIDIRECTIONAL || ch_cfg->dir == DMA_NONE) {
-+			dev_err(dev, "Invalid direction (%u) for channel (%u)\n",
-+				ch_cfg->dir, chan);
-+			goto error_chan_cfg;
-+		}
-+
-+		mhi_chan = &mhi_cntrl->mhi_chan[chan];
-+		mhi_chan->name = ch_cfg->name;
-+		mhi_chan->chan = chan;
-+		mhi_chan->dir = ch_cfg->dir;
-+		mutex_init(&mhi_chan->lock);
-+	}
-+
-+	return 0;
-+
-+error_chan_cfg:
-+	kfree(mhi_cntrl->mhi_chan);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Allocate channel and command rings here. Event rings will be allocated
-+ * in mhi_ep_power_up() as the config comes from the host.
-+ */
-+int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
-+				const struct mhi_ep_cntrl_config *config)
-+{
-+	struct mhi_ep_device *mhi_dev;
-+	int ret;
-+
-+	if (!mhi_cntrl || !mhi_cntrl->cntrl_dev)
-+		return -EINVAL;
-+
-+	ret = mhi_ep_chan_init(mhi_cntrl, config);
-+	if (ret)
-+		return ret;
-+
-+	mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS, sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
-+	if (!mhi_cntrl->mhi_cmd) {
-+		ret = -ENOMEM;
-+		goto err_free_ch;
-+	}
-+
-+	/* Set controller index */
-+	mhi_cntrl->index = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
-+	if (mhi_cntrl->index < 0) {
-+		ret = mhi_cntrl->index;
-+		goto err_free_cmd;
-+	}
-+
-+	/* Allocate the controller device */
-+	mhi_dev = mhi_ep_alloc_device(mhi_cntrl, MHI_DEVICE_CONTROLLER);
-+	if (IS_ERR(mhi_dev)) {
-+		dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate controller device\n");
-+		ret = PTR_ERR(mhi_dev);
-+		goto err_ida_free;
-+	}
-+
-+	dev_set_name(&mhi_dev->dev, "mhi_ep%u", mhi_cntrl->index);
-+	mhi_dev->name = dev_name(&mhi_dev->dev);
-+	mhi_cntrl->mhi_dev = mhi_dev;
-+
-+	ret = device_add(&mhi_dev->dev);
-+	if (ret)
-+		goto err_put_dev;
-+
-+	dev_dbg(&mhi_dev->dev, "MHI EP Controller registered\n");
-+
-+	return 0;
-+
-+err_put_dev:
-+	put_device(&mhi_dev->dev);
-+err_ida_free:
-+	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
-+err_free_cmd:
-+	kfree(mhi_cntrl->mhi_cmd);
-+err_free_ch:
-+	kfree(mhi_cntrl->mhi_chan);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(mhi_ep_register_controller);
-+
-+void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	struct mhi_ep_device *mhi_dev = mhi_cntrl->mhi_dev;
-+
-+	kfree(mhi_cntrl->mhi_cmd);
-+	kfree(mhi_cntrl->mhi_chan);
-+
-+	device_del(&mhi_dev->dev);
-+	put_device(&mhi_dev->dev);
-+
-+	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
-+}
-+EXPORT_SYMBOL_GPL(mhi_ep_unregister_controller);
-+
-+static int mhi_ep_match(struct device *dev, struct device_driver *drv)
++static int mhi_ep_driver_remove(struct device *dev)
 +{
 +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
++	struct mhi_ep_driver *mhi_drv = to_mhi_ep_driver(dev->driver);
++	struct mhi_result result = {};
++	struct mhi_ep_chan *mhi_chan;
++	int dir;
 +
-+	/*
-+	 * If the device is a controller type then there is no client driver
-+	 * associated with it
-+	 */
++	/* Skip if it is a controller device */
 +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
 +		return 0;
 +
++	/* Disconnect the channels associated with the driver */
++	for (dir = 0; dir < 2; dir++) {
++		mhi_chan = dir ? mhi_dev->ul_chan : mhi_dev->dl_chan;
++
++		if (!mhi_chan)
++			continue;
++
++		mutex_lock(&mhi_chan->lock);
++		/* Send channel disconnect status to the client driver */
++		if (mhi_chan->xfer_cb) {
++			result.transaction_status = -ENOTCONN;
++			result.bytes_xferd = 0;
++			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
++		}
++
++		mhi_chan->state = MHI_CH_STATE_DISABLED;
++		mhi_chan->xfer_cb = NULL;
++		mutex_unlock(&mhi_chan->lock);
++	}
++
++	/* Remove the client driver now */
++	mhi_drv->remove(mhi_dev);
++
 +	return 0;
-+};
-+
-+struct bus_type mhi_ep_bus_type = {
-+	.name = "mhi_ep",
-+	.dev_name = "mhi_ep",
-+	.match = mhi_ep_match,
-+};
-+
-+static int __init mhi_ep_init(void)
-+{
-+	return bus_register(&mhi_ep_bus_type);
 +}
 +
-+static void __exit mhi_ep_exit(void)
++int __mhi_ep_driver_register(struct mhi_ep_driver *mhi_drv, struct module *owner)
 +{
-+	bus_unregister(&mhi_ep_bus_type);
++	struct device_driver *driver = &mhi_drv->driver;
++
++	if (!mhi_drv->probe || !mhi_drv->remove)
++		return -EINVAL;
++
++	/* Client drivers should have callbacks defined for both channels */
++	if (!mhi_drv->ul_xfer_cb || !mhi_drv->dl_xfer_cb)
++		return -EINVAL;
++
++	driver->bus = &mhi_ep_bus_type;
++	driver->owner = owner;
++	driver->probe = mhi_ep_driver_probe;
++	driver->remove = mhi_ep_driver_remove;
++
++	return driver_register(driver);
 +}
++EXPORT_SYMBOL_GPL(__mhi_ep_driver_register);
 +
-+postcore_initcall(mhi_ep_init);
-+module_exit(mhi_ep_exit);
++void mhi_ep_driver_unregister(struct mhi_ep_driver *mhi_drv)
++{
++	driver_unregister(&mhi_drv->driver);
++}
++EXPORT_SYMBOL_GPL(mhi_ep_driver_unregister);
 +
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MHI Bus Endpoint stack");
-+MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
-diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
-new file mode 100644
-index 000000000000..9c58938371e2
---- /dev/null
-+++ b/include/linux/mhi_ep.h
-@@ -0,0 +1,143 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022, Linaro Ltd.
-+ *
-+ */
-+#ifndef _MHI_EP_H_
-+#define _MHI_EP_H_
-+
-+#include <linux/dma-direction.h>
-+#include <linux/mhi.h>
-+
-+#define MHI_EP_DEFAULT_MTU 0x8000
-+
-+/**
-+ * struct mhi_ep_channel_config - Channel configuration structure for controller
-+ * @name: The name of this channel
-+ * @num: The number assigned to this channel
-+ * @num_elements: The number of elements that can be queued to this channel
-+ * @dir: Direction that data may flow on this channel
-+ */
-+struct mhi_ep_channel_config {
-+	char *name;
-+	u32 num;
-+	u32 num_elements;
-+	enum dma_data_direction dir;
-+};
-+
-+/**
-+ * struct mhi_ep_cntrl_config - MHI Endpoint controller configuration
-+ * @mhi_version: MHI spec version supported by the controller
-+ * @max_channels: Maximum number of channels supported
-+ * @num_channels: Number of channels defined in @ch_cfg
-+ * @ch_cfg: Array of defined channels
-+ */
-+struct mhi_ep_cntrl_config {
-+	u32 mhi_version;
-+	u32 max_channels;
-+	u32 num_channels;
-+	const struct mhi_ep_channel_config *ch_cfg;
-+};
-+
-+/**
-+ * struct mhi_ep_db_info - MHI Endpoint doorbell info
-+ * @mask: Mask of the doorbell interrupt
-+ * @status: Status of the doorbell interrupt
-+ */
-+struct mhi_ep_db_info {
-+	u32 mask;
-+	u32 status;
-+};
-+
-+/**
-+ * struct mhi_ep_cntrl - MHI Endpoint controller structure
-+ * @cntrl_dev: Pointer to the struct device of physical bus acting as the MHI
-+ *             Endpoint controller
-+ * @mhi_dev: MHI Endpoint device instance for the controller
-+ * @mmio: MMIO region containing the MHI registers
-+ * @mhi_chan: Points to the channel configuration table
-+ * @mhi_event: Points to the event ring configurations table
-+ * @mhi_cmd: Points to the command ring configurations table
-+ * @sm: MHI Endpoint state machine
-+ * @raise_irq: CB function for raising IRQ to the host
-+ * @alloc_addr: CB function for allocating memory in endpoint for storing host context
-+ * @map_addr: CB function for mapping host context to endpoint
-+ * @free_addr: CB function to free the allocated memory in endpoint for storing host context
-+ * @unmap_addr: CB function to unmap the host context in endpoint
-+ * @read_from_host: CB function for reading from host memory from endpoint
-+ * @write_to_host: CB function for writing to host memory from endpoint
-+ * @mhi_state: MHI Endpoint state
-+ * @max_chan: Maximum channels supported by the endpoint controller
-+ * @mru: MRU (Maximum Receive Unit) value of the endpoint controller
-+ * @index: MHI Endpoint controller index
-+ */
-+struct mhi_ep_cntrl {
-+	struct device *cntrl_dev;
-+	struct mhi_ep_device *mhi_dev;
-+	void __iomem *mmio;
-+
-+	struct mhi_ep_chan *mhi_chan;
-+	struct mhi_ep_event *mhi_event;
-+	struct mhi_ep_cmd *mhi_cmd;
-+	struct mhi_ep_sm *sm;
-+
-+	void (*raise_irq)(struct mhi_ep_cntrl *mhi_cntrl, u32 vector);
-+	void __iomem *(*alloc_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t *phys_addr,
-+		       size_t size);
-+	int (*map_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr, u64 pci_addr,
-+			size_t size);
-+	void (*free_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr,
-+			  void __iomem *virt_addr, size_t size);
-+	void (*unmap_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr);
-+	int (*read_from_host)(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void __iomem *to,
-+			      size_t size);
-+	int (*write_to_host)(struct mhi_ep_cntrl *mhi_cntrl, void __iomem *from, u64 to,
-+			     size_t size);
-+
-+	enum mhi_state mhi_state;
-+
-+	u32 max_chan;
-+	u32 mru;
-+	u32 index;
-+};
-+
-+/**
-+ * struct mhi_ep_device - Structure representing an MHI Endpoint device that binds
-+ *                     to channels or is associated with controllers
-+ * @dev: Driver model device node for the MHI Endpoint device
-+ * @mhi_cntrl: Controller the device belongs to
-+ * @id: Pointer to MHI Endpoint device ID struct
-+ * @name: Name of the associated MHI Endpoint device
-+ * @ul_chan: UL channel for the device
-+ * @dl_chan: DL channel for the device
-+ * @dev_type: MHI device type
-+ */
-+struct mhi_ep_device {
-+	struct device dev;
-+	struct mhi_ep_cntrl *mhi_cntrl;
+ static int mhi_ep_match(struct device *dev, struct device_driver *drv)
+ {
+ 	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
++	struct mhi_ep_driver *mhi_drv = to_mhi_ep_driver(drv);
 +	const struct mhi_device_id *id;
-+	const char *name;
-+	struct mhi_ep_chan *ul_chan;
-+	struct mhi_ep_chan *dl_chan;
-+	enum mhi_device_type dev_type;
+ 
+ 	/*
+ 	 * If the device is a controller type then there is no client driver
+@@ -209,6 +288,12 @@ static int mhi_ep_match(struct device *dev, struct device_driver *drv)
+ 	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+ 		return 0;
+ 
++	for (id = mhi_drv->id_table; id->chan[0]; id++)
++		if (!strcmp(mhi_dev->name, id->chan)) {
++			mhi_dev->id = id;
++			return 1;
++		}
++
+ 	return 0;
+ };
+ 
+diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+index 9c58938371e2..efcbdc51464f 100644
+--- a/include/linux/mhi_ep.h
++++ b/include/linux/mhi_ep.h
+@@ -108,8 +108,8 @@ struct mhi_ep_cntrl {
+  * @mhi_cntrl: Controller the device belongs to
+  * @id: Pointer to MHI Endpoint device ID struct
+  * @name: Name of the associated MHI Endpoint device
+- * @ul_chan: UL channel for the device
+- * @dl_chan: DL channel for the device
++ * @ul_chan: UL (from host to endpoint) channel for the device
++ * @dl_chan: DL (from endpoint to host) channel for the device
+  * @dev_type: MHI device type
+  */
+ struct mhi_ep_device {
+@@ -122,7 +122,60 @@ struct mhi_ep_device {
+ 	enum mhi_device_type dev_type;
+ };
+ 
++/**
++ * struct mhi_ep_driver - Structure representing a MHI Endpoint client driver
++ * @id_table: Pointer to MHI Endpoint device ID table
++ * @driver: Device driver model driver
++ * @probe: CB function for client driver probe function
++ * @remove: CB function for client driver remove function
++ * @ul_xfer_cb: CB function for UL (from host to endpoint) data transfer
++ * @dl_xfer_cb: CB function for DL (from endpoint to host) data transfer
++ */
++struct mhi_ep_driver {
++	const struct mhi_device_id *id_table;
++	struct device_driver driver;
++	int (*probe)(struct mhi_ep_device *mhi_ep,
++		     const struct mhi_device_id *id);
++	void (*remove)(struct mhi_ep_device *mhi_ep);
++	void (*ul_xfer_cb)(struct mhi_ep_device *mhi_dev,
++			   struct mhi_result *result);
++	void (*dl_xfer_cb)(struct mhi_ep_device *mhi_dev,
++			   struct mhi_result *result);
 +};
 +
-+#define to_mhi_ep_device(dev) container_of(dev, struct mhi_ep_device, dev)
+ #define to_mhi_ep_device(dev) container_of(dev, struct mhi_ep_device, dev)
++#define to_mhi_ep_driver(drv) container_of(drv, struct mhi_ep_driver, driver)
++
++/*
++ * module_mhi_ep_driver() - Helper macro for drivers that don't do
++ * anything special other than using default mhi_ep_driver_register() and
++ * mhi_ep_driver_unregister().  This eliminates a lot of boilerplate.
++ * Each module may only use this macro once.
++ */
++#define module_mhi_ep_driver(mhi_drv) \
++	module_driver(mhi_drv, mhi_ep_driver_register, \
++		      mhi_ep_driver_unregister)
++
++/*
++ * Macro to avoid include chaining to get THIS_MODULE
++ */
++#define mhi_ep_driver_register(mhi_drv) \
++	__mhi_ep_driver_register(mhi_drv, THIS_MODULE)
 +
 +/**
-+ * mhi_ep_register_controller - Register MHI Endpoint controller
-+ * @mhi_cntrl: MHI Endpoint controller to register
-+ * @config: Configuration to use for the controller
++ * __mhi_ep_driver_register - Register a driver with MHI Endpoint bus
++ * @mhi_drv: Driver to be associated with the device
++ * @owner: The module owner
 + *
-+ * Return: 0 if controller registrations succeeds, a negative error code otherwise.
++ * Return: 0 if driver registrations succeeds, a negative error code otherwise.
 + */
-+int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
-+			       const struct mhi_ep_cntrl_config *config);
++int __mhi_ep_driver_register(struct mhi_ep_driver *mhi_drv, struct module *owner);
 +
 +/**
-+ * mhi_ep_unregister_controller - Unregister MHI Endpoint controller
-+ * @mhi_cntrl: MHI Endpoint controller to unregister
++ * mhi_ep_driver_unregister - Unregister a driver from MHI Endpoint bus
++ * @mhi_drv: Driver associated with the device
 + */
-+void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl);
-+
-+#endif
++void mhi_ep_driver_unregister(struct mhi_ep_driver *mhi_drv);
+ 
+ /**
+  * mhi_ep_register_controller - Register MHI Endpoint controller
 -- 
 2.25.1
 

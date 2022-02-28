@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6118A4C6079
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 01:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 266E54C6086
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 02:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiB1A4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 19:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S232313AbiB1BBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 20:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiB1A4q (ORCPT
+        with ESMTP id S229565AbiB1BBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 19:56:46 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A317F6E4CA;
-        Sun, 27 Feb 2022 16:56:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 44DA8218CE;
-        Mon, 28 Feb 2022 00:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646009767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6BMX+ZTu71y6pW6n3w8F+LKPlpMD1xGyNzpWEriNEMU=;
-        b=1oVF7UvWyYQbKC/xLf9MsPR8L3YFujQtqWjDHI94j3Y6llbbBEk2LfEWhVw1RKXMvC0qBD
-        AkIvIvUtlcpZCbTCf0+sxGGDUkQ+B9NLXEnYiMmkxnLDvm4StN1h694Ps83kJCvBCZAZj8
-        EqUfKBdZeCUe1bXwMeZou2fTb0WkjDQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646009767;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6BMX+ZTu71y6pW6n3w8F+LKPlpMD1xGyNzpWEriNEMU=;
-        b=ZqAexWszEd97yVO/gMY1fUsKeCbC0z3zIfR0iYIdzKVOYZJIVYUn/GzIx+edrJvq14rJuV
-        x5NUKrQjCITcUmBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 852F2139BD;
-        Mon, 28 Feb 2022 00:56:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LCeyD6QdHGLqPAAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 28 Feb 2022 00:56:04 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 27 Feb 2022 20:01:19 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2665419B;
+        Sun, 27 Feb 2022 17:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646010041; x=1677546041;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5ATRL4rQ1IyZjNEW/fMNHknvLJWziKwt7KwEQHMNLqg=;
+  b=Pb29J0F0u4X1f7W9oXBVQ/4hk/fHzPDW4K9w8ZJ7iN/z1wFlbkiNDLsf
+   M+AIsO24VEngASbwKnX1XjsB8t8Ak9iAVR338sAWt4HsyR5wignG1LK0b
+   9mg97WiRpZ+a5q429t73nXOUDAr0ZO+jNyYdPO5opi30pcSdMAbCUhHBm
+   CNMH0JTNpl0f/9m4QzI4Pgn8gDh5O0x/zPgxf5owXrpaSifOPlBRoMPce
+   KUOa6gsC8nxjLTDGssM1ZuX+duinmHF975nR0oeRdXjjWKwzLCW06YZAe
+   IB3f0LnjkGo0YIHbfdaambiF6sA+0JnObTD9QOyKrumX0cunhokEIXuRB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="252700834"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="252700834"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 17:00:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="534251537"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2022 17:00:30 -0800
+Message-ID: <f78b3bce-513a-a14c-d12e-1a328d5ddc87@linux.intel.com>
+Date:   Mon, 28 Feb 2022 08:58:57 +0800
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     "Andreas Dilger" <adilger@dilger.ca>,
-        "Dave Chinner" <david@fromorbit.com>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        "Daire Byrne" <daire@dneg.com>,
-        "Andreas Dilger" <adilger.kernel@dilger.ca>
-Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
-In-reply-to: <20220224233848.GC8269@magnolia>
-References: <164568221518.25116.18139840533197037520@noble.neil.brown.name>,
- <893053D7-E5DD-43DB-941A-05C10FF5F396@dilger.ca>,
- <20220224233848.GC8269@magnolia>
-Date:   Mon, 28 Feb 2022 11:55:47 +1100
-Message-id: <164600974741.15631.8678502963654197325@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022, Darrick J. Wong wrote:
-> On Thu, Feb 24, 2022 at 09:31:28AM -0700, Andreas Dilger wrote:
-> > On Feb 23, 2022, at 22:57, NeilBrown <neilb@suse.de> wrote:
-> > >=20
-> > > for i in {1..70}; do ( for j in {1000..8000}; do touch $j; rm -f $j ; d=
-one ) & done
->=20
-> I think you want something faster here, like ln to hardlink an existing
-> file into the directory.
->=20
+On 2/18/22 8:55 AM, Lu Baolu wrote:
+> v6:
+>    - Refine comments and commit mesages.
+>    - Rename iommu_group_set_dma_owner() to iommu_group_claim_dma_owner().
+>    - Rename iommu_device_use/unuse_kernel_dma() to
+>      iommu_device_use/unuse_default_domain().
+>    - Remove unnecessary EXPORT_SYMBOL_GPL.
+>    - Change flag name from no_kernel_api_dma to driver_managed_dma.
+>    - Merge 4 "Add driver dma ownership management" patches into single
+>      one.
 
-And probably written in C too..
+Thanks you very much for review and comments. A new version (v7) has
+been posted.
 
-=20
-> (I am also not a fan of "PAR_UPDATE", since 'par' is already an English
-> word that doesn't mean 'parallel'.)
+https://lore.kernel.org/linux-iommu/20220228005056.599595-1-baolu.lu@linux.intel.com/
 
-:-)
-We already have DCACHE_PAR_LOOKUP for parallel lookups in a directory
-(though it is really a lock bit and I think should be named as soch).
-So it made sense to use DCACHE_PAR_UPDATE for parallel updates.
-And then S_PAR_UPDATE for the inode flag to enable this seemed logical.
+If I missed anything there, please let me know.
 
-But I agree that these names are sub-par :-)
-
-NeilBrown
+Best regards,
+baolu

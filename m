@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CA14C7542
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D67B74C7416
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240162AbiB1Rx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S238330AbiB1RlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238846AbiB1RtL (ORCPT
+        with ESMTP id S238588AbiB1RiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:49:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571ADA1BE6;
-        Mon, 28 Feb 2022 09:38:56 -0800 (PST)
+        Mon, 28 Feb 2022 12:38:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9928B5715F;
+        Mon, 28 Feb 2022 09:33:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBE026153C;
-        Mon, 28 Feb 2022 17:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB80FC340F5;
-        Mon, 28 Feb 2022 17:38:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EABDC61374;
+        Mon, 28 Feb 2022 17:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B271C340E7;
+        Mon, 28 Feb 2022 17:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069935;
-        bh=h/GxUeJdKHje3wA7qwpFqrLsPnKSOIqf/phe3Raqnq4=;
+        s=korg; t=1646069603;
+        bh=AlViE/H7ZXnf4ci5Vul7W8Ps8FfyT9x32LR/bzpcLZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uEBHTb5ZXl/wSkkyNRmRPO+JEJSXor+Q5g0FIeivB7iS3fmSEFuQjNT/BofYk7X1X
-         DJORg+zcQBYHJ224Tb8XqIbSewqnFmBmK3CU3QUqmC3CTlHGAW4cLgEYDNVIXKakDR
-         Cl/4aHS71RKe2xEPZuR9zITZEhuU0QKZYM5pvWPU=
+        b=siy4q2CVDfE4pCvgYF/rblB55H/t5ZVPUQd/EsLRWYc2XArz14ksT0acaYRZuayre
+         eusmUGzuHcjW38ZkXUmfudVFja/DPrimZZeBc1DKHTt4y70+3a3nz+YA5MsrWgvznJ
+         gncBA/T43I8iK0mI9RXP3tEgfZSr5Kpgds7thrUU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matt Roper <matthew.d.roper@intel.com>,
-        Swathi Dhanavanthri <swathi.dhanavanthri@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.15 065/139] drm/i915/dg2: Print PHY name properly on calibration error
+        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH 5.10 18/80] optee: use driver internal tee_context for some rpc
 Date:   Mon, 28 Feb 2022 18:23:59 +0100
-Message-Id: <20220228172354.532950118@linuxfoundation.org>
+Message-Id: <20220228172313.789030930@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Roper <matthew.d.roper@intel.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
 
-commit 28adef861233c6fce47372ebd2070b55eaa8e899 upstream.
+commit aceeafefff736057e8f93f19bbfbef26abd94604 upstream.
 
-We need to use phy_name() to convert the PHY value into a human-readable
-character in the error message.
+Adds a driver private tee_context by moving the tee_context in struct
+optee_notif to struct optee. This tee_context was previously used when
+doing internal calls to secure world to deliver notification.
 
-Fixes: a6a128116e55 ("drm/i915/dg2: Wait for SNPS PHY calibration during display init")
-Signed-off-by: Matt Roper <matthew.d.roper@intel.com>
-Reviewed-by: Swathi Dhanavanthri <swathi.dhanavanthri@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220215163545.2175730-1-matthew.d.roper@intel.com
-(cherry picked from commit 84073e568eec7b586b2f6fd5fb2fb08f59edec54)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+The new driver internal tee_context is now also when allocating driver
+private shared memory. This decouples the shared memory object from its
+original tee_context. This is needed when the life time of such a memory
+allocation outlives the client tee_context.
+
+This patch fixes the problem described below:
+
+The addition of a shutdown hook by commit f25889f93184 ("optee: fix tee out
+of memory failure seen during kexec reboot") introduced a kernel shutdown
+regression that can be triggered after running the OP-TEE xtest suites.
+
+Once the shutdown hook is called it is not possible to communicate any more
+with the supplicant process because the system is not scheduling task any
+longer. Thus if the optee driver shutdown path receives a supplicant RPC
+request from the OP-TEE we will deadlock the kernel's shutdown.
+
+Fixes: f25889f93184 ("optee: fix tee out of memory failure seen during kexec reboot")
+Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
+Reported-by: Lars Persson <larper@axis.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+[JW: backport to 5.10-stable + update commit message]
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_snps_phy.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tee/optee/core.c          |    8 ++++++++
+ drivers/tee/optee/optee_private.h |    2 ++
+ drivers/tee/optee/rpc.c           |    8 +++++---
+ 3 files changed, 15 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/i915/display/intel_snps_phy.c
-+++ b/drivers/gpu/drm/i915/display/intel_snps_phy.c
-@@ -32,7 +32,7 @@ void intel_snps_phy_wait_for_calibration
- 		if (intel_de_wait_for_clear(dev_priv, ICL_PHY_MISC(phy),
- 					    DG2_PHY_DP_TX_ACK_MASK, 25))
- 			DRM_ERROR("SNPS PHY %c failed to calibrate after 25ms.\n",
--				  phy);
-+				  phy_name(phy));
- 	}
+--- a/drivers/tee/optee/core.c
++++ b/drivers/tee/optee/core.c
+@@ -588,6 +588,7 @@ static int optee_remove(struct platform_
+ 	/* Unregister OP-TEE specific client devices on TEE bus */
+ 	optee_unregister_devices();
+ 
++	teedev_close_context(optee->ctx);
+ 	/*
+ 	 * Ask OP-TEE to free all cached shared memory objects to decrease
+ 	 * reference counters and also avoid wild pointers in secure world
+@@ -633,6 +634,7 @@ static int optee_probe(struct platform_d
+ 	struct optee *optee = NULL;
+ 	void *memremaped_shm = NULL;
+ 	struct tee_device *teedev;
++	struct tee_context *ctx;
+ 	u32 sec_caps;
+ 	int rc;
+ 
+@@ -719,6 +721,12 @@ static int optee_probe(struct platform_d
+ 	optee_supp_init(&optee->supp);
+ 	optee->memremaped_shm = memremaped_shm;
+ 	optee->pool = pool;
++	ctx = teedev_open(optee->teedev);
++	if (IS_ERR(ctx)) {
++		rc = PTR_ERR(ctx);
++		goto err;
++	}
++	optee->ctx = ctx;
+ 
+ 	/*
+ 	 * Ensure that there are no pre-existing shm objects before enabling
+--- a/drivers/tee/optee/optee_private.h
++++ b/drivers/tee/optee/optee_private.h
+@@ -70,6 +70,7 @@ struct optee_supp {
+  * struct optee - main service struct
+  * @supp_teedev:	supplicant device
+  * @teedev:		client device
++ * @ctx:		driver internal TEE context
+  * @invoke_fn:		function to issue smc or hvc
+  * @call_queue:		queue of threads waiting to call @invoke_fn
+  * @wait_queue:		queue of threads from secure world waiting for a
+@@ -87,6 +88,7 @@ struct optee {
+ 	struct tee_device *supp_teedev;
+ 	struct tee_device *teedev;
+ 	optee_invoke_fn *invoke_fn;
++	struct tee_context *ctx;
+ 	struct optee_call_queue call_queue;
+ 	struct optee_wait_queue wait_queue;
+ 	struct optee_supp supp;
+--- a/drivers/tee/optee/rpc.c
++++ b/drivers/tee/optee/rpc.c
+@@ -284,6 +284,7 @@ static struct tee_shm *cmd_alloc_suppl(s
  }
  
+ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
++					  struct optee *optee,
+ 					  struct optee_msg_arg *arg,
+ 					  struct optee_call_ctx *call_ctx)
+ {
+@@ -313,7 +314,8 @@ static void handle_rpc_func_cmd_shm_allo
+ 		shm = cmd_alloc_suppl(ctx, sz);
+ 		break;
+ 	case OPTEE_MSG_RPC_SHM_TYPE_KERNEL:
+-		shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
++		shm = tee_shm_alloc(optee->ctx, sz,
++				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
+ 		break;
+ 	default:
+ 		arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+@@ -470,7 +472,7 @@ static void handle_rpc_func_cmd(struct t
+ 		break;
+ 	case OPTEE_MSG_RPC_CMD_SHM_ALLOC:
+ 		free_pages_list(call_ctx);
+-		handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
++		handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
+ 		break;
+ 	case OPTEE_MSG_RPC_CMD_SHM_FREE:
+ 		handle_rpc_func_cmd_shm_free(ctx, arg);
+@@ -501,7 +503,7 @@ void optee_handle_rpc(struct tee_context
+ 
+ 	switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
+ 	case OPTEE_SMC_RPC_FUNC_ALLOC:
+-		shm = tee_shm_alloc(ctx, param->a1,
++		shm = tee_shm_alloc(optee->ctx, param->a1,
+ 				    TEE_SHM_MAPPED | TEE_SHM_PRIV);
+ 		if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
+ 			reg_pair_from_64(&param->a1, &param->a2, pa);
 
 

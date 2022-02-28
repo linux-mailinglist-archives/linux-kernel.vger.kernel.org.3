@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3215B4C758B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E5C4C740D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238798AbiB1Rz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S235620AbiB1Rkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239156AbiB1RwB (ORCPT
+        with ESMTP id S238700AbiB1RiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:52:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F99291341;
-        Mon, 28 Feb 2022 09:39:33 -0800 (PST)
+        Mon, 28 Feb 2022 12:38:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486FB580DF;
+        Mon, 28 Feb 2022 09:33:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0CD1B815BB;
-        Mon, 28 Feb 2022 17:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1193EC340F0;
-        Mon, 28 Feb 2022 17:39:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE3B61359;
+        Mon, 28 Feb 2022 17:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69D5C340E7;
+        Mon, 28 Feb 2022 17:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069970;
-        bh=CddVVUFIMUYm1CX/7EsfuhiY7pLEr+i9IuKyrRICjow=;
+        s=korg; t=1646069614;
+        bh=Ef5KvnxkJ6Iv+ke4WtsG7da/lgdJDeo+xBjd0/3QwCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ysxo7U4FQCGGD0Pt29KwH8CikcfINepXVdsoY1HXCLvfLYmpU2EksXLLhmU29nRri
-         gEiVOdPQLLQ+30mTfcQBIj9yopSwp/uLF+YfEgYfzTNF+M88ZAbzgCg0WUZv8axagu
-         phdwlvYhOTGoyyOMlyqfFg/e56Rj5qdZYkq3s/eg=
+        b=O7MMXh3IOvqyjz22OlOZdRBJdyO2MhJR4ahO+somweMK/kMgPwATHULogJiQnoLST
+         hbUjLUoZnj3OLBNbjgWYC3k/sZ9TXAPSFM3Vc9ctwf2cNLsJbZCGteCbUuzLbWfLQf
+         XsXz/58cwX+qOsS2RQcQu8Zqw6PTcPjQSWOxneM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cris Forno <cforno12@outlook.com>,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        Dany Madden <drt@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 077/139] ibmvnic: schedule failover only if vioctl fails
+        stable@vger.kernel.org, Tao Liu <thomas.liu@ucloud.cn>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 30/80] gso: do not skip outer ip header in case of ipip and net_failover
 Date:   Mon, 28 Feb 2022 18:24:11 +0100
-Message-Id: <20220228172355.825625607@linuxfoundation.org>
+Message-Id: <20220228172315.246668594@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+From: Tao Liu <thomas.liu@ucloud.cn>
 
-commit 277f2bb14361790a70e4b3c649e794b75a91a597 upstream.
+commit cc20cced0598d9a5ff91ae4ab147b3b5e99ee819 upstream.
 
-If client is unable to initiate a failover reset via H_VIOCTL hcall, then
-it should schedule a failover reset as a last resort. Otherwise, there is
-no need to do a last resort.
+We encounter a tcp drop issue in our cloud environment. Packet GROed in
+host forwards to a VM virtio_net nic with net_failover enabled. VM acts
+as a IPVS LB with ipip encapsulation. The full path like:
+host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
+ -> ipip encap -> net_failover tx -> virtio_net tx
 
-Fixes: 334c42414729 ("ibmvnic: improve failover sysfs entry")
-Reported-by: Cris Forno <cforno12@outlook.com>
-Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Signed-off-by: Dany Madden <drt@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220221210545.115283-1-drt@linux.ibm.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
+SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
+did because it supports TSO and GSO_IPXIP4. But network_header points to
+inner ip header.
+
+Call Trace:
+ tcp4_gso_segment        ------> return NULL
+ inet_gso_segment        ------> inner iph, network_header points to
+ ipip_gso_segment
+ inet_gso_segment        ------> outer iph
+ skb_mac_gso_segment
+
+Afterwards virtio_net transmits the pkt, only inner ip header is modified.
+And the outer one just keeps unchanged. The pkt will be dropped in remote
+host.
+
+Call Trace:
+ inet_gso_segment        ------> inner iph, outer iph is skipped
+ skb_mac_gso_segment
+ __skb_gso_segment
+ validate_xmit_skb
+ validate_xmit_skb_list
+ sch_direct_xmit
+ __qdisc_run
+ __dev_queue_xmit        ------> virtio_net
+ dev_hard_start_xmit
+ __dev_queue_xmit        ------> net_failover
+ ip_finish_output2
+ ip_output
+ iptunnel_xmit
+ ip_tunnel_xmit
+ ipip_tunnel_xmit        ------> ipip
+ dev_hard_start_xmit
+ __dev_queue_xmit
+ ip_finish_output2
+ ip_output
+ ip_forward
+ ip_rcv
+ __netif_receive_skb_one_core
+ netif_receive_skb_internal
+ napi_gro_receive
+ receive_buf
+ virtnet_poll
+ net_rx_action
+
+The root cause of this issue is specific with the rare combination of
+SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
+SKB_GSO_DODGY is set from external virtio_net. We need to reset network
+header when callbacks.gso_segment() returns NULL.
+
+This patch also includes ipv6_gso_segment(), considering SIT, etc.
+
+Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
+Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/ibm/ibmvnic.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ net/ipv4/af_inet.c     |    5 ++++-
+ net/ipv6/ip6_offload.c |    2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5733,10 +5733,14 @@ static ssize_t failover_store(struct dev
- 		   be64_to_cpu(session_token));
- 	rc = plpar_hcall_norets(H_VIOCTL, adapter->vdev->unit_address,
- 				H_SESSION_ERR_DETECTED, session_token, 0, 0);
--	if (rc)
-+	if (rc) {
- 		netdev_err(netdev,
- 			   "H_VIOCTL initiated failover failed, rc %ld\n",
- 			   rc);
-+		goto last_resort;
-+	}
-+
-+	return count;
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1374,8 +1374,11 @@ struct sk_buff *inet_gso_segment(struct
+ 	}
  
- last_resort:
- 	netdev_dbg(netdev, "Trying to send CRQ_CMD, the last resort\n");
+ 	ops = rcu_dereference(inet_offloads[proto]);
+-	if (likely(ops && ops->callbacks.gso_segment))
++	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
++	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
+ 		goto out;
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -113,6 +113,8 @@ static struct sk_buff *ipv6_gso_segment(
+ 	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		skb_reset_transport_header(skb);
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+ 	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
 
 

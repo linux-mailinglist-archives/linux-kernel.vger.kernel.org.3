@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773FF4C745A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 190FF4C736A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbiB1Rmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S238151AbiB1RfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236529AbiB1Rjh (ORCPT
+        with ESMTP id S238308AbiB1RdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:39:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD09137D;
-        Mon, 28 Feb 2022 09:34:12 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F078F983;
+        Mon, 28 Feb 2022 09:29:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED32CB815BD;
-        Mon, 28 Feb 2022 17:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB31C340E7;
-        Mon, 28 Feb 2022 17:34:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEFB76145C;
+        Mon, 28 Feb 2022 17:29:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97CBC340F0;
+        Mon, 28 Feb 2022 17:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069649;
-        bh=HCABU+6noVfxghNDpa+0Ktp/7wxrthhz8I3ynmU7u1U=;
+        s=korg; t=1646069386;
+        bh=vU/qhmC0dR0bSizI4ccziVaAU5ZeYpReprMKNESwoZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1T3lV/w8Bl2voMkafNnIzw5SX6s/fUy/ee8GvUJ4YDJk2RxYaSDQnZp3D+/16byya
-         ITXUMsLeKK17jv5PdTGWpn9s02HXOOkb4v08wIE9BXb10DAbws9t+1EmjPtXqhopBh
-         ocqYfqt7l3dn94wGxlUm90pr+g5T9MN9YjrjK7Y8=
+        b=LpeIn1x9h1mQqQtoXTTRc/EAZvQEn+zHsSLmV9+B7SypScJGkN9nZs6W3XyQPtibr
+         NfunRS+Ulol95mr61Rz1yjYZtcoavTmQG305IkmPoUEODeqx9AAB1ggk75dcrzQvin
+         0Li4u2q/4gNPnQqzMh65oatp9cTXS4fCFxKMfjhQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
-        Mark Bloch <mbloch@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.10 42/80] net/mlx5: Fix possible deadlock on rule deletion
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 4.19 17/34] gpio: tegra186: Fix chip_data type confusion
 Date:   Mon, 28 Feb 2022 18:24:23 +0100
-Message-Id: <20220228172316.633802535@linuxfoundation.org>
+Message-Id: <20220228172209.845156606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
+References: <20220228172207.090703467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Gottlieb <maorg@nvidia.com>
+From: Marc Zyngier <maz@kernel.org>
 
-commit b645e57debca846f51b3209907546ea857ddd3f5 upstream.
+commit d1e972ace42390de739cde87d96043dcbe502286 upstream.
 
-Add missing call to up_write_ref_node() which releases the semaphore
-in case the FTE doesn't have destinations, such in drop rule case.
+The tegra186 GPIO driver makes the assumption that the pointer
+returned by irq_data_get_irq_chip_data() is a pointer to a
+tegra_gpio structure. Unfortunately, it is actually a pointer
+to the inner gpio_chip structure, as mandated by the gpiolib
+infrastructure. Nice try.
 
-Fixes: 465e7baab6d9 ("net/mlx5: Fix deletion of duplicate rules")
-Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
-Reviewed-by: Mark Bloch <mbloch@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+The saving grace is that the gpio_chip is the first member of
+tegra_gpio, so the bug has gone undetected since... forever.
+
+Fix it by performing a container_of() on the pointer. This results
+in no additional code, and makes it possible to understand how
+the whole thing works.
+
+Fixes: 5b2b135a87fc ("gpio: Add Tegra186 support")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Link: https://lore.kernel.org/r/20220211093904.1112679-1-maz@kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fs_core.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpio/gpio-tegra186.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-@@ -2034,6 +2034,8 @@ void mlx5_del_flow_rules(struct mlx5_flo
- 		fte->node.del_hw_func = NULL;
- 		up_write_ref_node(&fte->node, false);
- 		tree_put_node(&fte->node, false);
-+	} else {
-+		up_write_ref_node(&fte->node, false);
- 	}
- 	kfree(handle);
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -237,9 +237,12 @@ static int tegra186_gpio_of_xlate(struct
+ 	return offset + pin;
  }
+ 
++#define to_tegra_gpio(x) container_of((x), struct tegra_gpio, gpio)
++
+ static void tegra186_irq_ack(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 
+ 	base = tegra186_gpio_get_base(gpio, data->hwirq);
+@@ -251,7 +254,8 @@ static void tegra186_irq_ack(struct irq_
+ 
+ static void tegra186_irq_mask(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
+@@ -266,7 +270,8 @@ static void tegra186_irq_mask(struct irq
+ 
+ static void tegra186_irq_unmask(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
+@@ -281,7 +286,8 @@ static void tegra186_irq_unmask(struct i
+ 
+ static int tegra186_irq_set_type(struct irq_data *data, unsigned int flow)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
 
 

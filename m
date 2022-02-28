@@ -2,45 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F214C7165
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BB14C7169
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbiB1QMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S237544AbiB1QNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234448AbiB1QL5 (ORCPT
+        with ESMTP id S237829AbiB1QM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:11:57 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5C18565D;
-        Mon, 28 Feb 2022 08:11:16 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V5oM5vq_1646064672;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V5oM5vq_1646064672)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 01 Mar 2022 00:11:13 +0800
-From:   xhao@linux.alibaba.com
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH v3 05/13] mm/damon/sysfs: Support the physical address
- space monitoring
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        gregkh@linuxfoundation.org, linux-damon@amazon.com,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220228081314.5770-1-sj@kernel.org>
- <20220228081314.5770-6-sj@kernel.org>
-Message-ID: <d4b7fe7b-a908-989c-e86b-2ed404372d78@linux.alibaba.com>
-Date:   Tue, 1 Mar 2022 00:11:12 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Mon, 28 Feb 2022 11:12:56 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28D185661;
+        Mon, 28 Feb 2022 08:12:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FHZFMOFgrV/rSEJc9zqxSvRChIYeUfj7GbQZCWiIZMh22ZpnfpD+D2u8Cr4ZM+VHXw8Kb3Yc2q75CBhb+Jbjoj/YcKfFCuFlzOlhVyiG56M4jK8vbyHkp7j7HBaw4kitOieILeKYbyOf3en8DuMKiKKn2CXIdBJuXBAP+1O5cHRMjPZqiJTKwG108+iKapOGY0xhMsNR/MobY4Aj81HgXidmaMpf82WpI+eAjJDzc2EJ8nPEGgw2Vo7j8f7aykd8KpylMyIPdWjkNUFxEYOWgnAExuJtdb3HMIrKRftfOHpyLC1FFX1w3ATFU0d7oVQ+XmUiJY0/9I+H/hNvwmMDyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=++on12dq13GgFFvnEU3hWWVBzDygCW859dcTbFuQyAk=;
+ b=Sf++8HZVUP+RqscM7LuzsxAdf2D3SWkNMidUJ+bWW1fyEgy4tDsLe3c9VqoX2kyXe3NasNzliJHf159Q7NAmRROkUI/8e8anK0mDxvgj0qVfLz5OWnHn9DOqbl8R94EZOAUIWKPUPI0ZxseVzrX2aVJBZ9zOj/g8nyK6qucgCRLGt/1Me11r8Dl8zp+fm+YxPR0i30NqYXRobcRrvGN6nlfN0DFUyEHkf4m9PaboA6w5N3gKfTbCJJiQKbwvz9xmFRgB1jxM0ApDRlJkCCI/89rTtWnOh04gidDAbRITc8apG4BTYxNFOtBskpHvaovnQhYfzjTbAtu5xWbZ7SWPBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=++on12dq13GgFFvnEU3hWWVBzDygCW859dcTbFuQyAk=;
+ b=wb1AJ5C2pLmKFNzR/geFSJ4Us/NmRXOGqJ6GtUycz10sRRCeChLfyNlswNx2BWLJU+S0oKzrWKw3Ewv06ihUDyX+LySbP8ohSdl2nqcarhRuEfqnwUjME7cGGrqCLtEXGNPw7u/34S7RzkFicXDwvEeK8CnGEj4v3sgxYXVc90g=
+Received: from BN0PR10CA0009.namprd10.prod.outlook.com (2603:10b6:408:143::6)
+ by CY4PR12MB1926.namprd12.prod.outlook.com (2603:10b6:903:11b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
+ 2022 16:12:13 +0000
+Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:143:cafe::f9) by BN0PR10CA0009.outlook.office365.com
+ (2603:10b6:408:143::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21 via Frontend
+ Transport; Mon, 28 Feb 2022 16:12:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Mon, 28 Feb 2022 16:12:13 +0000
+Received: from milan-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 28 Feb
+ 2022 10:12:09 -0600
+From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
+To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-edac@vger.kernel.org>, <bp@alien8.de>, <mingo@redhat.com>,
+        <mchehab@kernel.org>, <airlied@linux.ie>,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: [PATCH 1/1] x86/amd_nb: unexport amd_cache_northbridges()
+Date:   Mon, 28 Feb 2022 21:41:54 +0530
+Message-ID: <20220228161154.54539-1-nchatrad@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20220228081314.5770-6-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 09b5e156-ed12-4d26-a9ee-08d9fad514aa
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1926:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB19269726C249B90C7DDBD2FAE8019@CY4PR12MB1926.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a9ZWBBpXMmZK9yjTxwr5fjhRke5xCMJZM0BNFIRskJj7mGNh8cLr4okB49zvlo3diykoALjwfpi+f7qM6EeE1bfcKbgYRHiD8HW5lNt0ypQi+cK4sGYzZPqkRlp0phv5N8ryNFDNCL74MHLZQrBgxnn025Wb4nHiJ8lavdzd4rvl4m5qOU7eyRVo7svmf6LLcrRjdWtHG3ZtoqEAZrbmjVPtVLAMgNutXfJds96CGMgSKkl59O3h7D9AQp3I/UhNFspLkHsKZ9n340SKSm2OoFFFuAtD5aDx+U5sYBDkGKbAFFFYFzhh02h2ujIRnqG/tYFNF0lZaJxVtduPbB8wJHAHDxWwxXf4ma4z7HCWDE3ydcBMYqyCINZqlMHRZ5fLJUk95iVmsBL/EaYnwcCJCz2VbjfQ3g1lLRezbJV6qXnhBVnIWqM3fO37YfeBlcCiCKaHlJzopbB93qaszZXHI6NvUlzxT4Igm/y1fUsVqBSM5FL3UoNFw+UpdXbozr2q6E59b1VADhgC6S6VMPTEarId9nqZufdJmz3zX3PWtimejGi/GKGoZ3mZvLi0kwGYWmNCASf6jEALpkBPeU2TP7T7mvQVZkYuVrbGl15O6uomHk+HrT+HrrX9xNvSQRmoPsNb0b6ZCbwBB7QyLu3RMJUN60M+Ed/+ynSKIszCcafGnQpwfmepwTxq1Ami/qsPJU6oZP6DGm+kbCcrtIpXMQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(82310400004)(8676002)(4326008)(70206006)(7696005)(316002)(356005)(70586007)(83380400001)(6666004)(26005)(186003)(81166007)(54906003)(110136005)(426003)(508600001)(336012)(36860700001)(2906002)(1076003)(40460700003)(16526019)(2616005)(5660300002)(36756003)(47076005)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 16:12:13.0717
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09b5e156-ed12-4d26-a9ee-08d9fad514aa
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1926
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,389 +99,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Muralidhara M K <muralimk@amd.com>
 
-On 2/28/22 4:13 PM, SeongJae Park wrote:
-> This commit makes DAMON sysfs interface supports the physical address
-> space monitoring.  Specifically, this commit adds support of the initial
-> monitoring regions set feature by adding 'regions' directory under each
-> target directory and makes context operations file to receive 'paddr' in
-> addition to 'vaddr'.
->
-> As a result, the files hierarchy becomes as below:
->
->      /sys/kernel/mm/damon/admin
->      │ kdamonds/nr_kdamonds
->      │ │ 0/state,pid
->      │ │ │ contexts/nr_contexts
->      │ │ │ │ 0/operations
->      │ │ │ │ │ monitoring_attrs/
->      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
->      │ │ │ │ │ │ nr_regions/min,max
->      │ │ │ │ │ targets/nr_targets
->      │ │ │ │ │ │ 0/pid_target
->      │ │ │ │ │ │ │ regions/nr_regions    <- NEW DIRECTORY
->      │ │ │ │ │ │ │ │ 0/start,end
->      │ │ │ │ │ │ │ │ ...
->      │ │ │ │ │ │ ...
->      │ │ │ │ ...
->      │ │ ...
->
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->   mm/damon/sysfs.c | 276 ++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 271 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index 9221c93db6cc..968a4ba8e81b 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -113,12 +113,220 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
->   	.default_groups = damon_sysfs_ul_range_groups,
->   };
->   
-> +/*
-> + * init region directory
-> + */
-> +
-> +struct damon_sysfs_region {
-> +	struct kobject kobj;
-> +	unsigned long start;
-> +	unsigned long end;
-> +};
-> +
-> +static struct damon_sysfs_region *damon_sysfs_region_alloc(
-> +		unsigned long start,
-> +		unsigned long end)
-> +{
-> +	struct damon_sysfs_region *region = kmalloc(sizeof(*region),
-> +			GFP_KERNEL);
-> +
-> +	if (!region)
-> +		return NULL;
-> +	region->kobj = (struct kobject){};
-> +	region->start = start;
-> +	region->end = end;
-> +	return region;
-> +}
-> +
+amd_cache_northbridges() is called from init_amd_nbs(), during
+fs_initcall() and need not be called explicitly. Kernel components
+can directly call amd_nb_num() to get the initialized number of
+north bridges.
 
-The interface "start" and "end" have the same problems
+unexport amd_cache_northbridges(), update dependent modules to
+call amd_nb_num() instead. While at it, simplify the while checks
+in amd_cache_northbridges().
 
-[root@rt2k03395 0]# echo 100 > start
-[root@rt2k03395 0]# echo 10 > end
-[root@rt2k03395 0]# cat end
-10
-[root@rt2k03395 0]# cat start
-100
+Signed-off-by: Muralidhara M K <muralimk@amd.com>
+Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+---
+ arch/x86/include/asm/amd_nb.h | 1 -
+ arch/x86/kernel/amd_nb.c      | 7 +++----
+ drivers/char/agp/amd64-agp.c  | 2 +-
+ drivers/edac/amd64_edac.c     | 2 +-
+ 4 files changed, 5 insertions(+), 7 deletions(-)
 
-> +static ssize_t start_show(struct kobject *kobj, struct kobj_attribute *attr,
-> +		char *buf)
-> +{
-> +	struct damon_sysfs_region *region = container_of(kobj,
-> +			struct damon_sysfs_region, kobj);
-> +
-> +	return sysfs_emit(buf, "%lu\n", region->start);
-> +}
-> +
-> +static ssize_t start_store(struct kobject *kobj, struct kobj_attribute *attr,
-> +		const char *buf, size_t count)
-> +{
-> +	struct damon_sysfs_region *region = container_of(kobj,
-> +			struct damon_sysfs_region, kobj);
-> +	int err = kstrtoul(buf, 0, &region->start);
-> +
-> +	if (err)
-> +		return -EINVAL;
-> +	return count;
-> +}
-> +
-> +static ssize_t end_show(struct kobject *kobj, struct kobj_attribute *attr,
-> +		char *buf)
-> +{
-> +	struct damon_sysfs_region *region = container_of(kobj,
-> +			struct damon_sysfs_region, kobj);
-> +
-> +	return sysfs_emit(buf, "%lu\n", region->end);
-> +}
-> +
-> +static ssize_t end_store(struct kobject *kobj, struct kobj_attribute *attr,
-> +		const char *buf, size_t count)
-> +{
-> +	struct damon_sysfs_region *region = container_of(kobj,
-> +			struct damon_sysfs_region, kobj);
-> +	int err = kstrtoul(buf, 0, &region->end);
-> +
-> +	if (err)
-> +		return -EINVAL;
-> +	return count;
-> +}
-> +
-> +static void damon_sysfs_region_release(struct kobject *kobj)
-> +{
-> +	kfree(container_of(kobj, struct damon_sysfs_region, kobj));
-> +}
-> +
-> +static struct kobj_attribute damon_sysfs_region_start_attr =
-> +		__ATTR_RW_MODE(start, 0600);
-> +
-> +static struct kobj_attribute damon_sysfs_region_end_attr =
-> +		__ATTR_RW_MODE(end, 0600);
-> +
-> +static struct attribute *damon_sysfs_region_attrs[] = {
-> +	&damon_sysfs_region_start_attr.attr,
-> +	&damon_sysfs_region_end_attr.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(damon_sysfs_region);
-> +
-> +static struct kobj_type damon_sysfs_region_ktype = {
-> +	.release = damon_sysfs_region_release,
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +	.default_groups = damon_sysfs_region_groups,
-> +};
-> +
-> +/*
-> + * init_regions directory
-> + */
-> +
-> +struct damon_sysfs_regions {
-> +	struct kobject kobj;
-> +	struct damon_sysfs_region **regions_arr;
-> +	int nr;
-> +};
-> +
-> +static struct damon_sysfs_regions *damon_sysfs_regions_alloc(void)
-> +{
-> +	return kzalloc(sizeof(struct damon_sysfs_regions), GFP_KERNEL);
-> +}
-> +
-> +static void damon_sysfs_regions_rm_dirs(struct damon_sysfs_regions *regions)
-> +{
-> +	struct damon_sysfs_region **regions_arr = regions->regions_arr;
-> +	int i;
-> +
-> +	for (i = 0; i < regions->nr; i++)
-> +		kobject_put(&regions_arr[i]->kobj);
-> +	regions->nr = 0;
-> +	kfree(regions_arr);
-> +	regions->regions_arr = NULL;
-> +}
-> +
-> +static int damon_sysfs_regions_add_dirs(struct damon_sysfs_regions *regions,
-> +		int nr_regions)
-> +{
-> +	struct damon_sysfs_region **regions_arr, *region;
-> +	int err, i;
-> +
-> +	damon_sysfs_regions_rm_dirs(regions);
-> +	if (!nr_regions)
-> +		return 0;
-> +
-> +	regions_arr = kmalloc_array(nr_regions, sizeof(*regions_arr),
-> +			GFP_KERNEL | __GFP_NOWARN);
-> +	if (!regions_arr)
-> +		return -ENOMEM;
-> +	regions->regions_arr = regions_arr;
-> +
-> +	for (i = 0; i < nr_regions; i++) {
-> +		region = damon_sysfs_region_alloc(0, 0);
-> +		if (!region) {
-> +			damon_sysfs_regions_rm_dirs(regions);
-> +			return -ENOMEM;
-> +		}
-> +
-> +		err = kobject_init_and_add(&region->kobj,
-> +				&damon_sysfs_region_ktype, &regions->kobj,
-> +				"%d", i);
-> +		if (err) {
-> +			kobject_put(&region->kobj);
-> +			damon_sysfs_regions_rm_dirs(regions);
-> +			return err;
-> +		}
-> +
-> +		regions_arr[i] = region;
-> +		regions->nr++;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static ssize_t nr_regions_show(struct kobject *kobj,
-> +		struct kobj_attribute *attr, char *buf)
-> +{
-> +	struct damon_sysfs_regions *regions = container_of(kobj,
-> +			struct damon_sysfs_regions, kobj);
-> +
-> +	return sysfs_emit(buf, "%d\n", regions->nr);
-> +}
-> +
-> +static ssize_t nr_regions_store(struct kobject *kobj,
-> +		struct kobj_attribute *attr, const char *buf, size_t count)
-> +{
-> +	struct damon_sysfs_regions *regions = container_of(kobj,
-> +			struct damon_sysfs_regions, kobj);
-> +	int nr, err = kstrtoint(buf, 0, &nr);
-> +
-> +	if (err)
-> +		return err;
-> +	if (nr < 0)
-> +		return -EINVAL;
-> +
-> +	if (!mutex_trylock(&damon_sysfs_lock))
-> +		return -EBUSY;
-> +	err = damon_sysfs_regions_add_dirs(regions, nr);
-> +	mutex_unlock(&damon_sysfs_lock);
-> +	if (err)
-> +		return err;
-> +
-> +	return count;
-> +}
-> +
-> +static void damon_sysfs_regions_release(struct kobject *kobj)
-> +{
-> +	kfree(container_of(kobj, struct damon_sysfs_regions, kobj));
-> +}
-> +
-> +static struct kobj_attribute damon_sysfs_regions_nr_attr =
-> +		__ATTR_RW_MODE(nr_regions, 0600);
-> +
-> +static struct attribute *damon_sysfs_regions_attrs[] = {
-> +	&damon_sysfs_regions_nr_attr.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(damon_sysfs_regions);
-> +
-> +static struct kobj_type damon_sysfs_regions_ktype = {
-> +	.release = damon_sysfs_regions_release,
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +	.default_groups = damon_sysfs_regions_groups,
-> +};
-> +
->   /*
->    * target directory
->    */
->   
->   struct damon_sysfs_target {
->   	struct kobject kobj;
-> +	struct damon_sysfs_regions *regions;
->   	int pid;
->   };
->   
-> @@ -127,6 +335,29 @@ static struct damon_sysfs_target *damon_sysfs_target_alloc(void)
->   	return kzalloc(sizeof(struct damon_sysfs_target), GFP_KERNEL);
->   }
->   
-> +static int damon_sysfs_target_add_dirs(struct damon_sysfs_target *target)
-> +{
-> +	struct damon_sysfs_regions *regions = damon_sysfs_regions_alloc();
-> +	int err;
-> +
-> +	if (!regions)
-> +		return -ENOMEM;
-> +
-> +	err = kobject_init_and_add(&regions->kobj, &damon_sysfs_regions_ktype,
-> +			&target->kobj, "regions");
-> +	if (err)
-> +		kobject_put(&regions->kobj);
-> +	else
-> +		target->regions = regions;
-> +	return err;
-> +}
-> +
-> +static void damon_sysfs_target_rm_dirs(struct damon_sysfs_target *target)
-> +{
-> +	damon_sysfs_regions_rm_dirs(target->regions);
-> +	kobject_put(&target->regions->kobj);
-> +}
-> +
->   static ssize_t pid_target_show(struct kobject *kobj,
->   		struct kobj_attribute *attr, char *buf)
->   {
-> @@ -188,8 +419,10 @@ static void damon_sysfs_targets_rm_dirs(struct damon_sysfs_targets *targets)
->   	struct damon_sysfs_target **targets_arr = targets->targets_arr;
->   	int i;
->   
-> -	for (i = 0; i < targets->nr; i++)
-> +	for (i = 0; i < targets->nr; i++) {
-> +		damon_sysfs_target_rm_dirs(targets_arr[i]);
->   		kobject_put(&targets_arr[i]->kobj);
-> +	}
->   	targets->nr = 0;
->   	kfree(targets_arr);
->   	targets->targets_arr = NULL;
-> @@ -224,6 +457,10 @@ static int damon_sysfs_targets_add_dirs(struct damon_sysfs_targets *targets,
->   		if (err)
->   			goto out;
->   
-> +		err = damon_sysfs_target_add_dirs(target);
-> +		if (err)
-> +			goto out;
-> +
->   		targets_arr[i] = target;
->   		targets->nr++;
->   	}
-> @@ -608,9 +845,6 @@ static ssize_t operations_store(struct kobject *kobj,
->   
->   	for (id = 0; id < NR_DAMON_OPS; id++) {
->   		if (sysfs_streq(buf, damon_sysfs_ops_strs[id])) {
-> -			/* Support only vaddr */
-> -			if (id != DAMON_OPS_VADDR)
-> -				return -EINVAL;
->   			context->ops_id = id;
->   			return count;
->   		}
-> @@ -855,10 +1089,37 @@ static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
->   	}
->   }
->   
-> +static int damon_sysfs_set_regions(struct damon_target *t,
-> +		struct damon_sysfs_regions *sysfs_regions)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < sysfs_regions->nr; i++) {
-> +		struct damon_sysfs_region *sys_region =
-> +			sysfs_regions->regions_arr[i];
-> +		struct damon_region *prev, *r;
-> +
-> +		if (sys_region->start > sys_region->end)
-> +			return -EINVAL;
-> +		r = damon_new_region(sys_region->start, sys_region->end);
-> +		if (!r)
-> +			return -ENOMEM;
-> +		damon_add_region(r, t);
-> +		if (damon_nr_regions(t) > 1) {
-> +			prev = damon_prev_region(r);
-> +			if (prev->ar.end > r->ar.start) {
-> +				damon_destroy_region(r, t);
-> +				return -EINVAL;
-> +			}
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
->   static int damon_sysfs_set_targets(struct damon_ctx *ctx,
->   		struct damon_sysfs_targets *sysfs_targets)
->   {
-> -	int i;
-> +	int i, err;
->   
->   	for (i = 0; i < sysfs_targets->nr; i++) {
->   		struct damon_sysfs_target *sys_target =
-> @@ -877,6 +1138,11 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
->   			}
->   		}
->   		damon_add_target(ctx, t);
-> +		err = damon_sysfs_set_regions(t, sys_target->regions);
-> +		if (err) {
-> +			damon_sysfs_destroy_targets(ctx);
-> +			return err;
-> +		}
->   	}
->   	return 0;
->   }
-
+diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
+index 00d1a400b7a1..ed0eaf65c437 100644
+--- a/arch/x86/include/asm/amd_nb.h
++++ b/arch/x86/include/asm/amd_nb.h
+@@ -16,7 +16,6 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
+ 
+ extern bool early_is_amd_nb(u32 value);
+ extern struct resource *amd_get_mmconfig_range(struct resource *res);
+-extern int amd_cache_northbridges(void);
+ extern void amd_flush_garts(void);
+ extern int amd_numa_init(void);
+ extern int amd_get_subcaches(int);
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index 020c906f7934..190e0f763375 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -188,7 +188,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
+ EXPORT_SYMBOL_GPL(amd_smn_write);
+ 
+ 
+-int amd_cache_northbridges(void)
++static int amd_cache_northbridges(void)
+ {
+ 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
+ 	const struct pci_device_id *link_ids = amd_nb_link_ids;
+@@ -210,14 +210,14 @@ int amd_cache_northbridges(void)
+ 	}
+ 
+ 	misc = NULL;
+-	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
++	while ((misc = next_northbridge(misc, misc_ids)))
+ 		misc_count++;
+ 
+ 	if (!misc_count)
+ 		return -ENODEV;
+ 
+ 	root = NULL;
+-	while ((root = next_northbridge(root, root_ids)) != NULL)
++	while ((root = next_northbridge(root, root_ids)))
+ 		root_count++;
+ 
+ 	if (root_count) {
+@@ -290,7 +290,6 @@ int amd_cache_northbridges(void)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(amd_cache_northbridges);
+ 
+ /*
+  * Ignores subdevice/subvendor but as far as I can figure out
+diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
+index dc78a4fb879e..84a4aa9312cf 100644
+--- a/drivers/char/agp/amd64-agp.c
++++ b/drivers/char/agp/amd64-agp.c
+@@ -327,7 +327,7 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
+ {
+ 	int i;
+ 
+-	if (amd_cache_northbridges() < 0)
++	if (!amd_nb_num())
+ 		return -ENODEV;
+ 
+ 	if (!amd_nb_has_feature(AMD_NB_GART))
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index fba609ada0e6..af2c578f8ab3 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -4269,7 +4269,7 @@ static int __init amd64_edac_init(void)
+ 	if (!x86_match_cpu(amd64_cpuids))
+ 		return -ENODEV;
+ 
+-	if (amd_cache_northbridges() < 0)
++	if (!amd_nb_num())
+ 		return -ENODEV;
+ 
+ 	opstate_init();
 -- 
-Best Regards!
-Xin Hao
+2.25.1
 

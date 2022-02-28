@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC664C75EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1EE4C74A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbiB1R5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S238658AbiB1RqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239839AbiB1Rxe (ORCPT
+        with ESMTP id S238800AbiB1RnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F99AD103;
-        Mon, 28 Feb 2022 09:41:02 -0800 (PST)
+        Mon, 28 Feb 2022 12:43:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF909A4D7;
+        Mon, 28 Feb 2022 09:35:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CF1CB815CE;
-        Mon, 28 Feb 2022 17:41:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED962C340E7;
-        Mon, 28 Feb 2022 17:41:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C6B72CE17C8;
+        Mon, 28 Feb 2022 17:35:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9365C340E7;
+        Mon, 28 Feb 2022 17:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070061;
-        bh=8NwO2JbQ7fN+ULKMJeEmG2Q93OYX+2DS86zbZzyzrbs=;
+        s=korg; t=1646069710;
+        bh=bdeZ2090sDqU+izv81ASqcBTYUENGg4bAPv8rFcJ7GI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U9hX2+fosQsvyB7AcRoJ0vgdCC7Aj2dI5k4HPImHLxEXrnyq3QDilEvmObFt7nbHP
-         nMIZ5uB0cfG2mZ2xFciKuWmv2nyo/wVy1lyqOmQsflllT6EeXJe8q/kB+ZHBEH2zCw
-         JpfqNXUflXM9bLWkiXl0PbiE4lP90Pcy/RwkIfAk=
+        b=J40PupWfLXIhC5rz7DccAz/yRzPv7RDX/Q/uHf5WzcuQpQFFge218lmX1r5gs+22l
+         6jQXBJ89nHhWghgiCDcuWj9B/EbdVEvKntftX6/4IMnP1iZZ1La7Ew2I6YuJVJ1W7k
+         B0WZPqxFH1p35ZsK4grRvUF+1Brxj5/Qo/D52pag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 5.15 111/139] usb: dwc2: drd: fix soft connect when gadget is unconfigured
-Date:   Mon, 28 Feb 2022 18:24:45 +0100
-Message-Id: <20220228172359.313215522@linuxfoundation.org>
+Subject: [PATCH 5.10 65/80] usb: dwc2: drd: fix soft connect when gadget is unconfigured
+Date:   Mon, 28 Feb 2022 18:24:46 +0100
+Message-Id: <20220228172319.625573384@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,7 +86,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
-@@ -1417,6 +1417,7 @@ void dwc2_hsotg_core_connect(struct dwc2
+@@ -1406,6 +1406,7 @@ void dwc2_hsotg_core_connect(struct dwc2
  void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
  int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
  #define dwc2_is_device_connected(hsotg) (hsotg->connected)
@@ -94,7 +94,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
  int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
  int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
-@@ -1453,6 +1454,7 @@ static inline int dwc2_hsotg_set_test_mo
+@@ -1434,6 +1435,7 @@ static inline int dwc2_hsotg_set_test_mo
  					   int testmode)
  { return 0; }
  #define dwc2_is_device_connected(hsotg) (0)

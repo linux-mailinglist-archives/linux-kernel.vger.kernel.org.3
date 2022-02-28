@@ -2,174 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD974C7C43
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 546744C7C46
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiB1Vmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S231138AbiB1Vm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiB1Vmb (ORCPT
+        with ESMTP id S229913AbiB1Vm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:42:31 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348214CC80
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:41:51 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 139so12714506pge.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:41:51 -0800 (PST)
+        Mon, 28 Feb 2022 16:42:58 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E4914CC8A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:42:18 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id c18so16334465ioc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SDEQwyNhO1YP2PlPCVZv2QT+trnELH3tuuISdUJhH/A=;
-        b=d9xMn/X4LpBqF7CCmU2zh6/QLyVNBTRuNZU+e7jV9ejFO0/bkIPnXV0yhaKjw6dJm8
-         FJS3J2mi6lbO85oN/dNF+rqWxtAJUijNlNeALlXJL+eaCxB0tcq950US1kKVvr8mqukF
-         e0ToSOH4Si3JfzpFzCogjXNl1DMde6d8MLn9SuHccOTRwzid1E81/cSQ/4tTUtiOrMCh
-         9TojhlCRrVYJxHlgtGOmRoGhypN9RiWcKC8aFAkMrBK4RGw8XoilLoTMd70dGA9hdZYh
-         n+kv4MVL49Db4WfNBmaeThQEFLAURei7cyQEoj8G+S/4PT3zkCcTFjR/aTe5mw8oJWud
-         4tvQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=psCBzbXEDf6T/SWoNq2L8Jn+X5RxvEcj72+FIH1380E=;
+        b=FRVQPlvlgtb9ftOph2cuTty7puYPGKS3oBL3GLLjUNdnRw5ZD1P52NGE5E3Vwaokam
+         /6PEaakHj1sqi1yh4tHdHwQyt2Vjk+hUXK+OdFFUW5XFHQ6Cuk8PL1wiE9pl2N/qF3Hl
+         t6AQ/Ps5D/GUaRIJPIYeuHK8c0+xIzZzN7qSU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SDEQwyNhO1YP2PlPCVZv2QT+trnELH3tuuISdUJhH/A=;
-        b=Hhwy/3i4l51pFXpxUfevhV6PEVp0+C0xE1T6c5pMY+rqnQ4kx7vYgeDiyUAXDNpaT5
-         tT1ChnWb15aUO6OnNa3Ak+r1XnAmNUCLehfTsvCYJk75/jgkuPGIUqBJwSns6cyhtqWI
-         v9IK/FU+xt5SxKB5j2hftMh4Dt/F2UDyHR2H2BD47X8joYrHqoC54F2EGPuXTe+v+khv
-         M8HyPBabWUu1XTo/OwzmJEWqCiD4CRrZEmI4iVeUEsNiLkH/A//Eht0LaTmQToM54+Nf
-         YY0TnCx7JOvOa61nm8MZud0JJ0QxUtm3VhFPkGEXAu9yViTXSoGP9+l80zvwm3oe+7Bu
-         44XA==
-X-Gm-Message-State: AOAM530G8sCQVTV/kxL10Rwj5hqyFA5kiu1UmYxV1gnvq51M9rTbVjgv
-        SS/TqsGQenw/MDZ3iLlJpSt0sQ==
-X-Google-Smtp-Source: ABdhPJysQYIb7FAhRgqLT3HifNDIOw9MY3JP0SvCbCIF1CiA1nyX5JMrxTKRUKNjLMnj4tBxx48g9A==
-X-Received: by 2002:a05:6a00:26e0:b0:4e1:7131:de2b with SMTP id p32-20020a056a0026e000b004e17131de2bmr23819114pfw.20.1646084510471;
-        Mon, 28 Feb 2022 13:41:50 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:777f:ae46:e31e:b07e])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a0b9700b001b8f602eaeasm259006pjr.53.2022.02.28.13.41.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 13:41:50 -0800 (PST)
-Date:   Mon, 28 Feb 2022 13:41:45 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, linux-kbuild@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-Message-ID: <20220228214145.o37bgp3zl3rxpeo4@google.com>
-References: <20220228103142.3301082-1-arnd@kernel.org>
- <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=psCBzbXEDf6T/SWoNq2L8Jn+X5RxvEcj72+FIH1380E=;
+        b=ZsvOv52ceL2e3ZpfF0ObUa8/OkZO501yrOgShf7ogEGzeWHUqGUFWAea6bF5fFjjcx
+         Xyo9qn7SiuG2ZXrYIueyyjp4gXd8bgmiPSuTqaMzcW3TBGoLeIi/3k6VYlOALHceFRWA
+         R2fuDncq4LdTKujUtyzByzIxF0sgefioVOSwlFivuoCAImKfe+7ooUnTH7hpmso8oBVr
+         O3FSoZtYHqqI9t2koZyDAMGcwGgBH33ookQJcrcn76zVvWfh/6M3NQNNxKG8VcrgTpu6
+         m5jH7UvCbQb0Fosk8StxUM8jcurBQQYsCNrbA0kYCet9cWWP0SStvzvJPoj5z8AUjK5J
+         T2LQ==
+X-Gm-Message-State: AOAM533RVYxqParVA37d/TJyfBzWaZGruesJpg3uxXE0Crm7jihw6wiy
+        qUd7P6M/1zXhnFAdnTWAcUlKMw==
+X-Google-Smtp-Source: ABdhPJyyuwpkhfFWxu/CuqzOs5vGs/IW6q7D8yAK8Yzox+34UhF2GsOq/rjmkiLlcffT1Dfc0JJ7bg==
+X-Received: by 2002:a02:aca:0:b0:314:9da8:7be0 with SMTP id 193-20020a020aca000000b003149da87be0mr19029259jaw.280.1646084538129;
+        Mon, 28 Feb 2022 13:42:18 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id t15-20020a92dc0f000000b002c2258e154fsm6694109iln.1.2022.02.28.13.42.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 13:42:17 -0800 (PST)
+Subject: Re: [PATCH 5.4 00/53] 5.4.182-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e435f20b-e2f6-0645-725b-afd1e4e00224@linuxfoundation.org>
+Date:   Mon, 28 Feb 2022 14:42:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the patch!
+On 2/28/22 10:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.182 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.182-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-(Was always wondering which of binutils and kernel would migrate to C99+
-earlier... binutils won)
+Compiled and booted on my test system. No dmesg regressions.
 
-On 2022-02-28, Nick Desaulniers wrote:
->On Mon, Feb 28, 2022 at 2:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> During a patch discussion, Linus brought up the option of changing
->> the C standard version from gnu89 to gnu99, which allows using variable
->> declaration inside of a for() loop. While the C99, C11 and later standards
->> introduce many other features, most of these are already available in
->> gnu89 as GNU extensions as well.
->>
->> An earlier attempt to do this when gcc-5 started defaulting to
->> -std=gnu11 failed because at the time that caused warnings about
->> designated initializers with older compilers. Now that gcc-5.1 is the
->> minimum compiler version used for building kernels, that is no longer a
->> concern. Similarly, the behavior of 'inline' functions changes between
->
->More precisely, the semantics of "extern inline" functions changed
->between ISO C90 and ISO C99.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Perhaps a clearer explanation to readers is: "extern inline" and "inline" swap
-semantics with gnu_inline (-fgnu89-inline or __attribute__((__gnu_inline__))).
-
->That's the only concern I have, which I doubt is an issue. The kernel
->is already covered by the function attribute as you note.
->
->Just to have some measure:
->$ git grep -rn "extern inline" | wc -l
->116
-
-"^inline" behaves like C99+ "extern inline"
-
-Agree this is handled by
-
-     #define inline inline __gnu_inline __inline_maybe_unused notrace
-
->Most of those are in arch/alpha/ which is curious; I wonder if those
->were intentional.
->
->(I do worry about Makefiles that completely reset KBUILD_CFLAGS
->though; the function attributes still take precedence).
->
->> gnu89 and gnu11, but this was taken care of by defining 'inline' to
->> include __attribute__((gnu_inline)) in order to allow building with
->> clang a while ago.
->>
->> One minor issue that remains is an added gcc warning for shifts of
->> negative integers when building with -Werror, which happens with the
->> 'make W=1' option, as well as for three drivers in the kernel that always
->> enable -Werror, but it was only observed with the i915 driver so far.
->> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
->> in a Makefile.
->>
->> Nathan Chancellor reported an additional -Wdeclaration-after-statement
->> warning that appears in a system header on arm, this still needs a
->> workaround.
->
->Ack; I think we can just fix this in clang.
->
->>
->> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
->> minimal and mainly impact warnings at the -Wpedantic level that the
->> kernel never enables. Between these, gnu11 is the newest version
->> that is supported by all supported compiler versions, though it is
->> only the default on gcc-5, while all other supported versions of
->> gcc or clang default to gnu1x/gnu17.
->
->I agree. With the fixup to s/Werror/Wextra.
->
->Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
->>
->> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
->> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Cc: linux-kbuild@vger.kernel.org
->> Cc: llvm@lists.linux.dev
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
->-- 
->Thanks,
->~Nick Desaulniers
->
+thanks,
+-- Shuah

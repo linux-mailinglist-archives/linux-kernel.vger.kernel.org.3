@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AD74C73F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B8F4C728F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiB1Rjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S234335AbiB1R1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238453AbiB1Rhx (ORCPT
+        with ESMTP id S233869AbiB1R0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:37:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463202A26F;
-        Mon, 28 Feb 2022 09:32:36 -0800 (PST)
+        Mon, 28 Feb 2022 12:26:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F89685942;
+        Mon, 28 Feb 2022 09:26:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 105D56135F;
-        Mon, 28 Feb 2022 17:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FCC1C340E7;
-        Mon, 28 Feb 2022 17:32:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B690FB815C6;
+        Mon, 28 Feb 2022 17:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10DBEC36AF5;
+        Mon, 28 Feb 2022 17:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069555;
-        bh=hB1FCymVo+iKu6qvqLsvVFV56s88lMs8Vo0RdBY0W/M=;
+        s=korg; t=1646069160;
+        bh=2ssf9prs06l3gtTDvKaqz2wr49VTxv2DHOaap4K54nU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g7X5rHOK255RLPKh1Llv2JZqSrDmEpMUN5GgwTzHOnyiKjwLIiU7JlXbvArXzB9qd
-         XUwBVXgUOZTbhkyRd9gNUOpP+hWfho7TFkoVyJUyPegxwKUxSq5cr6H3NMFp6cqiQe
-         LuK6zi5DdCDAcY/CXmgeE1DD2ypu4I/TRygo1Gl8=
+        b=EdRpOi5AwwnN0A4j1rrg7zpWBJDF8x8/vHU/iTXIF2RpO9QubUp3Awf7zIvcOx9jq
+         wr8VGCe1A6jABRaZ5/lSu7x1wc3Onj0HwSnpj8wKALemalcK881SShlnQe1B1EyvXb
+         GG8P1S5r5dkysyK6jMja14WGQK1FcEW1LSkjVh/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.10 01/80] cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug
+        stable@vger.kernel.org,
+        syzbot+831661966588c802aae9@syzkaller.appspotmail.com,
+        Bart Van Assche <bvanassche@acm.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 15/29] RDMA/ib_srp: Fix a deadlock
 Date:   Mon, 28 Feb 2022 18:23:42 +0100
-Message-Id: <20220228172311.956462417@linuxfoundation.org>
+Message-Id: <20220228172143.382581693@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,59 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Qiao <zhangqiao22@huawei.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-commit 05c7b7a92cc87ff8d7fde189d0fade250697573c upstream.
+[ Upstream commit 081bdc9fe05bb23248f5effb6f811da3da4b8252 ]
 
-As previously discussed(https://lkml.org/lkml/2022/1/20/51),
-cpuset_attach() is affected with similar cpu hotplug race,
-as follow scenario:
+Remove the flush_workqueue(system_long_wq) call since flushing
+system_long_wq is deadlock-prone and since that call is redundant with a
+preceding cancel_work_sync()
 
-     cpuset_attach()				cpu hotplug
-    ---------------------------            ----------------------
-    down_write(cpuset_rwsem)
-    guarantee_online_cpus() // (load cpus_attach)
-					sched_cpu_deactivate
-					  set_cpu_active()
-					  // will change cpu_active_mask
-    set_cpus_allowed_ptr(cpus_attach)
-      __set_cpus_allowed_ptr_locked()
-       // (if the intersection of cpus_attach and
-         cpu_active_mask is empty, will return -EINVAL)
-    up_write(cpuset_rwsem)
-
-To avoid races such as described above, protect cpuset_attach() call
-with cpu_hotplug_lock.
-
-Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
-Cc: stable@vger.kernel.org # v2.6.32+
-Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
-Acked-by: Waiman Long <longman@redhat.com>
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220215210511.28303-3-bvanassche@acm.org
+Fixes: ef6c49d87c34 ("IB/srp: Eliminate state SRP_TARGET_DEAD")
+Reported-by: syzbot+831661966588c802aae9@syzkaller.appspotmail.com
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cpuset.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/infiniband/ulp/srp/ib_srp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -2212,6 +2212,7 @@ static void cpuset_attach(struct cgroup_
- 	cgroup_taskset_first(tset, &css);
- 	cs = css_cs(css);
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index af68be201c299..67b993f4ec91a 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -3646,9 +3646,11 @@ static void srp_remove_one(struct ib_device *device, void *client_data)
+ 		spin_unlock(&host->target_lock);
  
-+	cpus_read_lock();
- 	percpu_down_write(&cpuset_rwsem);
+ 		/*
+-		 * Wait for tl_err and target port removal tasks.
++		 * srp_queue_remove_work() queues a call to
++		 * srp_remove_target(). The latter function cancels
++		 * target->tl_err_work so waiting for the remove works to
++		 * finish is sufficient.
+ 		 */
+-		flush_workqueue(system_long_wq);
+ 		flush_workqueue(srp_remove_wq);
  
- 	/* prepare for attach */
-@@ -2267,6 +2268,7 @@ static void cpuset_attach(struct cgroup_
- 		wake_up(&cpuset_attach_wq);
- 
- 	percpu_up_write(&cpuset_rwsem);
-+	cpus_read_unlock();
- }
- 
- /* The various types of files and directories in a cpuset file system */
+ 		kfree(host);
+-- 
+2.34.1
+
 
 

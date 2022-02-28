@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1695E4C7601
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7647C4C773A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239733AbiB1R6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S240155AbiB1SNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240672AbiB1Rya (ORCPT
+        with ESMTP id S240847AbiB1SJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB38255BF;
-        Mon, 28 Feb 2022 09:42:42 -0800 (PST)
+        Mon, 28 Feb 2022 13:09:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F475FF09;
+        Mon, 28 Feb 2022 09:49:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3BCDFCE17D2;
-        Mon, 28 Feb 2022 17:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAA6C340E7;
-        Mon, 28 Feb 2022 17:42:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CA5360BBB;
+        Mon, 28 Feb 2022 17:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30A1C340E7;
+        Mon, 28 Feb 2022 17:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070159;
-        bh=V6newwJbWXuT//dCdjfZeDJPjFDcTXvCBqBZ7lsONFE=;
+        s=korg; t=1646070522;
+        bh=Q8JC4OcwLGjsXfqJrcQWbcSisgO3H+o0nNhmi2ygFr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1B9Qe/J0NiWXx6HbMW9l5KvSZtjH0NkkdJ87li8xVQLNPa+c/qKX6Z6kx4dPVIgs1
-         zODWR2wP7d+X/RwmJudrAe/T6X4ReZI8X/LyE6nvuz3zW+zMgmc1Oexo534zcv7ozY
-         zSYMqgwqyn/qdXpTknOa2/iIjiRLwQ6RTtDHpcTY=
+        b=z45BKJePhzkIoKV6aYtLh2aYTeKhBPPx8cZhxis73YJ0BjaFmoc/1p0F8g+GcwqfQ
+         tu30+BX5VjwSTeDCoV8r2M97IzlfWadzAeHGeKMRPxRkBGnx9wzJ1y5rbD2rZluczH
+         A25EF8GwJgO75uDprJK1cp+TcRHN9DLBhaN/8q2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 126/139] riscv: fix nommu_k210_sdcard_defconfig
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 138/164] btrfs: defrag: dont try to merge regular extents with preallocated extents
 Date:   Mon, 28 Feb 2022 18:25:00 +0100
-Message-Id: <20220228172400.913599597@linuxfoundation.org>
+Message-Id: <20220228172412.488282193@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +54,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Qu Wenruo <wqu@suse.com>
 
-commit 762e52f79c95ea20a7229674ffd13b94d7d8959c upstream.
+commit 7093f15291e95f16dfb5a93307eda3272bfe1108 upstream.
 
-Instead of an arbitrary delay, use the "rootwait" kernel option to wait
-for the mmc root device to be ready.
+[BUG]
+With older kernels (before v5.16), btrfs will defrag preallocated extents.
+While with newer kernels (v5.16 and newer) btrfs will not defrag
+preallocated extents, but it will defrag the extent just before the
+preallocated extent, even it's just a single sector.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Fixes: 7e09fd3994c5 ("riscv: Add Canaan Kendryte K210 SD card defconfig")
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+This can be exposed by the following small script:
+
+	mkfs.btrfs -f $dev > /dev/null
+
+	mount $dev $mnt
+	xfs_io -f -c "pwrite 0 4k" -c sync -c "falloc 4k 16K" $mnt/file
+	xfs_io -c "fiemap -v" $mnt/file
+	btrfs fi defrag $mnt/file
+	sync
+	xfs_io -c "fiemap -v" $mnt/file
+
+The output looks like this on older kernels:
+
+/mnt/btrfs/file:
+ EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+   0: [0..7]:          26624..26631         8   0x0
+   1: [8..39]:         26632..26663        32 0x801
+/mnt/btrfs/file:
+ EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+   0: [0..39]:         26664..26703        40   0x1
+
+Which defrags the single sector along with the preallocated extent, and
+replace them with an regular extent into a new location (caused by data
+COW).
+This wastes most of the data IO just for the preallocated range.
+
+On the other hand, v5.16 is slightly better:
+
+/mnt/btrfs/file:
+ EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+   0: [0..7]:          26624..26631         8   0x0
+   1: [8..39]:         26632..26663        32 0x801
+/mnt/btrfs/file:
+ EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+   0: [0..7]:          26664..26671         8   0x0
+   1: [8..39]:         26632..26663        32 0x801
+
+The preallocated range is not defragged, but the sector before it still
+gets defragged, which has no need for it.
+
+[CAUSE]
+One of the function reused by the old and new behavior is
+defrag_check_next_extent(), it will determine if we should defrag
+current extent by checking the next one.
+
+It only checks if the next extent is a hole or inlined, but it doesn't
+check if it's preallocated.
+
+On the other hand, out of the function, both old and new kernel will
+reject preallocated extents.
+
+Such inconsistent behavior causes above behavior.
+
+[FIX]
+- Also check if next extent is preallocated
+  If so, don't defrag current extent.
+
+- Add comments for each branch why we reject the extent
+
+This will reduce the IO caused by defrag ioctl and autodefrag.
+
+CC: stable@vger.kernel.org # 5.16
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/configs/nommu_k210_sdcard_defconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/ioctl.c |   17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
---- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
-+++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-@@ -23,7 +23,7 @@ CONFIG_SLOB=y
- CONFIG_SOC_CANAAN=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=2
--CONFIG_CMDLINE="earlycon console=ttySIF0 rootdelay=2 root=/dev/mmcblk0p1 ro"
-+CONFIG_CMDLINE="earlycon console=ttySIF0 root=/dev/mmcblk0p1 rootwait ro"
- CONFIG_CMDLINE_FORCE=y
- # CONFIG_SECCOMP is not set
- # CONFIG_STACKPROTECTOR is not set
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -1024,19 +1024,24 @@ static bool defrag_check_next_extent(str
+ 				     bool locked)
+ {
+ 	struct extent_map *next;
+-	bool ret = true;
++	bool ret = false;
+ 
+ 	/* this is the last extent */
+ 	if (em->start + em->len >= i_size_read(inode))
+ 		return false;
+ 
+ 	next = defrag_lookup_extent(inode, em->start + em->len, locked);
++	/* No more em or hole */
+ 	if (!next || next->block_start >= EXTENT_MAP_LAST_BYTE)
+-		ret = false;
+-	else if ((em->block_start + em->block_len == next->block_start) &&
+-		 (em->block_len > SZ_128K && next->block_len > SZ_128K))
+-		ret = false;
+-
++		goto out;
++	if (test_bit(EXTENT_FLAG_PREALLOC, &next->flags))
++		goto out;
++	/* Physically adjacent and large enough */
++	if ((em->block_start + em->block_len == next->block_start) &&
++	    (em->block_len > SZ_128K && next->block_len > SZ_128K))
++		goto out;
++	ret = true;
++out:
+ 	free_extent_map(next);
+ 	return ret;
+ }
 
 

@@ -2,205 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0D64C6106
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6564C610C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiB1CRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 21:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S232525AbiB1CSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 21:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiB1CRn (ORCPT
+        with ESMTP id S231483AbiB1CSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:17:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE1636C920
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 18:16:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646014562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CNnWgfiQ5Q6Qh97dwmTTW8CSwF1BaMsz3d9uB0mZlfU=;
-        b=FfRshwVbt20L4NftCSMKH6sWyHlDjBMVUwIo4GuLMnWZWvDwq9qsD3U+yk2NqU5F6f1s2E
-        0jDnxR0RKkMq0SLicHqBwylgyNs2RqKl/tZIbQeBVlz+VS/9m1KdPMVG+vAOqcnFAV+vjp
-        ZkELG5PjSPqzJYmEZiyvK8m5x1cL5YE=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-220-o_DX-D_PM0KSqnwzYFTwsQ-1; Sun, 27 Feb 2022 21:16:01 -0500
-X-MC-Unique: o_DX-D_PM0KSqnwzYFTwsQ-1
-Received: by mail-lj1-f198.google.com with SMTP id o1-20020a2eb301000000b0024640251ba9so4950824lja.12
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 18:16:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CNnWgfiQ5Q6Qh97dwmTTW8CSwF1BaMsz3d9uB0mZlfU=;
-        b=7FGLUnn6sib/IlLnuDtaFf4hvjIB3Z92PGZrFgF2LxCau945o2UBIC3xo+OfPV+Emv
-         dXnVOb4oiv24P5YFTVQrxfKySzogVoCIxHDxe+nR1/XRRD0NC7tR8Ke9eapiuj+tmZ0Q
-         liPSr1xOTxTWQGSpJ0uOpqxG5CD4R+OtZBf8/dqCMSmEPlr1UpPI5lsoTTs8o/5Yw6CD
-         gSUivau0UEeX+0YTH2Jl0ncJckjbJouh/6mkhR7KFhpp/QE4IpXZx5j+4XVqBmtbsS7F
-         R00kBCqrMUY+LorztBqAdhXlUOPVZZBWLWJjM0egps6KV3I31rZxTuNJwrQNcktVLpeP
-         XWNg==
-X-Gm-Message-State: AOAM530Ef9+134dsddBKUEO4vvrx/uvOTNi/wc3Z8zu5MmjdgAvanGSp
-        cJWNowlJWh66Y8z4ABAcy1+nOqRKugH1Qlq7cAby0I1/j31MNqjbkLgDCOVRsSXZjt8zgzwXVxJ
-        MdTnhj9hdkQ7MWuQzS5lk1mWs3+QjM8qNuDB6kdnr
-X-Received: by 2002:a05:651c:b12:b0:246:74cb:4a4 with SMTP id b18-20020a05651c0b1200b0024674cb04a4mr9044578ljr.492.1646014558588;
-        Sun, 27 Feb 2022 18:15:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz2IUEdlig5Qxrnulga+hl3unA9Ll/9S9C/ZsbSGHeENvGx+vqIAwaZpk161mttnlyBOJreuBl3ckcaf9f4JsU=
-X-Received: by 2002:a05:651c:b12:b0:246:74cb:4a4 with SMTP id
- b18-20020a05651c0b1200b0024674cb04a4mr9044559ljr.492.1646014558307; Sun, 27
- Feb 2022 18:15:58 -0800 (PST)
+        Sun, 27 Feb 2022 21:18:54 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2090.outbound.protection.outlook.com [40.107.114.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16D24ECF5;
+        Sun, 27 Feb 2022 18:18:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RBTS+rTSjpeOLKDDaQaxWNhVKLBJyf4LSJFZUb6NmLV0u7jHsjZR8Xzu5Zd3GwAf7HIIzqHAAvoTYEjkPBntw8Y27oLS5OH2ITRxGNvkIYKR0myG+0KjMLLiUch0oHPeBCYGN1xZvGSDyhoqHalWi9f8x6E2GcFathh4F85RI3RyBJ7xQYhADJni/ZT0hLa2kIM2SMaI7YC6SuGZ1EU4k2AVJZkl2V674e0epBgJkVBQExLac1dB2Lusr98U+iixt0L5kgJe8Pvr13okgiTGk2lCwLn5KfPrLgUuNa5UG7xiRlxwG2LX7YHVh1lJO4hELqMoRm3FP1iTfEDtj5XSHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3zaT2TNPuA1Bq2I09huwrD/E6uphbpT3EYPL6/eXerQ=;
+ b=bypM2i5piaU9E27uCsHSAfCPtGC0C8tvhyrOtlGTyouWYTyW4OYbeo3Y0VsqQPLpImA85JTIsoaJrKt/XPBm+RBJKQrp6osnq7xnSb1GgyJgrPCAjOmY8NCK5XqlL+KDMecJVYsYC5RCRL8S0p+rcUzprm6pIpyneLjNi6/WsT8PfmIBXjrTIg+j40qwZmqFxWJ2qVAPmndBP6OsE9bhyn2LuJdUpUrtda9/+nm4PoAoW0wzgXV5PaPJwCSMcvFzg8rX81z6T6wVm0k9JzI8EjulWcOgqTbEvM5IDS7CxMsx/YhpymPCbruG7tORNFIY7JNtWh8/WN8N5E13EUNlEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3zaT2TNPuA1Bq2I09huwrD/E6uphbpT3EYPL6/eXerQ=;
+ b=n+1nJWFC5xx2QNm+0Vf4BO+fG2Lh/HGWkj9pQh2E9At3yVU/CHThDu0A3HZEGisgKMTCkdi/7tWayiBZtwK5DaLhM22ET7eHfpNzPyb6iyaaeKzolasSsrr4DineK4zyNEfbVBGE97j8+Hm0Kl8btdUuCnHE8ovoowMrypU+h9U=
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ (2603:1096:404:8028::13) by OSAPR01MB3665.jpnprd01.prod.outlook.com
+ (2603:1096:604:58::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
+ 2022 02:18:13 +0000
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::458:e316:da3:511a]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::458:e316:da3:511a%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
+ 02:18:13 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
+Subject: RE: [PATCH] dt-bindings: phy: renesas,usb2-phy: Document RZ/V2L phy
+ bindings
+Thread-Topic: [PATCH] dt-bindings: phy: renesas,usb2-phy: Document RZ/V2L phy
+ bindings
+Thread-Index: AQHYLC7weD4cm/YgSEuBSWb5ZIEx3KyoOLzw
+Date:   Mon, 28 Feb 2022 02:18:13 +0000
+Message-ID: <TYBPR01MB5341A5DC3BBB4AA59668AF87D8019@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+References: <20220227230817.31094-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227230817.31094-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 44a4715c-0a33-4213-b5ac-08d9fa6092db
+x-ms-traffictypediagnostic: OSAPR01MB3665:EE_
+x-microsoft-antispam-prvs: <OSAPR01MB3665022A29999D6E4BBE73A1D8019@OSAPR01MB3665.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /7DwOM0IAWxoMFd48NLIb0ftui2ts/aKaRBQr/lbeZXPoK+EhHHeoCHEQxO6F7XE1Oux9z0j9GUdqGhK0yrZ7APD3VvM8aocgOjtsZICQFYrAEriEHncCB70kGcBissdN9C6xRyJ34H8ofj2rlvGuYAgu6rNuojAcloA4oSQjzDRYkyLyNMKZgTWSKwmIIQTpe7F9aUU08HZzt+2nmdYoC6EPMz3bnJcbd0uQzP17gALUJBKEel2MouZsjziIaBi/GjWY4gYgZOn6uagWCqzXD2ZGYNVNtyDb+P26stjtJtPPjBzmPHKkaBY/4smtvzG25xCtNdr2nNw5g3RkPO9U8uUxjZ3QRjpfkTcwhxFz62r5KM/JQEPR/MeOrvByspVi4/Ah4TWUUWWOLTNTj0euZX66Nv1gwdxqr029lq72Oy1cyT4KX1IJ5crWlN43l4kYay95YNTyDfpKibOn2bFD1lL7OhNm9P8SuzPbMMtwZsNJr31Wvv2GDKhAviHKHlfk3HrptubmPG3zhyB7cNQNjoMyf860TgLTej0vf2ysFmjuFJX51BynQGXcfs5z7kX1sb1M2Ldf2IKABo/3oKWuqYf8PsYybT/AzxJetSgHAO7z7WlR9uI5DZ5mWS+73kgTWevPaOVfj2M9QLbo/OLGOHPaY0WoDUHgOCxVLhw01ABY0rQGpg5frdFAjGz7t8j0Eysp45dOOUqygd4uVHWvw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(54906003)(4326008)(86362001)(8676002)(33656002)(8936002)(9686003)(5660300002)(64756008)(38070700005)(66446008)(6506007)(110136005)(66946007)(76116006)(66476007)(71200400001)(52536014)(66556008)(186003)(316002)(122000001)(508600001)(38100700002)(55016003)(2906002)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b237XwRiYkYX6t1sW6aBqqNO1Hz3DvuAwArn9gR+Un6qpFtdseLsaaAa5uKy?=
+ =?us-ascii?Q?wO/y/b5r5DIKVv5M818XtK0KZqJFrAoVU+jafbM9Xyp9mXq+zvWt4ML+hA/N?=
+ =?us-ascii?Q?MMHwxP/DRuKKokN4DWinEs3NmoGW1a4UYfRK7HDkw7493SjcfRCdlnx4d/RF?=
+ =?us-ascii?Q?JKaimNr9vqP5kYoZOuD0LeSYbUReYqSx0e4EQdEkAKZzYklUEfZm9ACWQI7D?=
+ =?us-ascii?Q?FWFDahBc1p7yBCZvWAz6Ik5elIKdKWkbKCxyp14z85zD0BqYhVcRVgeecFpY?=
+ =?us-ascii?Q?OLoRYQgSHc8TqieWe11X/zOwynB54rJzS8K6OLITpOxfpptcK1lgoOpfIDya?=
+ =?us-ascii?Q?fkDPU/esMZhzKCaWLEhEje4JRI80FiQqaBAb7Ge0omFQH0FgfM4TVqUMrhGE?=
+ =?us-ascii?Q?RCL7623WLYVSNMihou/daPtKKM6emQj6kwiR4lZH13Z3Fps3qBp8Jo6hJcHw?=
+ =?us-ascii?Q?J2wGPx2UWm4LBrxPp7GyFkszOG81wzFZSooAXN/BVWqv+27bBynb23rS8Y4K?=
+ =?us-ascii?Q?HeZ4nYxQmKps+XIEQ92GPv9E/2QTeqSKZPytieywMyDdKYDAEYbnN4pTJBMW?=
+ =?us-ascii?Q?DeD2P8lOD9ln4SW384tmce0KSRotW1Hk0eprQ45tr8HsRxaRkc+3MrLgjtNT?=
+ =?us-ascii?Q?4iwMKZxgjitMEJ3U/1jjPjdVFev4Hnww9wWKNMijWvxJx8qoJgGXTVIS4JRW?=
+ =?us-ascii?Q?7a3D30pqiFmjHSBxK9vsCEVapprJyckXeWg5PeW2cofJz0F6yXxjnAS2MAHn?=
+ =?us-ascii?Q?lsOm7OcvJRyXJVAibE/ww1EA0PkSikXw+7ro55mSyciS5UaXGVR+51qBBDUw?=
+ =?us-ascii?Q?4LfmVRrG5wLgU0tEsDQBTwETyQk1EC2inLeVf6dVS8heLSqggRckrdDOUTps?=
+ =?us-ascii?Q?6/FyPbPWOkBVhfZsHhOk/xwuT/aEiWms9L89Q6uWkSuG1ZfW20kbfd2nJS1J?=
+ =?us-ascii?Q?w0j6f8hzL1jfHD646sNV8qzaR58fdpKjNYpehlfAjttDhc2Oy1u5er0NXNDe?=
+ =?us-ascii?Q?CADAV5lhHFTiMO/Eme3gw/FQGF9RoTjQXBqobQZukzFQFbbanAc5tScq06Xk?=
+ =?us-ascii?Q?llOKoIFnWJMxudpnvdrYZiBaVh/BXZRiTyzTt/J7oxV47gW7pHvggqQyECnP?=
+ =?us-ascii?Q?txymj8zzwivvF6cjeI1Om8CJRnKubzVmejeKW+g14dg3CKU32zSlN1ewCzgZ?=
+ =?us-ascii?Q?u5TLCX1291ad1ig4YCJ7h5xN9ug2WJgDebKQLwdSvZNPko4dEW/2I3QdtFG8?=
+ =?us-ascii?Q?n+Zmkv84RziLb/J3aEUyC8hKHBUOZCsOS67PjRCbJ4YCnURcdS9vOyh1Kl0l?=
+ =?us-ascii?Q?U+hMIaWBwHT37Cj5062JtVnOWGvo42kwdOU+XlCwG/WCbN5hoC9XudG8LAnj?=
+ =?us-ascii?Q?y5DMcx/kkAMGC2yn30zpmSchWkpgHlar6ri5iCljw55zO/DVzbCw5b6/7c4w?=
+ =?us-ascii?Q?JHADGpg90547nmNAsl5ux0TBbHmgKYGXYinBLRVhIloSNEROrdf+QJYRJ9hR?=
+ =?us-ascii?Q?Tax/x4NFrNGZd2SVRrOf3uGJ/exaGpKMRuDQxRAFx0TlwPCrwv/03rlnK+Xf?=
+ =?us-ascii?Q?mJk/WiPwqbwrKPYiN68A2MX9ku5I22FlGsd5DKIorditX7DCh315tGmMjKS7?=
+ =?us-ascii?Q?NIWwxZyURJFjHmiDdgE/DfKKA0ely7FjxE7DoDwIqPgDjQupTGbQgftyCWbA?=
+ =?us-ascii?Q?P7Vj+WqxxVJw8d7deGYS66Kj7GtU6/1dF2mFRxuUADtGkFqVP96k8V9hGd4g?=
+ =?us-ascii?Q?lg4xjtJhTzyddfrhl/D2VTsDJXeDe5Jp7ydURCOn6a3OP7iwdTkz?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220224103852.311369-1-baymaxhuang@gmail.com> <20220225090223.636877-1-baymaxhuang@gmail.com>
-In-Reply-To: <20220225090223.636877-1-baymaxhuang@gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 28 Feb 2022 10:15:47 +0800
-Message-ID: <CACGkMEvRxb02LgF9Tq9ypnAmfBmrw1iG1W8pB5hqNs3DROxmvw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] tun: support NAPI for packets received from
- batched XDP buffs
-To:     Harold Huang <baymaxhuang@gmail.com>
-Cc:     netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44a4715c-0a33-4213-b5ac-08d9fa6092db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 02:18:13.6844
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0jUm1VTmLjddmn8058bbkrt0oZKXPUjLRjM+eCMxZcQOjbODvKIUHIyrrs+Fr9NyN9BU77MvYvGy//MfpScAXRdsMWqAs3D6UDc44GWMYUjRa9/jLl5tgo96MuKymlQj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3665
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 5:03 PM Harold Huang <baymaxhuang@gmail.com> wrote:
->
-> In tun, NAPI is supported and we can also use NAPI in the path of
-> batched XDP buffs to accelerate packet processing. What is more, after
-> we use NAPI, GRO is also supported. The iperf shows that the throughput of
-> single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
-> Gbps nearly reachs the line speed of the phy nic and there is still about
-> 15% idle cpu core remaining on the vhost thread.
->
-> Test topology:
->
-> [iperf server]<--->tap<--->dpdk testpmd<--->phy nic<--->[iperf client]
->
-> Iperf stream:
->
-> Before:
-> ...
-> [  5]   5.00-6.00   sec   558 MBytes  4.68 Gbits/sec    0   1.50 MBytes
-> [  5]   6.00-7.00   sec   556 MBytes  4.67 Gbits/sec    1   1.35 MBytes
-> [  5]   7.00-8.00   sec   556 MBytes  4.67 Gbits/sec    2   1.18 MBytes
-> [  5]   8.00-9.00   sec   559 MBytes  4.69 Gbits/sec    0   1.48 MBytes
-> [  5]   9.00-10.00  sec   556 MBytes  4.67 Gbits/sec    1   1.33 MBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.00  sec  5.39 GBytes  4.63 Gbits/sec   72          sender
-> [  5]   0.00-10.04  sec  5.39 GBytes  4.61 Gbits/sec               receiver
->
-> After:
-> ...
-> [  5]   5.00-6.00   sec  1.07 GBytes  9.19 Gbits/sec    0   1.55 MBytes
-> [  5]   6.00-7.00   sec  1.08 GBytes  9.30 Gbits/sec    0   1.63 MBytes
-> [  5]   7.00-8.00   sec  1.08 GBytes  9.25 Gbits/sec    0   1.72 MBytes
-> [  5]   8.00-9.00   sec  1.08 GBytes  9.25 Gbits/sec   77   1.31 MBytes
-> [  5]   9.00-10.00  sec  1.08 GBytes  9.24 Gbits/sec    0   1.48 MBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.00  sec  10.8 GBytes  9.28 Gbits/sec  166          sender
-> [  5]   0.00-10.04  sec  10.8 GBytes  9.24 Gbits/sec               receiver
-> ....
->
-> Reported-at: https://lore.kernel.org/all/CACGkMEvTLG0Ayg+TtbN4q4pPW-ycgCCs3sC3-TF8cuRTf7Pp1A@mail.gmail.com
-> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+Hi Lad-san,
+
+Thank you for the patch!
+
+> From: Lad Prabhakar, Sent: Monday, February 28, 2022 8:08 AM
+>=20
+> Document USB phy bindings for RZ/V2L SoC. RZ/V2L USB phy is identical to
+> one found on the RZ/G2L SoC. No driver changes are required as generic
+> compatible string "renesas,rzg2l-usb2-phy" will be used as a fallback.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
-> v1 -> v2
->  - fix commit messages
->  - add queued flag to avoid void unnecessary napi suggested by Jason
->
->  drivers/net/tun.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index fed85447701a..c7d8b7c821d8 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -2379,7 +2379,7 @@ static void tun_put_page(struct tun_page *tpage)
->  }
->
->  static int tun_xdp_one(struct tun_struct *tun,
-> -                      struct tun_file *tfile,
-> +                      struct tun_file *tfile, int *queued,
->                        struct xdp_buff *xdp, int *flush,
->                        struct tun_page *tpage)
+>  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml
+> b/Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml
+> index 3a6e1165419c..4c475be413ef 100644
+> --- a/Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml
+> @@ -33,6 +33,7 @@ properties:
+>        - items:
+>            - enum:
+>                - renesas,usb2-phy-r9a07g044 # RZ/G2{L,LC}
+> +              - renesas,usb2-phy-r9a07g054 # RZ/V2L
+>            - const: renesas,rzg2l-usb2-phy  # RZ/G2L family
 
-Nit: how about simply returning the number of packets queued here?
+The "# RZ/G2L family" is not suitable now. I think removing
+the comment is better like "renesas,rcar-gen3-usb2-phy".
 
-Thanks
+I don't have the RZ/V2L- documentation. So, I cannot check
+whether the RZ/V2L is the same specification with RZ/G2{L,LC}.
+But I trust you. So, after the comment was removed,
 
->  {
-> @@ -2388,6 +2388,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->         struct virtio_net_hdr *gso = &hdr->gso;
->         struct bpf_prog *xdp_prog;
->         struct sk_buff *skb = NULL;
-> +       struct sk_buff_head *queue;
->         u32 rxhash = 0, act;
->         int buflen = hdr->buflen;
->         int err = 0;
-> @@ -2464,7 +2465,15 @@ static int tun_xdp_one(struct tun_struct *tun,
->             !tfile->detached)
->                 rxhash = __skb_get_hash_symmetric(skb);
->
-> -       netif_receive_skb(skb);
-> +       if (tfile->napi_enabled) {
-> +               queue = &tfile->sk.sk_write_queue;
-> +               spin_lock(&queue->lock);
-> +               __skb_queue_tail(queue, skb);
-> +               spin_unlock(&queue->lock);
-> +               (*queued)++;
-> +       } else {
-> +               netif_receive_skb(skb);
-> +       }
->
->         /* No need to disable preemption here since this function is
->          * always called with bh disabled
-> @@ -2492,7 +2501,7 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
->         if (ctl && (ctl->type == TUN_MSG_PTR)) {
->                 struct tun_page tpage;
->                 int n = ctl->num;
-> -               int flush = 0;
-> +               int flush = 0, queued = 0;
->
->                 memset(&tpage, 0, sizeof(tpage));
->
-> @@ -2501,12 +2510,15 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
->
->                 for (i = 0; i < n; i++) {
->                         xdp = &((struct xdp_buff *)ctl->ptr)[i];
-> -                       tun_xdp_one(tun, tfile, xdp, &flush, &tpage);
-> +                       tun_xdp_one(tun, tfile, &queued, xdp, &flush, &tpage);
->                 }
->
->                 if (flush)
->                         xdp_do_flush();
->
-> +               if (tfile->napi_enabled && queued > 0)
-> +                       napi_schedule(&tfile->napi);
-> +
->                 rcu_read_unlock();
->                 local_bh_enable();
->
+Acked-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+Best regards,
+Yoshihiro Shimoda
+
+>    reg:
 > --
-> 2.27.0
->
+> 2.17.1
 

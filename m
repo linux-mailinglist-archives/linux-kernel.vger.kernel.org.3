@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFF64C731C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DF94C72D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiB1RcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S234694AbiB1R3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:29:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbiB1Rap (ORCPT
+        with ESMTP id S236218AbiB1R1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:30:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3A77A84;
-        Mon, 28 Feb 2022 09:28:31 -0800 (PST)
+        Mon, 28 Feb 2022 12:27:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179998932A;
+        Mon, 28 Feb 2022 09:27:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97D56612FA;
-        Mon, 28 Feb 2022 17:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877F3C340E7;
-        Mon, 28 Feb 2022 17:28:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A040AB815A6;
+        Mon, 28 Feb 2022 17:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71C1C340F0;
+        Mon, 28 Feb 2022 17:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069310;
-        bh=+jFmiezy0bv2WUitnEyc7gsplQtvmGcXqvHe6GSCsE8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jzAhLgIjR6861Ax+Xen1JoRMIrmFGKb+AYGz54jw0xNRoxlMjgzGeo0/JsbjeevDa
-         T8JnOmHHDeeq1PhcCm67Kyyergv1FLgmpB8v1sbQ/dZPfWoMFwiwLqBsHNrqU2LwXc
-         G0Sl1bPZl2kd2D+PXPgdqeEQsEIF+NKYaOMwSSsU=
+        s=korg; t=1646069220;
+        bh=pkOCGlI0oawlvjr58pfeQHv4Iga9CO17MGI1+uxuUoM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dJW4Rk3s8lIf4nOjfSOKJyd30ZrnzsBJvsYYacuQem57+J7elMvKKnXwFzFrQrw7S
+         GYuedIuNTF0G2m4Vy+rqOtUlGj0zVOQGWoopbcFkpKw6MBc9O/IfgJmKMvijTCT6GJ
+         YbNpno/ZcUQzgfqLo0tv/DHfdLEmt5o/YFzH6UN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/31] 4.14.269-rc1 review
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Carel Si <beibei.si@intel.com>, Jann Horn <jannh@google.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Baokun Li <libaokun1@huawei.com>
+Subject: [PATCH 4.9 29/29] fget: clarify and improve __fget_files() implementation
 Date:   Mon, 28 Feb 2022 18:23:56 +0100
-Message-Id: <20220228172159.515152296@linuxfoundation.org>
+Message-Id: <20220228172144.557686370@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.269-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.269-rc1
-X-KernelTest-Deadline: 2022-03-02T17:22+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,160 +57,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.269 release.
-There are 31 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-Anything received after that time might be too late.
+commit e386dfc56f837da66d00a078e5314bc8382fab83 upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.269-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+Commit 054aa8d439b9 ("fget: check that the fd still exists after getting
+a ref to it") fixed a race with getting a reference to a file just as it
+was being closed.  It was a fairly minimal patch, and I didn't think
+re-checking the file pointer lookup would be a measurable overhead,
+since it was all right there and cached.
 
-thanks,
+But I was wrong, as pointed out by the kernel test robot.
 
-greg k-h
+The 'poll2' case of the will-it-scale.per_thread_ops benchmark regressed
+quite noticeably.  Admittedly it seems to be a very artificial test:
+doing "poll()" system calls on regular files in a very tight loop in
+multiple threads.
 
--------------
-Pseudo-Shortlog of commits:
+That means that basically all the time is spent just looking up file
+descriptors without ever doing anything useful with them (not that doing
+'poll()' on a regular file is useful to begin with).  And as a result it
+shows the extra "re-check fd" cost as a sore thumb.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.269-rc1
+Happily, the regression is fixable by just writing the code to loook up
+the fd to be better and clearer.  There's still a cost to verify the
+file pointer, but now it's basically in the noise even for that
+benchmark that does nothing else - and the code is more understandable
+and has better comments too.
 
-Linus Torvalds <torvalds@linux-foundation.org>
-    fget: clarify and improve __fget_files() implementation
+[ Side note: this patch is also a classic case of one that looks very
+  messy with the default greedy Myers diff - it's much more legible with
+  either the patience of histogram diff algorithm ]
 
-Miaohe Lin <linmiaohe@huawei.com>
-    memblock: use kfree() to release kmalloced memblock regions
+Link: https://lore.kernel.org/lkml/20211210053743.GA36420@xsang-OptiPlex-9020/
+Link: https://lore.kernel.org/lkml/20211213083154.GA20853@linux.intel.com/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Tested-by: Carel Si <beibei.si@intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/file.c |   73 ++++++++++++++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 57 insertions(+), 16 deletions(-)
 
-Karol Herbst <kherbst@redhat.com>
-    Revert "drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR"
-
-daniel.starke@siemens.com <daniel.starke@siemens.com>
-    tty: n_gsm: fix proper link termination after failed open
-
-daniel.starke@siemens.com <daniel.starke@siemens.com>
-    tty: n_gsm: fix encoding of control signal octet bit DV
-
-Hongyu Xie <xiehongyu1@kylinos.cn>
-    xhci: Prevent futile URB re-submissions due to incorrect return value.
-
-Puma Hsu <pumahsu@google.com>
-    xhci: re-initialize the HC during resume if HCE was set
-
-Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-    usb: dwc3: gadget: Let the interrupt handler disable bottom halves.
-
-Daniele Palmas <dnlplm@gmail.com>
-    USB: serial: option: add Telit LE910R1 compositions
-
-Slark Xiao <slark_xiao@163.com>
-    USB: serial: option: add support for DW5829e
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracefs: Set the group ownership in apply_options() not parse_options()
-
-Szymon Heidrich <szymon.heidrich@gmail.com>
-    USB: gadget: validate endpoint index for xilinx udc
-
-Daehwan Jung <dh10.jung@samsung.com>
-    usb: gadget: rndis: add spinlock for rndis response list
-
-Dmytro Bagrii <dimich.dmb@gmail.com>
-    Revert "USB: serial: ch341: add new Product ID for CH341A"
-
-Sergey Shtylyov <s.shtylyov@omp.ru>
-    ata: pata_hpt37x: disable primary channel on HPT371
-
-Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-    iio: adc: men_z188_adc: Fix a resource leak in an error handling path
-
-Bart Van Assche <bvanassche@acm.org>
-    RDMA/ib_srp: Fix a deadlock
-
-ChenXiaoSong <chenxiaosong2@huawei.com>
-    configfs: fix a race in configfs_{,un}register_subsystem()
-
-Gal Pressman <gal@nvidia.com>
-    net/mlx5e: Fix wrong return value on ioctl EEPROM query failure
-
-Maxime Ripard <maxime@cerno.tech>
-    drm/edid: Always set RGB444
-
-Paul Blakey <paulb@nvidia.com>
-    openvswitch: Fix setting ipv6 fields causing hw csum failure
-
-Tao Liu <thomas.liu@ucloud.cn>
-    gso: do not skip outer ip header in case of ipip and net_failover
-
-Eric Dumazet <edumazet@google.com>
-    net: __pskb_pull_tail() & pskb_carve_frag_list() drop_monitor friends
-
-Xin Long <lucien.xin@gmail.com>
-    ping: remove pr_err from ping_lookup
-
-Robert Hancock <robert.hancock@calian.com>
-    serial: 8250: of: Fix mapped region size when using reg-offset property
-
-Oliver Neukum <oneukum@suse.com>
-    USB: zaurus: support another broken Zaurus
-
-Oliver Neukum <oneukum@suse.com>
-    sr9700: sanity check for packet length
-
-Helge Deller <deller@gmx.de>
-    parisc/unaligned: Fix ldw() and stw() unalignment handlers
-
-Helge Deller <deller@gmx.de>
-    parisc/unaligned: Fix fldd and fstd unaligned handlers on 32-bit kernel
-
-Stefano Garzarella <sgarzare@redhat.com>
-    vhost/vsock: don't check owner in vhost_vsock_stop() while releasing
-
-Zhang Qiao <zhangqiao22@huawei.com>
-    cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |  4 +-
- arch/parisc/kernel/unaligned.c                     | 14 ++---
- drivers/ata/pata_hpt37x.c                          | 14 +++++
- drivers/gpu/drm/drm_edid.c                         |  2 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c     | 37 +++++------
- drivers/iio/adc/men_z188_adc.c                     |  9 ++-
- drivers/infiniband/ulp/srp/ib_srp.c                |  6 +-
- .../net/ethernet/mellanox/mlx5/core/en_ethtool.c   |  2 +-
- drivers/net/usb/cdc_ether.c                        | 12 ++++
- drivers/net/usb/sr9700.c                           |  2 +-
- drivers/net/usb/zaurus.c                           | 12 ++++
- drivers/tty/n_gsm.c                                |  4 +-
- drivers/tty/serial/8250/8250_of.c                  | 11 +++-
- drivers/usb/dwc3/gadget.c                          |  2 +
- drivers/usb/gadget/function/rndis.c                |  8 +++
- drivers/usb/gadget/function/rndis.h                |  1 +
- drivers/usb/gadget/udc/udc-xilinx.c                |  6 ++
- drivers/usb/host/xhci.c                            | 28 ++++++---
- drivers/usb/serial/ch341.c                         |  1 -
- drivers/usb/serial/option.c                        | 12 ++++
- drivers/vhost/vsock.c                              | 21 ++++---
- fs/configfs/dir.c                                  | 14 +++++
- fs/file.c                                          | 73 +++++++++++++++++-----
- fs/tracefs/inode.c                                 |  5 +-
- include/net/checksum.h                             |  5 ++
- kernel/cgroup/cpuset.c                             |  2 +
- mm/memblock.c                                      | 10 ++-
- net/core/skbuff.c                                  |  4 +-
- net/ipv4/af_inet.c                                 |  5 +-
- net/ipv4/ping.c                                    |  1 -
- net/ipv6/ip6_offload.c                             |  2 +
- net/openvswitch/actions.c                          | 46 +++++++++++---
- 32 files changed, 287 insertions(+), 88 deletions(-)
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -692,28 +692,69 @@ void do_close_on_exec(struct files_struc
+ 	spin_unlock(&files->file_lock);
+ }
+ 
+-static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
++static inline struct file *__fget_files_rcu(struct files_struct *files,
++		unsigned int fd, fmode_t mask, unsigned int refs)
+ {
+-	struct files_struct *files = current->files;
+-	struct file *file;
++	for (;;) {
++		struct file *file;
++		struct fdtable *fdt = rcu_dereference_raw(files->fdt);
++		struct file __rcu **fdentry;
+ 
+-	rcu_read_lock();
+-loop:
+-	file = fcheck_files(files, fd);
+-	if (file) {
+-		/* File object ref couldn't be taken.
+-		 * dup2() atomicity guarantee is the reason
+-		 * we loop to catch the new file (or NULL pointer)
++		if (unlikely(fd >= fdt->max_fds))
++			return NULL;
++
++		fdentry = fdt->fd + array_index_nospec(fd, fdt->max_fds);
++		file = rcu_dereference_raw(*fdentry);
++		if (unlikely(!file))
++			return NULL;
++
++		if (unlikely(file->f_mode & mask))
++			return NULL;
++
++		/*
++		 * Ok, we have a file pointer. However, because we do
++		 * this all locklessly under RCU, we may be racing with
++		 * that file being closed.
++		 *
++		 * Such a race can take two forms:
++		 *
++		 *  (a) the file ref already went down to zero,
++		 *      and get_file_rcu_many() fails. Just try
++		 *      again:
+ 		 */
+-		if (file->f_mode & mask)
+-			file = NULL;
+-		else if (!get_file_rcu_many(file, refs))
+-			goto loop;
+-		else if (__fcheck_files(files, fd) != file) {
++		if (unlikely(!get_file_rcu_many(file, refs)))
++			continue;
++
++		/*
++		 *  (b) the file table entry has changed under us.
++		 *       Note that we don't need to re-check the 'fdt->fd'
++		 *       pointer having changed, because it always goes
++		 *       hand-in-hand with 'fdt'.
++		 *
++		 * If so, we need to put our refs and try again.
++		 */
++		if (unlikely(rcu_dereference_raw(files->fdt) != fdt) ||
++		    unlikely(rcu_dereference_raw(*fdentry) != file)) {
+ 			fput_many(file, refs);
+-			goto loop;
++			continue;
+ 		}
++
++		/*
++		 * Ok, we have a ref to the file, and checked that it
++		 * still exists.
++		 */
++		return file;
+ 	}
++}
++
++
++static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
++{
++	struct files_struct *files = current->files;
++	struct file *file;
++
++	rcu_read_lock();
++	file = __fget_files_rcu(files, fd, mask, refs);
+ 	rcu_read_unlock();
+ 
+ 	return file;
 
 

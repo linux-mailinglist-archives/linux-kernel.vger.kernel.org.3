@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305824C73A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708794C730B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237444AbiB1Rh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
+        id S234825AbiB1Rbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238157AbiB1Reh (ORCPT
+        with ESMTP id S236828AbiB1RaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:34:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D1C7D029;
-        Mon, 28 Feb 2022 09:31:05 -0800 (PST)
+        Mon, 28 Feb 2022 12:30:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8881277A;
+        Mon, 28 Feb 2022 09:28:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2D661419;
-        Mon, 28 Feb 2022 17:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53387C340E7;
-        Mon, 28 Feb 2022 17:30:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5D34B815B1;
+        Mon, 28 Feb 2022 17:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2448FC340E7;
+        Mon, 28 Feb 2022 17:28:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069456;
-        bh=Rd8jvTNrPWtN6dd5Od5wtu8Di/L6XL1V6MGeJMtvvLA=;
+        s=korg; t=1646069296;
+        bh=NVZ/13wV06YZ+xr1T2jgfLSQQ++PaVN1I5onuZqPhSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MXE+/VOB+5Ire5M1YjlbO35I1GjRaTZfgwGXlHom8xBnYWtt/H09mj1Wbukn3n5Ve
-         vOuAXdETsG/jPxN/B8VTMuVXs++KaQZKctLUGuju5nAOJxrMZTCFXRsWIh9PmXZ8dn
-         AzJhhZIDlo0xVMvk2nTKsg4V6SWmBTzvqpvfwpHU=
+        b=bHpC5RuSAS9ACzGhJ7a7po6JVzYGM5Bhw6yvlgFhEmsxKhHIjo6x2IXvydJtq55xw
+         23JLdomHb/BjRKmU+B4RRl/V/X77SCJGIcJMFQGHbha8c4QNKTUn3/MHg9dQ0JfrNm
+         fgGLhO/M07gXI6IE1dUfepiOpg0i0xS2pK7JxQfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 03/53] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Grant Grundler <grundler@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 05/31] sr9700: sanity check for packet length
 Date:   Mon, 28 Feb 2022 18:24:01 +0100
-Message-Id: <20220228172248.525743374@linuxfoundation.org>
+Message-Id: <20220228172200.336099744@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
+commit e9da0b56fe27206b49f39805f7dcda8a89379062 upstream.
 
-vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
-ownership. It expects current->mm to be valid.
+A malicious device can leak heap data to user space
+providing bogus frame lengths. Introduce a sanity check.
 
-vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
-the user has not done close(), so when we are in do_exit(). In this
-case current->mm is invalid and we're releasing the device, so we
-should clean it anyway.
-
-Let's check the owner only when vhost_vsock_stop() is called
-by an ioctl.
-
-When invoked from release we can not fail so we don't check return
-code of vhost_vsock_stop(). We need to stop vsock even if it's not
-the owner.
-
-Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reviewed-by: Grant Grundler <grundler@chromium.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vsock.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/net/usb/sr9700.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -570,16 +570,18 @@ err:
- 	return ret;
- }
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -410,7 +410,7 @@ static int sr9700_rx_fixup(struct usbnet
+ 		/* ignore the CRC length */
+ 		len = (skb->data[1] | (skb->data[2] << 8)) - 4;
  
--static int vhost_vsock_stop(struct vhost_vsock *vsock)
-+static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
- {
- 	size_t i;
--	int ret;
-+	int ret = 0;
+-		if (len > ETH_FRAME_LEN)
++		if (len > ETH_FRAME_LEN || len > skb->len)
+ 			return 0;
  
- 	mutex_lock(&vsock->dev.mutex);
- 
--	ret = vhost_dev_check_owner(&vsock->dev);
--	if (ret)
--		goto err;
-+	if (check_owner) {
-+		ret = vhost_dev_check_owner(&vsock->dev);
-+		if (ret)
-+			goto err;
-+	}
- 
- 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
- 		struct vhost_virtqueue *vq = &vsock->vqs[i];
-@@ -694,7 +696,12 @@ static int vhost_vsock_dev_release(struc
- 	 * inefficient.  Room for improvement here. */
- 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
- 
--	vhost_vsock_stop(vsock);
-+	/* Don't check the owner, because we are in the release path, so we
-+	 * need to stop the vsock device in any case.
-+	 * vhost_vsock_stop() can not fail in this case, so we don't need to
-+	 * check the return code.
-+	 */
-+	vhost_vsock_stop(vsock, false);
- 	vhost_vsock_flush(vsock);
- 	vhost_dev_stop(&vsock->dev);
- 
-@@ -792,7 +799,7 @@ static long vhost_vsock_dev_ioctl(struct
- 		if (start)
- 			return vhost_vsock_start(vsock);
- 		else
--			return vhost_vsock_stop(vsock);
-+			return vhost_vsock_stop(vsock, true);
- 	case VHOST_GET_FEATURES:
- 		features = VHOST_VSOCK_FEATURES;
- 		if (copy_to_user(argp, &features, sizeof(features)))
+ 		/* the last packet of current skb */
 
 

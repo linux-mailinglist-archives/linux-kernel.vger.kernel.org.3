@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471344C709E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405554C70A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234241AbiB1Pah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S236151AbiB1PbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiB1Pag (ORCPT
+        with ESMTP id S236106AbiB1PbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:30:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE0261A31;
-        Mon, 28 Feb 2022 07:29:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B141B811D2;
-        Mon, 28 Feb 2022 15:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13573C340E7;
-        Mon, 28 Feb 2022 15:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646062194;
-        bh=lIBSNp+pViFi4sTHttxnbsoqe0xdjN5DZcklDqZj7Ho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cy0rV89WR/SvOWDHaUHJ97DAgacxQQfVhpMHYQ4MVrjArRr/ymrj1T2h8ueI4rIoE
-         L/tFqM4S1Z+Kn8T/EypwMKAZhmilQWMgDcVdjCl7qKFWGDl9o60aCyDQeho8J7ElUN
-         5BhXHsZ5Yw2E5uLiyAuR+SLf76CEWvS6PI6JebmqIxiYpN4Prxr8jbfGnn/537bi27
-         LRwO9d4B5sXjzZGZT41RLmD5FaFYhFDoB7EbMF6pusgSBQOxBhSyZRS0zm7yZgJVp/
-         pDhd+XwSmrznxLjFcWg2UqaMPpLRceCqAK+d1JfN2heAxSbewAgYjpcn597HcMFJgA
-         +uv3vxiGLT4Bw==
-Date:   Mon, 28 Feb 2022 15:29:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Rob Herring <robh+dt@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
-Message-ID: <YhzqbYW1q5bPNWXn@sirena.org.uk>
-References: <cover.1646060734.git.christophe.leroy@csgroup.eu>
- <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
+        Mon, 28 Feb 2022 10:31:09 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71587EB04
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:30:29 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id j5so10257588ila.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7xuq/jHgOUriIm1O/BV7S1L7sNlV9+5iBX6aT2AWV0s=;
+        b=Ckmgyi0L1ORPLOIs0I59pJKj3U54sFM9eXt7zVW3L8Zz3vVWcUMuDhm4H5a0vH4P0r
+         dMwwxS0/KGseXwyf0kqph5aogznMPR27U5WJtAkF1tTLkwgui7KkoFSBuNke67NYvHBn
+         zo4bt5FdK9LoYJx8RqwfwmVSextkRSxiTUfjgQUMI9y2NzVE8v6DcZBQfMygp4HF3c3/
+         K5PTTu5KC2uqpcwucSwCDYMzKUpA6YfJVXHgHqiEmkBagcqLNDZvufFiD6k4WPgOiNkq
+         vJu3UipP5TDqjLSQGIhc0SdYb16UTannauH9vGQH08ptV/XB1MlfgAQrD7j0WeyrBVEg
+         SBBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7xuq/jHgOUriIm1O/BV7S1L7sNlV9+5iBX6aT2AWV0s=;
+        b=QoCMhVD5Z7ElOenoGdXhlZRwBHVbaiLsEqacDVfd1vZJH+MGQCpjoj9QOlvxD5iONA
+         sFL0LEqMRps6oE6fiqi9yYrd5FZajY1pJBFiFDADbENO8ZLJIY0SHAYJllHi7HHrg6OY
+         STgbC924J8etcsA2asBxWAVObOcYAFSS9rpmlARxQgaCDk4S2hy6bz+twrQ53lodbAy7
+         IoV3I0VUZkc8XP1/dpGQUJ8zdY7SY6QxvpzyUZnG8pjNddFDc09ReOLw3cyKuXQmbbGe
+         Zfo0bQe4qBzILqO5wBg4QCHFMyvuT4zD7+Et6HnL94FgMQXXV1lkohOtTJqBnToywkOb
+         8Iqg==
+X-Gm-Message-State: AOAM531DrtZEWK8IFqP7dnBKHpAiR1fmBEVLs321SWHxdaDa56DrFFky
+        AvtzGRcmSIewMi1FWCa4KJ3fdw==
+X-Google-Smtp-Source: ABdhPJzwxFhKVHGQFdEn09+VOKy0nPF9+3HOs0WuXGTDKn+rgLpe2qPij7SospjNJcbvkVBrxkUuow==
+X-Received: by 2002:a05:6e02:1587:b0:2c2:5c48:a695 with SMTP id m7-20020a056e02158700b002c25c48a695mr19306744ilu.169.1646062229191;
+        Mon, 28 Feb 2022 07:30:29 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id u17-20020a056e02111100b002c2a943034esm5952850ilk.5.2022.02.28.07.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 07:30:28 -0800 (PST)
+Message-ID: <6fc89860-9eea-630c-f193-272bf436ad81@linaro.org>
+Date:   Mon, 28 Feb 2022 09:30:26 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6sX4MQTStecWuNG6"
-Content-Disposition: inline
-In-Reply-To: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
-X-Cookie: Killing turkeys causes winter.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 01/27] bus: mhi: Fix pm_state conversion to string
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Hemant Kumar <hemantk@codeaurora.org>, stable@vger.kernel.org
+References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+ <20220228124344.77359-2-manivannan.sadhasivam@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220228124344.77359-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,51 +83,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/28/22 6:43 AM, Manivannan Sadhasivam wrote:
+> From: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> 
+> On big endian architectures the mhi debugfs files which report pm state
+> give "Invalid State" for all states.  This is caused by using
+> find_last_bit which takes an unsigned long* while the state is passed in
+> as an enum mhi_pm_state which will be of int size.
+> 
+> Fix by using __fls to pass the value of state instead of find_last_bit.
+> 
+> Also the current API expects "mhi_pm_state" enumerator as the function
+> argument but the function only works with bitmasks. So as Alex suggested,
+> let's change the argument to u32 to avoid confusion.
 
---6sX4MQTStecWuNG6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+(Grumble grumble too much static data in header file.)
 
-On Mon, Feb 28, 2022 at 04:15:46PM +0100, Christophe Leroy wrote:
+Reviewed-by: Alex Elder <elder@linaro.org>
 
-> +	if (!status && spi->trailing_bits) {
-> +		struct spi_transfer t = {
-> +			.len = 1,
-> +			.tx_buf = empty_zero_page,
-> +		};
+> Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
+> Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+> Cc: stable@vger.kernel.org
+> [mani: changed the function argument to u32]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/bus/mhi/core/init.c     | 10 ++++++----
+>   drivers/bus/mhi/core/internal.h |  2 +-
+>   2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+> index 046f407dc5d6..09394a1c29ec 100644
+> --- a/drivers/bus/mhi/core/init.c
+> +++ b/drivers/bus/mhi/core/init.c
+> @@ -77,12 +77,14 @@ static const char * const mhi_pm_state_str[] = {
+>   	[MHI_PM_STATE_LD_ERR_FATAL_DETECT] = "Linkdown or Error Fatal Detect",
+>   };
+>   
+> -const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+> +const char *to_mhi_pm_state_str(u32 state)
+>   {
+> -	unsigned long pm_state = state;
+> -	int index = find_last_bit(&pm_state, 32);
+> +	int index;
+>   
+> -	if (index >= ARRAY_SIZE(mhi_pm_state_str))
+> +	if (state)
+> +		index = __fls(state);
 > +
-> +		if (spi->trailing_bits < 4)
-> +			t.bits_per_word = 4;
-> +		else if (spi->trailing_bits > 8)
-> +			t.bits_per_word = 16;
-> +		else
-> +			t.bits_per_word = spi->trailing_bits;
-> +
-> +		status = fsl_spi_setup_transfer(spi, &t);
-> +		if (!status)
-> +			status = fsl_spi_bufs(spi, &t, 0);
-> +	}
-> +	m->status = status;
+> +	if (!state || index >= ARRAY_SIZE(mhi_pm_state_str))
+>   		return "Invalid State";
+>   
+>   	return mhi_pm_state_str[index];
+> diff --git a/drivers/bus/mhi/core/internal.h b/drivers/bus/mhi/core/internal.h
+> index e2e10474a9d9..3508cbbf555d 100644
+> --- a/drivers/bus/mhi/core/internal.h
+> +++ b/drivers/bus/mhi/core/internal.h
+> @@ -622,7 +622,7 @@ void mhi_free_bhie_table(struct mhi_controller *mhi_cntrl,
+>   enum mhi_pm_state __must_check mhi_tryset_pm_state(
+>   					struct mhi_controller *mhi_cntrl,
+>   					enum mhi_pm_state state);
+> -const char *to_mhi_pm_state_str(enum mhi_pm_state state);
+> +const char *to_mhi_pm_state_str(u32 state);
+>   int mhi_queue_state_transition(struct mhi_controller *mhi_cntrl,
+>   			       enum dev_st_transition state);
+>   void mhi_pm_st_worker(struct work_struct *work);
 
-The binding looks good now but this is still driver specific code when
-it looks like it could easily be implemented in the core - like I said
-on the previous version you'd need to update drivers to advertise less
-than 8 bits but there's basically nothing driver specific I can see here
-so any driver using transfer_one() would get support that way.
-
---6sX4MQTStecWuNG6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIc6mwACgkQJNaLcl1U
-h9ByJgf+Ph2K77NJETd4CxxTZeaCykQtUOUWUNtf67pOCCXa0j2bI0/ER4oBstq6
-A4QjDZW1vXmlkY/Q2zfLOi0Zw3nGGo6Ygj6n0K/3SiQGaiX+9DsDL2rWKdxxsU5p
-kNfnReKJ9eeF5rDNS6Pap4FlwXmknCCFelC43BcFHzlJcZZxYHPCb1OUAxB0t8xm
-Djs56AByqApS2i1RXPDqwLE4q9024Xvmn8ULYHbjFANawe4cRiIRwwFHOMkNsDSG
-TwLfO1ndF2eImBieKEoZe6cUCMy/PXFU5q3EISaqpDuxmq3Hj0Os2j9HLi9tLAwC
-Iuwnf+cjK54tJ5vEeCSQOTpdQuZabQ==
-=EYyd
------END PGP SIGNATURE-----
-
---6sX4MQTStecWuNG6--

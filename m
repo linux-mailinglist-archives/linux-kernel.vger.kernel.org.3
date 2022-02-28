@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6014C754D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508664C728B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240551AbiB1RyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S234100AbiB1R0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbiB1RvJ (ORCPT
+        with ESMTP id S234227AbiB1R0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA4EA2F2F;
-        Mon, 28 Feb 2022 09:39:17 -0800 (PST)
+        Mon, 28 Feb 2022 12:26:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60576E04;
+        Mon, 28 Feb 2022 09:25:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B69661540;
-        Mon, 28 Feb 2022 17:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A0DC340E7;
-        Mon, 28 Feb 2022 17:39:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD86FB815A5;
+        Mon, 28 Feb 2022 17:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35788C340E7;
+        Mon, 28 Feb 2022 17:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069957;
-        bh=/k8eIg1NAH1SmFReaKQmxUVMuexZO0RUQC9sV/M3azk=;
+        s=korg; t=1646069154;
+        bh=w8pGtcHZO6owIM3oPeS+BA5XE3faq42KlBhU1/HkMwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tnh8paZRUQ+vU0NmtSW6hldxaw1tyylScjMbxh0HJwooyog1UVkg6hTIcCrefDvlb
-         GrTJDFyjKnKkAZIBPS6+0xDnZDGWNX5GoIDSxF6c1kx3gyqALIxDDbaab/edF7pJoH
-         zZRR0ljyJxKycpz+t7AMQ9ekVm8iKGH6ZWUtivPE=
+        b=uAfGLQ/SFZ2ckzLb7JrKXzi8iE889U8+5RKoufyyOJqsxjbmiEzCUsMzSlXChNZ9C
+         kADSk1mCrUvIq6Sy//k+sZdWP9uQ697yiGPPCRcAsUU3HwS0rdkrUMf2gKMl8kgg62
+         D4s3ogF3DIS5G9nQopn0426ewrUiv2ZsKu9VuCGM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Mi <cmi@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.15 046/139] net/mlx5: Fix tc max supported prio for nic mode
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 4.9 13/29] net/mlx5e: Fix wrong return value on ioctl EEPROM query failure
 Date:   Mon, 28 Feb 2022 18:23:40 +0100
-Message-Id: <20220228172352.534990702@linuxfoundation.org>
+Message-Id: <20220228172143.141526295@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Mi <cmi@nvidia.com>
+From: Gal Pressman <gal@nvidia.com>
 
-commit be7f4b0ab149afd19514929fad824b2117d238c9 upstream.
+commit 0b89429722353d112f8b8b29ca397e95fa994d27 upstream.
 
-Only prio 1 is supported if firmware doesn't support ignore flow
-level for nic mode. The offending commit removed the check wrongly.
-Add it back.
+The ioctl EEPROM query wrongly returns success on read failures, fix
+that by returning the appropriate error code.
 
-Fixes: 9a99c8f1253a ("net/mlx5e: E-Switch, Offload all chain 0 priorities when modify header and forward action is not supported")
-Signed-off-by: Chris Mi <cmi@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
+Fixes: bb64143eee8c ("net/mlx5e: Add ethtool support for dump module EEPROM")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
-@@ -121,6 +121,9 @@ u32 mlx5_chains_get_nf_ft_chain(struct m
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
+@@ -1405,7 +1405,7 @@ static int mlx5e_get_module_eeprom(struc
+ 		if (size_read < 0) {
+ 			netdev_err(priv->netdev, "%s: mlx5_query_eeprom failed:0x%x\n",
+ 				   __func__, size_read);
+-			return 0;
++			return size_read;
+ 		}
  
- u32 mlx5_chains_get_prio_range(struct mlx5_fs_chains *chains)
- {
-+	if (!mlx5_chains_prios_supported(chains))
-+		return 1;
-+
- 	if (mlx5_chains_ignore_flow_level_supported(chains))
- 		return UINT_MAX;
- 
+ 		i += size_read;
 
 

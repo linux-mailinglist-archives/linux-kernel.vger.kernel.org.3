@@ -2,125 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB864C6265
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2B54C626E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 06:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiB1FST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 00:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S233101AbiB1FUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 00:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiB1FSP (ORCPT
+        with ESMTP id S230123AbiB1FUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 00:18:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16CDB29835
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:17:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646025457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 28 Feb 2022 00:20:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613939154;
+        Sun, 27 Feb 2022 21:19:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E6BD921155;
+        Mon, 28 Feb 2022 05:19:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646025575; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qsxc2s292NsRQ4hzwanA8m9ycoHJFMMtSw79mLbnNdE=;
-        b=UObONYEQYdCVxKHA11OaBuo5CFL6IpX0AW0kcT2RJcfpvyOAolx9fCGshmUQkKTrjsovM+
-        mTyalHtmtm89fXcSUcOyosoF53MlLOPfgDekv0n0iCvIQGJcPcDMC+iTRnPGy6gYfsVurx
-        k9sH/0XUEQBrIu6oUoS7PLuE+aLuCX4=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-G7bHknfQN4eUfpqC0DpYZQ-1; Mon, 28 Feb 2022 00:17:35 -0500
-X-MC-Unique: G7bHknfQN4eUfpqC0DpYZQ-1
-Received: by mail-lf1-f71.google.com with SMTP id i24-20020a0565123e1800b0044567f5a29bso1473129lfv.5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 21:17:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qsxc2s292NsRQ4hzwanA8m9ycoHJFMMtSw79mLbnNdE=;
-        b=3f797p9sZsFk7ZntKC9+M1STcaQt0lkrUfizIsLIGt38siRf2nqYYltXfzgbxVLgBl
-         51F12XWkLvhuR8y5GCa8e6l/bvCHXlFIlTsafShGBAuo5e/B836GS/kDdqNJkgQbpgGd
-         W2TxwjixwashdekVjiJ7Pb1r8uVU6JXSx7CyyIM6BFBK5EJJYXw+qOWd/yYrmeGSaBQ0
-         Xdmavx11SurbtJr8l8MDow6EG79v5FqDCUWz7ayFUrjWFnkqewLQLSJ2wSBECrK4HgYt
-         bvVtwNzo5nI66ERrSSkoBRsL89H+qdyJ9T9/Elb9t4AS328If9ncIfIm3WDUXc1WyWfN
-         YBJw==
-X-Gm-Message-State: AOAM531U+z+YrAzrQCBEug7Cx6qqu0vuQ9pzKDv1ovew52rvtmBz+zwe
-        vIrLyUM1j32C39H3vVJjDT/QrXknoQ1f4VaGVfp2JJrSR/AlosVyCv4yYXMt1xjcM2OavELbLsT
-        QyOdpIpjzVAevy5+WzMV2TSowhSGTofC9LdyYcHwp
-X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id h1-20020ac24da1000000b0043874be5a88mr11252861lfe.210.1646025453591;
-        Sun, 27 Feb 2022 21:17:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwtKdDAsYdevYlXM4KkIBT28shP4GL11Q2MrukJc3at1rmEfn7iLM6V1nQQyjtFS2b6NVGWoHh9y1pwXlQ0pNA=
-X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id
- h1-20020ac24da1000000b0043874be5a88mr11252849lfe.210.1646025453345; Sun, 27
- Feb 2022 21:17:33 -0800 (PST)
+        bh=OsOdRKyOPTsqFVySVeje99MCazN8FHXIRZGctTB3Fjc=;
+        b=1aDnYNyCMKoqi7852ELng+RjN9qj4H3oZKIs6lZKTxoiwJvkWraBZGmj+Lgr7uB+1SHFJz
+        Yh2mZu17ZFxMhdj6twoLK7xeDGS6uw7JuUWs/fN+ewmZBdcdER+polBa/xGaRr74gldhFA
+        Ag1t4rw/IZDJ70lWUTD3DCkE1pDKQVg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646025575;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OsOdRKyOPTsqFVySVeje99MCazN8FHXIRZGctTB3Fjc=;
+        b=ETy1bbk4AvRTgoyR516RJsfNTn47d24xVl6EFjxT7PerkTAmm+E/x1KFcnx2xiTY9paC/z
+        4vNKWy2UyfSPGfDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E5C712FC5;
+        Mon, 28 Feb 2022 05:19:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5BzICmBbHGIXfAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 28 Feb 2022 05:19:28 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20220224103852.311369-1-baymaxhuang@gmail.com>
- <20220225090223.636877-1-baymaxhuang@gmail.com> <c687e1d8-e36a-8f23-342a-22b2a1efb372@gmail.com>
- <CACGkMEtTdvbc1rk6sk=KE7J2L0=R2M-FMxK+DfJDUYMTPbPJGA@mail.gmail.com> <CANn89iKLhhwGnmEyfZuEKjtt7OwTbVyDYcFUMDYoRpdXjbMwiA@mail.gmail.com>
-In-Reply-To: <CANn89iKLhhwGnmEyfZuEKjtt7OwTbVyDYcFUMDYoRpdXjbMwiA@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 28 Feb 2022 13:17:22 +0800
-Message-ID: <CACGkMEuWLQ6fGXiew_1WGuLYsxEkT+vFequHpZW1KvH=3wcF-w@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] tun: support NAPI for packets received from
- batched XDP buffs
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Harold Huang <baymaxhuang@gmail.com>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Jan Kara" <jack@suse.cz>, "Wu Fengguang" <fengguang.wu@intel.com>,
+        "Jaegeuk Kim" <jaegeuk@kernel.org>, "Chao Yu" <chao@kernel.org>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "Ilya Dryomov" <idryomov@gmail.com>,
+        "Miklos Szeredi" <miklos@szeredi.hu>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>,
+        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        "Philipp Reisner" <philipp.reisner@linbit.com>,
+        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
+        "Paolo Valente" <paolo.valente@linaro.org>,
+        "Jens Axboe" <axboe@kernel.dk>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH 02/11] MM: document and polish read-ahead code.
+In-reply-to: <20220227204728.b2eb5dd94ecc3e86912bacad@linux-foundation.org>
+References: <164447124918.23354.17858831070003318849.stgit@noble.brown>,
+ <164447147257.23354.2801426518649016278.stgit@noble.brown>,
+ <20220210122440.vqth5mwsqtv6vjpq@quack3.lan>,
+ <164453611721.27779.1299851963795418722@noble.neil.brown.name>,
+ <20220224182622.n7abfey3asszyq3x@quack3.lan>,
+ <164602251992.20161.9146570952337454229@noble.neil.brown.name>,
+ <20220227204728.b2eb5dd94ecc3e86912bacad@linux-foundation.org>
+Date:   Mon, 28 Feb 2022 16:19:24 +1100
+Message-id: <164602556430.20161.5451268677064506613@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:59 PM Eric Dumazet <edumazet@google.com> wrote:
->
->
->
-> On Sun, Feb 27, 2022 at 8:20 PM Jason Wang <jasowang@redhat.com> wrote:
->>
->> On Mon, Feb 28, 2022 at 12:06 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->>
->> > How big n can be ?
->> >
->> > BTW I could not find where m->msg_controllen was checked in tun_sendmsg().
->> >
->> > struct tun_msg_ctl *ctl = m->msg_control;
->> >
->> > if (ctl && (ctl->type == TUN_MSG_PTR)) {
->> >
->> >      int n = ctl->num;  // can be set to values in [0..65535]
->> >
->> >      for (i = 0; i < n; i++) {
->> >
->> >          xdp = &((struct xdp_buff *)ctl->ptr)[i];
->> >
->> >
->> > I really do not understand how we prevent malicious user space from
->> > crashing the kernel.
->>
->> It looks to me the only user for this is vhost-net which limits it to
->> 64, userspace can't use sendmsg() directly on tap.
->>
->
-> Ah right, thanks for the clarification.
->
-> (IMO, either remove the "msg.msg_controllen = sizeof(ctl);" from handle_tx_zerocopy(), or add sanity checks in tun_sendmsg())
->
->
+On Mon, 28 Feb 2022, Andrew Morton wrote:
+> On Mon, 28 Feb 2022 15:28:39 +1100 "NeilBrown" <neilb@suse.de> wrote:
+> 
+> > When writing documentation the intent of the author is of some interest,
+> > but the behaviour of the code is paramount.
+> 
+> uh, er, ah, no.  The code describes the behaviour of the code.  The
+> comments are there to describe things other than the code's behaviour.
+> Things such as the author's intent.
+> 
+> Any deviation between the author's intent and the code's behaviour is
+> called a "bug", so it's pretty important to understand authorial
+> intent, no?
 
-Right, Harold, want to do that?
+When the author is writing the documentation - then yes - definitely. 
+When the "author" is several different people over a period of years,
+then it is not even certain that there is a single unified "intent".
 
-Thanks
+The author's intent is less interesting not so much because it is less
+relevant, but because it is less available.
 
+So when writing third-party post-hoc documentation, the focus has to be
+on the code, though with reference to the intent to whatever extent it
+is available.  Bugs then show up where the actual behaviour turns out to
+be impossible to document coherently.
+
+Thanks,
+NeilBrown

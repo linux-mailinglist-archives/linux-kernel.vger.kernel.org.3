@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DF64C744C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C104C76EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238532AbiB1Rms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S240291AbiB1SIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238318AbiB1RjU (ORCPT
+        with ESMTP id S240629AbiB1SDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:39:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF7A8F98C;
-        Mon, 28 Feb 2022 09:34:02 -0800 (PST)
+        Mon, 28 Feb 2022 13:03:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492CDBF;
+        Mon, 28 Feb 2022 09:47:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22902614CB;
-        Mon, 28 Feb 2022 17:34:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A02C340E7;
-        Mon, 28 Feb 2022 17:34:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0719B81085;
+        Mon, 28 Feb 2022 17:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D03C340E7;
+        Mon, 28 Feb 2022 17:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069641;
-        bh=qt3niuXE92R7t+jTdXk/hjGHrViVT+Y+HW2d36IGo6Y=;
+        s=korg; t=1646070415;
+        bh=mnkt+5Ak8JOKgSSwk+d2Lz2WiQE6cY/xo0S7CuH+MwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V2tLVqVGp2KiOHDUXklT4/yTzQxGnvohJBjjBUrOFyd5DApGydtwmKJY38wMU9g3v
-         jfUHQmWySUT0cgxe2jaSFnFLZ5ZcyN3/Zefp0QAkWGUa0h4UfnenPq7WFILQUVcDhk
-         1eonPWDdT20CoEGhKMvCiC55+LrpL+lTM8T2Ozis=
+        b=VXUufLwK2aRIi3Pkqh0riTz1TxZGc/5V9qdzPVBT63gKbhodZJ9+aXcRGFX+79Yy0
+         9Lyi4U8DDUbgi9+jkQfY7lbTMC8MolC3B4TGIrW6V2OzCt03lD+HIH36Q3xyHTUqnH
+         ZTvzWh3BjS5Mzn8JzRaki4vyF3Kwk9uCN4thORPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com,
-        Tony Lu <tonylu@linux.alibaba.com>
-Subject: [PATCH 5.10 39/80] net/smc: Use a mutex for locking "struct smc_pnettable"
+        stable@vger.kernel.org, Lama Kayal <lkayal@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.16 098/164] net/mlx5e: Add missing increment of count
 Date:   Mon, 28 Feb 2022 18:24:20 +0100
-Message-Id: <20220228172316.191390981@linuxfoundation.org>
+Message-Id: <20220228172408.662393867@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,220 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+From: Lama Kayal <lkayal@nvidia.com>
 
-commit 7ff57e98fb78ad94edafbdc7435f2d745e9e6bb5 upstream.
+commit 5ee02b7a800654ff9549807bcf0b4c9fd5cf25f9 upstream.
 
-smc_pnetid_by_table_ib() uses read_lock() and then it calls smc_pnet_apply_ib()
-which, in turn, calls mutex_lock(&smc_ib_devices.mutex).
+Add mistakenly missing increment of count variable when looping over
+output buffer in mlx5e_self_test().
 
-read_lock() disables preemption. Therefore, the code acquires a mutex while in
-atomic context and it leads to a SAC bug.
+This resolves the issue of garbage values output when querying with self
+test via ethtool.
 
-Fix this bug by replacing the rwlock with a mutex.
+before:
+$ ethtool -t eth2
+The test result is PASS
+The test extra info:
+Link Test        0
+Speed Test       1768697188
+Health Test      758528120
+Loopback Test    3288687
 
-Reported-and-tested-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
-Fixes: 64e28b52c7a6 ("net/smc: add pnet table namespace support")
-Confirmed-by: Tony Lu <tonylu@linux.alibaba.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220223100252.22562-1-fmdefrancesco@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+after:
+$ ethtool -t eth2
+The test result is PASS
+The test extra info:
+Link Test        0
+Speed Test       0
+Health Test      0
+Loopback Test    0
+
+Fixes: 7990b1b5e8bd ("net/mlx5e: loopback test is not supported in switchdev mode")
+Signed-off-by: Lama Kayal <lkayal@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/smc_pnet.c |   42 +++++++++++++++++++++---------------------
- net/smc/smc_pnet.h |    2 +-
- 2 files changed, 22 insertions(+), 22 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/smc/smc_pnet.c
-+++ b/net/smc/smc_pnet.c
-@@ -112,7 +112,7 @@ static int smc_pnet_remove_by_pnetid(str
- 	pnettable = &sn->pnettable;
- 
- 	/* remove table entry */
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist,
- 				 list) {
- 		if (!pnet_name ||
-@@ -130,7 +130,7 @@ static int smc_pnet_remove_by_pnetid(str
- 			rc = 0;
- 		}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c
+@@ -334,6 +334,7 @@ void mlx5e_self_test(struct net_device *
+ 		netdev_info(ndev, "\t[%d] %s start..\n", i, st.name);
+ 		buf[count] = st.st_func(priv);
+ 		netdev_info(ndev, "\t[%d] %s end: result(%lld)\n", i, st.name, buf[count]);
++		count++;
  	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
  
- 	/* if this is not the initial namespace, stop here */
- 	if (net != &init_net)
-@@ -191,7 +191,7 @@ static int smc_pnet_add_by_ndev(struct n
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && !pnetelem->ndev &&
- 		    !strncmp(pnetelem->eth_name, ndev->name, IFNAMSIZ)) {
-@@ -205,7 +205,7 @@ static int smc_pnet_add_by_ndev(struct n
- 			break;
- 		}
- 	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -223,7 +223,7 @@ static int smc_pnet_remove_by_ndev(struc
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && pnetelem->ndev == ndev) {
- 			dev_put(pnetelem->ndev);
-@@ -236,7 +236,7 @@ static int smc_pnet_remove_by_ndev(struc
- 			break;
- 		}
- 	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -371,7 +371,7 @@ static int smc_pnet_add_eth(struct smc_p
- 
- 	rc = -EEXIST;
- 	new_netdev = true;
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_ETH &&
- 		    !strncmp(tmp_pe->eth_name, eth_name, IFNAMSIZ)) {
-@@ -381,9 +381,9 @@ static int smc_pnet_add_eth(struct smc_p
- 	}
- 	if (new_netdev) {
- 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 	} else {
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 		kfree(new_pe);
- 		goto out_put;
- 	}
-@@ -445,7 +445,7 @@ static int smc_pnet_add_ib(struct smc_pn
- 	new_pe->ib_port = ib_port;
- 
- 	new_ibdev = true;
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
-@@ -455,9 +455,9 @@ static int smc_pnet_add_ib(struct smc_pn
- 	}
- 	if (new_ibdev) {
- 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 	} else {
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 		kfree(new_pe);
- 	}
- 	return (new_ibdev) ? 0 : -EEXIST;
-@@ -602,7 +602,7 @@ static int _smc_pnet_dump(struct net *ne
- 	pnettable = &sn->pnettable;
- 
- 	/* dump pnettable entries */
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
- 		if (pnetid && !smc_pnet_match(pnetelem->pnet_name, pnetid))
- 			continue;
-@@ -617,7 +617,7 @@ static int _smc_pnet_dump(struct net *ne
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return idx;
- }
- 
-@@ -859,7 +859,7 @@ int smc_pnet_net_init(struct net *net)
- 	struct smc_pnetids_ndev *pnetids_ndev = &sn->pnetids_ndev;
- 
- 	INIT_LIST_HEAD(&pnettable->pnetlist);
--	rwlock_init(&pnettable->lock);
-+	mutex_init(&pnettable->lock);
- 	INIT_LIST_HEAD(&pnetids_ndev->list);
- 	rwlock_init(&pnetids_ndev->lock);
- 
-@@ -939,7 +939,7 @@ static int smc_pnet_find_ndev_pnetid_by_
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && ndev == pnetelem->ndev) {
- 			/* get pnetid of netdev device */
-@@ -948,7 +948,7 @@ static int smc_pnet_find_ndev_pnetid_by_
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -1129,7 +1129,7 @@ int smc_pnetid_by_table_ib(struct smc_ib
- 	sn = net_generic(&init_net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX) &&
-@@ -1139,7 +1139,7 @@ int smc_pnetid_by_table_ib(struct smc_ib
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 
- 	return rc;
- }
-@@ -1158,7 +1158,7 @@ int smc_pnetid_by_table_smcd(struct smcd
- 	sn = net_generic(&init_net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
-@@ -1167,7 +1167,7 @@ int smc_pnetid_by_table_smcd(struct smcd
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 
- 	return rc;
- }
---- a/net/smc/smc_pnet.h
-+++ b/net/smc/smc_pnet.h
-@@ -29,7 +29,7 @@ struct smc_link_group;
-  * @pnetlist: List of PNETIDs
-  */
- struct smc_pnettable {
--	rwlock_t lock;
-+	struct mutex lock;
- 	struct list_head pnetlist;
- };
- 
+ 	mutex_unlock(&priv->state_lock);
 
 

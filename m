@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4224C7D90
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C974C7D94
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiB1WkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S231542AbiB1WkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbiB1WkG (ORCPT
+        with ESMTP id S230488AbiB1WkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 17:40:06 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0F312558E;
-        Mon, 28 Feb 2022 14:39:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6203512552D;
+        Mon, 28 Feb 2022 14:39:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646087967; x=1677623967;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z3cuSidlSplrkPzS0iAKkjA4oiCL66X8tnB9pZSBsV4=;
-  b=fLUPhKYbsdkGxitMzipIio+TUVfL+xwBF+qY09i5DDEtTkClzSS8nDB+
-   ScHl2VR0VMqm1maWk/ZlA1CSmSwEJq+ebkIXqRf5e+qvOzpxDFuOBQ0PW
-   Zznv1Uh2W7M0yQzRboqfw67fFVLdZjRRYbfFduPFK16xwoOtIba4Vpk1Z
-   /nwE4z2MgtpAx5MEL3s8FDIrty3z57Ao6yBwiEgqNQg3+IJzTn2+fRlOD
-   BEyrAE1p2W3SzbvdYzH2phncsk+j8L2XK69HyB46vjV6KfXfKVYS36ddw
-   c1y+q62Ae4Da+xSOrMU1eRsoy7sUnpZyLx5QcmL4PphQwzToA5oW6Tc/g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251835914"
+  t=1646087966; x=1677623966;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7KW5r5qAfPKAahouBoRxbP98/SFsYhZNNzFD4JTPQyQ=;
+  b=Pg3Hszf/wEHWGlSgE8HsE4Bpb7g1FYERLyQ1CydHkh3PWQ4t2PYrSSsm
+   X++3nP+/+PM0JqLnirbM0/m7wdHVaOUltOhDLTqf7eANKc49yVzTovJIA
+   X3G3+SkWS+5eRJOpRo1WQ9wDF7Y+LN1qm9IzYgg+uqPajhm6AlonaJtIb
+   xCQwwK4rlg+Coa87Z548qP6bJdy3E5mgpW5GN0tygLfUCDC/7tz8X/JxY
+   09a3ItuDGVmto3rY9QqrsPmJv27hQQhU6ccTz15Yvkim334l5tqnjB6gj
+   lNn5OYi1SmkPhjPNajwfBXDi3OlR/8ZWP+dC0omBmfUwwLPNbGBoSBQsm
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251835911"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="251835914"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+   d="scan'208";a="251835911"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 14:39:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="629799062"
+   d="scan'208";a="593387226"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Feb 2022 14:39:24 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 28 Feb 2022 14:39:24 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 08036142; Tue,  1 Mar 2022 00:39:41 +0200 (EET)
+        id 13E5442; Tue,  1 Mar 2022 00:39:42 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>
-Subject: [PATCH v1 1/7] ACPI: enumeration: Discourage to use custom _DSM methods
-Date:   Tue,  1 Mar 2022 00:39:30 +0200
-Message-Id: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/7] ACPI: enumeration: Update UART serial bus resource documentation
+Date:   Tue,  1 Mar 2022 00:39:31 +0200
+Message-Id: <20220228223936.54310-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
+References: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,84 +63,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since we have _DSD established and specified (ACPI v5.1+) there is no
-need to use custom _DSM methods. Rewrite documentation to use _DSD.
+In some cases UART serial bus resource may be represented by struct
+serdev_device.
 
-Fixes: f60e7074902a ("misc: at25: Make use of device property API")
+Fixes: 53c7626356c7 ("serdev: Add ACPI support")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../firmware-guide/acpi/enumeration.rst       | 48 ++++++++-----------
- 1 file changed, 21 insertions(+), 27 deletions(-)
+ Documentation/firmware-guide/acpi/enumeration.rst | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
-index d0022567c022..3b221cc9ff5f 100644
+index 3b221cc9ff5f..f4bb5ddca528 100644
 --- a/Documentation/firmware-guide/acpi/enumeration.rst
 +++ b/Documentation/firmware-guide/acpi/enumeration.rst
-@@ -227,43 +227,37 @@ to at25 SPI eeprom driver (this is meant for the above ACPI snippet)::
- 	};
+@@ -19,16 +19,17 @@ possible we decided to do following:
+     platform devices.
  
- Note that this driver actually needs more information like page size of the
--eeprom etc. but at the time writing this there is no standard way of
--passing those. One idea is to return this in _DSM method like::
-+eeprom, etc. This information can be passed via _DSD method like::
+   - Devices behind real busses where there is a connector resource
+-    are represented as struct spi_device or struct i2c_device
+-    (standard UARTs are not busses so there is no struct uart_device).
++    are represented as struct spi_device or struct i2c_device. Note
++    that standard UARTs are not busses so there is no struct uart_device,
++    although some of them may be represented by sturct serdev_device.
  
- 	Device (EEP0)
- 	{
- 		...
--		Method (_DSM, 4, NotSerialized)
-+		Name (_DSD, Package ()
- 		{
--			Store (Package (6)
-+			ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+			Package ()
- 			{
--				"byte-len", 1024,
--				"addr-mode", 2,
--				"page-size, 32
--			}, Local0)
--
--			// Check UUIDs etc.
--
--			Return (Local0)
--		}
--
--Then the at25 SPI driver can get this configuration by calling _DSM on its
--ACPI handle like::
--
--	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
--	struct acpi_object_list input;
--	acpi_status status;
-+				Package () { "size", 1024 },
-+				Package () { "pagesize", 32 },
-+				Package () { "address-width", 16 },
-+			}
-+		})
-+	}
+ As both ACPI and Device Tree represent a tree of devices (and their
+ resources) this implementation follows the Device Tree way as much as
+ possible.
  
--	/* Fill in the input buffer */
-+Then the at25 SPI driver can get this configuration by calling device property
-+APIs during ->probe() phase like::
+-The ACPI implementation enumerates devices behind busses (platform, SPI and
+-I2C), creates the physical devices and binds them to their ACPI handle in
+-the ACPI namespace.
++The ACPI implementation enumerates devices behind busses (platform, SPI,
++I2C, and in some cases UART), creates the physical devices and binds them
++to their ACPI handle in the ACPI namespace.
  
--	status = acpi_evaluate_object(ACPI_HANDLE(&spi->dev), "_DSM",
--				      &input, &output);
--	if (ACPI_FAILURE(status))
--		/* Handle the error */
-+	err = device_property_read_u32(dev, "size", &size);
-+	if (err)
-+		...error handling...
- 
--	/* Extract the data here */
-+	err = device_property_read_u32(dev, "pagesize", &page_size);
-+	if (err)
-+		...error handling...
- 
--	kfree(output.pointer);
-+	err = device_property_read_u32(dev, "address-width", &addr_width);
-+	if (err)
-+		...error handling...
- 
- I2C serial bus support
- ======================
+ This means that when ACPI_HANDLE(dev) returns non-NULL the device was
+ enumerated from ACPI namespace. This handle can be used to extract other
 -- 
 2.34.1
 

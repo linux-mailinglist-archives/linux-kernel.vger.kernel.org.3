@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFE84C763C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10504C74E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiB1SBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S239159AbiB1RsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240795AbiB1Ryp (ORCPT
+        with ESMTP id S239720AbiB1Roc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AF0532FE;
-        Mon, 28 Feb 2022 09:43:47 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D050E9EB9C;
+        Mon, 28 Feb 2022 09:36:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DAC160919;
-        Mon, 28 Feb 2022 17:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483E9C340F0;
-        Mon, 28 Feb 2022 17:43:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F464B815BE;
+        Mon, 28 Feb 2022 17:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA02FC340F1;
+        Mon, 28 Feb 2022 17:36:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070226;
-        bh=wTMGyY6Kndnigy9AW+gjE4f4Ti19rqa13nEH/sEjFTw=;
+        s=korg; t=1646069812;
+        bh=eHN+QxCJDsMYcD1W3M1wJxnaC7XsIYiU4h+rIJhtuLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A7G3KdNdtcEYxvDzDp3oodKFZKFVZExy9jFjL4NsuI11d2CkDQ0oxFYFYTtDe+jVq
-         ZkVuFPj0nCjxM3VV/yDAvduIf2sIOJbryOILfsra9EegtzhUplJCeNvrIHYbRxsm8B
-         CRjRvYPM9cJoDH0TyOkaX727wcFGuMHGWlvRYq40=
+        b=J2v4YPqBbaSuMFr0XWDKxx6QBCtzht+yx0awKbczcrgf142E2yLzZiIQfCqnRk4Z/
+         GmW/BwZ8oXnRcSwhznkwI9bwPJWSjSWETh5xPCpL4Ke9/ykkcMh0ilntkTtSGaGmFs
+         vqOMdczLiONUv+fTwZ1y4w/U8YDlYaGg2E0Tzou8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Nick Gregory <Nick.Gregory@Sophos.com>
-Subject: [PATCH 5.16 032/164] netfilter: nf_tables_offload: incorrect flow offload action array size
-Date:   Mon, 28 Feb 2022 18:23:14 +0100
-Message-Id: <20220228172403.136712769@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.15 021/139] drm/i915: Widen the QGV point mask
+Date:   Mon, 28 Feb 2022 18:23:15 +0100
+Message-Id: <20220228172350.085074050@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,138 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit b1a5983f56e371046dcf164f90bfaf704d2b89f6 upstream.
+commit 3f33364836aacc28cd430d22cf22379e3b5ecd77 upstream.
 
-immediate verdict expression needs to allocate one slot in the flow offload
-action array, however, immediate data expression does not need to do so.
+adlp+ adds some extra bits to the QGV point mask. The code attempts
+to handle that but forgot to actually make sure we can store those
+bits in the bw state. Fix it.
 
-fwd and dup expression need to allocate one slot, this is missing.
-
-Add a new offload_action interface to report if this expression needs to
-allocate one slot in the flow offload action array.
-
-Fixes: be2861dc36d7 ("netfilter: nft_{fwd,dup}_netdev: add offload support")
-Reported-and-tested-by: Nick Gregory <Nick.Gregory@Sophos.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: stable@vger.kernel.org
+Cc: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Fixes: 192fbfb76744 ("drm/i915: Implement PSF GV point support")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220214091811.13725-4-ville.syrjala@linux.intel.com
+Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+(cherry picked from commit c0299cc9840b3805205173cc77782f317b78ea0e)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/netfilter/nf_tables.h         |    2 +-
- include/net/netfilter/nf_tables_offload.h |    2 --
- net/netfilter/nf_tables_offload.c         |    3 ++-
- net/netfilter/nft_dup_netdev.c            |    6 ++++++
- net/netfilter/nft_fwd_netdev.c            |    6 ++++++
- net/netfilter/nft_immediate.c             |   12 +++++++++++-
- 6 files changed, 26 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/i915/display/intel_bw.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -889,9 +889,9 @@ struct nft_expr_ops {
- 	int				(*offload)(struct nft_offload_ctx *ctx,
- 						   struct nft_flow_rule *flow,
- 						   const struct nft_expr *expr);
-+	bool				(*offload_action)(const struct nft_expr *expr);
- 	void				(*offload_stats)(struct nft_expr *expr,
- 							 const struct flow_stats *stats);
--	u32				offload_flags;
- 	const struct nft_expr_type	*type;
- 	void				*data;
- };
---- a/include/net/netfilter/nf_tables_offload.h
-+++ b/include/net/netfilter/nf_tables_offload.h
-@@ -67,8 +67,6 @@ struct nft_flow_rule {
- 	struct flow_rule	*rule;
- };
+--- a/drivers/gpu/drm/i915/display/intel_bw.h
++++ b/drivers/gpu/drm/i915/display/intel_bw.h
+@@ -30,19 +30,19 @@ struct intel_bw_state {
+ 	 */
+ 	u8 pipe_sagv_reject;
  
--#define NFT_OFFLOAD_F_ACTION	(1 << 0)
++	/* bitmask of active pipes */
++	u8 active_pipes;
++
+ 	/*
+ 	 * Current QGV points mask, which restricts
+ 	 * some particular SAGV states, not to confuse
+ 	 * with pipe_sagv_mask.
+ 	 */
+-	u8 qgv_points_mask;
++	u16 qgv_points_mask;
+ 
+ 	unsigned int data_rate[I915_MAX_PIPES];
+ 	u8 num_active_planes[I915_MAX_PIPES];
+ 
+-	/* bitmask of active pipes */
+-	u8 active_pipes;
 -
- void nft_flow_rule_set_addr_type(struct nft_flow_rule *flow,
- 				 enum flow_dissector_key_id addr_type);
- 
---- a/net/netfilter/nf_tables_offload.c
-+++ b/net/netfilter/nf_tables_offload.c
-@@ -94,7 +94,8 @@ struct nft_flow_rule *nft_flow_rule_crea
- 
- 	expr = nft_expr_first(rule);
- 	while (nft_expr_more(rule, expr)) {
--		if (expr->ops->offload_flags & NFT_OFFLOAD_F_ACTION)
-+		if (expr->ops->offload_action &&
-+		    expr->ops->offload_action(expr))
- 			num_actions++;
- 
- 		expr = nft_expr_next(expr);
---- a/net/netfilter/nft_dup_netdev.c
-+++ b/net/netfilter/nft_dup_netdev.c
-@@ -67,6 +67,11 @@ static int nft_dup_netdev_offload(struct
- 	return nft_fwd_dup_netdev_offload(ctx, flow, FLOW_ACTION_MIRRED, oif);
- }
- 
-+static bool nft_dup_netdev_offload_action(const struct nft_expr *expr)
-+{
-+	return true;
-+}
-+
- static struct nft_expr_type nft_dup_netdev_type;
- static const struct nft_expr_ops nft_dup_netdev_ops = {
- 	.type		= &nft_dup_netdev_type,
-@@ -75,6 +80,7 @@ static const struct nft_expr_ops nft_dup
- 	.init		= nft_dup_netdev_init,
- 	.dump		= nft_dup_netdev_dump,
- 	.offload	= nft_dup_netdev_offload,
-+	.offload_action	= nft_dup_netdev_offload_action,
+ 	int min_cdclk;
  };
  
- static struct nft_expr_type nft_dup_netdev_type __read_mostly = {
---- a/net/netfilter/nft_fwd_netdev.c
-+++ b/net/netfilter/nft_fwd_netdev.c
-@@ -77,6 +77,11 @@ static int nft_fwd_netdev_offload(struct
- 	return nft_fwd_dup_netdev_offload(ctx, flow, FLOW_ACTION_REDIRECT, oif);
- }
- 
-+static bool nft_fwd_netdev_offload_action(const struct nft_expr *expr)
-+{
-+	return true;
-+}
-+
- struct nft_fwd_neigh {
- 	u8			sreg_dev;
- 	u8			sreg_addr;
-@@ -219,6 +224,7 @@ static const struct nft_expr_ops nft_fwd
- 	.dump		= nft_fwd_netdev_dump,
- 	.validate	= nft_fwd_validate,
- 	.offload	= nft_fwd_netdev_offload,
-+	.offload_action	= nft_fwd_netdev_offload_action,
- };
- 
- static const struct nft_expr_ops *
---- a/net/netfilter/nft_immediate.c
-+++ b/net/netfilter/nft_immediate.c
-@@ -213,6 +213,16 @@ static int nft_immediate_offload(struct
- 	return 0;
- }
- 
-+static bool nft_immediate_offload_action(const struct nft_expr *expr)
-+{
-+	const struct nft_immediate_expr *priv = nft_expr_priv(expr);
-+
-+	if (priv->dreg == NFT_REG_VERDICT)
-+		return true;
-+
-+	return false;
-+}
-+
- static const struct nft_expr_ops nft_imm_ops = {
- 	.type		= &nft_imm_type,
- 	.size		= NFT_EXPR_SIZE(sizeof(struct nft_immediate_expr)),
-@@ -224,7 +234,7 @@ static const struct nft_expr_ops nft_imm
- 	.dump		= nft_immediate_dump,
- 	.validate	= nft_immediate_validate,
- 	.offload	= nft_immediate_offload,
--	.offload_flags	= NFT_OFFLOAD_F_ACTION,
-+	.offload_action	= nft_immediate_offload_action,
- };
- 
- struct nft_expr_type nft_imm_type __read_mostly = {
 
 

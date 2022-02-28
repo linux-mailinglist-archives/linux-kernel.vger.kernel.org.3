@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC584C6168
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C9C4C6121
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiB1Cst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 21:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S232583AbiB1Cd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 21:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiB1Csr (ORCPT
+        with ESMTP id S231653AbiB1Cd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:48:47 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C831A826;
-        Sun, 27 Feb 2022 18:48:08 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7B336516;
-        Sun, 27 Feb 2022 18:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1646016488;
-        bh=/iervmZzRL0Mt5kpC3j8ZiRbpDgGTMM0VaPpylf5tJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DJjeBa0PqiIPgHj9xQr4Sl7aIEu8ufRb7o8PjRh9Zgo3XBWsk2SDHUB0UarokWdO1
-         dO0u2xCPJ76B3QJc8ropLkDBqt/9Xvkq98/Mr+tB5BgfydrmeQpumdUkI/RiTtiIxL
-         fkelbIxetoTFB86c5AF1TbWuRHDbIFJT3lHBXcRE=
-Date:   Sun, 27 Feb 2022 18:48:05 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/5] hwmon: (nct6775) Add i2c support
-Message-ID: <Yhw35Wq5r5KiNWyM@hatter.bewilderbeest.net>
-References: <20220226133047.6226-1-zev@bewilderbeest.net>
- <2620147.mvXUDI8C0e@natalenko.name>
- <YhrFizhgOpZbi3dE@hatter.bewilderbeest.net>
- <4719747.31r3eYUQgx@natalenko.name>
+        Sun, 27 Feb 2022 21:33:26 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCA538DB3;
+        Sun, 27 Feb 2022 18:32:46 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K6PTN3yk6z9sMq;
+        Mon, 28 Feb 2022 10:29:12 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 28 Feb
+ 2022 10:32:43 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH v3] ext4:fix file system corrupted when rmdir non empty directory with IO error
+Date:   Mon, 28 Feb 2022 10:48:15 +0800
+Message-ID: <20220228024815.3952506-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4719747.31r3eYUQgx@natalenko.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +47,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 01:38:31PM PST, Oleksandr Natalenko wrote:
->Hello.
->
->On neděle 27. února 2022 1:27:55 CET Zev Weiss wrote:
->> On Sat, Feb 26, 2022 at 04:14:12PM PST, Oleksandr Natalenko wrote:
->> >Hello.
->> >
->> >On sobota 26. února 2022 14:30:42 CET Zev Weiss wrote:
->> >> Hello,
->> >>
->> >> This patch series augments the existing nct6775 driver with support
->> >> for the hardware's i2c interface.
->> >
->> >Is it something I can test on my ASUS Pro WS X570-ACE board as an ordinary user, and if so, how?
->> >
->>
->> You could certainly test that the nct6775-platform driver still works as
->> it did previously, which would be good to confirm -- you'll need to
->> enable CONFIG_SENSORS_NCT6775_PLATFORM now to build it.
->
->Ack.
->
->>  From what I've been able to find about that board though it looks like
->> it doesn't have a BMC, so testing the i2c driver on it probably isn't
->> going to be possible.  (Even if it does in fact have a BMC, it would
->> require at least a partial port of OpenBMC or similar, and re-flashing
->> your BMC firmware with that, and is hence a non-trivial undertaking.)
->
->It should have, the BMC is based on RTL8117, although I have no idea if it is something that can be called true IPMI as I've never enabled/used it.
->
+We inject IO error when rmdir non empty direcory, then got issue as follows:
+step1: mkfs.ext4 -F /dev/sda
+step2: mount /dev/sda  test
+step3: cd test
+step4: mkdir -p 1/2
+step5: rmdir 1
+	[  110.920551] ext4_empty_dir: inject fault
+	[  110.921926] EXT4-fs warning (device sda): ext4_rmdir:3113: inode #12:
+	comm rmdir: empty directory '1' has too many links (3)
+step6: cd ..
+step7: umount test
+step8: fsck.ext4 -f /dev/sda
+	e2fsck 1.42.9 (28-Dec-2013)
+	Pass 1: Checking inodes, blocks, and sizes
+	Pass 2: Checking directory structure
+	Entry '..' in .../??? (13) has deleted/unused inode 12.  Clear<y>? yes
+	Pass 3: Checking directory connectivity
+	Unconnected directory inode 13 (...)
+	Connect to /lost+found<y>? yes
+	Pass 4: Checking reference counts
+	Inode 13 ref count is 3, should be 2.  Fix<y>? yes
+	Pass 5: Checking group summary information
 
-Ah, interesting -- I hadn't heard of that chip before, and web searches 
-mostly seem to turn up discussions of that particular board (and sibling 
-models), so I guess it's probably not very widely used elsewhere.  It 
-does appear to run an OpenWRT-based firmware with source available 
-(https://gitlab.com/gplmirror/rtl8117), though apparently with a rather 
-old (4.4) kernel (and with added fun goodies like what looks to be a 
-partial implementation of an in-kernel VNC server??).
+	/dev/sda: ***** FILE SYSTEM WAS MODIFIED *****
+	/dev/sda: 12/131072 files (0.0% non-contiguous), 26157/524288 blocks
 
-So I guess in theory if you were feeling adventurous and wanted to 
-backport these patches to that kernel, recompile the firmware, and flash 
-the result onto your hardware you could *maybe* test out the i2c driver, 
-though it's probably a much deeper rabbit hole than is likely to be 
-worthwhile, and with significant risk of leaving your hardware in an 
-awkward (potentially bricked) state if things go awry, so it's not 
-something I'd recommend taking on casually.  There would also still be 
-the process of figuring out at what i2c bus/address the Super-I/O chip 
-lives for the rtl8117, if its i2c interface is even attached at all, 
-which I don't think is guaranteed -- the rtl8117 might not need it if 
-it's not in charge of thermal monitoring/fan control on that board, and 
-even if it is handling that it might have a direct connection to the TSI 
-interface instead of going through the Super-I/O chip as is done on the 
-ASRock boards I'm familiar with.
+ext4_rmdir
+	if (!ext4_empty_dir(inode))
+		goto end_rmdir;
+ext4_empty_dir
+	bh = ext4_read_dirblock(inode, 0, DIRENT_HTREE);
+	if (IS_ERR(bh))
+		return true;
+Now if read directory block failed, 'ext4_empty_dir' will return true, assume
+directory is empty. Obviously, it will lead to above issue.
+To solve this issue, if read directory block failed 'ext4_empty_dir' just
+return false. To avoid making things worse when file system is already
+corrupted, 'ext4_empty_dir' also return false.
 
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/inline.c |  9 ++++-----
+ fs/ext4/namei.c  | 10 +++++-----
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
-Zev
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index e42941803605..9c076262770d 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -1783,19 +1783,20 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 	void *inline_pos;
+ 	unsigned int offset;
+ 	struct ext4_dir_entry_2 *de;
+-	bool ret = true;
++	bool ret = false;
+ 
+ 	err = ext4_get_inode_loc(dir, &iloc);
+ 	if (err) {
+ 		EXT4_ERROR_INODE_ERR(dir, -err,
+ 				     "error %d getting inode %lu block",
+ 				     err, dir->i_ino);
+-		return true;
++		return false;
+ 	}
+ 
+ 	down_read(&EXT4_I(dir)->xattr_sem);
+ 	if (!ext4_has_inline_data(dir)) {
+ 		*has_inline_data = 0;
++		ret = true;
+ 		goto out;
+ 	}
+ 
+@@ -1804,7 +1805,6 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 		ext4_warning(dir->i_sb,
+ 			     "bad inline directory (dir #%lu) - no `..'",
+ 			     dir->i_ino);
+-		ret = true;
+ 		goto out;
+ 	}
+ 
+@@ -1823,16 +1823,15 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 				     dir->i_ino, le32_to_cpu(de->inode),
+ 				     le16_to_cpu(de->rec_len), de->name_len,
+ 				     inline_size);
+-			ret = true;
+ 			goto out;
+ 		}
+ 		if (le32_to_cpu(de->inode)) {
+-			ret = false;
+ 			goto out;
+ 		}
+ 		offset += ext4_rec_len_from_disk(de->rec_len, inline_size);
+ 	}
+ 
++	ret = true;
+ out:
+ 	up_read(&EXT4_I(dir)->xattr_sem);
+ 	brelse(iloc.bh);
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index 8cf0a924a49b..39e223f7bf64 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -2997,14 +2997,14 @@ bool ext4_empty_dir(struct inode *inode)
+ 	if (inode->i_size < ext4_dir_rec_len(1, NULL) +
+ 					ext4_dir_rec_len(2, NULL)) {
+ 		EXT4_ERROR_INODE(inode, "invalid size");
+-		return true;
++		return false;
+ 	}
+ 	/* The first directory block must not be a hole,
+ 	 * so treat it as DIRENT_HTREE
+ 	 */
+ 	bh = ext4_read_dirblock(inode, 0, DIRENT_HTREE);
+ 	if (IS_ERR(bh))
+-		return true;
++		return false;
+ 
+ 	de = (struct ext4_dir_entry_2 *) bh->b_data;
+ 	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size,
+@@ -3012,7 +3012,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 	    le32_to_cpu(de->inode) != inode->i_ino || strcmp(".", de->name)) {
+ 		ext4_warning_inode(inode, "directory missing '.'");
+ 		brelse(bh);
+-		return true;
++		return false;
+ 	}
+ 	offset = ext4_rec_len_from_disk(de->rec_len, sb->s_blocksize);
+ 	de = ext4_next_entry(de, sb->s_blocksize);
+@@ -3021,7 +3021,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 	    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
+ 		ext4_warning_inode(inode, "directory missing '..'");
+ 		brelse(bh);
+-		return true;
++		return false;
+ 	}
+ 	offset += ext4_rec_len_from_disk(de->rec_len, sb->s_blocksize);
+ 	while (offset < inode->i_size) {
+@@ -3035,7 +3035,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 				continue;
+ 			}
+ 			if (IS_ERR(bh))
+-				return true;
++				return false;
+ 		}
+ 		de = (struct ext4_dir_entry_2 *) (bh->b_data +
+ 					(offset & (sb->s_blocksize - 1)));
+-- 
+2.31.1
 

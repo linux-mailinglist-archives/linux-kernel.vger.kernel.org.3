@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CFF4C73FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3132F4C753F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238331AbiB1Rjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S239596AbiB1RxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238538AbiB1Rh6 (ORCPT
+        with ESMTP id S234827AbiB1Rs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:37:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909E750059;
-        Mon, 28 Feb 2022 09:32:51 -0800 (PST)
+        Mon, 28 Feb 2022 12:48:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C3DA1BDF;
+        Mon, 28 Feb 2022 09:38:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C4ECB815B3;
-        Mon, 28 Feb 2022 17:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F51C340F1;
-        Mon, 28 Feb 2022 17:32:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0093861357;
+        Mon, 28 Feb 2022 17:38:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14055C340F0;
+        Mon, 28 Feb 2022 17:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069569;
-        bh=C6gmUbI3lDqmvA6/v3kymtV/MNnaqkTM8sJlK3mLUn4=;
+        s=korg; t=1646069924;
+        bh=QB10XE3gR5BJEWW3EM4cJA7nfq9MGQ5WwU/sqBhunZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CSQ2m6AVeIMWcvfSIO85c9pHFAdMZJuuFz9a3BzQr0KBAHO7oa4PWcMxdyUBEZweH
-         AiGB/VsuUDP0jxye1jekLnnr4GAvoj9Zs1v1BhPY+bIUN4NzE+MgO5fx4xj5fIdvR/
-         C9IkLFJ8AtKido6oJXtx3mwhIwPrDQkUkWEdYFbM=
+        b=UQ3Yk9mT2MpKQh7BaXhZMILVMGQ3s9HNQAdgU444NipzplPnBbG1gi7z1KuccRbUh
+         T7ea4ZCU3Xy3C1RU/boo3QV8lNTQ0lIl+1EPm7K/EC1mVnsHZIJk3x2a3GkP17fLow
+         yeV38EwAaF/KEVXH9VuNJiqy/d38AcIbCg0KUgWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 14/80] CDC-NCM: avoid overflow in sanity checking
-Date:   Mon, 28 Feb 2022 18:23:55 +0100
-Message-Id: <20220228172313.354550555@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Matthias Reichl <hias@horus.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.15 062/139] drm/edid: Always set RGB444
+Date:   Mon, 28 Feb 2022 18:23:56 +0100
+Message-Id: <20220228172354.213295656@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 8d2b1a1ec9f559d30b724877da4ce592edc41fdc upstream.
+commit ecbd4912a693b862e25cba0a6990a8c95b00721e upstream.
 
-A broken device may give an extreme offset like 0xFFF0
-and a reasonable length for a fragment. In the sanity
-check as formulated now, this will create an integer
-overflow, defeating the sanity check. Both offset
-and offset + len need to be checked in such a manner
-that no overflow can occur.
-And those quantities should be unsigned.
+In order to fill the drm_display_info structure each time an EDID is
+read, the code currently will call drm_add_display_info with the parsed
+EDID.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+drm_add_display_info will then call drm_reset_display_info to reset all
+the fields to 0, and then set them to the proper value depending on the
+EDID.
+
+In the color_formats case, we will thus report that we don't support any
+color format, and then fill it back with RGB444 plus the additional
+formats described in the EDID Feature Support byte.
+
+However, since that byte only contains format-related bits since the 1.4
+specification, this doesn't happen if the EDID is following an earlier
+specification. In turn, it means that for one of these EDID, we end up
+with color_formats set to 0.
+
+The EDID 1.3 specification never really specifies what it means by RGB
+exactly, but since both HDMI and DVI will use RGB444, it's fairly safe
+to assume it's supposed to be RGB444.
+
+Let's move the addition of RGB444 to color_formats earlier in
+drm_add_display_info() so that it's always set for a digital display.
+
+Fixes: da05a5a71ad8 ("drm: parse color format support for digital displays")
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Reported-by: Matthias Reichl <hias@horus.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220203115416.1137308-1-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/cdc_ncm.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/drm_edid.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -1702,10 +1702,10 @@ int cdc_ncm_rx_fixup(struct usbnet *dev,
- {
- 	struct sk_buff *skb;
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
--	int len;
-+	unsigned int len;
- 	int nframes;
- 	int x;
--	int offset;
-+	unsigned int offset;
- 	union {
- 		struct usb_cdc_ncm_ndp16 *ndp16;
- 		struct usb_cdc_ncm_ndp32 *ndp32;
-@@ -1777,8 +1777,8 @@ next_ndp:
- 			break;
- 		}
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5205,6 +5205,7 @@ u32 drm_add_display_info(struct drm_conn
+ 	if (!(edid->input & DRM_EDID_INPUT_DIGITAL))
+ 		return quirks;
  
--		/* sanity checking */
--		if (((offset + len) > skb_in->len) ||
-+		/* sanity checking - watch out for integer wrap*/
-+		if ((offset > skb_in->len) || (len > skb_in->len - offset) ||
- 				(len > ctx->rx_max) || (len < ETH_HLEN)) {
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "invalid frame detected (ignored) offset[%u]=%u, length=%u, skb=%p\n",
++	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
+ 	drm_parse_cea_ext(connector, edid);
+ 
+ 	/*
+@@ -5253,7 +5254,6 @@ u32 drm_add_display_info(struct drm_conn
+ 	DRM_DEBUG("%s: Assigning EDID-1.4 digital sink color depth as %d bpc.\n",
+ 			  connector->name, info->bpc);
+ 
+-	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
+ 	if (edid->features & DRM_EDID_FEATURE_RGB_YCRCB444)
+ 		info->color_formats |= DRM_COLOR_FORMAT_YCRCB444;
+ 	if (edid->features & DRM_EDID_FEATURE_RGB_YCRCB422)
 
 

@@ -2,143 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECCE4C6B31
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C1F4C6B38
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235991AbiB1LrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S236000AbiB1LtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbiB1LrS (ORCPT
+        with ESMTP id S233945AbiB1Ls7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:47:18 -0500
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00049.outbound.protection.outlook.com [40.107.0.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559BB47542;
-        Mon, 28 Feb 2022 03:46:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=my39+lH4SZM2C5E+Ta7dRLQqSCxclwjRS6wLeUyRlFZErkcb/ZmtsCvMrrsrqOMdmUWsgjOg6QZFYLe0H0a5/DdYQkzWljQI3J2nU5whnnawAO1/7UOc+8LBHhA7NZXrNicEsfnzm1GCDM3srT+tlLL8JuZMbwtCn+6v8rxlVMjKIoHet4koZ7mV2smg0jUwsUGnHV8i6r2R1Dy5vedLysc8oETQ+u8lelnUewWaeOzNdaAOGD3zL/phORaNIKSRzYQuK/htpy4cutVq2WpRSx1IKrarIzxM+qNxn6VscT9O4jyyIqIAKhYe/QJcwKyBgSscN68snLSvHJO1EUwVJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dlhEWZsVnKZIPmwnFbWTgC2Xx7hIiPHqcBD7XS6/C/Y=;
- b=I+OcsXUqAfIm06kEBwmAagByytaWPXlel5LsTGxAu67R8x/+zFdcjZ5ztFlhfoSxCB4zfbDNwTKQ4VLEsSoLbp5YQbXoSpxVKclZG6T7Nj4t8l3R8gyq+8FsMN2Zy8QEveZCAeHgXcCN+5f3ljjfmZOMCN7vTjdazyD45nqQ3/nwvgwEicjvaupGL6zyp37lZdvA2G27KFc4cZaTjoWg/Mem8XmsKUBbdle5YberTmopUJg8tfcsoZXuoSfy1dPMgOpgSibDRbnSTpHIBV/EwyKv71KAM0aYc0mD/bEM0JcD2F4ipg/N63n+Ur+sAQnj9Gd4DH+qz3OBXTDMX6jdeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dlhEWZsVnKZIPmwnFbWTgC2Xx7hIiPHqcBD7XS6/C/Y=;
- b=VxV7rFCqA0+u6N0ngAUmJLKJ4dVT9O3Fc/j2h3b9AZ1IrTODFE4gNJE46GAMCG3PZjb25eD0gCGbV5/WIEnSVs2QByl5Z6D6iVewPualKsRQmarocPDQ7FgHJ4cEeDRNkJKpY7cLK1gkKWth8OFMzCWI0mBI+L1LxnoE0vAqZMw=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by HE1PR04MB3275.eurprd04.prod.outlook.com (2603:10a6:7:1a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
- 2022 11:46:35 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::ac0c:d5d:aaa9:36]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::ac0c:d5d:aaa9:36%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 11:46:35 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v1 net-next 1/1] net: dsa: felix: remove
- prevalidate_phy_mode interface
-Thread-Topic: [PATCH v1 net-next 1/1] net: dsa: felix: remove
- prevalidate_phy_mode interface
-Thread-Index: AQHYK2FktZ+AkJz6WkWsPM8tzjJshKyo2ugA
-Date:   Mon, 28 Feb 2022 11:46:35 +0000
-Message-ID: <20220228114634.izmpym7x6kvjjvq6@skbuf>
-References: <20220226223650.4129751-1-colin.foster@in-advantage.com>
-In-Reply-To: <20220226223650.4129751-1-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6b663e04-223b-43ce-05e7-08d9faaff8fe
-x-ms-traffictypediagnostic: HE1PR04MB3275:EE_
-x-microsoft-antispam-prvs: <HE1PR04MB32753140C8E8DE7CE08089C1E0019@HE1PR04MB3275.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 95rb5V55sYXn4Z/mmaOU29nb2YH2ZEmA2CuyL/Ni2EhBKmgSlCIh/zew/EviVtXGQZCqa5jFOLuoTI5537ZH/59VvF+ZuVQNPj+rTvzdCKLsVQ+CgJVELPZ5qtLvVpq68jY9FH/Mo/EvIZ1ktLt68mlGIYal6rN2P573QxZjFnOnaS+VPGvJG9LU7uRrgIBY1TsP0Ujr7ikaT4hhHID9zIabIs/NNBb6VJZtFPFrIMMnWzBSTwgYBaoPk92w7QPS/7uMxIMh00wBy78iRuU8mcaNs3o4qomeca3HYFYLTta2oBqltKP9i7OnfELnDecPJgNaXav1rKKjzcvNzK3TJ8P5YQhaIznYQwaXxn3WXB6NJlGK7NnzjS3Pyh2VaZ0TwxSc65Nvx2lbUzq2HcdgtvZMMP+0oF2uhcdpmyBFfZR00ig3wJFIP7IPqRW7yS6nNFiTwuBLX5A7iL16Y3Z2nxPYa+e5QYXkjjMddtMAzjullbcbdN7MHd/8m3RJ5tbSFFqQjlZFdEppcae9wip5PGWfhfqywmycdGE4zucmnlDTHatukD9rJ3oZO7DbW3Z8bIgZ6UDIu8vGMP5SmBY7vDcMZBU+I+ij35fUlGeW9zFJO6YFjcSHfp8QAn2DOTnpv5lssPgdoBjfaRY4JLshVaqeRvb4ivWG4JO4OKdb1SG7abTN9+oUAVhzV7mKHddKrm9npmvpGiXTSQkoqoRmug==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(26005)(38100700002)(122000001)(1076003)(9686003)(6512007)(186003)(4744005)(5660300002)(2906002)(33716001)(44832011)(8936002)(7416002)(66446008)(91956017)(508600001)(71200400001)(66946007)(76116006)(6486002)(38070700005)(66556008)(86362001)(6506007)(64756008)(83380400001)(4326008)(8676002)(54906003)(6916009)(66476007)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1wSM+40P8l2SoLvyWgliZpRtAD7bxJUUUeqHeQJVOAj/DqVWLsZH8p06yDJX?=
- =?us-ascii?Q?1wDY4YLaNRiij9LTM3ABNr+uVQVfhm2mmD5ziiRjnnHutdLmC5ZGpQLnBrrR?=
- =?us-ascii?Q?j61jg81Y7HTq/VU3NwdfcAPmU8nXPeTtR4elZHYAuP2Y9YE9Ly5JoZXxCPxy?=
- =?us-ascii?Q?HrxXqLuqKLRA1Xa3F8UrRERy1GRyQDMSDnMjjKQGeoo8yXpqJh58YV+gX9xE?=
- =?us-ascii?Q?fu5/ytf/JIGUUiYtYmYBdLlZrO003m5aSXHVoLj6kwVjNIaNto46ckelP1kG?=
- =?us-ascii?Q?6RYbn5gZoOWQNiCeb5oipTbhljHNN5kZthJQHyvVTxhFEmUXPIeqisqEQvCv?=
- =?us-ascii?Q?776ZJHjzMgtyRsoA9ARtztUIBvafEECrkY5lbbQGC14AvAIMq+fY7qQCBGdg?=
- =?us-ascii?Q?4t89hrQ0vjG1FBZrzz0aIn6lA0zDHUF7PjNa8StYJxn4+/Dn6iAoG7DERu2A?=
- =?us-ascii?Q?l5U/3ZkBohGLiN5GOJb6BQQiRcz2sRkyr8bgMzpbOU4oO9KffZbegwGjaKCv?=
- =?us-ascii?Q?2BDbhFf2Gez9tL371aLPQgd81sKEDvT6VSm8byIBcq08AgrOndWt1mJ6ZtUt?=
- =?us-ascii?Q?sDRfb/vtLA4KZ40bIL8N3JbiRSc/4lHonqBL9z7zUP3osohka4n42UHLOtDi?=
- =?us-ascii?Q?M9uivy5pvR6stmtyBRecCgY0GolKyY565y3rGkMvQsi+EtAmlCTUMboRTfR8?=
- =?us-ascii?Q?RewKYfkab/DU4gEdk7LPVTxctghnDlvyo7SyPsDKLgT4ju7LTEQP114bozwq?=
- =?us-ascii?Q?B+nMudZIBjII+hQIFnU1a7ZG5f+4f8xHJF5Y7JMREIM6k9VoSamgVA6QjMws?=
- =?us-ascii?Q?utQMIn5NU1E/L2o0x7fbrSl4TNFrwpJqI63FD/bwwDC46Pxtezo0EuJURm6V?=
- =?us-ascii?Q?XzYQZkrBOCELyq8DIo0wZ9QPk/NUJMuBVVVsX/V/LrtNFx5nWRmLST81b8TE?=
- =?us-ascii?Q?p2jMLGnIX+BTSA746nFqfvIOCHMEdrPnsGJhLAL0l7EvSi2ojRDxDDnq2tmA?=
- =?us-ascii?Q?ZFg9i5IzHkXrvU1czNv+0zNv4x0xk0x77zM1rfoOX/RVsVJk4wEBI/H8JnmE?=
- =?us-ascii?Q?iooY652A676Se/f9iYPeWebeg72zKr9NRS2vm39OFvPEkpBq35VTIzMbSy/K?=
- =?us-ascii?Q?+Nhe5PsApH2o1T6TpGcE+L9iXFaR4/tL7iRRosGrcL8WrAImrlnNTQvhae+L?=
- =?us-ascii?Q?w21d5bGnN3XbMZWgvH2NKEWJelyrAunb8WgnGmGSC9VFowczkRfZSKO0dNs5?=
- =?us-ascii?Q?hYUDszxshUbjB6l3qSx9pWDHJ1bU5sPjWaa1qLtublIkkvwSK1wGT0qkmX6A?=
- =?us-ascii?Q?/OAGwiVhQ59Yfri+XRcUDsih6nJ5hRv5eUQoztyEVKrei+0tMdqGctte/4qk?=
- =?us-ascii?Q?LdQO0MXAH5Eu5rDg0pV+1l6LdPtspcN9SPSdO1Q4dtGWZ8YhSa1echnsWbd8?=
- =?us-ascii?Q?Kt+4tuN6i97Mj4Fs2xAFazm/UDbybp2NVHMmphBbyv0cqNua+H0xgCztNhS5?=
- =?us-ascii?Q?Ou5Zn0ZGGxAbPmjp+SYCuA2JXhzpF3+JtzzaMD7IEDqyWOGmSgLaRQn9KrIq?=
- =?us-ascii?Q?2sYcTgY2we8NqXqmZPFc9/bQVVwFRlP7Ij79gho2tAjSC1likAkzQVWDUI79?=
- =?us-ascii?Q?TsP0dz7Vo+aYSdeihst6WIM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9837ECC2D51CF642829AFEF329E0D8FE@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 28 Feb 2022 06:48:59 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FAA5939A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:48:18 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d66f95f1d1so105185997b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:48:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AP0PgNepdnxsOpz/9ZEeiz4P6tZwSjtnIOow+xt1Bhs=;
+        b=J15huMm9W/rsHw7l7UxwubQm3myLmtLN+/oxVy/pt1DW7c92Mq1yCwuAN3Nr2eKnbI
+         q8btDsNov4R7ykysxpbds/3h6ptMJrWrOfYlC7NuqyBq/6Ivytd42FC7qsNwk1w5ZCPx
+         ESIWyZEYMJuS7HB46Ga0xM26C8utsWKu0yZbGfIeJEQKhoQgjwwCwUO9i6Ou/GJEuves
+         SXEVpKTxjZ7JHbxMU9QdmXqy5m8JRZmq7uVdVhlrk7/Vl3/02U60prldKXhUpH+vieH5
+         IUJQrTA2DD5WiTQlMvMZOHbrH+ZJ66cSxhiXK2xGxC1UuW31CsBkTpRQMSNt8XKUYi5Z
+         LlOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AP0PgNepdnxsOpz/9ZEeiz4P6tZwSjtnIOow+xt1Bhs=;
+        b=Rp995/p6gUXcGLl+IZ4LEnX+d0KXs2uxRNWpWlZmcSRXkME+RYvY1UGT6E8E0hLIJP
+         Lck+C8NvT9CEe1cqkqcWe+DMYvTNf4viFQlulJgb5MeQiEDH89A2uf+v7dmT46BsHzAn
+         OBqiVOW01ioE7IKg+PpmbxLzHwEz1n2jUZ5QRHhPDnSc+oxuiNE02NcpxfT33dGt9+d9
+         ExrogHX1Cd01PhRkXiEt93y5CDMUD3CHDsNiFInJGRj2mLSAAdv0+lMpstJDDrCjahW7
+         RMGRiEC8Y3DnngEi0GPKJ1g2PMXMwDPQRrmBSsVuY+26Fg2SmY9Wb/826RaMo3TOIVEP
+         bngg==
+X-Gm-Message-State: AOAM532ebb5Zk9E6ktUY5ScB0rNHutG9p6PkY2Ndgp/jLuhqrT5OLXMM
+        d1yKhDlcKUOEfzotCnbQx+hhfsnDVhbwPQ/AeqAvRQ==
+X-Google-Smtp-Source: ABdhPJyBz3vxrgFNhr47VeuJb7h3EKQf+mF/oK5JTz4GJg27hRskRelwhJHN0mxG15EhSFY1w1DtoWCPYN4lO8MZHTQ=
+X-Received: by 2002:a81:743:0:b0:2ca:287c:6ca2 with SMTP id
+ 64-20020a810743000000b002ca287c6ca2mr18866401ywh.327.1646048897841; Mon, 28
+ Feb 2022 03:48:17 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b663e04-223b-43ce-05e7-08d9faaff8fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 11:46:35.2472
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WAYp13NP2QeH29mU7PG5ECP1qSdUL2etIeYuinLMhDZObxLePNVkBZzAl/8sgKldHrLferVY8I8LLnPORi/YAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3275
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220228103142.3301082-1-arnd@kernel.org>
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 28 Feb 2022 12:47:41 +0100
+Message-ID: <CANpmjNP6VE9G8Yng4W7Mayk-0QsqUtAXkrMUSvL5pAP5DpXSmA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 02:36:50PM -0800, Colin Foster wrote:
-> All users of the felix driver were creating their own prevalidate_phy_mod=
-e
-> function. The same logic can be performed in a more general way by using =
-a
-> simple array of bit fields.
->=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
+On Mon, 28 Feb 2022 at 11:32, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standard=
+s
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+>
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=3Dgnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is the
+> minimum compiler version used for building kernels, that is no longer a
+> concern. Similarly, the behavior of 'inline' functions changes between
+> gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> include __attribute__((gnu_inline)) in order to allow building with
+> clang a while ago.
+>
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Werror, which happens with the
+> 'make W=3D1' option, as well as for three drivers in the kernel that alwa=
+ys
+> enable -Werror, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
+>
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>=
+On the topic of Wdeclaration-after-statement, Clang only respects this
+warning with C99 and later starting with Clang 14:
+https://github.com/llvm/llvm-project/commit/c65186c89f35#diff-ec770381d76c8=
+59f5f572db789175fe44410a72608f58ad5dbb14335ba56eb97R61
+
+Until Clang 14, -Wdeclaration-after-statement is ignored by Clang in
+newer standards. If this is a big problem, we can probably convince
+the Clang stable folks to backport the fixes. However, the build won't
+fail, folks might just miss the warning if they don't also test with
+GCC.
+
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=3DwiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdK=
+pcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Marco Elver <elver@google.com>
+
+Thanks,
+-- Marco
+
+> ---
+> [v2]
+>  - added -std=3Dgnu11 back, rather than just relying on the default
+>  - minor changes to changelog text
+> ---
+>  Documentation/process/programming-language.rst              | 4 ++--
+>  .../translations/it_IT/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_TW/process/programming-language.rst     | 4 ++--
+>  Makefile                                                    | 6 +++---
+>  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
+>  drivers/gpu/drm/i915/Makefile                               | 1 +
+>  drivers/staging/greybus/tools/Makefile                      | 3 ++-
+>  fs/btrfs/Makefile                                           | 1 +
+>  scripts/Makefile.extrawarn                                  | 1 +
+>  10 files changed, 17 insertions(+), 13 deletions(-)
+>
+> diff --git a/Documentation/process/programming-language.rst b/Documentati=
+on/process/programming-language.rst
+> index ec474a70a02f..894f2a6eb9db 100644
+> --- a/Documentation/process/programming-language.rst
+> +++ b/Documentation/process/programming-language.rst
+> @@ -5,8 +5,8 @@ Programming Language
+>
+>  The kernel is written in the C programming language [c-language]_.
+>  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
+> -under ``-std=3Dgnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
+C90
+> -(including some C99 features). ``clang`` [clang]_ is also supported, see
+> +under ``-std=3Dgnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
+C11
+> +(including some C17 features). ``clang`` [clang]_ is also supported, see
+>  docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>
+>  This dialect contains many extensions to the language [gnu-extensions]_,
+> diff --git a/Documentation/translations/it_IT/process/programming-languag=
+e.rst b/Documentation/translations/it_IT/process/programming-language.rst
+> index 41db2598ce11..aa21097737ae 100644
+> --- a/Documentation/translations/it_IT/process/programming-language.rst
+> +++ b/Documentation/translations/it_IT/process/programming-language.rst
+> @@ -10,8 +10,8 @@ Linguaggio di programmazione
+>
+>  Il kernel =C3=A8 scritto nel linguaggio di programmazione C [it-c-langua=
+ge]_.
+>  Pi=C3=B9 precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ u=
+sando
+> -l'opzione ``-std=3Dgnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> -dello standard ISO C90 (con l'aggiunta di alcune funzionalit=C3=A0 da C9=
+9).
+> +l'opzione ``-std=3Dgnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> +dello standard ISO C11 (con l'aggiunta di alcune funzionalit=C3=A0 da C1=
+7).
+>  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
+>  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>
+> diff --git a/Documentation/translations/zh_CN/process/programming-languag=
+e.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+> index 2a47a1d2ec20..58d2b3bd2d85 100644
+> --- a/Documentation/translations/zh_CN/process/programming-language.rst
+> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
+> @@ -9,8 +9,8 @@
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  =E5=86=85=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AF=AD=E8=A8=80 :ref:`c-language=
+ <cn_c-language>` =E7=BC=96=E5=86=99=E7=9A=84=E3=80=82=E6=9B=B4=E5=87=86=E7=
+=A1=AE=E5=9C=B0=E8=AF=B4=EF=BC=8C=E5=86=85=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
+=AF=E7=94=A8 :ref:`gcc <cn_gcc>`
+> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
+> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> +=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC17=E7=89=B9=E6=80=A7=EF=BC=89
+>
+>  =E8=BF=99=E7=A7=8D=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=AF=B9=E8=AF=AD=
+=E8=A8=80 :ref:`gnu-extensions <cn_gnu-extensions>` =E7=9A=84=E8=AE=B8=E5=
+=A4=9A=E6=89=A9=E5=B1=95=EF=BC=8C=E5=BD=93=E7=84=B6=EF=BC=8C=E5=AE=83=E4=BB=
+=AC=E8=AE=B8=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E4=BD=BF=
+=E7=94=A8=E3=80=82
+>
+> diff --git a/Documentation/translations/zh_TW/process/programming-languag=
+e.rst b/Documentation/translations/zh_TW/process/programming-language.rst
+> index 54e3699eadf8..235de05f7e2c 100644
+> --- a/Documentation/translations/zh_TW/process/programming-language.rst
+> +++ b/Documentation/translations/zh_TW/process/programming-language.rst
+> @@ -12,8 +12,8 @@
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  =E5=85=A7=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AA=9E=E8=A8=80 :ref:`c-language=
+ <tw_c-language>` =E7=B7=A8=E5=AF=AB=E7=9A=84=E3=80=82=E6=9B=B4=E6=BA=96=E7=
+=A2=BA=E5=9C=B0=E8=AA=AA=EF=BC=8C=E5=85=A7=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
+=AF=E7=94=A8 :ref:`gcc <tw_gcc>`
+> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
+> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> +=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC17=E7=89=B9=E6=80=A7=EF=BC=89
+>
+>  =E9=80=99=E7=A8=AE=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=B0=8D=E8=AA=9E=
+=E8=A8=80 :ref:`gnu-extensions <tw_gnu-extensions>` =E7=9A=84=E8=A8=B1=E5=
+=A4=9A=E6=93=B4=E5=B1=95=EF=BC=8C=E7=95=B6=E7=84=B6=EF=BC=8C=E5=AE=83=E5=80=
+=91=E8=A8=B1=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=85=A7=E6=A0=B8=E4=B8=AD=E4=BD=BF=
+=E7=94=A8=E3=80=82
+>
+> diff --git a/Makefile b/Makefile
+> index 289ce2be8032..66496eaeb9ec 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -432,7 +432,7 @@ HOSTCXX     =3D g++
+>  endif
+>
+>  export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-protot=
+ypes \
+> -                             -O2 -fomit-frame-pointer -std=3Dgnu89
+> +                             -O2 -fomit-frame-pointer -std=3Dgnu11
+>  export KBUILD_USERLDFLAGS :=3D
+>
+>  KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTC=
+FLAGS)
+> @@ -515,7 +515,7 @@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werror=3Dstrict-p=
+rototypes -Wno-trigraphs \
+>                    -fno-strict-aliasing -fno-common -fshort-wchar -fno-PI=
+E \
+>                    -Werror=3Dimplicit-function-declaration -Werror=3Dimpl=
+icit-int \
+>                    -Werror=3Dreturn-type -Wno-format-security \
+> -                  -std=3Dgnu89
+> +                  -std=3Dgnu11
+>  KBUILD_CPPFLAGS :=3D -D__KERNEL__
+>  KBUILD_AFLAGS_KERNEL :=3D
+>  KBUILD_CFLAGS_KERNEL :=3D
+> @@ -782,7 +782,7 @@ KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMP=
+LICIT_FALLTHROUGH)
+>
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS +=3D -Qunused-arguments
+> -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is acce=
+ptable.
+> +# The kernel builds with '-std=3Dgnu11' so use of GNU extensions is acce=
+ptable.
+>  KBUILD_CFLAGS +=3D -Wno-gnu
+>  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, =
+as the
+>  # source of a reference will be _MergedGlobals and not on of the whiteli=
+sted names.
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32=
+/Makefile
+> index 6c01b63ff56d..9378ea055bf2 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -68,7 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -Wno=
+-trigraphs \
+>                 -fno-strict-aliasing -fno-common \
+>                 -Werror-implicit-function-declaration \
+>                 -Wno-format-security \
+> -               -std=3Dgnu89
+> +               -std=3Dgnu11
+>  VDSO_CFLAGS  +=3D -O2
+>  # Some useful compiler-dependent flags from top-level Makefile
+>  VDSO_CFLAGS +=3D $(call cc32-option,-Wdeclaration-after-statement,)
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefil=
+e
+> index 1b62b9f65196..1618a6e0af4e 100644
+> --- a/drivers/gpu/drm/i915/Makefile
+> +++ b/drivers/gpu/drm/i915/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D -Wno-unused-parameter
+>  subdir-ccflags-y +=3D -Wno-type-limits
+>  subdir-ccflags-y +=3D -Wno-missing-field-initializers
+>  subdir-ccflags-y +=3D -Wno-sign-compare
+> +subdir-ccflags-y +=3D -Wno-shift-negative-value
+>  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable=
+)
+>  subdir-ccflags-y +=3D $(call cc-disable-warning, frame-address)
+>  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) +=3D -Werror
+> diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/gre=
+ybus/tools/Makefile
+> index ad0ae8053b79..a3bbd73171f2 100644
+> --- a/drivers/staging/greybus/tools/Makefile
+> +++ b/drivers/staging/greybus/tools/Makefile
+> @@ -12,7 +12,8 @@ CFLAGS        +=3D -std=3Dgnu99 -Wall -Wextra -g \
+>             -Wredundant-decls \
+>             -Wcast-align \
+>             -Wsign-compare \
+> -           -Wno-missing-field-initializers
+> +           -Wno-missing-field-initializers \
+> +           -Wno-shift-negative-value
+>
+>  CC     :=3D $(CROSS_COMPILE)gcc
+>
+> diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+> index 4188ba3fd8c3..99f9995670ea 100644
+> --- a/fs/btrfs/Makefile
+> +++ b/fs/btrfs/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D $(condflags)
+>  subdir-ccflags-y +=3D -Wno-missing-field-initializers
+>  subdir-ccflags-y +=3D -Wno-sign-compare
+>  subdir-ccflags-y +=3D -Wno-type-limits
+> +subdir-ccflags-y +=3D -Wno-shift-negative-value
+>
+>  obj-$(CONFIG_BTRFS_FS) :=3D btrfs.o
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 8be892887d71..650d0b8ceec3 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -36,6 +36,7 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncat=
+ion)
+>  KBUILD_CFLAGS +=3D -Wno-missing-field-initializers
+>  KBUILD_CFLAGS +=3D -Wno-sign-compare
+>  KBUILD_CFLAGS +=3D -Wno-type-limits
+> +KBUILD_CFLAGS +=3D -Wno-shift-negative-value
+>
+>  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
+>
+> --
+> 2.29.2
+>
+>

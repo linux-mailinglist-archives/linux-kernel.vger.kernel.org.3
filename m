@@ -2,145 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3734C6F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830494C6F1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiB1OPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S235166AbiB1OPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiB1OPL (ORCPT
+        with ESMTP id S231997AbiB1OPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:15:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9427427DA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646057670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2exk6k2NFpFhRNyzQ86mHmzJ2MpkNYTiFBpW3kB7MP4=;
-        b=hd4GTx91nRAyb79hITLEObffMscAFmMwkUeHqmmjhxWQMC7FWmuFQW+lUxDdpfVGRefmDR
-        IGWc+tZ9sLvE7tSpKkfpXbVj5VrNGWzh3XqRZ26NGe7hBDOP9BzSR3z3+rB76KPABTBLDh
-        iPtYIHHPDEP8iTnHCK8AebGTStGDRUA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-Haln9fVGOfKsrx7ySTiH4Q-1; Mon, 28 Feb 2022 09:14:28 -0500
-X-MC-Unique: Haln9fVGOfKsrx7ySTiH4Q-1
-Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so2122678wrg.19
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:14:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2exk6k2NFpFhRNyzQ86mHmzJ2MpkNYTiFBpW3kB7MP4=;
-        b=7AqLVPLaFEiB79uJGG6RVp61uvl6Jo+TUHFWiMUasplpD/m1GBrIZcpu4dW7C3uEml
-         IwK38Fos+glk/vvaYB2mhcaiR3eeXMec7YXX39YWPZCnvI7y65vSKOVPLxs0pwlTpo8J
-         geQU67MA8VlnRj0Pu0Xf7lwOxs+HaOjPmSWBHERDi6BbhZa5lIo+B8yYfe1mzLjDBTiE
-         CllezR8f8bBSUBUTHF+8tdtb9mOFi6eJVpVN/3WVjNFX93gGsZvIwKmTmMqhNbokIxFJ
-         6j0klSfe+tgH8Zk5m4jTrf+5gChpUkfaFmJW2gqKw3LiJ7WGLPiL5yac2T8agJCC5y5g
-         +FHA==
-X-Gm-Message-State: AOAM531b75Gd6Jj9FQXGGcQVeZDSXDAM52wUcLCrmxqCgtb6DEr34JW8
-        gZbdUZMbnoQXoLVhjt1Wahu6pvuoeM9lMgRyex0IW2FQLbf70LsJZjx3cX5MJO/Ky3vCqEq2HYm
-        ZtomU1hPVlTOkMo4RfY0Ou0Sy
-X-Received: by 2002:a5d:6a87:0:b0:1ed:e3e1:e305 with SMTP id s7-20020a5d6a87000000b001ede3e1e305mr15444415wru.334.1646057667606;
-        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwSweu/vDqttlW8UujeQjHYYvx1IqL/6xa8QGq+PfI8fILt/wD4u5iEdt+ypDzwLNmxlCWi9Q==
-X-Received: by 2002:a5d:6a87:0:b0:1ed:e3e1:e305 with SMTP id s7-20020a5d6a87000000b001ede3e1e305mr15444400wru.334.1646057667415;
-        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
-Received: from vian.redhat.com ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05600c268900b00381394d74a1sm10342072wmt.9.2022.02.28.06.14.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     rostedt@goodmis.org, bristot@kernel.org, paulmck@kernel.org
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        mtosatti@redhat.com, Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Date:   Mon, 28 Feb 2022 15:14:23 +0100
-Message-Id: <20220228141423.259691-1-nsaenzju@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Feb 2022 09:15:46 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A9D50E0C;
+        Mon, 28 Feb 2022 06:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646057708; x=1677593708;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=214IHmeaSYgEtmwJm7lHCh4wPF2r2kl5QIdZUcIBo74=;
+  b=au3ZI8+7JXNrfQ7/hyn/4VomKNHQuMrDQe87nzaD+eaJk7MAV8oKt0U4
+   DRts+qyrhM5d2Go+13jW9pxN73qm5RjNY6UnnGC18Vc3OTBk5X8uT1+PL
+   JRI+R4hLsWiz4F7zAN9FTzVPbDTcqvJrsfYus1LwCL6/sUs8L11WOhG0p
+   s=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Feb 2022 06:15:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 06:15:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 28 Feb 2022 06:15:06 -0800
+Received: from [10.216.7.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 28 Feb
+ 2022 06:15:01 -0800
+Subject: Re: [PATCH V7 1/5] dt-bindings: mfd: pm8008: Add pm8008 regulators
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1645182064-15843-2-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n51X=LJMjDb9KS0rqQDqLR5srzxCOJCRS4oJgPSXbvaSiQ@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <05780d0a-bc9c-3a81-2676-ea92453d7303@quicinc.com>
+Date:   Mon, 28 Feb 2022 19:44:56 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n51X=LJMjDb9KS0rqQDqLR5srzxCOJCRS4oJgPSXbvaSiQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-kernel might have the side effect of extending grace periods too much.
-This will eventually entice RCU to schedule a task on the isolated CPU
-to end the overly extended grace period, adding unwarranted noise to the
-CPU being traced in the process.
 
-So, check if we're the only ones running on this isolated CPU and that
-we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
-between measurements.
+On 2/19/2022 7:09 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-02-18 03:00:59)
+>> Add regulators and their supply nodes. Add separate compatible
+>> "qcom,pm8008-regulators" to differentiate between pm8008 infra
+>> and pm8008 regulators mfd devices.
+>>
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> ---
+> Is the register layout compatible with SPMI regulators? The gpio node
+> seems to be fully compatible and the same driver probes there for SPMI
+> and i2c, so I wonder why we can't extend the existing SPMI gpio and
+> regulator bindings to have the new compatible strings for pm8008. Is
+> anything really different, or do we have the same device talking i2c
+> instead of SPMI now? Possibly it's exposing the different hardware
+> blocks inside the PMIC at different i2c addresses. It looks like the i2c
+> address is 0x8 and then there's 16-bits of address space inside the i2c
+> device to do things. 0x9 is the i2c address for the regulators and then
+> each ldo is at some offset in there?
 
-Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
-loop's cond_resched() will go though a quiescent state for them.
 
-Note that this same exact problem is what extended quiescent states were
-created for. But adapting them to this specific use-case isn't trivial
-as it'll imply reworking entry/exit and dynticks/context tracking code.
+The register layout is not compatible with spmi regulators, I see some 
+differences w.r.t VOLTAGE_CTL, EN_CTL, MODE_CTL registers. Also, there 
+is no headroom related stuff in the spmi driver.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
----
- kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 870a08da5b48..4928358f6e88 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -21,7 +21,9 @@
- #include <linux/uaccess.h>
- #include <linux/cpumask.h>
- #include <linux/delay.h>
-+#include <linux/tick.h>
- #include <linux/sched/clock.h>
-+#include <linux/sched/isolation.h>
- #include <uapi/linux/sched/types.h>
- #include <linux/sched.h>
- #include "trace.h"
-@@ -1295,6 +1297,7 @@ static int run_osnoise(void)
- 	struct osnoise_sample s;
- 	unsigned int threshold;
- 	u64 runtime, stop_in;
-+	unsigned long flags;
- 	u64 sum_noise = 0;
- 	int hw_count = 0;
- 	int ret = -1;
-@@ -1386,6 +1389,22 @@ static int run_osnoise(void)
- 					osnoise_stop_tracing();
- 		}
- 
-+		/*
-+		 * Check if we're the only ones running on this nohz_full CPU
-+		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
-+		 * QS since there is no way for RCU to know we're not making
-+		 * use of it.
-+		 *
-+		 * Otherwise it'll be done through cond_resched().
-+		 */
-+		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
-+		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
-+		    tick_nohz_tick_stopped()) {
-+			local_irq_save(flags);
-+			rcu_momentary_dyntick_idle();
-+			local_irq_restore(flags);
-+		}
-+
- 		/*
- 		 * For the non-preemptive kernel config: let threads runs, if
- 		 * they so wish.
--- 
-2.35.1
+>> Changes in V2:
+>>   - As per Rob's comments changed "pm8008[a-z]?-regulator" to
+>>     "^pm8008[a-z]?-regulators".
+>>
+>> Changes in V3:
+>>   - Fixed bot errors.
+>>   - As per stephen's comments, changed "^pm8008[a-z]?-regulators$" to
+>>     "regulators".
+>>
+>> Changes in V4:
+>>   - Changed compatible string to "qcom,pm8008-regulators"
+>>
+>> Changes in V5:
+>>   - Remove compatible for regulators node.
+>>   - Move supply nodes of the regulators to chip level.
+>>
+>> Changes in V6:
+>>   - No changes.
+>>
+>> Changes in V7:
+>>   - Removed the intermediate regulators node and added ldos
+>>     directly under mfd node.
+>>
+>>   .../devicetree/bindings/mfd/qcom,pm8008.yaml       | 50 +++++++++++++++++++---
+>>   1 file changed, 43 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> index ec3138c..6b3b53e 100644
+>> --- a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> @@ -16,7 +16,9 @@ description: |
+>>
+>>   properties:
+>>     compatible:
+>> -    const: qcom,pm8008
+>> +    enum:
+>> +      - qcom,pm8008
+>> +      - qcom,pm8008-regulators
+>>
+>>     reg:
+>>       description:
+>> @@ -44,6 +46,21 @@ properties:
+>>     "#size-cells":
+>>       const: 0
+>>
+>> +  vdd_l1_l2-supply:
+>> +    description: Input supply phandle of ldo1 and ldo2 regulators.
+>> +
+>> +  vdd_l3_l4-supply:
+>> +    description: Input supply phandle of ldo3 and ldo4 regulators.
+>> +
+>> +  vdd_l5-supply:
+>> +    description: Input supply phandle of ldo5 regulator.
+>> +
+>> +  vdd_l6-supply:
+>> +    description: Input supply phandle of ldo6 regulator.
+>> +
+>> +  vdd_l7-supply:
+>> +    description: Input supply phandle of ldo7 regulator.
+>> +
+>>   patternProperties:
+>>     "^gpio@[0-9a-f]+$":
+>>       type: object
+>> @@ -85,13 +102,16 @@ patternProperties:
+>>
+>>       additionalProperties: false
+>>
+>> +  "^ldo[1-7]$":
+>> +    type: object
+>> +    $ref: "../regulator/regulator.yaml#"
+>> +    description: PM8008 regulator peripherals of PM8008 regulator device
+>> +
+>>   required:
+>>     - compatible
+>>     - reg
+>> -  - interrupts
+>>     - "#address-cells"
+>>     - "#size-cells"
+>> -  - "#interrupt-cells"
+>>
+>>   additionalProperties: false
+>>
+>> @@ -102,13 +122,11 @@ examples:
+>>       qupv3_se13_i2c {
+>>         #address-cells = <1>;
+>>         #size-cells = <0>;
+>> -      pm8008i@8 {
+>> +      pm8008_infra: pm8008@8 {
+>>           compatible = "qcom,pm8008";
+>>           reg = <0x8>;
+>>           #address-cells = <1>;
+>>           #size-cells = <0>;
+>> -        interrupt-controller;
+>> -        #interrupt-cells = <2>;
+>>
+>>           interrupt-parent = <&tlmm>;
+>>           interrupts = <32 IRQ_TYPE_EDGE_RISING>;
+> I still fail to see what this part of the diff has to do with
+> regulators. Can it be split off to a different patch with a clear
+> description of why interrupt-controller and #interrupt-cells is no
+> longer required for qcom,pm8008?
+
+
+This diff has nothing to do with regulators, I removed it to avoid yaml 
+errors during dtbs check.
+
+I'll move this to a separate patch.
+
+
+> It really looks like we're combining the binding for qcom,pm8008 and
+> qcom,pm8008-regulators at the same level, which looks wrong. We don't
+> want to describe the least common denominator between the two bindings.
+> Why not make two different bindings and files? One for the interrupty
+> gpio/interrupt controller device (at 0x8) and one for the regulator one
+> (at 0x9)?
+
+
+Okay, I'll add a different binding for regulators 
+(mfd/qcom,pm8008-regulators.yaml), leave this binding as it is.. and 
+also add separate DT files for pm8008-infra and pm8008-regulators.
+
+
+>> @@ -123,6 +141,24 @@ examples:
+>>             #interrupt-cells = <2>;
+>>           };
+>>         };
+>> -    };
+>>
+>> +      pm8008_regulators: pm8008@9 {
+> pmic@9, or regulators@9? The node name should be generic.
+>
+>> +        compatible = "qcom,pm8008-regulators";
+>> +        reg = <0x9>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        vdd_l1_l2-supply = <&vreg_s8b_1p2>;
+>> +        vdd_l3_l4-supply = <&vreg_s1b_1p8>;
+>> +        vdd_l5-supply = <&vreg_bob>;
+>> +        vdd_l6-supply = <&vreg_bob>;
+>> +        vdd_l7-supply = <&vreg_bob>;
+>> +
+>> +        pm8008_l1: ldo1 {
+>> +          regulator-name = "pm8008_l1";
+>> +          regulator-min-microvolt = <950000>;
+>> +          regulator-max-microvolt = <1300000>;
+>> +        };
+>> +      };
+> For some i2c devices that appear on multiple i2c addresses we make an
+> i2c client for each address in the driver that attaches to the node we
+> put in DT. I suppose that won't work easily here. Either way, it would
+> make it much clearer if this existing binding was left alone. Is there
+> other functionality inside the i2c address 0x9 register space that isn't
+> regulators?
+
+
+As mentioned above, I'll make a separate binding for regulators. There 
+is no other functionality apart from regulators in the i2c 0x9 register 
+space.
+
 

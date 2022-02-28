@@ -2,90 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A374C7B36
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B074C7B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiB1U7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S229782AbiB1VCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiB1U7x (ORCPT
+        with ESMTP id S229510AbiB1VCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:59:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2469369F5;
-        Mon, 28 Feb 2022 12:59:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 601AAB8165B;
-        Mon, 28 Feb 2022 20:59:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DB6C340F1;
-        Mon, 28 Feb 2022 20:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646081951;
-        bh=9DFC8+ejskEuUZnsxASmagFdYxR7Vh6yUJxTxyJU0xE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tzy0WmcNphDKxKnlaRvvOyPdgQBhuO0l/KoeJ7U6GP4aZf9Mh4WP7YcIkQdI9MFzh
-         49Z4FcShoqj5QXNuByQCBzPR3Zt9GN8p404dvaCWnNY4HP44O8BVnjQ40n5gYrBcrb
-         WGe87xcp5dnQgIp90N36AsWlRfaCX5S6k4mhnq9U=
-Date:   Mon, 28 Feb 2022 21:59:08 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Kyle Sanderson <kyle.leet@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
-        Linux-Kernal <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        device-mapper development <dm-devel@redhat.com>
-Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
- dm-crypt + xfs
-Message-ID: <Yh03nCTcDGqReEGs@kroah.com>
-References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
- <20220219210354.GF59715@dread.disaster.area>
- <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
- <YhN76/ONC9qgIKQc@silpixa00400314>
- <CACsaVZJFane88cXxG_E1VkcMcJm8YVN+GDqQ2+tRYNpCf+m8zA@mail.gmail.com>
- <CAHk-=whVT2GcwiJM8m-XzgJj8CjytTHi_pmgmOnSpzvGWzZM1A@mail.gmail.com>
- <Yh0y75aegqS4jIP7@silpixa00400314>
+        Mon, 28 Feb 2022 16:02:10 -0500
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3164DD7603;
+        Mon, 28 Feb 2022 13:01:30 -0800 (PST)
+Received: from [45.44.224.220] (port=57032 helo=[192.168.1.179])
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nOn97-0003rK-1O; Mon, 28 Feb 2022 16:01:29 -0500
+Message-ID: <f84e9ab7d61aef6bf58d602a466a806193f3abbc.camel@trillion01.com>
+Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Hao Xu <haoxu@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 28 Feb 2022 16:01:27 -0500
+In-Reply-To: <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
+References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+         <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
+         <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
+         <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
+Organization: Trillion01 Inc
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh0y75aegqS4jIP7@silpixa00400314>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:39:11PM +0000, Giovanni Cabiddu wrote:
-> On Mon, Feb 28, 2022 at 11:25:49AM -0800, Linus Torvalds wrote:
-> > On Mon, Feb 28, 2022 at 12:18 AM Kyle Sanderson <kyle.leet@gmail.com> wrote:
-> > >
-> > > Makes sense - this kernel driver has been destroying users for many
-> > > years. I'm disappointed that this critical bricking failure isn't
-> > > searchable for others.
+On Tue, 2022-03-01 at 02:26 +0800, Hao Xu wrote:
+> 
+> On 2/25/22 13:32, Olivier Langlois wrote:
+> > On Mon, 2022-02-21 at 13:23 +0800, Hao Xu wrote:
+> > > > @@ -5776,6 +5887,7 @@ static int __io_arm_poll_handler(struct
+> > > > io_kiocb *req,
+> > > >                  __io_poll_execute(req, mask);
+> > > >                  return 0;
+> > > >          }
+> > > > +       io_add_napi(req->file, req->ctx);
+> > > I think this may not be the right place to do it. the process
+> > > will
+> > > be:
+> > > arm_poll sockfdA--> get invalid napi_id from sk->napi_id -->
+> > > event
+> > > triggered --> arm_poll for sockfdA again --> get valid napi_id
+> > > then why not do io_add_napi() in event
+> > > handler(apoll_task_func/poll_task_func).
+> > You have a valid concern that the first time a socket is passed to
+> > io_uring that napi_id might not be assigned yet.
 > > 
-> > It does sound like we should just disable that driver entirely until
-> > it is fixed.
+> > OTOH, getting it after data is available for reading does not help
+> > neither since busy polling must be done before data is received.
 > > 
-> > Or at least the configuration that can cause problems, if there is
-> > some particular sub-case.
-> The dm-crypt + QAT use-case is already disabled since kernel 5.10 due to
-> a different issue.
-> Is it an option to port those patches to stable till I provide a fix for
-> the driver? I drafted already few alternatives for the fix and I am aiming
-> for a final set by end of week.
+> > for both places, the extracted napi_id will only be leveraged at
+> > the
+> > next polling.
+> 
+> Hi Olivier,
+> 
+> I think we have some gap here. AFAIK, it's not 'might not', it is
+> 
+> 'definitely not', the sk->napi_id won't be valid until the poll
+> callback.
+> 
+> Some driver's code FYR:
+> (drivers/net/ethernet/intel/e1000/e1000_main.c)
+> 
+> e1000_receive_skb-->napi_gro_receive-->napi_skb_finish--
+> >gro_normal_one
+> 
+> and in gro_normal_one(), it does:
+> 
+>            if (napi->rx_count >= gro_normal_batch)
+>                    gro_normal_list(napi);
+> 
+> 
+> The gro_normal_list() delivers the info up to the specifical network 
+> protocol like tcp.
+> 
+> And then sk->napi_id is set, meanwhile the poll callback is
+> triggered.
+> 
+> So that's why I call the napi polling technology a 'speculation'.
+> It's 
+> totally for the
+> 
+> future data. Correct me if I'm wrong especially for the poll callback
+> triggering part.
+> 
+When I said 'might not', I was meaning that from the io_uring point of
+view, it has no idea what is the previous socket usage. If it has been
+used outside io_uring, the napi_id could available on the first call.
 
-If the existing situation is broken, yes, those patches are fine for
-stable releases.
+If it is really read virgin socket, neither my choosen call site or
+your proposed sites will make the napi busy poll possible for the first
+poll.
 
-thanks,
+I feel like there is not much to gain to argue on this point since I
+pretty much admitted that your solution was most likely the only call
+site making MULTIPOLL requests work correctly with napi busy poll as
+those requests could visit __io_arm_poll_handler only once (Correct me
+if my statement is wrong).
 
-greg k-h
+The only issue was that I wasn't sure is how using your calling sites
+would make locking work.
+
+I suppose that adding a dedicated spinlock for protecting napi_list
+instead of relying on uring_lock could be a solution. Would that work?
+

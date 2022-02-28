@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FEA4C7396
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D574C7681
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbiB1Rgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S240848AbiB1SEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238765AbiB1Rdu (ORCPT
+        with ESMTP id S239393AbiB1RxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:33:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01179318C;
-        Mon, 28 Feb 2022 09:30:41 -0800 (PST)
+        Mon, 28 Feb 2022 12:53:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D34BA94F9;
+        Mon, 28 Feb 2022 09:40:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2021F6143A;
-        Mon, 28 Feb 2022 17:30:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3D0C340E7;
-        Mon, 28 Feb 2022 17:30:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0DE2B815B4;
+        Mon, 28 Feb 2022 17:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B136C340E7;
+        Mon, 28 Feb 2022 17:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069440;
-        bh=ROkih2dOv8Nkwrhl3q24xQr0HNt/vhhvIrdDm3BjikQ=;
+        s=korg; t=1646070008;
+        bh=QoV7j+7VjawEmBbE7tClEvzEIsDXiNYm9A4p/HtvrVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QHsd7fZv7oVQYpk5utp4iWtQ/VtQvndl+HXV+YTi8IMjc2tUQahwS3xaa2SqssMA9
-         lhng6Q9Zu0AUN1JKHVF5ae5Nsys72LM5N+I+imEMQtdiKxa+ZtJxi5sQ7AiiKFd3PQ
-         72pgrQKBUYe22VDjboztcU3DSZkf5DXCVfRjpxzU=
+        b=z6n7kPVdaBJJTE6Efyzzp6xC2liVaazEx1W/sq2UwQKeI5wB1f0GTkbpW7/YO/YSP
+         c/XRRL+8EyoK0LxtKRj0oQk1oAxBZtY8H7AihaEbrtwHsA8RjO8po70KjtLJFB207L
+         aOu6D1+OXiJM4ugJd3KvTzBeKJCTUnPekMBXelOA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 20/53] openvswitch: Fix setting ipv6 fields causing hw csum failure
-Date:   Mon, 28 Feb 2022 18:24:18 +0100
-Message-Id: <20220228172249.788638885@linuxfoundation.org>
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 085/139] spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
+Date:   Mon, 28 Feb 2022 18:24:19 +0100
+Message-Id: <20220228172356.608452171@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,149 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-commit d9b5ae5c1b241b91480aa30408be12fe91af834a upstream.
+[ Upstream commit ab3824427b848da10e9fe2727f035bbeecae6ff4 ]
 
-Ipv6 ttl, label and tos fields are modified without first
-pulling/pushing the ipv6 header, which would have updated
-the hw csum (if available). This might cause csum validation
-when sending the packet to the stack, as can be seen in
-the trace below.
+In zynq_qspi_exec_mem_op(), kzalloc() is directly used in memset(),
+which could lead to a NULL pointer dereference on failure of
+kzalloc().
 
-Fix this by updating skb->csum if available.
+Fix this bug by adding a check of tmpbuf.
 
-Trace resulted by ipv6 ttl dec and then sending packet
-to conntrack [actions: set(ipv6(hlimit=63)),ct(zone=99)]:
-[295241.900063] s_pf0vf2: hw csum failure
-[295241.923191] Call Trace:
-[295241.925728]  <IRQ>
-[295241.927836]  dump_stack+0x5c/0x80
-[295241.931240]  __skb_checksum_complete+0xac/0xc0
-[295241.935778]  nf_conntrack_tcp_packet+0x398/0xba0 [nf_conntrack]
-[295241.953030]  nf_conntrack_in+0x498/0x5e0 [nf_conntrack]
-[295241.958344]  __ovs_ct_lookup+0xac/0x860 [openvswitch]
-[295241.968532]  ovs_ct_execute+0x4a7/0x7c0 [openvswitch]
-[295241.979167]  do_execute_actions+0x54a/0xaa0 [openvswitch]
-[295242.001482]  ovs_execute_actions+0x48/0x100 [openvswitch]
-[295242.006966]  ovs_dp_process_packet+0x96/0x1d0 [openvswitch]
-[295242.012626]  ovs_vport_receive+0x6c/0xc0 [openvswitch]
-[295242.028763]  netdev_frame_hook+0xc0/0x180 [openvswitch]
-[295242.034074]  __netif_receive_skb_core+0x2ca/0xcb0
-[295242.047498]  netif_receive_skb_internal+0x3e/0xc0
-[295242.052291]  napi_gro_receive+0xba/0xe0
-[295242.056231]  mlx5e_handle_rx_cqe_mpwrq_rep+0x12b/0x250 [mlx5_core]
-[295242.062513]  mlx5e_poll_rx_cq+0xa0f/0xa30 [mlx5_core]
-[295242.067669]  mlx5e_napi_poll+0xe1/0x6b0 [mlx5_core]
-[295242.077958]  net_rx_action+0x149/0x3b0
-[295242.086762]  __do_softirq+0xd7/0x2d6
-[295242.090427]  irq_exit+0xf7/0x100
-[295242.093748]  do_IRQ+0x7f/0xd0
-[295242.096806]  common_interrupt+0xf/0xf
-[295242.100559]  </IRQ>
-[295242.102750] RIP: 0033:0x7f9022e88cbd
-[295242.125246] RSP: 002b:00007f9022282b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffda
-[295242.132900] RAX: 0000000000000005 RBX: 0000000000000010 RCX: 0000000000000000
-[295242.140120] RDX: 00007f9022282ba8 RSI: 00007f9022282a30 RDI: 00007f9014005c30
-[295242.147337] RBP: 00007f9014014d60 R08: 0000000000000020 R09: 00007f90254a8340
-[295242.154557] R10: 00007f9022282a28 R11: 0000000000000246 R12: 0000000000000000
-[295242.161775] R13: 00007f902308c000 R14: 000000000000002b R15: 00007f9022b71f40
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Fixes: 3fdbd1ce11e5 ("openvswitch: add ipv6 'set' action")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Link: https://lore.kernel.org/r/20220223163416.24096-1-paulb@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_SPI_ZYNQ_QSPI=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Link: https://lore.kernel.org/r/20211130172253.203700-1-zhou1615@umn.edu
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/checksum.h    |    5 +++++
- net/openvswitch/actions.c |   46 ++++++++++++++++++++++++++++++++++++++--------
- 2 files changed, 43 insertions(+), 8 deletions(-)
+ drivers/spi/spi-zynq-qspi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/include/net/checksum.h
-+++ b/include/net/checksum.h
-@@ -139,6 +139,11 @@ static inline void csum_replace2(__sum16
- 	*sum = ~csum16_add(csum16_sub(~(*sum), old), new);
- }
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index cfa222c9bd5e7..78f31b61a2aac 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -570,6 +570,9 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
  
-+static inline void csum_replace(__wsum *csum, __wsum old, __wsum new)
-+{
-+	*csum = csum_add(csum_sub(*csum, old), new);
-+}
+ 	if (op->dummy.nbytes) {
+ 		tmpbuf = kzalloc(op->dummy.nbytes, GFP_KERNEL);
++		if (!tmpbuf)
++			return -ENOMEM;
 +
- struct sk_buff;
- void inet_proto_csum_replace4(__sum16 *sum, struct sk_buff *skb,
- 			      __be32 from, __be32 to, bool pseudohdr);
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -427,12 +427,43 @@ static void set_ipv6_addr(struct sk_buff
- 	memcpy(addr, new_addr, sizeof(__be32[4]));
- }
- 
--static void set_ipv6_fl(struct ipv6hdr *nh, u32 fl, u32 mask)
-+static void set_ipv6_dsfield(struct sk_buff *skb, struct ipv6hdr *nh, u8 ipv6_tclass, u8 mask)
- {
-+	u8 old_ipv6_tclass = ipv6_get_dsfield(nh);
-+
-+	ipv6_tclass = OVS_MASKED(old_ipv6_tclass, ipv6_tclass, mask);
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)(old_ipv6_tclass << 12),
-+			     (__force __wsum)(ipv6_tclass << 12));
-+
-+	ipv6_change_dsfield(nh, ~mask, ipv6_tclass);
-+}
-+
-+static void set_ipv6_fl(struct sk_buff *skb, struct ipv6hdr *nh, u32 fl, u32 mask)
-+{
-+	u32 ofl;
-+
-+	ofl = nh->flow_lbl[0] << 16 |  nh->flow_lbl[1] << 8 |  nh->flow_lbl[2];
-+	fl = OVS_MASKED(ofl, fl, mask);
-+
- 	/* Bits 21-24 are always unmasked, so this retains their values. */
--	OVS_SET_MASKED(nh->flow_lbl[0], (u8)(fl >> 16), (u8)(mask >> 16));
--	OVS_SET_MASKED(nh->flow_lbl[1], (u8)(fl >> 8), (u8)(mask >> 8));
--	OVS_SET_MASKED(nh->flow_lbl[2], (u8)fl, (u8)mask);
-+	nh->flow_lbl[0] = (u8)(fl >> 16);
-+	nh->flow_lbl[1] = (u8)(fl >> 8);
-+	nh->flow_lbl[2] = (u8)fl;
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)htonl(ofl), (__force __wsum)htonl(fl));
-+}
-+
-+static void set_ipv6_ttl(struct sk_buff *skb, struct ipv6hdr *nh, u8 new_ttl, u8 mask)
-+{
-+	new_ttl = OVS_MASKED(nh->hop_limit, new_ttl, mask);
-+
-+	if (skb->ip_summed == CHECKSUM_COMPLETE)
-+		csum_replace(&skb->csum, (__force __wsum)(nh->hop_limit << 8),
-+			     (__force __wsum)(new_ttl << 8));
-+	nh->hop_limit = new_ttl;
- }
- 
- static void set_ip_ttl(struct sk_buff *skb, struct iphdr *nh, u8 new_ttl,
-@@ -550,18 +581,17 @@ static int set_ipv6(struct sk_buff *skb,
- 		}
- 	}
- 	if (mask->ipv6_tclass) {
--		ipv6_change_dsfield(nh, ~mask->ipv6_tclass, key->ipv6_tclass);
-+		set_ipv6_dsfield(skb, nh, key->ipv6_tclass, mask->ipv6_tclass);
- 		flow_key->ip.tos = ipv6_get_dsfield(nh);
- 	}
- 	if (mask->ipv6_label) {
--		set_ipv6_fl(nh, ntohl(key->ipv6_label),
-+		set_ipv6_fl(skb, nh, ntohl(key->ipv6_label),
- 			    ntohl(mask->ipv6_label));
- 		flow_key->ipv6.label =
- 		    *(__be32 *)nh & htonl(IPV6_FLOWINFO_FLOWLABEL);
- 	}
- 	if (mask->ipv6_hlimit) {
--		OVS_SET_MASKED(nh->hop_limit, key->ipv6_hlimit,
--			       mask->ipv6_hlimit);
-+		set_ipv6_ttl(skb, nh, key->ipv6_hlimit, mask->ipv6_hlimit);
- 		flow_key->ip.ttl = nh->hop_limit;
- 	}
- 	return 0;
+ 		memset(tmpbuf, 0xff, op->dummy.nbytes);
+ 		reinit_completion(&xqspi->data_completion);
+ 		xqspi->txbuf = tmpbuf;
+-- 
+2.34.1
+
 
 

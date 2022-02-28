@@ -2,238 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D224C7B56
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C405D4C7B59
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiB1VG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S230036AbiB1VHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiB1VG5 (ORCPT
+        with ESMTP id S229582AbiB1VHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:06:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBD8642A;
-        Mon, 28 Feb 2022 13:06:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0FD8B81651;
-        Mon, 28 Feb 2022 21:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A58C340F1;
-        Mon, 28 Feb 2022 21:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646082374;
-        bh=h+Vr0xa4sw719cfJKXXdkWPHmnkmCz7iKEofpmYZuls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ryUW/hps6zMY2vq+o6aVRQ7JS3au1jKNlMCz3lmBRnlpzyglulPdiNzhNLbp/b7uk
-         63eOc+hu8s+YtgOZUEWtlzJOTx/Wh8tFGtWhzQgATAUOKjkvvleDmkx4KJvCWKvyKz
-         b+FW1S2jAaEdxRoD6xwqhO0I62pHvacfENCPpHaM=
-Date:   Mon, 28 Feb 2022 22:06:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Won Chung <wonchung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb:typec: Add sysfs support for Type C connector's
- physical location
-Message-ID: <Yh05QgVw5htyGj+X@kroah.com>
-References: <20220228190649.362070-1-wonchung@google.com>
+        Mon, 28 Feb 2022 16:07:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08AAD13D24
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646082398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LYnovbPtGcgc9E/8oVMTSKgr3ODQnP2MrUjRdl+DpK0=;
+        b=MtVjFSGlkt1CWwkaqwCvIJoj0kfEqMRm6ZPaDnYfMtErrFNlsz4RErz7vBHTM0QBjDPqk0
+        rpmkJgUW+a6BQif3PFLKnF5h3Bx+pAev1n1wpV2XwCrrFWyeDDHyXr8Eykv0pkvAPW7GLz
+        FsDGw9QeSS2YnQuHcTgJkl6MMNuKhAI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-amDrzvEeM6uPiDraZxEOLw-1; Mon, 28 Feb 2022 16:06:36 -0500
+X-MC-Unique: amDrzvEeM6uPiDraZxEOLw-1
+Received: by mail-qv1-f69.google.com with SMTP id z8-20020a0cda88000000b00432946b4c84so12579303qvj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:06:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=LYnovbPtGcgc9E/8oVMTSKgr3ODQnP2MrUjRdl+DpK0=;
+        b=Rwd3P6aoGDc0CeVS+CW6y5nNMf+aK5VV6XYHT+OybNIHWPciMuNQCglVN6bpyCW07b
+         FiI8RH3Pya/sVv4RM6j8F5f6i0C6yVw1pwLoWTZeRgZvq8IJWSg6stG9ZlqVhLzqkahx
+         Db9PrX2HT7JZ8hMIxh1p33xlK750G3y6H9ZcIpIYmAzra9TDjHUiAWbVF3mA1nZNv8EC
+         PS9dof2viKzzdJOo/lQr6dTbAVtq1Y5r+QJL5bVgxBv4x2yymfpPDWZs2egAi8h2nkh4
+         NqHI9YjBWDQoXwLK8NOui4YcDJxs8gddffeLDwbW3eIUziDWOvAznHWJr2TYbLXQLlaj
+         qu2A==
+X-Gm-Message-State: AOAM530wKFkqXh1ldwz5L1Cd4F4RkUFW4svhgcD7vjC1Ta7LN63h+8Ak
+        i3KDMrDF4ZMUQo8+HFSOSRq9XM6Js+x95G8WfWG0UI+KBX76eBBKzJ0Z0/hXwKFCXhfKIH+I6Fa
+        CORZbWzfFzwd1K1R0qX1bMGf3
+X-Received: by 2002:a05:6214:2421:b0:432:843f:b437 with SMTP id gy1-20020a056214242100b00432843fb437mr15149191qvb.102.1646082395631;
+        Mon, 28 Feb 2022 13:06:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzYR48coK6y+4ntjFW3gm3X78BcUfrEpCL4Q9kP1stQ4+ZmgiQnbNc7mm9sQd0BlLKJGiAMPA==
+X-Received: by 2002:a05:6214:2421:b0:432:843f:b437 with SMTP id gy1-20020a056214242100b00432843fb437mr15149181qvb.102.1646082395416;
+        Mon, 28 Feb 2022 13:06:35 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id n8-20020a05620a152800b00648e52be61bsm5437078qkk.37.2022.02.28.13.06.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 13:06:35 -0800 (PST)
+Subject: Re: [PATCH] iio: scd4x: check return of scd4x_write_and_fetch
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     roan@protonic.nl, lars@metafoo.de, nathan@kernel.org,
+        ndesaulniers@google.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220227154331.80338-1-trix@redhat.com>
+ <20220227174850.73520e39@jic23-huawei>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b13706f7-4a9e-ba3d-2828-8570c409096c@redhat.com>
+Date:   Mon, 28 Feb 2022 13:06:32 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228190649.362070-1-wonchung@google.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220227174850.73520e39@jic23-huawei>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 07:06:49PM +0000, Won Chung wrote:
-> When ACPI table includes _PLD field for a Type C connector, share _PLD
-> values in its sysfs. _PLD stands for physical location of device.
-> 
-> Currently without connector's location information, when there are
-> multiple Type C ports, it is hard to distinguish which connector
-> corresponds to which physical port at which location. For example, when
-> there are two Type C connectors, it is hard to find out which connector
-> corresponds to the Type C port on the left panel versus the Type C port
-> on the right panel. With location information provided, we can determine
-> which specific device at which location is doing what.
-> 
-> _PLD output includes much more fields, but only generic fields are added
-> and exposed to sysfs, so that non-ACPI devices can also support it in
-> the future. The minimal generic fields needed for locating a port are
-> the following.
-> - panel
-> - horizontal_position
-> - vertical_position
-> - dock
-> - lid
-> 
-> Signed-off-by: Won Chung <wonchung@google.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-typec | 43 +++++++++++++++++
->  drivers/usb/typec/class.c                   | 52 +++++++++++++++++++++
->  drivers/usb/typec/class.h                   |  3 ++
->  3 files changed, 98 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 75088ecad202..2879bc6e6ad2 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -141,6 +141,49 @@ Description:
->  		- "reverse": CC2 orientation
->  		- "unknown": Orientation cannot be determined.
->  
-> +What:		/sys/class/typec/<port>/location/panel
-> +Date:		February 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes which panel surface of the system’s housing the
-> +		Type C port resides on:
-> +		0 - Top
-> +		1 - Bottom
-> +		2 - Left
-> +		3 - Right
-> +		4 - Front
-> +		5 - Back
-> +		6 - Unknown (Vertical Position and Horizontal Position will be
-> +		ignored)
 
-This is text files, why not say "top", "bottom", and so on?  Why use a
-number that means nothing?
+On 2/27/22 9:48 AM, Jonathan Cameron wrote:
+> On Sun, 27 Feb 2022 07:43:31 -0800
+> trix@redhat.com wrote:
+>
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this problem
+>> scd4x.c:474:10: warning: The left operand of '==' is a
+>>    garbage value
+>>    if (val == 0xff) {
+>>        ~~~ ^
+>> val is only set from a successful call to scd4x_write_and_fetch()
+>> So check it's return.
+>>
+>> Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> Good find, but I'd prefer a separate check on ret inline with what the
+> other error checking paths in that function are doing.
+>
+>> ---
+>>   drivers/iio/chemical/scd4x.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
+>> index 20d4e7584e923..b978330fb761c 100644
+>> --- a/drivers/iio/chemical/scd4x.c
+>> +++ b/drivers/iio/chemical/scd4x.c
+>> @@ -471,7 +471,7 @@ static ssize_t calibration_forced_value_store(struct device *dev,
+>>   	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
+>>   	mutex_unlock(&state->lock);
+>>   
+>> -	if (val == 0xff) {
+>> +	if (!ret && val == 0xff) {
+>>   		dev_err(dev, "forced calibration has failed");
+>>   		return -EINVAL;
+>>   	}
+> Prefer
+>
+> 	if (ret)
+> 		return ret;
+>
+> 	if (val == 0xff) {
+> 		dev_err(dev, "...
+> 		return -EINVAL;
+> 	}
 
+ok and the next line can be simplified to
 
-> +
-> +What:		/sys/class/typec/<port>/location/vertical_position
-> +Date:		February 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		0 - Upper
-> +		1 - Center
-> +		2 - Lower
+return len;
 
-Same here.
+Tom
 
+> Thanks,
+>
+> Jonathan
+>
 
-> +
-> +What:		/sys/class/typec/<port>/location/horizontal_position
-> +Date:		Feb, 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		0 - Left
-> +		1 - Center
-> +		2 - Right
-
-And here.
-
-> +
-> +What:		/sys/class/typec/<port>/location/dock
-> +Date:		Feb, 2022
-
-Note that date ends in a few hours :(
-
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Set if the port resides in a docking station or a port replicator.
-> +
-> +What:		/sys/class/typec/<port>/location/lid
-> +Date:		Feb, 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Set if the port resides on the lid of laptop system.
-
-"set"?  What does that mean?
-
-
-
-> +
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->  
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 45a6f0c807cb..43b23c221f95 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1579,8 +1579,40 @@ static const struct attribute_group typec_group = {
->  	.attrs = typec_attrs,
->  };
->  
-> +#define DEV_ATTR_LOCATION_PROP(prop) \
-> +	static ssize_t prop##_show(struct device *dev, struct device_attribute *attr, \
-> +		char *buf) \
-> +	{ \
-> +		struct typec_port *port = to_typec_port(dev); \
-> +		if (port->pld) \
-> +			return sprintf(buf, "%u\n", port->pld->prop); \
-> +		return 0; \
-> +	}; \
-> +static DEVICE_ATTR_RO(prop)
-> +
-> +DEV_ATTR_LOCATION_PROP(panel);
-> +DEV_ATTR_LOCATION_PROP(vertical_position);
-> +DEV_ATTR_LOCATION_PROP(horizontal_position);
-> +DEV_ATTR_LOCATION_PROP(dock);
-> +DEV_ATTR_LOCATION_PROP(lid);
-> +
-> +static struct attribute *typec_location_attrs[] = {
-> +	&dev_attr_panel.attr,
-> +	&dev_attr_vertical_position.attr,
-> +	&dev_attr_horizontal_position.attr,
-> +	&dev_attr_dock.attr,
-> +	&dev_attr_lid.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group typec_location_group = {
-> +	.name = "location",
-> +	.attrs = typec_location_attrs,
-> +};
-> +
->  static const struct attribute_group *typec_groups[] = {
->  	&typec_group,
-> +	&typec_location_group,
->  	NULL
->  };
->  
-> @@ -1614,6 +1646,24 @@ const struct device_type typec_port_dev_type = {
->  	.release = typec_release,
->  };
->  
-> +void *get_pld(struct device *dev)
-
-That is a horrible global function name :(
-
-And why a void pointer?  We have real types in the kernel, please use
-them.
-
-> +{
-> +#ifdef CONFIG_ACPI
-
-No #ifdefs in .c files please.
-
-> +	struct acpi_pld_info *pld;
-> +	acpi_status status;
-> +
-> +	if (!has_acpi_companion(dev))
-> +		return NULL;
-> +
-> +	status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-> +	if (ACPI_FAILURE(status))
-> +		return NULL;
-> +	return pld;
-
-See, you return a real type, don't throw that information away.  This
-isn't Windows :)
-
-thanks,
-
-gre gk-h

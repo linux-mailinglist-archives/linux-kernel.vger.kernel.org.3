@@ -2,120 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D414C7DDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947F24C7DF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiB1W4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S229508AbiB1XDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiB1W4j (ORCPT
+        with ESMTP id S229446AbiB1XDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:56:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCD38D68A;
-        Mon, 28 Feb 2022 14:55:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BD09B816A6;
-        Mon, 28 Feb 2022 22:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118EAC340EE;
-        Mon, 28 Feb 2022 22:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646088957;
-        bh=IrKyR4KsaGy6ILEoSjvY+Pfikinwp5UgDQ/3sdpyfQg=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=JTti+7gOLMySTeqWwRBxm9JF/LxEc36hF/DllbnINKGysrNoAZbJLJCN29tzVQpEC
-         OPBNdIDfbz1a4MXrk6S84RC/ZiOGeWwOxLpW2V9hRJc+e7F2oPRIOxlhmAfsR40EkZ
-         Q2pS4vFDlD+ecf+evWmIf7r7ooWXN3k3Pfc74WjAyCK5yndZ0W3PF081gZa2AVB1LT
-         qIfQUnlwqzaDII5e8dWe49KxurJ1CpD4xSdpKFvkS+qWBTA9snzhIQ6jB54mE10KcI
-         jijFO4uIy/i+6CAtuUZ+BqilyatRAWqJ7H624wNXOLvWOzS4C5e8sn1XGZbRzI/A4w
-         RX+lyfAqXFcag==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B3D1A27C0054;
-        Mon, 28 Feb 2022 17:55:53 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Mon, 28 Feb 2022 17:55:53 -0500
-X-ME-Sender: <xms:-FIdYsLIH8xSXNZkBj6DK83xIzUn_W9DsfVQwWcVMCVCOzeKk1MKzQ>
-    <xme:-FIdYsLitA72qcFv2KAsG4rt4hYfQ-yzQUiflwB2j5Gq_sovTK47ksE4Xj0VPodt9
-    vn1SyG-Tz7OMJvj2yU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtuddgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
-    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
-    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
-    drlhhuthhordhush
-X-ME-Proxy: <xmx:-FIdYssw9wS50EE9pmpETO-NcmotanHVlmsg84NE43g3fXEk307dsg>
-    <xmx:-FIdYpaUHX3OArm88Um26oVtVLfGpJZ6c4f2XxZPmdtCJEAqDNfk6Q>
-    <xmx:-FIdYjbMoiMfJTvRwgFi78iSWM11ZclQ9BUpPVva3-tJJlRFBp_zwg>
-    <xmx:-VIdYpuR9Y186Dyd0VlVgshdQ9Q02sP-GkUSmwD_NWUNx-bFblctiTHSWgI>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2E51821E006E; Mon, 28 Feb 2022 17:55:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
-In-Reply-To: <Yh0+9cFyAfnsXqxI@kernel.org>
-References: <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain>
- <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain>
- <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
- <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
- <Yh0wIMjFdDl8vaNM@kernel.org>
- <5a792e77-0072-4ded-9f89-e7fcc7f7a1d6@www.fastmail.com>
- <Yh0+9cFyAfnsXqxI@kernel.org>
-Date:   Mon, 28 Feb 2022 14:55:30 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Mike Rapoport" <rppt@kernel.org>
-Cc:     "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Cyrill Gorcunov" <gorcunov@gmail.com>,
-        "Balbir Singh" <bsingharora@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Dmitry Safonov" <0x7f454c46@gmail.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Adrian Reber" <adrian@lisas.de>,
-        "Florian Weimer" <fweimer@redhat.com>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Jann Horn" <jannh@google.com>, "Andrei Vagin" <avagin@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Oleg Nesterov" <oleg@redhat.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Pavel Machek" <pavel@ucw.cz>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Mike Kravetz" <mike.kravetz@oracle.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Weijiang Yang" <weijiang.yang@intel.com>,
-        "Dave Martin" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 28 Feb 2022 18:03:30 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53D1C11F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:02:49 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso488644pju.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E18nFr6CZyKutgNHe7ZMWmu1CUH8/xXfpzrd78+lw3g=;
+        b=clgIO3f5d/WoMs5kQadArCOE8yK3k1iikSF9YqWeMN7Na5zLFCkPmwHUz4zGYmF2Bn
+         I+dLJFdtf/dxyfLzjtY6xm9m5p0Us1nz/Ah+NF0LtqAAdJroJ/MM6nTzxcthnWrQcgWS
+         v1duGAc6nfiyyEm71Te9WSdfyzbXe8hZ7Y9QQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E18nFr6CZyKutgNHe7ZMWmu1CUH8/xXfpzrd78+lw3g=;
+        b=0PHtpPC7nfyRUT80l0ui78jCfOzEe1oSGo7MIpKYkjFr4DLzye2yp0427mGyd9Eiwq
+         OfCHD+UUf7bGpClLUd/dHQdCh3AisfsX+0beFHiX5cmpexkdlAuB6Vj0Gy7jiI6fILQk
+         GMw8u43VtX+d2uPnnrZvM4mr4jcxUDOpDivJuO7Bx2O0dOhY1eobISau/9h5GAsqNjMW
+         +CkQLHNNXh4c5gUsa2dVH66Y+Nq0eyb7pyMcKsZp17g2ZbxMssHIa4e+ZkG7wR4O4smh
+         7Y6SWWEYA+NWSuC47RjH+zK7GSWS6RfVnHUR8c78QzPilmla4KLqcQ/XmmmNO4V6RR9d
+         js2g==
+X-Gm-Message-State: AOAM533jooRqeVevuT00TIs7Mlpw9nXV4O1vtAilmI4wsTxGiDX+R7YV
+        4T+/iUVhm7YByCskcMT1v/sJew==
+X-Google-Smtp-Source: ABdhPJxfQ1nEAcrAyPHpdz9IUSpSVvJ+s1ZvVeZTzteCXVt4ZAkTmBmTv9aj7/vxmk13zoRAUJFh2A==
+X-Received: by 2002:a17:903:2c5:b0:14f:4a29:1f64 with SMTP id s5-20020a17090302c500b0014f4a291f64mr23194061plk.90.1646089369195;
+        Mon, 28 Feb 2022 15:02:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c34-20020a630d22000000b0034cb89e4695sm11538529pgl.28.2022.02.28.15.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 15:02:48 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:02:48 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202202281453.C8B840C7@keescook>
+References: <20220301092730.10de23c5@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301092730.10de23c5@canb.auug.org.au>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,41 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 01, 2022 at 09:27:30AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kspp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+> drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
+>  3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
+>       |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
+>  3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
+>       |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+>    59 |         return link_status[r - DP_LANE0_1_STATUS];
+>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> I can't see what in the kspp tree suddenly brought this on, so I have
+> used the kspp tree from next-20220228 for today.
+> 
+> In case it matters: x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
 
+This is fixed in drm-misc:
 
-On Mon, Feb 28, 2022, at 1:30 PM, Mike Rapoport wrote:
-> On Mon, Feb 28, 2022 at 12:30:41PM -0800, Andy Lutomirski wrote:
->> 
->> 
->> On Mon, Feb 28, 2022, at 12:27 PM, Mike Rapoport wrote:
->> > On Wed, Feb 09, 2022 at 06:37:53PM -0800, Andy Lutomirski wrote:
->> >> On 2/8/22 18:18, Edgecombe, Rick P wrote:
->> >> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
->> >> > 
->> >
->> > Even with the current shadow stack interface Rick proposed, CRIU can restore
->> > the victim using ptrace without any additional knobs, but we loose an
->> > important ability to "self-cure" the victim from the parasite in case
->> > anything goes wrong with criu control process.
->> >
->> > Moreover, the issue with backward compatibility is not with ptrace but with
->> > sigreturn and it seems that criu is not its only user.
->> 
->> So we need an ability for a tracer to cause the tracee to call a function
->> and to return successfully.  Apparently a gdb branch can already do this
->> with shstk, and my PTRACE_CALL_FUNCTION_SIGFRAME should also do the
->> trick.  I don't see why we need a sigretur-but-dont-verify -- we just
->> need this mechanism to create a frame such that sigreturn actually works.
->
-> If I understand correctly, PTRACE_CALL_FUNCTION_SIGFRAME() injects a frame
-> into the tracee and makes the tracee call sigreturn.
-> I.e. the tracee is stopped and this is used pretty much as PTRACE_CONT or
-> PTRACE_SYSCALL.
->
-> In such case this defeats the purpose of sigreturn in CRIU because it is
-> called asynchronously by the tracee when the tracer is about to detach or
-> even already detached.
+https://cgit.freedesktop.org/drm/drm-misc/log/
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=d4da1f27396fb1dde079447a3612f4f512caed07
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=a2151490cc6c57b368d7974ffd447a8b36ade639
 
-The intent of PTRACE_CALL_FUNCTION_SIGFRAME is push a signal frame onto the stack and call a function.  That function should then be able to call sigreturn just like any normal signal handler.  There should be no requirement that the tracer still be attached when this happens, although the code calling sigreturn still needs to be mapped.
+but I had to drop the fix from the for-next/kspp because the patched
+file got moved in drm-misc.
 
-(Specifically, on modern arches, the user runtime is expected to provide a "restorer" that calls sigreturn.  A hypotheticall PTRACE_CALL_FUNCTION_SIGFRAME would either need to call sigreturn directly or provide a restorer.)
+I don't know how to best deal with this case, which is: "add new Makefile
+flag" and "carry fixes that have been ignored for 2 weeks" followed
+by a later "fix got picked up now" change. Currently I've still been
+carrying them is a separate tree that is merged with for-next/kspp,
+so the warning doesn't appear like above, but that requires that the
+tree it applies to doesn't change out from under it. :P
+
+-- 
+Kees Cook

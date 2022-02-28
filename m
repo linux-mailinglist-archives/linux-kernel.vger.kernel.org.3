@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9164C681C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F10C4C6867
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiB1Kvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S235007AbiB1KyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbiB1Kv0 (ORCPT
+        with ESMTP id S235235AbiB1Kwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:51:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B7063BCE;
-        Mon, 28 Feb 2022 02:50:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8665F60B14;
-        Mon, 28 Feb 2022 10:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EF1C340E7;
-        Mon, 28 Feb 2022 10:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646045447;
-        bh=RGxEAwdzbR9egvtFInpa3m0a3G+1maC22+8uUJecp+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2mr4o0ihvx67u6tNw0ZQeK8ySDxIIZCnqC4Ex4voBp9cJOAwzLtVgodPoUWwqQh6K
-         Pq2Eo6lAjCsN1L0eP39op+X0xNeqTqIOQPRIGAml0Xcl7auXm21Ibxjj/AduI8S862
-         87O8cic3X/60Za8DC5rd0XOSXhsp77pYqumwDpDM=
-Date:   Mon, 28 Feb 2022 11:50:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-Message-ID: <YhypAxDfWpDhPUbc@kroah.com>
-References: <20220228103142.3301082-1-arnd@kernel.org>
+        Mon, 28 Feb 2022 05:52:54 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7F2674DC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:51:27 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d07c4a0d06so102662437b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 02:51:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kYkiTGE+IL621wQjI8CgMwBjCYo+uE8eI9lxYVOTdh4=;
+        b=RgzHqIp1vA8is+C2ytkSxIxm4DQxeOY/hmAu6Qz3W1Q93ZAHaBl9TSm9MdRE48hQHp
+         EcIAdPLfPu6/h7lXHaroH40GzxJBOSc0ioDrKP4QB8iOQlbT4slFg2FSDyrWxg4UgjE3
+         bOM9MSgnY3oaG+1e30qKUFXA4jeONfittua8vGZfygqJ/HPOqUbs7Q8OJ7QitjMJxPhS
+         ZrsJDGMk23U2ili69HorKtfW6zbNnbsOYRaRVp6Tt345WWGtGJjQo0l4LAGmA0PKIsgt
+         FUfFiZ4o46XXMd2vFJsoOHHII2yv9PvbSmtMIqAd8a/+ZEnDLxV+vb07oex9eUIV/9lw
+         GgOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kYkiTGE+IL621wQjI8CgMwBjCYo+uE8eI9lxYVOTdh4=;
+        b=NwIgWe8Y4FheVW8qdUxSD18n9VPJ10r3VsXzWmX5cXIYSagcieCTu7+zaIeOSjE5Uu
+         VB4I0ug+DBxrv8bZ2AUx7Jj7NS9G80Vw9eXQ5nKS8SsQVYcw8v96ZenWkIn2+LCP0DaC
+         MsYnoGlCYoM4qSSvoBwvaq2xzlbZ9cKhb77L9cCLjjNc/dxfVq/Z7hhs7HeSp6dn92Da
+         apM5vUgghmZsW88wT09qaqSknlRkUqQxVQT+3VyObuLNGsnlsawxrx4wwlnyOaCyIrNa
+         /p5uD3lhdkYinchuEh4zXM7LBdXivqxDHpl2bxuApVdFQL0G08G6a4nJdMh646Lh3pms
+         Xg+A==
+X-Gm-Message-State: AOAM5333nKN9kSJl17K9JVXVHcymczKBfBWhXVcEwgOHWKtyohbyIIHX
+        eUiz3kPwJs+1gb6p/AQM6wAPKNviiCDx7D+brh2C4Q==
+X-Google-Smtp-Source: ABdhPJxNJhPVWSLXvI3iBbzOTe+qklatZ5k5QaYFXfBVeasYi8gKHeTY8TCV153zvQlSda9HbUSe36S5qOS966ph55M=
+X-Received: by 2002:a81:1a49:0:b0:2d7:fc73:dab2 with SMTP id
+ a70-20020a811a49000000b002d7fc73dab2mr19291710ywa.316.1646045486359; Mon, 28
+ Feb 2022 02:51:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220225180318.20594-3-vbabka@suse.cz> <YhrrM7NTYXG5JluY@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <CANpmjNOyVTQZroOEVF_ZLASCtQ=SiC12WGWEwOib3vDk3sCbtw@mail.gmail.com> <YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal>
+In-Reply-To: <YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 28 Feb 2022 11:50:49 +0100
+Message-ID: <CANpmjNOOhuoU7T4UqHbzkRAvM+b-gvt+Qtx41va=9ixGgUSWaQ@mail.gmail.com>
+Subject: Re: [PATCH] lib/stackdepot: Use page allocator if both slab and
+ memblock is unavailable
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> During a patch discussion, Linus brought up the option of changing
-> the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standards
-> introduce many other features, most of these are already available in
-> gnu89 as GNU extensions as well.
-> 
-> An earlier attempt to do this when gcc-5 started defaulting to
-> -std=gnu11 failed because at the time that caused warnings about
-> designated initializers with older compilers. Now that gcc-5.1 is the
-> minimum compiler version used for building kernels, that is no longer a
-> concern. Similarly, the behavior of 'inline' functions changes between
-> gnu89 and gnu11, but this was taken care of by defining 'inline' to
-> include __attribute__((gnu_inline)) in order to allow building with
-> clang a while ago.
-> 
-> One minor issue that remains is an added gcc warning for shifts of
-> negative integers when building with -Werror, which happens with the
-> 'make W=1' option, as well as for three drivers in the kernel that always
-> enable -Werror, but it was only observed with the i915 driver so far.
-> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
-> in a Makefile.
-> 
-> Nathan Chancellor reported an additional -Wdeclaration-after-statement
-> warning that appears in a system header on arm, this still needs a
-> workaround.
-> 
-> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
-> minimal and mainly impact warnings at the -Wpedantic level that the
-> kernel never enables. Between these, gnu11 is the newest version
-> that is supported by all supported compiler versions, though it is
-> only the default on gcc-5, while all other supported versions of
-> gcc or clang default to gnu1x/gnu17.
-> 
-> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> [v2]
->  - added -std=gnu11 back, rather than just relying on the default
->  - minor changes to changelog text
-> ---
->  Documentation/process/programming-language.rst              | 4 ++--
->  .../translations/it_IT/process/programming-language.rst     | 4 ++--
->  .../translations/zh_CN/process/programming-language.rst     | 4 ++--
->  .../translations/zh_TW/process/programming-language.rst     | 4 ++--
->  Makefile                                                    | 6 +++---
->  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
->  drivers/gpu/drm/i915/Makefile                               | 1 +
->  drivers/staging/greybus/tools/Makefile                      | 3 ++-
->  fs/btrfs/Makefile                                           | 1 +
->  scripts/Makefile.extrawarn                                  | 1 +
->  10 files changed, 17 insertions(+), 13 deletions(-)
+On Mon, 28 Feb 2022 at 11:05, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+[...]
+> > This is odd - who is calling stack_depot_init() while neither slab nor
+> > memblock are available?
+>
+> It's not merged yet - but Oliver's patch (2/5) in his series [1] does:
+> If user is debugging cache, it calls stack_depot_init() when creating
+> cache.
+>
+> > @@ -4221,6 +4220,9 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+> >       s->remote_node_defrag_ratio = 1000;
+> >  #endif
+> >
+> > +     if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
+> > +             stack_depot_init();
+> > +
+>
+> Oliver's patch series enables stack depot when arch supports stacktrace,
+> to store slab objects' stack traces. (as slub debugging feature.)
+>
+> Because slub debugging is turned on by default, the commit 2dba5eb1c73b
+> ("lib/stackdepot: allow optional init and stack_table allocation by
+> kvmalloc()") made stack_depot_init() can be called later.
+>
+> With Oliver's patch applied, stack_depot_init() can be called in
+> contexts below:
+>
+>   1) only memblock available (for kasan)
+>   2) only buddy available, vmalloc/memblock unavailable (for boot caches)
+>   3) buddy/slab available, vmalloc/memblock unavailable (vmap_area cache)
+>   4) buddy/slab/vmalloc available, memblock unavailable (other caches)
+>
+> SLUB supports enabling debugging for specific cache by passing
+> slub_debug boot parameter. As slab caches can be created in
+> various context, stack_depot_init() should consider all contexts above.
+>
+> Writing this, I realized my patch does not handle case 3).. I'll send v3.
+>
+> [1] https://lore.kernel.org/linux-mm/YhoakP7Kih%2FYUgiN@ip-172-31-19-208.ap-northeast-1.compute.internal/T/#t
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v1
+>
+> > Do you have a stacktrace?
+>
+> Yeah, here:
+>
+> You can reproduce this on vbabka's slab-stackdepot-v1 branch [2] with
+> slub_debug=U, and CONFIG_STACKDEPOT_ALWAYS_INIT=n
+>
+[...]
+> [    0.000000] Call trace:
+> [    0.000000]  __memset+0x16c/0x188
+> [    0.000000]  stack_depot_init+0xc8/0x100
+> [    0.000000]  __kmem_cache_create+0x454/0x570
+> [    0.000000]  create_boot_cache+0xa0/0xe0
 
-For the greybus tools section:
+I think even before this point you have all the information required
+to determine if stackdepot will be required. It's available after
+setup_slub_debug().
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+So why can't you just call stack_depot_init() somewhere else and avoid
+all this complexity?
+
+> [    0.000000]  kmem_cache_init+0xf8/0x204
+> [    0.000000]  start_kernel+0x3ec/0x668
+> [    0.000000]  __primary_switched+0xc0/0xc8
+> [    0.000000] Code: 91010108 54ffff4a 8b040108 cb050042 (d50b7428)
+> [    0.000000] ---[ end trace 0000000000000000 ]---
+> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+> [    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---

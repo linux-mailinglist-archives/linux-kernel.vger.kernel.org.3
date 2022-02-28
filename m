@@ -2,209 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3181B4C7515
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052844C750A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238973AbiB1Ru3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S238812AbiB1RuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239375AbiB1RoH (ORCPT
+        with ESMTP id S239333AbiB1Rn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:44:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A8B9D0DE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069778; x=1677605778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xNaNNHqAIqgJiiZ16Dvv6Se8got1HO3XhTb5+wE1vwk=;
-  b=N+IukYxpkmVOk+O0q9xeT7W3mrqrYY7suTbiA0JjIId9LVlADwWqjMrk
-   2EaefzSiw4SrX0C3gfTwUI8iQFUI2C16l/PwlSjea//kR+iaSQ1YkJlgt
-   F2KKDny+PxOlxPHMK3pGrQq/Ad7o9BjfilGy66bvUiCBDMtTxgrSxPpsU
-   enzgqoMugZH4mdhLF2U4oiSm1wj3cXuN846Eh8M3+L1KU8kWJ5s85oPLr
-   Ot8Tltts1C7N57Aq4eA87gUBWoebWjt+GG3t/V4jgCwjIjq00HeOMq3Va
-   Wpq0EhdUuZBFeMVTKw5ocDIzwZFltnYusd/ggDL9s7/A4ZMimAIKxwfcO
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252865435"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="252865435"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:36:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="608524735"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Feb 2022 09:36:15 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOjwU-0007aj-9X; Mon, 28 Feb 2022 17:36:14 +0000
-Date:   Tue, 1 Mar 2022 01:35:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        daniel.lezcano@linaro.org, tglx@linutronix.de
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 5/7] clocksource/drivers/timer-microchip-pit64b: add
- delay timer
-Message-ID: <202202282242.zM0FjCHj-lkp@intel.com>
-References: <20220228111923.1400049-6-claudiu.beznea@microchip.com>
+        Mon, 28 Feb 2022 12:43:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498639680D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:36:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646069772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZjMF25uYjLREHp+O7hSIrQRDAZsG0wANT5peCox0nVI=;
+        b=LFWIS18XW4zDfCPAJ2EeOZ5ccFiKBQ+nq8k+P5c3YRz2qIMCdUgrRgAB15/FxaKiaDHFnp
+        8eLxkeTP1S7KbDuv7L5M+o9sBUDeDNCNoM2YwJnNKVb0Zo3FnTESIcyA+IunpmIBi6xDNq
+        sX1LpxoXAa1SPGu45JzSoiAHcwNJ0oo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-U1YXVGmONM6teGaV4Fdj3g-1; Mon, 28 Feb 2022 12:36:10 -0500
+X-MC-Unique: U1YXVGmONM6teGaV4Fdj3g-1
+Received: by mail-qv1-f69.google.com with SMTP id d15-20020a0cb2cf000000b00432e2ddeefaso7322426qvf.23
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:36:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZjMF25uYjLREHp+O7hSIrQRDAZsG0wANT5peCox0nVI=;
+        b=GAPlAA9MUihPAcG/A/GHcAHlaryN5brG7qMN2aAjC8lrbtpp8e6/Rdfh2kb2pRHSDa
+         9bRLan3yWdESFtgvmiRwCchzXSCW8I5PvXIym+YS9ryST7HCgbA3kF6WH9qYQpYBQuXY
+         SkzFIYBo59wa3Y++h1RtF4b0Luni5UJnBr3wM+O4LgdoB0DmhYYIZevIgNQDaldMGQZO
+         Is+GmUNPmGXc71oE12xUb5AVaxb5zoslyzcvm8A7C5zyb5hQ0Rrf4eV5vdMrEFwnLVqK
+         EReaPMAajXJC1XFITaPp2eS/3XO1jh0jyVq2DYByHfJotTrfJRcstLesYY9bwz+1YSB7
+         81Yw==
+X-Gm-Message-State: AOAM533kBnccklRhJeHl3HlBg/ZAPQ5nFLLpyqW8yW81pBRxX97lQi53
+        TaKDGNI1xktIihQYMiM6NeQEz9bg60q5QJ3GXoCwfKGYgtnNX5DsGLDjJsyOl3JrBp53cIhgAaC
+        UXM8K/ghWewkgEouXam2uK4ob
+X-Received: by 2002:a05:620a:2108:b0:648:ee02:4601 with SMTP id l8-20020a05620a210800b00648ee024601mr11172612qkl.405.1646069770423;
+        Mon, 28 Feb 2022 09:36:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwrX+DEjhdqkNd1pMhAVM2Jj1iDLRMhoDRwTjYtNT6tbi8TuqQl5g0wq16VvkZYqx/2B/4FJw==
+X-Received: by 2002:a05:620a:2108:b0:648:ee02:4601 with SMTP id l8-20020a05620a210800b00648ee024601mr11172597qkl.405.1646069770154;
+        Mon, 28 Feb 2022 09:36:10 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id p12-20020a05622a048c00b002de8f67b60dsm7488545qtx.58.2022.02.28.09.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 09:36:09 -0800 (PST)
+Date:   Mon, 28 Feb 2022 09:36:06 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 36/39] objtool: Find unused ENDBR instructions
+Message-ID: <20220228173606.nqyq2knzenwrnfup@treble>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151324.137868984@infradead.org>
+ <20220227034613.a5ejjey5agxlympd@treble>
+ <YhzC6RmRZs6U4wvG@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220228111923.1400049-6-claudiu.beznea@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhzC6RmRZs6U4wvG@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Claudiu,
+On Mon, Feb 28, 2022 at 01:41:13PM +0100, Peter Zijlstra wrote:
+> On Sat, Feb 26, 2022 at 07:46:13PM -0800, Josh Poimboeuf wrote:
+> > On Thu, Feb 24, 2022 at 03:52:14PM +0100, Peter Zijlstra wrote:
+> > > +#ifdef CONFIG_X86_KERNEL_IBT
+> > > +	. = ALIGN(8);
+> > > +	.ibt_endbr_sites : AT(ADDR(.ibt_endbr_sites) - LOAD_OFFSET) {
+> > > +		__ibt_endbr_sites = .;
+> > > +		*(.ibt_endbr_sites)
+> > > +		__ibt_endbr_sites_end = .;
+> > > +	}
+> > > +#endif
+> > 
+> > ".ibt_endbr_superfluous" maybe?  It's not *all* the endbr sites.
+> 
+> Since I like seals, I'll make it .ibt_endbr_seal :-) Also goes well with
+> the option at hand.
 
-I love your patch! Perhaps something to improve:
+Sounds good.
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on soc/for-next linus/master v5.17-rc6 next-20220225]
-[cannot apply to daniel-lezcano/clockevents/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> > > +
+> > >  	/*
+> > >  	 * struct alt_inst entries. From the header (alternative.h):
+> > >  	 * "Alternative instructions for different CPU types or capabilities"
+> > > --- a/tools/objtool/builtin-check.c
+> > > +++ b/tools/objtool/builtin-check.c
+> > > @@ -21,7 +21,7 @@
+> > >  
+> > >  bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+> > >       lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
+> > > -     ibt, ibt_fix_direct;
+> > > +     ibt, ibt_fix_direct, ibt_seal;
+> > >  
+> > >  static const char * const check_usage[] = {
+> > >  	"objtool check [<options>] file.o",
+> > > @@ -50,6 +50,7 @@ const struct option check_options[] = {
+> > >  	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
+> > >  	OPT_BOOLEAN(0, "ibt", &ibt, "validate ENDBR placement"),
+> > >  	OPT_BOOLEAN(0, "ibt-fix-direct", &ibt_fix_direct, "fixup direct jmp/call to ENDBR"),
+> > > +	OPT_BOOLEAN(0, "ibt-seal", &ibt_seal, "list superfluous ENDBR instructions"),
+> > 
+> > s/list/annotate/ ?
+> 
+> Done :-)
+> 
+> > Not sure "ibt-seal" is the appropriate name since the "seal" is done at
+> > boot time.
+> 
+> It allows sealing; it finds the locations to seal, whatever :-)
 
-url:    https://github.com/0day-ci/linux/commits/Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220228-191933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: s390-randconfig-r036-20220228 (https://download.01.org/0day-ci/archive/20220228/202202282242.zM0FjCHj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/6050ca5a0af604ed2c397dcb907a9b057635a64e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220228-191933
-        git checkout 6050ca5a0af604ed2c397dcb907a9b057635a64e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/clocksource/
+Fair enough :-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Do we really need a separate option anyway?  To get the full benefits of
+> > IBT you might as well enable it...  And always enabling it helps flush
+> > out bugs quicker.
+> 
+> Are you asking about --ibt and --ibt-seal or about the existence of
+> X86_KERNEL_IBT_SEAL here?
 
-All warnings (new ones prefixed by >>):
+Both.
 
-   In file included from drivers/clocksource/timer-microchip-pit64b.c:11:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/clocksource/timer-microchip-pit64b.c:11:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/clocksource/timer-microchip-pit64b.c:11:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/clocksource/timer-microchip-pit64b.c:97:27: warning: tentative definition of variable with internal linkage has incomplete non-array type 'struct delay_timer' [-Wtentative-definition-incomplete-type]
-   static struct delay_timer mchp_pit64b_dt;
-                             ^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:382:16: error: incomplete definition of type 'struct delay_timer'
-           mchp_pit64b_dt.read_current_timer = mchp_pit64b_dt_read;
-           ~~~~~~~~~~~~~~^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:383:16: error: incomplete definition of type 'struct delay_timer'
-           mchp_pit64b_dt.freq = clk_rate;
-           ~~~~~~~~~~~~~~^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   drivers/clocksource/timer-microchip-pit64b.c:384:2: error: implicit declaration of function 'register_current_timer_delay' [-Werror,-Wimplicit-function-declaration]
-           register_current_timer_delay(&mchp_pit64b_dt);
-           ^
-   drivers/clocksource/timer-microchip-pit64b.c:97:27: error: tentative definition has type 'struct delay_timer' that is never completed
-   static struct delay_timer mchp_pit64b_dt;
-                             ^
-   drivers/clocksource/timer-microchip-pit64b.c:97:15: note: forward declaration of 'struct delay_timer'
-   static struct delay_timer mchp_pit64b_dt;
-                 ^
-   13 warnings and 4 errors generated.
+> The Makefiles will only ever use --ibt and --ibt-seal together for the
+> reason you state. The reason they're two separate objtool arguments is
+> because it's stictly speaking two different things being done. Also
+> --ibt as such is invariant, while --ibt-seal causes modifications to the
+> object file (which can be discarded using the new --dry-run I suppose).
 
+Ok, but I wanted to avoid option sprawl.  I don't see a reason to
+separate them.
 
-vim +97 drivers/clocksource/timer-microchip-pit64b.c
+> The reason X86_KERNEL_IBT_SEAL exists is because that requires objtool
+> while X86_KERNEL_IBT does not -- you seemed to favour not hard relying
+> on having objtool present.
 
-    87	
-    88	#define clksrc_to_mchp_pit64b_timer(x) \
-    89		((struct mchp_pit64b_timer *)container_of(x,\
-    90			struct mchp_pit64b_clksrc, clksrc))
-    91	
-    92	/* Base address for clocksource timer. */
-    93	static void __iomem *mchp_pit64b_cs_base;
-    94	/* Default cycles for clockevent timer. */
-    95	static u64 mchp_pit64b_ce_cycles;
-    96	/* Delay timer. */
-  > 97	static struct delay_timer mchp_pit64b_dt;
-    98	
+Hm, either you misunderstood, I misspoke, or I have short term memory
+loss.  Objtool is already hopelessly intertwined with x86.  I'd rather
+not have the extra option.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Josh
+

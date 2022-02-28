@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392624C6EAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E284C6EB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbiB1N5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S236917AbiB1N6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236845AbiB1N5t (ORCPT
+        with ESMTP id S236854AbiB1N5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:57:49 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0FC7D020;
-        Mon, 28 Feb 2022 05:57:11 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id j5so12468775qvs.13;
-        Mon, 28 Feb 2022 05:57:11 -0800 (PST)
+        Mon, 28 Feb 2022 08:57:50 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B817D013
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:57:12 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id v18so12498064qvh.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:57:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cQUDxIOQmLA9ZKQOZ3DN3t0eYopkqsvrJZ7NjA42XWM=;
-        b=D6wZocUmb6FhBDKphSVz7f0+50OiiHnoN4aW4spyaT3McyYINKNrdPC3rrxPTZI/5I
-         p7By6hXY+sQQqS2imvNWYN+Vw/mzJmBVtt/bnGGpdtkFnwtrNCypFPXSW+/pv18qekX6
-         o+GVc8Eas7xOnZCfKgTJfufQQ3Rz+EA6ePOZXOSZK0oQ6nZRIIUo0nDgsjACfpnn0Th4
-         x7+NGOhFfcGw0Vt9VAGqHC7dUrW+HHlI8uXrr+VXjHoBpOEk/PiB32oFHTvwpZsUBIWC
-         BvqlzD7ItoFyqBCmRTzwjiBxY1z3g27a8wxpVJz2w3SJ2UO01ZGfuUBe2WN9OABJ7a5x
-         ZwJA==
+        bh=ZtUJySmbIWUCXkZt6OYhMWHmPcZgwTz+ISBAU3SmGDQ=;
+        b=f7mHaST5NAc+ZIDJY57ZHA0oq8TrhOyfZVssHBsJGecvBXPY/L1UQruS1pWOe1uZLR
+         Wo9UrmY8B7uPAUk1siaDc8QWiwA0jZ4Lo4WXIICX+fW++jbriE10QO833oWDWj2VwLY4
+         zoUZZ8mlJhqSuwf4E4q8+220BxsKfgZP2Z6fII+erqmLb6iYYwJ2AqmorFubvIP/ZOQ0
+         7/Cz9afCjP5oCdXMd+DL1/YujlaMltAfzn2o2Rzg7U0KdAT3WtnK+OHopVVXhXGSZwVm
+         euMv1yatBtzNxI9JDnjjtJw8Rzj1IJS9utJLiSCsmqH/D7WSq1W8xJcYqSQb3EZAg/xK
+         ABCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cQUDxIOQmLA9ZKQOZ3DN3t0eYopkqsvrJZ7NjA42XWM=;
-        b=MN04tPcAPpd6N+4eJs7qRjf8AmWGSlhWpaXcxpAWICjK/1qah/J3pKgT6fGbIM2qkI
-         CWn5vPSYNzr68Gaez8KYaUoMlgQIaPTs3zpbCfhMG+p1IpKLNrrEDtTIRBCOtprT9F0Z
-         7HuJewMSGAzlSCVSgElpuw6nDOBwa8/lqVoVcGgu+81gs5ng5o9B+kprWLAjRvCv/RJF
-         Uq0lkRMchZWZoJFL7gnl1lqBA4n+MX7+0hX/OdTD0QmydAaKVP+4Zc/itya5Eta3z+8P
-         gFAF+Ti0JzDeLcXH2S2L7AmyURZMnsxchfx8RHb8ts9X+phFXCXYGU9ZJzMnkO/r7dFR
-         aWyA==
-X-Gm-Message-State: AOAM531o1Ud01ylarpV/UAHxDzdgcK1ian2qxLXaHGQxYYSgKHvWk2Ya
-        t1aCecIfYklavJQLMGDOglc=
-X-Google-Smtp-Source: ABdhPJzK8dI/AuVUIiY2N79dEgcXtr0u3v9g6tyJfKve6jayoJ2SoZtpH7AuPI9zJCIbLK8W9zAigQ==
-X-Received: by 2002:ad4:5fcb:0:b0:432:d049:c6d with SMTP id jq11-20020ad45fcb000000b00432d0490c6dmr9850850qvb.39.1646056630371;
-        Mon, 28 Feb 2022 05:57:10 -0800 (PST)
+        bh=ZtUJySmbIWUCXkZt6OYhMWHmPcZgwTz+ISBAU3SmGDQ=;
+        b=R6TpWeTEmau+lrdgJRFV7N4hwa9qYBpfMB9Z6O25SvvpuEeIUvM37yPSlYtUA7wYNF
+         79wioAt/cNzmERGC/GFV+MtLO85mrg0fvTQezPrKaZbkiR1PaX3G1nkzGQYElcK27+Tn
+         cnfXVCAw0JRuTGcBBIWwtCOVmBCcCMaQ4XET8APCGW6jFf01GuPnEmmuoxCBWJrF7KtU
+         rirvmdJby7zg+ksPlFGz+YKuykmiSsibgGW6ivlxd6AHwB0MYAQ6B1V9BpW+YkdJUUsK
+         sUw+0RdSYL51WbIRwhDsXlOaSZRZYjP5dB2vNSlZLA7RYP4Wlp/67qQ5xB9HDKl53Mgf
+         8hwg==
+X-Gm-Message-State: AOAM531gQKO/LDNGEqnN3B3lCz7vJWDS7338gBFvdMwd4Duti4A0rasU
+        wsvGAkGvIwIXAqLXaXp7t6hMvpmNojU52g==
+X-Google-Smtp-Source: ABdhPJwPALj6XKu9+umS4mMfyI8C8p5m+jZ9VT//cuyLwFrVCc5AoMqTn2unAhe0zVjk9nrBQJb5kg==
+X-Received: by 2002:a05:6214:212e:b0:42c:4226:282e with SMTP id r14-20020a056214212e00b0042c4226282emr14089597qvc.111.1646056631293;
+        Mon, 28 Feb 2022 05:57:11 -0800 (PST)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id b8-20020a05620a088800b00648bfd00a41sm4932244qka.80.2022.02.28.05.57.09
+        by smtp.gmail.com with ESMTPSA id b8-20020a05620a088800b00648bfd00a41sm4932244qka.80.2022.02.28.05.57.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 05:57:10 -0800 (PST)
+        Mon, 28 Feb 2022 05:57:11 -0800 (PST)
 From:   Peter Geis <pgwipeout@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>
+To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     linux-rockchip@lists.infradead.org, michael.riesch@wolfvision.net,
-        jbx6244@gmail.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/8] dt-bindings: usb: add rk3568 compatible to rockchip, dwc3
-Date:   Mon, 28 Feb 2022 08:56:54 -0500
-Message-Id: <20220228135700.1089526-4-pgwipeout@gmail.com>
+        jbx6244@gmail.com, Peter Geis <pgwipeout@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 4/8] soc: rockchip: set dwc3 clock for rk3566
+Date:   Mon, 28 Feb 2022 08:56:55 -0500
+Message-Id: <20220228135700.1089526-5-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228135700.1089526-1-pgwipeout@gmail.com>
 References: <20220228135700.1089526-1-pgwipeout@gmail.com>
@@ -75,35 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Riesch <michael.riesch@wolfvision.net>
+The rk3566 dwc3 otg port clock is unavailable at boot, as it defaults to
+the combophy as the clock source. As combophy0 doesn't exist on rk3566,
+we need to set the clock source to the usb2 phy instead.
 
-Add the compatible for the Rockchip RK3568 variant.
+Add handling to the grf driver to handle this on boot.
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/soc/rockchip/grf.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index 04077f2d7faf..b3798d94d2fd 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -30,6 +30,7 @@ select:
-         enum:
-           - rockchip,rk3328-dwc3
-           - rockchip,rk3399-dwc3
-+          - rockchip,rk3568-dwc3
-   required:
-     - compatible
+diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
+index 494cf2b5bf7b..384461b70684 100644
+--- a/drivers/soc/rockchip/grf.c
++++ b/drivers/soc/rockchip/grf.c
+@@ -108,6 +108,20 @@ static const struct rockchip_grf_info rk3399_grf __initconst = {
+ 	.num_values = ARRAY_SIZE(rk3399_defaults),
+ };
  
-@@ -39,6 +40,7 @@ properties:
-       - enum:
-           - rockchip,rk3328-dwc3
-           - rockchip,rk3399-dwc3
-+          - rockchip,rk3568-dwc3
-       - const: snps,dwc3
- 
-   reg:
++#define RK3566_GRF_USB3OTG0_CON1	0x0104
++
++static const struct rockchip_grf_value rk3566_defaults[] __initconst = {
++	{ "usb3otg port switch", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(0, 1, 12) },
++	{ "usb3otg clock switch", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(1, 1, 7) },
++	{ "usb3otg disable usb3", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(1, 1, 0) },
++};
++
++static const struct rockchip_grf_info rk3566_pipegrf __initconst = {
++	.values = rk3566_defaults,
++	.num_values = ARRAY_SIZE(rk3566_defaults),
++};
++
++
+ static const struct of_device_id rockchip_grf_dt_match[] __initconst = {
+ 	{
+ 		.compatible = "rockchip,rk3036-grf",
+@@ -130,6 +144,9 @@ static const struct of_device_id rockchip_grf_dt_match[] __initconst = {
+ 	}, {
+ 		.compatible = "rockchip,rk3399-grf",
+ 		.data = (void *)&rk3399_grf,
++	}, {
++		.compatible = "rockchip,rk3566-pipe-grf",
++		.data = (void *)&rk3566_pipegrf,
+ 	},
+ 	{ /* sentinel */ },
+ };
 -- 
 2.25.1
 

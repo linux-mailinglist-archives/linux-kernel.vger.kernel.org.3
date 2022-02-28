@@ -2,186 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9484C6557
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC5E4C6531
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbiB1JEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S234155AbiB1JCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbiB1JEN (ORCPT
+        with ESMTP id S234145AbiB1JCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:04:13 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD342A3F;
-        Mon, 28 Feb 2022 01:03:18 -0800 (PST)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6ZD206Snz67ySD;
-        Mon, 28 Feb 2022 17:03:14 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 10:03:15 +0100
-Received: from A2006125610.china.huawei.com (10.47.94.1) by
- lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 09:03:08 +0000
-From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
-        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
-        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
-        <wangzhou1@hisilicon.com>
-Subject: [PATCH v6 10/10] hisi_acc_vfio_pci: Use its own PCI reset_done error handler
-Date:   Mon, 28 Feb 2022 09:01:21 +0000
-Message-ID: <20220228090121.1903-11-shameerali.kolothum.thodi@huawei.com>
-X-Mailer: git-send-email 2.12.0.windows.1
-In-Reply-To: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
-References: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+        Mon, 28 Feb 2022 04:02:33 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF1966AC1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:01:54 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d28so14258396wra.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GklO/UHCHEE9F5DiQFSvvtbE7AZlaReUkQYnTqJmpAI=;
+        b=ywFgbJzrh/DZClHZ80xiwFkRi6o9PJgtnA5qZ87ix1K4Dc7VPHm7hkmJmzEbNSTHdz
+         Dm79YKPrll7KOUeQe9Ik3eKSGFz5rHB5YuAQbb5nnPPHDqlXqBpPwTNqMYpkuNejJKVl
+         bMWopoyytqWNeIhRi8ebORgk9K/X0aDgdDebHgGtnWwQif4xujvmzBy9Pe6j/EkL246n
+         DWr9SN9UM2QlDxJl51nKzhaoyr6STfoP7RbjwtfYJJWX5rcyzf+F0Di/d3KoAgA1/u9H
+         9124JV1MODZVXIKIdHmSJeuu0QPpdsECy0iO4omzIx3yBwRYUguyDi1Rx2eBUy60Wh87
+         53Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GklO/UHCHEE9F5DiQFSvvtbE7AZlaReUkQYnTqJmpAI=;
+        b=W+h93YsnzB1PtiTnNkzbTmirI3k6XPgv+4u6SGiECdTJzNwaDR/vuEIp7p5SVNcaFn
+         T5paREon38p6jqaD9TtrA3N3ajFLdrUsOt7HyIMNFj2rZ/Zv3DZr4GMoVGAZ1b5XQeh5
+         xvGAzaF1ho6VWQOOW2cE9j3NHdHwwFaIm4+LZRPUWjRXHgERaiCwFXMlDBVyQnUbZxxG
+         SD1P8jPsLL6aoR40b8Bu8WaDGGwtL6OclR36cEJ3O3mJm63YIGE/NMfQQVuwQnr0BR3j
+         zWjeQ0flLXtPNzCogoIXIzOrwirXvNCcWKdvr9Qq7TbTBZ+TGSQWwsPE9ON5UPmXvESj
+         4EEw==
+X-Gm-Message-State: AOAM531v10ecckxh5T8rdP0QCfs9691066dx4MnSYgY1y6+riS4T+7Qm
+        cgLXlQyjuXZE1pmoiPpPDwgefw==
+X-Google-Smtp-Source: ABdhPJzDkZIVZHzdceQbuQQa3A+DqOc0pW2JK4Xes6piiRp38ouCSl9r0mt6vKg4TeGRtJ9A9lpQ+w==
+X-Received: by 2002:a5d:40c7:0:b0:1ed:bd9d:e2e8 with SMTP id b7-20020a5d40c7000000b001edbd9de2e8mr14779672wrq.693.1646038912837;
+        Mon, 28 Feb 2022 01:01:52 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c4-20020adfed84000000b001e5b8d5b8dasm14202553wro.36.2022.02.28.01.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 01:01:52 -0800 (PST)
+Date:   Mon, 28 Feb 2022 09:01:49 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
+Message-ID: <YhyPfcjJtIKNQtF8@google.com>
+References: <20220228193928.3ec6ee98@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.47.94.1]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228193928.3ec6ee98@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register private handler for pci_error_handlers.reset_done and update
-state accordingly.
+On Mon, 28 Feb 2022, Stephen Rothwell wrote:
 
-Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
----
- .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 56 ++++++++++++++++++-
- .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  4 +-
- 2 files changed, 56 insertions(+), 4 deletions(-)
+> Hi all,
+> 
+> Today's linux-next merge of the char-misc tree got a conflict in:
 
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-index ce57c230d1a0..cdd278d6be11 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-@@ -868,6 +868,26 @@ hisi_acc_vf_set_device_state(struct hisi_acc_vf_core_device *hisi_acc_vdev,
- 	return ERR_PTR(-EINVAL);
- }
- 
-+/*
-+ * This function is called in all state_mutex unlock cases to
-+ * handle a 'deferred_reset' if exists.
-+ */
-+static void hisi_acc_vf_state_mutex_unlock(struct hisi_acc_vf_core_device *hisi_acc_vdev)
-+{
-+again:
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	if (hisi_acc_vdev->deferred_reset) {
-+		hisi_acc_vdev->deferred_reset = false;
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		hisi_acc_vdev->vf_qm_state = QM_NOT_READY;
-+		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
-+		hisi_acc_vf_disable_fds(hisi_acc_vdev);
-+		goto again;
-+	}
-+	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+}
-+
- static struct file *
- hisi_acc_vfio_pci_set_device_state(struct vfio_device *vdev,
- 				   enum vfio_device_mig_state new_state)
-@@ -898,7 +918,7 @@ hisi_acc_vfio_pci_set_device_state(struct vfio_device *vdev,
- 			break;
- 		}
- 	}
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return res;
- }
- 
-@@ -911,10 +931,35 @@ hisi_acc_vfio_pci_get_device_state(struct vfio_device *vdev,
- 
- 	mutex_lock(&hisi_acc_vdev->state_mutex);
- 	*curr_state = hisi_acc_vdev->mig_state;
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return 0;
- }
- 
-+static void hisi_acc_vf_pci_aer_reset_done(struct pci_dev *pdev)
-+{
-+	struct hisi_acc_vf_core_device *hisi_acc_vdev = dev_get_drvdata(&pdev->dev);
-+
-+	if (hisi_acc_vdev->core_device.vdev.migration_flags !=
-+				VFIO_MIGRATION_STOP_COPY)
-+		return;
-+
-+	/*
-+	 * As the higher VFIO layers are holding locks across reset and using
-+	 * those same locks with the mm_lock we need to prevent ABBA deadlock
-+	 * with the state_mutex and mm_lock.
-+	 * In case the state_mutex was taken already we defer the cleanup work
-+	 * to the unlock flow of the other running context.
-+	 */
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vdev->deferred_reset = true;
-+	if (!mutex_trylock(&hisi_acc_vdev->state_mutex)) {
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		return;
-+	}
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
-+}
-+
- static int hisi_acc_vf_qm_init(struct hisi_acc_vf_core_device *hisi_acc_vdev)
- {
- 	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
-@@ -1257,12 +1302,17 @@ static const struct pci_device_id hisi_acc_vfio_pci_table[] = {
- 
- MODULE_DEVICE_TABLE(pci, hisi_acc_vfio_pci_table);
- 
-+static const struct pci_error_handlers hisi_acc_vf_err_handlers = {
-+	.reset_done = hisi_acc_vf_pci_aer_reset_done,
-+	.error_detected = vfio_pci_core_aer_err_detected,
-+};
-+
- static struct pci_driver hisi_acc_vfio_pci_driver = {
- 	.name = KBUILD_MODNAME,
- 	.id_table = hisi_acc_vfio_pci_table,
- 	.probe = hisi_acc_vfio_pci_probe,
- 	.remove = hisi_acc_vfio_pci_remove,
--	.err_handler = &vfio_pci_core_err_handlers,
-+	.err_handler = &hisi_acc_vf_err_handlers,
- };
- 
- module_pci_driver(hisi_acc_vfio_pci_driver);
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-index 51bc7e92a776..6c18f7c74f34 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-@@ -96,6 +96,7 @@ struct hisi_acc_vf_migration_file {
- struct hisi_acc_vf_core_device {
- 	struct vfio_pci_core_device core_device;
- 	u8 match_done:1;
-+	u8 deferred_reset:1;
- 	/* for migration state */
- 	struct mutex state_mutex;
- 	enum vfio_device_mig_state mig_state;
-@@ -105,7 +106,8 @@ struct hisi_acc_vf_core_device {
- 	struct hisi_qm vf_qm;
- 	u32 vf_qm_state;
- 	int vf_id;
--
-+	/* for reset handler */
-+	spinlock_t reset_lock;
- 	struct hisi_acc_vf_migration_file resuming_migf;
- 	struct hisi_acc_vf_migration_file saving_migf;
- };
+I did ask for this *not* to be merged when it was in -testing.
+
+I'll follow-up with Greg.
+
+>   drivers/mfd/simple-mfd-i2c.c
+> 
+> between commit:
+> 
+>   5913eb45d036 ("mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a")
+> 
+> from the mfd tree and commit:
+> 
+>   d0cac2434c8e ("mfd: simple-mfd-i2c: Add Delta TN48M CPLD support")
+> 
+> from the char-misc tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+
+
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

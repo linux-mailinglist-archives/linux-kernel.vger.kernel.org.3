@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD454C707C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78194C7088
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiB1PUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S237516AbiB1P1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiB1PUu (ORCPT
+        with ESMTP id S237174AbiB1P1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:20:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ECC522C4;
-        Mon, 28 Feb 2022 07:20:11 -0800 (PST)
+        Mon, 28 Feb 2022 10:27:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154AC8093F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:27:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5397D60FD8;
-        Mon, 28 Feb 2022 15:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A9F58C340EE;
-        Mon, 28 Feb 2022 15:20:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA29DB811D2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0D7C340E7;
+        Mon, 28 Feb 2022 15:27:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646061610;
-        bh=szhdfk7+7V9sGlldHCLj5UhBz7sXxIGJHMZ+TCys5dA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BBF27rZrJ6bBGl5XgqNOKiGgQ3ctoLnlS5yJgcQYsTR8aNMvxlevv3hvTOpBt2aIp
-         7ge6Lv9MKdrjeugB4Tqzdk98/q1vu7kunefeqYAftikkRZjZivGnonuaTsTn8lCkyT
-         tg3ZUN0CG/hDcPYOxPAYPKEUC+1Y2yKinzdzI/6ip+ZeG9/bXTpLUMm3g6ikXwitMw
-         L8kIwtucbk9K8on/O4pbBW0YLXDXHjr+il3KiAWYYHyKxmHvnDRyNGM5P+q4bvqfc8
-         qA24eGozJ1/YWcO/QZZ8w7DW4Id50XxeQ4dCyQqUF5o+auCCvky7xQUenkvAHNac52
-         LcLrZkvFWmDaQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E341E5D087;
-        Mon, 28 Feb 2022 15:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1646062024;
+        bh=kFhWjGGPF0HOMSD41o5huv2osoCwgvTkZ3Q334nGLzY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gn3F5ZL+dou8lTgfyLNm181boVHfFi+CTyIt/fDJtEMsk00674yLi6uEWrBRqz2EC
+         rWdAi7n5FTg5oOA/k3VIZ/FlW7A9FsC0Hf99O+46B82BI5g4xxsoSl6nSB3UL+Q7ia
+         TkoyE+Ne4nSdi+OzagxH6CAJ3cSXWx9Ug3cX5aZJhEjH1ygv6VyHlWzW/msM5wEkAt
+         sn8nU/Qo2ndeTO79tMwOXgX0+xOfNWSK0B+Arpx15XZEebqLlXuVVekSt4AmbqipmY
+         4kSMGfpqhTyXW/rrhhsI4eJ02lyEfBPwO+k1gty5GZx8XHK3aCBpwaRhrAIkJLu5Qv
+         386CwB06NKMfQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Lewis Hanly <lewis.hanly@microchip.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] SoC: polarfire: fix build warning
+Date:   Mon, 28 Feb 2022 16:26:52 +0100
+Message-Id: <20220228152658.3367506-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpftool: Remove redundant slashes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164606161057.12013.6641220017965219668.git-patchwork-notify@kernel.org>
-Date:   Mon, 28 Feb 2022 15:20:10 +0000
-References: <20220226163815.520133-1-ytcoode@gmail.com>
-In-Reply-To: <20220226163815.520133-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        quentin@isovalent.com, jean-philippe@linaro.org,
-        mauricio@kinvolk.io, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,29 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Arnd Bergmann <arnd@arndb.de>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+The newly added driver causes a build warning because of a missing
+prototype:
 
-On Sun, 27 Feb 2022 00:38:15 +0800 you wrote:
-> Because the OUTPUT variable ends with a slash but CURDIR doesn't, to keep
-> the _OUTPUT value consistent, we add a trailing slash to CURDIR when
-> defining _OUTPUT variable.
-> 
-> Since the _OUTPUT variable holds a value ending with a trailing slash,
-> there is no need to add another one when defining BOOTSTRAP_OUTPUT and
-> LIBBPF_OUTPUT variables.
-> 
-> [...]
+drivers/soc/microchip/mpfs-sys-controller.c:76:6: warning: no previous prototype for function 'mpfs_sys_controller_put' [-Wmissing-prototypes]
 
-Here is the summary with links:
-  - [bpf-next,v2] bpftool: Remove redundant slashes
-    https://git.kernel.org/bpf/bpf-next/c/c62dd8a58d19
+Link: https://lore.kernel.org/llvm/202202260947.F5T1YNao-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: d0054a470c33 ("soc: add microchip polarfire soc system controller")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I've applied this to the arm/drivers branch as a fixup
 
-You are awesome, thank you!
+ include/soc/microchip/mpfs.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/soc/microchip/mpfs.h b/include/soc/microchip/mpfs.h
+index 6466515262bd..969b5239521e 100644
+--- a/include/soc/microchip/mpfs.h
++++ b/include/soc/microchip/mpfs.h
+@@ -38,6 +38,8 @@ int mpfs_blocking_transaction(struct mpfs_sys_controller *mpfs_client, struct mp
+ 
+ struct mpfs_sys_controller *mpfs_sys_controller_get(struct device *dev);
+ 
++void mpfs_sys_controller_put(void *data);
++
+ #endif /* if IS_ENABLED(CONFIG_POLARFIRE_SOC_SYS_CTRL) */
+ 
+ #endif /* __SOC_MPFS_H__ */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.29.2
 

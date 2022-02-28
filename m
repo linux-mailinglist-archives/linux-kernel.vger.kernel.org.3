@@ -2,137 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018E04C7DD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BD14C7DD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiB1WyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S231221AbiB1WyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbiB1WyP (ORCPT
+        with ESMTP id S229834AbiB1WyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:54:15 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F38226;
-        Mon, 28 Feb 2022 14:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646088814; x=1677624814;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3yIm7V15EpTQEteU1KS+l9s/+KA1nJQQU0c8OZGB6jE=;
-  b=E/xTgLexv9H32ir7n2YEtCZhVkPPkwIJeLh0yC7p/A97MVuF4CM/bQMq
-   u/p20IkJRnViF9arsC7dvXd7HLVUcmLeat+m9L6axpo3unY3hDhIapRkD
-   sqUYVf8IcgpiwsJHD5MW4qKyRJwkDLCVO+73/KMMPuAcJvIzpUCyZ+FCR
-   uKsUecWwNDRFHyKtuzIOdgnhnJrG0/WbWmrG/os2EMmaa0479TTxxHYNY
-   ljGI1RENCMWae7Bm/NtDxZy7h7oWExR/l1WKZWItKEgwbPiat+ihnnZKQ
-   qLXsC4xJjlXpUQ307QPmlCSOP7V2eVRDORjxRqiZ0sQjfQNvEO6xhYTUl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250587968"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="250587968"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 14:53:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="803506507"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2022 14:53:31 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOotW-0007rm-RC; Mon, 28 Feb 2022 22:53:30 +0000
-Date:   Tue, 1 Mar 2022 06:52:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Won Chung <wonchung@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Won Chung <wonchung@google.com>
-Subject: Re: [PATCH] usb:typec: Add sysfs support for Type C connector's
- physical location
-Message-ID: <202203010628.Aac5rBDB-lkp@intel.com>
-References: <20220228190649.362070-1-wonchung@google.com>
+        Mon, 28 Feb 2022 17:54:06 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDC319A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:53:26 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id k1so1902677pfu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zibmIXYjhxaupOk9s0xWr7duCuTjugvyvgKLHyYpgFE=;
+        b=iCpxXt6G0aThtvRUcLNU8SriL190rIC2M+2t85Gz/EPinufDECNpaCnslsRSQAk3ep
+         MPSStIzbBpIxl3lRd+df6HbZ3lim+gftRnXLHB8sidpRHKV2QhZoSgXk99khZDcvuzcT
+         Spee0qr8TUPt+3I4rqnlZ4mG/KhdXvQrBaZQM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zibmIXYjhxaupOk9s0xWr7duCuTjugvyvgKLHyYpgFE=;
+        b=KykLZBgHdIZUa/QlP8ZQ7FucRNsIouC8ZifXM2z2AGjnj3b+Ad2bThzR5temK4U51O
+         3Gvd4UC8lu7EmEizfVfbigUYQsdEFEK0MrxAqQQjpNXm0eySlS5k3BS6lBC1EWRj8ohU
+         h+KIojrBY0TI7A3czV5LOcEKzVwkqH9WeTWKXPVUlvQ1axMEwwfrgeqW6E2VYk1PyuVY
+         0jbgZya7ryJkn1aMlyC7afcdYIA+KtoIvIJSabU42MPgIQwBz0zMof+qIPVx+UuyMIYX
+         ktvCCKJUKkOcXudnnXsKSJVoetbRbTaXQwnJDLwrdzIKNjaGntjy0ZFjmSpqPYhbXbfj
+         BsZw==
+X-Gm-Message-State: AOAM532FalDHQQ9VhFmt85pusqSerhbEX9xI8RzHY4EyzDeyQ6P29bWx
+        UHz+fdO52Lyi8DY61uTs5VCavA==
+X-Google-Smtp-Source: ABdhPJzHZGv/HnLcdSxWcXgVP/q5WimYbT2Car4mVv68atOJnIPOjOQrAQTFGQxx45g0YLdkIV/MsA==
+X-Received: by 2002:a65:6210:0:b0:374:ba5:aacc with SMTP id d16-20020a656210000000b003740ba5aaccmr18921903pgv.8.1646088806198;
+        Mon, 28 Feb 2022 14:53:26 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f9-20020a056a00228900b004f3ba7d177csm14943547pfe.54.2022.02.28.14.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 14:53:25 -0800 (PST)
+Date:   Mon, 28 Feb 2022 14:53:25 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        stable@vger.kernel.org,
+        Magnus =?iso-8859-1?Q?Gro=DF?= <magnus.gross@rwth-aachen.de>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 5.16 v2] binfmt_elf: Avoid total_mapping_size for ET_EXEC
+Message-ID: <202202281452.93E321A39@keescook>
+References: <20220228205518.1265798-1-keescook@chromium.org>
+ <ce8af9c13bcea9230c7689f3c1e0e2cd@matoro.tk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228190649.362070-1-wonchung@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ce8af9c13bcea9230c7689f3c1e0e2cd@matoro.tk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Won,
+On Mon, Feb 28, 2022 at 05:14:26PM -0500, matoro wrote:
+> On 2022-02-28 15:55, Kees Cook wrote:
+> > Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
+> > MAP_FIXED_NOREPLACE").
+> > 
+> > At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
+> > contiguous (but _are_ file-offset contiguous). This would result in
+> > giant mapping attempts to cover the entire span, including the virtual
+> > address range hole. Disable total_mapping_size for ET_EXEC, which
+> > reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
+> > 
+> > $ readelf -lW /usr/bin/gcc
+> > ...
+> > Program Headers:
+> >   Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz
+> > ...
+> > ...
+> >   LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0
+> > ...
+> >   LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710
+> > ...
+> > ...
+> >        ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
+> > 
+> > File offset range     : 0x000000-0x00bb4c
+> > 			0x00bb4c bytes
+> > 
+> > Virtual address range : 0x4000000000000000-0x600000000000bcb0
+> > 			0x200000000000bcb0 bytes
+> > 
+> > Ironically, this is the reverse of the problem that originally caused
+> > problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem is
+> > with holes. Future work could restore full coverage if load_elf_binary()
+> > were to perform mappings in a separate phase from the loading (where
+> > it could resolve both overlaps and holes).
+> > 
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > Cc: Eric Biederman <ebiederm@xmission.com>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+> > Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > Fixes: 5f501d555653 ("binfmt_elf: reintroduce using
+> > MAP_FIXED_NOREPLACE")
+> > Link:
+> > https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > Here's the v5.16 backport.
+> > ---
+> >  fs/binfmt_elf.c | 25 ++++++++++++++++++-------
+> >  1 file changed, 18 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> > index f8c7f26f1fbb..911a9e7044f4 100644
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -1135,14 +1135,25 @@ static int load_elf_binary(struct linux_binprm
+> > *bprm)
+> >  			 * is then page aligned.
+> >  			 */
+> >  			load_bias = ELF_PAGESTART(load_bias - vaddr);
+> > -		}
+> > 
+> > -		/*
+> > -		 * Calculate the entire size of the ELF mapping (total_size).
+> > -		 * (Note that load_addr_set is set to true later once the
+> > -		 * initial mapping is performed.)
+> > -		 */
+> > -		if (!load_addr_set) {
+> > +			/*
+> > +			 * Calculate the entire size of the ELF mapping
+> > +			 * (total_size), used for the initial mapping,
+> > +			 * due to first_pt_load which is set to false later
+> > +			 * once the initial mapping is performed.
+> > +			 *
+> > +			 * Note that this is only sensible when the LOAD
+> > +			 * segments are contiguous (or overlapping). If
+> > +			 * used for LOADs that are far apart, this would
+> > +			 * cause the holes between LOADs to be mapped,
+> > +			 * running the risk of having the mapping fail,
+> > +			 * as it would be larger than the ELF file itself.
+> > +			 *
+> > +			 * As a result, only ET_DYN does this, since
+> > +			 * some ET_EXEC (e.g. ia64) may have virtual
+> > +			 * memory holes between LOADs.
+> > +			 *
+> > +			 */
+> >  			total_size = total_mapping_size(elf_phdata,
+> >  							elf_ex->e_phnum);
+> >  			if (!total_size) {
+> 
+> This does the trick!  Thank you so much!!
 
-Thank you for the patch! Perhaps something to improve:
+Excellent; thank you for testing! I'll send this to Linus shortly.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next linus/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-randconfig-r041-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010628.Aac5rBDB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Won-Chung/usb-typec-Add-sysfs-support-for-Type-C-connector-s-physical-location/20220301-030738
-        git checkout 93d7a0fa1ed009ae6cc98fe5039cec8c9c77609f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/class.c:1649:7: warning: no previous prototype for function 'get_pld' [-Wmissing-prototypes]
-   void *get_pld(struct device *dev)
-         ^
-   drivers/usb/typec/class.c:1649:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *get_pld(struct device *dev)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/get_pld +1649 drivers/usb/typec/class.c
-
-  1648	
-> 1649	void *get_pld(struct device *dev)
-  1650	{
-  1651	#ifdef CONFIG_ACPI
-  1652		struct acpi_pld_info *pld;
-  1653		acpi_status status;
-  1654	
-  1655		if (!has_acpi_companion(dev))
-  1656			return NULL;
-  1657	
-  1658		status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-  1659		if (ACPI_FAILURE(status))
-  1660			return NULL;
-  1661		return pld;
-  1662	#else
-  1663		return NULL;
-  1664	#endif
-  1665	}
-  1666	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook

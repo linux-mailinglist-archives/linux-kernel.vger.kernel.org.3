@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3702E4C7D75
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9CC4C7D80
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiB1Wh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S231493AbiB1WjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiB1WhZ (ORCPT
+        with ESMTP id S229780AbiB1WjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:37:25 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B4D113AD6;
-        Mon, 28 Feb 2022 14:36:46 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id 185so11623838qkh.1;
-        Mon, 28 Feb 2022 14:36:46 -0800 (PST)
+        Mon, 28 Feb 2022 17:39:08 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F1A30F61
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:38:28 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so27801603ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:38:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NqNLCNZbfRzdZ6s+RPZUVSDu53vbe0qWHYGyNkt893E=;
-        b=XftIddrMAmhmuVKIlxOi7ezAmFRdps3UDkEEbl2ZeQMGo2H+ELXtV+4e9DhnZAMsyL
-         D/pDeeWj49sL9GZwHUnnj7n3RGyrUTegADjvReidPUORqC64NeyziR5G+yT6oAKr6A2d
-         Vdk+FWwex1AuVPvENWoJB6Ej44hGNZptg3xEBBphTsCS8U8UUkUxFpOUgebJdUc2qjrN
-         ox0phf1gLwEbJqPCbyajU3SIVtC/zaTN1s3koJIojHtROjDUYqV56hheoywgjYgCNSYz
-         vxCzJtshV5w34Hu9TntuiYVCrJxoLt0yfBW6VGutDNiE8lv73o7vOn34u0tiBsX6p2Gg
-         aRMw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F2fi2f0PCqSCYe+tcWhAUpFtNcH0g69LWKCmBIirVWc=;
+        b=WOEq1URYcDwyPIE9I17hh3CQNr46AQkStK2aveUEFtiX/oFcmFuN72q+SuX1DBDQAI
+         vcHd7DA5kMne/VGCrkB6EFrGW22qY0iG7FbBaqDPTbqFsAfsb/krmvS0kAtv/ZMBDr86
+         WoiWI03kprmUiDUr7vQuePMl443QZpFCoNdCT7uUys7VOJ+D5OztXCIUwgN77IU3kUHF
+         srSb5zHrKT2XunJHHoE4N648jgGP8M/tJI+KIvEs2lxQKdY5Ys2Qjq429WZRymt128/K
+         VGGSSPyijvkGdV67TrxaOUOSXAwzF26JvUr1aAM1P9BsfoMWp/T+Oive7XLnKs1tGDlm
+         FaCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NqNLCNZbfRzdZ6s+RPZUVSDu53vbe0qWHYGyNkt893E=;
-        b=F0cm/T9jY9h4ZNZBw/vLoF6O2ymLSPe4K7qzX19jVgj9mQ8o5cBg8A5+BHpYsW8P/R
-         lXArAcZjE2/nvdb/ghcTH0iG/+KT2ph8scjy30BvWH88ALFCtm003NL5NQne2CcHyone
-         WbMpDy4DUOOXKbnbHBlzE9EDt4VpQuPLFmZ+JWtskfmgxl0NiC5nkefzJ3qi9ZpWjWhz
-         m6ss4qZxRL2uIML9t0DoxkwN5C6SGupTb76T+npVQ1enf0rB5DeuQeFKsHIHeMvmRcmG
-         +Lux2ccucJOUXKd/yDJmeK6TEIglD1wk4kurpToTzy/ih7BHEplI2M6wmucRNFoJR9Ff
-         himw==
-X-Gm-Message-State: AOAM531SIqqo/IC3Q4WL0cbI/oagBHe3nlo2Mw1yJQoPc/pBw464IbLH
-        28suTeHDbBaZuwEBje9VviQ=
-X-Google-Smtp-Source: ABdhPJxzocr7KcKfiyTO0gDJ53raBvOlFPXC+nmpx349DwcEXm+eD7Ij9yg7XQVuxFESGg/JvDVyWw==
-X-Received: by 2002:a05:620a:45:b0:508:176a:8892 with SMTP id t5-20020a05620a004500b00508176a8892mr12549250qkt.731.1646087805470;
-        Mon, 28 Feb 2022 14:36:45 -0800 (PST)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05622a144900b002dfedb4dccasm6632068qtx.66.2022.02.28.14.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 14:36:45 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mmc: host: dw-mmc-rockchip: avoid logspam when cd-broken
-Date:   Mon, 28 Feb 2022 17:36:42 -0500
-Message-Id: <20220228223642.1136229-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F2fi2f0PCqSCYe+tcWhAUpFtNcH0g69LWKCmBIirVWc=;
+        b=GiMqRFXF8PbjWK83mTqdXJM36lOu7+EZB42mKF34lpDhc4zCP3XawBfh3dng6FKZNf
+         UhFlYGTjS8SNOrAHkqPDqqd885w5s1gOvaIvhVLDubjyghoTBfwXk/uLl14sl6DQXSa3
+         wz4fJ3VwVNnr2dKviHj45VyHsultRn+h8tP/hbVJBArt90KehEy93gk/m+R70r0Nmb+D
+         7iAIscID0hB1tq0eC8k7ddARzhD19ddI/8RHu72xN/haHCPrJ6bLmhLBa2z7kwq6frr6
+         YFL/lu/uwOYMc1uCgdrDaOU/Nf4HHAihf3RJ15HRB4jttCjUVe/D2x2OMIVbtA/c6J6u
+         BKRw==
+X-Gm-Message-State: AOAM531jSfte//BD9V0e9DzTfjr7MdSqQBOtpgoJxaWJomdDeXJ0L5gW
+        Pk+NraKxxWE/ZLk1LYu3xs3OWDg0YfQEisNiqz/FGg==
+X-Google-Smtp-Source: ABdhPJzHVKLU+dscmJvFH5kNt/O0h8NOUq87CSbLUWKDGQZNyh4e7ZZRlVsqCCHSHXWyHeUJliK63gt0GowksuJULxM=
+X-Received: by 2002:a17:906:be1:b0:6ce:c3c8:b4b6 with SMTP id
+ z1-20020a1709060be100b006cec3c8b4b6mr16410585ejg.617.1646087906409; Mon, 28
+ Feb 2022 14:38:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220225182248.3812651-1-seanjc@google.com> <20220225182248.3812651-5-seanjc@google.com>
+In-Reply-To: <20220225182248.3812651-5-seanjc@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 28 Feb 2022 14:38:15 -0800
+Message-ID: <CANgfPd8u9CtHBjxjHWKyKNOvq542NA0NwuYmQos5==MfRodksw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
+ shadow page is zapped
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +77,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dw_mmc-rockchip driver drops a large amound of logspam constantly
-when the cd-broken flag is enabled.
-Set the warning to be debug ratelimited in this case.
+On Fri, Feb 25, 2022 at 10:22 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Zap only obsolete roots when responding to zapping a single root shadow
+> page.  Because KVM keeps root_count elevated when stuffing a previous
+> root into its PGD cache, shadowing a 64-bit guest means that zapping any
+> root causes all vCPUs to reload all roots, even if their current root is
+> not affected by the zap.
+>
+> For many kernels, zapping a single root is a frequent operation, e.g. in
+> Linux it happens whenever an mm is dropped, e.g. process exits, etc...
+>
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- drivers/mmc/host/dw_mmc-rockchip.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Reviewed-by: Ben Gardon <bgardon@google.com>
 
-diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-index 95d0ec0f5f3a..d0ebf0afa42a 100644
---- a/drivers/mmc/host/dw_mmc-rockchip.c
-+++ b/drivers/mmc/host/dw_mmc-rockchip.c
-@@ -50,8 +50,13 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
- 		cclkin = ios->clock * RK3288_CLKGEN_DIV;
- 
- 	ret = clk_set_rate(host->ciu_clk, cclkin);
--	if (ret)
--		dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
-+	if (ret) {
-+		/* this screams when card detection is broken */
-+		if (host->slot->mmc->caps & MMC_CAP_NEEDS_POLL)
-+			dev_dbg_ratelimited(host->dev, "failed to set rate %uHz\n", ios->clock);
-+		else
-+			dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
-+	}
- 
- 	bus_hz = clk_get_rate(host->ciu_clk) / RK3288_CLKGEN_DIV;
- 	if (bus_hz != host->bus_hz) {
--- 
-2.25.1
-
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 +
+>  arch/x86/kvm/mmu.h              |  1 +
+>  arch/x86/kvm/mmu/mmu.c          | 65 +++++++++++++++++++++++++++++----
+>  arch/x86/kvm/x86.c              |  4 +-
+>  4 files changed, 63 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 713e08f62385..343041e892c6 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -102,6 +102,8 @@
+>  #define KVM_REQ_MSR_FILTER_CHANGED     KVM_ARCH_REQ(29)
+>  #define KVM_REQ_UPDATE_CPU_DIRTY_LOGGING \
+>         KVM_ARCH_REQ_FLAGS(30, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+> +#define KVM_REQ_MMU_FREE_OBSOLETE_ROOTS \
+> +       KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>
+>  #define CR0_RESERVED_BITS                                               \
+>         (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR0_TS \
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 1d0c1904d69a..bf8dbc4bb12a 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -80,6 +80,7 @@ int kvm_handle_page_fault(struct kvm_vcpu *vcpu, u64 error_code,
+>
+>  int kvm_mmu_load(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_unload(struct kvm_vcpu *vcpu);
+> +void kvm_mmu_free_obsolete_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_prev_roots(struct kvm_vcpu *vcpu);
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 32c6d4b33d03..825996408465 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2310,7 +2310,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+>                                        struct list_head *invalid_list,
+>                                        int *nr_zapped)
+>  {
+> -       bool list_unstable;
+> +       bool list_unstable, zapped_root = false;
+>
+>         trace_kvm_mmu_prepare_zap_page(sp);
+>         ++kvm->stat.mmu_shadow_zapped;
+> @@ -2352,14 +2352,20 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+>                  * in kvm_mmu_zap_all_fast().  Note, is_obsolete_sp() also
+>                  * treats invalid shadow pages as being obsolete.
+>                  */
+> -               if (!is_obsolete_sp(kvm, sp))
+> -                       kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+> +               zapped_root = !is_obsolete_sp(kvm, sp);
+>         }
+>
+>         if (sp->lpage_disallowed)
+>                 unaccount_huge_nx_page(kvm, sp);
+>
+>         sp->role.invalid = 1;
+> +
+> +       /*
+> +        * Make the request to free obsolete roots after marking the root
+> +        * invalid, otherwise other vCPUs may not see it as invalid.
+> +        */
+> +       if (zapped_root)
+> +               kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+>         return list_unstable;
+>  }
+>
+> @@ -3947,7 +3953,7 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>          * previous root, then __kvm_mmu_prepare_zap_page() signals all vCPUs
+>          * to reload even if no vCPU is actively using the root.
+>          */
+> -       if (!sp && kvm_test_request(KVM_REQ_MMU_RELOAD, vcpu))
+> +       if (!sp && kvm_test_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+>                 return true;
+>
+>         return fault->slot &&
+> @@ -4180,8 +4186,8 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
+>         /*
+>          * It's possible that the cached previous root page is obsolete because
+>          * of a change in the MMU generation number. However, changing the
+> -        * generation number is accompanied by KVM_REQ_MMU_RELOAD, which will
+> -        * free the root set here and allocate a new one.
+> +        * generation number is accompanied by KVM_REQ_MMU_FREE_OBSOLETE_ROOTS,
+> +        * which will free the root set here and allocate a new one.
+>          */
+>         kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+>
+> @@ -5085,6 +5091,51 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu)
+>         vcpu_clear_mmio_info(vcpu, MMIO_GVA_ANY);
+>  }
+>
+> +static bool is_obsolete_root(struct kvm *kvm, hpa_t root_hpa)
+> +{
+> +       struct kvm_mmu_page *sp;
+> +
+> +       if (!VALID_PAGE(root_hpa))
+> +               return false;
+> +
+> +       /*
+> +        * When freeing obsolete roots, treat roots as obsolete if they don't
+> +        * have an associated shadow page.  This does mean KVM will get false
+> +        * positives and free roots that don't strictly need to be freed, but
+> +        * such false positives are relatively rare:
+> +        *
+> +        *  (a) only PAE paging and nested NPT has roots without shadow pages
+> +        *  (b) remote reloads due to a memslot update obsoletes _all_ roots
+> +        *  (c) KVM doesn't track previous roots for PAE paging, and the guest
+> +        *      is unlikely to zap an in-use PGD.
+> +        */
+> +       sp = to_shadow_page(root_hpa);
+> +       return !sp || is_obsolete_sp(kvm, sp);
+> +}
+> +
+> +static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+> +{
+> +       unsigned long roots_to_free = 0;
+> +       int i;
+> +
+> +       if (is_obsolete_root(kvm, mmu->root.hpa))
+> +               roots_to_free |= KVM_MMU_ROOT_CURRENT;
+> +
+> +       for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+> +               if (is_obsolete_root(kvm, mmu->root.hpa))
+> +                       roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+> +       }
+> +
+> +       if (roots_to_free)
+> +               kvm_mmu_free_roots(kvm, mmu, roots_to_free);
+> +}
+> +
+> +void kvm_mmu_free_obsolete_roots(struct kvm_vcpu *vcpu)
+> +{
+> +       __kvm_mmu_free_obsolete_roots(vcpu->kvm, &vcpu->arch.root_mmu);
+> +       __kvm_mmu_free_obsolete_roots(vcpu->kvm, &vcpu->arch.guest_mmu);
+> +}
+> +
+>  static bool need_remote_flush(u64 old, u64 new)
+>  {
+>         if (!is_shadow_present_pte(old))
+> @@ -5656,7 +5707,7 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+>          * Note: we need to do this under the protection of mmu_lock,
+>          * otherwise, vcpu would purge shadow page but miss tlb flush.
+>          */
+> -       kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+> +       kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+>
+>         kvm_zap_obsolete_pages(kvm);
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 579b26ffc124..d6bf0562c4c4 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9856,8 +9856,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>                                 goto out;
+>                         }
+>                 }
+> -               if (kvm_check_request(KVM_REQ_MMU_RELOAD, vcpu))
+> -                       kvm_mmu_unload(vcpu);
+> +               if (kvm_check_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+> +                       kvm_mmu_free_obsolete_roots(vcpu);
+>                 if (kvm_check_request(KVM_REQ_MIGRATE_TIMER, vcpu))
+>                         __kvm_migrate_timers(vcpu);
+>                 if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
+> --
+> 2.35.1.574.g5d30c73bfb-goog
+>

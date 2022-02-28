@@ -2,145 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A61F4C7E45
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A27C4C7E43
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiB1X1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229813AbiB1X0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiB1X04 (ORCPT
+        with ESMTP id S229529AbiB1X0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:26:56 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B01FC7E8F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:17 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id p14so27929091ejf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:17 -0800 (PST)
+        Mon, 28 Feb 2022 18:26:51 -0500
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4019C626D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:11 -0800 (PST)
+Received: by mail-vs1-xe42.google.com with SMTP id t22so14740616vsa.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IYj0iyPbAPJYK0pqqrQFmSosxig3GLvPltNcBRpBH2o=;
-        b=iilCwxcJirrROzQlokAzirElITvzz8NVS309xa9R+fmGw9330A74LwBK3eZYQ3xy9n
-         rkHxmIEDL09h+td2iWT3rJUObUBT6IN+zk9ezdTBBr1ySUm5aMgocqlq5Wp11cPe8ZNl
-         ZqlyQsCZVSY7B2Z7kItx9x1BlIxIyzmf9rGVSmevoYvCMc3XR0zO/d7FJyGzHSdIaYoR
-         NwJ1EOZz7pG4uMAOsjdUKz0MokxuetIYWe7DB7CFqDZL1LmrOI5am0cFISjMCncJLpJt
-         9nkQE3cm2ATdP4rNDTAiLca6Hhh6myJYWOWRrKwlIg4wT3BPqIwz9IMq9iEl3Q3pbG7c
-         WfZA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=678bsp2ErC3AUHByI563pP4zj6fiQdpPo5vEOV1fue0=;
+        b=ozH4CPp2zu7LhcVv6S/q7oub5q1+cZ9nyOOxAMKT0uJ9FRpMSi13MW5tFZtzsa/NwO
+         40/Sh6X4AmgitON88oEeersWw75CzIQur3pLWkl0n9zYTBBrjUlWVctrJrNQCXCFi+XL
+         4fyM/m2U0U1FE8ekyt4aDheSe88K8/xkWgs/zKi5ZxknbHM5u/WeVPeLcfvJwXKjHnyu
+         NLf8aSlQCa/dLBwWelqR0TLmoX5ltWj+5mhgRUenrG10+P4R8nXdZLbslyYgwtuGDQGE
+         spnZjFMx3kPnns/TPTIrlTR5lCLi3BADefbabo6jj8TOXUc8AEEtM1YdpxA13wIifiZN
+         0A7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IYj0iyPbAPJYK0pqqrQFmSosxig3GLvPltNcBRpBH2o=;
-        b=J1Ghh4J2yaVNfVeuUM/BCt99KlOcpVkd0dMCWTQBMMjmouztqdSUwy3O482mDLD3Uo
-         gO4jPQE/0lJla/aEZkWGsjPY3S02qohR1uawnFrAr+WrGQF0YCetDVpi7AyL/wxAQiIA
-         Gkl8uRkfeiFX2pQNj4Dr8fIBU25XT5fl8P+iEPjcENcb4I7Z93MneKPniJn3l43dkIt7
-         MAhOMHHZpQOkqp2fIcfVWyoQGwOri932K/ZS8iBulaCjwIQue/C9aURE0UMiMPnw4fYw
-         HlDHPqQLtfOvq7nmsABY5tARPyGHPMEBdvB8nrdBvtp8dTatj6Hy43BAmsOC4skaX2vs
-         lEgw==
-X-Gm-Message-State: AOAM533ZZUlGDd1r4Ap8pylfvP+7u3ZdE2QyUEYQnk5kOUSfK7WBK81W
-        UNtK4x+SVjrAl107ZJPrvJi00iX6+hNjc76dYZVlwA==
-X-Google-Smtp-Source: ABdhPJxpETjZNwVKbXGVCTkT2JrkFz4ve5APlqWONORpQL2mt2RgqVbwmsnHQ8548VmwQRXdL5XR+y0muIp0FqJC3kM=
-X-Received: by 2002:a17:906:2486:b0:6cf:ced9:e4cc with SMTP id
- e6-20020a170906248600b006cfced9e4ccmr16841097ejb.201.1646090775588; Mon, 28
- Feb 2022 15:26:15 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=678bsp2ErC3AUHByI563pP4zj6fiQdpPo5vEOV1fue0=;
+        b=gGNzDZXIE6pe43Sfm1RQ9uwIaCTwbUb7NHDz5V0WeY7kWXSXGOPXxqvlx9uv8AZHKx
+         hTyCDyZJMp4j8cJFaGa6a+ZT3jyDrKAYMFzm4pcCycS1kg6XlLVEZEvFhDm/0RcHCZEc
+         f/tSj5IqnIPBg0OfdSFrw6eRp3Uc117hY/TUFpj1+lbt6vnhjiOUvRBbweVLjGxhFpMk
+         Zn1j5cvIAiRAceJfaBrOmkFiY51/pimepaqDhLUz7MKMDQJiZhaEY0NRLOZkfLQohkDH
+         OoT1G8XRjsQy6UMyH9kN4ML79EmMYlDHQ/DGttf+G7LR2A4pVBlSgeJtJ1HRkRkljgVG
+         TbIQ==
+X-Gm-Message-State: AOAM531D85phLWuoHW3RtbuY5E8pDNdeoU9s6+vVQyorULFPaOhsN1UZ
+        mvrczgATssLdLXCh30dw3P8=
+X-Google-Smtp-Source: ABdhPJzFW+ebkA33fyzZOlIhybeZny+OBqFcDo8O1cUgrJSuSOoNTuzXQSuYpfpz1FOAgljyzbWoRA==
+X-Received: by 2002:a67:e187:0:b0:30f:ec53:be70 with SMTP id e7-20020a67e187000000b0030fec53be70mr10055671vsl.15.1646090770993;
+        Mon, 28 Feb 2022 15:26:10 -0800 (PST)
+Received: from ishi (072-189-064-222.res.spectrum.com. [72.189.64.222])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056102025900b0031c34d0f8d5sm1555132vsq.3.2022.02.28.15.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 15:26:10 -0800 (PST)
+Date:   Mon, 28 Feb 2022 18:26:08 -0500
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 10/10] x86/Kconfig: remove CONFIG_ISA_BUS
+Message-ID: <Yh1aEGwekig1hG9G@ishi>
+References: <20220228212826.27080-1-mat.jonczyk@o2.pl>
+ <20220228212826.27080-11-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-7-seanjc@google.com>
-In-Reply-To: <20220226001546.360188-7-seanjc@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 28 Feb 2022 15:26:04 -0800
-Message-ID: <CANgfPd-Y6Z=icq4ajhesu23AOZPNRVq+KNQ-2kyFHyVA6sx5Xg@mail.gmail.com>
-Subject: Re: [PATCH v3 06/28] KVM: x86/mmu: Require mmu_lock be held for write
- in unyielding root iter
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228212826.27080-11-mat.jonczyk@o2.pl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Assert that mmu_lock is held for write by users of the yield-unfriendly
-> TDP iterator.  The nature of a shared walk means that the caller needs to
-> play nice with other tasks modifying the page tables, which is more or
-> less the same thing as playing nice with yielding.  Theoretically, KVM
-> could gain a flow where it could legitimately take mmu_lock for read in
-> a non-preemptible context, but that's highly unlikely and any such case
-> should be viewed with a fair amount of scrutiny.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Mon, Feb 28, 2022 at 10:28:26PM +0100, Mateusz Jończyk wrote:
+> CONFIG_ISA_BUS was used only as a dependency for a single Industrial IO
+> driver: CONFIG_CIO_DAC ("Measurement Computing CIO-DAC IIO driver"). At
+> least grepping the kernel source for "ISA_BUS" did not find any other
+> meaningful results.
+> 
+> There are more configuration options that select CONFIG_ISA_BUS_API, but
+> did not depend on CONFIG_ISA_BUS. Most of these are for Industrial IO and
+> GPIO drivers.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+For context, the Measurement Computing CIO-DAC device comes in two
+form factors: PC104 and ISA. The PC104 bus is typically aimed at
+embedded systems and not commonly used by general users, so the
+CONFIG_PC104 Kconfig option was introduced to filter out these devices
+for most users who would generally not be interested in them. Because
+the CIO-DAC device is also available in an ISA form factor, I needed a
+way to have the CONFIG_CIO_DAC Kconfig available even on non-PC104
+systems; that's how the CONFIG_ISA_BUS Kconfig option came about.
+
+The purpose of the CONFIG_ISA_BUS Kconfig option is filter out ISA bus
+devices because few users will have an ISA bus. I suppose it does no
+harm to remove that filter because users can still select CONFIG_CIO_DAC
+if they want it, so I'm all right with this patch.
+
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
 > ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 5994db5d5226..189f21e71c36 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -29,13 +29,16 @@ bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
->         return true;
->  }
->
-> -static __always_inline void kvm_lockdep_assert_mmu_lock_held(struct kvm *kvm,
-> +/* Arbitrarily returns true so that this may be used in if statements. */
-> +static __always_inline bool kvm_lockdep_assert_mmu_lock_held(struct kvm *kvm,
->                                                              bool shared)
->  {
->         if (shared)
->                 lockdep_assert_held_read(&kvm->mmu_lock);
->         else
->                 lockdep_assert_held_write(&kvm->mmu_lock);
-> +
-> +       return true;
->  }
->
->  void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
-> @@ -187,11 +190,17 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
->  #define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)         \
->         __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, ALL_ROOTS)
->
-> -#define for_each_tdp_mmu_root(_kvm, _root, _as_id)                             \
-> -       list_for_each_entry_rcu(_root, &_kvm->arch.tdp_mmu_roots, link,         \
-> -                               lockdep_is_held_type(&kvm->mmu_lock, 0) ||      \
-> -                               lockdep_is_held(&kvm->arch.tdp_mmu_pages_lock)) \
-> -               if (kvm_mmu_page_as_id(_root) != _as_id) {              \
-> +/*
-> + * Iterate over all TDP MMU roots.  Requires that mmu_lock be held for write,
-> + * the implication being that any flow that holds mmu_lock for read is
-> + * inherently yield-friendly and should use the yielf-safe variant above.
-> + * Holding mmu_lock for write obviates the need for RCU protection as the list
-> + * is guaranteed to be stable.
-> + */
-> +#define for_each_tdp_mmu_root(_kvm, _root, _as_id)                     \
-> +       list_for_each_entry(_root, &_kvm->arch.tdp_mmu_roots, link)     \
-> +               if (kvm_lockdep_assert_mmu_lock_held(_kvm, false) &&    \
-> +                   kvm_mmu_page_as_id(_root) != _as_id) {              \
->                 } else
->
->  static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
-> --
-> 2.35.1.574.g5d30c73bfb-goog
->
+>  arch/x86/Kconfig        | 11 -----------
+>  drivers/iio/dac/Kconfig |  2 +-
+>  2 files changed, 1 insertion(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 19acc5954083..2de46adfbde2 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2692,17 +2692,6 @@ config PCI_CNB20LE_QUIRK
+>  
+>  	  You should say N unless you know you need this.
+>  
+> -config ISA_BUS
+> -	bool "ISA bus support on modern systems" if EXPERT
+> -	help
+> -	  Expose ISA bus device drivers and options available for selection and
+> -	  configuration. Enable this option if your target machine has an ISA
+> -	  bus. ISA is an older system, displaced by PCI and newer bus
+> -	  architectures -- if your target machine is modern, it probably does
+> -	  not have an ISA bus.
+> -
+> -	  If unsure, say N.
+> -
+>  # x86_64 have no ISA slots, but can have ISA-style DMA.
+>  config ISA_DMA_API
+>  	bool "ISA-style DMA support" if (X86_64 && EXPERT)
+> diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+> index bfcf7568de32..fe0f2a93055d 100644
+> --- a/drivers/iio/dac/Kconfig
+> +++ b/drivers/iio/dac/Kconfig
+> @@ -264,7 +264,7 @@ config AD8801
+>  
+>  config CIO_DAC
+>  	tristate "Measurement Computing CIO-DAC IIO driver"
+> -	depends on X86 && (ISA_BUS || PC104)
+> +	depends on X86
+>  	select ISA_BUS_API
+>  	help
+>  	  Say yes here to build support for the Measurement Computing CIO-DAC
+> -- 
+> 2.25.1
+> 

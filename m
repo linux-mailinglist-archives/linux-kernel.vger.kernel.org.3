@@ -2,76 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298C54C7A52
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FF64C7A5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiB1U0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S229670AbiB1U2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiB1U0i (ORCPT
+        with ESMTP id S229496AbiB1U2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:26:38 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB04580DF
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:25:59 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id c1so12516172pgk.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JYJS0+baIpj8rNk1gxFjQtSNQLz0w5fW/GZ4P6Cva34=;
-        b=NtBj2377xC9UwhgXdBGz78ZGGbAgv+utx1c/2FxM08P9KP+6cQCgHNSCuUa6K2g/ot
-         wLF0mQ2Tzf0O/FdNrPPV8s8rvp7/x0FZBKLgJVqg2mi3PjsAQP1PqggPaJun9dTCOqau
-         Tz+PbS0+pVtyzDyGcZHoOtWHeUVJzr9f3TuDE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JYJS0+baIpj8rNk1gxFjQtSNQLz0w5fW/GZ4P6Cva34=;
-        b=Jg3P1ulfNTQoOep3XMSEiP1Jbou7Q5SCHMB1+gSaFy2cN1946kExk91/QgknFRjOL5
-         9dvPJLXBdM6iQU8Z+HD+pRRWkMl+4ovjr1jXMiaQyJDJwnFnTVMIU+U5n2SpFOmXKtuY
-         PuHUrybkgZGWVnsK+OEQMc9Zd0wSHmrn2wmargDHR750KwjM3/ljB0PRj7qsst16Cz4f
-         Zbw5ZcfqTNNgfT6VX0N8fIHP7YEQKASm8HRLjOPYwcDgjPMdCdMLhvDRoNDR5SNPKsda
-         XRXBwuL7dBIGxRjEWKFtOq47QIHH+S0mKBIXBgSFMwkYQ/aAsho/hCBL9TvLBHzfL0Qy
-         8daQ==
-X-Gm-Message-State: AOAM533v9Mj7wxkxwJpkMXNR/bleeLhSJCasCcKgeBkUiA49eXTa3Lry
-        MwQnH/7dPPb4Vnu5ZDdKMikCig==
-X-Google-Smtp-Source: ABdhPJzA2n4xckiPWFfvi2ErCa67YVQqABCW741BDbD621t4ro8ENXSJcL3UE0iJi9/RyWEl4pHfeA==
-X-Received: by 2002:a63:1003:0:b0:378:7d70:2ec5 with SMTP id f3-20020a631003000000b003787d702ec5mr8779623pgl.351.1646079958576;
-        Mon, 28 Feb 2022 12:25:58 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:ba66:7507:a6af:82f1])
-        by smtp.gmail.com with UTF8SMTPSA id p10-20020a056a000b4a00b004e12fd48035sm14633629pfo.96.2022.02.28.12.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:25:58 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, Sean Paul <seanpaul@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>,
-        Liu Ying <victor.liu@oss.nxp.com>, stable@vger.kernel.org
-Subject: [PATCH v2 2/2] drm/atomic: Force bridge self-refresh-exit on CRTC switch
-Date:   Mon, 28 Feb 2022 12:25:32 -0800
-Message-Id: <20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid>
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-In-Reply-To: <20220228202532.869740-1-briannorris@chromium.org>
-References: <20220228202532.869740-1-briannorris@chromium.org>
+        Mon, 28 Feb 2022 15:28:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DC647AE4;
+        Mon, 28 Feb 2022 12:27:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5D7960C24;
+        Mon, 28 Feb 2022 20:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B278C340F2;
+        Mon, 28 Feb 2022 20:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646080055;
+        bh=Afapf1pYfGXISLziFelpEK++X0t+Auwfn5socGkEaSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WaNbKRVb+8PyC2XBMMuGUDzadTZQU7i4YPRjxMq7iFSKes7Vv4DyIVaBobjJOeoL6
+         oZt4Z44m7gTyg1BoNpW3KqQNTUkAjhFc5lq/9nDsrzoowLNwwYMZwXLWcCTYAyEPZ6
+         FgRG1DnhR9He9KtCfA3xkUkfsj4noS1+aNDR7H18/oFJ53uCYVt06GHHWvlNDWy5b9
+         jCLHRm1IW6RzLfF1lbcUVgAKGt6HNzjcfD4o4Uh92jK8FiWxDRV1NuYdYY0w1HgQHQ
+         aE3OLyBUl05iyG/BGvpez2NppZwA0Yp+RXEqG49Dg0AL+dnXtsEA9xWNx+dEx8RCQN
+         TZJGMvbUKSsaw==
+Date:   Mon, 28 Feb 2022 22:27:12 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <Yh0wIMjFdDl8vaNM@kernel.org>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+ <YgI1A0CtfmT7GMIp@kernel.org>
+ <YgI37n+3JfLSNQCQ@grain>
+ <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
+ <YgKiKEcsNt7mpMHN@grain>
+ <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+ <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,69 +99,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible to change which CRTC is in use for a given
-connector/encoder/bridge while we're in self-refresh without fully
-disabling the connector/encoder/bridge along the way. This can confuse
-the bridge encoder/bridge, because
-(a) it needs to track the SR state (trying to perform "active"
-    operations while the panel is still in SR can be Bad(TM)); and
-(b) it tracks the SR state via the CRTC state (and after the switch, the
-    previous SR state is lost).
+On Wed, Feb 09, 2022 at 06:37:53PM -0800, Andy Lutomirski wrote:
+> On 2/8/22 18:18, Edgecombe, Rick P wrote:
+> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
+> > 
+> > Still wrapping my head around the CRIU save and restore steps, but
+> > another general approach might be to give ptrace the ability to
+> > temporarily pause/resume/set CET enablement and SSP for a stopped
+> > thread. Then injected code doesn't need to jump through any hoops or
+> > possibly run into road blocks. I'm not sure how much this opens things
+> > up if the thread has to be stopped...
+> 
+> Hmm, that's maybe not insane.
+> 
+> An alternative would be to add a bona fide ptrace call-a-function mechanism.
+> I can think of two potentially usable variants:
+> 
+> 1. Straight call.  PTRACE_CALL_FUNCTION(addr) just emulates CALL addr,
+> shadow stack push and all.
+> 
+> 2. Signal-style.  PTRACE_CALL_FUNCTION_SIGFRAME injects an actual signal
+> frame just like a real signal is being delivered with the specified handler.
+> There could be a variant to opt-in to also using a specified altstack and
+> altshadowstack.
 
-Thus, we need to either somehow carry the self-refresh state over to the
-new CRTC, or else force an encoder/bridge self-refresh transition during
-such a switch.
+Using ptrace() will not solve CRIU's issue with sigreturn because sigreturn
+is called from the victim context rather than from the criu process that
+controls the dump and uses ptrace().
 
-I choose the latter, so we disable the encoder (and exit PSR) before
-attaching it to the new CRTC (where we can continue to assume a clean
-(non-self-refresh) state).
+Even with the current shadow stack interface Rick proposed, CRIU can restore
+the victim using ptrace without any additional knobs, but we loose an
+important ability to "self-cure" the victim from the parasite in case
+anything goes wrong with criu control process.
 
-This fixes PSR issues seen on Rockchip RK3399 systems with
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
+Moreover, the issue with backward compatibility is not with ptrace but with
+sigreturn and it seems that criu is not its only user.
 
-Change in v2:
+So I think we need a way to allow direct calls to sigreturn that will
+bypass check and restore of the shadow stack.
 
-- Drop "->enable" condition; this could possibly be "->active" to
-  reflect the intended hardware state, but it also is a little
-  over-specific. We want to make a transition through "disabled" any
-  time we're exiting PSR at the same time as a CRTC switch.
-  (Thanks Liu Ying)
-
-Cc: Liu Ying <victor.liu@oss.nxp.com>
-Cc: <stable@vger.kernel.org>
-Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
- drivers/gpu/drm/drm_atomic_helper.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-index 9603193d2fa1..987e4b212e9f 100644
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -1011,9 +1011,19 @@ crtc_needs_disable(struct drm_crtc_state *old_state,
- 		return drm_atomic_crtc_effectively_active(old_state);
+I only know that there are sigreturn users except criu that show up in
+Debian codesearch, and I don't know how do they use it, but for full
+backward compatibility we'd need to have no-CET sigreturn as default and
+add a new, say UC_CHECK_SHSTK flag to rt_sigframe->uc.uc_flags or even a
+new syscall for libc signal handling.
  
- 	/*
--	 * We need to run through the crtc_funcs->disable() function if the CRTC
--	 * is currently on, if it's transitioning to self refresh mode, or if
--	 * it's in self refresh mode and needs to be fully disabled.
-+	 * We need to disable bridge(s) and CRTC if we're transitioning out of
-+	 * self-refresh and changing CRTCs at the same time, because the
-+	 * bridge tracks self-refresh status via CRTC state.
-+	 */
-+	if (old_state->self_refresh_active &&
-+	    old_state->crtc != new_state->crtc)
-+		return true;
-+
-+	/*
-+	 * We also need to run through the crtc_funcs->disable() function if
-+	 * the CRTC is currently on, if it's transitioning to self refresh
-+	 * mode, or if it's in self refresh mode and needs to be fully
-+	 * disabled.
- 	 */
- 	return old_state->active ||
- 	       (old_state->self_refresh_active && !new_state->active) ||
--- 
-2.35.1.574.g5d30c73bfb-goog
+> 2 would be more expensive but would avoid the need for much in the way of
+> asm magic.  The injected code could be plain C (or Rust or Zig or whatever).
+> 
+> All of this only really handles save, not restore.  I don't understand
+> restore enough to fully understand the issue.
 
+Restore is more complex, will get to it later.
+ 
+> --Andy
+
+-- 
+Sincerely yours,
+Mike.

@@ -2,153 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3496C4C7A4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B8F4C79CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiB1UZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S229814AbiB1UBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiB1UZn (ORCPT
+        with ESMTP id S229755AbiB1UBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:25:43 -0500
-X-Greylist: delayed 1345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 12:25:03 PST
-Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.180.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A256C15
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:25:03 -0800 (PST)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 0E9D9B239
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:02:38 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id OmC6nxGp022u3OmC7nw2sw; Mon, 28 Feb 2022 14:00:33 -0600
-X-Authority-Reason: nr=8
-Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:40014 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        Mon, 28 Feb 2022 15:01:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B69210FCF;
+        Mon, 28 Feb 2022 12:01:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06A00B81643;
+        Mon, 28 Feb 2022 20:01:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E46EC340F1;
+        Mon, 28 Feb 2022 20:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646078458;
+        bh=WX2GSxXiBauKudb0mEfuYngTCREWlWxYllb0lfJstnw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d2TVZTt2KkPq5p75E5jhIPc7tDj4A0MICF9a+hpYB+7RDSM32/j/yrisSBzLt+Qdd
+         ozC9qQ/ph78ht13NvqGPiiZCM69mBC5FwY10tiWhtecj8x/B2IGUpdOnzaPumuFWA7
+         0Xf8OTnEJAzVPjqyGUfKypoTeWbhD786eKc/MfpVyyzulhDuA5zOAr4UBTqZduwLRV
+         6G3O4BdSmakWemA9zpbQoKJR5hQO9YxeFB95GZ2zJ2rqvaQnfmjAe0DiRLoZ8V2nnz
+         aILsjZTXLbcUFi5odjscBHVMqfl6b5OycOPe4f2dQcPDIaOcPPmoA+HNFJ8mIVFvmw
+         DoHs3PwkeGUaA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nOmC5-004Kdt-G2; Mon, 28 Feb 2022 14:00:29 -0600
-Message-ID: <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
-Date:   Mon, 28 Feb 2022 21:00:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Content-Language: en-US
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, rostedt@goodmis.org,
-        paulmck@kernel.org
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, mtosatti@redhat.com
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220228141423.259691-1-nsaenzju@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 95.232.30.176
-X-Source-L: No
-X-Exim-ID: 1nOmC5-004Kdt-G2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:40014
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 2
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        (envelope-from <maz@kernel.org>)
+        id 1nOmCW-00BDhb-4H; Mon, 28 Feb 2022 20:00:56 +0000
+Date:   Mon, 28 Feb 2022 20:00:55 +0000
+Message-ID: <87y21u69s8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Maulik Shah (mkshah)" <quic_mkshah@quicinc.com>
+Cc:     <linux-kernel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 2/5] irqchip/qcom-pdc: Kill non-wakeup irqdomain
+In-Reply-To: <22ac147c-fb47-fc8c-8e10-8e67db94fbf8@quicinc.com>
+References: <20220224101226.88373-1-maz@kernel.org>
+        <20220224101226.88373-3-maz@kernel.org>
+        <22ac147c-fb47-fc8c-8e10-8e67db94fbf8@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_mkshah@quicinc.com, linux-kernel@vger.kernel.org, agross@kernel.org, bjorn.andersson@linaro.org, tglx@linutronix.de, linux-arm-msm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/22 15:14, Nicolas Saenz Julienne wrote:
-> At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-> kernel might have the side effect of extending grace periods too much.
-> This will eventually entice RCU to schedule a task on the isolated CPU
-> to end the overly extended grace period, adding unwarranted noise to the
-> CPU being traced in the process.
+On Mon, 28 Feb 2022 19:29:41 +0000,
+"Maulik Shah (mkshah)" <quic_mkshah@quicinc.com> wrote:
 > 
-> So, check if we're the only ones running on this isolated CPU and that
-> we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
-> between measurements.
+> Hi,
 > 
-> Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
-> loop's cond_resched() will go though a quiescent state for them.
+> On 2/24/2022 3:42 PM, Marc Zyngier wrote:
+> > A careful look at the way the PDC driver works shows that:
+> > 
+> > - all interrupts are in the same space
+> > - all interrupts are treated the same
+> > 
+> > And yet the driver creates two domains based on whether
+> > the interrupt gets mapped directly or from the pinctrl code,
+> > which is obviously a waste of resources.
+> The GPIO is kept under separate domain to handle extra configuration
+> for wake GPIO handling.
+
+Which extra configuration? The irq_chip structure is the same, the
+translation is the same, the GIC mapping is the same, and the select
+method only serves to select between two irq domains that do the same
+thing.
+
+So please point me to what the difference is.
+
 > 
-> Note that this same exact problem is what extended quiescent states were
-> created for. But adapting them to this specific use-case isn't trivial
-> as it'll imply reworking entry/exit and dynticks/context tracking code.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> ---
->  kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> index 870a08da5b48..4928358f6e88 100644
-> --- a/kernel/trace/trace_osnoise.c
-> +++ b/kernel/trace/trace_osnoise.c
-> @@ -21,7 +21,9 @@
->  #include <linux/uaccess.h>
->  #include <linux/cpumask.h>
->  #include <linux/delay.h>
-> +#include <linux/tick.h>
->  #include <linux/sched/clock.h>
-> +#include <linux/sched/isolation.h>
->  #include <uapi/linux/sched/types.h>
->  #include <linux/sched.h>
->  #include "trace.h"
-> @@ -1295,6 +1297,7 @@ static int run_osnoise(void)
->  	struct osnoise_sample s;
->  	unsigned int threshold;
->  	u64 runtime, stop_in;
-> +	unsigned long flags;
->  	u64 sum_noise = 0;
->  	int hw_count = 0;
->  	int ret = -1;
-> @@ -1386,6 +1389,22 @@ static int run_osnoise(void)
->  					osnoise_stop_tracing();
->  		}
->  
-> +		/*
-> +		 * Check if we're the only ones running on this nohz_full CPU
-> +		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
-> +		 * QS since there is no way for RCU to know we're not making
-> +		 * use of it.
-> +		 *
-> +		 * Otherwise it'll be done through cond_resched().
-> +		 */
-> +		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
-> +		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
+> On targets like SM8150/SM8250 each wake up capable GPIO (if totan n)
+> line has dedicated parent PDC irq (if total m, n = m) associated with
+> it.
+> However on targets like sdx55 PDC has muxes where each wake GPIO (if
+> total n) line goes through each PDC muxes (if total m, n > m) and
+> any of these muxes can be used to route any one GPIO to PDC (and
+> parent GIC) but unlike other targets it doesn't have one to one
+> mapping for GPIO to GIC interrupt.
+> So this will need to be kept as is to support sdx55 target.
 
-Does this restrict to only isolcpus cpus? what if this CPU was isolated via
-other methods?
+As far as I can tell, the current code doesn't have any support for
+this. And if there is a mux involved in the interrupt routing, this
+should be something entierly separate, as the current code is strictly
+hierarchical.
 
-> +		    tick_nohz_tick_stopped()) {
-> +			local_irq_save(flags);
+What am I missing?
 
-This code is always with interrupts enabled, so local_irq_disable()/enable()
-should be enough (and faster).
+	M.
 
-> +			rcu_momentary_dyntick_idle();
-> +			local_irq_restore(flags);
-> +		}
-
-Question, if we set this once, we could avoid setting it on every loop unless we
-have a preemption from another thread, right?
-
->  		/*
->  		 * For the non-preemptive kernel config: let threads runs, if
->  		 * they so wish.
-
-/me keeps playing with this patch.
-
--- Daniel
+-- 
+Without deviation from the norm, progress is not possible.

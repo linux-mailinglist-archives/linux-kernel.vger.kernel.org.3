@@ -2,144 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAEB4C6BB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A024C6BB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234804AbiB1MFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S236101AbiB1MFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiB1MFD (ORCPT
+        with ESMTP id S231370AbiB1MFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:05:03 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2753017E28
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:04:25 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id y24so20969745lfg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8WnObInMC2ofWUsTKYtPij+k1Wh0DXe/u1zG3p1IPf4=;
-        b=JqfBkaGJmDTS5BLvufjhP/LEar/dzjQ6i7GPUZzQbUUApCYFA5AQYeQ/dfEM6n3HG6
-         CaZx9w0fjnDcQCHoNddRQS/A54mr7vTrErGBM5tIFsv7T/+VRPuNDLeW23vIDovdwSP7
-         1YlExP3x/CuK+MMWXD+8VX40ycwwMQg9kW/7AfxgyIM/5HUHjOIhV6o04w+Sz1TY6zGJ
-         yK5nlmPf9dv+VtE25IFeAdYzaQl0yQmQdb0DFN6YWjq3GJl8OCOtYnx1B1DzLqs0Htc5
-         BO28nMs1x1Ceqic4zFgJpRukkI19rYnBqN13EUOvPUo4O19aDegrb8WhpA5zTdnQRqGM
-         OE9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8WnObInMC2ofWUsTKYtPij+k1Wh0DXe/u1zG3p1IPf4=;
-        b=yLyEP9Qo1m51mEwYU76Ybyu803+1lXNUlBla+dDwj7DQQssvU7JaPNKd/KdZxohW3z
-         ceATaA0i3onqV2mZxnzhTnRZGX1WtbElEAO7CZJn8Ty2wprXSNcw+qs5nCu22uWGyZPs
-         M0MIJZBZXF1aEYqFCSCwT4oASt1aDUSufjmtRBJhTjUq55UloBdqozLSZGRyAXK9bBgg
-         zzFjDVpEeX1p+eKsh5pNyN07N+iQSmJeoQwwklp0SmfJVq9o13cpOaReFQss7CCj01N4
-         4QMWLDqCM0CSj5nzFuQ4fW6fTDpE2GCG1YlquZ+iNZfLExO5ZeBga/3HsjwfA+PPuchl
-         C0QA==
-X-Gm-Message-State: AOAM531uDVlCEL2RVN9/f+tYKIcG2hskoAsGN6kPhiDiUCmI4lMCBRHP
-        em60mVk5F/q81UjYDLjex/Vivx1doYKE2FqkLTmJ7g==
-X-Google-Smtp-Source: ABdhPJxpZi2fIFjY4KRz6vVxIdDcBSJGElXWDH3T1Fddx90I97shcxEvbgmXGqeayZecnO4XROSRNKyZGUYTNmYasOI=
-X-Received: by 2002:ac2:5de4:0:b0:443:5b80:d4c4 with SMTP id
- z4-20020ac25de4000000b004435b80d4c4mr12437782lfq.373.1646049863342; Mon, 28
- Feb 2022 04:04:23 -0800 (PST)
+        Mon, 28 Feb 2022 07:05:40 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1800817E28
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:04:59 -0800 (PST)
+Date:   Mon, 28 Feb 2022 21:04:48 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1646049897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q1MJ8jXt8CRUuDZRl3QeZdqpRp5teAOKdkqZb44fYZI=;
+        b=MXF4vhaI0lP1IgMok1yrUhPiWMMuJcw0xT7KyvONBR3PtiGZ0VcAJ7JaCAJ4qjcxxbp3Mb
+        CQVZ2KbAviEkCaOoSJ3kZ1UnXOxnXxupUg01+MYcFzKTivvRFLdRnF9Xplx+ln5NJxU+qa
+        utLXmJ26Ig7VnBeHTx6X/q/QEFgaGPw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
+        david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] mm/memory-failure.c: fix memory failure race with
+ memory offline
+Message-ID: <20220228120448.GA1142923@u2004>
+References: <20220226094034.23938-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <1644395927-4138-1-git-send-email-wangqing@vivo.com>
- <CAPDyKFqg5N1tCqQ2u2jt5qU0qLuDJRSJRtq_aMVDc7XNDbRvkw@mail.gmail.com> <bcd6688f-6f42-ca8f-ab9c-978eeff4f4e3@wanadoo.fr>
-In-Reply-To: <bcd6688f-6f42-ca8f-ab9c-978eeff4f4e3@wanadoo.fr>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 28 Feb 2022 13:03:47 +0100
-Message-ID: <CAPDyKFo-4hkTo8F9q4+BmxUH_Y4nk_K0N20q53xrdJLAFRutcQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: mtk-sd: use div64_u64() instead of do_div()
-To:     Qing Wang <wangqing@vivo.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220226094034.23938-1-linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 21:00, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 17/02/2022 =C3=A0 16:39, Ulf Hansson a =C3=A9crit :
-> > On Wed, 9 Feb 2022 at 09:39, Qing Wang <wangqing@vivo.com> wrote:
-> >>
-> >> From: Wang Qing <wangqing@vivo.com>
-> >>
-> >> do_div() does a 64-by-32 division.
-> >> When the divisor is u64, do_div() truncates it to 32 bits, this means =
-it
-> >> can test non-zero and be truncated to zero for division.
-> >>
-> >> fix do_div.cocci warning:
-> >> do_div() does a 64-by-32 division, please consider using div64_u64 ins=
-tead.
-> >>
-> >> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> >
-> > Applied for next, thanks!
->
->
-> This is wrong.
->
-> See [1].
+On Sat, Feb 26, 2022 at 05:40:34PM +0800, Miaohe Lin wrote:
+> There is a theoretical race window between memory failure and memory
+> offline. Think about the below scene:
+> 
+>   CPU A					  CPU B
+> memory_failure				offline_pages
+>   mutex_lock(&mf_mutex);
+>   TestSetPageHWPoison(p)
+> 					  start_isolate_page_range
+> 					    has_unmovable_pages
+> 					      --PageHWPoison is movable
+> 					  do {
+> 					    scan_movable_pages
+> 					    do_migrate_range
+> 					      --PageHWPoison isn't migrated
+> 					  }
+> 					  test_pages_isolated
+> 					    --PageHWPoison is isolated
+> 					remove_memory
+>   access page... bang
+>   ...
+> 
+> When PageHWPoison is set, the page could be offlined anytime regardless
+> of the page refcnt. It's bacause start_isolate_page_range treats HWPoison
+> page as movable and already isolated, so the page range can be successfully
+> isolated. soft_offline_page and unpoison_memory have the similar race. Fix
+> this by using get_online_mems + put_online_mems pair to guard aginst memory
+> offline when doing memory failure.
 
-Thanks for reporting this, I am dropping the patch from my next branch!
+Sounds convincing to me. Thanks for identifying. Is this problem reproduced
+in your testing, or just picked out by code inspection?
 
-See more comments below.
+> 
+> There is a even worse race window. If the page refcnt is held, then memory
+> failure happens, the page could be offlined while it's still in use. So The
+> assumption that a page can not be offlined when the page refcnt is held is
+> now broken. This theoretical race window could happen in every vm activity.
+> But this race window might be too small to fix.
 
->
->
-> Wang Qing, you should really warn all the people you have sent such patch=
-es.
->
-> CJ
->
-> [1]:
-> https://lore.kernel.org/linux-kernel/19b96972-cee7-937f-21ce-c78982ed2048=
-@linaro.org/
->
->
-> >
-> > Kind regards
-> > Uffe
-> >
-> >
-> >> ---
-> >>   drivers/mmc/host/mtk-sd.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> >> index 65037e1..777c9a8
-> >> --- a/drivers/mmc/host/mtk-sd.c
-> >> +++ b/drivers/mmc/host/mtk-sd.c
-> >> @@ -766,7 +766,7 @@ static u64 msdc_timeout_cal(struct msdc_host *host=
-, u64 ns, u64 clks)
-> >>                  clk_ns  =3D 1000000000ULL;
-> >>                  do_div(clk_ns, mmc->actual_clock);
-> >>                  timeout =3D ns + clk_ns - 1;
-> >> -               do_div(timeout, clk_ns);
-> >> +               div64_u64(timeout, clk_ns);
+Yes, hwpoisoned pages can now be offlined while they have refcount > 0.
+I think that they need to be categorize into two groups based on
+whether the error page was successfully handled or not.
 
-I guess a proper patch would be to convert clk_ns into an u32 instead!?
+If a error page is successfully handled, then page_handle_poison() succeeded
+and the refcount should be one (which is held only by hwpoison subsystem
+itself, so there should be no other reference to it), so it should be safely
+offlined as we do now.  But if error handling failed, the hwpoisoned page
+have any value and there could remain some reference to it.  So we might
+better to make offline_pages() fail for such "failed handling" pages, or for
+all hwpoisoned pages with refcount more than one?
 
-> >>                  timeout +=3D clks;
-> >>                  /* in 1048576 sclk cycle unit */
-> >>                  timeout =3D DIV_ROUND_UP(timeout, BIT(20));
-> >> --
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/memory-failure.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 5444a8ef4867..b85232a64104 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1702,6 +1702,7 @@ int memory_failure(unsigned long pfn, int flags)
+>  	if (!sysctl_memory_failure_recovery)
+>  		panic("Memory failure on page %lx", pfn);
+> 
+> +	get_online_mems();
+>  	mutex_lock(&mf_mutex);
+> 
+>  	p = pfn_to_online_page(pfn);
+> @@ -1894,11 +1895,13 @@ int memory_failure(unsigned long pfn, int flags)
+>  identify_page_state:
+>  	res = identify_page_state(pfn, p, page_flags);
+>  	mutex_unlock(&mf_mutex);
+> +	put_online_mems();
+>  	return res;
+>  unlock_page:
+>  	unlock_page(p);
+>  unlock_mutex:
+>  	mutex_unlock(&mf_mutex);
+> +	put_online_mems();
+>  	return res;
+>  }
+>  EXPORT_SYMBOL_GPL(memory_failure);
+> @@ -2058,6 +2061,7 @@ int unpoison_memory(unsigned long pfn)
+>  	if (!pfn_valid(pfn))
+>  		return -ENXIO;
+> 
+> +	get_online_mems();
+>  	p = pfn_to_page(pfn);
+>  	page = compound_head(p);
+> 
+> @@ -2114,6 +2118,7 @@ int unpoison_memory(unsigned long pfn)
+> 
+>  unlock_mutex:
+>  	mutex_unlock(&mf_mutex);
+> +	put_online_mems();
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(unpoison_memory);
+> @@ -2278,10 +2283,12 @@ int soft_offline_page(unsigned long pfn, int flags)
+>  	if (flags & MF_COUNT_INCREASED)
+>  		ref_page = pfn_to_page(pfn);
+> 
+> +	get_online_mems();
 
-Kind regards
-Uffe
+I felt that {get,put}_online_mems() can be put together with takeing/freeing
+mf_mutex with some wrapper lock/unlock function, which slightly improves
+code readability (developers won't have to care about two locking separately).
+That requires moving mutex_lock(&mf_mutex), which could have non-trivial
+change, but maybe that's not so bad.
+
+Thanks,
+Naoya Horiguchi
+
+>  	/* Only online pages can be soft-offlined (esp., not ZONE_DEVICE). */
+>  	page = pfn_to_online_page(pfn);
+>  	if (!page) {
+>  		put_ref_page(ref_page);
+> +		put_online_mems();
+>  		return -EIO;
+>  	}
+> 
+> @@ -2291,13 +2298,12 @@ int soft_offline_page(unsigned long pfn, int flags)
+>  		pr_info("%s: %#lx page already poisoned\n", __func__, pfn);
+>  		put_ref_page(ref_page);
+>  		mutex_unlock(&mf_mutex);
+> +		put_online_mems();
+>  		return 0;
+>  	}
+> 
+>  retry:
+> -	get_online_mems();
+>  	ret = get_hwpoison_page(page, flags);
+> -	put_online_mems();
+> 
+>  	if (ret > 0) {
+>  		ret = soft_offline_in_use_page(page);
+> @@ -2310,6 +2316,7 @@ int soft_offline_page(unsigned long pfn, int flags)
+>  	}
+> 
+>  	mutex_unlock(&mf_mutex);
+> +	put_online_mems();
+> 
+>  	return ret;
+>  }
+> ---
+> 2.23.0
+> 

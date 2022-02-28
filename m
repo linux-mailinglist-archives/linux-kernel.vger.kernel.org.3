@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8A94C76CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06CC4C73A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239953AbiB1SHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S237383AbiB1Rha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240117AbiB1SDA (ORCPT
+        with ESMTP id S237524AbiB1Reo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C4A9EB9E;
-        Mon, 28 Feb 2022 09:46:36 -0800 (PST)
+        Mon, 28 Feb 2022 12:34:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C39939A8;
+        Mon, 28 Feb 2022 09:31:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE1F26098A;
-        Mon, 28 Feb 2022 17:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19F4C340E7;
-        Mon, 28 Feb 2022 17:46:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAB3CB815AE;
+        Mon, 28 Feb 2022 17:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E319C340E7;
+        Mon, 28 Feb 2022 17:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070369;
-        bh=x3Ks4l3oF8qlXekP7bV+zF2mkX7O9rC2XCw9cam+juA=;
+        s=korg; t=1646069467;
+        bh=NVZ/13wV06YZ+xr1T2jgfLSQQ++PaVN1I5onuZqPhSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u/Ng2NZuM5++r29GcUXuXTWta2c1kyucUBt15F2yz9dqJFO0Xy3L2PmhDKF8r5H/3
-         cQwYuG4/4gpqP2topTdI72XcjIM/VvwaUCO5Tr1xmxsrIa+E9pUBfRQI7skd8Qj8yC
-         kFKEK2ujhUGcsxcHqlCNYRUTHIWYsNi0isBlzuoM=
+        b=MMWs2yZg0W2t5l2TX+HZqmu6dIKAMXZvIAr1lu8NeQFxaD+EYU7xlErVQ3Yr8ceKk
+         xMriP8FcXHeBcpvhwhR73jHcrinMWhflBkmpWbZGwRL9/pNEgFR62cg4bhziUaWCR2
+         lZjSKXkdzS+3WjwdYwjT4ccT17ySbBfVc3mYjcQQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch.siach@siklu.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Grant Grundler <grundler@chromium.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 083/164] net: mdio-ipq4019: add delay after clock enable
+Subject: [PATCH 5.4 07/53] sr9700: sanity check for packet length
 Date:   Mon, 28 Feb 2022 18:24:05 +0100
-Message-Id: <20220228172407.471992966@linuxfoundation.org>
+Message-Id: <20220228172248.850170902@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baruch Siach <baruch.siach@siklu.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit b6ad6261d27708567b309fdb3102b12c42a070cc upstream.
+commit e9da0b56fe27206b49f39805f7dcda8a89379062 upstream.
 
-Experimentation shows that PHY detect might fail when the code attempts
-MDIO bus read immediately after clock enable. Add delay to stabilize the
-clock before bus access.
+A malicious device can leak heap data to user space
+providing bogus frame lengths. Introduce a sanity check.
 
-PHY detect failure started to show after commit 7590fc6f80ac ("net:
-mdio: Demote probed message to debug print") that removed coincidental
-delay between clock enable and bus access.
-
-10ms is meant to match the time it take to send the probed message over
-UART at 115200 bps. This might be a far overshoot.
-
-Fixes: 23a890d493e3 ("net: mdio: Add the reset function for IPQ MDIO driver")
-Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reviewed-by: Grant Grundler <grundler@chromium.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/mdio/mdio-ipq4019.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/usb/sr9700.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/mdio/mdio-ipq4019.c
-+++ b/drivers/net/mdio/mdio-ipq4019.c
-@@ -200,7 +200,11 @@ static int ipq_mdio_reset(struct mii_bus
- 	if (ret)
- 		return ret;
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -410,7 +410,7 @@ static int sr9700_rx_fixup(struct usbnet
+ 		/* ignore the CRC length */
+ 		len = (skb->data[1] | (skb->data[2] << 8)) - 4;
  
--	return clk_prepare_enable(priv->mdio_clk);
-+	ret = clk_prepare_enable(priv->mdio_clk);
-+	if (ret == 0)
-+		mdelay(10);
-+
-+	return ret;
- }
+-		if (len > ETH_FRAME_LEN)
++		if (len > ETH_FRAME_LEN || len > skb->len)
+ 			return 0;
  
- static int ipq4019_mdio_probe(struct platform_device *pdev)
+ 		/* the last packet of current skb */
 
 

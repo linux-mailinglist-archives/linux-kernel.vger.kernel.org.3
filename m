@@ -2,183 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4924C71C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0034C71C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbiB1Qc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S237934AbiB1Qdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237934AbiB1Qc4 (ORCPT
+        with ESMTP id S233788AbiB1Qdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:32:56 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EE151E74;
-        Mon, 28 Feb 2022 08:32:16 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id p4so6022115wmg.1;
-        Mon, 28 Feb 2022 08:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nspjxBI9tYzhw/PzFHLylmjKidTTydsrD7JFMGTC0VQ=;
-        b=FPcvzvX3MDs+LdnqfpdttONymmd5Rh4uve9/n2nXP25NoIaAzzIdxwwWDw74Eu2KAI
-         s7CcDs1KSGhtfBpOFKS9DacY1Xo9WueMmBUvHWJ3xmIJP7JG2mKiuTOJkrLHQvGUsCoX
-         3MGqYVcHH8JyXnG9VDBJa2G3WdzVY2i8A6bUaV2YeoVt43Y7Gk0EGEkO8giTcRgXZEa1
-         d2sIdsyHQvoAkmkkfV/trDwqaYFMLsGxnRmU6/rgU/hUm/p4fIAuhDbtVGD4HTE9KA/T
-         jV9dQimHsukOP9QwzcTcDUq5vajfFEy6WqvtxDGfLVRtKL6+dKj0XvnqoXXF/qh+qYUL
-         DsdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nspjxBI9tYzhw/PzFHLylmjKidTTydsrD7JFMGTC0VQ=;
-        b=KxqMUylY2eBOMPIWsDk/u1gLHCQySToDG3eHyWOG8WIspISukvkjZbqi+X6sF87MVo
-         Bz9SwJXRmnJgxn19V3L42KpteZmtizJrBKNHhZianhlfEHypSbrG7AsBDuaKRIptu8Km
-         tvR2tHFsvAwRUW1oouK1t6sTvlvuR24sEk2hPQ8fFoo2Ba+FiM1Ux4UDI26UdO4XGkAr
-         2qmU3bpkNh6v91QqWIBJW5Fpq01iYlu5uuqD9MjDUWGzgSpiHKJ4I6DeSz9mX2Le3eAV
-         PtNBiExv9QE1cWyyL/YLUhT7P+6Xoy8xMGRAanaJtI+HAaF4Y3cP8XBCYZzh5pb8A9Nj
-         WDag==
-X-Gm-Message-State: AOAM531UVyYhMB3YQ0NKcNzssqU3P5tSyKGjb+cLVIqx7JFw9tzvhphM
-        VLwYI5dOkaB38ZOiL1O+V6M=
-X-Google-Smtp-Source: ABdhPJy/RE308BOWztEfvBeC+M/1tepbLiYUtCH/0hJf9ShvYGyv+1u2o9DxOIVpfyR+PA44lN0jhw==
-X-Received: by 2002:a05:600c:418b:b0:380:e493:660a with SMTP id p11-20020a05600c418b00b00380e493660amr13779838wmh.189.1646065935336;
-        Mon, 28 Feb 2022 08:32:15 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfdb84000000b001e8d8ac5394sm11503518wri.110.2022.02.28.08.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 08:32:14 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: Re: [RFC PATCH 2/8] media: Add P010 format
-Date:   Mon, 28 Feb 2022 17:32:13 +0100
-Message-ID: <5696849.MhkbZ0Pkbq@kista>
-In-Reply-To: <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com> <20220227144926.3006585-3-jernej.skrabec@gmail.com> <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
+        Mon, 28 Feb 2022 11:33:52 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7A743EFE;
+        Mon, 28 Feb 2022 08:33:08 -0800 (PST)
+X-UUID: 844e9321f9514547804018f8b76c476d-20220301
+X-UUID: 844e9321f9514547804018f8b76c476d-20220301
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 920374331; Tue, 01 Mar 2022 00:32:59 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 1 Mar 2022 00:32:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Mar
+ 2022 00:32:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 00:32:56 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <pmladek@suse.com>
+CC:     <acme@kernel.org>, <akpm@linux-foundation.org>,
+        <alexander.shishkin@linux.intel.com>, <catalin.marinas@arm.com>,
+        <davem@davemloft.net>, <jolsa@redhat.com>, <jthierry@redhat.com>,
+        <keescook@chromium.org>, <kernelfans@gmail.com>,
+        <lecopzer.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>, <mark.rutland@arm.com>,
+        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>, <maz@kernel.org>,
+        <mcgrof@kernel.org>, <mingo@redhat.com>, <namhyung@kernel.org>,
+        <nixiaoming@huawei.com>, <peterz@infradead.org>,
+        <sparclinux@vger.kernel.org>, <sumit.garg@linaro.org>,
+        <wangqing@vivo.com>, <will@kernel.org>, <yj.chiang@mediatek.com>
+Subject: Re: [PATCH 4/5] kernel/watchdog: Adapt the watchdog_hld interface for async model
+Date:   Tue, 1 Mar 2022 00:32:57 +0800
+Message-ID: <20220228163257.2411-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <YhygkafOHc6eeP9f@alley>
+References: <YhygkafOHc6eeP9f@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 28. februar 2022 ob 13:48:53 CET je Nicolas Dufresne=20
-napisal(a):
-> Le dimanche 27 f=E9vrier 2022 =E0 15:49 +0100, Jernej Skrabec a =E9crit :
-> > Add P010 format, which is commonly used for 10-bit videos.
->=20
-> There is a much more complete patch that was sent previously (with=20
-documentation
-> and all):
->=20
-> https://patchwork.kernel.org/project/linux-rockchip/patch/
-20210618131526.566762-5-benjamin.gaignard@collabora.com/
-
-Great, I'll take it for next revision. Although I'm not sure what "much mor=
-e=20
-complete" means. Only additional thing is documentation.
-
-Best regards,
-Jernej
-
->=20
-> regards,
-> Nicolas
->=20
-> >=20
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > ---
-> >  drivers/media/v4l2-core/v4l2-common.c | 2 ++
-> >  drivers/media/v4l2-core/v4l2-ioctl.c  | 1 +
-> >  include/uapi/linux/videodev2.h        | 1 +
-> >  3 files changed, 4 insertions(+)
-> >=20
-> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-
-core/v4l2-common.c
-> > index 1db0020e08c0..4ede36546e9c 100644
-> > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > @@ -275,6 +275,8 @@ const struct v4l2_format_info *v4l2_format_info(u32=
-=20
-format)
-> >  		{ .format =3D V4L2_PIX_FMT_YUV422P, .pixel_enc =3D=20
-V4L2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 3, .bpp =3D { 1, 1,=
- 1, 0 },=20
-=2Ehdiv =3D 2, .vdiv =3D 1 },
-> >  		{ .format =3D V4L2_PIX_FMT_GREY,    .pixel_enc =3D=20
-V4L2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 1, 0,=
- 0, 0 },=20
-=2Ehdiv =3D 1, .vdiv =3D 1 },
-> > =20
-> > +		{ .format =3D V4L2_PIX_FMT_P010,    .pixel_enc =3D=20
-V4L2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 2, 4,=
- 0, 0 },=20
-=2Ehdiv =3D 2, .vdiv =3D 2 },
-> > +
-> >  		/* Tiled YUV formats */
-> >  		{ .format =3D V4L2_PIX_FMT_NV12_4L4, .pixel_enc =3D=20
-V4L2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2,=
- 0, 0 },=20
-=2Ehdiv =3D 2, .vdiv =3D 2 },
-> >  		{ .format =3D V4L2_PIX_FMT_P010_4L4, .pixel_enc =3D=20
-V4L2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 2, 4,=
- 0, 0 },=20
-=2Ehdiv =3D 2, .vdiv =3D 2 },
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-
-core/v4l2-ioctl.c
-> > index 048f326c57b9..a8d999e23e5b 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1295,6 +1295,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc=
-=20
-*fmt)
-> >  	case V4L2_PIX_FMT_M420:		descr =3D "YUV 4:2:0=20
-(M420)"; break;
-> >  	case V4L2_PIX_FMT_NV12:		descr =3D "Y/CbCr 4:2:0"; break;
-> >  	case V4L2_PIX_FMT_NV21:		descr =3D "Y/CrCb 4:2:0"; break;
-> > +	case V4L2_PIX_FMT_P010:		descr =3D "10-bit Y/CbCr 4:2:0";=20
-break;
-> >  	case V4L2_PIX_FMT_NV16:		descr =3D "Y/CbCr 4:2:2"; break;
-> >  	case V4L2_PIX_FMT_NV61:		descr =3D "Y/CrCb 4:2:2"; break;
-> >  	case V4L2_PIX_FMT_NV24:		descr =3D "Y/CbCr 4:4:4"; break;
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/
-videodev2.h
-> > index 772dbadd1a24..211bc11a48cb 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -597,6 +597,7 @@ struct v4l2_pix_format {
-> >  /* two planes -- one Y, one Cr + Cb interleaved  */
-> >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/=
-CbCr=20
-4:2:0  */
-> >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/=
-CrCb=20
-4:2:0  */
-> > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/=
-CbCr=20
-4:2:0 10-bit */
-> >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/=
-CbCr=20
-4:2:2  */
-> >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/=
-CrCb=20
-4:2:2  */
-> >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/=
-CbCr=20
-4:4:4  */
->=20
->=20
+Yes, there is no race now, the condition is much like a verbose checking for
+the state. I'll remove it.
 
 
+> > I think it make sense to remove WARN now becasue it looks verbosely...
+> > However, I would rather change the following printk to
+> > "Delayed init for lockup detector failed."
+> 
+> I would print both messages. The above message says what failed.
+> 
+> 
+> > > > +		pr_info("Perf NMI watchdog permanently disabled\n");
+> 
+> And this message explains what is the result of the above failure.
+> It is not obvious.
+
+Yes, make sense, let's print both.
+
+
+> 
+> > > > +	}
+> > > > +}
+> > > > +
+> > > > +/* Ensure the check is called after the initialization of PMU driver */
+> > > > +static int __init lockup_detector_check(void)
+> > > > +{
+> > > > +	if (detector_delay_init_state < DELAY_INIT_WAIT)
+> > > > +		return 0;
+> > > > +
+> > > > +	if (WARN_ON(detector_delay_init_state == DELAY_INIT_WAIT)) {
+> > > 
+> > > Again. Is WARN_ON() needed?
+> > > 
+> > > Also the condition looks wrong. IMHO, this is the expected state.
+> > > 
+> > 
+> > This does expected DELAY_INIT_READY here, which means,
+> > every one who comes here to be checked should be READY and WARN if you're
+> > still in WAIT state, and which means the previous lockup_detector_delay_init()
+> > failed.
+> 
+> No, DELAY_INIT_READY is set below. DELAY_INIT_WAIT is valid value here.
+> It means that lockup_detector_delay_init() work is queued.
+> 
+
+Sorry, I didn't describe clearly,
+
+For the call flow:
+
+kernel_init_freeable()
+-> lockup_detector_init()
+--> queue work(lockup_detector_delay_init) with state registering
+    to DELAY_INIT_WAIT.
+---> lockup_detector_delay_init wait DELAY_INIT_READY that set
+     by armv8_pmu_driver_init().
+----> device_initcall(armv8_pmu_driver_init),
+      set state to READY and wake_up the work. (in 5th patch)
+-----> lockup_detector_delay_init recieves READY and calls
+       watchdog_nmi_probe() again.
+------> late_initcall_sync(lockup_detector_check);
+        check if the state is READY? In other words, did the arch driver
+        finish probing watchdog between "queue work" and "late_initcall_sync()"?
+        If not, we forcely set state to READY and wake_up again.
+
+
+> 
+> > IMO, either keeping or removing WARN is fine with me.
+> > 
+> > I think I'll remove WARN and add
+> > pr_info("Delayed init checking for lockup detector failed, retry for once.");
+> > inside the `if (detector_delay_init_state == DELAY_INIT_WAIT)`
+> > 
+> > Or would you have any other suggestion? thanks.
+> > 
+> > > > +		detector_delay_init_state = DELAY_INIT_READY;
+> > > > +		wake_up(&hld_detector_wait);
+> 
+> I see another problem now. We should always call the wake up here
+> when the work was queued. Otherwise, the worker will stay blocked
+> forewer.
+> 
+> The worker will also get blocked when the late_initcall is called
+> before the work is proceed by a worker.
+
+lockup_detector_check() is used to solve the blocking state.
+As the description above, if state is WAIT when lockup_detector_check(),
+we would forcely set state to READY can wake up the work for once.
+After lockup_detector_check(), nobody cares about the state and the worker
+also finishes its work.
+
+> 
+> > > > +	}
+> > > > +	flush_work(&detector_work);
+> > > > +	return 0;
+> > > > +}
+> > > > +late_initcall_sync(lockup_detector_check);
+> 
+> 
+> OK, I think that the three states are too complicated. I suggest to
+> use only a single bool. Something like:
+> 
+> static bool lockup_detector_pending_init __initdata;
+> 
+> struct wait_queue_head lockup_detector_wait __initdata =
+> 		__WAIT_QUEUE_HEAD_INITIALIZER(lockup_detector_wait);
+> 
+> static struct work_struct detector_work __initdata =
+> 		__WORK_INITIALIZER(lockup_detector_work,
+> 				   lockup_detector_delay_init);
+> 
+> static void __init lockup_detector_delay_init(struct work_struct *work)
+> {
+> 	int ret;
+> 
+> 	wait_event(lockup_detector_wait, lockup_detector_pending_init == false);
+> 
+> 	ret = watchdog_nmi_probe();
+> 	if (ret) {
+> 		pr_info("Delayed init of the lockup detector failed: %\n);
+> 		pr_info("Perf NMI watchdog permanently disabled\n");
+> 		return;
+> 	}
+> 
+> 	nmi_watchdog_available = true;
+> 	lockup_detector_setup();
+> }
+> 
+> /* Trigger delayedEnsure the check is called after the initialization of PMU driver */
+> static int __init lockup_detector_check(void)
+> {
+> 	if (!lockup_detector_pending_init)
+> 		return;
+> 
+> 	lockup_detector_pending_init = false;
+> 	wake_up(&lockup_detector_wait);
+> 	return 0;
+> }
+> late_initcall_sync(lockup_detector_check);
+> 
+> void __init lockup_detector_init(void)
+> {
+> 	int ret;
+> 
+> 	if (tick_nohz_full_enabled())
+> 		pr_info("Disabling watchdog on nohz_full cores by default\n");
+> 
+> 	cpumask_copy(&watchdog_cpumask,
+> 		     housekeeping_cpumask(HK_FLAG_TIMER));
+> 
+> 	ret = watchdog_nmi_probe();
+> 	if (!ret)
+> 		nmi_watchdog_available = true;
+> 	else if (ret == -EBUSY) {
+> 		detector_delay_pending_init = true;
+> 		/* Init must be done in a process context on a bound CPU. */
+> 		queue_work_on(smp_processor_id(), system_wq, 
+> 				  &lockup_detector_work);
+> 	}
+> 
+> 	lockup_detector_setup();
+> 	watchdog_sysctl_init();
+> }
+> 
+> The result is that lockup_detector_work() will never stay blocked
+> forever. There are two possibilities:
+> 
+> 1.  lockup_detector_work() called before lockup_detector_check().
+>     In this case, wait_event() will wait until lockup_detector_check()
+>     clears detector_delay_pending_init and calls wake_up().
+> 
+> 2. lockup_detector_check() called before lockup_detector_work().
+>    In this case, wait_even() will immediately continue because
+>    it will see cleared detector_delay_pending_init.
+> 
+
+Thanks, I think this logic is much simpler than three states for our use case now,
+It also fits the call flow described above, I will revise it base on this
+code.
+
+
+Thanks a lot for your code and review!
+
+BRs,
+Lecopzer

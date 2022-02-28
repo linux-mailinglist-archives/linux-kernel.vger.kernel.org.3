@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947F24C7DF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353EE4C7DF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiB1XDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S229529AbiB1XGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiB1XDa (ORCPT
+        with ESMTP id S229446AbiB1XGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:03:30 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53D1C11F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:02:49 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso488644pju.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:02:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=E18nFr6CZyKutgNHe7ZMWmu1CUH8/xXfpzrd78+lw3g=;
-        b=clgIO3f5d/WoMs5kQadArCOE8yK3k1iikSF9YqWeMN7Na5zLFCkPmwHUz4zGYmF2Bn
-         I+dLJFdtf/dxyfLzjtY6xm9m5p0Us1nz/Ah+NF0LtqAAdJroJ/MM6nTzxcthnWrQcgWS
-         v1duGAc6nfiyyEm71Te9WSdfyzbXe8hZ7Y9QQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=E18nFr6CZyKutgNHe7ZMWmu1CUH8/xXfpzrd78+lw3g=;
-        b=0PHtpPC7nfyRUT80l0ui78jCfOzEe1oSGo7MIpKYkjFr4DLzye2yp0427mGyd9Eiwq
-         OfCHD+UUf7bGpClLUd/dHQdCh3AisfsX+0beFHiX5cmpexkdlAuB6Vj0Gy7jiI6fILQk
-         GMw8u43VtX+d2uPnnrZvM4mr4jcxUDOpDivJuO7Bx2O0dOhY1eobISau/9h5GAsqNjMW
-         +CkQLHNNXh4c5gUsa2dVH66Y+Nq0eyb7pyMcKsZp17g2ZbxMssHIa4e+ZkG7wR4O4smh
-         7Y6SWWEYA+NWSuC47RjH+zK7GSWS6RfVnHUR8c78QzPilmla4KLqcQ/XmmmNO4V6RR9d
-         js2g==
-X-Gm-Message-State: AOAM533jooRqeVevuT00TIs7Mlpw9nXV4O1vtAilmI4wsTxGiDX+R7YV
-        4T+/iUVhm7YByCskcMT1v/sJew==
-X-Google-Smtp-Source: ABdhPJxfQ1nEAcrAyPHpdz9IUSpSVvJ+s1ZvVeZTzteCXVt4ZAkTmBmTv9aj7/vxmk13zoRAUJFh2A==
-X-Received: by 2002:a17:903:2c5:b0:14f:4a29:1f64 with SMTP id s5-20020a17090302c500b0014f4a291f64mr23194061plk.90.1646089369195;
-        Mon, 28 Feb 2022 15:02:49 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c34-20020a630d22000000b0034cb89e4695sm11538529pgl.28.2022.02.28.15.02.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 15:02:48 -0800 (PST)
-Date:   Mon, 28 Feb 2022 15:02:48 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202202281453.C8B840C7@keescook>
-References: <20220301092730.10de23c5@canb.auug.org.au>
+        Mon, 28 Feb 2022 18:06:12 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC851DA64
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 15:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646089533; x=1677625533;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=aJFUREQF4g+hepgFPW1vGzF13KIn40MVOYBMZl7kvDw=;
+  b=BdgGNdvmIvGSyVQdwp6Kr0Qs7GahJ8hkCX7dhWHYjVKgZkZ3JwaNkgi9
+   dUd3yyssjvofcsQPnzjazzh+nSHo/HHgfr21jUXdyGHkP9kDCou+dRYhC
+   vL1sArME/Dt5YtDPNjYbgyAUPp6E+MZx4y0qYUj+NH6XoYlhkYYbQlIRn
+   u0xQ2kQmjHNe9lcy77XNiFarU+McalGEL7q86TLv9RUDKXdn3/Y68rleD
+   3RVILdWslXMxO3bRueJOjdQM87hagwEMEDcp1GB7hz1asxnXVONawu+qe
+   HQ4keR5zj+xUgk0D5dDRgqGEr0wTLyns3BTU2Oh0mVjQVgbFCADnfXlhm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232978247"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="232978247"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 15:05:33 -0800
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="550453365"
+Received: from simpleku-mobl.amr.corp.intel.com (HELO [10.209.11.92]) ([10.209.11.92])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 15:05:31 -0800
+Message-ID: <76b54855-d2b6-e224-ccb4-3f6c4cd1f7e7@intel.com>
+Date:   Mon, 28 Feb 2022 15:05:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301092730.10de23c5@canb.auug.org.au>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-11-kirill.shutemov@linux.intel.com>
+ <51b6613d-eabd-941d-19b2-95b33ec27e99@intel.com>
+ <20220227010733.abapkmyaroglcafl@black.fi.intel.com>
+ <7a8c4e5e-c0ba-ee8e-a912-c71f89b4d4f2@intel.com>
+ <20220228225336.k3lxk5qqm4vpaocv@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 10/30] x86/tdx: Handle CPUID via #VE
+In-Reply-To: <20220228225336.k3lxk5qqm4vpaocv@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:27:30AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 2/28/22 14:53, Kirill A. Shutemov wrote:
+> On Mon, Feb 28, 2022 at 08:41:38AM -0800, Dave Hansen wrote:
+>>> We realise that this is possible vector of attack and plan to implement
+>>> proper filtering. But it is beyon core enabling.
+>>>
+>>>> Is this better than just returning 0's, for instance?
+>>> Plain 0 injection breaks the boot. More complicated solution is need.
+>> OK, so we're leaving the kernel open to something that might be an
+>> attack vector: we know that we don't know how this might be bad.  It's a
+>> "known unknown"[1].
+> I looked deeper. The only CPUIDs that actually required are from the
+> hypervisor range (the range is reserved and never will be used by CPU, so
+> hypervisors adopt it for own use).
 > 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> So this filtering makes kernel boot (I didn't test much beyond that).
 > 
-> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
-> drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
->  3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
->       |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
->  3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
->       |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
-> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->    59 |         return link_status[r - DP_LANE0_1_STATUS];
->       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> 	/*
+> 	 * Only allow VMM to control range reserved for hypervisor
+> 	 * communication.
+> 	 *
+> 	 * Return all-zeros for any CPUID outside the range.
+> 	 */
+> 	if (regs->ax < 0x40000000 || regs->ax > 0x4FFFFFFF) {
+> 		regs->ax = regs->bx = regs->cx = regs->dx = 0;
+> 		return true;
+> 	}
 > 
-> I can't see what in the kspp tree suddenly brought this on, so I have
-> used the kspp tree from next-20220228 for today.
-> 
-> In case it matters: x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+> We may tighten the range further (only few leafs from the range is
+> actually used during the boot), but this should be good enough for this
+> stage of enabling.
 
-This is fixed in drm-misc:
+Seems sane to me.  This closes off basically any ability for the VMM to
+confuse the guest with CPUID values except for the ones that *must* by
+hypervisor-controlled.
 
-https://cgit.freedesktop.org/drm/drm-misc/log/
-https://cgit.freedesktop.org/drm/drm-misc/commit/?id=d4da1f27396fb1dde079447a3612f4f512caed07
-https://cgit.freedesktop.org/drm/drm-misc/commit/?id=a2151490cc6c57b368d7974ffd447a8b36ade639
+Does this, in practice, keep TDX guests from detecting any features that
+it supports today?
 
-but I had to drop the fix from the for-next/kspp because the patched
-file got moved in drm-misc.
-
-I don't know how to best deal with this case, which is: "add new Makefile
-flag" and "carry fixes that have been ignored for 2 weeks" followed
-by a later "fix got picked up now" change. Currently I've still been
-carrying them is a separate tree that is merged with for-next/kspp,
-so the warning doesn't appear like above, but that requires that the
-tree it applies to doesn't change out from under it. :P
-
--- 
-Kees Cook

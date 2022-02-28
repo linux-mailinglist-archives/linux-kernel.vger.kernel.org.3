@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71FD4C6471
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D953D4C646B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbiB1IMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S233850AbiB1IMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiB1IMP (ORCPT
+        with ESMTP id S231684AbiB1IL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:12:15 -0500
+        Mon, 28 Feb 2022 03:11:58 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6C4692B9;
-        Mon, 28 Feb 2022 00:11:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB2692B9;
+        Mon, 28 Feb 2022 00:11:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B330DB80E58;
-        Mon, 28 Feb 2022 08:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61635C340F1;
-        Mon, 28 Feb 2022 08:11:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68594B80E47;
+        Mon, 28 Feb 2022 08:11:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2506C340E7;
+        Mon, 28 Feb 2022 08:11:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646035894;
-        bh=DljB/ws5J9Owyl5yds3GZxgK+VN9CcGAOjBMjtsvHLY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lUHl1zVGtsG7blAH/F0UTToBcop4tD/U31a16Z8iFIbr3Yz3NZyMMruEmqnjff4ZV
-         sOXR4ep1bZSZFP0thZxfJu86f2z6+1scEBxEdmX2MzzbIbTJIcJ58A29zDedh4boJZ
-         xAOME5veJRutesYxFUwWk5sQ+QrLNYM/TVXnCtonVD/qOrj4pXJn2RS2GVaVmp52BQ
-         5iwZQ45A8fmgwsj70jPmE+MF5yxYndWMbRpKn6LVhUyC6bqg4uPpX27ECqsMIMGs2u
-         XUwEuPOV78DTReq/jMwlT/mX0z/iDJpT5zge+xiLD8/j5HMuuicA5nzcXCsD/SOF5J
-         RTmRglaDYVWmw==
-Received: by mail-wm1-f42.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so5460950wmp.5;
-        Mon, 28 Feb 2022 00:11:34 -0800 (PST)
-X-Gm-Message-State: AOAM5318uRMZ+6Bmb5GQS2dvPlhhsmRiLvvuJkrAHm1W+tsEqzYNxghQ
-        wqMu5NpdjUPw3h8ZuoIowHfatgE+zy+oEqaJnsk=
-X-Google-Smtp-Source: ABdhPJwcMEK5ybaUtjnn+nhdYBsBMcvPLAK49eN6lkpL2rzIto/bB9bCpNQVYXjU55YpRRxY6tLnPO6gmy6I0G+qdwc=
-X-Received: by 2002:a05:600c:3b87:b0:381:428c:24c1 with SMTP id
- n7-20020a05600c3b8700b00381428c24c1mr8612916wms.1.1646035892684; Mon, 28 Feb
- 2022 00:11:32 -0800 (PST)
+        s=k20201202; t=1646035878;
+        bh=y1tdMpsiRpffhOx2vBGdYD8HZmjyMt0V4WvXxZ/HDI4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V+KDVirnh3eOYCFV8FXguYwOhS1tTrAiJ9F0r9TEI1UpdiS6lrWv/9qsq+Z7R/F8c
+         bZdQLocTorrgNjW1WC7kweF/RNvrUKPNhmWTYwFwMOKrmMLK5+120uQ6abXSs3S2vR
+         +OWwJrC6zjIjrqS72GmHxVXQzFpQqOp5lU/D03q9Dkwg0o+jwIbS+dSeia5FvTnFQf
+         4V+bZGIfy/88ds4iki52ciHTi1GXFyz222Ssuh9RbjH0aL0vAJdlW1GE7eHRF2fY03
+         9iVW81iOYpG++HKlentvm3Vp/hOT9P12a3Ko93wjxX3eZy0PlpsU5BEU4SEtqrIk+/
+         sF/PnIeE17wwQ==
+Date:   Mon, 28 Feb 2022 00:11:16 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-mmc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v4 0/3] block: show crypto capabilities in sysfs
+Message-ID: <YhyDpNN/Yoajneg/@sol.localdomain>
+References: <20220124215938.2769-1-ebiggers@kernel.org>
+ <YhL3obBiHO92EcEc@sol.localdomain>
 MIME-Version: 1.0
-References: <20220227215408.3180023-1-arnd@kernel.org> <dd41c574-05b0-23bc-646c-0bd341e6e50b@linaro.org>
-In-Reply-To: <dd41c574-05b0-23bc-646c-0bd341e6e50b@linaro.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 28 Feb 2022 09:11:16 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a05aLS1sgQdeUDN6LD3oS0khZh07pyEO9LhUC5CJHN-Kg@mail.gmail.com>
-Message-ID: <CAK8P3a05aLS1sgQdeUDN6LD3oS0khZh07pyEO9LhUC5CJHN-Kg@mail.gmail.com>
-Subject: Re: [greybus-dev] [PATCH] Kbuild: remove -std=gnu89 from compiler arguments
-To:     Alex Elder <elder@linaro.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhL3obBiHO92EcEc@sol.localdomain>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,29 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:04 AM Alex Elder <elder@linaro.org> wrote:
-> On 2/27/22 3:52 PM, Arnd Bergmann wrote: From: Arnd Bergmann <arnd@arndb.de>
+On Sun, Feb 20, 2022 at 06:23:29PM -0800, Eric Biggers wrote:
+> On Mon, Jan 24, 2022 at 01:59:35PM -0800, Eric Biggers wrote:
+> > This series adds sysfs files that expose the inline encryption
+> > capabilities of request queues.
+> > 
+> > Patches 1 and 2 are some related cleanups for existing blk-sysfs code.
+> > Patch 3 is the real change; see there for more details.
+> > 
+> > This series applies to v5.17-rc1.
+> > 
+> > Changed v3 => v4:
+> >    - Reworded a comment in patch 2.
+> >    - Updated dates in sysfs documentation.
+> >    - Added more Reviewed-by tags.
+> > 
+> > Changed v2 => v3:
+> >    - Moved the documentation into Documentation/ABI/stable/sysfs-block,
+> >      and improved it a bit.
+> >    - Write "/sys/block/" instead of "/sys/class/block/".
+> >    - Added Reviewed-by tags.
+> > 
+> > Changed v1 => v2:
+> >    - Use sysfs_emit() instead of sprintf().
+> >    - Use __ATTR_RO().
+> > 
+> > Eric Biggers (3):
+> >   block: simplify calling convention of elv_unregister_queue()
+> >   block: don't delete queue kobject before its children
+> >   blk-crypto: show crypto capabilities in sysfs
+> > 
+> 
+> Any more feedback on this?
+> 
 
-> > I put the suggestion into patch form, based on what we discussed
-> > in the thread.  I only gave it minimal testing, but it would
-> > be good to have it in linux-next if we want to do this in the
-> > merge window.
->
-> Did you determine what needed the new compiler flag based on
-> compilation results?
->
-> Glancing at the Greybus code, I don't believe there's any
-> reason it needs to shift a negative value.  Such warnings
-> could be fixed by making certain variables unsigned, for
-> example.
->
-> I have no objection, I'll just make a note of it.
+Jens, can you apply this for 5.18?  Is there anything else you're waiting for?
 
-I've clarified in the changelog that I'm adding the -Wno-shift-negative-value
-everywhere that -Wextra is used, not because I saw actual warnings
-for greybus and btrfs. The -Wextra is copied from scripts/Makefile.extrawarn,
-so this keeps it in sync. Ideally we should have an easier way for a
-subdirectory to get the W=1 flags without copying the list, but the
-patch I started to do this never got close to getting integrated.
-
-         Arnd
+- Eric

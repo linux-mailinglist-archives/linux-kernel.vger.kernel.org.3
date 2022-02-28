@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419744C7668
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE5E4C744B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240791AbiB1SEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S232372AbiB1Rm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239468AbiB1RxF (ORCPT
+        with ESMTP id S238234AbiB1Rhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:05 -0500
+        Mon, 28 Feb 2022 12:37:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB8DA996B;
-        Mon, 28 Feb 2022 09:40:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2FD25C58;
+        Mon, 28 Feb 2022 09:32:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FFB26154F;
-        Mon, 28 Feb 2022 17:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 187C8C340E7;
-        Mon, 28 Feb 2022 17:40:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD20661365;
+        Mon, 28 Feb 2022 17:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DBCC340E7;
+        Mon, 28 Feb 2022 17:32:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070022;
-        bh=kcKxsW8Q8xpBHWLZSMDqe7m3Do9CkKyNlANTKWSkuSE=;
+        s=korg; t=1646069547;
+        bh=YapyDaCD7iBiLBcrtI8n+txzlNjyNo+E6ZIxHkcKEO8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vEKpcRkYJWsIklHQxRVDeHOXXg0DlbIAmkQ6e30SFDHEm9d5tpTwCWOnglEBkaVRw
-         IGnxbLYNFONushT/QUGQ9f7wssKQCFjrZhc59+S2q7xAtgNWZZc/mob8lstb6w8P8V
-         lEA8xKr2vqDBbeAebEaQ5Q9OeTHEJhByaO2EXrwM=
+        b=s8jcS2mzloaOUU9WiZ9GttLmmlP/yACDHmvHZAI9K5CESntp6kWKEGfH90msz0G/B
+         lQgSmSbu/UAl7zKH/B90AXzNLOkUykpFp+TI4eOTXmkL2cDJ7h4KEl9KsseqznEkyy
+         KJg6zjXEub09Y7l0NijhYmiAmLxYVqitDtos97EY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        stable@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 098/139] iio: adc: tsc2046: fix memory corruption by preventing array overflow
+Subject: [PATCH 5.4 34/53] iio: adc: ad7124: fix mask used for setting AIN_BUFP & AIN_BUFM bits
 Date:   Mon, 28 Feb 2022 18:24:32 +0100
-Message-Id: <20220228172357.946505749@linuxfoundation.org>
+Message-Id: <20220228172250.747090700@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+From: Cosmin Tanislav <demonsingur@gmail.com>
 
-commit b7a78a8adaa8849c02f174d707aead0f85dca0da upstream.
+commit 0e33d15f1dce9e3a80a970ea7f0b27837168aeca upstream.
 
-On one side we have indio_dev->num_channels includes all physical channels +
-timestamp channel. On other side we have an array allocated only for
-physical channels. So, fix memory corruption by ARRAY_SIZE() instead of
-num_channels variable.
+According to page 90 of the datasheet [1], AIN_BUFP is bit 6 and
+AIN_BUFM is bit 5 of the CONFIG_0 -> CONFIG_7 registers.
 
-Note the first case is a cleanup rather than a fix as the software
-timestamp channel bit in active_scanmask is never set by the IIO core.
+Fix the mask used for setting these bits.
 
-Fixes: 9374e8f5a38d ("iio: adc: add ADC driver for the TI TSC2046 controller")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/r/20220107081401.2816357-1-o.rempel@pengutronix.de
+[1]: https://www.analog.com/media/en/technical-documentation/data-sheets/ad7124-8.pdf
+
+Fixes: 0eaecea6e487 ("iio: adc: ad7124: Add buffered input support")
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Link: https://lore.kernel.org/r/20220112200036.694490-1-cosmin.tanislav@analog.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/ti-tsc2046.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/iio/adc/ad7124.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-index d84ae6b008c1..e8fc4d01f30b 100644
---- a/drivers/iio/adc/ti-tsc2046.c
-+++ b/drivers/iio/adc/ti-tsc2046.c
-@@ -388,7 +388,7 @@ static int tsc2046_adc_update_scan_mode(struct iio_dev *indio_dev,
- 	mutex_lock(&priv->slock);
+--- a/drivers/iio/adc/ad7124.c
++++ b/drivers/iio/adc/ad7124.c
+@@ -63,7 +63,7 @@
+ #define AD7124_CONFIG_REF_SEL(x)	FIELD_PREP(AD7124_CONFIG_REF_SEL_MSK, x)
+ #define AD7124_CONFIG_PGA_MSK		GENMASK(2, 0)
+ #define AD7124_CONFIG_PGA(x)		FIELD_PREP(AD7124_CONFIG_PGA_MSK, x)
+-#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(7, 6)
++#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(6, 5)
+ #define AD7124_CONFIG_IN_BUFF(x)	FIELD_PREP(AD7124_CONFIG_IN_BUFF_MSK, x)
  
- 	size = 0;
--	for_each_set_bit(ch_idx, active_scan_mask, indio_dev->num_channels) {
-+	for_each_set_bit(ch_idx, active_scan_mask, ARRAY_SIZE(priv->l)) {
- 		size += tsc2046_adc_group_set_layout(priv, group, ch_idx);
- 		tsc2046_adc_group_set_cmd(priv, group, ch_idx);
- 		group++;
-@@ -548,7 +548,7 @@ static int tsc2046_adc_setup_spi_msg(struct tsc2046_adc_priv *priv)
- 	 * enabled.
- 	 */
- 	size = 0;
--	for (ch_idx = 0; ch_idx < priv->dcfg->num_channels; ch_idx++)
-+	for (ch_idx = 0; ch_idx < ARRAY_SIZE(priv->l); ch_idx++)
- 		size += tsc2046_adc_group_set_layout(priv, ch_idx, ch_idx);
- 
- 	priv->tx = devm_kzalloc(&priv->spi->dev, size, GFP_KERNEL);
--- 
-2.35.1
-
+ /* AD7124_FILTER_X */
 
 

@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3B54C74D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7D84C74CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbiB1RsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S238788AbiB1Rrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239389AbiB1RoH (ORCPT
+        with ESMTP id S239474AbiB1RoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:44:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F6F9D0E3;
-        Mon, 28 Feb 2022 09:36:18 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:15 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFC89D4F1;
+        Mon, 28 Feb 2022 09:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069781; x=1677605781;
+  t=1646069786; x=1677605786;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+KgJCu/G172yzub1bnsz1B3lwqCokfmEHWGWbws7Ttk=;
-  b=FbYW7iVaL+rWAMeueXeE6Ze6Q2KtMbndlQNBpRnvS/k+Z/JQ0hdzJqFp
-   Md9mUkFTcKCGj3eSJwlCp6WMHhVTOFX12vy/9gm9Uo34ZS/MntTQUm4aW
-   AkWbn6OC+zG3OBvuye5yegitbADCOKfajsZQoNcFH7Cp15QGx15JIH9u/
-   W8Xt0MTPm9tvqF1HFEGAsLYZNimjD0lqBW27pMir6D+e8//rJ0ury8WUx
-   g9U96v8BcuJOUdCxBAnLDZo+Llt4QdXptX/DSrwODW1iLrHuhUxSalw6s
-   k0KubSoaa9c0WB0D9np4M+aa5ULs4UYYz6xjiEhaGeu3P1/pvjXHfIXsi
+  bh=cGOfW2D/IgbYKpicSNs2f28FE08ecgJ11Y9ztjKulYE=;
+  b=P/3XOmEFzzddyD5QsKvPOk/+i0GzLlTU/G4eJM3VoTdZuFfiSiDtHC2a
+   ScYnSRCVeE0dI8fhXYgPNjF5w+P/5TqRZMj0A3xpn8Esj1C+ZukudEfYK
+   88WzEBFH53/E6TLo0FsQpAz9I3zzvgr45MbbaHdWfvwJ6PxTrfi5Skhub
+   zBLfSfAoLk/2QHUbFKglzZs874iPaeyHifDpNXZKKZTr2NC6JwylfgBhv
+   SbXlXCqgRiKsXNqlpbSrfIUvn51gVXYddXOjkJ5QDYjCe0S1okM4vcW0h
+   AuVqlOJNLFO9AvoTQwGItuVg0JGkbas9w+Y29AE/wTZylXILTdVkCUdcO
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252865440"
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="236446046"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="252865440"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:36:18 -0800
+   d="scan'208";a="236446046"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:36:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="507494467"
+   d="scan'208";a="510174501"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Feb 2022 09:36:15 -0800
+  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 09:36:15 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nOjwU-0007ao-AJ; Mon, 28 Feb 2022 17:36:14 +0000
-Date:   Tue, 1 Mar 2022 01:35:14 +0800
+        id 1nOjwU-0007b3-Ej; Mon, 28 Feb 2022 17:36:14 +0000
+Date:   Tue, 1 Mar 2022 01:35:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Potin Lai <potin.lai@quantatw.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, Patrick Williams <patrick@stwcx.xyz>,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Patrick Williams <patrick@stwcx.xyz>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Potin Lai <potin.lai@quantatw.com>
 Subject: Re: [PATCH v3 1/2] hwmon: (adm1275) Allow setting sample averaging
-Message-ID: <202202282046.WwmsqJeJ-lkp@intel.com>
+Message-ID: <202202282133.tDaIrm2N-lkp@intel.com>
 References: <20220228103716.10774-2-potin.lai@quantatw.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220228103716.10774-2-potin.lai@quantatw.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,8 +82,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Potin-Lai/hwmon-adm1275-Add-sample-averaging-binding-support/20220228-183914
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220228/202202282046.WwmsqJeJ-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
+config: i386-randconfig-a003-20220228 (https://download.01.org/0day-ci/archive/20220228/202202282133.tDaIrm2N-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -92,61 +93,41 @@ reproduce (this is a W=1 build):
         git checkout e64fc74c4ca9f31e72265039c6bce3497169c8a2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/hwmon/pmbus/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/pmbus/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from drivers/hwmon/pmbus/adm1275.c:15:
-   drivers/hwmon/pmbus/adm1275.c: In function 'adm1275_probe':
->> drivers/hwmon/pmbus/adm1275.c:766:25: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
-     766 |                         "Setting power sample averaging number to %u",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                          ^~~~~~~
-   drivers/hwmon/pmbus/adm1275.c:765:17: note: in expansion of macro 'dev_info'
-     765 |                 dev_info(&client->dev,
-         |                 ^~~~~~~~
-   drivers/hwmon/pmbus/adm1275.c:766:68: note: format string is defined here
-     766 |                         "Setting power sample averaging number to %u",
-         |                                                                   ~^
-         |                                                                    |
-         |                                                                    unsigned int
-         |                                                                   %lu
-   In file included from include/linux/device.h:15,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from drivers/hwmon/pmbus/adm1275.c:15:
-   drivers/hwmon/pmbus/adm1275.c:783:25: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
-     783 |                         "Setting voltage and current sample averaging number to %u",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                          ^~~~~~~
-   drivers/hwmon/pmbus/adm1275.c:782:17: note: in expansion of macro 'dev_info'
-     782 |                 dev_info(&client->dev,
-         |                 ^~~~~~~~
-   drivers/hwmon/pmbus/adm1275.c:783:82: note: format string is defined here
-     783 |                         "Setting voltage and current sample averaging number to %u",
-         |                                                                                 ~^
-         |                                                                                  |
-         |                                                                                  unsigned int
-         |                                                                                 %lu
+>> drivers/hwmon/pmbus/adm1275.c:767:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                           BIT(ilog2(avg)));
+                           ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   drivers/hwmon/pmbus/adm1275.c:784:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                           BIT(ilog2(avg)));
+                           ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +766 drivers/hwmon/pmbus/adm1275.c
+vim +767 drivers/hwmon/pmbus/adm1275.c
 
    464	
    465	static int adm1275_probe(struct i2c_client *client)
@@ -450,8 +431,8 @@ vim +766 drivers/hwmon/pmbus/adm1275.c
    763			if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
    764				return -EINVAL;
    765			dev_info(&client->dev,
- > 766				"Setting power sample averaging number to %u",
-   767				BIT(ilog2(avg)));
+   766				"Setting power sample averaging number to %u",
+ > 767				BIT(ilog2(avg)));
    768			ret = adm1275_write_pmon_config(data, client, true,
    769							ilog2(avg));
    770			if (ret < 0) {

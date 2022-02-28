@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9394C77B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C544C77B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240734AbiB1S1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S240533AbiB1S2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240630AbiB1S11 (ORCPT
+        with ESMTP id S240806AbiB1S1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:27:27 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AA15D5FA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:08:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646071720; x=1677607720;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mjTrSdZLS0vkY/n3c3U4LIAjRcrou3vGsUs7LG9mP78=;
-  b=GNlNRC4vJfEHeKJBy7DTzjWmaOdQOFzu5zPv8BgcEOeblTGz1q687OXO
-   GuqLEtw8+cy4EIgZqhRiFNeD+vDZPa5QXImNFv4xTmCBJv7cDKjcwGHSp
-   pK0rdc42D/qiNtM/j/t18aF58pvgsIcHfmQYLJyCXHpoF0eqhp8r58DDT
-   jSLjS2H8IryGlta2V6b2Kj5MQWH6yhFSMsPn7G9NvQhZ40SFJu3waEmCQ
-   BcjdbzLjvbqQY8B/XzUVfu3gLOSCNyqcNT1e90EYM1C/dX9m1kdXqEwS7
-   Sww/tesECK8NcniG/XuZ2gK5nnc2jgKOSIbtTU9cYJSiqtSc19I/JsvPo
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252874501"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="252874501"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:08:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="534549808"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2022 10:08:16 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOkRT-0007fC-KF; Mon, 28 Feb 2022 18:08:15 +0000
-Date:   Tue, 1 Mar 2022 02:07:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, mingo@redhat.com,
-        peterz@infradead.org, frederic@kernel.org, rostedt@goodmis.org
-Cc:     kbuild-all@lists.01.org, tglx@linutronix.de, mtosatti@redhat.com,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: Re: [RESEND PATCH 2/2] tracing: Avoid isolated CPUs when queueing
- fsnotify irqwork
-Message-ID: <202203010138.m94KpMH3-lkp@intel.com>
-References: <20220228141550.260119-2-nsaenzju@redhat.com>
+        Mon, 28 Feb 2022 13:27:50 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C3DB3E7D;
+        Mon, 28 Feb 2022 10:10:27 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id p15so13982917oip.3;
+        Mon, 28 Feb 2022 10:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7wQWrntmzj+Iyb2AkW1h0mbOWmxT1sYGcUG1qHtruzA=;
+        b=hO9hm+T3VPBeUPH7RQD/Y0rI1IKC/jJ2dA97Y/k0Edaujb0hG+dz7Suf8AtSqBJdzN
+         N0wpwz906k2hpLIL5b5sVa2R2MhQOh0tUIgjHy0JwiLPevs2xVo4LSbHZlnxVKeEqYGe
+         DYKGhs05u+MNlJD+T9pLdl696AxwN9ArskJ/BOuw5GpObFdJaNd9ujzVRVvRu+KuOIwE
+         WMk/0F+oZeBhyvAC/cgxTum/6Nu9+SMFHLfUxW/v5j8dDrIGrZfksvHdwp73OFlW917l
+         59wqgfvaPTX79smzDIyXotarX6JpDcXANBPNxruKstDgzV8PcNW6EgU9A+T3PEuuB6lj
+         W/Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7wQWrntmzj+Iyb2AkW1h0mbOWmxT1sYGcUG1qHtruzA=;
+        b=c/DFlWQnZp7gYjhaxquIg6NKSdfmm4oJMk9xzBeRMIif1ep+/7vRm4N8QfSfYy9BM2
+         Q17vqeAe7CoUm5e1W6tMSASVzKeXvTWp3+c11oE6S2SGV8ERrM4QLj6vy+gnTolb4Bhg
+         I9hifVBGxR9zv11O1IqNwtxLJnYZ/Mcaf1go8RHMwDgrInCPHIECYtXSGhA6XBZe4cV8
+         GBwfLNJBmeUAF0eHTBJoqIIJE9iY2fCHIbIkWBSIaUnibHXHn3ixvE0jKPTUYN9rn8ws
+         OppCH2LnjTOURqWbIOFVkNhmYQVuPGndl+11hnOq11pQvbrdq8kMaUKNvU5+v0ZHEeMH
+         Z+MQ==
+X-Gm-Message-State: AOAM531YDcwd+ootxVdIJ86iAuSiN+Kn5MO7xIymOV+PjpiCitEcgf+F
+        BVxB8JjtFf6H8ghRZDC+Ycob/21rQLo=
+X-Google-Smtp-Source: ABdhPJyiXkfCIS04W7ZFPsOkY+JzUPJmnYpp09LkpTS7tVVjk6qnJNOcCg/oLMt6gMfJG0uAnknBKA==
+X-Received: by 2002:a54:4f1c:0:b0:2d0:6df2:808e with SMTP id e28-20020a544f1c000000b002d06df2808emr11795057oiy.67.1646071826308;
+        Mon, 28 Feb 2022 10:10:26 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m17-20020a0568080f1100b002d71e151e51sm6553576oiw.0.2022.02.28.10.10.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 10:10:25 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9edce888-8e7c-9c97-dc70-17df7f348832@roeck-us.net>
+Date:   Mon, 28 Feb 2022 10:10:23 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228141550.260119-2-nsaenzju@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/2] ic2: mux: pca9541: add delayed-release support
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     linux-i2c@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+References: <20220201001810.19516-1-zev@bewilderbeest.net>
+ <YhyLIRFbs226KTwA@hatter.bewilderbeest.net>
+ <fbb305e3-73b3-7a2d-99cf-a7205b7344ff@roeck-us.net>
+ <Yh0CUzBzGJc4zyTR@hatter.bewilderbeest.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Yh0CUzBzGJc4zyTR@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+On 2/28/22 09:11, Zev Weiss wrote:
+> On Mon, Feb 28, 2022 at 05:57:27AM PST, Guenter Roeck wrote:
+>> On 2/28/22 00:43, Zev Weiss wrote:
+>>> On Mon, Jan 31, 2022 at 04:18:08PM PST, Zev Weiss wrote:
+>>>> Hello,
+>>>>
+>>>> This series adds support for a new pca9541 device-tree property
+>>>> ("release-delay-us"), which delays releasing ownership of the bus
+>>>> after a transaction for a configurable duration, anticipating that
+>>>> another transaction may follow shortly.  By avoiding a
+>>>> release/reacquisition between transactions, this can provide a
+>>>> substantial performance improvement for back-to-back operations -- on
+>>>> a Delta AHE-50DC (ASPEED AST1250) system running OpenBMC with dozens
+>>>> of LM25066 PMICs on PCA9541-arbitrated busses, a setting of 10000 (10
+>>>> ms) reduces the median latency the psusensor daemon's hwmon sysfs file
+>>>> reads from 2.28 ms to 0.99 ms (a 57% improvement).
+>>>>
+>>>
+>>> Ping...Guenter, any thoughts on this?
+>>>
+>>
+>> It sounds reasonable to me, but I don't have access to hardware anymore
+>> to test it, so I have no means to confirm that it actually works.
+>>
+> 
+> Ack, thanks.  In that case, what's the path forward on getting changes to this driver merged?  I see sign-offs from Wolfram and Peter on the last few commits that touched it -- any input from the i2c/i2c-mux maintainers?
+> 
 
-I love your patch! Yet something to improve:
+The i2c/i2c-mux maintainers will need to accept it, and you'll need
+approval for the DT changes from a DT maintainer (presumably Rob).
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on next-20220225]
-[cannot apply to rostedt-trace/for-next linus/master v5.17-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 6255b48aebfd4dff375e97fc8b075a235848db0b
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220301/202203010138.m94KpMH3-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e3ec0b4adfed05db0d559d2d5234d6d8f1034985
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
-        git checkout e3ec0b4adfed05db0d559d2d5234d6d8f1034985
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/trace/trace.c: In function 'latency_fsnotify':
->> kernel/trace/trace.c:1728:71: error: 'HK_FLAG_MISC' undeclared (first use in this function); did you mean 'HK_TYPE_MISC'?
-    1728 |         irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
-         |                                                                       ^~~~~~~~~~~~
-         |                                                                       HK_TYPE_MISC
-   kernel/trace/trace.c:1728:71: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/trace/trace.c: In function 'trace_check_vprintf':
-   kernel/trace/trace.c:3827:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    3827 |                 trace_seq_vprintf(&iter->seq, iter->fmt, ap);
-         |                 ^~~~~~~~~~~~~~~~~
-   kernel/trace/trace.c:3894:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    3894 |                 trace_seq_vprintf(&iter->seq, p, ap);
-         |                 ^~~~~~~~~~~~~~~~~
-
-
-vim +1728 kernel/trace/trace.c
-
-  1718	
-  1719	void latency_fsnotify(struct trace_array *tr)
-  1720	{
-  1721		if (!fsnotify_wq)
-  1722			return;
-  1723		/*
-  1724		 * We cannot call queue_work(&tr->fsnotify_work) from here because it's
-  1725		 * possible that we are called from __schedule() or do_idle(), which
-  1726		 * could cause a deadlock.
-  1727		 */
-> 1728		irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
-  1729	}
-  1730	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Guenter

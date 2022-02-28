@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0A64C7925
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094684C7952
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiB1T5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 14:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S229935AbiB1T6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 14:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiB1T5M (ORCPT
+        with ESMTP id S230051AbiB1T6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 14:57:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453A9140C4;
-        Mon, 28 Feb 2022 11:56:31 -0800 (PST)
+        Mon, 28 Feb 2022 14:58:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543A24F22;
+        Mon, 28 Feb 2022 11:57:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D009D60A5B;
-        Mon, 28 Feb 2022 19:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E835BC340F1;
-        Mon, 28 Feb 2022 19:56:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C10DB81640;
+        Mon, 28 Feb 2022 19:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25560C340F6;
+        Mon, 28 Feb 2022 19:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646078190;
-        bh=0OOU4ypDKyXvi1uajjSPnUmhPXeaSTp6ukVsSrlQHcA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RTXisNBZzA45iz5I1nD1Q49iYcdgMwiouYVpm5sJdmQu/9H3Ov4Fq04ogI46PGsIA
-         oaBc37LVfwkKEZGCfFvr/j6nXxvPNIVuYPdJshypg2oWys6+aYhwo/oVHDZ0rhpKY+
-         +4mXh3fKy9RPjTyNheqYMVhvd9FlT6UZqMOgAL17c9ULCYs2cORvz/yNnrsPYMQQc0
-         UsPcu4z97fXmbKmf7hrkgc98uhwRfmsW9ncPZar9gWRTnnR+05/5gM/is7Mp1mvv7y
-         7xb/Zt2d7+4d+67ra8MyvoYhvG1UD37XJaFlwAMYuOJcjBzVy9IrI4UHnH5VWgi1+a
-         HJ04Qzzd6J+DA==
-Date:   Mon, 28 Feb 2022 13:56:28 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v7 06/11] PCI: portdrv: Set driver_managed_dma
-Message-ID: <20220228195628.GA515785@bhelgaas>
+        s=k20201202; t=1646078238;
+        bh=l5lLRt3vCYUiYaHyAaMI2kjZl93YQn92cFQDfwENYYc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A+gHE8ynvFySBYElIx1otyPFay0rvpFhk4R1i6htEBIkpbViL67XeFlpxC7qfYbHC
+         adswbY2ndvA7R9wHtzVEWBSybHRfV5Q/ly9l/ZATgaJoT3A9sKgDm3SknViMkBoIJd
+         7/on6FPbfEWACJEm4mpTOM9DUpVHmapxKlWaNFvgDDO/L+ym4S6n/5jy4CWn6PkcbS
+         4nSNTijVu3T4ROd+izGeTRDoRluGibDsghw0N1qSo14dnoohCFcFtYM/bTm/AccsTF
+         GfP3q7gJfxJrQrZThcj9lDaRu3p7ka0wTNNYRQvyIZwQ/HXaTl1Seb8jWcRBhdOBmE
+         kj/WoGxs6rm3A==
+Received: by mail-ed1-f51.google.com with SMTP id s24so19156970edr.5;
+        Mon, 28 Feb 2022 11:57:18 -0800 (PST)
+X-Gm-Message-State: AOAM5319XaVM0A7f8sQn/HKx41xXNvQYbNFQDw7lg3hNK+qpygzmYrMK
+        ywT0kvqXlGMM4SzKTnfrvmvXgWtXQ4xIBx7GAg==
+X-Google-Smtp-Source: ABdhPJxu9XPcGWgUlPnfAVpPTPRsS8IAALKfEklJS+km7TveFGDFfTWE5+3j5LJ6ScmR5br0jvLWLJoTEZjDJKHIAzg=
+X-Received: by 2002:aa7:ce92:0:b0:40f:b89c:18fe with SMTP id
+ y18-20020aa7ce92000000b0040fb89c18femr21239364edv.67.1646078236360; Mon, 28
+ Feb 2022 11:57:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228005056.599595-7-baolu.lu@linux.intel.com>
+References: <cover.1643360652.git.geert@linux-m68k.org>
+In-Reply-To: <cover.1643360652.git.geert@linux-m68k.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 28 Feb 2022 13:57:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ=hikc1RAFkdV-uGWTVyHKp8z+=NEtTm-WZzc9h3Lxew@mail.gmail.com>
+Message-ID: <CAL_JsqJ=hikc1RAFkdV-uGWTVyHKp8z+=NEtTm-WZzc9h3Lxew@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] dt-bindings: timer: sifive, clint: Miscellaneous improvements
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,52 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:50:51AM +0800, Lu Baolu wrote:
-> If a switch lacks ACS P2P Request Redirect, a device below the switch can
-> bypass the IOMMU and DMA directly to other devices below the switch, so
-> all the downstream devices must be in the same IOMMU group as the switch
-> itself.
-> 
-> The existing VFIO framework allows the portdrv driver to be bound to the
-> bridge while its downstream devices are assigned to user space. The
-> pci_dma_configure() marks the IOMMU group as containing only devices
-> with kernel drivers that manage DMA. Avoid this default behavior for the
-> portdrv driver in order for compatibility with the current VFIO usage.
+On Fri, Jan 28, 2022 at 3:07 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+>         Hi all,
+>
+> This patch series contains two improvements for the SiFive CLINT DT
+> bindings.
+>
+> Changes compared to v3[1]:
+>   - Use architectural maximum instead of practical maximum of 10,
+>   - Add Reviewed-by (this time for real ;-).
+>
+> Changes compared to v2[2]:
+>   - Add Acked-by, Reviewed-by.
+>
+> Changes compared to v1[3]:
+>   - Split in two patches,
+>   - Improve patch description and document limit rationale.
+>
+> Thanks!
+>
+> [1] https://lore.kernel.org/r/cover.1639744468.git.geert@linux-m68k.org/
+> [2] https://lore.kernel.org/r/cover.1639662093.git.geert@linux-m68k.org
+> [3] https://lore.kernel.org/r/20211125152317.162958-1-geert@linux-m68k.org
+>
+> Geert Uytterhoeven (2):
+>   dt-bindings: timer: sifive,clint: Fix number of interrupts
+>   dt-bindings: timer: sifive,clint: Group interrupt tuples
+>
+>  .../devicetree/bindings/timer/sifive,clint.yaml          | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-It would be nice to explicitly say here how we can look at portdrv
-(and pci_stub) and conclude that ".driver_managed_dma = true" is safe.
+As these have not been picked up yet, I've applied them.
 
-Otherwise I won't know what kind of future change to portdrv might
-make it unsafe.
-
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Suggested-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-> ---
->  drivers/pci/pcie/portdrv_pci.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/portdrv_pci.c b/drivers/pci/pcie/portdrv_pci.c
-> index 35eca6277a96..6b2adb678c21 100644
-> --- a/drivers/pci/pcie/portdrv_pci.c
-> +++ b/drivers/pci/pcie/portdrv_pci.c
-> @@ -202,6 +202,8 @@ static struct pci_driver pcie_portdriver = {
->  
->  	.err_handler	= &pcie_portdrv_err_handler,
->  
-> +	.driver_managed_dma = true,
-> +
->  	.driver.pm	= PCIE_PORTDRV_PM_OPS,
->  };
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
+Rob

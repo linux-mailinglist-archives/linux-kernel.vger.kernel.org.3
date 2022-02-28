@@ -2,168 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22D4C7A7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC704C7A79
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiB1Ubs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S229683AbiB1Uc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiB1Ubq (ORCPT
+        with ESMTP id S229621AbiB1Ucu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:31:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482EF13D7E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:31:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC22960C95
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090E8C36AE2;
-        Mon, 28 Feb 2022 20:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646080266;
-        bh=zsRjDMSjqdrecF0uQGK53RtaJnJbg2cIMw159uLcH/4=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=TNHidC4nRa4lVBOlnn6tRGQQuV2FY1QmuuKHcFSzdPuJYPImuOfiCnSw8tIsTi0/1
-         CB4pHgu6TKDwzbi6gYcRH/5n0ucsTM2Q/uA5PeZWRgAoNj/u1QXO2jzstfKEIxLurk
-         +a9c6DxmoTOam0L1LZD0nugBeDGH4aa1QbjWuJkGuCezADIqIgWqZLfUx4x4NrAJgF
-         HfqZ4YHjJEas1B3CiT+8nLAVp7nYPCE6ci7OATgZTZYINfiiqAz2vApMgDzMLF3hFH
-         Udisi3mVHUw3LTkuIXhVbFKA8ydZjm0UuWFADoLofteyggP/W2VsOnYg1c4sLj7P2X
-         rsUp4xA06nKfA==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9494827C0054;
-        Mon, 28 Feb 2022 15:31:03 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Mon, 28 Feb 2022 15:31:03 -0500
-X-ME-Sender: <xms:BjEdYlUapsVPI10asxGthD5Bhhb4bc-sn-fi0pHzOX7Snvu8pACgLg>
-    <xme:BjEdYlmws6dI9KpCslRZ9xMxJTaJefmy8itaxPm64NFA48YdbddErE6RKmmgmHnHE
-    qMjbe5y6iEp40cEI84>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnheptdfhheettddvtedvtedugfeuuefhtddugedvleevleefvdetleff
-    gfefvdekgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:BjEdYhZkXo9K-qypaX0ASYBP845titqnUhlPkcUY6PGmL8BPc2X85Q>
-    <xmx:BjEdYoXNR3YOj0Mr7Q5gI2DkA-HXfaljCVJExNmksoWI7lsaqaxQjw>
-    <xmx:BjEdYvnDF-hJuu6YASafTavymLVX5lfS_KrcRk798jlsdHnbItIVig>
-    <xmx:BzEdYtpypV6SEhjvecGiLJGsA3OTdkYM96WJUX2RGKoMVRPB60J4JZAyK1I>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 161F021E006E; Mon, 28 Feb 2022 15:31:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <5a792e77-0072-4ded-9f89-e7fcc7f7a1d6@www.fastmail.com>
-In-Reply-To: <Yh0wIMjFdDl8vaNM@kernel.org>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org> <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain>
- <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain>
- <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
- <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
- <Yh0wIMjFdDl8vaNM@kernel.org>
-Date:   Mon, 28 Feb 2022 12:30:41 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Mike Rapoport" <rppt@kernel.org>
-Cc:     "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Cyrill Gorcunov" <gorcunov@gmail.com>,
-        "Balbir Singh" <bsingharora@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Dmitry Safonov" <0x7f454c46@gmail.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Adrian Reber" <adrian@lisas.de>,
-        "Florian Weimer" <fweimer@redhat.com>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Jann Horn" <jannh@google.com>, "Andrei Vagin" <avagin@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Oleg Nesterov" <oleg@redhat.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Pavel Machek" <pavel@ucw.cz>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Mike Kravetz" <mike.kravetz@oracle.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Weijiang Yang" <weijiang.yang@intel.com>,
-        "Dave Martin" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 15:32:50 -0500
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E77E19C16;
+        Mon, 28 Feb 2022 12:31:24 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; bh=3Z50+tLC8/CEOc9W5FMuZ/YfLz0LpCHJGNIb1bHqn70=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220111215046; t=1646080260; v=1; x=1646512260;
+ b=crJzFMOR6tc9squcx92hLTuFtuCfhgO+BgNnioUeH7k69a4pSO7joK45Wfxj0yH7NEIwX6uZ
+ ovLhBNmzxYd5GCzchaGc5QbNkiNzNti5/PIEBt0QyXPX2BToy9B41BFvKbxTGv5xjhVv6kKb/oN
+ OVkZTwV0VQF/Nh/w2UdBttHf7cNJH02zmF8O3u9kFIu3JIdWVoXI6KSpQYEr2yd92EMtlkBySjK
+ VOka02DgQS/aFvpvPOaq3GW48LdBEpQclkOgPyVi61JJq9bq0ylXW5ZtUxY/5ix8dkvcSA0wnHK
+ hZIf4rgSu0P5LiEbYccNCW91mbHc6sUp8HfDA43bsiNAQ9+GWbtWDncUnxcuu2PkY3etBd2b/9G
+ zdLjv5VqebunO676QNsGrJRRkEHk7kWB9gid1XivUpxHo3AY+X+T79AbzN/MnHDtxFJuvGoQILr
+ LZE/kxHolAH+o3gf/wpTQC5IMskejWDD2C2ITZi4ryHpV/NAEiuQRV1F03SdJI9r5ngOfcA4QqP
+ BXYRWYXIYIWbrFE3aw7SFY2xkXoyStoakRiewxY3x02/MgRjFkWvAgznd0fbt0DqESFJ7M35xec
+ OEU6V3m+Q53l8JgSfk6YfDSdMAftMhfkYyPj9J1iZNlN4YHvvi7OXXQBftKtjSF8jHYEKGmPGIb
+ 3Al+HFYYAy8=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 51b43b45; Mon, 28 Feb
+ 2022 15:31:00 -0500
+MIME-Version: 1.0
+Date:   Mon, 28 Feb 2022 15:31:00 -0500
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        stable@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] binfmt_elf: Avoid total_mapping_size for ET_EXEC
+In-Reply-To: <20220228194613.1149432-1-keescook@chromium.org>
+References: <20220228194613.1149432-1-keescook@chromium.org>
+Message-ID: <5d44f028b2d739395c92e4b3036e2bbf@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-02-28 14:46, Kees Cook wrote:
+> Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
+> MAP_FIXED_NOREPLACE").
+> 
+> At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
+> contiguous (but _are_ file-offset contiguous). This would result in
+> giant mapping attempts to cover the entire span, including the virtual
+> address range hole. Disable total_mapping_size for ET_EXEC, which
+> reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
+> 
+> $ readelf -lW /usr/bin/gcc
+> ...
+> Program Headers:
+>   Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   
+> ...
+> ...
+>   LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 
+> ...
+>   LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 
+> ...
+> ...
+>        ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
+> 
+> File offset range     : 0x000000-0x00bb4c
+> 			0x00bb4c bytes
+> 
+> Virtual address range : 0x4000000000000000-0x600000000000bcb0
+> 			0x200000000000bcb0 bytes
+> 
+> Ironically, this is the reverse of the problem that originally caused
+> problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem 
+> is
+> with holes. Future work could restore full coverage if 
+> load_elf_binary()
+> were to perform mappings in a separate phase from the loading (where
+> it could resolve both overlaps and holes).
+> 
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+> Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Fixes: 5f501d555653 ("binfmt_elf: reintroduce using 
+> MAP_FIXED_NOREPLACE")
+> Link:
+> https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> matoro (or anyone else) can you please test this?
+> ---
+>  fs/binfmt_elf.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 9bea703ed1c2..474b44032c65 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -1136,14 +1136,25 @@ static int load_elf_binary(struct linux_binprm 
+> *bprm)
+>  			 * is then page aligned.
+>  			 */
+>  			load_bias = ELF_PAGESTART(load_bias - vaddr);
+> -		}
+> 
+> -		/*
+> -		 * Calculate the entire size of the ELF mapping (total_size).
+> -		 * (Note that first_pt_load is set to false later once the
+> -		 * initial mapping is performed.)
+> -		 */
+> -		if (first_pt_load) {
+> +			/*
+> +			 * Calculate the entire size of the ELF mapping
+> +			 * (total_size), used for the initial mapping,
+> +			 * due to first_pt_load which is set to false later
+> +			 * once the initial mapping is performed.
+> +			 *
+> +			 * Note that this is only sensible when the LOAD
+> +			 * segments are contiguous (or overlapping). If
+> +			 * used for LOADs that are far apart, this would
+> +			 * cause the holes between LOADs to be mapped,
+> +			 * running the risk of having the mapping fail,
+> +			 * as it would be larger than the ELF file itself.
+> +			 *
+> +			 * As a result, only ET_DYN does this, since
+> +			 * some ET_EXEC (e.g. ia64) may have virtual
+> +			 * memory holes between LOADs.
+> +			 *
+> +			 */
+>  			total_size = total_mapping_size(elf_phdata,
+>  							elf_ex->e_phnum);
+>  			if (!total_size) {
 
-
-On Mon, Feb 28, 2022, at 12:27 PM, Mike Rapoport wrote:
-> On Wed, Feb 09, 2022 at 06:37:53PM -0800, Andy Lutomirski wrote:
->> On 2/8/22 18:18, Edgecombe, Rick P wrote:
->> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
->> > 
->> > Still wrapping my head around the CRIU save and restore steps, but
->> > another general approach might be to give ptrace the ability to
->> > temporarily pause/resume/set CET enablement and SSP for a stopped
->> > thread. Then injected code doesn't need to jump through any hoops or
->> > possibly run into road blocks. I'm not sure how much this opens things
->> > up if the thread has to be stopped...
->> 
->> Hmm, that's maybe not insane.
->> 
->> An alternative would be to add a bona fide ptrace call-a-function mechanism.
->> I can think of two potentially usable variants:
->> 
->> 1. Straight call.  PTRACE_CALL_FUNCTION(addr) just emulates CALL addr,
->> shadow stack push and all.
->> 
->> 2. Signal-style.  PTRACE_CALL_FUNCTION_SIGFRAME injects an actual signal
->> frame just like a real signal is being delivered with the specified handler.
->> There could be a variant to opt-in to also using a specified altstack and
->> altshadowstack.
->
-> Using ptrace() will not solve CRIU's issue with sigreturn because sigreturn
-> is called from the victim context rather than from the criu process that
-> controls the dump and uses ptrace().
-
-I'm not sure I follow.
-
->
-> Even with the current shadow stack interface Rick proposed, CRIU can restore
-> the victim using ptrace without any additional knobs, but we loose an
-> important ability to "self-cure" the victim from the parasite in case
-> anything goes wrong with criu control process.
->
-> Moreover, the issue with backward compatibility is not with ptrace but with
-> sigreturn and it seems that criu is not its only user.
-
-So we need an ability for a tracer to cause the tracee to call a function and to return successfully.  Apparently a gdb branch can already do this with shstk, and my PTRACE_CALL_FUNCTION_SIGFRAME should also do the trick.  I don't see why we need a sigretur-but-dont-verify -- we just need this mechanism to create a frame such that sigreturn actually works.
-
---Andy
+This does not apply for me, I'm looking around and can't find any 
+reference to the first_pt_load variable you're removing there?  What 
+commit/tag are you applying this on top of?

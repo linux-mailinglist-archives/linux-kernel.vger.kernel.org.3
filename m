@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE7C4C7399
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DDE4C72F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbiB1Rg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S236264AbiB1Rah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238830AbiB1Rdz (ORCPT
+        with ESMTP id S234856AbiB1R2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:33:55 -0500
+        Mon, 28 Feb 2022 12:28:40 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27677A93;
-        Mon, 28 Feb 2022 09:30:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15170BC0A;
+        Mon, 28 Feb 2022 09:27:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E84DB815AB;
-        Mon, 28 Feb 2022 17:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61EFC340F4;
-        Mon, 28 Feb 2022 17:30:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B743CB815B1;
+        Mon, 28 Feb 2022 17:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2151CC340E7;
+        Mon, 28 Feb 2022 17:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069435;
-        bh=SvDQLbu5beE3Sm6Z67NDVZ7DhnI92oBSclkppH4UUcM=;
+        s=korg; t=1646069261;
+        bh=917T7g5NADCLUB+jfAC4t5c2Tgf/uZE24UZy1cRKwXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XJSqc94YLfeE1u02Zg50p9SWGd25Vq+3XyQqqJbOwQrB/0+D6Dgn2BbEXI6/lOMpa
-         zZjJMXsOhzarB+nRrgBN73gsyWASbVlmt1MacCUJGJf80O9pu5aYqHZK+lUjhkZauX
-         avvp0TP2V4f+EcJkoxR8v21r+uQ0XC1ku1XIes9c=
+        b=kmbvwY00k3UnKt3VypvttQblpINafLUjc4hggCD38JXjLhl/+bLxpKj5kyGiFh9of
+         7PFWZxdoPQvb8AY8Tmi1GiFsiPNNaEr02vTWHIScXqnOD2Ttv0C3QfBGvskCbB4oGU
+         v7coOtsmS+wvD1pPzTAJcO6eDtG/ePXKBHSDdoQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tao Liu <thomas.liu@ucloud.cn>,
-        Willem de Bruijn <willemb@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 19/53] gso: do not skip outer ip header in case of ipip and net_failover
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.14 21/31] tracefs: Set the group ownership in apply_options() not parse_options()
 Date:   Mon, 28 Feb 2022 18:24:17 +0100
-Message-Id: <20220228172249.730686703@linuxfoundation.org>
+Message-Id: <20220228172201.786955916@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
-References: <20220228172248.232273337@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,103 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Liu <thomas.liu@ucloud.cn>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit cc20cced0598d9a5ff91ae4ab147b3b5e99ee819 upstream.
+commit 851e99ebeec3f4a672bb5010cf1ece095acee447 upstream.
 
-We encounter a tcp drop issue in our cloud environment. Packet GROed in
-host forwards to a VM virtio_net nic with net_failover enabled. VM acts
-as a IPVS LB with ipip encapsulation. The full path like:
-host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
- -> ipip encap -> net_failover tx -> virtio_net tx
+Al Viro brought it to my attention that the dentries may not be filled
+when the parse_options() is called, causing the call to set_gid() to
+possibly crash. It should only be called if parse_options() succeeds
+totally anyway.
 
-When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
-SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
-did because it supports TSO and GSO_IPXIP4. But network_header points to
-inner ip header.
+He suggested the logical place to do the update is in apply_options().
 
-Call Trace:
- tcp4_gso_segment        ------> return NULL
- inet_gso_segment        ------> inner iph, network_header points to
- ipip_gso_segment
- inet_gso_segment        ------> outer iph
- skb_mac_gso_segment
+Link: https://lore.kernel.org/all/20220225165219.737025658@goodmis.org/
+Link: https://lkml.kernel.org/r/20220225153426.1c4cab6b@gandalf.local.home
 
-Afterwards virtio_net transmits the pkt, only inner ip header is modified.
-And the outer one just keeps unchanged. The pkt will be dropped in remote
-host.
-
-Call Trace:
- inet_gso_segment        ------> inner iph, outer iph is skipped
- skb_mac_gso_segment
- __skb_gso_segment
- validate_xmit_skb
- validate_xmit_skb_list
- sch_direct_xmit
- __qdisc_run
- __dev_queue_xmit        ------> virtio_net
- dev_hard_start_xmit
- __dev_queue_xmit        ------> net_failover
- ip_finish_output2
- ip_output
- iptunnel_xmit
- ip_tunnel_xmit
- ipip_tunnel_xmit        ------> ipip
- dev_hard_start_xmit
- __dev_queue_xmit
- ip_finish_output2
- ip_output
- ip_forward
- ip_rcv
- __netif_receive_skb_one_core
- netif_receive_skb_internal
- napi_gro_receive
- receive_buf
- virtnet_poll
- net_rx_action
-
-The root cause of this issue is specific with the rare combination of
-SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
-SKB_GSO_DODGY is set from external virtio_net. We need to reset network
-header when callbacks.gso_segment() returns NULL.
-
-This patch also includes ipv6_gso_segment(), considering SIT, etc.
-
-Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
-Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: stable@vger.kernel.org
+Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/af_inet.c     |    5 ++++-
- net/ipv6/ip6_offload.c |    2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ fs/tracefs/inode.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1344,8 +1344,11 @@ struct sk_buff *inet_gso_segment(struct
- 	}
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -265,7 +265,6 @@ static int tracefs_parse_options(char *d
+ 			if (!gid_valid(gid))
+ 				return -EINVAL;
+ 			opts->gid = gid;
+-			set_gid(tracefs_mount->mnt_root, gid);
+ 			break;
+ 		case Opt_mode:
+ 			if (match_octal(&args[0], &option))
+@@ -292,7 +291,9 @@ static int tracefs_apply_options(struct
+ 	inode->i_mode |= opts->mode;
  
- 	ops = rcu_dereference(inet_offloads[proto]);
--	if (likely(ops && ops->callbacks.gso_segment))
-+	if (likely(ops && ops->callbacks.gso_segment)) {
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
-+	}
+ 	inode->i_uid = opts->uid;
+-	inode->i_gid = opts->gid;
++
++	/* Set all the group ids to the mount option */
++	set_gid(sb->s_root, opts->gid);
  
- 	if (IS_ERR_OR_NULL(segs))
- 		goto out;
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -111,6 +111,8 @@ static struct sk_buff *ipv6_gso_segment(
- 	if (likely(ops && ops->callbacks.gso_segment)) {
- 		skb_reset_transport_header(skb);
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
- 	}
- 
- 	if (IS_ERR_OR_NULL(segs))
+ 	return 0;
+ }
 
 

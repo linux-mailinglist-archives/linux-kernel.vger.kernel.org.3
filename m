@@ -2,296 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7A54C7900
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7C64C78F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiB1Ts3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 14:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229630AbiB1Tsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 14:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiB1TsJ (ORCPT
+        with ESMTP id S229717AbiB1TsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 14:48:09 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2628FEF78A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:14 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2d310db3812so121158757b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:14 -0800 (PST)
+        Mon, 28 Feb 2022 14:48:10 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE1EEFFA6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:19 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id i1so11641438plr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BOWJAIOGIH0ymZT9zq+uY7hdzLkaNDyjtAxVqVFFj2w=;
-        b=Wg9c7J0r1y1fhIg98DzrgIzLwAwxdvq8uND7NaTnjSrLRme5cW3gfqTZDoCvYly0ZF
-         +npreilNQ45gdPYFmYgrZx4opwSJZ3zEgzrY14Tce8jF8b+N6T6+MhyYCqov0s3UCBdx
-         cMBq1y5VPRRHIQ50w0k0yC5g5NslhzGoTZJZ8whsT+9R6zU8m8bWuFE8d7epgFZnAtt2
-         p4engUaKwtsosUXzBFEGCDp5eaIwNPQQjW07dgFoZLbVYEheyVqp/sVQG4OgpDRCx3s3
-         JRjJmxY8Fnqxt99mm6+qK34sU2wo1BvQBn2skVxpfVruf47TFWJTJzS2QG3DRRdFc0MB
-         o5Jg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tR+AhlIqjS9XYnLOtynP2EhZ/OV9mCnZ9eIc3MUdC24=;
+        b=EEqg7pUkySZVbQvZfJGIVuw0lXwGWG+go3YvVrAhLQgLhiQhNzDWgCAEyKKhK7DPsx
+         H1LWnVGxrPGJ5ZGzxfs/DLiWdoAxZu1P28f0+C1qdVWmaheFrUNc+ZjxCmcoA8AqfTkH
+         r9Wsbvj+psRVE1ujQo6yM8ftEYCR7mER0tJ+8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BOWJAIOGIH0ymZT9zq+uY7hdzLkaNDyjtAxVqVFFj2w=;
-        b=nlq1PzkTXTSqDVgyQoA6wMpREnDMNs8ynz8cfDOVXrhCrH0KYpwjaZ6/+kM7GA8SGD
-         AOzToGwXGRyDLijcOWzVs/6/YsstV5RsivevEwq2DV7fvqtcgF9E6x4/It5peS8I9JVw
-         CXcGhuludR89Z60On3SZ77QlmlQNJ1m3vZApdzTqKvNXkrjJdCy4I6F+pi2pYy0qxPFj
-         xax1eS6u7EwAE3YuNg40jWHP5+n2vdlUhIKIKE/AhVeo3qkqxOaa2YKaFDiilsHPCehJ
-         5hjGMMRtbixccWNU2ScyD3klkG9pGg06u5CyG/SUx7MYtdJZg6I2b6BxcH/+fYhVSXIc
-         xltw==
-X-Gm-Message-State: AOAM532tCFboeHv/g3sVBEuRQdg1ML3Fl2Bkzlx1Pktz4Axy7P/3GPrc
-        I7e3HebItvtJ71jwxzE7ZB06bQd1KpPZIwak2wCWKw==
-X-Google-Smtp-Source: ABdhPJyEEJLZKxr+GIRaaClTqY0OlHtvicUSDZifLcY+kQQkwsi3Lq9EqECkLjPLoTWZ209QsnDxrVIYifXR81+jjN8=
-X-Received: by 2002:a81:c47:0:b0:2d6:beec:b381 with SMTP id
- 68-20020a810c47000000b002d6beecb381mr21743070ywm.148.1646077572416; Mon, 28
- Feb 2022 11:46:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tR+AhlIqjS9XYnLOtynP2EhZ/OV9mCnZ9eIc3MUdC24=;
+        b=3melf0vgCiwE0PDmSe0NwheSSjBQtYLENt2ZQg7vfwJksoykAfo8Gu6dTN+ufQPvtr
+         Wn1nRMj9keTZFI1GiYwBCmdg0Bs9WeKczPNG8uIiIjTHGV0LWmcgjqcz+1LhrlWLuGYr
+         FIrixciGAx4m3mZ87SYEHZFetzbYZWHj4C48kdRjKPvuXQaNXBibbSh8AUPO2eby2XzD
+         m3JjD+9L5s4vvP0OShBZQO/nhGhhJ/NYCemAYYekeJiy+f9r48JkMYU1MgF07XuoXE24
+         6BRLva1JFcJ0sGozT7tig0ujWkTd5SV6oOpeEalw3KW5sPUlN4Dnj/IiqCw2t9zc+6Ok
+         lQEw==
+X-Gm-Message-State: AOAM533q6dj8Hfo9DEkTrzGamec1hmdA/hVDUPhTbptw+5f6Ewn5uYil
+        LMLF+n1ADMaxuKc0COAC6Nb5CA==
+X-Google-Smtp-Source: ABdhPJz8yuUY3QLjcjfiLAIH3SgbY2+JCxtn3vQ51x519MkGnccf2G5leuKh/e98pxMWfX9wrbgW2g==
+X-Received: by 2002:a17:90a:6688:b0:1bc:5492:6373 with SMTP id m8-20020a17090a668800b001bc54926373mr18053297pjj.161.1646077576522;
+        Mon, 28 Feb 2022 11:46:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm14288692pfu.40.2022.02.28.11.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 11:46:16 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        stable@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] binfmt_elf: Avoid total_mapping_size for ET_EXEC
+Date:   Mon, 28 Feb 2022 11:46:13 -0800
+Message-Id: <20220228194613.1149432-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220224172559.4170192-1-rananta@google.com> <20220224172559.4170192-3-rananta@google.com>
- <Yhh6cI4P5VEMitkg@google.com> <CAJHc60zn0df4e-TXaeKEgkej4G34VzbFdQUpX_6ii_XwTNY2tg@mail.gmail.com>
- <YhkfW76Rit6DYs9T@google.com>
-In-Reply-To: <YhkfW76Rit6DYs9T@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 28 Feb 2022 11:46:01 -0800
-Message-ID: <CAJHc60z=qmz_s1G+LkNRWGumZOrtgzYmRM78j=3VpMi08Ox4Zg@mail.gmail.com>
-Subject: Re: [PATCH v4 02/13] KVM: arm64: Introduce KVM_CAP_ARM_REG_SCOPE
-To:     Oliver Upton <oupton@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, kvm-ia64@vger.kernel.org,
-        kvm-ppc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3328; h=from:subject; bh=l5ScQA97desVa/cbVIp0ld/aMpV+dI3qivoNgmUT4HY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiHSaEHNpWviXuAR7FBfgnykVicWqBdDFz4Mm5Oxru Wk8kzj2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYh0mhAAKCRCJcvTf3G3AJvL6D/ 4/8Opfekx+etBVTmmg6BBaHAHA8L48+PvyAvXuTrQcBwmTx6u2kHTlNm05KEHD78I3pPl6WFdLidNX hdHtV9YD4pJtlDXWQYpaKFFRSPyMb1Q+Zr3T3Pcw2ONhm72yKR+w2EWSmncLYr9WVuBMr/sMMYY5y0 d4fUjZ0olF55wDUFE+2rN2CcIU4e8HjqVoo+2yvOLqPh8YDdw86l3Z0q9Vj5iq+gH6eLvU5WxEG/eZ cjgfLahNoXjCP0/dlPZeGn4vO8xP36bTR3heewwP2OUFH6FokRxzK85fJXQuhjeTP9WhSdxUtHSezM tHCWIEPOOULFM4ONKAHuXgfjk4aOsipHcg+5sWqeuzU6H3aQb40AiEIR/X7ToKo74ys1wDl1ZYvu2v c07D7+PJ59abndEeaJhxsqJUfYh2JY7ggnaUD/qTMlV+h+6oYiQ2xfc6fp0mcaO4qduMYvC30ATa4G rBzu0m3FByxUJKRnhZnkt6cNIIovqdDVjUbCt0fboRZUO0OOPjAJDGrGqPeArViNIyUJHYJyU87fIC o6/z5yPlNufXyH4ki0eM09QNq+3oIB+MFcUlvE1VrtB4qJYmqVYosQg35kBCPgpeFH9s9ZaIiEZb6q q00aBsO4vT+xKC6RAmJH89G7YBiDGotMkgw0F44f/jTcOCP3obE29Gyc86/A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 10:26 AM Oliver Upton <oupton@google.com> wrote:
->
-> On Fri, Feb 25, 2022 at 09:34:35AM -0800, Raghavendra Rao Ananta wrote:
-> > Hey Oliver,
-> >
-> > On Thu, Feb 24, 2022 at 10:43 PM Oliver Upton <oupton@google.com> wrote:
-> > >
-> > > On Thu, Feb 24, 2022 at 05:25:48PM +0000, Raghavendra Rao Ananta wrote:
-> > > > KVM_[GET|SET]_ONE_REG act on per-vCPU basis. Currently certain
-> > > > ARM64 registers, such as KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_[1|2],
-> > > > are accessed via this interface even though the effect that
-> > > > they have are really per-VM. As a result, userspace could just
-> > > > waste cycles to read/write the same information for every vCPU
-> > > > that it spawns, only to realize that there's absolutely no change
-> > > > in the VM's state. The problem gets worse in proportion to the
-> > > > number of vCPUs created.
-> > > >
-> > > > As a result, to avoid this redundancy, introduce the capability
-> > > > KVM_CAP_ARM_REG_SCOPE. If enabled, KVM_GET_REG_LIST will advertise
-> > > > the registers that are VM-scoped by dynamically modifying the
-> > > > register encoding. KVM_REG_ARM_SCOPE_* helper macros are introduced
-> > > > to decode the same. By learning this, userspace can access such
-> > > > registers only once.
-> > > >
-> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > > > ---
-> > > >  Documentation/virt/kvm/api.rst    | 16 ++++++++++++++++
-> > > >  arch/arm64/include/asm/kvm_host.h |  3 +++
-> > > >  arch/arm64/include/uapi/asm/kvm.h |  6 ++++++
-> > > >  arch/arm64/kvm/arm.c              | 13 +++++++------
-> > > >  include/uapi/linux/kvm.h          |  1 +
-> > > >  5 files changed, 33 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > > > index a4267104db50..7e7b3439f540 100644
-> > > > --- a/Documentation/virt/kvm/api.rst
-> > > > +++ b/Documentation/virt/kvm/api.rst
-> > > > @@ -7561,3 +7561,19 @@ The argument to KVM_ENABLE_CAP is also a bitmask, and must be a subset
-> > > >  of the result of KVM_CHECK_EXTENSION.  KVM will forward to userspace
-> > > >  the hypercalls whose corresponding bit is in the argument, and return
-> > > >  ENOSYS for the others.
-> > > > +
-> > > > +8.34 KVM_CAP_ARM_REG_SCOPE
-> > > > +--------------------------
-> > > > +
-> > > > +:Architectures: arm64
-> > > > +
-> > > > +The capability, if enabled, amends the existing register encoding
-> > > > +with additional information to the userspace if a particular register
-> > > > +is scoped per-vCPU or per-VM via KVM_GET_REG_LIST. KVM provides
-> > > > +KVM_REG_ARM_SCOPE_* helper macros to decode the same. Userspace can
-> > > > +use this information from the register encoding to access a VM-scopped
-> > > > +regiser only once, as opposed to accessing it for every vCPU for the
-> > > > +same effect.
-> > > > +
-> > >
-> > > Could you describe the encoding changes in 4.68 'KVM_SET_ONE_REG', along
-> > > with the other ARM encoding details?
-> > >
-> > > > +On the other hand, if the capability is disabled, all the registers
-> > > > +remain vCPU-scopped by default, retaining backward compatibility.
-> > >
-> > > typo: vCPU-scoped
-> > >
-> > > That said, I don't believe we need to document behavior if the CAP is
-> > > disabled, as the implicated ioctls should continue to work the same.
-> > >
-> > Sure, I'll address the above two Doc comments.
-> > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > > > index 5bc01e62c08a..8132de6bd718 100644
-> > > > --- a/arch/arm64/include/asm/kvm_host.h
-> > > > +++ b/arch/arm64/include/asm/kvm_host.h
-> > > > @@ -136,6 +136,9 @@ struct kvm_arch {
-> > > >
-> > > >       /* Memory Tagging Extension enabled for the guest */
-> > > >       bool mte_enabled;
-> > > > +
-> > > > +     /* Register scoping enabled for KVM registers */
-> > > > +     bool reg_scope_enabled;
-> > > >  };
-> > > >
-> > > >  struct kvm_vcpu_fault_info {
-> > > > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> > > > index b3edde68bc3e..c35447cc0e0c 100644
-> > > > --- a/arch/arm64/include/uapi/asm/kvm.h
-> > > > +++ b/arch/arm64/include/uapi/asm/kvm.h
-> > > > @@ -199,6 +199,12 @@ struct kvm_arm_copy_mte_tags {
-> > > >  #define KVM_REG_ARM_COPROC_MASK              0x000000000FFF0000
-> > > >  #define KVM_REG_ARM_COPROC_SHIFT     16
-> > > >
-> > > > +/* Defines if a KVM register is one per-vCPU or one per-VM */
-> > > > +#define KVM_REG_ARM_SCOPE_MASK               0x0000000010000000
-> > > > +#define KVM_REG_ARM_SCOPE_SHIFT              28
-> > >
-> > > Thinking about the advertisement of VM- and vCPU-scoped registers, this
-> > > could be generally useful. Might it make sense to add such an encoding
-> > > to the arch-generic register definitions?
-> > >
-> > > If that is the case, we may want to snap up a few more bits (a nybble)
-> > > for future expansion.
-> > >
-> > That's a great idea! But I wonder if we'll get a push-back since there
-> > are no users of it in other arch(s) yet. Not sure if there was any
-> > need/discussion regarding the same, but I'm happy to share a patch for
-> > the same if you sense that there's a strong potential for the patch.
-> >
->
-> I'm unsure if this is actually of interest to other architectures, it
-> just doesn't seem ARM-specific so we should probably raise the question
-> so we only grab these bits once.
->
-I've CC'ed a few more arch-specific kvm lists for
-comments/concerns/suggestions on the idea (feel free to add any other
-relevant groups/persons). Based on the response, I can start an
-independent RFC series for the same.
+Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
+MAP_FIXED_NOREPLACE").
 
-> > > > +#define KVM_REG_ARM_SCOPE_VCPU               0
-> > > > +#define KVM_REG_ARM_SCOPE_VM         1
-> > > > +
-> > > >  /* Normal registers are mapped as coprocessor 16. */
-> > > >  #define KVM_REG_ARM_CORE             (0x0010 << KVM_REG_ARM_COPROC_SHIFT)
-> > > >  #define KVM_REG_ARM_CORE_REG(name)   (offsetof(struct kvm_regs, name) / sizeof(__u32))
-> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > > index ecc5958e27fe..107977c82c6c 100644
-> > > > --- a/arch/arm64/kvm/arm.c
-> > > > +++ b/arch/arm64/kvm/arm.c
-> > > > @@ -81,26 +81,26 @@ int kvm_arch_check_processor_compat(void *opaque)
-> > > >  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> > > >                           struct kvm_enable_cap *cap)
-> > > >  {
-> > > > -     int r;
-> > > > +     int r = 0;
-> > > >
-> > > >       if (cap->flags)
-> > > >               return -EINVAL;
-> > > >
-> > > >       switch (cap->cap) {
-> > > >       case KVM_CAP_ARM_NISV_TO_USER:
-> > > > -             r = 0;
-> > > >               kvm->arch.return_nisv_io_abort_to_user = true;
-> > > >               break;
-> > > >       case KVM_CAP_ARM_MTE:
-> > > >               mutex_lock(&kvm->lock);
-> > > > -             if (!system_supports_mte() || kvm->created_vcpus) {
-> > > > +             if (!system_supports_mte() || kvm->created_vcpus)
-> > > >                       r = -EINVAL;
-> > > > -             } else {
-> > > > -                     r = 0;
-> > > > +             else
-> > > >                       kvm->arch.mte_enabled = true;
-> > > > -             }
-> > > >               mutex_unlock(&kvm->lock);
-> > > >               break;
-> > >
-> > > Hmm.. these all look like cleanups. If you want to propose these, could
-> > > you do it in a separate patch?
-> > >
-> > Ahh, I thought I could squeeze it in. But sure, I can separate it out.
-> > > > +     case KVM_CAP_ARM_REG_SCOPE:
-> > > > +             WRITE_ONCE(kvm->arch.reg_scope_enabled, true);
-> > > > +             break;
-> > > >       default:
-> > > >               r = -EINVAL;
-> > > >               break;
-> > > > @@ -209,6 +209,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> > > >       case KVM_CAP_SET_GUEST_DEBUG:
-> > > >       case KVM_CAP_VCPU_ATTRIBUTES:
-> > > >       case KVM_CAP_PTP_KVM:
-> > > > +     case KVM_CAP_ARM_REG_SCOPE:
-> > >
-> > > It is a bit odd to advertise a capability (and allow userspace to enable
-> > > it), despite the fact that the feature itself hasn't yet been
-> > > implemented.
-> > >
-> > > Is it possible to fold the feature in to the patch that exposes it to
-> > > userspace? Otherwise, you could punt advertisement of the CAP until it
-> > > is actually implemented in kernel.
-> > >
-> > Well, I didn't want to complicate the patch, but technically the
-> > feature is available with this patch, including all the CAP and macro
-> > definitions. Userspace can still decode the scope information, only
-> > that no registers are added yet, which is done in the next patch. So,
-> > the userspace can still remain the same between this and the next
-> > patch.
->
-> But the series isn't cleanly bisectable. There will exist commits in
-> history that report KVM_CAP_ARM_REG_SCOPE as implemented even though
-> that is not actually the case. You should really only advertise support
-> to userspace when the feature is implemented.
->
-> Defining kvm->arch.reg_scope_enabled can be done earlier so you have a
-> bit to test and guard all of the new code, and only expose the CAP in
-> the last patch of the series.
->
-Got it. I'll arrange that in the next spin.
-> Also, as an FYI Marc has a patch that I'll be picking up in my own
-> series which uses bits instead of bools to keep track of certain
-> VM-wide features:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?h=kvm-arm64/mmu/guest-MMIO-guard&id=7dd0a13a4217b870f2e83cdc6045e5ce482a5340
->
-Thanks. This is great. I can steal a couple of bits and implement the
-flags introduced in the series here.
-> Marc, if neither of our series land in 5.18 could you at least submit
-> this patch in preparation? Should keep conflicts minimal that way.
->
-> Thanks!
->
-> --
-> Oliver
+At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
+contiguous (but _are_ file-offset contiguous). This would result in
+giant mapping attempts to cover the entire span, including the virtual
+address range hole. Disable total_mapping_size for ET_EXEC, which
+reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
 
-Thank you.
+$ readelf -lW /usr/bin/gcc
+...
+Program Headers:
+  Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   ...
+...
+  LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 ...
+  LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 ...
+...
+       ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
 
-Raghavendra
+File offset range     : 0x000000-0x00bb4c
+			0x00bb4c bytes
+
+Virtual address range : 0x4000000000000000-0x600000000000bcb0
+			0x200000000000bcb0 bytes
+
+Ironically, this is the reverse of the problem that originally caused
+problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem is
+with holes. Future work could restore full coverage if load_elf_binary()
+were to perform mappings in a separate phase from the loading (where
+it could resolve both overlaps and holes).
+
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Fixes: 5f501d555653 ("binfmt_elf: reintroduce using MAP_FIXED_NOREPLACE")
+Link: https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+matoro (or anyone else) can you please test this?
+---
+ fs/binfmt_elf.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 9bea703ed1c2..474b44032c65 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1136,14 +1136,25 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			 * is then page aligned.
+ 			 */
+ 			load_bias = ELF_PAGESTART(load_bias - vaddr);
+-		}
+ 
+-		/*
+-		 * Calculate the entire size of the ELF mapping (total_size).
+-		 * (Note that first_pt_load is set to false later once the
+-		 * initial mapping is performed.)
+-		 */
+-		if (first_pt_load) {
++			/*
++			 * Calculate the entire size of the ELF mapping
++			 * (total_size), used for the initial mapping,
++			 * due to first_pt_load which is set to false later
++			 * once the initial mapping is performed.
++			 *
++			 * Note that this is only sensible when the LOAD
++			 * segments are contiguous (or overlapping). If
++			 * used for LOADs that are far apart, this would
++			 * cause the holes between LOADs to be mapped,
++			 * running the risk of having the mapping fail,
++			 * as it would be larger than the ELF file itself.
++			 *
++			 * As a result, only ET_DYN does this, since
++			 * some ET_EXEC (e.g. ia64) may have virtual
++			 * memory holes between LOADs.
++			 *
++			 */
+ 			total_size = total_mapping_size(elf_phdata,
+ 							elf_ex->e_phnum);
+ 			if (!total_size) {
+-- 
+2.32.0
+

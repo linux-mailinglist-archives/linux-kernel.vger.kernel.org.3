@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9174C711F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2681B4C7120
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbiB1QAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S237717AbiB1QB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237707AbiB1QAd (ORCPT
+        with ESMTP id S232976AbiB1QBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:00:33 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4624E7C145
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:59:54 -0800 (PST)
+        Mon, 28 Feb 2022 11:01:22 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D98301F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:00:44 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 03AFE219A0;
-        Mon, 28 Feb 2022 15:59:53 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id BF9C71F899;
+        Mon, 28 Feb 2022 16:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646063993; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646064042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4z5vJyV4/iP6hL9tUw+uZShWWOaJ2WdBHqF5vMWnsl0=;
-        b=t421fAQRIMCU6rXhne9E1ev2+/G2cKFTMBTv+cDe0400kz4HynOd/z6ZLbZDoatQhMvz09
-        BaO9ndfTXt3Lar3+wOwaK7IVIyYfdNsn/VVLgvvlkIKEyp+ryxFPGT0atTrFg9jHozgua0
-        cbAa0VOqcpbnGG+1apEfDpW6ZX8oK5M=
+        bh=hGTfvCQhrt/SMIRr7jr1rjKHBVEjBKSzMSd1EBTGR88=;
+        b=RMvd4SO0qA4gNblsvo/BvVPnjsN24PK4RvPQOQY8AK6xOT/hXGANnQ7ZmXDkK2cB1dOsck
+        KDSsggwYQrAJkdLxERW57Pmw55xaY/Rc/7n36ir4vCyDrkXAdgIu/1QstovxHQaT3gnkBT
+        XBOImZpd9Dh5H/9ecjmHh+rU5yBSNsg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646063993;
+        s=susede2_ed25519; t=1646064042;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4z5vJyV4/iP6hL9tUw+uZShWWOaJ2WdBHqF5vMWnsl0=;
-        b=Mbnf8RFGsd8hv49q/H0XNk2KP+lY8qRylxfaYWUlbba8NEPz5YwIYCyhqFwibg5enooJns
-        M3I1h4pgShrm1vCA==
+        bh=hGTfvCQhrt/SMIRr7jr1rjKHBVEjBKSzMSd1EBTGR88=;
+        b=APSnLcwkE7M8GOLjXPGfvSaWXD7tDuSRJtxTNoETQKr1j8ec9O9kFw6EqsPOqydjBG+8Q9
+        UTmDQ4c2cx4qEVBA==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id E499DA3B93;
-        Mon, 28 Feb 2022 15:59:52 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 16:59:52 +0100
-Message-ID: <s5hczj7rngn.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id ADBE7A3B83;
+        Mon, 28 Feb 2022 16:00:42 +0000 (UTC)
+Date:   Mon, 28 Feb 2022 17:00:42 +0100
+Message-ID: <s5hbkyrrnf9.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Meng Tang <tangmeng@uniontech.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
 Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sound/mips: Use platform_get_irq() to get the interrupt
-In-Reply-To: <20220225111929.17194-1-tangmeng@uniontech.com>
-References: <20220225111929.17194-1-tangmeng@uniontech.com>
+Subject: Re: [PATCH] ALSA: spi: Add check for clk_enable()
+In-Reply-To: <20220228022839.3547266-1-jiasheng@iscas.ac.cn>
+References: <20220228022839.3547266-1-jiasheng@iscas.ac.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -61,19 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 12:19:29 +0100,
-Meng Tang wrote:
+On Mon, 28 Feb 2022 03:28:39 +0100,
+Jiasheng Jiang wrote:
 > 
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypassed the hierarchical setup and messed up the
-> irq chaining.
+> As the potential failure of the clk_enable(),
+> it should be better to check it and return error
+> if fails.
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
-> 
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> Fixes: 3568459a5113 ("ALSA: at73c213: manage SSC clock")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
 Thanks, applied now.
 

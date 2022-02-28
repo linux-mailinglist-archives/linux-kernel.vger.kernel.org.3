@@ -2,189 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D094C63DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3204C6441
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233650AbiB1Hg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S233810AbiB1IA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiB1Hgy (ORCPT
+        with ESMTP id S233803AbiB1IAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:36:54 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F3593AF
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646033777; x=1677569777;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Ohg6vewj32bg8k1oga+9hlY486tYc81H4nLrfKWEoyo=;
-  b=WKQ/BOELUC6tCzErjjSsOphhFMl5Kv7FRHXgHgnNFluAkdQpOfIn/f5I
-   V3PSrql5Y0JowZS9Te7eYBH/Rax3qKK0xScJzDibwwQf9P1GF/Ay3Rldz
-   xlPbpI5sVs70iR5+dPyU7JHPkfIC6nVg7FMGZ506OtTjZWXY1RFe7JcJ6
-   6BMEMe+p589RyATZzN/56FapRLcadaObAMwQP8IJe9mNToiF10ux4bDG3
-   KK8p3jVb7CVv3ewtwrevQUHWYkC0OJ7QLTpaSwCaMUk2Iad3ywThYDrXF
-   qoWkLeVhDzuwavK5VN0kb33yXmaZyOsgyxp8f7/8zIn7E5nfL9J1pQ6U1
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="154594640"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 00:36:14 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 00:36:11 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 00:36:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bw0QeN25ZHjUveHq34KzmNFVumbVezwml+38g6RytEQzJs/8Jl3yVPBenlq3PZhw4kUh+rC1n8/R8S2le0I97vyhQXJALrZo/nPumPp/sOZ6VPKG4dfzY/CVVwUkXG+Jq0Dp7UEG1CHskfspOSkDndpwmSW3iS/L6V2NAgFe/O+XaFGcUdNWR1c0d6oe84G2neKbFd6bKxzrhxtg2vUuF+9oueeYQ/zOiPWGdCQgMMae6D9qJSjQEPCUwHOV381vrbxsjP21gvmLsXyrrZN7sAI7Zi305p8ORTY+Wp3RY7FR6VEqLnw03Y/CdVR5sNSIlUDF32pdxlqbCrYyo7L+OA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ohg6vewj32bg8k1oga+9hlY486tYc81H4nLrfKWEoyo=;
- b=REJ71c2AjdGS8jy30xQqQKWpZBPAQhaGtyn0CEYVl0x3FPWThQbae1l7lrFlZUhAvB+Fh8Ke/tRQ+UdMXkExSCgeaNyU3y/kmhUvpsl/nBbovlHrGfqsFmC634wJZ6uVnuu0uMfB2BeuYcIV4+oRLyMOBms0VQHuaj4Ru69mwYkIiH7PL8Iod+KvSetfVOhT5g0jkcufWdsvgzSO044r5jjKbzM2ko6C2pHg5X+hn1Gf0Ay5vxvAdntFE/tuii2HBkFv89/FWXb4rBT9FhWmfo+ew5HYCzkGvSDr6crwdzVj+4yYGPkT99P9DTozcEwX82EfsFO9ptsozlK9f4VbyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ohg6vewj32bg8k1oga+9hlY486tYc81H4nLrfKWEoyo=;
- b=QuNlwEQLO5esUtgzh7kEsOYstMNnFVJNY+Zxh2c4kiYbOH/QeynPUXDKrtHQ+L/qVUj2YAQdQ6XwrHriDYWJx+/pL2y9fFHBFSrVnRF0wFr/B+OPeirBvkFVOCXVlFT0g/uogYLlheTQOX16unkzdC05nECCc8gbauilR4k1qxQ=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
- by CH0PR11MB5691.namprd11.prod.outlook.com (2603:10b6:610:110::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Mon, 28 Feb
- 2022 07:36:09 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b%5]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 07:36:09 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <groeck@google.com>, <shraash@google.com>
-CC:     <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <Ludovic.Desroches@microchip.com>, <groeck@chromium.org>,
-        <lee.jones@linaro.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] mfd: Avoid unused variable 'atmel_flexcom_pm_ops' warning
-Thread-Topic: [PATCH] mfd: Avoid unused variable 'atmel_flexcom_pm_ops'
- warning
-Thread-Index: AQHYLHXaY1kBBaTP10GrGjF/VEkSzA==
-Date:   Mon, 28 Feb 2022 07:36:09 +0000
-Message-ID: <e13337ff-508c-ff69-1ba2-70ca2b503b6e@microchip.com>
-References: <20220225101520.3188373-1-shraash@google.com>
- <CABXOdTcMj_=XqTnTiUmT8r585W2N2-12ddg4OGDHpwaiTp-Tjw@mail.gmail.com>
-In-Reply-To: <CABXOdTcMj_=XqTnTiUmT8r585W2N2-12ddg4OGDHpwaiTp-Tjw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f6b87ce0-8f7d-4051-2b50-08d9fa8cfce9
-x-ms-traffictypediagnostic: CH0PR11MB5691:EE_
-x-microsoft-antispam-prvs: <CH0PR11MB56913B808C48B8B320EFBE4687019@CH0PR11MB5691.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zC6hXfK1/eT74LUaNHnbcMn4v2UFvCkjCcmpahU1wBUfYssYbe8T4sKYdNsQPabHEKmbqSJwNjd2+2etMwkPn69wAlvxmo8uNdKkY8jYViCsZISRIhYPSfn6BRkuQN5Zlaoz7nGE9sY9Evwb8OUxP78ycG03nsAerYP/SAuBH3DL8dHxrbD6Tsq0OLNi9QPiL/rxeyOOFBAUPuygASx9pirA1fsSSAu0fxuIRPvnParEDgiFdLNYWMA8pI6cFHM3hw2cdSWUtsA8zTEV648GH7ao8/7n7ndJgCvQ8zXgxGZatcfjPdngBIknxFchBvWl0zGZBCKHSbngMS7g1sqMqfrwSRCJRv6fca6k0dswG6dbQluraIrM71rJgU0VLbyPIi+LS2WZCtfE2JTcW452I6urO3WQHy3GSXTPJgG/y7N8HQs5AJ7Ow0C7vGUr8e5teKvLMqnb1HyDKwgYNgJuA8Ccq5u+4dQJEAZmO5IfVWrT8hITZDwkYdstW69QIoBV4V+xCwLOXPBY3CxWq1o35nhzS+S8QuGMPvSyoqwWwVzDqGT59gt/pBiwr1V554AUAXjjf7ZU99/F4pjbAD/6nzdECe5yBRGA4PaeC5Y3IHCJ7DlYN196q+W0bvbB81Hyah0i8y0sCzmQfwaRMkyJp2s61ImMUT1CLFHe/NtVpCbxKWCL3gLndF8XvtS4KagI/2X/C8vXg6S7WsmF6MxtW20k6F3yvaPWdB8087K2Y7pAiUqoaGD/zAeQ1zslL9eGjTv1Z5QCK/s1B7H3P9DBtLalH0KB8E9/85eg5T9fxdebsu1H4q7Q86LU0x7D8iKRPE9H+tQyyZKUAEpHxrn72yQE4u+65jV5JI6UM6dXfLA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(91956017)(8676002)(66946007)(66556008)(66476007)(66446008)(31696002)(8936002)(38070700005)(6486002)(966005)(76116006)(316002)(5660300002)(54906003)(110136005)(64756008)(26005)(122000001)(38100700002)(6506007)(2906002)(6512007)(508600001)(31686004)(71200400001)(36756003)(53546011)(83380400001)(86362001)(2616005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlNSUVFIUy84N29ncUo2eTZtUXFSL1YrWEtmQ1R0bVo3dUpTRGxCajdsYWlO?=
- =?utf-8?B?MXBndy9YOXdPSzlKamhpZ2RVUTlpc2JYNVUrTlR5RUg2bTBmTkxaQk81K1VK?=
- =?utf-8?B?bWtZc0ZvbzV2NU4vYjJjN0x4UmNBNnVkNjQ1VHJiTXpzUDM5UVUxeDhhWDlj?=
- =?utf-8?B?WnI0VUhRRWxaYUhaRHIvbDRpL2t1S0dmelpGU3ZFa0NQbVVDK1NyUmdNUzA5?=
- =?utf-8?B?KzdMbUY1UjAzVFRsdk1FRjBSU0Q0T3NNSXNoVjRLc2xSK1gvTjN0cnhwVmZu?=
- =?utf-8?B?SHJ4N2RCZk1QZXMrbTZkMk9TV3Mvc2lteWQ1MVM5U3czSGVkSEtVcXhwamk5?=
- =?utf-8?B?K1RFTGJXVHJyTTV2cGJPL2dnRER2OW1uQTNyeXVsOThQL3FKMTZkajNzUTdW?=
- =?utf-8?B?RnJyK0dJV01Halc0dTExeUpIQjlTb2xZaUJhUWdkdWhDSUZoZjFnOW4wY0FW?=
- =?utf-8?B?TjhVVTVWeXFDSmdFeUxWaDlmQ3M0NE05SnhFbmIzUG5ZeWFoOHlDK2djUnR3?=
- =?utf-8?B?MUptMnovK2JSTktQYXgvaVp4QXVORkllb21DSDZ4TDVmelhzTUNsUnJuVlBK?=
- =?utf-8?B?N0tuTk8ySDhTb0k5MFhPZERkdktIMnd6eDFBRjZ3RkltVU5JdmxLbFlacjB4?=
- =?utf-8?B?MDA3ZjFaTmsrN3J1TWV1OEc1Vk04eHg1d3FGVzh1T1dMK0dYTWR5b1ZwL3Fk?=
- =?utf-8?B?dmVDMnpudW03cW1jYnZsS1hTaWlRQVAzQUpzY3phNjVRVkNraXd4dVJIaHlL?=
- =?utf-8?B?WkVGNEF5bExKb3EyMHRRelA5d2k4QzhLMmFncitBay9rMmVDTGFwU1Y2MXBS?=
- =?utf-8?B?UzhkNjJOUHcyL3hGNXE5RVMrQUE0cDZ0Q2VyZW1NV3ltS3ZRYW9INVBqUzNK?=
- =?utf-8?B?eFFOL0JsZmFLNXFsTlptNU9LWGV1a1FxamdUcUpMalIxdnVBcG11NFFKZFV3?=
- =?utf-8?B?cGRYUXVWMmFGNkZEWEhPNlhDS2FHMFViU3VlUVpFMEIzMzMrOVhta3JyU05O?=
- =?utf-8?B?Sm9GbXI0UkJXTEp0Q21NYld3T2tSTXlGcmttS2duays4RndsLzRqZVNDTGlE?=
- =?utf-8?B?RXovRXRqUnVON2tvOEgyQVEzeUhiWkFibFp5UitNdDNBcGhVWHEwV3hiNjVh?=
- =?utf-8?B?ZDlrL1FPdjNFejJoZXgrbmd2TFRPSlM3Szc0Wnk2TllycXkrZ1h5dDNNZVlk?=
- =?utf-8?B?NW9PYUNWQVdXT01ZK0xrNklsd0hMYWxpWDdIRHRKclZ3R3d5UU5qZkNVNjFz?=
- =?utf-8?B?c0ZVSXlCV21takgxTE1zWjhCN3hpQjcxc3lvVGh0ajV1YWxkdWRHU1l1amFa?=
- =?utf-8?B?M2dLYlhZNlR1NG50b3dzQWhhdFFKbWRXQ2xGdHYrcmZBQ0ZIRXh6T3lDWmUy?=
- =?utf-8?B?TjF6a0NyeHptTGNGeVRmekxqaUdITUJtUC9EWDhrbk01SGdMUHhwL3hVbERl?=
- =?utf-8?B?WWxuZFErNm4xY0JtbXZJbHJSZjR2dThCd0YrVm9TcVYvbGkwRnM2Q0c3UzNu?=
- =?utf-8?B?NmxuWlA5N1plMlRrRFJTckxFM0xHWE0wZVN6UkI2SmIrTzhKbitsaG56UUZr?=
- =?utf-8?B?YTJvbnU2OVU0bXNnTTVYcnRxV0V1UU9hR1oyWDBrVlNRMDdtbytkTGZSN05J?=
- =?utf-8?B?eGVtS0FSWUkxekhYZmhDRzBTQmpGbkRFMk9rbkpwRmp4dXpUOE96NDNRVGFH?=
- =?utf-8?B?elJIMm9EYnJKVU40dHZ5bzNzaUZwOGdDRko2SmYyM1o5eFVKVGhjekVwY01K?=
- =?utf-8?B?UFBWRWdXL3R6RE5kejR2ZWMrdVgvdGVWVVJWeXpRZlZLUW14SVIxSHFQWGw0?=
- =?utf-8?B?akpyMlpGZ0c5RkpWTDhqb1JvSVBNSHgzT28vaFdUUkE5UGhDbGV5dXk5Tzlk?=
- =?utf-8?B?MVRmbUpiVTNHRUpJb0kvZ3JlODFaOUt4bDBtNDh5R0Jjd052bVZQWWlnMGZW?=
- =?utf-8?B?S24wdGRmRTBDNWpiY3VTRm5FVmtYcGxLVzlVaWlEeU1EVjQvNEtlNncycnFH?=
- =?utf-8?B?K0ZZNFlVUkJQSStOL21JdTY3MFcxcVhUWkRCOVFiS2wyby92RUtML3AzNDAr?=
- =?utf-8?B?OGpCcVdzak1PNDJwYm9rTTlYNU9QQ0l0cFNPMWhla0tRVVlLUys4MDRZS25U?=
- =?utf-8?B?cWNkeG85KzB5KzlwTElWWnk1UjdVQkMvSHFRNHh3V1JTNDQ4UDZ2Zy9jeWpL?=
- =?utf-8?B?dDkzcUJCOEFaZnpnbEhRcW5tUHU0TGhRbHoxdStxWlhjbEgydTBlRTJpMGc5?=
- =?utf-8?B?dmNjWGNtc2JELzVVNzZZYmhGVG1RPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E3C5966E5914E740B0C4D73E82DFA184@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 28 Feb 2022 03:00:54 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5DD69289
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 00:00:11 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220228080008epoutp03386cbf34894942080ec58ce9affd1cfe~X5E0LibAn2398123981epoutp034
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:00:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220228080008epoutp03386cbf34894942080ec58ce9affd1cfe~X5E0LibAn2398123981epoutp034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646035208;
+        bh=5lb/XZEA6d4myjK7HT1vCVf2lq/nLV7+u97my67yA4k=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=otXQUoGcKUCXOuX1p9JtNA/sHvA+3GIBw8Tdp+6++Pw9IP/GNnmQkySkUji74WxWD
+         kbjD2pyTKYT4ile8JeomQM3Nj7w66yAZYGHmMVnHDFxHY2evZLSPOkjh7ndphN7nNf
+         dT+GkrkURskWE6XhcMhhhGVC59b8kohucYOeXAuY=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220228080007epcas5p298df853932d6c7ad51d203ee1a730dc2~X5EzudzCO2427724277epcas5p2F;
+        Mon, 28 Feb 2022 08:00:07 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.E6.05590.7018C126; Mon, 28 Feb 2022 17:00:07 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220228073715epcas5p1b3166e6b673d3c8b610f7e2f5745562b~X4w13oz9J1138311383epcas5p1I;
+        Mon, 28 Feb 2022 07:37:15 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220228073715epsmtrp1bea15c5a3109c1ed5f344252bc521afc~X4w120QQd2358623586epsmtrp1b;
+        Mon, 28 Feb 2022 07:37:15 +0000 (GMT)
+X-AuditID: b6c32a4b-723ff700000015d6-11-621c81077fdc
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        22.77.29871.BAB7C126; Mon, 28 Feb 2022 16:37:15 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.44]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220228073714epsmtip165f1325c35d89b7f52219a05a50bd505~X4w0P45FU0350703507epsmtip1c;
+        Mon, 28 Feb 2022 07:37:13 +0000 (GMT)
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
+        lukas.bulwahn@gmail.com, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Maninder Singh <maninder1.s@samsung.com>,
+        Vaneet Narang <v.narang@samsung.com>
+Subject: [PATCH v4] scripts/checkpatch.pl: remove _deferred and
+ _deferred_once false warning
+Date:   Mon, 28 Feb 2022 13:07:08 +0530
+Message-Id: <20220228073708.1610603-1-maninder1.s@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6b87ce0-8f7d-4051-2b50-08d9fa8cfce9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 07:36:09.4035
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dHUFLtrnLUDNyLyoeyx7Y37ztVLzzDxBnBbDcncmyUWiyJq+po4Eh7h85TAPFohCg6NYwDvNlyo/7KodOLKA888y/rPYcOzJeGa0Pt7mIx8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5691
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsWy7bCmhi57o0ySwYp7xhZz1q9hs/iwVsNi
+        /cJlzBaz7z9msbi8aw6bRcvRdhaLw/PbWCwOnZzL6MDhMauhl81j56y77B4nZvxm8fiy6hqz
+        R9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGUs6l/MUrCAu+Lbwx6mBsb5nF2MnBwSAiYSO58f
+        Yepi5OIQEtjNKLFjxkso5xOjxIHXfYwQzjdGiVVbDzLBtDSumwaV2MsoMWHvbyjnC6PEn0M3
+        GUGq2AT0JFbt2sMCYosIlEr8PPiUDcRmFiiS+HKtE6xGWCBOYtONv2BTWQRUJT6sOQNm8wrY
+        SZzv/8kIsU1eYual7+wQcUGJkzOfsEDMkZdo3jqbGWSxhMAtdonGny1AzRxAjovEhCXeEL3C
+        Eq+Ob2GHsKUkXva3sUPUdzNKbOg+xgLhzGCU+HzwKtQ2e4knFxeyggxiFtCUWL9LHyIsKzH1
+        1DomiMV8Er2/n0CDgldixzwYW1Wi5eYGVghbWuLzx48sELaHRPvFPrAjhARiJS5Me8c0gVF+
+        FpJ/ZiH5ZxbC5gWMzKsYJVMLinPTU4tNC4zzUsv1ihNzi0vz0vWS83M3MYLTjZb3DsZHDz7o
+        HWJk4mA8xCjBwawkwsvOKpkkxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdU+oZEIYH0xJLU7NTU
+        gtQimCwTB6dUA9OkNTUCnGZ/1iYVv2RL0bu1SH/rWat9WjMmbykL6rmqwLdxpq6q8PaJ/kX/
+        Dn7k8ij+zj5Z1aspsXPvXimOb9sYLm08mXZuisqpU8sexPV33smtMlGXNn9Rdt7gZcSntWE8
+        B64z/ZRo2Gjpt7uJv/5wsUn333kd8dueB9gkMOUemevEzH713/zTLFPmsn0t2Pru1uk1VcHh
+        nR8faXVnvbn9pSrm4BqT/LdGy/zKTmrPFs2wrtaO3xPS8GTrL+5mdo+bApunx35X62t9E9OW
+        I/1Vy1b4kWT7ed2U+weTK85MuVB6h+nTt1BdU41K8YaAo/8S+htX2u+p5dX6JB0Vue20E/sF
+        1oMhWisO3Ume+F+JpTgj0VCLuag4EQABKqM+pgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOLMWRmVeSWpSXmKPExsWy7bCSnO7qapkkgwmPNS3mrF/DZvFhrYbF
+        +oXLmC1m33/MYnF51xw2i5aj7SwWh+e3sVgcOjmX0YHDY1ZDL5vHzll32T1OzPjN4vFl1TVm
+        j74tqxg9Pm+SC2CL4rJJSc3JLEst0rdL4MpY1L+YpWABd8W3hz1MDYzzObsYOTkkBEwkGtdN
+        Y+xi5OIQEtjNKHH8x2pmiIS0xM9/71kgbGGJlf+es0MUfWKU6H13GyzBJqAnsWrXHjBbRKBa
+        Ytbnj0BFHBzMAiUSP/d4g4SFBWIkbk37wwpiswioSnxYc4YJxOYVsJM43/+TEWK+vMTMS9/Z
+        IeKCEidnPgEbyQwUb946m3kCI98sJKlZSFILGJlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXr
+        JefnbmIEh62W5g7G7as+6B1iZOJgPMQowcGsJMLLziqZJMSbklhZlVqUH19UmpNafIhRmoNF
+        SZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAPTyTyO47rdS3rzzkSumhp+RrBsdWq15bop1ksu
+        rOBJ66+I277obLj+mu98XzknLXFtOzfX/JFWyCN5+e11Dv1qLLFb0ttXS/X18/nVbtHpWtD7
+        JHDeRCH329/E1K9Nf6jZluj19ndb2OqvViURa02vrOGbUZrS73yX/f/CmWv/ey1J1d324OHt
+        r+Lnb1x+WXFx5rENFSLqV88uy1DataT99ZWyeyrekwXWW3B8PK8vJ5nFOb/G7veuXl0Pu/bO
+        7RYud3pr0yZEqX2NTvI0O5W/mvvCIcZ5x9hrpBQN7s/La1NJe1VrWLSw+USELGNWo0hd58Uo
+        rWW3p+bX8L01XiHG2u60urS+bKLcN5/tP7crsRRnJBpqMRcVJwIAvLmGxcoCAAA=
+X-CMS-MailID: 20220228073715epcas5p1b3166e6b673d3c8b610f7e2f5745562b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20220228073715epcas5p1b3166e6b673d3c8b610f7e2f5745562b
+References: <CGME20220228073715epcas5p1b3166e6b673d3c8b610f7e2f5745562b@epcas5p1.samsung.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjUuMDIuMjAyMiAyMTowMCwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gRVhURVJOQUwgRU1B
-SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
-dyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBGcmksIEZlYiAyNSwgMjAyMiBhdCAyOjE1
-IEFNIEFhc2hpc2ggU2hhcm1hIDxzaHJhYXNoQGdvb2dsZS5jb20+IHdyb3RlOg0KPj4NCj4+IEZp
-eCB0aGlzIGtlcm5lbCB0ZXN0IHJvYm90IHdhcm5pbmc6DQo+Pg0KPj4gZHJpdmVycy9tZmQvYXRt
-ZWwtZmxleGNvbS5jOjEwODozMjogd2FybmluZzogdW51c2VkDQo+PiB2YXJpYWJsZSAnYXRtZWxf
-ZmxleGNvbV9wbV9vcHMnIFstV3VudXNlZC1jb25zdC12YXJpYWJsZV0NCj4+DQo+PiBUaGUgdmFy
-aWFibGUgYXRtZWxfZmxleGNvbV9wbV9vcHMgaXMgdW51c2VkIHdoZW4gQ09ORklHX1BNDQo+PiBp
-cyBub3Qgc2VsZWN0ZWQsIHNvIG1hcmtpbmcgaXQgYXMgX19tYXliZV91bnNlZC4NCj4+DQo+PiBT
-aWduZWQtb2ZmLWJ5OiBBYXNoaXNoIFNoYXJtYSA8c2hyYWFzaEBnb29nbGUuY29tPg0KPiANCj4g
-UmV2aWV3ZWQtYnk6IEd1ZW50ZXIgUm9lY2sgPGdyb2Vja0Bnb29nbGUuY29tPg0KDQpUaGVyZSBp
-cyBhbHJlYWR5IFsxXSBwb3N0ZWQgYSB3aGlsZSBhZ28uLi4NCg0KWzFdIGh0dHBzOi8vbGttbC5v
-cmcvbGttbC8yMDIxLzEyLzcvNDc0DQoNCj4gDQo+PiAtLS0NCj4+ICBkcml2ZXJzL21mZC9hdG1l
-bC1mbGV4Y29tLmMgfCAyICstDQo+PiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAx
-IGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhj
-b20uYyBiL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhjb20uYw0KPj4gaW5kZXggNTU5ZWI0ZDM1MmI2
-Li4zM2NhYTRmYmE2YWYgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL21mZC9hdG1lbC1mbGV4Y29t
-LmMNCj4+ICsrKyBiL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhjb20uYw0KPj4gQEAgLTEwNSw3ICsx
-MDUsNyBAQCBzdGF0aWMgaW50IF9fbWF5YmVfdW51c2VkIGF0bWVsX2ZsZXhjb21fcmVzdW1lX25v
-aXJxKHN0cnVjdCBkZXZpY2UgKmRldikNCj4+ICAgICAgICAgcmV0dXJuIDA7DQo+PiAgfQ0KPj4N
-Cj4+IC1zdGF0aWMgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMgYXRtZWxfZmxleGNvbV9wbV9vcHMg
-PSB7DQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIF9fbWF5YmVfdW51c2VkIGF0
-bWVsX2ZsZXhjb21fcG1fb3BzID0gew0KPj4gICAgICAgICAucmVzdW1lX25vaXJxID0gYXRtZWxf
-ZmxleGNvbV9yZXN1bWVfbm9pcnEsDQo+PiAgfTsNCj4+DQo+PiAtLQ0KPj4gMi4zNS4xLjU3NC5n
-NWQzMGM3M2JmYi1nb29nDQo+Pg0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18NCj4gbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QNCj4gbGlu
-dXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRl
-YWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbA0KDQo=
+with commit 98e35f5894cf ("printk: git rid of [sched_delayed] message for
+printk_deferred") printk_deferred and printk_deferred_once requires
+LOGLEVEL in argument, but checkpatch.pl was not fixed and still reports
+it as warning:
+
+WARNING: Possible unnecessary KERN_ALERT
+printk_deferred(KERN_ALERT "checking deferred\n");
+
+Co-developed-by: Vaneet Narang <v.narang@samsung.com>
+Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+---
+v3 -> v4: v3 was dropped, because it starts reporting *_printk as
+          unnecessary KERNEL_* levels as report by Joe Perches.
+          dev_printk(KERN_DEBUG "foo", ...). thus fixing it with simple
+          addition of deferred in same line of _ratelimited as original
+          https://lkml.org/lkml/2021/8/24/91
+
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 2653177f52d9..78053545a0d5 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -6312,7 +6312,7 @@ sub process {
+ 		}
+ 
+ # check for logging functions with KERN_<LEVEL>
+-		if ($line !~ /printk(?:_ratelimited|_once)?\s*\(/ &&
++		if ($line !~ /printk(?:_ratelimited|_once|_deferred|_deferred_once)?\s*\(/ &&
+ 		    $line =~ /\b$logFunctions\s*\(.*\b(KERN_[A-Z]+)\b/) {
+ 			my $level = $1;
+ 			if (WARN("UNNECESSARY_KERN_LEVEL",
+-- 
+2.17.1
+

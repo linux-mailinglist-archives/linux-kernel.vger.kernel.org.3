@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A8A4C7A1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF2D4C7A3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiB1UTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
+        id S229548AbiB1UYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiB1UTk (ORCPT
+        with ESMTP id S229558AbiB1UYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:19:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 433AE532E0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:18:54 -0800 (PST)
+        Mon, 28 Feb 2022 15:24:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DB6756234
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:23:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646079533;
+        s=mimecast20190719; t=1646079831;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BMbhGFqICXc9zz+taMDylt5/xD3hSAylr2/hy4plK9c=;
-        b=GfB0GYkvn86kN+WkvxNBXUP20A5S1Dmpr5fo8ecz1URHEwDRj96cMFMeb3WuGAQOHJnzxN
-        WU1lkFNPWTgJNyT+NN/C3z+obedzbGgoPeZ06VSmglcKxD+VuW6zIoMw4Xhhdl83sGzD4f
-        nYxuM75gWOgAVdL9fTl8uhyf2qgce0g=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=90VxHOyFuo2ODBqrQg2kpbHyzlakM2kYCuGAJwvAK6A=;
+        b=aTIWLXGeh2miDuNwMlFDCMyqHJgsCo1jhmOe3n7q4T9Qr5rObMx0sIaX1W9RnoS8GHSqxe
+        jpJupPj9DdmnfwFiY30paF78su8ZUMD5zZnHGE1InXgNmfLKI2Tf3jQWy4YuRiwALEZDYU
+        eGxcB8YM4iOtDTqQM594P7QOYQRS0+A=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-YSAedkCkM3exJrRaTyz5iA-1; Mon, 28 Feb 2022 15:18:52 -0500
-X-MC-Unique: YSAedkCkM3exJrRaTyz5iA-1
-Received: by mail-qk1-f197.google.com with SMTP id 3-20020a370603000000b0060de5e49129so12350406qkg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:18:52 -0800 (PST)
+ us-mta-401-OFQsS2oJNlmhlbkgeTQxQg-1; Mon, 28 Feb 2022 15:23:49 -0500
+X-MC-Unique: OFQsS2oJNlmhlbkgeTQxQg-1
+Received: by mail-oi1-f197.google.com with SMTP id c3-20020aca3503000000b002d48224d7e8so6154217oia.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:23:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BMbhGFqICXc9zz+taMDylt5/xD3hSAylr2/hy4plK9c=;
-        b=Vl+yfjsZdJTT/OQ2VuMS+af0+Gt9A4lam1N8NAiK6L6SKJ/4gH/cz1N5/5cralTK0+
-         pTZj2z04qjcYHxdLKTu6hicmRfCcbqy7lheJ/G1BTsVG0FvNlSYQA5nKpsIKKq2pMIUx
-         GSxF1nR06251tLowAss0tGoe+iO5XCxhwFGdo4kJtkrCJlBexcRO3MWbHh3HXZ6lKTSq
-         VXX4gm274MPwM+ifsgHHAE+d9jDoSI3jWsUmJn6jlyPAX4KHuRlUkBTYR9GwxWnXAjG8
-         FE5iB4aef0iVMx9aIXtiF+mfU1YV13ENCjB6uWpN1oOlDBoTHptq0rl+tGTGea8jsOVt
-         XyOw==
-X-Gm-Message-State: AOAM531i8zZpBDMIPF2JrE6279jfaP1GjEMyfrrQ6gNyDzI+CziD/vTI
-        iBjB89c3gME8ag0rxaqXeKFegtOKPh+Ngd332CS0Uhkz1X4UQNkwSenIxh21D5g/NQwW9KLlLFO
-        ekMGpCGlc31P12oBWuh4iiB+3
-X-Received: by 2002:a37:a5c6:0:b0:46c:e3c1:7216 with SMTP id o189-20020a37a5c6000000b0046ce3c17216mr12224668qke.721.1646079531631;
-        Mon, 28 Feb 2022 12:18:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/kvdAcmlg00cBArw3rYuFLuKSUGwvQYCaHp2wkho9pcwAZ7Zeor1QLcXvlqB3qZnEiTioVA==
-X-Received: by 2002:a37:a5c6:0:b0:46c:e3c1:7216 with SMTP id o189-20020a37a5c6000000b0046ce3c17216mr12224657qke.721.1646079531387;
-        Mon, 28 Feb 2022 12:18:51 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id z196-20020a3765cd000000b0050848cdb596sm5446810qkb.101.2022.02.28.12.18.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=90VxHOyFuo2ODBqrQg2kpbHyzlakM2kYCuGAJwvAK6A=;
+        b=kXZCo4fbHOZ06e+52JSdaBQouGAGH2nMkWf8BMdGh+04korFK/5pyWZrW6BgPsaEK1
+         D4OOPl7t0ZrKXLcLCM+RrztHRvxfP+xZfonOTITNWInPg44wlPR2fV4g/mPZgk1E3I99
+         7pgzL7YP6N5y+Q7sN+1rQDQIvDMDju4YxYBStJyUU67iG12om86LC8eP36JWMUcVirGU
+         zW3QOCOADz3R+frR2XHQ0n1woCj3DlHxwErBpdhFb/ApXPjbOU3zQGpCVk2jOdqbE+Vy
+         viheeavB9gK6wdITlD9YUeRsqt3TXmw8o5roa3eC/jbcOprcz5eOERvu2oxlVNP7aw2I
+         1ghQ==
+X-Gm-Message-State: AOAM530rKgT/7FmxtF+c1A2zqvU6R5B0qUwC2pWPrTeOQ2eEmfphFipT
+        siAaubfrgQ7N/vOCS9FBTv5dTA7mjOjWDqdIg5nNLzOrMz2pdVlZ92PWo7rzdC4r+LnrjtMjmFZ
+        X5KKEdiAVbKzrVPgNPr4TTWTs
+X-Received: by 2002:a05:6870:678c:b0:d6:e495:e9e2 with SMTP id gc12-20020a056870678c00b000d6e495e9e2mr1729699oab.154.1646079829028;
+        Mon, 28 Feb 2022 12:23:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxCoTJvK0Zs83kxVjGLCSp366fI2fadM1e3pMs0iu/tKtBzyVo7yn+bdexHYiCmEVEg2PXmsQ==
+X-Received: by 2002:a05:6870:678c:b0:d6:e495:e9e2 with SMTP id gc12-20020a056870678c00b000d6e495e9e2mr1729684oab.154.1646079828768;
+        Mon, 28 Feb 2022 12:23:48 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id v5-20020a544d05000000b002d7652b3c52sm4653982oix.25.2022.02.28.12.23.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 12:18:50 -0800 (PST)
-Date:   Mon, 28 Feb 2022 12:18:47 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 21/29] objtool: Rename --duplicate to --lto
-Message-ID: <20220228201847.x2i5frlmuwprfgap@treble>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.814392411@infradead.org>
- <20220226194209.bvv3t65hhtnwltmk@treble>
- <20220226214802.4chmsrtstlerefmu@treble>
- <YhysYkcfwLr68Job@hirez.programming.kicks-ass.net>
- <20220228183228.splleoatuxxjr5kq@treble>
- <20220228200934.GF11184@worktop.programming.kicks-ass.net>
+        Mon, 28 Feb 2022 12:23:48 -0800 (PST)
+Date:   Mon, 28 Feb 2022 13:23:46 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, jgg@nvidia.com, cohuck@redhat.com,
+        mgurtovoy@nvidia.com, yishaih@nvidia.com, linuxarm@huawei.com,
+        liulongfang@huawei.com, prime.zeng@hisilicon.com,
+        jonathan.cameron@huawei.com, wangzhou1@hisilicon.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 03/10] hisi_acc_qm: Move PCI device IDs to common
+ header
+Message-ID: <20220228132346.77624e5b.alex.williamson@redhat.com>
+In-Reply-To: <20220228201259.GA516607@bhelgaas>
+References: <20220228103338.76da0b3b.alex.williamson@redhat.com>
+        <20220228201259.GA516607@bhelgaas>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220228200934.GF11184@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 09:09:34PM +0100, Peter Zijlstra wrote:
-> > So how about we just get rid of the magical --vmlinux and --lto options
-> > altogether, and make --noinstr additive, like all the other options?
-> >
-> >   A) legacy mode:
-> >      .o files: objtool check [--module]
-> >       vmlinux: N/A
-> >        module: N/A
-> >
-> >   B) CONFIG_NOINSTR_VALIDATION=y && !(CONFIG_X86_KERNEL_IBT=y || CONFIG_LTO=y):
-> >      .o files: objtool check [--module]
-> >       vmlinux: objtool check --noinstr-only
-> >        module: objtool check --module --noinstr-only
-> >
-> >   C) CONFIG_X86_KERNEL_IBT=y || CONFIG_LTO=y:
-> >      .o files: N/A
-> >       vmlinux: objtool check --noinstr
-> >        module: objtool check --module --noinstr
+On Mon, 28 Feb 2022 14:12:59 -0600
+Bjorn Helgaas <helgaas@kernel.org> wrote:
+
+> On Mon, Feb 28, 2022 at 10:33:38AM -0700, Alex Williamson wrote:
+> > [Cc+ Bjorn, linux-pci]
+> > 
+> > On Mon, 28 Feb 2022 09:01:14 +0000
+> > Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+> >   
+> > > Move the PCI Device IDs of HiSilicon ACC devices to
+> > > a common header and use a uniform naming convention.  
 > 
-> I like the --noinstr-only thing. But I think I still like a flag to
-> differentiate between TU/.o file and vmlinux/whole-module invocation.
+> > > --- a/include/linux/pci_ids.h
+> > > +++ b/include/linux/pci_ids.h
+> > > @@ -2529,6 +2529,12 @@
+> > >  #define PCI_DEVICE_ID_KORENIX_JETCARDF3	0x17ff
+> > >  
+> > >  #define PCI_VENDOR_ID_HUAWEI		0x19e5
+> > > +#define PCI_DEVICE_ID_HUAWEI_ZIP_PF	0xa250
+> > > +#define PCI_DEVICE_ID_HUAWEI_ZIP_VF	0xa251
+> > > +#define PCI_DEVICE_ID_HUAWEI_SEC_PF	0xa255
+> > > +#define PCI_DEVICE_ID_HUAWEI_SEC_VF	0xa256
+> > > +#define PCI_DEVICE_ID_HUAWEI_HPRE_PF	0xa258
+> > > +#define PCI_DEVICE_ID_HUAWEI_HPRE_VF	0xa259  
+> 
+> We usually don't add things to pci_ids.h unless they're used in more
+> than one place (see the comment at the top of the file).  AFAICT,
+> these device IDs are only used in one file, so you can leave the
+> #defines in the file that uses them or use bare hex values.
 
-I'm missing why that would still be useful.
+Later in this series the VF IDs are added to a vendor variant of the
+vfio-pci driver:
 
-> Anyway, you ok with me cleaning this up later, in a separate series?
+https://lore.kernel.org/all/20220228090121.1903-5-shameerali.kolothum.thodi@huawei.com/
 
-Sure.  It's already less than ideal today anyway, with '--vmlinux' and
-'--duplicate'.
+diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+new file mode 100644
+index 000000000000..8129c3457b3b
+--- /dev/null
++++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+...
++static const struct pci_device_id hisi_acc_vfio_pci_table[] = {
++	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_SEC_VF) },
++	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_HPRE_VF) },
++	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_ZIP_VF) },
++	{ }
++};
 
--- 
-Josh
+So I think the VFs IDs meet the requirements, but perhaps not the PF
+IDs.  Would it be ok if the PFs were dropped?  Thanks,
+
+Alex
 

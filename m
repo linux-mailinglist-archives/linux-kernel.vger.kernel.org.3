@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12084C75F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B4E4C7736
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiB1R5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S234760AbiB1SMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240014AbiB1Rxs (ORCPT
+        with ESMTP id S240158AbiB1SH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36215B0A78;
-        Mon, 28 Feb 2022 09:41:24 -0800 (PST)
+        Mon, 28 Feb 2022 13:07:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FE55D64D;
+        Mon, 28 Feb 2022 09:48:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1807661357;
-        Mon, 28 Feb 2022 17:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F276C340E7;
-        Mon, 28 Feb 2022 17:41:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E44DB810DB;
+        Mon, 28 Feb 2022 17:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFBCC340E7;
+        Mon, 28 Feb 2022 17:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070083;
-        bh=ZeUaeCJFJ4bWJ2ejkrzVSGb9kDF1BPevUpezIc/prvg=;
+        s=korg; t=1646070499;
+        bh=E6574w75kqATyqu0nXYHqLTZcMPRkRFDJ7mSeoReHQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vN3cb0cATCHgq6T6f8G0e8xhd+TEoIrLhI6pAsIYwlT/xs5RQ6KSNpoTnite6MsYp
-         /dS+YPHAafsmgP7iMEq4XRqwIyEWCnjhngsDhmT7OMkLoDBW4/4n5el1chz3z0wqLF
-         HP5UnKjFV/OocjS+gk8TfkypdAam+XBuBMxBr/eA=
+        b=WX8q+6y/tsZMd+q58+AvtwIXgBpahy89seoavjQbnBy/L5spJWuw5VmJg9m0JSU8s
+         pyPcmzbIqqfrNnmZp2nWIfRfVP8qGG9KMnetelHiK8OLh0Z1YebfgJz6nd9nUnT5Xh
+         VP9sS+jmk2QyU2D9zxOKOpjAm+asyCBI9LiSbNuo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 5.15 118/139] mtd: core: Fix a conflict between MTD and NVMEM on wp-gpios property
+        stable@vger.kernel.org, stable@kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.16 130/164] usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
 Date:   Mon, 28 Feb 2022 18:24:52 +0100
-Message-Id: <20220228172400.008762930@linuxfoundation.org>
+Message-Id: <20220228172411.881459435@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Kerello <christophe.kerello@foss.st.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit 6c7621890995d089a56a06d11580d185ede7c2f8 upstream.
+commit d7c93a903f33ff35aa0e6b5a8032eb9755b00826 upstream.
 
-Wp-gpios property can be used on NVMEM nodes and the same property can
-be also used on MTD NAND nodes. In case of the wp-gpios property is
-defined at NAND level node, the GPIO management is done at NAND driver
-level. Write protect is disabled when the driver is probed or resumed
-and is enabled when the driver is released or suspended.
+Commit e0082698b689 ("usb: dwc3: ulpi: conditionally resume ULPI PHY")
+fixed an issue where ULPI transfers would timeout if any requests where
+send to the phy sometime after init, giving it enough time to auto-suspend.
 
-When no partitions are defined in the NAND DT node, then the NAND DT node
-will be passed to NVMEM framework. If wp-gpios property is defined in
-this node, the GPIO resource is taken twice and the NAND controller
-driver fails to probe.
+Commit e5f4ca3fce90 ("usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend
+regression") changed the behavior to instead of clearing the
+DWC3_GUSB2PHYCFG_SUSPHY bit, add an extra sleep when it is set.
 
-A new Boolean flag named ignore_wp has been added in nvmem_config.
-In case ignore_wp is set, it means that the GPIO is handled by the
-provider. Lets set this flag in MTD layer to avoid the conflict on
-wp_gpios property.
+But on Bay Trail devices, when phy_set_mode() gets called during init,
+this leads to errors like these:
+[   28.451522] tusb1210 dwc3.ulpi: error -110 writing val 0x01 to reg 0x0a
+[   28.464089] tusb1210 dwc3.ulpi: error -110 writing val 0x01 to reg 0x0a
 
-Fixes: 2a127da461a9 ("nvmem: add support for the write-protect pin")
-Cc: stable@vger.kernel.org
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220220151432.16605-3-srinivas.kandagatla@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Add "snps,dis_u2_susphy_quirk" to the settings for Bay Trail devices to
+fix this. This restores the old behavior for Bay Trail devices, since
+previously the DWC3_GUSB2PHYCFG_SUSPHY bit would get cleared on the first
+ulpi_read/_write() and then was never set again.
+
+Fixes: e5f4ca3fce90 ("usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend regression")
+Cc: stable@kernel.org
+Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220213130524.18748-2-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/mtdcore.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/dwc3-pci.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -546,6 +546,7 @@ static int mtd_nvmem_add(struct mtd_info
- 	config.stride = 1;
- 	config.read_only = true;
- 	config.root_only = true;
-+	config.ignore_wp = true;
- 	config.no_of_node = !of_device_is_compatible(node, "nvmem-cells");
- 	config.priv = mtd;
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -119,6 +119,13 @@ static const struct property_entry dwc3_
+ 	{}
+ };
  
-@@ -830,6 +831,7 @@ static struct nvmem_device *mtd_otp_nvme
- 	config.owner = THIS_MODULE;
- 	config.type = NVMEM_TYPE_OTP;
- 	config.root_only = true;
-+	config.ignore_wp = true;
- 	config.reg_read = reg_read;
- 	config.size = size;
- 	config.of_node = np;
++static const struct property_entry dwc3_pci_intel_byt_properties[] = {
++	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
++	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
++	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
++	{}
++};
++
+ static const struct property_entry dwc3_pci_mrfld_properties[] = {
+ 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
+ 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+@@ -161,6 +168,10 @@ static const struct software_node dwc3_p
+ 	.properties = dwc3_pci_intel_properties,
+ };
+ 
++static const struct software_node dwc3_pci_intel_byt_swnode = {
++	.properties = dwc3_pci_intel_byt_properties,
++};
++
+ static const struct software_node dwc3_pci_intel_mrfld_swnode = {
+ 	.properties = dwc3_pci_mrfld_properties,
+ };
+@@ -344,7 +355,7 @@ static const struct pci_device_id dwc3_p
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BYT),
+-	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
++	  (kernel_ulong_t) &dwc3_pci_intel_byt_swnode, },
+ 
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MRFLD),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_mrfld_swnode, },
 
 

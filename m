@@ -2,162 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017334C7216
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3ADA4C7213
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238086AbiB1RDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S238015AbiB1RCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238048AbiB1RDL (ORCPT
+        with ESMTP id S229743AbiB1RCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:03:11 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375EA765F;
-        Mon, 28 Feb 2022 09:02:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646067719;
-        bh=k0F6SvpCnls0O/0DV0EzovTEbGLpabyeCkX8dCik5jo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Fc/tFMfnhnLQjv5kZ7pSXE/dQgPU6KhkZPWtyb2CPNrs8kEcT1pogOrMaJ1lYmnvV
-         VdV1pBsK9814RNDWLpRKOBHND+OQRGoU22oQE0wCOe25FywrkoNiZluWk8uZIFiZ7L
-         W0fjGQWyv+b8+xkqPBVGsfLlqVJO6oH7BDvJKgWU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.79.12] ([80.245.79.12]) by web-mail.gmx.net
- (3c-app-gmx-bs53.server.lan [172.19.170.137]) (via HTTP); Mon, 28 Feb 2022
- 18:01:58 +0100
+        Mon, 28 Feb 2022 12:02:46 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0A786E0F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:06 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id a1so13551590qvl.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Y9cZVaut3aLdlKX+slS0PsytKlmPKaShOXQetxBEnLs=;
+        b=RWahVHidsmUKk3zmU4u+GXNAQsPIO4fG+FWWtFLwh/nIJSVim2DRTMT+dtX8WkXnNw
+         IhLL4C1HcJ9ZDzbcAYB1aCCOT3FAMdOlWQIR3BBfX/MfsCGxMk4tisEiRuqi6TuyNCSf
+         fBYFIesGaDPEnn1TYpMJJTswWKjm+RtORcQOwTZFeT3QdpqpLHMeudiuIWfQsTYU0437
+         Pi1+oFeFvCH2Diy8u1i22uQajV/YXRjXV3bwVdIFb+oScDEvFIPnjxKdB4/90MLk1imj
+         iHRrkReVr4m6Z/SLB/qIhO18kTkqzsJx7zFvyvWA3udBE+sywy8GuIo2uGsBc3yBFJ0w
+         4lMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Y9cZVaut3aLdlKX+slS0PsytKlmPKaShOXQetxBEnLs=;
+        b=laCrlfcDcD9vOlYl0eZFazdTh4xVUkz0xLz69ttZKfRV/s4klAn0gP68TgOmaIbLxw
+         JO0bcV1GVplxP3IlvuVTYGNoReTXD8gdGq/2UfLz/XgwjbxrBKkJ19pwbLmQ6XvKvAqC
+         PJKnZvsqQN85bJyg72r/R9tPAgwgpjFjPd/kbccuCv5wAqDK5Ldy4/H72w8MkVJ7L+RE
+         WfUeCdvfx9FE/bke8GTbSK8jKc2iqc0zxfjMFUYvKeZJF6YZY3r97ptUDnITOzRrR+VE
+         66P3HaTkqUU5mXEj64hAq89VoqeYqVyLwyDDfDLl9qETixq+/FBQovIZ914Yjmejb0NL
+         tnNQ==
+X-Gm-Message-State: AOAM532xwKMJPD+dO1VuZjtKwq1Ib222AlHi+jHcln+W4BBro1vWndmG
+        /naHSD4g4VZFgyJOgoXfAI7Jow==
+X-Google-Smtp-Source: ABdhPJwnakSt4EAfE7IsVjU7wlxEV+JgWuYIQRAupe57mnq3QS7Jav+/osBrc1CyPEkT1Hqcy4qtRw==
+X-Received: by 2002:ad4:5605:0:b0:432:e77e:8023 with SMTP id ca5-20020ad45605000000b00432e77e8023mr7904254qvb.8.1646067726011;
+        Mon, 28 Feb 2022 09:02:06 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id 20-20020ac84e94000000b002de8f564305sm7506949qtp.1.2022.02.28.09.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 09:02:05 -0800 (PST)
+Message-ID: <73f460d843cee2781c9d08cdc421f0fd64f9ccc7.camel@ndufresne.ca>
+Subject: Re: Re: [RFC PATCH 2/8] media: Add P010 format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Date:   Mon, 28 Feb 2022 12:02:04 -0500
+In-Reply-To: <5696849.MhkbZ0Pkbq@kista>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+         <20220227144926.3006585-3-jernej.skrabec@gmail.com>
+         <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
+         <5696849.MhkbZ0Pkbq@kista>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Message-ID: <trinity-bfe6b2d5-52cd-458d-92b2-66216620a4b3-1646067718759@3c-app-gmx-bs53>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Aw: Re:  Re: Re: [PATCH v3 1/3] dt-bindings: Convert ahci-platform
- DT bindings to yaml
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 28 Feb 2022 18:01:58 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <ddd09f4f-782f-67e9-ec2f-dd5818ae26c5@canonical.com>
-References: <20220227182800.275572-1-linux@fw-web.de>
- <20220227182800.275572-2-linux@fw-web.de>
- <4c3303f5-7af5-9974-7bea-b7f0d6c7ef53@canonical.com>
- <trinity-ac45bde6-392d-4810-8aad-9a06d2bcd85a-1646050780475@3c-app-gmx-bs53>
- <8fbbce9e-4fd9-d420-43ef-953e846d29f1@canonical.com>
- <trinity-f1b6ce3a-6f22-4cf8-bf51-a5e7f007dda7-1646057347735@3c-app-gmx-bs53>
- <ddd09f4f-782f-67e9-ec2f-dd5818ae26c5@canonical.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:1sAIoTtR42be1SxcghXxsWmzRmXeoAOJamY6t168/WaUJiXHT+4izW5decLTrn8wEXQT7
- 7sJw/WzpVBqu1akl+pvbxgb7zMRcnKCaNX2ZZXJLAtQnb8WiWCUYkRC04sbpZpqbeNpX0z79jpCX
- G3/uTEddAB5iIVsCTcrtnlXazbRlxitcDF/MnxLdbpFh2esg0pU34lIOxb41swWoI/R/0MgU5DB3
- TBqyHo3GR1IqdDRcSehSA/t0vhnl7IfYkTuyV+aMZR/xYB3vODSCW2qrkUIMhRJRhG8LdqL8B4ZP
- AY=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VmkEUVxE6/s=:AgE2Y0u0Dd1vG2/ZILjYR/
- fhoyEv+mJ/Y7cEKejpo16PPfmCiYpK7Zjq2rVzM93b9cyHx5LAeoEDAyRw6aFUvK15hBK2Ekx
- cY7nE3icg0HTddlthKYBkgeIEqb6/NvAO8wt2qDgTPJU/GQLyoOh2G3EP3Xhz6fyPFsU3pfGk
- ASDrN4geUk0/c0DJMf62yew1n/gG84cHzoYSL+n0C4S50s+MVFvwZeHTxw1sTdcRz36WWSlg7
- xCURwi0olci2GPJmE3Da9A0pcsTNMr+gORV/u1Q4kHRUbnEdlblHaEpZA3DkNxpKzYJcfjRPI
- QUKG4xzKdYV0dKaWeEGravMhEuwCQgLFLogJKHPYaHUKEVnIIuYM97u+Bt8+kA7yq4vjHmjKj
- HQCOc9g9NqkJyBxJyMrKJlhNP6awcxTKjfQtJ+AgmtqluLl9ilQxwDf6zXJAY5fJ3xGiBDqCr
- XENhmE/GUNnnB5Sl2O3LNAvzd/itkVSIceRLpj/3G3sLd37bmL12q0K7lyc7MzHNp7lmw5+me
- kcQaCeiBtLruBhTUsg7heVQKT8hhgAFd+BKU92KQx2ZiDNZZztspKqvpJwQMPNY1If/Zflauj
- NxvKrf/D2TzRXrYr0+pchFUOXo5zRJqWlOEjmJg6pEC6KiVY42kZ1o60fqZAGkwRLVumHB9KD
- EuspsrjujA6Rgu8/+ohzGV4ihDgbzq0mjefJwdAIj7soWW9IGuMC/5GYk0QPikRpnGCFLy5vK
- Zh3wxy7fuC5sJz+VPcARyM2zg4cRpUIgT1Mx118fiMZHruUPbXarkCddzI9lhdE2yrnl7OTFu
- ZN6NPDv
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Le lundi 28 février 2022 à 17:32 +0100, Jernej Škrabec a écrit :
+> Dne ponedeljek, 28. februar 2022 ob 13:48:53 CET je Nicolas Dufresne 
+> napisal(a):
+> > Le dimanche 27 février 2022 à 15:49 +0100, Jernej Skrabec a écrit :
+> > > Add P010 format, which is commonly used for 10-bit videos.
+> > 
+> > There is a much more complete patch that was sent previously (with 
+> documentation
+> > and all):
+> > 
+> > https://patchwork.kernel.org/project/linux-rockchip/patch/
+> 20210618131526.566762-5-benjamin.gaignard@collabora.com/
+> 
+> Great, I'll take it for next revision. Although I'm not sure what "much more 
+> complete" means. Only additional thing is documentation.
 
-> Gesendet: Montag, 28. Februar 2022 um 15:35 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
-> >> Gesendet: Montag, 28. Februar 2022 um 13:38 Uhr
-> >> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
+When adding uAPI, doc is really important, so having the format documented means
+the other patch is "much more" ready to be merged.
 
-> >> No, this has to be oneOf. See for example
-> >> Documentation/devicetree/bindings/gpio/gpio-vf610.yaml or many other =
-files.
+cheers,
+Nicolas
 
-> > compatible:
-> >   oneOf:
-> >     - enum:
-> >       - brcm,iproc-ahci
-> >       - cavium,octeon-7130-ahci
-> >       - hisilicon,hisi-ahci
-> >       - ibm,476gtr-ahci
-> >       - marvell,armada-3700-ahci
-> >       - marvell,armada-380-ahci
-> >       - snps,dwc-ahci
-> >       - snps,spear-ahci
-> >     - items:
-> >       - const: generic-ahci
-> >       - enum:
-> >         - brcm,iproc-ahci
-> >         - cavium,octeon-7130-ahci
-> >         - hisilicon,hisi-ahci
-> >         - ibm,476gtr-ahci
-> >         - marvell,armada-3700-ahci
-> >         - marvell,armada-380-ahci
-> >         - snps,dwc-ahci
-> >         - snps,spear-ahci
->
-> That could be one way, but instead I propose to have only second part
-> (so enum + generic-ahci) for all compatibles mentioned in
-> ahci_platform.c, which do not customize the driver behavior for these
-> compatibles..
+> 
+> Best regards,
+> Jernej
+> 
+> > 
+> > regards,
+> > Nicolas
+> > 
+> > > 
+> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > > ---
+> > >  drivers/media/v4l2-core/v4l2-common.c | 2 ++
+> > >  drivers/media/v4l2-core/v4l2-ioctl.c  | 1 +
+> > >  include/uapi/linux/videodev2.h        | 1 +
+> > >  3 files changed, 4 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-
+> core/v4l2-common.c
+> > > index 1db0020e08c0..4ede36546e9c 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > > @@ -275,6 +275,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 
+> format)
+> > >  		{ .format = V4L2_PIX_FMT_YUV422P, .pixel_enc = 
+> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, 
+> .hdiv = 2, .vdiv = 1 },
+> > >  		{ .format = V4L2_PIX_FMT_GREY,    .pixel_enc = 
+> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, 
+> .hdiv = 1, .vdiv = 1 },
+> > >  
+> > > +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = 
+> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, 
+> .hdiv = 2, .vdiv = 2 },
+> > > +
+> > >  		/* Tiled YUV formats */
+> > >  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = 
+> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, 
+> .hdiv = 2, .vdiv = 2 },
+> > >  		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = 
+> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, 
+> .hdiv = 2, .vdiv = 2 },
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-
+> core/v4l2-ioctl.c
+> > > index 048f326c57b9..a8d999e23e5b 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > @@ -1295,6 +1295,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc 
+> *fmt)
+> > >  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 
+> (M420)"; break;
+> > >  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
+> > >  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
+> > > +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CbCr 4:2:0"; 
+> break;
+> > >  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
+> > >  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+> > >  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/
+> videodev2.h
+> > > index 772dbadd1a24..211bc11a48cb 100644
+> > > --- a/include/uapi/linux/videodev2.h
+> > > +++ b/include/uapi/linux/videodev2.h
+> > > @@ -597,6 +597,7 @@ struct v4l2_pix_format {
+> > >  /* two planes -- one Y, one Cr + Cb interleaved  */
+> > >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 
+> 4:2:0  */
+> > >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 
+> 4:2:0  */
+> > > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 
+> 4:2:0 10-bit */
+> > >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 
+> 4:2:2  */
+> > >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 
+> 4:2:2  */
+> > >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 
+> 4:4:4  */
+> > 
+> > 
+> 
+> 
 
-tried many ways of defining it, but none passes with the examples. either =
-to short (first example) or too long (second)
-
-as far as i understand the logic it should be similar to this:
-
-properties:
-  compatible:
-    oneOf:
-      - items:
-        - enum:
-          - marvell,berlin2q-achi
-        - const: generic-ahci
-      - items:
-        - enum:
-          - brcm,iproc-ahci
-          - cavium,octeon-7130-ahci
-          - hisilicon,hisi-ahci
-          - ibm,476gtr-ahci
-          - marvell,armada-3700-ahci
-          - marvell,armada-380-ahci
-          - snps,dwc-ahci
-          - snps,spear-ahci
-
-this passes the dt-binding_check (examples) for me, but i guess there are =
-many more compatibles defined with the generic.
-
-dtbs_check found some more like
-
-'brcm,iproc-ahci'
-'marvell,armada-8k-ahci'
-and many more
-
-it looks like these are also checked in the enum, so the yaml itself look =
-correct, but needs some kind of wildcard instead of the "marvell,berlin2q-=
-achi" as second for the generic-ahci compatible
-
-regards Frank

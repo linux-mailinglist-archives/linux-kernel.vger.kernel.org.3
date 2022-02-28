@@ -2,138 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541854C7236
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AC44C7239
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237965AbiB1RIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S237707AbiB1RLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiB1RIs (ORCPT
+        with ESMTP id S230161AbiB1RLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:08:48 -0500
-X-Greylist: delayed 240 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 09:08:06 PST
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758533E12;
-        Mon, 28 Feb 2022 09:08:05 -0800 (PST)
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 21SH7qjg001599;
-        Tue, 1 Mar 2022 02:07:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 21SH7qjg001599
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1646068072;
-        bh=98mZh3DSkLLdEUaUpwDchiQq5D3wILeXQhtbg+uZ5C0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D7+3GydIml5G5ULFdTIEOoeqAwyMiUllHF3GnHTuWW10nvZHqUydYyT+Jh/PjJc0C
-         9dGdscCwyV7M2qIK+TzlPN1lAgIFyW+LG8jTroxw3JcjB6xKD7AirJYq0hUGTm8FH0
-         G+ADSE21IaerZgVAUzhrazbpc1LG5nCdoDPIyOH+HiPFxvUV/fpB4XJyJl5QpYMKTS
-         4ZTfUYOn5AT4FiPGSuUklu/G/I3NUW/sdn3Ghx5EQK34yrsnKdstPivvN6BQ2Vg4IY
-         ckEBCcFgDL3VltZ5/Wnp4REwrg9Mbqj+hvGqQh0dDV6gu6iHvDuGU/mp/Vm9sD7zLJ
-         M5BfVt3YSVuhQ==
-X-Nifty-SrcIP: [209.85.215.171]
-Received: by mail-pg1-f171.google.com with SMTP id bc27so3199726pgb.4;
-        Mon, 28 Feb 2022 09:07:52 -0800 (PST)
-X-Gm-Message-State: AOAM533ZQQRv9BZdlSf1H6fD9183Jw+blY7bLetooRw1g+AKcoSk6sxc
-        xqUAdO8d0vJTNfQ7K1s2koHl/S6hFhx4aqW5jdo=
-X-Google-Smtp-Source: ABdhPJyLr4NM5Xb8MWbTJd6oMf6oOtnn2XpS61KrD/xyflT+Su6ouIqvNpJKrYGOOASYu0nk5xFAElbhZTOY0HMSDmM=
-X-Received: by 2002:a63:e758:0:b0:378:8511:cfe7 with SMTP id
- j24-20020a63e758000000b003788511cfe7mr7050358pgk.126.1646068071650; Mon, 28
- Feb 2022 09:07:51 -0800 (PST)
+        Mon, 28 Feb 2022 12:11:08 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EFE7486F;
+        Mon, 28 Feb 2022 09:10:29 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B991C219A4;
+        Mon, 28 Feb 2022 17:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646068227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Se4zhHEaPU9V1yfCSSf057AkUax+xeAkyFZTtecsvOk=;
+        b=PnNjZmmzjdTC81o0wLPptLX10/+Iqzu9UE7f1fYDvqrY9DjWKwDYuchbuOlnzNHqKiz7i/
+        VgsVDpACPfAOiCFoQgHhtieQhBQ0PYUePRxXsQo74Sgh7/dwKZjhxAc2xZ1jOwHdFlpCAB
+        kGthl5H97S97NGMn34uqJdlHcSsP4fg=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B3B8FA3B81;
+        Mon, 28 Feb 2022 17:10:26 +0000 (UTC)
+Date:   Mon, 28 Feb 2022 18:10:26 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Maninder Singh <maninder1.s@samsung.com>, mcgrof@kernel.org,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
+        wangkefeng.wang@huawei.com, v.narang@samsung.com,
+        swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Message-ID: <YhzywNowPiQm3IN4@alley>
+References: <CGME20220228053457epcas5p1dac3fced39d1594f8fdfc5e64e23ac73@epcas5p1.samsung.com>
+ <20220228053447.1584704-1-maninder1.s@samsung.com>
+ <Yhy6EtP/Yr03bHTl@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org> <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
-In-Reply-To: <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 1 Mar 2022 02:07:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATbX3TfETQTAr=e5kQLMDSXSn_KetDKTAaeZSq9k_70Uw@mail.gmail.com>
-Message-ID: <CAK7LNATbX3TfETQTAr=e5kQLMDSXSn_KetDKTAaeZSq9k_70Uw@mail.gmail.com>
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org, Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yhy6EtP/Yr03bHTl@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 8:25 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Arnd,
->
-> This is great!
->
-> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > During a patch discussion, Linus brought up the option of changing
-> > the C standard version from gnu89 to gnu99, which allows using variable
-> > declaration inside of a for() loop. While the C99, C11 and later standards
-> > introduce many other features, most of these are already available in
-> > gnu89 as GNU extensions as well.
-> >
-> > An earlier attempt to do this when gcc-5 started defaulting to
-> > -std=gnu11 failed because at the time that caused warnings about
-> > designated initializers with older compilers. Now that gcc-5.1 is the
-> > minimum compiler version used for building kernels, that is no longer a
-> > concern. Similarly, the behavior of 'inline' functions changes between
-> > gnu89 and gnu11, but this was taken care of by defining 'inline' to
-> > include __attribute__((gnu_inline)) in order to allow building with
-> > clang a while ago.
-> >
-> > One minor issue that remains is an added gcc warning for shifts of
-> > negative integers when building with -Werror, which happens with the
-> > 'make W=1' option, as well as for three drivers in the kernel that always
-> > enable -Werror, but it was only observed with the i915 driver so far.
-> > To be on the safe side, add -Wno-shift-negative-value to any -Wextra
-> > in a Makefile.
-> >
-> > Nathan Chancellor reported an additional -Wdeclaration-after-statement
-> > warning that appears in a system header on arm, this still needs a
-> > workaround.
->
-> FWIW, I had a go at moving to c99 a few weeks ago (to be able to use
-> for-loop-declarations in some concurrency primitives), and when I tried, I also
-> saw declaration-after-statement warnings when building modpost.c, which is easy
-> enough to fix:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=treewide/gnu99&id=505775bd6fd0bc1883f3271f826963066bbdc194
->
+Adding Kees into Cc. This patch allows to see non-hashed base
+address of the module and eventually of vmlinux, see below.
+
+On Mon 2022-02-28 14:03:30, Andy Shevchenko wrote:
+> On Mon, Feb 28, 2022 at 11:04:47AM +0530, Maninder Singh wrote:
+> > with commit '82b37e632513 ("kallsyms: print module name in %ps/S
+> > case when KALLSYMS is disabled"), module name printing was enhanced.
+
+The commit does not exist.
+
+Note that linux-next is regularly rebased. Commit IDs might still be
+stable when they are merged from a maintainer git tree. But Andrew's
+-mm tree is imported from quilt and the patches always get new
+commit ID.
+
+The best solution is to handle the changes in a single patchset.
+
+> > As per suggestion from Petr Mladek <pmladek@suse.com>, covering
+> > other flavours also to print build id also.
+> > 
+> > for %pB no change as it needs to know symbol name to adjust address
+> > value which can't be done without KALLSYMS.
+> > 
+> > original output with KALLSYMS:
+> > [8.842129] ps function_1 [crash]
+> > [8.842735] pS function_1+0x4/0x2c [crash]
+> > [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> > [8.843175] pB function_1+0x4/0x2c [crash]
+> > [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> > 
+> > original output without KALLSYMS:
+> > [12.487424] ps 0xffff800000eb008c
+> > [12.487598] pS 0xffff800000eb008c
+> > [12.487723] pSb 0xffff800000eb008c
+> > [12.487850] pB 0xffff800000eb008c
+> > [12.487967] pBb 0xffff800000eb008c
+> > 
+> > With patched kernel without KALLSYMS:
+> > [9.205207] ps 0xffff800000eb008c [crash]
+> > [9.205564] pS 0xffff800000eb0000+0x8c [crash]
+> > [9.205757] pSb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> > [9.206066] pB 0xffff800000eb0000+0x8c [crash]
+> > [9.206257] pBb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> 
+> ...
+> 
+> > +static int sprint_module_info(char *buf, char *end, unsigned long value,
+> > +			     const char *fmt)
+> > +{
+> > +	struct module *mod;
+> > +	unsigned long offset = 1;
+> > +	unsigned long base;
+> 
+> > +	int ret = 0;
+> 
+> This is hard to find if it's not close to the first use.
+> Since you are using positive numbers...
+
+The name of the variable is misleading. It is not a return value.
+It is set when:
+
+	if (mod) {
+		ret = 1;
+
+and used:
+
+	if (!ret)
+		return 0;
 
 
-I do not understand this statement:
+In fact, we do not need the value at all. It is enough to do:
 
-"Usually such warnings are implciitly enabled as part of `-std=gnu89`,
- and in preparation for changing the standard used, this patch explciitly
-enales the warnings with `-Wdeclaration-after-statement`, which takes
-effect regardless of which version of the C standard is in use."
+	if (!mod)
+		return 0;
 
 
+> > +	const char *modname;
+> > +	int modbuildid = 0;
+> > +	int len;
+> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> > +	const unsigned char *buildid = NULL;
+> > +#endif
+> > +
+> > +	if (is_ksym_addr(value))
+> > +		return 0;
+> 
+> > +	if (*fmt == 'B' && fmt[1] == 'b')
+> > +		modbuildid = 1;
+> > +	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
+> 
+> Why not to split to two conditionals? Would be easier to get,
 
-modpost is already built with -std=gnu89.
+This is copy&paste from symbol_string().
 
-If  Wdeclaration-after-statement is implied by gnu89,
-why did nobody notice this before?
+> > +		modbuildid = 1;
+> > +	else if (*fmt != 's') {
+> 
+> These all are inconsistent, please switch to fmt[0].
+> 
+> > +		/*
+> > +		 * do nothing.
+> > +		 */
+> > +	} else
+> > +		offset = 0;
+> > +
+> > +	preempt_disable();
+> > +	mod = __module_address(value);
+> > +	if (mod) {
+> > +		ret = 1;
+> > +		modname = mod->name;
+> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> > +		if (modbuildid)
+> > +			buildid = mod->build_id;
+> > +#endif
+> > +		if (offset) {
+> > +			base = (unsigned long)mod->core_layout.base;
+> > +			offset = value - base;
+> > +		}
+> > +	}
+> > +
+> > +	preempt_enable();
+> 
+> > +	if (!ret)
+> 
+> This looks a bit strange, but okay, I'm not familiar with the function of this
+> code.
+
+Yes, this can be replaced by
+
+	/* We handle offset only against module base. */
+	if (!mod)
+		return 0;
+
+Hmm, why don't we compute offset against vmlinux base when the symbol
+is from vmlinux?
+
+Wait, this would show base address of vmlinux. It would be security
+hole.
+
+Wait, if the base address of vmlinux is security hole then the base
+address of module is security hole as well.
+
+IMHO, we must hash the base address when the hashing is not disabled!
 
 
--- 
-Best Regards
-Masahiro Yamada
+> > +		return 0;
+> > +
+> > +	/* address belongs to module */
+> > +	if (offset)
+> > +		len = sprintf(buf, "0x%lx+0x%lx", base, offset);
+> > +	else
+> > +		len = sprintf(buf, "0x%lx", value);
+> > +
+> > +	len += sprintf(buf + len, " [%s", modname);
+> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> > +	if (modbuildid && buildid) {
+> > +		/* build ID should match length of sprintf */
+> > +		static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
+> > +		len += sprintf(buf + len, " %20phN", buildid);
+> > +	}
+> > +#endif
+> > +	len += sprintf(buf + len, "]");
+
+And all these sprint() calls are copy&pasted from __sprint_symbol().
+
+We really should reduce the cut&pasting.
+
+> > +
+> > +	return len;
+> > +}
+
+Best Regards,
+Petr

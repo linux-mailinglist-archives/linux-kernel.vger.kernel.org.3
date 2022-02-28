@@ -2,187 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A1A4C7D57
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70E14C7D64
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiB1W3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S231355AbiB1Wbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiB1W3o (ORCPT
+        with ESMTP id S229741AbiB1Wbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:29:44 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECE9EDF1A;
-        Mon, 28 Feb 2022 14:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646087344;
-        bh=gnitHaDoKtFYFmdfHx7ZmUK+2K99mC4OdMWiGF3yqts=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=aDv+zUJMVLbpHnTobs88HMeKXt8e/Fsm3NyltqbtXmut8dDpKPmgZQHvU7CQAhpxT
-         x8yyOH8cKkqI9wCCVd7mWgGGPtOdFvurEvTcoJzgoG8F+eqVyUcxI30U1Z3UyKmv+s
-         JFRv6cmaJ/MAgdj571KO+Pve8Zec5bTLqNmzMPjU=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2FE4A1281036;
-        Mon, 28 Feb 2022 17:29:04 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UdsLtl38GfVe; Mon, 28 Feb 2022 17:29:04 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646087343;
-        bh=gnitHaDoKtFYFmdfHx7ZmUK+2K99mC4OdMWiGF3yqts=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=u33hwQnb0VqdOXP8ulufSc5IRuZCZipVBGZNcGF9+k1EE0TmKFXpcGOMGd4fMwEgO
-         9syQhDBoNk9Z7GUqfbwA47rALQtXFHUxFeSSP/G0sxjEsJWs9EMuAmppU6twhzQzk+
-         fAgT3F3AJIbVTwM2ufsCoBYKhhHBSRhleqdyR2l4=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C21DB1280D34;
-        Mon, 28 Feb 2022 17:28:59 -0500 (EST)
-Message-ID: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop
- body as a ptr
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Date:   Mon, 28 Feb 2022 17:28:58 -0500
-In-Reply-To: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
-         <20220228110822.491923-3-jakobkoschel@gmail.com>
-         <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
-         <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
-         <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
-         <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
-         <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Mon, 28 Feb 2022 17:31:32 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF9CEDF1A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:30:53 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so20496476ooi.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
+        b=ElcKOruAXbvxWDYvNPelX7nfkbvr5prW+ZUpyWp0zCYNtIH5cQ8kTumGYq2SGYmvfj
+         AJKxZoUqAvpDu/F+a9neQDo4u2Q3DRo/prSmpCma1dNvWzvYefscyrCfuWMkfy7OUIod
+         6l3ayoWRsPfzOkVxlv+RLKinqiuEm6QmxtzNQ5J7DlQGNIuh+AQVJJbxiElRc3xJ3cPD
+         j+qXxPn66/JY8QsJLkAjIA8jT5SAlJ4dMp395XvWBql5ysTpokA6aEtrtVHSbRF6PInM
+         QN0TE5o1GNg6ITeSPFcewR5FtJDrum+tKnxlobePfkRCga9ukeWGCFOly485J1vwOq2m
+         /Xlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oWJNEF23gYsaQqgLAEVbye1HfW5HTbmGgJBkQBp8gGE=;
+        b=hDkoxa0KpWePXis38gmRWIqHgbgRebkJUxEG/BB1N6Gw5XAf6t47GMJLrNp5ZGX4PS
+         S5dgEPrUGrTPmpOYJXkZNNRfhkpht4kqIhZLz0iHVyCd/BeCKNsiOuYlrX+/LLt+VX4+
+         zOwYsoB3A0ve4Rh4jPpxJJUjgVqsQO9/BQFiRf6co9AoV3wj1uvSoXY6Qf9Fzn/SZ8wx
+         8VIZjjpcmY+HUC1bBZJH6NZBxXB498w3JCupyph4RE9XNvEj0c0S63hhUKjLdS/WoGFr
+         MScHwVDANRN+wfm16sm/lzYKa+woq4nqwwF26LbgLxVSj3pv08MnSTfUVpmNyUEJ3c8L
+         Cc7Q==
+X-Gm-Message-State: AOAM532yNyItxdCVr+VjH8sORg/GR0sN1T/Xw0azMVed7wXN3zcqdg+B
+        A3qlF/SJpeHytccRRse0WOIS/W6eZ7NhUctmSU8=
+X-Google-Smtp-Source: ABdhPJxJw4j6RbUKEuCCao9TFapxCXxTwduA5GmufbYLkRtVhOI3ahGDwGCTJQXixtkIAkJPLilFPdDIBO2YtqM9oeE=
+X-Received: by 2002:a05:6870:1b85:b0:d6:feda:913f with SMTP id
+ hm5-20020a0568701b8500b000d6feda913fmr2039667oab.123.1646087452697; Mon, 28
+ Feb 2022 14:30:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220227153342.79546-1-trix@redhat.com> <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
+In-Reply-To: <58ae0ccc-e964-69a3-b40b-3262fd24af9b@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 28 Feb 2022 17:30:41 -0500
+Message-ID: <CADnq5_Oc2mUfv41gOxrdeHjKDQ4W+S1+wiX6v_7SE6bEH-9xSA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amdgpu: Fix realloc of ptr
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Lazar, Lijo" <lijo.lazar@amd.com>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        Kevin Wang <kevin1.wang@amd.com>,
+        Tom St Denis <tom.stdenis@amd.com>,
+        "Quan, Evan" <evan.quan@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        llvm@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-28 at 23:59 +0200, Mike Rapoport wrote:
-> 
-> On February 28, 2022 10:42:53 PM GMT+02:00, James Bottomley <
-> James.Bottomley@HansenPartnership.com> wrote:
-> > On Mon, 2022-02-28 at 21:07 +0100, Christian König wrote:
-[...]
-> > > > I do wish we could actually poison the 'pos' value after the
-> > > > loop somehow - but clearly the "might be uninitialized" I was
-> > > > hoping for isn't the way to do it.
-> > > > 
-> > > > Anybody have any ideas?
-> > > 
-> > > I think we should look at the use cases why code is touching
-> > > (pos) after the loop.
-> > > 
-> > > Just from skimming over the patches to change this and experience
-> > > with the drivers/subsystems I help to maintain I think the
-> > > primary pattern looks something like this:
-> > > 
-> > > list_for_each_entry(entry, head, member) {
-> > >      if (some_condition_checking(entry))
-> > >          break;
-> > > }
-> > > do_something_with(entry);
-> > 
-> > Actually, we usually have a check to see if the loop found
-> > anything, but in that case it should something like
-> > 
-> > if (list_entry_is_head(entry, head, member)) {
-> >    return with error;
-> > }
-> > do_somethin_with(entry);
-> > 
-> > Suffice?  The list_entry_is_head() macro is designed to cope with
-> > the bogus entry on head problem.
-> 
-> Won't suffice because the end goal of this work is to limit scope of
-> entry only to loop. Hence the need for additional variable.
+Applied.  Thanks!
 
-Well, yes, but my objection is more to the size of churn than the
-desire to do loop local.  I'm not even sure loop local is possible,
-because it's always annoyed me that for (int i = 0; ...  in C++ defines
-i in the outer scope not the loop scope, which is why I never use it.
+Alex
 
-However, if the desire is really to poison the loop variable then we
-can do
-
-#define list_for_each_entry(pos, head, member)				\
-	for (pos = list_first_entry(head, typeof(*pos), member);	\
-	     !list_entry_is_head(pos, head, member) && ((pos = NULL) == NULL;			\
-	     pos = list_next_entry(pos, member))
-
-Which would at least set pos to NULL when the loop completes.
-
-> Besides, there are no guarantees that people won't
-> do_something_with(entry) without the check or won't compare entry to
-> NULL to check if the loop finished with break or not.
-
-I get the wider goal, but we have to patch the problem cases now and a
-simple one-liner is better than a larger patch that may or may not work
-if we ever achieve the local definition or value poisoning idea.  I'm
-also fairly certain coccinelle can come up with a use without checking
-for loop completion semantic patch which we can add to 0day.
-
-James
-
-
+On Mon, Feb 28, 2022 at 5:55 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 27.02.22 um 16:33 schrieb trix@redhat.com:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > Clang static analysis reports this error
+> > amdgpu_debugfs.c:1690:9: warning: 1st function call
+> >    argument is an uninitialized value
+> >    tmp =3D krealloc_array(tmp, i + 1,
+> >          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > realloc uses tmp, so tmp can not be garbage.
+> > And the return needs to be checked.
+> >
+> > Fixes: 5ce5a584cb82 ("drm/amdgpu: add debugfs for reset registers list"=
+)
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+>
+> Yeah, stuff I missed because of the long review. I was already wondering
+> what semantics krealloc_array is following for freeing up the pointer on
+> error.
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> Thanks,
+> Christian.
+>
+> > ---
+> > v2:
+> >    use 'new' to hold/check the ralloc return
+> >    fix commit log mistake on ralloc freeing to using input ptr
+> >
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 9 +++++++--
+> >   1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_debugfs.c
+> > index 9eb9b440bd438..2f4f8c5618d81 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > @@ -1676,7 +1676,7 @@ static ssize_t amdgpu_reset_dump_register_list_wr=
+ite(struct file *f,
+> >   {
+> >       struct amdgpu_device *adev =3D (struct amdgpu_device *)file_inode=
+(f)->i_private;
+> >       char reg_offset[11];
+> > -     uint32_t *tmp;
+> > +     uint32_t *new, *tmp =3D NULL;
+> >       int ret, i =3D 0, len =3D 0;
+> >
+> >       do {
+> > @@ -1687,7 +1687,12 @@ static ssize_t amdgpu_reset_dump_register_list_w=
+rite(struct file *f,
+> >                       goto error_free;
+> >               }
+> >
+> > -             tmp =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
+KERNEL);
+> > +             new =3D krealloc_array(tmp, i + 1, sizeof(uint32_t), GFP_=
+KERNEL);
+> > +             if (!new) {
+> > +                     ret =3D -ENOMEM;
+> > +                     goto error_free;
+> > +             }
+> > +             tmp =3D new;
+> >               if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) !=3D 1) {
+> >                       ret =3D -EINVAL;
+> >                       goto error_free;
+>

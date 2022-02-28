@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7C64C78F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F324C791F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 20:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiB1Tsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 14:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S229641AbiB1TwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 14:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiB1TsK (ORCPT
+        with ESMTP id S229743AbiB1Tvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 14:48:10 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE1EEFFA6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:19 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id i1so11641438plr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:46:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tR+AhlIqjS9XYnLOtynP2EhZ/OV9mCnZ9eIc3MUdC24=;
-        b=EEqg7pUkySZVbQvZfJGIVuw0lXwGWG+go3YvVrAhLQgLhiQhNzDWgCAEyKKhK7DPsx
-         H1LWnVGxrPGJ5ZGzxfs/DLiWdoAxZu1P28f0+C1qdVWmaheFrUNc+ZjxCmcoA8AqfTkH
-         r9Wsbvj+psRVE1ujQo6yM8ftEYCR7mER0tJ+8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tR+AhlIqjS9XYnLOtynP2EhZ/OV9mCnZ9eIc3MUdC24=;
-        b=3melf0vgCiwE0PDmSe0NwheSSjBQtYLENt2ZQg7vfwJksoykAfo8Gu6dTN+ufQPvtr
-         Wn1nRMj9keTZFI1GiYwBCmdg0Bs9WeKczPNG8uIiIjTHGV0LWmcgjqcz+1LhrlWLuGYr
-         FIrixciGAx4m3mZ87SYEHZFetzbYZWHj4C48kdRjKPvuXQaNXBibbSh8AUPO2eby2XzD
-         m3JjD+9L5s4vvP0OShBZQO/nhGhhJ/NYCemAYYekeJiy+f9r48JkMYU1MgF07XuoXE24
-         6BRLva1JFcJ0sGozT7tig0ujWkTd5SV6oOpeEalw3KW5sPUlN4Dnj/IiqCw2t9zc+6Ok
-         lQEw==
-X-Gm-Message-State: AOAM533q6dj8Hfo9DEkTrzGamec1hmdA/hVDUPhTbptw+5f6Ewn5uYil
-        LMLF+n1ADMaxuKc0COAC6Nb5CA==
-X-Google-Smtp-Source: ABdhPJz8yuUY3QLjcjfiLAIH3SgbY2+JCxtn3vQ51x519MkGnccf2G5leuKh/e98pxMWfX9wrbgW2g==
-X-Received: by 2002:a17:90a:6688:b0:1bc:5492:6373 with SMTP id m8-20020a17090a668800b001bc54926373mr18053297pjj.161.1646077576522;
-        Mon, 28 Feb 2022 11:46:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm14288692pfu.40.2022.02.28.11.46.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 11:46:16 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     matoro <matoro_mailinglist_kernel@matoro.tk>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Anthony Yznaga <anthony.yznaga@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] binfmt_elf: Avoid total_mapping_size for ET_EXEC
-Date:   Mon, 28 Feb 2022 11:46:13 -0800
-Message-Id: <20220228194613.1149432-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 28 Feb 2022 14:51:46 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB320DF29
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 11:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646077823; x=1677613823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fyMzmzWob5BwLEcRZwKRCLnS0Nzkv/dRn06vcSYOlQM=;
+  b=DUC1DxOZ9b9qtpoVAlOYQssJAZ6Z0Mnhemti5/ealu5BTCxe6nkMnggM
+   12tvzd6mXjpkxZOGNTbMfaC9Z6rd0In2/XJhc43c3u9pv3RTkXDQyvIN7
+   UgznB6G2/CIwfLjIP5HMsvqPhrq+Apag+0ZcfdX6HEUvQYhIWxsc7mKQH
+   yssv/vKq7+J/fvedmcwVTcT0do94sN4MhgfdTul4FQh+kwJcYrRIVyXlJ
+   ZtoIxMAQHPxbuAGWllPkXIhvhLgyrhLXia5kzLdz50TfLHDRjPZVxrUcn
+   mHn3t02AqCJJb/7vPR8lVOBHNFhQsaYZg0Es08LKo/TGDkocnjtTqBXwT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232942862"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="232942862"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 11:50:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="492838943"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2022 11:50:19 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOm2E-0007kJ-LB; Mon, 28 Feb 2022 19:50:18 +0000
+Date:   Tue, 1 Mar 2022 03:49:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, mingo@redhat.com,
+        peterz@infradead.org, frederic@kernel.org, rostedt@goodmis.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, tglx@linutronix.de,
+        mtosatti@redhat.com, bristot@redhat.com,
+        linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Subject: Re: [RESEND PATCH 2/2] tracing: Avoid isolated CPUs when queueing
+ fsnotify irqwork
+Message-ID: <202203010318.S1y5cIXE-lkp@intel.com>
+References: <20220228141550.260119-2-nsaenzju@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3328; h=from:subject; bh=l5ScQA97desVa/cbVIp0ld/aMpV+dI3qivoNgmUT4HY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiHSaEHNpWviXuAR7FBfgnykVicWqBdDFz4Mm5Oxru Wk8kzj2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYh0mhAAKCRCJcvTf3G3AJvL6D/ 4/8Opfekx+etBVTmmg6BBaHAHA8L48+PvyAvXuTrQcBwmTx6u2kHTlNm05KEHD78I3pPl6WFdLidNX hdHtV9YD4pJtlDXWQYpaKFFRSPyMb1Q+Zr3T3Pcw2ONhm72yKR+w2EWSmncLYr9WVuBMr/sMMYY5y0 d4fUjZ0olF55wDUFE+2rN2CcIU4e8HjqVoo+2yvOLqPh8YDdw86l3Z0q9Vj5iq+gH6eLvU5WxEG/eZ cjgfLahNoXjCP0/dlPZeGn4vO8xP36bTR3heewwP2OUFH6FokRxzK85fJXQuhjeTP9WhSdxUtHSezM tHCWIEPOOULFM4ONKAHuXgfjk4aOsipHcg+5sWqeuzU6H3aQb40AiEIR/X7ToKo74ys1wDl1ZYvu2v c07D7+PJ59abndEeaJhxsqJUfYh2JY7ggnaUD/qTMlV+h+6oYiQ2xfc6fp0mcaO4qduMYvC30ATa4G rBzu0m3FByxUJKRnhZnkt6cNIIovqdDVjUbCt0fboRZUO0OOPjAJDGrGqPeArViNIyUJHYJyU87fIC o6/z5yPlNufXyH4ki0eM09QNq+3oIB+MFcUlvE1VrtB4qJYmqVYosQg35kBCPgpeFH9s9ZaIiEZb6q q00aBsO4vT+xKC6RAmJH89G7YBiDGotMkgw0F44f/jTcOCP3obE29Gyc86/A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228141550.260119-2-nsaenzju@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,90 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
-MAP_FIXED_NOREPLACE").
+Hi Nicolas,
 
-At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
-contiguous (but _are_ file-offset contiguous). This would result in
-giant mapping attempts to cover the entire span, including the virtual
-address range hole. Disable total_mapping_size for ET_EXEC, which
-reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
+I love your patch! Yet something to improve:
 
-$ readelf -lW /usr/bin/gcc
-...
-Program Headers:
-  Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   ...
-...
-  LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 ...
-  LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 ...
-...
-       ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on next-20220228]
+[cannot apply to rostedt-trace/for-next linus/master v5.17-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-File offset range     : 0x000000-0x00bb4c
-			0x00bb4c bytes
+url:    https://github.com/0day-ci/linux/commits/Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 6255b48aebfd4dff375e97fc8b075a235848db0b
+config: i386-randconfig-a002-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010318.S1y5cIXE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e3ec0b4adfed05db0d559d2d5234d6d8f1034985
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Nicolas-Saenz-Julienne/sched-isolation-Use-raw_smp_processor_id-in-housekeeping_any_cpu/20220228-221742
+        git checkout e3ec0b4adfed05db0d559d2d5234d6d8f1034985
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Virtual address range : 0x4000000000000000-0x600000000000bcb0
-			0x200000000000bcb0 bytes
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Ironically, this is the reverse of the problem that originally caused
-problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem is
-with holes. Future work could restore full coverage if load_elf_binary()
-were to perform mappings in a separate phase from the loading (where
-it could resolve both overlaps and holes).
+All errors (new ones prefixed by >>):
 
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
-Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Fixes: 5f501d555653 ("binfmt_elf: reintroduce using MAP_FIXED_NOREPLACE")
-Link: https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+>> kernel/trace/trace.c:1728:64: error: use of undeclared identifier 'HK_FLAG_MISC'; did you mean 'HK_TYPE_MISC'?
+           irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
+                                                                         ^~~~~~~~~~~~
+                                                                         HK_TYPE_MISC
+   include/linux/sched/isolation.h:11:2: note: 'HK_TYPE_MISC' declared here
+           HK_TYPE_MISC,
+           ^
+   1 error generated.
+
+
+vim +1728 kernel/trace/trace.c
+
+  1718	
+  1719	void latency_fsnotify(struct trace_array *tr)
+  1720	{
+  1721		if (!fsnotify_wq)
+  1722			return;
+  1723		/*
+  1724		 * We cannot call queue_work(&tr->fsnotify_work) from here because it's
+  1725		 * possible that we are called from __schedule() or do_idle(), which
+  1726		 * could cause a deadlock.
+  1727		 */
+> 1728		irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_FLAG_MISC));
+  1729	}
+  1730	
+
 ---
-matoro (or anyone else) can you please test this?
----
- fs/binfmt_elf.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
-
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 9bea703ed1c2..474b44032c65 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1136,14 +1136,25 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			 * is then page aligned.
- 			 */
- 			load_bias = ELF_PAGESTART(load_bias - vaddr);
--		}
- 
--		/*
--		 * Calculate the entire size of the ELF mapping (total_size).
--		 * (Note that first_pt_load is set to false later once the
--		 * initial mapping is performed.)
--		 */
--		if (first_pt_load) {
-+			/*
-+			 * Calculate the entire size of the ELF mapping
-+			 * (total_size), used for the initial mapping,
-+			 * due to first_pt_load which is set to false later
-+			 * once the initial mapping is performed.
-+			 *
-+			 * Note that this is only sensible when the LOAD
-+			 * segments are contiguous (or overlapping). If
-+			 * used for LOADs that are far apart, this would
-+			 * cause the holes between LOADs to be mapped,
-+			 * running the risk of having the mapping fail,
-+			 * as it would be larger than the ELF file itself.
-+			 *
-+			 * As a result, only ET_DYN does this, since
-+			 * some ET_EXEC (e.g. ia64) may have virtual
-+			 * memory holes between LOADs.
-+			 *
-+			 */
- 			total_size = total_mapping_size(elf_phdata,
- 							elf_ex->e_phnum);
- 			if (!total_size) {
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

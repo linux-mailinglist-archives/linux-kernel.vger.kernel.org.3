@@ -2,192 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E91B4C74F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F2C4C74B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238883AbiB1RtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S234708AbiB1RqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238948AbiB1Rnd (ORCPT
+        with ESMTP id S238907AbiB1Rnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:43:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709D7D03F;
-        Mon, 28 Feb 2022 09:35:25 -0800 (PST)
+        Mon, 28 Feb 2022 12:43:31 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D2F9A985;
+        Mon, 28 Feb 2022 09:35:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069725; x=1677605725;
+  t=1646069720; x=1677605720;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rL/LDGX5IsDnQdPbHkRMVK6CvzA1sOWyScOPv1bJ4b0=;
-  b=dDmyROAHI4NL7nBBSYLrOi7fMIQLN2NRJebbCBIZKl5PX0yX/hzIpsiB
-   xh1lLfM+T7oBIjkF58OC0nxi315w1mt2k6tuD6N+hgAWAxlBmK3ZHTbzG
-   NvW0I2deYZHHwzsKHNZNH8hLnrquoElaVUhew+F6A+TMwhtwa4bDSUcBj
-   mKOjSUZn/PpwUEO7UK4o9hJlzLl3QQ0tw1xruI2AYUDJ7Kj9HTyM5fUsM
-   sd4iW7jeR33QmsswMeYGbKZL08/KB+TiowggsqnCDfLCUgUztnt7To5UQ
-   6H0/E+xF5/XySC/a2i/EDq4ZSmbeAsy9x8sFo26YxHXag4hh1ghxrnTG/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339373867"
+  bh=4h1YWtV6F2Q6sNCl+7xob39bvg1TMmI6b4u3dRROqA4=;
+  b=CVnpusEK/Eramn9TgpeNNSwap1EzIugiOMh0a14eYIcR7T8XB9T3G5bC
+   BLrrMcv9yH7GRS4Snie/X7+jLqyJJBSZD9oXvqTsuB0ewSyzMuPQ9g6Vs
+   pK+4uFkJ7rGXyZq7zGk4UYA6w4ajELA9VPczbcCqijOpbW4/S387l7cQZ
+   P0bwzo4fJV1gFb8Wp8XXPDOJgmjvtJQaGwI+gNo2BQPiF1GsPvPXY6BVC
+   k6dTHxkV2KaZgVknKrzCNamLde4rwHMtVVJuL7DYzq3altgmM7xzsox0y
+   m0KzGHZG0BhZeSUlpgruL/hhO8ntbl+e8unSjvSoO8BwOhEhBnS1Wgxgu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277599710"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="339373867"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:35:19 -0800
+   d="scan'208";a="277599710"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:35:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="510174103"
+   d="scan'208";a="608524532"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 09:35:14 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 28 Feb 2022 09:35:14 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nOjvW-0007ZQ-6k; Mon, 28 Feb 2022 17:35:14 +0000
-Date:   Tue, 1 Mar 2022 01:35:02 +0800
+        id 1nOjvW-0007ZL-5q; Mon, 28 Feb 2022 17:35:14 +0000
+Date:   Tue, 1 Mar 2022 01:35:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Maninder Singh <maninder1.s@samsung.com>, mcgrof@kernel.org,
-        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com
-Cc:     kbuild-all@lists.01.org, v.narang@samsung.com, swboyd@chromium.org,
-        ojeda@kernel.or, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, avimalin@gmail.com,
-        atomlin@redhat.com, Maninder Singh <maninder1.s@samsung.com>
-Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <202202281853.EofvQRmv-lkp@intel.com>
-References: <20220228053447.1584704-1-maninder1.s@samsung.com>
+To:     Muchun Song <songmuchun@bytedance.com>, dan.j.williams@intel.com,
+        willy@infradead.org, jack@suse.cz, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, apopple@nvidia.com, shy828301@gmail.com,
+        rcampbell@nvidia.com, hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v3 4/6] mm: pvmw: add support for walking devmap pages
+Message-ID: <202202281913.ZakSkynK-lkp@intel.com>
+References: <20220228063536.24911-5-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228053447.1584704-1-maninder1.s@samsung.com>
+In-Reply-To: <20220228063536.24911-5-songmuchun@bytedance.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maninder,
+Hi Muchun,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on next-20220225]
-[cannot apply to mcgrof/modules-next linus/master v5.17-rc6]
+[auto build test ERROR on hnaz-mm/master]
+[also build test ERROR on next-20220225]
+[cannot apply to linus/master v5.17-rc6]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
+url:    https://github.com/0day-ci/linux/commits/Muchun-Song/Fix-some-bugs-related-to-ramp-and-dax/20220228-143753
 base:   https://github.com/hnaz/linux-mm master
-config: alpha-randconfig-r032-20220227 (https://download.01.org/0day-ci/archive/20220228/202202281853.EofvQRmv-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
+config: riscv-randconfig-r012-20220227 (https://download.01.org/0day-ci/archive/20220228/202202281913.ZakSkynK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fbad94837350bb7c5b1b0c33648f8b20eff0150a
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/4b08af172f30c61ae5f43ec23642e2767371247e
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
-        git checkout fbad94837350bb7c5b1b0c33648f8b20eff0150a
+        git fetch --no-tags linux-review Muchun-Song/Fix-some-bugs-related-to-ramp-and-dax/20220228-143753
+        git checkout 4b08af172f30c61ae5f43ec23642e2767371247e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   lib/vsprintf.c: In function 'sprint_module_info':
->> lib/vsprintf.c:993:13: warning: variable 'modbuildid' set but not used [-Wunused-but-set-variable]
-     993 |         int modbuildid = 0;
-         |             ^~~~~~~~~~
-   lib/vsprintf.c: In function 'va_format':
-   lib/vsprintf.c:1761:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    1761 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
-         |         ^~~
+>> mm/page_vma_mapped.c:113:13: error: call to __compiletime_assert_258 declared with 'error' attribute: BUILD_BUG failed
+           if ((pfn + HPAGE_PMD_NR - 1) < pvmw->pfn)
+                      ^
+   include/linux/huge_mm.h:105:26: note: expanded from macro 'HPAGE_PMD_NR'
+   #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
+                            ^
+   include/linux/huge_mm.h:104:26: note: expanded from macro 'HPAGE_PMD_ORDER'
+   #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+                            ^
+   include/linux/huge_mm.h:307:28: note: expanded from macro 'HPAGE_PMD_SHIFT'
+   #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+                              ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:335:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:328:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:73:1: note: expanded from here
+   __compiletime_assert_258
+   ^
+   1 error generated.
 
 
-vim +/modbuildid +993 lib/vsprintf.c
+vim +/error +113 mm/page_vma_mapped.c
 
-   983	
-   984	#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-   985	static int sprint_module_info(char *buf, char *end, unsigned long value,
-   986				     const char *fmt)
-   987	{
-   988		struct module *mod;
-   989		unsigned long offset = 1;
-   990		unsigned long base;
-   991		int ret = 0;
-   992		const char *modname;
- > 993		int modbuildid = 0;
-   994		int len;
-   995	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-   996		const unsigned char *buildid = NULL;
-   997	#endif
-   998	
-   999		if (is_ksym_addr(value))
-  1000			return 0;
-  1001	
-  1002		if (*fmt == 'B' && fmt[1] == 'b')
-  1003			modbuildid = 1;
-  1004		else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
-  1005			modbuildid = 1;
-  1006		else if (*fmt != 's') {
-  1007			/*
-  1008			 * do nothing.
-  1009			 */
-  1010		} else
-  1011			offset = 0;
-  1012	
-  1013		preempt_disable();
-  1014		mod = __module_address(value);
-  1015		if (mod) {
-  1016			ret = 1;
-  1017			modname = mod->name;
-  1018	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-  1019			if (modbuildid)
-  1020				buildid = mod->build_id;
-  1021	#endif
-  1022			if (offset) {
-  1023				base = (unsigned long)mod->core_layout.base;
-  1024				offset = value - base;
-  1025			}
-  1026		}
-  1027	
-  1028		preempt_enable();
-  1029		if (!ret)
-  1030			return 0;
-  1031	
-  1032		/* address belongs to module */
-  1033		if (offset)
-  1034			len = sprintf(buf, "0x%lx+0x%lx", base, offset);
-  1035		else
-  1036			len = sprintf(buf, "0x%lx", value);
-  1037	
-  1038		len += sprintf(buf + len, " [%s", modname);
-  1039	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-  1040		if (modbuildid && buildid) {
-  1041			/* build ID should match length of sprintf */
-  1042			static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-  1043			len += sprintf(buf + len, " %20phN", buildid);
-  1044		}
-  1045	#endif
-  1046		len += sprintf(buf + len, "]");
-  1047	
-  1048		return len;
-  1049	}
-  1050	#else
-  1051	static inline int sprint_module_info(char *buf, char *end, unsigned long value,
-  1052				     const char *fmt)
-  1053	{
-  1054		return 0;
-  1055	}
-  1056	#endif
-  1057	
+9188af981d385d Andrew Morton      2022-02-25  109  
+9188af981d385d Andrew Morton      2022-02-25  110  /* Returns true if the two ranges overlap.  Careful to not overflow. */
+9188af981d385d Andrew Morton      2022-02-25  111  static bool check_pmd(unsigned long pfn, struct page_vma_mapped_walk *pvmw)
+9188af981d385d Andrew Morton      2022-02-25  112  {
+9188af981d385d Andrew Morton      2022-02-25 @113  	if ((pfn + HPAGE_PMD_NR - 1) < pvmw->pfn)
+9188af981d385d Andrew Morton      2022-02-25  114  		return false;
+9188af981d385d Andrew Morton      2022-02-25  115  	if (pfn > pvmw->pfn + pvmw->nr_pages - 1)
+9188af981d385d Andrew Morton      2022-02-25  116  		return false;
+9188af981d385d Andrew Morton      2022-02-25  117  	return true;
+ace71a19cec5eb Kirill A. Shutemov 2017-02-24  118  }
+ace71a19cec5eb Kirill A. Shutemov 2017-02-24  119  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06784C7290
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A3C4C759D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiB1R1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S236616AbiB1Rzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiB1R0v (ORCPT
+        with ESMTP id S239296AbiB1Rww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:26:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF33887B5;
-        Mon, 28 Feb 2022 09:26:05 -0800 (PST)
+        Mon, 28 Feb 2022 12:52:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007A393982;
+        Mon, 28 Feb 2022 09:39:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB52B815AB;
-        Mon, 28 Feb 2022 17:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA250C340E7;
-        Mon, 28 Feb 2022 17:26:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CBF2614CC;
+        Mon, 28 Feb 2022 17:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85433C340E7;
+        Mon, 28 Feb 2022 17:39:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069163;
-        bh=zJosyq7oCq/myyxojvwiAwIeuLpNezuOpFJg2ObthN0=;
+        s=korg; t=1646069994;
+        bh=p9ckdDtQYt8cam5k/4hyLTvHsay93JN2BiHA02yx+Ow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zbyk8FTWE+y0OL/gZnP8r/p92b2qWGr8mgV1fsiMUSIngyeXyP9noK9ODfa9d0fRB
-         PZ+kfsyUsCUj/S5OlROPdFzwI8GdUqu5A4CAW0UhkK7RAtAUk8OEEQwUBHbkRuo0Xo
-         u+UZRY/om6RVtIwm5VFJ2aaGlOZavAJr0Ac0xc1w=
+        b=dnFV9hrv6mbx6/QC50gX8SxcNqqqxMfZ+ek0o3TrIZT8SI9JD1wYj0x7ccp7rHvqK
+         tXK2rPaRqPcKUIYV5VoEwjSNyjppE+/NuegOtOt0fFwVyOPcGVeXFBmkq7QaVsJzPX
+         PXjrfUBOBNnHye3uR0ZCQ8x3XBfsEHd4yXGdP8to=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.9 16/29] iio: adc: men_z188_adc: Fix a resource leak in an error handling path
+        stable@vger.kernel.org, Meir Lichtinger <meirl@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.15 049/139] net/mlx5: Update the list of the PCI supported devices
 Date:   Mon, 28 Feb 2022 18:23:43 +0100
-Message-Id: <20220228172143.444738755@linuxfoundation.org>
+Message-Id: <20220228172352.849780237@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Meir Lichtinger <meirl@nvidia.com>
 
-commit e0a2e37f303828d030a83f33ffe14b36cb88d563 upstream.
+commit f908a35b22180c4da64cf2647e4f5f0cd3054da7 upstream.
 
-If iio_device_register() fails, a previous ioremap() is left unbalanced.
+Add the upcoming BlueField-4 and ConnectX-8 device IDs.
 
-Update the error handling path and add the missing iounmap() call, as
-already done in the remove function.
-
-Fixes: 74aeac4da66f ("iio: adc: Add MEN 16z188 ADC driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/320fc777863880247c2aff4a9d1a54ba69abf080.1643445149.git.christophe.jaillet@wanadoo.fr
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 2e9d3e83ab82 ("net/mlx5: Update the list of the PCI supported devices")
+Signed-off-by: Meir Lichtinger <meirl@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/men_z188_adc.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/main.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/iio/adc/men_z188_adc.c
-+++ b/drivers/iio/adc/men_z188_adc.c
-@@ -107,6 +107,7 @@ static int men_z188_probe(struct mcb_dev
- 	struct z188_adc *adc;
- 	struct iio_dev *indio_dev;
- 	struct resource *mem;
-+	int ret;
+--- a/drivers/net/ethernet/mellanox/mlx5/core/main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/main.c
+@@ -1762,10 +1762,12 @@ static const struct pci_device_id mlx5_c
+ 	{ PCI_VDEVICE(MELLANOX, 0x101e), MLX5_PCI_DEV_IS_VF},	/* ConnectX Family mlx5Gen Virtual Function */
+ 	{ PCI_VDEVICE(MELLANOX, 0x101f) },			/* ConnectX-6 LX */
+ 	{ PCI_VDEVICE(MELLANOX, 0x1021) },			/* ConnectX-7 */
++	{ PCI_VDEVICE(MELLANOX, 0x1023) },			/* ConnectX-8 */
+ 	{ PCI_VDEVICE(MELLANOX, 0xa2d2) },			/* BlueField integrated ConnectX-5 network controller */
+ 	{ PCI_VDEVICE(MELLANOX, 0xa2d3), MLX5_PCI_DEV_IS_VF},	/* BlueField integrated ConnectX-5 network controller VF */
+ 	{ PCI_VDEVICE(MELLANOX, 0xa2d6) },			/* BlueField-2 integrated ConnectX-6 Dx network controller */
+ 	{ PCI_VDEVICE(MELLANOX, 0xa2dc) },			/* BlueField-3 integrated ConnectX-7 network controller */
++	{ PCI_VDEVICE(MELLANOX, 0xa2df) },			/* BlueField-4 integrated ConnectX-8 network controller */
+ 	{ 0, }
+ };
  
- 	indio_dev = devm_iio_device_alloc(&dev->dev, sizeof(struct z188_adc));
- 	if (!indio_dev)
-@@ -133,8 +134,14 @@ static int men_z188_probe(struct mcb_dev
- 	adc->mem = mem;
- 	mcb_set_drvdata(dev, indio_dev);
- 
--	return iio_device_register(indio_dev);
-+	ret = iio_device_register(indio_dev);
-+	if (ret)
-+		goto err_unmap;
- 
-+	return 0;
-+
-+err_unmap:
-+	iounmap(adc->base);
- err:
- 	mcb_release_mem(mem);
- 	return -ENXIO;
 
 

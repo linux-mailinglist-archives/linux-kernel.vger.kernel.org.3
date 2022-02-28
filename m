@@ -2,282 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC5C4C671B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716784C6717
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbiB1Kcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        id S234573AbiB1Kbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiB1Kcu (ORCPT
+        with ESMTP id S231721AbiB1Kbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:32:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9255746;
-        Mon, 28 Feb 2022 02:32:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C47E61320;
-        Mon, 28 Feb 2022 10:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53CBC340E7;
-        Mon, 28 Feb 2022 10:32:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646044330;
-        bh=NTMoGe2qM6Zlz2XjXRYS6obPgPuEJeVRzpLtHtUzKbU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rvT9Sz0ZYpqlbao+aNtyUDhbYN60iOK0g94ID0/9blJGJHbgXOMUCx4E6u9j6hi+N
-         MOy/YvYTA3T9OkTggpf0QNPZthUon2kBk6f2OBl99CJwNxmM2qZuG1ngx5D8u4EpkI
-         7V5QyKUXLzeme56EkuSPctfKC11Qj4bCGRFrQ2+5Mr+/GlwGc0ZWQhMoZfPLT22M3w
-         ANedRGgopyuejv8pL9dimPpPXBfm3gK1SFBnfY8Amk3vS8IYdtZmMEj+pm49RH3D51
-         ihAHScB1jNVHki71tguNvLPH6pOa0g76LxFsPOZ7vfCMXzcjRoUjONjBxIz5sDVRuM
-         lua1ZFvShJhfQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org
-Subject: [PATCH] [v2] Kbuild: move to -std=gnu11
-Date:   Mon, 28 Feb 2022 11:27:43 +0100
-Message-Id: <20220228103142.3301082-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Mon, 28 Feb 2022 05:31:35 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E855743;
+        Mon, 28 Feb 2022 02:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646044255; x=1677580255;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
+  b=ADHAmz5ZoHE4x2wPgvnFItq7N5tW8vmmTmAXdMxem277LYxBwUvpzplo
+   wNUdSGKueLy6Fg6wf5BS8LeT9r8inxmzOugmsFblazO8nzlHnlCYSxSAi
+   WGszyq+xYxooDaz4DLtaTB7JxTyRF57icnVYWf0GC45YNk4VIii6NU/HS
+   WrIERi1u7nhZ4MXqYfUJvAuxtHcHM6hZIIVoEv343Mo2SgTwliWDQoGRL
+   jil5jGL9bEfLAQ8Tp8ydP6PgaKC6N5n8dOBjc8qm+iWyegA5kSjMP1O7b
+   1WO0RNf0zhIGIoRUutAof4sX25Y8vznNmdPJUBOOTP6Qn0wCyGDi6TDmP
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
+   d="scan'208";a="22347755"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 28 Feb 2022 11:30:53 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 28 Feb 2022 11:30:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646044253; x=1677580253;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
+  b=drl60c3M2hZ1JsyApj7b/J3NNsuyJx2l7VmECVLQS/Tf/QjBKp2M9Ifw
+   /i/OIfQfR9ADcRPleNljFyW9yUWvnoptEHSGSSVOIjZum9/e3RB4+VYVX
+   ePlD92B2152XpAoBPYlrecr4XnywkkqK984/I3seSZaukFrIlWm1XG27I
+   2Tpkxsq1GSAUaLbiSqU6YDc2q1EOQ2YF/Unsu8Y3u/N9RceqITRQxJuIz
+   lklF1nnsCeMwiE1kuj51yntelt7kh1BeIuvEE/VPqeDRvfA/GiHSKxk3q
+   L+snH9cH/3oVI5iiGXCZka975PPARx9b+41uiT0wbXLa1ge2QRxq8goNo
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
+   d="scan'208";a="22347754"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id A7F5E280074;
+        Mon, 28 Feb 2022 11:30:52 +0100 (CET)
+Message-ID: <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Date:   Mon, 28 Feb 2022 11:30:50 +0100
+In-Reply-To: <YgJZbdOlazrde7O/@atomide.com>
+References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+         <20220204143108.653qk2ihnlhsr5aa@prior> <YgDCLaBHA3DDQAUd@atomide.com>
+         <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
+         <YgEBml9HvFzSl289@atomide.com>
+         <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
+         <YgJZbdOlazrde7O/@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 2022-02-08 at 13:52 +0200, Tony Lindgren wrote:
+> * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220208
+> 10:53]:
+> > On Mon, 2022-02-07 at 13:25 +0200, Tony Lindgren wrote:
+> > > * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220207
+> > > 08:45]:
+> > > > Generally I think that it's a bootloader's responsiblity to
+> > > > disable
+> > > > unneeded devices - the kernel may not even have a driver for
+> > > > some
+> > > > peripherals, leading to the same behaviour as a "disabled"
+> > > > status.
+> > > > For
+> > > > this reason I believe that it should always be okay to set
+> > > > unneeded
+> > > > devices to "disabled", and it should be considered a safe
+> > > > default.
+> > > 
+> > > Not possible, think kexec for example :) How would the previous
+> > > kernel
+> > > even know what to disable if Linux has no idea about the devices?
+> > 
+> > Well, optimally, bootloader and all kernels would agree on the
+> > devices
+> > that are actually available, but I get your point.
+> > 
+> > > If there are issues you're seeing, it's likely a bug in some of
+> > > the
+> > > device drivers for not checking for the necessary resources like
+> > > pinctrl for i2c lines.
+> > 
+> > I don't think it's common for individual drivers to care about
+> > pinctrl
+> > unless switching between different pin settings is required at
+> > runtime.
+> > Many drivers can be used on different hardware, some of which may
+> > require pinmuxing, while others don't.
+> 
+> Yeah that's true, some configurations only do pin muxing in the
+> bootloader. So pins are not a good criteria for devicetree status
+> enabled
+> for when the device is operational.
+> 
+> Probably a better criteria for devicetree "operational" status is the
+> device can be clocked and configured or idled. Some devices like GPUs
+> can render to memory with no external pin configuration for example.
+> 
 
-During a patch discussion, Linus brought up the option of changing
-the C standard version from gnu89 to gnu99, which allows using variable
-declaration inside of a for() loop. While the C99, C11 and later standards
-introduce many other features, most of these are already available in
-gnu89 as GNU extensions as well.
+I don't think any properties currently exist that could or should be
+used to decide whether a device is operational. Clocks etc. are usually
+internal to the SoC and thus already set in the SoC DTSI. Pins and
+power supplies may be specific to a mainboard, but can also be
+optional. Whether an I2C bus can be operational may solely depend on
+whether external pullups are connected to the pins or not.
 
-An earlier attempt to do this when gcc-5 started defaulting to
--std=gnu11 failed because at the time that caused warnings about
-designated initializers with older compilers. Now that gcc-5.1 is the
-minimum compiler version used for building kernels, that is no longer a
-concern. Similarly, the behavior of 'inline' functions changes between
-gnu89 and gnu11, but this was taken care of by defining 'inline' to
-include __attribute__((gnu_inline)) in order to allow building with
-clang a while ago.
+The idea of an "incomplete" status like you mention below sounds better
+to me. I also thought about adding something like a "probe_disabled()"
+that is called instead of probe() for "disabled" devices, but I assume
+that would cause a boot time penalty on systems that have many
+"disabled" devices and don't actually need this...
 
-One minor issue that remains is an added gcc warning for shifts of
-negative integers when building with -Werror, which happens with the
-'make W=1' option, as well as for three drivers in the kernel that always
-enable -Werror, but it was only observed with the i915 driver so far.
-To be on the safe side, add -Wno-shift-negative-value to any -Wextra
-in a Makefile.
 
-Nathan Chancellor reported an additional -Wdeclaration-after-statement
-warning that appears in a system header on arm, this still needs a
-workaround.
+> Following Linux running on a PC analogy.. If ACPI has some device
+> that
+> causes driver warnings on Linux boot, do we patch the ACPI table and
+> pretend the device does not exist? Or do we patch the device driver
+> to
+> deal with the random buggy bootloader state for the device? :)
+> 
+> > Also, what is the expected behavior of a driver that is probed for
+> > an
+> > unusable device? Wouldn't this require some as-of-yet nonexisting
+> > status between "okay" and "disabled" that conveys something like
+> > "probe
+> > this device, initialize (and disable) PM, but don't register
+> > anything",
+> > so no unusable devices become visible to userspace (and possibly
+> > other
+> > kernel drivers)?
+> 
+> I did some experimental patches several years ago to add devicetree
+> status for incomplete, but eventually came to the conclusion that it
+> was not really needed. Feel free to revisit that if you have the
+> spare cycles :)
+> 
+> Having the drivers check for the resources like clocks and then just
+> idle the device after probe solved the issues I was seeing for
+> warnings
+> and kexec. In some cases the device may need to be reset or at least
+> properly reconfigured in the probe as the state can be unknown from
+> the
+> bootloader. That's about all there is to it. Sure you could save some
+> memory with less instances for some devices, so maybe the status =
+> "incomplete" could be used to do the trick for that.
 
-The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
-minimal and mainly impact warnings at the -Wpedantic level that the
-kernel never enables. Between these, gnu11 is the newest version
-that is supported by all supported compiler versions, though it is
-only the default on gcc-5, while all other supported versions of
-gcc or clang default to gnu1x/gnu17.
+I don't really care about memory usage. What I do care about is that
+incorrect userspace usage doesn't cause ugly kernel warnings (for
+example timeouts for i2cdetect on unmuxed bus) when we can avoid it,
+because such issues always lead to support requests.
 
-Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
-Link: https://github.com/ClangBuiltLinux/linux/issues/1603
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-[v2]
- - added -std=gnu11 back, rather than just relying on the default
- - minor changes to changelog text
----
- Documentation/process/programming-language.rst              | 4 ++--
- .../translations/it_IT/process/programming-language.rst     | 4 ++--
- .../translations/zh_CN/process/programming-language.rst     | 4 ++--
- .../translations/zh_TW/process/programming-language.rst     | 4 ++--
- Makefile                                                    | 6 +++---
- arch/arm64/kernel/vdso32/Makefile                           | 2 +-
- drivers/gpu/drm/i915/Makefile                               | 1 +
- drivers/staging/greybus/tools/Makefile                      | 3 ++-
- fs/btrfs/Makefile                                           | 1 +
- scripts/Makefile.extrawarn                                  | 1 +
- 10 files changed, 17 insertions(+), 13 deletions(-)
+Not being able to hide non-operational devices from userspace feels
+like a regression from older hardware.
 
-diff --git a/Documentation/process/programming-language.rst b/Documentation/process/programming-language.rst
-index ec474a70a02f..894f2a6eb9db 100644
---- a/Documentation/process/programming-language.rst
-+++ b/Documentation/process/programming-language.rst
-@@ -5,8 +5,8 @@ Programming Language
- 
- The kernel is written in the C programming language [c-language]_.
- More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
--under ``-std=gnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO C90
--(including some C99 features). ``clang`` [clang]_ is also supported, see
-+under ``-std=gnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO C11
-+(including some C17 features). ``clang`` [clang]_ is also supported, see
- docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
- 
- This dialect contains many extensions to the language [gnu-extensions]_,
-diff --git a/Documentation/translations/it_IT/process/programming-language.rst b/Documentation/translations/it_IT/process/programming-language.rst
-index 41db2598ce11..aa21097737ae 100644
---- a/Documentation/translations/it_IT/process/programming-language.rst
-+++ b/Documentation/translations/it_IT/process/programming-language.rst
-@@ -10,8 +10,8 @@ Linguaggio di programmazione
- 
- Il kernel è scritto nel linguaggio di programmazione C [it-c-language]_.
- Più precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ usando
--l'opzione ``-std=gnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
--dello standard ISO C90 (con l'aggiunta di alcune funzionalità da C99).
-+l'opzione ``-std=gnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
-+dello standard ISO C11 (con l'aggiunta di alcune funzionalità da C17).
- Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
- :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
- 
-diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-index 2a47a1d2ec20..58d2b3bd2d85 100644
---- a/Documentation/translations/zh_CN/process/programming-language.rst
-+++ b/Documentation/translations/zh_CN/process/programming-language.rst
-@@ -9,8 +9,8 @@
- ============
- 
- 内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
--在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C90的 GNU 方言（
--包括一些C99特性）
-+在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言（
-+包括一些C17特性）
- 
- 这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
- 
-diff --git a/Documentation/translations/zh_TW/process/programming-language.rst b/Documentation/translations/zh_TW/process/programming-language.rst
-index 54e3699eadf8..235de05f7e2c 100644
---- a/Documentation/translations/zh_TW/process/programming-language.rst
-+++ b/Documentation/translations/zh_TW/process/programming-language.rst
-@@ -12,8 +12,8 @@
- ============
- 
- 內核是用C語言 :ref:`c-language <tw_c-language>` 編寫的。更準確地說，內核通常是用 :ref:`gcc <tw_gcc>`
--在 ``-std=gnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C90的 GNU 方言（
--包括一些C99特性）
-+在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect-options>` 下編譯的：ISO C11的 GNU 方言（
-+包括一些C17特性）
- 
- 這種方言包含對語言 :ref:`gnu-extensions <tw_gnu-extensions>` 的許多擴展，當然，它們許多都在內核中使用。
- 
-diff --git a/Makefile b/Makefile
-index 289ce2be8032..66496eaeb9ec 100644
---- a/Makefile
-+++ b/Makefile
-@@ -432,7 +432,7 @@ HOSTCXX	= g++
- endif
- 
- export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
--			      -O2 -fomit-frame-pointer -std=gnu89
-+			      -O2 -fomit-frame-pointer -std=gnu11
- export KBUILD_USERLDFLAGS :=
- 
- KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
-@@ -515,7 +515,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
- 		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
- 		   -Werror=implicit-function-declaration -Werror=implicit-int \
- 		   -Werror=return-type -Wno-format-security \
--		   -std=gnu89
-+		   -std=gnu11
- KBUILD_CPPFLAGS := -D__KERNEL__
- KBUILD_AFLAGS_KERNEL :=
- KBUILD_CFLAGS_KERNEL :=
-@@ -782,7 +782,7 @@ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- 
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
--# The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-+# The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
- KBUILD_CFLAGS += -Wno-gnu
- # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
- # source of a reference will be _MergedGlobals and not on of the whitelisted names.
-diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-index 6c01b63ff56d..9378ea055bf2 100644
---- a/arch/arm64/kernel/vdso32/Makefile
-+++ b/arch/arm64/kernel/vdso32/Makefile
-@@ -68,7 +68,7 @@ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
-                -fno-strict-aliasing -fno-common \
-                -Werror-implicit-function-declaration \
-                -Wno-format-security \
--               -std=gnu89
-+               -std=gnu11
- VDSO_CFLAGS  += -O2
- # Some useful compiler-dependent flags from top-level Makefile
- VDSO_CFLAGS += $(call cc32-option,-Wdeclaration-after-statement,)
-diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-index 1b62b9f65196..1618a6e0af4e 100644
---- a/drivers/gpu/drm/i915/Makefile
-+++ b/drivers/gpu/drm/i915/Makefile
-@@ -17,6 +17,7 @@ subdir-ccflags-y += -Wno-unused-parameter
- subdir-ccflags-y += -Wno-type-limits
- subdir-ccflags-y += -Wno-missing-field-initializers
- subdir-ccflags-y += -Wno-sign-compare
-+subdir-ccflags-y += -Wno-shift-negative-value
- subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
- subdir-ccflags-y += $(call cc-disable-warning, frame-address)
- subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
-diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/greybus/tools/Makefile
-index ad0ae8053b79..a3bbd73171f2 100644
---- a/drivers/staging/greybus/tools/Makefile
-+++ b/drivers/staging/greybus/tools/Makefile
-@@ -12,7 +12,8 @@ CFLAGS	+= -std=gnu99 -Wall -Wextra -g \
- 	    -Wredundant-decls \
- 	    -Wcast-align \
- 	    -Wsign-compare \
--	    -Wno-missing-field-initializers
-+	    -Wno-missing-field-initializers \
-+	    -Wno-shift-negative-value
- 
- CC	:= $(CROSS_COMPILE)gcc
- 
-diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
-index 4188ba3fd8c3..99f9995670ea 100644
---- a/fs/btrfs/Makefile
-+++ b/fs/btrfs/Makefile
-@@ -17,6 +17,7 @@ subdir-ccflags-y += $(condflags)
- subdir-ccflags-y += -Wno-missing-field-initializers
- subdir-ccflags-y += -Wno-sign-compare
- subdir-ccflags-y += -Wno-type-limits
-+subdir-ccflags-y += -Wno-shift-negative-value
- 
- obj-$(CONFIG_BTRFS_FS) := btrfs.o
- 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 8be892887d71..650d0b8ceec3 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -36,6 +36,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
- KBUILD_CFLAGS += -Wno-missing-field-initializers
- KBUILD_CFLAGS += -Wno-sign-compare
- KBUILD_CFLAGS += -Wno-type-limits
-+KBUILD_CFLAGS += -Wno-shift-negative-value
- 
- KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
- 
--- 
-2.29.2
+> 
+> > > > I'm not sure what the consensus on these issues is. I'm more
+> > > > familiar
+> > > > with NXP's i.MX and Layerscape SoCs, where it's common to have
+> > > > all
+> > > > muxable peripherals set to "disabled" in the base DTSI, and a
+> > > > quick
+> > > > grep through a few dts directories gives me the impression that
+> > > > this is
+> > > > the case for most other vendors as well.
+> > > 
+> > > This approach only works for SoCs that don't need the kernel to
+> > > idle
+> > > devices for runtime PM.
+> > 
+> > I'm pretty sure that most modern SoCs I looked at have runtime PM,
+> > and
+> > it is simply expected that unusable devices are never enabled in
+> > the
+> > first place, so there is no need for the kernel to know about them.
+> 
+> Yeah well that assumption is the difference in getting runtime PM to
+> work in a sane way across multiple SoCs and devices :)
+> 
+> Devices tagged with status = "disabled" are completely ignored by the
+> kernel. Interconnect and bus related code may not know the details on
+> how to reset and idle the child devices. Relying on firmware to do
+> the
+> reset and idle of unused devices may be too generic, can be buggy,
+> and
+> probably depends on the firmware revision.
+
+Well, so far it seems like the `status = "disabled"` is just being
+pushed from the SoC DTSIs to the board DTSs on TI hardware. For the
+AM64 platform (which is fairly similar to the AM65), both mainboards
+that currently exist disable unused UARTs, I2C/SPI busses, PWMs, ...
+(Some of these might be disabled to make them usable from the R5/M4
+cores, but I don't think that the case for all of them - "reserved"
+would be more appropriate than "disabled" in these cases anyways)
+
+AFAICT, disabling non-operatational devices in the board DTS instead of
+the SoC DTSI is worse than the alternatives in every way:
+
+- Verbose board DTS: You have to think about all the devices that exist
+in the SoC, not just the ones you want to use
+- Adding new nodes without `status = "disabled" to SoC DTSI can
+potentially cause issues on dependent boards
+- It doesn't solve the issues that not having `status = "disabled"` in
+the DTSI is supposed to solve
+
+Regards,
+Matthias
+
+
+> 
+> Regards,
+> 
+> Tony
 

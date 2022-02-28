@@ -2,257 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CA94C7C12
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB80C4C7C11
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiB1VdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S230293AbiB1Vcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiB1VdJ (ORCPT
+        with ESMTP id S230197AbiB1Vcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:33:09 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149712222B;
-        Mon, 28 Feb 2022 13:32:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646083950; x=1677619950;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LczHU2VgdEbSa318frFVSW5Uambj7Tf+7NqJ5ePTTEQ=;
-  b=AptW2Y2biP5E2LvufbaRiPLu296uq7tW4dbIXt/dLRKahqrFwsssGeVa
-   IjsANgC9+CfIjQ6fhQGysyYJnMIR7IpvtD4440Yq5mlexv84o7Kk9Pcmr
-   xyIGqhHmv39dQ632CKGGZkyrRO1zCjQxnyHuRWE9s76vsQNeTQhVO2kGy
-   EZvczSA079JSM7OvK8mN5FTeOUR/pvuBaeJjMboUgOO8kU/9qn2x+18xS
-   2PzXqsQrDjgG0sckA2QAUlov1XXD722gevcz1jlRelsmT552M5G9APaex
-   BzfrSTTjlECvNXE3YNw+mzYhO6frDRZGy0QW+tS+V5OXrpxuLnQeIJmry
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339425562"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="339425562"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 13:32:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="641029708"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 13:32:25 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOnd3-0007oH-1c; Mon, 28 Feb 2022 21:32:25 +0000
-Date:   Tue, 1 Mar 2022 05:31:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     wudaemon <wudaemon@163.com>, davem@davemloft.net, kuba@kernel.org,
-        m.grzeschik@pengutronix.de, chenhao288@hisilicon.com, arnd@arndb.de
-Cc:     kbuild-all@lists.01.org, wudaemon@163.com, shenyang39@huawei.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ksz884x: use time_before in netdev_open for
- compatibility and remove static variable
-Message-ID: <202203010549.CYZcqRXa-lkp@intel.com>
-References: <20220228162955.22819-1-wudaemon@163.com>
+        Mon, 28 Feb 2022 16:32:33 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C5F12F43E;
+        Mon, 28 Feb 2022 13:31:53 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v5-20020a17090ac90500b001bc40b548f9so362456pjt.0;
+        Mon, 28 Feb 2022 13:31:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=k66+0NBdInfEOq9yxFpLr2boMVNjFk29RdvxyccfnqM=;
+        b=cd+CwlxhWN0+XEO/CMr7/TW9Jrf93W7Bvb65TNuTnny0CQbIlQOmnIeofW3+8mRGDx
+         mSD1Cc+ZMv/qFGUj27TnfFtW+ksRFBkY7Eactutxxnr+amWESbStFmKgC4DzKQzoyY0e
+         /e6/7rCZpzrI0mdorKIACxrmhI4gzkuXkeAagzyMirxZATA0/Uuz7Kh04c4nKnjTXmYN
+         EG9KZSj3w0lIqnWfjp+ZjgKxx/dn1tDyf/O5wqfGlwil3abwhzPIzkvSbXCQO8BbQg33
+         8y8y8KgRP8OfvaNd1hXkYKleZpHmgmW33emZ4QZVVAvBEyUF2BrCsT1UyrugZNMGL2Rl
+         A3jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k66+0NBdInfEOq9yxFpLr2boMVNjFk29RdvxyccfnqM=;
+        b=Z8BFzCn5zHzDda0aaQeqTMesZydXgTrhh/okcalg5ruER9+KGLm+avO0q7JMQ3x5H3
+         gKlsbrudqai/cK6F0PxJ7c5l6A7XFGI4s8sRkrYWWH4MG2GIMmcBCQ963Gfu6SH0p2dD
+         e+l/iL/JfiFAHmjLN4TbUO5U1PavUAbgVTHLlXFmO3dXTD7gWihvs44zO9y0u5GtXjb3
+         FOIArI4NKUt8ormtQlU7FxT/soU3kcnfXqvk8FYGsx6M2h5hlhh1u0StFljjRHWhUD+g
+         RHbVydn6ynJbxvpwsU3rM1wOpLTp2tJ6FjEAdf/xnT0WnCuQnkoA3Z2HULv4DwiVeeLy
+         osgw==
+X-Gm-Message-State: AOAM533LagkrRP0inRhCvvfDALubrKhypcpaCC9+lbYlDZXLFgIpLTZc
+        EtfnbLXHT2B8WsvVY/jXJ2U=
+X-Google-Smtp-Source: ABdhPJylCG8LedKReihawuPUm4WE5/20Ku9HoR+cBvnCqpjdo6asB1ev36fEl8Yj/GWGRfHHk/1u7g==
+X-Received: by 2002:a17:903:24f:b0:14f:73fa:2b30 with SMTP id j15-20020a170903024f00b0014f73fa2b30mr22474458plh.174.1646083912552;
+        Mon, 28 Feb 2022 13:31:52 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id l9-20020a655609000000b0037589f4337dsm11386450pgs.78.2022.02.28.13.31.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 13:31:51 -0800 (PST)
+Message-ID: <bdb6a903-6efc-e7ff-3a88-70ad9fe3fc09@gmail.com>
+Date:   Mon, 28 Feb 2022 13:31:50 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228162955.22819-1-wudaemon@163.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] arm64: dts: ns2: Fix spi-cpol and spi-cpha property
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220228110903.97478-1-singh.kuldeep87k@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220228110903.97478-1-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi wudaemon,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master soc/for-next linus/master v5.17-rc6 next-20220228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/wudaemon/net-ksz884x-use-time_before-in-netdev_open-for-compatibility-and-remove-static-variable/20220301-003151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b42a738e409b62f38a15ce7530e8290b00f823a4
-config: ia64-randconfig-r012-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010549.CYZcqRXa-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5db9da911f33045f8dd202d40c20530211b48af0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review wudaemon/net-ksz884x-use-time_before-in-netdev_open-for-compatibility-and-remove-static-variable/20220301-003151
-        git checkout 5db9da911f33045f8dd202d40c20530211b48af0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/ethernet/micrel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/ia64/include/asm/pgtable.h:153,
-                    from include/linux/pgtable.h:6,
-                    from arch/ia64/include/asm/uaccess.h:40,
-                    from include/linux/uaccess.h:11,
-                    from arch/ia64/include/asm/sections.h:11,
-                    from include/linux/interrupt.h:21,
-                    from drivers/net/ethernet/micrel/ksz884x.c:12:
-   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
-   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
-     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
-         |                                                ^~~~~~~
-   drivers/net/ethernet/micrel/ksz884x.c: In function 'prepare_hardware':
-   drivers/net/ethernet/micrel/ksz884x.c:5363:23: warning: unused variable 'next_jiffies' [-Wunused-variable]
-    5363 |         unsigned long next_jiffies = 0;
-         |                       ^~~~~~~~~~~~
-   In file included from include/linux/bitops.h:7,
-                    from include/linux/kernel.h:22,
-                    from include/linux/interrupt.h:6,
-                    from drivers/net/ethernet/micrel/ksz884x.c:12:
-   drivers/net/ethernet/micrel/ksz884x.c: In function 'netdev_open':
->> drivers/net/ethernet/micrel/ksz884x.c:5430:41: error: 'next_jiffies' undeclared (first use in this function)
-    5430 |                         if (time_before(next_jiffies, jiffies))
-         |                                         ^~~~~~~~~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/jiffies.h:108:33: note: in expansion of macro 'time_after'
-     108 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^~~~~~~~~~
-   drivers/net/ethernet/micrel/ksz884x.c:5430:29: note: in expansion of macro 'time_before'
-    5430 |                         if (time_before(next_jiffies, jiffies))
-         |                             ^~~~~~~~~~~
-   drivers/net/ethernet/micrel/ksz884x.c:5430:41: note: each undeclared identifier is reported only once for each function it appears in
-    5430 |                         if (time_before(next_jiffies, jiffies))
-         |                                         ^~~~~~~~~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/jiffies.h:108:33: note: in expansion of macro 'time_after'
-     108 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^~~~~~~~~~
-   drivers/net/ethernet/micrel/ksz884x.c:5430:29: note: in expansion of macro 'time_before'
-    5430 |                         if (time_before(next_jiffies, jiffies))
-         |                             ^~~~~~~~~~~
->> include/linux/typecheck.h:12:25: warning: comparison of distinct pointer types lacks a cast
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                         ^~
-   include/linux/jiffies.h:106:10: note: in expansion of macro 'typecheck'
-     106 |          typecheck(unsigned long, b) && \
-         |          ^~~~~~~~~
-   include/linux/jiffies.h:108:33: note: in expansion of macro 'time_after'
-     108 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^~~~~~~~~~
-   drivers/net/ethernet/micrel/ksz884x.c:5430:29: note: in expansion of macro 'time_before'
-    5430 |                         if (time_before(next_jiffies, jiffies))
-         |                             ^~~~~~~~~~~
 
 
-vim +/next_jiffies +5430 drivers/net/ethernet/micrel/ksz884x.c
+On 2/28/2022 3:09 AM, Kuldeep Singh wrote:
+> Broadcom ns2 platform has spi-cpol and spi-cpho properties set
+> incorrectly. As per spi-slave-peripheral-prop.yaml, these properties are
+> of flag or boolean type and not integer type. Fix the values.
+> 
+> CC: Ray Jui <rjui@broadcom.com>
+> CC: Scott Branden <sbranden@broadcom.com>
+> CC: Florian Fainelli <f.fainelli@gmail.com>
+> Fixes: d69dbd9f41a7c (arm64: dts: Add ARM PL022 SPI DT nodes for NS2)
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+> Hi,
+> 
+> This patch is on top of git://github.com/broadcom/cygnus-linux.git,
+> master branch which is not updated since 4.14 kernel.
+> Hope the reference is correct. Thanks!
 
-  5397	
-  5398	/**
-  5399	 * netdev_open - open network device
-  5400	 * @dev:	Network device.
-  5401	 *
-  5402	 * This function process the open operation of network device.  This is caused
-  5403	 * by the user command "ifconfig ethX up."
-  5404	 *
-  5405	 * Return 0 if successful; otherwise an error code indicating failure.
-  5406	 */
-  5407	static int netdev_open(struct net_device *dev)
-  5408	{
-  5409		struct dev_priv *priv = netdev_priv(dev);
-  5410		struct dev_info *hw_priv = priv->adapter;
-  5411		struct ksz_hw *hw = &hw_priv->hw;
-  5412		struct ksz_port *port = &priv->port;
-  5413		int i;
-  5414		int p;
-  5415		int rc = 0;
-  5416	
-  5417		priv->multicast = 0;
-  5418		priv->promiscuous = 0;
-  5419	
-  5420		/* Reset device statistics. */
-  5421		memset(&dev->stats, 0, sizeof(struct net_device_stats));
-  5422		memset((void *) port->counter, 0,
-  5423			(sizeof(u64) * OID_COUNTER_LAST));
-  5424	
-  5425		if (!(hw_priv->opened)) {
-  5426			rc = prepare_hardware(dev);
-  5427			if (rc)
-  5428				return rc;
-  5429			for (i = 0; i < hw->mib_port_cnt; i++) {
-> 5430				if (time_before(next_jiffies, jiffies))
-  5431					next_jiffies = jiffies + HZ * 2;
-  5432				else
-  5433					next_jiffies += HZ * 1;
-  5434				hw_priv->counter[i].time = next_jiffies;
-  5435				hw->port_mib[i].state = media_disconnected;
-  5436				port_init_cnt(hw, i);
-  5437			}
-  5438			if (hw->ksz_switch)
-  5439				hw->port_mib[HOST_PORT].state = media_connected;
-  5440			else {
-  5441				hw_add_wol_bcast(hw);
-  5442				hw_cfg_wol_pme(hw, 0);
-  5443				hw_clr_wol_pme_status(&hw_priv->hw);
-  5444			}
-  5445		}
-  5446		port_set_power_saving(port, false);
-  5447	
-  5448		for (i = 0, p = port->first_port; i < port->port_cnt; i++, p++) {
-  5449			/*
-  5450			 * Initialize to invalid value so that link detection
-  5451			 * is done.
-  5452			 */
-  5453			hw->port_info[p].partner = 0xFF;
-  5454			hw->port_info[p].state = media_disconnected;
-  5455		}
-  5456	
-  5457		/* Need to open the port in multiple device interfaces mode. */
-  5458		if (hw->dev_count > 1) {
-  5459			port_set_stp_state(hw, port->first_port, STP_STATE_SIMPLE);
-  5460			if (port->first_port > 0)
-  5461				hw_add_addr(hw, dev->dev_addr);
-  5462		}
-  5463	
-  5464		port_get_link_speed(port);
-  5465		if (port->force_link)
-  5466			port_force_link_speed(port);
-  5467		else
-  5468			port_set_link_speed(port);
-  5469	
-  5470		if (!(hw_priv->opened)) {
-  5471			hw_setup_intr(hw);
-  5472			hw_enable(hw);
-  5473			hw_ena_intr(hw);
-  5474	
-  5475			if (hw->mib_port_cnt)
-  5476				ksz_start_timer(&hw_priv->mib_timer_info,
-  5477					hw_priv->mib_timer_info.period);
-  5478		}
-  5479	
-  5480		hw_priv->opened++;
-  5481	
-  5482		ksz_start_timer(&priv->monitor_timer_info,
-  5483			priv->monitor_timer_info.period);
-  5484	
-  5485		priv->media_state = port->linked->state;
-  5486	
-  5487		set_media_state(dev, media_connected);
-  5488		netif_start_queue(dev);
-  5489	
-  5490		return 0;
-  5491	}
-  5492	
+The reference is not correct, but it applied cleanly anyway. The correct 
+reference would have been the github.com/Broadcom/stblinux 
+refs/heads/devicetree-arm64/next
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Applied, thanks!
+-- 
+Florian

@@ -2,109 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118FA4C7DBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7014E4C7DBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiB1Wuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S231589AbiB1Wuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiB1Wut (ORCPT
+        with ESMTP id S231577AbiB1Wuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:50:49 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDCD149BB3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:50:09 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id h126so8725073ybc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mn4+kgjmXxJgm4OAorwyyF3bOLkF04FkX9ZXLKWpbeA=;
-        b=gJRgswjjNSH6d21VIg6gtItUhMur6yQVpp1I2QRW7zF2GWc38ElPLT6vzTxeWIPAUm
-         KWbOLCYKEH0ElkFA0D7zSDUy/GZB28/7zFaZvbu34RQ5YmET1J7c7hexvWJufNW0dYVA
-         oCp+Ut6Fa/rsYT8VqkTHa7SxGRKh4tAeuQV1EdIRqbIbuTY0B+HjG39VmTl5xfUYdaQx
-         PGvwaQtSNCvVK18a8kPxNRid5o5BJUA3JqEM0vpOI2P75GbfuiGWSsUNltvgybBr110+
-         kFwdg01f/UzWIBVLsqtUlKCrPelNmTB73hZT7l3JZnDE3AiMxjzxQYG6xldBsmokyEeq
-         2Syw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mn4+kgjmXxJgm4OAorwyyF3bOLkF04FkX9ZXLKWpbeA=;
-        b=fnFvcZkWm4rNJ+CmgPiddaKnVRVPKRgxkD3tRy30FVlQ6t4sOyZAXk2RPNH8DpG6a2
-         gEIb8aQXJWPdXE2HUkWGg/pAdL2X+r0/TIQUdbmfh2SYPqYyTOy54cSO3nUABfuZPUdf
-         7Nc4IQGlihNCp+6LcvvqDyf8eM/9Hkdcgk6JkGtFdlP0ID3XImmkty55/QMP5AiiMqtt
-         Yxm+g1bCUuoBNcdyEgDACkTVW4Bu6Cgz6HHbkml2ecN1emcQ8oGpOw2eYKFX2V1sf2v6
-         Lz0HKzNMpw29+7ATWYeypEnV2YyHy2NjFUNYwue/82AvWwJ86yc83NYcIe2yCzFc24yR
-         lTOg==
-X-Gm-Message-State: AOAM530SnttZfCAfaRMXgyX8238kAdVqKMW0RUVLQgqdI3w5Ny1kBaRQ
-        kT3Bjzzvu5RF8Z7/HVQI5UCSqHu02plCGREqhEn1nQ==
-X-Google-Smtp-Source: ABdhPJxkM+FzfHrMMvSUVMeWBGLePzqxGRlEMtKKuxkgM8AFsPaDCRHlXHILLH4h1xPwfhaxrt9XhPyseCq1GfD+59s=
-X-Received: by 2002:a25:aac3:0:b0:624:ab10:49dc with SMTP id
- t61-20020a25aac3000000b00624ab1049dcmr21426486ybi.291.1646088608419; Mon, 28
- Feb 2022 14:50:08 -0800 (PST)
+        Mon, 28 Feb 2022 17:50:54 -0500
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5270A14A04E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:50:12 -0800 (PST)
+Date:   Mon, 28 Feb 2022 22:50:06 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1646088609;
+        bh=EcotLxkQaYgY6ajZYic/GfxM/AoG16BTcQ37oNetF9g=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=cBGwkD0dY6C6UZ8ZjhjHcbwM06BMDKF9S/uxRi+rS2UvdSsFLFOG1HSm6qlJyiCUO
+         uC1XgssvVNSFSsxdHJ1aOl5NwIA18vjg17jCvCkv13dOUO+5hOt3OCcfXLX2AxvryX
+         lsXEg4vAoBljMT4ewAP2cK1EUDuyezakLW8pnSEAczd9xFJNkZ4Y3ZLxhFb22yslY3
+         3xdTS3cTZ9GeOv+wrf2xTPfY4Kamc1tDDmDy3yCaRm+7b1f1xP0Y+5xR0FjORV+5kM
+         cK85iRo45YcxaJSZ64KqeuDyrCIZDsEiDwE78vJR0ycrL/ZWpMTXDPzJnBHTv4Qo8t
+         TiTx0AcdTLM/g==
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
+Message-ID: <Ax76nlte5gO6McgVlkdlM8SHBdfYoG0hb6pFO3MJ6iEg3VCk3kzPWFQ6HS2uVDB8eeyLSr4ku62pXF-FrsROsQvF_VDAW1I5lXTFZTkkMfk=@protonmail.com>
+In-Reply-To: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com> <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org> <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
 MIME-Version: 1.0
-References: <CACRpkdYM21hcH5d9rXyvjMPHQp429OZ1Zcy7uLU2tndoJcOmUQ@mail.gmail.com>
- <CAHk-=whg3eRY1nOJjHam+jORmVymU539CxhBUjp4=tGoFitotw@mail.gmail.com>
- <CACRpkdbWkm1WDY30qoGLEQba+G2cDEhT+M8nCdJbcD=ZQiu6uw@mail.gmail.com> <CAHk-=wjNdW6Tdei6+6OJy6jGqY=PCJ2TWFKpV+g0projUC1eag@mail.gmail.com>
-In-Reply-To: <CAHk-=wjNdW6Tdei6+6OJy6jGqY=PCJ2TWFKpV+g0projUC1eag@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 28 Feb 2022 23:49:56 +0100
-Message-ID: <CACRpkdY-8D8ZYy9VichQmJHTJCSskFs=e0qpbYssf7tED_9dLw@mail.gmail.com>
-Subject: Re: [GIT PULL] pin control fixes for the v5.17 series
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 8:15 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-
-> Well, part of me being confused is that I've literally seen you reply
-> with 'patch applied' to the fixes.. Ie:
->
->     https://lore.kernel.org/lkml/CACRpkdZ1nFAmzRvsvKvZ08fsP_MgsnsiNpD7LdRRXUDWtO_w=Q@mail.gmail.com/
->
-> but then I didn't get the result.
->
-> Afaik, that patch is only relevant if you applied the previous fix
-> ("pinctrl-sunxi: use the right offset" or something like that).
-
-Yes this is the issue, reading that patch series does not really make it
-clear that it should be applied, also it gets into next through something that
-is not my tree so I get a bit confused and feel a bit out of control here.
-
-Anyways I will apply that patch:
+Hi
 
 
-> I get the feeling that you didn't realize that this was a 5.17 issue,
-> and have maybe applied them to the wrong branch, and they are pending
-> for the next merge window.
+2022. febru=C3=A1r 28., h=C3=A9tf=C5=91 23:28 keltez=C3=A9ssel, James Botto=
+mley =C3=ADrta:
+> [...]
+> Well, yes, but my objection is more to the size of churn than the
+> desire to do loop local.  I'm not even sure loop local is possible,
+> because it's always annoyed me that for (int i =3D 0; ...  in C++ defines
+> i in the outer scope not the loop scope, which is why I never use it.
 
-Indeed.
+It is arguably off-topic to the discussion at hand, but I think you might b=
+e
+thinking of something else (or maybe it was the case in an ancient version =
+of C++)
+because that does not appear to be case. If it were,
 
-The Fixes tag on the latter patch refers to another commit
-entirely so it was applied on its own merits, for next.
+  for (int i ...) { ... }
+  for (int i ...) { ... }
 
-I'll take these two:
+would have to trigger a redeclaration error, but that happens neither in C+=
++ nor in C.
+The variable is also inaccessible outside the loop.
 
-pinctrl-sunxi: sunxi_pinctrl_gpio_direction_in/output: use correct offset
-pinctrl: sunxi: Use unique lockdep classes for IRQs
 
-and put them into fixes, that should nail it.
+> [...]
 
-Yours,
-Linus Walleij
+
+Regards,
+Barnab=C3=A1s P=C5=91cze

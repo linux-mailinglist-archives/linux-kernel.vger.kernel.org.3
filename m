@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7534C672B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465EE4C672D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbiB1KiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S234813AbiB1Ki3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiB1KiU (ORCPT
+        with ESMTP id S229767AbiB1KiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:38:20 -0500
+        Mon, 28 Feb 2022 05:38:21 -0500
 Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B42B2E099;
-        Mon, 28 Feb 2022 02:37:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6D43204C;
+        Mon, 28 Feb 2022 02:37:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cagVLRVeXMw/AhWBrPZ1GX6ic5J29yf3NM57oHM6aLlqhSh9mXZaVYl1sC510/GTNh6Bkbtr/6bXnJKSWbBu1jiznDGHmyl0jP9LpMrzSKIXo3buPOu3HDTg84KQKA8IFTII0GndCKDc6li94q6/t5CKaIzlWrEws4Sb0KBvPtSufLOEqzcnHqKBNZ1+OVyJwectxqhLEepBf8isF6xfiKqX9KZYPEfMO7VXQFqM3g/YCYBaS4H+V6ogpmG7Ygzk9l8jn0mGGVWT1FZz3uW0QR6U9kXjswr50wEjr+WoFJ3sHxthSZLEnNPLzMaUP6AH3mfYDYxRsmuYe6SxKYpULg==
+ b=WG9qlJ+PUBegBN9JoyvJ8mkKwgBFZ52IiSBQyXrRNYaB18lOUCnPvDN4k8onP3WYSqghPJ6AOSL2n6PI3FKnlXgsS7nnFENPcAjhtFLlIEo6qLgcdaSVPvnCcSnLiFVK7JZADYNPp/w4SXEkXN9YeuztAesbehckXm4MkDXigiVUBVRxwrFuS3OmL8waFlyaMwxuRMkz+BQOxb6iBLrbvgo17PIdbfcrDsnrRsyRn6wVV4LkLEmpavovmzIZQWG75ARcwcpfRWdvghRaoDW9ErvtlrvOahWkra8nJFDfSIG5HvLXslA2keVpeanDzV6vSRUFKa4GyqHCJnmLoHcq2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GCZI0v9jl9jFvLfhLftBhwwkTk+cc0vuC2t38F0OEqY=;
- b=IKxuchAr3NQyxEoa7skZDgurdRnOBSEnt5eo8J1Q4jmviqFE4bDw/XVVowEKjlwnA21QZh+o+a8P3Rus0DWNSbmRxPvzzvlIB6ULhDDGFFdyXnrYXJjiBl4N9MFdzizX9Lw4GozEe+ynUH5uDjzbTX5WdJ/l08rGi/772g0VmQ9ww3HjC1G8y/9z6T9X1SlBY/taAXbTeKABVhJ5jRzLsxgg01nsxrnTheRNoUlT0ht655Ux+ujmI9UBo1vvGH4LO8XO1V7bb+SG1lg55B5cS82RkJEyWRx5EvBLkujeDya7NOJyz5npgqQEM9Bv4Zx8y4J6JeARq0nVA+rpKnJ0Qw==
+ bh=wcrl/2qIfxjoflsMxnOckrnTatYdM55dyzFNJE89MYw=;
+ b=STX3nIIAdZx6RkekuD4RABcIj9KmMNysbS/yxrWHJ+giOd4Icww0gSfKN72FFV4VCLsB8bfXCwiaGts17fQTEBmt5sc7lPW3fgUUZNB0hmUExrrmqrmPhlpMqmFWEFDzCDyvciQt2VaFiot7FTNfCS6Q94DFk5EoBWOB5hbP/PLdP6LNHquTlUxiE0I3gDBTI9ALNMAEq0QPw3u/q3cQn5YJIcfk4rLMVNu/JAcwEAUvToxp0dazqrmDkmoqSXiW9ABnDeQc5IxNshCe7GezkPWaW8lKnK7zP0RrWNaEFWvXliBW+6cA/KWmrXh+Kwmmq+Mzeu8qQvvKL19/k+7RPw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
  dkim=pass header.d=quantatw.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GCZI0v9jl9jFvLfhLftBhwwkTk+cc0vuC2t38F0OEqY=;
- b=iF0Db9vBWrOlvc2pR+q2C8iKfCFwvQxowT/D9Dd3Dp8gfG0CxxLBEJKTHFPFSCmeJVOazjq1EcRktzTG3ITh4GDlMYT7F5VkQSFXbYKoC8DOZNVbaFi3l1TR2DJDv+evyWLPZa5mySNEdNg+BYWvLfvj5lRfwkndB2v3IFk9w2g=
+ bh=wcrl/2qIfxjoflsMxnOckrnTatYdM55dyzFNJE89MYw=;
+ b=m93JL6rhliu+bOmqzAlNn6ANcRaKfj+Dfil5Ap4t6eO0djNwWQ1cL12+fnHLfmXy/fKUKlHUozsWC83euG9YoyMmwERSr+WF+b3VX02ciX5dH9ez8hunnm37AxiXC3d9BvcyC5AvT9AnAhmV5O0dE9JC7b49fFYizx4+r1ZpPOI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=quantatw.com;
 Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
  by SL2PR04MB3002.apcprd04.prod.outlook.com (2603:1096:100:3b::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 10:37:36 +0000
+ 2022 10:37:37 +0000
 Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
  ([fe80::b57e:962a:3820:eab]) by HK0PR04MB3282.apcprd04.prod.outlook.com
  ([fe80::b57e:962a:3820:eab%3]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 10:37:36 +0000
+ 10:37:37 +0000
 From:   Potin Lai <potin.lai@quantatw.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
@@ -49,63 +49,65 @@ To:     Guenter Roeck <linux@roeck-us.net>,
 Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Potin Lai <potin.lai@quantatw.com>
-Subject: [PATCH v3 0/2] hwmon: (adm1275) Add sample averaging binding support
-Date:   Mon, 28 Feb 2022 18:37:14 +0800
-Message-Id: <20220228103716.10774-1-potin.lai@quantatw.com>
+Subject: [PATCH v3 1/2] hwmon: (adm1275) Allow setting sample averaging
+Date:   Mon, 28 Feb 2022 18:37:15 +0800
+Message-Id: <20220228103716.10774-2-potin.lai@quantatw.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220228103716.10774-1-potin.lai@quantatw.com>
+References: <20220228103716.10774-1-potin.lai@quantatw.com>
 Content-Type: text/plain
 X-ClientProxiedBy: HK2PR02CA0131.apcprd02.prod.outlook.com
  (2603:1096:202:16::15) To HK0PR04MB3282.apcprd04.prod.outlook.com
  (2603:1096:203:89::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 97d5f75a-54aa-4701-7e31-08d9faa65591
+X-MS-Office365-Filtering-Correlation-Id: ec95fe24-6abb-48f7-5e16-08d9faa65657
 X-MS-TrafficTypeDiagnostic: SL2PR04MB3002:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR04MB30023187316876B5E9E3609E8E019@SL2PR04MB3002.apcprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SL2PR04MB3002D46E7022BB169F19E3E28E019@SL2PR04MB3002.apcprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NoD7i9Q3YQBW20n6ko1U6ypgIOFgn3g56UASqKY3ds2iJXhl+wtXMzNUOfeUoQxO175qqG21P1aoZB9EODdnJdFfxkmaozuBT8VSkYcbmy7kZek1lKlpqm+U63HKQh0b/P2QRTyR46bFUP3fZv+LxAZqWRoeRu+O06s5KFDORLEVokULMzCO1lhJ3ruMBcj/x3ZwFTS+mGr3cHj+H7hLhzOQkfwb9bwmGaGI6GlUXWHTPBGzlLt+bYrGKuD6K4RYkuyYci6ttatkq2rBIVKPwAw4ujG5Gpb4k1RVd190iJCSlqoCA4rp6PJw8kR2PyZNjwFxG/ezaOLfEAZWNAdCu8C/B4WN7BIi3lW6TXNtrZq4ZQ5yl0umEeInpXtGT0iTV3DcvfZrkFqoOJI52leDZSqc+xC1obBQyUYKGmuY84ZTLje2MINo7zDUNPiq9iZW+KtgnlK228qOhhJ/z9vIFJgc5oQmp3WvM2X4qJSoBfazwtEfNlYGIQKBwMAQoSNQeVEi6O9Vn3j1uFNZ00bgmK2ld+UU91MTuemQdVFCTWhbF/cxiVAScINYf5YuLVBnVnuO3Cbm5wooc2PaBP55HX2QrTPE3CfuK5nawdn9ka5uWsKj+GLziyCVMBURC28E8+j69bZiV6qroEbI3txEzLlrHcT7vqZfvf4OeG9qQNrqDTg9Qt8xKXULy5gjQ/1phVDuMcRkOlk+SeTFZZy4yAEZTCGgQUTJPlj1iWtGp+ySB2nkYCHVsXtZuStilsSfxn3J980gmEhaN2YZfGcheSxWiZIb36/y1eDGZw7wN4/mqFnsXMUkbVkmHzD1GMpcRfuEJhPEcpQhm+RrDAermw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(86362001)(83380400001)(316002)(36756003)(4326008)(54906003)(66476007)(66556008)(66946007)(110136005)(5660300002)(6512007)(6506007)(6666004)(52116002)(8936002)(508600001)(44832011)(966005)(107886003)(2906002)(26005)(186003)(1076003)(2616005)(6486002)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: KfDUASpaG/zAW/1W+bYGb2sfiXC4JORqN/EdCZLJZXonDZY2y8WChWWrmZBKdYxo7RfANgtloSrpr7BPt0P+l55CNHtVddJ5LrOeAPS7CQnyW2cBtSV7BPcTd+Y57qpXjOYq9jdKwqQuG5W6yiH25MJyiV6CG39ACSumydF4QIwBpKMgjW0hdtbAxdQDNHIQ0xpOrL5jlr/y/bdtbbKvYDbCz4NQqaCB7zUgb+aeIGr5J9efe4opNzB9y+Vxen6opYLecijHatknqfsfEj0ndWBxN7niZcYWO2Dc9emB5/sI+hWMK3jH1wDSQxBv7zxWycy8ORZ1WKdF4lct+gAkjgE19m24w/ww5ocWX7DPfAfSkBWR3qtiMADV4c7PixGb+ZRqHOCCmwMJa/3z70TjCmxI8XkR/kmAqTZexSFcVWVx2N0i/B3DwOwVfFxhUWGtJp11NgmGLLpBgaINag1FJ9gitsTwkNN8ADvkYAVRGHc37KVkzLW+ZkiZ+iU4M6IhVsdX0y48F6KZFcrbJXu5JKHTHrHK1HoFv0yImh876GLUXJG8K51cUsaq2MeMmTEldweMQ1ggc4n7oARnVCDDHkBjYQL3am3xcWJIX7Gf7ZzzHrqg13GI7+95iTaZQ7sLboJVeeyqW3zNZ1AuPVOhbLq07+wHjop6Ggucz4K9g2Lp7U1Qtapq5XjAJV98YXKpIPOHZeCtivHMHuuM55p7ZA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(86362001)(316002)(36756003)(4326008)(54906003)(66476007)(66556008)(66946007)(110136005)(5660300002)(6512007)(6506007)(6666004)(52116002)(8936002)(508600001)(44832011)(107886003)(2906002)(26005)(186003)(1076003)(2616005)(6486002)(38350700002)(38100700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UZ1lCh9Mls9jgAcBGTX0U6ehvKdWERgAuya+paSNrKKfPNH/M5DlHL9nuPPu?=
- =?us-ascii?Q?X2fYBC/2icOR4IauDkp9RprMB7x4KfgD0vfrIjfFAxU+dMN3LUlo3yXg0aw0?=
- =?us-ascii?Q?TpgVvEElOeoLQP8cIHmWWRxRSc4iEVuZtp7sygnlao0quMn9MaFNqkKWTsSZ?=
- =?us-ascii?Q?ndEQlarGG44fQRZg64ziwJlD1xs59TyjFkqusQwPbARg6v1wM7wEmFxBiWIg?=
- =?us-ascii?Q?p3grUwM6uR4pVajusLSIAJEYrNdUiJ9KoXakzn1ErudTyTFQiYGgvhMaTyNo?=
- =?us-ascii?Q?DEqrM+E65ZvjqknrcIf8yGCSVvWx3vRsxtWdswLRaf2icv+2z4V0ejBlYYNj?=
- =?us-ascii?Q?AadyrusFGaax0cpUrhNVeFBnLU+WIOg0MkJHAJ3D1vDo0Ku0YBEu6RORYWoy?=
- =?us-ascii?Q?uz07MOkl4PhMawZxv2Kiz7UXzCvBKXO7KrjvTCKG/w1IKoN6WblCgdsnkNve?=
- =?us-ascii?Q?ycGb7Ij9r+aa+J0Rwvq+H2u1VxJXsSyh3Kxc9KwSjCyS9l5sPSV4LobcRSCL?=
- =?us-ascii?Q?HW/04yd21bY3BZGazGpf1RQfi5n7BNS3qN4sW0vca/UFSyUzlZ7Yohu3XK2B?=
- =?us-ascii?Q?AQ8qwirK4f8kBHFlXzEWoxeoxM+Y9WROb15OsTzpAAvoEfS3uGwTEoakN6+V?=
- =?us-ascii?Q?hi4pUuA0ucKMK3hfQ5GlN6WX5ye7VHPNIAo16EiQcKLDuj1LdEbHhlU6qGRE?=
- =?us-ascii?Q?dkinMnsh4DjCh4y42+ZLZNUUtI4ptuOpiOmIflmkEMHcmekD4tRmRY7+fkTU?=
- =?us-ascii?Q?WULgOYJFtKtGWjPQjITUATAepuVvbTyy9NmgvHbR4i1tisrJoNp/WJEPxY70?=
- =?us-ascii?Q?5xZWq5pLe7vivS9lOol3rWSFftWGNkhtdVyqaSSDv463i1IZ98raMU5vhGvq?=
- =?us-ascii?Q?yEazsKL03u8HPvuj4ulhoWXIVsrFS3F3SaIsvvexmsZb3nChU5cMu3hGG3PI?=
- =?us-ascii?Q?VWQErMg+B86ayYuTJ5OiTbbsgNvJKnjrnw+vQ7dpqvyFtyB+O2mv2gmFQ2za?=
- =?us-ascii?Q?qnbMfKDVaG0CCRh9CYPG3+g4vL05zq/7OWG3RhsPbokJaIqPtYzEVQk+Uxqb?=
- =?us-ascii?Q?tavphdAjUL4gNwgnmNySEdoFvir9njbB0y4QlvnBshVkQ3ahxcaTwiJ5CRe0?=
- =?us-ascii?Q?dbpljZ02A8RoXaMvGIuNftrCcq5MNfud1BI6p0RiY/ml8pDxWfOI039QWK8K?=
- =?us-ascii?Q?ue2BhiHsfWdoDr39YlGhoX9lzrL1tRVdJzihkkkko93AbxR1UPUe8ubjxU7b?=
- =?us-ascii?Q?d//4ZETs47bgPNkTTeyq9kCCaMRTNTvWD86CAMj+ZFN+a0Bvw+SJoyPuH1eo?=
- =?us-ascii?Q?Cx5ssk9hDKGofu7vaG3UDu00tYeko0swD5FXgZfGED6uBiL/pdWk3NHLtBZu?=
- =?us-ascii?Q?eNJoaAZzcKz2HkYzGp93Bwiat3esZHa+jkCX5nS+alBgotTwSmjzsUduQ6fn?=
- =?us-ascii?Q?XEYkNnbDFHygw7NpqKm21QV0HVZAenP6GHUSgGyI/+hCuZ+niwHJEXZy4Om9?=
- =?us-ascii?Q?66hJZIXkND1aUrmCTsVGCsZvVQ2RXB4KKn6+pVDfvoOFDBOfqCDIkYxWc+x6?=
- =?us-ascii?Q?80R4vkcehI0JsxX0oevXlHLjVjXVYJQ93PPIb1fNTSuAJJFruseisp6cXfud?=
- =?us-ascii?Q?mj3J5GUPvcaoNWNHdXLhn8Y=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U9bbYv7ieMQuxpYeJnHnnZV5L9ziZEvpg8VkrAA/WGijC29o+hnKgG+tJ+Fq?=
+ =?us-ascii?Q?CPjiJsqdL3LzTKD7N0Tq4s1ywPANb7D+ASk6kWX8u1/+cp/2McgSpinVr3S1?=
+ =?us-ascii?Q?r146hi1H2PLRoW1PAbQ7YAZlUjtLqIJaysErO1RKE17FwotsPSuhFV5cb1Eo?=
+ =?us-ascii?Q?Kgr14SriMLlhyh6fayhNALJz3vM7MSH1Eb4NoISgrLtO0/ziH4YVR4ODXaFs?=
+ =?us-ascii?Q?DWOLY3jx+Hb2OQiW65RrOPq32OTNfXS7fQ32vZJDUIrGAjAC0vNt6xpnQrH6?=
+ =?us-ascii?Q?bjG+FilicbC5hRNqHkpyZh9430plfN5glM8XoLfn+nlbGn/N+LEW+CRUszMe?=
+ =?us-ascii?Q?eSd0Hmg/2ZjkcQr1sivpzIK1ByHxKQeJj3luFesULinJJ2iPM2C3RUD/+ag5?=
+ =?us-ascii?Q?zy5FiTyZba78EC+ZF0REifp9TRnwQlU2X7FAebx0GOs0K8GWeXw4jA7SbGsb?=
+ =?us-ascii?Q?baILHU5MzUVxu7FM8Rn5MV3sx90uiLXs40sqrSej+yiWkqwSHstwDOu6dyp/?=
+ =?us-ascii?Q?uRq8Jg1keZNfdwvBBbHRmB9oGHnolkR+7qaQcw+v33mv7oC9wpNskqi1JNAT?=
+ =?us-ascii?Q?j4QVF+fxZHxMcmgm8S1xK1IqSWwWyB6NKlkcTjdRuo28yReeAtjE6K8cKV5b?=
+ =?us-ascii?Q?3iyuSd7t0ZWyrsWOFLGydZzStm4VWQhYQ5hzDhCmLGjIeG9EoVIAwTvs+MtO?=
+ =?us-ascii?Q?QgUiD/oahZyYQ2P1XAtc3q5v2BMMIdJfzHTHngab5L1Vi2uyoooWe9ZWw9fP?=
+ =?us-ascii?Q?99S6W6fJpFsExjmvczcahUhd8bmT1vvKwNgeyjJr6uMclfq2u9rbxTtpICys?=
+ =?us-ascii?Q?2DP+NXX/RJUoMy+RDm30+z3MyTGX1yAls53OoXV7HQs6RSLq1/gPHLnvjUJF?=
+ =?us-ascii?Q?tfUVFzCiL4NZSDZLaFoX9SqqUvC6j4uk2n5nyzJaP4eOVsRjPnypDzTenSKk?=
+ =?us-ascii?Q?R2BgHsgj86X8//bZpCEo7atEDDtULXh50cfWQ/otCBdjN6T9WNwtFnRLA5pT?=
+ =?us-ascii?Q?eJWpVba+m6CpnEol7ahTMqVZjOT2yG3zLRVB8bhyAk90U6QU9yQa5RA20m08?=
+ =?us-ascii?Q?sFEFyiOuqQmZUyh0OjwQ0QvlJHp8xFfKsltl6w5QbMA6hlIKQaHRWdvq0NFo?=
+ =?us-ascii?Q?fbwwJ9VG/5whQuLmXHDQMbnLeIQ8dHz+Dqwhsd3nvbUpqcbpM4hxwEHiRJEF?=
+ =?us-ascii?Q?UOaCYcQUDSNp1Bjz7IFVAU5o8n7O95eGmFYoAkgUNui0ImUaKqr1KnY3bC1a?=
+ =?us-ascii?Q?u2vBxWKKktYtz6NyItZMTe5JqsuLjtXDoKDTnX3mctlFWj/5y2r7uWtqiZWR?=
+ =?us-ascii?Q?PIA5VJ1eHgCisrKq8k7pySN/tXQ0MyuYoDNmONvZ6JAtuRCub9G9cgpSc4Fz?=
+ =?us-ascii?Q?rMHbrNyCPbFH5eRWb7DqoC1BSe9naGWWmRGvmBKG3L094rHcBBIHO+zTt586?=
+ =?us-ascii?Q?6D0tsijThpIP+gJh8VkIq++6OlEyZrVdAyvUdlpsQHac0i7b9sSX4oGTbFuG?=
+ =?us-ascii?Q?rH3OJoVmI6LKiWbePXxyhowaDA3/2/JBGNZ8dPnf0CtkbVkiUBlTGYRb49aE?=
+ =?us-ascii?Q?lV1CfZzpZ9q72Cy/oHXdbYOhNSynyI7djS/e3b3z3wfgti2Z5omM3HYMvAbn?=
+ =?us-ascii?Q?eINIKGpppmFV2d7AjTgWh9s=3D?=
 X-OriginatorOrg: quantatw.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97d5f75a-54aa-4701-7e31-08d9faa65591
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec95fe24-6abb-48f7-5e16-08d9faa65657
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 10:37:35.9249
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 10:37:37.7685
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tK9IR5zkH+08CH76OeMvu9EHIujkw5e+IOnHebu3hOv8ZpAFrTi6sFJKOjSM0PI0D+sGSCYkte6dJLG6/unqAQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: FOtD+kTm2XsUcLk7mNGBK7onOHswafXIL4bSMwQsEYI/IbqB+waxq/lVhRj+SuOWpUBaMX1cX89tpwr6FjMtGg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR04MB3002
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -116,40 +118,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series allow user config PWR_AVG and VI_AVG in PMON_CONF
-register by adding properties in device tree.
+Current driver assume PWR_AVG and VI_AVG as 1 by default, and user needs
+to set sample averaging via sysfs manually.
 
-Example:
-	adm1278@11 {
-		compatible = "adi,adm1278";
-		......
-		adi,volt-curr-sample-average = <128>;
-		adi,power-sample-average = <128>;
-	};
+This patch parses the properties below from device tree, and setting
+sample averaging during probe. Allowed input value from 1 to 128. If the
+inputed value is not power of 2, the sample averaging number will be
+configured with the smaller and cloest power of 2.
 
-LINK: [v1] https://lore.kernel.org/all/20220223163817.30583-1-potin.lai@quantatw.com/
-LINK: [v2] https://lore.kernel.org/all/20220224154329.9755-1-potin.lai@quantatw.com/
+- adi,power-sample-average
+- adi,volt-curr-sample-average
 
-Changes v2 --> v3:
-- change property type back to u32, use logical value instead of register
-  value
-- fix typo in properties description
-- add if-block to descript "adi,power-sample-average" not alloed if
-  compatible not in the enum list
+Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+---
+ drivers/hwmon/pmbus/adm1275.c | 36 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-Changes v1 --> v2:
-- use more descriptive property name
-- change property type from u32 to u8 
-- add property value check, valid range between 1 and 7
-
-Potin Lai (2):
-  hwmon: (adm1275) Allow setting sample averaging
-  dt-bindings: hwmon: Add sample averaging properties for ADM1275
-
- .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
- drivers/hwmon/pmbus/adm1275.c                 | 36 +++++++++++++++++
- 2 files changed, 75 insertions(+)
-
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index d311e0557401..212c7f3c59b0 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -475,6 +475,7 @@ static int adm1275_probe(struct i2c_client *client)
+ 	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
+ 	int tindex = -1;
+ 	u32 shunt;
++	u32 avg;
+ 
+ 	if (!i2c_check_functionality(client->adapter,
+ 				     I2C_FUNC_SMBUS_READ_BYTE_DATA
+@@ -756,6 +757,41 @@ static int adm1275_probe(struct i2c_client *client)
+ 		return -ENODEV;
+ 	}
+ 
++	if (data->have_power_sampling &&
++	    of_property_read_u32(client->dev.of_node,
++				"adi,power-sample-average", &avg) == 0) {
++		if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
++			return -EINVAL;
++		dev_info(&client->dev,
++			"Setting power sample averaging number to %u",
++			BIT(ilog2(avg)));
++		ret = adm1275_write_pmon_config(data, client, true,
++						ilog2(avg));
++		if (ret < 0) {
++			dev_err(&client->dev,
++				"Setting power sample averaging failed with error %d",
++				ret);
++			return ret;
++		}
++	}
++
++	if (of_property_read_u32(client->dev.of_node,
++				"adi,volt-curr-sample-average", &avg) == 0) {
++		if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
++			return -EINVAL;
++		dev_info(&client->dev,
++			"Setting voltage and current sample averaging number to %u",
++			BIT(ilog2(avg)));
++		ret = adm1275_write_pmon_config(data, client, false,
++						ilog2(avg));
++		if (ret < 0) {
++			dev_err(&client->dev,
++				"Setting voltage and current sample averaging failed with error %d",
++				ret);
++			return ret;
++		}
++	}
++
+ 	if (voindex < 0)
+ 		voindex = vindex;
+ 	if (vindex >= 0) {
 -- 
 2.17.1
 

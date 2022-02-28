@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49984C6A00
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7FD4C6A01
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiB1LSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S233194AbiB1LSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234423AbiB1LR6 (ORCPT
+        with ESMTP id S234966AbiB1LSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:17:58 -0500
+        Mon, 28 Feb 2022 06:18:03 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3EABF2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:17:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C8D2A70F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646047038; x=1677583038;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=t73JCsD7PZHwhkuYI4yML7PDv9mGaY4kWadlsL2q9n8=;
-  b=DyYFqk/h50/u9V0/8uJs5f+UoAy6scdrcwFapbOqrPhW1ZWMPnTTbDUS
-   AMD7QT5H8FNMpVET1J+AS/JcqR+nnENLLj+U0HuxG6t64jdbeHlfQ9XAD
-   jEgNYTJhEsuXp6+5RHSFTPybHkf7PfNEI0jFI0czu+yyYjnp6P6nN6bN5
-   6SdG5Ave5x9daOUuyI6EHbeVBwOJfHwqYpL4p1arCABBd2lbmNK0QxrMI
-   gVh4g/NU/zlBmGcOVEslAefwD8jkUTCsDprIl80uo+DxpAF0MVXcVC4c0
-   DLAwnadIXvvJbCKeyHrkuTwWaQrQMSErGv51TSSU/Reuzvct0za1iDeAq
-   g==;
+  t=1646047043; x=1677583043;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BH6EZIu4OsWu2aIV5tde913BHkUKDL7QFYpT5jrDQJg=;
+  b=WpaF0rYa0sOErDh5r96oCBoa/tRQlFAA2N1KL1oJISyqcTLLqQG9otlw
+   C2ESUwOoWpnt9t5ImSzqs2CR4NCA7SSj3Ny/47aHUi2O9CNxyWbztCGSK
+   m2f2KOJ+yJ12rW1/5bFaPEnq/jC5WSBZFkL5oUxRJx+8DC2RnMqLtHXY/
+   g+otnh58+ZjuGsuMPS+R+n3sJ1aMr791twpG2yKI7VGk4VtbhxhiHj2qn
+   4GIa+lthtDJy0eSgHXJ0MaWqfomLCCSWgYaTm068HaGXf1AZgPV4wuDaN
+   uKhdTuTjWeCjrmP49RhDj+pJshSq4JPhA0Iuy5YCJlgXwUTCxGWIfqImC
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="155099335"
+   d="scan'208";a="154614913"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 04:17:17 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 04:17:22 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 04:17:17 -0700
+ 15.1.2375.17; Mon, 28 Feb 2022 04:17:21 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 04:17:14 -0700
+ 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 04:17:18 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <nicolas.ferre@microchip.com>,
         Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2 0/8] mtd: spi-nor: Rework Octal DTR methods
-Date:   Mon, 28 Feb 2022 13:17:04 +0200
-Message-ID: <20220228111712.111737-1-tudor.ambarus@microchip.com>
+Subject: [PATCH v2 1/8] mtd: spi-nor: Rename method, s/spi_nor_match_id/spi_nor_match_name
+Date:   Mon, 28 Feb 2022 13:17:05 +0200
+Message-ID: <20220228111712.111737-2-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220228111712.111737-1-tudor.ambarus@microchip.com>
+References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,33 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a combination of:
-https://lore.kernel.org/lkml/20220209133656.374903-1-tudor.ambarus@microchip.com/
-https://lore.kernel.org/lkml/20220210023334.408926-1-tudor.ambarus@microchip.com/
+The method is matching a flash_info entry by searching by name. Rename
+the method for better clarity.
 
-Macronix patches will be handled in a further series.
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/mtd/spi-nor/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-v2:
-- Fix bug on octal dtr disable, s/nor->reg_proto/SNOR_PROTO_1_1_1,
-because after disable the nor->proto is not yet updated
-- update function/macros names to comply with Michael's rename series.
-
-Tudor Ambarus (8):
-  mtd: spi-nor: Rename method, s/spi_nor_match_id/spi_nor_match_name
-  mtd: spi-nor: Introduce spi_nor_match_id()
-  mtd: spi-nor: core: Use auto-detection only once
-  mtd: spi-nor: core: Introduce method for RDID op
-  mtd: spi-nor: manufacturers: Use spi_nor_read_id() core method
-  mtd: spi-nor: core: Add helpers to read/write any register
-  mtd: spi-nor: micron-st: Rework spi_nor_micron_octal_dtr_enable()
-  mtd: spi-nor: spansion: Rework spi_nor_cypress_octal_dtr_enable()
-
- drivers/mtd/spi-nor/core.c      | 153 ++++++++++++++++++++++----------
- drivers/mtd/spi-nor/core.h      |  13 +++
- drivers/mtd/spi-nor/micron-st.c | 112 ++++++++++++-----------
- drivers/mtd/spi-nor/spansion.c  | 131 ++++++++++++++-------------
- 4 files changed, 241 insertions(+), 168 deletions(-)
-
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 9014008e60b3..f3c359d03163 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2876,8 +2876,8 @@ void spi_nor_restore(struct spi_nor *nor)
+ }
+ EXPORT_SYMBOL_GPL(spi_nor_restore);
+ 
+-static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
+-						 const char *name)
++static const struct flash_info *spi_nor_match_name(struct spi_nor *nor,
++						   const char *name)
+ {
+ 	unsigned int i, j;
+ 
+@@ -2899,7 +2899,7 @@ static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
+ 	const struct flash_info *info = NULL;
+ 
+ 	if (name)
+-		info = spi_nor_match_id(nor, name);
++		info = spi_nor_match_name(nor, name);
+ 	/* Try to auto-detect if chip name wasn't specified or not found */
+ 	if (!info)
+ 		info = spi_nor_read_id(nor);
 -- 
 2.25.1
 

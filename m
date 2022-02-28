@@ -2,134 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DF84C6BD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847B44C6BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235852AbiB1MIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S236189AbiB1MOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236263AbiB1MI3 (ORCPT
+        with ESMTP id S233197AbiB1MOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:08:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC95FD3D;
-        Mon, 28 Feb 2022 04:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F3eTU03pb76E1ORP3hb/KpZsjDGhzZCbE56yzxqP8q4=; b=JN3jrRBpX2T88x6YqGvSH9chlW
-        JQ1HApPsnmw/Z2eJORa/9yH42lJoXMCBTKkO0oL61dOUXdUBOx93wTr8bN9LBxACbVjHEvcVbD3De
-        /HQZyf6z7tUvM3j1BbTuYk1R9GNNE2WdsqvR76prGUV6PQdDjPbGhgeMQF2CMIAy3tTPqHKfZWm0L
-        PfKRF8M3qLXVsRB+4nqws9Lx4YavRanPh1K7pT64rPJ2zA9P80Ku6kcamz003Gd54ixZicmQ02a2P
-        BTRJSXx+t7Y14NljhBdlf8Ydu3jx0i8AQdMIkiJ573RlE4EsTIiEb1oU9G8/t5ROuP2Cokh9ejbTm
-        fh7HIm2g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOeoQ-008U6Q-1m; Mon, 28 Feb 2022 12:07:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B716300390;
-        Mon, 28 Feb 2022 13:07:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5575120244B2C; Mon, 28 Feb 2022 13:07:30 +0100 (CET)
-Date:   Mon, 28 Feb 2022 13:07:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-serial@vger.kernel.org, hasegawa-hitomi@fujitsu.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, arnd@arndb.de
-Subject: Re: [RFT v2] tty/sysrq: Make sysrq handler NMI aware
-Message-ID: <Yhy7AnwEMqbcKsEg@hirez.programming.kicks-ass.net>
-References: <20220228075351.1412452-1-sumit.garg@linaro.org>
+        Mon, 28 Feb 2022 07:14:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB6B26102;
+        Mon, 28 Feb 2022 04:13:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85EA061148;
+        Mon, 28 Feb 2022 12:13:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6787C340FA;
+        Mon, 28 Feb 2022 12:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646050413;
+        bh=m+Mr/LSWoSX8OkgGcblK1edJYBHkvQ8ETiM4gpOKC3I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rIMwDp96WEceKeR//qBV3hW3RflLbT7Ri6SkOJyFuYr1Umz7PSvd2tJnyGzsnCuOS
+         zkRyMuoLF4OGwgS+f/Wsr1lbvrKVwKD+GgZo0lF48j2T2ja0JkL5vU+2vdoz2hSosg
+         6OQVRAqUsoJ0aCkxHUP/njxd/M/ACV6bVFgUaP4nROyg0nDWrG1O6p88Q0nPMOvat3
+         zrPnrEukqvielX4IAh9Uetd+2K27NDb3zp1Ca3sodR1USsvoivi8RrwikZlQbMWRVF
+         Fsv3mZNjmf5ZYFYlQ1CQ2WNC6HV9skutTKtKfLL6m3wkMUQgl4m9/NbufixetgZfFh
+         dohrw6mir2x7g==
+Received: by mail-vs1-f43.google.com with SMTP id e5so12663197vsg.12;
+        Mon, 28 Feb 2022 04:13:33 -0800 (PST)
+X-Gm-Message-State: AOAM53274Zx73OLfBNHXH3Q0UXsqeVvWRE2mPpuzYWX6hSsdN6RIejRT
+        XCQcmG49q/DJgT63OspcKXfWneqwinAo6fIkqmA=
+X-Google-Smtp-Source: ABdhPJyOu5HUo/VjwWn8/fo2A1Ybsum6GvVfDzqE4Hcq0Flfey7YjZaD85t/OqXDAvijqsqOBSTjjzgFI7EmcLKksiE=
+X-Received: by 2002:a05:6102:3a12:b0:31e:6646:b3d1 with SMTP id
+ b18-20020a0561023a1200b0031e6646b3d1mr4905201vsu.51.1646050412829; Mon, 28
+ Feb 2022 04:13:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228075351.1412452-1-sumit.garg@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-4-guoren@kernel.org>
+ <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com> <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
+ <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com>
+In-Reply-To: <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 28 Feb 2022 20:13:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
+Message-ID: <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
+Subject: Re: [PATCH V7 03/20] compat: consolidate the compat_flock{,64} definition
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "liush@allwinnertech.com" <liush@allwinnertech.com>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
+        "hch@lst.de" <hch@lst.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 01:23:51PM +0530, Sumit Garg wrote:
-> Allow a magic sysrq to be triggered from an NMI context. This is done
+On Mon, Feb 28, 2022 at 8:02 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Guo Ren
+> > Sent: 28 February 2022 11:52
+> >
+> > On Mon, Feb 28, 2022 at 2:40 PM David Laight <David.Laight@aculab.com> wrote:
+> > >
+> > > From: guoren@kernel.org
+> > > > Sent: 27 February 2022 16:28
+> > > >
+> > > > From: Christoph Hellwig <hch@lst.de>
+> > > >
+> > > > Provide a single common definition for the compat_flock and
+> > > > compat_flock64 structures using the same tricks as for the native
+> > > > variants.  Another extra define is added for the packing required on
+> > > > x86.
+> > > ...
+> > > > diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+> > > ...
+> > > >  /*
+> > > > - * IA32 uses 4 byte alignment for 64 bit quantities,
+> > > > - * so we need to pack this structure.
+> > > > + * IA32 uses 4 byte alignment for 64 bit quantities, so we need to pack the
+> > > > + * compat flock64 structure.
+> > > >   */
+> > > ...
+> > > > +#define __ARCH_NEED_COMPAT_FLOCK64_PACKED
+> > > >
+> > > >  struct compat_statfs {
+> > > >       int             f_type;
+> > > > diff --git a/include/linux/compat.h b/include/linux/compat.h
+> > > > index 1c758b0e0359..a0481fe6c5d5 100644
+> > > > --- a/include/linux/compat.h
+> > > > +++ b/include/linux/compat.h
+> > > > @@ -258,6 +258,37 @@ struct compat_rlimit {
+> > > >       compat_ulong_t  rlim_max;
+> > > >  };
+> > > >
+> > > > +#ifdef __ARCH_NEED_COMPAT_FLOCK64_PACKED
+> > > > +#define __ARCH_COMPAT_FLOCK64_PACK   __attribute__((packed))
+> > > > +#else
+> > > > +#define __ARCH_COMPAT_FLOCK64_PACK
+> > > > +#endif
+> > > ...
+> > > > +struct compat_flock64 {
+> > > > +     short           l_type;
+> > > > +     short           l_whence;
+> > > > +     compat_loff_t   l_start;
+> > > > +     compat_loff_t   l_len;
+> > > > +     compat_pid_t    l_pid;
+> > > > +#ifdef __ARCH_COMPAT_FLOCK64_PAD
+> > > > +     __ARCH_COMPAT_FLOCK64_PAD
+> > > > +#endif
+> > > > +} __ARCH_COMPAT_FLOCK64_PACK;
+> > > > +
+> > >
+> > > Provided compat_loff_t are correctly defined with __aligned__(4)
+> > See include/asm-generic/compat.h
+> >
+> > typedef s64 compat_loff_t;
+> >
+> > Only:
+> > #ifdef CONFIG_COMPAT_FOR_U64_ALIGNMENT
+> > typedef s64 __attribute__((aligned(4))) compat_s64;
+> >
+> > So how do you think compat_loff_t could be defined with __aligned__(4)?
+>
+> compat_loff_t should be compat_s64 not s64.
+>
+> The same should be done for all 64bit 'compat' types.
+Changing
+typedef s64 compat_loff_t;
+to
+typedef compat_s64 compat_loff_t;
 
-*why* though?
+should be another patch and it affects all architectures, I don't
+think we should involve it in this series.
 
+look at kernel/power/user.c:
+struct compat_resume_swap_area {
+        compat_loff_t offset;
+        u32 dev;
+} __packed;
 
-> +#define SYSRQ_NMI_FIFO_SIZE	2
-> +static DEFINE_KFIFO(sysrq_nmi_fifo, int, SYSRQ_NMI_FIFO_SIZE);
-> +
-> +static void sysrq_do_nmi_work(struct irq_work *work)
+I thnk keep "typedef s64 compat_loff_t;" is a sensible choice for
+COMPAT support patchset series.
 
-That naming don't make sense, it does the !NMI work, from IRQ context.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+--
+Best Regards
+ Guo Ren
 
-> +{
-> +	const struct sysrq_key_op *op_p;
-> +	int orig_suppress_printk;
-> +	int key;
-> +
-> +	orig_suppress_printk = suppress_printk;
-> +	suppress_printk = 0;
-> +
-> +	rcu_sysrq_start();
-> +	rcu_read_lock();
-> +
-> +	if (kfifo_peek(&sysrq_nmi_fifo, &key)) {
-> +		op_p = __sysrq_get_key_op(key);
-> +		if (op_p)
-> +			op_p->handler(key);
-> +	}
-> +
-> +	rcu_read_unlock();
-> +	rcu_sysrq_end();
-> +
-> +	suppress_printk = orig_suppress_printk;
-> +
-> +	kfifo_reset_out(&sysrq_nmi_fifo);
-> +}
-> +
-> +static DEFINE_IRQ_WORK(sysrq_nmi_work, sysrq_do_nmi_work);
-> +
->  void __handle_sysrq(int key, bool check_mask)
->  {
->  	const struct sysrq_key_op *op_p;
-> @@ -573,6 +612,10 @@ void __handle_sysrq(int key, bool check_mask)
->  	int orig_suppress_printk;
->  	int i;
->  
-> +	/* Skip sysrq handling if one already in progress */
-> +	if (!kfifo_is_empty(&sysrq_nmi_fifo))
-> +		return;
-> +
->  	orig_suppress_printk = suppress_printk;
->  	suppress_printk = 0;
->  
-> @@ -596,7 +639,13 @@ void __handle_sysrq(int key, bool check_mask)
->  		if (!check_mask || sysrq_on_mask(op_p->enable_mask)) {
->  			pr_info("%s\n", op_p->action_msg);
->  			console_loglevel = orig_log_level;
-> -			op_p->handler(key);
-> +
-> +			if (in_nmi() && !op_p->nmi_safe) {
-> +				kfifo_put(&sysrq_nmi_fifo, key);
-> +				irq_work_queue(&sysrq_nmi_work);
-> +			} else {
-> +				op_p->handler(key);
-> +			}
->  		} else {
->  			pr_info("This sysrq operation is disabled.\n");
->  			console_loglevel = orig_log_level;
-
-I'm missing the point of that kfifo stuff; afaict it only ever buffers
-_1_ key, might as well use a simple variable, no?
+ML: https://lore.kernel.org/linux-csky/

@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C1A4C718A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B384C7190
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbiB1QPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S237860AbiB1QRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiB1QPn (ORCPT
+        with ESMTP id S235727AbiB1QRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:15:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE79C45069;
-        Mon, 28 Feb 2022 08:15:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3B447CE12EF;
-        Mon, 28 Feb 2022 16:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0095C340F4;
-        Mon, 28 Feb 2022 16:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646064900;
-        bh=TioH1JdfWBEgp389V5StL5ui/CGuwFI3oojMLNWN5Fw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DcYm0Jujc1Xme3NtHFlZ+zOqR7Csh2pJrQkKGfDO9LUbTQnnaLUB2Fc5v6DvmptLU
-         fVPvAxGXiMLQFyb2p6JLs5Ue0bO8bpf2YGgGOOsekpTzJnsLrKyRSVZm8sWgX4ndr7
-         R4oMMssu5oimyANTyskfCIDx0wXNjO2UYRu203yj2IcXGJlHoOrTgnR+Yx3fObDrKT
-         Y8Uq0KcgRYc6Cdth6WyHqHzDEd+l/EG5cktoDo86f0lKymqqe4X22MefN9T7EOYH4d
-         l7ySKE/4jEwCtJcuxcUqG7zTdtqY6p3Ha+5KZ125NA2X5VV2svFyvTwgFK7qcCMxzH
-         wKXom+YeHdwPg==
-Date:   Mon, 28 Feb 2022 16:14:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Rob Herring <robh+dt@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
-Message-ID: <Yhz0/1kiAy7Mlgtv@sirena.org.uk>
-References: <cover.1646060734.git.christophe.leroy@csgroup.eu>
- <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
- <YhzqbYW1q5bPNWXn@sirena.org.uk>
- <7afaab3d-50e0-4716-18d4-41eabc2a9cb9@csgroup.eu>
+        Mon, 28 Feb 2022 11:17:38 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0226870F74
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:16:59 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id w27so22252908lfa.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:16:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IRc/v5RBhjywblCaCu+qbO7MMR+S4MDqe0h9NB7l5U4=;
+        b=qlvqPJLnwrw7v4sX5xzvIhieHQlASu2+KK8v/TE0ycWHA4g0hKZzF8AQIhmfPdWZ/X
+         Jzr3qYL9R8XGmXmWplbuJrwDXWVI39bTF4/Ce2BAMfG22MYlXnGFR/PrcgwIwPvcrN4k
+         nJ+HtLG6CeWccZEuOFd6WJ+ivGt0OKv4OUwjF2YB6CP2JpHE3nsVaJw9E01q3G39bD11
+         r3P0oixp2Bf7o+l6g7li6dfpheKa9NQMGZiiA3u1DC6S3V01K6hFVAgYO5YM7TXu8jnj
+         2Z/jwMgHEenqSLB5EzjYBm0EiVJrKCU4OgTSGnmmwqmPdNAOHT6Rk8ivhmSmkytAsIte
+         AsTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IRc/v5RBhjywblCaCu+qbO7MMR+S4MDqe0h9NB7l5U4=;
+        b=zduEEYN5MMB5ODCCGwFRe/RQSJzJy/Oz2d1EWJtC47Xb/O2Gu/xi2YCGtGo+RWBTB/
+         zb4AIzppa+QwBJABGi+OJp2wXkVoeuEp+8syJXmo3nV2+NlkhZYKiaVCBWJd3EFHYirT
+         MZeuHohpHyd1wvr3ANJiidHh7S6QH9TF6Y3tYu/+tTY8ou0CsKd+kVbk58ZkW2OzqtAg
+         QDpvkOTE/jXP1bg1h+I9yKeB1EzMlaAaDtnMyBFPFlZIclfiDGxL1rDtwDDFWinnvaiX
+         3JfRvE9CTlN+KNhxMg9u0Ayvw1f9JB1dJWLBF1+03v+cGbZbXqGU2NOm/PeqT3ujYtgO
+         19Rg==
+X-Gm-Message-State: AOAM533b8mAMT/4Bmtozj85WApIGBBYbG9uEVZRpKGrsLMmkXabUS0GW
+        NNQpIl+tHvJnJ5gM+VLy/K8+UV279J5HBE2lZAQSQg==
+X-Google-Smtp-Source: ABdhPJxSQGBBJL92fuhW6DLKJM3Nt6JMGwDv/3OLpLHw0RkJjKg+R2Fli+O5NmMNwoO2Z7eoGqDHcs7xf0MY7TG70Vc=
+X-Received: by 2002:ac2:5de4:0:b0:443:5b80:d4c4 with SMTP id
+ z4-20020ac25de4000000b004435b80d4c4mr13014007lfq.373.1646065016130; Mon, 28
+ Feb 2022 08:16:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qKdT2bTM8goibbBn"
-Content-Disposition: inline
-In-Reply-To: <7afaab3d-50e0-4716-18d4-41eabc2a9cb9@csgroup.eu>
-X-Cookie: Killing turkeys causes winter.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220224095517.30872-1-jslaby@suse.cz> <20220224095558.30929-1-jslaby@suse.cz>
+ <20220224095558.30929-4-jslaby@suse.cz>
+In-Reply-To: <20220224095558.30929-4-jslaby@suse.cz>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 28 Feb 2022 17:16:20 +0100
+Message-ID: <CAPDyKFqHLQ8YTc3wzaFOdAA7Ay9RBEfdQC5uN574=oMavi6iCQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,66 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 24 Feb 2022 at 10:56, Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> Having a generic UART_LCR_WLEN() macro and the tty_get_char_size()
+> helper, we can remove all those repeated switch-cases in drivers.
+>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: linux-mmc@vger.kernel.org
 
---qKdT2bTM8goibbBn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-On Mon, Feb 28, 2022 at 04:02:30PM +0000, Christophe Leroy wrote:
-> Le 28/02/2022 =E0 16:29, Mark Brown a =E9crit=A0:
+Kind regards
+Uffe
 
-> > The binding looks good now but this is still driver specific code when
-> > it looks like it could easily be implemented in the core - like I said
-> > on the previous version you'd need to update drivers to advertise less
-> > than 8 bits but there's basically nothing driver specific I can see here
-> > so any driver using transfer_one() would get support that way.
-
-> Argh ! Sorry your comment to the previous version ended up in Junk=20
-> mails. I see it now.
-
-No problem.
-
-> We discussed that back in 2016 in=20
-> https://lore.kernel.org/linux-spi/20160824112701.GE22076@sirena.org.uk/=
-=20
-> and my understanding at that time was that it was not something that=20
-> could be done at core level.
-
-> But maybe things have changed since then ?
-
-What I said then was "it would need a new core feature" which is what
-the binding does, I'm suggesting that you also do that for the handling
-of the implementation as well.
-
-Actually now I think about it perhaps this shouldn't be a binding at all
-but rather something specified by the client driver - presumably any
-system using an affected device is going to need these extra clock
-cycles so they'll all need to add the same property.
-
-> By the way, fsl-spi driver doesn't implement transfer_one() but=20
-> transfer_one_message() so it takes care of the chipselect changes and=20
-> therefore the final dummy transfer with CS off is to be done there as=20
-> far as I understand.
-
-> Would it mean changing fsl-spi driver to implement transfer_one() first ?
-
-Well, if it can implement transfer_one() without any negative
-consequences whichh
-
---qKdT2bTM8goibbBn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIc9P4ACgkQJNaLcl1U
-h9Chawf/TUDMKYhNk4LqWy00lFQyjXSbd2nVuiSqHE1a7qLCPUZ5qc+Qcq2Zy31F
-f1yxIifKq1ExltTrXwtIJoGErlmulDj7xvczXST+meVERa+5b34YLIJ8X8cdM3ty
-EXicTql4bTeuMsYQXsTSyyey9vMk62j9/HNHuQMKYP7swYt7RFGwl6YmVfVRX0o7
-fSCsGh4NqPyObpUreZB0A3JdJ+u8MstILHo0ywn4b26ch1h1FdOAzYrl8SvSceF+
-3p3LdXkmzyRm0qAXu2T8kW68BIF8/0fC1BoK74+rEi8tgQfqQMPc/pBmJajuvWiT
-Jvz6AqRGfSt3xgDAQSOpaXc4HQ4DVA==
-=GKPt
------END PGP SIGNATURE-----
-
---qKdT2bTM8goibbBn--
+> ---
+>  drivers/mmc/core/sdio_uart.c | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
+>
+> diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
+> index 04c0823e0359..e6eb5bd6e440 100644
+> --- a/drivers/mmc/core/sdio_uart.c
+> +++ b/drivers/mmc/core/sdio_uart.c
+> @@ -250,21 +250,7 @@ static void sdio_uart_change_speed(struct sdio_uart_port *port,
+>         unsigned char cval, fcr = 0;
+>         unsigned int baud, quot;
+>
+> -       switch (termios->c_cflag & CSIZE) {
+> -       case CS5:
+> -               cval = UART_LCR_WLEN5;
+> -               break;
+> -       case CS6:
+> -               cval = UART_LCR_WLEN6;
+> -               break;
+> -       case CS7:
+> -               cval = UART_LCR_WLEN7;
+> -               break;
+> -       default:
+> -       case CS8:
+> -               cval = UART_LCR_WLEN8;
+> -               break;
+> -       }
+> +       cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
+>
+>         if (termios->c_cflag & CSTOPB)
+>                 cval |= UART_LCR_STOP;
+> --
+> 2.35.1
+>

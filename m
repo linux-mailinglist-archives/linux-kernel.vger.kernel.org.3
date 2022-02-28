@@ -2,83 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB194C60A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 02:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5337A4C60AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 02:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiB1Bjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 20:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S232350AbiB1Blp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 20:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiB1Bjk (ORCPT
+        with ESMTP id S231453AbiB1Blo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 20:39:40 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79E4220DD;
-        Sun, 27 Feb 2022 17:39:01 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id CD60CC021; Mon, 28 Feb 2022 02:38:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1646012335; bh=ppd2glzcFuscrKkv8TaEP18WFv+ORpmIkkSFkUHICKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=soJF5RcOsYnglkImQtb9pIl/qP0khiWeql+7Q6WwujVLmRGcXKH3MDHyZJoDXkoNZ
-         nfLwdNmR94ipRhpfU/yGGtQ0CCPAl+7FpblPZV8W/XGjkCEuWOVtaj1L3iJZNb1N2c
-         CdFOmEkUilyqU7UyR5ey2DFe4qxL2CTrCOVK5hn01HnX0h1O+PjEcdIRgQrW8XJmxl
-         H+hkzWGGaj+LESdwk6Ju5LgHdmiE30kl8numPoA7Ri/9ofIaiBnajtGSDvwJu4XUQA
-         5b720TWpoaAk8d9fQ/2jmPHL9z5lscohyyh4S3MA6L5C1XoE86p8B9XZe5Z5DVVfvD
-         as1TbQlailyOw==
+        Sun, 27 Feb 2022 20:41:44 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C55933A2B;
+        Sun, 27 Feb 2022 17:41:05 -0800 (PST)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K6NMm1nFwzBrL4;
+        Mon, 28 Feb 2022 09:39:16 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 09:41:03 +0800
+Received: from [10.67.109.84] (10.67.109.84) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 28 Feb
+ 2022 09:41:03 +0800
+Message-ID: <5cbe7a03-5e11-d6fd-2693-4db732675e85@huawei.com>
+Date:   Mon, 28 Feb 2022 09:41:03 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
+ into its own file
+To:     Baoquan He <bhe@redhat.com>
+CC:     <ebiederm@xmission.com>, <mcgrof@kernel.org>,
+        <keescook@chromium.org>, <yzaikin@google.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <zengweilin@huawei.com>,
+        <chenjianguo3@huawei.com>, <nixiaoming@huawei.com>,
+        <qiuguorui1@huawei.com>, <young.liuyang@huawei.com>
+References: <20220223030318.213093-1-yingelin@huawei.com>
+ <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
+ <c60419f8-422b-660d-8254-291182a06cbe@huawei.com> <Yhbu6UxoYXFtDyFk@fedora>
+From:   yingelin <yingelin@huawei.com>
+In-Reply-To: <Yhbu6UxoYXFtDyFk@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.84]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 12DEEC009;
-        Mon, 28 Feb 2022 02:38:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1646012334; bh=ppd2glzcFuscrKkv8TaEP18WFv+ORpmIkkSFkUHICKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1PSLUt443Hf1hB90umtNGuJtN+Kh6sjXkX8fXCfBQZMFA0VTGkp2DjToqsTKDv02n
-         bxMx5jkWll/W/NDF6NCs8nWS1/04hJh9N3rUtC8UPxDJBokFK26va6822UCXfQ9xxN
-         TZejmVbF+paZ96VIN1n1A8vABAf9WTp8XyDdVH0Ejy9JeFmI/7lGwA8J4AfcKDsF3O
-         Wogq7gjlWn8wiNDOYgOE9uLcnb5zNlpwVm5cNs1qNHmP9+Mv8DVxtqDl+E49qffKqP
-         gMWaZZ+ipQvc9z3R1bgkEFr2Lp1z6fNdJFhRMv4YwFM4rRCWZF1lgGPFCUVnwZaWhD
-         Xf4n2h+Q2d0OQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9b6fd6d8;
-        Mon, 28 Feb 2022 01:38:48 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 10:38:33 +0900
-From:   asmadeus@codewreck.org
-To:     syzbot <syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, ericvh@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Subject: Re: [syzbot] WARNING in p9_client_destroy
-Message-ID: <YhwnmR5hbseg0EJd@codewreck.org>
-References: <00000000000011f0c905d9097a62@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <00000000000011f0c905d9097a62@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot wrote on Sun, Feb 27, 2022 at 04:53:29PM -0800:
-> kmem_cache_destroy 9p-fcall-cache: Slab cache still has objects when
-> called from p9_client_destroy+0x213/0x370 net/9p/client.c:1100
 
-hmm, there is no previous "Packet with tag %d has still references"
-(sic) message, so this is probably because p9_tag_cleanup only relies on
-rcu read lock for consistency, so even if the connection has been closed
-above (clnt->trans_mode->close) there could have been a request sent
-(= tag added) just before that which isn't visible on the destroying
-side?
+在 2022/2/24 10:35, Baoquan He 写道:
+> On 02/24/22 at 09:04am, yingelin wrote:
+>> 在 2022/2/23 16:30, Baoquan He 写道:
+>>> On 02/23/22 at 11:03am, yingelin wrote:
+>>>> This move the kernel/kexec_core.c respective sysctls to its own file.
+>>> Hmm, why is the move needed?
+>>>
+>>> With my understanding, sysctls are all put in kernel/sysctl.c,
+>>> why is kexec special?
+>> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty dishes,
+>>
+>> this makes it very difficult to maintain. The proc sysctl maintainers do not
+>> want to
+>>
+>> know what sysctl knobs you wish to add for your own piece of code, we
+>>
+>> just care about the core logic.
+>>
+>> This patch moves the kexec sysctls to the place where they actually belong
+>> to help
+> That seems to be an issue everything related to sysctl are all added to
+> kernel/sysctl.c. Do you have a pointer that someone complained about it
+> and people agree to scatter them into their own component code?
 
-I guess adding an rcu_barrier() is what makes most sense here to protect
-this case?
-I'll send a patch in the next few days unless it was a stupid idea.
--- 
-Dominique
+I'm sorry to reply you too late, the link is
+
+https://lkml.kernel.org/r/20220226031054.47DF8C340E7@smtp.kernel.org
+
+> I understand your concern now, I am personally not confused by that
+> maybe because I haven't got stuff adding or changing into sysctls. My
+> concern is if we only care and move kexec knob, or we have plan to try
+> to move all of them. If there's some background information or
+> discussion with a link, that would be helpful.
+
+Yeah, we are going to move all sysctls to their own places, in fact, all 
+the filesystem
+
+sysctls are moved out already. I'm sorry I didn't express it clearly. 
+I'll fix it in v2 patch.
+
+>
+> Thanks
+> Baoquan
+>
+>> with this maintenance.
+>>
+>>>> Signed-off-by: yingelin <yingelin@huawei.com>
+>>>> ---
+>>>>    kernel/kexec_core.c | 20 ++++++++++++++++++++
+>>>>    kernel/sysctl.c     | 13 -------------
+>>>>    2 files changed, 20 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+>>>> index 68480f731192..e57339d49439 100644
+>>>> --- a/kernel/kexec_core.c
+>>>> +++ b/kernel/kexec_core.c
+>>>> @@ -936,6 +936,26 @@ int kimage_load_segment(struct kimage *image,
+>>>>    struct kimage *kexec_image;
+>>>>    struct kimage *kexec_crash_image;
+>>>>    int kexec_load_disabled;
+>>>> +static struct ctl_table kexec_core_sysctls[] = {
+>>>> +	{
+>>>> +		.procname	= "kexec_load_disabled",
+>>>> +		.data		= &kexec_load_disabled,
+>>>> +		.maxlen		= sizeof(int),
+>>>> +		.mode		= 0644,
+>>>> +		/* only handle a transition from default "0" to "1" */
+>>>> +		.proc_handler	= proc_dointvec_minmax,
+>>>> +		.extra1		= SYSCTL_ONE,
+>>>> +		.extra2		= SYSCTL_ONE,
+>>>> +	},
+>>>> +	{ }
+>>>> +};
+>>>> +
+>>>> +static int __init kexec_core_sysctl_init(void)
+>>>> +{
+>>>> +	register_sysctl_init("kernel", kexec_core_sysctls);
+>>>> +	return 0;
+>>>> +}
+>>>> +late_initcall(kexec_core_sysctl_init);
+>>>>    /*
+>>>>     * No panic_cpu check version of crash_kexec().  This function is called
+>>>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+>>>> index ae5e59396b5d..00e97c6d6576 100644
+>>>> --- a/kernel/sysctl.c
+>>>> +++ b/kernel/sysctl.c
+>>>> @@ -61,7 +61,6 @@
+>>>>    #include <linux/capability.h>
+>>>>    #include <linux/binfmts.h>
+>>>>    #include <linux/sched/sysctl.h>
+>>>> -#include <linux/kexec.h>
+>>>>    #include <linux/bpf.h>
+>>>>    #include <linux/mount.h>
+>>>>    #include <linux/userfaultfd_k.h>
+>>>> @@ -1839,18 +1838,6 @@ static struct ctl_table kern_table[] = {
+>>>>    		.proc_handler	= tracepoint_printk_sysctl,
+>>>>    	},
+>>>>    #endif
+>>>> -#ifdef CONFIG_KEXEC_CORE
+>>>> -	{
+>>>> -		.procname	= "kexec_load_disabled",
+>>>> -		.data		= &kexec_load_disabled,
+>>>> -		.maxlen		= sizeof(int),
+>>>> -		.mode		= 0644,
+>>>> -		/* only handle a transition from default "0" to "1" */
+>>>> -		.proc_handler	= proc_dointvec_minmax,
+>>>> -		.extra1		= SYSCTL_ONE,
+>>>> -		.extra2		= SYSCTL_ONE,
+>>>> -	},
+>>>> -#endif
+>>>>    #ifdef CONFIG_MODULES
+>>>>    	{
+>>>>    		.procname	= "modprobe",
+>>>> -- 
+>>>> 2.26.2
+>>>>
+>>> .
+> .

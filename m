@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35414C7675
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7423D4C765B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239970AbiB1SCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S240056AbiB1SC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbiB1Ryp (ORCPT
+        with ESMTP id S240799AbiB1Ryp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 12:54:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204A953724;
-        Mon, 28 Feb 2022 09:43:53 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7684053727;
+        Mon, 28 Feb 2022 09:43:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD1C960909;
-        Mon, 28 Feb 2022 17:43:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D07C340F1;
-        Mon, 28 Feb 2022 17:43:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D269B81366;
+        Mon, 28 Feb 2022 17:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76707C340F1;
+        Mon, 28 Feb 2022 17:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070232;
-        bh=I5WCHMB1VTrzwLsHeb0NI7Mr1kLeGOCs/cC2bJ5zA0E=;
+        s=korg; t=1646070234;
+        bh=VcvQDz9VZtmgeBdwB1Xfn3XxoSMMVM530yEXxV6FkUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dOI7ALDKgcVZvNMyk3sKjWq89Ym+DROvtLgpwoAfDxUtFcewIxlFadaXq5camyZrl
-         DogRcWl1pwmDL7Cll0XJ5vK3iR+y9klZjQUo2D9YrAQSz+Ee722zMQOef6aFXoNmkU
-         vWrNzbEvsU9zg/P46UoQsdjYtgvmfTrC+BAy6frM=
+        b=THjvHQ6Fgdp30K2QILM9Nql8KDOXWD0zRC9DQoVjJzoK/3NquNF2HkXNKSRdoO/iC
+         BIDs3X0APOefL/1MY40GMtCy4Wn4rO8ZPYbTq91/AkOPDceEXRMma8HaJNgcbRS1vt
+         QxtnIIs4ls12ToDC7uFGOX+IAl/jBGn/kj9BASDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 034/164] Revert "i40e: Fix reset bw limit when DCB enabled with 1 TC"
-Date:   Mon, 28 Feb 2022 18:23:16 +0100
-Message-Id: <20220228172403.331778163@linuxfoundation.org>
+        stable@vger.kernel.org, Mikko Perttunen <mperttunen@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.16 035/164] gpu: host1x: Always return syncpoint value when waiting
+Date:   Mon, 28 Feb 2022 18:23:17 +0100
+Message-Id: <20220228172403.442823527@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -56,60 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Palczewski <mateusz.palczewski@intel.com>
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-commit fe20371578ef640069e6ae9fa8038f60e7908565 upstream.
+commit 184b58fa816fb5ee1854daf0d430766422bf2a77 upstream.
 
-Revert of a patch that instead of fixing a AQ error when trying
-to reset BW limit introduced several regressions related to
-creation and managing TC. Currently there are errors when creating
-a TC on both PF and VF.
+The new TegraDRM UAPI uses syncpoint waiting with timeout set to
+zero to indicate reading the syncpoint value. To support that we
+need to return the syncpoint value always when waiting.
 
-Error log:
-[17428.783095] i40e 0000:3b:00.1: AQ command Config VSI BW allocation per TC failed = 14
-[17428.783107] i40e 0000:3b:00.1: Failed configuring TC map 0 for VSI 391
-[17428.783254] i40e 0000:3b:00.1: AQ command Config VSI BW allocation per TC failed = 14
-[17428.783259] i40e 0000:3b:00.1: Unable to  configure TC map 0 for VSI 391
-
-This reverts commit 3d2504663c41104b4359a15f35670cfa82de1bbf.
-
-Fixes: 3d2504663c41 (i40e: Fix reset bw limit when DCB enabled with 1 TC)
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Link: https://lore.kernel.org/r/20220223175347.1690692-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 44e961381354 ("drm/tegra: Implement syncpoint wait UAPI")
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |   12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ drivers/gpu/host1x/syncpt.c |   19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -5372,15 +5372,7 @@ static int i40e_vsi_configure_bw_alloc(s
- 	/* There is no need to reset BW when mqprio mode is on.  */
- 	if (pf->flags & I40E_FLAG_TC_MQPRIO)
+--- a/drivers/gpu/host1x/syncpt.c
++++ b/drivers/gpu/host1x/syncpt.c
+@@ -225,27 +225,12 @@ int host1x_syncpt_wait(struct host1x_syn
+ 	void *ref;
+ 	struct host1x_waitlist *waiter;
+ 	int err = 0, check_count = 0;
+-	u32 val;
+ 
+ 	if (value)
+-		*value = 0;
+-
+-	/* first check cache */
+-	if (host1x_syncpt_is_expired(sp, thresh)) {
+-		if (value)
+-			*value = host1x_syncpt_load(sp);
++		*value = host1x_syncpt_load(sp);
+ 
++	if (host1x_syncpt_is_expired(sp, thresh))
  		return 0;
+-	}
 -
--	if (!vsi->mqprio_qopt.qopt.hw) {
--		if (pf->flags & I40E_FLAG_DCB_ENABLED)
--			goto skip_reset;
+-	/* try to read from register */
+-	val = host1x_hw_syncpt_load(sp->host, sp);
+-	if (host1x_syncpt_is_expired(sp, thresh)) {
+-		if (value)
+-			*value = val;
 -
--		if (IS_ENABLED(CONFIG_I40E_DCB) &&
--		    i40e_dcb_hw_get_num_tc(&pf->hw) == 1)
--			goto skip_reset;
--
-+	if (!vsi->mqprio_qopt.qopt.hw && !(pf->flags & I40E_FLAG_DCB_ENABLED)) {
- 		ret = i40e_set_bw_limit(vsi, vsi->seid, 0);
- 		if (ret)
- 			dev_info(&pf->pdev->dev,
-@@ -5388,8 +5380,6 @@ static int i40e_vsi_configure_bw_alloc(s
- 				 vsi->seid);
- 		return ret;
- 	}
--
--skip_reset:
- 	memset(&bw_data, 0, sizeof(bw_data));
- 	bw_data.tc_valid_bits = enabled_tc;
- 	for (i = 0; i < I40E_MAX_TRAFFIC_CLASS; i++)
+-		goto done;
+-	}
+ 
+ 	if (!timeout) {
+ 		err = -EAGAIN;
 
 

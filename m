@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6B24C63A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC054C63AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiB1HMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S233586AbiB1HMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiB1HMF (ORCPT
+        with ESMTP id S233585AbiB1HMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:12:05 -0500
+        Mon, 28 Feb 2022 02:12:10 -0500
 Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803C8673F1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:27 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id q11so9915601pln.11
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF04673FF
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:31 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id bd1so9895222plb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RCfkkHTFTbBZWN4MRRKByw8vOmHdfbN0IqiaDPGeNOg=;
-        b=dOgU94T9dxNIYWE9VHh0hdTmT7ifAkOngLUMR8I3WSTsC9oIxFotYVEIZwliIXZcFQ
-         VZ/UqJK22p8kBOQ/eeqe7CyK+HfhgDua9J6jUBt5qUd1XPStDXacH7kCI/NEdpwiTVgM
-         RL2YaMCNt8hCeMRUzhCGOvX1DYB+ccEVpULIh90TIZotoY8GISEBZGnQsWizLZ0Lh2j5
-         hdCbnIkrBpRzhoNUk1w2CFGYkhm1lqNtWV0cDzDSK34PoZm+JbHkgrjPZRkBIX1Jf8Ml
-         hA9jEH3wCC4ktKvZu9Qw+DFhJ1G1zrusDWH9mJv/C8R4iaEZuL+eDSj9sOsRc1S3m+0B
-         qbBQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oqE92Z30jLRB5qj639p7ReXjqJAONBgi3Xr8rqugwWc=;
+        b=e2F/6vYuG7H/7yU5OibJdQw/ZPCcUdpXzvY1YCsl6iX6fv1pAnjbnW2Mjddjky6LK9
+         uzjUZZZJBhd2peqU+T3t4mdTPJv5YZaODOD3iKFHa6tL7PTAKR8rzj0atcTRNL0EMx/b
+         NbZzF1mPZkhDn9fxn/XJ8FzqQbVEApgBQi+jQ8HqKqg0dmNOFHHpLCLs7R09wtLpqTNm
+         RjIVCwzjknwpWcPrrul95klarohrfak/wSmWb1LisWOtHrPyj/27/KHtUnQhdxvdhF6u
+         +fPqkPBrOhlguOPAehK38KtyA/LpERXHqg7GVrbY6tHr+WXEbixjZ3Hey8zQvbEjkJht
+         DAXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RCfkkHTFTbBZWN4MRRKByw8vOmHdfbN0IqiaDPGeNOg=;
-        b=u6N/HxlSFoahDZhUc9LKzzrE5vYu3/BGJVrz2mByvYeJqCy2cQONdk5sbgB+JaDmZ1
-         5aN1cL5NRFgSL135111JLjUYspwVRLWAcrS9vwK0FHT7f88uwViUvx4Yc6ZsdGG0qk6S
-         I7p6+1aRWN52oUd/CBIr1ePJBC3O+2VWt19ZR+TVmyCiiSXiWtHgEoTveyUoPeNeMqnT
-         tfk+YuqucLwweYeW+3HKMKWG2KvfDfU1U1bVpOIjSQnTAqHnpPRyCAGWBGUrHQDmGTaw
-         9j3U7GngVydWXDTJNnUaEdpeCGJSnVVbdiYSDuSwXm0uF+vSOURShpFB7VfvjmcBldpr
-         BhkQ==
-X-Gm-Message-State: AOAM531yBa/Zd7dpVI/G8zNcWLPNtZ8SGyqbbZlXOoQZzTl2GD630zG0
-        85onkWh6RsFJSmluc8g5eshyzg==
-X-Google-Smtp-Source: ABdhPJwNiUWUQVyDl1VtKFWZYCiwhMGUytWFPX3AfhkBPGNgEoCG83MO5Y+CgnGGRhEqgdFkaMO6CQ==
-X-Received: by 2002:a17:90b:3cc:b0:1bc:692b:ad8 with SMTP id go12-20020a17090b03cc00b001bc692b0ad8mr15139329pjb.90.1646032287064;
-        Sun, 27 Feb 2022 23:11:27 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oqE92Z30jLRB5qj639p7ReXjqJAONBgi3Xr8rqugwWc=;
+        b=8LI9LcL+2oU9nLAcjq8s1TIULdzNytH7gsBzrqP+QVljCvcMVrct6kVMLsoHE9rq5Y
+         Sku2RFjRV71gGSpdbWffutiriXWoELRfc8yN3xRyQTTmM+Sb/SM2K+I1ILRIPESRgEI/
+         MpeAGUwXGA40zMdzyoASrBGMj6cspL3GV8N2tafAZzftKn3t61Y52JQ7HuqcSkJNjRkX
+         aBkTStwDiW2kM4Ge6nqQdFcqmAWArWGNxQqqkfGSYWYs2zx95yiuW4+qGTSQNAYO+xL8
+         L5GfQOBCXL7Fvh46vqqY//Jf0vuubjYNAKEggoEcX620cJurkLqhvtGK9qdcLmcpjixW
+         GlBw==
+X-Gm-Message-State: AOAM530G2qrnvdu9thi+YkjQEE23MLDIMNI41h3gUP0ovPyYjSTrTrkZ
+        MYvX2HzirqEgvofbkPLSUPnO/g==
+X-Google-Smtp-Source: ABdhPJzSxBRm2Jc+FR3haOpBiZvOJNWnMLPpmqPSQ2uOi05bt+bgbNRdMNtr3yqqrTJeLgu2AeKf1g==
+X-Received: by 2002:a17:902:da8a:b0:151:6240:b877 with SMTP id j10-20020a170902da8a00b001516240b877mr5078007plx.22.1646032291347;
+        Sun, 27 Feb 2022 23:11:31 -0800 (PST)
 Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b001b936b8abe0sm16240390pjs.7.2022.02.27.23.11.22
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b001b936b8abe0sm16240390pjs.7.2022.02.27.23.11.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 23:11:26 -0800 (PST)
+        Sun, 27 Feb 2022 23:11:31 -0800 (PST)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
         mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, duanxiongchun@bytedance.com,
         Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 0/3] add hugetlb_free_vmemmap sysctl
-Date:   Mon, 28 Feb 2022 15:10:19 +0800
-Message-Id: <20220228071022.26143-1-songmuchun@bytedance.com>
+Subject: [PATCH 1/3] mm: hugetlb: disable freeing vmemmap pages when struct page crosses page boundaries
+Date:   Mon, 28 Feb 2022 15:10:20 +0800
+Message-Id: <20220228071022.26143-2-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220228071022.26143-1-songmuchun@bytedance.com>
+References: <20220228071022.26143-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,24 +71,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series amis to add hugetlb_free_vmemmap sysctl to enable the feature
-of freeing vmemmap pages of HugeTLB pages.
+If CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON is enabled and the size
+of "struct page" is not power of two, we cannot optimize vmemmap pages
+of HugeTLB pages. We should disable this feature in this case.
 
-Muchun Song (3):
-  mm: hugetlb: disable freeing vmemmap pages when struct page crosses
-    page boundaries
-  sysctl: allow to set extra1 to SYSCTL_ONE
-  mm: hugetlb: add hugetlb_free_vmemmap sysctl
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ mm/hugetlb_vmemmap.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
- Documentation/admin-guide/sysctl/vm.rst | 13 +++++++++++++
- include/linux/hugetlb.h                 |  5 +++++
- include/linux/memory_hotplug.h          |  1 +
- kernel/sysctl.c                         | 13 ++++++++++++-
- mm/hugetlb_vmemmap.c                    | 24 +++++++++++++++++++++++-
- mm/hugetlb_vmemmap.h                    |  4 +++-
- mm/memory_hotplug.c                     |  2 +-
- 7 files changed, 58 insertions(+), 4 deletions(-)
-
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index b3118dba0518..836d1117f08b 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -121,6 +121,17 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
+ 	if (!hugetlb_free_vmemmap_enabled())
+ 		return;
+ 
++	if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON) &&
++	    !is_power_of_2(sizeof(struct page))) {
++		/*
++		 * The hugetlb_free_vmemmap_enabled_key can be enabled when
++		 * CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON. It should
++		 * be disabled if "struct page" crosses page boundaries.
++		 */
++		static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
++		return;
++	}
++
+ 	vmemmap_pages = (nr_pages * sizeof(struct page)) >> PAGE_SHIFT;
+ 	/*
+ 	 * The head page is not to be freed to buddy allocator, the other tail
 -- 
 2.11.0
 

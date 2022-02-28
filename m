@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B834C7733
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63F94C7447
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiB1SM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S238457AbiB1RmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240039AbiB1SHv (ORCPT
+        with ESMTP id S238350AbiB1RhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:07:51 -0500
+        Mon, 28 Feb 2022 12:37:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A7B8B;
-        Mon, 28 Feb 2022 09:48:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890FC8A6FB;
+        Mon, 28 Feb 2022 09:32:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A094860909;
-        Mon, 28 Feb 2022 17:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F7FC340F0;
-        Mon, 28 Feb 2022 17:48:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63AF4609EE;
+        Mon, 28 Feb 2022 17:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A94BC340E7;
+        Mon, 28 Feb 2022 17:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070497;
-        bh=2wWi9eM3qMqzJvLDsBqg8Qs3ojl5pW+KP4DJxb7mM6s=;
+        s=korg; t=1646069530;
+        bh=enr+3JE+jfp/tXmWjfUXVHUy5lAWuiRIWpJLIBM2HW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WyVnLZ4GR5VnUTy793IOtOSL0fLCDeto9LBsZIh178Rt0MCoQU/aIBCoh3yP2mg9P
-         Fd3iL+tLdjqWgHO3vpcrB8mBz+TbbCuVn3BLRTH7FDwnAp+6sgh2cBUaIL2X62+JoO
-         l+kT4oU8FAlQEaCxeAEDb2bamhSZenkHpHdNbHPA=
+        b=J7PGMgeWay6LT8pOCFZPON6DBehY/4+B5RcgJZXDIo2hcYNDbt4y18bSgSwr6l4Lb
+         0fUBbajxcQwgPynsWC3HR8s5FLsE1fTizdOq9k7qEBai5bINCxwXSiaqdVBhdtQrnu
+         tfDeo7nPo4Zui4qlG8lA4hAYVzRxpyoj5VzE47yg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 5.16 129/164] usb: dwc2: drd: fix soft connect when gadget is unconfigured
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Carel Si <beibei.si@intel.com>, Jann Horn <jannh@google.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Baokun Li <libaokun1@huawei.com>
+Subject: [PATCH 5.4 53/53] fget: clarify and improve __fget_files() implementation
 Date:   Mon, 28 Feb 2022 18:24:51 +0100
-Message-Id: <20220228172411.807031028@linuxfoundation.org>
+Message-Id: <20220228172252.371692386@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +57,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit 32fde84362c40961726a5c91f35ad37355ccc0c6 upstream.
+commit e386dfc56f837da66d00a078e5314bc8382fab83 upstream.
 
-When the gadget driver hasn't been (yet) configured, and the cable is
-connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-HOST tries to enumerate it.
-At the host side, this can result in a stuck USB port or worse. When
-getting lucky, some dmesg can be observed at the host side:
- new high-speed USB device number ...
- device descriptor read/64, error -110
+Commit 054aa8d439b9 ("fget: check that the fd still exists after getting
+a ref to it") fixed a race with getting a reference to a file just as it
+was being closed.  It was a fairly minimal patch, and I didn't think
+re-checking the file pointer lookup would be a measurable overhead,
+since it was all right there and cached.
 
-Fix it in drd, by checking the enabled flag before calling
-dwc2_hsotg_core_connect(). It will be called later, once configured,
-by the normal flow:
-- udc_bind_to_driver
- - usb_gadget_connect
-   - dwc2_hsotg_pullup
-     - dwc2_hsotg_core_connect
+But I was wrong, as pointed out by the kernel test robot.
 
-Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/1644999135-13478-1-git-send-email-fabrice.gasnier@foss.st.com
+The 'poll2' case of the will-it-scale.per_thread_ops benchmark regressed
+quite noticeably.  Admittedly it seems to be a very artificial test:
+doing "poll()" system calls on regular files in a very tight loop in
+multiple threads.
+
+That means that basically all the time is spent just looking up file
+descriptors without ever doing anything useful with them (not that doing
+'poll()' on a regular file is useful to begin with).  And as a result it
+shows the extra "re-check fd" cost as a sore thumb.
+
+Happily, the regression is fixable by just writing the code to loook up
+the fd to be better and clearer.  There's still a cost to verify the
+file pointer, but now it's basically in the noise even for that
+benchmark that does nothing else - and the code is more understandable
+and has better comments too.
+
+[ Side note: this patch is also a classic case of one that looks very
+  messy with the default greedy Myers diff - it's much more legible with
+  either the patience of histogram diff algorithm ]
+
+Link: https://lore.kernel.org/lkml/20211210053743.GA36420@xsang-OptiPlex-9020/
+Link: https://lore.kernel.org/lkml/20211213083154.GA20853@linux.intel.com/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Tested-by: Carel Si <beibei.si@intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/core.h |    2 ++
- drivers/usb/dwc2/drd.c  |    6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ fs/file.c |   73 ++++++++++++++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 57 insertions(+), 16 deletions(-)
 
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1416,6 +1416,7 @@ void dwc2_hsotg_core_connect(struct dwc2
- void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
- int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
- #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-+#define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
- int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
- int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
- int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
-@@ -1452,6 +1453,7 @@ static inline int dwc2_hsotg_set_test_mo
- 					   int testmode)
- { return 0; }
- #define dwc2_is_device_connected(hsotg) (0)
-+#define dwc2_is_device_enabled(hsotg) (0)
- static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
- { return 0; }
- static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
---- a/drivers/usb/dwc2/drd.c
-+++ b/drivers/usb/dwc2/drd.c
-@@ -109,8 +109,10 @@ static int dwc2_drd_role_sw_set(struct u
- 		already = dwc2_ovr_avalid(hsotg, true);
- 	} else if (role == USB_ROLE_DEVICE) {
- 		already = dwc2_ovr_bvalid(hsotg, true);
--		/* This clear DCTL.SFTDISCON bit */
--		dwc2_hsotg_core_connect(hsotg);
-+		if (dwc2_is_device_enabled(hsotg)) {
-+			/* This clear DCTL.SFTDISCON bit */
-+			dwc2_hsotg_core_connect(hsotg);
-+		}
- 	} else {
- 		if (dwc2_is_device_mode(hsotg)) {
- 			if (!dwc2_ovr_bvalid(hsotg, false))
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -706,28 +706,69 @@ void do_close_on_exec(struct files_struc
+ 	spin_unlock(&files->file_lock);
+ }
+ 
+-static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
++static inline struct file *__fget_files_rcu(struct files_struct *files,
++		unsigned int fd, fmode_t mask, unsigned int refs)
+ {
+-	struct files_struct *files = current->files;
+-	struct file *file;
++	for (;;) {
++		struct file *file;
++		struct fdtable *fdt = rcu_dereference_raw(files->fdt);
++		struct file __rcu **fdentry;
+ 
+-	rcu_read_lock();
+-loop:
+-	file = fcheck_files(files, fd);
+-	if (file) {
+-		/* File object ref couldn't be taken.
+-		 * dup2() atomicity guarantee is the reason
+-		 * we loop to catch the new file (or NULL pointer)
++		if (unlikely(fd >= fdt->max_fds))
++			return NULL;
++
++		fdentry = fdt->fd + array_index_nospec(fd, fdt->max_fds);
++		file = rcu_dereference_raw(*fdentry);
++		if (unlikely(!file))
++			return NULL;
++
++		if (unlikely(file->f_mode & mask))
++			return NULL;
++
++		/*
++		 * Ok, we have a file pointer. However, because we do
++		 * this all locklessly under RCU, we may be racing with
++		 * that file being closed.
++		 *
++		 * Such a race can take two forms:
++		 *
++		 *  (a) the file ref already went down to zero,
++		 *      and get_file_rcu_many() fails. Just try
++		 *      again:
+ 		 */
+-		if (file->f_mode & mask)
+-			file = NULL;
+-		else if (!get_file_rcu_many(file, refs))
+-			goto loop;
+-		else if (__fcheck_files(files, fd) != file) {
++		if (unlikely(!get_file_rcu_many(file, refs)))
++			continue;
++
++		/*
++		 *  (b) the file table entry has changed under us.
++		 *       Note that we don't need to re-check the 'fdt->fd'
++		 *       pointer having changed, because it always goes
++		 *       hand-in-hand with 'fdt'.
++		 *
++		 * If so, we need to put our refs and try again.
++		 */
++		if (unlikely(rcu_dereference_raw(files->fdt) != fdt) ||
++		    unlikely(rcu_dereference_raw(*fdentry) != file)) {
+ 			fput_many(file, refs);
+-			goto loop;
++			continue;
+ 		}
++
++		/*
++		 * Ok, we have a ref to the file, and checked that it
++		 * still exists.
++		 */
++		return file;
+ 	}
++}
++
++
++static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
++{
++	struct files_struct *files = current->files;
++	struct file *file;
++
++	rcu_read_lock();
++	file = __fget_files_rcu(files, fd, mask, refs);
+ 	rcu_read_unlock();
+ 
+ 	return file;
 
 

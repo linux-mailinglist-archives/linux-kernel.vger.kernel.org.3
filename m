@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519184C71E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679EA4C71E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237722AbiB1QpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S238002AbiB1Qpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiB1QpS (ORCPT
+        with ESMTP id S234322AbiB1Qpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:45:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6100694AD
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:44:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646066677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sVkgrQx4/hFskalMNfAttIkAMngSgQhSsCGyOZ8Ebfo=;
-        b=AD1/5QUO0WY5LvO3KupCtmLKtAlx9lFvoBcLb4pqLnUdDuj4X6bksG6/F6h+RUiKEg7K2h
-        V3dG6HNT/Rb5Bc/NoWF7GvxHlp0YiBYkEVcZgZB+jLRXrZZfl7tyFBp31HZgflXfJqfDED
-        6Bnpx+jt0BvYahUsCgdus67lw6NUU8I=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-194-coYP04JEPHmDBRye27VzXA-1; Mon, 28 Feb 2022 11:44:36 -0500
-X-MC-Unique: coYP04JEPHmDBRye27VzXA-1
-Received: by mail-qk1-f197.google.com with SMTP id r20-20020a37a814000000b00648f4cddf6bso11638835qke.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:44:36 -0800 (PST)
+        Mon, 28 Feb 2022 11:45:43 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38070694AD;
+        Mon, 28 Feb 2022 08:45:04 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id g24so10790559qkl.3;
+        Mon, 28 Feb 2022 08:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gZ/lBVmz5qkZmaDTKla0rq1d1JmWVouxOfT4UJPJ/zI=;
+        b=EUbYpCYm4Rqd9t5BnR6HhwA8Cv5yKyKomML6aJbDTJ1dmfmXbwe/dhAH9kYOFyQLwi
+         nD7qryaBes99/P/BXjFSxzpnwzzkckAuI2SuK4P/dQBI4VdFtbpV+EMhPe50lKeKfu4e
+         H8CbLTZf2rzwHhKnJYY84EUfcWccLAHWZ5jo1P1FD5BhkGeltKhGghV4Yd1AWwuzUHaa
+         fyj7um5P6NaemeD82c+U3dDnWQQNdf50kSfSjgITnw44qT7cRaYircVluNBi43XXqsCa
+         fB4/skecH1TslU0CBWl2DNU60au1qDswMX6IkdHa5ynEmvwiidkz8lZDE4nDKQ13Je1a
+         EVFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sVkgrQx4/hFskalMNfAttIkAMngSgQhSsCGyOZ8Ebfo=;
-        b=HE2Jmtkt5vf5aIavcnrhFTA4VpM7HwhSm5tr/tQsmGreEclJznG8F4S1qRojT+hb8Z
-         +Wn5dGjrZZUs7r8gunrlGiJ6GJGtGh5wIeGwUV+0QbAzcMdOH1SB7Fucs9AOrpDtUrL9
-         dpNwhFw+TdIIL7+9GIIm38+VI0E0JdVrP0YTYWT0Auv/e4b+wdSYFsyBOr2kWxZ0SLcR
-         MqoktyP5/CieIB7PJPsxxpYJIAbWuELTAGkYhCXkNdlYs8LK3qtfEecH0tILMsY/8641
-         yObz8BgHqNu6ph/UGwVGD3EViSwnY3WnxfRTfwSyZQkIk7ECp6pDB1M7mMEg9KjUhQQs
-         +QYw==
-X-Gm-Message-State: AOAM531m1jKSdQ0YXPVigkiuqNGye5biKg2tbuSdxv2yxosbK3WouJHD
-        D0PjTnNppDz3K482s8EShhHrQMlWH9NQ5/nSi7rwvh9k3WwmKfNsBQUjQdz3E0fGXPTvxU7pqnC
-        9sK5KpbW5E+e1NZuKfL3yAOdv
-X-Received: by 2002:a37:9e86:0:b0:507:42b:7540 with SMTP id h128-20020a379e86000000b00507042b7540mr11554025qke.159.1646066676088;
-        Mon, 28 Feb 2022 08:44:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw8GYDO/W+wtFA8bzurOKX7n/pjCYKWYUslsiKvaGl8LxgY7gGD0gf0ofbgVorZpuNIYwd2Gw==
-X-Received: by 2002:a37:9e86:0:b0:507:42b:7540 with SMTP id h128-20020a379e86000000b00507042b7540mr11554012qke.159.1646066675821;
-        Mon, 28 Feb 2022 08:44:35 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id j10-20020ac85f8a000000b002dde6288fa7sm7386432qta.83.2022.02.28.08.44.32
+        bh=gZ/lBVmz5qkZmaDTKla0rq1d1JmWVouxOfT4UJPJ/zI=;
+        b=DPL9I0MWUJULRsAZ16I5Y6Vw6FRarhkBkliH32/ZQUW9soYDIvu12eIL73AS0+vmfT
+         8uUj8J5/MFx2xOkT/z6U7uyD/KHt13652ubukJSQ7N6JyQaSyubLvx9LYnS0WdEVXqUf
+         /HVgSGnA+Mr3zBKjkyeugruy7HNjAast+cU60dh7/Vm6Otnu8rTBoD0XKuulIcN3sqZQ
+         598dkFpbVaX4qkY1750Cg5/qGoEci9xC1lmwdadmHaYaiSaPf+h3P/jFMmo3ux8aRCEj
+         q/YmIJcaxmUhHz8sfKMlzFI6BRzdXCcEOXF+2/FNiDB32AnIBR0tQEs2JAwaP/jYEgcy
+         P7Ag==
+X-Gm-Message-State: AOAM531LnvSoApD8HIUX5OQWhR5PKJmsj4gL7AN+OIBP94MqqtjZ7pJY
+        m8FQ48TdHa4DHSaHQp6TVUD51Nt7QEg=
+X-Google-Smtp-Source: ABdhPJwV79w/xcqL5pMshUMmenCj1DphiDLzuupE/DTTMMGNGZUk/iCMjf3a4MHPPAkfhmIldXgqDQ==
+X-Received: by 2002:a37:f719:0:b0:648:cd93:3198 with SMTP id q25-20020a37f719000000b00648cd933198mr11687653qkj.179.1646066703316;
+        Mon, 28 Feb 2022 08:45:03 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id t5-20020a05620a034500b00476e85c85b9sm5203572qkm.110.2022.02.28.08.45.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 08:44:35 -0800 (PST)
-Date:   Mon, 28 Feb 2022 08:44:30 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
-        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 15/30] x86/boot: Allow to hook up alternative port I/O
- helpers
-Message-ID: <20220228164430.7uveususkg4upihq@treble>
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-16-kirill.shutemov@linux.intel.com>
- <20220227220219.6myd32n6oojwbnyh@treble>
- <20220228163353.d6redrbv3kpb557n@black.fi.intel.com>
+        Mon, 28 Feb 2022 08:45:02 -0800 (PST)
+Date:   Mon, 28 Feb 2022 11:45:00 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     peda@axentia.se, andy.shevchenko@gmail.com, lars@metafoo.de,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v15 00/10] iio: afe: add temperature rescaling support
+Message-ID: <Yhz8DBfkJQSpBagW@shaak>
+References: <20220213025739.2561834-1-liambeguin@gmail.com>
+ <20220227125559.72d5d79a@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228163353.d6redrbv3kpb557n@black.fi.intel.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220227125559.72d5d79a@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 07:33:53PM +0300, Kirill A. Shutemov wrote:
-> On Sun, Feb 27, 2022 at 02:02:19PM -0800, Josh Poimboeuf wrote:
-> > On Thu, Feb 24, 2022 at 06:56:15PM +0300, Kirill A. Shutemov wrote:
-> > > Port I/O instructions trigger #VE in the TDX environment. In response to
-> > > the exception, kernel emulates these instructions using hypercalls.
-> > > 
-> > > But during early boot, on the decompression stage, it is cumbersome to
-> > > deal with #VE. It is cleaner to go to hypercalls directly, bypassing #VE
-> > > handling.
-> > > 
-> > > Add a way to hook up alternative port I/O helpers in the boot stub.
-> > > 
-> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > 
-> > I think you missed my comment from v3.
-> 
-> I did not missed it, but I failed to acknowledge it.
-> 
-> To me it is a judgement call. Either way has right to live.
-> I talked to Borislav on this and we suggested to keep it as. Rework later
-> as needed.
-> 
-> > Repeating it here:
-> > 
-> > At least from reading the commit message it's not self-evident why #VE
-> > handling would be worse, especially since there's already #VC support in
-> > boot.  It would help to give more info about that in the commit message.
-> > 
-> > The current approach also seems fragile, doesn't it require all future
-> > code to remember to not do i/o directly?  How do we make sure that
-> > doesn't happen going forward?
-> > 
-> > How does it fail if some code accidentally does i/o directly?  Or
-> > triggers #VE some other way?  Is the error understandable and
-> > actionable?
-> 
-> Dealing with failure in decompression code is a pain. We don't have usual
-> infrastructure there. The patch deals with port I/O which is the only way
-> to communicate issue to the user. If it fails for whatever reason we are
-> screwed. And it doesn't depend on how it was implemented.
+Hi Jonathan,
 
-In the patch description, please address all of my concerns and
-questions.
+On Sun, Feb 27, 2022 at 12:55:59PM +0000, Jonathan Cameron wrote:
+> On Sat, 12 Feb 2022 21:57:29 -0500
+> Liam Beguin <liambeguin@gmail.com> wrote:
+> 
+> > Jonathan, Peter, Andy,
+> > 
+> > This series focuses on adding temperature rescaling support to the IIO
+> > Analog Front End (AFE) driver.
+> > 
+> > The main changes to the AFE driver include an initial Kunit test suite,
+> > support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+> > and temperature transducer sensors.
+> > 
+> > Thanks for your time,
+> > Liam
+> 
+> Hi Liam,
+> 
+> I was waiting for Andy to reply to this. Took a quick look back at
+> what was outstanding and realised he had given a
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> for v13.
+> 
+> I'm assuming there wasn't a strong reason to drop that in the meantime
+> and it's a simple omission / crossed emails issue.
+> 
+> As such, 
+> 
+> Series applied to the togreg branch of iio.git and pushed out
+> as testing to get some build coverage from 0-day.
 
--- 
-Josh
+Great news! Thanks again for your patience, and review on this work.
 
+I noticed you fixed the CI error. Thanks for doing that, and my
+apologies for missing it.
+
+Cheers,
+Liam
+
+> Thanks,
+> 
+> Jonathan
+> 

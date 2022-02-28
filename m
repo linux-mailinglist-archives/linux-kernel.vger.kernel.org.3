@@ -2,47 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC7F4C6E9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CE14C6E9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236586AbiB1Nv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S236732AbiB1NzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiB1Nv6 (ORCPT
+        with ESMTP id S233984AbiB1Ny5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:51:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3207CDF3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:51:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2324613EA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5246DC340E7;
-        Mon, 28 Feb 2022 13:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646056276;
-        bh=IETDOddOFXjvnkfs3zJwg2g/A8kTkjziyY9ZwVfPiR8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rJ+7Wdx7/88f7zoyt2oo2PO9fKVnYCBT2xPpc5usQaXmtUdPybHVFoGnfdyg437z8
-         cRkze12El+fuV56LDO0A2tsOHPT0ZAREAnrAUojL7ip2dA+MUNThfZJVGr+Q8qvBdt
-         9f9fFBuz6LSUOofndhuPNszQvefaNgRXIWu7SUdtZsJewn4TbgDukHhdZfeuEalY3N
-         y93BQVzssxDUuUDjYrKzi4bELCSz2nQE1dXzMxIGdDMwUn36QBuVsYxK9p0ntYU4GY
-         LJC6nD4yuywz3/Oy/nnhNukoupzc0iGDX2kxxOJDgS4uc/ZqgtzXu7c9F+RULeIi6E
-         Jfu8O+f5/FSSA==
-Date:   Mon, 28 Feb 2022 15:51:11 +0200
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [git pull] habanalabs pull request for kernel 5.18
-Message-ID: <20220228135111.GA1174849@ogabbay-vm-u20.habana-labs.com>
+        Mon, 28 Feb 2022 08:54:57 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E20142EC7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:54:19 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id ay5so7961453plb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WEy1zCQgDzZI0KWybQkh1tiSD7E5/9VujlwkP39Po4I=;
+        b=S7MP84cNFACuxNfvhM7fJy4miwUvj6rX8/O5d5P3Tguai+qxHva7T8Sa+44kR26m4K
+         rQg8xhy/dDkRLc8YoC0FocXWrtH+dOw2OKCYxNxZfQbib7HWrLHl+LCGckPX8KhY9RAL
+         dznVnRIp37gF/yAOvrR3d9p0ZYjYxxUwX5i+jknC6gS10myUOCeukvn5ihIYJ3d/vKP7
+         6zGy3YLCOuTUN6OEIHGLTSI6kTk6ceOn2JpoabZcQph2qZjVG4s4ef2a4KnG9tvyoNHp
+         4A901AASZCniir/7Zb9MBw2Rah0hn8CFMhmF9N1cP/wLbl+y66SiFqJLA+QN+PWEXKre
+         qQYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WEy1zCQgDzZI0KWybQkh1tiSD7E5/9VujlwkP39Po4I=;
+        b=adpW48HdslnkBxE8hWJgP6aey9NG4XkWhNVv+aLUfhY91/nrDNfLC+R1O4HQfuBzxY
+         2VW/zQMoT0tGusce2JroC+Al/vXrG17ZV5zoANrdwS+o5w2146OpoeE5wcvFoWHs8jpb
+         CD6hZp3P0qhU5xVplZVfDEKXzJJk+Enw+/VZtd433S6z1r5IQ8kUBAGXJ0vdftRzsY/N
+         u0dXot8LxsOMe296606hdrPW2+sdiBTWYCX42UVWNESPcXz9rITwH35iBZeP8ohZFcIA
+         yuPxgKdlxuwE6Ipr2OXHwd2waGsDpqZPFYJ2ntsVPjnPhSpGUy1djPv6or9PRZrKQUuk
+         T+hA==
+X-Gm-Message-State: AOAM533MSSDntc6Le+250P5jSTY/CwNrdmM7mwdgf3C8YGJWDZORppIe
+        Cpmb0OqixLneF3r78glAwf5GJw==
+X-Google-Smtp-Source: ABdhPJxndjCL6DuOrGcZ40lddkjyZWeCgJNEwhO3fREhBQx7ptcnk3zS+oVQVdJ71WNlar0BPJv41A==
+X-Received: by 2002:a17:90a:fef:b0:1bc:1465:c4e9 with SMTP id 102-20020a17090a0fef00b001bc1465c4e9mr16919511pjz.119.1646056458698;
+        Mon, 28 Feb 2022 05:54:18 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c2a:216d:26eb:507e:a508:58b5])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004e03b051040sm13894746pfj.112.2022.02.28.05.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 05:54:18 -0800 (PST)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     linux-serial@vger.kernel.org, hasegawa-hitomi@fujitsu.com
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, linux-kernel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, arnd@arndb.de,
+        peterz@infradead.org, Sumit Garg <sumit.garg@linaro.org>
+Subject: [RFT v3] tty/sysrq: Make sysrq handler NMI aware
+Date:   Mon, 28 Feb 2022 19:24:08 +0530
+Message-Id: <20220228135408.1452882-1-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,151 +71,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Allow a magic sysrq to be triggered from an NMI context. This is done
+via marking some sysrq actions as NMI safe. Safe actions will be allowed
+to run from NMI context whilst that cannot run from an NMI will be queued
+as irq_work for later processing.
 
-This is habanalabs pull request for the merge window of kernel 5.18.
-Although it adds small number of features, this pull request mainly
-fixes multiple bugs in the code and also does some re-factoring to
-better organize the code.
+The major use-case is to add NMI debugging capabilities to the kernel
+in order to debug scenarios such as:
+- Primary CPU is stuck in deadlock with interrupts disabled and hence
+  doesn't honor serial device interrupt. So having magic sysrq triggered
+  as an NMI is helpful for debugging.
+- Always enabled NMI based magic sysrq irrespective of whether the serial
+  TTY port is active or not.
+- Apart from UART interrupts, it allows magic sysrq to be triggered from
+  a diagnostic NMI interrupt on systems such as A64FX.
 
-Full details are in the tag.
+A particular sysrq handler is only marked as NMI safe in case the handler
+isn't contending for any synchronization primitives as in NMI context
+they are expected to cause deadlocks. Note that the debug sysrq do not
+contend for any synchronization primitives. It does call kgdb_breakpoint()
+to provoke a trap but that trap handler should be NMI safe on
+architectures that implement an NMI.
 
-Thanks,
-Oded
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+---
 
-The following changes since commit 085686fb8491a7cbf6a7260d5b9d4169a041c340:
+Hi Hitomi Hasegawa,
 
-  Merge 5.17-rc6 into char-misc-next (2022-02-28 07:30:32 +0100)
+Give this patch a try with diagnostic pseudo NMI interrupt on A64FX and
+let me know if it works for you. Also, feel free to include this patch
+along with your driver patch.
 
-are available in the Git repository at:
+-Sumit
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git tags/misc-habanalabs-next-2022-02-28
+Changes in v3:
+- Extend commit message to include use-cases.
+- Get rid of redundant kfifo stuff.
+- Incorporate other misc. feedback from Peter Z.
 
-for you to fetch changes up to 655221c56739058ae73a7aabd90847a024dabff6:
+Changes in v2:
+- Rebased to 5.17-rc5.
+- Separate this patch from complete patch-set [1] as its relevant for
+  other diagnostic NMI interrupts [2] as well apart from uart NMI
+  interrupts.
+- Incorporated suggestions from Doug.
 
-  habanalabs: remove deprecated firmware states (2022-02-28 14:34:50 +0200)
+[1] https://lore.kernel.org/linux-arm-kernel/CAFA6WYOWHgmYYt=KGXDh2hKiuy_rQbJfi279ev0+s-Qh7L21kA@mail.gmail.com/t/#m2b5006f08581448020eb24566927a104d0b95c44
+[2] https://lore.kernel.org/all/Yhi0rrkSR63ZhjX1@kroah.com/T/
 
-----------------------------------------------------------------
-This tag contains habanalabs driver changes for v5.18:
+ drivers/tty/sysrq.c       | 45 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/sysrq.h     |  1 +
+ kernel/debug/debug_core.c |  1 +
+ 3 files changed, 46 insertions(+), 1 deletion(-)
 
-- Add new feature of recording time-stamp when a completion
-  queue counter reaches a target value as determined by the
-  userspace application. This is used by the graph compiler
-  to accurately measure the time it takes for certain workloads
-  to execute, which helps to fine-tune future compilations.
+diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+index bbfd004449b5..40cd492fe6ec 100644
+--- a/drivers/tty/sysrq.c
++++ b/drivers/tty/sysrq.c
+@@ -51,6 +51,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/of.h>
+ #include <linux/rcupdate.h>
++#include <linux/irq_work.h>
+ 
+ #include <asm/ptrace.h>
+ #include <asm/irq_regs.h>
+@@ -112,6 +113,7 @@ static const struct sysrq_key_op sysrq_loglevel_op = {
+ 	.help_msg	= "loglevel(0-9)",
+ 	.action_msg	= "Changing Loglevel",
+ 	.enable_mask	= SYSRQ_ENABLE_LOG,
++	.nmi_safe	= true,
+ };
+ 
+ #ifdef CONFIG_VT
+@@ -159,6 +161,7 @@ static const struct sysrq_key_op sysrq_crash_op = {
+ 	.help_msg	= "crash(c)",
+ 	.action_msg	= "Trigger a crash",
+ 	.enable_mask	= SYSRQ_ENABLE_DUMP,
++	.nmi_safe	= true,
+ };
+ 
+ static void sysrq_handle_reboot(int key)
+@@ -172,6 +175,7 @@ static const struct sysrq_key_op sysrq_reboot_op = {
+ 	.help_msg	= "reboot(b)",
+ 	.action_msg	= "Resetting",
+ 	.enable_mask	= SYSRQ_ENABLE_BOOT,
++	.nmi_safe	= true,
+ };
+ 
+ const struct sysrq_key_op *__sysrq_reboot_op = &sysrq_reboot_op;
+@@ -219,6 +223,7 @@ static const struct sysrq_key_op sysrq_showlocks_op = {
+ 	.handler	= sysrq_handle_showlocks,
+ 	.help_msg	= "show-all-locks(d)",
+ 	.action_msg	= "Show Locks Held",
++	.nmi_safe	= true,
+ };
+ #else
+ #define sysrq_showlocks_op (*(const struct sysrq_key_op *)NULL)
+@@ -291,6 +296,7 @@ static const struct sysrq_key_op sysrq_showregs_op = {
+ 	.help_msg	= "show-registers(p)",
+ 	.action_msg	= "Show Regs",
+ 	.enable_mask	= SYSRQ_ENABLE_DUMP,
++	.nmi_safe	= true,
+ };
+ 
+ static void sysrq_handle_showstate(int key)
+@@ -328,6 +334,7 @@ static const struct sysrq_key_op sysrq_ftrace_dump_op = {
+ 	.help_msg	= "dump-ftrace-buffer(z)",
+ 	.action_msg	= "Dump ftrace buffer",
+ 	.enable_mask	= SYSRQ_ENABLE_DUMP,
++	.nmi_safe	= true,
+ };
+ #else
+ #define sysrq_ftrace_dump_op (*(const struct sysrq_key_op *)NULL)
+@@ -566,6 +573,32 @@ static void __sysrq_put_key_op(int key, const struct sysrq_key_op *op_p)
+ 		sysrq_key_table[i] = op_p;
+ }
+ 
++static int sysrq_nmi_key = -1;
++
++static void sysrq_do_irq_work(struct irq_work *work)
++{
++	const struct sysrq_key_op *op_p;
++	int orig_suppress_printk;
++
++	orig_suppress_printk = suppress_printk;
++	suppress_printk = 0;
++
++	rcu_sysrq_start();
++	rcu_read_lock();
++
++	op_p = __sysrq_get_key_op(sysrq_nmi_key);
++	if (op_p)
++		op_p->handler(sysrq_nmi_key);
++
++	rcu_read_unlock();
++	rcu_sysrq_end();
++
++	suppress_printk = orig_suppress_printk;
++	sysrq_nmi_key = -1;
++}
++
++static DEFINE_IRQ_WORK(sysrq_irq_work, sysrq_do_irq_work);
++
+ void __handle_sysrq(int key, bool check_mask)
+ {
+ 	const struct sysrq_key_op *op_p;
+@@ -573,6 +606,10 @@ void __handle_sysrq(int key, bool check_mask)
+ 	int orig_suppress_printk;
+ 	int i;
+ 
++	/* Skip sysrq handling if one already in progress */
++	if (sysrq_nmi_key != -1)
++		return;
++
+ 	orig_suppress_printk = suppress_printk;
+ 	suppress_printk = 0;
+ 
+@@ -596,7 +633,13 @@ void __handle_sysrq(int key, bool check_mask)
+ 		if (!check_mask || sysrq_on_mask(op_p->enable_mask)) {
+ 			pr_info("%s\n", op_p->action_msg);
+ 			console_loglevel = orig_log_level;
+-			op_p->handler(key);
++
++			if (in_nmi() && !op_p->nmi_safe) {
++				sysrq_nmi_key = key;
++				irq_work_queue(&sysrq_irq_work);
++			} else {
++				op_p->handler(key);
++			}
+ 		} else {
+ 			pr_info("This sysrq operation is disabled.\n");
+ 			console_loglevel = orig_log_level;
+diff --git a/include/linux/sysrq.h b/include/linux/sysrq.h
+index 3a582ec7a2f1..630b5b9dc225 100644
+--- a/include/linux/sysrq.h
++++ b/include/linux/sysrq.h
+@@ -34,6 +34,7 @@ struct sysrq_key_op {
+ 	const char * const help_msg;
+ 	const char * const action_msg;
+ 	const int enable_mask;
++	const bool nmi_safe;
+ };
+ 
+ #ifdef CONFIG_MAGIC_SYSRQ
+diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
+index da06a5553835..53b56114f59b 100644
+--- a/kernel/debug/debug_core.c
++++ b/kernel/debug/debug_core.c
+@@ -978,6 +978,7 @@ static const struct sysrq_key_op sysrq_dbg_op = {
+ 	.handler	= sysrq_handle_dbg,
+ 	.help_msg	= "debug(g)",
+ 	.action_msg	= "DEBUG",
++	.nmi_safe	= true,
+ };
+ #endif
+ 
+-- 
+2.25.1
 
-- Add two new attributes to sysfs that expose the VRM and
-  f/w OS version
-
-- Add a delay to the reset path that allows the driver to
-  receive and handle additional events from the f/w before
-  doing the reset. This can help when debugging why a reset
-  event was received from the f/w.
-
-- Re-factor some of the sysfs code in the driver. Mainly,
-  move functions from hwmgr.c to more relevant files and
-  totally remove hwmgr.c file.
-
-- Fix multiple bugs such as races, use-after-free, ignoring
-  error codes, etc.
-
-- As usual, multiple minor changes and small fixes.
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      habanalabs: silence an uninitialized variable warning
-
-Dani Liberman (2):
-      habanalabs: fix soft reset flow in case of failure
-      habanalabs: fix race when waiting on encaps signal
-
-Jiasheng Jiang (1):
-      habanalabs: Add check for pci_enable_device
-
-Oded Gabbay (26):
-      habanalabs/gaudi: disable CGM permanently
-      habanalabs: remove ASIC functions of clock gating
-      habanalabs: sysfs functions should be in sysfs.c
-      habanalabs: get clk is common function
-      habanalabs: remove hwmgr.c
-      habanalabs: move more f/w functions to firmware_if.c
-      habanalabs: remove asic callback set_pll_profile()
-      habanalabs: rename dev_attr_grp to dev_clk_attr_grp
-      habanalabs: add vrm version to sysfs
-      habanalabs: remove power9 workaround for dma support
-      habanalabs: use common wrapper for MMU cache invalidation
-      habanalabs: there is no kernel TDR in future ASICs
-      habanalabs: don't free phys_pg_pack inside lock
-      habanalabs: update to latest f/w specs
-      habanalabs: expose number of user interrupts
-      habanalabs: reject host map with mmu disabled
-      habanalabs: fix user interrupt wait when timeout is 0
-      habanalabs: fix race between wait and irq
-      habanalabs: remove duplicate print
-      habanalabs: fix spelling mistake
-      habanalabs: rephrase error messages in PCI initialization
-      habanalabs: fix use-after-free bug
-      habanalabs: add missing include of vmalloc.h
-      habanalabs: change function to static
-      habanalabs/gaudi: handle axi errors from NIC engines
-      habanalabs/gaudi: add missing handling of NIC related events
-
-Ofir Bitton (1):
-      habanalabs: remove deprecated firmware states
-
-Ohad Sharabi (6):
-      habanalabs: fix possible memory leak in MMU DR fini
-      habanalabs: make some MMU functions common
-      habanalabs: duplicate HOP table props to MMU props
-      habanalabs: use kernel-doc for memory ioctl documentation
-      habanalabs: allow user to set allocation page size
-      habanalabs: make sure device mem alloc is page aligned
-
-Rajaravi Krishna Katta (1):
-      habanalabs: sysfs support for fw os version
-
-Tomer Tayar (10):
-      habanalabs: check the return value of hl_cs_poll_fences()
-      habanalabs: avoid copying pll data if pll_info_get fails
-      habanalabs: add missing error check in sysfs clk_freq_mhz_show
-      habanalabs: add missing error check in sysfs max_power_show
-      habanalabs: prevent false heartbeat failure during soft-reset
-      habanalabs: enable stop-on-error debugfs setting per ASIC
-      habanalabs: use proper max_power variable for device utilization
-      habanalabs: set max power on device init per ASIC
-      habanalabs: avoid using an uninitialized variable
-      habanalabs: add an option to delay a device reset
-
-farah kassabri (2):
-      habanalabs: Timestamps buffers registration
-      habanalabs: Fix reset upon device release bug
-
- .../ABI/testing/debugfs-driver-habanalabs          |  20 +-
- Documentation/ABI/testing/sysfs-driver-habanalabs  |  16 +-
- drivers/misc/habanalabs/common/Makefile            |   2 +-
- drivers/misc/habanalabs/common/command_buffer.c    |   4 +-
- .../misc/habanalabs/common/command_submission.c    | 265 +++++++++---
- drivers/misc/habanalabs/common/debugfs.c           |  40 +-
- drivers/misc/habanalabs/common/device.c            |  53 ++-
- drivers/misc/habanalabs/common/firmware_if.c       | 152 ++++++-
- drivers/misc/habanalabs/common/habanalabs.h        | 209 +++++++---
- drivers/misc/habanalabs/common/habanalabs_drv.c    |   3 +-
- drivers/misc/habanalabs/common/habanalabs_ioctl.c  |  13 +-
- drivers/misc/habanalabs/common/hwmgr.c             | 117 ------
- drivers/misc/habanalabs/common/irq.c               | 127 +++++-
- drivers/misc/habanalabs/common/memory.c            | 360 ++++++++++++++--
- drivers/misc/habanalabs/common/mmu/mmu.c           |  55 +++
- drivers/misc/habanalabs/common/mmu/mmu_v1.c        |  47 +--
- drivers/misc/habanalabs/common/pci/pci.c           |   9 +-
- drivers/misc/habanalabs/common/sysfs.c             | 176 ++++----
- drivers/misc/habanalabs/gaudi/gaudi.c              | 462 +++++++--------------
- drivers/misc/habanalabs/gaudi/gaudiP.h             |   8 +-
- drivers/misc/habanalabs/goya/goya.c                |  45 +-
- drivers/misc/habanalabs/goya/goyaP.h               |   6 +-
- drivers/misc/habanalabs/goya/goya_hwmgr.c          |  67 +--
- drivers/misc/habanalabs/include/common/cpucp_if.h  |   2 +
- .../misc/habanalabs/include/common/hl_boot_if.h    |   5 +
- .../habanalabs/include/gaudi/gaudi_async_events.h  |  10 +
- include/uapi/misc/habanalabs.h                     | 146 ++++---
- 27 files changed, 1504 insertions(+), 915 deletions(-)
- delete mode 100644 drivers/misc/habanalabs/common/hwmgr.c

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D0E4C7550
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FCD4C7419
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiB1Rwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S238247AbiB1RlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239036AbiB1RsB (ORCPT
+        with ESMTP id S238573AbiB1RiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:48:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04655A0BDC;
-        Mon, 28 Feb 2022 09:38:26 -0800 (PST)
+        Mon, 28 Feb 2022 12:38:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485153E0A;
+        Mon, 28 Feb 2022 09:33:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9804F61549;
-        Mon, 28 Feb 2022 17:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2758C340E7;
-        Mon, 28 Feb 2022 17:38:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D17E761359;
+        Mon, 28 Feb 2022 17:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B62C340E7;
+        Mon, 28 Feb 2022 17:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069905;
-        bh=7IUjcYtpSmXwRIc5CdSx6f7wOUuj9jn09/OakLM90AU=;
+        s=korg; t=1646069595;
+        bh=/3wMuk5dVomCtEwH4m1c/LTp++Sgz0IwaN6J265Drmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LcPKbG7qtLWqYvSR4+1qa5RvcWuZaV1f8+n4fW38S9SaaRumfQ6JGM6I73QBsVjDH
-         cezxpi0f9aS1khFOsS3d9/IrFYHs+CwDsJJCYGetZgkiYrQ14il5c08h8j6B3Di4Pg
-         /KHDvxJydISbwztv/nMWVN9iZF2EIadXLVZ4/Trc=
+        b=PoSby5mww/dfFpnWSvghIxIroMPBOsStH7CzuHkp5+9nySLLWMbKwOUwWJKTOtK4x
+         mbSEXzAnRmPoEHoGIblFvq6e13rivGKPLl8Rj1RoIJBC/+H9Se3SxlRr6KLgHjHuO1
+         V5hkEYN1Is9NJ/vMlH8LoqAMHyOZyGK39GeJEwk8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH 5.15 055/139] io_uring: add a schedule point in io_add_buffers()
+        stable@vger.kernel.org, Liang Zhang <zhangliang5@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 08/80] KVM: x86/mmu: make apf token non-zero to fix bug
 Date:   Mon, 28 Feb 2022 18:23:49 +0100
-Message-Id: <20220228172353.504279908@linuxfoundation.org>
+Message-Id: <20220228172312.554378128@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,87 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Liang Zhang <zhangliang5@huawei.com>
 
-commit f240762f88b4b1b58561939ffd44837759756477 upstream.
+commit 6f3c1fc53d86d580d8d6d749c4af23705e4f6f79 upstream.
 
-Looping ~65535 times doing kmalloc() calls can trigger soft lockups,
-especially with DEBUG features (like KASAN).
+In current async pagefault logic, when a page is ready, KVM relies on
+kvm_arch_can_dequeue_async_page_present() to determine whether to deliver
+a READY event to the Guest. This function test token value of struct
+kvm_vcpu_pv_apf_data, which must be reset to zero by Guest kernel when a
+READY event is finished by Guest. If value is zero meaning that a READY
+event is done, so the KVM can deliver another.
+But the kvm_arch_setup_async_pf() may produce a valid token with zero
+value, which is confused with previous mention and may lead the loss of
+this READY event.
 
-[  253.536212] watchdog: BUG: soft lockup - CPU#64 stuck for 26s! [b219417889:12575]
-[  253.544433] Modules linked in: vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
-[  253.544451] CPU: 64 PID: 12575 Comm: b219417889 Tainted: G S         O      5.17.0-smp-DEV #801
-[  253.544457] RIP: 0010:kernel_text_address (./include/asm-generic/sections.h:192 ./include/linux/kallsyms.h:29 kernel/extable.c:67 kernel/extable.c:98)
-[  253.544464] Code: 0f 93 c0 48 c7 c1 e0 63 d7 a4 48 39 cb 0f 92 c1 20 c1 0f b6 c1 5b 5d c3 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 89 fb <48> c7 c0 00 00 80 a0 41 be 01 00 00 00 48 39 c7 72 0c 48 c7 c0 40
-[  253.544468] RSP: 0018:ffff8882d8baf4c0 EFLAGS: 00000246
-[  253.544471] RAX: 1ffff1105b175e00 RBX: ffffffffa13ef09a RCX: 00000000a13ef001
-[  253.544474] RDX: ffffffffa13ef09a RSI: ffff8882d8baf558 RDI: ffffffffa13ef09a
-[  253.544476] RBP: ffff8882d8baf4d8 R08: ffff8882d8baf5e0 R09: 0000000000000004
-[  253.544479] R10: ffff8882d8baf5e8 R11: ffffffffa0d59a50 R12: ffff8882eab20380
-[  253.544481] R13: ffffffffa0d59a50 R14: dffffc0000000000 R15: 1ffff1105b175eb0
-[  253.544483] FS:  00000000016d3380(0000) GS:ffff88af48c00000(0000) knlGS:0000000000000000
-[  253.544486] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  253.544488] CR2: 00000000004af0f0 CR3: 00000002eabfa004 CR4: 00000000003706e0
-[  253.544491] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  253.544492] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  253.544494] Call Trace:
-[  253.544496]  <TASK>
-[  253.544498] ? io_queue_sqe (fs/io_uring.c:7143)
-[  253.544505] __kernel_text_address (kernel/extable.c:78)
-[  253.544508] unwind_get_return_address (arch/x86/kernel/unwind_frame.c:19)
-[  253.544514] arch_stack_walk (arch/x86/kernel/stacktrace.c:27)
-[  253.544517] ? io_queue_sqe (fs/io_uring.c:7143)
-[  253.544521] stack_trace_save (kernel/stacktrace.c:123)
-[  253.544527] ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-[  253.544531] ? ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-[  253.544533] ? __kasan_kmalloc (mm/kasan/common.c:524)
-[  253.544535] ? kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-[  253.544541] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544544] ? __io_queue_sqe (fs/io_uring.c:?)
-[  253.544551] __kasan_kmalloc (mm/kasan/common.c:524)
-[  253.544553] kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-[  253.544556] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544560] io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544564] ? __kasan_slab_alloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-[  253.544567] ? __kasan_slab_alloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-[  253.544569] ? kmem_cache_alloc_bulk (mm/slab.h:732 mm/slab.c:3546)
-[  253.544573] ? __io_alloc_req_refill (fs/io_uring.c:2078)
-[  253.544578] ? io_submit_sqes (fs/io_uring.c:7441)
-[  253.544581] ? __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-[  253.544584] ? __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-[  253.544587] ? do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-[  253.544590] ? entry_SYSCALL_64_after_hwframe (??:?)
-[  253.544596] __io_queue_sqe (fs/io_uring.c:?)
-[  253.544600] io_queue_sqe (fs/io_uring.c:7143)
-[  253.544603] io_submit_sqe (fs/io_uring.c:?)
-[  253.544608] io_submit_sqes (fs/io_uring.c:?)
-[  253.544612] __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-[  253.544616] __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-[  253.544619] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-[  253.544623] entry_SYSCALL_64_after_hwframe (??:?)
+This bug may cause task blocked forever in Guest:
+ INFO: task stress:7532 blocked for more than 1254 seconds.
+       Not tainted 5.10.0 #16
+ "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+ task:stress          state:D stack:    0 pid: 7532 ppid:  1409
+ flags:0x00000080
+ Call Trace:
+  __schedule+0x1e7/0x650
+  schedule+0x46/0xb0
+  kvm_async_pf_task_wait_schedule+0xad/0xe0
+  ? exit_to_user_mode_prepare+0x60/0x70
+  __kvm_handle_async_pf+0x4f/0xb0
+  ? asm_exc_page_fault+0x8/0x30
+  exc_page_fault+0x6f/0x110
+  ? asm_exc_page_fault+0x8/0x30
+  asm_exc_page_fault+0x1e/0x30
+ RIP: 0033:0x402d00
+ RSP: 002b:00007ffd31912500 EFLAGS: 00010206
+ RAX: 0000000000071000 RBX: ffffffffffffffff RCX: 00000000021a32b0
+ RDX: 000000000007d011 RSI: 000000000007d000 RDI: 00000000021262b0
+ RBP: 00000000021262b0 R08: 0000000000000003 R09: 0000000000000086
+ R10: 00000000000000eb R11: 00007fefbdf2baa0 R12: 0000000000000000
+ R13: 0000000000000002 R14: 000000000007d000 R15: 0000000000001000
 
-Fixes: ddf0322db79c ("io_uring: add IORING_OP_PROVIDE_BUFFERS")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring <io-uring@vger.kernel.org>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220215041003.2394784-1-eric.dumazet@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
+Message-Id: <20220222031239.1076682-1-zhangliang5@huawei.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/mmu/mmu.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4454,6 +4454,7 @@ static int io_add_buffers(struct io_prov
- 		} else {
- 			list_add_tail(&buf->list, &(*head)->list);
- 		}
-+		cond_resched();
- 	}
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3631,12 +3631,23 @@ static void shadow_page_table_clear_floo
+ 	walk_shadow_page_lockless_end(vcpu);
+ }
  
- 	return i ? i : -ENOMEM;
++static u32 alloc_apf_token(struct kvm_vcpu *vcpu)
++{
++	/* make sure the token value is not 0 */
++	u32 id = vcpu->arch.apf.id;
++
++	if (id << 12 == 0)
++		vcpu->arch.apf.id = 1;
++
++	return (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
++}
++
+ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 				    gfn_t gfn)
+ {
+ 	struct kvm_arch_async_pf arch;
+ 
+-	arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
++	arch.token = alloc_apf_token(vcpu);
+ 	arch.gfn = gfn;
+ 	arch.direct_map = vcpu->arch.mmu->direct_map;
+ 	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
 
 

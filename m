@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891E94C76D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A7C4C7543
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239885AbiB1SHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S239782AbiB1Rxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240439AbiB1SDd (ORCPT
+        with ESMTP id S238720AbiB1Rs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7B771CB6;
-        Mon, 28 Feb 2022 09:47:14 -0800 (PST)
+        Mon, 28 Feb 2022 12:48:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86178A1BF4;
+        Mon, 28 Feb 2022 09:38:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89BCA60748;
-        Mon, 28 Feb 2022 17:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929E5C340E7;
-        Mon, 28 Feb 2022 17:47:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B73BB815B3;
+        Mon, 28 Feb 2022 17:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41C1C340E7;
+        Mon, 28 Feb 2022 17:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070432;
-        bh=XSLKRkij1uXAIPZeU+vR3idzKH3jAVHBKW7vVMbPZpQ=;
+        s=korg; t=1646069927;
+        bh=DYAZNilmD8cCnmy4h4SXlX7Bd/ZLe909alZgUubnF3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z1xg9TOl1Tl7mJyggkxEta+WOt7NX3jMyxIZbXHpCFGgH8ExN4fSEQZLy1n1ntBnV
-         BFgPvQPMv1Bey7+6s16TNwljAjJ3JagjXo0o1bX4AsnTgOAzQVo7V31r308rlOsJBX
-         FJgw8nPdHkBmVVt+KW7LpctBKs8DPhjXQpb3L6Zs=
+        b=vXI5GksOx1gSk7xpxjoNq28p394Ewndg4yW/DmbRvPOLwdpR14N+e3wvO/hlpviag
+         PZNdDcM4+rz9RT30YMP4397MBGXtuPN7vIRt2DY9of0dk74xNJVr2k0UW2RvJJdMfo
+         aiGwy8ylGagd016TYfZetJe815tduMMU2v1VZHpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH 5.16 057/164] bpf: Do not try bpf_msg_push_data with len 0
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.15 045/139] hwmon: Handle failure to register sensor with thermal zone correctly
 Date:   Mon, 28 Feb 2022 18:23:39 +0100
-Message-Id: <20220228172405.333864395@linuxfoundation.org>
+Message-Id: <20220228172352.445874237@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Maurer <fmaurer@redhat.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 4a11678f683814df82fca9018d964771e02d7e6d upstream.
+commit 1b5f517cca36292076d9e38fa6e33a257703e62e upstream.
 
-If bpf_msg_push_data() is called with len 0 (as it happens during
-selftests/bpf/test_sockmap), we do not need to do anything and can
-return early.
+If an attempt is made to a sensor with a thermal zone and it fails,
+the call to devm_thermal_zone_of_sensor_register() may return -ENODEV.
+This may result in crashes similar to the following.
 
-Calling bpf_msg_push_data() with len 0 previously lead to a wrong ENOMEM
-error: we later called get_order(copy + len); if len was 0, copy + len
-was also often 0 and get_order() returned some undefined value (at the
-moment 52). alloc_pages() caught that and failed, but then bpf_msg_push_data()
-returned ENOMEM. This was wrong because we are most probably not out of
-memory and actually do not need any additional memory.
+Unable to handle kernel NULL pointer dereference at virtual address 00000000000003cd
+...
+Internal error: Oops: 96000021 [#1] PREEMPT SMP
+...
+pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : mutex_lock+0x18/0x60
+lr : thermal_zone_device_update+0x40/0x2e0
+sp : ffff800014c4fc60
+x29: ffff800014c4fc60 x28: ffff365ee3f6e000 x27: ffffdde218426790
+x26: ffff365ee3f6e000 x25: 0000000000000000 x24: ffff365ee3f6e000
+x23: ffffdde218426870 x22: ffff365ee3f6e000 x21: 00000000000003cd
+x20: ffff365ee8bf3308 x19: ffffffffffffffed x18: 0000000000000000
+x17: ffffdde21842689c x16: ffffdde1cb7a0b7c x15: 0000000000000040
+x14: ffffdde21a4889a0 x13: 0000000000000228 x12: 0000000000000000
+x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+x8 : 0000000001120000 x7 : 0000000000000001 x6 : 0000000000000000
+x5 : 0068000878e20f07 x4 : 0000000000000000 x3 : 00000000000003cd
+x2 : ffff365ee3f6e000 x1 : 0000000000000000 x0 : 00000000000003cd
+Call trace:
+ mutex_lock+0x18/0x60
+ hwmon_notify_event+0xfc/0x110
+ 0xffffdde1cb7a0a90
+ 0xffffdde1cb7a0b7c
+ irq_thread_fn+0x2c/0xa0
+ irq_thread+0x134/0x240
+ kthread+0x178/0x190
+ ret_from_fork+0x10/0x20
+Code: d503201f d503201f d2800001 aa0103e4 (c8e47c02)
 
-Fixes: 6fff607e2f14b ("bpf: sk_msg program helper bpf_msg_push_data")
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/df69012695c7094ccb1943ca02b4920db3537466.1644421921.git.fmaurer@redhat.com
+Jon Hunter reports that the exact call sequence is:
+
+hwmon_notify_event()
+  --> hwmon_thermal_notify()
+    --> thermal_zone_device_update()
+      --> update_temperature()
+        --> mutex_lock()
+
+The hwmon core needs to handle all errors returned from calls
+to devm_thermal_zone_of_sensor_register(). If the call fails
+with -ENODEV, report that the sensor was not attached to a
+thermal zone  but continue to register the hwmon device.
+
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Fixes: 1597b374af222 ("hwmon: Add notification support")
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/filter.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/hwmon.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2711,6 +2711,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_
- 	if (unlikely(flags))
- 		return -EINVAL;
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -214,12 +214,14 @@ static int hwmon_thermal_add_sensor(stru
  
-+	if (unlikely(len == 0))
+ 	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+ 						   &hwmon_thermal_ops);
+-	/*
+-	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
+-	 * so ignore that error but forward any other error.
+-	 */
+-	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
+-		return PTR_ERR(tzd);
++	if (IS_ERR(tzd)) {
++		if (PTR_ERR(tzd) != -ENODEV)
++			return PTR_ERR(tzd);
++		dev_info(dev, "temp%d_input not attached to any thermal zone\n",
++			 index + 1);
++		devm_kfree(dev, tdata);
 +		return 0;
-+
- 	/* First find the starting scatterlist element */
- 	i = msg->sg.start;
- 	do {
++	}
+ 
+ 	err = devm_add_action(dev, hwmon_thermal_remove_sensor, &tdata->node);
+ 	if (err)
 
 

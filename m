@@ -2,201 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1D84C6F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3734C6F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbiB1OOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S234081AbiB1OPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiB1OOb (ORCPT
+        with ESMTP id S231997AbiB1OPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:14:31 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE67424A5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:13:51 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d17so15641307wrc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=hxrYZWbf+t1SkWdBj7V3c0s4/eY5PWXdIAHGF4Ng3mE=;
-        b=sjkiMNjntMCkg8BhMsA+AT9L4II8B+wM8IUbHEQenvbEZ6m657vD5ltKHYBDGWKACo
-         cbHq35b0bj3mVfcJoFPXZeY9tSQimWPqWJ9LrwBOZoWF4VlFPIk+BvVoEByVvfGzZut0
-         GrnGXZlDlnOwjaEOgBUCv8hixa3e9Wz04Du8/x3MGH2SyNAmmYEccx6szKnawGOVh5av
-         34+wA0d3v7HXJoVNQQIH70gTgJzp/OLMAz6tacnwa4C5s58aNhOTS5BtEUsm/0KAKCIP
-         wVA38VY2eq9I7mxcpZnsXyiREXYqEAETnPDcM2eWcBn2frCHmS0usKXL8colTZ9ToMVt
-         5GUw==
+        Mon, 28 Feb 2022 09:15:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9427427DA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:14:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646057670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2exk6k2NFpFhRNyzQ86mHmzJ2MpkNYTiFBpW3kB7MP4=;
+        b=hd4GTx91nRAyb79hITLEObffMscAFmMwkUeHqmmjhxWQMC7FWmuFQW+lUxDdpfVGRefmDR
+        IGWc+tZ9sLvE7tSpKkfpXbVj5VrNGWzh3XqRZ26NGe7hBDOP9BzSR3z3+rB76KPABTBLDh
+        iPtYIHHPDEP8iTnHCK8AebGTStGDRUA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-Haln9fVGOfKsrx7ySTiH4Q-1; Mon, 28 Feb 2022 09:14:28 -0500
+X-MC-Unique: Haln9fVGOfKsrx7ySTiH4Q-1
+Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so2122678wrg.19
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:14:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hxrYZWbf+t1SkWdBj7V3c0s4/eY5PWXdIAHGF4Ng3mE=;
-        b=0wlXy4LMvewylg1pMFZYyag/VPuUmB/Y0+DHN6mZ/YoDFPmQ+tNZ6V+SYuVCAmXKxy
-         sQidESR/AQXeCmgcy5p7xo4KU48osZ3pwebE5PtRATL/zbrad+KEHNBIL/jaGiBd3uLi
-         tEXjFFJgoPgLr6t/Jp/GpzVmLlyNecsHvi80E0pyIfDv55dK5w+gqnVCIZaA1F/KWjmT
-         z2caKLE+n6Bz1apd79S8ki3+dJlfnxdGC6Hk2cH+JXL7hSRPHAtJ1CgoylOuXbJnjttg
-         YvdYjUJAERLm9C/TVG/Ex9R3Ok7p62c26wSjZELv3Dj2knzrxUkMWwil4cyeZmq3BP+y
-         y7sw==
-X-Gm-Message-State: AOAM531uVi7du4hYcArSsQ7dY02NQ1134tV83vc0YaIaDAytd+9UzhzQ
-        dtjVoff59pDc7SCnEAcjCwsQGw==
-X-Google-Smtp-Source: ABdhPJwYaUoKYjigKtVEJBaIMvwSs88l9Q8uTGiDZw7db/brtNNBh2cmfs/+K0MqPnGExy27Xga+aA==
-X-Received: by 2002:a5d:6052:0:b0:1ed:9fcc:3055 with SMTP id j18-20020a5d6052000000b001ed9fcc3055mr16885437wrt.438.1646057630394;
-        Mon, 28 Feb 2022 06:13:50 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:6431:1dc7:b58f:6282? ([2001:861:44c0:66c0:6431:1dc7:b58f:6282])
-        by smtp.gmail.com with ESMTPSA id a9-20020a05600c2d4900b0038100a95903sm14131513wmg.41.2022.02.28.06.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:13:50 -0800 (PST)
-Message-ID: <29b34655-f820-39c9-4363-878481cd3f63@baylibre.com>
-Date:   Mon, 28 Feb 2022 15:13:48 +0100
+        bh=2exk6k2NFpFhRNyzQ86mHmzJ2MpkNYTiFBpW3kB7MP4=;
+        b=7AqLVPLaFEiB79uJGG6RVp61uvl6Jo+TUHFWiMUasplpD/m1GBrIZcpu4dW7C3uEml
+         IwK38Fos+glk/vvaYB2mhcaiR3eeXMec7YXX39YWPZCnvI7y65vSKOVPLxs0pwlTpo8J
+         geQU67MA8VlnRj0Pu0Xf7lwOxs+HaOjPmSWBHERDi6BbhZa5lIo+B8yYfe1mzLjDBTiE
+         CllezR8f8bBSUBUTHF+8tdtb9mOFi6eJVpVN/3WVjNFX93gGsZvIwKmTmMqhNbokIxFJ
+         6j0klSfe+tgH8Zk5m4jTrf+5gChpUkfaFmJW2gqKw3LiJ7WGLPiL5yac2T8agJCC5y5g
+         +FHA==
+X-Gm-Message-State: AOAM531b75Gd6Jj9FQXGGcQVeZDSXDAM52wUcLCrmxqCgtb6DEr34JW8
+        gZbdUZMbnoQXoLVhjt1Wahu6pvuoeM9lMgRyex0IW2FQLbf70LsJZjx3cX5MJO/Ky3vCqEq2HYm
+        ZtomU1hPVlTOkMo4RfY0Ou0Sy
+X-Received: by 2002:a5d:6a87:0:b0:1ed:e3e1:e305 with SMTP id s7-20020a5d6a87000000b001ede3e1e305mr15444415wru.334.1646057667606;
+        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwSweu/vDqttlW8UujeQjHYYvx1IqL/6xa8QGq+PfI8fILt/wD4u5iEdt+ypDzwLNmxlCWi9Q==
+X-Received: by 2002:a5d:6a87:0:b0:1ed:e3e1:e305 with SMTP id s7-20020a5d6a87000000b001ede3e1e305mr15444400wru.334.1646057667415;
+        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
+Received: from vian.redhat.com ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
+        by smtp.gmail.com with ESMTPSA id 9-20020a05600c268900b00381394d74a1sm10342072wmt.9.2022.02.28.06.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 06:14:27 -0800 (PST)
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     rostedt@goodmis.org, bristot@kernel.org, paulmck@kernel.org
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        mtosatti@redhat.com, Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Subject: [PATCH] tracing/osnoise: Force quiescent states while tracing
+Date:   Mon, 28 Feb 2022 15:14:23 +0100
+Message-Id: <20220228141423.259691-1-nsaenzju@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3] tty: serial: meson: Fix the compile link error
- reported by kernel test robot
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220228135530.6918-1-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220228135530.6918-1-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
+kernel might have the side effect of extending grace periods too much.
+This will eventually entice RCU to schedule a task on the isolated CPU
+to end the overly extended grace period, adding unwarranted noise to the
+CPU being traced in the process.
 
-On 28/02/2022 14:55, Yu Tu wrote:
-> Describes the calculation of the UART baud rate clock using a clock
-> frame. Forgot to add in Kconfig kernel test Robot compilation error
-> due to COMMON_CLK dependency.
-> 
-> Fixes: ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
+So, check if we're the only ones running on this isolated CPU and that
+we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
+between measurements.
 
-As I already replied on V2 of this patch, you're invited to apply these fixes directly
-on the next version of your "Use CCF to describe the UART baud rate clock" patchset
-and not as a separate patch.
+Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
+loop's cond_resched() will go though a quiescent state for them.
 
-Thanks,
-Neil
+Note that this same exact problem is what extended quiescent states were
+created for. But adapting them to this specific use-case isn't trivial
+as it'll imply reworking entry/exit and dynticks/context tracking code.
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->   drivers/tty/serial/Kconfig      |  1 +
->   drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
->   2 files changed, 27 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index e952ec5c7a7c..a0f2b82fc18b 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
->   config SERIAL_MESON
->   	tristate "Meson serial port support"
->   	depends on ARCH_MESON || COMPILE_TEST
-> +	depends on COMMON_CLK
->   	select SERIAL_CORE
->   	help
->   	  This enables the driver for the on-chip UARTs of the Amlogic
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index bf6be5468aaf..972f210f3492 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -780,28 +780,37 @@ static int meson_uart_probe(struct platform_device *pdev)
->   		return ret;
->   
->   	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0)
-> -		return irq;
-> +	if (irq < 0) {
-> +		ret = irq;
-> +		goto err_out_clk_disable;
-> +	}
->   
->   	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
->   
->   	if (meson_ports[pdev->id]) {
->   		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
-> -		return -EBUSY;
-> +		ret = -EBUSY;
-> +		goto err_out_clk_disable;
->   	}
->   
->   	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
-> -	if (!port)
-> -		return -ENOMEM;
-> +	if (!port) {
-> +		ret = -ENOMEM;
-> +		goto err_out_clk_disable;
-> +	}
->   
->   	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
-> -	if (IS_ERR(port->membase))
-> -		return PTR_ERR(port->membase);
-> +	if (IS_ERR(port->membase)) {
-> +		ret = PTR_ERR(port->membase);
-> +		goto err_out_clk_disable;
-> +	}
->   
->   	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
->   				    GFP_KERNEL);
-> -	if (!private_data)
-> -		return -ENOMEM;
-> +	if (!private_data) {
-> +		ret = -ENOMEM;
-> +		goto err_out_clk_disable;
-> +	}
->   
->   	if (device_get_match_data(&pdev->dev))
->   		private_data->use_xtal_clk = true;
-> @@ -822,7 +831,7 @@ static int meson_uart_probe(struct platform_device *pdev)
->   
->   	ret = meson_uart_probe_clocks(port);
->   	if (ret)
-> -		return ret;
-> +		goto err_out_clk_disable;
->   
->   	meson_ports[pdev->id] = port;
->   	platform_set_drvdata(pdev, port);
-> @@ -831,9 +840,15 @@ static int meson_uart_probe(struct platform_device *pdev)
->   	meson_uart_reset(port);
->   
->   	ret = uart_add_one_port(&meson_uart_driver, port);
-> -	if (ret)
-> +	if (ret) {
->   		meson_ports[pdev->id] = NULL;
-> +		goto err_out_clk_disable;
-> +	}
-> +
-> +	return 0;
->   
-> +err_out_clk_disable:
-> +	clk_disable_unprepare(pclk);
->   	return ret;
->   }
->   
-> 
-> base-commit: c2faf737abfb10f88f2d2612d573e9edc3c42c37
+Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+---
+ kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 870a08da5b48..4928358f6e88 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -21,7 +21,9 @@
+ #include <linux/uaccess.h>
+ #include <linux/cpumask.h>
+ #include <linux/delay.h>
++#include <linux/tick.h>
+ #include <linux/sched/clock.h>
++#include <linux/sched/isolation.h>
+ #include <uapi/linux/sched/types.h>
+ #include <linux/sched.h>
+ #include "trace.h"
+@@ -1295,6 +1297,7 @@ static int run_osnoise(void)
+ 	struct osnoise_sample s;
+ 	unsigned int threshold;
+ 	u64 runtime, stop_in;
++	unsigned long flags;
+ 	u64 sum_noise = 0;
+ 	int hw_count = 0;
+ 	int ret = -1;
+@@ -1386,6 +1389,22 @@ static int run_osnoise(void)
+ 					osnoise_stop_tracing();
+ 		}
+ 
++		/*
++		 * Check if we're the only ones running on this nohz_full CPU
++		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
++		 * QS since there is no way for RCU to know we're not making
++		 * use of it.
++		 *
++		 * Otherwise it'll be done through cond_resched().
++		 */
++		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
++		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
++		    tick_nohz_tick_stopped()) {
++			local_irq_save(flags);
++			rcu_momentary_dyntick_idle();
++			local_irq_restore(flags);
++		}
++
+ 		/*
+ 		 * For the non-preemptive kernel config: let threads runs, if
+ 		 * they so wish.
+-- 
+2.35.1
 

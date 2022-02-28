@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398354C70EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945A74C70F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236985AbiB1Pr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S236994AbiB1PvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiB1Pr2 (ORCPT
+        with ESMTP id S234182AbiB1PvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:47:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3930D7A985;
-        Mon, 28 Feb 2022 07:46:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3855B811C9;
-        Mon, 28 Feb 2022 15:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 810D8C340E7;
-        Mon, 28 Feb 2022 15:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646063206;
-        bh=zh6mvTHgv6lw8dZUkV2NkLSn/51hOyLeWJyliQ2KXLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HNg3VtPwbqGxzPOoOwGjIVZcODgMtfwe2GjCNGAOIF+yAiwp/V1oSDK94NeMWCISh
-         2zKqmOMO52UUNJNqhf0ySuXIJWfI0aqOpYoN0o7ELy5sfK43fuLOAb46SnGJWb+v3E
-         JDnugjV/rD//WSv9HPiaKLwqKX9qolbP2W9PiKwYmOiguMWPJs7iLcXDs6H9NNDJDn
-         dq+2EYGL41Dqh9YLW7CdXz8KC6aQRWf8uvjt+yWx0xZXBSpkaRMh+2ZCer1GkvrRZa
-         r9C9ZQBmSnoXKCn+I2knGhxMBMebItWYj6EPpv95+K4Kmp96X8lC/IW8lsI/7iuVXy
-         arPXRg2b6Fb+g==
-Date:   Mon, 28 Feb 2022 15:46:41 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH 1/3] dt-bindings: spi: Update clocks property for ARM
- pl022
-Message-ID: <YhzuYdB+Y/euzql4@sirena.org.uk>
-References: <20220228124345.99474-1-singh.kuldeep87k@gmail.com>
- <20220228124345.99474-2-singh.kuldeep87k@gmail.com>
- <6e14bdd4-5924-dd58-41ef-5bdb5561913b@arm.com>
- <YhzmHgV3L+3nmt+Y@sirena.org.uk>
- <1763f668-2582-c05e-7ac8-d635bc84ef82@arm.com>
+        Mon, 28 Feb 2022 10:51:08 -0500
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8B17A9B8;
+        Mon, 28 Feb 2022 07:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1646063430;
+  x=1677599430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EwPAkPPxKxS35tuFVR1SCR1lUDJX7spRDbDEEnTwIO4=;
+  b=QKkppyMlvtohejea190Lwx+FyhcNajZrKSNWsegwZriq9dJYAhTVb/XU
+   GHNb6UMmpZmOlU2VX+whOU3ukNWa93yEm3zmhOFhpcpLvLjw9qRM7uEMf
+   oxVI/98e0pYkGe9xpHm/cQdtQMWQlwXtiH5vzdsvr+YNIHt5OcvHAM6kM
+   N63u+WkAystDp/kchA91jaeDWghwY42GXxtEvjFrj7Oe8QpxPFXKMdAoC
+   COnSw/Xn60nDeEbdDERQ0JcX2/11eRoKJwWLAJ9H0d/oLl/Qt1T++lFCN
+   Jt71LFS45Yc6Hok5bylVSiYc7awB9qEXBM2Rl0lc6ARYhmqWzyZhncC79
+   Q==;
+Date:   Mon, 28 Feb 2022 16:50:27 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>, <kernel@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] regulator: virtual: add devicetree support
+Message-ID: <20220228155027.GA16152@axis.com>
+References: <20220218110604.1329024-1-vincent.whitchurch@axis.com>
+ <YhZDVGC7dPiisnI+@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3sg9MoE27A1IvpMe"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1763f668-2582-c05e-7ac8-d635bc84ef82@arm.com>
-X-Cookie: Killing turkeys causes winter.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhZDVGC7dPiisnI+@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 02:23:16PM +0000, Mark Brown wrote:
+> On Fri, Feb 18, 2022 at 12:06:03PM +0100, Vincent Whitchurch wrote:
+> 
+> > The reg-virt-consumer is very useful for development and testing of
+> > regulator drivers since it allows voltages and modes to be set from
+> > userspace.  However, it currently requires platform data so it cannot be
+> > used on modern platforms.  Add support for probing it from the
+> > devicetree to remedy this.
+> 
+> Meh, you can add a bit of code on module_init() to register a platform
+> device or something.
 
---3sg9MoE27A1IvpMe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Something like that could work during manual testing, but I'm hoping to
+use this from a test framework where it's rather impractical to patch
+individual drivers in that way.
 
-On Mon, Feb 28, 2022 at 03:27:08PM +0000, Robin Murphy wrote:
-> On 2022-02-28 15:11, Mark Brown wrote:
+> > Since this driver is only meant for testing and is a purely software
+> > construct, no binding documentation is added.
+> 
+> That's not going to stop anyone.  We should at the very least be
+> printing very loud warnings if anyone tries to intantiate this.
 
-> > Well, it could also be that the clock is wired to some other clock which
-> > is always on (which I guess is why the driver allows this in the first
-> > place, there's a lot of sloppy code around stuff like that in the tree).
+I can add a warning.  Maybe something like this, following the style of
+kernel/trace/trace.c?
 
-> I wouldn't say the driver "allows" it, so much as it just blindly grabs the
-> first clock assuming it's SSPCLK per the binding, and thus it will happen to
-> work out if the underlying physical clock is the same as, or equivalent to,
-> the APB PCLK. Otherwise, it's already into some degree of not working
-> properly, by virtue of reading the wrong clock rate.
+  pr_warn("**********************************************************\n");
+  pr_warn("**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **\n");
+  pr_warn("**                                                      **\n");
+  pr_warn("** regulator-virtual-consumer is only for testing and   **\n");
+  pr_warn("** debugging.  Do not use it in a production kernel.    **\n");
+  pr_warn("**                                                      **\n");
+  pr_warn("**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **\n");
+  pr_warn("**********************************************************\n");
 
-Ah, the APB clock requirement is inherited from the AMBA implementation
-isn't it?  We really ought to be extending an AMBA binding here...
+> 
+> > +	if (!reg_id)
+> > +		reg_id = "default";
+> > +
+> 
+> Oh?
 
---3sg9MoE27A1IvpMe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIc7mAACgkQJNaLcl1U
-h9DH5AgAggtT3JHbzSG/s7i5V/nVQjzCepMhOVGYXIkPFY2O+9m8MuXqmcrn3qaN
-sUQijP+V8rxOWCaO8WHufgdvwfVr3+ESrLRLdmYDY7BakGG1p0dugXup8BtviPFh
-BIrgRB+RFl0RYjfP6TKXHfo7pSw2ZFinjsTgukZPEf6R3L4THydMuAv2EbVgng+D
-MSlywzM0Ax0aA2TOOGw9uYLPWgfZRh7zOYpXRljR1bz5v9wZ/T9cITmaNY6eiSVl
-LT3aprK+88es9aQJcs5XDN8r6f457S9Br1+0SPwqtT+WitZuM/1XC94oIYZmJz7B
-3RZSwvJJnF9+mMquDyJkY1ZXvBNnBA==
-=0w2x
------END PGP SIGNATURE-----
-
---3sg9MoE27A1IvpMe--
+As you know, this results in looking for the regulator phandle in a
+property named "default-supply".  I wasn't sure what supply name to use
+for this virtual client.  Getting the name from another property seemed
+unnecessary.  Would you prefer that, or would you suggest some other
+name than "default"?

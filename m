@@ -2,40 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA5D4C785A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695654C784C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236564AbiB1Szy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S234851AbiB1Sri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiB1Szv (ORCPT
+        with ESMTP id S233037AbiB1Srg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:55:51 -0500
-X-Greylist: delayed 381 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 10:55:10 PST
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB79352B1F;
-        Mon, 28 Feb 2022 10:55:10 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D86A3DF8B1;
-        Mon, 28 Feb 2022 10:48:18 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PZHZnodUMfv1; Mon, 28 Feb 2022 10:48:18 -0800 (PST)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-kernel@vger.kernel.org, kernel@puri.sm,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Subject: [PATCH] input: keyboard: snvs_pwrkey: Fix SNVS_HPVIDR1 register address
-Date:   Mon, 28 Feb 2022 19:46:52 +0100
-Message-Id: <20220228184652.277252-1-sebastian.krzyszkowiak@puri.sm>
+        Mon, 28 Feb 2022 13:47:36 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC0D21D;
+        Mon, 28 Feb 2022 10:46:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 91D2E219A0;
+        Mon, 28 Feb 2022 18:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646074015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFD/luhJC8LruRYLMs0gTooM9kEU0Vb0THBd4sc3pRA=;
+        b=KRyo6rUkMNul2GZJKG7Kx0l4Nw4gD3yieyj/lCJCTigs5UFZ978tEqO1/WbNe75Q6r5PU/
+        jEvk+0GNiPgx1SINVBkCHyUeG/o7df+NptnWhTTZ+74gBbV0gL7jhYSV9B5RCwwVVOAH9R
+        vHSGjFMxoT/+7S52NU/YCFOvI+99ku4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6539F13AE1;
+        Mon, 28 Feb 2022 18:46:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rAuLF58YHWJGTgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 28 Feb 2022 18:46:55 +0000
+Date:   Mon, 28 Feb 2022 19:46:53 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive
+ codepaths
+Message-ID: <20220228184653.GA1812@blackbody.suse.cz>
+References: <20220226002412.113819-1-shakeelb@google.com>
+ <20220225165842.561d3a475310aeab86a2d653@linux-foundation.org>
+ <CALvZod7SA17vounKnq1KX23172rztNN_Oo0K1XaeEuS4JVEhMw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7SA17vounKnq1KX23172rztNN_Oo0K1XaeEuS4JVEhMw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,28 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both i.MX6 and i.MX8 reference manuals list 0xBF8 as SNVS_HPVIDR1
-(chapters 57.9 and 6.4.5 respectively).
+On Fri, Feb 25, 2022 at 05:42:57PM -0800, Shakeel Butt <shakeelb@google.com> wrote:
+> Yes, the right fix would be to optimize the flushing code (but that
+> would require more work/time). However I still think letting
+> performance critical code paths to skip the sync flush would be good
+> in general. So, if the current patch is not to your liking we can
+> remove mem_cgroup_flush_stats() from workingset_refault().
 
-Fixes: 1a26c920717a ("Input: snvs_pwrkey - send key events for i.MX6 S, DL and Q")
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/input/keyboard/snvs_pwrkey.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What about flushing just the subtree of the memcg where the refault
+happens?
+It doesn't reduce the overall work and there's still full-tree
+cgroup_rstat_lock but it should make the chunks of work smaller
+durations more regular.
 
-diff --git a/drivers/input/keyboard/snvs_pwrkey.c b/drivers/input/keyboard/snvs_pwrkey.c
-index 65286762b02a..ad8660be0127 100644
---- a/drivers/input/keyboard/snvs_pwrkey.c
-+++ b/drivers/input/keyboard/snvs_pwrkey.c
-@@ -20,7 +20,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/regmap.h>
- 
--#define SNVS_HPVIDR1_REG	0xF8
-+#define SNVS_HPVIDR1_REG	0xBF8
- #define SNVS_LPSR_REG		0x4C	/* LP Status Register */
- #define SNVS_LPCR_REG		0x38	/* LP Control Register */
- #define SNVS_HPSR_REG		0x14
--- 
-2.35.1
+
+Michal
 

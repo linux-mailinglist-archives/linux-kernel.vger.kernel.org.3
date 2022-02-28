@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570CE4C764A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E754C74DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiB1SBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S238772AbiB1Rrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240756AbiB1Rye (ORCPT
+        with ESMTP id S239462AbiB1RoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68F550065;
-        Mon, 28 Feb 2022 09:42:58 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886DB9D4ED;
+        Mon, 28 Feb 2022 09:36:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D769B815B8;
-        Mon, 28 Feb 2022 17:42:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB00C340E7;
-        Mon, 28 Feb 2022 17:42:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22A01614C9;
+        Mon, 28 Feb 2022 17:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3970BC340FB;
+        Mon, 28 Feb 2022 17:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070176;
-        bh=v+vqe5cFqVXm0aqjTyrSV3VL+XcjaDQMvZr8cnMPM2g=;
+        s=korg; t=1646069784;
+        bh=B67488vlLg8wvpE4eeP01HLsZ1yBWp4dAWwWJBaCMPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aMHp8gdfqNTT3NarGqEYlAWhBm9CHwD/QLVgvAGqaPd6gzMb/gUwKy6MumoOqpio0
-         Mmrs3SNSkt+5+nWt4O7qMiTZNyTiKQru8oaW99sZjuVyGPyLN4DiyoeSbp6hBy7tXD
-         9e59Aj2CBs/qWnLMnm1F4R4sAaJDZkHH0UOBw2bM=
+        b=qHvtsqAOe0b8Yzie5EvE72lXXl9TjO2Sx1gzkRljp65ryrf1wx5dveA55P2CBZ9ih
+         0QoEh8JuEQ8JyOI+FXZav6EHrjPssYNoxHns79JX1Ev9acrWAK8v1eCdqrRDFG7/PI
+         1MQzex9YTR969wMRvkeOvAnNn3/+sSQdyc4LILZU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang Zhang <zhangliang5@huawei.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 014/164] KVM: x86/mmu: make apf token non-zero to fix bug
-Date:   Mon, 28 Feb 2022 18:22:56 +0100
-Message-Id: <20220228172401.184361652@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        "Masami Ichikawa(CIP)" <masami.ichikawa@cybertrust.co.jp>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.15 003/139] cgroup-v1: Correct privileges check in release_agent writes
+Date:   Mon, 28 Feb 2022 18:22:57 +0100
+Message-Id: <20220228172347.935048104@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,79 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang Zhang <zhangliang5@huawei.com>
+From: Michal Koutný <mkoutny@suse.com>
 
-commit 6f3c1fc53d86d580d8d6d749c4af23705e4f6f79 upstream.
+commit 467a726b754f474936980da793b4ff2ec3e382a7 upstream.
 
-In current async pagefault logic, when a page is ready, KVM relies on
-kvm_arch_can_dequeue_async_page_present() to determine whether to deliver
-a READY event to the Guest. This function test token value of struct
-kvm_vcpu_pv_apf_data, which must be reset to zero by Guest kernel when a
-READY event is finished by Guest. If value is zero meaning that a READY
-event is done, so the KVM can deliver another.
-But the kvm_arch_setup_async_pf() may produce a valid token with zero
-value, which is confused with previous mention and may lead the loss of
-this READY event.
+The idea is to check: a) the owning user_ns of cgroup_ns, b)
+capabilities in init_user_ns.
 
-This bug may cause task blocked forever in Guest:
- INFO: task stress:7532 blocked for more than 1254 seconds.
-       Not tainted 5.10.0 #16
- "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
- task:stress          state:D stack:    0 pid: 7532 ppid:  1409
- flags:0x00000080
- Call Trace:
-  __schedule+0x1e7/0x650
-  schedule+0x46/0xb0
-  kvm_async_pf_task_wait_schedule+0xad/0xe0
-  ? exit_to_user_mode_prepare+0x60/0x70
-  __kvm_handle_async_pf+0x4f/0xb0
-  ? asm_exc_page_fault+0x8/0x30
-  exc_page_fault+0x6f/0x110
-  ? asm_exc_page_fault+0x8/0x30
-  asm_exc_page_fault+0x1e/0x30
- RIP: 0033:0x402d00
- RSP: 002b:00007ffd31912500 EFLAGS: 00010206
- RAX: 0000000000071000 RBX: ffffffffffffffff RCX: 00000000021a32b0
- RDX: 000000000007d011 RSI: 000000000007d000 RDI: 00000000021262b0
- RBP: 00000000021262b0 R08: 0000000000000003 R09: 0000000000000086
- R10: 00000000000000eb R11: 00007fefbdf2baa0 R12: 0000000000000000
- R13: 0000000000000002 R14: 000000000007d000 R15: 0000000000001000
+The commit 24f600856418 ("cgroup-v1: Require capabilities to set
+release_agent") got this wrong in the write handler of release_agent
+since it checked user_ns of the opener (may be different from the owning
+user_ns of cgroup_ns).
+Secondly, to avoid possibly confused deputy, the capability of the
+opener must be checked.
 
-Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
-Message-Id: <20220222031239.1076682-1-zhangliang5@huawei.com>
+Fixes: 24f600856418 ("cgroup-v1: Require capabilities to set release_agent")
 Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Link: https://lore.kernel.org/stable/20220216121142.GB30035@blackbody.suse.cz/
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+Reviewed-by: Masami Ichikawa(CIP) <masami.ichikawa@cybertrust.co.jp>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/mmu.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ kernel/cgroup/cgroup-v1.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3905,12 +3905,23 @@ static void shadow_page_table_clear_floo
- 	walk_shadow_page_lockless_end(vcpu);
- }
- 
-+static u32 alloc_apf_token(struct kvm_vcpu *vcpu)
-+{
-+	/* make sure the token value is not 0 */
-+	u32 id = vcpu->arch.apf.id;
-+
-+	if (id << 12 == 0)
-+		vcpu->arch.apf.id = 1;
-+
-+	return (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
-+}
-+
- static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 				    gfn_t gfn)
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -549,6 +549,7 @@ static ssize_t cgroup_release_agent_writ
+ 					  char *buf, size_t nbytes, loff_t off)
  {
- 	struct kvm_arch_async_pf arch;
+ 	struct cgroup *cgrp;
++	struct cgroup_file_ctx *ctx;
  
--	arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
-+	arch.token = alloc_apf_token(vcpu);
- 	arch.gfn = gfn;
- 	arch.direct_map = vcpu->arch.mmu->direct_map;
- 	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
+ 	BUILD_BUG_ON(sizeof(cgrp->root->release_agent_path) < PATH_MAX);
+ 
+@@ -556,8 +557,9 @@ static ssize_t cgroup_release_agent_writ
+ 	 * Release agent gets called with all capabilities,
+ 	 * require capabilities to set release agent.
+ 	 */
+-	if ((of->file->f_cred->user_ns != &init_user_ns) ||
+-	    !capable(CAP_SYS_ADMIN))
++	ctx = of->priv;
++	if ((ctx->ns->user_ns != &init_user_ns) ||
++	    !file_ns_capable(of->file, &init_user_ns, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	cgrp = cgroup_kn_lock_live(of->kn, false);
 
 

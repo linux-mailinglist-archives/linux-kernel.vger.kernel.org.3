@@ -2,269 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97FF4C63B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3018C4C63C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiB1HSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S233620AbiB1HYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbiB1HSC (ORCPT
+        with ESMTP id S231347AbiB1HYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:18:02 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2091.outbound.protection.outlook.com [40.107.20.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736C21D9;
-        Sun, 27 Feb 2022 23:17:22 -0800 (PST)
+        Mon, 28 Feb 2022 02:24:41 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130075.outbound.protection.outlook.com [40.107.13.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4695966AC5;
+        Sun, 27 Feb 2022 23:24:02 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nakv115kWYRChxgP9zFEAaQRTLlhPtQY+R0lKnbUGQXr+icFPEZxUmxGKIsS2ILNE6drKlJxbcPzFtBPEz7RwPlG8HEpLo83yiGeAocO4VgKkfe9SlgCDmIoSlruDVUfpJdpuzUzRqynBzvvMD+VJBghgLxw8tZb4KlqaEve+hpcupcDsJkD6lwi6DT8MSj7NtyRMEWJUW0O0cEJlKzbzKirebIvA9Dfu5BVyLcFGQS5Xd21M6XN4m8gPQdUiuLl5r4wB0M2r0XKffpJ9TOjiQRQvZkfshxGNxfXpFVzJzaNmQ/GFupKOwjFfORwhdFfkhu5jzB5HnheWwvOOqs6Ag==
+ b=hiYT8akoiaH9t+4R9gbC/nQ+uZrYQgDeQfANO4XbaNToSt3IA7t36qX0OK1VnjtGNMpMuPKFfBJrzLd3qw4LXkXDSqyg7jPnhO25VdFwM2D/iY0Xjag14Bey/90uo/WHo54OcigC6nDlGkP/PBM/DCFSxpfk3ZIklTu6qR3+hWXlddD+jAVLpSjl9Lxw+YB9bRgEk2ICeRAyGi+680EN0F6seu1VOEMnU4iitAsKGCaRf9rXEzj84qsBqcwrkfWJI/skil9RiB7DJD6muNWY+NSPB/wKPGbHqOc3AJ+ktqu0LZJlX6Ep3B556Wsl6zS78xmMOteba2YnVXqLftONwA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ItXo0edaAv26vpZ+c5d9S5dAsoAp0gsx5xRh9gs3tZI=;
- b=cMgFMGYIRTBkNRfPver5SORxzSDuw+COTEpvKUhpcP25zj4SG+qqFCWiDFKtEMqSQsLYhRDM4LJslMffXM8Qkg/fqJWj4WXpp+/iYuUmyElMRdVoA+aJY7gC4xzvJ4NZH7zB7CeZ9lNnS3GqqF9xFz8vMBIeY9YnIsYU6KzEA5LGTTah405ndsFEhGdyJaTCPuKv9SlS4acSofqvZ50LJTlHzkniQ12XvMpwZSxRwSLe0jJ6KQGBCp7DLNYkR0hMA0lkDVTiz1dsjAgyyDqFc615uCfq37baHCPt4rYYl2+3OWXDwvjcwlDvWRN56cjrDSDPQPYJ6Vz5Brpkq0c7Fw==
+ bh=aSzdleLiZMFuqwoE6zntyTfFA/cBY+Wn9/YoCH5nQ2Y=;
+ b=VJ3l8dIvwyqWi9qfnVPQ3yzr2urRK6AbNnMG3y8Tn+FzgGCHEzdzPDDgag+z1R1fvPSL1C4WEAibC1qluiJ3Jx5wPnMAPuk4FhQG0aKpxhSCFr/40bLyVelt2xxgh2087PmfikDchj81xQJelMm4P8fVuNvOh5L2EE2TDeD2WV3tVG2m7J6JnaCTMDlgDeHFmqrJB0kIOHG7uaoJV8xeZ/c0mRBlGK64ICLBxIb3NhPUU9Aig3/XYFhnaTC8FrUD6PKrzYXrsUGTI6acONNFOJhIi/dica6j93OXaiM2LL31b3bk9hEnKPSToPr136eIFItbMi6b/Qbcyd+wrVx4Dw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ItXo0edaAv26vpZ+c5d9S5dAsoAp0gsx5xRh9gs3tZI=;
- b=vWA1EarnVyIcW4osm3ThjUvh9q7NTUlX1zlnYiXPTnself3vyd/RfeYBJFGpG4Dmt6oJF5H9GsmiI9jMDq2cESME5gqe/yG6KTM1qu5XQ+OqTRs9lM7o9imkU59acS6azkaxwFsqAiM0hpFjFt858fqc+DzvPxJRl0XVHPQ4K9s=
+ bh=aSzdleLiZMFuqwoE6zntyTfFA/cBY+Wn9/YoCH5nQ2Y=;
+ b=V8Gd48Mus+6m+MGg3S1/tevS/vGn0NqISTMX1VbAYMvFSWg5F5vjcx6g7C5nPCkNPN8iwt4jTjRTmccFYLnbSsyil6C38csdX7laNlRZZe4sAJ1es68ynrhNK99dr/iovbfntIhAtkhx9LkuExIcbnh00kKBiWbY7pcjHhEd0bA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VI1PR08MB3245.eurprd08.prod.outlook.com (2603:10a6:803:48::20)
- by DB8PR08MB4123.eurprd08.prod.outlook.com (2603:10a6:10:b2::16) with
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
+ by PAXPR08MB7382.eurprd08.prod.outlook.com (2603:10a6:102:22d::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
- 2022 07:17:18 +0000
-Received: from VI1PR08MB3245.eurprd08.prod.outlook.com
- ([fe80::4007:6de5:a0b9:1533]) by VI1PR08MB3245.eurprd08.prod.outlook.com
- ([fe80::4007:6de5:a0b9:1533%6]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 07:17:18 +0000
-Message-ID: <a5e09e93-106d-0527-5b1e-48dbf3b48b4e@virtuozzo.com>
-Date:   Mon, 28 Feb 2022 10:17:16 +0300
+ 2022 07:23:58 +0000
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::f9ee:a333:b115:5049]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::f9ee:a333:b115:5049%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
+ 07:23:58 +0000
+Message-ID: <fdacf3eb-7892-c767-ae85-1672f85684dc@wolfvision.net>
+Date:   Mon, 28 Feb 2022 08:23:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Vasily Averin <vvs@virtuozzo.com>
-Subject: [PATCH RFC] net: memcg accounting for veth devices
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Linux MM <linux-mm@kvack.org>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel@openvz.org
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3 5/7] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org, jbx6244@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220227153016.950473-1-pgwipeout@gmail.com>
+ <20220227153016.950473-6-pgwipeout@gmail.com>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <20220227153016.950473-6-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0302CA0017.eurprd03.prod.outlook.com
- (2603:10a6:800:e9::27) To VI1PR08MB3245.eurprd08.prod.outlook.com
- (2603:10a6:803:48::20)
+X-ClientProxiedBy: ZR0P278CA0155.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::16) To HE1PR0802MB2426.eurprd08.prod.outlook.com
+ (2603:10a6:3:e1::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 691d39cd-5fbe-4d1e-b297-08d9fa8a5a6a
-X-MS-TrafficTypeDiagnostic: DB8PR08MB4123:EE_
-X-Microsoft-Antispam-PRVS: <DB8PR08MB4123DDE2505B2639A8EEE100AA019@DB8PR08MB4123.eurprd08.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 4c2e95ca-4112-4c64-5850-08d9fa8b4921
+X-MS-TrafficTypeDiagnostic: PAXPR08MB7382:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR08MB738276C9DEA690435F48F234F2019@PAXPR08MB7382.eurprd08.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6SLawBQvtRVU6As9MDg5cHH7Ou/LLJ7wZema49uJ7N5MlxZyY5iakegmGvrD1OoDhBa6qnonrl/f9SkcvnuEqOtjzOHCGGrh7d2JkOaNrypz/LtTA/3+PDKlxTmSS5m4bIyyQUBIVCor9SnapYxiOSkErJ1TI0CrsTjJumz1ZGgnFhEZ5NCGI7y8Kf3Kp2MpRbLw4JbONhPE4L5zmd8GfeKgQHbSVC5dCboLBqXHUKMA0bsEh2jQOv/mg3Ye5xY45AiHLizYV90Dn3DUeRy5XeUzLxrmp68FGCJrGZAKcbW2Z44NPjs31gkbnhTb3n/jst+8ic054SMGmPZi/11jRi1DviPPSCtFDww2VVrJTOgcke2moFzq092MHWfMqDuy4QRMajOwLskjHLg5hBEnfDEvLykX9hdZLAjA+uSuqsgndSJQIvBY5mwgHrST3pq5kyTyyg6jWl2o7NQ5LeKqrTmWDwkd8lek5ecbQGiKy4nrLbcfZ19Iw9BXqCRPJJhT/TsjbcJ6CCpYDyxe+i3XFGxTAnK0gcwKJIi682vMr8qth4sH7g1RNf18HaqcD3X7PC4/8mBewn3aNRID6z0TdT74XxWEKE5dJ8KlX0cMaOvMbm7zzpLfp35UPK9OgE7WJw6w4J4jPp7kthJdDDxZQ9X0OsLa5VDma9HM3A9xgzv03+QW8GLx/oJFowAODQgp9YTJgPoRZGqYE6W/EN60pLaoZZ/oaelytOspdWxuIzHXd1O0l7hUVkxV0y0N+lu45A7N1gAXeP86+Cau5iL9vBbQ7eY/BsaYsK1z6n/dhgE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3245.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(54906003)(110136005)(83380400001)(38100700002)(8676002)(8936002)(4326008)(66476007)(66556008)(36756003)(66946007)(31686004)(508600001)(5660300002)(316002)(7416002)(2616005)(26005)(186003)(6506007)(52116002)(15650500001)(2906002)(31696002)(107886003)(38350700002)(6512007)(86362001)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 0o5H4Mzn0yIB5lPxpLXHMUe4lnCIk8beYRaHrQeJwNj1Z7Nn2iDo92iadaRJAxS4nSlv3RuWVLgGLuqh3ocmabBrG0L8ZeOFb904Z3IWHPXpOxsi7z6/KUJ7Dm237aQ7KZGdn85upiAXtEaX8iE8MKmXKMhnEibiPdCp3E3gkD8yjBMf6CsA+i0Skbtibje2VhhxS+7ep2dqpq18LGtLVsmNoSbfB7DkrtoABPY0BIlbA2JLAW1l+6tv/QtOdtsBtvOKklXZU+Wl8ccWL/qusUjbx3qZrMnZDviZ/Ql4c5pxLoL2kqpQt2h82vT3w8XG3mXw3StYjkqZlCW9I15W4hhvNT0iSKApRbC2PX9qy5EjRUGxmJhKKL0qw/L347qp0yR8hkUYDz1Vdx51I1HblIrB3oJfwdW6gs0grQB0dmqnlNuOZLgNNkHvDwBNYbSAuTWrJswfmubH1QOF3ZprHSg3KP/Y0PB82izxs1iYzOUukgvne6q4BUY8bhs06aMtFu6a+xI6BO/4tF+Zd/xrxbCFOg46O7NQYuMn1aQcoQN+cthMPEjfX8D3vCmN3bZXtN67QK8UDyUaq1uYXvb+NUVVAHqZ6yorn3U5YK/KzR3EpK0NbIlF5KsBUwtNQhb81IzB9Qb/z35zPTRcbUd+iEQxWe31kchDUQcBVTRYuv5nvUEdo1RXsNb/LJt4Dd47hkVEN7HTmXcPdiadzH5+RYJR73rSaK2AkWh2hr8eN+M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(6512007)(31686004)(110136005)(83380400001)(36756003)(2906002)(6486002)(86362001)(316002)(38100700002)(186003)(508600001)(4326008)(53546011)(66476007)(8676002)(66946007)(2616005)(66556008)(44832011)(6506007)(8936002)(5660300002)(52116002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHFOUUJRT09MMWtWTmxPbElTbGczZ29TdmlUdVBaWVRnTDhkMVo2bmdmTUpD?=
- =?utf-8?B?YS9neFpGb2JzL2xubk9ZNllieFZzdGJzOWVnSXVQaEIwVEdZM2EyMG9sUnMy?=
- =?utf-8?B?WEIxWEdVblFHTjIxeTZTMXNkcnRuRFc3NTBhVSsrVlp3NE96NkQrME1Oampv?=
- =?utf-8?B?bU1zOEtEaWtqNnpQMjdMZWxPVi9rb2E1UHZWai9ZMDIzWUxpTXFNbDhIQVRu?=
- =?utf-8?B?cG13TEd1TzJibXhJeTkrVVduR1ByTmppcTVxamxBTlJzM21JanpWNVE2Nms4?=
- =?utf-8?B?QjNGMXQ4SnQyOVkrUG5ZN09LcW9Vekoxd2pGRmR2Q2JNL0prS3NPcnZQT3Y4?=
- =?utf-8?B?c3h0NTE2Z3IyM0lCR0FGSWFOSHhtU0JQdzJlQ1g3ZUc2QUhENkFwRnB5S1N2?=
- =?utf-8?B?M2pNVFdIWFl0T1J2YVhIM1BJbnJIdXJOUkpNWHpJckQyUDFac09kZHQwaDAy?=
- =?utf-8?B?ZVR5WHM4TmQxYjhzYUZCQzBrWjBnTDB0WTNvQWZObG4xZEs5aUZCZUtyc0VH?=
- =?utf-8?B?YmlSbzJNYWxPbjgwZG5PaE1ZZTBKYnhpMjdHME55bklYRHVreFZnSE9SZWE0?=
- =?utf-8?B?QlZXbmRQQkh3TjdybUVxaTBNMWpoYUZRSXkxYitVRzFyVjNQeXA4YXVTTEtl?=
- =?utf-8?B?MmNNbUp3SUR6elZuL3l2NkRQbTYvQmgyUXZ3eGF5Tk5EOVJ4UmpCVkNLUjc5?=
- =?utf-8?B?TEFCeFZkM3RKdmhOeTQ2V1lXUTU2UlR4QXpNbVZZQzB3clZTWXNLNk9DZXFX?=
- =?utf-8?B?Q0wyUHpXQ1NmTXNRRUJCUFBjYTNIY1FYSTV6MXpjRkFjSWZ1cGZhQmQybDJx?=
- =?utf-8?B?WlNCRi80Ui9hcFRhZ0pwMmNPcFVKSENDcTA3YjJXT3hoOFJ3UEQ2NGUxcElj?=
- =?utf-8?B?L3QzOWR4dHBjY0JPS3ZwaEZjRGxTZWdyUmtWelNtV3FKczFSM0hoZ1BVY1F3?=
- =?utf-8?B?dkVHemFoYnpMeVF2cnoyU0psbklWcmwwdVRWTnBJeEY4QXBDcHJ0TFlKNHlE?=
- =?utf-8?B?czFNR25HSWdzWHZIK3MybVRneGRlOEI4dUtyZ29sK1JQMTNoYzU3ZkE5QnY4?=
- =?utf-8?B?aXJQWGJ2Wm9qWWthdDFYU25PbWwzWDA4NkhpajNZajFBbWEzcVA2cUZId2ZR?=
- =?utf-8?B?UnJNNUJud3gvK2RqNFV2azdzZkhNckRIQ1d2UDFLeFhHVG5menlia09sa2VU?=
- =?utf-8?B?aHFuNFdvMUN0ZUFid1BHcS92ZHVaSGlTV0NwUHowZWYwRjlQTTk3ekp0aFZC?=
- =?utf-8?B?dFl3bjIzSXBqVkFVU1k3LzlQYlp6OUFBR2dNeGhaZ1RzMUFqUkV6WWFua1dm?=
- =?utf-8?B?cTY2Z3NiYk0vYXl5NlhCSFZ6eXE2cVFjYkpoUEFoY2ZNRzhZbXVpVEVNVDhS?=
- =?utf-8?B?QXgvRU1RaDhvL1RZQ1VGeVd5OHFrY3lVUm5zaE9UNXhQSEFHbU52aERtcHVZ?=
- =?utf-8?B?OHhoamR2UHlGb0NrNTI5UkRkazVGZUgvb1hRK1FIYjRYK1dMYWZobXEzdWo4?=
- =?utf-8?B?NFZvRnkxd3duT1JMcDJxbmFJT2kxclhYdlBCRFRmTDBqbWYzMlZBcG9yMFNm?=
- =?utf-8?B?UnV2VGxIVDNUM21wSldqcGVyRHdCVWppa0E1NHBSOVRmNkhYMExZdTdvanFu?=
- =?utf-8?B?Y01CTVgzK1U5Ui9vSWpNOUZ1WHZkdms0bzFQeFdlUXE0dFovQzFIT2tIQ281?=
- =?utf-8?B?UTROZ2JBcks4SjRMNXpPZXJId0N2WDV4TFVIMHhqNXFISE4xV0dTQnV0ajRT?=
- =?utf-8?B?VTBNSnZqVjFxbkdnT1JNY2tpNnZpbjZJREtieFRxUGZRZGtKRGM1SDBzV0VG?=
- =?utf-8?B?R2Y2c2RoTStrSHlMQTc0c3BVeFlxbzNWY1lQNVl2SXpVQ3RLZ0Z5RDVxeWp2?=
- =?utf-8?B?M3pmK1IrbmpWSlB6ZjhIaUN3RVR1M0lpa2ozNklvMHBleUp5QVA1OEVaWTJS?=
- =?utf-8?B?TExVdTdILzR3bXJyVEpNL2hzUzdZUEo5WjlIN3krWFJmbTBUYVNWdTZnNjly?=
- =?utf-8?B?VTZvRStiQTBjeElvTlJIVW5tNzVMUXMyZkFQYm5IL241WUpYOXY0ek1DMHNN?=
- =?utf-8?B?WHd2Mml0NkVtNWk2RHFGTUI1Y3NicXBUSytTa25rUmZXUnFGV3U2MStBTjJl?=
- =?utf-8?B?VmtJWVpiOVh2b21QVEJza0lWWm8yY0wrOU9rNWFvVmxIWHNBeCtTY3M5YzJW?=
- =?utf-8?Q?963RTUsGhdCZ8mMd58ZA4sI=3D?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 691d39cd-5fbe-4d1e-b297-08d9fa8a5a6a
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB3245.eurprd08.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QXI4Y0tZVEVsTjRkYTZCWXE4WHFrS3F5azd6bFUzeFpuNnlvYnM3aEhMaUxr?=
+ =?utf-8?B?cHNqaXFTdzdEdzd1TlJzbFo5ZWxGUHdFZkdidVNiNVlqN0M2ZUVDTm9iUUVC?=
+ =?utf-8?B?MW02ekJmZm5wZHNEeTJyUEthNEJQSDZKUmxvUCtnYXhIZlN5R0RidmFZay9K?=
+ =?utf-8?B?RTNXMGZFbzFnQ1J3UzJPdnczL2ZSMEFCODlmcVpnWG5HbTZ3T3FHZEZqRzJo?=
+ =?utf-8?B?NG81eVBnREJmMk9Zall4bWVIWWs2OXpuRXlDOTRyblZyTVJCc1gzYUFoaTlX?=
+ =?utf-8?B?YW12S1dVNHQvVklJdjlWVWo0dEI5a1MycEE4WEVGL3lMQkEvbFVxZlB4UkEy?=
+ =?utf-8?B?ekNIcUc5L1pxaUNWVXd5a2tPTWhUbSsyei9ZSEVZWjVuT3RsNytVUnRKejdk?=
+ =?utf-8?B?SWZpOE40ZytwZEdrSW94Qzg4NU9IS3MzUG5TUndZUlFtYmg4OVFxLzMveWdW?=
+ =?utf-8?B?OFp5OFkwZFZOY2FMZ1hhL3NOVEFmYmlKTjZZZXRialNZZmtqTldNRXVSTWp6?=
+ =?utf-8?B?eDYzOWhqdkhXWTRFWmxsa3JSclpGRGEvYkw4OURiR2VJaHF5bjdWdVFFc0l1?=
+ =?utf-8?B?S0NjdlNGUWh2N0tGbmJKNERldXJwMEN5TXk4ck5BUTI5akUwWGtQNjVDWno4?=
+ =?utf-8?B?WXp0aGp4ZVVXWnZtWWgrYTRFd1p5Z2QzQU5ndmhZUE1VYitLVW5FRWl3NklQ?=
+ =?utf-8?B?L3BMZVgzb1ZrZW5qNGlYa2xjUWhTWXNzU2ZmOXdFT1RzcFZsdFl5WnRRL0FR?=
+ =?utf-8?B?YkR6eG5OV1MvcUtHYVQwZkJQMSt5VHhNallYZVBhWCsvTjR4V3Jvek0wSzdT?=
+ =?utf-8?B?bFhEVlRjaXJDeXppblNCUWF1RXNkbkg3U3hTU3FtOEV1QktMVzEyU3FlSGNq?=
+ =?utf-8?B?NTRsWloyYldyL1QvNkxoa2pyRnJXamY5QStUanhaeUJIQVBXZXFnVHFmT1Nj?=
+ =?utf-8?B?aXMyaGFpTG1rUGlrK0gxdFl2bFAwVEEwQUpBQ1Y5UjR3MlEwSUVENUtPMmpG?=
+ =?utf-8?B?RkNPcSt5SXB4c0ZyWThyQVdKdUFjVCtpOGp1Q3ZreEpacm1EUEQyemNtZVhJ?=
+ =?utf-8?B?TzcrMURzZE51RnlHUmt4SlE0TFVORURDNGd6dXphdE94TXJvajFieGRPZnBi?=
+ =?utf-8?B?SmRodDRXbjBLemQzWWQ3WHFwNW5tTlJYS0hERkJTS080a2VFM3E1eElKWHdu?=
+ =?utf-8?B?TkFnVTJ6bks0dUNWdU52bWFtVkpRSE5xNzBQcW1uYXpYR2VScVZHeWxYZGhh?=
+ =?utf-8?B?N2NxSldyTTZOVUMvb2R4SjRWb1dZREo5NUU5TmZxNlFGeTlwYlJDazh1V3Za?=
+ =?utf-8?B?OHdDNms0UEpDT3N1SEZ4cTFmc3pqOHlkUTROdWxDZDM1N0dtY2xGaGJ1dE9q?=
+ =?utf-8?B?Q2RSQ21HdGpqL29KTVFYVzNCVlNmMGNHNklOTmxYWERDVVJpTVdPRjhXUjNj?=
+ =?utf-8?B?dU84S3ArTVUwdzVheFdrYTFmMllUL1B0bHhxVzkxRnlNMW0wQU9sZG40Y0Vt?=
+ =?utf-8?B?dklORE1BZEdMTlliSXRReDI2ZmFZT0VEcUtPQkpTd2pJQUhIZFhwOTh0dXdF?=
+ =?utf-8?B?RlQ0K1p2OHBIMVRmMERJdnlMaTZ2aWhxcVV4RzZHblZIbDhKbGQ0SUJxcmRm?=
+ =?utf-8?B?SjZuLzhiUzVIUTFPb0Fzc3NuK0FDUXRaZDZFd0tPL3FxNHUvcGN4UjVhNm5Y?=
+ =?utf-8?B?U2hGYmwrSVhPbDk1d0lnMUsyTUxiREc4dTRZanhhdWoySldLaHc2VlFkWkVP?=
+ =?utf-8?B?WFU5VHRKdU5TdjkxMUYwWXRQM3ZyMTdwWHdUdmY4b01XSlpwZXhaQ25IY2Rj?=
+ =?utf-8?B?bzJ4ZmNVUXVIdndra0lmUlk5Q1h4WVV2NEJCQ2toTEhVNEdyT1ZvOGFhU2tL?=
+ =?utf-8?B?V3E1MVdBdVNicTViOHkzaEZwMnFUNUZBOW1uWEJmWVJHNktLdERIN2dtbmJk?=
+ =?utf-8?B?Y2ZWY09HVmRuUzJnVmxYUk4raGRqcy9LWkVSMFRZazZXcmhuNXdGNGM2V2hC?=
+ =?utf-8?B?TFEySHJPenAvMnBpNk9PVzZPVUkzZ0twNDFvWllKeVd2TzIvUzNwQzJ1Rlls?=
+ =?utf-8?B?Qk1LR2lraDFlL1lLYnk4UXVHaVRhRXRFQzNkbnI0MEhRQ3dreUYzQnIvaTNi?=
+ =?utf-8?B?ZDh3U0d1MFhna3g4NUdKdURFUkxIRGdGUkhjK2NsM1k4RzNRQ1VrbG9EeHlh?=
+ =?utf-8?B?L1hUdFFMeFo5TGg0ZXRucnU5eGY2dkh4OHRYakovMXdsYk9LK3c2SzJ4eXNM?=
+ =?utf-8?B?RDVlb0wyQ0lUSDhjMjI1NnRhOW9aTFRNd25OSDAxaHlJZU9aNFZsNlJNUVlF?=
+ =?utf-8?B?R1hzUHU2bi9xOXF4VHJuNHRvL1JZazEzeEIyL3Q1dGV0YjFSaDMzZz09?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c2e95ca-4112-4c64-5850-08d9fa8b4921
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 07:17:18.2289
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 07:23:58.5518
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sJOrNIwZNnEv9imavIqVUn++9kgdDUOkAiwuOMnDQPc1foPVM9pRZsfAJ652v3tioDF1P/ehbySXNl1HcUT+uA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4123
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: BZqJVNwpNVrVwm+yVs0sBwkuwPp9AHC87syRNa/SZhyY15JLIvrOw5gmD1ugTvTnSv8jtgFG8i1/WaFusbPusj5cGLbC3+kZYTC3NEeBuxA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB7382
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following one-liner running inside memcg-limited container consumes
-huge number of host memory and can trigger global OOM.
+Hi Peter,
 
-for i in `seq 1 xxx` ; do ip l a v$i type veth peer name vp$i ; done
+On 2/27/22 16:30, Peter Geis wrote:
+> Add the dwc3 device nodes to the rk356x device trees.
+> The rk3566 has one usb2 capable dwc3 otg controller and one usb3 capable
+> dwc3 host controller.
+> The rk3568 has one usb3 capable dwc3 otg controller and one usb3 capable
+> dwc3 host controller.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3566.dtsi | 11 ++++++++
+>  arch/arm64/boot/dts/rockchip/rk3568.dtsi |  9 ++++++
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 35 +++++++++++++++++++++++-
+>  3 files changed, 54 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566.dtsi b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
+> index 3839eef5e4f7..0b957068ff89 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
+> @@ -6,6 +6,10 @@ / {
+>  	compatible = "rockchip,rk3566";
+>  };
+>  
+> +&pipegrf {
+> +	compatible = "rockchip,rk3566-pipe-grf", "syscon";
+> +};
+> +
+>  &power {
+>  	power-domain@RK3568_PD_PIPE {
+>  		reg = <RK3568_PD_PIPE>;
+> @@ -18,3 +22,10 @@ power-domain@RK3568_PD_PIPE {
+>  		#power-domain-cells = <0>;
+>  	};
+>  };
+> +
+> +&usb_host0_xhci {
+> +	phys = <&usb2phy0_otg>;
+> +	phy-names = "usb2-phy";
+> +	extcon = <&usb2phy0>;
 
-Patch accounts most part of these allocations and can protect host.
----[cut]---
-It is not polished, and perhaps should be splitted.
-obviously it affects other kind of netdevices too.
-Unfortunately I'm not sure that I will have enough time to handle it properly
-and decided to publish current patch version as is.
-OpenVz workaround it by using per-container limit for number of
-available netdevices, but upstream does not have any kind of
-per-container configuration.
-------
+I wonder what the correct place for this extcon property is. You defined
+it on SoC (RK3566) level, in my patch for the RK3568 EVB1 it is added on
+board level. Is this common to all RK356x variants?
 
-Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
----
-  drivers/net/veth.c    | 2 +-
-  fs/kernfs/mount.c     | 2 +-
-  fs/proc/proc_sysctl.c | 3 ++-
-  net/core/neighbour.c  | 4 ++--
-  net/ipv4/devinet.c    | 2 +-
-  net/ipv6/addrconf.c   | 6 +++---
-  6 files changed, 10 insertions(+), 9 deletions(-)
+Best regards,
+Michael
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 354a963075c5..6e0b4a9d0843 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1307,7 +1307,7 @@ static int veth_alloc_queues(struct net_device *dev)
-  	struct veth_priv *priv = netdev_priv(dev);
-  	int i;
-  
--	priv->rq = kcalloc(dev->num_rx_queues, sizeof(*priv->rq), GFP_KERNEL);
-+	priv->rq = kcalloc(dev->num_rx_queues, sizeof(*priv->rq), GFP_KERNEL_ACCOUNT);
-  	if (!priv->rq)
-  		return -ENOMEM;
-  
-diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-index cfa79715fc1a..2881aeeaa880 100644
---- a/fs/kernfs/mount.c
-+++ b/fs/kernfs/mount.c
-@@ -391,7 +391,7 @@ void __init kernfs_init(void)
-  {
-  	kernfs_node_cache = kmem_cache_create("kernfs_node_cache",
-  					      sizeof(struct kernfs_node),
--					      0, SLAB_PANIC, NULL);
-+					      0, SLAB_PANIC | SLAB_ACCOUNT, NULL);
-  
-  	/* Creates slab cache for kernfs inode attributes */
-  	kernfs_iattrs_cache  = kmem_cache_create("kernfs_iattrs_cache",
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 7d9cfc730bd4..e20ce8198a44 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1333,7 +1333,8 @@ struct ctl_table_header *__register_sysctl_table(
-  		nr_entries++;
-  
-  	header = kzalloc(sizeof(struct ctl_table_header) +
--			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL);
-+			 sizeof(struct ctl_node)*nr_entries,
-+			 GFP_KERNEL_ACCOUNT);
-  	if (!header)
-  		return NULL;
-  
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ec0bf737b076..66a4445421f1 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -1665,7 +1665,7 @@ struct neigh_parms *neigh_parms_alloc(struct net_device *dev,
-  	struct net *net = dev_net(dev);
-  	const struct net_device_ops *ops = dev->netdev_ops;
-  
--	p = kmemdup(&tbl->parms, sizeof(*p), GFP_KERNEL);
-+	p = kmemdup(&tbl->parms, sizeof(*p), GFP_KERNEL_ACCOUNT);
-  	if (p) {
-  		p->tbl		  = tbl;
-  		refcount_set(&p->refcnt, 1);
-@@ -3728,7 +3728,7 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
-  	char neigh_path[ sizeof("net//neigh/") + IFNAMSIZ + IFNAMSIZ ];
-  	char *p_name;
-  
--	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL_ACCOUNT);
-  	if (!t)
-  		goto err;
-  
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index fba2bffd65f7..47523fe5b891 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2566,7 +2566,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
-  	struct devinet_sysctl_table *t;
-  	char path[sizeof("net/ipv4/conf/") + IFNAMSIZ];
-  
--	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL_ACCOUNT);
-  	if (!t)
-  		goto out;
-  
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f927c199a93c..9d903342bc41 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -358,7 +358,7 @@ static int snmp6_alloc_dev(struct inet6_dev *idev)
-  	if (!idev->stats.icmpv6dev)
-  		goto err_icmp;
-  	idev->stats.icmpv6msgdev = kzalloc(sizeof(struct icmpv6msg_mib_device),
--					   GFP_KERNEL);
-+					   GFP_KERNEL_ACCOUNT);
-  	if (!idev->stats.icmpv6msgdev)
-  		goto err_icmpmsg;
-  
-@@ -382,7 +382,7 @@ static struct inet6_dev *ipv6_add_dev(struct net_device *dev)
-  	if (dev->mtu < IPV6_MIN_MTU)
-  		return ERR_PTR(-EINVAL);
-  
--	ndev = kzalloc(sizeof(struct inet6_dev), GFP_KERNEL);
-+	ndev = kzalloc(sizeof(struct inet6_dev), GFP_KERNEL_ACCOUNT);
-  	if (!ndev)
-  		return ERR_PTR(err);
-  
-@@ -7023,7 +7023,7 @@ static int __addrconf_sysctl_register(struct net *net, char *dev_name,
-  	struct ctl_table *table;
-  	char path[sizeof("net/ipv6/conf/") + IFNAMSIZ];
-  
--	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL);
-+	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL_ACCOUNT);
-  	if (!table)
-  		goto out;
-  
--- 
-2.25.1
-
+> +	maximum-speed = "high-speed";
+> +};
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> index 5b0f528d6818..8ba9334f9753 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> @@ -99,6 +99,10 @@ opp-1992000000 {
+>  	};
+>  };
+>  
+> +&pipegrf {
+> +	compatible = "rockchip,rk3568-pipe-grf", "syscon";
+> +};
+> +
+>  &power {
+>  	power-domain@RK3568_PD_PIPE {
+>  		reg = <RK3568_PD_PIPE>;
+> @@ -114,3 +118,8 @@ power-domain@RK3568_PD_PIPE {
+>  		#power-domain-cells = <0>;
+>  	};
+>  };
+> +
+> +&usb_host0_xhci {
+> +	phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
+> +	phy-names = "usb2-phy", "usb3-phy";
+> +};
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 7cdef800cb3c..072bb9080cd6 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -230,6 +230,40 @@ scmi_shmem: sram@0 {
+>  		};
+>  	};
+>  
+> +	usb_host0_xhci: usb@fcc00000 {
+> +		compatible = "snps,dwc3";
+> +		reg = <0x0 0xfcc00000 0x0 0x400000>;
+> +		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
+> +			 <&cru ACLK_USB3OTG0>;
+> +		clock-names = "ref_clk", "suspend_clk",
+> +			      "bus_clk";
+> +		dr_mode = "host";
+> +		phy_type = "utmi_wide";
+> +		power-domains = <&power RK3568_PD_PIPE>;
+> +		resets = <&cru SRST_USB3OTG0>;
+> +		snps,dis_u2_susphy_quirk;
+> +		status = "disabled";
+> +	};
+> +
+> +	usb_host1_xhci: usb@fd000000 {
+> +		compatible = "snps,dwc3";
+> +		reg = <0x0 0xfd000000 0x0 0x400000>;
+> +		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
+> +			 <&cru ACLK_USB3OTG1>;
+> +		clock-names = "ref_clk", "suspend_clk",
+> +			      "bus_clk";
+> +		dr_mode = "host";
+> +		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+> +		phy-names = "usb2-phy", "usb3-phy";
+> +		phy_type = "utmi_wide";
+> +		power-domains = <&power RK3568_PD_PIPE>;
+> +		resets = <&cru SRST_USB3OTG1>;
+> +		snps,dis_u2_susphy_quirk;
+> +		status = "disabled";
+> +	};
+> +
+>  	gic: interrupt-controller@fd400000 {
+>  		compatible = "arm,gic-v3";
+>  		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
+> @@ -297,7 +331,6 @@ pmu_io_domains: io-domains {
+>  	};
+>  
+>  	pipegrf: syscon@fdc50000 {
+> -		compatible = "rockchip,rk3568-pipe-grf", "syscon";
+>  		reg = <0x0 0xfdc50000 0x0 0x1000>;
+>  	};
+>  

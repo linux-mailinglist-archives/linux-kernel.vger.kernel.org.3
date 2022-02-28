@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21364C71E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3B64C71EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237769AbiB1Qqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S238003AbiB1Qro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbiB1Qqt (ORCPT
+        with ESMTP id S236321AbiB1Qrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:46:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D75E694AD;
-        Mon, 28 Feb 2022 08:46:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4223A61287;
-        Mon, 28 Feb 2022 16:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D784C340F0;
-        Mon, 28 Feb 2022 16:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646066765;
-        bh=dNMO+y5r7S1RpzbmjvoBeO0lP33wFZ9Dgn/kJUsKbMM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Vtd/0n+GZXUMrEnaliViycb3tvSKAv5tgYj6MSPOMv5NV+VnkxhoJeoyLxHG/bZdA
-         A+Ts8UOmTOY1P9oldac9kNkqzmlr4+XPEDdH2q+vUD9jFblWNyoS7qnBAnbJ1roovf
-         nJyfgs/5elUdKtdea1F/Pj5u6C/aCom516RdDtZGrjZyyuz3KNS8V1mu4YiO9v15cH
-         R4b0yggsxH/H8XF8n9aake+RAaap/eBM25dm/XrTLxVKOAtYWrvDljspLuWIMlRRCV
-         wfZkt/uOkFOFbqCYZTzorUuNtK9ZkN+Mc5zaXZVZYoJ34kA3C0PO/rigv+67M8RdGC
-         dqysJxed8Kv9A==
-Received: by mail-yb1-f173.google.com with SMTP id w63so21697083ybe.10;
-        Mon, 28 Feb 2022 08:46:05 -0800 (PST)
-X-Gm-Message-State: AOAM532N1eYrFpdvqtY2/aGc4/kY7kyfoLaDeLegVikY9dm8Yyza7GxJ
-        2C9aS0+i2RkIpTSHpM0yc7/CO5detzkFsvYVWjI=
-X-Google-Smtp-Source: ABdhPJwAY7S8L1gKE1sVwGEO2B+Kak5FtQoUfWwIg8wYKyehkdeJy6gXURdid5dJuLchR2Il2/yZuRWBsoZXGf1m3co=
-X-Received: by 2002:a25:58f:0:b0:628:67cd:c6b4 with SMTP id
- 137-20020a25058f000000b0062867cdc6b4mr1426853ybf.533.1646066764724; Mon, 28
- Feb 2022 08:46:04 -0800 (PST)
+        Mon, 28 Feb 2022 11:47:42 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE99C83038
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646066823; x=1677602823;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=d1WgYu4v5V8Z7rVxe9pdwk9MSrnrrOz1ni41OvnRn8Y=;
+  b=hE+PxhcyovZKgurPoCFywPQ9IjwRKEQ3BJZMzVC9vz2gptm0cOtM0YQ5
+   WJ/3d1pkD3bMrg0lhjnWBTBQj5RvS+Fg6kOn0xGLOBffgEztGyI9plE+v
+   f0hGXEDKK88W7Kpg6j2Dkf/dH+iUWabMvGpNwydrkGe4wr8kVKQkDEwdc
+   oOrkno28R1UpAn8FPQpDHy2rMOktpA+zQpvfmN54VTtfHy1vGOsL0K2ml
+   PTjhhhkp/vn+0v4oMKpMkdl7wyLwQIuiaP/7B0j2fq255DEiDLy5KP/H2
+   XVaKUw+xhgnwRTHJuaZsrhQbTlJwmBIDe0OQ0Y4cSjndtWta06VZbGJGt
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313644055"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="313644055"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 08:47:03 -0800
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="550312451"
+Received: from eliasbro-mobl.amr.corp.intel.com (HELO [10.212.174.65]) ([10.212.174.65])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 08:47:02 -0800
+Message-ID: <dd2d7c49-45bd-e8cd-a3c2-533e53f0bc4e@intel.com>
+Date:   Mon, 28 Feb 2022 08:46:57 -0800
 MIME-Version: 1.0
-References: <20220224154330.26564-1-baskov@ispras.ru>
-In-Reply-To: <20220224154330.26564-1-baskov@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 28 Feb 2022 17:45:53 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGg=HAv3P_NKqUHCg6bRFsB0qhfa_z-TOdmi-G8EqPrZA@mail.gmail.com>
-Message-ID: <CAMj1kXGg=HAv3P_NKqUHCg6bRFsB0qhfa_z-TOdmi-G8EqPrZA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 0/2] Handle UEFI NX-restricted page tables
-To:     Baskov Evgeniy <baskov@ispras.ru>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv4 29/30] ACPICA: Avoid cache flush on TDX guest
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, linux-efi <linux-efi@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, sdeep@vmware.com,
+        Sean Christopherson <seanjc@google.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, X86 ML <x86@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-30-kirill.shutemov@linux.intel.com>
+ <20220227220526.3rrmy3u7j2xpelcn@treble>
+ <CAPcyv4jqHQDhpSE24-Y6amC9Y-z4vVnXy6Lvo1j2hdCvzPACvQ@mail.gmail.com>
+ <20220228163713.5eewdwcqhmulsp4z@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220228163713.5eewdwcqhmulsp4z@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Matt and Peter)
+On 2/28/22 08:37, Kirill A. Shutemov wrote:
+>> Agree, why is this marked as "TODO"? The cache flushes associated with
+>> ACPI sleep states are to flush cache before bare metal power loss to
+>> CPU caches and bare metal transition of DDR in self-refresh mode. If a
+>> cache flush is required it is the responsibility of the hypervisor.
+>> Either it is safe for all guests or it is unsafe for all guests, not
+>> TD specific.
+> Do we have "any VM" check? I can't find it right away.
 
-On Thu, 24 Feb 2022 at 16:45, Baskov Evgeniy <baskov@ispras.ru> wrote:
->
-> This is another implementation of this patch. It uses DXE services
-> to change memory protection flags as you suggested earlier.
->
-> As I mentioned, you can reproduce this issue with any firmware,
-> including OVMF by setting the PcdDxeNxMemoryProtectionPolicy policy:
-> gEfiMdeModulePkgTokenSpaceGuid.PcdDxeNxMemoryProtectionPolicy|0x7FD4
-> Restricting the user from creating executable pages is not an goal,
-> but restricting one from creating both executable and writable pages
-> is a goal, which is enforced in the firmware we use. We cannot allow
-> allocating pages of any type that have RWX permissions.
-> gDS->SetMemorySpaceAttributes() is technically part of the UEFI PI
-> specification, so it is not too bad to rely on it. However:
-> - DXE services is not something designed to be used by an UEFI application.
-> - From what we know, no other operating system uses this interface,
-> which means that it can easily break in production firmware on the
-> boards we do not control before anyone could even notice.
-> We do not strictly mind experimenting with this route, but it would be
-> preferable for this interface to become more standard in this case:
-> move it to UEFI Boot Services or a separate protocol and include it in
-> UEFI conformance suite. It will also help if we enable this feature in
-> Linux by default.
->
+Yes:
 
-Thanks for exploring my suggestion to use the DXE services for this.
+> #define X86_FEATURE_HYPERVISOR          ( 4*32+31) /* Running on a hypervisor */
 
-Given that this is a workaround for a very specific issue arising on
-PI based implementations of UEFI, I consider this a quirk, and so I
-think this approach is reasonable. I'd still like to gate it on some
-kind of identification, though - perhaps something related to DMI like
-the x86 core kernel does as well.
-
-I've cc'ed Peter and Matt, who have much more experience dealing with
-these kinds of things on x86 - my experience is mostly based on ARM,
-which tends to be less quirky when it comes to UEFI support, given
-that vendors that implement EFI actually care about being compliant
-(instead of only about getting a windows sticker)
-
-Matt, Peter, any thoughts?
-
-
-> Baskov Evgeniy (2):
->        efi: declare DXE services table
->        libstub: ensure allocated memory to be executable
->
->  arch/x86/include/asm/efi.h              |  5 ++
->  drivers/firmware/efi/libstub/efistub.h  | 53 ++++++++++++++++++++
->  drivers/firmware/efi/libstub/x86-stub.c | 73 ++++++++++++++++++++++++++--
->  include/linux/efi.h                     |  2 +
->  4 files changed, 128 insertions(+), 5 deletions(-)
+I'm pretty sure an earlier version of this patch used it.

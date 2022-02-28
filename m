@@ -2,243 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87E04C63AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9239B4C63A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiB1HM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S233581AbiB1HLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiB1HMV (ORCPT
+        with ESMTP id S229624AbiB1HLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:12:21 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C34674C0
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:41 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id i1so9926649plr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:11:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/8ft55r/VTfoT4ZinxhB51u9HRB18drBxk6cMGVkRIc=;
-        b=QPUd6SMtlL0lgH1f6RussrMAtI4S+e2NVZ4z1/cLuYCljBgasiYx6HN63o1FJmT3mB
-         EyERA9+htOPxv14o3q8QvwJsmjpHWrbsY4D9/F3IqZQVtTdSQjgOHYIoizN+awrObS+b
-         o2mqmQMWwaP9vT80WgYs90x14FldeS7DT225M0TViqTER9xsB49CZ19VLK0rtgs7bYAO
-         880eTRkSqRu/r7E1L3noMD1KcmGHufV9nWspTVwy6deuZwsaBvPqkRSSCBZhRkjKyLnq
-         QSWEj7WLbh8fbWTAI0GZPeBUprgYQt0jZeV+T307CtT3eVTyVwzCq9i4XXeVZ3jIhskr
-         BeCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/8ft55r/VTfoT4ZinxhB51u9HRB18drBxk6cMGVkRIc=;
-        b=7syiWjEBU2i3UYpOuIvmqormJ3O7ZY7NJyp8+lg2bbw219yH8+Hm9FVASNVVzGRWi5
-         YvMFvoU+M400Q4/JCnIFAjX/AlobvKlCvwx0aAddeodbNplpM807WP/4RcTD7E59Rcyg
-         VHcaHdAunPU4ZEd+dr8t7Cc7fSCA6z0c+EAUeSTPBauZxa5vLP98DVlXaY3ISc9vIfHu
-         zIDKb2/BLdzCkwrJ/br8nPe4/nYSqvA1WeA3n5dmhPFcuXb8U9mk3bknqMAMREWWII0A
-         1XfJq1KukDIMH58QKbg1rlAfGmmuNixB8Xro+rtgYXpdc3wUn/x+0IL81aRnz2CEaFOy
-         dPwA==
-X-Gm-Message-State: AOAM531b5DDYkZta1RhhMcNTNKmuvSAmE9Igef7VZ2KRxfDjkA+W8td2
-        MNL2ghfIv/sduvDUXvU75RSpTg==
-X-Google-Smtp-Source: ABdhPJy8a01fRIV4nGG4Fscsyj42sS294OeFwsAc/3btG49ySTvEgsDMP+HVgRNeNNfgTB6q6/T4XA==
-X-Received: by 2002:a17:90a:5995:b0:1bc:be7f:f5a1 with SMTP id l21-20020a17090a599500b001bcbe7ff5a1mr15573946pji.84.1646032300573;
-        Sun, 27 Feb 2022 23:11:40 -0800 (PST)
-Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b001b936b8abe0sm16240390pjs.7.2022.02.27.23.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 23:11:40 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 3/3] mm: hugetlb: add hugetlb_free_vmemmap sysctl
-Date:   Mon, 28 Feb 2022 15:10:22 +0800
-Message-Id: <20220228071022.26143-4-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220228071022.26143-1-songmuchun@bytedance.com>
-References: <20220228071022.26143-1-songmuchun@bytedance.com>
+        Mon, 28 Feb 2022 02:11:13 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F72F673D7;
+        Sun, 27 Feb 2022 23:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646032235; x=1677568235;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=y3vWJXmXIxLoqN+LR4JyPDGHfXzsrgmgo7NHZTRsoHs=;
+  b=cBuXZMRxf4NjsVNjoSJKpL2ZYVz+ioLipzZ4i12f3DbUOtYZkcKqr3h4
+   fV4sV06ycBF42zMwRN+z4m45NMx3w7VgS+aVUmn0gjIy82Cp20QpCavEi
+   8OMJKZI5sKIKhIy6O2Pm0HW/uz/1ffy7O901nJKTwuBerLzYvlEzpu5L4
+   TQbDaY5hEhVLr6vLUGrbdUp6LEOF2Wstnb5L24mGo013hFg68rB42eGHZ
+   Ba0KU4l4wK11RlILN85R5fsnqSDERBLNZ/mxhX0PO40oFR+mtVnLNJxY2
+   sKhK3uLDUzqz7rtw6MjiysRwv0X/5UB5Fd82RXmCmpDQStD1GC5mMqfxK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="277475029"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="277475029"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 23:10:35 -0800
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="534337928"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 23:10:32 -0800
+Message-ID: <4b2ddc09-f68d-1cc3-3d10-f7651d811fc3@intel.com>
+Date:   Mon, 28 Feb 2022 15:10:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+ <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
+ <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com>
+ <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
+ <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com>
+ <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
+ <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
+ <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
+ <71736b9d-9ed4-ea02-e702-74cae0340d66@intel.com>
+ <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We must add "hugetlb_free_vmemmap=on" to boot cmdline and reboot the
-server to enable the feature of freeing vmemmap pages of HugeTLB
-pages. Rebooting usually taske a long time. Add a sysctl to enable
-the feature at runtime and do not need to reboot.
+On 2/26/2022 10:24 PM, Jim Mattson wrote:
+> On Fri, Feb 25, 2022 at 10:24 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+>>
+>> On 2/26/2022 12:53 PM, Jim Mattson wrote:
+>>> On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
+>>>>
+>>>> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+>>>>>
+>>>>> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
+>>>>>> On 2/25/22 16:12, Xiaoyao Li wrote:
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> I don't like the idea of making things up without notifying userspace
+>>>>>>>>> that this is fictional. How is my customer running nested VMs supposed
+>>>>>>>>> to know that L2 didn't actually shutdown, but L0 killed it because the
+>>>>>>>>> notify window was exceeded? If this information isn't reported to
+>>>>>>>>> userspace, I have no way of getting the information to the customer.
+>>>>>>>>
+>>>>>>>> Then, maybe a dedicated software define VM exit for it instead of
+>>>>>>>> reusing triple fault?
+>>>>>>>>
+>>>>>>>
+>>>>>>> Second thought, we can even just return Notify VM exit to L1 to tell
+>>>>>>> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
+>>>>>>> to L1.
+>>>>>>
+>>>>>> That might cause NULL pointer dereferences or other nasty occurrences.
+>>>>>
+>>>>> IMO, a well written VMM (in L1) should handle it correctly.
+>>>>>
+>>>>> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
+>>>>> setting Notify VM exit. If a L2 causes notify_vm_exit with
+>>>>> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
+>>>>> support of Notify VM Exit from VMX MSR capability. Following L1 handler
+>>>>> is possible:
+>>>>>
+>>>>> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
+>>>>>                   handle in b)
+>>>>>           } else {
+>>>>>                   report unexpected vm exit reason to userspace;
+>>>>>           }
+>>>>>
+>>>>> b)      similar handler like we implement in KVM:
+>>>>>           if (!vm_context_invalid)
+>>>>>                   re-enter guest;
+>>>>>           else
+>>>>>                   report to userspace;
+>>>>>
+>>>>> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
+>>>>> unsupported exit reason
+>>>>>
+>>>>> As long as it belongs to any case above, I think L1 can handle it
+>>>>> correctly. Any nasty occurrence should be caused by incorrect handler in
+>>>>> L1 VMM, in my opinion.
+>>>>
+>>>> Please test some common hypervisors (e.g. ESXi and Hyper-V).
+>>>
+>>> I took a look at KVM in Linux v4.9 (one of our more popular guests),
+>>> and it will not handle this case well:
+>>>
+>>>           if (exit_reason < kvm_vmx_max_exit_handlers
+>>>               && kvm_vmx_exit_handlers[exit_reason])
+>>>                   return kvm_vmx_exit_handlers[exit_reason](vcpu);
+>>>           else {
+>>>                   WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
+>>>                   kvm_queue_exception(vcpu, UD_VECTOR);
+>>>                   return 1;
+>>>           }
+>>>
+>>> At least there's an L1 kernel log message for the first unexpected
+>>> NOTIFY VM-exit, but after that, there is silence. Just a completely
+>>> inexplicable #UD in L2, assuming that L2 is resumable at this point.
+>>
+>> At least there is a message to tell L1 a notify VM exit is triggered in
+>> L2. Yes, the inexplicable #UD won't be hit unless L2 triggers Notify VM
+>> exit with invalid_context, which is malicious to L0 and L1.
+> 
+> There is only an L1 kernel log message *the first time*. That's not
+> good enough. And this is just one of the myriad of possible L1
+> hypervisors.
+> 
+>> If we use triple_fault (i.e., shutdown), then no info to tell L1 that
+>> it's caused by Notify VM exit with invalid context. Triple fault needs
+>> to be extended and L1 kernel needs to be enlightened. It doesn't help
+>> old guest kernel.
+>>
+>> If we use Machine Check, it's somewhat same inexplicable to L2 unless
+>> it's enlightened. But it doesn't help old guest kernel.
+>>
+>> Anyway, for Notify VM exit with invalid context from L2, I don't see a
+>> good solution to tell L1 VMM it's a "Notify VM exit with invalid context
+>> from L2" and keep all kinds of L1 VMM happy, especially for those with
+>> old kernel versions.
+> 
+> I agree that there is no way to make every conceivable L1 happy.
+> That's why the information needs to be surfaced to the L0 userspace. I
+> contend that any time L0 kvm violates the architectural specification
+> in its emulation of L1 or L2, the L0 userspace *must* be informed.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- Documentation/admin-guide/sysctl/vm.rst | 13 +++++++++++++
- include/linux/hugetlb.h                 |  5 +++++
- include/linux/memory_hotplug.h          |  1 +
- kernel/sysctl.c                         | 11 +++++++++++
- mm/hugetlb_vmemmap.c                    | 23 +++++++++++++++++------
- mm/hugetlb_vmemmap.h                    |  4 +++-
- mm/memory_hotplug.c                     |  2 +-
- 7 files changed, 51 insertions(+), 8 deletions(-)
+We can make the design to exit to userspace on notify vm exit 
+unconditionally with exit_qualification passed, then userspace can take 
+the same action like what this patch does in KVM that
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index f4804ce37c58..01f18e6cc227 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -561,6 +561,19 @@ Change the minimum size of the hugepage pool.
- See Documentation/admin-guide/mm/hugetlbpage.rst
- 
- 
-+hugetlb_free_vmemmap
-+====================
-+
-+A toggle value indicating if vmemmap pages are allowed to be optimized.
-+If it is off (0), then it can be set true (1).  Once true, the vmemmap
-+pages associated with each HugeTLB page will be optimized, and the toggle
-+cannot be set back to false.  It only optimizes the subsequent allocation
-+of HugeTLB pages from buddy system, while already allocated HugeTLB pages
-+will not be optimized.
-+
-+See Documentation/admin-guide/mm/hugetlbpage.rst
-+
-+
- nr_hugepages_mempolicy
- ======================
- 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 53c1b6082a4c..cc4ab21892f5 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -1080,6 +1080,11 @@ static inline void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr
- }
- #endif	/* CONFIG_HUGETLB_PAGE */
- 
-+#ifdef CONFIG_HUGETLB_PAGE_FREE_VMEMMAP
-+int hugetlb_vmemmap_sysctl_handler(struct ctl_table *table, int write,
-+				   void *buffer, size_t *length, loff_t *ppos);
-+#endif
-+
- static inline spinlock_t *huge_pte_lock(struct hstate *h,
- 					struct mm_struct *mm, pte_t *pte)
- {
-diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index e0b2209ab71c..b30f9fdaed73 100644
---- a/include/linux/memory_hotplug.h
-+++ b/include/linux/memory_hotplug.h
-@@ -349,6 +349,7 @@ extern int arch_create_linear_mapping(int nid, u64 start, u64 size,
- 				      struct mhp_params *params);
- void arch_remove_linear_mapping(u64 start, u64 size);
- extern bool mhp_supports_memmap_on_memory(unsigned long size);
-+extern bool memmap_on_memory;
- #endif /* CONFIG_MEMORY_HOTPLUG */
- 
- #endif /* __LINUX_MEMORY_HOTPLUG_H */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index ab3e9c937268..77f039849b2a 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2223,6 +2223,17 @@ static struct ctl_table vm_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= hugetlb_sysctl_handler,
- 	},
-+#ifdef CONFIG_HUGETLB_PAGE_FREE_VMEMMAP
-+	{
-+		.procname	= "hugetlb_free_vmemmap",
-+		.data		= &hugetlb_free_vmemmap_enabled_key.key,
-+		.maxlen		= sizeof(hugetlb_free_vmemmap_enabled_key.key),
-+		.mode		= 0644,
-+		/* only handle a transition from default "0" to "1" */
-+		.proc_handler	= hugetlb_vmemmap_sysctl_handler,
-+		.extra1		= SYSCTL_ONE,
-+	},
-+#endif
- #ifdef CONFIG_NUMA
- 	{
- 		.procname       = "nr_hugepages_mempolicy",
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 836d1117f08b..3167021055d6 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -10,6 +10,7 @@
- 
- #define pr_fmt(fmt)	"HugeTLB: " fmt
- 
-+#include <linux/memory_hotplug.h>
- #include "hugetlb_vmemmap.h"
- 
- /*
-@@ -118,17 +119,14 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
- 	BUILD_BUG_ON(__NR_USED_SUBPAGE >=
- 		     RESERVE_VMEMMAP_SIZE / sizeof(struct page));
- 
--	if (!hugetlb_free_vmemmap_enabled())
--		return;
--
--	if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON) &&
--	    !is_power_of_2(sizeof(struct page))) {
-+	if (!is_power_of_2(sizeof(struct page))) {
- 		/*
- 		 * The hugetlb_free_vmemmap_enabled_key can be enabled when
- 		 * CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON. It should
- 		 * be disabled if "struct page" crosses page boundaries.
- 		 */
--		static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
-+		if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON))
-+			static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
- 		return;
- 	}
- 
-@@ -147,3 +145,16 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
- 	pr_info("can free %d vmemmap pages for %s\n", h->nr_free_vmemmap_pages,
- 		h->name);
- }
-+
-+int hugetlb_vmemmap_sysctl_handler(struct ctl_table *table, int write,
-+				   void *buffer, size_t *length, loff_t *ppos)
-+{
-+	/*
-+	 * The vmemmap pages cannot be optimized if a "struct page" crosses page
-+	 * boundaries or memory_hotplug.memmap_on_memory is enabled.
-+	 */
-+	if (write && (!is_power_of_2(sizeof(struct page)) || memmap_on_memory))
-+		return -EPERM;
-+
-+	return proc_do_static_key(table, write, buffer, length, ppos);
-+}
-diff --git a/mm/hugetlb_vmemmap.h b/mm/hugetlb_vmemmap.h
-index cb2bef8f9e73..b67a159027f4 100644
---- a/mm/hugetlb_vmemmap.h
-+++ b/mm/hugetlb_vmemmap.h
-@@ -21,7 +21,9 @@ void hugetlb_vmemmap_init(struct hstate *h);
-  */
- static inline unsigned int free_vmemmap_pages_per_hpage(struct hstate *h)
- {
--	return h->nr_free_vmemmap_pages;
-+	if (hugetlb_free_vmemmap_enabled())
-+		return h->nr_free_vmemmap_pages;
-+	return 0;
- }
- #else
- static inline int alloc_huge_page_vmemmap(struct hstate *h, struct page *head)
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index c226a337c1ef..b5cc5abde05a 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -46,7 +46,7 @@
- /*
-  * memory_hotplug.memmap_on_memory parameter
-  */
--static bool memmap_on_memory __ro_after_init;
-+bool memmap_on_memory __ro_after_init;
- #ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
- module_param(memmap_on_memory, bool, 0444);
- MODULE_PARM_DESC(memmap_on_memory, "Enable memmap on memory for memory hotplug");
--- 
-2.11.0
+  - re-enter guest when context_invalid is false;
+  - stop running the guest if context_invalid is true; (userspace can 
+definitely re-enter the guest in this case, but it needs to take the 
+fall on this)
 
+Then, for nested case, L0 needs to enable it transparently for L2 if 
+this feature is enabled for L1 guest (the reason as we all agreed that 
+cannot allow L1 to escape just by creating a L2). Then what should KVM 
+do when notify vm exit from L2?
+
+  - Exit to L0 userspace on L2's notify vm exit. L0 userspace takes the 
+same action:
+	- re-enter if context-invalid is false;
+	- kill L1 if context-invalid is true; (I don't know if there is any 
+interface for L0 userspace to kill L2). Then it opens the potential door 
+for malicious user to kill L1 by creating a L2 to trigger fatal notify 
+vm exit. If you guys accept it, we can implement in this way.
+
+
+in conclusion, we have below solution:
+
+1. Take this patch as is. The drawback is L1 VMM receives a triple_fault 
+from L2 when L2 triggers notify vm exit with invalid context. Neither of 
+L1 VMM, L1 userspace, nor L2 kernel know it's caused due to notify vm 
+exit. There is only kernel log in L0, which seems not accessible for L1 
+user or L2 guest.
+
+2. a) Inject notify vm exit back to L1 if L2 triggers notify vm exit 
+with invalid context. The drawback is, old L1 hypervisor is not 
+enlightened of it and maybe misbehave on it.
+
+    b) Inject a synthesized SHUTDOWN exit to L1, with additional info to 
+tell it's caused by fatal notify vm exit from L2. It has the same 
+drawback that old hypervisor has no idea of it and maybe misbehave on it.
+
+3. Exit to L0 usersapce unconditionally no matter it's caused from L1 or 
+L2. Then it may open the door for L1 user to kill L1.
+
+Do you have any better solution other than above? If no, we need to pick 
+one from above though it cannot make everyone happy.
+
+thanks,
+-Xiaoyao

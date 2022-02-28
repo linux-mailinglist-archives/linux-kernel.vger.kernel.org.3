@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06C04C7554
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305824C73A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbiB1RyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S237444AbiB1Rh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbiB1Rtg (ORCPT
+        with ESMTP id S238157AbiB1Reh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:49:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7451A2524;
-        Mon, 28 Feb 2022 09:39:00 -0800 (PST)
+        Mon, 28 Feb 2022 12:34:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D1C7D029;
+        Mon, 28 Feb 2022 09:31:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47E3AB815A2;
-        Mon, 28 Feb 2022 17:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5735C340E7;
-        Mon, 28 Feb 2022 17:38:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2D661419;
+        Mon, 28 Feb 2022 17:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53387C340E7;
+        Mon, 28 Feb 2022 17:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069938;
-        bh=31Dd8Zqdd0+cNLUrvIB6lJEInN/erFEQgBfxHSJ/ybk=;
+        s=korg; t=1646069456;
+        bh=Rd8jvTNrPWtN6dd5Od5wtu8Di/L6XL1V6MGeJMtvvLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dD+h1DeyvL2mobo5GgBcmo/qfrMPjbSXNgf3tMAVmtW7BrLA7VcOa4hpcHwTg3VU6
-         gB8LeZqqI9U98E5WL8GA615fsIZHCMgboalOvlpP1ohWPVyyyxtsAhlGbx7wBKxzaj
-         IdXaTJTN6sXC/fPq5Kvl8mUXA31gM+L6oiuhvHso=
+        b=MXE+/VOB+5Ire5M1YjlbO35I1GjRaTZfgwGXlHom8xBnYWtt/H09mj1Wbukn3n5Ve
+         vOuAXdETsG/jPxN/B8VTMuVXs++KaQZKctLUGuju5nAOJxrMZTCFXRsWIh9PmXZ8dn
+         AzJhhZIDlo0xVMvk2nTKsg4V6SWmBTzvqpvfwpHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 066/139] net/sched: act_ct: Fix flow table lookup after ct clear or switching zones
-Date:   Mon, 28 Feb 2022 18:24:00 +0100
-Message-Id: <20220228172354.639959124@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 03/53] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
+Date:   Mon, 28 Feb 2022 18:24:01 +0100
+Message-Id: <20220228172248.525743374@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Stefano Garzarella <sgarzare@redhat.com>
 
-commit 2f131de361f6d0eaff17db26efdb844c178432f8 upstream.
+commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
 
-Flow table lookup is skipped if packet either went through ct clear
-action (which set the IP_CT_UNTRACKED flag on the packet), or while
-switching zones and there is already a connection associated with
-the packet. This will result in no SW offload of the connection,
-and the and connection not being removed from flow table with
-TCP teardown (fin/rst packet).
+vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+ownership. It expects current->mm to be valid.
 
-To fix the above, remove these unneccary checks in flow
-table lookup.
+vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+the user has not done close(), so when we are in do_exit(). In this
+case current->mm is invalid and we're releasing the device, so we
+should clean it anyway.
 
-Fixes: 46475bb20f4b ("net/sched: act_ct: Software offload of established flows")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Let's check the owner only when vhost_vsock_stop() is called
+by an ioctl.
+
+When invoked from release we can not fail so we don't check return
+code of vhost_vsock_stop(). We need to stop vsock even if it's not
+the owner.
+
+Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/act_ct.c |    5 -----
- 1 file changed, 5 deletions(-)
+ drivers/vhost/vsock.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
---- a/net/sched/act_ct.c
-+++ b/net/sched/act_ct.c
-@@ -516,11 +516,6 @@ static bool tcf_ct_flow_table_lookup(str
- 	struct nf_conn *ct;
- 	u8 dir;
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -570,16 +570,18 @@ err:
+ 	return ret;
+ }
  
--	/* Previously seen or loopback */
--	ct = nf_ct_get(skb, &ctinfo);
--	if ((ct && !nf_ct_is_template(ct)) || ctinfo == IP_CT_UNTRACKED)
--		return false;
--
- 	switch (family) {
- 	case NFPROTO_IPV4:
- 		if (!tcf_ct_flow_table_fill_tuple_ipv4(skb, &tuple, &tcph))
+-static int vhost_vsock_stop(struct vhost_vsock *vsock)
++static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+ {
+ 	size_t i;
+-	int ret;
++	int ret = 0;
+ 
+ 	mutex_lock(&vsock->dev.mutex);
+ 
+-	ret = vhost_dev_check_owner(&vsock->dev);
+-	if (ret)
+-		goto err;
++	if (check_owner) {
++		ret = vhost_dev_check_owner(&vsock->dev);
++		if (ret)
++			goto err;
++	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
+ 		struct vhost_virtqueue *vq = &vsock->vqs[i];
+@@ -694,7 +696,12 @@ static int vhost_vsock_dev_release(struc
+ 	 * inefficient.  Room for improvement here. */
+ 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+ 
+-	vhost_vsock_stop(vsock);
++	/* Don't check the owner, because we are in the release path, so we
++	 * need to stop the vsock device in any case.
++	 * vhost_vsock_stop() can not fail in this case, so we don't need to
++	 * check the return code.
++	 */
++	vhost_vsock_stop(vsock, false);
+ 	vhost_vsock_flush(vsock);
+ 	vhost_dev_stop(&vsock->dev);
+ 
+@@ -792,7 +799,7 @@ static long vhost_vsock_dev_ioctl(struct
+ 		if (start)
+ 			return vhost_vsock_start(vsock);
+ 		else
+-			return vhost_vsock_stop(vsock);
++			return vhost_vsock_stop(vsock, true);
+ 	case VHOST_GET_FEATURES:
+ 		features = VHOST_VSOCK_FEATURES;
+ 		if (copy_to_user(argp, &features, sizeof(features)))
 
 

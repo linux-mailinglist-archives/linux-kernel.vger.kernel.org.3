@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BF54C740F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C0B4C7577
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiB1Rkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S237381AbiB1RzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238788AbiB1RiW (ORCPT
+        with ESMTP id S239123AbiB1RwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:38:22 -0500
+        Mon, 28 Feb 2022 12:52:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485C77D02D;
-        Mon, 28 Feb 2022 09:33:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CF292D35;
+        Mon, 28 Feb 2022 09:39:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 025E1B815C5;
-        Mon, 28 Feb 2022 17:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36509C340F1;
-        Mon, 28 Feb 2022 17:33:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEFBDB815A2;
+        Mon, 28 Feb 2022 17:39:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F04C340F0;
+        Mon, 28 Feb 2022 17:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069622;
-        bh=2V6guBmpGFOk5qPU8UnCpHCk4D2ma3AaHaBwJoIQgjg=;
+        s=korg; t=1646069978;
+        bh=5uVrlQkD28VUujlNYgjjOG/6mkVMyfRz4XGWA7/Oy5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dwKdU2enUihdMnIycqxP/Zewx9TMXM4aBfds1nbuXQMd8DOLLxcO64I2HKPRiYyMX
-         hxw7VuyH1acq+605PtYIZyOHAqx2jqRwu517xKz+3uJLAMt/ncKExEXSQB7uuYDsAd
-         rEg4Sff1cX6yKI18EIYHRRS7zindkSYQhH2OIjRw=
+        b=UWfrQSENCMyAlMvTOp576VKCX3Vs+XFHx4tYah4X3LxeWv+Zf6uRhOo/9TvHkTzEH
+         gzkFVEIX54dvCc/oOzfEctc69ysnBmwmW/w3VOm1YK8uoDzPASv1kn+DZkYu+4TXce
+         Xn5ZK/74/fpnR6xdeuwpzuuQNVPZYgQ6we8GHA/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
+        stable@vger.kernel.org, Ariel Levkovich <lariel@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.10 33/80] net/mlx5e: Fix wrong return value on ioctl EEPROM query failure
+Subject: [PATCH 5.15 080/139] net/mlx5: Fix wrong limitation of metadata match on ecpf
 Date:   Mon, 28 Feb 2022 18:24:14 +0100
-Message-Id: <20220228172315.506900227@linuxfoundation.org>
+Message-Id: <20220228172356.114111140@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gal Pressman <gal@nvidia.com>
+From: Ariel Levkovich <lariel@nvidia.com>
 
-commit 0b89429722353d112f8b8b29ca397e95fa994d27 upstream.
+commit 07666c75ad17d7389b18ac0235c8cf41e1504ea8 upstream.
 
-The ioctl EEPROM query wrongly returns success on read failures, fix
-that by returning the appropriate error code.
+Match metadata support check returns false for ecpf device.
+However, this support does exist for ecpf and therefore this
+limitation should be removed to allow feature such as stacked
+devices and internal port offloaded to be supported.
 
-Fixes: bb64143eee8c ("net/mlx5e: Add ethtool support for dump module EEPROM")
-Signed-off-by: Gal Pressman <gal@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Fixes: 92ab1eb392c6 ("net/mlx5: E-Switch, Enable vport metadata matching if firmware supports it")
+Signed-off-by: Ariel Levkovich <lariel@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-@@ -1746,7 +1746,7 @@ static int mlx5e_get_module_eeprom(struc
- 		if (size_read < 0) {
- 			netdev_err(priv->netdev, "%s: mlx5_query_eeprom failed:0x%x\n",
- 				   __func__, size_read);
--			return 0;
-+			return size_read;
- 		}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
+@@ -2784,10 +2784,6 @@ bool mlx5_esw_vport_match_metadata_suppo
+ 	if (!MLX5_CAP_ESW_FLOWTABLE(esw->dev, flow_source))
+ 		return false;
  
- 		i += size_read;
+-	if (mlx5_core_is_ecpf_esw_manager(esw->dev) ||
+-	    mlx5_ecpf_vport_exists(esw->dev))
+-		return false;
+-
+ 	return true;
+ }
+ 
 
 

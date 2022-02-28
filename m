@@ -2,113 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1871A4C6F47
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1756C4C6F46
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237102AbiB1O0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S237090AbiB1OZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbiB1O0C (ORCPT
+        with ESMTP id S231794AbiB1OZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:26:02 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213506D1B4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:25:22 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id p4so2743107edi.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 06:25:22 -0800 (PST)
+        Mon, 28 Feb 2022 09:25:53 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40BC69CE4;
+        Mon, 28 Feb 2022 06:25:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t89NhqJYorEFTw8WrVtJVWyHHmbVnl5aLtAxBdRQbyU=;
-        b=XhXH3g7w69442RPA1I5M5/K8M1qvIrQSI2wWBRk3Rtw6la/HhkC0ud+M4OxwK4jHbE
-         ZHDHRpEiplIwdsIqTShexd2pbaNzsdkX75dxSIQDwnWM/omTHoUp7oIfpj716pUmQk6h
-         0MEKVNCRE13ruMxNqOc+zvibmaUfAjIxBFnWmxDdlSBrCuVt+luarFbAbpx8SebKxfKI
-         RVYrAlfpv0VGCiwdx93Z7+tpDINxXHaDcVl7OLPNqvfjBjFP+jaBR3kbYNXc01sfxfKl
-         gnuJwe+zxdbeB5jHT/tX78TiFmpr9fm2X23LTpOfqPZ6Yw1OQLTcDURBxpuue7yVAbWs
-         xrDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t89NhqJYorEFTw8WrVtJVWyHHmbVnl5aLtAxBdRQbyU=;
-        b=xCTv1NAmVlniExj8JibQMBkMNtEWPX3ANdyPgLbQdfGqT0bPHKQWcMsO259U0cRU5f
-         4fieSMAuv9RUj934AQoCcg4ULNYKUAyWileyte0jO/t+pkuUmrsLqWpB96Reu0uE8TIu
-         IWW2ypoR7HwJ3irLMl2b/ipAAS4pdX+aAP6OZ/FVNBlNDjrzWc3Ss3RVoUtX0vmDlHrq
-         /V7HsxxQeoos2NOwmRsr5zluqcR7X0ARNTcdE9PxxF9Oe5RZQp7oq42bxb//TdgMylQv
-         XM0jVkAOFXOR8hXfWIOM9ZnCbb1qG58mB4ornKzLhBqGBo6ON1x0UD9POxzU4xKHH5C5
-         gqfA==
-X-Gm-Message-State: AOAM5301viqp51SV8syHd9h58+AR2g9RdXT+b9RaKxNtaeqEMJlD45Q3
-        yC0WMCQxIA8QTsW7Za+s00o=
-X-Google-Smtp-Source: ABdhPJxOxtmXMvYcLKAjDOX0lh9MhTomTdWMimmV0Cfq/XIN4jDu+unVS7ejvfrzCMb440clF5fS2w==
-X-Received: by 2002:a50:d711:0:b0:410:a51a:77c5 with SMTP id t17-20020a50d711000000b00410a51a77c5mr20374819edi.154.1646058320341;
-        Mon, 28 Feb 2022 06:25:20 -0800 (PST)
-Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id ov6-20020a170906fc0600b006cf54ef58ddsm4494527ejb.149.2022.02.28.06.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 06:25:19 -0800 (PST)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anton Vorontsov <avorontsov@ru.mvista.com>,
-        Kumar Gala <galak@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc/sysdev: fix incorrect use to determine if list is empty
-Date:   Mon, 28 Feb 2022 15:24:33 +0100
-Message-Id: <20220228142434.576226-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646058314; x=1677594314;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=KjNPm8CkcwmZjG9ZCapTIjn+RZ9HMpspNn/kHxvBxHg=;
+  b=jzmdPWVVE6ZYTkRjSeGTIKUA+MqtNFn7Rt4PdeqpAXTFMkSAhDZ1q5jU
+   B8b0xMgB209xGm1cb7nPKiFdH6vcyMu0uEyafFohf2MKa5OE1f3R7Ycrw
+   4d73zrdcQHumqGJ8DZhiH8EO7ernakspW9BmYgrrb08ZYlRHjyh2fnrje
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Feb 2022 06:25:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 06:25:14 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 28 Feb 2022 06:25:13 -0800
+Received: from [10.216.7.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 28 Feb
+ 2022 06:25:09 -0800
+Subject: Re: [PATCH V7 5/5] arm64: dts: qcom: sc7280: Add pm8008 support for
+ sc7280-idp
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1645182064-15843-6-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n509bg6RzieOtYuUvicU14D7bmgH-u02F1TB+hBZ+xH4CA@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <42570508-ed62-af26-220e-c776418a722e@quicinc.com>
+Date:   Mon, 28 Feb 2022 19:55:06 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n509bg6RzieOtYuUvicU14D7bmgH-u02F1TB+hBZ+xH4CA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'gtm' will *always* be set by list_for_each_entry().
-It is incorrect to assume that the iterator value will be NULL if the
-list is empty.
 
-Instead of checking the pointer it should be checked if
-the list is empty.
+On 2/19/2022 7:31 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-02-18 03:01:03)
+>> Add pm8008_infra and pm8008_regulators support for sc7280 idp.
+>>
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> ---
+>> Changes in V2:
+>>   - As per Stephen's comments, replaced '_' with '-' for node names.
+>>
+>> Changes in V3:
+>>   - Changed the regulator node names as l1, l2 etc
+>>   - Changed "pm8008-regulators" to "regulators"
+>>   - Changed "qcom,min-dropout-voltage" to "regulator-min-dropout-voltage-microvolt"
+>>
+>> Changes in V4:
+>>   - Moved all common stuff to pm8008.dtsi and added board specific configurations here.
+>>
+>> Changes in V5:
+>>   - Changed the node names as per pm8008.dtsi
+>>   - Moved supply nodes to chip level (mfd node).
+>>   - Removed the regulator-mindropout property.
+>>
+>> Changes in V6:
+>>   - No changes.
+>>
+>> Changes in V7:
+>>   - No Changes.
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 66 ++++++++++++++++++++++++++++++++
+>>   1 file changed, 66 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> index ecbf2b8..371ad19 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> @@ -263,6 +263,62 @@
+>>          };
+>>   };
+>>
+>> +&i2c1 {
+> Can we add another phandle?
+>
+> &pm8008_bus: &i2c1 {
 
-Fixes: 83ff9dcf375c ("powerpc/sysdev: implement FSL GTM support")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- arch/powerpc/sysdev/fsl_gtm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Okay.
 
-diff --git a/arch/powerpc/sysdev/fsl_gtm.c b/arch/powerpc/sysdev/fsl_gtm.c
-index 8963eaffb1b7..39186ad6b3c3 100644
---- a/arch/powerpc/sysdev/fsl_gtm.c
-+++ b/arch/powerpc/sysdev/fsl_gtm.c
-@@ -86,7 +86,7 @@ static LIST_HEAD(gtms);
-  */
- struct gtm_timer *gtm_get_timer16(void)
- {
--	struct gtm *gtm = NULL;
-+	struct gtm *gtm;
- 	int i;
 
- 	list_for_each_entry(gtm, &gtms, list_node) {
-@@ -103,7 +103,7 @@ struct gtm_timer *gtm_get_timer16(void)
- 		spin_unlock_irq(&gtm->lock);
- 	}
+>> +       #address-cells = <1>;
+>> +       #size-cells = <0>;
+>> +       status = "okay";
+>> +
+>> +       #include "pm8008.dtsi"
+>> +};
+> And then
+>
+> #include "pm8008.dtsi"
 
--	if (gtm)
-+	if (!list_empty(&gtms))
- 		return ERR_PTR(-EBUSY);
- 	return ERR_PTR(-ENODEV);
- }
 
-base-commit: 7ee022567bf9e2e0b3cd92461a2f4986ecc99673
---
-2.25.1
+Okay.
 
+
+> and have the pm8008.dtsi file add itself as a child of &pm8008_bus? Then
+> we can easily see that pm8008 is a child of pm8008_bus without having to
+> figure out where the file is included. It also helps avoid polluting the
+> i2c node with things that shouldn't be there in case we want to include
+> configuration bits in the pm8008.dtsi file that aren't directly related
+> to the bus node.
+>
+>> +
+>> +&pm8008_infra {
+>> +       pinctrl-names = "default";
+>> +       pinctrl-0 = <&pm8008_active>;
+>> +};
+>> +
+>> +&pm8008_regulators {
+>> +       vdd_l1_l2-supply = <&vreg_s8b_1p2>;
+>> +       vdd_l3_l4-supply = <&vreg_s1b_1p8>;
+>> +       vdd_l5-supply = <&vreg_bob>;
+>> +       vdd_l6-supply = <&vreg_bob>;
+>> +       vdd_l7-supply = <&vreg_bob>;
+>> +};
+>> +
+>> +&pm8008_l1 {
+>> +       regulator-min-microvolt = <950000>;
+>> +       regulator-max-microvolt = <1300000>;
+>> +};
+>> +
+>> +&pm8008_l2 {
+>> +       regulator-min-microvolt = <950000>;
+>> +       regulator-max-microvolt = <1250000>;
+>> +};
+>> +
+>> +&pm8008_l3 {
+>> +       regulator-min-microvolt = <1650000>;
+>> +       regulator-max-microvolt = <3000000>;
+>> +};
+>> +
+>> +&pm8008_l4 {
+>> +       regulator-min-microvolt = <1504000>;
+>> +       regulator-max-microvolt = <1600000>;
+>> +};
+>> +
+>> +&pm8008_l5 {
+>> +       regulator-min-microvolt = <2600000>;
+>> +       regulator-max-microvolt = <3000000>;
+>> +};
+>> +
+>> +&pm8008_l6 {
+>> +       regulator-min-microvolt = <2600000>;
+>> +       regulator-max-microvolt = <3000000>;
+>> +};
+>> +
+>> +&pm8008_l7 {
+>> +       regulator-min-microvolt = <3000000>;
+>> +       regulator-max-microvolt = <3544000>;
+>> +};
+>> +
+>>   &qfprom {
+>>          vcc-supply = <&vreg_l1c_1p8>;
+>>   };
+>> @@ -375,6 +431,16 @@
+>>          drive-strength = <2>;
+>>   };
+>>
+>> +&pm8350c_gpios {
+>> +       pm8008_active: pm8008_active {
+> No underscore in node names. pm8008_active: pm8008-active {
+
+
+Okay.
+
+
+>> +               pins = "gpio4";
+>> +               function = "normal";
+>> +               bias-disable;
+>> +               output-high;
+> Is this a reset signal? Should the driver be deasserting the reset when
+> it is ready? That could be the same time the gpio is acquired.
+
+
+I didn't get your question exactly.. hope this answers your query
+
+The pm8008 chip needs this gpio to be toggled , in order to come out of 
+reset and start any transactions..
+
+Please let me know if you have more queries
+
+
+>> +               power-source = <0>;
+>> +       };
+>> +};

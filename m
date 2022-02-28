@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7604C7821
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E634C782F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbiB1Sl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S229684AbiB1Smg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240702AbiB1Slh (ORCPT
+        with ESMTP id S240709AbiB1SmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:41:37 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4263E54BD3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:35:43 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c192so6219079wma.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:35:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XWE8ka0LFITuVWLTsvK0XnLYaX+ahuY1DLqYbhtqPVM=;
-        b=fhg7jpYf1EYHHy4sAaAQg8FUpD08rHouaef4QgIbFmDlV/OB0oARBG55IS0Vs6V7RM
-         dz1g6KwYdqfXj8/RsQiP30R9Vsy4j0+9+90azseP39z+yyaDaTIR3o0saIcI0j3ONmGp
-         /f5z4djXrqFENtGpVcKk6MIwkg81alkL2gPZgrjTjqO6rp0ITjedEQorl6w2nQxqQqia
-         7YeF5sP/D2kJomyggm4iB9PAa1WwbwGAKIsgBiJM/WQIg1mPwiUBLbwFKYWz8RORrDrp
-         pCQLJArueazRmcCsFyK7FLRFqlLoqTSoPbfR4dL8g6+wY22pXI0ZidCNDoEuP0NpDoga
-         rz3A==
+        Mon, 28 Feb 2022 13:42:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEB58BC3A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646073421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Nw+YzuEzgs3gu2at3y5Ba3Dv+XkvEq+c0bsLbBK/qk=;
+        b=EFP+XEL+pSb8Eq4DlI6KXzbkaaiiHqppzsJlIJI6Gg3x3rxbpQOYxfDRDh7oI+6NIZPvM8
+        D/7txjamniqDXa4ISl1aU9w83Dks8Fvsa+vJvH7sbWqQXX8s/80rgs4M4j9G8qehfwPnko
+        OVRRt+fSq2TZOfp5PAHUFBSjz3zbbd0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-yClh6WywNkS7B4zlv5M-KQ-1; Mon, 28 Feb 2022 13:37:00 -0500
+X-MC-Unique: yClh6WywNkS7B4zlv5M-KQ-1
+Received: by mail-qk1-f199.google.com with SMTP id c19-20020a05620a11b300b00648cdeae21aso11929837qkk.17
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:37:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XWE8ka0LFITuVWLTsvK0XnLYaX+ahuY1DLqYbhtqPVM=;
-        b=R61vif8/Qrlt8CnzRvhZ2Mcjdl43AkkOVb5wCrLdmQRGSOEApPD5c08B4Sfy5AlO75
-         BIeIws/ZJjeFQcX3/a1Rp07SvGQWb5aC0o3jipLBzB8UQ/yQZw5aCecyAK2UpnDqPKTl
-         0PPfjs/nMqRwHUKWqDECai/ztemy47snMsn5xYsHasQpnoS51cjuAnueIyNLni68wGhY
-         ZJeEpHOeZqy5A9Jmj406u0VvYIpJIQU98vlK02/U6iR3y05305/M1JadD6sd1e9CEcqV
-         Gerk2xtXqfWRGxKJqtc/rzJ6aXwQC35WM0PvyYLfQf0tRzOaEQ6v2KFDKy7E/oRDxoqF
-         DdzA==
-X-Gm-Message-State: AOAM5323PFVO0bAgPB3qQ+TRqbGd+qTYGgVtjhwzkiULzrYHW8vgvRa8
-        LLRxWKBXa7byFFkinECDBo4=
-X-Google-Smtp-Source: ABdhPJwV3VqdHtOu+yvIpbun8KXIm09AgnYoutTtzWN3kkuBLC0rMsfci3Y49igHiesLNf6e99/m3g==
-X-Received: by 2002:a1c:544a:0:b0:37f:a9c8:d598 with SMTP id p10-20020a1c544a000000b0037fa9c8d598mr14285948wmi.26.1646073341878;
-        Mon, 28 Feb 2022 10:35:41 -0800 (PST)
-Received: from localhost.localdomain ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id x5-20020adfec05000000b001e58cc95affsm11351387wrn.38.2022.02.28.10.35.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0Nw+YzuEzgs3gu2at3y5Ba3Dv+XkvEq+c0bsLbBK/qk=;
+        b=0RkrYDeoL8L1wwKXfd1J2/Q4N1M/4qgTqC+NJZH/hqUGE5LBlrLO/SNgIPSSNzmw9u
+         dzYduvOW+QPTPwhFVGHr0LVsiVAZGqOXwAG65wVO4rwOuohnpm2qp6YnuWOaJIvGNw0X
+         8oLeVv5pOOLS3HGOicbzxonv2kRHliMeOIE+rzwNqDunNYzUKipiqS2josC27Jqy6Xdc
+         DrKYsoYTpoIqljVe1Bd7pYs9M05FynStzfWVc8sqeLCZ2JPwpyzwwH6V/ff9Auisgb3d
+         4KP9R4dGiys+qiukO0272tq1C0uwZ96ziYNQySylnmCH6rve76v1jWLb5kW59MtfkE94
+         wB4A==
+X-Gm-Message-State: AOAM5339aQAj2sBTTaIRlkQTQc860DWKrpjthZpN+4nM4jb8/mDNtesz
+        3oElh2AYSWcTvzNrsJ4Bmx4SdJyfptF0EJ+SpQf/UdD5xGndadmGqhnoTrwhsqtV3A/nVcE9B2Y
+        q1AFdeifE5F/d2vg+/XFkMKXY
+X-Received: by 2002:a05:6214:3004:b0:434:ec44:a4aa with SMTP id ke4-20020a056214300400b00434ec44a4aamr579434qvb.82.1646073420032;
+        Mon, 28 Feb 2022 10:37:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJypuXmACvJKkGTqqA7ckL8GgJgVLOX14Uko4cCuqnq4ygGwUrBeVheyZdTCTnqnxdeqCkR0bg==
+X-Received: by 2002:a05:6214:3004:b0:434:ec44:a4aa with SMTP id ke4-20020a056214300400b00434ec44a4aamr579411qvb.82.1646073419737;
+        Mon, 28 Feb 2022 10:36:59 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id g202-20020a379dd3000000b0064932a7b992sm5444536qke.98.2022.02.28.10.36.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 10:35:41 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     andrzej.hajda@intel.com
-Cc:     narmstrong@baylibre.com, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        maxime@cerno.tech, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] drm/bridge: tc358775: switch to devm_drm_of_get_bridge
-Date:   Mon, 28 Feb 2022 19:35:37 +0100
-Message-Id: <20220228183537.24600-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 10:36:59 -0800 (PST)
+Date:   Mon, 28 Feb 2022 10:36:55 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 34/39] objtool: Validate IBT assumptions
+Message-ID: <20220228183655.gcacvddofbaaiqhz@treble>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151324.018939604@infradead.org>
+ <20220227031348.drbmkcmoqur53aay@treble>
+ <20220227170003.GE11184@worktop.programming.kicks-ass.net>
+ <20220227222055.uqgcz33dwhl3atpr@treble>
+ <YhyaS4tN9NpCJcmk@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YhyaS4tN9NpCJcmk@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function "drm_of_find_panel_or_bridge" has been deprecated in
-favor of "devm_drm_of_get_bridge".
+On Mon, Feb 28, 2022 at 10:47:55AM +0100, Peter Zijlstra wrote:
+> On Sun, Feb 27, 2022 at 02:20:55PM -0800, Josh Poimboeuf wrote:
+> > On Sun, Feb 27, 2022 at 06:00:03PM +0100, Peter Zijlstra wrote:
+> > > > > @@ -3101,6 +3164,17 @@ static int validate_branch(struct objtoo
+> > > > >  
+> > > > >  		if (insn->hint) {
+> > > > >  			state.cfi = *insn->cfi;
+> > > > > +			if (ibt) {
+> > > > > +				struct symbol *sym;
+> > > > > +
+> > > > > +				if (insn->cfi->type == UNWIND_HINT_TYPE_REGS_PARTIAL &&
+> > > > > +				    (sym = find_symbol_by_offset(insn->sec, insn->offset)) &&
+> > > > > +				    insn->type != INSN_ENDBR && !insn->noendbr) {
+> > > > > +					WARN_FUNC("IRET_REGS hint without ENDBR: %s",
+> > > > > +						  insn->sec, insn->offset,
+> > > > > +						  sym->name);
+> > > > > +				}
+> > > > 
+> > > > No need to print sym->name here, WARN_FUNC() already does it?
+> > > 
+> > > Almost; perhaps the change to make is to either introduce WARN_SYM or
+> > > make WARN_FUNC also print !STT_FUNC symbols ?
+> > 
+> > In the case of no function, WARN_FUNC() falls back to printing sec+off.
+> > Is that not good enough?
+> 
+> I got really tired of doing the manual symbol lookup... I don't suppose
+> it matters too much now that I've more or less completed the triage, but
+> it was useful.
 
-Switch to the new function and reduce boilerplate.
+Maybe it would be reasonable to change WARN_FUNC to do that?  i.e. fall
+back from func+off to sym+off to sec+off.
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/bridge/tc358775.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
-index 2c76331b251d..b158e5ad561c 100644
---- a/drivers/gpu/drm/bridge/tc358775.c
-+++ b/drivers/gpu/drm/bridge/tc358775.c
-@@ -649,7 +649,6 @@ static int tc_attach_host(struct tc_data *tc)
- static int tc_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
--	struct drm_panel *panel;
- 	struct tc_data *tc;
- 	int ret;
- 
-@@ -660,14 +659,8 @@ static int tc_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	tc->dev = dev;
- 	tc->i2c = client;
- 
--	ret = drm_of_find_panel_or_bridge(dev->of_node, TC358775_LVDS_OUT0,
--					  0, &panel, NULL);
--	if (ret < 0)
--		return ret;
--	if (!panel)
--		return -ENODEV;
--
--	tc->panel_bridge = devm_drm_panel_bridge_add(dev, panel);
-+	tc->panel_bridge = devm_drm_of_get_bridge(dev, dev->of_node,
-+						  TC358775_LVDS_OUT0, 0);
- 	if (IS_ERR(tc->panel_bridge))
- 		return PTR_ERR(tc->panel_bridge);
- 
 -- 
-2.25.1
+Josh
 

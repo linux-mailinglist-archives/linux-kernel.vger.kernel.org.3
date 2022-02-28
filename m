@@ -2,154 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16C84C7161
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F214C7165
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237801AbiB1QLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
+        id S237807AbiB1QMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234448AbiB1QLr (ORCPT
+        with ESMTP id S234448AbiB1QL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:11:47 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4251A8565D;
-        Mon, 28 Feb 2022 08:11:04 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BC8051C000B;
-        Mon, 28 Feb 2022 16:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646064662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TsRzRoAaLpHY0fxOVpMA6s3Oa6DZiUQyKn9vN7ceT1Y=;
-        b=VIUWnD2RvZ4DPwtXXa6fm1PhnHV0YLG2B7/Bu5GETiK9spUhMufNObNNaUacgKYiSHGhNX
-        kxPJ3G2uyvMeaxeH2b9ykLkkt0BgqcedniR3Gfles+hl2lZuEPzIICak/TDvCdftW4bumY
-        L3qb3xVsP6NImgKn1UmTTLfMkb2itMdwJhgX0lVm0GdHQyONQa/7zIcknWdBCjbRNE8rJE
-        37XAL7UE7BHQu3oyzrNEbXKudc9GLzMTPECH7f1ptolQ0MMyWGFZRG45mGktaWTvUBjZln
-        pgH//xJFs1+EW7PlPtMYF8jZWZyAzD5cK4fgvXiAFeVMLslctCNOXpDCIdq8+g==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH v4 00/12] PCI: mvebu: subsystem ids, AER and INTx
-In-Reply-To: <20220222161854.7oot5v6xlw2wzmsc@pali>
-References: <20220222155030.988-1-pali@kernel.org>
- <164554589988.5595.5091384618177225445.b4-ty@arm.com>
- <20220222161143.6ryghgtfmhnmhpmz@pali> <20220222161539.GA20114@lpieralisi>
- <20220222161854.7oot5v6xlw2wzmsc@pali>
-Date:   Mon, 28 Feb 2022 17:11:01 +0100
-Message-ID: <87h78j0y5m.fsf@BL-laptop>
+        Mon, 28 Feb 2022 11:11:57 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5C18565D;
+        Mon, 28 Feb 2022 08:11:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V5oM5vq_1646064672;
+Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V5oM5vq_1646064672)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 01 Mar 2022 00:11:13 +0800
+From:   xhao@linux.alibaba.com
+Reply-To: xhao@linux.alibaba.com
+Subject: Re: [PATCH v3 05/13] mm/damon/sysfs: Support the physical address
+ space monitoring
+To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
+Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
+        gregkh@linuxfoundation.org, linux-damon@amazon.com,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220228081314.5770-1-sj@kernel.org>
+ <20220228081314.5770-6-sj@kernel.org>
+Message-ID: <d4b7fe7b-a908-989c-e86b-2ed404372d78@linux.alibaba.com>
+Date:   Tue, 1 Mar 2022 00:11:12 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220228081314.5770-6-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-> + Gregory
+On 2/28/22 4:13 PM, SeongJae Park wrote:
+> This commit makes DAMON sysfs interface supports the physical address
+> space monitoring.  Specifically, this commit adds support of the initial
+> monitoring regions set feature by adding 'regions' directory under each
+> target directory and makes context operations file to receive 'paddr' in
+> addition to 'vaddr'.
 >
-> On Tuesday 22 February 2022 16:15:39 Lorenzo Pieralisi wrote:
->> On Tue, Feb 22, 2022 at 05:11:43PM +0100, Pali Roh=C3=A1r wrote:
->> > On Tuesday 22 February 2022 16:06:20 Lorenzo Pieralisi wrote:
->> > > On Tue, 22 Feb 2022 16:50:18 +0100, Pali Roh=C3=A1r wrote:
->> > > > This patch series extends pci-bridge-emul.c driver to emulate PCI =
-Subsystem
->> > > > Vendor ID capability and PCIe extended capabilities. And then impl=
-ement
->> > > > in pci-mvebu.c driver support for PCI Subsystem Vendor IDs, PCIe A=
-ER
->> > > > registers, support for legacy INTx interrupts, configuration for X=
-1/X4
->> > > > mode and usage of new PCI child_ops API.
->> > > >=20
->> > > > Changes in v4:
->> > > > * rebased on c3bd7dc553eea5a3595ca3aa0adee9bf83622a1f
->> > > >=20
->> > > > [...]
->> > >=20
->> > > I can't apply dts changes, patch 12 should go via the arm-soc tree.
->> >=20
->> > Gregory already wrote about this dts change:
->> > https://lore.kernel.org/linux-pci/87tud1jwpr.fsf@BL-laptop/
->> > "So the easier is to let merge it through the PCI subsystem with the
->> > other patches from this series."
->> >=20
->> > Are there any issues with applying this dts change via pci tree?
->>=20
->> I don't usually take dts changes through the PCI tree since they
->> can conflict with arm-soc, that's the issue - dts changes should
->> be managed by platform maintainers.
+> As a result, the files hierarchy becomes as below:
 >
-> Gregory, could you please take patch 12/12?
-> https://lore.kernel.org/linux-pci/20220222155030.988-13-pali@kernel.org/
-> You have already Acked-by (see above previous link)
-
-
-Applied on mvebu/dt
-
-let's hope the PCI branch will be merged before the ARM branch.
-
-Thanks,
-
-Gregory
-
-
+>      /sys/kernel/mm/damon/admin
+>      │ kdamonds/nr_kdamonds
+>      │ │ 0/state,pid
+>      │ │ │ contexts/nr_contexts
+>      │ │ │ │ 0/operations
+>      │ │ │ │ │ monitoring_attrs/
+>      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
+>      │ │ │ │ │ │ nr_regions/min,max
+>      │ │ │ │ │ targets/nr_targets
+>      │ │ │ │ │ │ 0/pid_target
+>      │ │ │ │ │ │ │ regions/nr_regions    <- NEW DIRECTORY
+>      │ │ │ │ │ │ │ │ 0/start,end
+>      │ │ │ │ │ │ │ │ ...
+>      │ │ │ │ │ │ ...
+>      │ │ │ │ ...
+>      │ │ ...
 >
->> Thanks,
->> Lorenzo
->>=20
->> > > Applied the others to pci/mvebu, thanks.
->> > >=20
->> > > [01/12] PCI: pci-bridge-emul: Re-arrange register tests
->> > >         https://git.kernel.org/lpieralisi/pci/c/c453bf6f9b
->> > > [02/12] PCI: pci-bridge-emul: Add support for PCIe extended capabili=
-ties
->> > >         https://git.kernel.org/lpieralisi/pci/c/c0bd419732
->> > > [03/12] PCI: pci-bridge-emul: Add support for PCI Bridge Subsystem V=
-endor ID capability
->> > >         https://git.kernel.org/lpieralisi/pci/c/3767a90242
->> > > [04/12] dt-bindings: PCI: mvebu: Add num-lanes property
->> > >         https://git.kernel.org/lpieralisi/pci/c/26b982ca83
->> > > [05/12] PCI: mvebu: Correctly configure x1/x4 mode
->> > >         https://git.kernel.org/lpieralisi/pci/c/2a81dd9fd9
->> > > [06/12] PCI: mvebu: Add support for PCI Bridge Subsystem Vendor ID o=
-n emulated bridge
->> > >         https://git.kernel.org/lpieralisi/pci/c/e3e13c9135
->> > > [07/12] PCI: mvebu: Add support for Advanced Error Reporting registe=
-rs on emulated bridge
->> > >         https://git.kernel.org/lpieralisi/pci/c/2b6ee04c0a
->> > > [08/12] PCI: mvebu: Use child_ops API
->> > >         https://git.kernel.org/lpieralisi/pci/c/c099c2a761
->> > > [09/12] dt-bindings: PCI: mvebu: Update information about intx inter=
-rupts
->> > >         https://git.kernel.org/lpieralisi/pci/c/0124989220
->> > > [10/12] PCI: mvebu: Fix macro names and comments about legacy interr=
-upts
->> > >         https://git.kernel.org/lpieralisi/pci/c/d00ea94e62
->> > > [11/12] PCI: mvebu: Implement support for legacy INTx interrupts
->> > >         https://git.kernel.org/lpieralisi/pci/c/ec07526264
->> > >=20
->> > > Thanks,
->> > > Lorenzo
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>   mm/damon/sysfs.c | 276 ++++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 271 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+> index 9221c93db6cc..968a4ba8e81b 100644
+> --- a/mm/damon/sysfs.c
+> +++ b/mm/damon/sysfs.c
+> @@ -113,12 +113,220 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
+>   	.default_groups = damon_sysfs_ul_range_groups,
+>   };
+>   
+> +/*
+> + * init region directory
+> + */
+> +
+> +struct damon_sysfs_region {
+> +	struct kobject kobj;
+> +	unsigned long start;
+> +	unsigned long end;
+> +};
+> +
+> +static struct damon_sysfs_region *damon_sysfs_region_alloc(
+> +		unsigned long start,
+> +		unsigned long end)
+> +{
+> +	struct damon_sysfs_region *region = kmalloc(sizeof(*region),
+> +			GFP_KERNEL);
+> +
+> +	if (!region)
+> +		return NULL;
+> +	region->kobj = (struct kobject){};
+> +	region->start = start;
+> +	region->end = end;
+> +	return region;
+> +}
+> +
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+The interface "start" and "end" have the same problems
+
+[root@rt2k03395 0]# echo 100 > start
+[root@rt2k03395 0]# echo 10 > end
+[root@rt2k03395 0]# cat end
+10
+[root@rt2k03395 0]# cat start
+100
+
+> +static ssize_t start_show(struct kobject *kobj, struct kobj_attribute *attr,
+> +		char *buf)
+> +{
+> +	struct damon_sysfs_region *region = container_of(kobj,
+> +			struct damon_sysfs_region, kobj);
+> +
+> +	return sysfs_emit(buf, "%lu\n", region->start);
+> +}
+> +
+> +static ssize_t start_store(struct kobject *kobj, struct kobj_attribute *attr,
+> +		const char *buf, size_t count)
+> +{
+> +	struct damon_sysfs_region *region = container_of(kobj,
+> +			struct damon_sysfs_region, kobj);
+> +	int err = kstrtoul(buf, 0, &region->start);
+> +
+> +	if (err)
+> +		return -EINVAL;
+> +	return count;
+> +}
+> +
+> +static ssize_t end_show(struct kobject *kobj, struct kobj_attribute *attr,
+> +		char *buf)
+> +{
+> +	struct damon_sysfs_region *region = container_of(kobj,
+> +			struct damon_sysfs_region, kobj);
+> +
+> +	return sysfs_emit(buf, "%lu\n", region->end);
+> +}
+> +
+> +static ssize_t end_store(struct kobject *kobj, struct kobj_attribute *attr,
+> +		const char *buf, size_t count)
+> +{
+> +	struct damon_sysfs_region *region = container_of(kobj,
+> +			struct damon_sysfs_region, kobj);
+> +	int err = kstrtoul(buf, 0, &region->end);
+> +
+> +	if (err)
+> +		return -EINVAL;
+> +	return count;
+> +}
+> +
+> +static void damon_sysfs_region_release(struct kobject *kobj)
+> +{
+> +	kfree(container_of(kobj, struct damon_sysfs_region, kobj));
+> +}
+> +
+> +static struct kobj_attribute damon_sysfs_region_start_attr =
+> +		__ATTR_RW_MODE(start, 0600);
+> +
+> +static struct kobj_attribute damon_sysfs_region_end_attr =
+> +		__ATTR_RW_MODE(end, 0600);
+> +
+> +static struct attribute *damon_sysfs_region_attrs[] = {
+> +	&damon_sysfs_region_start_attr.attr,
+> +	&damon_sysfs_region_end_attr.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(damon_sysfs_region);
+> +
+> +static struct kobj_type damon_sysfs_region_ktype = {
+> +	.release = damon_sysfs_region_release,
+> +	.sysfs_ops = &kobj_sysfs_ops,
+> +	.default_groups = damon_sysfs_region_groups,
+> +};
+> +
+> +/*
+> + * init_regions directory
+> + */
+> +
+> +struct damon_sysfs_regions {
+> +	struct kobject kobj;
+> +	struct damon_sysfs_region **regions_arr;
+> +	int nr;
+> +};
+> +
+> +static struct damon_sysfs_regions *damon_sysfs_regions_alloc(void)
+> +{
+> +	return kzalloc(sizeof(struct damon_sysfs_regions), GFP_KERNEL);
+> +}
+> +
+> +static void damon_sysfs_regions_rm_dirs(struct damon_sysfs_regions *regions)
+> +{
+> +	struct damon_sysfs_region **regions_arr = regions->regions_arr;
+> +	int i;
+> +
+> +	for (i = 0; i < regions->nr; i++)
+> +		kobject_put(&regions_arr[i]->kobj);
+> +	regions->nr = 0;
+> +	kfree(regions_arr);
+> +	regions->regions_arr = NULL;
+> +}
+> +
+> +static int damon_sysfs_regions_add_dirs(struct damon_sysfs_regions *regions,
+> +		int nr_regions)
+> +{
+> +	struct damon_sysfs_region **regions_arr, *region;
+> +	int err, i;
+> +
+> +	damon_sysfs_regions_rm_dirs(regions);
+> +	if (!nr_regions)
+> +		return 0;
+> +
+> +	regions_arr = kmalloc_array(nr_regions, sizeof(*regions_arr),
+> +			GFP_KERNEL | __GFP_NOWARN);
+> +	if (!regions_arr)
+> +		return -ENOMEM;
+> +	regions->regions_arr = regions_arr;
+> +
+> +	for (i = 0; i < nr_regions; i++) {
+> +		region = damon_sysfs_region_alloc(0, 0);
+> +		if (!region) {
+> +			damon_sysfs_regions_rm_dirs(regions);
+> +			return -ENOMEM;
+> +		}
+> +
+> +		err = kobject_init_and_add(&region->kobj,
+> +				&damon_sysfs_region_ktype, &regions->kobj,
+> +				"%d", i);
+> +		if (err) {
+> +			kobject_put(&region->kobj);
+> +			damon_sysfs_regions_rm_dirs(regions);
+> +			return err;
+> +		}
+> +
+> +		regions_arr[i] = region;
+> +		regions->nr++;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static ssize_t nr_regions_show(struct kobject *kobj,
+> +		struct kobj_attribute *attr, char *buf)
+> +{
+> +	struct damon_sysfs_regions *regions = container_of(kobj,
+> +			struct damon_sysfs_regions, kobj);
+> +
+> +	return sysfs_emit(buf, "%d\n", regions->nr);
+> +}
+> +
+> +static ssize_t nr_regions_store(struct kobject *kobj,
+> +		struct kobj_attribute *attr, const char *buf, size_t count)
+> +{
+> +	struct damon_sysfs_regions *regions = container_of(kobj,
+> +			struct damon_sysfs_regions, kobj);
+> +	int nr, err = kstrtoint(buf, 0, &nr);
+> +
+> +	if (err)
+> +		return err;
+> +	if (nr < 0)
+> +		return -EINVAL;
+> +
+> +	if (!mutex_trylock(&damon_sysfs_lock))
+> +		return -EBUSY;
+> +	err = damon_sysfs_regions_add_dirs(regions, nr);
+> +	mutex_unlock(&damon_sysfs_lock);
+> +	if (err)
+> +		return err;
+> +
+> +	return count;
+> +}
+> +
+> +static void damon_sysfs_regions_release(struct kobject *kobj)
+> +{
+> +	kfree(container_of(kobj, struct damon_sysfs_regions, kobj));
+> +}
+> +
+> +static struct kobj_attribute damon_sysfs_regions_nr_attr =
+> +		__ATTR_RW_MODE(nr_regions, 0600);
+> +
+> +static struct attribute *damon_sysfs_regions_attrs[] = {
+> +	&damon_sysfs_regions_nr_attr.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(damon_sysfs_regions);
+> +
+> +static struct kobj_type damon_sysfs_regions_ktype = {
+> +	.release = damon_sysfs_regions_release,
+> +	.sysfs_ops = &kobj_sysfs_ops,
+> +	.default_groups = damon_sysfs_regions_groups,
+> +};
+> +
+>   /*
+>    * target directory
+>    */
+>   
+>   struct damon_sysfs_target {
+>   	struct kobject kobj;
+> +	struct damon_sysfs_regions *regions;
+>   	int pid;
+>   };
+>   
+> @@ -127,6 +335,29 @@ static struct damon_sysfs_target *damon_sysfs_target_alloc(void)
+>   	return kzalloc(sizeof(struct damon_sysfs_target), GFP_KERNEL);
+>   }
+>   
+> +static int damon_sysfs_target_add_dirs(struct damon_sysfs_target *target)
+> +{
+> +	struct damon_sysfs_regions *regions = damon_sysfs_regions_alloc();
+> +	int err;
+> +
+> +	if (!regions)
+> +		return -ENOMEM;
+> +
+> +	err = kobject_init_and_add(&regions->kobj, &damon_sysfs_regions_ktype,
+> +			&target->kobj, "regions");
+> +	if (err)
+> +		kobject_put(&regions->kobj);
+> +	else
+> +		target->regions = regions;
+> +	return err;
+> +}
+> +
+> +static void damon_sysfs_target_rm_dirs(struct damon_sysfs_target *target)
+> +{
+> +	damon_sysfs_regions_rm_dirs(target->regions);
+> +	kobject_put(&target->regions->kobj);
+> +}
+> +
+>   static ssize_t pid_target_show(struct kobject *kobj,
+>   		struct kobj_attribute *attr, char *buf)
+>   {
+> @@ -188,8 +419,10 @@ static void damon_sysfs_targets_rm_dirs(struct damon_sysfs_targets *targets)
+>   	struct damon_sysfs_target **targets_arr = targets->targets_arr;
+>   	int i;
+>   
+> -	for (i = 0; i < targets->nr; i++)
+> +	for (i = 0; i < targets->nr; i++) {
+> +		damon_sysfs_target_rm_dirs(targets_arr[i]);
+>   		kobject_put(&targets_arr[i]->kobj);
+> +	}
+>   	targets->nr = 0;
+>   	kfree(targets_arr);
+>   	targets->targets_arr = NULL;
+> @@ -224,6 +457,10 @@ static int damon_sysfs_targets_add_dirs(struct damon_sysfs_targets *targets,
+>   		if (err)
+>   			goto out;
+>   
+> +		err = damon_sysfs_target_add_dirs(target);
+> +		if (err)
+> +			goto out;
+> +
+>   		targets_arr[i] = target;
+>   		targets->nr++;
+>   	}
+> @@ -608,9 +845,6 @@ static ssize_t operations_store(struct kobject *kobj,
+>   
+>   	for (id = 0; id < NR_DAMON_OPS; id++) {
+>   		if (sysfs_streq(buf, damon_sysfs_ops_strs[id])) {
+> -			/* Support only vaddr */
+> -			if (id != DAMON_OPS_VADDR)
+> -				return -EINVAL;
+>   			context->ops_id = id;
+>   			return count;
+>   		}
+> @@ -855,10 +1089,37 @@ static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
+>   	}
+>   }
+>   
+> +static int damon_sysfs_set_regions(struct damon_target *t,
+> +		struct damon_sysfs_regions *sysfs_regions)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < sysfs_regions->nr; i++) {
+> +		struct damon_sysfs_region *sys_region =
+> +			sysfs_regions->regions_arr[i];
+> +		struct damon_region *prev, *r;
+> +
+> +		if (sys_region->start > sys_region->end)
+> +			return -EINVAL;
+> +		r = damon_new_region(sys_region->start, sys_region->end);
+> +		if (!r)
+> +			return -ENOMEM;
+> +		damon_add_region(r, t);
+> +		if (damon_nr_regions(t) > 1) {
+> +			prev = damon_prev_region(r);
+> +			if (prev->ar.end > r->ar.start) {
+> +				damon_destroy_region(r, t);
+> +				return -EINVAL;
+> +			}
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+>   static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+>   		struct damon_sysfs_targets *sysfs_targets)
+>   {
+> -	int i;
+> +	int i, err;
+>   
+>   	for (i = 0; i < sysfs_targets->nr; i++) {
+>   		struct damon_sysfs_target *sys_target =
+> @@ -877,6 +1138,11 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+>   			}
+>   		}
+>   		damon_add_target(ctx, t);
+> +		err = damon_sysfs_set_regions(t, sys_target->regions);
+> +		if (err) {
+> +			damon_sysfs_destroy_targets(ctx);
+> +			return err;
+> +		}
+>   	}
+>   	return 0;
+>   }
+
+-- 
+Best Regards!
+Xin Hao
+

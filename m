@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088CD4C7E37
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125CD4C7E41
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiB1XW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S229771AbiB1XZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 18:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiB1XWx (ORCPT
+        with ESMTP id S229704AbiB1XZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:22:53 -0500
-Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD819A27A2;
-        Mon, 28 Feb 2022 15:22:10 -0800 (PST)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=rainbowdash)
-        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nOpLD-000510-L9; Mon, 28 Feb 2022 23:22:07 +0000
-Received: from ben by rainbowdash with local (Exim 4.95)
-        (envelope-from <ben@rainbowdash>)
-        id 1nOpLD-00CHuf-3I;
-        Mon, 28 Feb 2022 23:22:07 +0000
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-To:     helgaas@kernel.org, linux-pci@vger.kernel.org
-Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on some boards
-Date:   Mon, 28 Feb 2022 23:22:06 +0000
-Message-Id: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.34.1
+        Mon, 28 Feb 2022 18:25:21 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB02BC3311;
+        Mon, 28 Feb 2022 15:24:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B22F478;
+        Tue,  1 Mar 2022 00:24:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646090679;
+        bh=GequZV5BwVjpKPb+Q/rQWeSXyCGPG/WT/t2NCTE3e44=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Xi4ptyLzFjcJ0ffGr6xtQG2NQb6Tbk4Id3luptcVQKUalOnq7cbUIgwJlty9rVGMd
+         TevFoHW2bEgBDHUj46YHrjIPfOEZY5t5NTiAEOz//i69Gtnx9P0eytbjrV05xq5ocC
+         MbG5jVP6lmrsARn2BaUJRbkXne/VCRmLhDAR3bOw=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220228183955.25508-1-jose.exposito89@gmail.com>
+References: <20220228183955.25508-1-jose.exposito89@gmail.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: switch to devm_drm_of_get_bridge
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     linux-pwm@vger.kernel.org, jonas@kwiboo.se, airlied@linux.ie,
+        robert.foss@linaro.org, dri-devel@lists.freedesktop.org,
+        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
+        jernej.skrabec@gmail.com, thierry.reding@gmail.com,
+        Laurent.pinchart@ideasonboard.com, u.kleine-koenig@pengutronix.de,
+        =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        lee.jones@linaro.org, maxime@cerno.tech
+To:     =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        andrzej.hajda@intel.com
+Date:   Mon, 28 Feb 2022 23:24:36 +0000
+Message-ID: <164609067646.2361501.15747139249939190799@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fu740 PCIe core does not probe any devices on the SiFive Unmatched
-board without this fix (or having U-Boot explicitly start the PCIe via
-either boot-script or user command). The fix is to start the link at
-Gen1 speeds and once the link is up then change the speed back.
+Hi Jos=C3=A9
 
-The U-Boot driver claims to set the link-speed to Gen1 to get the probe
-to work (and U-Boot does print link up at Gen1) in the following code:
-https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+Quoting Jos=C3=A9 Exp=C3=B3sito (2022-02-28 18:39:54)
+> The function "drm_of_find_panel_or_bridge" has been deprecated in
+> favor of "devm_drm_of_get_bridge".
+>=20
+> Switch to the new function and reduce boilerplate.
+>=20
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> ---
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/brid=
+ge/ti-sn65dsi86.c
+> index dab8f76618f3..fb8e16ed7e90 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> @@ -1232,15 +1232,9 @@ static int ti_sn_bridge_probe(struct auxiliary_dev=
+ice *adev,
+>  {
+>         struct ti_sn65dsi86 *pdata =3D dev_get_drvdata(adev->dev.parent);
+>         struct device_node *np =3D pdata->dev->of_node;
+> -       struct drm_panel *panel;
+>         int ret;
+> =20
+> -       ret =3D drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
+> -       if (ret)
+> -               return dev_err_probe(&adev->dev, ret,
+> -                                    "could not find any panel node\n");
+> -
+> -       pdata->next_bridge =3D devm_drm_panel_bridge_add(pdata->dev, pane=
+l);
+> +       pdata->next_bridge =3D devm_drm_of_get_bridge(pdata->dev, np, 1, =
+0);
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+Yikes, I was about to rely on this panel variable to determine if the
+device is a panel or a display port connector. (Well, I am relying on
+it, and patches are hoping to be reposted this week).
+
+Is there expected to be another way to identify if the next connection
+is a panel or a bridge?
+
+Regards
+
 --
-Note, this patch has had significant re-work since the previous 4
-sets, including trying to fix style, message, reliance on the U-Boot
-fix and the comments about usage of LINK_CAP and reserved fields.
----
- drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+Kieran
 
-diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
-index 842b7202b96e..16ad52f53490 100644
---- a/drivers/pci/controller/dwc/pcie-fu740.c
-+++ b/drivers/pci/controller/dwc/pcie-fu740.c
-@@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
- {
- 	struct device *dev = pci->dev;
- 	struct fu740_pcie *afp = dev_get_drvdata(dev);
-+	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	int ret;
-+	u32 orig, tmp;
-+
-+	/*
-+	 * Force Gen1 when starting link, due to some devices not
-+	 * probing at higher speeds. This happens with the PCIe switch
-+	 * on the Unmatched board. The fix in U-Boot is to force Gen1
-+	 * and hope later resets will clear this capaility.
-+	 */
-+
-+	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
-+	dw_pcie_dbi_ro_wr_en(pci);
-+
-+	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-+	orig = tmp & PCI_EXP_LNKCAP_SLS;
-+	tmp &= ~PCI_EXP_LNKCAP_SLS;
-+	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
-+	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
- 
- 	/* Enable LTSSM */
- 	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
--	return 0;
-+
-+	ret = dw_pcie_wait_for_link(pci);
-+	if (ret) {
-+		dev_err(dev, "error: link did not start\n");
-+		goto err;
-+	}
-+
-+	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-+	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
-+		dev_dbg(dev, "changing speed back to original\n");
-+
-+		tmp &= ~PCI_EXP_LNKCAP_SLS;
-+		tmp |= orig;
-+		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
-+
-+		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
-+		tmp |= PORT_LOGIC_SPEED_CHANGE;
-+		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
-+
-+		ret = dw_pcie_wait_for_link(pci);
-+		if (ret) {
-+			dev_err(dev, "error: link did not start at new speed\n");
-+			goto err;
-+		}
-+	}
-+
-+	ret = 0;
-+err:
-+	// todo - if we do have an unliekly error, what do we do here?
-+	dw_pcie_dbi_ro_wr_dis(pci);
-+	return ret;
- }
- 
- static int fu740_pcie_host_init(struct pcie_port *pp)
--- 
-2.34.1
 
+>         if (IS_ERR(pdata->next_bridge)) {
+>                 DRM_ERROR("failed to create panel bridge\n");
+>                 return PTR_ERR(pdata->next_bridge);
+> --=20
+> 2.25.1
+>

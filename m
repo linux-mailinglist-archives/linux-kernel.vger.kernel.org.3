@@ -2,237 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A654C6BA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAEB4C6BB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236156AbiB1ME0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S234804AbiB1MFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236121AbiB1MEX (ORCPT
+        with ESMTP id S231265AbiB1MFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:04:23 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D10A2C13A;
-        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id p15so24284100ejc.7;
-        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
+        Mon, 28 Feb 2022 07:05:03 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2753017E28
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:04:25 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id y24so20969745lfg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
-        b=puET9FaE+iPLWSLHaH0Jc15P7LML3ILv/CtQc1xDRlDOvchBnePGr3CpZ8iNTFg26S
-         MvdmzyKLao5C/5rXrSzR7jzTPZ0Yuj+7M+cqDE4eOMJCgAt9uraXgTEJwynFkzni1Fvy
-         Vjo1HNa/jUOUFI/CmrkLVTegwpA5o7Cf0wR8qBn5y2xARegC4rz7JN5F70qSFE936vyK
-         a6/WQ787WIaZ7lFx0I/tSaiXwe3z6FIrVBWdIQkzq0oVXXDZs7cCv56cl8qPmZ4RxzRI
-         sP+DHiZk3rxPTft7o6PkfUdJMVZiSNaECaj+ljhYu978P5TkgTkfoRd54h/EuhklkuKS
-         esTA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8WnObInMC2ofWUsTKYtPij+k1Wh0DXe/u1zG3p1IPf4=;
+        b=JqfBkaGJmDTS5BLvufjhP/LEar/dzjQ6i7GPUZzQbUUApCYFA5AQYeQ/dfEM6n3HG6
+         CaZx9w0fjnDcQCHoNddRQS/A54mr7vTrErGBM5tIFsv7T/+VRPuNDLeW23vIDovdwSP7
+         1YlExP3x/CuK+MMWXD+8VX40ycwwMQg9kW/7AfxgyIM/5HUHjOIhV6o04w+Sz1TY6zGJ
+         yK5nlmPf9dv+VtE25IFeAdYzaQl0yQmQdb0DFN6YWjq3GJl8OCOtYnx1B1DzLqs0Htc5
+         BO28nMs1x1Ceqic4zFgJpRukkI19rYnBqN13EUOvPUo4O19aDegrb8WhpA5zTdnQRqGM
+         OE9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
-        b=b5ErhjzOgn9U4hMBWo62yCMMDr61Wbhoawc/0WIGvgv7uxDqgPBoMig5dkM4VcHO7D
-         XKGWXQAibWijkLhBlKxLdxo61wnOSvx2UA6hpeOSM9Kcuf7/XZfe5J0/n1I5On+XdXXK
-         PFQcVcX3hWp/zNSc2A+ockxR4gcqCtFm6svFqpVzEXI/0Xk81KyM/fDpKtm0e8ViUMcX
-         o/CdwN5J0ITvoc2Erb4pWTpaOetb2pONRYytJagcudWss0yCyhqPe1OVwvoSobXHk6O4
-         swJRhuM3X8J92q2Tx5p5S+FryA/Dtr1braIlwDEjBlzC0ufkOGMpNIGrGLDVVdoY+DiY
-         6qYQ==
-X-Gm-Message-State: AOAM532P7Eovede7RZdlai8eb3Qd6/DRPl1sWJVIfHcd4AoqihYZ5BTx
-        KlHFJt41/QKvCU8lHPeyZ80=
-X-Google-Smtp-Source: ABdhPJyPihjoYwx+e9NKg98XvxKCbWi7t13guT1EBLKeJ6QGdK72cKHCeJpX8hRszpc83uJxZ+jQ9w==
-X-Received: by 2002:a17:906:d14e:b0:6cd:8d7e:eec9 with SMTP id br14-20020a170906d14e00b006cd8d7eeec9mr14944415ejb.28.1646049820086;
-        Mon, 28 Feb 2022 04:03:40 -0800 (PST)
-Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:957a:1d13:c949:d1f3])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm4257528ejh.184.2022.02.28.04.03.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Feb 2022 04:03:39 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH 1/6] drivers: usb: remove usage of list iterator past the
- loop body
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <20220228112413.GA2812@kadam>
-Date:   Mon, 28 Feb 2022 13:03:36 +0100
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-sgx@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, kvm@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        v9fs-developer@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8WnObInMC2ofWUsTKYtPij+k1Wh0DXe/u1zG3p1IPf4=;
+        b=yLyEP9Qo1m51mEwYU76Ybyu803+1lXNUlBla+dDwj7DQQssvU7JaPNKd/KdZxohW3z
+         ceATaA0i3onqV2mZxnzhTnRZGX1WtbElEAO7CZJn8Ty2wprXSNcw+qs5nCu22uWGyZPs
+         M0MIJZBZXF1aEYqFCSCwT4oASt1aDUSufjmtRBJhTjUq55UloBdqozLSZGRyAXK9bBgg
+         zzFjDVpEeX1p+eKsh5pNyN07N+iQSmJeoQwwklp0SmfJVq9o13cpOaReFQss7CCj01N4
+         4QMWLDqCM0CSj5nzFuQ4fW6fTDpE2GCG1YlquZ+iNZfLExO5ZeBga/3HsjwfA+PPuchl
+         C0QA==
+X-Gm-Message-State: AOAM531uDVlCEL2RVN9/f+tYKIcG2hskoAsGN6kPhiDiUCmI4lMCBRHP
+        em60mVk5F/q81UjYDLjex/Vivx1doYKE2FqkLTmJ7g==
+X-Google-Smtp-Source: ABdhPJxpZi2fIFjY4KRz6vVxIdDcBSJGElXWDH3T1Fddx90I97shcxEvbgmXGqeayZecnO4XROSRNKyZGUYTNmYasOI=
+X-Received: by 2002:ac2:5de4:0:b0:443:5b80:d4c4 with SMTP id
+ z4-20020ac25de4000000b004435b80d4c4mr12437782lfq.373.1646049863342; Mon, 28
+ Feb 2022 04:04:23 -0800 (PST)
+MIME-Version: 1.0
+References: <1644395927-4138-1-git-send-email-wangqing@vivo.com>
+ <CAPDyKFqg5N1tCqQ2u2jt5qU0qLuDJRSJRtq_aMVDc7XNDbRvkw@mail.gmail.com> <bcd6688f-6f42-ca8f-ab9c-978eeff4f4e3@wanadoo.fr>
+In-Reply-To: <bcd6688f-6f42-ca8f-ab9c-978eeff4f4e3@wanadoo.fr>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 28 Feb 2022 13:03:47 +0100
+Message-ID: <CAPDyKFo-4hkTo8F9q4+BmxUH_Y4nk_K0N20q53xrdJLAFRutcQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: mtk-sd: use div64_u64() instead of do_div()
+To:     Qing Wang <wangqing@vivo.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <E31E215E-C409-40B8-8452-57E70C91484C@gmail.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-2-jakobkoschel@gmail.com>
- <20220228112413.GA2812@kadam>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Feb 2022 at 21:00, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Le 17/02/2022 =C3=A0 16:39, Ulf Hansson a =C3=A9crit :
+> > On Wed, 9 Feb 2022 at 09:39, Qing Wang <wangqing@vivo.com> wrote:
+> >>
+> >> From: Wang Qing <wangqing@vivo.com>
+> >>
+> >> do_div() does a 64-by-32 division.
+> >> When the divisor is u64, do_div() truncates it to 32 bits, this means =
+it
+> >> can test non-zero and be truncated to zero for division.
+> >>
+> >> fix do_div.cocci warning:
+> >> do_div() does a 64-by-32 division, please consider using div64_u64 ins=
+tead.
+> >>
+> >> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> >
+> > Applied for next, thanks!
+>
+>
+> This is wrong.
+>
+> See [1].
 
+Thanks for reporting this, I am dropping the patch from my next branch!
 
-> On 28. Feb 2022, at 12:24, Dan Carpenter <dan.carpenter@oracle.com> =
-wrote:
->=20
-> On Mon, Feb 28, 2022 at 12:08:17PM +0100, Jakob Koschel wrote:
->> diff --git a/drivers/usb/gadget/udc/at91_udc.c =
-b/drivers/usb/gadget/udc/at91_udc.c
->> index 9040a0561466..0fd0307bc07b 100644
->> --- a/drivers/usb/gadget/udc/at91_udc.c
->> +++ b/drivers/usb/gadget/udc/at91_udc.c
->> @@ -150,13 +150,14 @@ static void proc_ep_show(struct seq_file *s, =
-struct at91_ep *ep)
->> 	if (list_empty (&ep->queue))
->> 		seq_printf(s, "\t(queue empty)\n");
->>=20
->> -	else list_for_each_entry (req, &ep->queue, queue) {
->> -		unsigned	length =3D req->req.actual;
->> +	else
->> +		list_for_each_entry(req, &ep->queue, queue) {
->> +			unsigned int	length =3D req->req.actual;
->>=20
->> -		seq_printf(s, "\treq %p len %d/%d buf %p\n",
->> -				&req->req, length,
->> -				req->req.length, req->req.buf);
->> -	}
->> +			seq_printf(s, "\treq %p len %d/%d buf %p\n",
->> +					&req->req, length,
->> +					req->req.length, req->req.buf);
->> +		}
->=20
-> Don't make unrelated white space changes.  It just makes the patch
-> harder to review.  As you're writing the patch make note of any
-> additional changes and do them later in a separate patch.
->=20
-> Also a multi-line indent gets curly braces for readability even though
-> it's not required by C.  And then both sides would get curly braces.
->=20
->> 	spin_unlock_irqrestore(&udc->lock, flags);
->> }
->>=20
->> @@ -226,7 +227,7 @@ static int proc_udc_show(struct seq_file *s, void =
-*unused)
->>=20
->> 	if (udc->enabled && udc->vbus) {
->> 		proc_ep_show(s, &udc->ep[0]);
->> -		list_for_each_entry (ep, &udc->gadget.ep_list, =
-ep.ep_list) {
->> +		list_for_each_entry(ep, &udc->gadget.ep_list, =
-ep.ep_list) {
->=20
-> Another unrelated change.
->=20
->> 			if (ep->ep.desc)
->> 				proc_ep_show(s, ep);
->> 		}
->=20
->=20
-> [ snip ]
+See more comments below.
 
-Thanks for pointing out, I'll remove the changes here and note them down
-to send them separately.
+>
+>
+> Wang Qing, you should really warn all the people you have sent such patch=
+es.
+>
+> CJ
+>
+> [1]:
+> https://lore.kernel.org/linux-kernel/19b96972-cee7-937f-21ce-c78982ed2048=
+@linaro.org/
+>
+>
+> >
+> > Kind regards
+> > Uffe
+> >
+> >
+> >> ---
+> >>   drivers/mmc/host/mtk-sd.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> >> index 65037e1..777c9a8
+> >> --- a/drivers/mmc/host/mtk-sd.c
+> >> +++ b/drivers/mmc/host/mtk-sd.c
+> >> @@ -766,7 +766,7 @@ static u64 msdc_timeout_cal(struct msdc_host *host=
+, u64 ns, u64 clks)
+> >>                  clk_ns  =3D 1000000000ULL;
+> >>                  do_div(clk_ns, mmc->actual_clock);
+> >>                  timeout =3D ns + clk_ns - 1;
+> >> -               do_div(timeout, clk_ns);
+> >> +               div64_u64(timeout, clk_ns);
 
->=20
->> diff --git a/drivers/usb/gadget/udc/net2272.c =
-b/drivers/usb/gadget/udc/net2272.c
->> index 7c38057dcb4a..bb59200f1596 100644
->> --- a/drivers/usb/gadget/udc/net2272.c
->> +++ b/drivers/usb/gadget/udc/net2272.c
->> @@ -926,7 +926,8 @@ static int
->> net2272_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->> {
->> 	struct net2272_ep *ep;
->> -	struct net2272_request *req;
->> +	struct net2272_request *req =3D NULL;
->> +	struct net2272_request *tmp;
->> 	unsigned long flags;
->> 	int stopped;
->>=20
->> @@ -939,11 +940,13 @@ net2272_dequeue(struct usb_ep *_ep, struct =
-usb_request *_req)
->> 	ep->stopped =3D 1;
->>=20
->> 	/* make sure it's still queued on this endpoint */
->> -	list_for_each_entry(req, &ep->queue, queue) {
->> -		if (&req->req =3D=3D _req)
->> +	list_for_each_entry(tmp, &ep->queue, queue) {
->> +		if (&tmp->req =3D=3D _req) {
->> +			req =3D tmp;
->> 			break;
->> +		}
->> 	}
->> -	if (&req->req !=3D _req) {
->> +	if (!req) {
->> 		ep->stopped =3D stopped;
->> 		spin_unlock_irqrestore(&ep->dev->lock, flags);
->> 		return -EINVAL;
->> @@ -954,7 +957,6 @@ net2272_dequeue(struct usb_ep *_ep, struct =
-usb_request *_req)
->> 		dev_dbg(ep->dev->dev, "unlink (%s) pio\n", _ep->name);
->> 		net2272_done(ep, req, -ECONNRESET);
->> 	}
->> -	req =3D NULL;
->=20
-> Another unrelated change.  These are all good changes but send them as
-> separate patches.
+I guess a proper patch would be to convert clk_ns into an u32 instead!?
 
-You are referring to the req =3D NULL, right?
+> >>                  timeout +=3D clks;
+> >>                  /* in 1048576 sclk cycle unit */
+> >>                  timeout =3D DIV_ROUND_UP(timeout, BIT(20));
+> >> --
 
-I've changed the use of 'req' in the same function and assumed that I =
-can
-just remove the unnecessary statement. But if it's better to do =
-separately
-I'll do that.
-
->=20
->> 	ep->stopped =3D stopped;
->>=20
->> 	spin_unlock_irqrestore(&ep->dev->lock, flags);
->=20
-> regards,
-> dan carpenter
-
-thanks,
-Jakob Koschel
-
+Kind regards
+Uffe

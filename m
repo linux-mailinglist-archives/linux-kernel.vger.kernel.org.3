@@ -2,91 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452294C6A92
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D8E4C6A9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbiB1Lea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S235858AbiB1Lf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235445AbiB1Le1 (ORCPT
+        with ESMTP id S231419AbiB1Lfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:34:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743F3B3F3;
-        Mon, 28 Feb 2022 03:33:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646048029; x=1677584029;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ySEF5DlzjPALe7nOecQb25EocfAPubPKoB3jY4hZ7cw=;
-  b=g095o77BwvrY6TB2RrlHXbo5nElUvM6N9iX5bK+tt6XKw5cLkqKF1W2Z
-   w7OJL/d3BZ9u39EVGQS1HzOSO6g0yAm++d/rjnN3/8mug6De7JWbKZTq8
-   tolJvoNSsZDllCREHmK0CTKyhRRQCuwzmajG5s99EX2Xe0gLW61K+T4Pv
-   gyNc6fjN0Uz8/dbXcnWEj4TinyRw1rtajk1oSsCb0w0Cb2pYZif3+CDS/
-   0gRRAaZO1QpyKPcHz9v0dI95OkrHwh/9/5HTjrXnVK5IY1l5WwW5dVRN9
-   M8B5/odei4g52Uh85z547CG8QewwWqWQyctEj1kBfiKqzM+0KfwtltY+r
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="236367620"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="236367620"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 03:33:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="575286580"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 03:33:04 -0800
-Subject: Re: [PATCH 1/2 v2] xhci: fix garbage USBSTS being logged in some
- cases
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
- <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <01054a96-22d1-b72e-1166-fcbd5c2f489b@linux.intel.com>
-Date:   Mon, 28 Feb 2022 13:34:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Mon, 28 Feb 2022 06:35:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2671170F50;
+        Mon, 28 Feb 2022 03:35:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9A0060FE9;
+        Mon, 28 Feb 2022 11:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213E3C340EE;
+        Mon, 28 Feb 2022 11:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646048112;
+        bh=VpTjIs0hzrsh4I+aITjeOAjdM8laTn+iFKqS4LFINDk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mqgIqLbwn4DE7AUflvIxC2VCB0cBn04sKV3turceRE7FJxkvalo/Ps8mQOvPkaIPi
+         onbBtSjuukfUeezamG9+N3d2q31NSR0OIcGmIIgooQPqALYvdNwZdYS4QNprwy0f1P
+         dqvW19r2tUVjJozQc2aQpbthWqbrUeV0X/9cdI2J5gZwCfqrMKZiUmBxrp7VD/xwq8
+         r37BFg1rfm/7mOxfT5QeX7dRCm9epHLXYbVGnE3MmxsbFVC6KmL/P2L2wUqmC2l950
+         NQGqk6f2NtJtpYOby2B5XjRqBmkIh/5ckagRgTorRyHWt0708tI+QrD8+6BR2lyXWr
+         1sfra8hptDKrA==
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2d6923bca1aso104357787b3.9;
+        Mon, 28 Feb 2022 03:35:12 -0800 (PST)
+X-Gm-Message-State: AOAM53132M4C3SyRs58icHc/oH631bzuitDzcW06idzgYOJL7lCSGwF9
+        ZcdeQomRHuxKtpPrrrLdY/w6cSBo3Dg/zUJYoAc=
+X-Google-Smtp-Source: ABdhPJzeZBINIQtry8Kod9X4OGCGJqVlzDuJJm+hJ2c9FJIoJY+hDBsmwi5R/tmFrZAY7e1rGzq6goH4on8pCVQlJTk=
+X-Received: by 2002:a0d:d482:0:b0:2d8:1555:e21d with SMTP id
+ w124-20020a0dd482000000b002d81555e21dmr17717213ywd.272.1646048111201; Mon, 28
+ Feb 2022 03:35:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
+ <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
+ <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
+ <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
+ <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
+ <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com> <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 28 Feb 2022 12:35:00 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+Message-ID: <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.2.2022 12.26, Anssi Hannula wrote:
-> xhci_decode_usbsts() is expected to return a zero-terminated string by
-> its only caller, xhci_stop_endpoint_command_watchdog(), which directly
-> logs the return value:
-> 
->   xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
-> 
-> However, if no recognized bits are set in usbsts, the function will
-> return without having called any sprintf() and therefore return an
-> untouched non-zero-terminated caller-provided buffer, causing garbage
-> to be output to log.
-> 
-> Fix that by always including the raw value in the output.
-> 
-> Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
-> in xhci tracing") the result effect in the failure case was different as
-> a static buffer was used here, but the code still worked incorrectly.
-> 
-> Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> ---
+On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > On Mon, Feb 28, 2022 at 4:52 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > On Mon, 28 Feb 2022 at 09:38, Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > >
+> > > > > RISC-V is a useful reference for the changes needed - this is the most
+> > > > > recent addition to the EFI stub, and avoids some legacy stuff that new
+> > > > > architectures have no need for.
+> > > > We still want to support the raw elf kernel (RISC-V also does),
+> > > > because LoongArch also has MCU and SoC and we want to support FDT (I
+> > > > think this is reasonable, because RISC-V also supports raw elf).
+> > > >
+> > >
+> > > That is fine. So perhaps the best course of action is to omit the
+> > > UEFI/ACPI parts entirely for now, and focus on the DT/embedded use
+> > > case. Once all the spec pieces are in place, the UEFI + ACPI changes
+> > > can be presented as a single coherent set.
+> > It seems that I made you confusing. :)
+> > There are big CPUs and small CPUs (MCU and SoC), big CPUs use
+> > UEFI+ACPI, while small CPUs use FDT.
+> > At present, the only matured LoongArch CPU is Loongson-3A5000 (big
+> > CPU) which uses UEFI+ACPI.
+> > We want to support raw elf because it can run on both ACPI firmware
+> > and FDT firmware, but at present we only have ACPI firmware.
+>
+> Can't you just use the UEFI protocol for kernel entry regardless
+> of the bootloader? It seems odd to use a different protocol for loading
+> grub and the kernel, especially if that means you end up having to
+> support both protocols inside of u-boot and grub, in order to chain-load
+> a uefi application like grub.
+>
 
-Thanks. Adding both 1/2 v2 and 2/2
-
--Mathias
+I think this would make sense. Now that the EFI stub has generic
+support for loading the initrd via a UEFI specific protocol (of which
+u-boot already carries an implementation), booting via UEFI only would
+mean that no Linux boot protocol would need to be defined outside of
+the kernel at all (i.e., where to load the kernel, where to put the
+command line, where to put the initrd, other arch specific rules etc
+etc) UEFI already supports both ACPI and DT boot

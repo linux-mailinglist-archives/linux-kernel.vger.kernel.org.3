@@ -2,76 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DD04C6526
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EA54C652C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiB1JAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S234138AbiB1JCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiB1JAR (ORCPT
+        with ESMTP id S229579AbiB1JCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:00:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9073D1CC;
-        Mon, 28 Feb 2022 00:59:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08F7861196;
-        Mon, 28 Feb 2022 08:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669DBC340E7;
-        Mon, 28 Feb 2022 08:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646038778;
-        bh=uPlC4qslwCeJ8Z4r3iRUTyMBWGGVII3DOFy+WNdMmgA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EOFSkqpKF9SI8926Kj6PtOmLGUeGn01Jmt2hq1jDgAKPOvwzozTxeZ8JCNDrJSkmM
-         IAJE7G62/2fjX+qupNjNnSjFn7vrBsUSqd+xH09tC+NststxD/O1yvZdblhqEkM5RC
-         OfEcl6ZA3POI/llqGFFrjM2Uz3mTSzeONPcKfsxhiGhDDUPhF8YiqF7j9F2XiRqIrP
-         lp8rkWAMw4NfwEXkwMTeM225lQ9IxQWjXc8l4bnG/TF8ovhSap4KtrLP/+9zWyNxAI
-         sbM2hKynsJ7xjB3nPNJ2z4f2+aSSPO9P/84Yk3902pWdIODxCMcEOc7WbUAcSu3576
-         Grg99bmzLTbig==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nObsU-0002tH-D2; Mon, 28 Feb 2022 09:59:35 +0100
-Date:   Mon, 28 Feb 2022 09:59:34 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH] USB: serial: pl2303: Add IBM device IDs
-Message-ID: <YhyO9gsZZ9mqUzwn@hovoldconsulting.com>
-References: <20220224153444.10893-1-eajames@linux.ibm.com>
+        Mon, 28 Feb 2022 04:02:23 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DFB66625;
+        Mon, 28 Feb 2022 01:01:43 -0800 (PST)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K6ZBC33Kyz67xMg;
+        Mon, 28 Feb 2022 17:01:39 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 10:01:41 +0100
+Received: from A2006125610.china.huawei.com (10.47.94.1) by
+ lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 09:01:33 +0000
+From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
+        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
+        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
+        <wangzhou1@hisilicon.com>
+Subject: [PATCH v6 00/10] vfio/hisilicon: add ACC live migration driver
+Date:   Mon, 28 Feb 2022 09:01:11 +0000
+Message-ID: <20220228090121.1903-1-shameerali.kolothum.thodi@huawei.com>
+X-Mailer: git-send-email 2.12.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224153444.10893-1-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.94.1]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 09:34:44AM -0600, Eddie James wrote:
-> IBM manufactures a PL2303 device for UPS communications. Add the vendor
-> and product IDs so that the PL2303 driver binds to the device.
+Hi,
 
-Thanks for the patch, looks good.
+This series attempts to add vfio live migration support for HiSilicon
+ACC VF devices based on the new v2 migration protocol definition and
+mlx5 v9 series discussed here[0].
 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+v5 --> v6
+ -Report PRE_COPY support and use that for early compatibility check
+  between src and dst devices.
+ -For generic PRE_COPY support, included patch #7 from Jason(Thanks!).
+ -Addressed comments from Alex(Thanks!).
+ -Added the QM state register update to QM driver(patch #8) since that
+  is being used in migration driver to decide whether the device is
+  ready to save the state,
 
-The SoB of the submitter should go last here though. You can use
-Co-developed-by to give a co-author credit (or add a From line in case
-you're in fact not an author). Please review:
+This is sanity tested on a HiSilicon platform using the Qemu branch
+provided here[1].
 
-	Documentation/process/submitting-patches.rst
+Please take a look and let me know your feedback.
 
-and send a v2.
+Thanks,
+Shameer
+[0] https://lore.kernel.org/kvm/20220224142024.147653-1-yishaih@nvidia.com/
+[1] https://github.com/jgunthorpe/qemu/commits/vfio_migration_v2
 
-Johan
+RFCv4 --> v5
+  - Dropped RFC tag as v2 migration APIs are more stable now.
+  - Addressed review comments from Jason and Alex (Thanks!).
+
+v3 --> RFCv4
+-Based on migration v2 protocol and mlx5 v7 series.
+-Added RFC tag again as migration v2 protocol is still under discussion.
+-Added new patch #6 to retrieve the PF QM data.
+-PRE_COPY compatibility check is now done after the migration data
+ transfer. This is not ideal and needs discussion.
+
+RFC v2 --> v3
+ -Dropped RFC tag as the vfio_pci_core subsystem framework is now
+  part of 5.15-rc1.
+ -Added override methods for vfio_device_ops read/write/mmap calls
+  to limit the access within the functional register space.
+ -Patches 1 to 3 are code refactoring to move the common ACC QM
+  definitions and header around.
+
+RFCv1 --> RFCv2
+
+ -Adds a new vendor-specific vfio_pci driver(hisi-acc-vfio-pci)
+  for HiSilicon ACC VF devices based on the new vfio-pci-core
+  framework proposal.
+
+ -Since HiSilicon ACC VF device MMIO space contains both the
+  functional register space and migration control register space,
+  override the vfio_device_ops ioctl method to report only the
+  functional space to VMs.
+
+ -For a successful migration, we still need access to VF dev
+  functional register space mainly to read the status registers.
+  But accessing these while the Guest vCPUs are running may leave
+  a security hole. To avoid any potential security issues, we
+  map/unmap the MMIO regions on a need basis and is safe to do so.
+  (Please see hisi_acc_vf_ioremap/unmap() fns in patch #4).
+ 
+ -Dropped debugfs support for now.
+ -Uses common QM functions for mailbox access(patch #3).
+
+Jason Gunthorpe (1):
+  vfio: Extend the device migration protocol with PRE_COPY
+
+Longfang Liu (3):
+  crypto: hisilicon/qm: Move few definitions to common header
+  crypto: hisilicon/qm: Set the VF QM state register
+  hisi_acc_vfio_pci: Add support for VFIO live migration
+
+Shameer Kolothum (6):
+  crypto: hisilicon/qm: Move the QM header to include/linux
+  hisi_acc_qm: Move PCI device IDs to common header
+  hisi_acc_vfio_pci: add new vfio_pci driver for HiSilicon ACC devices
+  hisi_acc_vfio_pci: Restrict access to VF dev BAR2 migration region
+  hisi_acc_vfio_pci: Add helper to retrieve the struct pci_driver
+  hisi_acc_vfio_pci: Use its own PCI reset_done error handler
+
+ drivers/crypto/hisilicon/hpre/hpre.h          |    2 +-
+ drivers/crypto/hisilicon/hpre/hpre_main.c     |   18 +-
+ drivers/crypto/hisilicon/qm.c                 |   42 +-
+ drivers/crypto/hisilicon/sec2/sec.h           |    2 +-
+ drivers/crypto/hisilicon/sec2/sec_main.c      |   20 +-
+ drivers/crypto/hisilicon/sgl.c                |    2 +-
+ drivers/crypto/hisilicon/zip/zip.h            |    2 +-
+ drivers/crypto/hisilicon/zip/zip_main.c       |   17 +-
+ drivers/vfio/pci/Kconfig                      |    2 +
+ drivers/vfio/pci/Makefile                     |    2 +
+ drivers/vfio/pci/hisilicon/Kconfig            |   16 +
+ drivers/vfio/pci/hisilicon/Makefile           |    4 +
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1323 +++++++++++++++++
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
+ drivers/vfio/vfio.c                           |   71 +-
+ .../qm.h => include/linux/hisi_acc_qm.h       |   49 +
+ include/linux/pci_ids.h                       |    6 +
+ include/uapi/linux/vfio.h                     |  110 +-
+ 18 files changed, 1743 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/vfio/pci/hisilicon/Kconfig
+ create mode 100644 drivers/vfio/pci/hisilicon/Makefile
+ create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+ create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+ rename drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h (87%)
+
+-- 
+2.25.1
+

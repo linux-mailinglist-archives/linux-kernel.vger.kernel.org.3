@@ -2,188 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CA94C637B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E894C637D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbiB1HBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S233508AbiB1HBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiB1HBE (ORCPT
+        with ESMTP id S230022AbiB1HBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:01:04 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEFD673D5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:00:20 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id u3so18574862ybh.5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bkKQR+dUpKXqBM8AHEGKF1sHelKhsPJQTQvAXHyt+YE=;
-        b=W6Kc/r0NfxBnxUFJU5c8bqgbJ2ydU6stIHk5YOvqSsz8cH/TW8f+QgM4ZTYUzxF4hd
-         HNU3QayU7eR1RzKlciywEjK/4cA4ZZDE65CucKsBI0pvldgXvhZikmV81SB/XfoNRnCG
-         9YaKhzImE+zCm4OkYVGNZCtA5peAMdox8oKNg83SrFugDsmew3MgyZJcv+Y6VoV6Gf/a
-         xWAyRtbbPYfwPar+RhFzzjCfS4q9sb5lr6i6esCtyk2h3s2cSFuLkxVm6hPtRhp1lZ20
-         v8Mm/jKlUOzNLa9GIcQuXT0ZPbhWQbF80J6n0KhMPCUWLQVJ4Pg4PkH9Oz1pY5jP5GFT
-         CS/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bkKQR+dUpKXqBM8AHEGKF1sHelKhsPJQTQvAXHyt+YE=;
-        b=BQH0xBsAePLcOqr6elNqzhtZmu5OYU7EiyIGL/rTaOPUZ28xp1QUDf/Eg884lMXIF4
-         asJGQUDjYrMfL6Naq23Sdyui1yoQs/6RaESVKshN7MhgLs/z1MBoZhlkxZZZQimuIyWW
-         VOtXD9SJnWbeRcgHm7CUoXtkl7HXVSgtHZRozsSd2E2/eh46/xDX3ChTAO54r1Ax7gkm
-         IINKsO2qT3bxBuCmQ1vHYmlnmoK5Xr9Eu1MfUQYVKkeExiyKYInHK61B1/cfmy7PiOUo
-         4OPdyXhpdE40hSKnhBpTsNlUb0P8nleu790BXPHRM2CaYzvT1zRFQNctUh7QmtCceNDV
-         VILw==
-X-Gm-Message-State: AOAM531y2qNS1RjzzfV+cnaQk2eJhTPNzh8nNETarcv5tJKGGaPVipi6
-        lzbIxkgU7z6Ril/97eeQn2MjA+v9QfNc07nln9a11w==
-X-Google-Smtp-Source: ABdhPJzRGOAZYAiTMoEauVuuRnrjl5p6n/d/oUhCPnfLhQEhJKvuIfpkv9C+r8sDyjrKSFx6bjS7uxjoeOwznN9U0Hw=
-X-Received: by 2002:a25:aa51:0:b0:624:6fbf:c494 with SMTP id
- s75-20020a25aa51000000b006246fbfc494mr17413961ybi.425.1646031619624; Sun, 27
- Feb 2022 23:00:19 -0800 (PST)
+        Mon, 28 Feb 2022 02:01:38 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEEF673D5;
+        Sun, 27 Feb 2022 23:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646031659; x=1677567659;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3HTqZ8cMCet+ihim5wkWp9ciLYvKVDk653uvsW5tke8=;
+  b=WZ4M2BJ/1+z9BOa4PFrVMeojxpmpxpCWtyrd5Wt3IBYM0OZqKiTShP7+
+   /UZpSzCGTZRPmPctA8K4mLGDtQ4eImtR+xT5YZvlJksDvTAWwQmyFboxI
+   Yj6WFQ0wkBtppB6VyQNiPVxZ64O1WnZo4t+TeH7/qaCWqK+NTxnKUA60a
+   Gz8raIgZG1JWeE0UuYquhqmFn8a6qFIc8Yf53Kqc+AY5IwrKmLlFFfRRB
+   7PWmM1R12a/dibYRGOU/z+UYhq4C9BL6Owmcitb5Z8KIU2JSR9+qIFQOi
+   MIeQ6lID46UXrvC3Roin96dj8F9hG4ZFtDe74hW2aIhDsAs8Ji0Y1SH0k
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="232792525"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="232792525"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 23:00:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="708542759"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Feb 2022 23:00:56 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOa1f-00078X-HT; Mon, 28 Feb 2022 07:00:55 +0000
+Date:   Mon, 28 Feb 2022 15:00:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Olivier Langlois <olivier@trillion01.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     kbuild-all@lists.01.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Hao Xu <haoxu@linux.alibaba.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] io_uring: Add support for napi_busy_poll
+Message-ID: <202202281457.NLF9dxdF-lkp@intel.com>
+References: <53ae4884ede7faab1f409ec635f723a0745d3656.1645981935.git.olivier@trillion01.com>
 MIME-Version: 1.0
-References: <20220225180318.20594-3-vbabka@suse.cz> <YhrrM7NTYXG5JluY@ip-172-31-19-208.ap-northeast-1.compute.internal>
-In-Reply-To: <YhrrM7NTYXG5JluY@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 28 Feb 2022 08:00:00 +0100
-Message-ID: <CANpmjNOyVTQZroOEVF_ZLASCtQ=SiC12WGWEwOib3vDk3sCbtw@mail.gmail.com>
-Subject: Re: [PATCH] lib/stackdepot: Use page allocator if both slab and
- memblock is unavailable
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Zqiang <qiang.zhang@windriver.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53ae4884ede7faab1f409ec635f723a0745d3656.1645981935.git.olivier@trillion01.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 at 04:08, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->
-> After commit 2dba5eb1c73b ("lib/stackdepot: allow optional init and
-> stack_table allocation by kvmalloc()"), stack_depot_init() is called
-> later if CONFIG_STACKDEPOT_ALWAYS_INIT=n to remove unnecessary memory
-> usage. It allocates stack_table using memblock_alloc() or kvmalloc()
-> depending on availability of slab allocator.
->
-> But when stack_depot_init() is called while creating boot slab caches,
-> both slab allocator and memblock is not available. So kernel crashes.
-> Allocate stack_table from page allocator when both slab allocator and
-> memblock is unavailable.
+Hi Olivier,
 
-This is odd - who is calling stack_depot_init() while neither slab nor
-memblock are available? Do you have a stacktrace?
+Thank you for the patch! Perhaps something to improve:
 
-> Limit size of stack_table when using page allocator because vmalloc()
-> is also unavailable in kmem_cache_init(). it must not be larger than
-> (PAGE_SIZE << (MAX_ORDER - 1)).
->
-> This patch was tested on both CONFIG_STACKDEPOT_ALWAYS_INIT=y and n.
->
-> Fixes: 2dba5eb1c73b ("lib/stackdepot: allow optional init and stack_table allocation by kvmalloc()")
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> ---
->  lib/stackdepot.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
->
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index bf5ba9af0500..606f80ae2bf7 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -73,6 +73,14 @@ static int next_slab_inited;
->  static size_t depot_offset;
->  static DEFINE_RAW_SPINLOCK(depot_lock);
->
-> +static unsigned int stack_hash_size = (1 << CONFIG_STACK_HASH_ORDER);
-> +static inline unsigned int stack_hash_mask(void)
-> +{
-> +       return stack_hash_size - 1;
-> +}
-> +
-> +#define STACK_HASH_SEED 0x9747b28c
-> +
->  static bool init_stack_slab(void **prealloc)
->  {
->         if (!*prealloc)
-> @@ -142,10 +150,6 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
->         return stack;
->  }
->
-> -#define STACK_HASH_SIZE (1L << CONFIG_STACK_HASH_ORDER)
-> -#define STACK_HASH_MASK (STACK_HASH_SIZE - 1)
-> -#define STACK_HASH_SEED 0x9747b28c
-> -
->  static bool stack_depot_disable;
->  static struct stack_record **stack_table;
->
-> @@ -172,18 +176,28 @@ __ref int stack_depot_init(void)
->
->         mutex_lock(&stack_depot_init_mutex);
->         if (!stack_depot_disable && !stack_table) {
-> -               size_t size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
-> +               size_t size = (stack_hash_size * sizeof(struct stack_record *));
->                 int i;
->
->                 if (slab_is_available()) {
->                         pr_info("Stack Depot allocating hash table with kvmalloc\n");
->                         stack_table = kvmalloc(size, GFP_KERNEL);
-> +               } else if (totalram_pages() > 0) {
-> +                       /* Reduce size because vmalloc may be unavailable */
-> +                       size = min(size, PAGE_SIZE << (MAX_ORDER - 1));
-> +                       stack_hash_size = size / sizeof(struct stack_record *);
-> +
-> +                       pr_info("Stack Depot allocating hash table with __get_free_pages\n");
-> +                       stack_table = (struct stack_record **)
-> +                                     __get_free_pages(GFP_KERNEL, get_order(size));
->                 } else {
->                         pr_info("Stack Depot allocating hash table with memblock_alloc\n");
->                         stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
->                 }
-> +
->                 if (stack_table) {
-> -                       for (i = 0; i < STACK_HASH_SIZE;  i++)
-> +                       pr_info("Stack Depot hash table size=%u\n", stack_hash_size);
-> +                       for (i = 0; i < stack_hash_size;  i++)
->                                 stack_table[i] = NULL;
->                 } else {
->                         pr_err("Stack Depot hash table allocation failed, disabling\n");
-> @@ -363,7 +377,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->                 goto fast_exit;
->
->         hash = hash_stack(entries, nr_entries);
-> -       bucket = &stack_table[hash & STACK_HASH_MASK];
-> +       bucket = &stack_table[hash & stack_hash_mask()];
->
->         /*
->          * Fast path: look the stack trace up without locking.
-> --
-> 2.33.1
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc6]
+[cannot apply to next-20220225]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220228-012140
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2293be58d6a18cab800e25e42081bacb75c05752
+config: mips-randconfig-s032-20220228 (https://download.01.org/0day-ci/archive/20220228/202202281457.NLF9dxdF-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/65e72f78c66272f7cf0e87dfeef88f5b79de2d91
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220228-012140
+        git checkout 65e72f78c66272f7cf0e87dfeef88f5b79de2d91
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   fs/io_uring.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/io_uring.h):
+   include/trace/events/io_uring.h:509:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] op_flags @@     got restricted __kernel_rwf_t const [usertype] rw_flags @@
+   include/trace/events/io_uring.h:509:1: sparse:     expected unsigned int [usertype] op_flags
+   include/trace/events/io_uring.h:509:1: sparse:     got restricted __kernel_rwf_t const [usertype] rw_flags
+   fs/io_uring.c:3257:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __user * @@     got struct io_buffer *[assigned] kbuf @@
+   fs/io_uring.c:3257:24: sparse:     expected void [noderef] __user *
+   fs/io_uring.c:3257:24: sparse:     got struct io_buffer *[assigned] kbuf
+   fs/io_uring.c:4803:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/io_uring.c:4803:14: sparse:     expected struct file *file
+   fs/io_uring.c:4803:14: sparse:     got struct file [noderef] __rcu *
+   fs/io_uring.c:5637:37: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] result @@     got restricted __poll_t @@
+   fs/io_uring.c:5637:37: sparse:     expected unsigned int [usertype] result
+   fs/io_uring.c:5637:37: sparse:     got restricted __poll_t
+   fs/io_uring.c:5642:71: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:5642:65: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
+   fs/io_uring.c:5642:65: sparse:     expected restricted __poll_t [usertype] val
+   fs/io_uring.c:5642:65: sparse:     got unsigned int
+   fs/io_uring.c:5642:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got unsigned short @@
+   fs/io_uring.c:5642:52: sparse:     expected restricted __poll_t [usertype] mask
+   fs/io_uring.c:5642:52: sparse:     got unsigned short
+   fs/io_uring.c:5646:71: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t [usertype] mask @@
+   fs/io_uring.c:5646:71: sparse:     expected signed int [usertype] res
+   fs/io_uring.c:5646:71: sparse:     got restricted __poll_t [usertype] mask
+   fs/io_uring.c:5676:66: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:5676:55: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
+   fs/io_uring.c:5676:55: sparse:     expected restricted __poll_t [usertype] val
+   fs/io_uring.c:5676:55: sparse:     got unsigned int
+   fs/io_uring.c:5778:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [usertype] mask @@
+   fs/io_uring.c:5778:40: sparse:     expected int mask
+   fs/io_uring.c:5778:40: sparse:     got restricted __poll_t [usertype] mask
+   fs/io_uring.c:5865:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted __poll_t [assigned] [usertype] mask @@
+   fs/io_uring.c:5865:24: sparse:     expected int
+   fs/io_uring.c:5865:24: sparse:     got restricted __poll_t [assigned] [usertype] mask
+   fs/io_uring.c:5882:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
+   fs/io_uring.c:5882:40: sparse:     expected int mask
+   fs/io_uring.c:5882:40: sparse:     got restricted __poll_t [assigned] [usertype] mask
+   fs/io_uring.c:5918:25: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:5918:48: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got unsigned int @@
+   fs/io_uring.c:5918:48: sparse:     expected restricted __poll_t [usertype] mask
+   fs/io_uring.c:5918:48: sparse:     got unsigned int
+   fs/io_uring.c:5927:22: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:5927:22: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:5927:22: sparse:    right side has type int
+   fs/io_uring.c:5932:30: sparse: sparse: invalid assignment: &=
+   fs/io_uring.c:5932:30: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:5932:30: sparse:    right side has type int
+   fs/io_uring.c:5934:22: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:5934:22: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:5934:22: sparse:    right side has type int
+   fs/io_uring.c:5950:33: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected int mask @@     got restricted __poll_t [usertype] mask @@
+   fs/io_uring.c:5950:33: sparse:     expected int mask
+   fs/io_uring.c:5950:33: sparse:     got restricted __poll_t [usertype] mask
+   fs/io_uring.c:5950:50: sparse: sparse: incorrect type in argument 6 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
+   fs/io_uring.c:5950:50: sparse:     expected int events
+   fs/io_uring.c:5950:50: sparse:     got restricted __poll_t [usertype] events
+   fs/io_uring.c:6031:24: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6031:24: sparse:    left side has type unsigned int
+   fs/io_uring.c:6031:24: sparse:    right side has type restricted __poll_t
+   fs/io_uring.c:6032:65: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6032:29: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6032:38: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted __poll_t @@     got unsigned int @@
+   fs/io_uring.c:6032:38: sparse:     expected restricted __poll_t
+   fs/io_uring.c:6032:38: sparse:     got unsigned int
+   fs/io_uring.c:6122:43: sparse: sparse: invalid assignment: &=
+   fs/io_uring.c:6122:43: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6122:43: sparse:    right side has type int
+   fs/io_uring.c:6123:62: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6123:43: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6123:43: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6123:43: sparse:    right side has type unsigned int
+>> fs/io_uring.c:7840:17: sparse: sparse: incompatible types in comparison expression (different signedness):
+>> fs/io_uring.c:7840:17: sparse:    signed long long *
+>> fs/io_uring.c:7840:17: sparse:    unsigned long long [usertype] *
+   fs/io_uring.c:2294:17: sparse: sparse: context imbalance in 'handle_prev_tw_list' - different lock contexts for basic block
+   fs/io_uring.c:8293:9: sparse: sparse: context imbalance in 'io_sq_thread_unpark' - wrong count at exit
+   fs/io_uring.c:8304:9: sparse: sparse: context imbalance in 'io_sq_thread_park' - wrong count at exit
+
+vim +7840 fs/io_uring.c
+
+  7826	
+  7827	#ifdef CONFIG_NET_RX_BUSY_POLL
+  7828	static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
+  7829						struct io_wait_queue *iowq)
+  7830	{
+  7831		unsigned busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
+  7832		struct timespec64 pollto = ns_to_timespec64(1000 * (s64)busy_poll_to);
+  7833	
+  7834		if (timespec64_compare(ts, &pollto) > 0) {
+  7835			*ts = timespec64_sub(*ts, pollto);
+  7836			iowq->busy_poll_to = busy_poll_to;
+  7837		} else {
+  7838			s64 to = timespec64_to_ns(ts);
+  7839	
+> 7840			do_div(to, 1000);
+  7841			iowq->busy_poll_to = to;
+  7842			ts->tv_sec = 0;
+  7843			ts->tv_nsec = 0;
+  7844		}
+  7845	}
+  7846	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

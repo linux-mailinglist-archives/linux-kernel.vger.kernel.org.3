@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89B64C774B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F9D4C775D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239646AbiB1SOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S240355AbiB1SPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241615AbiB1SKI (ORCPT
+        with ESMTP id S241706AbiB1SKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:10:08 -0500
+        Mon, 28 Feb 2022 13:10:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D587B91FF;
-        Mon, 28 Feb 2022 09:50:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CBEBBE26;
+        Mon, 28 Feb 2022 09:50:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9501760B2B;
-        Mon, 28 Feb 2022 17:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB926C340F4;
-        Mon, 28 Feb 2022 17:49:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B35F6090B;
+        Mon, 28 Feb 2022 17:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7136C340E7;
+        Mon, 28 Feb 2022 17:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070582;
-        bh=Ctl1DITbHVbdBfKS48ElGs5/qHcBKH9J+pZSVWqw5OY=;
+        s=korg; t=1646070593;
+        bh=9IVbPx5XXABgQNpAyxzX0PNjV4IlCGkRbYRqHb7DN98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nyFHGui1ZSjJ+Ae/i1ikpXo3VJI2ajqFUOtOp6WyD814i4jfBJ+CgB8dSWRSWaTS2
-         foSwJDTE+z2qIPALCAYr4cgdZMc5ofWQ0hcby0QE7zHBtVYb9GIa4fjJf90m3RdBcV
-         c/CXLFOqVC1wI+XsiTtcZ+dRKS2Of66zhdt/mx4E=
+        b=aPIIoCthyjkCOgQtZhIPlB/2Mu8gjuSWmNmfX4j13qC3DaQD8UkgpYbcF+dpH4AuO
+         mmQTBeDeGTgKEQxHzrCwvXjTI6Jl6Cy2iUD0JL06kY7cHGq2ibAx4cGzY4G4bOHzy5
+         TtWinfUj3FyCumzkGGgIVO1HjUfjWj71JIbqaDxA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 144/164] btrfs: reduce extent threshold for autodefrag
-Date:   Mon, 28 Feb 2022 18:25:06 +0100
-Message-Id: <20220228172412.951650926@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 145/164] RDMA/cma: Do not change route.addr.src_addr outside state checks
+Date:   Mon, 28 Feb 2022 18:25:07 +0100
+Message-Id: <20220228172413.029297000@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -54,131 +56,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Jason Gunthorpe <jgg@nvidia.com>
 
-commit 558732df2122092259ab4ef85594bee11dbb9104 upstream.
+commit 22e9f71072fa605cbf033158db58e0790101928d upstream.
 
-There is a big gap between inode_should_defrag() and autodefrag extent
-size threshold.  For inode_should_defrag() it has a flexible
-@small_write value. For compressed extent is 16K, and for non-compressed
-extent it's 64K.
+If the state is not idle then resolve_prepare_src() should immediately
+fail and no change to global state should happen. However, it
+unconditionally overwrites the src_addr trying to build a temporary any
+address.
 
-However for autodefrag extent size threshold, it's always fixed to the
-default value (256K).
+For instance if the state is already RDMA_CM_LISTEN then this will corrupt
+the src_addr and would cause the test in cma_cancel_operation():
 
-This means, the following write sequence will trigger autodefrag to
-defrag ranges which didn't trigger autodefrag:
+           if (cma_any_addr(cma_src_addr(id_priv)) && !id_priv->cma_dev)
 
-  pwrite 0 8k
-  sync
-  pwrite 8k 128K
-  sync
+Which would manifest as this trace from syzkaller:
 
-The latter 128K write will also be considered as a defrag target (if
-other conditions are met). While only that 8K write is really
-triggering autodefrag.
+  BUG: KASAN: use-after-free in __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+  Read of size 8 at addr ffff8881546491e0 by task syz-executor.1/32204
 
-Such behavior can cause extra IO for autodefrag.
+  CPU: 1 PID: 32204 Comm: syz-executor.1 Not tainted 5.12.0-rc8-syzkaller #0
+  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+  Call Trace:
+   __dump_stack lib/dump_stack.c:79 [inline]
+   dump_stack+0x141/0x1d7 lib/dump_stack.c:120
+   print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:232
+   __kasan_report mm/kasan/report.c:399 [inline]
+   kasan_report.cold+0x7c/0xd8 mm/kasan/report.c:416
+   __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+   __list_add include/linux/list.h:67 [inline]
+   list_add_tail include/linux/list.h:100 [inline]
+   cma_listen_on_all drivers/infiniband/core/cma.c:2557 [inline]
+   rdma_listen+0x787/0xe00 drivers/infiniband/core/cma.c:3751
+   ucma_listen+0x16a/0x210 drivers/infiniband/core/ucma.c:1102
+   ucma_write+0x259/0x350 drivers/infiniband/core/ucma.c:1732
+   vfs_write+0x28e/0xa30 fs/read_write.c:603
+   ksys_write+0x1ee/0x250 fs/read_write.c:658
+   do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Close the gap, by copying the @small_write value into inode_defrag, so
-that later autodefrag can use the same @small_write value which
-triggered autodefrag.
+This is indicating that an rdma_id_private was destroyed without doing
+cma_cancel_listens().
 
-With the existing transid value, this allows autodefrag really to scan
-the ranges which triggered autodefrag.
+Instead of trying to re-use the src_addr memory to indirectly create an
+any address derived from the dst build one explicitly on the stack and
+bind to that as any other normal flow would do. rdma_bind_addr() will copy
+it over the src_addr once it knows the state is valid.
 
-Although this behavior change is mostly reducing the extent_thresh value
-for autodefrag, I believe in the future we should allow users to specify
-the autodefrag extent threshold through mount options, but that's an
-other problem to consider in the future.
+This is similar to commit bc0bdc5afaa7 ("RDMA/cma: Do not change
+route.addr.src_addr.ss_family")
 
-CC: stable@vger.kernel.org # 5.16+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Link: https://lore.kernel.org/r/0-v2-e975c8fd9ef2+11e-syz_cma_srcaddr_jgg@nvidia.com
+Cc: stable@vger.kernel.org
+Fixes: 732d41c545bb ("RDMA/cma: Make the locking for automatic state transition more clear")
+Reported-by: syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/ctree.h |    2 +-
- fs/btrfs/file.c  |   15 ++++++++++++++-
- fs/btrfs/inode.c |    4 ++--
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ drivers/infiniband/core/cma.c |   38 +++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -3315,7 +3315,7 @@ void btrfs_exclop_finish(struct btrfs_fs
- int __init btrfs_auto_defrag_init(void);
- void __cold btrfs_auto_defrag_exit(void);
- int btrfs_add_inode_defrag(struct btrfs_trans_handle *trans,
--			   struct btrfs_inode *inode);
-+			   struct btrfs_inode *inode, u32 extent_thresh);
- int btrfs_run_defrag_inodes(struct btrfs_fs_info *fs_info);
- void btrfs_cleanup_defrag_inodes(struct btrfs_fs_info *fs_info);
- int btrfs_sync_file(struct file *file, loff_t start, loff_t end, int datasync);
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@ -49,6 +49,15 @@ struct inode_defrag {
- 
- 	/* root objectid */
- 	u64 root;
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -3370,22 +3370,30 @@ err:
+ static int cma_bind_addr(struct rdma_cm_id *id, struct sockaddr *src_addr,
+ 			 const struct sockaddr *dst_addr)
+ {
+-	if (!src_addr || !src_addr->sa_family) {
+-		src_addr = (struct sockaddr *) &id->route.addr.src_addr;
+-		src_addr->sa_family = dst_addr->sa_family;
+-		if (IS_ENABLED(CONFIG_IPV6) &&
+-		    dst_addr->sa_family == AF_INET6) {
+-			struct sockaddr_in6 *src_addr6 = (struct sockaddr_in6 *) src_addr;
+-			struct sockaddr_in6 *dst_addr6 = (struct sockaddr_in6 *) dst_addr;
+-			src_addr6->sin6_scope_id = dst_addr6->sin6_scope_id;
+-			if (ipv6_addr_type(&dst_addr6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
+-				id->route.addr.dev_addr.bound_dev_if = dst_addr6->sin6_scope_id;
+-		} else if (dst_addr->sa_family == AF_IB) {
+-			((struct sockaddr_ib *) src_addr)->sib_pkey =
+-				((struct sockaddr_ib *) dst_addr)->sib_pkey;
+-		}
++	struct sockaddr_storage zero_sock = {};
++
++	if (src_addr && src_addr->sa_family)
++		return rdma_bind_addr(id, src_addr);
 +
 +	/*
-+	 * The extent size threshold for autodefrag.
-+	 *
-+	 * This value is different for compressed/non-compressed extents,
-+	 * thus needs to be passed from higher layer.
-+	 * (aka, inode_should_defrag())
++	 * When the src_addr is not specified, automatically supply an any addr
 +	 */
-+	u32 extent_thresh;
- };
- 
- static int __compare_inode_defrag(struct inode_defrag *defrag1,
-@@ -101,6 +110,8 @@ static int __btrfs_add_inode_defrag(stru
- 			 */
- 			if (defrag->transid < entry->transid)
- 				entry->transid = defrag->transid;
-+			entry->extent_thresh = min(defrag->extent_thresh,
-+						   entry->extent_thresh);
- 			return -EEXIST;
- 		}
++	zero_sock.ss_family = dst_addr->sa_family;
++	if (IS_ENABLED(CONFIG_IPV6) && dst_addr->sa_family == AF_INET6) {
++		struct sockaddr_in6 *src_addr6 =
++			(struct sockaddr_in6 *)&zero_sock;
++		struct sockaddr_in6 *dst_addr6 =
++			(struct sockaddr_in6 *)dst_addr;
++
++		src_addr6->sin6_scope_id = dst_addr6->sin6_scope_id;
++		if (ipv6_addr_type(&dst_addr6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
++			id->route.addr.dev_addr.bound_dev_if =
++				dst_addr6->sin6_scope_id;
++	} else if (dst_addr->sa_family == AF_IB) {
++		((struct sockaddr_ib *)&zero_sock)->sib_pkey =
++			((struct sockaddr_ib *)dst_addr)->sib_pkey;
  	}
-@@ -126,7 +137,7 @@ static inline int __need_auto_defrag(str
-  * enabled
-  */
- int btrfs_add_inode_defrag(struct btrfs_trans_handle *trans,
--			   struct btrfs_inode *inode)
-+			   struct btrfs_inode *inode, u32 extent_thresh)
- {
- 	struct btrfs_root *root = inode->root;
- 	struct btrfs_fs_info *fs_info = root->fs_info;
-@@ -152,6 +163,7 @@ int btrfs_add_inode_defrag(struct btrfs_
- 	defrag->ino = btrfs_ino(inode);
- 	defrag->transid = transid;
- 	defrag->root = root->root_key.objectid;
-+	defrag->extent_thresh = extent_thresh;
- 
- 	spin_lock(&fs_info->defrag_inodes_lock);
- 	if (!test_bit(BTRFS_INODE_IN_DEFRAG, &inode->runtime_flags)) {
-@@ -275,6 +287,7 @@ again:
- 	memset(&range, 0, sizeof(range));
- 	range.len = (u64)-1;
- 	range.start = cur;
-+	range.extent_thresh = defrag->extent_thresh;
- 
- 	sb_start_write(fs_info->sb);
- 	ret = btrfs_defrag_file(inode, NULL, &range, defrag->transid,
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -561,12 +561,12 @@ static inline int inode_need_compress(st
- }
- 
- static inline void inode_should_defrag(struct btrfs_inode *inode,
--		u64 start, u64 end, u64 num_bytes, u64 small_write)
-+		u64 start, u64 end, u64 num_bytes, u32 small_write)
- {
- 	/* If this is a small write inside eof, kick off a defrag */
- 	if (num_bytes < small_write &&
- 	    (start > 0 || end + 1 < inode->disk_i_size))
--		btrfs_add_inode_defrag(NULL, inode);
-+		btrfs_add_inode_defrag(NULL, inode, small_write);
+-	return rdma_bind_addr(id, src_addr);
++	return rdma_bind_addr(id, (struct sockaddr *)&zero_sock);
  }
  
  /*

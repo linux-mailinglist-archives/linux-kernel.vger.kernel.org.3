@@ -2,133 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA244C6D21
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68C54C6D2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiB1Mtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S231981AbiB1MuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiB1Mtf (ORCPT
+        with ESMTP id S231563AbiB1MuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:49:35 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4ED6354
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:48:55 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id fc19so12198122qvb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=+8I/V7LMKeEgdjfech8pVN3rLVcrkyoXC3NkYpHqx50=;
-        b=UzEaMg7JeXuUGaFUzjzNTjWqymgIKqaEVBGX/ytQjyMN6OC9OOJ0/nKWUdYq5uxvI3
-         /dra9cjZKvXzgDUebBGOWC5W7Vex1+dDK2vfDgq6DQqBF0xV3OAaHLTrixCGbjpTrelZ
-         oKZ4YLNuUVKHI8QeYETFk0iXjog6Qe7igxM3RkkXzBUgb0EBNE3mMMQlLlQIEemz/1up
-         y2yUjx+uzFN2xwsKNATwGf4tXX+27dJGIKH1fBmD8Ml/FNURZakDjIMB+01PmrrJ9Nh8
-         VkFceIVqIYMtP9KCjfKcXhhAJeXp9s+7UxbIONneuk+b62r95b0yzSskFZltmHazBbRR
-         26aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=+8I/V7LMKeEgdjfech8pVN3rLVcrkyoXC3NkYpHqx50=;
-        b=6tSa66VSnL0Yg76Snxy9tde6+ott6b4uIeYdqn10F4XuvgJwZ+aAadeSvLfClEDPKS
-         Xp5j63CcO0HrKuBfqXShp7+WnmSPthUswACfxp5RrOZPl855tigGIMd55dEYwEvuljNH
-         5hdKk/GJRR7bNDf3InjEcFjXpVHIhHK0zv3rDR91ONbGk9wv6xt574fC00XebRDfuKeg
-         o/jZ5aVXEsDuAYEQihchdcMGLB3E0nEzHu+0umgFKn9AZNCdE6zCCY0C4hZi9Mm1rNUR
-         +XG3iyg2glC+jTwgQeHy9F5WdiIWR4+/qFpce9vivBKT4K9MlQ+9L/HPn1hihs+En3H8
-         gQgw==
-X-Gm-Message-State: AOAM531Y325c8o/ZybLNeSJR84uFNrH0cs2tQghg7IzmyWEa25h/xno9
-        +XfounDuFUqV4Z4ZFEkyVx3x9g==
-X-Google-Smtp-Source: ABdhPJx3Zx++4poidmZxiaKiNp7huRBp+c07iQ/2xxhDNM88zR5W38PXzrrhlyBTtk2qm0T1kR/z9Q==
-X-Received: by 2002:ac8:59c8:0:b0:2de:5f4:7e84 with SMTP id f8-20020ac859c8000000b002de05f47e84mr16487539qtf.97.1646052535083;
-        Mon, 28 Feb 2022 04:48:55 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id y24-20020a05620a09d800b00648c8ba03c1sm4906437qky.107.2022.02.28.04.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:48:54 -0800 (PST)
-Message-ID: <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
-Subject: Re: [RFC PATCH 2/8] media: Add P010 format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Date:   Mon, 28 Feb 2022 07:48:53 -0500
-In-Reply-To: <20220227144926.3006585-3-jernej.skrabec@gmail.com>
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
-         <20220227144926.3006585-3-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Mon, 28 Feb 2022 07:50:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0863D54FAD;
+        Mon, 28 Feb 2022 04:49:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39CA2B81120;
+        Mon, 28 Feb 2022 12:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F7CC340EE;
+        Mon, 28 Feb 2022 12:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646052570;
+        bh=YNCjDWYFLy8kk5Lc6yfDNb4ICpsaXUgkOhGfWYb2mkg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Gc2oLdRhB79LqW2fWFa177bVCgVNvknFSspQ4Nx5BBRQEOH9JGJYOzWeIdtF4QlFa
+         Vm6UwbbeLBmvY6Iq2ESWhfaFgokcE1digjq997sEXhVM8APqrUEJvlJLp74Pvk2mC9
+         yRNCBOSSjomfbtGeQKNyOnmqvTLha8I0x+wfPOqaqZ59Vjpa9evMvPCHvgY/DxynWG
+         py3f1VJxEJwBxXBGz72y7KAMH2QQlJ7pCSCLQBPOevRDSXsr0bSWZpICpprumq0DyN
+         qc9B98cda5m7nLqFZBXESQTvAejiVjGQ+uQ2nokVTcxtk4fkfKfF16U43qXoqK6Aoo
+         G+FEWlvZxX7Vw==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2d07c4a0d06so106264137b3.13;
+        Mon, 28 Feb 2022 04:49:30 -0800 (PST)
+X-Gm-Message-State: AOAM530pRLkjn3F9zF8Me5GJnEZPnwIjsZ6crvXmh3vjAHvygJcnU8iL
+        l6ZX4Ahb4Tu+jgrAPxZUXCe13I7yS1aoIahGOEY=
+X-Google-Smtp-Source: ABdhPJwXH3KFl4x5Rc0RFSsToohrsPYhCK8XUjA94rh6d7jiY3THMitYZZ/tsMG+hNHW5uuID/0rygMJxULOVjBiqpw=
+X-Received: by 2002:a81:854:0:b0:2db:255b:dd6 with SMTP id 81-20020a810854000000b002db255b0dd6mr13412601ywi.140.1646052569778;
+ Mon, 28 Feb 2022 04:49:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220228114254.1099945-1-dovmurik@linux.ibm.com> <20220228114254.1099945-4-dovmurik@linux.ibm.com>
+In-Reply-To: <20220228114254.1099945-4-dovmurik@linux.ibm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 28 Feb 2022 13:49:19 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFybkGtxH2U6oAi_Qeqe-i_kH-hZjUZKY3-UzPHUg55vg@mail.gmail.com>
+Message-ID: <CAMj1kXFybkGtxH2U6oAi_Qeqe-i_kH-hZjUZKY3-UzPHUg55vg@mail.gmail.com>
+Subject: Re: [PATCH v8 3/4] efi: Load efi_secret module if EFI secret area is populated
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le dimanche 27 février 2022 à 15:49 +0100, Jernej Skrabec a écrit :
-> Add P010 format, which is commonly used for 10-bit videos.
+On Mon, 28 Feb 2022 at 12:43, Dov Murik <dovmurik@linux.ibm.com> wrote:
+>
+> If the efi_secret module is built, register a late_initcall in the EFI
+> driver which checks whether the EFI secret area is available and
+> populated, and then requests to load the efi_secret module.
+>
+> This will cause the <securityfs>/secrets/coco directory to appear in
+> guests into which secrets were injected; in other cases, the module is
+> not loaded.
+>
+> Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
+> Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
 
-There is a much more complete patch that was sent previously (with documentation
-and all):
+It would be better to simply expose a platform device and associated
+driver, instead of hooking into the module machinery directly.
 
-https://patchwork.kernel.org/project/linux-rockchip/patch/20210618131526.566762-5-benjamin.gaignard@collabora.com/
+We already do something similar for the EFI rtc and the efivars
+subsystem, using platform_device_register_simple()
 
-regards,
-Nicolas
 
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > ---
->  drivers/media/v4l2-core/v4l2-common.c | 2 ++
->  drivers/media/v4l2-core/v4l2-ioctl.c  | 1 +
->  include/uapi/linux/videodev2.h        | 1 +
->  3 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index 1db0020e08c0..4ede36546e9c 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -275,6 +275,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_YUV422P, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_GREY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  
-> +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>  drivers/firmware/efi/Makefile        |  1 +
+>  drivers/firmware/efi/coco.c          | 58 ++++++++++++++++++++
+>  drivers/virt/coco/efi_secret/Kconfig |  3 +
+>  3 files changed, 62 insertions(+)
+>
+> diff --git a/drivers/firmware/efi/Makefile b/drivers/firmware/efi/Makefile
+> index c02ff25dd477..49c4a8c0bfc4 100644
+> --- a/drivers/firmware/efi/Makefile
+> +++ b/drivers/firmware/efi/Makefile
+> @@ -32,6 +32,7 @@ obj-$(CONFIG_APPLE_PROPERTIES)                += apple-properties.o
+>  obj-$(CONFIG_EFI_RCI2_TABLE)           += rci2-table.o
+>  obj-$(CONFIG_EFI_EMBEDDED_FIRMWARE)    += embedded-firmware.o
+>  obj-$(CONFIG_LOAD_UEFI_KEYS)           += mokvar-table.o
+> +obj-$(CONFIG_EFI_COCO_SECRET)          += coco.o
+>
+>  fake_map-y                             += fake_mem.o
+>  fake_map-$(CONFIG_X86)                 += x86_fake_mem.o
+> diff --git a/drivers/firmware/efi/coco.c b/drivers/firmware/efi/coco.c
+> new file mode 100644
+> index 000000000000..f8efd240ab05
+> --- /dev/null
+> +++ b/drivers/firmware/efi/coco.c
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Confidential computing (coco) secret area handling
+> + *
+> + * Copyright (C) 2021 IBM Corporation
+> + * Author: Dov Murik <dovmurik@linux.ibm.com>
+> + */
 > +
->  		/* Tiled YUV formats */
->  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->  		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 048f326c57b9..a8d999e23e5b 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1295,6 +1295,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
->  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
-> +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CbCr 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
->  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
->  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 772dbadd1a24..211bc11a48cb 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -597,6 +597,7 @@ struct v4l2_pix_format {
->  /* two planes -- one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
->  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
-> +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit */
->  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
->  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
->  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
-
+> +#define pr_fmt(fmt) "efi: " fmt
+> +
+> +#include <linux/efi.h>
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/kmod.h>
+> +
+> +#ifdef CONFIG_EFI_SECRET_MODULE
+> +
+> +/*
+> + * Load the efi_secret module if the EFI secret area is populated
+> + */
+> +static int __init load_efi_secret_module(void)
+> +{
+> +       struct linux_efi_coco_secret_area *area;
+> +       efi_guid_t *header_guid;
+> +       int ret = 0;
+> +
+> +       if (efi.coco_secret == EFI_INVALID_TABLE_ADDR)
+> +               return 0;
+> +
+> +       area = memremap(efi.coco_secret, sizeof(*area), MEMREMAP_WB);
+> +       if (!area) {
+> +               pr_err("Failed to map confidential computing secret area descriptor\n");
+> +               return -ENOMEM;
+> +       }
+> +       if (!area->base_pa || area->size < sizeof(*header_guid))
+> +               goto unmap_desc;
+> +
+> +       header_guid = (void __force *)ioremap_encrypted(area->base_pa, sizeof(*header_guid));
+> +       if (!header_guid) {
+> +               pr_err("Failed to map secret area\n");
+> +               ret = -ENOMEM;
+> +               goto unmap_desc;
+> +       }
+> +       if (efi_guidcmp(*header_guid, EFI_SECRET_TABLE_HEADER_GUID))
+> +               goto unmap_encrypted;
+> +
+> +       ret = request_module("efi_secret");
+> +
+> +unmap_encrypted:
+> +       iounmap((void __iomem *)header_guid);
+> +
+> +unmap_desc:
+> +       memunmap(area);
+> +       return ret;
+> +}
+> +late_initcall(load_efi_secret_module);
+> +
+> +#endif
+> diff --git a/drivers/virt/coco/efi_secret/Kconfig b/drivers/virt/coco/efi_secret/Kconfig
+> index 4404d198f3b2..dc8da2921e36 100644
+> --- a/drivers/virt/coco/efi_secret/Kconfig
+> +++ b/drivers/virt/coco/efi_secret/Kconfig
+> @@ -14,3 +14,6 @@ config EFI_SECRET
+>
+>           To compile this driver as a module, choose M here.
+>           The module will be called efi_secret.
+> +
+> +         The module is loaded automatically by the EFI driver if the EFI
+> +         secret area is populated.
+> --
+> 2.25.1
+>

@@ -2,206 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664214C6512
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F294C6515
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbiB1Iwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S234096AbiB1Ixl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiB1Iws (ORCPT
+        with ESMTP id S229634AbiB1Ixi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:52:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87175AA69;
-        Mon, 28 Feb 2022 00:52:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1B047CE0FB5;
-        Mon, 28 Feb 2022 08:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2CEC340FB;
-        Mon, 28 Feb 2022 08:52:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646038326;
-        bh=Sf29VsmZah0cXLkVk/LGIb6Bgm/kXKzXsRYaR5Sg2lw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a9T1tgCHAw/Lvf3/kFcXRmaJ3dIiRyQZ7uDrZn44ronfJg/kHjOnV61t5OOWPbp23
-         umJ0ahIykI+E9gZczW3niq+sN4Mx3sRkhLkXNGcE5z0L1F9jRVVh8JAoeKUQ8RncTX
-         94heG03BHfKu/Auf/6M7PPCwyMgOd4gO5m0+7b043OG3skdSOCzrnelCkjU2Wu8+FE
-         S63+wFNWcH/by1B2CdbbSpEFwwwJlmH8hU/Ujq0EleFeFlWaw1rGQA1M1qxPSRxvPs
-         YcJ4hCJN1jG5TZJnGBwfCOqE/v5HlGduxUp5BPXXvuwRxn4OOywI44zmKBa3IKTNgt
-         w1SrC1beFrosw==
-Received: by mail-yb1-f181.google.com with SMTP id e140so19023379ybh.9;
-        Mon, 28 Feb 2022 00:52:06 -0800 (PST)
-X-Gm-Message-State: AOAM530BlCibH+mdDYLFIqfTEN4pBMsGvUDoIPkvIWr1YHjAmicJi6m9
-        qGabasKRWiK43tQiag3eWRg7sUl+dKURRoeragQ=
-X-Google-Smtp-Source: ABdhPJxK/+7HL5X+UMSZfwdKuec7P4o8ulRmm5RAFNjgmIq1UH1anKv75JVusd6oNRcz9l4RM2b05cHYBHZoZOYfN/8=
-X-Received: by 2002:a25:24ce:0:b0:61e:1276:bfcf with SMTP id
- k197-20020a2524ce000000b0061e1276bfcfmr17554405ybk.299.1646038325096; Mon, 28
- Feb 2022 00:52:05 -0800 (PST)
+        Mon, 28 Feb 2022 03:53:38 -0500
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545BABA1;
+        Mon, 28 Feb 2022 00:52:58 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V5j4Nby_1646038373;
+Received: from 30.225.28.126(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0V5j4Nby_1646038373)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 28 Feb 2022 16:52:54 +0800
+Message-ID: <4aef53b1-3e0f-92eb-4bd3-cdc4cd301866@linux.alibaba.com>
+Date:   Mon, 28 Feb 2022 16:52:52 +0800
 MIME-Version: 1.0
-References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
- <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
- <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com> <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
-In-Reply-To: <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 28 Feb 2022 09:51:53 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
-Message-ID: <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
-Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] scsi:target:tcmu: reduce once copy by using uio ioctl
+Content-Language: en-US
+To:     Bodo Stroesser <bostroesser@gmail.com>,
+        Guixin Liu <kanie@linux.alibaba.com>,
+        gregkh@linuxfoundation.org, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xlpang@linux.alibaba.com
+References: <1645064962-94123-1-git-send-email-kanie@linux.alibaba.com>
+ <1645064962-94123-2-git-send-email-kanie@linux.alibaba.com>
+ <eb08230b-c9a7-26ed-9431-9be3b9791385@gmail.com>
+From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+In-Reply-To: <eb08230b-c9a7-26ed-9431-9be3b9791385@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 09:38, Huacai Chen <chenhuacai@gmail.com> wrote:
->
-> Hi, Ard,
->
-> On Mon, Feb 28, 2022 at 4:09 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 28 Feb 2022 at 07:34, Huacai Chen <chenhuacai@gmail.com> wrote:
-> > >
-> > > Hi, Ard and Greg,
-> > >
-> > > On Mon, Feb 28, 2022 at 12:40 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Sun, Feb 27, 2022 at 03:14:30PM +0100, Ard Biesheuvel wrote:
-> > > > > (add Greg and ACPI maintainers)
-> > > > >
-> > > > > On Sat, 26 Feb 2022 at 12:11, Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > > >
-> > > > > > This patch adds basic boot, setup and reset routines for LoongArch.
-> > > > > > LoongArch uses UEFI-based firmware. The firmware uses ACPI and DMI/
-> > > > > > SMBIOS to pass configuration information to the Linux kernel (in elf
-> > > > > > format).
-> > > > > >
-> > > > > > Now the boot information passed to kernel is like this:
-> > > > > > 1, kernel get 3 register values (a0, a1 and a2) from bootloader.
-> > > > > > 2, a0 is "argc", a1 is "argv", so "kernel cmdline" comes from a0/a1.
-> > > > > > 3, a2 is "environ", which is a pointer to "struct bootparamsinterface".
-> > > > > > 4, "struct bootparamsinterface" include a "systemtable" pointer, whose
-> > > > > >    type is "efi_system_table_t". Most configuration information, include
-> > > > > >    ACPI tables and SMBIOS tables, come from here.
-> > > > > >
-> > > > > > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > > > > > Cc: linux-efi@vger.kernel.org
-> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > > ---
-> > > > > >  arch/loongarch/include/asm/acenv.h      |  17 +
-> > > > > >  arch/loongarch/include/asm/acpi.h       |  38 ++
-> > > > > >  arch/loongarch/include/asm/boot_param.h |  97 +++++
-> > > > > >  arch/loongarch/include/asm/bootinfo.h   |  33 ++
-> > > > > >  arch/loongarch/include/asm/dmi.h        |  24 ++
-> > > > > >  arch/loongarch/include/asm/efi.h        |  33 ++
-> > > > > >  arch/loongarch/include/asm/fw.h         |  18 +
-> > > > > >  arch/loongarch/include/asm/reboot.h     |  10 +
-> > > > > >  arch/loongarch/include/asm/setup.h      |  21 +
-> > > > > >  arch/loongarch/kernel/acpi.c            | 338 ++++++++++++++++
-> > > > > >  arch/loongarch/kernel/cacheinfo.c       | 122 ++++++
-> > > > > >  arch/loongarch/kernel/cmdline.c         |  31 ++
-> > > > > >  arch/loongarch/kernel/cpu-probe.c       | 305 +++++++++++++++
-> > > > > >  arch/loongarch/kernel/efi.c             | 208 ++++++++++
-> > > > > >  arch/loongarch/kernel/env.c             | 176 +++++++++
-> > > > > >  arch/loongarch/kernel/head.S            |  72 ++++
-> > > > > >  arch/loongarch/kernel/mem.c             |  89 +++++
-> > > > > >  arch/loongarch/kernel/reset.c           |  90 +++++
-> > > > > >  arch/loongarch/kernel/setup.c           | 495 ++++++++++++++++++++++++
-> > > > > >  arch/loongarch/kernel/time.c            | 220 +++++++++++
-> > > > > >  arch/loongarch/kernel/topology.c        |  13 +
-> > > > > >  21 files changed, 2450 insertions(+)
-> > > > >
-> > > > > As I pointed out in response to an earlier revision of this code, I
-> > > > > don't think we should merge this until we decide on some ground rules
-> > > > > regarding the support level of this architecture in the UEFI and ACPI
-> > > > > subsystems.
-> > > > >
-> > > > > The problem is that loongarch does not exist in the ACPI or UEFI
-> > > > > specifications at all, and as I understand it, the firmware
-> > > > > implementations themselves do not implement UEFI or ACPI entirely,
-> > > > > they simply present data structures in memory that look similar enough
-> > > > > for the Linux UEFI and ACPI code to boot the OS.
-> > > >
-> > > > Why isn't this in the ACPI/UEFI specs?  Is it a lack of access to the
-> > > > spec groups by the comapny making these devices, or something else?
-> > > We have tried our best to make LoongArch parts be in ACPI and UEFI SPECs.
-> > >
-> > > ECR for adding LoongArch support in ACPI:
-> > > https://mantis.uefi.org/mantis/view.php?id=2203
-> > >
-> > > ECR for adding LoongArch support in ACPI (version update):
-> > > https://mantis.uefi.org/mantis/view.php?id=2268
-> > >
-> > > ECR for adding LoongArch support in UEFI:
-> > > https://mantis.uefi.org/mantis/view.php?id=2313
-> > >
-> > > ACPI changes of LoongArch have been approved in the last year, but the
-> > > new version of ACPI SPEC hasn't been made public yet. And UEFI changes
-> > > of LoongArch are under review now.
-> > >
-> > > Is it a must that the kernel code be merged after all SPECs are
-> > > public? If not, I think we can provide some snapshots (If it is legal,
-> > > I'm not sure) of mantis.uefi.org to prove the above.
-> > >
-> >
-> > Thanks for the links, those with access will be able to review,
-> > although it would of course be preferable if this was open access.
-> >
-> > In any case, if UEFI and ACPI support is going to be ratified in the
-> > respective specifications, we are in a much better place to support
-> > this in Linux going forward.
-> >
-> > However, that still doesn't mean you should be using the internal API
-> > used between the EFI stub and the core kernel as a boot interface.
-> > Instead, you should implement LoongArch support into the EFI stub, and
-> > build the kernel as a PE/COFF image that can boot from EFI directly,
-> > from UEFI compliant firmware (u-boot or EDK2 are the most common
-> > examples) that exposes all the UEFI stuff that the EFI stub relies on.
-> We have implemented EFISTUB, but not in this first series:
-> https://github.com/loongson/linux/commit/d415a8e57e4d248e239958f2f18b45ea7a5fec2c
-> We want to add efistub support in the next series after new UEFI SPEC released.
->
-> >
-> > RISC-V is a useful reference for the changes needed - this is the most
-> > recent addition to the EFI stub, and avoids some legacy stuff that new
-> > architectures have no need for.
-> We still want to support the raw elf kernel (RISC-V also does),
-> because LoongArch also has MCU and SoC and we want to support FDT (I
-> think this is reasonable, because RISC-V also supports raw elf).
->
 
-That is fine. So perhaps the best course of action is to omit the
-UEFI/ACPI parts entirely for now, and focus on the DT/embedded use
-case. Once all the spec pieces are in place, the UEFI + ACPI changes
-can be presented as a single coherent set.
+hi Bodo,
 
--- 
-Ard.
+> Liu,
+>
+> generally I like ideas to speed up tcmu.
+>
+> OTOH, since Andy Grover implemented tcmu based on uio device, we are
+> restricted to what uio offers. With today's knowledge I think we would
+> not use the uio device in tcmu again, but switching away from uio now
+> would break existing userspace SW.
+Yeah, it will have much work if deciding to switch away from uio.
+I came up with a hacky or crazy idea :) what about we create a new file
+in tcmu_open() by anon_inode_getfile_secure(), and export this fd by
+tcmu mail box, we can do ioctl() on this new file, then uio framework
+won't be touched...
+
+static int tcmu_open(struct uio_info *info, struct inode *inode)
+{
+         struct tcmu_dev *udev = container_of(info, struct tcmu_dev, 
+uio_info);
+
+         /* O_EXCL not supported for char devs, so fake it? */
+         if (test_and_set_bit(TCMU_DEV_BIT_OPEN, &udev->flags))
+                 return -EBUSY;
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tcmu device can only be opened once before closed.
+
+Regards,
+Xiaoguang Wang
+>
+> Before we start thinking how the same performance gain could be reached
+> without a change in uio device, please let me know why you use file
+> backend on top of tcmu instead of target_core_file kernel module?
+> Wouldn't target_core_file be even faster for your purpose?
+>
+> Bodo
+>
+>
+>
+> On 17.02.22 03:29, Guixin Liu wrote:
+>> Currently the data needs to be copied twice between sg, tcmu data 
+>> area and
+>> userspace buffer if backstore holds its own userspace buffer, then we 
+>> can
+>> use uio ioctl to copy data between sg and userspace buffer directly to
+>> bypass data area to improve performance.
+>>
+>> Use tcm_loop and tcmu(backstore is file) to evaluate performance,
+>> fio job: fio -filename=/dev/sdb  -direct=1 -size=2G -name=1 -thread
+>> -runtime=60 -time_based -rw=randread -numjobs=16 -iodepth=16 -bs=128k
+>>
+>> Without this patch:
+>>      READ: bw=3539MiB/s (3711MB/s), 207MiB/s-233MiB/s (217MB/s-244MB/s),
+>> io=104GiB (111GB), run=30001-30002msec
+>>
+>> With this patch:
+>>      READ: bw=4420MiB/s (4634MB/s), 274MiB/s-278MiB/s (287MB/s-291MB/s),
+>> io=259GiB (278GB), run=60001-60002msec
+>>
+>> Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+>> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+>> ---
+>>   drivers/target/target_core_user.c     | 171 
+>> +++++++++++++++++++++++++++++-----
+>>   include/uapi/linux/target_core_user.h |   9 ++
+>>   2 files changed, 157 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/target/target_core_user.c 
+>> b/drivers/target/target_core_user.c
+>> index 7b2a89a..afea088 100644
+>> --- a/drivers/target/target_core_user.c
+>> +++ b/drivers/target/target_core_user.c
+>> @@ -122,6 +122,7 @@ struct tcmu_dev {
+>>   #define TCMU_DEV_BIT_BLOCKED 2
+>>   #define TCMU_DEV_BIT_TMR_NOTIFY 3
+>>   #define TCMU_DEV_BIT_PLUGGED 4
+>> +#define TCMU_DEV_BIT_BYPASS_DATA_AREA 5
+>>       unsigned long flags;
+>>         struct uio_info uio_info;
+>> @@ -642,12 +643,17 @@ static struct tcmu_cmd *tcmu_alloc_cmd(struct 
+>> se_cmd *se_cmd)
+>>       tcmu_cmd->se_cmd = se_cmd;
+>>       tcmu_cmd->tcmu_dev = udev;
+>>   -    tcmu_cmd_set_block_cnts(tcmu_cmd);
+>> -    tcmu_cmd->dbi = kcalloc(tcmu_cmd->dbi_cnt, sizeof(uint32_t),
+>> -                GFP_NOIO);
+>> -    if (!tcmu_cmd->dbi) {
+>> -        kmem_cache_free(tcmu_cmd_cache, tcmu_cmd);
+>> -        return NULL;
+>> +    if (!test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags)) {
+>> +        tcmu_cmd_set_block_cnts(tcmu_cmd);
+>> +        tcmu_cmd->dbi = kcalloc(tcmu_cmd->dbi_cnt, sizeof(uint32_t),
+>> +                    GFP_NOIO);
+>> +        if (!tcmu_cmd->dbi) {
+>> +            kmem_cache_free(tcmu_cmd_cache, tcmu_cmd);
+>> +            return NULL;
+>> +        }
+>> +    } else {
+>> +        tcmu_cmd->dbi_cnt = 0;
+>> +        tcmu_cmd->dbi = NULL;
+>>       }
+>>         return tcmu_cmd;
+>> @@ -1093,16 +1099,18 @@ static int queue_cmd_ring(struct tcmu_cmd 
+>> *tcmu_cmd, sense_reason_t *scsi_err)
+>>       tcmu_cmd_reset_dbi_cur(tcmu_cmd);
+>>       iov = &entry->req.iov[0];
+>>   -    if (se_cmd->data_direction == DMA_TO_DEVICE ||
+>> -        se_cmd->se_cmd_flags & SCF_BIDI)
+>> -        scatter_data_area(udev, tcmu_cmd, &iov);
+>> -    else
+>> -        tcmu_setup_iovs(udev, tcmu_cmd, &iov, se_cmd->data_length);
+>> -
+>> +    if (!test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags)) {
+>> +        if (se_cmd->data_direction == DMA_TO_DEVICE ||
+>> +        se_cmd->se_cmd_flags & SCF_BIDI)
+>> +            scatter_data_area(udev, tcmu_cmd, &iov);
+>> +        else
+>> +            tcmu_setup_iovs(udev, tcmu_cmd, &iov, se_cmd->data_length);
+>> +    }
+>>       entry->req.iov_cnt = iov_cnt - iov_bidi_cnt;
+>>         /* Handle BIDI commands */
+>> -    if (se_cmd->se_cmd_flags & SCF_BIDI) {
+>> +    if ((se_cmd->se_cmd_flags & SCF_BIDI)
+>> +        && !test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags)) {
+>>           iov++;
+>>           tcmu_setup_iovs(udev, tcmu_cmd, &iov, 
+>> tcmu_cmd->data_len_bidi);
+>>           entry->req.iov_bidi_cnt = iov_bidi_cnt;
+>> @@ -1366,16 +1374,19 @@ static bool tcmu_handle_completion(struct 
+>> tcmu_cmd *cmd,
+>>           else
+>>               se_cmd->se_cmd_flags |= SCF_TREAT_READ_AS_NORMAL;
+>>       }
+>> -    if (se_cmd->se_cmd_flags & SCF_BIDI) {
+>> -        /* Get Data-In buffer before clean up */
+>> -        gather_data_area(udev, cmd, true, read_len);
+>> -    } else if (se_cmd->data_direction == DMA_FROM_DEVICE) {
+>> -        gather_data_area(udev, cmd, false, read_len);
+>> -    } else if (se_cmd->data_direction == DMA_TO_DEVICE) {
+>> -        /* TODO: */
+>> -    } else if (se_cmd->data_direction != DMA_NONE) {
+>> -        pr_warn("TCMU: data direction was %d!\n",
+>> -            se_cmd->data_direction);
+>> +
+>> +    if (!test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags)) {
+>> +        if (se_cmd->se_cmd_flags & SCF_BIDI) {
+>> +            /* Get Data-In buffer before clean up */
+>> +            gather_data_area(udev, cmd, true, read_len);
+>> +        } else if (se_cmd->data_direction == DMA_FROM_DEVICE) {
+>> +            gather_data_area(udev, cmd, false, read_len);
+>> +        } else if (se_cmd->data_direction == DMA_TO_DEVICE) {
+>> +            /* TODO: */
+>> +        } else if (se_cmd->data_direction != DMA_NONE) {
+>> +            pr_warn("TCMU: data direction was %d!\n",
+>> +                se_cmd->data_direction);
+>> +        }
+>>       }
+>>     done:
+>> @@ -1973,6 +1984,84 @@ static int tcmu_release(struct uio_info *info, 
+>> struct inode *inode)
+>>       return 0;
+>>   }
+>>   +long tcmu_ioctl_copy_between_sgl_and_iovec(struct tcmu_cmd *tcmu_cmd,
+>> +            struct iovec __user *uiovec,
+>> +            unsigned long vcnt,
+>> +            bool is_copy_to_sgl)
+>> +{
+>> +    struct iovec iovstack[UIO_FASTIOV];
+>> +    struct iovec *iov = iovstack;
+>> +    struct iov_iter iter;
+>> +    ssize_t ret;
+>> +    struct se_cmd *se_cmd = tcmu_cmd->se_cmd;
+>> +    struct scatterlist *data_sg, *sg;
+>> +    int i;
+>> +    unsigned int data_nents;
+>> +    long copy_ret = 0;
+>> +
+>> +    if (se_cmd->se_cmd_flags & SCF_BIDI) {
+>> +        data_sg = se_cmd->t_bidi_data_sg;
+>> +        data_nents = se_cmd->t_bidi_data_nents;
+>> +    } else {
+>> +        data_sg = se_cmd->t_data_sg;
+>> +        data_nents = se_cmd->t_data_nents;
+>> +    }
+>> +
+>> +    ret = import_iovec(READ, uiovec, vcnt, ARRAY_SIZE(iovstack), 
+>> &iov, &iter);
+>> +    if (ret < 0) {
+>> +        pr_err("import iovec failed.\n");
+>> +        return -EFAULT;
+>> +    }
+>> +
+>> +    for_each_sg(data_sg, sg, data_nents, i) {
+>> +        if (is_copy_to_sgl)
+>> +            ret = copy_page_from_iter(sg_page(sg), sg->offset, 
+>> sg->length, &iter);
+>> +        else
+>> +            ret = copy_page_to_iter(sg_page(sg), sg->offset, 
+>> sg->length, &iter);
+>> +        if (ret < 0) {
+>> +            pr_err("copy failed.\n");
+>> +            copy_ret = -EFAULT;
+>> +            break;
+>> +        }
+>> +    }
+>> +    kfree(iov);
+>> +    return copy_ret;
+>> +}
+>> +
+>> +long tcmu_ioctl(struct uio_info *info, unsigned int cmd, unsigned 
+>> long arg)
+>> +{
+>> +    struct tcmu_dev *udev = container_of(info, struct tcmu_dev, 
+>> uio_info);
+>> +    struct tcmu_data_xfer __user *uxfer = (struct tcmu_data_xfer 
+>> __user *)arg;
+>> +    struct tcmu_data_xfer xfer;
+>> +    struct tcmu_cmd *tcmu_cmd;
+>> +
+>> +    if (!test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags))
+>> +        return -EINVAL;
+>> +
+>> +    if (copy_from_user(&xfer, uxfer, sizeof(xfer)))
+>> +        return -EFAULT;
+>> +
+>> +    tcmu_cmd = xa_load(&udev->commands, xfer.cmd_id);
+>> +    if (!tcmu_cmd) {
+>> +        set_bit(TCMU_DEV_BIT_BROKEN, &udev->flags);
+>> +        return -EFAULT;
+>> +    }
+>> +
+>> +    if (test_bit(TCMU_CMD_BIT_EXPIRED, &tcmu_cmd->flags))
+>> +        return -EFAULT;
+>> +
+>> +    switch (cmd) {
+>> +    case TCMU_IOCTL_CMD_COPY_TO_SGL:
+>> +        return tcmu_ioctl_copy_between_sgl_and_iovec(tcmu_cmd, 
+>> xfer.iovec,
+>> +                                 xfer.iov_cnt, true);
+>> +    case TCMU_IOCTL_CMD_COPY_FROM_SGL:
+>> +        return tcmu_ioctl_copy_between_sgl_and_iovec(tcmu_cmd, 
+>> xfer.iovec,
+>> +                                 xfer.iov_cnt, false);
+>> +    default:
+>> +        return -EINVAL;
+>> +    }
+>> +}
+>> +
+>>   static int tcmu_init_genl_cmd_reply(struct tcmu_dev *udev, int cmd)
+>>   {
+>>       struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
+>> @@ -2230,6 +2319,7 @@ static int tcmu_configure_device(struct 
+>> se_device *dev)
+>>       info->mmap = tcmu_mmap;
+>>       info->open = tcmu_open;
+>>       info->release = tcmu_release;
+>> +    info->ioctl = tcmu_ioctl;
+>>         ret = uio_register_device(tcmu_root_device, info);
+>>       if (ret)
+>> @@ -2838,6 +2928,40 @@ static ssize_t 
+>> tcmu_nl_reply_supported_store(struct config_item *item,
+>>   }
+>>   CONFIGFS_ATTR(tcmu_, nl_reply_supported);
+>>   +static ssize_t tcmu_bypass_data_area_show(struct config_item 
+>> *item, char *page)
+>> +{
+>> +    struct se_dev_attrib *da = container_of(to_config_group(item),
+>> +                        struct se_dev_attrib, da_group);
+>> +    struct tcmu_dev *udev = TCMU_DEV(da->da_dev);
+>> +
+>> +    if (test_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags))
+>> +        return snprintf(page, PAGE_SIZE, "%s\n", "true");
+>> +    else
+>> +        return snprintf(page, PAGE_SIZE, "%s\n", "false");
+>> +}
+>> +
+>> +static ssize_t tcmu_bypass_data_area_store(struct config_item *item, 
+>> const char *page,
+>> +                        size_t count)
+>> +{
+>> +    struct se_dev_attrib *da = container_of(to_config_group(item),
+>> +                        struct se_dev_attrib, da_group);
+>> +    struct tcmu_dev *udev = TCMU_DEV(da->da_dev);
+>> +    bool bypass_data_area;
+>> +    int ret;
+>> +
+>> +    ret = strtobool(page, &bypass_data_area);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    if (bypass_data_area)
+>> +        set_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags);
+>> +    else
+>> +        clear_bit(TCMU_DEV_BIT_BYPASS_DATA_AREA, &udev->flags);
+>> +
+>> +    return count;
+>> +}
+>> +CONFIGFS_ATTR(tcmu_, bypass_data_area);
+>> +
+>>   static ssize_t tcmu_emulate_write_cache_show(struct config_item *item,
+>>                            char *page)
+>>   {
+>> @@ -3069,6 +3193,7 @@ static ssize_t tcmu_free_kept_buf_store(struct 
+>> config_item *item, const char *pa
+>>       &tcmu_attr_emulate_write_cache,
+>>       &tcmu_attr_tmr_notification,
+>>       &tcmu_attr_nl_reply_supported,
+>> +    &tcmu_attr_bypass_data_area,
+>>       NULL,
+>>   };
+>>   diff --git a/include/uapi/linux/target_core_user.h 
+>> b/include/uapi/linux/target_core_user.h
+>> index 27ace51..c02a45e 100644
+>> --- a/include/uapi/linux/target_core_user.h
+>> +++ b/include/uapi/linux/target_core_user.h
+>> @@ -185,4 +185,13 @@ enum tcmu_genl_attr {
+>>   };
+>>   #define TCMU_ATTR_MAX (__TCMU_ATTR_MAX - 1)
+>>   +struct tcmu_data_xfer {
+>> +    unsigned short cmd_id;
+>> +    unsigned long iov_cnt;
+>> +    struct iovec __user *iovec;
+>> +};
+>> +
+>> +#define TCMU_IOCTL_CMD_COPY_TO_SGL      _IOW('T', 0xe0, struct 
+>> tcmu_data_xfer)
+>> +#define TCMU_IOCTL_CMD_COPY_FROM_SGL    _IOW('T', 0xe1, struct 
+>> tcmu_data_xfer)
+>> +
+>>   #endif
+

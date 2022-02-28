@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B074C7B39
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBB34C7B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiB1VCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S230094AbiB1VNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiB1VCK (ORCPT
+        with ESMTP id S230084AbiB1VNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:02:10 -0500
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3164DD7603;
-        Mon, 28 Feb 2022 13:01:30 -0800 (PST)
-Received: from [45.44.224.220] (port=57032 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1nOn97-0003rK-1O; Mon, 28 Feb 2022 16:01:29 -0500
-Message-ID: <f84e9ab7d61aef6bf58d602a466a806193f3abbc.camel@trillion01.com>
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     Hao Xu <haoxu@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 28 Feb 2022 16:01:27 -0500
-In-Reply-To: <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
-         <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
-         <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
-         <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Mon, 28 Feb 2022 16:13:50 -0500
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A2D5ECB1A;
+        Mon, 28 Feb 2022 13:12:56 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21SKr95E005627;
+        Mon, 28 Feb 2022 14:53:09 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21SKr7Xe005624;
+        Mon, 28 Feb 2022 14:53:07 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Mon, 28 Feb 2022 14:53:07 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        alsa-devel@alsa-project.org, KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, linux1394-devel@lists.sourceforge.net,
+        drbd-dev@lists.linbit.com, linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, linux-aspeed@lists.ozlabs.org,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
+Message-ID: <20220228205307.GD614@gate.crashing.org>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com> <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com> <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,83 +91,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 02:26 +0800, Hao Xu wrote:
+On Mon, Feb 28, 2022 at 12:14:44PM -0800, Linus Torvalds wrote:
+> On Mon, Feb 28, 2022 at 12:10 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > We can do
+> >
+> >         typeof(pos) pos
+> >
+> > in the 'for ()' loop, and never use __iter at all.
+> >
+> > That means that inside the for-loop, we use a _different_ 'pos' than outside.
 > 
-> On 2/25/22 13:32, Olivier Langlois wrote:
-> > On Mon, 2022-02-21 at 13:23 +0800, Hao Xu wrote:
-> > > > @@ -5776,6 +5887,7 @@ static int __io_arm_poll_handler(struct
-> > > > io_kiocb *req,
-> > > >                  __io_poll_execute(req, mask);
-> > > >                  return 0;
-> > > >          }
-> > > > +       io_add_napi(req->file, req->ctx);
-> > > I think this may not be the right place to do it. the process
-> > > will
-> > > be:
-> > > arm_poll sockfdA--> get invalid napi_id from sk->napi_id -->
-> > > event
-> > > triggered --> arm_poll for sockfdA again --> get valid napi_id
-> > > then why not do io_add_napi() in event
-> > > handler(apoll_task_func/poll_task_func).
-> > You have a valid concern that the first time a socket is passed to
-> > io_uring that napi_id might not be assigned yet.
-> > 
-> > OTOH, getting it after data is available for reading does not help
-> > neither since busy polling must be done before data is received.
-> > 
-> > for both places, the extracted napi_id will only be leveraged at
-> > the
-> > next polling.
+> The thing that makes me throw up in my mouth a bit is that in that
 > 
-> Hi Olivier,
+>         typeof(pos) pos
 > 
-> I think we have some gap here. AFAIK, it's not 'might not', it is
-> 
-> 'definitely not', the sk->napi_id won't be valid until the poll
-> callback.
-> 
-> Some driver's code FYR:
-> (drivers/net/ethernet/intel/e1000/e1000_main.c)
-> 
-> e1000_receive_skb-->napi_gro_receive-->napi_skb_finish--
-> >gro_normal_one
-> 
-> and in gro_normal_one(), it does:
-> 
->            if (napi->rx_count >= gro_normal_batch)
->                    gro_normal_list(napi);
-> 
-> 
-> The gro_normal_list() delivers the info up to the specifical network 
-> protocol like tcp.
-> 
-> And then sk->napi_id is set, meanwhile the poll callback is
-> triggered.
-> 
-> So that's why I call the napi polling technology a 'speculation'.
-> It's 
-> totally for the
-> 
-> future data. Correct me if I'm wrong especially for the poll callback
-> triggering part.
-> 
-When I said 'might not', I was meaning that from the io_uring point of
-view, it has no idea what is the previous socket usage. If it has been
-used outside io_uring, the napi_id could available on the first call.
+> the first 'pos' (that we use for just the typeof) is that outer-level
+> 'pos', IOW it's a *different* 'pos' than the second 'pos' in that same
+> declaration that declares the inner level shadowing new 'pos'
+> variable.
 
-If it is really read virgin socket, neither my choosen call site or
-your proposed sites will make the napi busy poll possible for the first
-poll.
+The new "pos" has not yet been declared, so this has to refer to the
+outer "pos", it cannot be the inner one.  Because it hasn't been
+declared yet :-)
 
-I feel like there is not much to gain to argue on this point since I
-pretty much admitted that your solution was most likely the only call
-site making MULTIPOLL requests work correctly with napi busy poll as
-those requests could visit __io_arm_poll_handler only once (Correct me
-if my statement is wrong).
+Compare this to
+  typeof (pos) pos = pos;
+where that last "pos" *does* refer to the newly declared one: that
+declaration has already been done!  (So this code is UB btw, 6.3.2.1/2).
 
-The only issue was that I wasn't sure is how using your calling sites
-would make locking work.
+> If I was a compiler person, I would say "Linus, that thing is too ugly
+> to live", and I would hate it. I'm just hoping that even compiler
+> people say "that's *so* ugly it's almost beautiful".
 
-I suppose that adding a dedicated spinlock for protecting napi_list
-instead of relying on uring_lock could be a solution. Would that work?
+It is perfectly well-defined.  Well, it would be good if we (GCC) would
+document it does work, and if someone tested it on LLVM as well.  But it
+is really hard to implement it to *not* work :-)
 
+> Because it does seem to work. It's not pretty, but hey, it's not like
+> our headers are really ever be winning any beauty contests...
+
+It is very pretty!  Needs a comment though :-)
+
+
+Segher

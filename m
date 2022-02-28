@@ -2,184 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DB44C719C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210404C719E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbiB1QVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S237883AbiB1QWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237591AbiB1QVH (ORCPT
+        with ESMTP id S232967AbiB1QWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:21:07 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777B37DABF;
-        Mon, 28 Feb 2022 08:20:28 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id q17so18346716edd.4;
-        Mon, 28 Feb 2022 08:20:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P9w2sABEp/WOpEUZx07FlpoTnPYsNU6bWSHX6sDtljo=;
-        b=Rxa8FZSQ2LC0/JvUhw6qnW0zw3TFaubwOKS2ekkhAZMzlyQK02rc4utO0U0g3JkrTc
-         gYFVYgkIn1nJEAXVEiYaI2PStK2WmCB3fk5Tq9X+2fF8FyT4e+2iTzV2QtgAG6UcMfAy
-         UDvxP8dN4ewcqanG5eyF5HArzP6FL0u4k9U8vx3w2Hy6qgOVAdqSWM2K2xvj6uix157q
-         pXa5QcAxbQYFkQGNEL47r4aabHMRDIqbbErSNNEUr3VqmgH+nyt9obPueTkwSaPzc96S
-         +188vPhmS0oUqjMQZlIesgGSJggVFZXvvLgVyd0cDBxibKvL+YbzK2TQ/xp8bHjNRnZF
-         9TJw==
-X-Gm-Message-State: AOAM530qKqHoZ9oQc08WnLuNnbXW/raCS1QdNhJvjMY7vSIEuKI57T5O
-        ETq5yHYikTJaOL+KIzmxExc=
-X-Google-Smtp-Source: ABdhPJzrs1dQNtccJPLhdeapL/ze/0/SWQ0EdlMjYvwVWpaNhVg3Zn9bLWQFNv98b3cFuMXZ4r9K9A==
-X-Received: by 2002:aa7:c983:0:b0:410:d314:6451 with SMTP id c3-20020aa7c983000000b00410d3146451mr19811851edt.56.1646065226872;
-        Mon, 28 Feb 2022 08:20:26 -0800 (PST)
-Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id ec21-20020a170906b6d500b006d170a3444csm4476468ejb.164.2022.02.28.08.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 08:20:25 -0800 (PST)
-Message-ID: <accfbf05-f0ff-7802-6c99-00ccff4e7809@kernel.org>
-Date:   Mon, 28 Feb 2022 17:20:24 +0100
+        Mon, 28 Feb 2022 11:22:05 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F308983022
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:21:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646065287; x=1677601287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fwU+TO/qK+rZqtODMYpxS2Ztzz09O92uLhRMqm2SguI=;
+  b=dBkI5icY9t8YczHOQO2siCx2Akl4zc3/HOLQudZ3S7S6gtcRNO+4yri2
+   AiwyX2e36F9Io3lVLDpJxSHm23pjanBv+esPVDfk2eKVEusP1T+HJMLsQ
+   +hBFVIsvu7xf56K2pi1pn1ReIQaQzVKghTcgkKnjq3EnbNDSfYksskPLN
+   7f3HCaC+LLHbXe+OudED1t0Heb/E/3aLuJfEgBNEBy0nMeE2p1z+z9hag
+   rjyIY2VBvWTkFX/sLI+GQHnzszgB0NqFH6Qu/svVm4zGskgsfiHYYYxbh
+   IgE+VsxCYv1TzD1DJHtbvr2qBtnPRr9B5eK2qw38Z8KCLjgbnoEOCpjIo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250505609"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="250505609"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 08:20:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="708696781"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 08:20:39 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 65C03142; Mon, 28 Feb 2022 18:20:56 +0200 (EET)
+Date:   Mon, 28 Feb 2022 19:20:56 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, David Rientjes <rientjes@google.com>
+Subject: Re: [PATCHv4 01/30] x86/mm: Fix warning on build with
+ X86_MEM_ENCRYPT=y
+Message-ID: <20220228162056.gul22bjr4w6zjslq@black.fi.intel.com>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-2-kirill.shutemov@linux.intel.com>
+ <20220227220130.23yjme7jucxo266l@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging
- properties for ADM1275
-Content-Language: en-US
-To:     POTIN LAI <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220228103716.10774-1-potin.lai@quantatw.com>
- <20220228103716.10774-3-potin.lai@quantatw.com>
- <062ad1fb-269f-2a43-0f47-46894bca426c@kernel.org>
- <aca659c8-558c-7091-f2b6-37ef478a14db@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <aca659c8-558c-7091-f2b6-37ef478a14db@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227220130.23yjme7jucxo266l@treble>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2022 17:13, POTIN LAI wrote:
+On Sun, Feb 27, 2022 at 02:01:30PM -0800, Josh Poimboeuf wrote:
+> On Thu, Feb 24, 2022 at 06:56:01PM +0300, Kirill A. Shutemov wrote:
+> > So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
+> > the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
+> > which triggers a warning:
+> > 
+> > arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
+> > 	function 'mem_encrypt_init' [-Wmissing-prototypes]
+> > 
+> > Fix it by moving mem_encrypt_init() declaration outside of #ifdef
+> > CONFIG_AMD_MEM_ENCRYPT.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
+> > Acked-by: David Rientjes <rientjes@google.com>
 > 
-> Krzysztof Kozlowski 於 28/02/2022 10:25 pm 寫道:
->> On 28/02/2022 11:37, Potin Lai wrote:
->>> Add documentation of new properties for sample averaging in PMON_CONFIG
->>> register.
->>>
->>> New properties:
->>> - adi,volt-curr-sample-average
->>> - adi,power-sample-average
->>>
->>> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->>>
->>> doc
->> You have weirdly formatted commit msg.
-> It must be pasted from somewhere accidentally, sorry.
->>> ---
->>>  .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
->>>  1 file changed, 39 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> index 223393d7cafd..bc4206b257a8 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> @@ -37,6 +37,43 @@ properties:
->>>      description:
->>>        Shunt resistor value in micro-Ohm.
->>>  
->>> +  adi,volt-curr-sample-average:
->>> +    description: |
->>> +      Number of samples to be used to report voltage and current values.
->>> +      If the configured value is not a power of 2, sample averaging number
->>> +      will be configured with smaller and closest power of 2.
->>> +
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 128
->>> +    default: 1
->>> +
->>> +  adi,power-sample-average:
->>> +    description: |
->>> +      Number of samples to be used to report power values.
->>> +      If the configured value is not a power of 2, sample averaging number
->>> +      will be configured with smaller and closest power of 2.
->>> +
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 128
->>> +    default: 1
->>> +
->>> +if:
->> This should be in allOf.
-> will add it.
->>
->>> +  not:
->> Remove negation and list devices where it is not allowed.
-> will remove it.
->>
->>> +    properties:
->>> +      compatible:
->>> +        contains:
->>> +          enum:
->>> +          - adi,adm1272
->>> +          - adi,adm1278
->>> +          - adi,adm1293
->>> +          - adi,adm1294
->>> +then:
->>> +  properties:
->>> +    adi,power-sample-average:
->>> +      description: This property is not allowed.
->> This does not work. Please test it - add not allowed property to such
->> devices and look for error. I gave you the example how it should be
->> done. Why doing it in a different way which does not work?
->>
-> Sorry for misunderstanding from original example. I rechecked the example and made a modification as below, before sending out new patch, would you mind help me review it and let me know if anything improper? Thank you.
-
-Don't take the example by copying and pasting. It has to be adjusted, I
-just explained there in example how to disallow a property.
-
+> The patch title, warning, and "Fixes" tag tend to give the impression
+> this is fixing a real user-visible bug.  But the bug is theoretical, as
+> it's not possible to enable X86_MEM_ENCRYPT without AMD_MEM_ENCRYPT,
+> until patch 27.
 > 
+> IMO it would be preferable to just squash this change with patch 27.
 > 
-> dependencies:
->   adi,enable-power-sample-average: [ 'adi,power-sample-average' ]
->   adi,power-sample-average: [ 'adi,enable-power-sample-average' ]
-> 
-> allOf:
->   - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - adi,adm1272
->               - adi,adm1278
->               - adi,adm1293
->               - adi,adm1294
->     then:
->       required:
->         - adi,enable-power-sample-average
+> Having it as a separate patch is also fine, but it shouldn't be
+> described as a fix or use the Fixes tag.  It's more of a preparatory
+> patch.
 
-This does not look correct, because it is not a required property.
+maintainer-tip.rst seems disagree with you:
 
-You should have "if:then: adi,enable-power-sample-average: false" etc"
+   A Fixes tag should be added even for changes which do not need to be
+   backported to stable kernels, i.e. when addressing a recently introduced
+   issue which only affects tip or the current head of mainline.
 
->     else:
->       properties:
->         adi,enable-power-sample-average: false
-> 
-> 
+I will leave it as is.
 
-
-Best regards,
-Krzysztof
+-- 
+ Kirill A. Shutemov

@@ -2,168 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8304C651B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0AD4C6522
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiB1I5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S234120AbiB1I7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiB1I5R (ORCPT
+        with ESMTP id S234114AbiB1I7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:57:17 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900E85EDEA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 00:56:38 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id m14so20113067lfu.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 00:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ygePuoaxgbXs17RogC07Ldx/FV9O8bjI15InNB3Uy0w=;
-        b=FKx+xo+W4hgDW4JOxePGfZb+77BSDBB8oU26O9gssc8ENvmCepVde7ZHaG+MxPKPWA
-         Y4Qf2Q94CjOul9fmid6o47nKb7UWMDdoJnAjY1er+GejO1kKF1efEgshnhm15x1NzT9g
-         ILn3oQQIk1oqAVBCHmiOC0khKWkNfd1esQvwFi2zL6zPTUrl4CYPxrMlatGYw9w7DD2F
-         wg8oWJFzmYuq1tVWIVN37lKxfIklD6OhEV0kUJyhoB0SXoljNxYFc9ruIGvADnc97iS8
-         ZAI7dO6gs78IRfd++kuMxVQ33jr618V/tKSX7TOrLKpLgUfvwtliWp+Ym1iyliQUgxVK
-         WusA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ygePuoaxgbXs17RogC07Ldx/FV9O8bjI15InNB3Uy0w=;
-        b=S9uQjS018sid8304HBwShb5Q++CUWt+1gG8tLWX1hi+Uxe6uJ9ldBA9pXYEcJjnqcH
-         JBV3iIYNJCKEjWF29YtaJFiff4NI+mNGe4uaZ9pSiF+W5VbcxWX5GUGHx2ssJxHh9FuO
-         lcmO3HJ6JVFbmgzYo8mxpV9cIv7VtUF7z0NtSFxdbokHzjJGpFTmhQfaja4cIQCJTfCR
-         oicEd76R/Ks3oA6F2CiCtc4HA5ipfKqLnad2HViZvhtAYORip0PVX8g2lKEaZl7UfGgg
-         hlbGShZTFU7MUbcwxo7AnPstvb3pOM7UpyBZxZbx1Bd1CuzCHqOr2HjWkOlBksal/U1h
-         krsg==
-X-Gm-Message-State: AOAM5328WBcw0OErt2DHwEiWBLF50EYi0P1+TyYvHqp673tMA7lJFwNU
-        7t5FAeW0ZXq4MUu7lzByIAXAmqOdPyNIK8Re30R9vg==
-X-Google-Smtp-Source: ABdhPJwEobWvxClZPpRMDvsq0YO/mcA9o3/C+24TofHIZT/U+C1c0yeX9koMa55gQZs732m+azQKvb3kAxzJom3CBv4=
-X-Received: by 2002:a19:2d11:0:b0:445:65c7:5f1e with SMTP id
- k17-20020a192d11000000b0044565c75f1emr12057243lfj.184.1646038596839; Mon, 28
- Feb 2022 00:56:36 -0800 (PST)
+        Mon, 28 Feb 2022 03:59:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00333CFFB
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 00:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646038753; x=1677574753;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dBDe8jIVz9Df3ksKfxfEqCjyseL7FlXV0ZuiVMhZvTk=;
+  b=QrU8yrqqPMhy2Ig4I/2UKvlKAMb4Hakcz+PfNx8JDG0r3+cIL1sCv74B
+   JZx4q/aFRAztM3ZOizopY7j7moQITQWMdS72Hi9j8ie98ddD8ym4uIdhe
+   FJDQTOVcTk1IH4u8AdmASPmrwtzyRgUjc9QHnH1A3lnJ6JEw1x3DZK8Qo
+   OQjnLfxVGLaRMLhWWlcHuawfHglOd12nUyEapKVSgRFz2f5fqGx50PJwV
+   giIZYubSZtjCSfk1FPKo2oSqGjwNTwl6kl5sWWqtzYqZzun5Mw4IRn93u
+   h1hXUG+CaGE1ZH6pUI0Qgp0Q1LrimVEUtFKOC7UKaFVvNUxyM1CIPT2hZ
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
+   d="scan'208";a="147475569"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 01:59:10 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 28 Feb 2022 01:59:09 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 01:59:07 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <eugen.hristev@microchip.com>, <codrin.ciubotariu@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PATCH] ARM: configs: at91: sama7: Unselect CONFIG_DMATEST
+Date:   Mon, 28 Feb 2022 10:59:06 +0200
+Message-ID: <20220228085906.18508-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220217124950.211354-1-ulf.hansson@linaro.org> <a869b705-c10e-ed0b-4119-35ef0a028311@gmail.com>
-In-Reply-To: <a869b705-c10e-ed0b-4119-35ef0a028311@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 28 Feb 2022 09:56:00 +0100
-Message-ID: <CAPDyKFrBxVry=yh8m+OSaq+xnzDmVqhFXQ0QN1F9WR3KB=2MGg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
- is in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 00:11, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 17.02.2022 15:49, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > A PM domain managed by genpd may support multiple idlestates (power-off
-> > states). During genpd_power_off() a genpd governor may be asked to sele=
-ct
-> > one of the idlestates based upon the dev PM QoS constraints, for exampl=
-e.
-> >
-> > However, there is a problem with the behaviour around this in genpd. Mo=
-re
-> > precisely, a parent-domain is allowed to be powered off, no matter of w=
-hat
-> > idlestate that has been selected for the child-domain.
-> >
-> > For the stm32mp1 platform from STMicro, this behaviour doesn't play wel=
-l.
-> > Instead, the parent-domain must not be powered off, unless the deepest
-> > idlestate has been selected for the child-domain. As the current behavi=
-our
-> > in genpd is quite questionable anyway, let's simply change it into what=
- is
-> > needed by the stm32mp1 platform.
-> >
-> > If it surprisingly turns out that other platforms may need a different
-> > behaviour from genpd, then we will have to revisit this to find a way t=
-o
-> > make it configurable.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - Clarified commit message - based upon discussions with Dmitry.
-> >       - Updated a comment in the code, suggested by Dmitry.
-> >
-> > ---
-> >  drivers/base/power/domain.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5db704f02e71..c87588c21700 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -636,6 +636,18 @@ static int genpd_power_off(struct generic_pm_domai=
-n *genpd, bool one_dev_on,
-> >                       atomic_read(&genpd->sd_count) > 0)
-> >               return -EBUSY;
-> >
-> > +     /*
-> > +      * The children must be in their deepest (powered-off) states to =
-allow
-> > +      * the parent to be powered off. Note that, there's no need for
-> > +      * additional locking, as powering on a child, requires the paren=
-t's
-> > +      * lock to be acquired first.
-> > +      */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return -EBUSY;
-> > +     }
-> > +
-> >       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-> >               enum pm_qos_flags_status stat;
-> >
-> > @@ -1073,6 +1085,13 @@ static void genpd_sync_power_off(struct generic_=
-pm_domain *genpd, bool use_lock,
-> >           || atomic_read(&genpd->sd_count) > 0)
-> >               return;
-> >
-> > +     /* Check that the children are in their deepest (powered-off) sta=
-te. */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return;
-> > +     }
-> > +
-> >       /* Choose the deepest state when suspending */
-> >       genpd->state_idx =3D genpd->state_count - 1;
-> >       if (_genpd_power_off(genpd, false))
->
-> Thank you, looks good. Although, this should be v3.
->
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+The DMA test client should be selected only when one is debugging a DMA
+Device driver. There's no need to select the DMA test client by default,
+unselect it.
 
-Thanks Dmitry! I think v2 should be correct. At least I haven't sent a
-v2 before. :-)
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ arch/arm/configs/sama7_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-Rafael, I think this is ready to go, can please pick it up?
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+index 0368068e04d9..17e8bed22791 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -170,7 +170,6 @@ CONFIG_RTC_DRV_AT91RM9200=y
+ CONFIG_RTC_DRV_AT91SAM9=y
+ CONFIG_DMADEVICES=y
+ CONFIG_AT_XDMAC=y
+-CONFIG_DMATEST=y
+ CONFIG_STAGING=y
+ CONFIG_MICROCHIP_PIT64B=y
+ # CONFIG_IOMMU_SUPPORT is not set
+-- 
+2.25.1
 
-Kind regards
-Uffe

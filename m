@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4A54C7282
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579014C7674
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiB1R0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S240878AbiB1SES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbiB1R02 (ORCPT
+        with ESMTP id S239363AbiB1Rwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:26:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DD476E04;
-        Mon, 28 Feb 2022 09:25:48 -0800 (PST)
+        Mon, 28 Feb 2022 12:52:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA16A94D7;
+        Mon, 28 Feb 2022 09:40:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DEB2B815AB;
-        Mon, 28 Feb 2022 17:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9294C340F1;
-        Mon, 28 Feb 2022 17:25:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455056156B;
+        Mon, 28 Feb 2022 17:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55268C340E7;
+        Mon, 28 Feb 2022 17:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069146;
-        bh=yC33GZMrlqD0i2w93NF1iJJZDlo/CRXfu2IKUrbZvqo=;
+        s=korg; t=1646070005;
+        bh=nxXKOafHAT91L+KEcpG5Ig/Ag6ujqpSqA5C2JyOG9ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Biks0AlaBumy632OvNFKYRa6cjrhJFsvo0sKXYmisHB3I5LKg4BRXoiZZMJE7Rx6q
-         J5rmufNbBUm0iaTD7AX1kZC+uZN0eptKHcB18aQGe29XGY9v70HTPNvihuamRl2CeZ
-         ZPB/4ox7E8ZhmYFbjmpykQPjCyMx3CnQz3wPVByY=
+        b=K19yfwFzkvTU55nNV32pmjG40BrNUpYv20IKLvt9diOL2WmM8f62vHWcVDhFiX0lW
+         R91/aBtG+KqVf+IF3Kn0UJgpdb15ENSHkw7hBmcvs1G0H4wnhyf+pOjpMlCg0/YT2k
+         2zaJ9pgOoJf+sZ88Zfq6gW10CfQE4k7YfLK7ajtE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tao Liu <thomas.liu@ucloud.cn>,
-        Willem de Bruijn <willemb@google.com>,
+        stable@vger.kernel.org, Edwin Peer <edwin.peer@broadcom.com>,
+        Ben Li <ben.li@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 10/29] gso: do not skip outer ip header in case of ipip and net_failover
+Subject: [PATCH 5.15 043/139] bnxt_en: Fix offline ethtool selftest with RDMA enabled
 Date:   Mon, 28 Feb 2022 18:23:37 +0100
-Message-Id: <20220228172142.482484537@linuxfoundation.org>
+Message-Id: <20220228172352.247071663@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,103 +56,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Liu <thomas.liu@ucloud.cn>
+From: Michael Chan <michael.chan@broadcom.com>
 
-commit cc20cced0598d9a5ff91ae4ab147b3b5e99ee819 upstream.
+commit 6758f937669dba14c6aac7ca004edda42ec1b18d upstream.
 
-We encounter a tcp drop issue in our cloud environment. Packet GROed in
-host forwards to a VM virtio_net nic with net_failover enabled. VM acts
-as a IPVS LB with ipip encapsulation. The full path like:
-host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
- -> ipip encap -> net_failover tx -> virtio_net tx
+For offline (destructive) self tests, we need to stop the RDMA driver
+first.  Otherwise, the RDMA driver will run into unrecoverable errors
+when destructive firmware tests are being performed.
 
-When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
-SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
-did because it supports TSO and GSO_IPXIP4. But network_header points to
-inner ip header.
+The irq_re_init parameter used in the half close and half open
+sequence when preparing the NIC for offline tests should be set to
+true because the RDMA driver will free all IRQs before the offline
+tests begin.
 
-Call Trace:
- tcp4_gso_segment        ------> return NULL
- inet_gso_segment        ------> inner iph, network_header points to
- ipip_gso_segment
- inet_gso_segment        ------> outer iph
- skb_mac_gso_segment
-
-Afterwards virtio_net transmits the pkt, only inner ip header is modified.
-And the outer one just keeps unchanged. The pkt will be dropped in remote
-host.
-
-Call Trace:
- inet_gso_segment        ------> inner iph, outer iph is skipped
- skb_mac_gso_segment
- __skb_gso_segment
- validate_xmit_skb
- validate_xmit_skb_list
- sch_direct_xmit
- __qdisc_run
- __dev_queue_xmit        ------> virtio_net
- dev_hard_start_xmit
- __dev_queue_xmit        ------> net_failover
- ip_finish_output2
- ip_output
- iptunnel_xmit
- ip_tunnel_xmit
- ipip_tunnel_xmit        ------> ipip
- dev_hard_start_xmit
- __dev_queue_xmit
- ip_finish_output2
- ip_output
- ip_forward
- ip_rcv
- __netif_receive_skb_one_core
- netif_receive_skb_internal
- napi_gro_receive
- receive_buf
- virtnet_poll
- net_rx_action
-
-The root cause of this issue is specific with the rare combination of
-SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
-SKB_GSO_DODGY is set from external virtio_net. We need to reset network
-header when callbacks.gso_segment() returns NULL.
-
-This patch also includes ipv6_gso_segment(), considering SIT, etc.
-
-Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
-Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Fixes: 55fd0cf320c3 ("bnxt_en: Add external loopback test to ethtool selftest.")
+Reviewed-by: Edwin Peer <edwin.peer@broadcom.com>
+Reviewed-by: Ben Li <ben.li@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/af_inet.c     |    5 ++++-
- net/ipv6/ip6_offload.c |    2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c         |   10 +++++-----
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c |   12 +++++++++---
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1238,8 +1238,11 @@ struct sk_buff *inet_gso_segment(struct
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -10295,12 +10295,12 @@ int bnxt_half_open_nic(struct bnxt *bp)
+ 		goto half_open_err;
  	}
  
- 	ops = rcu_dereference(inet_offloads[proto]);
--	if (likely(ops && ops->callbacks.gso_segment))
-+	if (likely(ops && ops->callbacks.gso_segment)) {
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
-+	}
- 
- 	if (IS_ERR_OR_NULL(segs))
- 		goto out;
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -96,6 +96,8 @@ static struct sk_buff *ipv6_gso_segment(
- 	if (likely(ops && ops->callbacks.gso_segment)) {
- 		skb_reset_transport_header(skb);
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+-	rc = bnxt_alloc_mem(bp, false);
++	rc = bnxt_alloc_mem(bp, true);
+ 	if (rc) {
+ 		netdev_err(bp->dev, "bnxt_alloc_mem err: %x\n", rc);
+ 		goto half_open_err;
  	}
+-	rc = bnxt_init_nic(bp, false);
++	rc = bnxt_init_nic(bp, true);
+ 	if (rc) {
+ 		netdev_err(bp->dev, "bnxt_init_nic err: %x\n", rc);
+ 		goto half_open_err;
+@@ -10309,7 +10309,7 @@ int bnxt_half_open_nic(struct bnxt *bp)
  
- 	if (IS_ERR_OR_NULL(segs))
+ half_open_err:
+ 	bnxt_free_skbs(bp);
+-	bnxt_free_mem(bp, false);
++	bnxt_free_mem(bp, true);
+ 	dev_close(bp->dev);
+ 	return rc;
+ }
+@@ -10319,9 +10319,9 @@ half_open_err:
+  */
+ void bnxt_half_close_nic(struct bnxt *bp)
+ {
+-	bnxt_hwrm_resource_free(bp, false, false);
++	bnxt_hwrm_resource_free(bp, false, true);
+ 	bnxt_free_skbs(bp);
+-	bnxt_free_mem(bp, false);
++	bnxt_free_mem(bp, true);
+ }
+ 
+ static void bnxt_reenable_sriov(struct bnxt *bp)
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+@@ -25,6 +25,7 @@
+ #include "bnxt_hsi.h"
+ #include "bnxt.h"
+ #include "bnxt_hwrm.h"
++#include "bnxt_ulp.h"
+ #include "bnxt_xdp.h"
+ #include "bnxt_ptp.h"
+ #include "bnxt_ethtool.h"
+@@ -3502,9 +3503,12 @@ static void bnxt_self_test(struct net_de
+ 	if (!offline) {
+ 		bnxt_run_fw_tests(bp, test_mask, &test_results);
+ 	} else {
+-		rc = bnxt_close_nic(bp, false, false);
+-		if (rc)
++		bnxt_ulp_stop(bp);
++		rc = bnxt_close_nic(bp, true, false);
++		if (rc) {
++			bnxt_ulp_start(bp, rc);
+ 			return;
++		}
+ 		bnxt_run_fw_tests(bp, test_mask, &test_results);
+ 
+ 		buf[BNXT_MACLPBK_TEST_IDX] = 1;
+@@ -3514,6 +3518,7 @@ static void bnxt_self_test(struct net_de
+ 		if (rc) {
+ 			bnxt_hwrm_mac_loopback(bp, false);
+ 			etest->flags |= ETH_TEST_FL_FAILED;
++			bnxt_ulp_start(bp, rc);
+ 			return;
+ 		}
+ 		if (bnxt_run_loopback(bp))
+@@ -3539,7 +3544,8 @@ static void bnxt_self_test(struct net_de
+ 		}
+ 		bnxt_hwrm_phy_loopback(bp, false, false);
+ 		bnxt_half_close_nic(bp);
+-		rc = bnxt_open_nic(bp, false, true);
++		rc = bnxt_open_nic(bp, true, true);
++		bnxt_ulp_start(bp, rc);
+ 	}
+ 	if (rc || bnxt_test_irq(bp)) {
+ 		buf[BNXT_IRQ_TEST_IDX] = 1;
 
 

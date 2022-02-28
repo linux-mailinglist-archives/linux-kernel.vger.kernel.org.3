@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DDE4C72F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458014C75FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236264AbiB1Rah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S239514AbiB1R6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbiB1R2k (ORCPT
+        with ESMTP id S240385AbiB1RyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15170BC0A;
-        Mon, 28 Feb 2022 09:27:44 -0800 (PST)
+        Mon, 28 Feb 2022 12:54:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D26986E4;
+        Mon, 28 Feb 2022 09:42:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B743CB815B1;
-        Mon, 28 Feb 2022 17:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2151CC340E7;
-        Mon, 28 Feb 2022 17:27:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 19E37CE17CF;
+        Mon, 28 Feb 2022 17:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149D6C340F3;
+        Mon, 28 Feb 2022 17:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069261;
-        bh=917T7g5NADCLUB+jfAC4t5c2Tgf/uZE24UZy1cRKwXg=;
+        s=korg; t=1646070121;
+        bh=yWl87/l7rBweT9FrX1/+y+EbyeKeQI8YJ+qt6HRWL+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmbvwY00k3UnKt3VypvttQblpINafLUjc4hggCD38JXjLhl/+bLxpKj5kyGiFh9of
-         7PFWZxdoPQvb8AY8Tmi1GiFsiPNNaEr02vTWHIScXqnOD2Ttv0C3QfBGvskCbB4oGU
-         v7coOtsmS+wvD1pPzTAJcO6eDtG/ePXKBHSDdoQg=
+        b=Ebwm/SPlxfTOi0IegWqZXEzbuZgSKRXxl90o0D0F+CBR2lEXxZp1oVGoWkhGXq7LN
+         n9eq+4aUE2Ri1jiVw7fQZbZDH+suZJclCvsLXc88v13QOtz0y2ALYNBHtSi0z1dXn+
+         JC/KWBI2uM1q/7yW73A2GzH9Ig0lsewntlBtDxLU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.14 21/31] tracefs: Set the group ownership in apply_options() not parse_options()
-Date:   Mon, 28 Feb 2022 18:24:17 +0100
-Message-Id: <20220228172201.786955916@linuxfoundation.org>
+        stable@vger.kernel.org, Maher Sanalla <msanalla@nvidia.com>,
+        Avihai Horon <avihaih@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.15 084/139] net/mlx5: Update log_max_qp value to be 17 at most
+Date:   Mon, 28 Feb 2022 18:24:18 +0100
+Message-Id: <20220228172356.515559050@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Maher Sanalla <msanalla@nvidia.com>
 
-commit 851e99ebeec3f4a672bb5010cf1ece095acee447 upstream.
+commit 7f839965b2d77e1926ad08b23c51d60988f10a99 upstream.
 
-Al Viro brought it to my attention that the dentries may not be filled
-when the parse_options() is called, causing the call to set_gid() to
-possibly crash. It should only be called if parse_options() succeeds
-totally anyway.
+Currently, log_max_qp value is dependent on what FW reports as its max capability.
+In reality, due to a bug, some FWs report a value greater than 17, even though they
+don't support log_max_qp > 17.
 
-He suggested the logical place to do the update is in apply_options().
+This FW issue led the driver to exhaust memory on startup.
+Thus, log_max_qp value is set to be no more than 17 regardless
+of what FW reports, as it was before the cited commit.
 
-Link: https://lore.kernel.org/all/20220225165219.737025658@goodmis.org/
-Link: https://lkml.kernel.org/r/20220225153426.1c4cab6b@gandalf.local.home
-
-Cc: stable@vger.kernel.org
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: 48b27b6b5191 ("tracefs: Set all files to the same group ownership as the mount option")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: f79a609ea6bf ("net/mlx5: Update log_max_qp value to FW max capability")
+Signed-off-by: Maher Sanalla <msanalla@nvidia.com>
+Reviewed-by: Avihai Horon <avihaih@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/tracefs/inode.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -265,7 +265,6 @@ static int tracefs_parse_options(char *d
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
--			set_gid(tracefs_mount->mnt_root, gid);
- 			break;
- 		case Opt_mode:
- 			if (match_octal(&args[0], &option))
-@@ -292,7 +291,9 @@ static int tracefs_apply_options(struct
- 	inode->i_mode |= opts->mode;
+--- a/drivers/net/ethernet/mellanox/mlx5/core/main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/main.c
+@@ -516,7 +516,7 @@ static int handle_hca_cap(struct mlx5_co
  
- 	inode->i_uid = opts->uid;
--	inode->i_gid = opts->gid;
-+
-+	/* Set all the group ids to the mount option */
-+	set_gid(sb->s_root, opts->gid);
- 
- 	return 0;
- }
+ 	/* Check log_max_qp from HCA caps to set in current profile */
+ 	if (prof->log_max_qp == LOG_MAX_SUPPORTED_QPS) {
+-		prof->log_max_qp = MLX5_CAP_GEN_MAX(dev, log_max_qp);
++		prof->log_max_qp = min_t(u8, 17, MLX5_CAP_GEN_MAX(dev, log_max_qp));
+ 	} else if (MLX5_CAP_GEN_MAX(dev, log_max_qp) < prof->log_max_qp) {
+ 		mlx5_core_warn(dev, "log_max_qp value in current profile is %d, changing it to HCA capability limit (%d)\n",
+ 			       prof->log_max_qp,
 
 

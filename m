@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BFD4C6DFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC304C6E01
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiB1NVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S235581AbiB1NWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiB1NVo (ORCPT
+        with ESMTP id S235167AbiB1NWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:21:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB879C45
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:21:05 -0800 (PST)
+        Mon, 28 Feb 2022 08:22:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0EB79397;
+        Mon, 28 Feb 2022 05:22:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FDEAB80E46
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B67C340F0;
-        Mon, 28 Feb 2022 13:21:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD0A561331;
+        Mon, 28 Feb 2022 13:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8BCC340E7;
+        Mon, 28 Feb 2022 13:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646054463;
-        bh=KeGJTMJNqRcQCKpg0+iOp8H0LglmDHJQZv2HgM+qwwY=;
+        s=k20201202; t=1646054529;
+        bh=z8UlMYS9HM8W4/LUvFSvEhzPSuQv09Li2PxhJIdtSmI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AxviUN5EHwgMhvzV7tqR1qtOBnNk5vrbm84rTER0CIWF1VmIkto59cVi/BgGA1szW
-         AgnSWUzyQO4gTTcFzLESGOzNOKpXGmBbeg2te2S/6bGyFj094q6zIROHH6zq+DPg3S
-         gQCqRsw3SraX7+pDmpXJqQJQvyS6a+f8AZoJ9yMYDbCDvhQ0AgNbFWx9HXk+AkjZf6
-         22TULpk5fGuxAGQpIc07ZDeuPwa5+Pj9XnM756eR7Qy6JAddPS2GtPjvRCn0AABmIZ
-         nYzoBT/c3q7u6P2g8KlevkM9In47QCUHelWqjxcDQubWKgBavwtrPZIFasIhMW6BsJ
-         1VXqFN3ozDjnw==
-Date:   Mon, 28 Feb 2022 13:20:57 +0000
+        b=ABw/SJbTYZkDTZYNynoLLjkBDE0rUMGhKDO17cEPPQgsWHHlpRIzeX3LU9Ut+tzWC
+         /DRw7Ewhgdo1+rMNp3f2m+v3miQUA8KTgIpT1U47jHLTw6xT2Fi9+Vq7eor6JrttlN
+         JJ5lBoxtPhwT9JoMm4i9iSug41Vkxfmw6pC5VETJP/BTifpknYd7dADDbRONgdLHwz
+         7YVqR3tvjfSkEJkDGEGLGO9Fa+vLcapS8Gj6DSjrX5OJa2fLmT1u3Yss+BOS/GE8PS
+         ssuxrvVE5FHVPt+BQ9Otaz9BxpZM78a5TGkgBAxnX6Fnb8yL8bdSDLjvWpS3esH9p3
+         prxgA1Ykku92w==
+Date:   Mon, 28 Feb 2022 13:22:02 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     David Engraf <david.engraf@sysgo.com>
-Cc:     suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        mark.rutland@arm.com, elver@google.com, ebiederm@xmission.com,
-        seanjc@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: signal: nofpsimd: Do not allocate fp/simd context
- when not available
-Message-ID: <YhzMOSXJZbApYUmE@sirena.org.uk>
-References: <20220225104008.820289-1-david.engraf@sysgo.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH] ASoC: qcom: soundwire: Add support for controlling audio
+ CGCR from HLOS
+Message-ID: <YhzMeoNW7/OUJrMa@sirena.org.uk>
+References: <1646035750-25635-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aWi5TuiGes20Vavu"
+        protocol="application/pgp-signature"; boundary="kK4kZyJyOJ4RsEpU"
 Content-Disposition: inline
-In-Reply-To: <20220225104008.820289-1-david.engraf@sysgo.com>
+In-Reply-To: <1646035750-25635-1-git-send-email-quic_srivasam@quicinc.com>
 X-Cookie: Killing turkeys causes winter.
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,33 +65,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---aWi5TuiGes20Vavu
+--kK4kZyJyOJ4RsEpU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Feb 25, 2022 at 11:40:08AM +0100, David Engraf wrote:
-> Commit 6d502b6ba1b2 ("arm64: signal: nofpsimd: Handle fp/simd context for
-> signal frames") introduced saving the fp/simd context for signal handling
-> only when support is available. But setup_sigframe_layout() always
-> reserves memory for fp/simd context. The additional memory is not touched
-> because preserve_fpsimd_context() is not called and thus the magic is
-> invalid.
+On Mon, Feb 28, 2022 at 01:39:10PM +0530, Srinivasa Rao Mandadapu wrote:
 
-Reviwed-by: Mark Brown <broonie@kernel.org>
+> +	ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
+> +	if (IS_ERR(ctrl->audio_cgcr))
+> +		dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
 
---aWi5TuiGes20Vavu
+Doesn't this need a DT binding update?
+
+--kK4kZyJyOJ4RsEpU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIczDkACgkQJNaLcl1U
-h9B8wgf4nCn5QRzwuOVFmXGSoeGx2MbGTxp0GO4WZbq2rD4NSZksLKOjakcgAah1
-TFeRu26s9ZDgKVIJvz9bipIRB7UVjV5q+uxnAu/qgpxrd+EM4esh38p2qmjjxp27
-IBQBqUts+t9Zu+/pOVgsNsmR2RhDt8C81CwL0sg/r8UP/bfro8/UY5TBH56kNSmO
-GuLOjXhiFk4xu9qzqFRXurL/SO6Dra8anF8nN4O5+3xuitbIaWM9sUghxwZNcHdA
-4Xvehg69DDPWX3+eo+otzzMTcSVJ/eeSPCgBrsrXloisSZqbCxWNhzPpsNKgcGAz
-UOrnkt39iK9zDsTZ3HvxUDYpbI+b
-=bNmK
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIczHkACgkQJNaLcl1U
+h9B0DQf/eqHBl2NodP/t4MJrv+UXLGpLCOMpY5mt7kVV4OLYSXYUpD5r/sAB/NmG
+Mrl9LHy1D/5nXyG0PiUtkjPMuJBlKJv5eaMV3dUDrXDF6oLot3eEDEpamF9pvPL8
+8um8g/HemA7ztGH7HXY1Gi8U5TJmt1IhGC/Bll19zCSyZAA5eH/f6WZ5CNJz+TzL
+5gSY0ye5Jsu1ybuQ3rMBs+KJW6+dR/6FeMFZUVY3KM5Dcu6IR25mx7wOcrw26XI/
+PupAgyOgXtO2uGAbnYYadNXdL262odddF/+2nrYKkOHi0mGqgxhV27IJM+zTOM+n
+/2jzjVSC6xmClBcZ44WRiI14PMP0JA==
+=flDI
 -----END PGP SIGNATURE-----
 
---aWi5TuiGes20Vavu--
+--kK4kZyJyOJ4RsEpU--

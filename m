@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F300B4C6E98
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC7F4C6E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbiB1NvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S236586AbiB1Nv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiB1NvW (ORCPT
+        with ESMTP id S230155AbiB1Nv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:51:22 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737385130C;
-        Mon, 28 Feb 2022 05:50:43 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id C45121F438C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646056242;
-        bh=01LHGkJJ+DpNYyT1azd35ZIb6hFj6cZ6HVkPFWhLSpg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EVphFN2nlSfP7QnVMQPprWeHY3LGcr4CNLIyJwc93JAON0XRrHPUEBxJtTps4YWN/
-         teZLX3YIek+zUtUDvBSoQrBSI/MMaewUqah04AgMl1Q2EoUcX49lKK3o3X3lDFTBeQ
-         Ciwc4QZJbinmesi65g4Cksnl/DPy8HmKBYR1dBf3CG73Y2GP3KeK5HTIkqXRSKZgHR
-         6g7KLIla/2XXP7PKHafiVilugVgEELIR4r3POzlUd375pz3+5AaS+yT3BOAkd7enBY
-         wLsHX+VBenM5SuXKynOeeyhdGojSDhCTFd+XPt7gt+38YBVce7LBPgpfWq7bQghohU
-         ob9f2ZHuNUTSg==
-Message-ID: <7ba0ee87-c193-9834-d0b4-ff3e06ced82b@collabora.com>
-Date:   Mon, 28 Feb 2022 14:50:37 +0100
+        Mon, 28 Feb 2022 08:51:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3207CDF3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 05:51:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2324613EA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5246DC340E7;
+        Mon, 28 Feb 2022 13:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646056276;
+        bh=IETDOddOFXjvnkfs3zJwg2g/A8kTkjziyY9ZwVfPiR8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rJ+7Wdx7/88f7zoyt2oo2PO9fKVnYCBT2xPpc5usQaXmtUdPybHVFoGnfdyg437z8
+         cRkze12El+fuV56LDO0A2tsOHPT0ZAREAnrAUojL7ip2dA+MUNThfZJVGr+Q8qvBdt
+         9f9fFBuz6LSUOofndhuPNszQvefaNgRXIWu7SUdtZsJewn4TbgDukHhdZfeuEalY3N
+         y93BQVzssxDUuUDjYrKzi4bELCSz2nQE1dXzMxIGdDMwUn36QBuVsYxK9p0ntYU4GY
+         LJC6nD4yuywz3/Oy/nnhNukoupzc0iGDX2kxxOJDgS4uc/ZqgtzXu7c9F+RULeIi6E
+         Jfu8O+f5/FSSA==
+Date:   Mon, 28 Feb 2022 15:51:11 +0200
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [git pull] habanalabs pull request for kernel 5.18
+Message-ID: <20220228135111.GA1174849@ogabbay-vm-u20.habana-labs.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v5 00/34] MT8195 IOMMU SUPPORT
-Content-Language: en-US
-To:     Joerg Roedel <joro@8bytes.org>, Yong Wu <yong.wu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
-        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, libo.kang@mediatek.com,
-        chengci.xu@mediatek.com
-References: <20220217113453.13658-1-yong.wu@mediatek.com>
- <YhzBSsn/zUlGg5JE@8bytes.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YhzBSsn/zUlGg5JE@8bytes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,62 +51,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/02/22 13:34, Joerg Roedel ha scritto:
-> Hi Yong Wu,
-> 
-> On Thu, Feb 17, 2022 at 07:34:19PM +0800, Yong Wu wrote:
->> Yong Wu (34):
->>    dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
->>    dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
->>    iommu/mediatek: Fix 2 HW sharing pgtable issue
->>    iommu/mediatek: Add list_del in mtk_iommu_remove
->>    iommu/mediatek: Remove clk_disable in mtk_iommu_remove
->>    iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
->>    iommu/mediatek: Add mutex for data in the mtk_iommu_domain
->>    iommu/mediatek: Adapt sharing and non-sharing pgtable case
->>    iommu/mediatek: Add 12G~16G support for multi domains
->>    iommu/mediatek: Add a flag DCM_DISABLE
->>    iommu/mediatek: Add a flag NON_STD_AXI
->>    iommu/mediatek: Remove the granule in the tlb flush
->>    iommu/mediatek: Always enable output PA over 32bits in isr
->>    iommu/mediatek: Add SUB_COMMON_3BITS flag
->>    iommu/mediatek: Add IOMMU_TYPE flag
->>    iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
->>    iommu/mediatek: Adjust device link when it is sub-common
->>    iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
->>    iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
->>    iommu/mediatek: Add infra iommu support
->>    iommu/mediatek: Add PCIe support
->>    iommu/mediatek: Add mt8195 support
->>    iommu/mediatek: Only adjust code about register base
->>    iommu/mediatek: Just move code position in hw_init
->>    iommu/mediatek: Separate mtk_iommu_data for v1 and v2
->>    iommu/mediatek: Remove mtk_iommu.h
->>    iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
->>    iommu/mediatek: Add mtk_iommu_bank_data structure
->>    iommu/mediatek: Initialise bank HW for each a bank
->>    iommu/mediatek: Change the domid to iova_region_id
->>    iommu/mediatek: Get the proper bankid for multi banks
->>    iommu/mediatek: Initialise/Remove for multi bank dev
->>    iommu/mediatek: Backup/restore regsiters for multi banks
->>    iommu/mediatek: mt8195: Enable multi banks for infra iommu
-> 
-> This doesn't apply cleanly, can you please send a version rebased to
-> v5.17-rc4?
-> 
-> Thanks,
-> 
-> 	Joerg
+Hi Greg,
 
-Hello Joerg,
+This is habanalabs pull request for the merge window of kernel 5.18.
+Although it adds small number of features, this pull request mainly
+fixes multiple bugs in the code and also does some re-factoring to
+better organize the code.
 
-this series depends on the following series:
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=592275
-
-...which is also well tested and ready to be merged in.
-
-Applying Yong's series without the mentioned series from Dafna would not work.
-
+Full details are in the tag.
 
 Thanks,
-Angelo
+Oded
+
+The following changes since commit 085686fb8491a7cbf6a7260d5b9d4169a041c340:
+
+  Merge 5.17-rc6 into char-misc-next (2022-02-28 07:30:32 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git tags/misc-habanalabs-next-2022-02-28
+
+for you to fetch changes up to 655221c56739058ae73a7aabd90847a024dabff6:
+
+  habanalabs: remove deprecated firmware states (2022-02-28 14:34:50 +0200)
+
+----------------------------------------------------------------
+This tag contains habanalabs driver changes for v5.18:
+
+- Add new feature of recording time-stamp when a completion
+  queue counter reaches a target value as determined by the
+  userspace application. This is used by the graph compiler
+  to accurately measure the time it takes for certain workloads
+  to execute, which helps to fine-tune future compilations.
+
+- Add two new attributes to sysfs that expose the VRM and
+  f/w OS version
+
+- Add a delay to the reset path that allows the driver to
+  receive and handle additional events from the f/w before
+  doing the reset. This can help when debugging why a reset
+  event was received from the f/w.
+
+- Re-factor some of the sysfs code in the driver. Mainly,
+  move functions from hwmgr.c to more relevant files and
+  totally remove hwmgr.c file.
+
+- Fix multiple bugs such as races, use-after-free, ignoring
+  error codes, etc.
+
+- As usual, multiple minor changes and small fixes.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      habanalabs: silence an uninitialized variable warning
+
+Dani Liberman (2):
+      habanalabs: fix soft reset flow in case of failure
+      habanalabs: fix race when waiting on encaps signal
+
+Jiasheng Jiang (1):
+      habanalabs: Add check for pci_enable_device
+
+Oded Gabbay (26):
+      habanalabs/gaudi: disable CGM permanently
+      habanalabs: remove ASIC functions of clock gating
+      habanalabs: sysfs functions should be in sysfs.c
+      habanalabs: get clk is common function
+      habanalabs: remove hwmgr.c
+      habanalabs: move more f/w functions to firmware_if.c
+      habanalabs: remove asic callback set_pll_profile()
+      habanalabs: rename dev_attr_grp to dev_clk_attr_grp
+      habanalabs: add vrm version to sysfs
+      habanalabs: remove power9 workaround for dma support
+      habanalabs: use common wrapper for MMU cache invalidation
+      habanalabs: there is no kernel TDR in future ASICs
+      habanalabs: don't free phys_pg_pack inside lock
+      habanalabs: update to latest f/w specs
+      habanalabs: expose number of user interrupts
+      habanalabs: reject host map with mmu disabled
+      habanalabs: fix user interrupt wait when timeout is 0
+      habanalabs: fix race between wait and irq
+      habanalabs: remove duplicate print
+      habanalabs: fix spelling mistake
+      habanalabs: rephrase error messages in PCI initialization
+      habanalabs: fix use-after-free bug
+      habanalabs: add missing include of vmalloc.h
+      habanalabs: change function to static
+      habanalabs/gaudi: handle axi errors from NIC engines
+      habanalabs/gaudi: add missing handling of NIC related events
+
+Ofir Bitton (1):
+      habanalabs: remove deprecated firmware states
+
+Ohad Sharabi (6):
+      habanalabs: fix possible memory leak in MMU DR fini
+      habanalabs: make some MMU functions common
+      habanalabs: duplicate HOP table props to MMU props
+      habanalabs: use kernel-doc for memory ioctl documentation
+      habanalabs: allow user to set allocation page size
+      habanalabs: make sure device mem alloc is page aligned
+
+Rajaravi Krishna Katta (1):
+      habanalabs: sysfs support for fw os version
+
+Tomer Tayar (10):
+      habanalabs: check the return value of hl_cs_poll_fences()
+      habanalabs: avoid copying pll data if pll_info_get fails
+      habanalabs: add missing error check in sysfs clk_freq_mhz_show
+      habanalabs: add missing error check in sysfs max_power_show
+      habanalabs: prevent false heartbeat failure during soft-reset
+      habanalabs: enable stop-on-error debugfs setting per ASIC
+      habanalabs: use proper max_power variable for device utilization
+      habanalabs: set max power on device init per ASIC
+      habanalabs: avoid using an uninitialized variable
+      habanalabs: add an option to delay a device reset
+
+farah kassabri (2):
+      habanalabs: Timestamps buffers registration
+      habanalabs: Fix reset upon device release bug
+
+ .../ABI/testing/debugfs-driver-habanalabs          |  20 +-
+ Documentation/ABI/testing/sysfs-driver-habanalabs  |  16 +-
+ drivers/misc/habanalabs/common/Makefile            |   2 +-
+ drivers/misc/habanalabs/common/command_buffer.c    |   4 +-
+ .../misc/habanalabs/common/command_submission.c    | 265 +++++++++---
+ drivers/misc/habanalabs/common/debugfs.c           |  40 +-
+ drivers/misc/habanalabs/common/device.c            |  53 ++-
+ drivers/misc/habanalabs/common/firmware_if.c       | 152 ++++++-
+ drivers/misc/habanalabs/common/habanalabs.h        | 209 +++++++---
+ drivers/misc/habanalabs/common/habanalabs_drv.c    |   3 +-
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c  |  13 +-
+ drivers/misc/habanalabs/common/hwmgr.c             | 117 ------
+ drivers/misc/habanalabs/common/irq.c               | 127 +++++-
+ drivers/misc/habanalabs/common/memory.c            | 360 ++++++++++++++--
+ drivers/misc/habanalabs/common/mmu/mmu.c           |  55 +++
+ drivers/misc/habanalabs/common/mmu/mmu_v1.c        |  47 +--
+ drivers/misc/habanalabs/common/pci/pci.c           |   9 +-
+ drivers/misc/habanalabs/common/sysfs.c             | 176 ++++----
+ drivers/misc/habanalabs/gaudi/gaudi.c              | 462 +++++++--------------
+ drivers/misc/habanalabs/gaudi/gaudiP.h             |   8 +-
+ drivers/misc/habanalabs/goya/goya.c                |  45 +-
+ drivers/misc/habanalabs/goya/goyaP.h               |   6 +-
+ drivers/misc/habanalabs/goya/goya_hwmgr.c          |  67 +--
+ drivers/misc/habanalabs/include/common/cpucp_if.h  |   2 +
+ .../misc/habanalabs/include/common/hl_boot_if.h    |   5 +
+ .../habanalabs/include/gaudi/gaudi_async_events.h  |  10 +
+ include/uapi/misc/habanalabs.h                     | 146 ++++---
+ 27 files changed, 1504 insertions(+), 915 deletions(-)
+ delete mode 100644 drivers/misc/habanalabs/common/hwmgr.c

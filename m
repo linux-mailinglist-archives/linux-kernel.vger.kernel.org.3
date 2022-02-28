@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51404C6D01
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A2F4C6CF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiB1MqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S236627AbiB1MqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbiB1MqH (ORCPT
+        with ESMTP id S236720AbiB1MqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 07:46:07 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B444757F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:08 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id h17so5043082plc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:08 -0800 (PST)
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1432F75C20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:14 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id u16so11026340pfg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:45:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F+KBq6RzwgdLLJoe+tsayKrNTKVoiagle0XBxHTtuXw=;
-        b=pTIw9yHH8kas/CWWFcZ9t94WLWakoVSGdbFIA2guoZrzNB47lYdUaIIBQvTT8kxFDc
-         p1gFCVi/RFtYZKSvE/wUWZ8BYw84o27wv1ILF4Y7XlisxsxZs8PAl02t715b+e7kRujn
-         Wk8BHxNWKrDj02t1B3Y36ctTr1vqqNf9AepE9dfgZRVIwmTN7QW33eujKj55eVjJVVX/
-         TuPf559S3YxBIrh/6tbsY2YF/6gsr/plS7OQ6sjI2Y8pfRAFg130+8qwPjhZYmiZB2nj
-         VpMRE6o5GFyqgUYaunsjTgT3mJefzgJApoaBlEy3qhTgOmIUBun6xM7D60URLd8AkQw1
-         3wYw==
+        bh=OzxxAcSZ3QzNXpGWZ3mCL6qTxkzBqAQS2IireUric5Y=;
+        b=xgkTzjwKHjrxOUhcXl++/6hx3IKreYJSI//ey+ZlPw03zUhNl2niilRYFaczu95rcW
+         AWuteZKexkELRFd7h0xhW7sqo9DOlfpfvAvARsUlcZ/YBHN3q0t/dcrTw0O37/8e7iSF
+         hPbYqQXEyW2nfsIeOjIP10bavbS73C6NVC3yFZvO4+W/HvZDHYAQB8XQ2fqZUsj6D30G
+         7QmjoreE/xo7Dqp2H/z6zMb8ndarXQCJPpLsMsW/CZYb41RIO4Ji3EpEB6J1OvrcPpQ2
+         Eo1TwOsr3+NE8lciVmrAbgAkIiFj2iPljp3Wfn+rCj4DnT1ZQnA/i/zwXNSpv/l0FBCU
+         uLyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F+KBq6RzwgdLLJoe+tsayKrNTKVoiagle0XBxHTtuXw=;
-        b=StfPjMzsR4leUMICaFRPVThhdI8M0iEQGE1xN17w6UNk5V7WBgq1x4OUil3eM9hvad
-         1EllRcs3l9K6FSFrf6vG26F/HWMxz+Y/tk9te6n3AmwSicsP9so5/ozVqoaXgUOzyVWz
-         fH0SfOJ3Sgd0DbHwpOawpAhAeSXwiEL7HDuK6lBIc/3wSmaudZSNSQG/C3OW5YD4gp1P
-         pD1gZujYwQbZ2LztyNdyuYMb2eGT3ZbnmBjxbM2TsiEHhD3gLgJCAbJ45Qv59HjIYw5a
-         6e5x1hyeJjRrjm53aXatZvfMI+2gNEU7YwodMdl0NK+eqNPWCkP8DyJSKFhyeeUunp4R
-         hZHQ==
-X-Gm-Message-State: AOAM532Y2FQYK9mUZ+OCWMzyeRdFoz4+ifFKF6uvs9CvvT4BkFsh1AFU
-        86kQqrePSVfLhCSKXaQFZIsQ
-X-Google-Smtp-Source: ABdhPJwTxfg0csI9uswuYIBC/Ef69Q2hlQj120Qf533tug9N5s+j+UYhUpQa8weUTAZxskFel9ypbA==
-X-Received: by 2002:a17:902:d888:b0:151:6fe8:6e68 with SMTP id b8-20020a170902d88800b001516fe86e68mr1958933plz.158.1646052308329;
-        Mon, 28 Feb 2022 04:45:08 -0800 (PST)
+        bh=OzxxAcSZ3QzNXpGWZ3mCL6qTxkzBqAQS2IireUric5Y=;
+        b=jYbENJ0YQ3Hy8Gu28PvWVhBjP8f+n6C6ae7GBZdjaRrJ8luCWUuvhK0IYdd50qUuZh
+         viHQ6phl5CmmXlB3khgiVsHpFBwwe8s783531eona47eauETd2NgPI+9d6Upr6hv0qpH
+         4MG9I7ZTfjvAhbv+aNACLmRtfvM4S3G5bFgsi2+tPNhDtZTIad3xTb96GhqnniE/gDtP
+         FWHKzlTQA+Bjqf9+TBOssIrzaKClBhaeIulSTN04/4fbYa4k6PZFSNMSfhI/WIRuSDT7
+         k3iIHrID+ViWRDw4DEsVVofi6Vo2/Pb4yI2Uoi2OhhXeJCm5RBfMHFT9jp9eB7lMHfOX
+         V5Wg==
+X-Gm-Message-State: AOAM531O4ue0+eIYjHelSZPYfNcUqRYOo9NuhXHzsePlxLZZBpaWKkmF
+        OUbwh0Zlo4hon3SSYNenFAc7
+X-Google-Smtp-Source: ABdhPJz9UF9zFkFSbdhTGwhnqmGMLsMZbC70CUVHi2Y5xxs5dgqdzgDn6e9K6ZsOkObqNKGzTI6Iwg==
+X-Received: by 2002:a65:52cc:0:b0:374:3ee6:c632 with SMTP id z12-20020a6552cc000000b003743ee6c632mr16912963pgp.91.1646052313523;
+        Mon, 28 Feb 2022 04:45:13 -0800 (PST)
 Received: from localhost.localdomain ([117.207.25.37])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.45.03
+        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.45.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:45:08 -0800 (PST)
+        Mon, 28 Feb 2022 04:45:13 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
@@ -57,9 +57,9 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, elder@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 13/27] bus: mhi: ep: Add support for managing MMIO registers
-Date:   Mon, 28 Feb 2022 18:13:30 +0530
-Message-Id: <20220228124344.77359-14-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 14/27] bus: mhi: ep: Add support for ring management
+Date:   Mon, 28 Feb 2022 18:13:31 +0530
+Message-Id: <20220228124344.77359-15-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
 References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
@@ -75,419 +75,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for managing the Memory Mapped Input Output (MMIO) registers
-of the MHI bus. All MHI operations are carried out using the MMIO registers
-by both host and the endpoint device.
+Add support for managing the MHI ring. The MHI ring is a circular queue
+of data structures used to pass the information between host and the
+endpoint.
 
-The MMIO registers reside inside the endpoint device memory (fixed
-location based on the platform) and the address is passed by the MHI EP
-controller driver during its registration.
+MHI support 3 types of rings:
+
+1. Transfer ring
+2. Event ring
+3. Command ring
+
+All rings reside inside the host memory and the MHI EP device maps it to
+the device memory using blocks like PCIe iATU. The mapping is handled in
+the MHI EP controller driver itself.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
  drivers/bus/mhi/ep/Makefile   |   2 +-
- drivers/bus/mhi/ep/internal.h |  26 ++++
- drivers/bus/mhi/ep/main.c     |   6 +-
- drivers/bus/mhi/ep/mmio.c     | 272 ++++++++++++++++++++++++++++++++++
- include/linux/mhi_ep.h        |  18 +++
- 5 files changed, 322 insertions(+), 2 deletions(-)
- create mode 100644 drivers/bus/mhi/ep/mmio.c
+ drivers/bus/mhi/ep/internal.h |  18 ++++
+ drivers/bus/mhi/ep/ring.c     | 197 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 216 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/bus/mhi/ep/ring.c
 
 diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
-index 64e29252b608..a1555ae287ad 100644
+index a1555ae287ad..7ba0e04801eb 100644
 --- a/drivers/bus/mhi/ep/Makefile
 +++ b/drivers/bus/mhi/ep/Makefile
 @@ -1,2 +1,2 @@
  obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
--mhi_ep-y := main.o
-+mhi_ep-y := main.o mmio.o
+-mhi_ep-y := main.o mmio.o
++mhi_ep-y := main.o mmio.o ring.o
 diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
-index 58ec5fdc503f..139e939fcf57 100644
+index 139e939fcf57..b3b8770f2f4e 100644
 --- a/drivers/bus/mhi/ep/internal.h
 +++ b/drivers/bus/mhi/ep/internal.h
-@@ -151,4 +151,30 @@ struct mhi_ep_chan {
+@@ -114,6 +114,11 @@ union mhi_ep_ring_ctx {
+ 	struct mhi_generic_ctx generic;
+ };
+ 
++struct mhi_ep_ring_item {
++	struct list_head node;
++	struct mhi_ep_ring *ring;
++};
++
+ struct mhi_ep_ring {
+ 	struct mhi_ep_cntrl *mhi_cntrl;
+ 	union mhi_ep_ring_ctx *ring_ctx;
+@@ -126,6 +131,9 @@ struct mhi_ep_ring {
+ 	u32 db_offset_h;
+ 	u32 db_offset_l;
+ 	u32 ch_id;
++	u32 er_index;
++	u32 irq_vector;
++	bool started;
+ };
+ 
+ struct mhi_ep_cmd {
+@@ -151,6 +159,16 @@ struct mhi_ep_chan {
  	bool skip_td;
  };
  
-+/* MMIO related functions */
-+u32 mhi_ep_mmio_read(struct mhi_ep_cntrl *mhi_cntrl, u32 offset);
-+void mhi_ep_mmio_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 val);
-+void mhi_ep_mmio_masked_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 mask, u32 val);
-+u32 mhi_ep_mmio_masked_read(struct mhi_ep_cntrl *dev, u32 offset, u32 mask);
-+void mhi_ep_mmio_enable_ctrl_interrupt(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_disable_ctrl_interrupt(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_enable_cmdb_interrupt(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_disable_cmdb_interrupt(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_enable_chdb(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
-+void mhi_ep_mmio_disable_chdb(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
-+void mhi_ep_mmio_enable_chdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl);
-+bool mhi_ep_mmio_read_chdb_status_interrupts(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_mask_interrupts(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_get_chc_base(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_get_erc_base(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_get_crc_base(struct mhi_ep_cntrl *mhi_cntrl);
-+u64 mhi_ep_mmio_get_db(struct mhi_ep_ring *ring);
-+void mhi_ep_mmio_set_env(struct mhi_ep_cntrl *mhi_cntrl, u32 value);
-+void mhi_ep_mmio_clear_reset(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_reset(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_get_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state *state,
-+			       bool *mhi_reset);
-+void mhi_ep_mmio_init(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_mmio_update_ner(struct mhi_ep_cntrl *mhi_cntrl);
++/* MHI Ring related functions */
++void mhi_ep_ring_init(struct mhi_ep_ring *ring, enum mhi_ep_ring_type type, u32 id);
++void mhi_ep_ring_reset(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring);
++int mhi_ep_ring_start(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring,
++		      union mhi_ep_ring_ctx *ctx);
++size_t mhi_ep_ring_addr2offset(struct mhi_ep_ring *ring, u64 ptr);
++int mhi_ep_ring_add_element(struct mhi_ep_ring *ring, struct mhi_ring_element *element);
++void mhi_ep_ring_inc_index(struct mhi_ep_ring *ring);
++int mhi_ep_update_wr_offset(struct mhi_ep_ring *ring);
 +
- #endif
-diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 3afae0bfd83c..d76387c4d5fa 100644
---- a/drivers/bus/mhi/ep/main.c
-+++ b/drivers/bus/mhi/ep/main.c
-@@ -214,7 +214,7 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
- 	struct mhi_ep_device *mhi_dev;
- 	int ret;
- 
--	if (!mhi_cntrl || !mhi_cntrl->cntrl_dev)
-+	if (!mhi_cntrl || !mhi_cntrl->cntrl_dev || !mhi_cntrl->mmio)
- 		return -EINVAL;
- 
- 	ret = mhi_ep_chan_init(mhi_cntrl, config);
-@@ -227,6 +227,10 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
- 		goto err_free_ch;
- 	}
- 
-+	/* Set MHI version and AMSS EE before enumeration */
-+	mhi_ep_mmio_write(mhi_cntrl, EP_MHIVER, config->mhi_version);
-+	mhi_ep_mmio_set_env(mhi_cntrl, MHI_EE_AMSS);
-+
- 	/* Set controller index */
- 	mhi_cntrl->index = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
- 	if (mhi_cntrl->index < 0) {
-diff --git a/drivers/bus/mhi/ep/mmio.c b/drivers/bus/mhi/ep/mmio.c
+ /* MMIO related functions */
+ u32 mhi_ep_mmio_read(struct mhi_ep_cntrl *mhi_cntrl, u32 offset);
+ void mhi_ep_mmio_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 val);
+diff --git a/drivers/bus/mhi/ep/ring.c b/drivers/bus/mhi/ep/ring.c
 new file mode 100644
-index 000000000000..311c5d94c4d2
+index 000000000000..1029eed2cc28
 --- /dev/null
-+++ b/drivers/bus/mhi/ep/mmio.c
-@@ -0,0 +1,272 @@
++++ b/drivers/bus/mhi/ep/ring.c
+@@ -0,0 +1,197 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2022 Linaro Ltd.
 + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 + */
 +
-+#include <linux/bitfield.h>
-+#include <linux/io.h>
 +#include <linux/mhi_ep.h>
-+
 +#include "internal.h"
 +
-+u32 mhi_ep_mmio_read(struct mhi_ep_cntrl *mhi_cntrl, u32 offset)
++size_t mhi_ep_ring_addr2offset(struct mhi_ep_ring *ring, u64 ptr)
 +{
-+	return readl(mhi_cntrl->mmio + offset);
++	return (ptr - ring->rbase) / sizeof(struct mhi_ring_element);
 +}
 +
-+void mhi_ep_mmio_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 val)
++static u32 mhi_ep_ring_num_elems(struct mhi_ep_ring *ring)
 +{
-+	writel(val, mhi_cntrl->mmio + offset);
++	return le64_to_cpu(ring->ring_ctx->generic.rlen) / sizeof(struct mhi_ring_element);
 +}
 +
-+void mhi_ep_mmio_masked_write(struct mhi_ep_cntrl *mhi_cntrl, u32 offset, u32 mask, u32 val)
++void mhi_ep_ring_inc_index(struct mhi_ep_ring *ring)
 +{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, offset);
-+	regval &= ~mask;
-+	regval |= (val << __ffs(mask)) & mask;
-+	mhi_ep_mmio_write(mhi_cntrl, offset, regval);
++	ring->rd_offset = (ring->rd_offset + 1) % ring->ring_size;
 +}
 +
-+u32 mhi_ep_mmio_masked_read(struct mhi_ep_cntrl *dev, u32 offset, u32 mask)
-+{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(dev, offset);
-+	regval &= mask;
-+	regval >>= __ffs(mask);
-+
-+	return regval;
-+}
-+
-+void mhi_ep_mmio_get_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state *state,
-+				bool *mhi_reset)
-+{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_MHICTRL);
-+	*state = FIELD_GET(MHICTRL_MHISTATE_MASK, regval);
-+	*mhi_reset = !!FIELD_GET(MHICTRL_RESET_MASK, regval);
-+}
-+
-+static void mhi_ep_mmio_set_chdb(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id, bool enable)
-+{
-+	u32 chid_mask, chid_shift, chdb_idx, val;
-+
-+	chid_shift = ch_id % 32;
-+	chid_mask = BIT(chid_shift);
-+	chdb_idx = ch_id / 32;
-+
-+	val = enable ? 1 : 0;
-+
-+	mhi_ep_mmio_masked_write(mhi_cntrl, MHI_CHDB_INT_MASK_n(chdb_idx), chid_mask, val);
-+
-+	/* Update the local copy of the channel mask */
-+	mhi_cntrl->chdb[chdb_idx].mask &= ~chid_mask;
-+	mhi_cntrl->chdb[chdb_idx].mask |= val << chid_shift;
-+}
-+
-+void mhi_ep_mmio_enable_chdb(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id)
-+{
-+	mhi_ep_mmio_set_chdb(mhi_cntrl, ch_id, true);
-+}
-+
-+void mhi_ep_mmio_disable_chdb(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id)
-+{
-+	mhi_ep_mmio_set_chdb(mhi_cntrl, ch_id, false);
-+}
-+
-+static void mhi_ep_mmio_set_chdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl, bool enable)
-+{
-+	u32 val, i;
-+
-+	val = enable ? MHI_CHDB_INT_MASK_n_EN_ALL : 0;
-+
-+	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++) {
-+		mhi_ep_mmio_write(mhi_cntrl, MHI_CHDB_INT_MASK_n(i), val);
-+		mhi_cntrl->chdb[i].mask = val;
-+	}
-+}
-+
-+void mhi_ep_mmio_enable_chdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_set_chdb_interrupts(mhi_cntrl, true);
-+}
-+
-+static void mhi_ep_mmio_mask_chdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_set_chdb_interrupts(mhi_cntrl, false);
-+}
-+
-+bool mhi_ep_mmio_read_chdb_status_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	bool chdb = 0;
-+	u32 i;
-+
-+	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++) {
-+		mhi_cntrl->chdb[i].status = mhi_ep_mmio_read(mhi_cntrl, MHI_CHDB_INT_STATUS_n(i));
-+		chdb |= !!mhi_cntrl->chdb[i].status;
-+	}
-+
-+	/* Return whether a channel doorbell interrupt occurred or not */
-+	return chdb;
-+}
-+
-+static void mhi_ep_mmio_set_erdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl, bool enable)
-+{
-+	u32 val, i;
-+
-+	val = enable ? MHI_ERDB_INT_MASK_n_EN_ALL : 0;
-+
-+	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++)
-+		mhi_ep_mmio_write(mhi_cntrl, MHI_ERDB_INT_MASK_n(i), val);
-+}
-+
-+static void mhi_ep_mmio_mask_erdb_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_set_erdb_interrupts(mhi_cntrl, false);
-+}
-+
-+void mhi_ep_mmio_enable_ctrl_interrupt(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_masked_write(mhi_cntrl, MHI_CTRL_INT_MASK,
-+				  MHI_CTRL_MHICTRL_MASK, 1);
-+}
-+
-+void mhi_ep_mmio_disable_ctrl_interrupt(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_masked_write(mhi_cntrl, MHI_CTRL_INT_MASK,
-+				  MHI_CTRL_MHICTRL_MASK, 0);
-+}
-+
-+void mhi_ep_mmio_enable_cmdb_interrupt(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_masked_write(mhi_cntrl, MHI_CTRL_INT_MASK,
-+				  MHI_CTRL_CRDB_MASK, 1);
-+}
-+
-+void mhi_ep_mmio_disable_cmdb_interrupt(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_masked_write(mhi_cntrl, MHI_CTRL_INT_MASK,
-+				  MHI_CTRL_CRDB_MASK, 0);
-+}
-+
-+void mhi_ep_mmio_mask_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	mhi_ep_mmio_disable_ctrl_interrupt(mhi_cntrl);
-+	mhi_ep_mmio_disable_cmdb_interrupt(mhi_cntrl);
-+	mhi_ep_mmio_mask_chdb_interrupts(mhi_cntrl);
-+	mhi_ep_mmio_mask_erdb_interrupts(mhi_cntrl);
-+}
-+
-+static void mhi_ep_mmio_clear_interrupts(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	u32 i;
-+
-+	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++)
-+		mhi_ep_mmio_write(mhi_cntrl, MHI_CHDB_INT_CLEAR_n(i),
-+				   MHI_CHDB_INT_CLEAR_n_CLEAR_ALL);
-+
-+	for (i = 0; i < MHI_MASK_ROWS_CH_EV_DB; i++)
-+		mhi_ep_mmio_write(mhi_cntrl, MHI_ERDB_INT_CLEAR_n(i),
-+				   MHI_ERDB_INT_CLEAR_n_CLEAR_ALL);
-+
-+	mhi_ep_mmio_write(mhi_cntrl, MHI_CTRL_INT_CLEAR,
-+			   MHI_CTRL_INT_MMIO_WR_CLEAR |
-+			   MHI_CTRL_INT_CRDB_CLEAR |
-+			   MHI_CTRL_INT_CRDB_MHICTRL_CLEAR);
-+}
-+
-+void mhi_ep_mmio_get_chc_base(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_CCABAP_HIGHER);
-+	mhi_cntrl->ch_ctx_host_pa = regval;
-+	mhi_cntrl->ch_ctx_host_pa <<= 32;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_CCABAP_LOWER);
-+	mhi_cntrl->ch_ctx_host_pa |= regval;
-+}
-+
-+void mhi_ep_mmio_get_erc_base(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_ECABAP_HIGHER);
-+	mhi_cntrl->ev_ctx_host_pa = regval;
-+	mhi_cntrl->ev_ctx_host_pa <<= 32;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_ECABAP_LOWER);
-+	mhi_cntrl->ev_ctx_host_pa |= regval;
-+}
-+
-+void mhi_ep_mmio_get_crc_base(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	u32 regval;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_CRCBAP_HIGHER);
-+	mhi_cntrl->cmd_ctx_host_pa = regval;
-+	mhi_cntrl->cmd_ctx_host_pa <<= 32;
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_CRCBAP_LOWER);
-+	mhi_cntrl->cmd_ctx_host_pa |= regval;
-+}
-+
-+u64 mhi_ep_mmio_get_db(struct mhi_ep_ring *ring)
++static int __mhi_ep_cache_ring(struct mhi_ep_ring *ring, size_t end)
 +{
 +	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-+	u64 db_offset;
-+	u32 regval;
++	struct device *dev = &mhi_cntrl->mhi_dev->dev;
++	size_t start, copy_size;
++	int ret;
 +
-+	regval = mhi_ep_mmio_read(mhi_cntrl, ring->db_offset_h);
-+	db_offset = regval;
-+	db_offset <<= 32;
++	/* Don't proceed in the case of event ring. This happens during mhi_ep_ring_start(). */
++	if (ring->type == RING_TYPE_ER)
++		return 0;
 +
-+	regval = mhi_ep_mmio_read(mhi_cntrl, ring->db_offset_l);
-+	db_offset |= regval;
++	/* No need to cache the ring if write pointer is unmodified */
++	if (ring->wr_offset == end)
++		return 0;
 +
-+	return db_offset;
++	start = ring->wr_offset;
++	if (start < end) {
++		copy_size = (end - start) * sizeof(struct mhi_ring_element);
++		ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
++						(start * sizeof(struct mhi_ring_element)),
++						&ring->ring_cache[start], copy_size);
++		if (ret < 0)
++			return ret;
++	} else {
++		copy_size = (ring->ring_size - start) * sizeof(struct mhi_ring_element);
++		ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
++						(start * sizeof(struct mhi_ring_element)),
++						&ring->ring_cache[start], copy_size);
++		if (ret < 0)
++			return ret;
++
++		if (end) {
++			ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase,
++							&ring->ring_cache[0],
++							end * sizeof(struct mhi_ring_element));
++			if (ret < 0)
++				return ret;
++		}
++	}
++
++	dev_dbg(dev, "Cached ring: start %zu end %zu size %zu\n", start, end, copy_size);
++
++	return 0;
 +}
 +
-+void mhi_ep_mmio_set_env(struct mhi_ep_cntrl *mhi_cntrl, u32 value)
++static int mhi_ep_cache_ring(struct mhi_ep_ring *ring, u64 wr_ptr)
 +{
-+	mhi_ep_mmio_write(mhi_cntrl, EP_BHI_EXECENV, value);
++	size_t wr_offset;
++	int ret;
++
++	wr_offset = mhi_ep_ring_addr2offset(ring, wr_ptr);
++
++	/* Cache the host ring till write offset */
++	ret = __mhi_ep_cache_ring(ring, wr_offset);
++	if (ret)
++		return ret;
++
++	ring->wr_offset = wr_offset;
++
++	return 0;
 +}
 +
-+void mhi_ep_mmio_clear_reset(struct mhi_ep_cntrl *mhi_cntrl)
++int mhi_ep_update_wr_offset(struct mhi_ep_ring *ring)
 +{
-+	mhi_ep_mmio_masked_write(mhi_cntrl, EP_MHICTRL, MHICTRL_RESET_MASK, 0);
++	u64 wr_ptr;
++
++	wr_ptr = mhi_ep_mmio_get_db(ring);
++
++	return mhi_ep_cache_ring(ring, wr_ptr);
 +}
 +
-+void mhi_ep_mmio_reset(struct mhi_ep_cntrl *mhi_cntrl)
++/* TODO: Support for adding multiple ring elements to the ring */
++int mhi_ep_ring_add_element(struct mhi_ep_ring *ring, struct mhi_ring_element *el)
 +{
-+	mhi_ep_mmio_write(mhi_cntrl, EP_MHICTRL, 0);
-+	mhi_ep_mmio_write(mhi_cntrl, EP_MHISTATUS, 0);
-+	mhi_ep_mmio_clear_interrupts(mhi_cntrl);
++	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
++	struct device *dev = &mhi_cntrl->mhi_dev->dev;
++	size_t old_offset = 0;
++	u32 num_free_elem;
++	int ret;
++
++	ret = mhi_ep_update_wr_offset(ring);
++	if (ret) {
++		dev_err(dev, "Error updating write pointer\n");
++		return ret;
++	}
++
++	if (ring->rd_offset < ring->wr_offset)
++		num_free_elem = (ring->wr_offset - ring->rd_offset) - 1;
++	else
++		num_free_elem = ((ring->ring_size - ring->rd_offset) + ring->wr_offset) - 1;
++
++	/* Check if there is space in ring for adding at least an element */
++	if (!num_free_elem) {
++		dev_err(dev, "No space left in the ring\n");
++		return -ENOSPC;
++	}
++
++	old_offset = ring->rd_offset;
++	mhi_ep_ring_inc_index(ring);
++
++	dev_dbg(dev, "Adding an element to ring at offset (%zu)\n", ring->rd_offset);
++
++	/* Update rp in ring context */
++	ring->ring_ctx->generic.rp = cpu_to_le64((ring->rd_offset * sizeof(*el)) + ring->rbase);
++
++	ret = mhi_cntrl->write_to_host(mhi_cntrl, el, ring->rbase + (old_offset * sizeof(*el)),
++				       sizeof(*el));
++	if (ret < 0)
++		return ret;
++
++	return 0;
 +}
 +
-+void mhi_ep_mmio_init(struct mhi_ep_cntrl *mhi_cntrl)
++void mhi_ep_ring_init(struct mhi_ep_ring *ring, enum mhi_ep_ring_type type, u32 id)
 +{
-+	u32 regval;
-+
-+	mhi_cntrl->chdb_offset = mhi_ep_mmio_read(mhi_cntrl, EP_CHDBOFF);
-+	mhi_cntrl->erdb_offset = mhi_ep_mmio_read(mhi_cntrl, EP_ERDBOFF);
-+
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_MHICFG);
-+	mhi_cntrl->event_rings = FIELD_GET(MHICFG_NER_MASK, regval);
-+	mhi_cntrl->hw_event_rings = FIELD_GET(MHICFG_NHWER_MASK, regval);
-+
-+	mhi_ep_mmio_reset(mhi_cntrl);
++	ring->type = type;
++	if (ring->type == RING_TYPE_CMD) {
++		ring->db_offset_h = EP_CRDB_HIGHER;
++		ring->db_offset_l = EP_CRDB_LOWER;
++	} else if (ring->type == RING_TYPE_CH) {
++		ring->db_offset_h = CHDB_HIGHER_n(id);
++		ring->db_offset_l = CHDB_LOWER_n(id);
++		ring->ch_id = id;
++	} else {
++		ring->db_offset_h = ERDB_HIGHER_n(id);
++		ring->db_offset_l = ERDB_LOWER_n(id);
++	}
 +}
 +
-+void mhi_ep_mmio_update_ner(struct mhi_ep_cntrl *mhi_cntrl)
++int mhi_ep_ring_start(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring,
++			union mhi_ep_ring_ctx *ctx)
 +{
-+	u32 regval;
++	struct device *dev = &mhi_cntrl->mhi_dev->dev;
++	int ret;
 +
-+	regval = mhi_ep_mmio_read(mhi_cntrl, EP_MHICFG);
-+	mhi_cntrl->event_rings = FIELD_GET(MHICFG_NER_MASK, regval);
-+	mhi_cntrl->hw_event_rings = FIELD_GET(MHICFG_NHWER_MASK, regval);
++	ring->mhi_cntrl = mhi_cntrl;
++	ring->ring_ctx = ctx;
++	ring->ring_size = mhi_ep_ring_num_elems(ring);
++	ring->rbase = le64_to_cpu(ring->ring_ctx->generic.rbase);
++
++	if (ring->type == RING_TYPE_CH)
++		ring->er_index = le32_to_cpu(ring->ring_ctx->ch.erindex);
++
++	if (ring->type == RING_TYPE_ER)
++		ring->irq_vector = le32_to_cpu(ring->ring_ctx->ev.msivec);
++
++	/* During ring init, both rp and wp are equal */
++	ring->rd_offset = mhi_ep_ring_addr2offset(ring, le64_to_cpu(ring->ring_ctx->generic.rp));
++	ring->wr_offset = mhi_ep_ring_addr2offset(ring, le64_to_cpu(ring->ring_ctx->generic.rp));
++
++	/* Allocate ring cache memory for holding the copy of host ring */
++	ring->ring_cache = kcalloc(ring->ring_size, sizeof(struct mhi_ring_element), GFP_KERNEL);
++	if (!ring->ring_cache)
++		return -ENOMEM;
++
++	ret = mhi_ep_cache_ring(ring, le64_to_cpu(ring->ring_ctx->generic.wp));
++	if (ret) {
++		dev_err(dev, "Failed to cache ring\n");
++		kfree(ring->ring_cache);
++		return ret;
++	}
++
++	ring->started = true;
++
++	return 0;
 +}
-diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
-index efcbdc51464f..8e1de062f820 100644
---- a/include/linux/mhi_ep.h
-+++ b/include/linux/mhi_ep.h
-@@ -59,6 +59,10 @@ struct mhi_ep_db_info {
-  * @mhi_event: Points to the event ring configurations table
-  * @mhi_cmd: Points to the command ring configurations table
-  * @sm: MHI Endpoint state machine
-+ * @ch_ctx_host_pa: Physical address of host channel context data structure
-+ * @ev_ctx_host_pa: Physical address of host event context data structure
-+ * @cmd_ctx_host_pa: Physical address of host command context data structure
-+ * @chdb: Array of channel doorbell interrupt info
-  * @raise_irq: CB function for raising IRQ to the host
-  * @alloc_addr: CB function for allocating memory in endpoint for storing host context
-  * @map_addr: CB function for mapping host context to endpoint
-@@ -69,6 +73,10 @@ struct mhi_ep_db_info {
-  * @mhi_state: MHI Endpoint state
-  * @max_chan: Maximum channels supported by the endpoint controller
-  * @mru: MRU (Maximum Receive Unit) value of the endpoint controller
-+ * @event_rings: Number of event rings supported by the endpoint controller
-+ * @hw_event_rings: Number of hardware event rings supported by the endpoint controller
-+ * @chdb_offset: Channel doorbell offset set by the host
-+ * @erdb_offset: Event ring doorbell offset set by the host
-  * @index: MHI Endpoint controller index
-  */
- struct mhi_ep_cntrl {
-@@ -81,6 +89,12 @@ struct mhi_ep_cntrl {
- 	struct mhi_ep_cmd *mhi_cmd;
- 	struct mhi_ep_sm *sm;
- 
-+	u64 ch_ctx_host_pa;
-+	u64 ev_ctx_host_pa;
-+	u64 cmd_ctx_host_pa;
 +
-+	struct mhi_ep_db_info chdb[4];
-+
- 	void (*raise_irq)(struct mhi_ep_cntrl *mhi_cntrl, u32 vector);
- 	void __iomem *(*alloc_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t *phys_addr,
- 		       size_t size);
-@@ -98,6 +112,10 @@ struct mhi_ep_cntrl {
- 
- 	u32 max_chan;
- 	u32 mru;
-+	u32 event_rings;
-+	u32 hw_event_rings;
-+	u32 chdb_offset;
-+	u32 erdb_offset;
- 	u32 index;
- };
- 
++void mhi_ep_ring_reset(struct mhi_ep_cntrl *mhi_cntrl, struct mhi_ep_ring *ring)
++{
++	ring->started = false;
++	kfree(ring->ring_cache);
++	ring->ring_cache = NULL;
++}
 -- 
 2.25.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087EA4C72B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4A54C7282
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235972AbiB1R2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S234081AbiB1R0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbiB1R11 (ORCPT
+        with ESMTP id S233653AbiB1R02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:27:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3185658;
-        Mon, 28 Feb 2022 09:26:38 -0800 (PST)
+        Mon, 28 Feb 2022 12:26:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DD476E04;
+        Mon, 28 Feb 2022 09:25:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BF67B815B0;
-        Mon, 28 Feb 2022 17:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA05C340E7;
-        Mon, 28 Feb 2022 17:26:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DEB2B815AB;
+        Mon, 28 Feb 2022 17:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9294C340F1;
+        Mon, 28 Feb 2022 17:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069196;
-        bh=usIFlN/FEikYYvUp7TbxxzRds9hM5Or9jnjcluoau0s=;
+        s=korg; t=1646069146;
+        bh=yC33GZMrlqD0i2w93NF1iJJZDlo/CRXfu2IKUrbZvqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eczhViAfmNaTZKteWJzdNFsXTvHT5XASG2L3KcYG/qO8s/NgxPGRsIcpitMA9RB+d
-         5jWFvQZH4AF1BPRTpiRRkzyL4jEi9u0t3Pn+nbNWMP3fzXLme0tgdUlG0Ml0IBRePA
-         5CYfOf17o++x6M4944cGiacxTdmrgxwJeuUEqZPs=
+        b=Biks0AlaBumy632OvNFKYRa6cjrhJFsvo0sKXYmisHB3I5LKg4BRXoiZZMJE7Rx6q
+         J5rmufNbBUm0iaTD7AX1kZC+uZN0eptKHcB18aQGe29XGY9v70HTPNvihuamRl2CeZ
+         ZPB/4ox7E8ZhmYFbjmpykQPjCyMx3CnQz3wPVByY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 09/29] net: __pskb_pull_tail() & pskb_carve_frag_list() drop_monitor friends
-Date:   Mon, 28 Feb 2022 18:23:36 +0100
-Message-Id: <20220228172142.423342346@linuxfoundation.org>
+        stable@vger.kernel.org, Tao Liu <thomas.liu@ucloud.cn>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 10/29] gso: do not skip outer ip header in case of ipip and net_failover
+Date:   Mon, 28 Feb 2022 18:23:37 +0100
+Message-Id: <20220228172142.482484537@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
 References: <20220228172141.744228435@linuxfoundation.org>
@@ -54,42 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Tao Liu <thomas.liu@ucloud.cn>
 
-commit ef527f968ae05c6717c39f49c8709a7e2c19183a upstream.
+commit cc20cced0598d9a5ff91ae4ab147b3b5e99ee819 upstream.
 
-Whenever one of these functions pull all data from an skb in a frag_list,
-use consume_skb() instead of kfree_skb() to avoid polluting drop
-monitoring.
+We encounter a tcp drop issue in our cloud environment. Packet GROed in
+host forwards to a VM virtio_net nic with net_failover enabled. VM acts
+as a IPVS LB with ipip encapsulation. The full path like:
+host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
+ -> ipip encap -> net_failover tx -> virtio_net tx
 
-Fixes: 6fa01ccd8830 ("skbuff: Add pskb_extract() helper function")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220220154052.1308469-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
+SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
+did because it supports TSO and GSO_IPXIP4. But network_header points to
+inner ip header.
+
+Call Trace:
+ tcp4_gso_segment        ------> return NULL
+ inet_gso_segment        ------> inner iph, network_header points to
+ ipip_gso_segment
+ inet_gso_segment        ------> outer iph
+ skb_mac_gso_segment
+
+Afterwards virtio_net transmits the pkt, only inner ip header is modified.
+And the outer one just keeps unchanged. The pkt will be dropped in remote
+host.
+
+Call Trace:
+ inet_gso_segment        ------> inner iph, outer iph is skipped
+ skb_mac_gso_segment
+ __skb_gso_segment
+ validate_xmit_skb
+ validate_xmit_skb_list
+ sch_direct_xmit
+ __qdisc_run
+ __dev_queue_xmit        ------> virtio_net
+ dev_hard_start_xmit
+ __dev_queue_xmit        ------> net_failover
+ ip_finish_output2
+ ip_output
+ iptunnel_xmit
+ ip_tunnel_xmit
+ ipip_tunnel_xmit        ------> ipip
+ dev_hard_start_xmit
+ __dev_queue_xmit
+ ip_finish_output2
+ ip_output
+ ip_forward
+ ip_rcv
+ __netif_receive_skb_one_core
+ netif_receive_skb_internal
+ napi_gro_receive
+ receive_buf
+ virtnet_poll
+ net_rx_action
+
+The root cause of this issue is specific with the rare combination of
+SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
+SKB_GSO_DODGY is set from external virtio_net. We need to reset network
+header when callbacks.gso_segment() returns NULL.
+
+This patch also includes ipv6_gso_segment(), considering SIT, etc.
+
+Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
+Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/skbuff.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/af_inet.c     |    5 ++++-
+ net/ipv6/ip6_offload.c |    2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -1716,7 +1716,7 @@ unsigned char *__pskb_pull_tail(struct s
- 		/* Free pulled out fragments. */
- 		while ((list = skb_shinfo(skb)->frag_list) != insp) {
- 			skb_shinfo(skb)->frag_list = list->next;
--			kfree_skb(list);
-+			consume_skb(list);
- 		}
- 		/* And insert new clone at head. */
- 		if (clone) {
-@@ -4951,7 +4951,7 @@ static int pskb_carve_frag_list(struct s
- 	/* Free pulled out fragments. */
- 	while ((list = shinfo->frag_list) != insp) {
- 		shinfo->frag_list = list->next;
--		kfree_skb(list);
-+		consume_skb(list);
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1238,8 +1238,11 @@ struct sk_buff *inet_gso_segment(struct
  	}
- 	/* And insert new clone at head. */
- 	if (clone) {
+ 
+ 	ops = rcu_dereference(inet_offloads[proto]);
+-	if (likely(ops && ops->callbacks.gso_segment))
++	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
++	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
+ 		goto out;
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -96,6 +96,8 @@ static struct sk_buff *ipv6_gso_segment(
+ 	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		skb_reset_transport_header(skb);
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+ 	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C104C76EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE984C73A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240291AbiB1SIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S232855AbiB1RhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240629AbiB1SDn (ORCPT
+        with ESMTP id S238838AbiB1Rdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492CDBF;
-        Mon, 28 Feb 2022 09:47:25 -0800 (PST)
+        Mon, 28 Feb 2022 12:33:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6877AAE;
+        Mon, 28 Feb 2022 09:30:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0719B81085;
-        Mon, 28 Feb 2022 17:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D03C340E7;
-        Mon, 28 Feb 2022 17:46:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43A1C61359;
+        Mon, 28 Feb 2022 17:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538A4C340E7;
+        Mon, 28 Feb 2022 17:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070415;
-        bh=mnkt+5Ak8JOKgSSwk+d2Lz2WiQE6cY/xo0S7CuH+MwE=;
+        s=korg; t=1646069448;
+        bh=YKvPEg0zzOIBH0zwPdQEyNkdhgSjYM/EH+4eaRDEvs0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VXUufLwK2aRIi3Pkqh0riTz1TxZGc/5V9qdzPVBT63gKbhodZJ9+aXcRGFX+79Yy0
-         9Lyi4U8DDUbgi9+jkQfY7lbTMC8MolC3B4TGIrW6V2OzCt03lD+HIH36Q3xyHTUqnH
-         ZTvzWh3BjS5Mzn8JzRaki4vyF3Kwk9uCN4thORPc=
+        b=v6vgdM10tLlQrJ1JDLC4lo0j953pQpoAXg13eGOzTCAsiklm2xE9AA6ktcPMFS2Xe
+         NRSWPMFkWWpNmWSBs8SW+yVQVpksGlQ2S5BFMFpHHMgVZhtwZW652kgIXMrOWqiB6D
+         myXn5nfqo7FoUQagUQJb9i6aOXKoHMxF/McXOP4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lama Kayal <lkayal@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 098/164] net/mlx5e: Add missing increment of count
-Date:   Mon, 28 Feb 2022 18:24:20 +0100
-Message-Id: <20220228172408.662393867@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 23/53] net: ll_temac: check the return value of devm_kmalloc()
+Date:   Mon, 28 Feb 2022 18:24:21 +0100
+Message-Id: <20220228172249.990160395@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172248.232273337@linuxfoundation.org>
+References: <20220228172248.232273337@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lama Kayal <lkayal@nvidia.com>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-commit 5ee02b7a800654ff9549807bcf0b4c9fd5cf25f9 upstream.
+commit b352c3465bb808ab700d03f5bac2f7a6f37c5350 upstream.
 
-Add mistakenly missing increment of count variable when looping over
-output buffer in mlx5e_self_test().
+devm_kmalloc() returns a pointer to allocated memory on success, NULL
+on failure. While lp->indirect_lock is allocated by devm_kmalloc()
+without proper check. It is better to check the value of it to
+prevent potential wrong memory access.
 
-This resolves the issue of garbage values output when querying with self
-test via ethtool.
-
-before:
-$ ethtool -t eth2
-The test result is PASS
-The test extra info:
-Link Test        0
-Speed Test       1768697188
-Health Test      758528120
-Loopback Test    3288687
-
-after:
-$ ethtool -t eth2
-The test result is PASS
-The test extra info:
-Link Test        0
-Speed Test       0
-Health Test      0
-Loopback Test    0
-
-Fixes: 7990b1b5e8bd ("net/mlx5e: loopback test is not supported in switchdev mode")
-Signed-off-by: Lama Kayal <lkayal@nvidia.com>
-Reviewed-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: f14f5c11f051 ("net: ll_temac: Support indirect_mutex share within TEMAC IP")
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/xilinx/ll_temac_main.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_selftest.c
-@@ -334,6 +334,7 @@ void mlx5e_self_test(struct net_device *
- 		netdev_info(ndev, "\t[%d] %s start..\n", i, st.name);
- 		buf[count] = st.st_func(priv);
- 		netdev_info(ndev, "\t[%d] %s end: result(%lld)\n", i, st.name, buf[count]);
-+		count++;
+--- a/drivers/net/ethernet/xilinx/ll_temac_main.c
++++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
+@@ -1345,6 +1345,8 @@ static int temac_probe(struct platform_d
+ 		lp->indirect_lock = devm_kmalloc(&pdev->dev,
+ 						 sizeof(*lp->indirect_lock),
+ 						 GFP_KERNEL);
++		if (!lp->indirect_lock)
++			return -ENOMEM;
+ 		spin_lock_init(lp->indirect_lock);
  	}
  
- 	mutex_unlock(&priv->state_lock);
 
 

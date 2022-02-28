@@ -2,119 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE664C6AB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAFB4C6A49
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235877AbiB1LiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S235787AbiB1L0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235901AbiB1Lh6 (ORCPT
+        with ESMTP id S235791AbiB1L0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:37:58 -0500
-X-Greylist: delayed 454 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 03:37:19 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F8C70F77;
-        Mon, 28 Feb 2022 03:37:19 -0800 (PST)
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MLR5f-1nh8rj1OvT-00IVk2; Mon, 28 Feb 2022 12:24:40 +0100
-Received: by mail-wr1-f48.google.com with SMTP id s1so14855590wrg.10;
-        Mon, 28 Feb 2022 03:24:40 -0800 (PST)
-X-Gm-Message-State: AOAM533VZ+zedlRLSkOHfL8O757zEzvIUDFRiVTJh6jWptMe0JRFSjnL
-        FmPgPBCdJ7sDb4xpvgEakSd+LWBPqr36BCuRebQ=
-X-Google-Smtp-Source: ABdhPJxsHhv9ZGMkqj+1xQqmNgWDzHJw3IWMK33HgSuLr4EGxfWw9ZOzndK9wjWGvid3acqW9xY0RN9FzlS1KN4eDoI=
-X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
- v3-20020adfedc3000000b001ec5f115415mr13527155wro.317.1646047479895; Mon, 28
- Feb 2022 03:24:39 -0800 (PST)
+        Mon, 28 Feb 2022 06:26:09 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0530D710CC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:25:29 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2d6923bca1aso104049157b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p96IvP9fUv4h1PakADfoqUYPHYxVnqzVwq2/kj5L+eU=;
+        b=KeqMjQGcDStWNcUS49dVbtvAJpxlSiOVErm61ZtH3VI5hAlAj0vQ1zcHquzneX3cK7
+         neNjKRdIJoiS6BtbKzb2YPS5nMEe8m5YxMTC5lR8kyZFI3AO2veXAPK8lwntA20ztYMd
+         KwUOA9e03fmOZ7HBoLWjb7t05sZeU/W4/KDzfTVTyKgA+MnDe1LSwmaphusTfs1ef6fK
+         of3KNhlrrVLJq9O7wpEVW9QSv8MmTwUXBvSrPyyIb375h4xyL7mvnPWA5QyNw68S+Ep9
+         h8+rf2NLd5Ip6RKVm7BOKl3zCDQHJWQQ+5s3ZGb3VbTOTSOB/sLncqcMr94bCvJDt0gD
+         xv+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p96IvP9fUv4h1PakADfoqUYPHYxVnqzVwq2/kj5L+eU=;
+        b=P/WuvcaZhqh4dL5EHMM/JLOMPeu5yRbo04XXyJdqGzmGJcZIBiwMG0KKxeuwII/Ygq
+         654lRxd0d3jSUxclnMsoKFSZTVA2cgHe5Ctf28Dfv1Sfv5iVMplcWy57D64S+8OE6s5E
+         HpEi6djclg4pl9d9bD96PmYzQ9Taref5SHnAlX0R8Yq0pOAI+kJPLNkRPoWeyvb6o6tQ
+         r6EFa+NmsRZKOZtCmTV50WWScK1RB7IMAip8C3lxZx/aI2kaIG493dKMs0LkrY/WX4N4
+         JFmfZ2SN+Z+jSv8kiG0hxeJ7C/6WdQh6NbOd5n9otPzvyjvJ+GjQ87GVWiL9i0+49Eyi
+         nBSg==
+X-Gm-Message-State: AOAM531mxoONZIz68xlOLV/3HbkS8OkUQMyhLGvrJwdU2h15FpeNuQsr
+        jG3E4GOtlcsBjDoE09QV9Nt2uNtBmiBkYvaxqw2x/Q==
+X-Google-Smtp-Source: ABdhPJz54dXk6AW8cnKh1rdgLlHMk+YG/fbrfpJzpZACyNSQ2YmjarYCbN3mfTc15EcGKVu9pa7aHfMqg5A3HN7vpFE=
+X-Received: by 2002:a81:7943:0:b0:2d0:c8bb:a45d with SMTP id
+ u64-20020a817943000000b002d0c8bba45dmr18980716ywc.264.1646047527866; Mon, 28
+ Feb 2022 03:25:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
- <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
- <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
- <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
- <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com> <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 28 Feb 2022 12:24:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
-Message-ID: <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
-Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+References: <20220225221625.3531852-1-keescook@chromium.org>
+In-Reply-To: <20220225221625.3531852-1-keescook@chromium.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 28 Feb 2022 12:24:51 +0100
+Message-ID: <CANpmjNOup5JCjRpRkhsF3Z+dPX6_MQE5u6WhnMit84c1TyRK+A@mail.gmail.com>
+Subject: Re: [PATCH] mm: Handle ksize() vs __alloc_size by forgetting size
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:wyAVrkZQ9dhz0EiWTUNl5iK9wV5bwB9HxL4qTjUVD2+rbG7/Wig
- wyqTDiAqGrs1iVKsCthNwyzoPv8MefXM/QxnkQqzvrGMNzG3weGgWoptCSZUGamBeL9MfpZ
- KgKmBq8rnITrsv1e0tuQ89dg6NUjifkaWnf66UJL9OHsQxk+IbZCBBkTojXi3w8XlzK3fX4
- 8gzZj331JKyaxrMhfZ17g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qqfNnNNOh2s=:Y9XUL3h6+xj6P3Xs3b68Zd
- g9clv8i4Qf94p/T7AH+JhTec1ZZZygmZTPEaimeoLMEGMP1ZhnG7Z0P9RBkLIniQ69rNKEpJX
- 69mbaIGJVqUEo2IeOJ5fdfD4c9fDsCRMW4EIXewNnnwvSU/yehyY12fJtSLCGbgKWmAvnWu2U
- EQwdXawtqv7Y7Kv4rFoEr98I7jewg5E2dpOIK+U08IVX/zl5wK3JFEBB3ISo/ytv2HYrvnrcu
- +tEDssEY8Xc3wQB30xB9qFHf5Q/KSnspxW154hw4FVDC0i5lsL6VoYnsLwiVc/4TsdHTfD8Hu
- EggIfjYyk2LF3qVC9GP4u2CX5r2g99fpMVAvRvlLxYOA7L4ZfdtJcJhs0WEoWKLrr2JbdhFRF
- T6Ia3wSsU3oOBM19DaanS++kRC92qlWcY7zwjvaihLMpUMi08ClUdgimuZG0rLs/9eQ8DIVOJ
- SbNVjkTaqzHFs3SMJHJHqR5eab2eHtAzXPz3w1coVpzb7dp2ksFz5prkIzXZrB9ZdXLc2l69u
- 883q5f71hiXIbsT7VKPFZJiNNl/k5xb06wdr/mSrzfl5Hp3kKiCgM9EbhVhny8MPNZEYvWtN/
- 7Ws/zkUzVsyCsavL6ajvLZFhSVwinKP7INSuad6TPwnW8jumUHJ0aREhZqFD+u56JRI2POjjd
- r8I4td9tVBPXhQFdC9LlLaHYjAGl5LA3UqoxVJO7emxpwl6LmqxKTbfZoGJBTxCrJBd8FkzAb
- pYonxfp2O4H+erVconiHCwOgQwYJj2XTho0561hX48PpZ4D8r7jFTkiSRg+HGlTnptK3vycF2
- CcHOqw8py+CCgY7JUkxNST05EFBfEonysPVMS3hfyimeWPKXww=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Mon, Feb 28, 2022 at 4:52 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Mon, 28 Feb 2022 at 09:38, Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > >
-> > > > RISC-V is a useful reference for the changes needed - this is the most
-> > > > recent addition to the EFI stub, and avoids some legacy stuff that new
-> > > > architectures have no need for.
-> > > We still want to support the raw elf kernel (RISC-V also does),
-> > > because LoongArch also has MCU and SoC and we want to support FDT (I
-> > > think this is reasonable, because RISC-V also supports raw elf).
-> > >
-> >
-> > That is fine. So perhaps the best course of action is to omit the
-> > UEFI/ACPI parts entirely for now, and focus on the DT/embedded use
-> > case. Once all the spec pieces are in place, the UEFI + ACPI changes
-> > can be presented as a single coherent set.
-> It seems that I made you confusing. :)
-> There are big CPUs and small CPUs (MCU and SoC), big CPUs use
-> UEFI+ACPI, while small CPUs use FDT.
-> At present, the only matured LoongArch CPU is Loongson-3A5000 (big
-> CPU) which uses UEFI+ACPI.
-> We want to support raw elf because it can run on both ACPI firmware
-> and FDT firmware, but at present we only have ACPI firmware.
+On Fri, 25 Feb 2022 at 23:16, Kees Cook <keescook@chromium.org> wrote:
+>
+> If ksize() is used on an allocation, the compiler cannot make any
+> assumptions about its size any more (as hinted by __alloc_size). Force
+> it to forget.
+>
+> One caller was using a container_of() construction that needed to be
+> worked around.
+>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: linux-mm@kvack.org
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> This appears to work for me, but I'm waiting for more feedback on
+> the specific instance got tripped over in Android.
+> ---
+>  drivers/base/devres.c |  4 +++-
+>  include/linux/slab.h  | 26 +++++++++++++++++++++++++-
+>  mm/slab_common.c      | 19 +++----------------
+>  3 files changed, 31 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+> index eaa9a5cd1db9..1a2645bd7234 100644
+> --- a/drivers/base/devres.c
+> +++ b/drivers/base/devres.c
+> @@ -855,6 +855,7 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+>         size_t total_new_size, total_old_size;
+>         struct devres *old_dr, *new_dr;
+>         unsigned long flags;
+> +       void *allocation;
+>
+>         if (unlikely(!new_size)) {
+>                 devm_kfree(dev, ptr);
+> @@ -874,7 +875,8 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+>         if (!check_dr_size(new_size, &total_new_size))
+>                 return NULL;
+>
+> -       total_old_size = ksize(container_of(ptr, struct devres, data));
+> +       allocation = container_of(ptr, struct devres, data);
+> +       total_old_size = ksize(allocation);
+>         if (total_old_size == 0) {
+>                 WARN(1, "Pointer doesn't point to dynamically allocated memory.");
+>                 return NULL;
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 37bde99b74af..a14f3bfa2f44 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -182,8 +182,32 @@ int kmem_cache_shrink(struct kmem_cache *s);
+>  void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
+>  void kfree(const void *objp);
+>  void kfree_sensitive(const void *objp);
+> +
+> +/**
+> + * ksize - get the actual amount of memory allocated for a given object
+> + * @objp: Pointer to the object
+> + *
+> + * kmalloc may internally round up allocations and return more memory
+> + * than requested. ksize() can be used to determine the actual amount of
+> + * memory allocated. The caller may use this additional memory, even though
+> + * a smaller amount of memory was initially specified with the kmalloc call.
+> + * The caller must guarantee that objp points to a valid object previously
+> + * allocated with either kmalloc() or kmem_cache_alloc(). The object
+> + * must not be freed during the duration of the call.
+> + *
+> + * Return: size of the actual memory used by @objp in bytes
+> + */
+> +#define ksize(objp) ({                                                 \
+> +       /*                                                              \
+> +        * Getting the actual allocation size means the __alloc_size    \
+> +        * hints are no longer valid, and the compiler needs to         \
+> +        * forget about them.                                           \
+> +        */                                                             \
+> +       OPTIMIZER_HIDE_VAR(objp);                                       \
+> +       _ksize(objp);                                                   \
+> +})
 
-Can't you just use the UEFI protocol for kernel entry regardless
-of the bootloader? It seems odd to use a different protocol for loading
-grub and the kernel, especially if that means you end up having to
-support both protocols inside of u-boot and grub, in order to chain-load
-a uefi application like grub.
+So per that ClangBuiltLinux issue I'm gleaning that the __alloc_size
+annotations are actually causing the compiler to generate wrong code?
+Possibly due to the compiler thinking that the accesses must stay
+within some bound, and anything beyond that will be "undefined
+behaviour"? Clearly, per the slab APIs, in particular with the
+provision of ksize(), the compiler is wrong.
 
-       Arnd
+At first I thought this was only related to UBSAN bounds checking
+generating false positives, in which case a simple workaround as you
+present above would probably take care of most cases.
+
+But if the real issue is the compiler suddenly doing more aggressive
+compiler optimizations because it thinks accesses beyond the object
+size (per __alloc_size) is UB, but UB can never happen, and thus does
+crazy things [1], I think the answer (at least with what we have right
+now) should be to find a different solution that is more reliable.
+
+[1] https://lore.kernel.org/all/20220218131358.3032912-1-gregkh@linuxfoundation.org/
+
+Because who's to say that there's not some code that does:
+
+   foo = kmalloc(...);
+   ...
+   bar = foo;
+   s = ksize(bar);
+   ... makes access address-dependent on 's' and 'foo' (but not 'bar') ...
+
+This doesn't look like code anyone would write, but I fear with enough
+macro and inline function magic, it's not too unlikely.
+
+I can see a few options:
+
+1. Dropping __alloc_size.
+2. Somehow statically computing the size-class's size (kmalloc_index()
+might help here), removing __alloc_size from allocation functions and
+instead use some wrapper.
+3. Teaching the compiler to drop *all* object sizes upon encountering a ksize().
+
+So I think #1 is probably not what you want. #2 seems quite
+complicated, and in many cases likely too relaxed and would miss bugs,
+so also not ideal. #3 would be the most reliable, but
+OPTIMIZER_HIDE_VAR() doesn't cut it, and we need something stronger.
+The downside of #3 is that it might pessimize code generation, but
+given ksize() is used sparingly, might be ok.
+
+Thanks,
+-- Marco

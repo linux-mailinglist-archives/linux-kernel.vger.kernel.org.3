@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD984C674D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB1A4C6754
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiB1KsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S234901AbiB1KsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiB1Kr7 (ORCPT
+        with ESMTP id S234887AbiB1KsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:47:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109285B888;
-        Mon, 28 Feb 2022 02:47:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBBA1B80FF2;
-        Mon, 28 Feb 2022 10:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BB0C340E7;
-        Mon, 28 Feb 2022 10:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646045236;
-        bh=wKsdoTANU5hpG2zlBt0hwyF+7+quOlTjzA0JHxNClnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RRObxfQNLSdZIiAH3BZhaD4LIww+/AHsaRBHjOolKzZF4/eGh5zIjLWvg0q8H6yT8
-         pA3jOoXTWA7jwLEhPde/cTtTNsVc2PnWb68hpE1E3mzdYrP6YrbRPY8k4ShYmP5/qh
-         rVKF8m5KZDO7o0iyU0r3t7CtUoDT/zPuXAfWSYRU=
-Date:   Mon, 28 Feb 2022 11:47:13 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Cc:     Bodo Stroesser <bostroesser@gmail.com>,
-        Guixin Liu <kanie@linux.alibaba.com>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xlpang@linux.alibaba.com
-Subject: Re: [PATCH 2/2] scsi:target:tcmu: reduce once copy by using uio ioctl
-Message-ID: <YhyoMekPbsKjO7KG@kroah.com>
-References: <1645064962-94123-1-git-send-email-kanie@linux.alibaba.com>
- <1645064962-94123-2-git-send-email-kanie@linux.alibaba.com>
- <eb08230b-c9a7-26ed-9431-9be3b9791385@gmail.com>
- <4aef53b1-3e0f-92eb-4bd3-cdc4cd301866@linux.alibaba.com>
+        Mon, 28 Feb 2022 05:48:23 -0500
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A3E110E;
+        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1646045264; x=1677581264;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=Ya3FJTF6XwIuL/RdbakwomCqOiapV+1l4GTq2bNEB8g=;
+  b=lQvng5v9PmIpXPeQZorgVHPcv/IV4w4NJwwc00Zez5jXhbJk6xs5BlL0
+   4aytnGDqA+s3bxFKnibdxbfBuhsB5XSf606l4YBSHQpr/cu9abl15oFJX
+   +n5Uf5LYaJs7wLQPu42kiekXDfRF2hEzcA5XO4tiUbrBS8A/FLvTeskvV
+   k=;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643673600"; 
+   d="scan'208";a="198181420"
+Subject: Re: [PATCH 3/4] KVM: x86: hyper-v: Fix the maximum number of sparse banks
+ for XMM fast TLB flush hypercalls
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-98c1c57e.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 28 Feb 2022 10:47:31 +0000
+Received: from EX13D28EUC003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-98c1c57e.us-west-2.amazon.com (Postfix) with ESMTPS id 6F1B3A1A0F;
+        Mon, 28 Feb 2022 10:47:29 +0000 (UTC)
+Received: from 147dda3edfb6.ant.amazon.com (10.43.160.103) by
+ EX13D28EUC003.ant.amazon.com (10.43.164.43) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 28 Feb 2022 10:47:25 +0000
+Date:   Mon, 28 Feb 2022 11:47:21 +0100
+From:   Siddharth Chandrasekaran <sidcha@amazon.de>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+CC:     <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        <linux-kernel@vger.kernel.org>
+Message-ID: <YhyoOcz2uAvE9jDN@147dda3edfb6.ant.amazon.com>
+References: <20220222154642.684285-1-vkuznets@redhat.com>
+ <20220222154642.684285-4-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <4aef53b1-3e0f-92eb-4bd3-cdc4cd301866@linux.alibaba.com>
+In-Reply-To: <20220222154642.684285-4-vkuznets@redhat.com>
+X-Originating-IP: [10.43.160.103]
+X-ClientProxiedBy: EX13D20UWA001.ant.amazon.com (10.43.160.34) To
+ EX13D28EUC003.ant.amazon.com (10.43.164.43)
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 04:52:52PM +0800, Xiaoguang Wang wrote:
+On Tue, Feb 22, 2022 at 04:46:41PM +0100, Vitaly Kuznetsov wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
-> hi Bodo,
 > 
-> > Liu,
-> > 
-> > generally I like ideas to speed up tcmu.
-> > 
-> > OTOH, since Andy Grover implemented tcmu based on uio device, we are
-> > restricted to what uio offers. With today's knowledge I think we would
-> > not use the uio device in tcmu again, but switching away from uio now
-> > would break existing userspace SW.
-> Yeah, it will have much work if deciding to switch away from uio.
-> I came up with a hacky or crazy idea :) what about we create a new file
-> in tcmu_open() by anon_inode_getfile_secure(), and export this fd by
-> tcmu mail box, we can do ioctl() on this new file, then uio framework
-> won't be touched...
+> 
+> When TLB flush hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}_EX are
+> issued in 'XMM fast' mode, the maximum number of allowed sparse_banks is
+> not 'HV_HYPERCALL_MAX_XMM_REGISTERS - 1' (5) but twice as many (10) as each
+> XMM register is 128 bit long and can hold two 64 bit long banks.
+> 
+> Fixes: 5974565bc26d ("KVM: x86: kvm_hv_flush_tlb use inputs from XMM registers")
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-No new ioctls please.  That is creating a new user/kernel api that you
-must support for the next 20+ years.  Please do not do that.
+Indeed :)
 
-thanks,
+Reviewed-by: Siddharth Chandrasekaran <sidcha@amazon.de>
 
-greg k-h
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+

@@ -2,114 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5193E4C7051
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F724C7052
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiB1PKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S237458AbiB1PKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237460AbiB1PJ7 (ORCPT
+        with ESMTP id S232788AbiB1PKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:09:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB59954BD5;
-        Mon, 28 Feb 2022 07:09:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B41i1sGCjiiiIsAwEwhmVSLh8Tk5XtiAj6Nrs4bu+FY=; b=aBdjVGqDdeEk2ubVAtqsVPvOaQ
-        uUAt1MgV7EnCqS2fcD3AcKMcJ+4Z+Umrl7v+eha0Xcfzx8wjY1X3CAZ7Ruv0JtJQxi4MIu2e2tp9l
-        FQscogjfgf5noU+/bDQjxR670debH45UGQM3B4mcOucbTBU7tCvAtJ+B2pc9CThk2LoCOYm5jIwxq
-        HTy0wLVPH1uyY18Uv+Z12NGmfYXHw8XWyn4a3yxbY6HGPtRPd4k1awjhaRdsJqb8Vs8aZ/BMngc9C
-        BAwYQGw79MQrnLWWyoVMuJ/4/8srzVu9v+9o6vuOznMGdYkbiaBNZld7/ovmnttvKgGZcNUnB9CRs
-        z8ixPLuQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOhe0-00D4pD-Qd; Mon, 28 Feb 2022 15:09:00 +0000
-Date:   Mon, 28 Feb 2022 07:09:00 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tangmeng <tangmeng@uniontech.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, keescook@chromium.org,
-        yzaikin@google.com, nixiaoming@huawei.com, nizhen@uniontech.com,
-        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] fs/proc: optimize exactly register one ctl_table
-Message-ID: <YhzljEnznlZjw53K@bombadil.infradead.org>
-References: <20220224093201.12440-1-tangmeng@uniontech.com>
- <YhvsgZesRNQmfkIB@bombadil.infradead.org>
- <f8820396-ff02-7589-a2f0-be542fbc2c3d@uniontech.com>
+        Mon, 28 Feb 2022 10:10:42 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3E777A9D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:10:03 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id o8so11687291pgf.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=/IzYX9ekXXf7onTNDRhy0rzD0OI0XgiFY+K3R+MvA9A=;
+        b=ZGIn/OXsY7QB0Sykq85jAfBBii7x+DAFUHBo7NHAudLxTsc/Unb8bKEFWoqST8WBpW
+         bw94JTVLzK0mn8ztcZhov9MXKHyGOOwbI70uHhcBZOtpoU5oafVBEP+KOeLCU0ev9dGu
+         QcEZM2EuIVFq9qVSGgzdj9jnqTBiv2dVZqWPReaWwHdGy1gdqmDn7oMTQOTUBYMrm4kH
+         7eRTEmq2C6bq8/xae6yoaqQa45g73ts/DgJrKuxRIfD66i1hf1Xxzat3o81X9wY3erRa
+         4cvJvMcJZLXK+ITjHuzNkMEZ9UtcL1Vq1LUMOxaiL6dvIxfvD0rgcprLUrOA57gpF60H
+         /Xnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=/IzYX9ekXXf7onTNDRhy0rzD0OI0XgiFY+K3R+MvA9A=;
+        b=H2lP5vT2iJh0nPG551cHjj0D7Cxkot48PvCL45FOmtLqf5sGBOVeoPjGVDCvNGby4x
+         vHWxhi4jvqFvnsN4bI6LRay7M31ErJRlyuTwOPNWjhTCK1JnV6q20kCj22OIJeL4uI4Y
+         kX8g2rZrRIPjctvhPqO9lBnTl4FIzcocxVWqRUp9SrQjNgtUf4htEhpEaG596yJSkRuL
+         XteIfL+XlWiOQY/OcGFDU8EaqlCX1OPo40OQN4WB7Yh30Lyf+M0gQRGcO1FnC0XKgzF1
+         UOXo/0aWCTNNZ+ujh0BqC1OitjyIvtr2o+ZiIp95pTV6ZHoWsw6t7aDrGTJB9NfLig4C
+         wEKg==
+X-Gm-Message-State: AOAM5302i2G7cFZ4CwDVFQefO8vIuBaHrM4gP0d/9ApwsL5Nk5Td5814
+        48TpmSBFqyEl/28bxwTsD78=
+X-Google-Smtp-Source: ABdhPJwOXeWsUUvwtVxFSOTG/liBvry3WbgiNRSaXCk4O/6AoD9vAhicr3tugHtb0p7pOx8qnDjRWQ==
+X-Received: by 2002:a63:d904:0:b0:372:9faf:5467 with SMTP id r4-20020a63d904000000b003729faf5467mr17491373pgg.196.1646061002852;
+        Mon, 28 Feb 2022 07:10:02 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056a00088800b004bca31c8e56sm14786206pfj.115.2022.02.28.07.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 07:10:02 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:09:55 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+Subject: [PATCH] mm/slub: initialize stack depot in boot process
+Message-ID: <Yhzlw0GGBeuCALJp@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f8820396-ff02-7589-a2f0-be542fbc2c3d@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANpmjNOOhuoU7T4UqHbzkRAvM+b-gvt+Qtx41va=9ixGgUSWaQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 10:42:19AM +0800, tangmeng wrote:
-> 
-> 
-> On 2022/2/28 05:26, Luis Chamberlain wrote:
-> 
-> > 
-> > This effort is trying to save space. But now you are adding a new bool
-> > for every single struct ctl_table.... So doesn't the math work out
-> > against us if you do a build size comparison?
-> > 
-> Currently,
+commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
+objects") initializes stack depot while creating cache if SLAB_STORE_USER
+flag is set.
 
-You mean after your patch.
+This can make kernel crash because a cache can be created in various
+contexts. For example if user sets slub_debug=U, kernel crashes
+because create_boot_cache() calls stack_depot_init(), which tries to
+allocate hash table using memblock_alloc() if slab is not available.
+But memblock is also not available at that time.
 
-> the definition of the ctl_table structure and the size of the
-> members are as follows.
-> /* In 64-bit system*/
-> struct ctl_table {
-...
->         bool register_one;               /* 1 bytes */
-...
-> } __randomize_layout;
-> 
-> Before 
+This patch solves the problem by initializing stack depot early
+in boot process if SLAB_STORE_USER debug flag is set globally
+or the flag is set to at least one cache.
 
-Before it the bool was not there. How can it be you are not increasing
-the size?
+[ elver@google.com: initialize stack depot depending on slub_debug
+  parameter instead of allowing stack_depot_init() can be called
+  in kmem_cache_init() for simplicity. ]
 
-> > Can you just instead add a new helper which deals with one entry?
-> > Perhaps then make the other caller which loops use that? That way
-> > we don't bloat the kernel with an extra bool per ctl_table?
-> > 
-> I have considered add a new helper which deals with one entry. But
-> considered that the code will be similar to array,
+Link: https://lkml.org/lkml/2022/2/28/238
+Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ include/linux/slab.h |  1 +
+ init/main.c          |  1 +
+ mm/slab.c            |  4 ++++
+ mm/slob.c            |  4 ++++
+ mm/slub.c            | 28 +++++++++++++++++++++++++---
+ 5 files changed, 35 insertions(+), 3 deletions(-)
 
-That's fine, if we have tons of these.
-
-> > Or can you add a new parameter which specififes the size of the array?
-> > 
-> When I considered add a new parameter which specififes the size of the
-> array. I have encountered the following difficulties.
-> 
-> The current status is that during the ctl_table registration process, the
-> method of traversing the table is implemented by a movement of the pointer
-> entry pointing to the struct ctl_table. When entry->procname is empty, it
-> considers table traversal.
-> 
-> This leads to that when the ctl_tables have child tables in the table, it is
-> not possible to get the child table's size by ARRAY_SIZE(*entry), so
-> transmitting the Child Table Size becomes very difficult.
-
-I see.
-
-A simple routine for dealing with single entries might be best then.
-And while at it, see if you can add a DECLARE_SYSCTL_SINGLE or something
-which will wrap up all the ugly stuff.
-
-  Luis
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..023f3f71ae35 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -139,6 +139,7 @@ struct mem_cgroup;
+ /*
+  * struct kmem_cache related prototypes
+  */
++void __init kmem_cache_init_early(void);
+ void __init kmem_cache_init(void);
+ bool slab_is_available(void);
+ 
+diff --git a/init/main.c b/init/main.c
+index 65fa2e41a9c0..4fdb7975a085 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -835,6 +835,7 @@ static void __init mm_init(void)
+ 	kfence_alloc_pool();
+ 	report_meminit();
+ 	stack_depot_early_init();
++	kmem_cache_init_early();
+ 	mem_init();
+ 	mem_init_print_info();
+ 	kmem_cache_init();
+diff --git a/mm/slab.c b/mm/slab.c
+index ddf5737c63d9..80a6d01aab06 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1196,6 +1196,10 @@ static void __init set_up_node(struct kmem_cache *cachep, int index)
+ 	}
+ }
+ 
++void __init kmem_cache_init_early(void)
++{
++}
++
+ /*
+  * Initialisation.  Called after the page allocator have been initialised and
+  * before smp_init().
+diff --git a/mm/slob.c b/mm/slob.c
+index 60c5842215f1..00e323af8be4 100644
+--- a/mm/slob.c
++++ b/mm/slob.c
+@@ -715,6 +715,10 @@ struct kmem_cache kmem_cache_boot = {
+ 	.align = ARCH_KMALLOC_MINALIGN,
+ };
+ 
++void __init kmem_cache_init_early(void)
++{
++}
++
+ void __init kmem_cache_init(void)
+ {
+ 	kmem_cache = &kmem_cache_boot;
+diff --git a/mm/slub.c b/mm/slub.c
+index a74afe59a403..40bcd18143b6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4221,9 +4221,6 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+ 	s->remote_node_defrag_ratio = 1000;
+ #endif
+ 
+-	if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
+-		stack_depot_init();
+-
+ 	/* Initialize the pre-computed randomized freelist if slab is up */
+ 	if (slab_state >= UP) {
+ 		if (init_cache_random_seq(s))
+@@ -4810,6 +4807,31 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
+ 	return s;
+ }
+ 
++/* Initialize stack depot if needed */
++void __init kmem_cache_init_early(void)
++{
++#ifdef CONFIG_STACKDEPOT
++	slab_flags_t block_flags;
++	char *next_block;
++	char *slab_list;
++
++	if (slub_debug & SLAB_STORE_USER)
++		goto init_stack_depot;
++
++	next_block = slub_debug_string;
++	while (next_block) {
++		next_block = parse_slub_debug_flags(next_block, &block_flags, &slab_list, false);
++		if (block_flags & SLAB_STORE_USER)
++			goto init_stack_depot;
++	}
++
++	return;
++
++init_stack_depot:
++	stack_depot_init();
++#endif
++}
++
+ void __init kmem_cache_init(void)
+ {
+ 	static __initdata struct kmem_cache boot_kmem_cache,
+-- 
+2.33.1

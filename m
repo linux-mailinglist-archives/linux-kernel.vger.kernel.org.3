@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D744E4C65F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B434C65F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiB1JrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S234457AbiB1Jrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiB1JrP (ORCPT
+        with ESMTP id S231363AbiB1Jrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:47:15 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADAD6A002
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:46:36 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        Mon, 28 Feb 2022 04:47:45 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADC16A015
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:47:04 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B4D893FC9E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:46:34 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 96FC93FCA9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646041594;
-        bh=vWRVPVArJCYlog6uyWwSBOO+0zNuAlMQrxtxYFl/jDE=;
+        s=20210705; t=1646041623;
+        bh=EpgoMOR6UC3l3nQ7gCKRaGHrh4PEexWfIMc6Exi5PTY=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=TvGdh8PoahWzvpn7b6V3YD2eKGDapLZDyGdE5cHvc6Jw+YyakuAOdzSnsWc3wWgRD
-         /xxcLzkwmFGug+QjvWzk50J+AXbETkGqCP9oTM2kuBek3+cNfvx+ISEw9EdOFBdjg5
-         FLVE4IQA94uXdJRGGAbE/rKw6bFfUdouo/rrIKuM1dzsCr1OL7L3XN+9SNKAJHCYdw
-         uZ+za7i2L6CYTq2a4kQiu2qLUJIvG1/4ZZJLCTQaxn5DpPQQwOzZMw4KICwh6Ml8f0
-         EKtypy9zDu9vpSDwU5gDduxP1aahVPyKqQTvO1VzbAGWga8kSmC9TlyqCoRA9wR2ic
-         gEjsCEKsh42gw==
-Received: by mail-wr1-f69.google.com with SMTP id w2-20020adfbac2000000b001ea99ca4c50so1854143wrg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:46:34 -0800 (PST)
+        b=oy3Vmdxb5GAIsP79rJx7ozgGMITlUSQPJsw6Q/B6qY6A3Nl9ObBkEKyiivzvuH0lD
+         sSEpC7Wzs1q4GN/YHXftXY2iLo/HB2JNpmwvLRzUT9BNiuxE1bdrpmvCX0pjLUeGQw
+         F74gFHuFd56fbqhxen8UMJ98f1BnT68SokhGanu19+1UuLf3P7K/P/Pod+xg78j/I8
+         yepZThQU8+cqXAaer1wvHK1G+ypeLM5jpXyM2em+D1fSwfwRbtp1SngZ8cDnCdZM0e
+         UcjHS3LpjL2tFADllQmI68p4gtW1jbW0ncSCpCDjfT7uastRT05Oe3Yyhn1E+Ds7QJ
+         B6MzIwpW9sTXQ==
+Received: by mail-wm1-f69.google.com with SMTP id i20-20020a05600c051400b00380d5eb51a7so5830397wmc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:47:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vWRVPVArJCYlog6uyWwSBOO+0zNuAlMQrxtxYFl/jDE=;
-        b=hA3xrY4mN5+0Hmvl0f+1zoPAg8bnpmR3UKjFG08HoaAuKc+dqE01tX8rhGrsbJrHPn
-         DYVzd+tPAhU9G6S63pnjeLFWGsLsu9FW5ev3Ep8T62uMW8o3ZmFbw7UaymmqxjKzuWXO
-         9c/SPUrUXQRjCBwoc/EvGRXQZTQ7nuZhzJYpIHs+ivCqVJHdQ4wf2+c0LHsIqtWZBBPl
-         3c8bz72h4R9X14cDYEI38XHT9bzgk5mpgLH5dAEfyvbwMZmVb7Zu0GSBT6LrZSquR1uz
-         JbRLug/ipOP7hvbcv17+K5+8DiTlvjHrwfAMeaBk2PQe8RzEqCOA3/fGHsyMxhj0EQn+
-         hymw==
-X-Gm-Message-State: AOAM533HdybQR4LauhTCuLJLcysKh9CVurnC3QXWWpTqau37hVKazp9V
-        XB8aFSrce+HLe6pE8hPkkE0+nW+6osqJhpZuy4sHtpD69ZvrwWNqKpEK1v6dlsXW3bvQk+De3Z/
-        WszT4fqGpktnG/Z57y0pfVZvyQJc++pELV/NJvn6hZA==
-X-Received: by 2002:a05:600c:1c29:b0:381:7667:ab69 with SMTP id j41-20020a05600c1c2900b003817667ab69mr1406261wms.142.1646041594385;
-        Mon, 28 Feb 2022 01:46:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyjgfHayCZ6lM4CIvn6f9h7ICOQlGN4pyToG5DkHnFk0Kst5sueKcEZizJeXImKTwcW83XFsw==
-X-Received: by 2002:a05:600c:1c29:b0:381:7667:ab69 with SMTP id j41-20020a05600c1c2900b003817667ab69mr1406248wms.142.1646041594244;
-        Mon, 28 Feb 2022 01:46:34 -0800 (PST)
+        bh=EpgoMOR6UC3l3nQ7gCKRaGHrh4PEexWfIMc6Exi5PTY=;
+        b=crZsMc/ROl5+SA8hSmk8jqgBOWc17YtqdcMU0Nyo7fVa2FCovwZEHVuLnqRJBE09UF
+         H8c1+mx7wK8OnEXyo1BE/OnilfgyoHcfkJjTvP8H1NHySZT4CUeGiKBn3L7R03lgJ6tB
+         S9CRbBY/D3zb54dlRlbHtG0TPZV+jKFM0pI40lrRLlxc3YvbnERj89sZU+n3f0tWvsiw
+         TXby9zcRwW3z+2blwa/AfvjTUrSAkod4cODl6YRIsTuVttqwVj2wCGwqy4dPz9dzYPOk
+         pMeZC7qWa+uWfkQK9pTn5i7yjxmrl9iLNosrQTgpIBPVorcAawAobDmgEjewu3o6ARAO
+         H8xg==
+X-Gm-Message-State: AOAM531SNFT30/NMR0TwZLF0ObasQpAyB4YEQ10GvFtqTCLUyPUnaOAT
+        TVGksQo5hJ4u0zwQGEedanTrfw/JMEs+URexA9AABKiSjNudEApgT+wYl1HEDKOU+UbNkVz8brP
+        DH9RBXmRdc/TcoplyUtDrXim8XtPCe76ncMLglba1sg==
+X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr14682252wre.711.1646041623218;
+        Mon, 28 Feb 2022 01:47:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy1MQrmxE/R+HSmU+JGaqJA8OjgOG3SQPiDIMSEoBZ6fjSsDIfcUwdI70YoFS/spyArSqyQFQ==
+X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr14682238wre.711.1646041623070;
+        Mon, 28 Feb 2022 01:47:03 -0800 (PST)
 Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id m12-20020adfe0cc000000b001ede2dd604esm9807179wri.106.2022.02.28.01.46.32
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm9854945wrm.82.2022.02.28.01.47.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 01:46:33 -0800 (PST)
-Message-ID: <5e15401e-761f-2135-7f3c-fd78a455e380@canonical.com>
-Date:   Mon, 28 Feb 2022 10:46:32 +0100
+        Mon, 28 Feb 2022 01:47:01 -0800 (PST)
+Message-ID: <0d605f73-aa26-58dd-6bb4-674764baadb6@canonical.com>
+Date:   Mon, 28 Feb 2022 10:47:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: net: can: renesas,rcar-canfd: Document
- RZ/V2L SoC
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
 Content-Language: en-US
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220227213250.23637-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220227213250.23637-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -94,21 +90,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2022 22:32, Lad Prabhakar wrote:
-> Document RZ/V2L CANFD bindings. RZ/V2L CANFD is identical to one found on
-> the RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rzg2l-canfd" will be used as a fallback.
+On 27/02/2022 22:47, Lad Prabhakar wrote:
+> Document RZ/V2L I2C bindings. RZ/V2L I2C is identical to one found on
+> the RZ/G2L SoC. No driver changes are required as RZ/G2L compatible
+> string "renesas,riic-rz" will be used as a fallback.
 > 
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
-> DTSI changes [0] have been posted as part of separate series.
+> DTSI changes have been posted as part of series [0].
 > 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220227203744.18355-4-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20220227203744.18355-6-prabhakar.mahadev-lad.rj@bp.renesas.com/
 > ---
->  .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml          | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 

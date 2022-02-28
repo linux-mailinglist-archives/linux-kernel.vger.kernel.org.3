@@ -2,371 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF914C6446
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDC34C644D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 09:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiB1ICX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 03:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S233390AbiB1IFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 03:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiB1ICU (ORCPT
+        with ESMTP id S230247AbiB1IFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:02:20 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA706928E;
-        Mon, 28 Feb 2022 00:01:42 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id u2so2447568ple.10;
-        Mon, 28 Feb 2022 00:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0kMd+1+9I4cwW0irNULMJVKX8ou/gm8Lldcho28W65A=;
-        b=YVJN3Gyq6Dlkv1BxfX2VusX8qBGNAhHAYp1uYVt3Y2vFGoDI5XHz1sJ2yTT5ClDKCO
-         DWyaIcNKRldKSMPgNR03QYx4DMQ7EtTHnzv2RO+OT8gRvo1TV7Rs7rbzbgXYBH040I4E
-         YlcfyEaSGRd1gM0LNkeRJ0fr5uq3VVFBDO3zyafYCp/hOLUF6SVjp4xws0yKg04YgdY0
-         0y1pl/LegL/8ECMFDV8H3uDJ4aGWbNdKZtj9v1v8EfkRV7BOEwEtqaz0Mz0CS9MPz3XA
-         PsMUVdoy7JYvpYX1r0aSw3CyHIAixN6SmJFKpiKsDOE7ItU80ul16t9BXSTlaq2/WrIl
-         zwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0kMd+1+9I4cwW0irNULMJVKX8ou/gm8Lldcho28W65A=;
-        b=1NsLwJ87Z2htna0liLqFragl8lEuAhdg/u8f41RDPhhi52FvShMn3jh48JM9BA/vnm
-         M6jcDXfI1WHpqI/bmoDJqBBMnAENTgXFeDoc/AOVV+yG2DogSpUTBdS9kJl2uZPa3mDA
-         mW9bym9CDmuQ5wuetXojSzWAn5Lqliolq0cGSBXCPAtYI29bgWfGjFLL/cdMN5XkJy3U
-         4ysyYRrIhHy8CrhTCf7pUJbYEnFad25lSMvrHFFgjXksDjSmUDxgqRK/+GA3JlsRxzhm
-         rcRZdsKSsMzGIhfLoqMwf3it+5h6CHLXOcS6HgEMiVf7CLxwovZCF18nsjvbpzB9E/1B
-         OPzA==
-X-Gm-Message-State: AOAM533glFRLEKN85MZPJb10Ft3HN/UVKdmVRsOutmEpyrERGPR10TgQ
-        YCObAnLlqsKu85JPBlcoc2M=
-X-Google-Smtp-Source: ABdhPJwq4aJ+Z5IbcaznHsI80vw02BrmJPr0pCY2w3MQ3PosRJ69qHQpqpia16LiVPguhk4RCCXCoQ==
-X-Received: by 2002:a17:902:b589:b0:14f:3f88:15e2 with SMTP id a9-20020a170902b58900b0014f3f8815e2mr18922156pls.171.1646035301395;
-        Mon, 28 Feb 2022 00:01:41 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:43a2:93b6:ebd7:94fd])
-        by smtp.gmail.com with ESMTPSA id y8-20020a056a00180800b004e156f7191esm11740621pfa.213.2022.02.28.00.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 00:01:40 -0800 (PST)
-Date:   Mon, 28 Feb 2022 00:01:38 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        Sean O'Brien <seobrien@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: Re: [PATCH v4 2/4] HID: Extract vivaldi hid feature mapping for use
- in hid-hammer
-Message-ID: <YhyBYl0DbizOwClS@google.com>
-References: <20220216195901.1326924-1-swboyd@chromium.org>
- <20220216195901.1326924-3-swboyd@chromium.org>
+        Mon, 28 Feb 2022 03:05:34 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300093.outbound.protection.outlook.com [40.107.130.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A629153B41;
+        Mon, 28 Feb 2022 00:04:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K2QGttyDJxlhAT5TiVT73nTHkl78dZBRqnVVyz0v23LLil0SsoPpqA4WMqZiD0CYtX63/bZTTwKH0vYiaztjAXAGi6b3H4QJDlKLCmPO+tKpCMKhim3TLz5MoBtKL4VEawVFy7blBfBgYt1Xq99FW/Jnw2vPSjS/qMe7l2K/093gyIq3rZ8JU/0w+2Dz0mvB+azaaC8F7YJaSk60rB/xp1+A0mnODRX25FvcDL+YiFx/Kr5k9JoAJkyXsaIlq59j4NZ3+JVaJIdPZ636XHWZU9ThQJ8O+xqUF9I6CPNCdbvwHLbrm8UZG4Z45bOmN6JDkat9IeilFzBm0aTqrWF0Zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9YI7WCiNbsRtSYf/fQVhygZxOoLR7O4di0+j4EqPOW0=;
+ b=fx1jxC2F2wzd7di2j4SwTooRIEJYmQZFyZN6Qofq0Uzm+LiwczlYfJg7j+rELVtreoCvVyqG5Br7iBRBHdQB/zrxsLbV92sJotFDlkT/JX5YLpMHWfq3ZFtnYPNB4kXALZ8JSHjRDl3PdBDjnCgiyqfVzsxJ9azpWj/5/iXjOA6iyA5RnwYsyVAS+rdvw3yZgLXMMqxBs0aR5UYShO4bV/VyC1H+G0oS3INunEI8zJO3O+ccqkqoD9jLzqrxilkye8KXe4IZXTMwKesKfkOBKDlJ0VFd4yuBT73f0BtZOA2Wc3qKnfNS/zr9diDjUuAxrl6tVU2MAkukLEq0k5/hBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9YI7WCiNbsRtSYf/fQVhygZxOoLR7O4di0+j4EqPOW0=;
+ b=M/+wqwrdAOwN+jJrg1atifk7P0pcM2FlXQFu/zXNTLsergBlQyI4wqEOsVhHoxV0VupOv8bhHfMhGIc2SwM+cMleJQN1AtB2F48A3elGdOXylyIyePT9jNb+WtZPVIIWGgAKFQ7lkr6YlEXGFQFSgvSgKffER1acHkKp4Np6FnY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ PS1PR0601MB3658.apcprd06.prod.outlook.com (2603:1096:300:78::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Mon, 28 Feb
+ 2022 08:04:48 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
+ 08:04:47 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-doc@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jiabing.wan@qq.com, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] bpf, docs: add a missing colon in verifier.rst
+Date:   Mon, 28 Feb 2022 16:04:16 +0800
+Message-Id: <20220228080416.1689327-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0156.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::36) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216195901.1326924-3-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ce515081-621f-45cc-8f0d-08d9fa90fc75
+X-MS-TrafficTypeDiagnostic: PS1PR0601MB3658:EE_
+X-Microsoft-Antispam-PRVS: <PS1PR0601MB3658FCEB4ABE66A87DC6D4EEAB019@PS1PR0601MB3658.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sGx7RK33riBhY2dK7wiiMyjGLv7FjNOJDhJzAuUGnm1e14lngTQkIHZU3OhiJM/7PIFzol0P7UaBUvqsHDDg3TV2o2U9HgpI55bLvMyQITWg95yn8dGo/WDA2/3gXunva3xi8fspO2ehsV3ARWarAT0NqBOHzsSeE6k0eORpZUvfbwx4jVBuJOnMfnFlg2to1dc8oP4ueHx0CxUqPSKEf0m0/L2oW8Nt4bv/iHyx30aJhpFdX8Jv3OC0JJQeMLLKL+UNf9oOOLm+BdT2rIfNV891NV79wRuU5oX2fzDac0MXOO+FJj0C/r+F9+sWT4LBEn4lMHhpLLdwsvCGrKU6I6oc2PTDshvA5egKyfwBe7CAoSB7KpTSwyORVR5IuQYvMehU3Z9kIvvwHWQsT76evu6mZCOLgFo+TxUIeVw9xahT7snSUawvAjGLXqIbn4C4kBSMOtLNp+9ObdFCUpQSyeypEHpVhSw1Dm0pS5cL+C+cqkCBwF/KWBWDyVb2NsN7B4q3C+O5+Xzlm0oDCF6ZZDAa7/2za1b0+WCHtgN8aPO/5yQrNAzN9KlvfnK4UjcaGwlCiyJIvEmXYfKAyQGmOzLPQQEFws0K7kRp1wXjVKNenNuNHe1Q48ElqdZdfyphRsej1e8x+kJaJ2o/pezdqHXwDYpl29hKhAdEB/hQLcXviY8YxjydYJvX0qx8j8BGZA+MWvA85ccLd8b5FVj7r3+dtdlL0oMHdPV5KyZqm4M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(110136005)(38100700002)(6506007)(186003)(26005)(316002)(5660300002)(6666004)(38350700002)(508600001)(7416002)(2906002)(36756003)(1076003)(107886003)(83380400001)(921005)(6512007)(8936002)(2616005)(4744005)(6486002)(8676002)(66946007)(66556008)(86362001)(4326008)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e8QKb/IhECQ6NTUh39KlC9Xt+UnEy8EvwHpSYT9A0Fl4YMYfJ/qDLH3fjDTp?=
+ =?us-ascii?Q?mbQznJRpkakm1abFSVsGDxQyfCSD98paPwWSiKuZFFv0ffthlNZFOfrkInSO?=
+ =?us-ascii?Q?V2wN91rpyX2kI7arVjGOWQJpXOtI2hG6ZvLE4UpLusPPZB6iorqqbcKuPQDn?=
+ =?us-ascii?Q?G4wWlGqv3t4R0eq6kqoO75usta49ASZEehFmYUtoV26FzusIK57wSInYWWU5?=
+ =?us-ascii?Q?Gr5SlWvk/h1TROZyL/7XRp9ZL/ZGMnby7A/P1nEWkDA4zNkeWbArrRNxtelU?=
+ =?us-ascii?Q?+cUuFFnxnXb/34PFhQFHWPP9qbqO1bh0C71K4mZH0TJ8Jt5LYEZsqony7E+9?=
+ =?us-ascii?Q?8hGu1YNhToYvRcS1TUYtGVHkdF9++lBEbShGWZCg0/YOw26SswGk9kPZ1Au3?=
+ =?us-ascii?Q?RxJUvFGYdWDwJWb791mrvSFRWnGmxS/I5jEWGxa9ajOvvmmRQS0DdFpdnMHU?=
+ =?us-ascii?Q?TreIm5n6B92cuWDQ4UBoA8dDO+e9CoodFvThKysWY4iJkBMLv1c1NrZw5QCH?=
+ =?us-ascii?Q?mRzrcDrzzGzuJiDHqK1y7VJ2yzkpYCEOEFvs+Y5OXhcQaoj4k5BlSaIPNxPY?=
+ =?us-ascii?Q?SRV908UdPxFpo/dmG899/Z7NysBYlhDBcntjJ/tNs3tvlTAeqhqSL5Q+fOfv?=
+ =?us-ascii?Q?rMAOdQPYnaIyWctRYWEw5blYMP2awoQrW5IjcWFtxl1w3/ov4Ei1c2DCcBK8?=
+ =?us-ascii?Q?WdCpdR6SVnXylP5pUv0DKRL4P2tuxnAP6995H34Sra3VmAiar2w+GrSLYKQk?=
+ =?us-ascii?Q?BYtsJ9kczlCkOjdpME2CXCJvqjpIzZDRgJTAeEZqZIEmYUzZqb7hpMhPqyyp?=
+ =?us-ascii?Q?6jD1JWN+DvB7TzWe6hSrWTRihocj/K5s9H8+ECUVwt+JL6PuM03QeUDWzGRK?=
+ =?us-ascii?Q?wuwt4CppFOznIeqmUZBSNn8cGnVpbCIw4tSRo71ITAUV8/Rs+QyPSThdEqwR?=
+ =?us-ascii?Q?Wxt84/4841LNJT5ZQxy0DjaozO2XE6+rfkmXq3h4bjKQYrb1Tamo2b3ssSjE?=
+ =?us-ascii?Q?heo+zeDAOqEyIMjBO6GP5ax6+TNljJR0pnusprDB+7jPqlSUYzsH8tg8txFC?=
+ =?us-ascii?Q?xKSj664zKgFBjnM89sY3s4twkzERAjAcTKePSxwcbdnAw64T0vcAotF5qAXt?=
+ =?us-ascii?Q?Iczv91WJHt24FbJbFqUdz0wdW0Tp7KWQoXCZdzNXyDgRztGc2vzr4hnkPHQy?=
+ =?us-ascii?Q?mbwmGPq9A2UhufWiXYNFdsZI5NvcgKKo0sKLnC2O1p+rvf83mdZ4RTnFi432?=
+ =?us-ascii?Q?DYUi45OaT8NslrZsqkc9u+DMFZ4oLc2L3vMnvKtgrV7EIJ+JMtl4TWBbcbw2?=
+ =?us-ascii?Q?C15pvaQIWnLgvnivBwrfnVLGzzbqk6s65dEuJEJ0iln0QPGiq4lzJJvIpvek?=
+ =?us-ascii?Q?Ib85k47t83M1zeUqI9bngIGqUQmzphHwRIXwXp90JKDT4nP4r4oiPgfIFIj/?=
+ =?us-ascii?Q?0tDoM2PvwciH2Z1MJK2mEqZJqKC7opS/07q2OrXduhp3v9nBBre4mUWBE6pf?=
+ =?us-ascii?Q?nGu22MH4cBI0pC43oXiiMIoB1Uvo7C2pW3HgRK3DhMHKGLDpw082uZbDB6aS?=
+ =?us-ascii?Q?/w3liofB2d56t7rJXKcqsmsRszVyhQ/etG9GtxHvQyzv943lGqCdWpNssaX5?=
+ =?us-ascii?Q?eY6dlm8PhPx0c8DJyqnGZnM=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce515081-621f-45cc-8f0d-08d9fa90fc75
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 08:04:46.9620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lK13IF+SwuiBfqeedAU3QvJkY2v410oqqXzx1MyxYfxDp6dNLmkoCO/tL2nJmp3kDFxyFbR16etSQcmbt6w20Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PR0601MB3658
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 11:58:59AM -0800, Stephen Boyd wrote:
-> We need to support parsing the HID device in both the vivaldi and the
-> hammer drivers so that we can properly expose the function row physmap
-> to userspace when a hammer device uses a vivaldi keyboard layout for the
-> function row keys. Extract the feature mapping logic from the vivaldi
-> driver into an hid specific vivaldi library so we can use it from both
-> HID drivers.
-> 
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Tested-by: "Sean O'Brien" <seobrien@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-> Acked-by: Jiri Kosina <jkosina@suse.cz>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/hid/Kconfig                |  9 +++
->  drivers/hid/Makefile               |  1 +
->  drivers/hid/hid-vivaldi-common.c   | 97 ++++++++++++++++++++++++++++++
->  drivers/hid/hid-vivaldi.c          | 69 +--------------------
->  include/linux/input/vivaldi-fmap.h |  9 +++
->  5 files changed, 118 insertions(+), 67 deletions(-)
->  create mode 100644 drivers/hid/hid-vivaldi-common.c
-> 
-> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> index 5569a2029dab..ea8fa71c9e9c 100644
-> --- a/drivers/hid/Kconfig
-> +++ b/drivers/hid/Kconfig
-> @@ -403,14 +403,23 @@ config HOLTEK_FF
->  	  Say Y here if you have a Holtek On Line Grip based game controller
->  	  and want to have force feedback support for it.
->  
-> +config HID_VIVALDI_COMMON
-> +	tristate
-> +	help
-> +	  ChromeOS Vivaldi HID parsing support library. This is a hidden
-> +	  option so that drivers can use common code to parse the HID
-> +	  descriptors for vivaldi function row keymap.
-> +
->  config HID_GOOGLE_HAMMER
->  	tristate "Google Hammer Keyboard"
-> +	select HID_VIVALDI_COMMON
+Add a missing colon to fix the document style.
 
-This chunk belongs to the next patch.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ Documentation/bpf/verifier.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  	depends on USB_HID && LEDS_CLASS && CROS_EC
->  	help
->  	Say Y here if you have a Google Hammer device.
->  
->  config HID_VIVALDI
->  	tristate "Vivaldi Keyboard"
-> +	select HID_VIVALDI_COMMON
->  	select INPUT_VIVALDIFMAP
->  	depends on HID
->  	help
-> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> index 6d3e630e81af..469a6159ebae 100644
-> --- a/drivers/hid/Makefile
-> +++ b/drivers/hid/Makefile
-> @@ -50,6 +50,7 @@ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
->  obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
->  obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
->  obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
-> +obj-$(CONFIG_HID_VIVALDI_COMMON) += hid-vivaldi-common.o
->  obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
->  obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
->  obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
-> diff --git a/drivers/hid/hid-vivaldi-common.c b/drivers/hid/hid-vivaldi-common.c
-> new file mode 100644
-> index 000000000000..8a5074fd63b7
-> --- /dev/null
-> +++ b/drivers/hid/hid-vivaldi-common.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Helpers for ChromeOS HID Vivaldi keyboards
-> + *
-> + * Copyright (C) 2022 Google, Inc
-> + */
-> +
-> +#include <linux/export.h>
-> +#include <linux/hid.h>
-> +#include <linux/input/vivaldi-fmap.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/types.h>
-> +
-> +#define HID_VD_FN_ROW_PHYSMAP 0x00000001
-> +#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
-> +
-> +/**
-> + * vivaldi_hid_feature_mapping - Fill out vivaldi keymap data exposed via HID
-> + * @data: The vivaldi function keymap
-> + * @hdev: HID device to parse
-> + * @field: HID field to parse
-> + * @usage: HID usage to parse
-> + */
-> +void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
-> +				 struct hid_device *hdev,
-> +				 struct hid_field *field,
-> +				 struct hid_usage *usage)
-> +{
-> +	struct hid_report *report = field->report;
-> +	int fn_key;
-> +	int ret;
-> +	u32 report_len;
-> +	u8 *report_data, *buf;
-> +
-> +	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
-> +	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-> +		return;
-> +
-> +	fn_key = (usage->hid & HID_USAGE);
-> +	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
-> +		return;
-> +	if (fn_key > data->num_function_row_keys)
-> +		data->num_function_row_keys = fn_key;
-> +
-> +	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-> +	if (!report_data)
-> +		return;
-> +
-> +	report_len = hid_report_len(report);
-> +	if (!report->id) {
-> +		/*
-> +		 * hid_hw_raw_request() will stuff report ID (which will be 0)
-> +		 * into the first byte of the buffer even for unnumbered
-> +		 * reports, so we need to account for this to avoid getting
-> +		 * -EOVERFLOW in return.
-> +		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-> +		 * so we can safely say that we have space for an extra byte.
-> +		 */
-> +		report_len++;
-> +	}
-> +
-> +	ret = hid_hw_raw_request(hdev, report->id, report_data,
-> +				 report_len, HID_FEATURE_REPORT,
-> +				 HID_REQ_GET_REPORT);
-> +	if (ret < 0) {
-> +		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
-> +			 field->report->id);
-> +		goto out;
-> +	}
-> +
-> +	if (!report->id) {
-> +		/*
-> +		 * Undo the damage from hid_hw_raw_request() for unnumbered
-> +		 * reports.
-> +		 */
-> +		report_data++;
-> +		report_len--;
-> +	}
-> +
-> +	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
-> +				   report_len, 0);
-> +	if (ret) {
-> +		dev_warn(&hdev->dev, "failed to report feature %d\n",
-> +			 field->report->id);
-> +		goto out;
-> +	}
-> +
-> +	data->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
-> +	    field->value[usage->usage_index];
-> +
-> +out:
-> +	kfree(buf);
-> +}
-> +EXPORT_SYMBOL_GPL(vivaldi_hid_feature_mapping);
-> +
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-> index adb56b342948..f70cab6a192b 100644
-> --- a/drivers/hid/hid-vivaldi.c
-> +++ b/drivers/hid/hid-vivaldi.c
-> @@ -13,9 +13,6 @@
->  #include <linux/module.h>
->  #include <linux/sysfs.h>
->  
-> -#define HID_VD_FN_ROW_PHYSMAP 0x00000001
-> -#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
-> -
->  static ssize_t function_row_physmap_show(struct device *dev,
->  					 struct device_attribute *attr,
->  					 char *buf)
-> @@ -60,70 +57,8 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
->  				    struct hid_usage *usage)
->  {
->  	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
-> -	struct hid_report *report = field->report;
-> -	int fn_key;
-> -	int ret;
-> -	u32 report_len;
-> -	u8 *report_data, *buf;
-> -
-> -	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
-> -	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-> -		return;
-> -
-> -	fn_key = (usage->hid & HID_USAGE);
-> -	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
-> -		return;
-> -	if (fn_key > drvdata->num_function_row_keys)
-> -		drvdata->num_function_row_keys = fn_key;
-> -
-> -	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-> -	if (!report_data)
-> -		return;
-> -
-> -	report_len = hid_report_len(report);
-> -	if (!report->id) {
-> -		/*
-> -		 * hid_hw_raw_request() will stuff report ID (which will be 0)
-> -		 * into the first byte of the buffer even for unnumbered
-> -		 * reports, so we need to account for this to avoid getting
-> -		 * -EOVERFLOW in return.
-> -		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-> -		 * so we can safely say that we have space for an extra byte.
-> -		 */
-> -		report_len++;
-> -	}
-> -
-> -	ret = hid_hw_raw_request(hdev, report->id, report_data,
-> -				 report_len, HID_FEATURE_REPORT,
-> -				 HID_REQ_GET_REPORT);
-> -	if (ret < 0) {
-> -		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
-> -			 field->report->id);
-> -		goto out;
-> -	}
-> -
-> -	if (!report->id) {
-> -		/*
-> -		 * Undo the damage from hid_hw_raw_request() for unnumbered
-> -		 * reports.
-> -		 */
-> -		report_data++;
-> -		report_len--;
-> -	}
-> -
-> -	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
-> -				   report_len, 0);
-> -	if (ret) {
-> -		dev_warn(&hdev->dev, "failed to report feature %d\n",
-> -			 field->report->id);
-> -		goto out;
-> -	}
-> -
-> -	drvdata->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
-> -	    field->value[usage->usage_index];
-> -
-> -out:
-> -	kfree(buf);
-> +
-> +	vivaldi_hid_feature_mapping(drvdata, hdev, field, usage);
->  }
->  
->  static int vivaldi_input_configured(struct hid_device *hdev,
-> diff --git a/include/linux/input/vivaldi-fmap.h b/include/linux/input/vivaldi-fmap.h
-> index 57563d9da022..c736200b4511 100644
-> --- a/include/linux/input/vivaldi-fmap.h
-> +++ b/include/linux/input/vivaldi-fmap.h
-> @@ -4,6 +4,10 @@
->  
->  #include <linux/types.h>
->  
-> +struct hid_device;
-> +struct hid_field;
-> +struct hid_usage;
-> +
-
-This all HID-specific and does not belong here, I created a new
-hid-vivaldi-common.h in drivers/hid for it.
-
->  #define VIVALDI_MIN_FN_ROW_KEY	1
->  #define VIVALDI_MAX_FN_ROW_KEY	24
->  
-> @@ -25,4 +29,9 @@ struct vivaldi_data {
->  ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
->  					  char *buf);
->  
-> +void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
-> +				 struct hid_device *hdev,
-> +				 struct hid_field *field,
-> +				 struct hid_usage *usage);
-> +
->  #endif /* _VIVALDI_KEYMAP_H */
-> -- 
-> https://chromeos.dev
-> 
-
-Thanks.
-
+diff --git a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
+index fae5f6273bac..d4326caf01f9 100644
+--- a/Documentation/bpf/verifier.rst
++++ b/Documentation/bpf/verifier.rst
+@@ -329,7 +329,7 @@ Program with unreachable instructions::
+   BPF_EXIT_INSN(),
+   };
+ 
+-Error:
++Error::
+ 
+   unreachable insn 1
+ 
 -- 
-Dmitry
+2.35.1
+

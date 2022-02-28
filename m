@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F73C4C72D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978594C76ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiB1R3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S240838AbiB1SJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237120AbiB1R2F (ORCPT
+        with ESMTP id S240470AbiB1SDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2061E5B;
-        Mon, 28 Feb 2022 09:27:21 -0800 (PST)
+        Mon, 28 Feb 2022 13:03:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54F8B1A9A;
+        Mon, 28 Feb 2022 09:47:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E2BAB815B3;
-        Mon, 28 Feb 2022 17:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D79C340F1;
-        Mon, 28 Feb 2022 17:27:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C16A060BFE;
+        Mon, 28 Feb 2022 17:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1ACC340F0;
+        Mon, 28 Feb 2022 17:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069239;
-        bh=CidzmvAFVi43hMNxzqnk5tG9HKIHJRZgVsRGz6ocuw8=;
+        s=korg; t=1646070388;
+        bh=jMJ/i/MT3k5J8P2WjDJWvWIVbj+0xe6ekMLEIvaprlA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Co6JB92vrzGgpBSnV/1W1F6NLD+e+lQPiDQ0i2PiD4cN2gYs0elC1jxyHkY+jUPJu
-         0ySLr5b+7R/kbW4R1MB6n+y2Oqxw5FTvXkVD7raeE8END+fHulVyXl2ZHowfUXpqhB
-         3OC+DwqpAlr8jHG5QijfcI54Vl6LpQPmIVcNuN9Y=
+        b=MEqsK2LTK1kjBMLQK89IhYK9nHp2FLHBGxjag0cGCwBLRMbnc1ycGF6MsUstuaHZl
+         S/17lHQ4Lya2TF9mnq/6OJQLDmvlRUb7VcTQbCbZlFcrNVt9o+U+gJQA3A0oht2LOP
+         NKSHZjTbopBcZt8rjn7gEhM0ouWHYHuI8sRIepss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Laibin Qiu <qiulaibin@huawei.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 14/31] configfs: fix a race in configfs_{,un}register_subsystem()
-Date:   Mon, 28 Feb 2022 18:24:10 +0100
-Message-Id: <20220228172201.258455438@linuxfoundation.org>
+        stable@vger.kernel.org, Cris Forno <cforno12@outlook.com>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        Dany Madden <drt@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 089/164] ibmvnic: schedule failover only if vioctl fails
+Date:   Mon, 28 Feb 2022 18:24:11 +0100
+Message-Id: <20220228172407.932323143@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,98 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChenXiaoSong <chenxiaosong2@huawei.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-[ Upstream commit 84ec758fb2daa236026506868c8796b0500c047d ]
+commit 277f2bb14361790a70e4b3c649e794b75a91a597 upstream.
 
-When configfs_register_subsystem() or configfs_unregister_subsystem()
-is executing link_group() or unlink_group(),
-it is possible that two processes add or delete list concurrently.
-Some unfortunate interleavings of them can cause kernel panic.
+If client is unable to initiate a failover reset via H_VIOCTL hcall, then
+it should schedule a failover reset as a last resort. Otherwise, there is
+no need to do a last resort.
 
-One of cases is:
-A --> B --> C --> D
-A <-- B <-- C <-- D
-
-     delete list_head *B        |      delete list_head *C
---------------------------------|-----------------------------------
-configfs_unregister_subsystem   |   configfs_unregister_subsystem
-  unlink_group                  |     unlink_group
-    unlink_obj                  |       unlink_obj
-      list_del_init             |         list_del_init
-        __list_del_entry        |           __list_del_entry
-          __list_del            |             __list_del
-            // next == C        |
-            next->prev = prev   |
-                                |               next->prev = prev
-            prev->next = next   |
-                                |                 // prev == B
-                                |                 prev->next = next
-
-Fix this by adding mutex when calling link_group() or unlink_group(),
-but parent configfs_subsystem is NULL when config_item is root.
-So I create a mutex configfs_subsystem_mutex.
-
-Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 334c42414729 ("ibmvnic: improve failover sysfs entry")
+Reported-by: Cris Forno <cforno12@outlook.com>
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Signed-off-by: Dany Madden <drt@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220221210545.115283-1-drt@linux.ibm.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/configfs/dir.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/net/ethernet/ibm/ibmvnic.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
-index c875f246cb0e9..ccb49caed502c 100644
---- a/fs/configfs/dir.c
-+++ b/fs/configfs/dir.c
-@@ -50,6 +50,14 @@ DECLARE_RWSEM(configfs_rename_sem);
-  */
- DEFINE_SPINLOCK(configfs_dirent_lock);
- 
-+/*
-+ * All of link_obj/unlink_obj/link_group/unlink_group require that
-+ * subsys->su_mutex is held.
-+ * But parent configfs_subsystem is NULL when config_item is root.
-+ * Use this mutex when config_item is root.
-+ */
-+static DEFINE_MUTEX(configfs_subsystem_mutex);
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -5919,10 +5919,14 @@ static ssize_t failover_store(struct dev
+ 		   be64_to_cpu(session_token));
+ 	rc = plpar_hcall_norets(H_VIOCTL, adapter->vdev->unit_address,
+ 				H_SESSION_ERR_DETECTED, session_token, 0, 0);
+-	if (rc)
++	if (rc) {
+ 		netdev_err(netdev,
+ 			   "H_VIOCTL initiated failover failed, rc %ld\n",
+ 			   rc);
++		goto last_resort;
++	}
 +
- static void configfs_d_iput(struct dentry * dentry,
- 			    struct inode * inode)
- {
-@@ -1937,7 +1945,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
- 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
++	return count;
  
- 	sd = root->d_fsdata;
-+	mutex_lock(&configfs_subsystem_mutex);
- 	link_group(to_config_group(sd->s_element), group);
-+	mutex_unlock(&configfs_subsystem_mutex);
- 
- 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
- 
-@@ -1962,7 +1972,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
- 	inode_unlock(d_inode(root));
- 
- 	if (err) {
-+		mutex_lock(&configfs_subsystem_mutex);
- 		unlink_group(group);
-+		mutex_unlock(&configfs_subsystem_mutex);
- 		configfs_release_fs();
- 	}
- 	put_fragment(frag);
-@@ -2008,7 +2020,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
- 
- 	dput(dentry);
- 
-+	mutex_lock(&configfs_subsystem_mutex);
- 	unlink_group(group);
-+	mutex_unlock(&configfs_subsystem_mutex);
- 	configfs_release_fs();
- }
- 
--- 
-2.34.1
-
+ last_resort:
+ 	netdev_dbg(netdev, "Trying to send CRQ_CMD, the last resort\n");
 
 

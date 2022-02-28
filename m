@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ECD4C76D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170B44C757E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240785AbiB1SJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S234532AbiB1RzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbiB1SDU (ORCPT
+        with ESMTP id S239068AbiB1Rwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:20 -0500
+        Mon, 28 Feb 2022 12:52:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B4B16F7;
-        Mon, 28 Feb 2022 09:46:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89883A6441;
+        Mon, 28 Feb 2022 09:39:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B321F60BBF;
-        Mon, 28 Feb 2022 17:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C48C340E7;
-        Mon, 28 Feb 2022 17:46:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA9C36153C;
+        Mon, 28 Feb 2022 17:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4CDCC340F0;
+        Mon, 28 Feb 2022 17:39:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070399;
+        s=korg; t=1646069981;
         bh=/hFzPLZdxNyr7sNhIlWRmhRcp4xlGHvWKKPXk1bmKxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GDEqV8+TQD5/jEIq4KrqvsqwYaWaMbd4P2NhueKcrcxi5NydgJXSYTgYUzTcH4KeN
-         scej+6bLNWjFL9X94Az4x4+rukO0WD8em1bBg7N1mq4WB1It4KQg9COh61tdSYIIUy
-         BPbSgDe8srrJY00UVWssroxO6R4VMhx3Y3+TV5jE=
+        b=bwXkKCTOUsCUt7HyZhQWfGawH3Lj8TdtkXBThFg5PJ3FOQi9IqofpM4sFsKW8uX5H
+         FPUDHusgxuRHtMd5tor2ErCsBK4OKjMj5leH/Ok0Jw+kzmdf0c+j6BuGYePCo89593
+         YN26rztYdzC2HvTP0gL4KMDCci/jW9LeHEAIbJBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Yevgeny Kliteynik <kliteyn@nvidia.com>,
         Alex Vesker <valex@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 093/164] net/mlx5: DR, Fix the threshold that defines when pool sync is initiated
+Subject: [PATCH 5.15 081/139] net/mlx5: DR, Fix the threshold that defines when pool sync is initiated
 Date:   Mon, 28 Feb 2022 18:24:15 +0100
-Message-Id: <20220228172408.235458838@linuxfoundation.org>
+Message-Id: <20220228172356.212832521@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

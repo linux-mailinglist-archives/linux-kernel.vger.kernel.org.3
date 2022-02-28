@@ -2,116 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550BC4C7B49
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EB94C7B51
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiB1VEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S230031AbiB1VEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiB1VEF (ORCPT
+        with ESMTP id S229838AbiB1VEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:04:05 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F0659A4E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:03:25 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso12611472ooi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:03:25 -0800 (PST)
+        Mon, 28 Feb 2022 16:04:38 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864F81A801
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:03:58 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id bn33so19188115ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 13:03:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=0HiWeztvfh0h27wjXWLu9/rtbvB3IfTa5II77KnloE0=;
-        b=oXVu11AAULQzkaq+3cCSvydEpAbot/2KU8wOdsDqsCpJhjwuZl7gyU4Cak54GOyP4X
-         4mPVqZ310vLC8Pm9Bo6nKbEqAb1+xCvBmkAZK1/s1hKE8rp3ecLXqDH3tmRp0OIqs9mq
-         EJTvZwogXoK1JwaqyzLBwNwnUy1NOLptsU6ys=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iiqNCFc6U32ONzTNhKfvxI6B2p9x39AVrXt2rLta2M8=;
+        b=W1quCfVq9oQhkjVMSeWaW2Z55DxdyDGbetnmG15rPiQ3v4OpkSJBRZVXEMnaa2odqg
+         QOxU/DybvDsA1JnfyM0Ii4qw3F6xR+UbY0dAPPGiPqs4IHrP1aOpkQPW6UBPfhHTs8Tm
+         PR7CBwZgGDqGkw8bM51JgA90FDhHoPP/FDNizSDpxNc9PDO+WtRrOnLiA4YcU9jxsmrw
+         z0maaOELQKiR1hC/GWCjcXmHCEwCPjiDrVGmn41QSQ89BJlDlTrXtLJTHpab0xmVnH4M
+         sZrukyP266PjsJuciZ6D4hmibJchflD3xDwtX05kLpAsnblhXyGN7U6wiOr/bpk5iv1a
+         EfsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=0HiWeztvfh0h27wjXWLu9/rtbvB3IfTa5II77KnloE0=;
-        b=E/pAd13nV+cs/NhuENml2xHGI9MaL8TwQt636QFSTVdPZYUlXV5WLkDcy3fiO0ZWav
-         H/Gc/bD42SC49ZJbplPwjOxYnHPv8bdhR390JbUmCI1Wrb/xtGgZrVeY5smDH/hf5+Z+
-         57c1wZdHDHqeftK8JAmI0VjwaYhP6Nm72XbxCCZq6S6YHIKcxYik+5cYLcqHo+/wgorN
-         elvfgq0FTqHTbDt+EKBVeChm9Wy7Exh6dCRFCdXvQzw6Txnw5PVL0/aGBgXHGj/iHxfG
-         DrbKaURtMKm2rqByBCFudiU/9DctMZ+sBd0Dd4UtUnStp3rbK12h7V9/cC7hOBt0NgRM
-         vxtg==
-X-Gm-Message-State: AOAM533luHUL9xM2GS+3xxnRqlsZ18xrwFaPk5Vgq3qjMZvPJ2GaONwd
-        NyFRuDLWKmFqIeP3ng2EWcVud77f2gKmcP11JAF2uQ==
-X-Google-Smtp-Source: ABdhPJx/F5AysCGRbvBL+PcRbui1fg8nR8qDReQX1sfrQqcmdoiIdqA1u5koeZEHjmONB8ZniRzCMz8FAKzSIXPGkX4=
-X-Received: by 2002:a05:6870:3c18:b0:d7:22ed:20b0 with SMTP id
- gk24-20020a0568703c1800b000d722ed20b0mr3854453oab.32.1646082204474; Mon, 28
- Feb 2022 13:03:24 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 28 Feb 2022 13:03:24 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iiqNCFc6U32ONzTNhKfvxI6B2p9x39AVrXt2rLta2M8=;
+        b=wfsgANdseWy+aGWAzP6PuPWOozN5/GZQEMBwCAqrgxvIkjG2by6ahQy6Y9RLmdqy7k
+         yGG4k77r2YR9mLbOASWUkeHsBR00XBxQNd9a5/n5ePEH0ymRANDbbNE8uvVmSi7vimJs
+         P7mYlkOOxvAxcmZXcwCWfPaY9mw8rZT0sZ0WzeckVnxH9PVtU28tgo15kZUd82E15cCh
+         v0gSvvJ/3DIBh4sBZelZk2AvPGdKC32Govd1tWh6SSy/uMx5ovAP4Fub6ODtv0g5iix6
+         fmSlSnLKYZWNtXGjZVKYHvwyTLl70g5m+IcABOViVwncIOYfKvpKRc8gYoOfW2Zc57Dm
+         I3lA==
+X-Gm-Message-State: AOAM530UEUixmBfE47EZczqmibXQiYPcBOoKTy2xJZFfAq1kKfYRT3oR
+        v4fV6dYvrRMwpmZlaVM3wQe9Sx1Q/hee5qKox2ZdFg==
+X-Google-Smtp-Source: ABdhPJzGFFfCBCn90UYvglywOrc8nxTF2i5r3/1lhRKGwuSQ5VMkWLmIJa+L1faEtfi148WU9C5GVQ0oji3KdUudozI=
+X-Received: by 2002:a2e:bf24:0:b0:246:801e:39d3 with SMTP id
+ c36-20020a2ebf24000000b00246801e39d3mr8506477ljr.472.1646082236647; Mon, 28
+ Feb 2022 13:03:56 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1646030377-12092-3-git-send-email-quic_srivasam@quicinc.com>
-References: <1646030377-12092-1-git-send-email-quic_srivasam@quicinc.com> <1646030377-12092-3-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 28 Feb 2022 13:03:24 -0800
-Message-ID: <CAE-0n51Toe+R+GzWZ5=QGz8oQ-g2W0=AL=RvYMZviwzR8cMfwQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] dt-bindings: soundwire: qcom: Add bindings for
- audio CSR reset control property
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, alsa-devel@alsa-project.org,
-        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-        quic_plai@quicinc.com, robh+dt@kernel.org, rohitkr@codeaurora.org,
-        sanyog.r.kale@intel.com, srinivas.kandagatla@linaro.org,
-        tiwai@suse.com, yung-chuan.liao@linux.intel.com
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <20220228103142.3301082-1-arnd@kernel.org>
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 28 Feb 2022 13:03:45 -0800
+Message-ID: <CAKwvOdkLUx1td+qgUYy3w2ojtBG-mJTzpJg3BV8Xv56YHTxHCw@mail.gmail.com>
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-02-27 22:39:37)
-> Update description for audio CSR reset control property, which is
-> required for latest chipsets to allow software enabling in CGCR HCLK register.
+On Mon, Feb 28, 2022 at 2:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/soundwire/qcom,sdw.txt | 12 ++++++++++++
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+>
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=gnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is the
+> minimum compiler version used for building kernels, that is no longer a
+> concern. Similarly, the behavior of 'inline' functions changes between
 
-Any reason this can't be yamlified?
+More precisely, the semantics of "extern inline" functions changed
+between ISO C90 and ISO C99.
 
->  1 file changed, 12 insertions(+)
+That's the only concern I have, which I doubt is an issue. The kernel
+is already covered by the function attribute as you note.
+
+Just to have some measure:
+$ git grep -rn "extern inline" | wc -l
+116
+
+Most of those are in arch/alpha/ which is curious; I wonder if those
+were intentional.
+
+(I do worry about Makefiles that completely reset KBUILD_CFLAGS
+though; the function attributes still take precedence).
+
+> gnu89 and gnu11, but this was taken care of by defining 'inline' to
+> include __attribute__((gnu_inline)) in order to allow building with
+> clang a while ago.
 >
-> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
-> index b93a2b3..84c8f54 100644
-> --- a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
-> +++ b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
-> @@ -150,6 +150,18 @@ board specific bus parameters.
->                     or applicable for the respective data port.
->                     More info in MIPI Alliance SoundWire 1.0 Specifications.
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Werror, which happens with the
+> 'make W=1' option, as well as for three drivers in the kernel that always
+> enable -Werror, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
 >
-> +- reset:
-> +       Usage: optional
-> +       Value type: <prop-encoded-array>
-> +       Definition: Should specify the SoundWire audio CSR reset controller interface,
-> +                   which is required for SoundWire version 1.6.0 and above.
-> +
-> +- reset-names:
-> +       Usage: optional
-> +       Value type: <stringlist>
-> +       Definition: should be "swr_audio_cgcr" for SoundWire audio CSR reset
-> +                   controller interface.
-> +
->  Note:
->         More Information on detail of encoding of these fields can be
->  found in MIPI Alliance SoundWire 1.0 Specifications.
-> --
-> 2.7.4
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
+
+Ack; I think we can just fix this in clang.
+
 >
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
+
+I agree. With the fixup to s/Werror/Wextra.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+-- 
+Thanks,
+~Nick Desaulniers

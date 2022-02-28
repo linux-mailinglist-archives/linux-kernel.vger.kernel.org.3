@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661E34C76B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C014C728E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239847AbiB1SFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S229701AbiB1R1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbiB1R70 (ORCPT
+        with ESMTP id S234242AbiB1R0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:59:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD8C88B18;
-        Mon, 28 Feb 2022 09:45:21 -0800 (PST)
+        Mon, 28 Feb 2022 12:26:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AC486E33;
+        Mon, 28 Feb 2022 09:26:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9EB6090B;
-        Mon, 28 Feb 2022 17:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5CAC340F0;
-        Mon, 28 Feb 2022 17:45:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D38A7B815AB;
+        Mon, 28 Feb 2022 17:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAEEC340E7;
+        Mon, 28 Feb 2022 17:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070319;
-        bh=FeXWa6P1qRtmPfj0mdtYpxdTQB265wDqpUFzlISXYoI=;
+        s=korg; t=1646069157;
+        bh=CidzmvAFVi43hMNxzqnk5tG9HKIHJRZgVsRGz6ocuw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0swlm84EcX+OLTLmihWlMGIbj7hmFVxxeC9Zj+2AifmqPg1u42h5V4Tn3j/VV41BD
-         O54n9wv2WY+G8U0FfAKcK6rom4SjJmD1c1pLwjeTxPZpq+DOuUQCLmyNyJXa51XMRc
-         ZwifHfLXRCF80ABLX+Z/y4SUO0dVeW8sXET/KW6U=
+        b=LXMPntDm6y+8w4hcinH7mvD2/2bDfECiLO6dOm7waJSovU6OuXvNZByPAUbenM8xM
+         YXliMkBP0hM7d0zINBiLm8uf3/Cnw37AFtMGH8JsK6f2kEU96BBupvzgmn+9L9Mv47
+         ct94YUWJHKiJHJOBt/+4C3ddCXExRY+dXpeWs5dw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH 5.16 058/164] selftests: bpf: Check bpf_msg_push_data return value
-Date:   Mon, 28 Feb 2022 18:23:40 +0100
-Message-Id: <20220228172405.416279934@linuxfoundation.org>
+        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Laibin Qiu <qiulaibin@huawei.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 14/29] configfs: fix a race in configfs_{,un}register_subsystem()
+Date:   Mon, 28 Feb 2022 18:23:41 +0100
+Message-Id: <20220228172143.262489847@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Maurer <fmaurer@redhat.com>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-commit 61d06f01f9710b327a53492e5add9f972eb909b3 upstream.
+[ Upstream commit 84ec758fb2daa236026506868c8796b0500c047d ]
 
-bpf_msg_push_data may return a non-zero value to indicate an error. The
-return value should be checked to prevent undetected errors.
+When configfs_register_subsystem() or configfs_unregister_subsystem()
+is executing link_group() or unlink_group(),
+it is possible that two processes add or delete list concurrently.
+Some unfortunate interleavings of them can cause kernel panic.
 
-To indicate an error, the BPF programs now perform a different action
-than their intended one to make the userspace test program notice the
-error, i.e., the programs supposed to pass/redirect drop, the program
-supposed to drop passes.
+One of cases is:
+A --> B --> C --> D
+A <-- B <-- C <-- D
 
-Fixes: 84fbfe026acaa ("bpf: test_sockmap add options to use msg_push_data")
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/89f767bb44005d6b4dd1f42038c438f76b3ebfad.1644601294.git.fmaurer@redhat.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     delete list_head *B        |      delete list_head *C
+--------------------------------|-----------------------------------
+configfs_unregister_subsystem   |   configfs_unregister_subsystem
+  unlink_group                  |     unlink_group
+    unlink_obj                  |       unlink_obj
+      list_del_init             |         list_del_init
+        __list_del_entry        |           __list_del_entry
+          __list_del            |             __list_del
+            // next == C        |
+            next->prev = prev   |
+                                |               next->prev = prev
+            prev->next = next   |
+                                |                 // prev == B
+                                |                 prev->next = next
+
+Fix this by adding mutex when calling link_group() or unlink_group(),
+but parent configfs_subsystem is NULL when config_item is root.
+So I create a mutex configfs_subsystem_mutex.
+
+Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_sockmap_kern.h |   26 ++++++++++++------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ fs/configfs/dir.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-@@ -235,7 +235,7 @@ SEC("sk_msg1")
- int bpf_prog4(struct sk_msg_md *msg)
+diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+index c875f246cb0e9..ccb49caed502c 100644
+--- a/fs/configfs/dir.c
++++ b/fs/configfs/dir.c
+@@ -50,6 +50,14 @@ DECLARE_RWSEM(configfs_rename_sem);
+  */
+ DEFINE_SPINLOCK(configfs_dirent_lock);
+ 
++/*
++ * All of link_obj/unlink_obj/link_group/unlink_group require that
++ * subsys->su_mutex is held.
++ * But parent configfs_subsystem is NULL when config_item is root.
++ * Use this mutex when config_item is root.
++ */
++static DEFINE_MUTEX(configfs_subsystem_mutex);
++
+ static void configfs_d_iput(struct dentry * dentry,
+ 			    struct inode * inode)
  {
- 	int *bytes, zero = 0, one = 1, two = 2, three = 3, four = 4, five = 5;
--	int *start, *end, *start_push, *end_push, *start_pop, *pop;
-+	int *start, *end, *start_push, *end_push, *start_pop, *pop, err = 0;
+@@ -1937,7 +1945,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
  
- 	bytes = bpf_map_lookup_elem(&sock_apply_bytes, &zero);
- 	if (bytes)
-@@ -249,8 +249,11 @@ int bpf_prog4(struct sk_msg_md *msg)
- 		bpf_msg_pull_data(msg, *start, *end, 0);
- 	start_push = bpf_map_lookup_elem(&sock_bytes, &two);
- 	end_push = bpf_map_lookup_elem(&sock_bytes, &three);
--	if (start_push && end_push)
--		bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+	if (start_push && end_push) {
-+		err = bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+		if (err)
-+			return SK_DROP;
-+	}
- 	start_pop = bpf_map_lookup_elem(&sock_bytes, &four);
- 	pop = bpf_map_lookup_elem(&sock_bytes, &five);
- 	if (start_pop && pop)
-@@ -263,6 +266,7 @@ int bpf_prog6(struct sk_msg_md *msg)
- {
- 	int zero = 0, one = 1, two = 2, three = 3, four = 4, five = 5, key = 0;
- 	int *bytes, *start, *end, *start_push, *end_push, *start_pop, *pop, *f;
-+	int err = 0;
- 	__u64 flags = 0;
+ 	sd = root->d_fsdata;
++	mutex_lock(&configfs_subsystem_mutex);
+ 	link_group(to_config_group(sd->s_element), group);
++	mutex_unlock(&configfs_subsystem_mutex);
  
- 	bytes = bpf_map_lookup_elem(&sock_apply_bytes, &zero);
-@@ -279,8 +283,11 @@ int bpf_prog6(struct sk_msg_md *msg)
+ 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
  
- 	start_push = bpf_map_lookup_elem(&sock_bytes, &two);
- 	end_push = bpf_map_lookup_elem(&sock_bytes, &three);
--	if (start_push && end_push)
--		bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+	if (start_push && end_push) {
-+		err = bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+		if (err)
-+			return SK_DROP;
-+	}
+@@ -1962,7 +1972,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 	inode_unlock(d_inode(root));
  
- 	start_pop = bpf_map_lookup_elem(&sock_bytes, &four);
- 	pop = bpf_map_lookup_elem(&sock_bytes, &five);
-@@ -338,7 +345,7 @@ SEC("sk_msg5")
- int bpf_prog10(struct sk_msg_md *msg)
- {
- 	int *bytes, *start, *end, *start_push, *end_push, *start_pop, *pop;
--	int zero = 0, one = 1, two = 2, three = 3, four = 4, five = 5;
-+	int zero = 0, one = 1, two = 2, three = 3, four = 4, five = 5, err = 0;
+ 	if (err) {
++		mutex_lock(&configfs_subsystem_mutex);
+ 		unlink_group(group);
++		mutex_unlock(&configfs_subsystem_mutex);
+ 		configfs_release_fs();
+ 	}
+ 	put_fragment(frag);
+@@ -2008,7 +2020,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
  
- 	bytes = bpf_map_lookup_elem(&sock_apply_bytes, &zero);
- 	if (bytes)
-@@ -352,8 +359,11 @@ int bpf_prog10(struct sk_msg_md *msg)
- 		bpf_msg_pull_data(msg, *start, *end, 0);
- 	start_push = bpf_map_lookup_elem(&sock_bytes, &two);
- 	end_push = bpf_map_lookup_elem(&sock_bytes, &three);
--	if (start_push && end_push)
--		bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+	if (start_push && end_push) {
-+		err = bpf_msg_push_data(msg, *start_push, *end_push, 0);
-+		if (err)
-+			return SK_PASS;
-+	}
- 	start_pop = bpf_map_lookup_elem(&sock_bytes, &four);
- 	pop = bpf_map_lookup_elem(&sock_bytes, &five);
- 	if (start_pop && pop)
+ 	dput(dentry);
+ 
++	mutex_lock(&configfs_subsystem_mutex);
+ 	unlink_group(group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 	configfs_release_fs();
+ }
+ 
+-- 
+2.34.1
+
 
 

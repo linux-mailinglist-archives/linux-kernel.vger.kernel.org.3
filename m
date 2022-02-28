@@ -2,115 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C544C77B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C154C77C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbiB1S2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S229775AbiB1S3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240806AbiB1S1u (ORCPT
+        with ESMTP id S240717AbiB1S3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:27:50 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C3DB3E7D;
-        Mon, 28 Feb 2022 10:10:27 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id p15so13982917oip.3;
-        Mon, 28 Feb 2022 10:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7wQWrntmzj+Iyb2AkW1h0mbOWmxT1sYGcUG1qHtruzA=;
-        b=hO9hm+T3VPBeUPH7RQD/Y0rI1IKC/jJ2dA97Y/k0Edaujb0hG+dz7Suf8AtSqBJdzN
-         N0wpwz906k2hpLIL5b5sVa2R2MhQOh0tUIgjHy0JwiLPevs2xVo4LSbHZlnxVKeEqYGe
-         DYKGhs05u+MNlJD+T9pLdl696AxwN9ArskJ/BOuw5GpObFdJaNd9ujzVRVvRu+KuOIwE
-         WMk/0F+oZeBhyvAC/cgxTum/6Nu9+SMFHLfUxW/v5j8dDrIGrZfksvHdwp73OFlW917l
-         59wqgfvaPTX79smzDIyXotarX6JpDcXANBPNxruKstDgzV8PcNW6EgU9A+T3PEuuB6lj
-         W/Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7wQWrntmzj+Iyb2AkW1h0mbOWmxT1sYGcUG1qHtruzA=;
-        b=c/DFlWQnZp7gYjhaxquIg6NKSdfmm4oJMk9xzBeRMIif1ep+/7vRm4N8QfSfYy9BM2
-         Q17vqeAe7CoUm5e1W6tMSASVzKeXvTWp3+c11oE6S2SGV8ERrM4QLj6vy+gnTolb4Bhg
-         I9hifVBGxR9zv11O1IqNwtxLJnYZ/Mcaf1go8RHMwDgrInCPHIECYtXSGhA6XBZe4cV8
-         GBwfLNJBmeUAF0eHTBJoqIIJE9iY2fCHIbIkWBSIaUnibHXHn3ixvE0jKPTUYN9rn8ws
-         OppCH2LnjTOURqWbIOFVkNhmYQVuPGndl+11hnOq11pQvbrdq8kMaUKNvU5+v0ZHEeMH
-         Z+MQ==
-X-Gm-Message-State: AOAM531YDcwd+ootxVdIJ86iAuSiN+Kn5MO7xIymOV+PjpiCitEcgf+F
-        BVxB8JjtFf6H8ghRZDC+Ycob/21rQLo=
-X-Google-Smtp-Source: ABdhPJyiXkfCIS04W7ZFPsOkY+JzUPJmnYpp09LkpTS7tVVjk6qnJNOcCg/oLMt6gMfJG0uAnknBKA==
-X-Received: by 2002:a54:4f1c:0:b0:2d0:6df2:808e with SMTP id e28-20020a544f1c000000b002d06df2808emr11795057oiy.67.1646071826308;
-        Mon, 28 Feb 2022 10:10:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a0568080f1100b002d71e151e51sm6553576oiw.0.2022.02.28.10.10.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 10:10:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9edce888-8e7c-9c97-dc70-17df7f348832@roeck-us.net>
-Date:   Mon, 28 Feb 2022 10:10:23 -0800
+        Mon, 28 Feb 2022 13:29:33 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5ADE6D85;
+        Mon, 28 Feb 2022 10:13:04 -0800 (PST)
+Date:   Mon, 28 Feb 2022 19:12:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646071959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yu+oKc/jlEU/pryQqAsVcrxYwdQgjNADy+5OiJTkgJA=;
+        b=Xrw7w4vAmGFlrfQfFnprBLUlm9gjJPldZC3VSPMenPWNwN+QOgPDlbfw1xCILAV4aOKgCj
+        gU+h4pYpcvR2mQ4tS6FDw7EUYkFFRQe/a8Bfu9Mt/52i+6shRHl/ZiJ7zedRxvFBbM8y7+
+        mV9P4QSpqgKpmhDFxMcclesrJ7ClvsY6iQFXEv1q9NpdHm1SPUS+8toIsAF+H4dxN9b3Qj
+        r5xMkWGEZuSE2j5cbTqPKeD6Pa6CzXF/nhITGiuImi5q1PSKkT+AmIgOEIGj7m/Ud9FZBc
+        P92VKlSLAFHvFUR7hA0nXg9ol8xB3HRDVndz4/byWmhVOEgx+r+A6Li+DL50Fg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646071959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yu+oKc/jlEU/pryQqAsVcrxYwdQgjNADy+5OiJTkgJA=;
+        b=ctCnfR1hDdTMQDvfO7wa9Jkz004BwarLRXCcNsl1iIptbF0Yyj3MRvad5/g7RxA3GMMJNQ
+        GwlnQFbVuYy/7kAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: RFC: Intervals to schedule the worker for mix_interrupt_randomness().
+Message-ID: <Yh0QlQ8aqttjlnKt@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/2] ic2: mux: pca9541: add delayed-release support
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-i2c@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-References: <20220201001810.19516-1-zev@bewilderbeest.net>
- <YhyLIRFbs226KTwA@hatter.bewilderbeest.net>
- <fbb305e3-73b3-7a2d-99cf-a7205b7344ff@roeck-us.net>
- <Yh0CUzBzGJc4zyTR@hatter.bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yh0CUzBzGJc4zyTR@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/22 09:11, Zev Weiss wrote:
-> On Mon, Feb 28, 2022 at 05:57:27AM PST, Guenter Roeck wrote:
->> On 2/28/22 00:43, Zev Weiss wrote:
->>> On Mon, Jan 31, 2022 at 04:18:08PM PST, Zev Weiss wrote:
->>>> Hello,
->>>>
->>>> This series adds support for a new pca9541 device-tree property
->>>> ("release-delay-us"), which delays releasing ownership of the bus
->>>> after a transaction for a configurable duration, anticipating that
->>>> another transaction may follow shortly.  By avoiding a
->>>> release/reacquisition between transactions, this can provide a
->>>> substantial performance improvement for back-to-back operations -- on
->>>> a Delta AHE-50DC (ASPEED AST1250) system running OpenBMC with dozens
->>>> of LM25066 PMICs on PCA9541-arbitrated busses, a setting of 10000 (10
->>>> ms) reduces the median latency the psusensor daemon's hwmon sysfs file
->>>> reads from 2.28 ms to 0.99 ms (a 57% improvement).
->>>>
->>>
->>> Ping...Guenter, any thoughts on this?
->>>
->>
->> It sounds reasonable to me, but I don't have access to hardware anymore
->> to test it, so I have no means to confirm that it actually works.
->>
-> 
-> Ack, thanks.  In that case, what's the path forward on getting changes to this driver merged?  I see sign-offs from Wolfram and Peter on the last few commits that touched it -- any input from the i2c/i2c-mux maintainers?
-> 
+Hi Jason,
 
-The i2c/i2c-mux maintainers will need to accept it, and you'll need
-approval for the DT changes from a DT maintainer (presumably Rob).
+I was debugging my backport and looking for a bug but then I figured out
+that everything works as intended.
 
-Guenter
+add_interrupt_randomness() has this piece:
+|         if (new_count < 64 && (!time_after(now, fast_pool->last + HZ) ||
+|                                unlikely(crng_init =3D=3D 0)))
+|                 return;
+
+I was reading this wrong the whole time as in (with context):
+   If new_count is greater or equal to 64 and a second passed by
+   schedule the worker for mix_interrupt_randomness().
+
+Which means a worker once a second on a CPU or longer intervals if the
+CPU is idle. But in reality this is:
+   If new_count is greater _or_ equal to 64 or a at least second passed
+   by then schedule the worker for mix_interrupt_randomness().
+
+This explains why there are some many worker pending/ running for
+mix_interrupt_randomness() in my testing. To give you an example why
+this got my attention:
+
+| [   15.763823] random: mix_interrupt_randomness() CPU16, HAZ: 2
+| [   15.763823] random: mix_interrupt_randomness() CPU17, HAZ: 2
+| [   15.763826] random: mix_interrupt_randomness() CPU07, HAZ: 2
+| [   15.763827] random: mix_interrupt_randomness() CPU06, HAZ: 4
+| [   15.763827] random: mix_interrupt_randomness() CPU04, HAZ: 2
+| [   18.579328] random: mix_interrupt_randomness() CPU18, HAZ: 3
+| [   18.579357] random: mix_interrupt_randomness() CPU16, HAZ: 1
+| [   18.579358] random: mix_interrupt_randomness() CPU03, HAZ: 2
+| [   18.579358] random: mix_interrupt_randomness() CPU17, HAZ: 1
+| [   18.579359] random: mix_interrupt_randomness() CPU04, HAZ: 1
+| [   18.579360] random: mix_interrupt_randomness() CPU05, HAZ: 1
+| [   18.579361] random: mix_interrupt_randomness() CPU06, HAZ: 1
+| [   18.579362] random: mix_interrupt_randomness() CPU07, HAZ: 1
+| [   20.531244] random: mix_interrupt_randomness() CPU18, HAZ: 2
+| [   20.531266] random: mix_interrupt_randomness() CPU16, HAZ: 1
+| [   20.531267] random: mix_interrupt_randomness() CPU03, HAZ: 2
+| [   20.531267] random: mix_interrupt_randomness() CPU17, HAZ: 1
+| [   20.531269] random: mix_interrupt_randomness() CPU04, HAZ: 1
+| [   20.531270] random: mix_interrupt_randomness() CPU05, HAZ: 1
+| [   20.531270] random: mix_interrupt_randomness() CPU06, HAZ: 1
+| [   20.531271] random: mix_interrupt_randomness() CPU07, HAZ: 1
+| [   22.515212] random: mix_interrupt_randomness() CPU18, HAZ: 2
+| [   22.515240] random: mix_interrupt_randomness() CPU16, HAZ: 2
+| [   22.515240] random: mix_interrupt_randomness() CPU17, HAZ: 1
+| [   22.515241] random: mix_interrupt_randomness() CPU03, HAZ: 1
+| [   22.515242] random: mix_interrupt_randomness() CPU04, HAZ: 1
+| [   22.515242] random: mix_interrupt_randomness() CPU05, HAZ: 1
+| [   22.515244] random: mix_interrupt_randomness() CPU06, HAZ: 1
+| [   22.515244] random: mix_interrupt_randomness() CPU07, HAZ: 1
+| [   23.948447] random: mix_interrupt_randomness() CPU18, HAZ: 1
+| [   23.948744] random: mix_interrupt_randomness() CPU16, HAZ: 1
+| [   24.531151] random: mix_interrupt_randomness() CPU17, HAZ: 1
+| [   24.531152] random: mix_interrupt_randomness() CPU03, HAZ: 1
+| [   24.531153] random: mix_interrupt_randomness() CPU04, HAZ: 1
+| [   24.531153] random: mix_interrupt_randomness() CPU05, HAZ: 1
+| [   24.531154] random: mix_interrupt_randomness() CPU06, HAZ: 1
+| [   24.531155] random: mix_interrupt_randomness() CPU07, HAZ: 1
+| [   25.034401] random: mix_interrupt_randomness() CPU16, HAZ: 2
+| [   25.074542] random: mix_interrupt_randomness() CPU18, HAZ: 38
+| [   25.566450] random: mix_interrupt_randomness() CPU03, HAZ: 19
+| [   25.598532] random: mix_interrupt_randomness() CPU05, HAZ: 15
+| [   25.726046] random: mix_interrupt_randomness() CPU18, HAZ: 64
+| [   25.802257] random: mix_interrupt_randomness() CPU18, HAZ: 64
+| [   26.085382] random: mix_interrupt_randomness() CPU18, HAZ: 64
+
+This output comes from the hack at the end of the email (not properly
+formatted). Since the box is idle and runs NO_HZ it is possible that a
+CPU is idle for a second or longer. If you look at the begin of the
+output, CPU16 scheduled the worker for mix_interrupt_randomness() with
+fast_pool::count =3D 2. So did CPU 17, 7 and 6. At the end log you see
+CPU18 got busy and scheduled the worker more frequently since it
+acquired 64 interrupts. This is output includes 10 seconds and CPUs 0
+and 1 are not part of the log.
+
+Is this really what we want? With HAZ=3D1 the CPU was woken up from idle
+poll routine so the registers should have always the same content since
+it is always the same while() routine calling CPU's idle function. At
+least get_reg() rotates them but instruction_pointer() would return
+always the same value. (Side note: on 64bit the upper 32bit of the IP
+register should be all 0xff=E2=80=A6ff for the kernel and 0x00=E2=80=A600 f=
+or userland.
+So this looks like one bit of entropy. I mention this now because I
+noticed that 32bit throws an additional register to the mix to make up
+for the small register)).
+
+Wouldn't it make sense entropy wise to gather more entropy (say the 64)
+before consuming it? And waiting at least a second if more entropy was
+created?
+
+With CONFIG_PERIODIC you have at least CONFIG_HZ interrupts on each CPU.
+"At least" because you have the timer tick interrupt and you may have
+additional interrupt for your device interrupts.  With HZ=3D1000 you have
+1000 timer tick interrupts.
+That is the one extreme. The other is NO_HZ and an idle box. [ Now that
+I look around it appears that risc-v has no get_irq_regs() and
+random_get_entropy() may return 0. Spooky. ]
+
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1254,6 +1254,7 @@ static unsigned long get_reg(struct fast_pool *f, str=
+uct pt_regs *regs)
+        return *ptr;
+ }
+=20
++enum { MIX_INFLIGHT =3D 1U << 31 };
+ static void mix_interrupt_randomness(struct work_struct *work)
+ {
+        struct fast_pool *fast_pool =3D container_of(work, struct fast_pool=
+, mix);
+@@ -1271,6 +1272,9 @@ static void mix_interrupt_randomness(struct work_stru=
+ct *work)
+         * consistent view, before we reenable irqs again.
+         */
+        memcpy(pool, fast_pool->pool32, sizeof(pool));
++       pr_err("%s() CPU%02d, HAZ: %d\n", __func__, smp_processor_id(),
++              READ_ONCE(fast_pool->count) & ~MIX_INFLIGHT);
++       WARN_ON((READ_ONCE(fast_pool->count) & MIX_INFLIGHT) =3D=3D 0);
+        fast_pool->count =3D 0;
+        fast_pool->last =3D jiffies;
+        local_irq_enable();
+@@ -1288,7 +1292,6 @@ static void mix_interrupt_randomness(struct work_stru=
+ct *work)
+=20
+ void add_interrupt_randomness(int irq)
+ {
+-       enum { MIX_INFLIGHT =3D 1U << 31 };
+        cycles_t cycles =3D random_get_entropy();
+        unsigned long now =3D jiffies;
+        struct fast_pool *fast_pool =3D this_cpu_ptr(&irq_randomness);
+
+Sebastian

@@ -2,161 +2,576 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4914C70DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D324C70DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 16:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237598AbiB1PkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 10:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S237602AbiB1PlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 10:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiB1PkH (ORCPT
+        with ESMTP id S231742AbiB1PlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:40:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B8237F4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646062766; x=1677598766;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yQcOpYi3/hD8IEZBHYqUvgPMwoCny9+QNjaItq/xudo=;
-  b=Lpdclo5ESeRQHSwJyBi20uuO51g23Vy+MZwt6Anb0fhWduhUx5l1oHIO
-   U99lLHrBctVi93n5zckVMyzv4UOe/vTQB+ZvEStJJ8sXFqmUHKpgv3Hvh
-   Dbgqge3bgzfhXe9ztvxdSrRP2t9qkbRTLmHNACbnolFZOP+nhrhpVcHvy
-   ePjU8dER60AZjlBa3FUzd9B9U8QkYQdDOLPfewxQfUQcMPnTYXvDIFNXy
-   4ZHoulG10XGPcUEnTdHK1PvS0wMsPWNUVExfDPReZGgFRPkb4Cf+PgycF
-   tBRs4TkmkWCex4MFOq8OYfJ/5PmaQH0HB+kTas2XU3tHleWr85p3OTEd5
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="150249761"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 08:39:25 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 08:39:24 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 08:39:22 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <michael@walle.cc>, <p.yadav@ti.com>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] mtd: spi-nor: Move XMC to manufacturer ID collisions driver
-Date:   Mon, 28 Feb 2022 17:39:21 +0200
-Message-ID: <20220228153921.219668-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <fead645197b0cb6534c04a665938a8d5@walle.cc>
-References: <fead645197b0cb6534c04a665938a8d5@walle.cc>
+        Mon, 28 Feb 2022 10:41:22 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0157EB10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:40:42 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id t11so15079795ioi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 07:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Gx6fHd8jK1ZShOXRvlwZDSX2PU+lqgsu7KVhpEsxKE4=;
+        b=du0i+UNYMd6adPwJMcGGbj+XFGEIN6ovpF5qadvBP0FMu+3vrzJuUnb3x/LdzNKJFK
+         XjQiCftRdxHy9JClBjPoa8I7bzfVMWtosfAE3Ge8J8raqv4wWEqkkamveASxMQSEw0au
+         UxC8ulAhrQPUWfOuc/EYDFe+I3V9aXsN0ytHScxYpPC/yCvBMpqAoFzy5OEcKvk/0ZPD
+         gwC17mHAPDLb6CAqiA2RllkvMJ2mHyqYsYMtB9/4n5+OyJ8dNsQNyRVNnSucD8RWTwvG
+         romdzdvBE967xnxBVm5zCtIDb7uRvWf8W15ou4WUqVt/dtH4RJRFrLBuUmhtUo+EBJQM
+         kY9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Gx6fHd8jK1ZShOXRvlwZDSX2PU+lqgsu7KVhpEsxKE4=;
+        b=6HeCP57vtHZvztoi3qT2Gog3FDHO4/yzKUnx/VerBWtPSGuCXyBGoDkjaLeH+7boUp
+         TACssiodWap4muSHOSFZo34gC++PGkQ5Amokv2gwbNUlaAwy1Ua61OW6jWF101lylENV
+         UXrHONv6zahMWKQRQOFuL/fAkYAGrE916n1Tqbw7c+pYrMbA8J0haeZ5VmXrywFPfRNg
+         c+8IC5oz00oe54TudMi0ff8XQwuwgFLjn6RrmIiwCFeHUPSe8vfFfVPVyoDctDDe14+D
+         LoWxqf0a5v2n/y7GuNv38FjzKMpJxov6W1UImFO9x2zEuLuG0EKWkOle5YWZ/2u0ehV6
+         nufg==
+X-Gm-Message-State: AOAM533eUhwpGvWCVmB//0S13p0sWhYLYq0y90oruvErqbE8+z8ykfAP
+        3923yavtjyl7SKu1pTyCUB/GPQ==
+X-Google-Smtp-Source: ABdhPJzSAQL51nRFbYbZnjkcx7Gji9tzry28ZiGfBPaDD82oCwDmWZrqdjlBNWaEDtA2GbT94iZA/A==
+X-Received: by 2002:a05:6638:381b:b0:314:8258:39d4 with SMTP id i27-20020a056638381b00b00314825839d4mr17408758jav.172.1646062841769;
+        Mon, 28 Feb 2022 07:40:41 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id q14-20020a92050e000000b002c16ddafb48sm6259145ile.49.2022.02.28.07.40.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 07:40:41 -0800 (PST)
+Message-ID: <71845ff3-b853-481c-62c1-d47fea3036b7@linaro.org>
+Date:   Mon, 28 Feb 2022 09:40:39 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 02/27] bus: mhi: Fix MHI DMA structure endianness
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        stable@vger.kernel.org
+References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+ <20220228124344.77359-3-manivannan.sadhasivam@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220228124344.77359-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XMC manufacturer ID is defined in bank 10 of JEP106 standard. The XMC
-flashes that are currently supported do not define the continuation codes
-and will collide with flashes using the same manufacturer IDs,
-STMicroelectronics being an example (defined in bank one without
-continuation codes). Move XMC to manufacturer ID collisions driver as it
-doesn't respect the JEP106 standard and collides with other manufacturers.
+On 2/28/22 6:43 AM, Manivannan Sadhasivam wrote:
+> From: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> 
+> The MHI driver does not work on big endian architectures.  The
+> controller never transitions into mission mode.  This appears to be due
+> to the modem device expecting the various contexts and transfer rings to
+> have fields in little endian order in memory, but the driver constructs
+> them in native endianness.
+> 
+> Fix MHI event, channel and command contexts and TRE handling macros to
+> use explicit conversion to little endian.  Mark fields in relevant
+> structures as little endian to document this requirement.
+> 
+> Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
+> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Suggested-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
-depends on: https://lore.kernel.org/linux-mtd/20220228134505.203270-1-tudor.ambarus@microchip.com/
+I didn't review it as carefully this time around, but this looks
+good enough for me.
 
- drivers/mtd/spi-nor/core.c                |  1 -
- drivers/mtd/spi-nor/core.h                |  1 -
- drivers/mtd/spi-nor/manuf-id-collisions.c |  8 ++++++++
- drivers/mtd/spi-nor/xmc.c                 | 25 -----------------------
- 4 files changed, 8 insertions(+), 27 deletions(-)
- delete mode 100644 drivers/mtd/spi-nor/xmc.c
+Reviewed-by: Alex Elder <elder@linaro.org>
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 80d6ce41122a..e2b388d12c6c 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1627,7 +1627,6 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
- 	&spi_nor_sst,
- 	&spi_nor_winbond,
- 	&spi_nor_xilinx,
--	&spi_nor_xmc,
- };
- 
- static const struct flash_info *
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index f727e632c0ee..db042c40853f 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -517,7 +517,6 @@ extern const struct spi_nor_manufacturer spi_nor_spansion;
- extern const struct spi_nor_manufacturer spi_nor_sst;
- extern const struct spi_nor_manufacturer spi_nor_winbond;
- extern const struct spi_nor_manufacturer spi_nor_xilinx;
--extern const struct spi_nor_manufacturer spi_nor_xmc;
- 
- extern const struct attribute_group *spi_nor_sysfs_groups[];
- 
-diff --git a/drivers/mtd/spi-nor/manuf-id-collisions.c b/drivers/mtd/spi-nor/manuf-id-collisions.c
-index 0447e245f4b1..33a7d475b1cd 100644
---- a/drivers/mtd/spi-nor/manuf-id-collisions.c
-+++ b/drivers/mtd/spi-nor/manuf-id-collisions.c
-@@ -27,6 +27,14 @@ static const struct spi_nor_fixups xtx_nor_fixups = {
- };
- 
- static const struct flash_info id_collision_parts[] = {
-+	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
-+	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
-+	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
-+
- 	/* Boya */
- 	{ "by25q128as", INFO(0x684018, 0, 64 * 1024, 256)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
-diff --git a/drivers/mtd/spi-nor/xmc.c b/drivers/mtd/spi-nor/xmc.c
-deleted file mode 100644
-index 051411e86339..000000000000
---- a/drivers/mtd/spi-nor/xmc.c
-+++ /dev/null
-@@ -1,25 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2005, Intec Automation Inc.
-- * Copyright (C) 2014, Freescale Semiconductor, Inc.
-- */
--
--#include <linux/mtd/spi-nor.h>
--
--#include "core.h"
--
--static const struct flash_info xmc_nor_parts[] = {
--	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
--	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
--	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
--};
--
--const struct spi_nor_manufacturer spi_nor_xmc = {
--	.name = "xmc",
--	.parts = xmc_nor_parts,
--	.nparts = ARRAY_SIZE(xmc_nor_parts),
--};
--- 
-2.25.1
+
+> ---
+>   drivers/bus/mhi/core/debugfs.c  |  26 +++----
+>   drivers/bus/mhi/core/init.c     |  36 +++++-----
+>   drivers/bus/mhi/core/internal.h | 119 ++++++++++++++++----------------
+>   drivers/bus/mhi/core/main.c     |  22 +++---
+>   drivers/bus/mhi/core/pm.c       |   4 +-
+>   5 files changed, 104 insertions(+), 103 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/core/debugfs.c b/drivers/bus/mhi/core/debugfs.c
+> index 858d7516410b..d818586c229d 100644
+> --- a/drivers/bus/mhi/core/debugfs.c
+> +++ b/drivers/bus/mhi/core/debugfs.c
+> @@ -60,16 +60,16 @@ static int mhi_debugfs_events_show(struct seq_file *m, void *d)
+>   		}
+>   
+>   		seq_printf(m, "Index: %d intmod count: %lu time: %lu",
+> -			   i, (er_ctxt->intmod & EV_CTX_INTMODC_MASK) >>
+> +			   i, (le32_to_cpu(er_ctxt->intmod) & EV_CTX_INTMODC_MASK) >>
+>   			   EV_CTX_INTMODC_SHIFT,
+> -			   (er_ctxt->intmod & EV_CTX_INTMODT_MASK) >>
+> +			   (le32_to_cpu(er_ctxt->intmod) & EV_CTX_INTMODT_MASK) >>
+>   			   EV_CTX_INTMODT_SHIFT);
+>   
+> -		seq_printf(m, " base: 0x%0llx len: 0x%llx", er_ctxt->rbase,
+> -			   er_ctxt->rlen);
+> +		seq_printf(m, " base: 0x%0llx len: 0x%llx", le64_to_cpu(er_ctxt->rbase),
+> +			   le64_to_cpu(er_ctxt->rlen));
+>   
+> -		seq_printf(m, " rp: 0x%llx wp: 0x%llx", er_ctxt->rp,
+> -			   er_ctxt->wp);
+> +		seq_printf(m, " rp: 0x%llx wp: 0x%llx", le64_to_cpu(er_ctxt->rp),
+> +			   le64_to_cpu(er_ctxt->wp));
+>   
+>   		seq_printf(m, " local rp: 0x%pK db: 0x%pad\n", ring->rp,
+>   			   &mhi_event->db_cfg.db_val);
+> @@ -106,18 +106,18 @@ static int mhi_debugfs_channels_show(struct seq_file *m, void *d)
+>   
+>   		seq_printf(m,
+>   			   "%s(%u) state: 0x%lx brstmode: 0x%lx pollcfg: 0x%lx",
+> -			   mhi_chan->name, mhi_chan->chan, (chan_ctxt->chcfg &
+> +			   mhi_chan->name, mhi_chan->chan, (le32_to_cpu(chan_ctxt->chcfg) &
+>   			   CHAN_CTX_CHSTATE_MASK) >> CHAN_CTX_CHSTATE_SHIFT,
+> -			   (chan_ctxt->chcfg & CHAN_CTX_BRSTMODE_MASK) >>
+> -			   CHAN_CTX_BRSTMODE_SHIFT, (chan_ctxt->chcfg &
+> +			   (le32_to_cpu(chan_ctxt->chcfg) & CHAN_CTX_BRSTMODE_MASK) >>
+> +			   CHAN_CTX_BRSTMODE_SHIFT, (le32_to_cpu(chan_ctxt->chcfg) &
+>   			   CHAN_CTX_POLLCFG_MASK) >> CHAN_CTX_POLLCFG_SHIFT);
+>   
+> -		seq_printf(m, " type: 0x%x event ring: %u", chan_ctxt->chtype,
+> -			   chan_ctxt->erindex);
+> +		seq_printf(m, " type: 0x%x event ring: %u", le32_to_cpu(chan_ctxt->chtype),
+> +			   le32_to_cpu(chan_ctxt->erindex));
+>   
+>   		seq_printf(m, " base: 0x%llx len: 0x%llx rp: 0x%llx wp: 0x%llx",
+> -			   chan_ctxt->rbase, chan_ctxt->rlen, chan_ctxt->rp,
+> -			   chan_ctxt->wp);
+> +			   le64_to_cpu(chan_ctxt->rbase), le64_to_cpu(chan_ctxt->rlen),
+> +			   le64_to_cpu(chan_ctxt->rp), le64_to_cpu(chan_ctxt->wp));
+>   
+>   		seq_printf(m, " local rp: 0x%pK local wp: 0x%pK db: 0x%pad\n",
+>   			   ring->rp, ring->wp,
+> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+> index 09394a1c29ec..d8787aaa176b 100644
+> --- a/drivers/bus/mhi/core/init.c
+> +++ b/drivers/bus/mhi/core/init.c
+> @@ -293,17 +293,17 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
+>   		if (mhi_chan->offload_ch)
+>   			continue;
+>   
+> -		tmp = chan_ctxt->chcfg;
+> +		tmp = le32_to_cpu(chan_ctxt->chcfg);
+>   		tmp &= ~CHAN_CTX_CHSTATE_MASK;
+>   		tmp |= (MHI_CH_STATE_DISABLED << CHAN_CTX_CHSTATE_SHIFT);
+>   		tmp &= ~CHAN_CTX_BRSTMODE_MASK;
+>   		tmp |= (mhi_chan->db_cfg.brstmode << CHAN_CTX_BRSTMODE_SHIFT);
+>   		tmp &= ~CHAN_CTX_POLLCFG_MASK;
+>   		tmp |= (mhi_chan->db_cfg.pollcfg << CHAN_CTX_POLLCFG_SHIFT);
+> -		chan_ctxt->chcfg = tmp;
+> +		chan_ctxt->chcfg = cpu_to_le32(tmp);
+>   
+> -		chan_ctxt->chtype = mhi_chan->type;
+> -		chan_ctxt->erindex = mhi_chan->er_index;
+> +		chan_ctxt->chtype = cpu_to_le32(mhi_chan->type);
+> +		chan_ctxt->erindex = cpu_to_le32(mhi_chan->er_index);
+>   
+>   		mhi_chan->ch_state = MHI_CH_STATE_DISABLED;
+>   		mhi_chan->tre_ring.db_addr = (void __iomem *)&chan_ctxt->wp;
+> @@ -328,14 +328,14 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
+>   		if (mhi_event->offload_ev)
+>   			continue;
+>   
+> -		tmp = er_ctxt->intmod;
+> +		tmp = le32_to_cpu(er_ctxt->intmod);
+>   		tmp &= ~EV_CTX_INTMODC_MASK;
+>   		tmp &= ~EV_CTX_INTMODT_MASK;
+>   		tmp |= (mhi_event->intmod << EV_CTX_INTMODT_SHIFT);
+> -		er_ctxt->intmod = tmp;
+> +		er_ctxt->intmod = cpu_to_le32(tmp);
+>   
+> -		er_ctxt->ertype = MHI_ER_TYPE_VALID;
+> -		er_ctxt->msivec = mhi_event->irq;
+> +		er_ctxt->ertype = cpu_to_le32(MHI_ER_TYPE_VALID);
+> +		er_ctxt->msivec = cpu_to_le32(mhi_event->irq);
+>   		mhi_event->db_cfg.db_mode = true;
+>   
+>   		ring->el_size = sizeof(struct mhi_tre);
+> @@ -349,9 +349,9 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
+>   		 * ring is empty
+>   		 */
+>   		ring->rp = ring->wp = ring->base;
+> -		er_ctxt->rbase = ring->iommu_base;
+> +		er_ctxt->rbase = cpu_to_le64(ring->iommu_base);
+>   		er_ctxt->rp = er_ctxt->wp = er_ctxt->rbase;
+> -		er_ctxt->rlen = ring->len;
+> +		er_ctxt->rlen = cpu_to_le64(ring->len);
+>   		ring->ctxt_wp = &er_ctxt->wp;
+>   	}
+>   
+> @@ -378,9 +378,9 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
+>   			goto error_alloc_cmd;
+>   
+>   		ring->rp = ring->wp = ring->base;
+> -		cmd_ctxt->rbase = ring->iommu_base;
+> +		cmd_ctxt->rbase = cpu_to_le64(ring->iommu_base);
+>   		cmd_ctxt->rp = cmd_ctxt->wp = cmd_ctxt->rbase;
+> -		cmd_ctxt->rlen = ring->len;
+> +		cmd_ctxt->rlen = cpu_to_le64(ring->len);
+>   		ring->ctxt_wp = &cmd_ctxt->wp;
+>   	}
+>   
+> @@ -581,10 +581,10 @@ void mhi_deinit_chan_ctxt(struct mhi_controller *mhi_cntrl,
+>   	chan_ctxt->rp = 0;
+>   	chan_ctxt->wp = 0;
+>   
+> -	tmp = chan_ctxt->chcfg;
+> +	tmp = le32_to_cpu(chan_ctxt->chcfg);
+>   	tmp &= ~CHAN_CTX_CHSTATE_MASK;
+>   	tmp |= (MHI_CH_STATE_DISABLED << CHAN_CTX_CHSTATE_SHIFT);
+> -	chan_ctxt->chcfg = tmp;
+> +	chan_ctxt->chcfg = cpu_to_le32(tmp);
+>   
+>   	/* Update to all cores */
+>   	smp_wmb();
+> @@ -618,14 +618,14 @@ int mhi_init_chan_ctxt(struct mhi_controller *mhi_cntrl,
+>   		return -ENOMEM;
+>   	}
+>   
+> -	tmp = chan_ctxt->chcfg;
+> +	tmp = le32_to_cpu(chan_ctxt->chcfg);
+>   	tmp &= ~CHAN_CTX_CHSTATE_MASK;
+>   	tmp |= (MHI_CH_STATE_ENABLED << CHAN_CTX_CHSTATE_SHIFT);
+> -	chan_ctxt->chcfg = tmp;
+> +	chan_ctxt->chcfg = cpu_to_le32(tmp);
+>   
+> -	chan_ctxt->rbase = tre_ring->iommu_base;
+> +	chan_ctxt->rbase = cpu_to_le64(tre_ring->iommu_base);
+>   	chan_ctxt->rp = chan_ctxt->wp = chan_ctxt->rbase;
+> -	chan_ctxt->rlen = tre_ring->len;
+> +	chan_ctxt->rlen = cpu_to_le64(tre_ring->len);
+>   	tre_ring->ctxt_wp = &chan_ctxt->wp;
+>   
+>   	tre_ring->rp = tre_ring->wp = tre_ring->base;
+> diff --git a/drivers/bus/mhi/core/internal.h b/drivers/bus/mhi/core/internal.h
+> index 3508cbbf555d..37c39bf1c7a9 100644
+> --- a/drivers/bus/mhi/core/internal.h
+> +++ b/drivers/bus/mhi/core/internal.h
+> @@ -209,14 +209,14 @@ extern struct bus_type mhi_bus_type;
+>   #define EV_CTX_INTMODT_MASK GENMASK(31, 16)
+>   #define EV_CTX_INTMODT_SHIFT 16
+>   struct mhi_event_ctxt {
+> -	__u32 intmod;
+> -	__u32 ertype;
+> -	__u32 msivec;
+> -
+> -	__u64 rbase __packed __aligned(4);
+> -	__u64 rlen __packed __aligned(4);
+> -	__u64 rp __packed __aligned(4);
+> -	__u64 wp __packed __aligned(4);
+> +	__le32 intmod;
+> +	__le32 ertype;
+> +	__le32 msivec;
+> +
+> +	__le64 rbase __packed __aligned(4);
+> +	__le64 rlen __packed __aligned(4);
+> +	__le64 rp __packed __aligned(4);
+> +	__le64 wp __packed __aligned(4);
+>   };
+>   
+>   #define CHAN_CTX_CHSTATE_MASK GENMASK(7, 0)
+> @@ -227,25 +227,25 @@ struct mhi_event_ctxt {
+>   #define CHAN_CTX_POLLCFG_SHIFT 10
+>   #define CHAN_CTX_RESERVED_MASK GENMASK(31, 16)
+>   struct mhi_chan_ctxt {
+> -	__u32 chcfg;
+> -	__u32 chtype;
+> -	__u32 erindex;
+> -
+> -	__u64 rbase __packed __aligned(4);
+> -	__u64 rlen __packed __aligned(4);
+> -	__u64 rp __packed __aligned(4);
+> -	__u64 wp __packed __aligned(4);
+> +	__le32 chcfg;
+> +	__le32 chtype;
+> +	__le32 erindex;
+> +
+> +	__le64 rbase __packed __aligned(4);
+> +	__le64 rlen __packed __aligned(4);
+> +	__le64 rp __packed __aligned(4);
+> +	__le64 wp __packed __aligned(4);
+>   };
+>   
+>   struct mhi_cmd_ctxt {
+> -	__u32 reserved0;
+> -	__u32 reserved1;
+> -	__u32 reserved2;
+> -
+> -	__u64 rbase __packed __aligned(4);
+> -	__u64 rlen __packed __aligned(4);
+> -	__u64 rp __packed __aligned(4);
+> -	__u64 wp __packed __aligned(4);
+> +	__le32 reserved0;
+> +	__le32 reserved1;
+> +	__le32 reserved2;
+> +
+> +	__le64 rbase __packed __aligned(4);
+> +	__le64 rlen __packed __aligned(4);
+> +	__le64 rp __packed __aligned(4);
+> +	__le64 wp __packed __aligned(4);
+>   };
+>   
+>   struct mhi_ctxt {
+> @@ -258,8 +258,8 @@ struct mhi_ctxt {
+>   };
+>   
+>   struct mhi_tre {
+> -	u64 ptr;
+> -	u32 dword[2];
+> +	__le64 ptr;
+> +	__le32 dword[2];
+>   };
+>   
+>   struct bhi_vec_entry {
+> @@ -277,57 +277,58 @@ enum mhi_cmd_type {
+>   /* No operation command */
+>   #define MHI_TRE_CMD_NOOP_PTR (0)
+>   #define MHI_TRE_CMD_NOOP_DWORD0 (0)
+> -#define MHI_TRE_CMD_NOOP_DWORD1 (MHI_CMD_NOP << 16)
+> +#define MHI_TRE_CMD_NOOP_DWORD1 (cpu_to_le32(MHI_CMD_NOP << 16))
+>   
+>   /* Channel reset command */
+>   #define MHI_TRE_CMD_RESET_PTR (0)
+>   #define MHI_TRE_CMD_RESET_DWORD0 (0)
+> -#define MHI_TRE_CMD_RESET_DWORD1(chid) ((chid << 24) | \
+> -					(MHI_CMD_RESET_CHAN << 16))
+> +#define MHI_TRE_CMD_RESET_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+> +					(MHI_CMD_RESET_CHAN << 16)))
+>   
+>   /* Channel stop command */
+>   #define MHI_TRE_CMD_STOP_PTR (0)
+>   #define MHI_TRE_CMD_STOP_DWORD0 (0)
+> -#define MHI_TRE_CMD_STOP_DWORD1(chid) ((chid << 24) | \
+> -				       (MHI_CMD_STOP_CHAN << 16))
+> +#define MHI_TRE_CMD_STOP_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+> +				       (MHI_CMD_STOP_CHAN << 16)))
+>   
+>   /* Channel start command */
+>   #define MHI_TRE_CMD_START_PTR (0)
+>   #define MHI_TRE_CMD_START_DWORD0 (0)
+> -#define MHI_TRE_CMD_START_DWORD1(chid) ((chid << 24) | \
+> -					(MHI_CMD_START_CHAN << 16))
+> +#define MHI_TRE_CMD_START_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+> +					(MHI_CMD_START_CHAN << 16)))
+>   
+> -#define MHI_TRE_GET_CMD_CHID(tre) (((tre)->dword[1] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_CMD_TYPE(tre) (((tre)->dword[1] >> 16) & 0xFF)
+> +#define MHI_TRE_GET_DWORD(tre, word) (le32_to_cpu((tre)->dword[(word)]))
+> +#define MHI_TRE_GET_CMD_CHID(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_CMD_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
+>   
+>   /* Event descriptor macros */
+> -#define MHI_TRE_EV_PTR(ptr) (ptr)
+> -#define MHI_TRE_EV_DWORD0(code, len) ((code << 24) | len)
+> -#define MHI_TRE_EV_DWORD1(chid, type) ((chid << 24) | (type << 16))
+> -#define MHI_TRE_GET_EV_PTR(tre) ((tre)->ptr)
+> -#define MHI_TRE_GET_EV_CODE(tre) (((tre)->dword[0] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_EV_LEN(tre) ((tre)->dword[0] & 0xFFFF)
+> -#define MHI_TRE_GET_EV_CHID(tre) (((tre)->dword[1] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_EV_TYPE(tre) (((tre)->dword[1] >> 16) & 0xFF)
+> -#define MHI_TRE_GET_EV_STATE(tre) (((tre)->dword[0] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_EV_EXECENV(tre) (((tre)->dword[0] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_EV_SEQ(tre) ((tre)->dword[0])
+> -#define MHI_TRE_GET_EV_TIME(tre) ((tre)->ptr)
+> -#define MHI_TRE_GET_EV_COOKIE(tre) lower_32_bits((tre)->ptr)
+> -#define MHI_TRE_GET_EV_VEID(tre) (((tre)->dword[0] >> 16) & 0xFF)
+> -#define MHI_TRE_GET_EV_LINKSPEED(tre) (((tre)->dword[1] >> 24) & 0xFF)
+> -#define MHI_TRE_GET_EV_LINKWIDTH(tre) ((tre)->dword[0] & 0xFF)
+> +#define MHI_TRE_EV_PTR(ptr) (cpu_to_le64(ptr))
+> +#define MHI_TRE_EV_DWORD0(code, len) (cpu_to_le32((code << 24) | len))
+> +#define MHI_TRE_EV_DWORD1(chid, type) (cpu_to_le32((chid << 24) | (type << 16)))
+> +#define MHI_TRE_GET_EV_PTR(tre) (le64_to_cpu((tre)->ptr))
+> +#define MHI_TRE_GET_EV_CODE(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_EV_LEN(tre) (MHI_TRE_GET_DWORD(tre, 0) & 0xFFFF)
+> +#define MHI_TRE_GET_EV_CHID(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_EV_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
+> +#define MHI_TRE_GET_EV_STATE(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_EV_EXECENV(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_EV_SEQ(tre) MHI_TRE_GET_DWORD(tre, 0)
+> +#define MHI_TRE_GET_EV_TIME(tre) (MHI_TRE_GET_EV_PTR(tre))
+> +#define MHI_TRE_GET_EV_COOKIE(tre) lower_32_bits(MHI_TRE_GET_EV_PTR(tre))
+> +#define MHI_TRE_GET_EV_VEID(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 16) & 0xFF)
+> +#define MHI_TRE_GET_EV_LINKSPEED(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+> +#define MHI_TRE_GET_EV_LINKWIDTH(tre) (MHI_TRE_GET_DWORD(tre, 0) & 0xFF)
+>   
+>   /* Transfer descriptor macros */
+> -#define MHI_TRE_DATA_PTR(ptr) (ptr)
+> -#define MHI_TRE_DATA_DWORD0(len) (len & MHI_MAX_MTU)
+> -#define MHI_TRE_DATA_DWORD1(bei, ieot, ieob, chain) ((2 << 16) | (bei << 10) \
+> -	| (ieot << 9) | (ieob << 8) | chain)
+> +#define MHI_TRE_DATA_PTR(ptr) (cpu_to_le64(ptr))
+> +#define MHI_TRE_DATA_DWORD0(len) (cpu_to_le32(len & MHI_MAX_MTU))
+> +#define MHI_TRE_DATA_DWORD1(bei, ieot, ieob, chain) (cpu_to_le32((2 << 16) | (bei << 10) \
+> +	| (ieot << 9) | (ieob << 8) | chain))
+>   
+>   /* RSC transfer descriptor macros */
+> -#define MHI_RSCTRE_DATA_PTR(ptr, len) (((u64)len << 48) | ptr)
+> -#define MHI_RSCTRE_DATA_DWORD0(cookie) (cookie)
+> -#define MHI_RSCTRE_DATA_DWORD1 (MHI_PKT_TYPE_COALESCING << 16)
+> +#define MHI_RSCTRE_DATA_PTR(ptr, len) (cpu_to_le64(((u64)len << 48) | ptr))
+> +#define MHI_RSCTRE_DATA_DWORD0(cookie) (cpu_to_le32(cookie))
+> +#define MHI_RSCTRE_DATA_DWORD1 (cpu_to_le32(MHI_PKT_TYPE_COALESCING << 16))
+>   
+>   enum mhi_pkt_type {
+>   	MHI_PKT_TYPE_INVALID = 0x0,
+> @@ -500,7 +501,7 @@ struct state_transition {
+>   struct mhi_ring {
+>   	dma_addr_t dma_handle;
+>   	dma_addr_t iommu_base;
+> -	u64 *ctxt_wp; /* point to ctxt wp */
+> +	__le64 *ctxt_wp; /* point to ctxt wp */
+>   	void *pre_aligned;
+>   	void *base;
+>   	void *rp;
+> diff --git a/drivers/bus/mhi/core/main.c b/drivers/bus/mhi/core/main.c
+> index ffde617f93a3..85f4f7c8d7c6 100644
+> --- a/drivers/bus/mhi/core/main.c
+> +++ b/drivers/bus/mhi/core/main.c
+> @@ -114,7 +114,7 @@ void mhi_ring_er_db(struct mhi_event *mhi_event)
+>   	struct mhi_ring *ring = &mhi_event->ring;
+>   
+>   	mhi_event->db_cfg.process_db(mhi_event->mhi_cntrl, &mhi_event->db_cfg,
+> -				     ring->db_addr, *ring->ctxt_wp);
+> +				     ring->db_addr, le64_to_cpu(*ring->ctxt_wp));
+>   }
+>   
+>   void mhi_ring_cmd_db(struct mhi_controller *mhi_cntrl, struct mhi_cmd *mhi_cmd)
+> @@ -123,7 +123,7 @@ void mhi_ring_cmd_db(struct mhi_controller *mhi_cntrl, struct mhi_cmd *mhi_cmd)
+>   	struct mhi_ring *ring = &mhi_cmd->ring;
+>   
+>   	db = ring->iommu_base + (ring->wp - ring->base);
+> -	*ring->ctxt_wp = db;
+> +	*ring->ctxt_wp = cpu_to_le64(db);
+>   	mhi_write_db(mhi_cntrl, ring->db_addr, db);
+>   }
+>   
+> @@ -140,7 +140,7 @@ void mhi_ring_chan_db(struct mhi_controller *mhi_cntrl,
+>   	 * before letting h/w know there is new element to fetch.
+>   	 */
+>   	dma_wmb();
+> -	*ring->ctxt_wp = db;
+> +	*ring->ctxt_wp = cpu_to_le64(db);
+>   
+>   	mhi_chan->db_cfg.process_db(mhi_cntrl, &mhi_chan->db_cfg,
+>   				    ring->db_addr, db);
+> @@ -432,7 +432,7 @@ irqreturn_t mhi_irq_handler(int irq_number, void *dev)
+>   	struct mhi_event_ctxt *er_ctxt =
+>   		&mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
+>   	struct mhi_ring *ev_ring = &mhi_event->ring;
+> -	dma_addr_t ptr = er_ctxt->rp;
+> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>   	void *dev_rp;
+>   
+>   	if (!is_valid_ring_ptr(ev_ring, ptr)) {
+> @@ -537,14 +537,14 @@ static void mhi_recycle_ev_ring_element(struct mhi_controller *mhi_cntrl,
+>   
+>   	/* Update the WP */
+>   	ring->wp += ring->el_size;
+> -	ctxt_wp = *ring->ctxt_wp + ring->el_size;
+> +	ctxt_wp = le64_to_cpu(*ring->ctxt_wp) + ring->el_size;
+>   
+>   	if (ring->wp >= (ring->base + ring->len)) {
+>   		ring->wp = ring->base;
+>   		ctxt_wp = ring->iommu_base;
+>   	}
+>   
+> -	*ring->ctxt_wp = ctxt_wp;
+> +	*ring->ctxt_wp = cpu_to_le64(ctxt_wp);
+>   
+>   	/* Update the RP */
+>   	ring->rp += ring->el_size;
+> @@ -801,7 +801,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>   	u32 chan;
+>   	int count = 0;
+> -	dma_addr_t ptr = er_ctxt->rp;
+> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>   
+>   	/*
+>   	 * This is a quick check to avoid unnecessary event processing
+> @@ -940,7 +940,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>   		mhi_recycle_ev_ring_element(mhi_cntrl, ev_ring);
+>   		local_rp = ev_ring->rp;
+>   
+> -		ptr = er_ctxt->rp;
+> +		ptr = le64_to_cpu(er_ctxt->rp);
+>   		if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>   			dev_err(&mhi_cntrl->mhi_dev->dev,
+>   				"Event ring rp points outside of the event ring\n");
+> @@ -970,7 +970,7 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+>   	int count = 0;
+>   	u32 chan;
+>   	struct mhi_chan *mhi_chan;
+> -	dma_addr_t ptr = er_ctxt->rp;
+> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>   
+>   	if (unlikely(MHI_EVENT_ACCESS_INVALID(mhi_cntrl->pm_state)))
+>   		return -EIO;
+> @@ -1011,7 +1011,7 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+>   		mhi_recycle_ev_ring_element(mhi_cntrl, ev_ring);
+>   		local_rp = ev_ring->rp;
+>   
+> -		ptr = er_ctxt->rp;
+> +		ptr = le64_to_cpu(er_ctxt->rp);
+>   		if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>   			dev_err(&mhi_cntrl->mhi_dev->dev,
+>   				"Event ring rp points outside of the event ring\n");
+> @@ -1533,7 +1533,7 @@ static void mhi_mark_stale_events(struct mhi_controller *mhi_cntrl,
+>   	/* mark all stale events related to channel as STALE event */
+>   	spin_lock_irqsave(&mhi_event->lock, flags);
+>   
+> -	ptr = er_ctxt->rp;
+> +	ptr = le64_to_cpu(er_ctxt->rp);
+>   	if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>   		dev_err(&mhi_cntrl->mhi_dev->dev,
+>   			"Event ring rp points outside of the event ring\n");
+> diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
+> index 4aae0baea008..c35c5ddc7220 100644
+> --- a/drivers/bus/mhi/core/pm.c
+> +++ b/drivers/bus/mhi/core/pm.c
+> @@ -218,7 +218,7 @@ int mhi_ready_state_transition(struct mhi_controller *mhi_cntrl)
+>   			continue;
+>   
+>   		ring->wp = ring->base + ring->len - ring->el_size;
+> -		*ring->ctxt_wp = ring->iommu_base + ring->len - ring->el_size;
+> +		*ring->ctxt_wp = cpu_to_le64(ring->iommu_base + ring->len - ring->el_size);
+>   		/* Update all cores */
+>   		smp_wmb();
+>   
+> @@ -420,7 +420,7 @@ static int mhi_pm_mission_mode_transition(struct mhi_controller *mhi_cntrl)
+>   			continue;
+>   
+>   		ring->wp = ring->base + ring->len - ring->el_size;
+> -		*ring->ctxt_wp = ring->iommu_base + ring->len - ring->el_size;
+> +		*ring->ctxt_wp = cpu_to_le64(ring->iommu_base + ring->len - ring->el_size);
+>   		/* Update to all cores */
+>   		smp_wmb();
+>   
 

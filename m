@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4894C71C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A122D4C71CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbiB1QeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S237959AbiB1Qei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbiB1QeU (ORCPT
+        with ESMTP id S237943AbiB1Qef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:34:20 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FD8443DE;
-        Mon, 28 Feb 2022 08:33:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646066021; x=1677602021;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UdSjyJ1B+8BlqPXgKZCokBvRIg9/Y/nN4hv5bYbeSv8=;
-  b=H93m1Zy1ONPvoY1GqCE8xWHc2CzPIOZxV2P4nKKwmx97+qNzNC3IG0NQ
-   lrAB4/Ii/yvOp0h39u1lkSGxqsh8ATdq2bDY+8Cu8odDSgH4hshRUWQPb
-   YLmXX+cxgIZLJvx9KiollU2OK+czBA2E6HEDwk4hyVUWMp+e/IsB7hVXI
-   XJRM7DB6ZN45Bm6oVB4H//kMUspaWa7pOkUBc9ymev1yd05zuMGn9q/zy
-   JvbfUGNfmKmZAJgjBaZzV4i+VQEZPHpMOqdyE0j3DUcXIqEMAn2RqAm2M
-   BtNcAn+AHHtj8xDRpUmHidljcZGC/Zt3j3f8bd7zTrMFRQHfX+MGdVls1
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="87262415"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 09:33:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 09:33:40 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 09:33:37 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>, <michael@walle.cc>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] mtd: spi-nor: Skip erase logic when SPI_NOR_NO_ERASE is set
-Date:   Mon, 28 Feb 2022 18:33:34 +0200
-Message-ID: <20220228163334.277730-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 11:34:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3A146B24;
+        Mon, 28 Feb 2022 08:33:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 642596123C;
+        Mon, 28 Feb 2022 16:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BF2C340E7;
+        Mon, 28 Feb 2022 16:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646066035;
+        bh=5TnaHWBObWPu9LztXoyemUFcbfrnH0z+xI99F3n3R8g=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=kZ7m26CkOlcamcJdE9TffN0PMCAyW+ITFSrvbw+O5Isw9bz+NzyxDoTqwC2Vx70/l
+         dI+voha1t1y0FCt5boFo/mFFvqOweUkVd64clVQVww3Dfl+irtWa2J8hfSj08w+tw4
+         SqkvSmHe6m++E1niteZAnImg6RU/XmxMKbFgfiOP1f4lE8HGkR2xzafac0ZuxYfzPu
+         yISiQuBFePoqFsZnNMSf/zNmjhHoN7XMOYrqIXaa5YcDJfiQj3ZOfopuPhSRzCmPIj
+         KawGoJ3iGh/jLrPQQHu/Mr3+j2Ik+onCBFgt5xR8kl68ALhhWpHzMK5b/LgEbHe0OF
+         htDcjt9pjubFg==
+Date:   Mon, 28 Feb 2022 17:33:49 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@redhat.com>
+Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
+In-Reply-To: <YhkEqpF6QSYeoMQn@kroah.com>
+Message-ID: <nycvar.YFH.7.76.2202281733000.11721@cbobk.fhfr.pm>
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com> <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com> <YhjbzxxgxtSxFLe/@kroah.com> <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+ <YhkEqpF6QSYeoMQn@kroah.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even if SPI_NOR_NO_ERASE was set, one could still send erase opcodes
-to the flash. It is not recommended to send unsupported opcodes to
-flashes. Fix the logic and do not set mtd->_erase when SPI_NOR_NO_ERASE
-is specified. With this users will not be able to issue erase opcodes to
-flashes and instead they will recive an -ENOTSUPP error.
+On Fri, 25 Feb 2022, Greg KH wrote:
 
-Cc: stable@vger.kernel.org
-Fixes: b199489d37b2 ("mtd: spi-nor: add the framework for SPI NOR")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/mtd/spi-nor/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> > I mean that if you need a bpf program to be loaded from userspace at
+> > boot to make your keyboard functional, then you need to have the root
+> > partition mounted (or put the program in the initrd) so udev can load
+> > it. Now if your keyboard is supposed to give the password used to
+> > decrypt your root partition but you need a bpf program on that said
+> > partition to make it functional, you are screwed :)
+> 
+> True, but that's why the HID boot protocol was designed for keyboards
+> and mice, so that they "always" work.  Yeah, I know many devices ignore
+> it, oh well...
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 86a536c97c18..cd2d094ef837 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2969,10 +2969,11 @@ static void spi_nor_set_mtd_info(struct spi_nor *nor)
- 	mtd->flags = MTD_CAP_NORFLASH;
- 	if (nor->info->flags & SPI_NOR_NO_ERASE)
- 		mtd->flags |= MTD_NO_ERASE;
-+	else
-+		mtd->_erase = spi_nor_erase;
- 	mtd->writesize = nor->params->writesize;
- 	mtd->writebufsize = nor->params->page_size;
- 	mtd->size = nor->params->size;
--	mtd->_erase = spi_nor_erase;
- 	mtd->_read = spi_nor_read;
- 	/* Might be already set by some SST flashes. */
- 	if (!mtd->_write)
+That's a very mild statement :)
+
+*Most* of the recent modern HW doesn't support it as far as I can say.
+
+Thanks,
+
 -- 
-2.25.1
+Jiri Kosina
+SUSE Labs
 

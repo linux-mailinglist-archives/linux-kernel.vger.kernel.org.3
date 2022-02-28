@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990694C75F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650B94C72F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239299AbiB1R5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S232964AbiB1RbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240253AbiB1RyI (ORCPT
+        with ESMTP id S236550AbiB1R24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9867DB12F2;
-        Mon, 28 Feb 2022 09:41:54 -0800 (PST)
+        Mon, 28 Feb 2022 12:28:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E540A54BC3;
+        Mon, 28 Feb 2022 09:28:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2631615B4;
-        Mon, 28 Feb 2022 17:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE0BC340F0;
-        Mon, 28 Feb 2022 17:41:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82345612FA;
+        Mon, 28 Feb 2022 17:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4E4C340E7;
+        Mon, 28 Feb 2022 17:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070113;
-        bh=5KaqpvvluzjEctSnCemTvMxDjNe7IYUy995fPKndeGE=;
+        s=korg; t=1646069283;
+        bh=oh/sasvbWZ6S2kcQyCU00pN818bGxsywW0dhY8vbDRc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x0xCdOKVJCfftkCEMKlL95QeR0kvbVo/q0auswIuph78iKYs7W0gwJNEzcjlROhVX
-         rXcumEcyvXXayi9N7AN83bUhy8c3s5sqg3A1AycHJJO1SCRI3ObcSQWzaCE59DlfTM
-         U50wYfD46kHOXHvKu/wJ+Ap5zolcetnY5D4DnPDQ=
+        b=kI1oXybS8qdZngdR5+hU9j5ocPOqHL/2YvaGwzocXZOGEhdW2kWhSIbkBiMDX3KMS
+         Y9ge5WFyatF7ux5BGBLkV97cY6e7ZTXBcxjEqDHAfOcXZTV3j9gyJ9lmd+luRx6eaj
+         5TAMZDjJu/ZivqVo22hO5fB3EEMtPibX56FLRjL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 091/139] bnxt_en: Increase firmware message response DMA wait time
+        Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 4.14 29/31] Revert "drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR"
 Date:   Mon, 28 Feb 2022 18:24:25 +0100
-Message-Id: <20220228172357.182578542@linuxfoundation.org>
+Message-Id: <20220228172202.563726636@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
+References: <20220228172159.515152296@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,80 +54,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Chan <michael.chan@broadcom.com>
+From: Karol Herbst <kherbst@redhat.com>
 
-[ Upstream commit b891106da52b2c12dbaf73400f6d225b06a38d80 ]
+This reverts commit c9ec3d85c0eef7c71cdc68db758e0f0e378132c0.
 
-When polling for the firmware message response, we first poll for the
-response message header.  Once the valid length is detected in the
-header, we poll for the valid bit at the end of the message which
-signals DMA completion.  Normally, this poll time for DMA completion
-is extremely short (0 to a few usec).  But on some devices under some
-rare conditions, it can be up to about 20 msec.
+This commit causes a regression if 4cdd2450bf739bada353e82d27b00db9af8c3001
+is not applied as well. This was fixed for 5.16, 5.15 and 5.10.
 
-Increase this delay to 50 msec and use udelay() for the first 10 usec
-for the common case, and usleep_range() beyond that.
+On older stable branches backporting this commit is complicated as relevant
+code changed quite a bit. Furthermore most of the affected hardware barely
+works on those and users would want to use the newer kernels anyway.
 
-Also, change the error message to include the above delay time when
-printing the timeout value.
-
-Fixes: 3c8c20db769c ("bnxt_en: move HWRM API implementation into separate file")
-Reviewed-by: Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org # 5.4 4.19 and 4.14
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/issues/149
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c | 12 +++++++++---
- drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h |  2 +-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c |   37 ++++++++++---------------
+ 1 file changed, 16 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
-index 8171f4912fa01..3a0eeb3737767 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c
-@@ -595,18 +595,24 @@ static int __hwrm_send(struct bnxt *bp, struct bnxt_hwrm_ctx *ctx)
- 
- 		/* Last byte of resp contains valid bit */
- 		valid = ((u8 *)ctx->resp) + len - 1;
--		for (j = 0; j < HWRM_VALID_BIT_DELAY_USEC; j++) {
-+		for (j = 0; j < HWRM_VALID_BIT_DELAY_USEC; ) {
- 			/* make sure we read from updated DMA memory */
- 			dma_rmb();
- 			if (*valid)
- 				break;
--			usleep_range(1, 5);
-+			if (j < 10) {
-+				udelay(1);
-+				j++;
-+			} else {
-+				usleep_range(20, 30);
-+				j += 20;
-+			}
- 		}
- 
- 		if (j >= HWRM_VALID_BIT_DELAY_USEC) {
- 			if (!(ctx->flags & BNXT_HWRM_CTX_SILENT))
- 				netdev_err(bp->dev, "Error (timeout: %u) msg {0x%x 0x%x} len:%d v:%d\n",
--					   hwrm_total_timeout(i),
-+					   hwrm_total_timeout(i) + j,
- 					   le16_to_cpu(ctx->req->req_type),
- 					   le16_to_cpu(ctx->req->seq_id), len,
- 					   *valid);
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
-index 9a9fc4e8041b6..380ef69afb51b 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h
-@@ -94,7 +94,7 @@ static inline unsigned int hwrm_total_timeout(unsigned int n)
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -70,13 +70,20 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev
+ 	return 0;
  }
  
- 
--#define HWRM_VALID_BIT_DELAY_USEC	150
-+#define HWRM_VALID_BIT_DELAY_USEC	50000
- 
- static inline bool bnxt_cfa_hwrm_message(u16 req_type)
+-static void
++static int
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
  {
--- 
-2.34.1
-
+ 	struct nvkm_device *device = pmu->subdev.device;
+ 
+ 	if (!pmu->func->enabled(pmu))
+-		return;
++		return 0;
++
++	/* Inhibit interrupts, and wait for idle. */
++	nvkm_wr32(device, 0x10a014, 0x0000ffff);
++	nvkm_msec(device, 2000,
++		if (!nvkm_rd32(device, 0x10a04c))
++			break;
++	);
+ 
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -87,37 +94,25 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
++
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	nvkm_pmu_reset(pmu);
+-	return 0;
++	return nvkm_pmu_reset(pmu);
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	struct nvkm_device *device = pmu->subdev.device;
+-
+-	if (!pmu->func->init)
+-		return 0;
+-
+-	if (pmu->func->enabled(pmu)) {
+-		/* Inhibit interrupts, and wait for idle. */
+-		nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-		nvkm_msec(device, 2000,
+-			if (!nvkm_rd32(device, 0x10a04c))
+-				break;
+-		);
+-
+-		nvkm_pmu_reset(pmu);
+-	}
+-
+-	return pmu->func->init(pmu);
++	int ret = nvkm_pmu_reset(pmu);
++	if (ret == 0 && pmu->func->init)
++		ret = pmu->func->init(pmu);
++	return ret;
+ }
+ 
+ static int
 
 

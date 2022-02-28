@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A834C6D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282104C6D3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbiB1MwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S231309AbiB1Myp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiB1MwB (ORCPT
+        with ESMTP id S229588AbiB1Myo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:52:01 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D67804F;
-        Mon, 28 Feb 2022 04:51:22 -0800 (PST)
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MvKTJ-1oFX692esT-00rGkv; Mon, 28 Feb 2022 13:51:20 +0100
-Received: by mail-wr1-f47.google.com with SMTP id j17so15350943wrc.0;
-        Mon, 28 Feb 2022 04:51:20 -0800 (PST)
-X-Gm-Message-State: AOAM533j5Gwpt1KJc3MLGO63cDs+7RTgPih1iAaSUZEoN4UNOLafFtfC
-        BoeUpflDt2dnP8PjiRW/uEzsMZq1gIKwNhPZp98=
-X-Google-Smtp-Source: ABdhPJxqAXtjqyu3XGhO9l+qeiMZpUmH3VvfwpXSNlGORAG+H/kTZ6DoBe9bebMaudh7ucMT2NCbvco6L/QKSBCYl4U=
-X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
- c2-20020a5d63c2000000b001ef840ee139mr8301106wrw.192.1646052680182; Mon, 28
- Feb 2022 04:51:20 -0800 (PST)
+        Mon, 28 Feb 2022 07:54:44 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796BF56C03;
+        Mon, 28 Feb 2022 04:54:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6gLH0sFPz4xcq;
+        Mon, 28 Feb 2022 23:53:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646052839;
+        bh=8B6XiJ9lmvXFwgHrhU14u3sza3iGcw2HRFqAdksawkY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gH871yv3uhpNqUtgYkncFghfyNx/ZzyOm2Or4VPktjPYSF72U9aHkGMxnKm3Ti3Dx
+         s2+B5lYc1may5lfNgtjMTCNQBuQ8QeXLr3CKNzDAd3B6Andwnv9vU/q69mgo3oSs82
+         Ck9X7MTWykWTj8+GOD6IGm11C9EJ26xlmBbMDP39O7zuS5LwPgn7ZtijyIrGFYVRy4
+         QqyAHnwfNCVXRiMx5SBTiyAKbtu6DSkHZHVcTaCyGuw2xUVy9TmMeN7ErmVDNF6cS3
+         2Ey2+WdFFTFTc0G43lD36ad05eGgm+uDxWCk+j3CnH1Mzy6wGKGDJo2dOtlyPvSIxx
+         ykDsbtx4jMoCQ==
+Date:   Mon, 28 Feb 2022 23:53:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Liam Howlett <liam.howlett@oracle.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: linux-next: build failure after merge of the folio tree
+Message-ID: <20220228235356.5aca3e03@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-4-guoren@kernel.org>
- <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com> <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
- <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com> <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
-In-Reply-To: <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 28 Feb 2022 13:51:03 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0ZXuGWO+n2ghxhXmxntZAk_HPDmsk3cigdh2FBMQcKYA@mail.gmail.com>
-Message-ID: <CAK8P3a0ZXuGWO+n2ghxhXmxntZAk_HPDmsk3cigdh2FBMQcKYA@mail.gmail.com>
-Subject: Re: [PATCH V7 03/20] compat: consolidate the compat_flock{,64} definition
-To:     Guo Ren <guoren@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "liush@allwinnertech.com" <liush@allwinnertech.com>,
-        "wefu@redhat.com" <wefu@redhat.com>,
-        "drew@beagleboard.org" <drew@beagleboard.org>,
-        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
-        "hch@lst.de" <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B0AtdJlqMXQDEgJHvuqtO1DU4MGLOpbhpQEBpVaQa9DAv4/KSs9
- INCrI+meMd2OjWcOwf1AkmQYwrBDdJa2HE2I/BLnzI0ywmQfbUhjtxMsAhLZmBOCTN5mXbu
- WLPrcYEEuYZR2vty06GMJNUVf1zoSqzf8Qp6kNTTHD87uJoagOquXn0k4gp3zIRqEC22p/i
- 8B1bPt/kCnBwGtcK6GD8g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eppUcn1u+fI=:gspmD17GQoBvp3XPDmBjBs
- dwrJFXkFnYIFQhGnKqWYlN0c8JjOZWUD8HAPILhcNTkkxZevvFyH23i75fTTa11TS9ths7xR6
- svAsq+geXeo+Jt/dmY5xrcVHO/dTTWNrpoYA0w+xFFUH3oDC8DG21kldBz6t7pgi91g2sNTMv
- 1K8V8FZQxbeE02c1poU5aN9vn6VAmVDk1cEpvIjqlTwl/JFJ4VyVvm1kqYuUWsEhn3eNFBeID
- U7ek7bpF3+0NgC/JbFh62Az5clcxVAe0A07TS397IgqaL8/M4VCso4yYuy5i22A9JZ+l8I9tI
- muvStCtNL6Xxi1Y/5kcjpZ9AP1vRbvYsXNLNHopFi7aSoffnNfm2WeSyNaUkYh4xpzErVdom0
- kzmEq/L8rEwPgxoP5bRyAwR113roU/ylN8QG8a1nROpFksPkdIUqo9n8mvRVVmWfv/cRG/tLU
- 2syVNzqrkJJ8g7wEIOOl7fr/ZW9FAIOgAY0qTA1bO/liheVGDh8Ksjq1Kmjrqc911ztMDJZ/E
- RhJju6guuXp1h/bpD00q0kVjSBtUk5F8rYjMIOnwY9zhpr0SG8JvyJLETKXs78nXY+HNocS04
- Bi0tJ2LGqaomL5Myhj79KXiQSedb0zT1LFmNsykNlj2LlH3IYJ5a+8Q0EBbPIO7n3kWW4iFq/
- Qc9MhHN6HVMvnQU4iXnXKlDg+JbS9tqrBKypBa7WOpzKhB6uWTrZsbvbivMXGRrgDipjGj0dK
- Av5/geYkcfw13a3ebmngh1AvuFOTCBB4EP3yMTWZG6DBrnsTMUgnXYgHzIi0QudqdxHGVCyeY
- YcoNNR6NmqUKH1nXF4uLYfnmtyHZivcyI+Qhg3xWz1zB0uVo+s=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/OJEnBt2I/y_=dGz3QYBoviK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,65 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 1:13 PM Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Feb 28, 2022 at 8:02 PM David Laight <David.Laight@aculab.com> wrote:
-> > From: Guo Ren Sent: 28 February 2022 11:52
-> > > On Mon, Feb 28, 2022 at 2:40 PM David Laight <David.Laight@aculab.com> wrote:
-> > > > ...
-> > > > > +struct compat_flock64 {
-> > > > > +     short           l_type;
-> > > > > +     short           l_whence;
-> > > > > +     compat_loff_t   l_start;
-> > > > > +     compat_loff_t   l_len;
-> > > > > +     compat_pid_t    l_pid;
-> > > > > +#ifdef __ARCH_COMPAT_FLOCK64_PAD
-> > > > > +     __ARCH_COMPAT_FLOCK64_PAD
-> > > > > +#endif
-> > > > > +} __ARCH_COMPAT_FLOCK64_PACK;
-> > > > > +
-> > > >
-> > > > Provided compat_loff_t are correctly defined with __aligned__(4)
-> > > See include/asm-generic/compat.h
-> > >
-> > > typedef s64 compat_loff_t;
-> > >
-> > > Only:
-> > > #ifdef CONFIG_COMPAT_FOR_U64_ALIGNMENT
-> > > typedef s64 __attribute__((aligned(4))) compat_s64;
-> > >
-> > > So how do you think compat_loff_t could be defined with __aligned__(4)?
-> >
-> > compat_loff_t should be compat_s64 not s64.
-> >
-> > The same should be done for all 64bit 'compat' types.
-> Changing
-> typedef s64 compat_loff_t;
-> to
-> typedef compat_s64 compat_loff_t;
->
-> should be another patch and it affects all architectures, I don't
-> think we should involve it in this series.
+--Sig_/OJEnBt2I/y_=dGz3QYBoviK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Agreed, your patch (originally from Christoph) looks fine, it correctly
-transforms the seven copies of the structure into a shared version.
+Hi all,
 
-There is always more that can be improved, but for this series,
-I think you have already done enough.
+After merging the folio tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-> look at kernel/power/user.c:
-> struct compat_resume_swap_area {
->         compat_loff_t offset;
->         u32 dev;
-> } __packed;
->
-> I thnk keep "typedef s64 compat_loff_t;" is a sensible choice for
-> COMPAT support patchset series.
+mm/mmap.c: In function 'do_mas_align_munmap':
+mm/mmap.c:2375:25: error: implicit declaration of function 'munlock_vma_pag=
+es_all'; did you mean 'munlock_vma_page'? [-Werror=3Dimplicit-function-decl=
+aration]
+ 2375 |                         munlock_vma_pages_all(next);
+      |                         ^~~~~~~~~~~~~~~~~~~~~
+      |                         munlock_vma_page
+mm/mmap.c: In function 'do_brk_munmap':
+mm/mmap.c:2908:17: error: implicit declaration of function 'munlock_vma_pag=
+es_range'; did you mean 'count_vma_pages_range'? [-Werror=3Dimplicit-functi=
+on-declaration]
+ 2908 |                 munlock_vma_pages_range(&unmap, newbrk, oldbrk);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~
+      |                 count_vma_pages_range
 
-The only references to compat_loff_t that we have in the kernel
-could all be simplified by defining compat_loff_t as compat_s64
-instead of s64, but it has no impact on correctness here.
+Caused by commits
 
-Let's make sure you get your series into 5.18, and then David can
-follow-up with any further cleanups after that.
+  a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+  34b6792380ce ("mm/munlock: mlock_pte_range() when mlocking or munlocking")
 
-         Arnd
+interacting with commits
+
+  99f86dff3df6 ("mm/mmap: Change do_brk_flags() to expand existing VMA and =
+add do_brk_munmap()")
+  04552dc1edc5 ("mm: Remove the vma linked list")
+
+from the maple tree.
+
+Given other feedback about the maple tree, I have dropped it for today.
+
+I am not sure what effect this will have on Andrew's patch series, but
+I guess I will find out shortly :-(
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OJEnBt2I/y_=dGz3QYBoviK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcxeQACgkQAVBC80lX
+0GxRxAgAmyNS+HPACkW65UElfO7sYYMvsMKorjpvCvznGT9nlwCdloOuzG7OJ5Nm
+erC/OrmAZdzRMnEqKce0PGqvknm/kw/YKNa7K5LECg7kH1XhrR5fQThIdYxRRjCD
++dx0ooSt3cSFMKoc9gXU0afxiz1SI+vAdtmw94Xyrivd4FjD+Su1BdoaXsadey1P
+k2/uX4HBrU9PQnzAfJa16fU7ZsH/n/QjXrge3naUExWXsDSdwfvo0rRh53Q/JpUl
+1dI4Dm/3UYbwtVtTC/NTJwBLDKybs7OtLCyOgRnzBBh4ewQoaU2IjvmoQsHIk+0V
+jWnVZT0jCPRrjl4Mxyj/XxStxfsjFA==
+=uIy/
+-----END PGP SIGNATURE-----
+
+--Sig_/OJEnBt2I/y_=dGz3QYBoviK--

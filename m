@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099BD4C6D3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003394C6D50
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiB1Mzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S232346AbiB1NAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiB1Mzl (ORCPT
+        with ESMTP id S230392AbiB1NAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:55:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B82E76E0C;
-        Mon, 28 Feb 2022 04:55:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A96D2B8112D;
-        Mon, 28 Feb 2022 12:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76CDC340EE;
-        Mon, 28 Feb 2022 12:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646052900;
-        bh=Xmuf1eL68pU4DmpFVDTtZDXTAA5H0aTtLv3dpQ/Q6N4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=StUkJjrXr26DVsItWgn+XwP8DKEhpOHwTd22e7zZm7HJx8KRf1mG8XcsqDMzQvV9v
-         hpGKgxewowjUALw+9kA5U/+r6+rrKZUVQVuTgFzheHXOv8Yu9o3iNhT3UE5TMO0Y5m
-         YflI+/5m5HDC2NAXdW9NcO03CaxpuIEWOLMVELxfoQBBmE4QSThuIvIgf9fR0wL3rO
-         HlW0yIqNMasJ8Ltf84xuhikoElEjrOMc+C2Xm+04cdWvfsLNkZkahVz2BoZ9fqy6QU
-         xZE4HJXjYDa+OjgU33DtxNXFsvWXlJbbAHMKZt8e+14eErpTPwtOUTFI25AODju+mF
-         oFveaCER83GJg==
-Date:   Mon, 28 Feb 2022 13:55:39 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/sgx: Free backing memory after faulting the
- enclave page
-Message-ID: <YhzGS+x0eNoc3gyN@iki.fi>
-References: <20220222120342.5277-1-jarkko@kernel.org>
- <33646f1e-da44-503a-c454-02658d512926@intel.com>
+        Mon, 28 Feb 2022 08:00:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93ACF58E55;
+        Mon, 28 Feb 2022 05:00:01 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5F35721991;
+        Mon, 28 Feb 2022 12:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646053199;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GYvrOH34zCWl0BM57x3MsoAIfmyz0j5aUqs18/+9t2Q=;
+        b=CjK8nNU5xeMNbntdPyPSfsq8/1RCdmnnM+tnemCL9lQAmpVtTSbi2i0S/zED3dXrk+604R
+        F7IO7CYu/SbuKXg9SBt5CXTg/P34/O1YqlSaqPLhtC63aEQddztfpC4Hi7UwtxSCvZvSgX
+        /+ilzqW9cikrpXqztnZDSBZcWjPDsWQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646053199;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GYvrOH34zCWl0BM57x3MsoAIfmyz0j5aUqs18/+9t2Q=;
+        b=YC640EWtiJvSsnZFCbq8EFRrctbU3bFx2JBcqb+i/kX+D3HkAqM4d4d/mY/yRse7T0PyAW
+        0aoolUYAD4EZD9DA==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 81766A3B84;
+        Mon, 28 Feb 2022 12:59:58 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id A86B6DA823; Mon, 28 Feb 2022 13:56:07 +0100 (CET)
+Date:   Mon, 28 Feb 2022 13:56:07 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+Message-ID: <20220228125607.GG12643@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Arnd Bergmann <arnd@kernel.org>,
+        linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
+References: <20220228103142.3301082-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <33646f1e-da44-503a-c454-02658d512926@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 09:14:05AM -0800, Dave Hansen wrote:
-> On 2/22/22 04:03, Jarkko Sakkinen wrote:
-> > +	if (pcmd_page_empty) {
-> > +		pgoff_t pcmd_off = encl->size + PAGE_SIZE /* SECS */ +
-> > +				   page_index * sizeof(struct sgx_pcmd);
-> > +
-> > +		sgx_encl_truncate_backing_page(encl, PFN_DOWN(pcmd_off));
-> > +	}
-> > +
-> >  	return ret;
-> >  }
-> >  
-> > @@ -583,7 +613,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
-> >  static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-> >  				struct sgx_backing *backing)
-> >  {
-> > -	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
-> > +	pgoff_t pcmd_off = encl->size + PAGE_SIZE /* SECS */ + page_index * sizeof(struct sgx_pcmd);
+On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Jarkko, I really don't like how this looks.  The '/* SECS */' thing is
-> pretty ugly and the comment in the middle of an arithmetic operation is
-> just really hard to read.
 > 
-> Then, there's the fact that this gem is copied-and-pasted.  Oh, and it
-> looks a wee bit over 80 columns.
+> Link: https://lore.kernel.org/lkml/CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> [v2]
+>  - added -std=gnu11 back, rather than just relying on the default
+>  - minor changes to changelog text
+> ---
+>  Documentation/process/programming-language.rst              | 4 ++--
+>  .../translations/it_IT/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_TW/process/programming-language.rst     | 4 ++--
+>  Makefile                                                    | 6 +++---
+>  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
+>  drivers/gpu/drm/i915/Makefile                               | 1 +
+>  drivers/staging/greybus/tools/Makefile                      | 3 ++-
 
-Today you can have 100.
+For
 
-> 
-> I went to the trouble of writing a nice, fully-fleshed-out helper
-> function for this with a comment included:
-> 
-> > https://lore.kernel.org/all/8afec431-4dfc-d8df-152b-76cca0e17ccb@intel.com/
+>  fs/btrfs/Makefile                                           | 1 +
 
-Keeping full byte offset up until parts of it are required for something
-makes the formula just a simple equation of additions and multiplications,
-e.g. nothing like "/ sizeof(struct sgx_pcmd)" is required.
-
-Then you get the PCMD page index will be just PFN_DOWN(pcmd_off) and offset
-inside that page is pcmd_off & PAGE_MASK. At least fro me this is more 
-intuitive way to do the calculations.
- 
-I thought that the formula is so simple that it does not matter if it is
-just in two sites open coded but I can wrap it too, if required, e.g.
-
-/* 
- * Calculate byte offset of a PCMD struct associated to an enclave page.
- * PCMD's follow right after the EPC data in the backing storage. In
- * addition to the visible enclave pages, there's one extra page slot
- * for SECS, before PCMD data.
- */
-static pgoff_t *sgx_encl_page_index_to_pcmd_offset(struct sgx_encl *encl, unsigned long page_index)
-{
-        return encl->size + PAGE_SIZE + page_index * sizeof(struct sgx_pcmd);
-}
-
-> 
-> Was there a problem using that?  The change from the last version is:
-> 
-> * Sanitized the offset calculations.
-> 
-> Given that there have been multiple different calculations over the four
-> versions so far, which version was right?  v3 or v4?
-
-This one has correct and tested calculations but for peer test probably
-Reinette should verify that. I tested this with my laptop in bare metal.
-
-BR, Jarkko
+Acked-by: David Sterba <dsterba@suse.com>

@@ -2,172 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4604C701D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608B54C701F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 15:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237402AbiB1Oyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 09:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S237412AbiB1OzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 09:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiB1Oyn (ORCPT
+        with ESMTP id S232561AbiB1OzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:54:43 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02379424A6;
-        Mon, 28 Feb 2022 06:54:05 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso18941234ooc.12;
-        Mon, 28 Feb 2022 06:54:04 -0800 (PST)
+        Mon, 28 Feb 2022 09:55:15 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A861F424BA;
+        Mon, 28 Feb 2022 06:54:36 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 12so11653752pgd.0;
+        Mon, 28 Feb 2022 06:54:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=2NpcbtVausRghlc2AF5Qk8ViAeV3CmmMKoQv0S/ZKco=;
-        b=e4hQZRDoDSvjOTGyDC3NZH8J2agWHdGzO/Ys1xnWTiuprlAxF6MwS+woRFaG9MeigN
-         74c/cdJVK4s2CZfcgu9MFw9a9gaPcrL8kYRI8b2u2YBgzA8VSDGT2cOoqQCIFGZ/Zx+J
-         3ocQ22ZXwdjF69EQVwhDL5f+jD5T4hWUGtcxhk5OxuCOryzJWuB9tIuEV8qsW0FRUV+c
-         7kU7bUYmixGQAhcoOMyj9XhAzcyYrSEnxcdmyZDjULb4/ztsTAKP+IuuP8Y7AgZm8rHd
-         PE3Z8adfBcg19EdC6wETI5E+l3l5Bv1HG5/U0I0Hx9S9yKkP2VlXFfXQlhzxPDC78k65
-         Lv9Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=ZI3WKr44gQFwNamAPZLz71oRj2BK+8Z/76zrwIPf9TA=;
+        b=LmbZpW6/LWzUaZkybCSn6M9Rmt712kYOR1ZkqSm6K9ju9oW7F2UeiDk/bB6SxojDI0
+         mvrARsOhjsY355jwhSSwf8ytFo+t9BNDMm21klZsQSwG+gFqk3O36pTBsXWCkun+258R
+         fxZ4cQ2+rLUWP1mL00jpA7K8IktC+CgLymJXG0vKZwfwStIrNrRuKxyq8T58Y0HTqL4r
+         vSW5GNt/wSPKs4F87marwsI3B6w5KNRmUuS6OHQz5PAPZ7bh8o92rxj9KspA8fNKLHdI
+         oRvIdZXdy7mdC0XEqj9Xw001mJEtfZKXVqEqj8fv4tk+EtnCU6b8xWIZE9lcbhGEQoys
+         c0cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=2NpcbtVausRghlc2AF5Qk8ViAeV3CmmMKoQv0S/ZKco=;
-        b=4OG8VZ29oP1rZQQVyHM2CBDMT+mbKnBRjPUoRGWf+IgVk0F1KIPFrAGgTwrHMJ88eL
-         C1Q+WGCsRRHDfX02/ovQmXs4/ovtgEuDvC4JEcqTYLoq/aOIGVBzPZgc5Fh3rbd+0nPR
-         37NCUtZ4iHql0+YGStyG7LCQibsCgl9y0+p5R843Q487QyocfM24Z3xQ/Ior+wl/UTGg
-         IWnPfus7+HXbV0ardCrvgdITSMqAguC2M9Lr+LEK6VGCjMXhUBSFhnWvRd9A+izK/Y1e
-         A9Qf1/3/68DTxCt8gOXlW3sple5OMXDB9Qtna6ydodPyOdTiRd8zA4sR+OUvL6wyVWcw
-         099w==
-X-Gm-Message-State: AOAM533GL07UqZ2C1bnf3hGeiLTnD3mRvG0+Qk1TuHeT9WrlFAP7Mk6j
-        kHYbsuKnP3ClX/OtrUbvqtw=
-X-Google-Smtp-Source: ABdhPJw5p564wo1FNct20/m8JSOhTn/r/zg8QD5FiplZuhydA8Gvqhwc9cyDH8tncVS6Nt+1026Yuw==
-X-Received: by 2002:a05:6870:218a:b0:d7:3be1:b842 with SMTP id l10-20020a056870218a00b000d73be1b842mr1414568oae.0.1646060044314;
-        Mon, 28 Feb 2022 06:54:04 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm5231148oth.27.2022.02.28.06.54.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:54:03 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <eb049c6f-f196-95de-265e-c3454fcb808a@roeck-us.net>
-Date:   Mon, 28 Feb 2022 06:54:01 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220228103716.10774-1-potin.lai@quantatw.com>
- <20220228103716.10774-3-potin.lai@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging
- properties for ADM1275
-In-Reply-To: <20220228103716.10774-3-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ZI3WKr44gQFwNamAPZLz71oRj2BK+8Z/76zrwIPf9TA=;
+        b=a7CoGfyFMwIUff7zYQV1IBQ7J8TXkT7Ym8Nj37dauIk0HHQXg+HssaEXe/Javbun1F
+         zFv2XHHVAOeiTvBwxOcC37zsTUeOz7t1sUnYbrAElD2kzqb4kOABUHQ580hSzs/ZxuQk
+         cP8xr2z2lO6EvN3FpwHui/kCSdweJwKst5xqhhLIwKaTWY84gMv+Q/VgGN7PKJeVx7Op
+         Zgbr/YLqUUalYLQMRZxcoWqNglKzMlO2dDLd8cGJL/KU3ma74QVdp43ioB7oYtn3KaqG
+         3NfSasHqEHEkA2xlgDk9qAw/eylNN4MxC6WexBmoMztb91jEfVWGR1VfStdlCteHm9vc
+         aJgg==
+X-Gm-Message-State: AOAM533q//LA36cDeFuyVlzVmFUaqKSqsZtkFP1coYVpXh6ZilFJM9nr
+        +7aQPGqf+UiSXipvEM7W8w==
+X-Google-Smtp-Source: ABdhPJxwUfKZSF6qDcSU2tVaVicT9+sagkyPAR7XDw0i7zaqVWgmgU6fvwvC+Xsyygjc5f6oyA3yPA==
+X-Received: by 2002:a63:2c4e:0:b0:373:6dfb:29e with SMTP id s75-20020a632c4e000000b003736dfb029emr17526601pgs.109.1646060076109;
+        Mon, 28 Feb 2022 06:54:36 -0800 (PST)
+Received: from vultr.guest ([107.191.53.97])
+        by smtp.gmail.com with ESMTPSA id bt20-20020a17090af01400b001bd60582399sm2256272pjb.29.2022.02.28.06.54.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 06:54:35 -0800 (PST)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] scsi: wd719x: Return proper error code when dma_set_mask() fails
+Date:   Mon, 28 Feb 2022 14:54:15 +0000
+Message-Id: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/22 02:37, Potin Lai wrote:
-> Add documentation of new properties for sample averaging in PMON_CONFIG
-> register.
-> 
-> New properties:
-> - adi,volt-curr-sample-average
-> - adi,power-sample-average
-> 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> 
-> doc
-> ---
->   .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
->   1 file changed, 39 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> index 223393d7cafd..bc4206b257a8 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -37,6 +37,43 @@ properties:
->       description:
->         Shunt resistor value in micro-Ohm.
->   
-> +  adi,volt-curr-sample-average:
-> +    description: |
-> +      Number of samples to be used to report voltage and current values.
-> +      If the configured value is not a power of 2, sample averaging number
-> +      will be configured with smaller and closest power of 2.
-> +
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 128
-> +    default: 1
-> +
-> +  adi,power-sample-average:
-> +    description: |
-> +      Number of samples to be used to report power values.
-> +      If the configured value is not a power of 2, sample averaging number
-> +      will be configured with smaller and closest power of 2.
-> +
+During the process of driver probing, the probe function should return < 0
+for failure, otherwise, the kernel will treat value >= 0 as success.
 
-Both properties should only accept 1, 2, 4, 8, 16, 32, 64, and 128.
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/scsi/wd719x.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-We accept non-exact numbers in sysfs attributes because we can not
-expect the end users to know permitted values, but devicetree authors
-should know what is acceptable. Valid values can be expressed here
-easily with something like
-	enum: [1, 2, 4, 8, 16, 32, 64, 128]
-
-This can also be easily tested in the code by ensuring that
-the devicetree property is in the range of 1..128 and has exactly
-one bit set, such as
-	if (!val || val > 128 || hweight32(val) != 1)
-or with something like
-	if (!val || val > 128 || BIT(__fls(val)) != val)
-
-Guenter
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 128
-> +    default: 1
-> +
-> +if:
-> +  not:
-> +    properties:
-> +      compatible:
-> +        contains:
-> +          enum:
-> +          - adi,adm1272
-> +          - adi,adm1278
-> +          - adi,adm1293
-> +          - adi,adm1294
-> +then:
-> +  properties:
-> +    adi,power-sample-average:
-> +      description: This property is not allowed.
-> +
->   required:
->     - compatible
->     - reg
-> @@ -53,5 +90,7 @@ examples:
->               compatible = "adi,adm1272";
->               reg = <0x10>;
->               shunt-resistor-micro-ohms = <500>;
-> +            adi,volt-curr-sample-average = <128>;
-> +            adi,power-sample-average = <128>;
->           };
->       };
+diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
+index 1a7947554581..2b24ef387d57 100644
+--- a/drivers/scsi/wd719x.c
++++ b/drivers/scsi/wd719x.c
+@@ -904,7 +904,8 @@ static int wd719x_pci_probe(struct pci_dev *pdev, const struct pci_device_id *d)
+ 	if (err)
+ 		goto fail;
+ 
+-	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(32))) {
++	err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
++	if (err) {
+ 		dev_warn(&pdev->dev, "Unable to set 32-bit DMA mask\n");
+ 		goto disable_device;
+ 	}
+-- 
+2.25.1
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BE44C6D14
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686FA4C6D16
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbiB1Mr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S236739AbiB1Mrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:47:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbiB1MrC (ORCPT
+        with ESMTP id S236702AbiB1MrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:47:02 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E917804E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:06 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id e13so10628056plh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:06 -0800 (PST)
+        Mon, 28 Feb 2022 07:47:16 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EC979C4D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:13 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id g21so4730792pfj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:46:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IIhQUhN2ZaDMAjZZvol3L7EWmR5Y0sj1KhKNQowC/Jw=;
-        b=o6qcAWSguSaU8j/pHUtIBOMLMjbt74TrxHnGx2JCVYfk7+vHSId5QIfaJHCQhIn6LB
-         iQzY/Nam/NKb9FQLgn0lfMknrA9vCvN/fyRktweXYoJeC0bhKPEh9H7Urhc2xfQxw7Cn
-         LS7HiAlKK4vyWeo5U2iSX3W7q4MwOa1LO23SMUYXI7NWOKkV0ykEB54phsnEJx1Vtyob
-         u10LuLHFA2Np1DPSUYEMfd/8JmeKnRw8F8eOdIEpQLm/xoBkjqdufU5I82G9UPq/Slhk
-         FRNYufFzaPDvCD0pD5WyD3frbcBYYVU8IR//bErDxK4RdtHgbQpB251HJcVLiuPgylx9
-         sJQQ==
+        bh=OJYdTNp5Gg/lOgcfWY4Qq4TIlRlc1oamUz2dj4AjBfk=;
+        b=qIzffofDKqZnIYKZBrvcvld9xY59Jed2+kjKTQSYZjX3jlWFMQq0v0SM2kxtlIpkO0
+         JsW4sujrunw6Yy5aMGAlO0iry6llnHZ5NaxTF347FJsMj7VNjh363hhjfZf4k8HmsSBA
+         TPQEwjwekuGC05vx1X08/ndD3hLpS5ptHwv41t+6KTXfvsdmZtiVeZ//GlsJwdq6zZ8Q
+         LaF9dg2Znwur3CZ5dxgeqC56gwbGVtrW5sJ9DrAEiSPFJQR887u/gYcsF3Ko746TK7+O
+         Qs5VvfdWvkhz7S7HC+D0n0NDrctAMj+Zc97kq3ZGyvUTiAtEwDIELaVbBG30NC5DsWbD
+         micA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IIhQUhN2ZaDMAjZZvol3L7EWmR5Y0sj1KhKNQowC/Jw=;
-        b=lJopuxdorE+zlewKmzbTs+7ussZ0c1frG64PtwHUQcZh4v8/vpYfpu172LLCPijQ+g
-         OaV4/IYD0ZBAk9k10j3F2VE8Jp2YqLkB3MFh9DZVykNoLTn7ZGWHyC9t/xVAAkO59hzh
-         f7jP+wOl0iz6NfOMsvgLJ402iTJpC2Fdw81Gc7E9LRjotD22wgzZTyJcnwDXmkA4mn7Y
-         AQgKHp8Vn998+jCswNlFT97lUC3BLcanu8Em4IX1XWfWvs30/h1Gn8oipGKFmRpSA1LR
-         mXb99yriziZ/xPS0zm+aVL5ZFILLUH67fJlJRbuYxuKXYBvJLxv4oPiulubwmDeSj/HI
-         YCPg==
-X-Gm-Message-State: AOAM53214HQYoQNvB+WIgsr0iNK+EjcR6HIeb0PzXtFr7JcVpTsKPVU1
-        Pcvg1cF7rYnh7DNfONPfsblE
-X-Google-Smtp-Source: ABdhPJzArRZdWJkaALITB+q29+YN6aJkdB+QK8z2+neQLJJMFtfpl1OL86kOTkFjwScD2E1Ds7b9pg==
-X-Received: by 2002:a17:90a:ac09:b0:1bc:3e9d:158 with SMTP id o9-20020a17090aac0900b001bc3e9d0158mr16328504pjq.235.1646052366361;
-        Mon, 28 Feb 2022 04:46:06 -0800 (PST)
+        bh=OJYdTNp5Gg/lOgcfWY4Qq4TIlRlc1oamUz2dj4AjBfk=;
+        b=XLTIIemp+nKZ4R1R2kQ2BRMGY+AJjyXdT+i/Q2t51lUmt1IA/MR+knqtjzJHN/iAKv
+         C7AdgDJnitTpAlaEsku5Rz1q03CnfJU6aNf8lTyntWoyzZna/VQV6ke/UI+fuwh6/Ooh
+         DOHSnAg9iTyy3ARTL8SaZuADHyeuUq5vpT8AIA+p8f0R0LkE+fC1Ski52lBnAyxwzylQ
+         qx+JHiklhKfwe+VG+RkIXPsbmn5iMtY1I18P2EbaJnAB1ISKKL1dwWYrJLMqUq4cIfKi
+         UIgwadBJK+dNwZaay20aqDf10zgfhbUZb4cwRoI3NHDsvXLwRz5jv4jeWLwLYE+YIXPp
+         dC6w==
+X-Gm-Message-State: AOAM531QRhmWI0T5QL3wKhO/oPIqeD/tIlG1mWH8Wpjq1gy2y8Om5SAr
+        ZB2Dwzn4p/4udy10YFX9rAS+
+X-Google-Smtp-Source: ABdhPJyGvXFHht1Ju98VcuXWZ+wA7qZaQRE+UQ7ts69fGULz/vaYta9lNRr3of+W9cWQdsMXkpBGkg==
+X-Received: by 2002:a05:6a00:1991:b0:4e1:a7dd:96e5 with SMTP id d17-20020a056a00199100b004e1a7dd96e5mr21800624pfl.2.1646052371636;
+        Mon, 28 Feb 2022 04:46:11 -0800 (PST)
 Received: from localhost.localdomain ([117.207.25.37])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.46.01
+        by smtp.gmail.com with ESMTPSA id y12-20020a056a00190c00b004f39e28fb87sm14256737pfi.98.2022.02.28.04.46.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 04:46:06 -0800 (PST)
+        Mon, 28 Feb 2022 04:46:11 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
@@ -57,9 +57,9 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, elder@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 24/27] bus: mhi: ep: Add support for processing channel rings
-Date:   Mon, 28 Feb 2022 18:13:41 +0530
-Message-Id: <20220228124344.77359-25-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 25/27] bus: mhi: ep: Add support for queueing SKBs to the host
+Date:   Mon, 28 Feb 2022 18:13:42 +0530
+Message-Id: <20220228124344.77359-26-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
 References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
@@ -75,182 +75,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for processing the channel rings from host. For the channel
-ring associated with DL channel, the xfer callback will simply invoked.
-For the case of UL channel, the ring elements will be read in a buffer
-till the write pointer and later passed to the client driver using the
-xfer callback.
+Add support for queueing SKBs to the host over the transfer ring of the
+relevant channel. The mhi_ep_queue_skb() API will be used by the client
+networking drivers to queue the SKBs to the host over MHI bus.
 
-The client drivers should provide the callbacks for both UL and DL
-channels during registration.
+The host will add ring elements to the transfer ring periodically for
+the device and the device will write SKBs to the ring elements. If a
+single SKB doesn't fit in a ring element (TRE), it will be placed in
+multiple ring elements and the overflow event will be sent for all ring
+elements except the last one. For the last ring element, the EOT event
+will be sent indicating the packet boundary.
 
-Reviewed-by: Alex Elder <elder@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/ep/main.c | 108 ++++++++++++++++++++++++++++++++++++++
- include/linux/mhi_ep.h    |   2 +
- 2 files changed, 110 insertions(+)
+ drivers/bus/mhi/ep/main.c | 82 +++++++++++++++++++++++++++++++++++++++
+ include/linux/mhi_ep.h    |  9 +++++
+ 2 files changed, 91 insertions(+)
 
 diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index e7c0ef9f281b..63e14d55aa06 100644
+index 63e14d55aa06..25d34cf26fd7 100644
 --- a/drivers/bus/mhi/ep/main.c
 +++ b/drivers/bus/mhi/ep/main.c
-@@ -420,6 +420,57 @@ static int mhi_ep_read_channel(struct mhi_ep_cntrl *mhi_cntrl,
+@@ -471,6 +471,88 @@ int mhi_ep_process_ch_ring(struct mhi_ep_ring *ring, struct mhi_ring_element *el
  	return 0;
  }
  
-+int mhi_ep_process_ch_ring(struct mhi_ep_ring *ring, struct mhi_ring_element *el)
++/* TODO: Handle partially formed TDs */
++int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, struct sk_buff *skb)
 +{
-+	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-+	struct mhi_result result = {};
-+	u32 len = MHI_EP_DEFAULT_MTU;
-+	struct mhi_ep_chan *mhi_chan;
++	struct mhi_ep_cntrl *mhi_cntrl = mhi_dev->mhi_cntrl;
++	struct mhi_ep_chan *mhi_chan = mhi_dev->dl_chan;
++	struct device *dev = &mhi_chan->mhi_dev->dev;
++	struct mhi_ring_element *el;
++	u32 buf_left, read_offset;
++	struct mhi_ep_ring *ring;
++	enum mhi_ev_ccs code;
++	void *read_addr;
++	u64 write_addr;
++	size_t tr_len;
++	u32 tre_len;
 +	int ret;
 +
-+	mhi_chan = &mhi_cntrl->mhi_chan[ring->ch_id];
++	buf_left = skb->len;
++	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
 +
-+	/*
-+	 * Bail out if transfer callback is not registered for the channel.
-+	 * This is most likely due to the client driver not loaded at this point.
-+	 */
-+	if (!mhi_chan->xfer_cb) {
-+		dev_err(&mhi_chan->mhi_dev->dev, "Client driver not available\n");
-+		return -ENODEV;
-+	}
++	mutex_lock(&mhi_chan->lock);
 +
-+	if (ring->ch_id % 2) {
-+		/* DL channel */
-+		result.dir = mhi_chan->dir;
-+		mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
-+	} else {
-+		/* UL channel */
-+		result.buf_addr = kzalloc(len, GFP_KERNEL);
-+		if (!result.buf_addr)
-+			return -ENOMEM;
++	do {
++		/* Don't process the transfer ring if the channel is not in RUNNING state */
++		if (mhi_chan->state != MHI_CH_STATE_RUNNING) {
++			dev_err(dev, "Channel not available\n");
++			ret = -ENODEV;
++			goto err_exit;
++		}
 +
-+		do {
-+			ret = mhi_ep_read_channel(mhi_cntrl, ring, &result, len);
-+			if (ret < 0) {
-+				dev_err(&mhi_chan->mhi_dev->dev, "Failed to read channel\n");
-+				kfree(result.buf_addr);
-+				return ret;
-+			}
++		if (mhi_ep_queue_is_empty(mhi_dev, DMA_FROM_DEVICE)) {
++			dev_err(dev, "TRE not available!\n");
++			ret = -ENOSPC;
++			goto err_exit;
++		}
 +
-+			result.dir = mhi_chan->dir;
-+			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
-+			result.bytes_xferd = 0;
-+			memset(result.buf_addr, 0, len);
++		el = &ring->ring_cache[ring->rd_offset];
++		tre_len = MHI_TRE_DATA_GET_LEN(el);
 +
-+			/* Read until the ring becomes empty */
-+		} while (!mhi_ep_queue_is_empty(mhi_chan->mhi_dev, DMA_TO_DEVICE));
++		tr_len = min(buf_left, tre_len);
++		read_offset = skb->len - buf_left;
++		read_addr = skb->data + read_offset;
++		write_addr = MHI_TRE_DATA_GET_PTR(el);
 +
-+		kfree(result.buf_addr);
-+	}
++		dev_dbg(dev, "Writing %zd bytes to channel (%u)\n", tr_len, ring->ch_id);
++		ret = mhi_cntrl->write_to_host(mhi_cntrl, read_addr, write_addr, tr_len);
++		if (ret < 0) {
++			dev_err(dev, "Error writing to the channel\n");
++			goto err_exit;
++		}
++
++		buf_left -= tr_len;
++		/*
++		 * For all TREs queued by the host for DL channel, only the EOT flag will be set.
++		 * If the packet doesn't fit into a single TRE, send the OVERFLOW event to
++		 * the host so that the host can adjust the packet boundary to next TREs. Else send
++		 * the EOT event to the host indicating the packet boundary.
++		 */
++		if (buf_left)
++			code = MHI_EV_CC_OVERFLOW;
++		else
++			code = MHI_EV_CC_EOT;
++
++		ret = mhi_ep_send_completion_event(mhi_cntrl, ring, el, tr_len, code);
++		if (ret) {
++			dev_err(dev, "Error sending transfer completion event\n");
++			goto err_exit;
++		}
++
++		mhi_ep_ring_inc_index(ring);
++	} while (buf_left);
++
++	mutex_unlock(&mhi_chan->lock);
 +
 +	return 0;
++
++err_exit:
++	mutex_unlock(&mhi_chan->lock);
++
++	return ret;
 +}
++EXPORT_SYMBOL_GPL(mhi_ep_queue_skb);
 +
  static int mhi_ep_cache_host_cfg(struct mhi_ep_cntrl *mhi_cntrl)
  {
  	size_t cmd_ctx_host_size, ch_ctx_host_size, ev_ctx_host_size;
-@@ -597,6 +648,60 @@ static void mhi_ep_cmd_ring_worker(struct work_struct *work)
- 	}
- }
- 
-+static void mhi_ep_ch_ring_worker(struct work_struct *work)
-+{
-+	struct mhi_ep_cntrl *mhi_cntrl = container_of(work, struct mhi_ep_cntrl, ch_ring_work);
-+	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-+	struct mhi_ep_ring_item *itr, *tmp;
-+	struct mhi_ring_element *el;
-+	struct mhi_ep_ring *ring;
-+	struct mhi_ep_chan *chan;
-+	unsigned long flags;
-+	LIST_HEAD(head);
-+	int ret;
-+
-+	spin_lock_irqsave(&mhi_cntrl->list_lock, flags);
-+	list_splice_tail_init(&mhi_cntrl->ch_db_list, &head);
-+	spin_unlock_irqrestore(&mhi_cntrl->list_lock, flags);
-+
-+	/* Process each queued channel ring. In case of an error, just process next element. */
-+	list_for_each_entry_safe(itr, tmp, &head, node) {
-+		list_del(&itr->node);
-+		ring = itr->ring;
-+
-+		/* Update the write offset for the ring */
-+		ret = mhi_ep_update_wr_offset(ring);
-+		if (ret) {
-+			dev_err(dev, "Error updating write offset for ring\n");
-+			kfree(itr);
-+			continue;
-+		}
-+
-+		/* Sanity check to make sure there are elements in the ring */
-+		if (ring->rd_offset == ring->wr_offset) {
-+			kfree(itr);
-+			continue;
-+		}
-+
-+		el = &ring->ring_cache[ring->rd_offset];
-+		chan = &mhi_cntrl->mhi_chan[ring->ch_id];
-+
-+		mutex_lock(&chan->lock);
-+		dev_dbg(dev, "Processing the ring for channel (%u)\n", ring->ch_id);
-+		ret = mhi_ep_process_ch_ring(ring, el);
-+		if (ret) {
-+			dev_err(dev, "Error processing ring for channel (%u): %d\n",
-+				ring->ch_id, ret);
-+			mutex_unlock(&chan->lock);
-+			kfree(itr);
-+			continue;
-+		}
-+
-+		mutex_unlock(&chan->lock);
-+		kfree(itr);
-+	}
-+}
-+
- static void mhi_ep_state_worker(struct work_struct *work)
- {
- 	struct mhi_ep_cntrl *mhi_cntrl = container_of(work, struct mhi_ep_cntrl, state_work);
-@@ -662,6 +767,8 @@ static void mhi_ep_queue_channel_db(struct mhi_ep_cntrl *mhi_cntrl, unsigned lon
- 		spin_lock(&mhi_cntrl->list_lock);
- 		list_splice_tail_init(&head, &mhi_cntrl->ch_db_list);
- 		spin_unlock(&mhi_cntrl->list_lock);
-+
-+		queue_work(mhi_cntrl->wq, &mhi_cntrl->ch_ring_work);
- 	}
- }
- 
-@@ -1152,6 +1259,7 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
- 	INIT_WORK(&mhi_cntrl->state_work, mhi_ep_state_worker);
- 	INIT_WORK(&mhi_cntrl->reset_work, mhi_ep_reset_worker);
- 	INIT_WORK(&mhi_cntrl->cmd_ring_work, mhi_ep_cmd_ring_worker);
-+	INIT_WORK(&mhi_cntrl->ch_ring_work, mhi_ep_ch_ring_worker);
- 
- 	mhi_cntrl->wq = alloc_workqueue("mhi_ep_wq", 0, 0);
- 	if (!mhi_cntrl->wq) {
 diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
-index 45d12a55b435..74170dad09f6 100644
+index 74170dad09f6..bd3ffde01f04 100644
 --- a/include/linux/mhi_ep.h
 +++ b/include/linux/mhi_ep.h
-@@ -78,6 +78,7 @@ struct mhi_ep_db_info {
-  * @state_work: State transition worker
-  * @reset_work: Worker for MHI Endpoint reset
-  * @cmd_ring_work: Worker for processing command rings
-+ * @ch_ring_work: Worker for processing channel rings
-  * @raise_irq: CB function for raising IRQ to the host
-  * @alloc_addr: CB function for allocating memory in endpoint for storing host context
-  * @map_addr: CB function for mapping host context to endpoint
-@@ -128,6 +129,7 @@ struct mhi_ep_cntrl {
- 	struct work_struct state_work;
- 	struct work_struct reset_work;
- 	struct work_struct cmd_ring_work;
-+	struct work_struct ch_ring_work;
+@@ -272,4 +272,13 @@ void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl);
+  */
+ bool mhi_ep_queue_is_empty(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir);
  
- 	void (*raise_irq)(struct mhi_ep_cntrl *mhi_cntrl, u32 vector);
- 	void __iomem *(*alloc_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t *phys_addr,
++/**
++ * mhi_ep_queue_skb - Send SKBs to host over MHI Endpoint
++ * @mhi_dev: Device associated with the DL channel
++ * @skb: SKBs to be queued
++ *
++ * Return: 0 if the SKBs has been sent successfully, a negative error code otherwise.
++ */
++int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, struct sk_buff *skb);
++
+ #endif
 -- 
 2.25.1
 

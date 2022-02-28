@@ -2,98 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9324C6764
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF044C677F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 11:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbiB1Ktb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 05:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S233115AbiB1Kt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 05:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbiB1KtY (ORCPT
+        with ESMTP id S234960AbiB1Ktj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:49:24 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B894DF7B;
-        Mon, 28 Feb 2022 02:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1646045327; x=1677581327;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=wtlDx4jEE4jGyIxehaIcjYydOOp8V9gGqhKFY2pAxek=;
-  b=lmL4Ao9d38OqN10++Ib0UXf3kdMmNoqbjsuluw2oVu3tHXIvYLaUfibB
-   IN4HN4RzlUON9BAsTufdAkmAydE4rjHJ/7D3bXWQ9qqqWsJLD3XhNq/uo
-   v9EweWB5T07szzF4GFFgGyveMxUMRbdb0SklTouSGDor41wh9xdsBB09X
-   U=;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643673600"; 
-   d="scan'208";a="181712404"
-Subject: Re: [PATCH 4/4] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast
- hypercall
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 28 Feb 2022 10:48:36 +0000
-Received: from EX13D28EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com (Postfix) with ESMTPS id 0220F829DD;
-        Mon, 28 Feb 2022 10:48:34 +0000 (UTC)
-Received: from 147dda3edfb6.ant.amazon.com (10.43.160.103) by
- EX13D28EUC003.ant.amazon.com (10.43.164.43) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 28 Feb 2022 10:48:30 +0000
-Date:   Mon, 28 Feb 2022 11:48:26 +0100
-From:   Siddharth Chandrasekaran <sidcha@amazon.de>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-CC:     <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        <linux-kernel@vger.kernel.org>
-Message-ID: <YhyoevsjEhNfcwWY@147dda3edfb6.ant.amazon.com>
-References: <20220222154642.684285-1-vkuznets@redhat.com>
- <20220222154642.684285-5-vkuznets@redhat.com>
+        Mon, 28 Feb 2022 05:49:39 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3B15D1B5;
+        Mon, 28 Feb 2022 02:48:59 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4376458027D;
+        Mon, 28 Feb 2022 05:48:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 28 Feb 2022 05:48:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=1vVga+h9htbpuVX4XD8VlM10uiiq7ZO3+UmFQE
+        c01vQ=; b=G+ZJOtIyw2/WazvvDKJTEgXHqoMoF3VJv2oKOGq4HDeWkTpOd8WBaT
+        4rHcpBbDc+9Q40E3VRnQZVyZ/TnAHgiMv+n0jHOCoqgKJb3y5c2rfx6jE89SIb6V
+        wuJl+VrQBakHz1bRaiUzukCY3YwHyArUCT2bEJjwBw4fBaNLxo87f39svsg6rW4M
+        FrMUpwRPrVgJt2SgGfjXyh4rTUGiwuracGqh9pypGThpKvggMHATxHjho+kSf+Pw
+        heMa0F3/JUt9L4e2D7WaaUrptrbQLO8XFLDibfMwypC1vdK9qeVxb0NoqswZmsY8
+        Z8Mrhat28uTSDyacKEGujZRc9zr/khHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1vVga+h9htbpuVX4X
+        D8VlM10uiiq7ZO3+UmFQEc01vQ=; b=Nh+yscHoWuHDO/JIgKuLzs9zoLl0tZ1mY
+        ytVar5473XvqOezOvfLch4dZ8miNo2Z2FCrbhGra/iXZZdTGj82hJZ68h7V5YRmO
+        qktlxsL8Cx7Lvz3+2nygzNzE9AHjwGj87qTX5C+amkmj2In5kCJolrxtOIDvYkTY
+        Tbue0a8O+ceonP7NqFL1vPkI3KRKftK+bVsX/cJM7Lr7z8vJZIBiSrvH46HxZ7Ra
+        lJGmWt7sv13cPZClOiB/gFeqAjLI33HUDPddiy2dFm1uZyNwtg3B/aQgCLLlC4PB
+        A1DMifsXZpaLTCmKf/PeqVXgw6O28YXpIKL45K2B4I2vA+2RFg9IA==
+X-ME-Sender: <xms:m6gcYpgoaOlXM9gadUBqEGIAviqtLOe-Nbf7EFYWzlYEpnLZERGT7A>
+    <xme:m6gcYuD053lZfrxnnUQtlFblUFSPo_WOMfaqeXe9XLBvJjrhtJz_Lx2q8W_-Pv2RD
+    uGpitA8Be-iJw>
+X-ME-Received: <xmr:m6gcYpHbpEOohqqrGSPr4j0Eli8Xd9nAJL7TGNVlr2KLUHVHL91HzCLHWwCMO9LUARfDg-L3EYLU869VfSBzFb25Y3o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:m6gcYuQuBVdHYfmN6Kvl3QfdijgiNSdtGgbI1hwtxnedBylDivM-Pw>
+    <xmx:m6gcYmyTyePgk8ZBswPOe7HUw3YRsapruwGegxM362ndjbrUM4N_ZQ>
+    <xmx:m6gcYk5pvScL-ey9GzG6KyC7NFnr5xGHbFmsISqoiWWB8gRNSWUiqg>
+    <xmx:m6gcYrrYq0YcPQnLfgZ3tW_Y0OF1eHNO5snpJM6jCnDUonnH4CWn_Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Feb 2022 05:48:58 -0500 (EST)
+Date:   Mon, 28 Feb 2022 11:48:56 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tty tree with the spi tree
+Message-ID: <YhyomKViVd3iPYDE@kroah.com>
+References: <20220228191316.411f1475@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222154642.684285-5-vkuznets@redhat.com>
-X-Originating-IP: [10.43.160.103]
-X-ClientProxiedBy: EX13D34UWA003.ant.amazon.com (10.43.160.69) To
- EX13D28EUC003.ant.amazon.com (10.43.164.43)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220228191316.411f1475@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 04:46:42PM +0100, Vitaly Kuznetsov wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+On Mon, Feb 28, 2022 at 07:13:16PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
+> Today's linux-next merge of the tty tree got a conflict in:
 > 
+>   MAINTAINERS
 > 
-> It has been proven on practice that at least Windows Server 2019 tries
-> using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
-> and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
-> hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
-> information is missing in TLFS as of 6.0b. Currently, KVM returns an error
-> (HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
+> between commit:
 > 
-> Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
-> all its parameters fit into RDX:R8 and this is handled by KVM correctly.
+>   f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
 > 
-> Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> from the spi tree and commits:
+> 
+>   b48b9f6deacf ("dt-bindings: serial: Add bindings doc for Sunplus SoC UART Driver")
+>   9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
+> 
+> from the tty tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc MAINTAINERS
+> index e6b3e94de842,4a30001f6d7b..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -18635,13 -18549,12 +18642,19 @@@ S:	Maintaine
+>   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+>   F:	drivers/rtc/rtc-sunplus.c
+>   
+>  +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
+>  +M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  +L:	linux-spi@vger.kernel.org
+>  +S:	Maintained
+>  +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>  +F:	drivers/spi/spi-sunplus-sp7021.c
+>  +
+> + SUNPLUS UART DRIVER
+> + M:	Hammer Hsieh <hammerh0314@gmail.com>
+> + S:	Maintained
+> + F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> + F:	drivers/tty/serial/sunplus-uart.c
+> + 
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
 
-Reviewed-by: Siddharth Chandrasekaran <sidcha@amazon.de>
+Looks correct, thanks!
 
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+greg k-h

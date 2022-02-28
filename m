@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC074C7702
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773FF4C745A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiB1SLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
+        id S238549AbiB1Rmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240898AbiB1SEW (ORCPT
+        with ESMTP id S236529AbiB1Rjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:04:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E4C36318;
-        Mon, 28 Feb 2022 09:47:54 -0800 (PST)
+        Mon, 28 Feb 2022 12:39:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD09137D;
+        Mon, 28 Feb 2022 09:34:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00A2160B2B;
-        Mon, 28 Feb 2022 17:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1534AC340E7;
-        Mon, 28 Feb 2022 17:47:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED32CB815BD;
+        Mon, 28 Feb 2022 17:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB31C340E7;
+        Mon, 28 Feb 2022 17:34:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070464;
-        bh=urQX6y50ENfkDfckR2XgPPLuEaOQejttoMPgSiW3WW0=;
+        s=korg; t=1646069649;
+        bh=HCABU+6noVfxghNDpa+0Ktp/7wxrthhz8I3ynmU7u1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZgonQewmRdY0puyaF+Ti7FIil1bBc6ezSrIkgfadryFcvqu7SxRovfPtLJ/vizAxx
-         D3Vq5c2rrpiCMBrMSsa6gUv7Y7Npmc0cEXPpHKCm88cLs6NbsVi+leQ5JN+bm6mz1u
-         3chJ2jf0YS8lzJDEYlnakTYifSWbbt2wEcJFD0wA=
+        b=1T3lV/w8Bl2voMkafNnIzw5SX6s/fUy/ee8GvUJ4YDJk2RxYaSDQnZp3D+/16byya
+         ITXUMsLeKK17jv5PdTGWpn9s02HXOOkb4v08wIE9BXb10DAbws9t+1EmjPtXqhopBh
+         ocqYfqt7l3dn94wGxlUm90pr+g5T9MN9YjrjK7Y8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Savaton <guillaume@baierouge.fr>,
-        Samuel Holland <samuel@sholland.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 101/164] gpio: rockchip: Reset int_bothedge when changing trigger
+        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
+        Mark Bloch <mbloch@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.10 42/80] net/mlx5: Fix possible deadlock on rule deletion
 Date:   Mon, 28 Feb 2022 18:24:23 +0100
-Message-Id: <20220228172408.954586862@linuxfoundation.org>
+Message-Id: <20220228172316.633802535@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Maor Gottlieb <maorg@nvidia.com>
 
-[ Upstream commit 7920af5c826cb4a7ada1ae26fdd317642805adc2 ]
+commit b645e57debca846f51b3209907546ea857ddd3f5 upstream.
 
-With v2 hardware, an IRQ can be configured to trigger on both edges via
-a bit in the int_bothedge register. Currently, the driver sets this bit
-when changing the trigger type to IRQ_TYPE_EDGE_BOTH, but fails to reset
-this bit if the trigger type is later changed to something else. This
-causes spurious IRQs, and when using gpio-keys with wakeup-event-action
-set to EV_ACT_(DE)ASSERTED, those IRQs translate into spurious wakeups.
+Add missing call to up_write_ref_node() which releases the semaphore
+in case the FTE doesn't have destinations, such in drop rule case.
 
-Fixes: 3bcbd1a85b68 ("gpio/rockchip: support next version gpio controller")
-Reported-by: Guillaume Savaton <guillaume@baierouge.fr>
-Tested-by: Guillaume Savaton <guillaume@baierouge.fr>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 465e7baab6d9 ("net/mlx5: Fix deletion of duplicate rules")
+Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-rockchip.c | 56 +++++++++++++++++++-----------------
- 1 file changed, 29 insertions(+), 27 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/fs_core.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-index ce63cbd14d69a..24155c038f6d0 100644
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -410,10 +410,8 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
- 	level = rockchip_gpio_readl(bank, bank->gpio_regs->int_type);
- 	polarity = rockchip_gpio_readl(bank, bank->gpio_regs->int_polarity);
- 
--	switch (type) {
--	case IRQ_TYPE_EDGE_BOTH:
-+	if (type == IRQ_TYPE_EDGE_BOTH) {
- 		if (bank->gpio_type == GPIO_TYPE_V2) {
--			bank->toggle_edge_mode &= ~mask;
- 			rockchip_gpio_writel_bit(bank, d->hwirq, 1,
- 						 bank->gpio_regs->int_bothedge);
- 			goto out;
-@@ -431,30 +429,34 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
- 			else
- 				polarity |= mask;
- 		}
--		break;
--	case IRQ_TYPE_EDGE_RISING:
--		bank->toggle_edge_mode &= ~mask;
--		level |= mask;
--		polarity |= mask;
--		break;
--	case IRQ_TYPE_EDGE_FALLING:
--		bank->toggle_edge_mode &= ~mask;
--		level |= mask;
--		polarity &= ~mask;
--		break;
--	case IRQ_TYPE_LEVEL_HIGH:
--		bank->toggle_edge_mode &= ~mask;
--		level &= ~mask;
--		polarity |= mask;
--		break;
--	case IRQ_TYPE_LEVEL_LOW:
--		bank->toggle_edge_mode &= ~mask;
--		level &= ~mask;
--		polarity &= ~mask;
--		break;
--	default:
--		ret = -EINVAL;
--		goto out;
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -2034,6 +2034,8 @@ void mlx5_del_flow_rules(struct mlx5_flo
+ 		fte->node.del_hw_func = NULL;
+ 		up_write_ref_node(&fte->node, false);
+ 		tree_put_node(&fte->node, false);
 +	} else {
-+		if (bank->gpio_type == GPIO_TYPE_V2) {
-+			rockchip_gpio_writel_bit(bank, d->hwirq, 0,
-+						 bank->gpio_regs->int_bothedge);
-+		} else {
-+			bank->toggle_edge_mode &= ~mask;
-+		}
-+		switch (type) {
-+		case IRQ_TYPE_EDGE_RISING:
-+			level |= mask;
-+			polarity |= mask;
-+			break;
-+		case IRQ_TYPE_EDGE_FALLING:
-+			level |= mask;
-+			polarity &= ~mask;
-+			break;
-+		case IRQ_TYPE_LEVEL_HIGH:
-+			level &= ~mask;
-+			polarity |= mask;
-+			break;
-+		case IRQ_TYPE_LEVEL_LOW:
-+			level &= ~mask;
-+			polarity &= ~mask;
-+			break;
-+		default:
-+			ret = -EINVAL;
-+			goto out;
-+		}
++		up_write_ref_node(&fte->node, false);
  	}
- 
- 	rockchip_gpio_writel(bank, level, bank->gpio_regs->int_type);
--- 
-2.34.1
-
+ 	kfree(handle);
+ }
 
 

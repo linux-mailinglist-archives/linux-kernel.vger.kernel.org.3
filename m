@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440D94C764D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE9A4C7518
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235919AbiB1SCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S238948AbiB1RvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240797AbiB1Ryp (ORCPT
+        with ESMTP id S239743AbiB1Roc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603AA5371F;
-        Mon, 28 Feb 2022 09:43:50 -0800 (PST)
+        Mon, 28 Feb 2022 12:44:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0192989CCE;
+        Mon, 28 Feb 2022 09:37:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFA20608D5;
-        Mon, 28 Feb 2022 17:43:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0169BC340F1;
-        Mon, 28 Feb 2022 17:43:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17874B815AB;
+        Mon, 28 Feb 2022 17:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F50AC340E7;
+        Mon, 28 Feb 2022 17:36:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070229;
-        bh=6dmsWtF2WF6CEy7yiT59gPr76gbVM+Z8NfW08yZAGbI=;
+        s=korg; t=1646069814;
+        bh=8H3ilQxvEFSiNZJR4VwvS7wdjepomJp/3DHWHpzouf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yUXTwfcXnEdrTRsRU6DikCqruPKEQIuMHjeObtVU6H1VazOsWGppreuKA6nfHsxTp
-         PgIHzHnTQnw/7aMn8DXbTEfU29+8UgA+Xrgmknkc5ptVsI3Bmkzlirwa/6viivmRy0
-         fU4p6QYbnEF49eETpV3BIB0++X1VFbiy4tCMeEA0=
+        b=Gs3HRtX5JlJ36Na0+99Q2vLcVZeDPRzkZqvWN92U2teoZRdjoegkUPCpeQtJMd2y5
+         AOblxkS9+83tauHooXVTJEcE2XoZvblqlUctCKKVIxfyemSnLMAzv8mEUUditlHlmS
+         EC0XnUMvXjLZQDjnN33f4ugvKqPxgfwM7ypTx5hI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>
-Subject: [PATCH 5.16 033/164] ping: remove pr_err from ping_lookup
-Date:   Mon, 28 Feb 2022 18:23:15 +0100
-Message-Id: <20220228172403.242099098@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.15 022/139] drm/i915: Correctly populate use_sagv_wm for all pipes
+Date:   Mon, 28 Feb 2022 18:23:16 +0100
+Message-Id: <20220228172350.165308597@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+References: <20220228172347.614588246@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit cd33bdcbead882c2e58fdb4a54a7bd75b610a452 upstream.
+commit afc189df6bcc6be65961deb54e15ec60e7f85337 upstream.
 
-As Jakub noticed, prints should be avoided on the datapath.
-Also, as packets would never come to the else branch in
-ping_lookup(), remove pr_err() from ping_lookup().
+When changing between SAGV vs. no SAGV on tgl+ we have to
+update the use_sagv_wm flag for all the crtcs or else
+an active pipe not already in the state will end up using
+the wrong watermarks. That is especially bad when we end up
+with the tighter non-SAGV watermarks with SAGV enabled.
+Usually ends up in underruns.
 
-Fixes: 35a79e64de29 ("ping: fix the dif and sdif check in ping_lookup")
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Link: https://lore.kernel.org/r/1ef3f2fcd31bd681a193b1fcf235eee1603819bd.1645674068.git.lucien.xin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Fixes: 7241c57d3140 ("drm/i915: Add TGL+ SAGV support")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220218064039.12834-2-ville.syrjala@linux.intel.com
+(cherry picked from commit 8dd8ffb824ca7b897ce9f2082ffa7e64831c22dc)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ping.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/gpu/drm/i915/intel_pm.c |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -187,7 +187,6 @@ static struct sock *ping_lookup(struct n
- 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
- #endif
- 	} else {
--		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
- 		return NULL;
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -4020,6 +4020,17 @@ static int intel_compute_sagv_mask(struc
+ 			return ret;
  	}
+ 
++	if (intel_can_enable_sagv(dev_priv, new_bw_state) !=
++	    intel_can_enable_sagv(dev_priv, old_bw_state)) {
++		ret = intel_atomic_serialize_global_state(&new_bw_state->base);
++		if (ret)
++			return ret;
++	} else if (new_bw_state->pipe_sagv_reject != old_bw_state->pipe_sagv_reject) {
++		ret = intel_atomic_lock_global_state(&new_bw_state->base);
++		if (ret)
++			return ret;
++	}
++
+ 	for_each_new_intel_crtc_in_state(state, crtc,
+ 					 new_crtc_state, i) {
+ 		struct skl_pipe_wm *pipe_wm = &new_crtc_state->wm.skl.optimal;
+@@ -4035,17 +4046,6 @@ static int intel_compute_sagv_mask(struc
+ 			intel_can_enable_sagv(dev_priv, new_bw_state);
+ 	}
+ 
+-	if (intel_can_enable_sagv(dev_priv, new_bw_state) !=
+-	    intel_can_enable_sagv(dev_priv, old_bw_state)) {
+-		ret = intel_atomic_serialize_global_state(&new_bw_state->base);
+-		if (ret)
+-			return ret;
+-	} else if (new_bw_state->pipe_sagv_reject != old_bw_state->pipe_sagv_reject) {
+-		ret = intel_atomic_lock_global_state(&new_bw_state->base);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	return 0;
+ }
  
 
 

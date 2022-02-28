@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C344C7756
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3250E4C7280
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiB1SPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S233740AbiB1R03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241330AbiB1SJr (ORCPT
+        with ESMTP id S233554AbiB1R0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:09:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FCFB2533;
-        Mon, 28 Feb 2022 09:49:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A48F3B81085;
-        Mon, 28 Feb 2022 17:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2256C340F0;
-        Mon, 28 Feb 2022 17:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070590;
-        bh=GCSuhudy+EoWfGl+etGbjGYE4CLlfJerNz4VeCQwXh8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nORkQk5Uchy2mnceeqCzYlDf6nXz8AoEWrr/vZoNvzExNLagfk3VJGuXpS9MmOaLP
-         KlUGDC6pkPPCIfRm7+Yegk34xC/pT6n9GUuQcLc5mNtgTbWnR/bJhnwG6aPJEP+HXW
-         jF3oSAkArmSPdMu99TMlAaYNm2Gn1zBkJ+OKed5Y=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 5.16 164/164] memblock: use kfree() to release kmalloced memblock regions
-Date:   Mon, 28 Feb 2022 18:25:26 +0100
-Message-Id: <20220228172414.476506653@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-References: <20220228172359.567256961@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 28 Feb 2022 12:26:22 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865E975E69
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:25:43 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id b5so16645163wrr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:25:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yvzT6l9BiPYrs+bU9uwRIaPTuYIMWgEcekkBhq5JP8k=;
+        b=Qu+fHpeNMxJy5zLFRoLMWxsXMgLo58Ef/jRu8wDZj82XLJiM5F8bGB70Ez/AbNijLn
+         k8VWr+amgFMAV24Z496cMyDdFkWFokZqlhGFOGMlTHbrOvY2tX/4LGR82401KK5HJC35
+         sZDJaVZ7ryPDWCpw5iXYyua+gcILPDxQuR9FyHt5yGL4jWP06JQhGZzAO30RyZhn5f9N
+         OjljJk+Ae8/wE2AOt6MrWLx61HSqO136jp7aywDWQofEjdyI1p0zHgX0F7HUghHcoXRi
+         pNlzJjEGpNWTups9edT9aCoJC3CNpAYb/mjb3vwPiedTRdeRY68/5bdZXyXfSpUu13yc
+         QfxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yvzT6l9BiPYrs+bU9uwRIaPTuYIMWgEcekkBhq5JP8k=;
+        b=O1HFNCNF8akfCUfRq9H1IwSgwkZvvAqCNOuoYFxDgx6n5sBZQ3iWTlBWbWT6LdSSz7
+         pGyxNxmbGhsopOGHKfxV/xY8UR8mPy01nKozr7QIEIglSwFOCJ2jqrxW2KiG18P+Au3w
+         AYdSsmd16ytAyvZsbRxJ6+96W+r1W9Fo247X7PazsoUVRX5CdN5YY6WQzLFN9DPTenLf
+         POlQLko3vuNEUop/EeO3ihbzx4DzmSPDNSUElq9RB7pKmwhxQqQ9xLUvhiQ1Fpw+zIk0
+         QNxTmBXKQiGYDqMlRWW53eQ+sTzgCz8A5Hfog1jtFRWgr6LLT0NG0l0ey5hjmo/gUmB3
+         1doQ==
+X-Gm-Message-State: AOAM533l6IcX7f9dPwX0n6Z0pTcsF+Jc+IVfchhkXQWGNrpezkgYG00K
+        1BntKjL73FBMGdBMtrVL5vtuJA==
+X-Google-Smtp-Source: ABdhPJxLGIwim7aiGspyvls/E1qsudDF1oAD8X7BsUscoVh4EVZOrO42H4kP6XT0HYMt4hXFSTKz0g==
+X-Received: by 2002:adf:910a:0:b0:1ed:c3fc:2dcf with SMTP id j10-20020adf910a000000b001edc3fc2dcfmr16786007wrj.430.1646069142139;
+        Mon, 28 Feb 2022 09:25:42 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id f21-20020a7bcd15000000b0034efd01ee16sm11514124wmj.42.2022.02.28.09.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 09:25:41 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     pierre-louis.bossart@linux.intel.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        quic_srivasam@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3 2/3] dt-bindings: soundwire: qcom: document optional wake irq
+Date:   Mon, 28 Feb 2022 17:25:27 +0000
+Message-Id: <20220228172528.3489-3-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
+References: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,46 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+Wake IRQ is optional interrupt that can be wired up on SoundWire controller
+instances like RX path along with MBHC(Multi Button Headset connection).
+Document this in bindings.
 
-commit c94afc46cae7ad41b2ad6a99368147879f4b0e56 upstream.
-
-memblock.{reserved,memory}.regions may be allocated using kmalloc() in
-memblock_double_array(). Use kfree() to release these kmalloced regions
-indicated by memblock_{reserved,memory}_in_slab.
-
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Fixes: 3010f876500f ("mm: discard memblock data later")
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- mm/memblock.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/soundwire/qcom,sdw.txt     | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -366,14 +366,20 @@ void __init memblock_discard(void)
- 		addr = __pa(memblock.reserved.regions);
- 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
- 				  memblock.reserved.max);
--		memblock_free_late(addr, size);
-+		if (memblock_reserved_in_slab)
-+			kfree(memblock.reserved.regions);
-+		else
-+			memblock_free_late(addr, size);
- 	}
+diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
+index b93a2b3e029d..51ddbc509382 100644
+--- a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
++++ b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
+@@ -22,7 +22,19 @@ board specific bus parameters.
+ - interrupts:
+ 	Usage: required
+ 	Value type: <prop-encoded-array>
+-	Definition: should specify the SoundWire Controller IRQ
++	Definition: should specify the SoundWire Controller core and optional
++		    wake IRQ
++
++- interrupt-names:
++	Usage: Optional
++	Value type: boolean
++	Value type: <stringlist>
++	Definition: should be "core" for core and "wakeup" for wake interrupt.
++
++- wakeup-source:
++	Usage: Optional
++	Value type: boolean
++	Definition: should specify if SoundWire Controller is wake up capable.
  
- 	if (memblock.memory.regions != memblock_memory_init_regions) {
- 		addr = __pa(memblock.memory.regions);
- 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
- 				  memblock.memory.max);
--		memblock_free_late(addr, size);
-+		if (memblock_memory_in_slab)
-+			kfree(memblock.memory.regions);
-+		else
-+			memblock_free_late(addr, size);
- 	}
- 
- 	memblock_memory = NULL;
-
+ - clock-names:
+ 	Usage: required
+-- 
+2.21.0
 

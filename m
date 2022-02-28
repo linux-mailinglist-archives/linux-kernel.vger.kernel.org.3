@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1340E4C76DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0194C7720
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240389AbiB1SIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S239714AbiB1SLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240751AbiB1SD7 (ORCPT
+        with ESMTP id S239702AbiB1SFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:03:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF5D25C5F;
-        Mon, 28 Feb 2022 09:47:43 -0800 (PST)
+        Mon, 28 Feb 2022 13:05:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE9E5418A;
+        Mon, 28 Feb 2022 09:48:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 486A360B2A;
-        Mon, 28 Feb 2022 17:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8EFC340E7;
-        Mon, 28 Feb 2022 17:47:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 636BAB81187;
+        Mon, 28 Feb 2022 17:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3577C340E7;
+        Mon, 28 Feb 2022 17:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070461;
-        bh=iX4GGGUBYLtFhqsSgufxOPti62s98X8cKQqYQbImluM=;
+        s=korg; t=1646070467;
+        bh=HtR2CxzOO8ZDLXGj1j6x+l8s1x2I1wdNHqufAAZ25hU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VvIpaYl6ZtTD0M9VB9AVERnieC2It2yRMqEAapM+WEuqH4G9S6VAo6JQEwg6FkUKn
-         jZanpYYCYzgIjXTGJcrUljD2eOMX7ZOfUUF69kNYVXyjohSP2eK/aQpuhrGNkv3fkd
-         kdwoJGw+jrPIVWaF5u3EwpXa6b8Fa8WqgvGHHtfY=
+        b=08p+Cdcp+OWd1eI5caZe/6Oh8b2mR10xv9BZgc6dc8jGWUC7CIGbcDVivar5oKa4Z
+         VRG0gFdRNKBDpxVGqCnRKumA24xbhTolhwl3og+QwMF0mOxGwg8e09A+T5FixIQJ51
+         d1EYF16CEhtL5KzAU7S61Qa9NczWwH6bvaOI45Qc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Nyekjaer <sean@geanix.com>,
-        Stable@vger.kernel.org,
+        stable@vger.kernel.org, Mario Tesi <mario.tesi@st.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.16 118/164] iio: accel: fxls8962af: add padding to regmap for SPI
-Date:   Mon, 28 Feb 2022 18:24:40 +0100
-Message-Id: <20220228172411.013872277@linuxfoundation.org>
+Subject: [PATCH 5.16 119/164] iio: imu: st_lsm6dsx: wait for settling time in st_lsm6dsx_read_oneshot
+Date:   Mon, 28 Feb 2022 18:24:41 +0100
+Message-Id: <20220228172411.078345606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -55,83 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Nyekjaer <sean@geanix.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-commit ccbed9d8d2a5351d8238f2d3f0741c9a3176f752 upstream.
+commit ea85bf906466191b58532bb19f4fbb4591f0a77e upstream.
 
-Add missing don't care padding between address and
-data for SPI transfers
+We need to wait for sensor settling time (~ 3/ODR) before reading data
+in st_lsm6dsx_read_oneshot routine in order to avoid corrupted samples.
 
-Fixes: a3e0b51884ee ("iio: accel: add support for FXLS8962AF/FXLS8964AF accelerometers")
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Link: https://lore.kernel.org/r/20211220125144.3630539-1-sean@geanix.com
+Fixes: 290a6ce11d93 ("iio: imu: add support to lsm6dsx driver")
+Reported-by: Mario Tesi <mario.tesi@st.com>
+Tested-by: Mario Tesi <mario.tesi@st.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Link: https://lore.kernel.org/r/b41ebda5535895298716c76d939f9f165fcd2d13.1644098120.git.lorenzo@kernel.org
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/fxls8962af-core.c |   12 ++++++++++--
- drivers/iio/accel/fxls8962af-i2c.c  |    2 +-
- drivers/iio/accel/fxls8962af-spi.c  |    2 +-
- drivers/iio/accel/fxls8962af.h      |    3 ++-
- 4 files changed, 14 insertions(+), 5 deletions(-)
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/iio/accel/fxls8962af-core.c
-+++ b/drivers/iio/accel/fxls8962af-core.c
-@@ -173,12 +173,20 @@ struct fxls8962af_data {
- 	u16 upper_thres;
- };
+--- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
++++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
+@@ -1374,8 +1374,12 @@ static int st_lsm6dsx_read_oneshot(struc
+ 	if (err < 0)
+ 		return err;
  
--const struct regmap_config fxls8962af_regmap_conf = {
-+const struct regmap_config fxls8962af_i2c_regmap_conf = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
- 	.max_register = FXLS8962AF_MAX_REG,
- };
--EXPORT_SYMBOL_GPL(fxls8962af_regmap_conf);
-+EXPORT_SYMBOL_GPL(fxls8962af_i2c_regmap_conf);
-+
-+const struct regmap_config fxls8962af_spi_regmap_conf = {
-+	.reg_bits = 8,
-+	.pad_bits = 8,
-+	.val_bits = 8,
-+	.max_register = FXLS8962AF_MAX_REG,
-+};
-+EXPORT_SYMBOL_GPL(fxls8962af_spi_regmap_conf);
++	/*
++	 * we need to wait for sensor settling time before
++	 * reading data in order to avoid corrupted samples
++	 */
+ 	delay = 1000000000 / sensor->odr;
+-	usleep_range(delay, 2 * delay);
++	usleep_range(3 * delay, 4 * delay);
  
- enum {
- 	fxls8962af_idx_x,
---- a/drivers/iio/accel/fxls8962af-i2c.c
-+++ b/drivers/iio/accel/fxls8962af-i2c.c
-@@ -18,7 +18,7 @@ static int fxls8962af_probe(struct i2c_c
- {
- 	struct regmap *regmap;
- 
--	regmap = devm_regmap_init_i2c(client, &fxls8962af_regmap_conf);
-+	regmap = devm_regmap_init_i2c(client, &fxls8962af_i2c_regmap_conf);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&client->dev, "Failed to initialize i2c regmap\n");
- 		return PTR_ERR(regmap);
---- a/drivers/iio/accel/fxls8962af-spi.c
-+++ b/drivers/iio/accel/fxls8962af-spi.c
-@@ -18,7 +18,7 @@ static int fxls8962af_probe(struct spi_d
- {
- 	struct regmap *regmap;
- 
--	regmap = devm_regmap_init_spi(spi, &fxls8962af_regmap_conf);
-+	regmap = devm_regmap_init_spi(spi, &fxls8962af_spi_regmap_conf);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&spi->dev, "Failed to initialize spi regmap\n");
- 		return PTR_ERR(regmap);
---- a/drivers/iio/accel/fxls8962af.h
-+++ b/drivers/iio/accel/fxls8962af.h
-@@ -17,6 +17,7 @@ int fxls8962af_core_probe(struct device
- int fxls8962af_core_remove(struct device *dev);
- 
- extern const struct dev_pm_ops fxls8962af_pm_ops;
--extern const struct regmap_config fxls8962af_regmap_conf;
-+extern const struct regmap_config fxls8962af_i2c_regmap_conf;
-+extern const struct regmap_config fxls8962af_spi_regmap_conf;
- 
- #endif				/* _FXLS8962AF_H_ */
+ 	err = st_lsm6dsx_read_locked(hw, addr, &data, sizeof(data));
+ 	if (err < 0)
 
 

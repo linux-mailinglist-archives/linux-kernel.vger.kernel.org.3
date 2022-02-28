@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C354C6D5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEB44C6D60
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 14:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbiB1NDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 08:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S234174AbiB1NEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 08:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbiB1NDs (ORCPT
+        with ESMTP id S233910AbiB1NEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:03:48 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F343A3818D;
-        Mon, 28 Feb 2022 05:03:09 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id w63so20296527ybe.10;
-        Mon, 28 Feb 2022 05:03:09 -0800 (PST)
+        Mon, 28 Feb 2022 08:04:02 -0500
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1467E42486;
+        Mon, 28 Feb 2022 05:03:22 -0800 (PST)
+Received: by mail-vk1-xa41.google.com with SMTP id j9so5102956vkj.1;
+        Mon, 28 Feb 2022 05:03:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XNRpJ8Jt0R4tLiHb+HbtNStgEz1uJPOasiJ9YaxoRyE=;
-        b=Kzl42XOXSMpcT+U+yQtmSD3Oi1GMkdaYWBvnvpS1Bsc2B8RW3KHhAfMl+eNytnrtQ6
-         jpXjmVLFo9aEjiVP38S8tnzVWAOMmsoAxmSnJ4HnJQuKYV8oQJJxfmLZ5tnAEy4UPF3X
-         UbLmGkryDBNour+hvbHxTLvZ62Av4nzaO3tix9SsyaSp+USYzyyqzzZ9Dl/uBPAfzS6k
-         KzKcLDFy/mXsRdUZbd7x18KB8RuS/s85Yi/+wwGzyyka6FrFdfmkgMn3Q24NHhDydeVB
-         x0hbJ667CR5RvMlzwyo5mdON4aypx97qQk/Gqtp7qcYTX/ItDGW38EN++tLTYTOHZVNv
-         6Omg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BTl/pAfD1lZ0h4IgEDgvVGkksy8JHT3RGVdO1p5rBwQ=;
+        b=Ldlxx9hDrW/D5mRexfK07vpqUm5TKE1VpzQKjQkvjhcAorAkHxxa7tI7JSaN+VYHl2
+         6a6uEMH9oYAUOYiRQ5xkzVa8jS9+O0DhVRfm5d/jiLroorICFA2Ff/w5AtFCtdwI6pdN
+         /A0fGyTwiWs7/iQuqK/tlooufyT6Txb+CXQOc7ej4befc/04Zg6+v3U0XIwiHc99+XBj
+         2A2ajw15zY6/xRky38XIiREnuty1P6+Yq29yomZsZakkcytIVfer+PMhYP/sP4wy6hC5
+         y71faSoQcslmZRT8Tg3qJel1E4QqIoFAzu6ke6t2rsRKwHaTvYwzmQ/7bLtPDKQj8ij3
+         tqbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XNRpJ8Jt0R4tLiHb+HbtNStgEz1uJPOasiJ9YaxoRyE=;
-        b=Rd5CTDITsYIzcvh50WtFmlcf1RLVQYe5BrCMIvkXB2AAW3BpHhyJtLj45jmI1vsHhf
-         sBRQnCfrea18+UNigSd8yiJTr7ZcaEAyoG9R3FDnptn7Ux1j+/e4Mi+zWAK2i7v0SSzI
-         GwdpunR+R23346bJrW1IkS0T5M18cu6fYOcWWMLPVfobNQ0wpLoY3Z4IRel5woDYdKR6
-         eEjQwqVbms9KBteO6Dyy2hICp1y2NwfrTtZ+L4KbDnDeKgniZTs82Yyc6T9LGhmrripe
-         mRr4JsFQt1MTRhkQF9v8yEB9pfD7DzPq4AQ4eOPYorN5dokPyerRkg7IKmA3wJ6F/o5s
-         BG9Q==
-X-Gm-Message-State: AOAM5305QX1etqqwx66Nevu0F2Hm+mnR1UYZ0wmU/U0rsITWNAzKdy8X
-        IP6WqqwnSj4xjph4ZIU3qx2mJupJ1MK3+SfhXTA=
-X-Google-Smtp-Source: ABdhPJzdvs82iiLgz3fdUf6D7AXDXcRrUJFEWDi/y6IeOiMBH50lTEy7Evn/Bj6NJNrAgF97jy+vsGyQmDKcXjxwBMk=
-X-Received: by 2002:a25:5d0:0:b0:61d:932b:6fc0 with SMTP id
- 199-20020a2505d0000000b0061d932b6fc0mr18827087ybf.585.1646053388782; Mon, 28
- Feb 2022 05:03:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BTl/pAfD1lZ0h4IgEDgvVGkksy8JHT3RGVdO1p5rBwQ=;
+        b=TTQ60V367HaUxt/xZ/eJXU0Evy5CgBXBy/0nzXJvrMyEk8Srwp9uZ4R8jjxXi6UW/1
+         yYZQIUkhMqDo7KL17hw9YA0/qXDWitw8Z7xyctFHSjfrikDJ+NrFG9qtVbbg9VDVh6/R
+         8kFSUy/wpfFXnTofv8ZdCVmfH0GjEy6wXAwA9cbKm33izvYPls4uJAVlMnWPYX5I/n5a
+         k1GVuuR6Fze343WS0QWzlhqTeqGGnRZJmFm+134HI0TwfegRgC1gkg5t3IoH/0m70FT+
+         SC+05o/VssXVQOfMqo3m2uebsDTO/6MjpL3fdsERD5w4Sbt6jNFu8XV5/45WKkU951Hm
+         aBIA==
+X-Gm-Message-State: AOAM5304obN5rJ9/EmE56IMVVitjJ+Ulw4zERD9otnyyaA7zeU72xpJO
+        zZhT352UMKpM7TupTBIk0y6/W8UBUFPfKFvIXpo=
+X-Google-Smtp-Source: ABdhPJyHAUb/sh2pkS8vXWVikPEH8kElNCDS41yRTb+JNO4AIHzANImpaNBvQfUKfI2f/vXi912Qqw==
+X-Received: by 2002:a1f:ac04:0:b0:32d:710:5930 with SMTP id v4-20020a1fac04000000b0032d07105930mr7901130vke.6.1646053401150;
+        Mon, 28 Feb 2022 05:03:21 -0800 (PST)
+Received: from ishi (072-189-064-222.res.spectrum.com. [72.189.64.222])
+        by smtp.gmail.com with ESMTPSA id e20-20020ab02b14000000b00345f0381ddcsm1886237uar.0.2022.02.28.05.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 05:03:20 -0800 (PST)
+Date:   Mon, 28 Feb 2022 08:03:18 -0500
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>, trix@redhat.com
+Cc:     nathan@kernel.org, ndesaulniers@google.com,
+        Jonathan.Cameron@huawei.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] counter: add defaults to switch-statements
+Message-ID: <YhzIFofXbnbFe9N6@ishi>
+References: <20220227161746.82776-1-trix@redhat.com>
+ <20220227174610.0e0e73e4@jic23-huawei>
 MIME-Version: 1.0
-References: <20220227153016.950473-1-pgwipeout@gmail.com> <20220227153016.950473-6-pgwipeout@gmail.com>
- <7b20fccd-4394-da3c-6556-4732d67cde3d@gmail.com> <CAMdYzYp8x_mKffm1WkHD4D1Fx_tVJ8WdBc=u-j+j_zRbJmyaCQ@mail.gmail.com>
- <3ac3cdf9-17c0-654f-b204-c5b4b0436c98@gmail.com>
-In-Reply-To: <3ac3cdf9-17c0-654f-b204-c5b4b0436c98@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 28 Feb 2022 08:02:57 -0500
-Message-ID: <CAMdYzYrxQUhFNog1hvwme=V-3xptE6C9Se09FxEoEQm9bPdEEQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227174610.0e0e73e4@jic23-huawei>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,164 +72,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 4:10 AM Johan Jonker <jbx6244@gmail.com> wrote:
->
->
->
-> On 2/27/22 23:44, Peter Geis wrote:
-> > On Sun, Feb 27, 2022 at 12:50 PM Johan Jonker <jbx6244@gmail.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/27/22 16:30, Peter Geis wrote:
-> >>> Add the dwc3 device nodes to the rk356x device trees.
-> >>> The rk3566 has one usb2 capable dwc3 otg controller and one usb3 capable
-> >>> dwc3 host controller.
-> >>> The rk3568 has one usb3 capable dwc3 otg controller and one usb3 capable
-> >>> dwc3 host controller.
-> >>>
-> >>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> >>> ---
-> >>>  arch/arm64/boot/dts/rockchip/rk3566.dtsi | 11 ++++++++
-> >>>  arch/arm64/boot/dts/rockchip/rk3568.dtsi |  9 ++++++
-> >>>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 35 +++++++++++++++++++++++-
-> >>>  3 files changed, 54 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3566.dtsi b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-> >>> index 3839eef5e4f7..0b957068ff89 100644
-> >>> --- a/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-> >>> @@ -6,6 +6,10 @@ / {
-> >>>       compatible = "rockchip,rk3566";
-> >>>  };
-> >>>
-> >>> +&pipegrf {
-> >>> +     compatible = "rockchip,rk3566-pipe-grf", "syscon";
-> >>> +};
-> >>> +
-> >>>  &power {
-> >>>       power-domain@RK3568_PD_PIPE {
-> >>>               reg = <RK3568_PD_PIPE>;
-> >>> @@ -18,3 +22,10 @@ power-domain@RK3568_PD_PIPE {
-> >>>               #power-domain-cells = <0>;
-> >>>       };
-> >>>  };
-> >>> +
-> >>> +&usb_host0_xhci {
-> >>> +     phys = <&usb2phy0_otg>;
-> >>> +     phy-names = "usb2-phy";
-> >>> +     extcon = <&usb2phy0>;
-> >>> +     maximum-speed = "high-speed";
-> >>> +};
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> >>> index 5b0f528d6818..8ba9334f9753 100644
-> >>> --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> >>> @@ -99,6 +99,10 @@ opp-1992000000 {
-> >>>       };
-> >>>  };
-> >>>
-> >>> +&pipegrf {
-> >>> +     compatible = "rockchip,rk3568-pipe-grf", "syscon";
-> >>> +};
-> >>> +
-> >>>  &power {
-> >>>       power-domain@RK3568_PD_PIPE {
-> >>>               reg = <RK3568_PD_PIPE>;
-> >>> @@ -114,3 +118,8 @@ power-domain@RK3568_PD_PIPE {
-> >>>               #power-domain-cells = <0>;
-> >>>       };
-> >>>  };
-> >>> +
-> >>> +&usb_host0_xhci {
-> >>> +     phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
-> >>> +     phy-names = "usb2-phy", "usb3-phy";
-> >>> +};
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> >>> index 7cdef800cb3c..072bb9080cd6 100644
-> >>> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> >>> @@ -230,6 +230,40 @@ scmi_shmem: sram@0 {
-> >>>               };
-> >>>       };
-> >>>
-> >>> +     usb_host0_xhci: usb@fcc00000 {
-> >>
-> >>> +             compatible = "snps,dwc3";
-> >>
-> >> compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
-> >>
-> >> compatible strings must be SoC orientated.
-> >> Add binding like you did before.
-> >
-> > Okay, should this go in the core yaml, since it's not really handled
-> > by of-simple?
->
-> Nothing to change in core.c, because the fall back string does the
-> trick, so we don't have to change the driver for every new SoC.
-> Change the node compatible here and add the binding.
-> That's it. The rest comes later if needed.
+On Sun, Feb 27, 2022 at 05:46:10PM +0000, Jonathan Cameron wrote:
+> On Sun, 27 Feb 2022 08:17:46 -0800
+> trix@redhat.com wrote:
+> 
+> > From: Tom Rix <trix@redhat.com>
+> > 
+> > Clang static analysis reports this representative problem
+> > counter-chrdev.c:482:3: warning: Undefined or garbage value
+> >   returned to caller
+> >   return ret;
+> >   ^~~~~~~~~~
+> > 
+> > counter_get_data() has a multilevel switches, some without
+> > defaults, so ret is sometimes not set.
+> > Add returning -EINVAL similar to other defaults.
+> > 
+> > Fixes: b6c50affda59 ("counter: Add character device interface")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> I'm fairly sure this one is warning supression rather than a fix as
+> that type u8 being used in the switch is storing an enum which is
+> set only by kernel code and all values of the enum are covered.
+> 
+> However, that's not locally visible so to me the addition looks good, I'd
+> just be tempted to drop the fixes tag as backporting this looks like noise
+> to me.
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-It's the binding I'm referring to here.
-snps,dwc3.yaml seems the logical place, but I want to make sure you
-concur first.
+Yes, this isn't really a bug because the only values available are those
+from the enum, but I see how this is not immediately obvious at first.
+If Tom has no objections, I'll pick this up and drop the fixes tag so
+that we have it along with the other counter changes for the 5.18 merge.
 
->
-> > Also, should I add in the compatible for rk3328 as well?
->
-> No, same story the fall back string does the trick in core.c
+Thanks,
 
-Same thing here, since I'm in snps,dwc3.yaml anyways I can add the
-rk3328 binding in and silence that error in one go.
+William Breathitt Gray
 
->
->
-> >
-> >>
-> >>> +             reg = <0x0 0xfcc00000 0x0 0x400000>;
-> >>> +             interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-> >>> +             clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
-> >>> +                      <&cru ACLK_USB3OTG0>;
-> >>> +             clock-names = "ref_clk", "suspend_clk",
-> >>> +                           "bus_clk";
-> >>> +             dr_mode = "host";
-> >>> +             phy_type = "utmi_wide";
-> >>> +             power-domains = <&power RK3568_PD_PIPE>;
-> >>> +             resets = <&cru SRST_USB3OTG0>;
-> >>> +             snps,dis_u2_susphy_quirk;
-> >>> +             status = "disabled";
-> >>> +     };
-> >>> +
-> >>> +     usb_host1_xhci: usb@fd000000 {
-> >>
-> >>> +             compatible = "snps,dwc3";
-> >>
-> >> compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
-> >>
-> >>> +             reg = <0x0 0xfd000000 0x0 0x400000>;
-> >>> +             interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-> >>> +             clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
-> >>> +                      <&cru ACLK_USB3OTG1>;
-> >>> +             clock-names = "ref_clk", "suspend_clk",
-> >>> +                           "bus_clk";
-> >>> +             dr_mode = "host";
-> >>> +             phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
-> >>> +             phy-names = "usb2-phy", "usb3-phy";
-> >>> +             phy_type = "utmi_wide";
-> >>> +             power-domains = <&power RK3568_PD_PIPE>;
-> >>> +             resets = <&cru SRST_USB3OTG1>;
-> >>> +             snps,dis_u2_susphy_quirk;
-> >>> +             status = "disabled";
-> >>> +     };
-> >>> +
-> >>>       gic: interrupt-controller@fd400000 {
-> >>>               compatible = "arm,gic-v3";
-> >>>               reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
-> >>> @@ -297,7 +331,6 @@ pmu_io_domains: io-domains {
-> >>>       };
-> >>>
-> >>>       pipegrf: syscon@fdc50000 {
-> >>> -             compatible = "rockchip,rk3568-pipe-grf", "syscon";
-> >>>               reg = <0x0 0xfdc50000 0x0 0x1000>;
-> >>>       };
-> >>>
+> > ---
+> >  drivers/counter/counter-chrdev.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
+> > index b7c62f957a6a8..69d340be9c93f 100644
+> > --- a/drivers/counter/counter-chrdev.c
+> > +++ b/drivers/counter/counter-chrdev.c
+> > @@ -477,6 +477,8 @@ static int counter_get_data(struct counter_device *const counter,
+> >  		case COUNTER_SCOPE_COUNT:
+> >  			ret = comp->count_u8_read(counter, parent, &value_u8);
+> >  			break;
+> > +		default:
+> > +			return -EINVAL;
+> >  		}
+> >  		*value = value_u8;
+> >  		return ret;
+> > @@ -496,6 +498,8 @@ static int counter_get_data(struct counter_device *const counter,
+> >  		case COUNTER_SCOPE_COUNT:
+> >  			ret = comp->count_u32_read(counter, parent, &value_u32);
+> >  			break;
+> > +		default:
+> > +			return -EINVAL;
+> >  		}
+> >  		*value = value_u32;
+> >  		return ret;
+> 

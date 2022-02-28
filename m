@@ -2,87 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8877B4C715C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449494C715F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 17:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237789AbiB1QLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 11:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S236078AbiB1QLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 11:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiB1QLU (ORCPT
+        with ESMTP id S237135AbiB1QLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:11:20 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07DC50B05
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:41 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id b8so11547007pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:41 -0800 (PST)
+        Mon, 28 Feb 2022 11:11:32 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A466E8565F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:51 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id j5so10359816ila.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 08:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xocpR3kEH7DQeX+jVuIfF7VJPK+XVL0jIQPIFfI+qI8=;
-        b=dhWajjV0N5cq5yyksodXUrVKqdANsgBSLIQvn6xHJ/0QOeLBz9xHBvcih5XHYq4rwA
-         RjOE1R+evHHmluSZlnSSq4lLGsysvjA8UqkOjKsDzbYJOpGxH2RJgXtRvL4vdwbVgHzg
-         gHU4l5/orEAqiO7t5Ktm0UIOq1L80gDqgaNnBpIc4Dkkm2TYy83urB/fGjMVbffjDwLK
-         zR62D8b8lMFEkREryoau4PxGO++jLEhQruLdCXq+gDWpH3N7FdWWb6BziaEYdQQwa6wu
-         AM0YJIJ8qu4g56p8oeb5l06IATj+NIbNVM+zTCy4uVrqOXRkQVHuUlGSbo95jlUS1jZJ
-         UJCg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8jmx30ZbNRzhnyuYyBnZsLywXfqEumxyi1nF6wYiqeE=;
+        b=N8coS3WuZ7i775paXOmSmV+emY7pEAnuUsbNjDf1JPILKcAh/ovJPLdcyG6sXHvxyk
+         coW9ufp/EgRCYplIxiAVjT83P1fpHProiukpD3qx7b3Vhhx6/dWq6Cyp+wGBAOW25X/5
+         yFw08Zt1yJIrB/+WL2syYmNzvE6OjDrkAviWxqJC7Equ3+sB1cAl+cKr20qzwuGSylBq
+         kobNlyVpIEGpbDpkFVH4VLpkZMoUYHPoYJCvjv1C5m1ptZHlkqARxbki34V+jkPazq04
+         H2O1zgD1+3ZSZAZtSJx2AouqFX98+9cCBWYfOV8kkWNwfUEqZbGZtHg+epE0c+nPCuDP
+         Rn6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xocpR3kEH7DQeX+jVuIfF7VJPK+XVL0jIQPIFfI+qI8=;
-        b=FvGw9G1LZCOhqgZmtOl+9UjTvNAljerdRObeWSmIz6wT3QAZ5A+2t8k21dJXYPWKaH
-         nTIT3xSPOm3RNyX8abcNteeIKIzw5KEZ97FhuiyqmPBQJRHvXEQHHe8mZLrJOhENI88o
-         PlF/EHAZHKyqY0D5qbegdhg9aJGwRdZa9fdV1kToViKxUeAvr69Q1QD9ud15Pf+iyvnQ
-         oHG6o+UfKOTfVSe31xIGLXgqZxy0ShqAI+jtcU9VUcLU/QEQj48GPkr9VyBtGAvpUuoU
-         g5t0ZFjHrVS+FvRBfYpqoZXULjG4yp39v2LXvtRSK/KhgWvC3cZjZx1Tz7uEjfed2rgr
-         iTjQ==
-X-Gm-Message-State: AOAM5328erTrGM/RRiaCJ7km4XsMN8imx8GtIzTPLaxOkcSCL0bYYNDm
-        VbX18+MHXHO0Mbyqf1kNL/WL1g==
-X-Google-Smtp-Source: ABdhPJwnEoEFSQu22qln1XnyXWA2QCP/IX2mziXAw1Oqr39CegYdEMoSIFcdf8UlMLnZXFRXtC0IQQ==
-X-Received: by 2002:a17:902:ec92:b0:14f:e593:5e99 with SMTP id x18-20020a170902ec9200b0014fe5935e99mr21508133plg.42.1646064641053;
-        Mon, 28 Feb 2022 08:10:41 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n42-20020a056a000d6a00b004e1a01dcc35sm13805049pfv.150.2022.02.28.08.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 08:10:40 -0800 (PST)
-Date:   Mon, 28 Feb 2022 16:10:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peng Hao <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]  kvm: x86: Adjust the location of pkru_mask of kvm_mmu
- to reduce memory
-Message-ID: <Yhzz/N4+3vNh7AQn@google.com>
-References: <20220228030749.88353-1-flyingpeng@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8jmx30ZbNRzhnyuYyBnZsLywXfqEumxyi1nF6wYiqeE=;
+        b=Rmhq5R2OIiNjPSNIrqIPeq2QMIyc4WdLpmXftHM+MEMvvU2wo3lpIBlrUsGxLknys4
+         W70e33hybyHjwoPYYL6vIxUdL+fdbpbO0+fyEBfR0trqy+j2hzavb1Qq7n6Damy/9Yxl
+         2FtAlYfbrRlM7PFriq7qm25ZOtLSUaRnYaSCo4WRCMOmMWmhlwmp8ShUhmllVlFyMbha
+         2RQ5xe2gU3YRuGjOqqEpcBO0KyQmOTE9avF0qmDsMlBl2W37QPuFVzfdBidHqSyVh3JF
+         jlGb/McdOvDSdhXu21CdOoDNBMuZv9nhh37GiWc45s4/uwgWxvdbMPjGSAfyAXTLW280
+         uosA==
+X-Gm-Message-State: AOAM531zHjzhtjan0keibDyx79wTbbmgoz9lYctWRpavwvmt1UF8Yqyc
+        y+TNKotmiKAw6TNKu1gKQ+8slg==
+X-Google-Smtp-Source: ABdhPJwOxhP4LjANGLGnHVGgdu+kdm5Otpzo6OH6lmLeJzNao/22ra5j4oxv0xsmy2R6qa8k2TbtCg==
+X-Received: by 2002:a05:6e02:2142:b0:2bf:ad10:e00e with SMTP id d2-20020a056e02214200b002bfad10e00emr19082701ilv.114.1646064651009;
+        Mon, 28 Feb 2022 08:10:51 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id u19-20020a6be413000000b0064103112badsm5826854iog.45.2022.02.28.08.10.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 08:10:50 -0800 (PST)
+Message-ID: <3535c32c-9f57-325d-21fb-04724da07ccf@linaro.org>
+Date:   Mon, 28 Feb 2022 10:10:49 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228030749.88353-1-flyingpeng@tencent.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 12/27] bus: mhi: ep: Add support for creating and
+ destroying MHI EP devices
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220228124344.77359-1-manivannan.sadhasivam@linaro.org>
+ <20220228124344.77359-13-manivannan.sadhasivam@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220228124344.77359-13-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022, Peng Hao wrote:
-> From: Peng Hao <flyingpeng@tencent.com>
+On 2/28/22 6:43 AM, Manivannan Sadhasivam wrote:
+> This commit adds support for creating and destroying MHI endpoint devices.
+> The MHI endpoint devices binds to the MHI endpoint channels and are used
+> to transfer data between MHI host and endpoint device.
 > 
-> Adjust the field pkru_mask to the back of direct_map to make up 8-byte
-> alignment.This reduces the size of kvm_mmu by 8 bytes.
+> There is a single MHI EP device for each channel pair. The devices will be
+> created when the corresponding channels has been started by the host and
+> will be destroyed during MHI EP power down and reset.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-I'd prefer we just burn the extra 8 bytes, at least for now.  'prku' and 'permissions'
-are related fields, IMO splitting them to save 24 bytes per vCPU isn't a good tradeoff.
+Looks good.
 
-And in the not-too-distant future, all of the 1-byte fields will hopefully go
-away, at which point were "wasting" 4 bytes no matter where 'pkru' is defined.  'ept_ad'
-can be dropped immediately, I'll send a patch for that.  We should be able to drop
-'root_level', 'shadow_root_level', and 'direct_map' once Paolo's clean up of the role
-stuff lands.
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+> ---
+>   drivers/bus/mhi/ep/main.c | 83 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 83 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> index 2bdcf1657479..3afae0bfd83c 100644
+> --- a/drivers/bus/mhi/ep/main.c
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -68,6 +68,89 @@ static struct mhi_ep_device *mhi_ep_alloc_device(struct mhi_ep_cntrl *mhi_cntrl,
+>   	return mhi_dev;
+>   }
+>   
+> +/*
+> + * MHI channels are always defined in pairs with UL as the even numbered
+> + * channel and DL as odd numbered one. This function gets UL channel (primary)
+> + * as the ch_id and always looks after the next entry in channel list for
+> + * the corresponding DL channel (secondary).
+> + */
+> +static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id)
+> +{
+> +	struct mhi_ep_chan *mhi_chan = &mhi_cntrl->mhi_chan[ch_id];
+> +	struct device *dev = mhi_cntrl->cntrl_dev;
+> +	struct mhi_ep_device *mhi_dev;
+> +	int ret;
+> +
+> +	/* Check if the channel name is same for both UL and DL */
+> +	if (strcmp(mhi_chan->name, mhi_chan[1].name)) {
+> +		dev_err(dev, "UL and DL channel names are not same: (%s) != (%s)\n",
+> +			mhi_chan->name, mhi_chan[1].name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mhi_dev = mhi_ep_alloc_device(mhi_cntrl, MHI_DEVICE_XFER);
+> +	if (IS_ERR(mhi_dev))
+> +		return PTR_ERR(mhi_dev);
+> +
+> +	/* Configure primary channel */
+> +	mhi_dev->ul_chan = mhi_chan;
+> +	get_device(&mhi_dev->dev);
+> +	mhi_chan->mhi_dev = mhi_dev;
+> +
+> +	/* Configure secondary channel as well */
+> +	mhi_chan++;
+> +	mhi_dev->dl_chan = mhi_chan;
+> +	get_device(&mhi_dev->dev);
+> +	mhi_chan->mhi_dev = mhi_dev;
+> +
+> +	/* Channel name is same for both UL and DL */
+> +	mhi_dev->name = mhi_chan->name;
+> +	dev_set_name(&mhi_dev->dev, "%s_%s",
+> +		     dev_name(&mhi_cntrl->mhi_dev->dev),
+> +		     mhi_dev->name);
+> +
+> +	ret = device_add(&mhi_dev->dev);
+> +	if (ret)
+> +		put_device(&mhi_dev->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int mhi_ep_destroy_device(struct device *dev, void *data)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	struct mhi_ep_chan *ul_chan, *dl_chan;
+> +
+> +	if (dev->bus != &mhi_ep_bus_type)
+> +		return 0;
+> +
+> +	mhi_dev = to_mhi_ep_device(dev);
+> +	mhi_cntrl = mhi_dev->mhi_cntrl;
+> +
+> +	/* Only destroy devices created for channels */
+> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+> +		return 0;
+> +
+> +	ul_chan = mhi_dev->ul_chan;
+> +	dl_chan = mhi_dev->dl_chan;
+> +
+> +	if (ul_chan)
+> +		put_device(&ul_chan->mhi_dev->dev);
+> +
+> +	if (dl_chan)
+> +		put_device(&dl_chan->mhi_dev->dev);
+> +
+> +	dev_dbg(&mhi_cntrl->mhi_dev->dev, "Destroying device for chan:%s\n",
+> +		 mhi_dev->name);
+> +
+> +	/* Notify the client and remove the device from MHI bus */
+> +	device_del(dev);
+> +	put_device(dev);
+> +
+> +	return 0;
+> +}
+> +
+>   static int mhi_ep_chan_init(struct mhi_ep_cntrl *mhi_cntrl,
+>   			    const struct mhi_ep_cntrl_config *config)
+>   {
+

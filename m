@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40BB4C6C9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27DF4C6CA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 13:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbiB1MfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 07:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S236279AbiB1Mgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 07:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiB1MfA (ORCPT
+        with ESMTP id S230389AbiB1Mgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:35:00 -0500
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3345F40902;
-        Mon, 28 Feb 2022 04:34:20 -0800 (PST)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 56FDE4B0; Mon, 28 Feb 2022 13:34:19 +0100 (CET)
-Date:   Mon, 28 Feb 2022 13:34:18 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
-        yen-chang.chen@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com
-Subject: Re: [PATCH v5 00/34] MT8195 IOMMU SUPPORT
-Message-ID: <YhzBSsn/zUlGg5JE@8bytes.org>
-References: <20220217113453.13658-1-yong.wu@mediatek.com>
+        Mon, 28 Feb 2022 07:36:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2F456764
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 04:36:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1659CB81112
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:36:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEFCAC340E7;
+        Mon, 28 Feb 2022 12:36:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646051768;
+        bh=cesg6vdoXt7YoKedudIJ9d8rtvtzfKk1Vdd6Mn77biw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=peHg7+g9p5oF5UP0zm/QUYuSqRJ01hXxrUNSui02akRGhnRjPE+g5KK5yQiZjdP3Y
+         i8CgvgQTJ1PTCQYC/M54u7HwEgCI5GDcGPDuiFTQPYTvJw2wfRlH1MFd+k/EgF3gHp
+         b8EIts+79Ndi0oFBrh2o5loziNrsjAv+vWxvtXDfp19qYK4sSk6ERDU1wIQ49Myi0J
+         Kf1/p0wPQlBTQFs8/88plS33l7rUYlT9nbYpjCX/WITstR0c4vWM3iz95mrFDASy7N
+         CHinS6R16cHs3J2U7/KqEOU9fFhKZyS+WhzF8DAUhTXgFujm+tIk5zrWbPJbog5c19
+         VJryE3s7qtVQA==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH] habanalabs: remove deprecated firmware states
+Date:   Mon, 28 Feb 2022 14:36:03 +0200
+Message-Id: <20220228123603.1172692-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217113453.13658-1-yong.wu@mediatek.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yong Wu,
+From: Ofir Bitton <obitton@habana.ai>
 
-On Thu, Feb 17, 2022 at 07:34:19PM +0800, Yong Wu wrote:
-> Yong Wu (34):
->   dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
->   dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
->   iommu/mediatek: Fix 2 HW sharing pgtable issue
->   iommu/mediatek: Add list_del in mtk_iommu_remove
->   iommu/mediatek: Remove clk_disable in mtk_iommu_remove
->   iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
->   iommu/mediatek: Add mutex for data in the mtk_iommu_domain
->   iommu/mediatek: Adapt sharing and non-sharing pgtable case
->   iommu/mediatek: Add 12G~16G support for multi domains
->   iommu/mediatek: Add a flag DCM_DISABLE
->   iommu/mediatek: Add a flag NON_STD_AXI
->   iommu/mediatek: Remove the granule in the tlb flush
->   iommu/mediatek: Always enable output PA over 32bits in isr
->   iommu/mediatek: Add SUB_COMMON_3BITS flag
->   iommu/mediatek: Add IOMMU_TYPE flag
->   iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
->   iommu/mediatek: Adjust device link when it is sub-common
->   iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
->   iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
->   iommu/mediatek: Add infra iommu support
->   iommu/mediatek: Add PCIe support
->   iommu/mediatek: Add mt8195 support
->   iommu/mediatek: Only adjust code about register base
->   iommu/mediatek: Just move code position in hw_init
->   iommu/mediatek: Separate mtk_iommu_data for v1 and v2
->   iommu/mediatek: Remove mtk_iommu.h
->   iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
->   iommu/mediatek: Add mtk_iommu_bank_data structure
->   iommu/mediatek: Initialise bank HW for each a bank
->   iommu/mediatek: Change the domid to iova_region_id
->   iommu/mediatek: Get the proper bankid for multi banks
->   iommu/mediatek: Initialise/Remove for multi bank dev
->   iommu/mediatek: Backup/restore regsiters for multi banks
->   iommu/mediatek: mt8195: Enable multi banks for infra iommu
+During driver and F/W handshake, driver waits for F/W to reach
+certain states in order to progress with the boot flow.
+Some of the states were deprecated a long time ago and were never
+present on official firmwares. Therefore, let's remove them from
+the handshake process.
 
-This doesn't apply cleanly, can you please send a version rebased to
-v5.17-rc4?
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/firmware_if.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thanks,
+diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
+index 11957d36c6a9..3262126cc7ca 100644
+--- a/drivers/misc/habanalabs/common/firmware_if.c
++++ b/drivers/misc/habanalabs/common/firmware_if.c
+@@ -1207,8 +1207,6 @@ static int hl_fw_read_preboot_caps(struct hl_device *hdev,
+ 		hdev,
+ 		cpu_boot_status_reg,
+ 		status,
+-		(status == CPU_BOOT_STATUS_IN_UBOOT) ||
+-		(status == CPU_BOOT_STATUS_DRAM_RDY) ||
+ 		(status == CPU_BOOT_STATUS_NIC_FW_RDY) ||
+ 		(status == CPU_BOOT_STATUS_READY_TO_BOOT) ||
+ 		(status == CPU_BOOT_STATUS_WAITING_FOR_BOOT_FIT),
+-- 
+2.25.1
 
-	Joerg

@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC704C7A79
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAEE4C7A7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 21:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiB1Uc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 15:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S229595AbiB1Ucv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 15:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiB1Ucu (ORCPT
+        with ESMTP id S229594AbiB1Uco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 15:32:50 -0500
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E77E19C16;
-        Mon, 28 Feb 2022 12:31:24 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; bh=3Z50+tLC8/CEOc9W5FMuZ/YfLz0LpCHJGNIb1bHqn70=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220111215046; t=1646080260; v=1; x=1646512260;
- b=crJzFMOR6tc9squcx92hLTuFtuCfhgO+BgNnioUeH7k69a4pSO7joK45Wfxj0yH7NEIwX6uZ
- ovLhBNmzxYd5GCzchaGc5QbNkiNzNti5/PIEBt0QyXPX2BToy9B41BFvKbxTGv5xjhVv6kKb/oN
- OVkZTwV0VQF/Nh/w2UdBttHf7cNJH02zmF8O3u9kFIu3JIdWVoXI6KSpQYEr2yd92EMtlkBySjK
- VOka02DgQS/aFvpvPOaq3GW48LdBEpQclkOgPyVi61JJq9bq0ylXW5ZtUxY/5ix8dkvcSA0wnHK
- hZIf4rgSu0P5LiEbYccNCW91mbHc6sUp8HfDA43bsiNAQ9+GWbtWDncUnxcuu2PkY3etBd2b/9G
- zdLjv5VqebunO676QNsGrJRRkEHk7kWB9gid1XivUpxHo3AY+X+T79AbzN/MnHDtxFJuvGoQILr
- LZE/kxHolAH+o3gf/wpTQC5IMskejWDD2C2ITZi4ryHpV/NAEiuQRV1F03SdJI9r5ngOfcA4QqP
- BXYRWYXIYIWbrFE3aw7SFY2xkXoyStoakRiewxY3x02/MgRjFkWvAgznd0fbt0DqESFJ7M35xec
- OEU6V3m+Q53l8JgSfk6YfDSdMAftMhfkYyPj9J1iZNlN4YHvvi7OXXQBftKtjSF8jHYEKGmPGIb
- 3Al+HFYYAy8=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 51b43b45; Mon, 28 Feb
- 2022 15:31:00 -0500
+        Mon, 28 Feb 2022 15:32:44 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6830412AB7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:31:59 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id i5so14351359oih.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 12:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=utrIpj5sGwbA9Y5s37XmpLzhGxUfS2xneQil5soYPOM=;
+        b=IJNTXhb8vKmca/sPG/5vUyGbk6U/5uSV4ApOSAlXFGmNSwgyan6DeTxcgzJiHwa6sp
+         NypjgIHkmQkkzpgLJ9502B4A1aijO507ETnJHHwo03ypRd85V0mZcil/a3UZYUEZMIdx
+         12FZxG2zLO9hKIqOHOOlAT2X8dgcls4RMqIe8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=utrIpj5sGwbA9Y5s37XmpLzhGxUfS2xneQil5soYPOM=;
+        b=4v4ybs66C4qR2K5RrFP4a5gQQxoIwor5YY141s9QgwVbMSq50zy1DuWqr2so6gLYZW
+         4aHbk+/4HG8AlInKahG+lazTNsVgeCZphU3zqEwprq4ttXicpJMx80OMtfMEGDDQd3DX
+         a3PjeFuGzzr7S3JRQfMvh+7rHpz6+j7NdK8nKFzok7Gfi2rkeDfYpk/iIIpA7RF1o2xW
+         gsfQGOREUGi1js6hZ5EWzQ85HB7BIQYsMTUi3KtXfUCn7ECGKLLs9Rw0Ujxs46NLI9pv
+         ee7M9vK+0VjBPjfYgQkeXhjrx5NdHkgoYKyo/58a1RLuPclBa8fpIY9bQ2AN6Dpf6fuS
+         3H0w==
+X-Gm-Message-State: AOAM530495zAsX2SeJxDGmD23bxQsIwvZEysK2GgEfKi+QPaSK3Y3YOQ
+        92po5i5wqtGYyoeqldjOnmlSUvzWX3rPi+87IA7UuA==
+X-Google-Smtp-Source: ABdhPJxT2qNwI+x+MXRZ6vklFHt8jMreYUaB/MnFw7ql9KToFLQdHvgZr3G6P8pADPUBa+ZL0D2JlyDA+u4ZmUk0Cxk=
+X-Received: by 2002:a05:6808:1a28:b0:2d7:3c61:e0d6 with SMTP id
+ bk40-20020a0568081a2800b002d73c61e0d6mr12145538oib.32.1646080318805; Mon, 28
+ Feb 2022 12:31:58 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 28 Feb 2022 12:31:58 -0800
 MIME-Version: 1.0
-Date:   Mon, 28 Feb 2022 15:31:00 -0500
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Anthony Yznaga <anthony.yznaga@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        regressions@lists.linux.dev, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] binfmt_elf: Avoid total_mapping_size for ET_EXEC
-In-Reply-To: <20220228194613.1149432-1-keescook@chromium.org>
-References: <20220228194613.1149432-1-keescook@chromium.org>
-Message-ID: <5d44f028b2d739395c92e4b3036e2bbf@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <05780d0a-bc9c-3a81-2676-ea92453d7303@quicinc.com>
+References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1645182064-15843-2-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n51X=LJMjDb9KS0rqQDqLR5srzxCOJCRS4oJgPSXbvaSiQ@mail.gmail.com> <05780d0a-bc9c-3a81-2676-ea92453d7303@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 28 Feb 2022 12:31:58 -0800
+Message-ID: <CAE-0n517usy-DDEg+r1Q6oeer0i5bBiAqTugxf3GPcW+2gtQ9A@mail.gmail.com>
+Subject: Re: [PATCH V7 1/5] dt-bindings: mfd: pm8008: Add pm8008 regulators
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya Kakitapalli <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-28 14:46, Kees Cook wrote:
-> Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
-> MAP_FIXED_NOREPLACE").
-> 
-> At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
-> contiguous (but _are_ file-offset contiguous). This would result in
-> giant mapping attempts to cover the entire span, including the virtual
-> address range hole. Disable total_mapping_size for ET_EXEC, which
-> reduces the MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD:
-> 
-> $ readelf -lW /usr/bin/gcc
-> ...
-> Program Headers:
->   Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   
-> ...
-> ...
->   LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 
-> ...
->   LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 
-> ...
-> ...
->        ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
-> 
-> File offset range     : 0x000000-0x00bb4c
-> 			0x00bb4c bytes
-> 
-> Virtual address range : 0x4000000000000000-0x600000000000bcb0
-> 			0x200000000000bcb0 bytes
-> 
-> Ironically, this is the reverse of the problem that originally caused
-> problems with ET_EXEC and MAP_FIXED_NOREPLACE: overlaps. This problem 
-> is
-> with holes. Future work could restore full coverage if 
-> load_elf_binary()
-> were to perform mappings in a separate phase from the loading (where
-> it could resolve both overlaps and holes).
-> 
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
-> Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Fixes: 5f501d555653 ("binfmt_elf: reintroduce using 
-> MAP_FIXED_NOREPLACE")
-> Link:
-> https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> matoro (or anyone else) can you please test this?
-> ---
->  fs/binfmt_elf.c | 25 ++++++++++++++++++-------
->  1 file changed, 18 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index 9bea703ed1c2..474b44032c65 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -1136,14 +1136,25 @@ static int load_elf_binary(struct linux_binprm 
-> *bprm)
->  			 * is then page aligned.
->  			 */
->  			load_bias = ELF_PAGESTART(load_bias - vaddr);
-> -		}
-> 
-> -		/*
-> -		 * Calculate the entire size of the ELF mapping (total_size).
-> -		 * (Note that first_pt_load is set to false later once the
-> -		 * initial mapping is performed.)
-> -		 */
-> -		if (first_pt_load) {
-> +			/*
-> +			 * Calculate the entire size of the ELF mapping
-> +			 * (total_size), used for the initial mapping,
-> +			 * due to first_pt_load which is set to false later
-> +			 * once the initial mapping is performed.
-> +			 *
-> +			 * Note that this is only sensible when the LOAD
-> +			 * segments are contiguous (or overlapping). If
-> +			 * used for LOADs that are far apart, this would
-> +			 * cause the holes between LOADs to be mapped,
-> +			 * running the risk of having the mapping fail,
-> +			 * as it would be larger than the ELF file itself.
-> +			 *
-> +			 * As a result, only ET_DYN does this, since
-> +			 * some ET_EXEC (e.g. ia64) may have virtual
-> +			 * memory holes between LOADs.
-> +			 *
-> +			 */
->  			total_size = total_mapping_size(elf_phdata,
->  							elf_ex->e_phnum);
->  			if (!total_size) {
+Quoting Satya Priya Kakitapalli (Temp) (2022-02-28 06:14:56)
+>
+> On 2/19/2022 7:09 AM, Stephen Boyd wrote:
+> > Quoting Satya Priya (2022-02-18 03:00:59)
+> >> Add regulators and their supply nodes. Add separate compatible
+> >> "qcom,pm8008-regulators" to differentiate between pm8008 infra
+> >> and pm8008 regulators mfd devices.
+> >>
+> >> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> >> ---
+> > Is the register layout compatible with SPMI regulators? The gpio node
+> > seems to be fully compatible and the same driver probes there for SPMI
+> > and i2c, so I wonder why we can't extend the existing SPMI gpio and
+> > regulator bindings to have the new compatible strings for pm8008. Is
+> > anything really different, or do we have the same device talking i2c
+> > instead of SPMI now? Possibly it's exposing the different hardware
+> > blocks inside the PMIC at different i2c addresses. It looks like the i2c
+> > address is 0x8 and then there's 16-bits of address space inside the i2c
+> > device to do things. 0x9 is the i2c address for the regulators and then
+> > each ldo is at some offset in there?
+>
+>
+> The register layout is not compatible with spmi regulators, I see some
+> differences w.r.t VOLTAGE_CTL, EN_CTL, MODE_CTL registers. Also, there
+> is no headroom related stuff in the spmi driver.
 
-This does not apply for me, I'm looking around and can't find any 
-reference to the first_pt_load variable you're removing there?  What 
-commit/tag are you applying this on top of?
+It sounds like minor differences and/or improvements to the existing
+SPMI regulator hardware.
+
+> >>           interrupt-parent = <&tlmm>;
+> >>           interrupts = <32 IRQ_TYPE_EDGE_RISING>;
+> > I still fail to see what this part of the diff has to do with
+> > regulators. Can it be split off to a different patch with a clear
+> > description of why interrupt-controller and #interrupt-cells is no
+> > longer required for qcom,pm8008?
+>
+>
+> This diff has nothing to do with regulators, I removed it to avoid yaml
+> errors during dtbs check.
+>
+> I'll move this to a separate patch.
+
+Ok, thanks!

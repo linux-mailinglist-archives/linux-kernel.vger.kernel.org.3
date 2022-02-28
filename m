@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546104C7608
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B024C76DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239198AbiB1R7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S241132AbiB1SJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239532AbiB1RxI (ORCPT
+        with ESMTP id S240742AbiB1SD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:53:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADC0A9A7F;
-        Mon, 28 Feb 2022 09:40:30 -0800 (PST)
+        Mon, 28 Feb 2022 13:03:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C534D2D1C0;
+        Mon, 28 Feb 2022 09:47:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4A261357;
-        Mon, 28 Feb 2022 17:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CE79C340F0;
-        Mon, 28 Feb 2022 17:40:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACA4DB815C8;
+        Mon, 28 Feb 2022 17:47:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1423EC340F0;
+        Mon, 28 Feb 2022 17:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070028;
-        bh=bUKPGIpJ7ZYzCycp1TO2WYIdsvUB9qr2ExzLIK6T5T8=;
+        s=korg; t=1646070445;
+        bh=yGsnh7E9L/fH8YmBeB2NY1p2xZReP1YIkd/qtKneqIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gHFffzAMFgubxv4Oe5Fw+uOgM8CHe95nQX+vlgi5nXYuLAKEnPs6TreJN17dgGdvp
-         fJ3Nw3WpTaq7016qlJ4Te8kslB6kPkDH5mttUbGTp8iNYBvfHjCFhZDYtSBURq5BeH
-         fOaJLuZggXxA2dHblQ6pxmp4IVHV6yMnClSxFPFs=
+        b=Zq6UhOJpjxJ8gS/17YyphxC7iHXJT0wbZJfJREUMsFRid+jzqA9ivoud2Vnov/S+c
+         jImkXKMKWfvbCrD5UfPzI+F/A23AaXQkCz3rULwnysXRwu1vXz5bEkoKozqOcZSTae
+         NlVPfIB2dvyHyID10g3WUS6nDT8ur5XM0VN81zOM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Nyekjaer <sean@geanix.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 100/139] iio: accel: fxls8962af: add padding to regmap for SPI
+        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.16 112/164] tracing: Dump stacktrace trigger to the corresponding instance
 Date:   Mon, 28 Feb 2022 18:24:34 +0100
-Message-Id: <20220228172358.181897599@linuxfoundation.org>
+Message-Id: <20220228172410.556772624@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Nyekjaer <sean@geanix.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-commit ccbed9d8d2a5351d8238f2d3f0741c9a3176f752 upstream.
+commit ce33c845b030c9cf768370c951bc699470b09fa7 upstream.
 
-Add missing don't care padding between address and
-data for SPI transfers
+The stacktrace event trigger is not dumping the stacktrace to the instance
+where it was enabled, but to the global "instance."
 
-Fixes: a3e0b51884ee ("iio: accel: add support for FXLS8962AF/FXLS8964AF accelerometers")
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Link: https://lore.kernel.org/r/20211220125144.3630539-1-sean@geanix.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Use the private_data, pointing to the trigger file, to figure out the
+corresponding trace instance, and use it in the trigger action, like
+snapshot_trigger does.
+
+Link: https://lkml.kernel.org/r/afbb0b4f18ba92c276865bc97204d438473f4ebc.1645396236.git.bristot@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Tested-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/fxls8962af-core.c |   12 ++++++++++--
- drivers/iio/accel/fxls8962af-i2c.c  |    2 +-
- drivers/iio/accel/fxls8962af-spi.c  |    2 +-
- drivers/iio/accel/fxls8962af.h      |    3 ++-
- 4 files changed, 14 insertions(+), 5 deletions(-)
+ kernel/trace/trace_events_trigger.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/iio/accel/fxls8962af-core.c
-+++ b/drivers/iio/accel/fxls8962af-core.c
-@@ -154,12 +154,20 @@ struct fxls8962af_data {
- 	u8 watermark;
- };
- 
--const struct regmap_config fxls8962af_regmap_conf = {
-+const struct regmap_config fxls8962af_i2c_regmap_conf = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
- 	.max_register = FXLS8962AF_MAX_REG,
- };
--EXPORT_SYMBOL_GPL(fxls8962af_regmap_conf);
-+EXPORT_SYMBOL_GPL(fxls8962af_i2c_regmap_conf);
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -1200,7 +1200,12 @@ stacktrace_trigger(struct event_trigger_
+ 		   struct trace_buffer *buffer,  void *rec,
+ 		   struct ring_buffer_event *event)
+ {
+-	trace_dump_stack(STACK_SKIP);
++	struct trace_event_file *file = data->private_data;
 +
-+const struct regmap_config fxls8962af_spi_regmap_conf = {
-+	.reg_bits = 8,
-+	.pad_bits = 8,
-+	.val_bits = 8,
-+	.max_register = FXLS8962AF_MAX_REG,
-+};
-+EXPORT_SYMBOL_GPL(fxls8962af_spi_regmap_conf);
++	if (file)
++		__trace_stack(file->tr, tracing_gen_ctx(), STACK_SKIP);
++	else
++		trace_dump_stack(STACK_SKIP);
+ }
  
- enum {
- 	fxls8962af_idx_x,
---- a/drivers/iio/accel/fxls8962af-i2c.c
-+++ b/drivers/iio/accel/fxls8962af-i2c.c
-@@ -18,7 +18,7 @@ static int fxls8962af_probe(struct i2c_c
- {
- 	struct regmap *regmap;
- 
--	regmap = devm_regmap_init_i2c(client, &fxls8962af_regmap_conf);
-+	regmap = devm_regmap_init_i2c(client, &fxls8962af_i2c_regmap_conf);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&client->dev, "Failed to initialize i2c regmap\n");
- 		return PTR_ERR(regmap);
---- a/drivers/iio/accel/fxls8962af-spi.c
-+++ b/drivers/iio/accel/fxls8962af-spi.c
-@@ -18,7 +18,7 @@ static int fxls8962af_probe(struct spi_d
- {
- 	struct regmap *regmap;
- 
--	regmap = devm_regmap_init_spi(spi, &fxls8962af_regmap_conf);
-+	regmap = devm_regmap_init_spi(spi, &fxls8962af_spi_regmap_conf);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&spi->dev, "Failed to initialize spi regmap\n");
- 		return PTR_ERR(regmap);
---- a/drivers/iio/accel/fxls8962af.h
-+++ b/drivers/iio/accel/fxls8962af.h
-@@ -17,6 +17,7 @@ int fxls8962af_core_probe(struct device
- int fxls8962af_core_remove(struct device *dev);
- 
- extern const struct dev_pm_ops fxls8962af_pm_ops;
--extern const struct regmap_config fxls8962af_regmap_conf;
-+extern const struct regmap_config fxls8962af_i2c_regmap_conf;
-+extern const struct regmap_config fxls8962af_spi_regmap_conf;
- 
- #endif				/* _FXLS8962AF_H_ */
+ static void
 
 

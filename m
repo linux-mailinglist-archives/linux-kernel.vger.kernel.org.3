@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA02B4C7456
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC074C7702
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbiB1RnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S235977AbiB1SLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiB1Rjb (ORCPT
+        with ESMTP id S240898AbiB1SEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:39:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05A91341;
-        Mon, 28 Feb 2022 09:34:09 -0800 (PST)
+        Mon, 28 Feb 2022 13:04:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E4C36318;
+        Mon, 28 Feb 2022 09:47:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38A20B815B8;
-        Mon, 28 Feb 2022 17:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924E3C340E7;
-        Mon, 28 Feb 2022 17:34:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00A2160B2B;
+        Mon, 28 Feb 2022 17:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1534AC340E7;
+        Mon, 28 Feb 2022 17:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069646;
-        bh=+l3jU0nvv1HAdt1l7oH7jBuox343EAywraz1n02pq30=;
+        s=korg; t=1646070464;
+        bh=urQX6y50ENfkDfckR2XgPPLuEaOQejttoMPgSiW3WW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ntvs8eFVBoMNXhP6oGQ3QWz7uHVUVDtt6CniZRzKh2E9HSHIvnasC89O0Tg/qA/rj
-         Jk19Ycx9Er5SXx00CWmtNL+PrCGG6DSiv2WJiWvYKRl8cHXkp6IrxFcYcuDX8tpV7n
-         nC2VWhD6y8wftdrfN/OG12J2Fw8fGnT9SfhoaAyo=
+        b=ZgonQewmRdY0puyaF+Ti7FIil1bBc6ezSrIkgfadryFcvqu7SxRovfPtLJ/vizAxx
+         D3Vq5c2rrpiCMBrMSsa6gUv7Y7Npmc0cEXPpHKCm88cLs6NbsVi+leQ5JN+bm6mz1u
+         3chJ2jf0YS8lzJDEYlnakTYifSWbbt2wEcJFD0wA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 41/80] udp_tunnel: Fix end of loop test in udp_tunnel_nic_unregister()
-Date:   Mon, 28 Feb 2022 18:24:22 +0100
-Message-Id: <20220228172316.511306586@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Savaton <guillaume@baierouge.fr>,
+        Samuel Holland <samuel@sholland.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 101/164] gpio: rockchip: Reset int_bothedge when changing trigger
+Date:   Mon, 28 Feb 2022 18:24:23 +0100
+Message-Id: <20220228172408.954586862@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Samuel Holland <samuel@sholland.org>
 
-commit de7b2efacf4e83954aed3f029d347dfc0b7a4f49 upstream.
+[ Upstream commit 7920af5c826cb4a7ada1ae26fdd317642805adc2 ]
 
-This test is checking if we exited the list via break or not.  However
-if it did not exit via a break then "node" does not point to a valid
-udp_tunnel_nic_shared_node struct.  It will work because of the way
-the structs are laid out it's the equivalent of
-"if (info->shared->udp_tunnel_nic_info != dev)" which will always be
-true, but it's not the right way to test.
+With v2 hardware, an IRQ can be configured to trigger on both edges via
+a bit in the int_bothedge register. Currently, the driver sets this bit
+when changing the trigger type to IRQ_TYPE_EDGE_BOTH, but fails to reset
+this bit if the trigger type is later changed to something else. This
+causes spurious IRQs, and when using gpio-keys with wakeup-event-action
+set to EV_ACT_(DE)ASSERTED, those IRQs translate into spurious wakeups.
 
-Fixes: 74cc6d182d03 ("udp_tunnel: add the ability to share port tables")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3bcbd1a85b68 ("gpio/rockchip: support next version gpio controller")
+Reported-by: Guillaume Savaton <guillaume@baierouge.fr>
+Tested-by: Guillaume Savaton <guillaume@baierouge.fr>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/udp_tunnel_nic.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-rockchip.c | 56 +++++++++++++++++++-----------------
+ 1 file changed, 29 insertions(+), 27 deletions(-)
 
---- a/net/ipv4/udp_tunnel_nic.c
-+++ b/net/ipv4/udp_tunnel_nic.c
-@@ -846,7 +846,7 @@ udp_tunnel_nic_unregister(struct net_dev
- 		list_for_each_entry(node, &info->shared->devices, list)
- 			if (node->dev == dev)
- 				break;
--		if (node->dev != dev)
-+		if (list_entry_is_head(node, &info->shared->devices, list))
- 			return;
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index ce63cbd14d69a..24155c038f6d0 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -410,10 +410,8 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
+ 	level = rockchip_gpio_readl(bank, bank->gpio_regs->int_type);
+ 	polarity = rockchip_gpio_readl(bank, bank->gpio_regs->int_polarity);
  
- 		list_del(&node->list);
+-	switch (type) {
+-	case IRQ_TYPE_EDGE_BOTH:
++	if (type == IRQ_TYPE_EDGE_BOTH) {
+ 		if (bank->gpio_type == GPIO_TYPE_V2) {
+-			bank->toggle_edge_mode &= ~mask;
+ 			rockchip_gpio_writel_bit(bank, d->hwirq, 1,
+ 						 bank->gpio_regs->int_bothedge);
+ 			goto out;
+@@ -431,30 +429,34 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
+ 			else
+ 				polarity |= mask;
+ 		}
+-		break;
+-	case IRQ_TYPE_EDGE_RISING:
+-		bank->toggle_edge_mode &= ~mask;
+-		level |= mask;
+-		polarity |= mask;
+-		break;
+-	case IRQ_TYPE_EDGE_FALLING:
+-		bank->toggle_edge_mode &= ~mask;
+-		level |= mask;
+-		polarity &= ~mask;
+-		break;
+-	case IRQ_TYPE_LEVEL_HIGH:
+-		bank->toggle_edge_mode &= ~mask;
+-		level &= ~mask;
+-		polarity |= mask;
+-		break;
+-	case IRQ_TYPE_LEVEL_LOW:
+-		bank->toggle_edge_mode &= ~mask;
+-		level &= ~mask;
+-		polarity &= ~mask;
+-		break;
+-	default:
+-		ret = -EINVAL;
+-		goto out;
++	} else {
++		if (bank->gpio_type == GPIO_TYPE_V2) {
++			rockchip_gpio_writel_bit(bank, d->hwirq, 0,
++						 bank->gpio_regs->int_bothedge);
++		} else {
++			bank->toggle_edge_mode &= ~mask;
++		}
++		switch (type) {
++		case IRQ_TYPE_EDGE_RISING:
++			level |= mask;
++			polarity |= mask;
++			break;
++		case IRQ_TYPE_EDGE_FALLING:
++			level |= mask;
++			polarity &= ~mask;
++			break;
++		case IRQ_TYPE_LEVEL_HIGH:
++			level &= ~mask;
++			polarity |= mask;
++			break;
++		case IRQ_TYPE_LEVEL_LOW:
++			level &= ~mask;
++			polarity &= ~mask;
++			break;
++		default:
++			ret = -EINVAL;
++			goto out;
++		}
+ 	}
+ 
+ 	rockchip_gpio_writel(bank, level, bank->gpio_regs->int_type);
+-- 
+2.34.1
+
 
 

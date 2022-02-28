@@ -2,142 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AC54C65A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355264C65AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 10:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbiB1J1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 04:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S234317AbiB1J32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 04:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiB1J1u (ORCPT
+        with ESMTP id S233521AbiB1J30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:27:50 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2080.outbound.protection.outlook.com [40.107.20.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948E169486;
-        Mon, 28 Feb 2022 01:27:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FWT2VEmsIwVPn3kGDhsp0IiRlXa/RP2FczB/6AO87DJexlZBNqEUSUFYvooQjPNKvs+he66NlNEPglVRmfDBnm4fdlWwm7l1VsM3GBHJCtKBfLs83drvkGm0dC4sbXQ9b2JMEhQnIMRCyXet7ycJ7NeZogMVot/HKFASPU7g/Aakua9CcXb0eNMmgZPC3Ufzv5ceJd9dW5TBaL68yARVxSy7NPLIeJCG1kOWvKIaF66JueXZkM9zya80AK5CPmRMvaww6q2qgvD6lblR3KkzZohCm4TAbLhWRiiJ18zz/xrXaiFbOKYMlvj1p6r2va8NTYKPryYZFrZ8wIwVuzEflw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eMV6WFrgZqQDyN+F++IThdZQKY2EFp+h/DtLAyPC89g=;
- b=QX3Kv6znkFtpZD3TtLwKts6xANZQbJYxxRH5Bbn8m5omGLZtfQsJ0Ho2+8ImLL99diYa5jvhBDr2mtf8DyMWmM6bGQE/JEdYGHZcgFFQAVI0ZwmrjRcmso6OIf2AU0o87wKzXbvMu/TvTuVaGwUonrf8z+/LaNGZoBuV3v8lLLOqkZOrOzpVpxK5xfz5n7SqiimJuK6eLoLvj2014p+xJjaFpwvDvv0lGntAmt6OujfkTUNYO2oB4VW8wQvcfofdoj2Ji8VsViSMCXgnmDzXRlRCv2/OQQDeTX4sF2M74wYxhmQbFSFRRA/P0NFcjDYGkJVfLA1Y8ofiTg2RGdSBxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eMV6WFrgZqQDyN+F++IThdZQKY2EFp+h/DtLAyPC89g=;
- b=JZH5xU1FfbC/gnCOdiiKV+LqkACApbUS3kQqPzjEHHHaEWMHpfctahSXAjVJhNPFqlHHklGO1CzbtVVVXp1aohN3BtLMIE83IYfIg97xe4Iej6tPVtr+Y8fGf6IQm5n+JOMxo+iSSzLvisZ9tiTxNW0RcHXE7/vql5xdTyEf1hc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM6PR04MB4182.eurprd04.prod.outlook.com (2603:10a6:209:44::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Mon, 28 Feb
- 2022 09:27:09 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::98a7:fbac:5cec:776e]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::98a7:fbac:5cec:776e%5]) with mapi id 15.20.5017.026; Mon, 28 Feb 2022
- 09:27:09 +0000
-Date:   Mon, 28 Feb 2022 11:27:06 +0200
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: fsl: scu: add imx8dxl scu clock support
-Message-ID: <YhyVanldAlwkqjsQ@abelvesa>
-References: <20220222082140.2073629-1-abel.vesa@nxp.com>
+        Mon, 28 Feb 2022 04:29:26 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09E7451324
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 01:28:46 -0800 (PST)
+Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
+        by 156.147.23.51 with ESMTP; 28 Feb 2022 18:28:44 +0900
+X-Original-SENDERIP: 156.147.1.121
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.121 with ESMTP; 28 Feb 2022 18:28:44 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Mon, 28 Feb 2022 18:28:26 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.com, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220228092826.GA5201@X58A-UD3R>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
+ <20220221190204.q675gtsb6qhylywa@quack3.lan>
+ <20220223003534.GA26277@X58A-UD3R>
+ <20220223144859.na2gjgl5efgw5zhn@quack3.lan>
+ <20220224011102.GA29726@X58A-UD3R>
+ <20220224102239.n7nzyyekuacgpnzg@quack3.lan>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222082140.2073629-1-abel.vesa@nxp.com>
-X-ClientProxiedBy: VI1PR0901CA0087.eurprd09.prod.outlook.com
- (2603:10a6:800:7e::13) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0069aa6-763c-4226-35a1-08d9fa9c7e3b
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4182:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR04MB41823806193BF2973900B050F6019@AM6PR04MB4182.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Uoq+tCK0QBtdS+IqRvMp38Z73u5XXNiOM9f+/2iq+DsyYuUUzXarr5azbJeLm3Jj7eOUwmMB9379hIcQkPVSLSkzubYs/cPoAPAv8v8BEN5xC6pWU0nHhh1AlS+oOYissSqA/nSSKGgmFNt/6i2PJiZOUR4XiygUTMTax6tJ5xVclTmv2Lm6j/6qHhvzJksam23S+CkINF2VTxducrsx3P0TD9fL+HiBCdplbwsR4NhcaqeS/99vXj102fJPPo3WR6JP9KH+ymCYe56Ci+RH8nqdsMhgaA3S8r0Gk6P9cK3EY07h6DEHnKW3Uj0v3NNOUcOhviUS4ak8biqe8m+IaUMh56a16sRbpO2x1Trp9gYGFqRYQYNFlajbrpSsp23dkCW8g8e7WJ0pljw5sCy++Y6lBvKtbEI143C9q79aHuaFgi4hhMb3IrHIq9I4kQKsox/0xMcV6AO/1tZpxFo84OCvpRVlPIueWl8O1PD4cGg76cEvItn8I4FPYIdbjWdglbzBRQMLkce8K/Bllp9fwxNBgVOUG71jTYzq4xJH5plJzrq/ZqCn18tacUGB0gbzM1CuxrngYT/biFZJkMVnadoxzxIUNMs8G4vJs8mVkb/OkWb8EIIl0SyLQCTD5pRZF3/BHftkVl4YA6aujfc6YAO/7ez85f95yZDtVYk2PhBpZhm2jsO0yMu9rBHiYleUFTG5BnrpdJSVavpjRPuXGXTEJID9jU7/WOeqjHUjQ1A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(4326008)(8676002)(66476007)(66556008)(66946007)(316002)(6636002)(4744005)(508600001)(6486002)(110136005)(54906003)(86362001)(38350700002)(38100700002)(9686003)(6506007)(6512007)(6666004)(26005)(186003)(52116002)(53546011)(44832011)(5660300002)(8936002)(33716001)(2906002)(83380400001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TybFPuY8YEhwXxmha8U50phRadiLvSeWuUchBD37t4Nt4FrLrOOva8LRiTe0?=
- =?us-ascii?Q?MKFzXq1mvYMHltInEBOw9jqr9nspmo9o46YIs02M3FYK1h4KB+dIKU2jjU1h?=
- =?us-ascii?Q?wPiZhrVAgro/M0IvYJg/xQ/znB0xlItEap6Ygp2IMonf4SL4h9+GTzkIpWJc?=
- =?us-ascii?Q?Es48YUg4bReTQS1Nop06R5nwhXMuwUSjXC7aMz+WAjQQB6/TAtWjPnTCEk6X?=
- =?us-ascii?Q?01YGy1+98ZdVrzvzycsMeo3bKhreu7a+VePILkPGVb4Hvl3++NouCbRmmYL1?=
- =?us-ascii?Q?LoKHUpvpbPJscvdQetuu2QaiJ6g8n4LBbrd1Q2A8V6PSetXW8V0uAYZhsf6P?=
- =?us-ascii?Q?qmn9FgF+mRpJRpqkzbIxU/ZWNiIosCsaO7MKKnqJmoutfZK25SzP4aIfFc0W?=
- =?us-ascii?Q?nDIN4v88KtFiE6CJqqbTrT2l66KhqUykcNChT0+rkV1KoQucfFEvVTUUMcd8?=
- =?us-ascii?Q?XI9Zkof+DA+rfJqkZj4q9FiNFx89aKpdO1wHfDKuJeOxJF7T1d9M09AnEcDl?=
- =?us-ascii?Q?q863pbPk0eB+YNOT9CNMK4+hn/K6+Xr7E8a02D8N/FjOrYfr2Q3SKL37nSil?=
- =?us-ascii?Q?GybG+WCz2AFE4RDa5F1O4Mi+Yr+mn3YjMqmjF8pKPRqKOKJ9K4+tZ5gNWadg?=
- =?us-ascii?Q?m3soVPHyGpSGNxXA1/YOPCN0eVFumtMgrbm9Ggmy2j3BcJsWTvfRG1DQLQFR?=
- =?us-ascii?Q?hpxr3yLm7zZecfG3WItL1aKhaXqyJLBMJDKCFDauk8MphPCzrgMDoBi3of+/?=
- =?us-ascii?Q?RzWzsCj2Rw6VsjjHIcOR+smKH/uJomOwUzqApscfL69lPTOECj/nogWjIZSv?=
- =?us-ascii?Q?XqGogNUmICiNIbrOFD5a9uEC4eT1J6j9TQmiRn5mylux/f4G1ubQ7GwIkye8?=
- =?us-ascii?Q?0HTxj5swvHC+5EL2X+692rtcx1/AbwffQbcKPwnSvdqb5eprY4buJR12HTRM?=
- =?us-ascii?Q?J16X6WnQ7fMeChc6UD7UO4ibHhp2azX5RS4y6Yu3tlFiHRW23TpIk/syvjXh?=
- =?us-ascii?Q?3vEmxgVJRBda/NgQYLpa8dYmoD3QONrCPr3oaAo2DYqp38NuyCp3sF6IB/cz?=
- =?us-ascii?Q?Z5tUuCq3WZ7HLxkL5ycJgCYpiLKJH+G6S6FGsH9kWJ0Oo1Fc5DDtbLGgKVHq?=
- =?us-ascii?Q?dmw71BSJbz9+ZXw6PNCK4qTKSiOesrS/A9EQyXsck4hoN1BMb3kox1vQI3s5?=
- =?us-ascii?Q?XlgjE1cg6oIH3hgUH8HjKBYcZC5FHHAipL/ZHQIiTKniaoz7H/W2ohAhQRLb?=
- =?us-ascii?Q?xSZ31KCGdIf/Dd+koNRn34ZWFF/yL1KtkGMKwD8pAkTNlzs+17OAMJCkodK1?=
- =?us-ascii?Q?I32YgHtRAXJmuhSP58Wjgz5ZwnfQZPyS9SoZf7ajQ0pjzRosemo4SirTsQji?=
- =?us-ascii?Q?1BGzg3iu2PSdC1DWMGX4bGW4MHTybI+Gz/mdqZkmRv5GYag004h6wgTgcMj/?=
- =?us-ascii?Q?EErZJSqGKGBeYm0Gsoh5h3RX4bNlCDIXXdyPH8d/1AqHHTWx0JczAiWYif+Q?=
- =?us-ascii?Q?0E+9CDfuOPBK7WjtSRkH3aUdoPH8alo0nqXckTu9nSMZVkPADBuyJ6dd8HVT?=
- =?us-ascii?Q?mLspuM17q4eIr4j/eAaEufEIxMUaBPhgzIRrER8hnc47e52c+T/ChBmJYEsb?=
- =?us-ascii?Q?YVqzoCARtNW2/aEcdkAk78w=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0069aa6-763c-4226-35a1-08d9fa9c7e3b
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 09:27:09.1162
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Kg5Ag84QIZdzbW/tOR8/EJfi5eFcGFeuRy2qr2CU4gVmQ84JpSPQ98ETftyzBqTvxzcUu+Ko4KGqpy+DnI9K4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4182
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220224102239.n7nzyyekuacgpnzg@quack3.lan>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-02-22 10:21:40, Abel Vesa wrote:
-> Add imx8dxl scu clock support.
+On Thu, Feb 24, 2022 at 11:22:39AM +0100, Jan Kara wrote:
+> On Thu 24-02-22 10:11:02, Byungchul Park wrote:
+> > On Wed, Feb 23, 2022 at 03:48:59PM +0100, Jan Kara wrote:
+> > > > KJOURNALD2(kthread)	TASK1(ksys_write)	TASK2(ksys_write)
+> > > > 
+> > > > wait A
+> > > > --- stuck
+> > > > 			wait B
+> > > > 			--- stuck
+> > > > 						wait C
+> > > > 						--- stuck
+> > > > 
+> > > > wake up B		wake up C		wake up A
+> > > > 
+> > > > where:
+> > > > A is a wait_queue, j_wait_commit
+> > > > B is a wait_queue, j_wait_transaction_locked
+> > > > C is a rwsem, mapping.invalidate_lock
+> > > 
+> > > I see. But a situation like this is not necessarily a guarantee of a
+> > > deadlock, is it? I mean there can be task D that will eventually call say
+> > > 'wake up B' and unblock everything and this is how things were designed to
+> > > work? Multiple sources of wakeups are quite common I'd say... What does
+> > 
+> > Yes. At the very beginning when I desgined Dept, I was thinking whether
+> > to support multiple wakeup sources or not for a quite long time.
+> > Supporting it would be a better option to aovid non-critical reports.
+> > However, I thought anyway we'd better fix it - not urgent tho - if
+> > there's any single circle dependency. That's why I decided not to
+> > support it for now and wanted to gather the kernel guys' opinions. Thing
+> > is which policy we should go with.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> I see. So supporting only a single wakeup source is fine for locks I guess.
+> But for general wait queues or other synchronization mechanisms, I'm afraid
+> it will lead to quite some false positive reports. Just my 2c.
 
-Applied.
+Thank you for your feedback.
 
-> ---
->  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 1 +
->  1 file changed, 1 insertion(+)
+I realized we've been using "false positive" differently. There exist
+the three types of code in terms of dependency and deadlock. It's worth
+noting that dependencies are built from between waits and events in Dept.
+
+---
+
+case 1. Code with an actual circular dependency, but not deadlock.
+
+   A circular dependency can be broken by a rescue wakeup source e.g.
+   timeout. It's not a deadlock. If it's okay that the contexts
+   participating in the circular dependency and others waiting for the
+   events in the circle are stuck until it gets broken. Otherwise, say,
+   if it's not meant, then it's anyway problematic.
+
+   1-1. What if we judge this code is problematic?
+   1-2. What if we judge this code is good?
+
+case 2. Code with an actual circular dependency, and deadlock.
+
+   There's no other wakeup source than those within the circular
+   dependency. Literally deadlock. It's problematic and critical.
+
+   2-1. What if we judge this code is problematic?
+   2-2. What if we judge this code is good?
+
+case 3. Code with no actual circular dependency, and not deadlock.
+
+   Must be good.
+
+   3-1. What if we judge this code is problematic?
+   3-2. What if we judge this code is good?
+
+---
+
+I call only 3-1 "false positive" circular dependency. And you call 1-1
+and 3-1 "false positive" deadlock.
+
+I've been wondering if the kernel guys esp. Linus considers code with
+any circular dependency is problematic or not, even if it won't lead to
+a deadlock, say, case 1. Even though I designed Dept based on what I
+believe is right, of course, I'm willing to change the design according
+to the majority opinion.
+
+However, I would never allow case 1 if I were the owner of the kernel
+for better stability, even though the code works anyway okay for now.
+
+Thanks,
+Byungchul
+
+> > > Dept do to prevent false reports in cases like this?
+> > > 
+> > > > The above is the simplest form. And it's worth noting that Dept focuses
+> > > > on wait and event itself rather than grabing and releasing things like
+> > > > lock. The following is the more descriptive form of it.
+> > > > 
+> > > > KJOURNALD2(kthread)	TASK1(ksys_write)	TASK2(ksys_write)
+> > > > 
+> > > > wait @j_wait_commit
+> > > > 			ext4_truncate_failed_write()
+> > > > 			   down_write(mapping.invalidate_lock)
+> > > > 
+> > > > 			   ext4_truncate()
+> > > > 			      ...
+> > > > 			      wait @j_wait_transaction_locked
+> > > > 
+> > > > 						ext_truncate_failed_write()
+> > > > 						   down_write(mapping.invalidate_lock)
+> > > > 
+> > > > 						ext4_should_retry_alloc()
+> > > > 						   ...
+> > > > 						   __jbd2_log_start_commit()
+> > > > 						      wake_up(j_wait_commit)
+> > > > jbd2_journal_commit_transaction()
+> > > >    wake_up(j_wait_transaction_locked)
+> > > > 			   up_write(mapping.invalidate_lock)
+> > > > 
+> > > > I hope this would help you understand the report.
+> > > 
+> > > I see, thanks for explanation! So the above scenario is impossible because
+> > 
+> > My pleasure.
+> > 
+> > > for anyone to block on @j_wait_transaction_locked the transaction must be
+> > > committing, which is done only by kjournald2 kthread and so that thread
+> > > cannot be waiting at @j_wait_commit. Essentially blocking on
+> > > @j_wait_transaction_locked means @j_wait_commit wakeup was already done.
+> > 
+> > kjournal2 repeatedly does the wait and the wake_up so the above scenario
+> > looks possible to me even based on what you explained. Maybe I should
+> > understand how the journal things work more for furhter discussion. Your
+> > explanation is so helpful. Thank you really.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> index fd0061712443..a87ec15e28d2 100644
-> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> @@ -86,6 +86,7 @@ This binding uses the common clock binding[1].
->  
->  Required properties:
->  - compatible:		Should be one of:
-> +			  "fsl,imx8dxl-clk"
->  			  "fsl,imx8qm-clk"
->  			  "fsl,imx8qxp-clk"
->  			followed by "fsl,scu-clk"
+> OK, let me provide you with more details for better understanding :) In
+> jbd2 we have an object called 'transaction'. This object can go through
+> many states but for our case is important that transaction is moved to
+> T_LOCKED state and out of it only while jbd2_journal_commit_transaction()
+> function is executing and waiting on j_wait_transaction_locked waitqueue is
+> exactly waiting for a transaction to get out of T_LOCKED state. Function
+> jbd2_journal_commit_transaction() is executed only by kjournald. Hence
+> anyone can see transaction in T_LOCKED state only if kjournald is running
+> inside jbd2_journal_commit_transaction() and thus kjournald cannot be
+> sleeping on j_wait_commit at the same time. Does this explain things?
+> 
+> 								Honza
 > -- 
-> 2.34.1
->
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR

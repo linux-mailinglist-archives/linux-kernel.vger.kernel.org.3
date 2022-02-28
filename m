@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03C44C72F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345B74C76BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236601AbiB1Rar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S239939AbiB1SGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235435AbiB1R2j (ORCPT
+        with ESMTP id S239453AbiB1SB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:28:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB193B02B;
-        Mon, 28 Feb 2022 09:27:37 -0800 (PST)
+        Mon, 28 Feb 2022 13:01:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFDF9BAD5;
+        Mon, 28 Feb 2022 09:45:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A97A8B815A6;
-        Mon, 28 Feb 2022 17:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1929AC340E7;
-        Mon, 28 Feb 2022 17:27:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 859CFB81085;
+        Mon, 28 Feb 2022 17:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA73DC340E7;
+        Mon, 28 Feb 2022 17:45:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069255;
-        bh=uCf5VClaTonT7lthVLCsmwBH7Qo4lWojiStxWKTV/ec=;
+        s=korg; t=1646070347;
+        bh=uW5lP9Jlu1qgQDuB/8Sam5qo0Jjx9pzRygNq0AAbrZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=maWbgBkD8SoRusayClalpTCSmv/EbLcSaEjNF7KrsWKIAl3MitILEvXt0Fx7WGnxR
-         GJtg74Stc0lrJL5P8PaNJlughuPeMFJvjipTWHc9df5mSc94vY5f7AcMeho5AMQDLw
-         bUTuPQcC6uujxvkM58pkCKpaP5Px1PMKj6qdSSpw=
+        b=Z6+2wbufnX6eyk9EwLnUUJAKfOC4jPqw/9goBY9pBMY/H1MHzEdLQF6Qz0iPAdwe5
+         roFVmMm/7RlXXTdJIA2zLs/LAH8n5bpxHesXOw1a2pC87IfwTQuVinXnDWxLs4rUt9
+         RA8jlboUMcfGeZ36WgoCwGPtxK4p+ff0gI+aumxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Subject: [PATCH 4.14 02/31] vhost/vsock: dont check owner in vhost_vsock_stop() while releasing
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 076/164] drm/amd/display: For vblank_disable_immediate, check PSR is really used
 Date:   Mon, 28 Feb 2022 18:23:58 +0100
-Message-Id: <20220228172200.075505247@linuxfoundation.org>
+Message-Id: <20220228172406.930512356@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-References: <20220228172159.515152296@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Michel Dänzer <mdaenzer@redhat.com>
 
-commit a58da53ffd70294ebea8ecd0eb45fd0d74add9f9 upstream.
+commit 4d22336f903930eb94588b939c310743a3640276 upstream.
 
-vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
-ownership. It expects current->mm to be valid.
+Even if PSR is allowed for a present GPU, there might be no eDP link
+which supports PSR.
 
-vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
-the user has not done close(), so when we are in do_exit(). In this
-case current->mm is invalid and we're releasing the device, so we
-should clean it anyway.
-
-Let's check the owner only when vhost_vsock_stop() is called
-by an ioctl.
-
-When invoked from release we can not fail so we don't check return
-code of vhost_vsock_stop(). We need to stop vsock even if it's not
-the owner.
-
-Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 708978487304 ("drm/amdgpu/display: Only set vblank_disable_immediate when PSR is not enabled")
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Michel Dänzer <mdaenzer@redhat.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vsock.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -569,16 +569,18 @@ err:
- 	return ret;
- }
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -4232,6 +4232,9 @@ static int amdgpu_dm_initialize_drm_devi
+ 	}
+ #endif
  
--static int vhost_vsock_stop(struct vhost_vsock *vsock)
-+static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
- {
- 	size_t i;
--	int ret;
-+	int ret = 0;
++	/* Disable vblank IRQs aggressively for power-saving. */
++	adev_to_drm(adev)->vblank_disable_immediate = true;
++
+ 	/* loops over all connectors on the board */
+ 	for (i = 0; i < link_cnt; i++) {
+ 		struct dc_link *link = NULL;
+@@ -4277,19 +4280,17 @@ static int amdgpu_dm_initialize_drm_devi
+ 				update_connector_ext_caps(aconnector);
+ 			if (psr_feature_enabled)
+ 				amdgpu_dm_set_psr_caps(link);
++
++			/* TODO: Fix vblank control helpers to delay PSR entry to allow this when
++			 * PSR is also supported.
++			 */
++			if (link->psr_settings.psr_feature_enabled)
++				adev_to_drm(adev)->vblank_disable_immediate = false;
+ 		}
  
- 	mutex_lock(&vsock->dev.mutex);
  
--	ret = vhost_dev_check_owner(&vsock->dev);
--	if (ret)
--		goto err;
-+	if (check_owner) {
-+		ret = vhost_dev_check_owner(&vsock->dev);
-+		if (ret)
-+			goto err;
-+	}
+ 	}
  
- 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
- 		struct vhost_virtqueue *vq = &vsock->vqs[i];
-@@ -692,7 +694,12 @@ static int vhost_vsock_dev_release(struc
- 	 * inefficient.  Room for improvement here. */
- 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
- 
--	vhost_vsock_stop(vsock);
-+	/* Don't check the owner, because we are in the release path, so we
-+	 * need to stop the vsock device in any case.
-+	 * vhost_vsock_stop() can not fail in this case, so we don't need to
-+	 * check the return code.
-+	 */
-+	vhost_vsock_stop(vsock, false);
- 	vhost_vsock_flush(vsock);
- 	vhost_dev_stop(&vsock->dev);
- 
-@@ -790,7 +797,7 @@ static long vhost_vsock_dev_ioctl(struct
- 		if (start)
- 			return vhost_vsock_start(vsock);
- 		else
--			return vhost_vsock_stop(vsock);
-+			return vhost_vsock_stop(vsock, true);
- 	case VHOST_GET_FEATURES:
- 		features = VHOST_VSOCK_FEATURES;
- 		if (copy_to_user(argp, &features, sizeof(features)))
+-	/*
+-	 * Disable vblank IRQs aggressively for power-saving.
+-	 *
+-	 * TODO: Fix vblank control helpers to delay PSR entry to allow this when PSR
+-	 * is also supported.
+-	 */
+-	adev_to_drm(adev)->vblank_disable_immediate = !psr_feature_enabled;
+-
+ 	/* Software is initialized. Now we can register interrupt handlers. */
+ 	switch (adev->asic_type) {
+ #if defined(CONFIG_DRM_AMD_DC_SI)
 
 

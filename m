@@ -2,84 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D914C6428
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725834C6429
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 08:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiB1H5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 02:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        id S233769AbiB1H5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 02:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiB1H5a (ORCPT
+        with ESMTP id S233763AbiB1H5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:57:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73E004614D
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:56:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646035011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WpShLimVwkmYIyb4Sx/D5oN6uinq/tsyvea/tNkwado=;
-        b=hmqirtYdBVRLZK6hL66wYov+HGdAECXRI0i0nicYCNm7VNExW2+ILAfWH/JVOEXm4o1Tl8
-        WoXCpB/LOSSWL+2wB7gMfBAjlbDscl+sKrUCn8AXxUcqZ/1Kn7VQdaJLz4WnYJo6lgMPmH
-        /kY2dqWymVJFAr4e6l1dA86Jz3ZTsRU=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-bBqigvgqP6uNghWaKbW4PA-1; Mon, 28 Feb 2022 02:56:48 -0500
-X-MC-Unique: bBqigvgqP6uNghWaKbW4PA-1
-Received: by mail-lj1-f198.google.com with SMTP id x8-20020a2ea7c8000000b00246215e0fc3so5321235ljp.8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:56:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WpShLimVwkmYIyb4Sx/D5oN6uinq/tsyvea/tNkwado=;
-        b=Q1aP5BkXvUwT7fHmxlHgTw1L7kibYYlvttOss81Ovr8IlaRmLsNq3jzNqQCV/STcat
-         0oEzE3/SqkIeNOCXIBXaf6JCC0SodQNv3bMM6pMDoH23NKBo7w7MSfaAkRVzrssKcrYo
-         66xDuf9pL5XXGTpLnNDj+s7U7nCQOVXqK4ugGPEMyke96Hccka7iIGL4iYIiXyjaIPdN
-         1sRnnWBh8Gst6QPnnJiZT1xyAxmp9gBcLmK1/zLe4foLOkQy/0b9J+rhKqZ1WxLC9TOi
-         bjQNd4I4wUTGHaLfQJSiwIPxRPu6qSYeG21s8EiDOcARHzZk5UScznQun0uDGE+657Vd
-         HpeA==
-X-Gm-Message-State: AOAM532wZ3hC803PBAfNE9dxGIM73qW+ZNGskLbEP+oYXdTKO0gwlRPz
-        o9pDNY49qLWmrmyDQTVJStGji8nCem6CyvNlGOZDNn9ihB7sjx4+lORK4nPsJ0W/11V0O7IOobu
-        aHZ2M3E5iFaEBoFvllinJSl7g/J9sKoYd3TvFyXdH
-X-Received: by 2002:a05:6512:3d08:b0:43f:8f45:d670 with SMTP id d8-20020a0565123d0800b0043f8f45d670mr12347887lfv.587.1646035007125;
-        Sun, 27 Feb 2022 23:56:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzfhHYpKm5FgVHu1Kj0ut0Y1DimEmo470n7GHsQ68BLqiZLCnk3GS34aG6ImJhNzneAlmJSl+Y11Q6OzZguBG8=
-X-Received: by 2002:a05:6512:3d08:b0:43f:8f45:d670 with SMTP id
- d8-20020a0565123d0800b0043f8f45d670mr12347870lfv.587.1646035006582; Sun, 27
- Feb 2022 23:56:46 -0800 (PST)
+        Mon, 28 Feb 2022 02:57:33 -0500
+Received: from mail.sysgo.com (mail.sysgo.com [IPv6:2a01:4f8:150:204a::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE03868FB5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 23:56:54 -0800 (PST)
+Message-ID: <4d02e8f6-2809-110d-408d-b379f9c9390c@sysgo.com>
+Date:   Mon, 28 Feb 2022 08:56:49 +0100
 MIME-Version: 1.0
-References: <20220224103852.311369-1-baymaxhuang@gmail.com>
- <20220225090223.636877-1-baymaxhuang@gmail.com> <c687e1d8-e36a-8f23-342a-22b2a1efb372@gmail.com>
- <CACGkMEtTdvbc1rk6sk=KE7J2L0=R2M-FMxK+DfJDUYMTPbPJGA@mail.gmail.com>
- <CANn89iKLhhwGnmEyfZuEKjtt7OwTbVyDYcFUMDYoRpdXjbMwiA@mail.gmail.com>
- <CACGkMEuWLQ6fGXiew_1WGuLYsxEkT+vFequHpZW1KvH=3wcF-w@mail.gmail.com> <CAHJXk3ahNPvniu8MKa2PNqin7ZxwRgrr7TbTftnpxMapxAtvNQ@mail.gmail.com>
-In-Reply-To: <CAHJXk3ahNPvniu8MKa2PNqin7ZxwRgrr7TbTftnpxMapxAtvNQ@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 28 Feb 2022 15:56:35 +0800
-Message-ID: <CACGkMEt_L8-4JasP3dNTEV7mafXc+W0vkr35cAUohz48-ND42g@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] tun: support NAPI for packets received from
- batched XDP buffs
-To:     Harold Huang <baymaxhuang@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Subject: Re: [PATCH] arm64: signal: nofpsimd: Do not allocate fp/simd context
+ when not available
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        mark.rutland@arm.com, elver@google.com, ebiederm@xmission.com,
+        seanjc@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220225104008.820289-1-david.engraf@sysgo.com>
+ <YhkYbhxA8+IQxVcb@sirena.org.uk>
+From:   David Engraf <david.engraf@sysgo.com>
+In-Reply-To: <YhkYbhxA8+IQxVcb@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +41,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 3:27 PM Harold Huang <baymaxhuang@gmail.com> wrote:
->
-> Thanks for the suggestions.
->
-> On Mon, Feb 28, 2022 at 1:17 PM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Mon, Feb 28, 2022 at 12:59 PM Eric Dumazet <edumazet@google.com> wrote:
-> > >
-> > >
-> > >
-> > > On Sun, Feb 27, 2022 at 8:20 PM Jason Wang <jasowang@redhat.com> wrote:
-> > >>
-> > >> On Mon, Feb 28, 2022 at 12:06 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
-> > >>
-> > >> > How big n can be ?
-> > >> >
-> > >> > BTW I could not find where m->msg_controllen was checked in tun_sendmsg().
-> > >> >
-> > >> > struct tun_msg_ctl *ctl = m->msg_control;
-> > >> >
-> > >> > if (ctl && (ctl->type == TUN_MSG_PTR)) {
-> > >> >
-> > >> >      int n = ctl->num;  // can be set to values in [0..65535]
-> > >> >
-> > >> >      for (i = 0; i < n; i++) {
-> > >> >
-> > >> >          xdp = &((struct xdp_buff *)ctl->ptr)[i];
-> > >> >
-> > >> >
-> > >> > I really do not understand how we prevent malicious user space from
-> > >> > crashing the kernel.
-> > >>
-> > >> It looks to me the only user for this is vhost-net which limits it to
-> > >> 64, userspace can't use sendmsg() directly on tap.
-> > >>
-> > >
-> > > Ah right, thanks for the clarification.
-> > >
-> > > (IMO, either remove the "msg.msg_controllen = sizeof(ctl);" from handle_tx_zerocopy(), or add sanity checks in tun_sendmsg())
-> > >
-> > >
-> >
-> > Right, Harold, want to do that?
->
-> I am greatly willing to do that. But  I am not quite sure about this.
->
-> If we remove the "msg.msg_controllen = sizeof(ctl);" from
-> handle_tx_zerocopy(), it seems msg.msg_controllen is always 0. What
-> does it stands for?
+On 25.02.22 18:57, Mark Brown wrote:
+> On Fri, Feb 25, 2022 at 11:40:08AM +0100, David Engraf wrote:
+>> Commit 6d502b6ba1b2 ("arm64: signal: nofpsimd: Handle fp/simd context for
+>> signal frames") introduced saving the fp/simd context for signal handling
+>> only when support is available. But setup_sigframe_layout() always
+>> reserves memory for fp/simd context. The additional memory is not touched
+>> because preserve_fpsimd_context() is not called and thus the magic is
+>> invalid.
+>>
+>> This may lead to an error when parse_user_sigframe() checks the fp/simd
+>> area and does not find a valid magic number.
+> 
+> How did you spot this - do you have a system that can reproduce this?
+> It'd be good to have coverage if there's testing but there's no easily
+> obtainable userspace that I'm aware of.
 
-It means msg_controllen is not used. But see below (adding sanity
-check seems to be better).
+I'm using a hypervisor which reports no fp/simd support. The user space 
+was a busybox with init and shell. The shell gets a SIGSEGV because 
+parse_user_sigframe() returns -EINVAL (bad magic).
 
->
-> I see tap_sendmsg in drivers/net/tap.c also uses msg_controller to
-> send batched xdp buffers. Do we need to add similar sanity checks to
-> tap_sendmsg  as tun_sendmsg?
->
+user->sigframe in get_sigframe() uses the user stack pointer and the 
+area was not zeroed. Thus the magic at fpsimd_offset is invalid.
 
-I think the point is to make sure the caller doesn't send us too short
-msg_control. E.g the msg_controllen should be sizeof(tun_msg_ctl).
-
-So we probably need to check in both places. (And initialize
-msg_controllen is vhost_tx_batch())
-
-Thanks
-
+Best regards
+- David

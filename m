@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08B54C6A93
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452294C6A92
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbiB1LfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S235851AbiB1Lea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiB1Le5 (ORCPT
+        with ESMTP id S235445AbiB1Le1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:34:57 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304A42EFE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:34:18 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21S94Zq0026184;
-        Mon, 28 Feb 2022 05:34:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=S6VCir7jm3q0cll/4S/bnJ/UG0+NhIM5qnTgg96Qo9c=;
- b=B0M8L6iA7FaWOI/McUkx+liiX8uATngvbqJ3GwwIQLjaW+vUVoHbFYMX+K3wK9HDpx9D
- eVlb/+s647FDxCQEPRs6hQWJOiEdM8JFhPkkylAJ/EmQRtAk3oGqVeC0UjBxssZKp6y4
- c5sk5/yCUV+EF9+otISApzHJCmKRzbMW4fNtGrmubCEna2uwnWO+1V8Lza3y6d/go7y5
- VTOFE9IGDxvZj6XelIeVbcXtw+r/VUZjFfX54NrUDOrQMLdbys/GGGbidxw7jNCRY5R9
- mobU4LXBL+lQMa7oZ3UAiEyw2SOj30Dq55hCGSFUyah1JG+uHdAe3g66DXgs9njF35hA kw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3efhgsa587-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 28 Feb 2022 05:34:15 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 28 Feb
- 2022 11:34:13 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Mon, 28 Feb 2022 11:34:13 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 93653B06;
-        Mon, 28 Feb 2022 11:34:13 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 11:34:13 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-CC:     Lee Jones <lee.jones@linaro.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mfd: arizona-spi: Split Windows ACPI init code into
- its own function
-Message-ID: <20220228113413.GI38351@ediswmail.ad.cirrus.com>
-References: <20220223134222.730886-1-hdegoede@redhat.com>
+        Mon, 28 Feb 2022 06:34:27 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743F3B3F3;
+        Mon, 28 Feb 2022 03:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646048029; x=1677584029;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ySEF5DlzjPALe7nOecQb25EocfAPubPKoB3jY4hZ7cw=;
+  b=g095o77BwvrY6TB2RrlHXbo5nElUvM6N9iX5bK+tt6XKw5cLkqKF1W2Z
+   w7OJL/d3BZ9u39EVGQS1HzOSO6g0yAm++d/rjnN3/8mug6De7JWbKZTq8
+   tolJvoNSsZDllCREHmK0CTKyhRRQCuwzmajG5s99EX2Xe0gLW61K+T4Pv
+   gyNc6fjN0Uz8/dbXcnWEj4TinyRw1rtajk1oSsCb0w0Cb2pYZif3+CDS/
+   0gRRAaZO1QpyKPcHz9v0dI95OkrHwh/9/5HTjrXnVK5IY1l5WwW5dVRN9
+   M8B5/odei4g52Uh85z547CG8QewwWqWQyctEj1kBfiKqzM+0KfwtltY+r
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="236367620"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="236367620"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 03:33:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="575286580"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 03:33:04 -0800
+Subject: Re: [PATCH 1/2 v2] xhci: fix garbage USBSTS being logged in some
+ cases
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
+ <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <01054a96-22d1-b72e-1166-fcbd5c2f489b@linux.intel.com>
+Date:   Mon, 28 Feb 2022 13:34:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220223134222.730886-1-hdegoede@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: SDrrRuWcxLDQ178bc1tBPyagi4z6VqXe
-X-Proofpoint-ORIG-GUID: SDrrRuWcxLDQ178bc1tBPyagi4z6VqXe
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 02:42:21PM +0100, Hans de Goede wrote:
-> x86/ACPI boards with an arizona WM5102 codec ship with either Windows or
-> Android as factory installed OS.
+On 25.2.2022 12.26, Anssi Hannula wrote:
+> xhci_decode_usbsts() is expected to return a zero-terminated string by
+> its only caller, xhci_stop_endpoint_command_watchdog(), which directly
+> logs the return value:
 > 
-> The ACPI fwnode describing the codec differs depending on the factory OS,
-> and the current arizona_spi_acpi_probe() function is tailored for use
-> with the Windows board ACPI tables.
+>   xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
 > 
-> Split out the Windows board ACPI tables specific bits into a new
-> arizona_spi_acpi_windows_probe() function in preparation for also
-> adding support for the Android board ACPI tables.
+> However, if no recognized bits are set in usbsts, the function will
+> return without having called any sprintf() and therefore return an
+> untouched non-zero-terminated caller-provided buffer, causing garbage
+> to be output to log.
 > 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Fix that by always including the raw value in the output.
+> 
+> Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
+> in xhci tracing") the result effect in the failure case was different as
+> a static buffer was used here, but the code still worked incorrectly.
+> 
+> Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
+> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
 > ---
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Thanks. Adding both 1/2 v2 and 2/2
 
-Thanks,
-Charles
+-Mathias

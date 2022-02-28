@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BA54C763D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08FF4C76B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbiB1SBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S239862AbiB1SGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240758AbiB1Rye (ORCPT
+        with ESMTP id S239394AbiB1R7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:54:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9515133A;
-        Mon, 28 Feb 2022 09:43:06 -0800 (PST)
+        Mon, 28 Feb 2022 12:59:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA08A6CA;
+        Mon, 28 Feb 2022 09:45:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 797DFB815AB;
-        Mon, 28 Feb 2022 17:43:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F9BC340E7;
-        Mon, 28 Feb 2022 17:43:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48967B81187;
+        Mon, 28 Feb 2022 17:45:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C004C340E7;
+        Mon, 28 Feb 2022 17:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646070184;
-        bh=14EMimUpj5GZ9KgacRO25ktm5uKqvBSC3sszDYK6NcA=;
+        s=korg; t=1646070316;
+        bh=H4bCPBLG7fxRFwWOWxzj2fIKxJazT6R4qsz8GJmb+dM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdsQIiZtID+G9RdvBtEXDj30u5CcGNwv2GcHVcYuUxujdlMVCEsGVK7ajGohO96bc
-         4/vPEQ23MpjNoWTreJUQ07UbgslWC2bYEl+csW0snP3rV+2ISTh8c6Xh4Nbad+IlrW
-         kSoJnLE0cAvvkHhzAI9zA7sIYlN2gcs4voSOj39o=
+        b=lb4sSgQUePDMlFCeBIgJo7eujLZPo0ig1hLaL9U/CdzxKi/4OB5Z3K+4so5WmOs1D
+         er6qbYKGEXJfKrmGxg9OxOvqabdixP6Kc2p71ETOx5/QDyeMZchZwL+CeoRy2NL5KL
+         2yRrd1i21yQLI4ynsee4fUwPGX65QNhtaAkJ2Wxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.16 017/164] drm/amd/display: Protect update_bw_bounding_box FPU code.
-Date:   Mon, 28 Feb 2022 18:22:59 +0100
-Message-Id: <20220228172401.489267046@linuxfoundation.org>
+Subject: [PATCH 5.16 018/164] drm/amd/pm: fix some OEM SKU specific stability issues
+Date:   Mon, 28 Feb 2022 18:23:00 +0100
+Message-Id: <20220228172401.592173123@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
 References: <20220228172359.567256961@linuxfoundation.org>
@@ -55,53 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+From: Evan Quan <evan.quan@amd.com>
 
-commit 1432108d00e42ffa383240bcac8d58f89ae19104 upstream.
+commit e3f3824874da78db5775a5cb9c0970cd1c6978bc upstream.
 
-For DCN3/3.01/3.02 at least these use the fpu.
+Add a quirk in sienna_cichlid_ppt.c to fix some OEM SKU
+specific stability issues.
 
-v2: squash in build fix for when DCN is not enabled (Leo)
-
-Signed-off-by: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+Signed-off-by: Evan Quan <evan.quan@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c |    2 ++
- drivers/gpu/drm/amd/display/dc/core/dc.c                     |    7 +++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c |   32 +++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-@@ -437,8 +437,10 @@ static void dcn3_get_memclk_states_from_
- 	clk_mgr_base->bw_params->clk_table.num_entries = num_levels ? num_levels : 1;
- 
- 	/* Refresh bounding box */
-+	DC_FP_START();
- 	clk_mgr_base->ctx->dc->res_pool->funcs->update_bw_bounding_box(
- 			clk_mgr->base.ctx->dc, clk_mgr_base->bw_params);
-+	DC_FP_END();
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
+@@ -418,6 +418,36 @@ static int sienna_cichlid_store_powerpla
+ 	return 0;
  }
  
- static bool dcn3_is_smu_present(struct clk_mgr *clk_mgr_base)
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -999,10 +999,13 @@ static bool dc_construct(struct dc *dc,
- 		goto fail;
- #ifdef CONFIG_DRM_AMD_DC_DCN
- 	dc->clk_mgr->force_smu_not_present = init_params->force_smu_not_present;
--#endif
- 
--	if (dc->res_pool->funcs->update_bw_bounding_box)
-+	if (dc->res_pool->funcs->update_bw_bounding_box) {
-+		DC_FP_START();
- 		dc->res_pool->funcs->update_bw_bounding_box(dc, dc->clk_mgr->bw_params);
-+		DC_FP_END();
++static int sienna_cichlid_patch_pptable_quirk(struct smu_context *smu)
++{
++	struct amdgpu_device *adev = smu->adev;
++	uint32_t *board_reserved;
++	uint16_t *freq_table_gfx;
++	uint32_t i;
++
++	/* Fix some OEM SKU specific stability issues */
++	GET_PPTABLE_MEMBER(BoardReserved, &board_reserved);
++	if ((adev->pdev->device == 0x73DF) &&
++	    (adev->pdev->revision == 0XC3) &&
++	    (adev->pdev->subsystem_device == 0x16C2) &&
++	    (adev->pdev->subsystem_vendor == 0x1043))
++		board_reserved[0] = 1387;
++
++	GET_PPTABLE_MEMBER(FreqTableGfx, &freq_table_gfx);
++	if ((adev->pdev->device == 0x73DF) &&
++	    (adev->pdev->revision == 0XC3) &&
++	    ((adev->pdev->subsystem_device == 0x16C2) ||
++	    (adev->pdev->subsystem_device == 0x133C)) &&
++	    (adev->pdev->subsystem_vendor == 0x1043)) {
++		for (i = 0; i < NUM_GFXCLK_DPM_LEVELS; i++) {
++			if (freq_table_gfx[i] > 2500)
++				freq_table_gfx[i] = 2500;
++		}
 +	}
-+#endif
++
++	return 0;
++}
++
+ static int sienna_cichlid_setup_pptable(struct smu_context *smu)
+ {
+ 	int ret = 0;
+@@ -438,7 +468,7 @@ static int sienna_cichlid_setup_pptable(
+ 	if (ret)
+ 		return ret;
  
- 	/* Creation of current_state must occur after dc->dml
- 	 * is initialized in dc_create_resource_pool because
+-	return ret;
++	return sienna_cichlid_patch_pptable_quirk(smu);
+ }
+ 
+ static int sienna_cichlid_tables_init(struct smu_context *smu)
 
 

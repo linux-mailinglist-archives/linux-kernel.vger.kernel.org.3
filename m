@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEB04C7BD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322704C7BDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 22:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiB1VYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 16:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S230273AbiB1VZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 16:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiB1VYh (ORCPT
+        with ESMTP id S229731AbiB1VZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 16:24:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517F8111091;
-        Mon, 28 Feb 2022 13:23:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03196115A;
-        Mon, 28 Feb 2022 21:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71692C340F1;
-        Mon, 28 Feb 2022 21:23:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646083437;
-        bh=7QaD+tXLqarmJbeGijWj9hiygCezLVN/S/8WqSTJVNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MFXPE/4x6iPsq+Tvg1FOZcG9d1EMvmtMIgbMv5HsD83YrDCus6HxIwFZ7eVnTr7j6
-         pulm9WhwkT4qv2WFDdDRqtK2QH20HQOsAjyp2eUqP81AqXbeWq6atp6h+sz//gVpDG
-         4Pm1fo1MmxF/AQH2ViiXrn94NuiEt2iTtFV5IpYI=
-Date:   Mon, 28 Feb 2022 22:23:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH V3] tty: serial: meson: Fix the compile link error
- reported by kernel test robot
-Message-ID: <Yh09abhySKsjart4@kroah.com>
-References: <20220228135530.6918-1-yu.tu@amlogic.com>
- <20220228142751.GF2812@kadam>
+        Mon, 28 Feb 2022 16:25:09 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F97C1201BB;
+        Mon, 28 Feb 2022 13:24:30 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id e6so11250042pgn.2;
+        Mon, 28 Feb 2022 13:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/BZ9ICbf1U+hKDT4v40btmacZirBqs9pkjE0c/BZegw=;
+        b=J6VTALh0jlhAPsV9di0Bt9jFsK8X4itmOEoLHplua8jA94wngD29TXhEqJbbRTxK0P
+         dwYqogijwYlEz5FzHUX+7gCfHJTY3IExnEjr8iPnyG3Hw2+Wl3tzwrzFosAHmJZpzw9O
+         LniBNTugcnAR3uzlzRyc3hJi6z85d6VgWL26MNITazp0Phf0QT3VSh5EUCm8hSEUA55l
+         Pmcpsw2872auO0G83rd7KE0FjysfnY3XvT1lIka4SPSXM3NhqOO9FjcrkwmCNCwUVSDT
+         u+sxaXph0Li0G+lVvpxVtU2dM6mFjQCgnsOpKuYzCAN8qIl1D+x7Pl0Tx9cI+Zw2xMUz
+         Nmtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/BZ9ICbf1U+hKDT4v40btmacZirBqs9pkjE0c/BZegw=;
+        b=71rbxHIheMTnGsMd81DqH99PJ9ZByHCNXruG/ZFBCoyoxM49rjd2FxKwmgnIdpI1za
+         DFxI6spAF4jiCagbL3XYirITHmPr1jafzb7dBWsz5oYTSNNnpP/JenigJToezs7cfVr8
+         fBErvTQ8g0iLlDpMwmH8ZbnCrXM51nGvpbfyolfYn8jjuwcR3vX4NydJWOu69MrmTcoc
+         ixIflalAxHPCnAM5NViHDbCuQmjB0RFUYXfzLk4GvdBSJyGwNowRusxgZbsDgnJNiDrS
+         iK9lNxEZYjaihRzrf43uEfJhx8zUNMuABF+SftMqUBUhz9Uq9RL5CIsU1bAr1aJ0GGU+
+         YUig==
+X-Gm-Message-State: AOAM533/RCMuYeJiCkc7/9NBK4ydKqThCyTgoRTPCMsJ50HO9NiJmpQp
+        4ysxUlGaWW0XRLRd/+OUzyo=
+X-Google-Smtp-Source: ABdhPJwlgZsp49t98S3sfpFV/5jNHYOEK9jcl0aBJV8JgDhrofRirUn/jsTGnZ3ubPBatQ8OgnCfoQ==
+X-Received: by 2002:a05:6a00:1901:b0:4f3:c0f6:5c47 with SMTP id y1-20020a056a00190100b004f3c0f65c47mr22673731pfi.69.1646083469641;
+        Mon, 28 Feb 2022 13:24:29 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id z14-20020aa7888e000000b004e5c2c0b9dcsm14761445pfe.30.2022.02.28.13.24.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 13:24:29 -0800 (PST)
+Message-ID: <48c74800-32c6-0327-52e2-96a59c1afda3@gmail.com>
+Date:   Mon, 28 Feb 2022 13:24:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228142751.GF2812@kadam>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 4.9 00/29] 4.9.304-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220228172141.744228435@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 05:27:52PM +0300, Dan Carpenter wrote:
-> On Mon, Feb 28, 2022 at 09:55:30PM +0800, Yu Tu wrote:
-> > Describes the calculation of the UART baud rate clock using a clock
-> > frame. Forgot to add in Kconfig kernel test Robot compilation error
-> > due to COMMON_CLK dependency.
-> > 
-> > Fixes: ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> > ---
-> >  drivers/tty/serial/Kconfig      |  1 +
-> >  drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
-> >  2 files changed, 27 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> > index e952ec5c7a7c..a0f2b82fc18b 100644
-> > --- a/drivers/tty/serial/Kconfig
-> > +++ b/drivers/tty/serial/Kconfig
-> > @@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
-> >  config SERIAL_MESON
-> >  	tristate "Meson serial port support"
-> >  	depends on ARCH_MESON || COMPILE_TEST
-> > +	depends on COMMON_CLK
-> >  	select SERIAL_CORE
-> >  	help
-> >  	  This enables the driver for the on-chip UARTs of the Amlogic
+
+
+On 2/28/2022 9:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.304 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
 > 
-> This is a link issue.  The rest is an unrelated error handling fix.
-> It should really be sent as two patches.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.304-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-I'll take the first version of this patch, which just did this portion,
-and the rest can be an independant change.
+On ARCH_BRCMSTb using 32-bit and 64-bit ARM kernels:
 
-thanks,
-
-greg k-h
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

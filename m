@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3121D4C6A05
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BD24C6A06
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbiB1LSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S234689AbiB1LSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiB1LSP (ORCPT
+        with ESMTP id S233455AbiB1LSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:18:15 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A279FEE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:17:36 -0800 (PST)
+        Mon, 28 Feb 2022 06:18:22 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BCA9FE5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 03:17:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646047056; x=1677583056;
+  t=1646047062; x=1677583062;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mKoKfdaQ7sfaHkKYIDfL8XSqEbj7jOZmi0dTb4Ji8IE=;
-  b=Vrw9pEVgjhainkEwBH5PMGE1AUmOoZ/dfVP6QMN06HzQHKpczkIQ/mTT
-   rgPayZxiRPL6c/F5QsaBr5bX3g0/r/aTxPVP5/SNXqfhsRPumGBG6fq6Y
-   X1HkBpPVQ1vTZ5NaeC5Oq0mvMiQbxlZukdMSurqFgMAJkyKYIjSZAFLLC
-   ggrgMfjisei18FGTS2PGj+mGMd8hHfeqA+rd8Z3o7wjNiO+WDE4pKnqLe
-   XPKY7Qp6Ox6aKuwG2xddiVTxH+bvqUMmTtKUkmmPXL88JjIT6Bi+/lxJ4
-   BEFd9gOKwdTAyD6EYIXlgM3XgOi2vFjoGcBWuzqaJvqi0Oq7Te6jw3vsF
-   g==;
+  bh=4k8NB06Tt38eO1sMpf6pSXXFWiN02DmgonwSIAOs4U4=;
+  b=x3DXgTmyeyKTU4YTEiGdCIYU2rLcg7/S8M3RxR8Q2H+9ZJrXJyXVkcue
+   LHjmJSoNOKOha8+aguW52DRz1cu3vqAXY5Y5uXg+nOrv30LkAVvGs54te
+   G+4uNah9ihEmBtsRo3viEoDRH59FfUUg95usxbWn2yJq6Ei5r7iVAxDH2
+   TCSg/WoZt4dqiJ860U69ejP8nSgIlUSw7JWy7nnY4E127J0awTmCR1LT/
+   eU1sbNLKAxgO0hEnFZmgNPE4Q1+0/Zt6EkjuC8zrF9TsG8J0OHNuYLCK/
+   YU5Sk6ylMJcbb2+uOt4Xw6cL7w5Y/mj/6GsCRnROI3MkgIM6XOxiMfqzD
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.90,142,1643698800"; 
-   d="scan'208";a="155099358"
+   d="scan'208";a="150223243"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 04:17:36 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 04:17:40 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 04:17:35 -0700
+ 15.1.2375.17; Mon, 28 Feb 2022 04:17:39 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 04:17:32 -0700
+ 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 04:17:36 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2 5/8] mtd: spi-nor: manufacturers: Use spi_nor_read_id() core method
-Date:   Mon, 28 Feb 2022 13:17:09 +0200
-Message-ID: <20220228111712.111737-6-tudor.ambarus@microchip.com>
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+Subject: [PATCH v2 6/8] mtd: spi-nor: core: Add helpers to read/write any register
+Date:   Mon, 28 Feb 2022 13:17:10 +0200
+Message-ID: <20220228111712.111737-7-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220228111712.111737-1-tudor.ambarus@microchip.com>
 References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
@@ -64,67 +65,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use spi_nor_read_id() core method to avoid duplication of code. Now the ID
-is read on the full SPI_NOR_MAX_ID_LEN instead of
-round_up(nor->info->id_len, 2), but it doesn't harm to read more ID bytes,
-so the change comes with no secondary effects.
+There are manufacturers that use registers indexed by address. Some of
+them support "read/write any register" opcodes. Provide core methods that
+can be used by all manufacturers. SPI NOR controller ops are intentionally
+not supported as we intend to move all the SPI NOR controller drivers
+under the SPI subsystem.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Tested-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/micron-st.c | 13 +++----------
- drivers/mtd/spi-nor/spansion.c  | 13 +++----------
- 2 files changed, 6 insertions(+), 20 deletions(-)
+ drivers/mtd/spi-nor/core.c | 41 ++++++++++++++++++++++++++++++++++++++
+ drivers/mtd/spi-nor/core.h |  4 ++++
+ 2 files changed, 45 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index 8a20475ce77a..41b87868ecf9 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -91,17 +91,10 @@ static int micron_st_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
- 		return ret;
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 281e3d25f74c..f1aa1e2ea7c9 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
+ 	return nor->controller_ops->write(nor, to, len, buf);
+ }
  
- 	/* Read flash ID to make sure the switch was successful. */
--	op = (struct spi_mem_op)
--		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
--			   SPI_MEM_OP_NO_ADDR,
--			   SPI_MEM_OP_DUMMY(enable ? 8 : 0, 1),
--			   SPI_MEM_OP_DATA_IN(round_up(nor->info->id_len, 2),
--					      buf, 1));
--
- 	if (enable)
--		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
--
--	ret = spi_mem_exec_op(nor->spimem, &op);
-+		ret = spi_nor_read_id(nor, 0, 8, buf, SNOR_PROTO_8_8_8_DTR);
-+	else
-+		ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
- 	if (ret)
- 		return ret;
++/**
++ * spi_nor_read_reg() - read register to flash memory
++ * @nor:        pointer to 'struct spi_nor'.
++ * @op:		SPI memory operation. op->data.buf must be DMA-able.
++ * @proto:	SPI protocol to use for the register operation.
++ *
++ * Return: zero on success, -errno otherwise
++ */
++int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
++		     enum spi_nor_protocol proto)
++{
++	if (!nor->spimem)
++		return -EOPNOTSUPP;
++
++	spi_nor_spimem_setup_op(nor, op, proto);
++	return spi_nor_spimem_exec_op(nor, op);
++}
++
++/**
++ * spi_nor_write_reg() - write register to flash memory
++ * @nor:        pointer to 'struct spi_nor'
++ * @op:		SPI memory operation. op->data.buf must be DMA-able.
++ * @proto:	SPI protocol to use for the register operation.
++ *
++ * Return: zero on success, -errno otherwise
++ */
++int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
++		      enum spi_nor_protocol proto)
++{
++	int ret;
++
++	if (!nor->spimem)
++		return -EOPNOTSUPP;
++
++	ret = spi_nor_write_enable(nor);
++	if (ret)
++		return ret;
++	spi_nor_spimem_setup_op(nor, op, proto);
++	return spi_nor_spimem_exec_op(nor, op);
++}
++
+ /**
+  * spi_nor_write_enable() - Set write enable latch with Write Enable command.
+  * @nor:	pointer to 'struct spi_nor'.
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index f952061d5c24..7c704475946d 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -554,6 +554,10 @@ ssize_t spi_nor_read_data(struct spi_nor *nor, loff_t from, size_t len,
+ 			  u8 *buf);
+ ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
+ 			   const u8 *buf);
++int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
++		     enum spi_nor_protocol proto);
++int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
++		      enum spi_nor_protocol proto);
+ int spi_nor_erase_sector(struct spi_nor *nor, u32 addr);
  
-diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
-index f24e546e04a5..c5988312cc91 100644
---- a/drivers/mtd/spi-nor/spansion.c
-+++ b/drivers/mtd/spi-nor/spansion.c
-@@ -98,17 +98,10 @@ static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
- 		return ret;
- 
- 	/* Read flash ID to make sure the switch was successful. */
--	op = (struct spi_mem_op)
--		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
--			   SPI_MEM_OP_ADDR(enable ? 4 : 0, 0, 1),
--			   SPI_MEM_OP_DUMMY(enable ? 3 : 0, 1),
--			   SPI_MEM_OP_DATA_IN(round_up(nor->info->id_len, 2),
--					      buf, 1));
--
- 	if (enable)
--		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
--
--	ret = spi_mem_exec_op(nor->spimem, &op);
-+		ret = spi_nor_read_id(nor, 4, 3, buf, SNOR_PROTO_8_8_8_DTR);
-+	else
-+		ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
- 	if (ret)
- 		return ret;
- 
+ int spi_nor_otp_read_secr(struct spi_nor *nor, loff_t addr, size_t len, u8 *buf);
 -- 
 2.25.1
 

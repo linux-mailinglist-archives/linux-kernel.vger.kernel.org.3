@@ -2,194 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D7E4C6117
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7744C6118
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 03:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbiB1C2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Feb 2022 21:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S232511AbiB1C3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Feb 2022 21:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiB1C2e (ORCPT
+        with ESMTP id S229714AbiB1C3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:28:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED30B522E8;
-        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70952D6E;
-        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
-Received: from [10.163.47.185] (unknown [10.163.47.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E4803F73D;
-        Sun, 27 Feb 2022 18:27:53 -0800 (PST)
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
- <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
- <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <bd239f45-3c9a-5faf-ba0e-610f2383720b@arm.com>
-Date:   Mon, 28 Feb 2022 07:57:51 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 27 Feb 2022 21:29:30 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5419A5C64A
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Feb 2022 18:28:51 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAAHD8NYMxxiopZpAQ--.55928S2;
+        Mon, 28 Feb 2022 10:28:41 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ALSA: spi: Add check for clk_enable()
+Date:   Mon, 28 Feb 2022 10:28:39 +0800
+Message-Id: <20220228022839.3547266-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAAHD8NYMxxiopZpAQ--.55928S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF1rWry5Ar4fXFW7tr1rXrb_yoW8tw4Dpa
+        97JFyrt3ykJasa9F4ayr48XFy3Jr40kFZxXwn2gw1xZw1Syw4qkay8JrnYya90kryDG3W3
+        Wr4xtFyUC3yUAr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
+        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+        0EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+        7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
+Fixes: 3568459a5113 ("ALSA: at73c213: manage SSC clock")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ sound/spi/at73c213.c | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-On 2/25/22 8:08 PM, Dinh Nguyen wrote:
-> 
-> 
-> On 2/25/22 08:29, Dinh Nguyen wrote:
->>
->>
->> On 2/25/22 02:52, Anshuman Khandual wrote:
->>>
->>>
->>> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->>>> Hi Anshuman,
->>>>
->>>> On 2/13/22 20:30, Anshuman Khandual wrote:
->>>>> This defines and exports a platform specific custom vm_get_page_prot() via
->>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->>>>> macros can be dropped which are no longer needed.
->>>>>
->>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>>> Cc: linux-kernel@vger.kernel.org
->>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>>> ---
->>>>>    arch/nios2/Kconfig               |  1 +
->>>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
->>>>>    arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->>>>>    3 files changed, 46 insertions(+), 16 deletions(-)
->>>>>
->>>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>>>> index 33fd06f5fa41..85a58a357a3b 100644
->>>>> --- a/arch/nios2/Kconfig
->>>>> +++ b/arch/nios2/Kconfig
->>>>> @@ -6,6 +6,7 @@ config NIOS2
->>>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>>>        select ARCH_HAS_DMA_SET_UNCACHED
->>>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>>>        select ARCH_NO_SWAP
->>>>>        select COMMON_CLK
->>>>>        select TIMER_OF
->>>>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
->>>>> index 4a995fa628ee..2678dad58a63 100644
->>>>> --- a/arch/nios2/include/asm/pgtable.h
->>>>> +++ b/arch/nios2/include/asm/pgtable.h
->>>>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>>>     */
->>>>>      /* Remove W bit on private pages for COW support */
->>>>> -#define __P000    MKP(0, 0, 0)
->>>>> -#define __P001    MKP(0, 0, 1)
->>>>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>>>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>>>> -#define __P100    MKP(1, 0, 0)
->>>>> -#define __P101    MKP(1, 0, 1)
->>>>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>>>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>>>      /* Shared pages can have exact HW mapping */
->>>>> -#define __S000    MKP(0, 0, 0)
->>>>> -#define __S001    MKP(0, 0, 1)
->>>>> -#define __S010    MKP(0, 1, 0)
->>>>> -#define __S011    MKP(0, 1, 1)
->>>>> -#define __S100    MKP(1, 0, 0)
->>>>> -#define __S101    MKP(1, 0, 1)
->>>>> -#define __S110    MKP(1, 1, 0)
->>>>> -#define __S111    MKP(1, 1, 1)
->>>>>      /* Used all over the kernel */
->>>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
->>>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>>>> index 613fcaa5988a..311b2146a248 100644
->>>>> --- a/arch/nios2/mm/init.c
->>>>> +++ b/arch/nios2/mm/init.c
->>>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->>>>>    {
->>>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>>>    }
->>>>> +
->>>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>>>> +{
->>>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>>>> +    case VM_NONE:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    case VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    /* COW */
->>>>> +    case VM_WRITE:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    /* COW */
->>>>> +    case VM_WRITE | VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    case VM_EXEC:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    case VM_EXEC | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    /* COW */
->>>>> +    case VM_EXEC | VM_WRITE:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    /* COW */
->>>>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    case VM_SHARED:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    case VM_SHARED | VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    case VM_SHARED | VM_WRITE:
->>>>> +        return MKP(0, 1, 0);
->>>>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>>>> +        return MKP(0, 1, 1);
->>>>> +    case VM_SHARED | VM_EXEC:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>>>> +        return MKP(1, 1, 0);
->>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>>>> +        return MKP(1, 1, 1);
->>>>> +    default:
->>>>> +        BUILD_BUG();
->>>>> +    }
->>>>> +}
->>>>> +EXPORT_SYMBOL(vm_get_page_prot);
->>>>
->>>> I'm getting this compile error after applying this patch when build NIOS2:
->>>
->>> Hmm, that is strange.
->>>
->>> Did you apply the entire series or atleast upto the nios2 patch ? Generic
->>> vm_get_page_prot() should not be called (which is build complaining here)
->>> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
->>>
->>> Ran a quick build test on nios2 for the entire series and also just upto
->>> this particular patch, build was successful.
->>>
->>
->> Ok, I did not apply the whole series, just this patch.
->>
-> 
-> 
-> Is someone taking this whole series or should I just take this patch?
+diff --git a/sound/spi/at73c213.c b/sound/spi/at73c213.c
+index 76c0e37a838c..8a2da6b1012e 100644
+--- a/sound/spi/at73c213.c
++++ b/sound/spi/at73c213.c
+@@ -218,7 +218,9 @@ static int snd_at73c213_pcm_open(struct snd_pcm_substream *substream)
+ 	runtime->hw = snd_at73c213_playback_hw;
+ 	chip->substream = substream;
+ 
+-	clk_enable(chip->ssc->clk);
++	err = clk_enable(chip->ssc->clk);
++	if (err)
++		return err;
+ 
+ 	return 0;
+ }
+@@ -776,7 +778,9 @@ static int snd_at73c213_chip_init(struct snd_at73c213 *chip)
+ 		goto out;
+ 
+ 	/* Enable DAC master clock. */
+-	clk_enable(chip->board->dac_clk);
++	retval = clk_enable(chip->board->dac_clk);
++	if (retval)
++		goto out;
+ 
+ 	/* Initialize at73c213 on SPI bus. */
+ 	retval = snd_at73c213_write_reg(chip, DAC_RST, 0x04);
+@@ -889,7 +893,9 @@ static int snd_at73c213_dev_init(struct snd_card *card,
+ 	chip->card = card;
+ 	chip->irq = -1;
+ 
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->ssc->clk);
++	if (retval)
++		return retval;
+ 
+ 	retval = request_irq(irq, snd_at73c213_interrupt, 0, "at73c213", chip);
+ 	if (retval) {
+@@ -1008,7 +1014,9 @@ static int snd_at73c213_remove(struct spi_device *spi)
+ 	int retval;
+ 
+ 	/* Stop playback. */
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->ssc->clk);
++	if (retval)
++		goto out;
+ 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXDIS));
+ 	clk_disable(chip->ssc->clk);
+ 
+@@ -1088,9 +1096,16 @@ static int snd_at73c213_resume(struct device *dev)
+ {
+ 	struct snd_card *card = dev_get_drvdata(dev);
+ 	struct snd_at73c213 *chip = card->private_data;
++	int retval;
+ 
+-	clk_enable(chip->board->dac_clk);
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->board->dac_clk);
++	if (retval)
++		return retval;
++	retval = clk_enable(chip->ssc->clk);
++	if (retval) {
++		clk_disable(chip->board->dac_clk);
++		return retval;
++	}
+ 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXEN));
+ 
+ 	return 0;
+-- 
+2.25.1
 
-I expect the series (latest instead) will go via the mm tree, but will
-really appreciate your tags if you find the series acceptable.

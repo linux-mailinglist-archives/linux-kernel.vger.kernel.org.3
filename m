@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87714C783E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5214C783B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240724AbiB1SoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 13:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S240950AbiB1Snr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241002AbiB1Sm6 (ORCPT
+        with ESMTP id S241165AbiB1SnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:42:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8C752A72C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:39:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646073560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gSruaDQ91wZiQ3U2vHdYAu7XWiXrgGYVxBWMGax8neQ=;
-        b=WoUrQA4vQOboOGY7klUXWwg9X2RS41zrDOQwJAmbThfVwLmPVX1jwKmRalzi5UvXJ5jpc7
-        /qBbzOX3UQf50a5u/9Hn0OQTmVykWW6sa0x/6qMDeJLVWwN8Z4BSviG7DOcql4i6jUJzOu
-        sMuSycj8i7frVVUXBUDSHHobPGkDNbc=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-507-XmHspIYJPIycQMx7vkc36A-1; Mon, 28 Feb 2022 13:39:17 -0500
-X-MC-Unique: XmHspIYJPIycQMx7vkc36A-1
-Received: by mail-qv1-f70.google.com with SMTP id q14-20020a0cf5ce000000b004326eec23acso12942648qvm.20
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 10:39:17 -0800 (PST)
+        Mon, 28 Feb 2022 13:43:13 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FF065E3;
+        Mon, 28 Feb 2022 10:40:11 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id r10so16909255wrp.3;
+        Mon, 28 Feb 2022 10:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6YEE4tA+o8+T1pGK0p5yO3E7r4KEuRuaX2SCJDWnvc=;
+        b=UK4OCcoKkVzJD4hyevzvTcvD5hTLJardtwDy3/dx7l/NiGxcmXubRspkglxKSaH6yh
+         /nz8d/Hs/N6u1gdxJ4LT8UEF3bXy4tNQn0xQUGLDU56Wi/7YcvqmqL3w0H1+wEy1Hz54
+         Av4nS7fn8FhGaOrq98iHrnN0V0pMIIOKfzIYsGxTfyy7ZqH0zEgGn133pkp/Q9lMdtzq
+         YzkOQ9OWS1Z3Mt1ZgK/E0EV7DE9luOSiEKMJx470JgQfseYVGcxZRr/ktRD3XqJfTHnC
+         3Ymcf/IcTVzVBRnT8hZd2t918UjL6DNajkHkbhpWriA8YzQ7AFmDoIdS+dkeKPuk7bo6
+         4aUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gSruaDQ91wZiQ3U2vHdYAu7XWiXrgGYVxBWMGax8neQ=;
-        b=68M7ix74r0P+8FjaPVA+op7MEnSEM4/uWhwmUa6ceqZKeuGXgT7WmSuY5MNYsjJqFb
-         ER9PXwisWTZzeWEkeE6z1yNuXCwIBWqxGVku+hmvaf/bVVmYjZlmNjRcHuV+dDzyHoBf
-         ntHmSe0ADfs1uo7cZYG9nfx0Akl+Ea2PFX3NKAIUg6vfvEqcyDjpbgeqxr2Fky574CtC
-         8vgTnpyawC8dMyDBE6dNNzpHrA/g8I4dPpYoCyXxGM4jLfnvRVlhYbcnYKYlURBfYYVn
-         03e4jCZ66Q91tgmM078SvhDP/6BOWbQrkWFqUTdWR+HD8fEugHSXIBUwe5tGgAXVOzbA
-         Yaag==
-X-Gm-Message-State: AOAM533hP+gJNG6+f9yYJBUN5L3lsZngyERN6WMw3OwZNi2f6h7SJF/l
-        msWkFjy1rHoDI7rHxNiP8wqGlH+YSE/dbsn35s0ILpJjqLad9uXFL/GJGiloMUuyRvT00af4jkG
-        l1zBBuQor+HE1nxPNjwRWwTWd
-X-Received: by 2002:a05:620a:11a7:b0:60d:df4a:f732 with SMTP id c7-20020a05620a11a700b0060ddf4af732mr12000627qkk.244.1646073557283;
-        Mon, 28 Feb 2022 10:39:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcL8pMH3E+RJrfw9BoEiPtQxOCruPFhp0i4BURaGugdQ+SIj2be00F+d9qP6Iss18tG2jXfg==
-X-Received: by 2002:a05:620a:11a7:b0:60d:df4a:f732 with SMTP id c7-20020a05620a11a700b0060ddf4af732mr12000606qkk.244.1646073557025;
-        Mon, 28 Feb 2022 10:39:17 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id w140-20020a376292000000b00648e88c1f05sm5501550qkb.67.2022.02.28.10.39.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6YEE4tA+o8+T1pGK0p5yO3E7r4KEuRuaX2SCJDWnvc=;
+        b=J8qGZtZfFZpa5E4wcppmgurDu5AZbzFBgRJf83MFKT+yCYiqxTZWE3NKkINAeq7eXv
+         tOvSodRC18zJKeMye/uir6X87LXXSjXCG6Rwmd5xzI35O0XC7sTNI9FHkCZ0dSD88VP1
+         Uqk//1szTELl58Id+kxZTpW3yFpUhrDg+0GrNR60Pti8HSFaMIiFUwlmhAYYQUa/6gn3
+         y4XDZIPu8u0qeOXXN0vq6s9YpdEYM11yL4MtN1HM6V7n6LmJq/PFzu5/+MiHqT0phiL5
+         BL6YCKyF/akHvOgu+oz9MNDeEbCi7ILJyTLAhi+tc9GyuTC3jEcswSKE21/y0/+YoGSd
+         lIBw==
+X-Gm-Message-State: AOAM530qmPUusGVCfz+p/hTCvicygki12fMm39DJona9ub+hVtNd7VDI
+        91V7j8J9wLs1vSBLEuyaF3I=
+X-Google-Smtp-Source: ABdhPJz0kvHdPe+ajGjHcDebdEWIdgAvL5IiW5tMhv+foN9qIBdzWhBia6PXsLTWZedHHDzLk+o9oQ==
+X-Received: by 2002:adf:ea44:0:b0:1ef:6f00:cf47 with SMTP id j4-20020adfea44000000b001ef6f00cf47mr12996852wrn.460.1646073609801;
+        Mon, 28 Feb 2022 10:40:09 -0800 (PST)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05600c511200b00352ec3b4c5asm297692wms.7.2022.02.28.10.40.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 10:39:16 -0800 (PST)
-Date:   Mon, 28 Feb 2022 10:39:13 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 34/39] objtool: Validate IBT assumptions
-Message-ID: <20220228183913.tg5qbisiqkbzm25n@treble>
-References: <20220224145138.952963315@infradead.org>
- <20220224151324.018939604@infradead.org>
- <20220227031348.drbmkcmoqur53aay@treble>
- <20220227170003.GE11184@worktop.programming.kicks-ass.net>
- <YhyVL9SbeC2bd942@hirez.programming.kicks-ass.net>
+        Mon, 28 Feb 2022 10:40:09 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     andrzej.hajda@intel.com
+Cc:     narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, maxime@cerno.tech,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] drm/bridge: ti-sn65dsi86: switch to devm_drm_of_get_bridge
+Date:   Mon, 28 Feb 2022 19:39:54 +0100
+Message-Id: <20220228183955.25508-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YhyVL9SbeC2bd942@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,47 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 10:26:07AM +0100, Peter Zijlstra wrote:
-> On Sun, Feb 27, 2022 at 06:00:03PM +0100, Peter Zijlstra wrote:
-> > On Sat, Feb 26, 2022 at 07:13:48PM -0800, Josh Poimboeuf wrote:
-> > > > +static struct instruction *
-> > > > +validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
-> > > > +{
-> > > > +	struct instruction *dest;
-> > > > +	struct section *sec;
-> > > > +	unsigned long off;
-> > > > +
-> > > > +	sec = reloc->sym->sec;
-> > > > +	off = reloc->sym->offset + reloc->addend;
-> > > 
-> > > This math assumes non-PC-relative.  If it's R_X86_64_PC32 or
-> > > R_X86_64_PLT32 then it needs +4 added.
-> > 
-> > Right; so I actually had that PC32 thing in there for a while, but ran
-> > into other trouble. I'll go try and figure it out.
-> 
-> Things like .rela.initcall*.init use PC32 but don't need the +4. If we
-> get that wrong it'll seal all the initcall and boot doesn't get very
-> far at all :-)
+The function "drm_of_find_panel_or_bridge" has been deprecated in
+favor of "devm_drm_of_get_bridge".
 
-Ah...
+Switch to the new function and reduce boilerplate.
 
-> How do you feel about something like:
-> 
-> 	sec = reloc->sym->sec;
-> 	off = reloc->sym->offset;
-> 
-> 	if ((reloc->sec->base->sh.sh_flags & SHF_EXECINSTR) &&
-> 	    (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32))
-> 		off += arch_dest_reloc_offset(reloc->addend);
-> 	else
-> 		off += reloc->addend;
-> 
-> 
-> hmm ?
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-Looks good to me.
-
+diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+index dab8f76618f3..fb8e16ed7e90 100644
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+@@ -1232,15 +1232,9 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+ {
+ 	struct ti_sn65dsi86 *pdata = dev_get_drvdata(adev->dev.parent);
+ 	struct device_node *np = pdata->dev->of_node;
+-	struct drm_panel *panel;
+ 	int ret;
+ 
+-	ret = drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
+-	if (ret)
+-		return dev_err_probe(&adev->dev, ret,
+-				     "could not find any panel node\n");
+-
+-	pdata->next_bridge = devm_drm_panel_bridge_add(pdata->dev, panel);
++	pdata->next_bridge = devm_drm_of_get_bridge(pdata->dev, np, 1, 0);
+ 	if (IS_ERR(pdata->next_bridge)) {
+ 		DRM_ERROR("failed to create panel bridge\n");
+ 		return PTR_ERR(pdata->next_bridge);
 -- 
-Josh
+2.25.1
 

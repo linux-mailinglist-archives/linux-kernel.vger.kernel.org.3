@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413274C727A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4914C7758
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 19:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbiB1R0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S240270AbiB1SPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 13:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiB1R0U (ORCPT
+        with ESMTP id S241316AbiB1SJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:26:20 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ABD75E67
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:25:41 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id r10so6113672wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 09:25:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=notYzvLapgrWxhvzTWLvUQkyjm1+ISszqSAt8pZdOYI=;
-        b=Zgqher2oa92fGjqwuNd7AvQQL/prMgpwurC/1I0Q2XMCq12BsIydAK7Xbt2y6WEZ3d
-         O83ghC4YWK0y7SASC9sfrraEmmCPIDC2yLy8LRMQ322ADA+msYp3dut1AKFazt1n85qG
-         XAcHAU8f3A2PHmucP8HfrHUQW3D26YfuYfqnTBpTXna39MTgxw8uW0RpMvyPk3xXbryw
-         OExK2vEy5eszJh4APgr2NWDP16vNXCINoVIVFMusBl66Q0sGeLGqCFl8uIwQ71XQCC/3
-         /DD5nsu5Rn4vrpuvTBGcOQmGgf9w0hHWRJaKPGWbh8cOuLN4O78lW+e/LjUsMid3Fkdm
-         JceQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=notYzvLapgrWxhvzTWLvUQkyjm1+ISszqSAt8pZdOYI=;
-        b=F17T1cBxvGVDD/HIHC5DcjeTbBJ4w+7ou+RhHNWpD1i+uUqeK+7vqog4Byjz9BZi50
-         TJfhGWx+yQ4zTSppAEpkhqsYF8gr8GC6jxs2TcQmJuJLFAsDqtJkqinjcInW/oOxL97N
-         A2yY5cWGeKyATk2LfFWRt8HYaPLWBnQn8foi3gMrkOmr8ZlDZNXZS0iSrSQJFlZXiF95
-         Z5u8UGoAchIOLXImYRahsEAN2nCFIOb6/dhmUgLbbj1PhNVbjpprYaku0F40XVnEGJuc
-         Yg3I2p7wZ9eeL9HL3LEaGc2IU8TjOYD4fVNID7UkFkx+mNMYBuqyP/NKiGSGBL0vbgPu
-         717g==
-X-Gm-Message-State: AOAM531Kh94IlY/wamTU9A9+McpgnOTm/Ef25ELOp+pzc0sZKia2CJRB
-        QavLmSINWn71g4kkcuXo3/7VIw==
-X-Google-Smtp-Source: ABdhPJwJ+NcsdjBxdhB1UyDeneF5rEqwUWcp9CAfrUzldwkhCgyJIZBroO5q5TvmPYAd8SU7IOWwyw==
-X-Received: by 2002:a7b:cc15:0:b0:381:3fb8:5f93 with SMTP id f21-20020a7bcc15000000b003813fb85f93mr12592663wmh.106.1646069139944;
-        Mon, 28 Feb 2022 09:25:39 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id f21-20020a7bcd15000000b0034efd01ee16sm11514124wmj.42.2022.02.28.09.25.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 09:25:39 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     robh+dt@kernel.org, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com
-Cc:     pierre-louis.bossart@linux.intel.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v3 0/3] soundwire: qcom: add pm runtime support
-Date:   Mon, 28 Feb 2022 17:25:25 +0000
-Message-Id: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Mon, 28 Feb 2022 13:09:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36981B12EB;
+        Mon, 28 Feb 2022 09:49:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C2860F92;
+        Mon, 28 Feb 2022 17:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD88C340F0;
+        Mon, 28 Feb 2022 17:49:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646070587;
+        bh=coSH3zK0zvw8QF9d1MK6j4sU0v+KwwPOV4PVpwVavYs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=epjMBBF5QnpkU7bz0atG9OfH/yrFUNgleZTdreddfh1DdH9lcjlGPBJWTFr6Rd2CN
+         uMddLy+SAXebnrRiYnb8I30j6ZRd4VMJZBUguzMlp/1g+GiY/tEku+Eg698BeYsw1P
+         xdFJ6u4i1mhiVbJyH+IuSePkirkgUKSy0i/QmieE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 5.16 163/164] gpio: tegra186: Fix chip_data type confusion
+Date:   Mon, 28 Feb 2022 18:25:25 +0100
+Message-Id: <20220228172414.400242140@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+References: <20220228172359.567256961@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,30 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds pm runtime support to Qualcomm SounWire Controller using
-SoundWire Clock Stop and Wake up using Headset events on supported instances and
-instances like WSA which do not support clock stop a soft reset of controller
-along with full rest of slaves is done to resume from a low power state.
+From: Marc Zyngier <maz@kernel.org>
 
-Tested it on SM8250 MTP and Dragon Board DB845c
+commit d1e972ace42390de739cde87d96043dcbe502286 upstream.
 
-Changes since v2:
- - update log as suggested by Pierre
- - removing handling clk stop for cases where the controller is soft reset.
- - add more error checks when calling  sdw_bus_prep_clk_stop
- - update dt-bindings with wakeup-source and interrupt-names properties.
+The tegra186 GPIO driver makes the assumption that the pointer
+returned by irq_data_get_irq_chip_data() is a pointer to a
+tegra_gpio structure. Unfortunately, it is actually a pointer
+to the inner gpio_chip structure, as mandated by the gpiolib
+infrastructure. Nice try.
 
---srini
+The saving grace is that the gpio_chip is the first member of
+tegra_gpio, so the bug has gone undetected since... forever.
 
-Srinivas Kandagatla (3):
-  soundwire: qcom: add runtime pm support
-  dt-bindings: soundwire: qcom: document optional wake irq
-  soundwire: qcom: add in-band wake up interrupt support
+Fix it by performing a container_of() on the pointer. This results
+in no additional code, and makes it possible to understand how
+the whole thing works.
 
- .../bindings/soundwire/qcom,sdw.txt           |  14 +-
- drivers/soundwire/qcom.c                      | 206 +++++++++++++++++-
- 2 files changed, 218 insertions(+), 2 deletions(-)
+Fixes: 5b2b135a87fc ("gpio: Add Tegra186 support")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Link: https://lore.kernel.org/r/20220211093904.1112679-1-maz@kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/gpio/gpio-tegra186.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
--- 
-2.21.0
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -341,9 +341,12 @@ static int tegra186_gpio_of_xlate(struct
+ 	return offset + pin;
+ }
+ 
++#define to_tegra_gpio(x) container_of((x), struct tegra_gpio, gpio)
++
+ static void tegra186_irq_ack(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 
+ 	base = tegra186_gpio_get_base(gpio, data->hwirq);
+@@ -355,7 +358,8 @@ static void tegra186_irq_ack(struct irq_
+ 
+ static void tegra186_irq_mask(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
+@@ -370,7 +374,8 @@ static void tegra186_irq_mask(struct irq
+ 
+ static void tegra186_irq_unmask(struct irq_data *data)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
+@@ -385,7 +390,8 @@ static void tegra186_irq_unmask(struct i
+ 
+ static int tegra186_irq_set_type(struct irq_data *data, unsigned int type)
+ {
+-	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct tegra_gpio *gpio = to_tegra_gpio(gc);
+ 	void __iomem *base;
+ 	u32 value;
+ 
+
 

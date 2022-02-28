@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CCD4C6ABF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6954C6AC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 12:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbiB1Lig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 06:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S235899AbiB1Lii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 06:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235883AbiB1Lie (ORCPT
+        with ESMTP id S235881AbiB1Lie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Feb 2022 06:38:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7EC4D248;
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810BD4CD5C;
         Mon, 28 Feb 2022 03:37:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E1F60FFD;
-        Mon, 28 Feb 2022 11:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1022C340F9;
-        Mon, 28 Feb 2022 11:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646048274;
-        bh=NMuZjdNCVeQj2VoQ5jMSwA/dHUHPZ7Mhms+WmvHKcaw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=puCfv4I80mTbhnHyUqTc9LSw3FPxPIOJ/vkuheGKL8juHQ+7OafzFbeIoOUiNrCzk
-         gMcRYr5uV1QgmlA2AVn6fH3BtT9wmOgIs9iNnH1so1jgptzNGXyJSNUNB+mD3GKWqs
-         E2XJQclA3FD72633y5W3VT8t4EU62kfI9ObJFzphTP1SAs7YsrIBe3/G3kytn/9qqP
-         5AHT3io7WPI82HCHJY9xunwb0bTqn6d4f/32za5KRCjqEkKdRHTt21XpXMpLeN/tBN
-         BbNvU8hEz/6Lp8OapNZxReFBxhZ7uLVFNvhFYK1wsIb1vZ8/L7F83N5gNIw77oSuFB
-         0hR/PLkKQ9mRw==
-Received: by mail-wr1-f42.google.com with SMTP id d28so14969944wra.4;
-        Mon, 28 Feb 2022 03:37:54 -0800 (PST)
-X-Gm-Message-State: AOAM533Mxj/AvQK941Qxx8qVLAjzq+Fwfh9hu8qiBRl3rTp5bMyPbkPj
-        XZiTdAerH/NqciSV4pnlrpu5IcLcPEjke33fM4Y=
-X-Google-Smtp-Source: ABdhPJxtXB6efD/LJ+kcWSKRCDN7bVXv1mCQCSSOtPPswSnZe/jnGK76a+5LOiLNukj3ERUK1wRtMZW5JaW1kqm9z5k=
-X-Received: by 2002:a05:6000:1866:b0:1ef:8a14:ab6a with SMTP id
- d6-20020a056000186600b001ef8a14ab6amr7567987wri.12.1646048273093; Mon, 28 Feb
- 2022 03:37:53 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21SBbmsY057976;
+        Mon, 28 Feb 2022 05:37:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646048268;
+        bh=nLMr4wVUegS8RsOa7LHrJJ7d3/4Kb1EE8ezBfNCz8bU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=J1dPlluyl0XHLgK7Z7IziHMg3f8wdU9csDudF1XlvqPovtLsZzqPuWDSXOgYg6eIi
+         0jGNUrzSFiCxWp1s+vJTyoulz5pZObEMcvCTgzYOM2tWNPdhtDa4lkftVS9ysBmnLE
+         n2XZPwJlj2nGIFDTYy/FmzTujNRFVsfer4xYX+PE=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21SBbmXn016881
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 05:37:48 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
+ Feb 2022 05:37:48 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 28 Feb 2022 05:37:48 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21SBbmga115166;
+        Mon, 28 Feb 2022 05:37:48 -0600
+Date:   Mon, 28 Feb 2022 05:37:48 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Subject: Re: [PATCH v3 0/5] arm64: Initial support for Texas Instruments AM62
+ Platform
+Message-ID: <20220228113748.nmoduketo72eaoql@pulse>
+References: <20220225120239.1303821-1-vigneshr@ti.com>
+ <164604791648.14181.3995342010827414573.b4-ty@ti.com>
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org> <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
-In-Reply-To: <YhyxML05rjJ/57Vk@FVFF77S0Q05N>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 28 Feb 2022 12:37:37 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
-Message-ID: <CAK8P3a0CTmtUq+Uba2S3D7wjSstew2M+LfzZoOcKdKK9cfXO9A@mail.gmail.com>
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <164604791648.14181.3995342010827414573.b4-ty@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,24 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:25 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> >
-> > Nathan Chancellor reported an additional -Wdeclaration-after-statement
-> > warning that appears in a system header on arm, this still needs a
-> > workaround.
->
-> FWIW, I had a go at moving to c99 a few weeks ago (to be able to use
-> for-loop-declarations in some concurrency primitives), and when I tried, I also
-> saw declaration-after-statement warnings when building modpost.c, which is easy
-> enough to fix:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=treewide/gnu99&id=505775bd6fd0bc1883f3271f826963066bbdc194
+On 05:32-20220228, Nishanth Menon wrote:
+> Hi Vignesh Raghavendra,
+> 
+> On Fri, 25 Feb 2022 17:32:34 +0530, Vignesh Raghavendra wrote:
+> > This adds AM62 SoC support.
+> > 
+> > The AM62 SoC family is the follow on AM335x built on K3 Multicore SoC
+> > architecture platform, providing ultra-low-power modes, dual display,
+> > multi-sensor edge compute, security and other BOM-saving integration.
+> > The AM62 SoC targets broad market to enable applications such as
+> > Industrial HMI, PLC/CNC/Robot control, Medical Equipment, Building
+> > Automation, Appliances and more.
+> > 
+> > [...]
+> 
+> I have applied the following to branch ti-k3-dts-next on [1].
+> Thank you!
+> 
+> [1/5] soc: ti: k3-socinfo: Add AM62x JTAG ID
+>       commit: c1f284b8207bb4e33d021e34dd3be525abc39b8f
+> [2/5] dt-bindings: arm: ti: Add bindings for AM625 SoC
+>       commit: 52b7a9c87a72aa9798051b271fa7e4fb62910624
+> [3/5] dt-bindings: pinctrl: k3: Introduce pinmux definitions for AM62
+>       commit: 67cf6b691ec36da1318051c6776ff3523200ebc7
+> [4/5] arm64: dts: ti: Introduce base support for AM62x SoC
+>       commit: c8c226192205cf536e3e975301b5ad2fcfb2de36
+> [5/5] arm64: dts: ti: Add support for AM62-SK
+>       commit: e32f766b6e378ec3b6095470b1cd54fdc79792c6
 
-I think the KBUILD_USERCFLAGS portion and the modpost.c fix for it
-make sense regardless of the -std=gnu11 change, but your change
-to KBUILD_CFLAGS is not actually needed because the warning is
-already enabled there -- gnu89 allows intermingled declarations since
-gcc-3.4, so the warning flag was added during early 2.6.x kernels.
+Just a headsup -> I split the patches into two branches. [1/5] is
+available in ti-drivers-soc-next Vs the rest in ti-k3-dts-next
 
-       Arnd
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

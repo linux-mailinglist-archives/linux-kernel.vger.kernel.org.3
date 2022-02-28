@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CD84C72C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60B94C741E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 18:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiB1R1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 12:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S238386AbiB1RlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 12:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiB1R1H (ORCPT
+        with ESMTP id S238565AbiB1RiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:27:07 -0500
+        Mon, 28 Feb 2022 12:38:00 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C2C8879A;
-        Mon, 28 Feb 2022 09:26:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E993F39141;
+        Mon, 28 Feb 2022 09:33:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DD9561372;
-        Mon, 28 Feb 2022 17:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98188C340E7;
-        Mon, 28 Feb 2022 17:26:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8555961358;
+        Mon, 28 Feb 2022 17:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B94FC340E7;
+        Mon, 28 Feb 2022 17:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646069176;
-        bh=nA9BGooZ+ch4rv9bJi2oi3GvFRimk1539Q3okqlAJ1A=;
+        s=korg; t=1646069589;
+        bh=0kLHFsDZCk0ZTM/V8Kf2IsrIaPAGMGwqKe7xccMH9p4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H68YiWtqiHIztEWSyHYFGxvkJcQPgo359x6g7hylhYqEQhKBSAfVJpjEYEZseBO7m
-         ioyYe5DTjvW9lkpqbmvclnaZTK66A8J+vPvhQoZ2vdEH39scBFqvtLgcpUkc8Ssm1+
-         hMyomaQ7WAc40C6OWtMUDJLauneOsPEsxMwpNgwo=
+        b=lRa8uq80OicttXBp0ASyLvR2FI/D2+19WAZpOFK3uZthNCORQ5zYrEREKpx9LJcUq
+         GNONo3O8lTv5obPS6b13taoXE4oQKFChox3HJoRs8A+RZHGl6YCnCezr9s5ATmPfHt
+         b67mdYdunjjpk6yp1TlgYocNgKYu5xucFcXkgAhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Szymon Heidrich <szymon.heidrich@gmail.com>,
-        stable <stable@kernel.org>
-Subject: [PATCH 4.9 20/29] USB: gadget: validate endpoint index for xilinx udc
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.10 06/80] parisc/unaligned: Fix fldd and fstd unaligned handlers on 32-bit kernel
 Date:   Mon, 28 Feb 2022 18:23:47 +0100
-Message-Id: <20220228172143.830951340@linuxfoundation.org>
+Message-Id: <20220228172312.435153056@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
-References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+References: <20220228172311.789892158@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Szymon Heidrich <szymon.heidrich@gmail.com>
+From: Helge Deller <deller@gmx.de>
 
-commit 7f14c7227f342d9932f9b918893c8814f86d2a0d upstream.
+commit dd2288f4a020d693360e3e8d72f8b9d9c25f5ef6 upstream.
 
-Assure that host may not manipulate the index to point
-past endpoint array.
+Usually the kernel provides fixup routines to emulate the fldd and fstd
+floating-point instructions if they load or store 8-byte from/to a not
+natuarally aligned memory location.
 
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc: stable <stable@kernel.org>
+On a 32-bit kernel I noticed that those unaligned handlers didn't worked and
+instead the application got a SEGV.
+While checking the code I found two problems:
+
+First, the OPCODE_FLDD_L and OPCODE_FSTD_L cases were ifdef'ed out by the
+CONFIG_PA20 option, and as such those weren't built on a pure 32-bit kernel.
+This is now fixed by moving the CONFIG_PA20 #ifdef to prevent the compilation
+of OPCODE_LDD_L and OPCODE_FSTD_L only, and handling the fldd and fstd
+instructions.
+
+The second problem are two bugs in the 32-bit inline assembly code, where the
+wrong registers where used. The calculation of the natural alignment used %2
+(vall) instead of %3 (ior), and the first word was stored back to address %1
+(valh) instead of %3 (ior).
+
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/udc-xilinx.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/parisc/kernel/unaligned.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -1620,6 +1620,8 @@ static void xudc_getstatus(struct xusb_u
+--- a/arch/parisc/kernel/unaligned.c
++++ b/arch/parisc/kernel/unaligned.c
+@@ -397,7 +397,7 @@ static int emulate_std(struct pt_regs *r
+ 	__asm__ __volatile__ (
+ "	mtsp	%4, %%sr1\n"
+ "	zdep	%2, 29, 2, %%r19\n"
+-"	dep	%%r0, 31, 2, %2\n"
++"	dep	%%r0, 31, 2, %3\n"
+ "	mtsar	%%r19\n"
+ "	zvdepi	-2, 32, %%r19\n"
+ "1:	ldw	0(%%sr1,%3),%%r20\n"
+@@ -409,7 +409,7 @@ static int emulate_std(struct pt_regs *r
+ "	andcm	%%r21, %%r19, %%r21\n"
+ "	or	%1, %%r20, %1\n"
+ "	or	%2, %%r21, %2\n"
+-"3:	stw	%1,0(%%sr1,%1)\n"
++"3:	stw	%1,0(%%sr1,%3)\n"
+ "4:	stw	%%r1,4(%%sr1,%3)\n"
+ "5:	stw	%2,8(%%sr1,%3)\n"
+ "	copy	%%r0, %0\n"
+@@ -596,7 +596,6 @@ void handle_unaligned(struct pt_regs *re
+ 		ret = ERR_NOTHANDLED;	/* "undefined", but lets kill them. */
  		break;
- 	case USB_RECIP_ENDPOINT:
- 		epnum = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
-+		if (epnum >= XUSB_MAX_ENDPOINTS)
-+			goto stall;
- 		target_ep = &udc->ep[epnum];
- 		epcfgreg = udc->read_fn(udc->addr + target_ep->offset);
- 		halt = epcfgreg & XUSB_EP_CFG_STALL_MASK;
-@@ -1687,6 +1689,10 @@ static void xudc_set_clear_feature(struc
- 	case USB_RECIP_ENDPOINT:
- 		if (!udc->setup.wValue) {
- 			endpoint = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
-+			if (endpoint >= XUSB_MAX_ENDPOINTS) {
-+				xudc_ep0_stall(udc);
-+				return;
-+			}
- 			target_ep = &udc->ep[endpoint];
- 			outinbit = udc->setup.wIndex & USB_ENDPOINT_DIR_MASK;
- 			outinbit = outinbit >> 7;
+ 	}
+-#ifdef CONFIG_PA20
+ 	switch (regs->iir & OPCODE2_MASK)
+ 	{
+ 	case OPCODE_FLDD_L:
+@@ -607,14 +606,15 @@ void handle_unaligned(struct pt_regs *re
+ 		flop=1;
+ 		ret = emulate_std(regs, R2(regs->iir),1);
+ 		break;
++#ifdef CONFIG_PA20
+ 	case OPCODE_LDD_L:
+ 		ret = emulate_ldd(regs, R2(regs->iir),0);
+ 		break;
+ 	case OPCODE_STD_L:
+ 		ret = emulate_std(regs, R2(regs->iir),0);
+ 		break;
+-	}
+ #endif
++	}
+ 	switch (regs->iir & OPCODE3_MASK)
+ 	{
+ 	case OPCODE_FLDW_L:
 
 

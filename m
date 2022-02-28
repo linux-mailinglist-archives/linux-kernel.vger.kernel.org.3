@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A85F4C7CE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586294C7CEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Feb 2022 23:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiB1WHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 17:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S231360AbiB1WHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 17:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiB1WHE (ORCPT
+        with ESMTP id S231332AbiB1WHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 17:07:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 742F7131119
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:06:21 -0800 (PST)
+        Mon, 28 Feb 2022 17:07:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05EDA14CCB1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646085980;
+        s=mimecast20190719; t=1646085987;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6g76Q1f7wfMD5s0Iq9NnNAaHx7TEHAaZl0n65azkoF4=;
-        b=hGPIKQdiAJyEKaay8eOW4IXBTEuoiYkRPq0hEk9YOrlTz2PeuMIam7bSyaOeLxeFdyntha
-        0VVgkL/n9yBxm9xk2irKq47LQmiDMKyqRaSc3nl+AI2Y5gI4Z5geuPQQVRpR1pOGTvBLyV
-        5bpotWMxNlQvVChVfVyo1qpTtlYM+4g=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=kSd2olf1jnjo/HsSgbCsJs5j16VEb70bfQ7PmeMY2VY=;
+        b=GUELIsv7eLkF6c8DNHomRjBJV7k7MidZBhPXOvc5BLK9LalYdAaziwiV0PmbGh6z/N4tqe
+        IZR9HM1BiPmSvR0Fjg5qyj4JoWbUp+z7dYbfSr33Pl5rVJn5phc88Xx2K4lzwA0ZXNRpiL
+        MZWLC3dovLIs3i44KZ8yiWX5pBTauRA=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-155-GJfC8sXzNKeu_VtDNUvZcQ-1; Mon, 28 Feb 2022 17:06:19 -0500
-X-MC-Unique: GJfC8sXzNKeu_VtDNUvZcQ-1
-Received: by mail-oi1-f198.google.com with SMTP id bh17-20020a056808181100b002d4f3396ec3so6279478oib.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:06:19 -0800 (PST)
+ us-mta-190-9RUOAEtnMr2J3ko_0l2oRg-1; Mon, 28 Feb 2022 17:06:25 -0500
+X-MC-Unique: 9RUOAEtnMr2J3ko_0l2oRg-1
+Received: by mail-oo1-f72.google.com with SMTP id r18-20020a056820039200b0031d6f9170eeso3054279ooj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 14:06:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6g76Q1f7wfMD5s0Iq9NnNAaHx7TEHAaZl0n65azkoF4=;
-        b=M4+APjiv9NIGSsTBuajrVFvAnu/YMvZbDDFunM1hLKKu7bfjS8s0/TTE5Qk52MwKNi
-         WYjvSQOTToOJZ0rmS4YDR3buRpeXxI1FO2DThK6cCKLA7mMdZb1vtVjmcVdbUKty0HEy
-         7sOgwTqS6HRLd6UgfhW/qCn0hqEgxTrPGnXMUWMHnvHWbms8ySsO7kwQ2Dc9lfSnmT03
-         78bK78h/WfTlocdPDWZ+kRKDd9ielvtezQe8cLjdJy1h065KxywmhLBygG08ahZs+MVx
-         VEekptzN3mFkfK7vWb0vowOO9nuqPqX3tdhHnaaubcnojOgU59hTs2Np5RfF2dRzobb3
-         KOzA==
-X-Gm-Message-State: AOAM533Ads4nGtoMy9dIZ/ulTEXR4NW5FoU5he9n7KoVa8OUjgELa9i2
-        75qHrCgpmn1+9k7zup6znZ55TnMGP8A96qTPJvQFEMWiN1PUwqvvs2UCq7OQFhqsipFUizR/Gtw
-        QZ7DnUgn0fklbXjkiiDCxM107
-X-Received: by 2002:a05:6808:1a28:b0:2d7:3c61:e0d6 with SMTP id bk40-20020a0568081a2800b002d73c61e0d6mr12441286oib.32.1646085978567;
-        Mon, 28 Feb 2022 14:06:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqktaI7nRschXFm6WIqpt/NJToJOLyZXiuWVFpjpKCqY9bZVPBmjxyvo/DJelsgeXDszQizg==
-X-Received: by 2002:a05:6808:1a28:b0:2d7:3c61:e0d6 with SMTP id bk40-20020a0568081a2800b002d73c61e0d6mr12441258oib.32.1646085978346;
-        Mon, 28 Feb 2022 14:06:18 -0800 (PST)
+        bh=kSd2olf1jnjo/HsSgbCsJs5j16VEb70bfQ7PmeMY2VY=;
+        b=uJhmzt9AnN4RltMhLi4e7MrSYdGsY9lxJdneQesE6sfOlY5tw0+8+BkuaVC3wXfWg5
+         bkpqqL19fu3Pqct2JIy5/2Z3O8XXjj2ZQnY6WtGa7u/i/jsC0251XviR0mgI2nWJJATJ
+         VaAQ22kVrS63DNm6dGuz8vnp2J5+bmI3YddiRdbhayzl8C/TYOjNedAjx5S9asTGmVzG
+         J3zXLmtZcoyLfrZSYRzUin/UGymgou/Aq7EjBQxGU9d0rj3MBYJteiH7UFPZb92VF7el
+         AxIbWWIr2uRaOMlUMvOsdcngy4qyf8sLu1a8D3Ud8V4kINHsJY9HbKGaX85A3HoVJ5Lv
+         UR0w==
+X-Gm-Message-State: AOAM530mxGeAzpies0Vhq72HxDBSxHK1R/AECalYtibW6o/Qa8i5mYAB
+        awGlHXDg4Pe8+NyQPiXNZ9gFoBgstYcGyN7EL34OttCX9gYfZU2H0PLuwlF1xmCBbayQbE4TDDl
+        4LbqJQyXcqhF6ohcsaMiJEcNR
+X-Received: by 2002:a05:6808:1148:b0:2d5:2333:bbb1 with SMTP id u8-20020a056808114800b002d52333bbb1mr10736852oiu.130.1646085984662;
+        Mon, 28 Feb 2022 14:06:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyXyd5cLZVXv21R215ahGVE59QoOxgoKUS9B2IAT3b2Nrgqe4ENaiagVjBUsTuHIIBNYSayzQ==
+X-Received: by 2002:a05:6808:1148:b0:2d5:2333:bbb1 with SMTP id u8-20020a056808114800b002d52333bbb1mr10736822oiu.130.1646085984239;
+        Mon, 28 Feb 2022 14:06:24 -0800 (PST)
 Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056808130200b002d542a72882sm7034767oiv.3.2022.02.28.14.06.16
+        by smtp.gmail.com with ESMTPSA id i47-20020a9d172f000000b005aed7ea7b44sm5393010ota.73.2022.02.28.14.06.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 14:06:17 -0800 (PST)
-Date:   Mon, 28 Feb 2022 15:06:15 -0700
+        Mon, 28 Feb 2022 14:06:23 -0800 (PST)
+Date:   Mon, 28 Feb 2022 15:06:21 -0700
 From:   Alex Williamson <alex.williamson@redhat.com>
 To:     Lu Baolu <baolu.lu@linux.intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -83,11 +83,11 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 07/11] vfio: Set DMA ownership for VFIO devices
-Message-ID: <20220228150615.7026b3ae.alex.williamson@redhat.com>
-In-Reply-To: <20220228005056.599595-8-baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v7 08/11] vfio: Remove use of vfio_group_viable()
+Message-ID: <20220228150621.5984595b.alex.williamson@redhat.com>
+In-Reply-To: <20220228005056.599595-9-baolu.lu@linux.intel.com>
 References: <20220228005056.599595-1-baolu.lu@linux.intel.com>
-        <20220228005056.599595-8-baolu.lu@linux.intel.com>
+        <20220228005056.599595-9-baolu.lu@linux.intel.com>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -95,53 +95,31 @@ Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 08:50:52 +0800
+On Mon, 28 Feb 2022 08:50:53 +0800
 Lu Baolu <baolu.lu@linux.intel.com> wrote:
 
-> Claim group dma ownership when an IOMMU group is set to a container,
-> and release the dma ownership once the iommu group is unset from the
-> container.
+> As DMA ownership is claimed for the iommu group when a VFIO group is
+> added to a VFIO container, the VFIO group viability is guaranteed as long
+> as group->container_users > 0. Remove those unnecessary group viability
+> checks which are only hit when group->container_users is not zero.
 > 
-> This change disallows some unsafe bridge drivers to bind to non-ACS
-> bridges while devices under them are assigned to user space. This is an
-> intentional enhancement and possibly breaks some existing
-> configurations. The recommendation to such an affected user would be
-> that the previously allowed host bridge driver was unsafe for this use
-> case and to continue to enable assignment of devices within that group,
-> the driver should be unbound from the bridge device or replaced with the
-> pci-stub driver.
-> 
-> For any bridge driver, we consider it unsafe if it satisfies any of the
-> following conditions:
-> 
->   1) The bridge driver uses DMA. Calling pci_set_master() or calling any
->      kernel DMA API (dma_map_*() and etc.) is an indicate that the
->      driver is doing DMA.
-> 
->   2) If the bridge driver uses MMIO, it should be tolerant to hostile
->      userspace also touching the same MMIO registers via P2P DMA
->      attacks.
-> 
-> If the bridge driver turns out to be a safe one, it could be used as
-> before by setting the driver's .driver_managed_dma field, just like what
-> we have done in the pcieport driver.
+> The only remaining reference is in GROUP_GET_STATUS, which could be called
+> at any time when group fd is valid. Here we just replace the
+> vfio_group_viable() by directly calling IOMMU core to get viability status.
 > 
 > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 > ---
->  drivers/vfio/fsl-mc/vfio_fsl_mc.c     |  1 +
->  drivers/vfio/pci/vfio_pci.c           |  1 +
->  drivers/vfio/platform/vfio_amba.c     |  1 +
->  drivers/vfio/platform/vfio_platform.c |  1 +
->  drivers/vfio/vfio.c                   | 10 +++++++++-
->  5 files changed, 13 insertions(+), 1 deletion(-)
+>  drivers/vfio/vfio.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
 
 Acked-by: Alex Williamson <alex.williamson@redhat.com>
 

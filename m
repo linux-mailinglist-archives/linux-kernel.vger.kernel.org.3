@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945234C856C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B6E4C856E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiCAHp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S232923AbiCAHsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiCAHpW (ORCPT
+        with ESMTP id S229674AbiCAHsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:45:22 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0C56760;
-        Mon, 28 Feb 2022 23:44:41 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v21so18993932wrv.5;
-        Mon, 28 Feb 2022 23:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9N9OiuGebRhfkNZJOLbrZK8yGd1uJ/RwgoMHb8+66t8=;
-        b=Bd+fGZjkwpi83khB3kaCW3TE7uA/n0ymRuN9QLFQQG4LrHj5rvdwgc1wEwX1Xxn6sq
-         DksXh6oU6CV9jSuMHBZvENgFiZud2pXFODfMSYUY6B24NNYWtSbHdkbY1C1b2koSfK8N
-         cWfgc47rnHia0nC6rcp7kmcPM2WaJBcMweTZJ73ldxsU5WkDvzbrwXdejlkplE1RXDrb
-         Ko3Ss7B4j3V6l0gIMXvvjcLhgknSGYPU0QV5Rry0O2dIp09EgT16VTg1/HM404dVNBJH
-         UGYDpiS8V3stQQI9uPZeejn4KCymYULGHOZDo4EB+H/EsNQxSDITLDXHNHEgD4ct5EnX
-         SkFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9N9OiuGebRhfkNZJOLbrZK8yGd1uJ/RwgoMHb8+66t8=;
-        b=JIxfXZCA52AIZ6+hRPo/40ZO8Gy3VFXOGaEi/Vz02wi4IiaQ6yUUnTGWl/z8tk+K5x
-         /a2cQ08EWbJ9lTundmx2oFVScjl9vmk4WWycfTPBsMML2FCEooAZqciQj4V8IId34dtK
-         Ds6gAc6Vl14bblBinblxYilUOVgNOIyn5C8I6ELovC2OXMr+Ok0U/3HhKn2rLBP+Ut+J
-         lyd+XOi3YbieheVgZnKza2RJ7AS/2/YWKZAnvTIhdfjZ2q5ZIIeGlcyxgSeOhKP9Zj69
-         YYNRLVW1zAjWcG1Z6Cf14LcH7lx9uWGQdJcrPX38YY5tvpftkSa85K3eaLU2sZSvu4Zf
-         3+yA==
-X-Gm-Message-State: AOAM532cc/v1ncTtATk9hCcHPLDs34Lk8WOEWxtq408ACTmt1lkKS/Zv
-        0tBfwlrhEj2tDYebamYtRDU=
-X-Google-Smtp-Source: ABdhPJxBUb5/MBYpZP4ycan/j5lwLp+Y/Q02GVioXh44+q0ranawE0HXM7MhI3mcgC5A8bu7SuyoOw==
-X-Received: by 2002:a5d:62c9:0:b0:1ea:940f:d929 with SMTP id o9-20020a5d62c9000000b001ea940fd929mr18519621wrv.164.1646120680070;
-        Mon, 28 Feb 2022 23:44:40 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b00380e3225af9sm1717859wms.0.2022.02.28.23.44.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 23:44:39 -0800 (PST)
-Message-ID: <ecb43ffc-48ff-97ab-c411-0597f356dd1a@gmail.com>
-Date:   Tue, 1 Mar 2022 08:44:38 +0100
+        Tue, 1 Mar 2022 02:48:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CEC10FE1;
+        Mon, 28 Feb 2022 23:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646120864;
+        bh=ya+GlCFq58nvhd8EcleV99I59eQckbD85ZW8wx4prKI=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=EqbHJb+ZT8u+rN/hoj6lnaIdRh080k3gbIIVM6Ck+h8UvG457m9H1Rl6AmMHp8e9W
+         m4FjsYB5JLjoqg/donKOV7jkqCPVP8E97g7ik/L8XNytStO/pwj0IdJzZCbDcN/q4G
+         w8SJFn4up2StKcxgpnecOZ/DRZ5FFqRAhn0F9xgs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MmDEm-1o6qdj3bH6-00iBQF; Tue, 01
+ Mar 2022 08:47:44 +0100
+Message-ID: <e55fb58e-bb3a-ce51-b485-6302415b34e4@gmx.com>
+Date:   Tue, 1 Mar 2022 15:47:38 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: mt6358: add mt6358-keys node
+ Thunderbird/91.6.1
 Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220121140323.4080640-1-mkorpershoek@baylibre.com>
- <20220121140323.4080640-5-mkorpershoek@baylibre.com>
- <87v8xps705.fsf@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <87v8xps705.fsf@baylibre.com>
+To:     kernel test robot <oliver.sang@intel.com>, Qu Wenruo <wqu@suse.com>
+Cc:     David Sterba <dsterba@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        lkp@lists.01.org, lkp@intel.com, linux-btrfs@vger.kernel.org
+References: <20220301063026.GB13547@xsang-OptiPlex-9020>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: [btrfs] 3626a285f8: divide_error:#[##]
+In-Reply-To: <20220301063026.GB13547@xsang-OptiPlex-9020>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l828tbFgKWyYtbkwfKrpXoQcW57YARkLuF0bG4lancPnY3SwIrd
+ n1N9m4VCTiDZxWo5jnSIG04qorWO6XLeGjzxKr88fBJMC5MXjc8/gm0fddL+pbqZdsLFJkr
+ Ef0CumOYtdQW4ZHFE1TTohf4MyfPNNmqKZ7tytUYz//RJPl+E3AFY0inQGaoz0fTeq7nvzi
+ 1qeBTuVqPjFLpiSEYoVZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:P4eJngYkoRs=:sFbRJrbGP3A8I0L6b45sbl
+ mMec9I7XT5hNBSoZIcxj5VQtPBO6so4DjXMyug6oYd/pHR1eN7IzUbuJAtvxj0/Fm8aUZaMPa
+ JdvhFiea4lEou0CrGM6qO/cao4bGj1UTewq4tteDEPOKzmk+LeKcFbc0BWnxo0Orh8Co6u1/x
+ Glj8LaX34e94bJhbkzqzwv+SOirJQsz2KZ3o82epG6SVIvOyE3qROdPuI2s/6G228GX2K9Xv4
+ xSO87qHjg9a5rtDY+ayYHSYookvN9Yfn9u+kJ+sXhONMznbaOVh4T8a5e0RU2PNyAV2Te6PM1
+ yf5saxsTlYBTtUxWe05cDnqdqwq7s0u8jKqpd0hr7DmivJ3kGmE0OwIrW3EROCGh1KsCcE4+8
+ ZhJgnQwZeaXWd+FKtwVsS+4p4l1h3n4ZYmHmk6Ih0CBwDNRpTQ2gCeCggb4unI4JLPBIfOTi9
+ 1Iwvk8lQIkwE8qRfq+DRat0sTZYVNZh8CNsjiFeeY+eNp3JkRVWHR9YAhv+vKDPBDSzFoeXaP
+ GSQPShANIaqI7ZQOi+7KsQt2Bo45akmU0CpLKLKu34RkRAtrcdMj/d+dao45RAhQbxDApe236
+ 1RtabsLsa7cihyjCQ/uobLr5xkZ65CYazlMt9+VOY6F3kaDe2v3b+cWLdgZ89MlNZV/fZpiMD
+ +7cK7jB8vJBNA7ykmlZUx+Ag28I/h+c1DIAIr09MdUNCBun/FuOgo384fFJg3C67z2Xmw2fvD
+ b4sKP0tO2vuJlANPMhHu2qsiBgQh0MmmqwifgSrvPyu4psM0nCtfuTebLhFLPfvZqkH203N2d
+ sNw2oSQ7dbFQc18cm2rp3QMYSQF6JJhtMI99m+LaiOBjFXE4yCGiIm4bbr+yJesttMlQS5MZy
+ g8y9NqDZ/jkIKgYiBk7sfL7grBS9U/cUwywQr1lcMl1SeFFcBdeB7hMEgRcVw7MiOHr5o/VjL
+ LlRH3AJfElh+ZmnBtBCDWkerPBn67u4v5ZZKByjXVhO04Yjtg355TunI8Bsw17BcjUadQoKq/
+ NgaSJ8fstxNGm82ucQfPf8cGOEDvQZsiq4IcB/G/Dfw6DRpBxHd/4PQ590qmvPXiqPpOLrukc
+ ABRB8+NpCiP588=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,55 +76,174 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 08/02/2022 16:38, Mattijs Korpershoek wrote:
-> Hi Matthias,
-> 
-> On ven., janv. 21, 2022 at 15:03, Mattijs Korpershoek <mkorpershoek@baylibre.com> wrote:
-> 
->> This enables the power,home keys on MediaTek boards with a mt6358 pmic.
->>
->> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> Since the driver change has been merged [1], can we queue up the DT change?
-> Or should I resubmit this separately?
-> 
-> Thanks
+On 2022/3/1 14:30, kernel test robot wrote:
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-9):
+>
+> commit: 3626a285f87dceb4ca649d0ef015d7b295206cdf ("btrfs: introduce dedi=
+cated helper to scrub simple-stripe based range")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+>
+> in testcase: xfstests
+> version: xfstests-x86_64-1de1db8-1_20220217
+> with following parameters:
+>
+> 	disk: 6HDD
+> 	fs: btrfs
+> 	test: btrfs-group-07
+> 	ucode: 0x28
+>
+> test-description: xfstests is a regression test suite for xfs and other =
+files ystems.
+> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+>
+>
+> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4770 CPU @ 3.4=
+0GHz with 8G memory
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log=
+/backtrace):
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+> [   65.408303][ T3224] BTRFS info (device sdb2): flagging fs with big me=
+tadata feature
+> [   65.415944][ T3224] BTRFS info (device sdb2): disk space caching is e=
+nabled
+> [   65.422842][ T3224] BTRFS info (device sdb2): has skinny extents
+> [   65.436656][ T3224] BTRFS info (device sdb2): checking UUID tree
+> [   66.134430][ T3293] BTRFS info (device sdb2): dev_replace from /dev/s=
+db3 (devid 2) to /dev/sdb6 started
+> [   67.823326][ T3293] divide error: 0000 [#1] SMP KASAN PTI
+> [   67.828668][ T3293] CPU: 3 PID: 3293 Comm: btrfs Not tainted 5.17.0-r=
+c5-00101-g3626a285f87d #1
+> [   67.837169][ T3293] Hardware name: Dell Inc. OptiPlex 9020/0DNKMN, BI=
+OS A05 12/05/2013
+> [ 67.844982][ T3293] RIP: 0010:scrub_stripe (kbuild/src/consumer/fs/btrf=
+s/scrub.c:3448 kbuild/src/consumer/fs/btrfs/scrub.c:3486 kbuild/src/consum=
+er/fs/btrfs/scrub.c:3644) btrfs
+> [ 67.850976][ T3293] Code: 00 00 fc ff df 48 89 f9 48 c1 e9 03 0f b6 0c =
+11 48 89 fa 83 e2 07 83 c2 03 38 ca 7c 08 84 c9 0f 85 27 09 00 00 41 8b 5d=
+ 1c 99 <f7> fb 48 8b 54 24 30 48 c1 ea 03 48 63 e8 48 b8 00 00 00 00 00 fc
+> All code
 
-Applied, thanks!
+This is weird, the code is from simple_stripe_full_stripe_len(), which
+means the chunk map must be RAID0 or RAID10.
 
-> 
-> [1] https://lore.kernel.org/all/YgIE%2F806gDmRJYCn@google.com/
->> ---
->>   arch/arm64/boot/dts/mediatek/mt6358.dtsi | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
->> index 95145076b7e6..98f3b0e0c9f6 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
->> @@ -2,6 +2,7 @@
->>   /*
->>    * Copyright (c) 2020 MediaTek Inc.
->>    */
->> +#include <dt-bindings/input/input.h>
->>   
->>   &pwrap {
->>   	pmic: mt6358 {
->> @@ -357,5 +358,16 @@ mt6358_vsim2_reg: ldo_vsim2 {
->>   		mt6358rtc: mt6358rtc {
->>   			compatible = "mediatek,mt6358-rtc";
->>   		};
->> +
->> +		mt6358keys: mt6358keys {
->> +			compatible = "mediatek,mt6358-keys";
->> +			power {
->> +				linux,keycodes = <KEY_POWER>;
->> +				wakeup-source;
->> +			};
->> +			home {
->> +				linux,keycodes = <KEY_HOME>;
->> +			};
->> +		};
->>   	};
->>   };
->> -- 
->> 2.32.0
+In that case, their sub_stripes should be either 1 or 2, why we got 0 ther=
+e?
+
+In fact, from volumes.c, all sub_stripes is from btrfs_raid_array[],
+which all have either 1 or 2 sub_stripes.
+
+
+Although the code is old, not the latest version, it should still not
+cause such problem.
+
+Mind to retest with my branch to see if it can be reproduced?
+https://github.com/adam900710/linux/tree/refactor_scrub
+
+Thanks,
+Qu
+
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>     0:	00 00                	add    %al,(%rax)
+>     2:	fc                   	cld
+>     3:	ff                   	(bad)
+>     4:	df 48 89             	fisttps -0x77(%rax)
+>     7:	f9                   	stc
+>     8:	48 c1 e9 03          	shr    $0x3,%rcx
+>     c:	0f b6 0c 11          	movzbl (%rcx,%rdx,1),%ecx
+>    10:	48 89 fa             	mov    %rdi,%rdx
+>    13:	83 e2 07             	and    $0x7,%edx
+>    16:	83 c2 03             	add    $0x3,%edx
+>    19:	38 ca                	cmp    %cl,%dl
+>    1b:	7c 08                	jl     0x25
+>    1d:	84 c9                	test   %cl,%cl
+>    1f:	0f 85 27 09 00 00    	jne    0x94c
+>    25:	41 8b 5d 1c          	mov    0x1c(%r13),%ebx
+>    29:	99                   	cltd
+>    2a:*	f7 fb                	idiv   %ebx		<-- trapping instruction
+>    2c:	48 8b 54 24 30       	mov    0x30(%rsp),%rdx
+>    31:	48 c1 ea 03          	shr    $0x3,%rdx
+>    35:	48 63 e8             	movslq %eax,%rbp
+>    38:	48                   	rex.W
+>    39:	b8 00 00 00 00       	mov    $0x0,%eax
+>    3e:	00 fc                	add    %bh,%ah
+>
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     0:	f7 fb                	idiv   %ebx
+>     2:	48 8b 54 24 30       	mov    0x30(%rsp),%rdx
+>     7:	48 c1 ea 03          	shr    $0x3,%rdx
+>     b:	48 63 e8             	movslq %eax,%rbp
+>     e:	48                   	rex.W
+>     f:	b8 00 00 00 00       	mov    $0x0,%eax
+>    14:	00 fc                	add    %bh,%ah
+> [   67.870187][ T3293] RSP: 0018:ffffc9000a71f450 EFLAGS: 00010246
+> [   67.876028][ T3293] RAX: 0000000000000004 RBX: 0000000000000000 RCX: =
+0000000000000000
+> [   67.883756][ T3293] RDX: 0000000000000000 RSI: 0000000000000004 RDI: =
+ffff888129ec6d1c
+> [   67.891491][ T3293] RBP: ffff8881453682a0 R08: 0000000000000001 R09: =
+0000000000000000
+> [   67.899230][ T3293] R10: ffff88821534a063 R11: ffffed1042a6940c R12: =
+ffff888121238000
+> [   67.906955][ T3293] R13: ffff888129ec6d00 R14: ffff888145368000 R15: =
+0000000000000008
+> [   67.914680][ T3293] FS:  00007f2851eb08c0(0000) GS:ffff8881a6d80000(0=
+000) knlGS:0000000000000000
+> [   67.923351][ T3293] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   67.929709][ T3293] CR2: 00007ffea4ff07f8 CR3: 000000010a0fc005 CR4: =
+00000000001706e0
+> [   67.937437][ T3293] DR0: 0000000000000000 DR1: 0000000000000000 DR2: =
+0000000000000000
+> [   67.945163][ T3293] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: =
+0000000000000400
+> [   67.952891][ T3293] Call Trace:
+> [   67.955992][ T3293]  <TASK>
+> [ 67.958749][ T3293] ? kasan_save_stack (kbuild/src/consumer/mm/kasan/co=
+mmon.c:39)
+> [ 67.963395][ T3293] ? kasan_set_track (kbuild/src/consumer/mm/kasan/com=
+mon.c:45)
+> [ 67.967951][ T3293] ? kasan_set_free_info (kbuild/src/consumer/mm/kasan=
+/generic.c:372)
+> [ 67.972851][ T3293] ? mutex_unlock (kbuild/src/consumer/arch/x86/includ=
+e/asm/atomic64_64.h:190 kbuild/src/consumer/include/linux/atomic/atomic-lo=
+ng.h:449 kbuild/src/consumer/include/linux/atomic/atomic-instrumented.h:17=
+90 kbuild/src/consumer/kernel/locking/mutex.c:178 kbuild/src/consumer/kern=
+el/locking/mutex.c:537)
+>
+>
+> To reproduce:
+>
+>          git clone https://github.com/intel/lkp-tests.git
+>          cd lkp-tests
+>          sudo bin/lkp install job.yaml           # job file is attached =
+in this email
+>          bin/lkp split-job --compatible job.yaml # generate the yaml fil=
+e for lkp run
+>          sudo bin/lkp run generated-yaml-file
+>
+>          # if come across any failure that blocks the test,
+>          # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> ---
+> 0DAY/LKP+ Test Infrastructure                   Open Source Technology C=
+enter
+> https://lists.01.org/hyperkitty/list/lkp@lists.01.org       Intel Corpor=
+ation
+>
+> Thanks,
+> Oliver Sang
+>

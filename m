@@ -2,198 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD5C4C9826
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992E54C9834
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiCAWHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S237420AbiCAWPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiCAWHW (ORCPT
+        with ESMTP id S231537AbiCAWPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:07:22 -0500
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4E79A9BF;
-        Tue,  1 Mar 2022 14:06:40 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id d17so22676123wrc.9;
-        Tue, 01 Mar 2022 14:06:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jXNWi4tflLbdxNUaNsAzZdjuXaOCikdIRH8LBw/41FM=;
-        b=ZN1/nD6SaemAuuSyjYLV4n7T0V2CmpHvXuP23pI5KlVddOu3kw8hoABqrBprGK5s4C
-         pmn1UgZ3LP5d2ekJg1ARA8AiqCuqlrf+7sN/DDixJXh4TymYviCZFcepFg8WIhzusD/X
-         PPFO61p/PIIMzRVwqrJ7U8Fe9W61bnmi3dfKd19j/rFjssztrf24wbjt6Hu+tyaMWSsB
-         kj3kMxIMEhzSL6OwnJacQdlLUwLyagi/W1TJLOD353RNUv6DUuCXKYYF+RaX9fFeitW9
-         s2M1H6id2zgzPRI7MlrhZzBR7uaUEZbrFNdK6wQnCIsWUVytAvgLS7O4NvKqKWPIVVBm
-         5Aig==
-X-Gm-Message-State: AOAM531YOKNGsJfRF5sxpqhVEaWdQIfsZANhegUM3t/+TVHsxYjWBDuZ
-        430rslXZgeO3J+NS6KmNexU1Gxqbpu0=
-X-Google-Smtp-Source: ABdhPJz77X85NKTeXnjSDVPgBEAo/gaz5LKN3+xx20pw4s6abbAA98GF6zyhudRgWzXUJIL6DBRrLA==
-X-Received: by 2002:a5d:5746:0:b0:1ea:9643:92ac with SMTP id q6-20020a5d5746000000b001ea964392acmr20549749wrw.597.1646172398668;
-        Tue, 01 Mar 2022 14:06:38 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n4-20020a05600c4f8400b00380e45cd564sm4421834wmq.8.2022.03.01.14.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 14:06:38 -0800 (PST)
-Date:   Tue, 1 Mar 2022 22:06:36 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Message-ID: <20220301220636.mqrzq7h3epfw3u3x@liuwe-devbox-debian-v2>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+        Tue, 1 Mar 2022 17:15:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE893F33B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:14:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98CBAB81E64
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 22:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7327C340EF;
+        Tue,  1 Mar 2022 22:14:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IK9JRuUj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646172869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=602NM2Gyd3H/qEINInMY72uMMsFmmO/PYVoztZoz+ps=;
+        b=IK9JRuUjNdxdFA6WCIO0+R3aefeCnCyyiJo2HTS7GhGtmLIxwU9DO7H/YwOsAdpKeL6+OO
+        WAarYzERb7tTf7jKIFACAeXWyYifRgG1rhhxB/pwg4K+nFqEFMsdqphjR4IHHQks7OoIKq
+        WQ/225cgZTniX0N97IeeTXrKmI9Qj1E=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b06919f5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 22:14:28 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH v2] random: do not export add_vmfork_randomness() unless needed
+Date:   Tue,  1 Mar 2022 23:14:25 +0100
+Message-Id: <20220301221425.411217-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9rdm0gQ0ZA4-7tTvNwd5a+TYRaPjWbcO3Rm5VoyLZbNnw@mail.gmail.com>
+References: <CAHmME9rdm0gQ0ZA4-7tTvNwd5a+TYRaPjWbcO3Rm5VoyLZbNnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will skip things that are pointed out by Greg.
+Since add_vmfork_randomness() is only called from vmgenid.o, we can
+guard it in CONFIG_VMGENID, similarly to how we do with
+add_disk_randomness() and CONFIG_BLOCK. If we ever have multiple things
+calling into add_vmfork_randomness(), we can add another shared Kconfig
+symbol for that, but for now, this is good enough. Even though
+add_vmfork_randomess() is a pretty small function, removing it means
+that there are only calls to crng_reseed(false) and none to
+crng_reseed(true), which means the compiler can constant propagate the
+false, removing branches from crng_reseed() and its descendants.
 
-On Tue, Mar 01, 2022 at 11:45:49AM -0800, Iouri Tarassov wrote:
-> - Create skeleton and add basic functionality for the
-> hyper-v compute device driver (dxgkrnl).
-> 
-> - Register for PCI and VM bus driver notifications and
-> handle initialization of VM bus channels.
-> 
-> - Connect the dxgkrnl module to the drivers/hv/ Makefile and Kconfig
-> 
-> - Create a MAINTAINERS entry
-> 
-> A VM bus channel is a communication interface between the hyper-v guest
-> and the host. The are two type of VM bus channels, used in the driver:
->   - the global channel
->   - per virtual compute device channel
-> 
+Additionally, we don't even need the symbol to be exported if
+CONFIG_VMGENID is not a module, so conditionalize that too.
 
-Same comment regarding the spelling of VMBus and Hyper-V. Please fix
-other instances in code and comments.
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v1->v2:
+- [Ted] Do not export symbol if we're a built-in.
 
-> A PCI device is created for each virtual compute device, projected
-> by the host. The device vendor is PCI_VENDOR_ID_MICROSOFT and device
-> id is PCI_DEVICE_ID_VIRTUAL_RENDER. dxg_pci_probe_device handles
-> arrival of such devices. The PCI config space of the virtual compute
-> device has luid of the corresponding virtual compute device VM
-> bus channel. This is how the compute device adapter objects are
-> linked to VM bus channels.
-> 
-> VM bus interface version is exchanged by reading/writing the PCI config
-> space of the virtual compute device.
-> 
-> The IO space is used to handle CPU accessible compute device
-> allocations. Hyper-v allocates IO space for the global VM bus channel.
-> 
-> Signed-off-by: Iouri Tarassov <iourit@linux.microsoft.com>
-> ---
-[...]
-> +static inline void guid_to_luid(guid_t *guid, struct winluid *luid)
-> +{
-> +	*luid = *(struct winluid *)&guid->b[0];
-> +}
+ drivers/char/random.c  | 4 ++++
+ include/linux/random.h | 2 ++
+ 2 files changed, 6 insertions(+)
 
-This should be moved to the header where luid is defined -- presumably
-this is useful for other things in the future too.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 99cf9e829d1e..fe477a12c1ad 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1169,6 +1169,7 @@ void add_bootloader_randomness(const void *buf, size_t size)
+ }
+ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+ 
++#if IS_ENABLED(CONFIG_VMGENID)
+ /*
+  * Handle a new unique VM ID, which is unique, not secret, so we
+  * don't credit it, but we do immediately force a reseed after so
+@@ -1182,7 +1183,10 @@ void add_vmfork_randomness(const void *unique_vm_id, size_t size)
+ 		pr_notice("crng reseeded due to virtual machine fork\n");
+ 	}
+ }
++#if IS_MODULE(CONFIG_VMGENID)
+ EXPORT_SYMBOL_GPL(add_vmfork_randomness);
++#endif
++#endif
+ 
+ struct fast_pool {
+ 	union {
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 117468f3a92e..f209f1a78899 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -34,7 +34,9 @@ extern void add_input_randomness(unsigned int type, unsigned int code,
+ extern void add_interrupt_randomness(int irq) __latent_entropy;
+ extern void add_hwgenerator_randomness(const void *buffer, size_t count,
+ 				       size_t entropy);
++#if IS_ENABLED(CONFIG_VMGENID)
+ extern void add_vmfork_randomness(const void *unique_vm_id, size_t size);
++#endif
+ 
+ extern void get_random_bytes(void *buf, size_t nbytes);
+ extern int wait_for_random_bytes(void);
+-- 
+2.35.1
 
-Also, please provide a comment on why this conversion is okay.
-
-[...]
-> + * A helper function to read PCI config space.
-> + */
-> +static int dxg_pci_read_dwords(struct pci_dev *dev, int offset, int size,
-> +			       void *val)
-> +{
-> +	int off = offset;
-> +	int ret;
-> +	int i;
-> +
-
-I think you should check for alignment here? size has to be a round
-number of sizeof(int) otherwise you risk reading cross boundary and
-causes unintended side effect?
-
-> +	for (i = 0; i < size / sizeof(int); i++) {
-> +		ret = pci_read_config_dword(dev, off, &((int *)val)[i]);
-> +		if (ret) {
-> +			pr_err("Failed to read PCI config: %d", off);
-> +			return ret;
-> +		}
-> +		off += sizeof(int);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int dxg_pci_probe_device(struct pci_dev *dev,
-> +				const struct pci_device_id *id)
-> +{
-> +	int ret;
-> +	guid_t guid;
-> +	u32 vmbus_interface_ver = DXGK_VMBUS_INTERFACE_VERSION;
-> +	struct winluid vgpu_luid = {};
-> +	struct dxgk_vmbus_guestcaps guest_caps = {.wsl2 = 1};
-> +
-> +	mutex_lock(&dxgglobal->device_mutex);
-> +
-> +	if (dxgglobal->vmbus_ver == 0)  {
-> +		/* Report capabilities to the host */
-> +
-> +		ret = pci_write_config_dword(dev, DXGK_VMBUS_GUESTCAPS_OFFSET,
-> +					guest_caps.guest_caps);
-> +		if (ret)
-> +			goto cleanup;
-> +
-> +		/* Negotiate the VM bus version */
-> +
-[...]
-> +	pr_debug("Adapter channel: %pUb\n", &guid);
-> +	pr_debug("Vmbus interface version: %d\n",
-> +		dxgglobal->vmbus_ver);
-
-No need to wrap the line here.
-
-> +	pr_debug("Host vGPU luid: %x-%x\n",
-> +		vgpu_luid.b, vgpu_luid.a);
-
-Ditto.
-
-> +
-> +cleanup:
-> +
-> +	mutex_unlock(&dxgglobal->device_mutex);
-> +
-> +	if (ret)
-> +		pr_debug("err: %s %d", __func__, ret);
-> +	return ret;
-> +}
-> +
-[...]
-> +static void __exit dxg_drv_exit(void)
-> +{
-> +	dxgglobal_destroy();
-> +}
-> +
-> +module_init(dxg_drv_init);
-> +module_exit(dxg_drv_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Microsoft Dxgkrnl virtual GPU Driver");
-
-Should be "virtual compute device driver" here? Please be consistent.
-
-Thanks,
-Wei.

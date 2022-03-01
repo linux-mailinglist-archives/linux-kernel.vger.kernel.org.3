@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D2D4C97B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C45C4C97BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238566AbiCAVYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        id S238578AbiCAVZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237410AbiCAVYm (ORCPT
+        with ESMTP id S233428AbiCAVZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:24:42 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BAE3A710
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:24:01 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id c7so14025132qka.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:24:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=1hxW1EGVkY2JeE6b+2heOI5s0Cr26hXM37u0kOu84ew=;
-        b=7EC0WjPjpVXX5wLzTCQ1zWHQ2/F0THAIt3QBUTkc8M8BzqOtaotoaSiloAzG6Nlkr2
-         40s87cb4Hz1S7+O6OTGwOk2SNQUND59+6VS/jNMQMGqU6FwPamkdQ15ptWeTjx+5mmK6
-         U3rUd6FUkMTRPrdV/TldBhMNv2053+SGa3BvI9gRzDXN/K4jXboBBe4yUqJX1QDeUI2+
-         tNwMHZPGaPAkGazIQPoHmaTb14W4jMR/QxsC5f2bwf2CKuGUXiknORvKHDHWa7QwDLHs
-         omqlkRTdNXmdoIA4Xbra/XcLzIqigrUZGFO4N08MNqUbv3L7LT2lrrJx+ybY3vLSk/aw
-         kq9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=1hxW1EGVkY2JeE6b+2heOI5s0Cr26hXM37u0kOu84ew=;
-        b=8SZHyk3slvBp+vt11LTnbURe1gPqbkNUsMnXqzVKYFvhVN56t15SyFseyMd+aaaRva
-         +mLYcdU5OHquLOnBuqZ/zHpDfsJPwjVXwIw2xdoyPBzHBIiMstSBBZtqUJGoymvPMff5
-         jlSLtL9Skcz3Ja2ZXXAdcOP9LRxFyDzwpU8sONIKvS6esHzcnCDHa5NdJhWBEyZ48Mtp
-         eyIIpODkGem2wGOYNfid818Q62l0e/L8eARDrI+2FYFX/Mb7Mf/tMaPl0wN+lpIvxMW2
-         qstuJkZOiC2EbKsumPlHQSCaeTsClFMbbKuvzxi2QTPSM3rFoqjHWKiVEssGI6aX7X0Q
-         Oivg==
-X-Gm-Message-State: AOAM5303NEQeolHTaW/emt4HMxTBqVjNJvT4c9agSlNuqKVAvDPDHj/Z
-        tZqP5a1xRccLCgJZns8mSiHW4g==
-X-Google-Smtp-Source: ABdhPJwY0aoBJrEONgibzMk7/y+sRBTD6g5QfO5xkwuHNI8ic+sDHMDAa187VNsVRjQq7qpNq+4P/w==
-X-Received: by 2002:a37:5d2:0:b0:5e9:5876:7f0 with SMTP id 201-20020a3705d2000000b005e9587607f0mr14619695qkf.4.1646169840382;
-        Tue, 01 Mar 2022 13:24:00 -0800 (PST)
-Received: from localhost ([2605:a601:a665:9200:a5cf:2f00:e792:9b5b])
-        by smtp.gmail.com with ESMTPSA id g2-20020a37e202000000b00607e264a208sm7072611qki.40.2022.03.01.13.23.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 13:24:00 -0800 (PST)
-From:   Jon Mason <jdmason@kudzu.us>
-X-Google-Original-From: Jon Mason <jdm@athena.kudzu.us>
-Date:   Tue, 1 Mar 2022 16:23:59 -0500
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com
-Subject: [GIT PULL] NTB bug fixes for 5.17
-Message-ID: <Yh6O7wmp8HCjxOn3@athena.kudzu.us>
+        Tue, 1 Mar 2022 16:25:18 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8363E59A6E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:24:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646169876; x=1677705876;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JZLioDVKS6LuehJBIZDO24RmEJXeYF9yp3vaFn2IdAs=;
+  b=HU1Sud7/z4HP0hKM61lAJjcB09uRYHN0++kJAABjdAXKV67xjeTa5EsA
+   qxN1bMaXaG3peqAIDE2GRrEApoP6WAeFe1zyO8A4QAukXgncvaa5NpotR
+   7uMvLH9r2Z0ONFbOcTJ099U8Ip10S6u9NImF9vipnp92jUG/aXKW00Dpj
+   HyyvLVpJAPEyOXD9ur5jh/rH+69YJ7Pe1+X/6wwEHK9jC7eSEZTR/faHr
+   m8JA36qZDxNK+hW1RKdoEh+dsW3XJW887nJ4Xry8oRENwC41zZ9ByHpgj
+   982AEE2OSQqIr4K4NUzmoCaJ4CfzTtl/HYU5PyhkVjgukMqo28xdKKwXl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="236754318"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="236754318"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 13:24:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="778602654"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Mar 2022 13:24:33 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP9yz-00013P-7k; Tue, 01 Mar 2022 21:24:33 +0000
+Date:   Wed, 2 Mar 2022 05:24:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [ammarfaizi2-block:axboe/linux-block/m1/2022-03-01 322/355]
+ drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared
+ identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
+Message-ID: <202203020538.0AuLqib9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
-Here are a few NTB bug fixes for 5.17.  Please consider pulling them.
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1/2022-03-01
+head:   d7cc9472c1c5430d7caa806e8180d2359ea46266
+commit: 4d1ed10a5e4b5553438f02ca438904fc8c2dcccf [322/355] reboot: Remove pm_power_off_prepare()
+config: hexagon-randconfig-r045-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020538.0AuLqib9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/4d1ed10a5e4b5553438f02ca438904fc8c2dcccf
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1/2022-03-01
+        git checkout 4d1ed10a5e4b5553438f02ca438904fc8c2dcccf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/regulator/
 
-Thanks,
-Jon
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
+           if (pm_power_off_prepare) {
+               ^~~~~~~~~~~~~~~~~~~~
+               pfuze_power_off_prepare
+   drivers/regulator/pfuze100-regulator.c:574:13: note: 'pfuze_power_off_prepare' declared here
+   static void pfuze_power_off_prepare(void)
+               ^
+   drivers/regulator/pfuze100-regulator.c:630:2: error: use of undeclared identifier 'pm_power_off_prepare'
+           pm_power_off_prepare = pfuze_power_off_prepare;
+           ^
+   drivers/regulator/pfuze100-regulator.c:844:3: error: use of undeclared identifier 'pm_power_off_prepare'
+                   pm_power_off_prepare = NULL;
+                   ^
+   3 errors generated.
 
 
+vim +619 drivers/regulator/pfuze100-regulator.c
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+c29daffa322ad3 Oleksij Rempel 2018-08-02  611  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  612  static int pfuze_power_off_prepare_init(struct pfuze_chip *pfuze_chip)
+c29daffa322ad3 Oleksij Rempel 2018-08-02  613  {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  614  	if (pfuze_chip->chip_id != PFUZE100) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  615  		dev_warn(pfuze_chip->dev, "Requested pm_power_off_prepare handler for not supported chip\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  616  		return -ENODEV;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  617  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  618  
+c29daffa322ad3 Oleksij Rempel 2018-08-02 @619  	if (pm_power_off_prepare) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  620  		dev_warn(pfuze_chip->dev, "pm_power_off_prepare is already registered.\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  621  		return -EBUSY;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  622  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  623  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  624  	if (syspm_pfuze_chip) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  625  		dev_warn(pfuze_chip->dev, "syspm_pfuze_chip is already set.\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  626  		return -EBUSY;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  627  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  628  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  629  	syspm_pfuze_chip = pfuze_chip;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  630  	pm_power_off_prepare = pfuze_power_off_prepare;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  631  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  632  	return 0;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  633  }
+c29daffa322ad3 Oleksij Rempel 2018-08-02  634  
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+:::::: The code at line 619 was first introduced by commit
+:::::: c29daffa322ad36978cbce487f8ebcd9c3c3f7c0 regulator: pfuze100-regulator: provide pm_power_off_prepare handler
 
-are available in the Git repository at:
+:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
-  git://github.com/jonmason/ntb tags/ntb-5.17-bugfixes
-
-for you to fetch changes up to 9b818634f8e7e0bca3386a50b1fada7a49036408:
-
-  MAINTAINERS: update mailing list address for NTB subsystem (2022-02-02 17:34:18 -0500)
-
-----------------------------------------------------------------
-Bug fixes for sparse warning, intel port config offset, and a new
-mailing list
-
-----------------------------------------------------------------
-Dave Jiang (2):
-      ntb: intel: fix port config status offset for SPR
-      MAINTAINERS: update mailing list address for NTB subsystem
-
-Gustavo A. R. Silva (1):
-      NTB/msi: Use struct_size() helper in devm_kzalloc()
-
- MAINTAINERS                        |  8 ++++----
- drivers/ntb/hw/intel/ntb_hw_gen4.c | 17 ++++++++++++++++-
- drivers/ntb/hw/intel/ntb_hw_gen4.h | 16 ++++++++++++++++
- drivers/ntb/msi.c                  |  6 ++----
- 4 files changed, 38 insertions(+), 9 deletions(-)
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

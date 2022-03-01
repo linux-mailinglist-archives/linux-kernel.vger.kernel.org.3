@@ -2,122 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054134C8BCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31754C8B69
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiCAMjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S234707AbiCAMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234065AbiCAMjD (ORCPT
+        with ESMTP id S233039AbiCAMVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:39:03 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B63372983B;
-        Tue,  1 Mar 2022 04:38:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F42DED1;
-        Tue,  1 Mar 2022 04:38:22 -0800 (PST)
-Received: from [10.57.39.47] (unknown [10.57.39.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BD743F70D;
-        Tue,  1 Mar 2022 04:38:20 -0800 (PST)
-Message-ID: <54b24f3d-3762-abbd-5ac4-dc5728f2fe4e@arm.com>
-Date:   Tue, 1 Mar 2022 12:38:17 +0000
+        Tue, 1 Mar 2022 07:21:25 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A7957170;
+        Tue,  1 Mar 2022 04:20:43 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K7GWx17dbzdZj5;
+        Tue,  1 Mar 2022 20:19:25 +0800 (CST)
+Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 1 Mar 2022 20:20:41 +0800
+Received: from huawei.com (10.175.124.27) by dggpemm500004.china.huawei.com
+ (7.185.36.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 1 Mar
+ 2022 20:20:40 +0800
+From:   Laibin Qiu <qiulaibin@huawei.com>
+To:     <tj@kernel.org>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next v2] blk-throttle: Set BIO_THROTTLED when bio has been throttled
+Date:   Tue, 1 Mar 2022 20:39:19 +0800
+Message-ID: <20220301123919.2381579-1-qiulaibin@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: avoid logspam when cd-broken
-Content-Language: en-GB
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-mmc@vger.kernel.org,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220228223642.1136229-1-pgwipeout@gmail.com>
- <c12e74b7-0bef-ac7a-20c1-2a17ddd050dd@arm.com>
- <CAMdYzYq0A4FitRGe49fxvjbwLUCi_KGwCtfz7pmayt_dK=r32w@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMdYzYq0A4FitRGe49fxvjbwLUCi_KGwCtfz7pmayt_dK=r32w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500004.china.huawei.com (7.185.36.219)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-01 11:49, Peter Geis wrote:
-> On Tue, Mar 1, 2022 at 6:23 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2022-02-28 22:36, Peter Geis wrote:
->>> The dw_mmc-rockchip driver drops a large amound of logspam constantly
->>> when the cd-broken flag is enabled.
->>> Set the warning to be debug ratelimited in this case.
->>
->> Isn't this just papering over some fundamental problem with the clock?
->> If it's failing to set the expected rate for communicating with a card,
->> then presumably that's an issue for correct operation in general? The
->> fact that polling for a card makes a lot more of that communication
->> happen seems unrelated :/
-> 
-> Good Morning,
-> 
-> This only happens when a card is not inserted, so communication cannot happen.
+1.In current process, all bio will set the BIO_THROTTLED flag
+after __blk_throtl_bio().
 
-Well, I suppose there's a philosophical question in there about whether 
-shouting into the void counts as "communication", but AFAIR what the 
-polling function does is power up the controller, send a command, and 
-see if it gets a response.
+2.If bio needs to be throttled, it will start the timer and
+stop submit bio directly. Bio will submit in
+blk_throtl_dispatch_work_fn() when the timer expires.But in
+the current process, if bio is throttled. The BIO_THROTTLED
+will be set to bio after timer start. If the bio has been
+completed, it may cause use-after-free blow.
 
-If the clock can't be set to the proper rate for low-speed discovery, 
-some or all cards may not be detected properly. Conversely if it is 
-already at a slow enough rate for discovery but can't be set higher once 
-a proper communication mode has been established, data transfer 
-performance will be terrible. Either way, it is not OK in general for 
-clk_set_rate() to fail, hence the warning. You have a clock driver problem.
+BUG: KASAN: use-after-free in blk_throtl_bio+0x12f0/0x2c70
+Read of size 2 at addr ffff88801b8902d4 by task fio/26380
 
-Cheers,
-Robin.
+ dump_stack+0x9b/0xce
+ print_address_description.constprop.6+0x3e/0x60
+ kasan_report.cold.9+0x22/0x3a
+ blk_throtl_bio+0x12f0/0x2c70
+ submit_bio_checks+0x701/0x1550
+ submit_bio_noacct+0x83/0xc80
+ submit_bio+0xa7/0x330
+ mpage_readahead+0x380/0x500
+ read_pages+0x1c1/0xbf0
+ page_cache_ra_unbounded+0x471/0x6f0
+ do_page_cache_ra+0xda/0x110
+ ondemand_readahead+0x442/0xae0
+ page_cache_async_ra+0x210/0x300
+ generic_file_buffered_read+0x4d9/0x2130
+ generic_file_read_iter+0x315/0x490
+ blkdev_read_iter+0x113/0x1b0
+ aio_read+0x2ad/0x450
+ io_submit_one+0xc8e/0x1d60
+ __se_sys_io_submit+0x125/0x350
+ do_syscall_64+0x2d/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-> I found it while lighting off the SoQuartz module.
-> As it is pin compatible with the RPi CM4, and the CM4 does not have a
-> card detect line, sdmmc is non functional without cd-broken.
-> This led to the fun spew when there wasn't a card inserted as this
-> function is called every poll tick.
-> 
-> Thanks,
-> Peter
-> 
->>
->> Robin.
->>
->>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
->>> ---
->>>    drivers/mmc/host/dw_mmc-rockchip.c | 9 +++++++--
->>>    1 file changed, 7 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
->>> index 95d0ec0f5f3a..d0ebf0afa42a 100644
->>> --- a/drivers/mmc/host/dw_mmc-rockchip.c
->>> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
->>> @@ -50,8 +50,13 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
->>>                cclkin = ios->clock * RK3288_CLKGEN_DIV;
->>>
->>>        ret = clk_set_rate(host->ciu_clk, cclkin);
->>> -     if (ret)
->>> -             dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
->>> +     if (ret) {
->>> +             /* this screams when card detection is broken */
->>> +             if (host->slot->mmc->caps & MMC_CAP_NEEDS_POLL)
->>> +                     dev_dbg_ratelimited(host->dev, "failed to set rate %uHz\n", ios->clock);
->>> +             else
->>> +                     dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
->>> +     }
->>>
->>>        bus_hz = clk_get_rate(host->ciu_clk) / RK3288_CLKGEN_DIV;
->>>        if (bus_hz != host->bus_hz) {
+Allocated by task 26380:
+ kasan_save_stack+0x19/0x40
+ __kasan_kmalloc.constprop.2+0xc1/0xd0
+ kmem_cache_alloc+0x146/0x440
+ mempool_alloc+0x125/0x2f0
+ bio_alloc_bioset+0x353/0x590
+ mpage_alloc+0x3b/0x240
+ do_mpage_readpage+0xddf/0x1ef0
+ mpage_readahead+0x264/0x500
+ read_pages+0x1c1/0xbf0
+ page_cache_ra_unbounded+0x471/0x6f0
+ do_page_cache_ra+0xda/0x110
+ ondemand_readahead+0x442/0xae0
+ page_cache_async_ra+0x210/0x300
+ generic_file_buffered_read+0x4d9/0x2130
+ generic_file_read_iter+0x315/0x490
+ blkdev_read_iter+0x113/0x1b0
+ aio_read+0x2ad/0x450
+ io_submit_one+0xc8e/0x1d60
+ __se_sys_io_submit+0x125/0x350
+ do_syscall_64+0x2d/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Freed by task 0:
+ kasan_save_stack+0x19/0x40
+ kasan_set_track+0x1c/0x30
+ kasan_set_free_info+0x1b/0x30
+ __kasan_slab_free+0x111/0x160
+ kmem_cache_free+0x94/0x460
+ mempool_free+0xd6/0x320
+ bio_free+0xe0/0x130
+ bio_put+0xab/0xe0
+ bio_endio+0x3a6/0x5d0
+ blk_update_request+0x590/0x1370
+ scsi_end_request+0x7d/0x400
+ scsi_io_completion+0x1aa/0xe50
+ scsi_softirq_done+0x11b/0x240
+ blk_mq_complete_request+0xd4/0x120
+ scsi_mq_done+0xf0/0x200
+ virtscsi_vq_done+0xbc/0x150
+ vring_interrupt+0x179/0x390
+ __handle_irq_event_percpu+0xf7/0x490
+ handle_irq_event_percpu+0x7b/0x160
+ handle_irq_event+0xcc/0x170
+ handle_edge_irq+0x215/0xb20
+ common_interrupt+0x60/0x120
+ asm_common_interrupt+0x1e/0x40
+
+Fix this by move BIO_THROTTLED set into the queue_lock.
+
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+---
+ block/blk-throttle.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index a3b3ebc72dd4..9d4ad9317509 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -2145,13 +2145,14 @@ bool __blk_throtl_bio(struct bio *bio)
+ 	}
+ 
+ out_unlock:
+-	spin_unlock_irq(&q->queue_lock);
+ 	bio_set_flag(bio, BIO_THROTTLED);
+ 
+ #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ 	if (throttled || !td->track_bio_latency)
+ 		bio->bi_issue.value |= BIO_ISSUE_THROTL_SKIP_LATENCY;
+ #endif
++	spin_unlock_irq(&q->queue_lock);
++
+ 	rcu_read_unlock();
+ 	return throttled;
+ }
+-- 
+2.22.0
+

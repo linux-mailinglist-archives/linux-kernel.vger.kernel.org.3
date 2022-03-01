@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E298B4C9083
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DA34C9084
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235380AbiCAQiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S236262AbiCAQi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236319AbiCAQiI (ORCPT
+        with ESMTP id S236170AbiCAQi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:38:08 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE941BF54
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:37:26 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2d07ae0b1bfso150839517b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HXHGLPLtJRYzjv6GySuP5dGmNicFN4UpBZOGFq6UpJ4=;
-        b=o6wRjxVDReOpmpWTDLYS5JsU4T1jJyPUCbmUFEvt587Yp/bGuKvDeypREjE7RHhUiC
-         vcVMX8ZBItn93oYEpzI7TpbQFudx8Vj3lpXBr83Ws7GfgQCTcvQ0RkTcm+yZkQgJ6yKE
-         g3HEkCiCKxf7kN5Y9GT8GfWLc15Y/FFVBk7kwHOQSqn9SnARxxgoEZ6mXOtnyCeR3Fql
-         im1hyAKLlGjKvxqqKdhy2nhleakAtssezMJPeMJUBoqQcHiXIK0THW0mDJaU3T2sXHea
-         N2BEdLOBPha/U32zMWEVzNuJKnkelg7eB0E+niO1NvUPlfNbrCrxpNSr/ukPmgpOxtcF
-         TE1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HXHGLPLtJRYzjv6GySuP5dGmNicFN4UpBZOGFq6UpJ4=;
-        b=a6jRnD1o+UPXsicFkF1GGicafN8T0PUetbTOzcJ1LZs8BAOUoUWW0O75j0bfYRsu3Q
-         zA97oAGR6TtP8xZXM6VPA7Hs7u8pAZk4GfGRG+fvqSF+JZcC4hflxDPD+5fzxIx+O7jm
-         wxeYApSaVEi4Zt3LjiI/ZrU5Rm78XQYiJQXcw6n+Kds/VCufHP8a4HzGG1oL7cAwQNNI
-         J0CiaHXPS7tT4TXmTC1J7NRQTzxQIq/9ereKyj4lPVGILd5T4R0NdpONz+n1OrfMxTZI
-         9p/39obSbB1RRuE/xW+BkZCy+oi2k7EE0WPPqGScIR5kAuMpIcHerBWLflbzJ6CUM3b6
-         Qgvw==
-X-Gm-Message-State: AOAM533jkrmnaCqbUczUnQFsgQigaa++VkzXmNIoPtOThuGBi5T77F4T
-        XxeQb2LXG3JBV8Ph0bDRa15lS4ORpGF+D3car+GJMA==
-X-Google-Smtp-Source: ABdhPJwD/CrTkuqxdqpnyMbKcMWQbQMe61UiZ/DvsEd5/UZrtCbcZx/Gb0RQsU8nZLCtdqz6fItOUA055qNfu6ZPqHA=
-X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
- v18-20020a812f12000000b002d7d366164amr26275690ywv.265.1646152645816; Tue, 01
- Mar 2022 08:37:25 -0800 (PST)
+        Tue, 1 Mar 2022 11:38:27 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582762C5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:37:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646152665; x=1677688665;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Xq8o1OwGrWrJswtfuIbrlg6hnMIFmFyMHnjBYysagQs=;
+  b=Ot9jpbtjBIkkmHbJiU19nzh23VMfZmd/7K26e9HLlvA9V7qzUXK0nfgP
+   wusMgKiPMvPXUk9y/sx4lC4AHxa4gQDHdW9JWFvSfFeJKTqu0IiOH6yj7
+   fRYxGpPE5qkR6NMcU1LkuIA30S3vdNGY4n18/MzG7RFASTVMIS3JHoaRl
+   RnaDlmu0p6ktErOvgBsUqCoD1Y5Lc+wnlBD0XE0a6krdhdE5gQYIs7ncT
+   nvXJiISEb05F93OoZiz0tSJMW/+MRE6SQr9Prwc/I9Hzn9jEOqwFSjPVM
+   6ICM71Es8x9fSitxhBCPoGz0fiF5ijkL2Ml/qDwNOaAEecwgEhmCV77fM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="316389267"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="316389267"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:37:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="593652839"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Mar 2022 08:37:43 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP5VP-0000iz-9o; Tue, 01 Mar 2022 16:37:43 +0000
+Date:   Wed, 2 Mar 2022 00:37:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/30]
+ drivers/vfio/vfio.c:1800:24: error: implicit declaration of function
+ 'iommufd_vfio_set_iommu'
+Message-ID: <202203020047.jhfhUk35-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220228172207.090703467@linuxfoundation.org>
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Mar 2022 22:07:13 +0530
-Message-ID: <CA+G9fYvN1awHcozk3A2=TKGF9T2626Qu9BU=E=z5NyBpOM-TXg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/34] 4.19.232-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,170 +62,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 22:59, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.232 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.232-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   2bca5fa75dad57f41002a93861a950d35d55e568
+commit: f8fb748995b4e1156fd76a3860da5ea897536a3c [29/30] vfio: Fix kernel panic in vfio_ioctl_check_extension()
+config: mips-randconfig-r015-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020047.jhfhUk35-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/f8fb748995b4e1156fd76a3860da5ea897536a3c
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout f8fb748995b4e1156fd76a3860da5ea897536a3c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build
-* kernel: 4.19.232-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: 277110482a84a0400d6d71b4c12262431b62a5fe
-* git describe: v4.19.231-35-g277110482a84
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.231-35-g277110482a84
+   drivers/vfio/vfio.c: In function '__vfio_group_unset_container':
+   drivers/vfio/vfio.c:1088:17: error: too many arguments to function 'vfio_group_unset_iommufd'
+    1088 |                 vfio_group_unset_iommufd(group->iommufd, &group->device_list);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/vfio/vfio.c:35:
+   include/linux/iommufd.h:57:20: note: declared here
+      57 | static inline void vfio_group_unset_iommufd(void *iommufd)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vfio/vfio.c: In function 'vfio_group_set_container':
+   drivers/vfio/vfio.c:1166:49: error: passing argument 2 of 'vfio_group_set_iommufd' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1166 |                                                 &group->device_list);
+         |                                                 ^~~~~~~~~~~~~~~~~~~
+         |                                                 |
+         |                                                 struct list_head *
+   In file included from drivers/vfio/vfio.c:35:
+   include/linux/iommufd.h:51:70: note: expected 'struct iommu_group *' but argument is of type 'struct list_head *'
+      51 | static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
+         |                                                  ~~~~~~~~~~~~~~~~~~~~^~~~~
+   drivers/vfio/vfio.c:1165:26: error: too few arguments to function 'vfio_group_set_iommufd'
+    1165 |         group->iommufd = vfio_group_set_iommufd(container_fd,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/vfio/vfio.c:35:
+   include/linux/iommufd.h:51:19: note: declared here
+      51 | static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/vfio/vfio.c: In function 'vfio_external_check_extension':
+>> drivers/vfio/vfio.c:1800:24: error: implicit declaration of function 'iommufd_vfio_set_iommu' [-Werror=implicit-function-declaration]
+    1800 |                 return iommufd_vfio_set_iommu(group->iommufd, arg);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-## Test Regressions (compared to v4.19.231)
-No test regressions found.
 
-## Metric Regressions (compared to v4.19.231)
-No metric regressions found.
+vim +/iommufd_vfio_set_iommu +1800 drivers/vfio/vfio.c
 
-## Test Fixes (compared to v4.19.231)
-No test fixes found.
+  1796	
+  1797	long vfio_external_check_extension(struct vfio_group *group, unsigned long arg)
+  1798	{
+  1799		if (group->iommufd)
+> 1800			return iommufd_vfio_set_iommu(group->iommufd, arg);
+  1801	
+  1802		return vfio_ioctl_check_extension(group->container, arg);
+  1803	}
+  1804	EXPORT_SYMBOL_GPL(vfio_external_check_extension);
+  1805	
 
-## Metric Fixes (compared to v4.19.231)
-No metric fixes found.
-
-## Test result summary
-total: 80757, pass: 67675, fail: 437, skip: 11350, xfail: 1295
-
-## Build Summary
-* arm: 281 total, 275 passed, 6 failed
-* arm64: 39 total, 37 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 60 total, 49 passed, 11 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

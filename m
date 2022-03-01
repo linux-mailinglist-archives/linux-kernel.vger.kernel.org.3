@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761F04C8B98
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F7F4C8BA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiCAMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S234761AbiCAMc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbiCAMaF (ORCPT
+        with ESMTP id S233394AbiCAMc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:30:05 -0500
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6357C7BD;
-        Tue,  1 Mar 2022 04:29:23 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id e186so2749680ybc.7;
-        Tue, 01 Mar 2022 04:29:23 -0800 (PST)
+        Tue, 1 Mar 2022 07:32:27 -0500
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB739681F;
+        Tue,  1 Mar 2022 04:31:46 -0800 (PST)
+Received: by mail-yb1-f171.google.com with SMTP id w16so960975ybi.12;
+        Tue, 01 Mar 2022 04:31:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2Qb+h6pvmrYcsYdF4fmRmPW5GvZZaWDE9Xx5LWTWH34=;
-        b=PlOHSc6xG0KtIUuc39L0z+7afFzJoKqA99WLj4+afh1W1YEujhBofgcdTWsy+oBkiU
-         ISJ4VVRNfqlpyUMg8MyjN76lLHzgtATNK95tGlfeQkb9IBDX6Cw6bnauPSOXU+9DFNBX
-         XR9wtWRh5fy1kLsA+b9ejl8I3RucVM8nN2BGmfjNCfye1fLiaZo4OahE3bepaLzA4yj7
-         AsGUN0lIvNBqFXxP6LRXnIqBxPEDHnKLOgbDFUSxDhmBrX0lmPlfwzfianfo6rf56Ao9
-         FMAziQt+psIkhiwmEzwQ8J6hRHdl9mnG2oF7uCFaljDpMqgxciPGsaHlp36WftJbJRvC
-         uwnA==
-X-Gm-Message-State: AOAM5308V5UEcODpw0YX0nAtxiUFyNB3dCcmlk1lv3y/zBAKeOh9MWRI
-        A/hfL2qRZJHWwWC+4WHC1Yvhwmj1TWuPXonK3cA=
-X-Google-Smtp-Source: ABdhPJx83Dm3C89wEnZvq5L0H/uXdIUCUF+VaaSrxtZgFnG2zvKEmtY6mGRdRaGSYA7F8csBBVvhQVCoy7FuKYkg+vc=
-X-Received: by 2002:a25:d90d:0:b0:615:e400:94c1 with SMTP id
- q13-20020a25d90d000000b00615e40094c1mr23374790ybg.81.1646137762438; Tue, 01
- Mar 2022 04:29:22 -0800 (PST)
+        bh=qaTIMLNruS+dxEOAlL7KpOrpDbigzmi7+nOXqPGN0d0=;
+        b=UPHqb0ULs8BIO+yirWkjDRNjNBw6lVXlw7cUEdXIfSUMXz7cSBM9n8BzSf3WZK1RbC
+         DOGJEazQ5E/COcdPVDlPk0XOIgQ4TJSereVH2FLEskLa8c/kyayrVnzsqfge6U2STRKY
+         h5qvI0RlKzMm7m2inNAdA1lbs9HBlLWtaZ+HQRNrAFjUmr+qtVLGerQN/GacbuQedxO5
+         N7YnvZVW9i/RR/qVU1ZyNHCR4iFTsIOcAFt8BtNHaALoRCe3+APedW+GcvFrUgSTBDZU
+         DhJvOMepppRLjQbey0rZxpZ5j4SfiRvW0mrkmzZtN7n94ljvgaQpxbNMvI6MDlqr3sVT
+         mK9w==
+X-Gm-Message-State: AOAM531y/6AJoo9EVHd72uDRdmycPTQDiatR+fEJLOsTftgNB+4xbIuB
+        KaJ0bnEuRy2lk6F5+xDIHuYRhVpKsgeUtlSH6u8zRFrJ
+X-Google-Smtp-Source: ABdhPJypqno3PJ6US5bKKCGYfosOnQ1nI12x3AAT2mS3PXz99WpzKQsvGxwjyUCb1OOYQ/A2xL7JBZZ4SfAPU7o9oro=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr21733061ybe.365.1646137905624; Tue, 01
+ Mar 2022 04:31:45 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHmME9qHnvwrxEue4Pdm_E1qZQGXFuR9orJSKCWj8fH5TSh6fA@mail.gmail.com>
- <20220228183355.9090-1-Jason@zx2c4.com>
-In-Reply-To: <20220228183355.9090-1-Jason@zx2c4.com>
+References: <20220228105259.230903-1-hdegoede@redhat.com> <20220228105259.230903-2-hdegoede@redhat.com>
+In-Reply-To: <20220228105259.230903-2-hdegoede@redhat.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 13:29:11 +0100
-Message-ID: <CAJZ5v0jPP5UJevOFQprxvv+9-HRZHH22Ms7AmG04=BpoeXF-uA@mail.gmail.com>
-Subject: Re: [PATCH 2/3 v6] ACPI: allow longer device IDs
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
+Date:   Tue, 1 Mar 2022 13:31:34 +0100
+Message-ID: <CAJZ5v0idYTBJV_NikVpF6hF6GOdWDjP3OUny4PqK7YD9t4MOqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/PCI: Disable exclusion of E820 reserved addressed
+ in some cases
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        =?UTF-8?Q?Benoit_Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -65,93 +68,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 7:34 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Mon, Feb 28, 2022 at 11:55 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> From: Alexander Graf <graf@amazon.com>
+> Some fw has a bug where the PCI bridge window returned by the ACPI
+> resources partly overlaps with some other address range, causing issues.
+> To workaround this Linux excludes E820 reserved addresses when allocating
+> addresses from the PCI bridge window. 2 known examples of such fw bugs are:
 >
-> We create a list of ACPI "PNP" IDs which contains _HID, _CID, and CLS
-> entries of the respective devices. However, when making structs for
-> matching, we squeeze those IDs into acpi_device_id, which only has 9
-> bytes space to store the identifier. The subsystem actually captures the
-> full length of the IDs, and the modalias has the full length, but this
-> struct we use for matching is limited. It originally had 16 bytes, but
-> was changed to only have 9 in 6543becf26ff ("mod/file2alias: make
-> modalias generation safe for cross compiling"), presumably on the theory
-> that it would match the ACPI spec so it didn't matter.
+> 1. The returned window contains addresses which map to system RAM,
+> see commit 4dc2287c1805 ("x86: avoid E820 regions when allocating
+> address space").
 >
-> Unfortunately, while most people adhere to the ACPI specs, Microsoft
-> decided that its VM Generation Counter device [1] should only be
-> identifiable by _CID with a value of "VM_Gen_Counter", which is longer
-> than 9 characters.
+> 2. The Lenovo X1 carbon gen 2 BIOS has an overlap between an EFI/E820
+> reserved range and the ACPI provided PCI bridge window:
+>  efi: mem46: [MMIO] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+>  BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+>  pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+> If Linux assigns the overlapping 0xdfa00000-0xdfa0ffff range to a PCI BAR
+> then the system fails to resume after a suspend.
 >
-> To allow device drivers to match identifiers that exceed the 9 byte
-> limit, this simply ups the length to 16, just like it was before the
-> aforementioned commit. Empirical testing indicates that this
-> doesn't actually increase vmlinux size on 64-bit, because the ulong in
-> the same struct caused there to be 7 bytes of padding anyway, and when
-> doing a s/M/Y/g i386_defconfig build, the bzImage only increased by
-> 0.0055%, so negligible.
+> Recently (2019) some systems have shown-up with EFI memmap MMIO entries
+> covering the entire ACPI provided PCI bridge window. These memmap entries
+> get converted into e820_table entries, causing all attempts to assign
+> memory to PCI BARs which have not been setup by the BIOS to fail.
+> For example see these dmesg snippets from a Lenovo IdeaPad 3 15IIL 81WE:
+>  efi: mem63: [MMIO] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+>  BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+>  pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
+>  pci 0000:00:15.0: BAR 0: failed to assign [mem size 0x00001000 64bit]
 >
-> This patch is a prerequisite to add support for VMGenID in Linux, the
-> subsequent patch in this series. It has been confirmed to also work on
-> the udev/modalias side in userspace.
+> To fix this, check if the ACPI provided PCI bridge window is fully
+> contained within in EFI memmap MMIO region and in that case disable
+> the "exclude E820 reserved addresses" workaround, fixing the problem
+> of not being able to find free space for unassigned BARs.
 >
-> [1] https://download.microsoft.com/download/3/1/C/31CFC307-98CA-4CA5-914C-D9772691E214/VirtualMachineGenerationID.docx
->
-> Signed-off-by: Alexander Graf <graf@amazon.com>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Co-authored-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> [Jason: reworked commit message a bit, went with len=16 approach.]
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+> BugLink: https://bugs.launchpad.net/bugs/1878279
+> BugLink: https://bugs.launchpad.net/bugs/1931715
+> BugLink: https://bugs.launchpad.net/bugs/1932069
+> BugLink: https://bugs.launchpad.net/bugs/1921649
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
-> Hi Rafael,
->
-> This patch is directed toward you specifically. The first and last patch
-> of the series this is part of have been through the ringer of review a
-> bit already and do not specifically require your attention, but we wound
-> up getting hung up on an ACPI ID matching API limitation. This patch
-> fixes that limitation with this patch that you see here, with a trivial
-> one line fix, which does require your attention.
->
-> The other patches will go through my random.git tree naturally, but
-> because those patches depend on this one here, in order to compile
-> without warnings (and be functional at all), it would be nice if you
-> would provide an "Acked-by" on it and permit me to /also/ take it
-> through my random.git tree (if it looks like a correct patch to you, of
-> course). This would make the merge logistics a lot easier. Plus it's a
-> small +1/-1 line change.
->
-> This v6 updates the commit message.
+> Changes in v2:
+> - Add a couple of missing includes to arch/x86/include/asm/pci_x86.h
+>   to fix i386 build errors Reported-by: kernel test robot <lkp@intel.com>
+> - Do not call resource_is_efi_mmio_region() on resource-list entries which
+>   have just been destroyed because they match resource_is_pcicfg_ioport()
+>   Reported-by: kernel test robot <oliver.sang@intel.com>
+> - Add (res->flags & IORESOURCE_MEM) check to resource_is_efi_mmio_region()
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Applied (subject fixed up), thanks!
 
-> Please have a look and let me know what you think.
+> ---
+>  arch/x86/include/asm/pci_x86.h | 10 +++++
+>  arch/x86/kernel/resource.c     |  4 ++
+>  arch/x86/pci/acpi.c            | 68 +++++++++++++++++++++++++++++++++-
+>  3 files changed, 81 insertions(+), 1 deletion(-)
 >
-> Thanks,
-> Jason
+> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
+> index 490411dba438..4ce61ab01a4f 100644
+> --- a/arch/x86/include/asm/pci_x86.h
+> +++ b/arch/x86/include/asm/pci_x86.h
+> @@ -5,7 +5,9 @@
+>   *     (c) 1999 Martin Mares <mj@ucw.cz>
+>   */
 >
->  include/linux/mod_devicetable.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> +#include <linux/init.h>
+>  #include <linux/ioport.h>
+> +#include <linux/spinlock.h>
 >
-> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-> index 4bb71979a8fd..5da5d990ff58 100644
-> --- a/include/linux/mod_devicetable.h
-> +++ b/include/linux/mod_devicetable.h
-> @@ -211,7 +211,7 @@ struct css_device_id {
->         kernel_ulong_t driver_data;
->  };
+>  #undef DEBUG
 >
-> -#define ACPI_ID_LEN    9
-> +#define ACPI_ID_LEN    16
+> @@ -64,6 +66,8 @@ void pcibios_scan_specific_bus(int busn);
 >
->  struct acpi_device_id {
->         __u8 id[ACPI_ID_LEN];
+>  /* pci-irq.c */
+>
+> +struct pci_dev;
+> +
+>  struct irq_info {
+>         u8 bus, devfn;                  /* Bus, device and function */
+>         struct {
+> @@ -232,3 +236,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
+>  # define x86_default_pci_init_irq      NULL
+>  # define x86_default_pci_fixup_irqs    NULL
+>  #endif
+> +
+> +#if defined CONFIG_PCI && defined CONFIG_ACPI
+> +extern bool pci_use_e820;
+> +#else
+> +#define pci_use_e820 true
+> +#endif
+> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+> index 9b9fb7882c20..e8dc9bc327bd 100644
+> --- a/arch/x86/kernel/resource.c
+> +++ b/arch/x86/kernel/resource.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <linux/ioport.h>
+>  #include <asm/e820/api.h>
+> +#include <asm/pci_x86.h>
+>
+>  static void resource_clip(struct resource *res, resource_size_t start,
+>                           resource_size_t end)
+> @@ -28,6 +29,9 @@ static void remove_e820_regions(struct resource *avail)
+>         int i;
+>         struct e820_entry *entry;
+>
+> +       if (!pci_use_e820)
+> +               return;
+> +
+>         for (i = 0; i < e820_table->nr_entries; i++) {
+>                 entry = &e820_table->entries[i];
+>
+> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+> index 052f1d78a562..fce05e03ba9e 100644
+> --- a/arch/x86/pci/acpi.c
+> +++ b/arch/x86/pci/acpi.c
+> @@ -1,4 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <linux/efi.h>
+>  #include <linux/pci.h>
+>  #include <linux/acpi.h>
+>  #include <linux/init.h>
+> @@ -21,6 +22,7 @@ struct pci_root_info {
+>
+>  static bool pci_use_crs = true;
+>  static bool pci_ignore_seg;
+> +bool pci_use_e820 = true;
+>
+>  static int __init set_use_crs(const struct dmi_system_id *id)
+>  {
+> @@ -291,6 +293,63 @@ static bool resource_is_pcicfg_ioport(struct resource *res)
+>                 res->start == 0xCF8 && res->end == 0xCFF;
+>  }
+>
+> +/*
+> + * Some fw has a bug where the PCI bridge window returned by the ACPI resources
+> + * partly overlaps with some other address range, causing issues. To workaround
+> + * this Linux excludes E820 reserved addresses when allocating addresses from
+> + * the PCI bridge window. 2 known examples of such firmware bugs are:
+> + *
+> + * 1. The returned window contains addresses which map to system RAM, see
+> + * commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address space").
+> + *
+> + * 2. The Lenovo X1 carbon gen 2 BIOS has an overlap between an EFI/E820
+> + * reserved range and the ACPI provided PCI bridge window:
+> + *  efi: mem46: [MMIO] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+> + *  BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+> + *  pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+> + * If Linux assigns the overlapping 0xdfa00000-0xdfa0ffff range to a PCI BAR
+> + * then the system fails to resume after a suspend.
+> + *
+> + * Recently (2019) some systems have shown-up with EFI memmap MMIO entries
+> + * covering the entire ACPI provided PCI bridge window. These memmap entries
+> + * get converted into e820_table entries, causing all attempts to assign
+> + * memory to PCI BARs which have not been setup by the BIOS to fail.
+> + * For example see these dmesg snippets from a Lenovo IdeaPad 3 15IIL 81WE:
+> + *  efi: mem63: [MMIO] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+> + *  BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+> + *  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+> + *  pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
+> + *  pci 0000:00:15.0: BAR 0: failed to assign [mem size 0x00001000 64bit]
+> + *
+> + * To code below checks if the ACPI provided PCI bridge window is fully
+> + * contained within in EFI memmap MMIO region and in that case disables
+> + * the "exclude E820 reserved addresses" workaround to avoid this issue.
+> + */
+> +static bool resource_is_efi_mmio_region(const struct resource *res)
+> +{
+> +       unsigned long long start, end;
+> +       efi_memory_desc_t *md;
+> +
+> +       if (!(res->flags & IORESOURCE_MEM))
+> +               return false;
+> +
+> +       if (!efi_enabled(EFI_MEMMAP))
+> +               return false;
+> +
+> +       for_each_efi_memory_desc(md) {
+> +               if (md->type != EFI_MEMORY_MAPPED_IO)
+> +                       continue;
+> +
+> +               start = md->phys_addr;
+> +               end = start + (md->num_pages << EFI_PAGE_SHIFT) - 1;
+> +
+> +               if (res->start >= start && res->end <= end)
+> +                       return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+>  {
+>         struct acpi_device *device = ci->bridge;
+> @@ -300,9 +359,16 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+>
+>         status = acpi_pci_probe_root_resources(ci);
+>         if (pci_use_crs) {
+> -               resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
+> +               resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+>                         if (resource_is_pcicfg_ioport(entry->res))
+>                                 resource_list_destroy_entry(entry);
+> +                       else if (resource_is_efi_mmio_region(entry->res)) {
+> +                               dev_info(&device->dev,
+> +                                       "host bridge window %pR is marked by EFI as MMIO\n",
+> +                                       entry->res);
+> +                               pci_use_e820 = false;
+> +                       }
+> +               }
+>                 return status;
+>         }
+>
 > --
 > 2.35.1
 >

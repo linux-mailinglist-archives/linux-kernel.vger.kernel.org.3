@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21494C8EDB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0F04C8EE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiCAPXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S235573AbiCAPYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235684AbiCAPW6 (ORCPT
+        with ESMTP id S232250AbiCAPYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:22:58 -0500
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DD2A8ECB;
-        Tue,  1 Mar 2022 07:22:17 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id c23so18816992ioi.4;
-        Tue, 01 Mar 2022 07:22:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=17fHYdPQFVzWsknAFNwdkyV3QN+tMAp7sQTqvIqbS7s=;
-        b=IaZFvg964ul2FFm04dJ4aVilVwSkq3tNtuRZzNQIZ1qy34DAa2M2mcIOTH9Efz8oma
-         ltfQcTLuTQOBdmykSXRgNgPxwNeMUVN7W1k1AtWuiI8KBYAdQksdDam/auDc93EXE5SX
-         Yz958K2iZ/NUq57qDWpcgrHt01um+1f3boVVUMRSq7bB7QDFd0qIt28q23RbNW4rqZMR
-         h7NsDZu0IG5aJxEEAFPugIjsh4mMtAjYE4ATwKCchQvMSn0K4TtvT1flUwVHog/UhgMj
-         sGP1i/KusXbgRP9EtxV7FcwgH8b2Q8bKxsFJ2D/mom3Yy/v7so44ZVQS3CIQ+hV5rV3u
-         IqIw==
-X-Gm-Message-State: AOAM53343AW0gBC1O8bnJwAH1+WuH4eh0LrzI8ODfzGO0nejT3732Qtw
-        xLhJeQTFCeCC6/jBnq7pgPwEVHYdRyujO/NsrXn1jF+a
-X-Google-Smtp-Source: ABdhPJwwt2otdbvGNqCJmsFuIaGpQ01LI6O8Nu7sQwI+o09PhY45pwqGbpMVXhO5pdjizwKGVRPETvFiyJ73sQfZXAQ=
-X-Received: by 2002:a02:9f86:0:b0:311:b694:ef5c with SMTP id
- a6-20020a029f86000000b00311b694ef5cmr21638604jam.96.1646148136942; Tue, 01
- Mar 2022 07:22:16 -0800 (PST)
+        Tue, 1 Mar 2022 10:24:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DA3EBBE;
+        Tue,  1 Mar 2022 07:24:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC45616AC;
+        Tue,  1 Mar 2022 15:24:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53CA6C340F0;
+        Tue,  1 Mar 2022 15:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646148239;
+        bh=H8InDEF3XW6EnD8MeXWjCxgu9Q/FK190kWhwHDJaj8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H6NUanA3HRwo76slofFpH8WtqTE7X4VRtO7hJwxJN/dD3yGpAS2448XRbvQ5S9Elw
+         cePWVe+ZbMX1//lJDNGuyV06OcZDcO1NdRX4mK/JtUVAVBapV9jhGFzP7qXv5Kpk+y
+         bUYT5sQSs3MMDMHjRZudslLo5LvKiSVyuGvXsukPU8xAKqfc3RbcAX31xEaSmlYS8z
+         JDYkdFLD6OflOPy8ufdbzbCHBQXf4qK93l7rvKlF2Zjzspt+Y0DrizeVb1sgP8zFPg
+         98skrXArzQ40TadadRjBM2DEBSBM48bSHGximsaylrQnLj4/8+Yh82xPoJwViCyIrZ
+         bpDK6YGPmFz1Q==
+Date:   Tue, 1 Mar 2022 16:23:56 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Xu Wang <vulab@iscas.ac.cn>
+Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mediatek: remove redundant null check
+Message-ID: <Yh46jPyQaExz0Xua@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Xu Wang <vulab@iscas.ac.cn>, qii.wang@mediatek.com,
+        matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200930084233.53085-1-vulab@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20220215033750.104952-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220215033750.104952-1-jiapeng.chong@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 16:22:05 +0100
-Message-ID: <CAJZ5v0gU7WDQyPWefydeg6=40ugdo7FenJyKMd18m=HodMQvMA@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: Fix non-kernel-doc comment
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DFAqbdottttrwCWu"
+Content-Disposition: inline
+In-Reply-To: <20200930084233.53085-1-vulab@iscas.ac.cn>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 4:38 AM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Fixes the following W=1 kernel build warning:
->
-> kernel/power/swap.c:120: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
-> Changes in v2:
->   -Modify subject 'block' to 'PM: hibernate'.
->
->  kernel/power/swap.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 6c4f983cbacc..91fffdd2c7fb 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -88,7 +88,7 @@ struct swap_map_page_list {
->         struct swap_map_page_list *next;
->  };
->
-> -/**
-> +/*
->   *     The swap_map_handle structure is used for handling swap in
->   *     a file-alike way
->   */
-> @@ -116,7 +116,7 @@ struct swsusp_header {
->
->  static struct swsusp_header *swsusp_header;
->
-> -/**
-> +/*
->   *     The following functions are used for tracing the allocated
->   *     swap pages, so that they can be freed in case of an error.
->   */
-> @@ -170,7 +170,7 @@ static int swsusp_extents_insert(unsigned long swap_offset)
->         return 0;
->  }
->
-> -/**
-> +/*
->   *     alloc_swapdev_block - allocate a swap page and register that it has
->   *     been allocated, so that it can be freed in case of an error.
->   */
-> @@ -189,7 +189,7 @@ sector_t alloc_swapdev_block(int swap)
->         return 0;
->  }
->
-> -/**
-> +/*
->   *     free_all_swap_pages - free swap pages allocated for saving image data.
->   *     It also frees the extents used to register which swap entries had been
->   *     allocated.
-> --
 
-Applied as 5.18 material with adjustments in the subject and changelog.
+--DFAqbdottttrwCWu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Wed, Sep 30, 2020 at 08:42:33AM +0000, Xu Wang wrote:
+> Because clk_disable_unprepare already checked NULL clock parameter,
+> so the additional checks are unnecessary, just remove it
+>=20
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+
+Missed Qii Wang's ack so far, sorry. Applied to for-next, thanks!
+
+
+--DFAqbdottttrwCWu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIeOogACgkQFA3kzBSg
+KbZfxRAAqkBiWxzxphWUAK/0YEAg5hksVJDpRGzv+KQzCLt4VxeOS0fcltsz4PlS
++1zF27icgR2bd6KdMoHO+AoKUhyUwUYHV8m5FAhGyiYdJKEiYMiY9pgxc3Gp1NeO
+JXiU3KrBKYu4LsuzG+SEsRlU9CRHvSZoRiDcLwwsZwhZkgatq5bXASphmCAWjOif
+TgpRBDyICwm1HwHxlf0wuQzTTRxCHc7s49ntiwRUnDa1jcAjeJ+JC7oGwWXmDqa0
+UBewHULIn4QirpU//eLI/sJIMmHGIzeaOe2UYGr1cVYL0bs/wOWtx/yxr1HcgUpz
+CljWQtmCUNuJRXsmgCC85NrGJDZXI90fCvJwfQW3eV44XLVeQdywqpvKo7kL5Agx
+J5lt3dXNbukqJR8a0kzeUVgVsV0feujgggnpXLxIw+K7+jXfh7Cq+0tZsilKdR5x
+3oyz3bTNksE2HCXvjtDlyn0fLoHkc50eX4YwRXyVmcQCC2+rziBD5JvCKtuKZ+jb
+w8Di73R66Rt0TKzmUsxIV2467wUEnv65WZHTcleWUhlk6IRa1jRj1OB5VNgs2IMX
+ChgXAY9RRTAO/O8S/2IPfP/lTWmdDWGSUrTJ/0FjGIUCS8+4lQdEmuXj2BcJwCzY
+sVBNjKgwEVnWaB0aF8kBkIDJ4zCZYwwBMkZrN41AjKj/OHdk2a8=
+=IYnt
+-----END PGP SIGNATURE-----
+
+--DFAqbdottttrwCWu--

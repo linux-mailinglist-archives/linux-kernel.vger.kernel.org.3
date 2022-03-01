@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9B24C94FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAF84C9500
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237472AbiCATt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S237458AbiCATud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237429AbiCATtt (ORCPT
+        with ESMTP id S237494AbiCATuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:49:49 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01E25A084;
-        Tue,  1 Mar 2022 11:48:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JTjpHIBNzbqDknQ+Nbv4Mia7f/qQBAKZ0P9X14dcOCY=; b=TS3MjJTjjyWVrc0Vzjy/hLdTS0
-        jyfpowb4SXry/qUrvbLRPPOPxa3DvgdnjL/DG5wgQZpGLBNgRxarZ+/gnJzYC3B09gBFqJbG6W4iK
-        2AjGYnTviAgEE8FBbfAL1UrzgpP9j6ZZPHcYnRtou9brufHwSOgjQ+4y0Vd0NsCk0y7/kPXkRlFyl
-        EsApvHdgTaZLxKlmCKUZXHk//Rsh5HCbVfrX+Y3VBkxE/9X6aY2IH0tGVvNUkt/+i2jk5JScWYLP1
-        hRxB8w/PxNXJnYdIYis/UafmXUBALsnFwuaxj7BW9X0yYZ2SPmrltfu4/uv//vvITzfexi9OBqZIo
-        QR9Q+ErQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nP8Sv-00EMCU-Sv; Tue, 01 Mar 2022 19:47:22 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9FBDE986271; Tue,  1 Mar 2022 20:47:20 +0100 (CET)
-Date:   Tue, 1 Mar 2022 20:47:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org, Radoslaw Burny <rburny@google.com>
-Subject: Re: [PATCH 3/4] locking/mutex: Pass proper call-site ip
-Message-ID: <20220301194720.GJ11184@worktop.programming.kicks-ass.net>
-References: <20220301010412.431299-1-namhyung@kernel.org>
- <20220301010412.431299-4-namhyung@kernel.org>
- <Yh3hyIIHLJEXZND3@hirez.programming.kicks-ass.net>
- <20220301095354.0c2b7008@gandalf.local.home>
+        Tue, 1 Mar 2022 14:50:18 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082C56D4C0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:48:59 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so28808025lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zMJzp8NGcAaMrW/Z1qKYk6Oa39jb7cXUzQ69+SC6rYw=;
+        b=WjJSyFGVENfQiC0MmIIfvy1CLy5n12Oo4AUwHCGNF5uL3WVwVKvlNMjBbp44NzCS0D
+         n7whOR6+F1DXu0rQ1BL+VAWoKCeysr500guTaZ4T3hmJfqyK2woz5VYKzh2wjlakAcw5
+         v0+6oDyQzrvdgVA6nuJmQG0xwPtvYXG+TCP12ByRiaCk2JbP6GUroOumOPukWLzsBqVi
+         ORpsBhQJToxG38dPJmseOq42nEH3s/uHzeszDm+0Z+1G+oE6a81n24eRmSZyX0Sp0fYU
+         qW8gIpvl7zSWSkdAVQeT8psWGqusSWnNL7SlV4aNuOvtjPqXciMb+L5iAxAW7N6McOD0
+         7hZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zMJzp8NGcAaMrW/Z1qKYk6Oa39jb7cXUzQ69+SC6rYw=;
+        b=yNfGAVfjBUgcHT9ycG6IjNJubSLObq5U6mvicVtkId55NkGyyIvHvvYR8hw4oqTPmK
+         Pgnum9zBEn3yWzSGZylCUbSTcsIMJH+Vc7FNnUijs16Nv1M5Ckaw8qNTgw36osf09iy/
+         qFGWybIKF7h4bsQ+0zRuvAjMoX2lj/ZULILUV8fshT4I4VyQ0wZZUbuHDzjiBuvD9Kkl
+         uNyYc58RcCrLw7rpYbB9icx+RFhSRgo2XJl+gHbOY2K2xEsM9teuFGcVqO8FxthH9+FX
+         pY/XO5zVBLhsLSJTehOhT7qohf0GYG+GGaFiFxSCnclVnzTJTUbXLv+cxEGuUuCarmB0
+         Satw==
+X-Gm-Message-State: AOAM533+UsaD+Bt1y3lQqX4SxV3d7pA8vXCm6zPBwn7/ix1fWNcKcHop
+        xxtwV1OeIjNbchzkH3mMsGQPi8krkMmGIQ==
+X-Google-Smtp-Source: ABdhPJz+SujTG8BnYtzJdCdHZsTc46VeiLCDOgemJ4BLAtZtG79nc+TKHx4xsymVx2Zllxns7+bJFQ==
+X-Received: by 2002:a05:6512:3f9:b0:443:3c86:31f1 with SMTP id n25-20020a05651203f900b004433c8631f1mr15744272lfq.532.1646164113494;
+        Tue, 01 Mar 2022 11:48:33 -0800 (PST)
+Received: from jade.urgonet (h-176-10-238-36.A175.priv.bahnhof.se. [176.10.238.36])
+        by smtp.gmail.com with ESMTPSA id m2-20020a196142000000b00443d65ea163sm1635891lfk.248.2022.03.01.11.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 11:48:33 -0800 (PST)
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH 0/3] OP-TEE RPC argument cache
+Date:   Tue,  1 Mar 2022 20:48:27 +0100
+Message-Id: <20220301194830.3557578-1-jens.wiklander@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301095354.0c2b7008@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:53:54AM -0500, Steven Rostedt wrote:
-> On Tue, 1 Mar 2022 10:05:12 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Mon, Feb 28, 2022 at 05:04:11PM -0800, Namhyung Kim wrote:
-> > > The __mutex_lock_slowpath() and friends are declared as noinline and
-> > > _RET_IP_ returns its caller as mutex_lock which is not meaningful.
-> > > Pass the ip from mutex_lock() to have actual caller info in the trace.  
-> > 
-> > Blergh, can't you do a very limited unwind when you do the tracing
-> > instead? 3 or 4 levels should be plenty fast and sufficient.
-> 
-> Is there a fast and sufficient way that works across architectures?
+Hi all,
 
-The normal stacktrace API? Or the fancy new arch_stack_walk() which is
-already available on most architectures you actually care about and
-risc-v :-)
+This patchset optimizes handling of the argument struction passed to
+call_with_arg when doing a yielding call to OP-TEE.
 
-Remember, this is the contention path, we're going to stall anyway,
-doing a few levels of unwind shouldn't really hurt at that point.
+Prior to this was this structure allocated before the yielding call and
+then freed after it had returned. In case many calls are made in succession
+this results in quite a bit of unncesary allocte/free and possibly also
+switching back and forth to secure work in order to register if needed.
 
-Anyway; when I wrote that this morning, I was thinking:
+Another optimization handles the way the argument struct needed to do RPC
+is passed. Please see the patch "optee: add OPTEE_SMC_CALL_WITH_RPC_ARG"
+for details.
 
-	unsigned long ips[4];
-	stack_trace_save(ips, 4, 0);
+This patchset is based the next branch [1] in my kernel to avoid conflict
+with other recent patches.
 
+Thanks,
+Jens
 
-> Could objtool help here?
+[1] https://git.linaro.org/people/jens.wiklander/linux-tee.git/log/?h=next
 
-There's a contradition there... objtool is still x86_64 only :-/
+Jens Wiklander (3):
+  optee: add OPTEE_SMC_CALL_WITH_RPC_ARG
+  optee: add FF-A capability OPTEE_FFA_SEC_CAP_ARG_OFFSET
+  optee: cache argument shared memory structs
 
-IIRC there's been work on s390, arm64 and power objtool, but so far none
-of them actually made it in.
+ drivers/tee/optee/call.c          | 238 ++++++++++++++++++++++++------
+ drivers/tee/optee/core.c          |   1 +
+ drivers/tee/optee/ffa_abi.c       |  36 +++--
+ drivers/tee/optee/optee_ffa.h     |  12 +-
+ drivers/tee/optee/optee_private.h |  31 +++-
+ drivers/tee/optee/optee_smc.h     |  47 +++++-
+ drivers/tee/optee/smc_abi.c       | 151 +++++++++++++++----
+ 7 files changed, 419 insertions(+), 97 deletions(-)
+
+-- 
+2.31.1
+

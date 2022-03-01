@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E564C8F60
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0594C8F63
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiCAPqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S235889AbiCAPrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiCAPqN (ORCPT
+        with ESMTP id S235713AbiCAPrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:46:13 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9A6527E0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:45:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646149532; x=1677685532;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yJOQ+UHnY8shUf635+u1oWoprslEA6t4CJY7JJ4XETA=;
-  b=PfDFKeHYxnXATlMKadKJtcacaUElWm2244G4cqLJCi2WhS9sG7GsPYjs
-   ZjkN8RE8lJif8FVx8heT/2MgJGI7gi/TMSI+enZArF1QTtRf0zqVtGNbG
-   2+s3NGgIufNEFxWoHsnHPwCaPPd5yEPMcggpS9upoNDver3X71ETYYTl0
-   pb8FplvOemd+dQdWzA9d9Pf0KKs/LLvnrCF5MItIeCTx2PHbhwz/A77ez
-   hwLAjkckF86OPijP/wHusZDzNRfr6ybUXIY59SD0i3Gw0v1lxMUkCz8al
-   h+aEkw0dm0zFj7YgMm6GtVW6WRmH/8t6PgLQJ78PYbRO2pnFyS0YB0BYe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="233126723"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="233126723"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:45:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="641305656"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2022 07:45:30 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP4gr-0000e0-I1; Tue, 01 Mar 2022 15:45:29 +0000
-Date:   Tue, 1 Mar 2022 23:45:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 21/30] ERROR: modpost:
- "interval_tree_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
-Message-ID: <202203012312.livRTcyQ-lkp@intel.com>
+        Tue, 1 Mar 2022 10:47:13 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8609527E0;
+        Tue,  1 Mar 2022 07:46:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646149563;
+        bh=CNTbDLm/SXlfrI/Yw70t8qZjmfwCUbk5EeiLym2vS3o=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=OqC9dpJ3yht3ymwKViwQ6Jqu/47pCQjQJCutG//Mw/O396ZZE5aD4yZuzZBir1EXy
+         g9A1/c1uZKi3x+R0OjNIgbce6t0mqQmK6iYwx1omHJQ4heVHbfnqt3WO6wNgCdcP0Q
+         4oWrygvTkjGUIQtB2qoX3uVWn2WK2bQNUcNa6+G8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.74] ([149.172.237.68]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMobU-1nfdeA3ROW-00ImCR; Tue, 01
+ Mar 2022 16:46:02 +0100
+Subject: Re: [PATCH v8 0/1] tpm: fix reference counting for struct tpm_chip
+To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
+        David.Laight@ACULAB.COM, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.rosenberger@kunbus.com
+References: <20220301022108.30310-1-LinoSanfilippo@gmx.de>
+ <a7a2c56c-a82b-40a9-68e5-7e6d92427c70@linux.ibm.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <fbb0a768-dbef-bb6e-f77b-f40a4da7f8bb@gmx.de>
+Date:   Tue, 1 Mar 2022 16:45:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a7a2c56c-a82b-40a9-68e5-7e6d92427c70@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l49twx3iq+56+pdB2eO5/63gkDHhNjH0/WXOoYU80/wUXFqDRxb
+ 49CAPOfq/lQ0DHeC95gvHjTF5qGvfaoM8EEtNxqqKp2CblmJ6eEzOB8bhQS0tqyNKi5l+yY
+ fdzkAgPCD6Q3AdzFj2exLDsQARTkXEZNx5wJ5HI7B0TnAeEKlsr3yf54jhJ65mWjITVDU3M
+ ZHEqQKoj8XAjuX82js40w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bz4EH9nboAk=:kvWMoadFvgpJG2LMr8o9Cd
+ RAQv7YWSUePsU0cPeMkx1LR2z7gMLBlReBsvqFaGADLOfaIujzBRkswF5uUm9119qSezUHekk
+ ePHxBO/VwnPlagWznNtZf38thaDprEGZ85Ye2HVp+xjzbmyEpdugrUQjyQAwH3GCOPKXSXSNy
+ qvP+nruQc5kMN+dWOtV7qYBwqPRA57pyYYNB20IzcR4vfBan8SI+imDm9lY+AzEuM1RGvowNT
+ YleJ/EadRiSw9BxutDXHw1XoNtExwcmEuDmwLXxxbm86ILQazPoMuZu0xOE1XBczGGzJ+Z1LJ
+ WxkJUCzOREvyTIzfZqoxwowsZFhYTI7NcdvQtMzJPLG00+Hbc33MGT54ofg0xFpIm7oI8TjwE
+ 3be2pfdQND+X1tJZPhHirpwKj/zf2SzjMZzoiayXdAIrdEYr0iftsL5Hlo5gCu/gGsm7rh6hm
+ qn9ETUNcc3pRhxXWRBFfY/WG5jx/mtJALk6yGKeZ4nzck15c0UqyYa+lm0WUC2NC7S/9Igv0E
+ eDPJEyxoWoOP/mKEGiDfyGOp4FmPH3yZPZ1AsKNqtNduzr30u+NlRvWzP1asdAtHxFlhG9yDq
+ DYWyGqUJI1FGhFWl6ePzdADzh6Ld3MjpJx8m+YjLaxMkcO+BgtEpC9+Ufyq4J8wnqPUzVvff6
+ y8jdknYZjMjvgm3f31Tww+PFraVHYddnGVlA/+WYUeG8M1KC2Jc4sJ8QfMV0GyyItxMij9TQU
+ IJWgwTG0jeRK8CjeSKNSbbGcEaQGP2copLqhd6ClLIZ8N0lsfHMkF3GBMPaozxOUHUcHSONKX
+ iwI4mykkMLkSLTtjECWBTnPkRjnHeO3nnOD/QZGjsvbZOjPilpb2AGEq+oWlMC5UnLNNSYED9
+ YLvXm9QA3/zeuMB7H1xKFSkpuMe3BfRQtDa7VRiHSyHHOHNfjOLsim/A35J4P7unsUEX8Go4t
+ TgZf6psia4nkoLy6bU4RTMGhNKz7FCs1BHK6pRCkSS2rsd6/wl8GArhgB48lNdSuL1gPsNMDb
+ 4lb7PRe1r7FhLbit/BxJhfvxXsCcC/j5BDmZyFlX5wazqvoCV/R95MOpuket1ASRqA/ZOe2eC
+ KEs5Jp06NMyJ5E=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   2bca5fa75dad57f41002a93861a950d35d55e568
-commit: e5b0b18da497e526cec5aad8c987ab9fd704adcd [21/30] vfio/pci: Add bind_iommufd() support
-config: riscv-randconfig-r042-20220301 (https://download.01.org/0day-ci/archive/20220301/202203012312.livRTcyQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/luxis1999/iommufd/commit/e5b0b18da497e526cec5aad8c987ab9fd704adcd
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout e5b0b18da497e526cec5aad8c987ab9fd704adcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On 01.03.22 at 14:56, Stefan Berger wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>
+> We also need to apply this patch here to fix another crash:
+>
+> https://lore.kernel.org/all/20210615091410.17007-2-vincent.whitchurch@ax=
+is.com/
+>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Right, this is another issue that should be fixed. The bugfix you mention =
+is essentially the same
+as James proposed over two years ago:
 
->> ERROR: modpost: "interval_tree_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_remove" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_insert" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_span_iter_next" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_span_iter_first" [drivers/iommu/iommufd/iommufd.ko] undefined!
->> ERROR: modpost: "interval_tree_iter_first" [drivers/iommu/iommufd/iommufd.ko] undefined!
+https://lore.kernel.org/linux-integrity/e7566e1e48f5be9dca034b4bfb67683b5d=
+3cb88f.camel@HansenPartnership.com/
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
+Regards,
+Lino
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+
+

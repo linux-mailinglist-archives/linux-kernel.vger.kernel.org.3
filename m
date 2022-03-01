@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E863D4C938D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574544C9390
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbiCASuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S237083AbiCASvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiCASus (ORCPT
+        with ESMTP id S229529AbiCASvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:50:48 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D3B58E67
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:50:06 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id c7so13673262qka.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=tR+m3BKtc2q7T6REjyTd+tbxkuYAbwb84wcNcVtcDDo=;
-        b=qv5pnnvk7TeB5F2VVork6VcyASkHuuOWpbcXzJ/cyRI1+PmIYBs0U/EhxwQ2jdj+iz
-         ctAJe9aKpLrV9V6eod+MqOLF+7QiLy6rK3fu33GePVDsbqQmnuhE4iWBKDcnPXK3Xv76
-         KPohYg/mFz2m3Zsr2NedsoI1aJoRw2JRXFjNubOcth+U1/2fAxw4X9GX4vE685YUHQ28
-         sQv3PydxnGXuozXRJ9RMqeXb8xDJBTJmcf91k/L9cFuON1fxzCJlrb/gUoRQiVr/NaQV
-         7BSHai6kmrDU03Az1bPf2EYC2mSqSYYo5T5M1N0vBIFrL5rK9XKddEJohWn7UTm7gZrd
-         AdVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=tR+m3BKtc2q7T6REjyTd+tbxkuYAbwb84wcNcVtcDDo=;
-        b=Z3EYU3n4AWZ7AhrVkC5s9B3wiI7W+8bq6h5F9z5yyMRZOBMuY0dRaS8bov+28Ds+s/
-         QZ/PAlyg4/AVmm3fuu90yKvV5Tiz5vrqKiQLu1jSiS2i/e+bD1e/8mjEsoVk9QqWslZB
-         5unfZr7Bjh5d8FKIVjVjO2JHpouE0qpC/lBM8+XvVL+JTroM3xIe2KLWNf5fcUKGdI8e
-         rgWE/Y0uF0LQDMxz05tkNUDZ0RNDoS4+u0B4CsCZQVvEfX8BY1R+XSf9UmUhStdQrRJO
-         k8GYFTPzdRJtBrLb57kWekCyP8X09OsZ/XIuZM15ERnv1FDpjY7+gs7EsC+E+LKJIppz
-         K86Q==
-X-Gm-Message-State: AOAM530dYrw26vW4N3LcxhlOV72ENAnaP86QBtZvYaG1dTJCMQzkF6oi
-        A/TbTCGiyv7guKgiHmAjiEu1CQ==
-X-Google-Smtp-Source: ABdhPJzSf4CtwvIG03wik3crXOBqVn2fR41pWQVrAZp/7qf1AZE3+yMudYLmNy+Tlo28zIT/Kyx94g==
-X-Received: by 2002:a37:6c45:0:b0:478:a755:8845 with SMTP id h66-20020a376c45000000b00478a7558845mr14371883qkc.362.1646160605528;
-        Tue, 01 Mar 2022 10:50:05 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id h17-20020a37de11000000b0047caf996ef8sm7044983qkj.20.2022.03.01.10.50.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 10:50:05 -0800 (PST)
-Message-ID: <9d44d2136ba60e7471ea82551f4cfed2c030ce2b.camel@ndufresne.ca>
-Subject: Re: [PATCH v7, 05/15] media: mtk-vcodec: Call
- v4l2_m2m_set_dst_buffered() set capture buffer buffered
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Tue, 01 Mar 2022 13:50:03 -0500
-In-Reply-To: <20220223034008.15781-6-yunfei.dong@mediatek.com>
-References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
-         <20220223034008.15781-6-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Tue, 1 Mar 2022 13:51:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD435EBCD;
+        Tue,  1 Mar 2022 10:50:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D232E6146A;
+        Tue,  1 Mar 2022 18:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E41C340EE;
+        Tue,  1 Mar 2022 18:50:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="a+evMrWy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646160652;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3PMVbtvLhHr1hDGNFr00QQ/+FwMy0Zd4jDjPEhVH0pM=;
+        b=a+evMrWy53P6L4cLxqbBeu0993AL3O2wbYMSz0tqyNO8uKic8cLDvfwrGII5ACChcFZjcn
+        qLmDnxY8V7vGY0Luac9nvSXkkARgo0Gp7jHwxojqfQvKtQ99vMKDZJ+lukLX2wNtW6sy46
+        BVj/PTvMMPpr2qPo1H7wBLRj3q8mTog=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 333cf56d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 18:50:52 +0000 (UTC)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2dc0364d2ceso6321887b3.7;
+        Tue, 01 Mar 2022 10:50:52 -0800 (PST)
+X-Gm-Message-State: AOAM530wRJt9aKCF2wfi0tJkF9YJ8zpQeT60IvtpaWCHe/XqYH3gbp0Q
+        57/ZS2ImDHZh2R1q8N2viYqwMGz2vsZ/Xlo0Kn8=
+X-Google-Smtp-Source: ABdhPJwZvmvKwp5AV8nO7mdf3a9IzS927T1nwsby5QxU8TZb+HY088MhWCqN/PNu3LgCzi9FuyFwXy+r1xdlgcYUiIo=
+X-Received: by 2002:a81:8984:0:b0:2db:6b04:be0c with SMTP id
+ z126-20020a818984000000b002db6b04be0cmr13150588ywf.2.1646160651145; Tue, 01
+ Mar 2022 10:50:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220301173120.297105-1-Jason@zx2c4.com> <CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com>
+ <CAHmME9o4Vu_rPqWkPYgD79perwqgL-f8hh1j7dWZQczBZD1dww@mail.gmail.com> <CAJZ5v0j+fCwdNHdQMZTzo0dvBh2KQHAb97dJq7XBZP=JY8yFQw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j+fCwdNHdQMZTzo0dvBh2KQHAb97dJq7XBZP=JY8yFQw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 1 Mar 2022 19:50:40 +0100
+X-Gmail-Original-Message-ID: <CAHmME9q=Q7UMje1wtciLyUFV7tons+o7dQUPgTVD7SbJ-uEOYQ@mail.gmail.com>
+Message-ID: <CAHmME9q=Q7UMje1wtciLyUFV7tons+o7dQUPgTVD7SbJ-uEOYQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: notify of PM_POST_VMFORK events from vmgenid
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 23 février 2022 à 11:39 +0800, Yunfei Dong a écrit :
-> lat thread: output queue      \
->                                -> lat hardware -> lat trans buffer
->             lat trans buffer  /
-> 
-> core thread: capture queue     \
->                                 ->core hardware -> capture queue
->              lat trans buffer  /
-> 
-> Lat and core work in different thread, setting capture buffer buffered.
+On Tue, Mar 1, 2022 at 7:50 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Mar 1, 2022 at 7:19 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Rafael,
+> >
+> > On Tue, Mar 1, 2022 at 6:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Tue, Mar 1, 2022 at 6:31 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > >
+> > > > There's an additional virtual power state that various crypto-oriented
+> > > > drivers may benefit from being notified of, such as WireGuard: right
+> > > > after a virtual machine has forked. In WireGuard's case, the PM notifier
+> > > > there that clears keys pre-suspend will be adjusted to also clear them
+> > > > post-vmfork. This trivial commit wires up the machinery for that change,
+> > > > which builds on the recently added vmgenid driver in the random.git
+> > > > tree.
+> > >
+> > > Well, what does power management have to do with WireGuard'?
+> >
+> > I guess a bit more background would be in order. If I post a v2 of
+> > this, I'll include that there. But for now:
+> >
+> > WireGuard has ephemeral session keys. They're not supposed to exist
+> > for longer than a few minutes for a crypto property called "forward
+> > secrecy". In order to ensure this, WireGuard currently registers a PM
+> > notifier that fires before suspend/hibernate, which memzeros the
+> > various keys. That's all well and fine and works.
+> >
+> > There's now another power-ish event that WireGuard also cares about:
+> > when a virtual machine has been forked. In this case, too, the
+> > reaction is the same - memzero the various keys, only for a different
+> > reason: rather than forward secrecy, the property we want here is that
+> > a key+nonce tuple is never used on more than one plaintext.
+> >
+> > The argument of this patchset is that VM forking is kind of like a
+> > power event, so why not re-use the same notifier for that.
+>
+> IMV the problem with this approach is that WireGuard is not the only
+> user of PM (suspend/hibernate) notifiers and the other users of them
+> will have no idea about what to do with PM_POST_VMFORK which from
+> their perspective has nothing to do with suspend and/or hibernation.
+>
+> > However, if you disagree, I could move ahead with a separate notification
+> > mechanism not involving the PM notifier.
+>
+> Yes, please.
 
-... so that output queue buffers (bitstream) can be process regardless if there
-is available capture buffers.
-
-I have concerns around the usefulness of running a dedicated thread to drive the
-lat and the core blocks. Having 3 threads (counting the m2m worker thread) here
-increase the complexity. The hardware is asynchronous by definition. I think
-this patch will go away after a proper rework of the driver thread model here.
-
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> index 5aebf88f997b..23a154c4e321 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> @@ -314,6 +314,9 @@ static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
->  	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
->  				 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
->  
-> +	if (ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-> +		v4l2_m2m_set_dst_buffered(ctx->m2m_ctx, 1);
-> +
->  	/* Support request api for output plane */
->  	src_vq->supports_requests = true;
->  	src_vq->requires_requests = true;
-
+Will do. Sorry for the noise.

@@ -2,177 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D2C4C8453
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9A34C8455
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiCAGsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S232694AbiCAGtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiCAGss (ORCPT
+        with ESMTP id S232130AbiCAGtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:48:48 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8830B50E29
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646117285; x=1677653285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gGq98DPhvXiYNuMD69nm/wiwfQmDcTai422+Q4afq7Q=;
-  b=IVq3T/6mtDYJb3rJCR02yxO+C55NDRQO+lpYlAswzjKpN0ZMW6SauAau
-   CrLNbYGXtP34WfmuVXtSYizI4TfKb3/B6DDpqhytFRoi1kTrwBFomfF/Z
-   dYmUVXWd9gTogFDCGYwQ+IIUotPgAzkPWHtOmvf2G8RiZATaJjgfOvXrt
-   yFSLAosJZLeBUHbudl32lDdmGLRj+dQXQTjJx8bDSDpgPnFmxax1evtYb
-   Oq+jURY3FK+HYS3WylmdyexCVydY/vbGCGcQbd2RL2furdF8Kn9b3DQh0
-   mzmGjBB1pNhrbPQdd79lS6blNMZ4kXAlCVPMiTCZqyYOohsIkG7mH6B/c
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,145,1643698800"; 
-   d="scan'208";a="87343387"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 23:48:04 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 28 Feb 2022 23:48:03 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 23:48:01 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <michael@walle.cc>, <p.yadav@ti.com>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2] mtd: spi-nor: Move XMC to manufacturer ID collisions driver
-Date:   Tue, 1 Mar 2022 08:47:58 +0200
-Message-ID: <20220301064758.294943-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <fead645197b0cb6534c04a665938a8d5@walle.cc>
-References: <fead645197b0cb6534c04a665938a8d5@walle.cc>
+        Tue, 1 Mar 2022 01:49:33 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F033457A2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:48:52 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-122-WdwIAktFNf2mPBI1Zr5aEQ-1; Tue, 01 Mar 2022 06:48:50 +0000
+X-MC-Unique: WdwIAktFNf2mPBI1Zr5aEQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 06:48:49 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 1 Mar 2022 06:48:49 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Abhinav Kumar' <quic_abhinavk@quicinc.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "khsieh@codeaurora.org" <khsieh@codeaurora.org>,
+        "nganji@codeaurora.org" <nganji@codeaurora.org>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "aravindh@codeaurora.org" <aravindh@codeaurora.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>
+Subject: RE: [PATCH] devcoredump: increase the device delete timeout to 10
+ mins
+Thread-Topic: [PATCH] devcoredump: increase the device delete timeout to 10
+ mins
+Thread-Index: AQHYLOuC8GeBLyfvf0C5oMN+SX9icKyqFqUw
+Date:   Tue, 1 Mar 2022 06:48:49 +0000
+Message-ID: <8fa2f879e33e4e42b76e21c6fbdcb023@AcuMS.aculab.com>
+References: <1644349472-31077-1-git-send-email-quic_abhinavk@quicinc.com>
+ <YgZD8vPqB7ISpRpZ@kroah.com>
+ <654d620b-9e14-c47f-b48c-762dc0bd32a1@quicinc.com>
+ <Ygdb63FrorUsX/Hg@kroah.com>
+ <b9156bde-137c-2fac-19e0-b205ab4d6016@quicinc.com>
+ <7db7d01fcf5a3edce61161769c0e6eb1541237bf.camel@sipsolutions.net>
+ <2add9ba7-7bc8-bd1d-1963-61e8154b0e3c@quicinc.com>
+ <989efb15-cc5e-8f6d-c313-118f01498e33@quicinc.com>
+In-Reply-To: <989efb15-cc5e-8f6d-c313-118f01498e33@quicinc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XMC manufacturer ID is defined in bank 10 of JEP106 standard. The XMC
-flashes that are currently supported do not define the continuation codes
-and will collide with flashes using the same manufacturer IDs,
-STMicroelectronics being an example (defined in bank one without
-continuation codes). Move XMC to manufacturer ID collisions driver as it
-doesn't respect the JEP106 standard and collides with other manufacturers.
-
-Suggested-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
-v2:
-- drop xmc from makefile
-- order flash_info entries in alphabetical order in manuf-id-collisions
-driver
-
- drivers/mtd/spi-nor/Makefile              |  1 -
- drivers/mtd/spi-nor/core.c                |  1 -
- drivers/mtd/spi-nor/core.h                |  1 -
- drivers/mtd/spi-nor/manuf-id-collisions.c |  8 ++++++++
- drivers/mtd/spi-nor/xmc.c                 | 25 -----------------------
- 5 files changed, 8 insertions(+), 28 deletions(-)
- delete mode 100644 drivers/mtd/spi-nor/xmc.c
-
-diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
-index 48763d10daad..3f2b431f9851 100644
---- a/drivers/mtd/spi-nor/Makefile
-+++ b/drivers/mtd/spi-nor/Makefile
-@@ -17,7 +17,6 @@ spi-nor-objs			+= spansion.o
- spi-nor-objs			+= sst.o
- spi-nor-objs			+= winbond.o
- spi-nor-objs			+= xilinx.o
--spi-nor-objs			+= xmc.o
- obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
- 
- obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 80d6ce41122a..e2b388d12c6c 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1627,7 +1627,6 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
- 	&spi_nor_sst,
- 	&spi_nor_winbond,
- 	&spi_nor_xilinx,
--	&spi_nor_xmc,
- };
- 
- static const struct flash_info *
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index f727e632c0ee..db042c40853f 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -517,7 +517,6 @@ extern const struct spi_nor_manufacturer spi_nor_spansion;
- extern const struct spi_nor_manufacturer spi_nor_sst;
- extern const struct spi_nor_manufacturer spi_nor_winbond;
- extern const struct spi_nor_manufacturer spi_nor_xilinx;
--extern const struct spi_nor_manufacturer spi_nor_xmc;
- 
- extern const struct attribute_group *spi_nor_sysfs_groups[];
- 
-diff --git a/drivers/mtd/spi-nor/manuf-id-collisions.c b/drivers/mtd/spi-nor/manuf-id-collisions.c
-index 0447e245f4b1..bcb80b779534 100644
---- a/drivers/mtd/spi-nor/manuf-id-collisions.c
-+++ b/drivers/mtd/spi-nor/manuf-id-collisions.c
-@@ -34,6 +34,14 @@ static const struct flash_info id_collision_parts[] = {
- 			      SPI_NOR_QUAD_READ)
- 		.fixups = &boya_nor_fixups },
- 
-+	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
-+	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
-+	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
-+
- 	/* XTX (XTX Technology Limited) */
- 	{ "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256)
- 		PARSE_SFDP
-diff --git a/drivers/mtd/spi-nor/xmc.c b/drivers/mtd/spi-nor/xmc.c
-deleted file mode 100644
-index 051411e86339..000000000000
---- a/drivers/mtd/spi-nor/xmc.c
-+++ /dev/null
-@@ -1,25 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2005, Intec Automation Inc.
-- * Copyright (C) 2014, Freescale Semiconductor, Inc.
-- */
--
--#include <linux/mtd/spi-nor.h>
--
--#include "core.h"
--
--static const struct flash_info xmc_nor_parts[] = {
--	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
--	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
--	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
--};
--
--const struct spi_nor_manufacturer spi_nor_xmc = {
--	.name = "xmc",
--	.parts = xmc_nor_parts,
--	.nparts = ARRAY_SIZE(xmc_nor_parts),
--};
--- 
-2.25.1
+RnJvbTogQWJoaW5hdiBLdW1hcg0KPiBTZW50OiAyOCBGZWJydWFyeSAyMDIyIDIxOjM4DQouLi4N
+Cj4gV2UgYWxzbyBkaWQgc29tZSBwcm9maWxpbmcgYXJvdW5kIGhvdyBtdWNoIGluY3JlYXNpbmcg
+dGhlIGJsb2NrIHNpemUNCj4gaGVscHMgYW5kIGhlcmUgaXMgdGhlIGRhdGE6DQo+IA0KPiBCbG9j
+ayBzaXplCWNvc3QNCj4gDQo+IDRLQgkgICAgICAgIDIyOXMNCj4gOEtCCSAgICAgICAgIDg2cw0K
+DQpZb3UgbXVzdCBoYXZlIGFuIE8obl4yKSBvcGVyYXRpb24gaW4gdGhlcmUgLSBmaW5kIGl0Lg0K
+DQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQs
+IE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86
+IDEzOTczODYgKFdhbGVzKQ0K
 

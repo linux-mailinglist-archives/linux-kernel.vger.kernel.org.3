@@ -2,117 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D464C977B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAC04C977E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbiCAVFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S238484AbiCAVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiCAVF2 (ORCPT
+        with ESMTP id S236415AbiCAVFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:05:28 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5394370337
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:04:46 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id y24so4553626ljh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jpkBhqMELpJRUkOoHFKbzsupAYwAnlqKB8gXhGz5QEA=;
-        b=gAEAIwp5TiyGoTgh4JNV+tH2eEHsDrzmeuag0zysI+PtG0mBbTlY+GQ2Irys79Qi+L
-         cwZSjxBpwdC2wHTKgnSPUDEg4jG5Iqs6jc/4r4BP55ON/wZvI6SvnOqgbVfnTZXuNlCj
-         Sko4sfN5Hk+tcMgzt8aDx7pTJ2JptgMqAsdqc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jpkBhqMELpJRUkOoHFKbzsupAYwAnlqKB8gXhGz5QEA=;
-        b=mRPS7kbxIlKK0UiMkk+YIVDEdk/T1sYsqWlJtq7b61FSEQGGvUff0z6G+8rIaKyB4i
-         SbpkCUN/REgmacPBD8tHTRbsX5R7GkSevGhFEMt2GWFPFEv27QvWQg4/fsRqNPskIStt
-         KKIanwaDpMhKoAv8R3TFFj+INIdsd2l6W21KDb+wb7yTDgxCi+7J0CnJbdmJS/EWWDsg
-         iaH4aLMnssGHJhmXqnnUJtQ9l/EttTyeL6dyV0IuuIu+FM7Pj6Fwz5KYdWNpd2MUwfxv
-         CGl2BkJkxifq8svL9XHZannv3Rxqbg9lGIyPBr98VQt3krQTHwQhjnfCcPx3wvMMDJGK
-         HICQ==
-X-Gm-Message-State: AOAM533DNq7DdhseFiYSBNwwJIZy126ZE5RhbkXNriDLG0+U1otNlmso
-        jYzOv3GlKu2x2mpVfpbckx/y6jtregFYxjP3RRM=
-X-Google-Smtp-Source: ABdhPJxXO16X3+bGO2fzNNUvwtLif5FmOK/c6qwRpsPceXA1PG1C3SF7QgfSS7MENsi/G7Zs7KYlnA==
-X-Received: by 2002:a05:651c:49d:b0:244:ca08:f811 with SMTP id s29-20020a05651c049d00b00244ca08f811mr18285718ljc.379.1646168683883;
-        Tue, 01 Mar 2022 13:04:43 -0800 (PST)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id z25-20020a2eb539000000b00244db8751a7sm2105985ljm.67.2022.03.01.13.04.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 13:04:43 -0800 (PST)
-Received: by mail-lj1-f173.google.com with SMTP id v28so23525123ljv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:04:42 -0800 (PST)
-X-Received: by 2002:a2e:bc17:0:b0:246:32b7:464 with SMTP id
- b23-20020a2ebc17000000b0024632b70464mr18195828ljf.506.1646168682597; Tue, 01
- Mar 2022 13:04:42 -0800 (PST)
+        Tue, 1 Mar 2022 16:05:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B676680903;
+        Tue,  1 Mar 2022 13:05:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BEF0B81A32;
+        Tue,  1 Mar 2022 21:05:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D72C340EF;
+        Tue,  1 Mar 2022 21:04:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646168700;
+        bh=+giOaAjXTXHBc6Q8z1vDjngTHJyi+4Yw/zEpOyQGKRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jlt84sel6Mj+tBBej8jK6EJrrkyMaV7/S20YoDwiMJjV54mMzUuhWnofEa1BEw040
+         AlVsMiugsy/KqZMH56Mbq4Trg7w3W1LFcQTgMNt0os0dUmDxDcitOhWNTpnNQWg5XJ
+         c1T6ddAKzJEauBhdZRdxo3T/wdPJG7tMvN3P7J2c=
+Date:   Tue, 1 Mar 2022 22:04:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V7 3/6] tty: serial: meson: Describes the calculation of
+ the UART baud rate clock using a clock frame
+Message-ID: <Yh6KedQgtLYkuG7k@kroah.com>
+References: <20220225073922.3947-1-yu.tu@amlogic.com>
+ <20220225073922.3947-4-yu.tu@amlogic.com>
+ <CGME20220301131754eucas1p1b8d762c90f4677b92a305f3eefec761f@eucas1p1.samsung.com>
+ <180d7038-4ae2-80d4-0760-4be24ec11836@samsung.com>
 MIME-Version: 1.0
-References: <20220301075839.4156-2-xiam0nd.tong@gmail.com> <202203020135.5duGpXM2-lkp@intel.com>
- <CAHk-=wiVF0SeV2132vaTAcL1ccVDP25LkAgNgPoHXdFc27x-0g@mail.gmail.com> <CAK8P3a0QAECV=_Bu5xnBxjxUHLcaGjBgJEjfMaeKT7StR=acyQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0QAECV=_Bu5xnBxjxUHLcaGjBgJEjfMaeKT7StR=acyQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 13:04:26 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiFbzpyt1-9ZAigFYU7R8g9mEgJho3w7yGYe0h-W==nsw@mail.gmail.com>
-Message-ID: <CAHk-=wiFbzpyt1-9ZAigFYU7R8g9mEgJho3w7yGYe0h-W==nsw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] Kbuild: compile kernel with gnu11 std
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kernel test robot <lkp@intel.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        kbuild-all@lists.01.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <180d7038-4ae2-80d4-0760-4be24ec11836@samsung.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 12:54 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> gcc-11 only shows the one line warning here.
+On Tue, Mar 01, 2022 at 02:17:53PM +0100, Marek Szyprowski wrote:
+> Hi,
+> 
+> On 25.02.2022 08:39, Yu Tu wrote:
+> > Using the common Clock code to describe the UART baud rate clock
+> > makes it easier for the UART driver to be compatible with the
+> > baud rate requirements of the UART IP on different meson chips.
+> >
+> > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> 
+> This patch landed recently in linux next-20220228 as commit 44023b8e1f14 
+> ("tty: serial: meson: Describes the calculation of the UART baud rate 
+> clock using a clock frame"). It causes kernel crash on my Amlogic based 
+> test boards: Odroid C4/N2 and Khadas VIM3:
 
-What an odd warning. Not even a filename, much less a line number?
+Ok, this series is causing lots of problems, I'm just going to revert
+the whole thing from my tree, thanks for letting me know.
 
-> The source is
->
-> /* PCI CFG04 status fields */
-> #define PCI_CFG04_STAT_BIT      16
-> #define PCI_CFG04_STAT          0xffff0000
-> #define PCI_CFG04_STAT_66_MHZ   (1 << 21)
-> #define PCI_CFG04_STAT_FBB      (1 << 23)
-> #define PCI_CFG04_STAT_MDPE     (1 << 24)
-> #define PCI_CFG04_STAT_DST      (1 << 25)
-> #define PCI_CFG04_STAT_STA      (1 << 27)
-> #define PCI_CFG04_STAT_RTA      (1 << 28)
-> #define PCI_CFG04_STAT_RMA      (1 << 29)
-> #define PCI_CFG04_STAT_SSE      (1 << 30)
-> #define PCI_CFG04_STAT_PE       (1 << 31)
-> #define KORINA_STAT             (PCI_CFG04_STAT_MDPE | \
->                                  PCI_CFG04_STAT_STA | \
->                                  PCI_CFG04_STAT_RTA | \
->                                  PCI_CFG04_STAT_RMA | \
->                                  PCI_CFG04_STAT_SSE | \
->                                  PCI_CFG04_STAT_PE)
-> #define KORINA_CNFG1            ((KORINA_STAT<<16)|KORINA_CMD)
-
-Yeah, looks like that "<< 16" is likely just wrong.
-
-I'm guessing that that KORINA_CNFG1 thing either ends up not
-mattering, or - probably more likely - nobody really used that
-platform at all. It has had pretty much zero updates sinced 2008.
-
-               Linus
+greg k-h

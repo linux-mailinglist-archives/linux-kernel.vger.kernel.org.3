@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AFD4C8A4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334334C8A50
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiCALHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S234460AbiCALL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiCALHj (ORCPT
+        with ESMTP id S233165AbiCALLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:07:39 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2222F8BF30;
-        Tue,  1 Mar 2022 03:06:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646132819; x=1677668819;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=DplcUm3snQ+9f/2Kg7Iq3Eg7znZsn8k8xzccD8lBdvU=;
-  b=Kbr+Q/7sCnOPhiqsHm1mzpFkr0luNGdSe87MNb264CegNzZT/S7ZP8oC
-   MrXnQh60r9U6HJkVXRShGHj4uxEgqG8WeP5s1qUcVk73039KV421nFO7T
-   RwAsaemeBfMlSS+wBsl4P7W32HYXC5mAFfsbZpz1reg7wwz1QMH++W/20
-   quKJ0MoczW9SrO216RUhR9eIiQnomKI+xO+DmL1ZUrr4Bbl9lSQ1D7IkU
-   atN+BD+++YxGtWZVhC2ss5U9oEi5D0tstlQGQcBstZz6DlFw6MJfcTAAE
-   +0Nn4hl/GA1J5DuyD3URX/HFe6P2ipkdzqw/yx9aDceptF0uqp1rw7m50
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316323870"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="316323870"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 03:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="685683786"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Mar 2022 03:06:54 -0800
-Message-ID: <9a1163af-7a6e-547b-7b2e-245f1a29b4d5@intel.com>
-Date:   Tue, 1 Mar 2022 13:06:53 +0200
+        Tue, 1 Mar 2022 06:11:23 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3357492
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:10:40 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d19a:1d86:8408:fe96])
+        by laurent.telenet-ops.be with bizsmtp
+        id 0zAd2704K2dyv6m01zAdTt; Tue, 01 Mar 2022 12:10:38 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nP0Or-002KSx-BH; Tue, 01 Mar 2022 12:10:37 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nP0Oq-006QpQ-Kp; Tue, 01 Mar 2022 12:10:36 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] base: soc: Make soc_device_match() simpler and easier to read
+Date:   Tue,  1 Mar 2022 12:10:35 +0100
+Message-Id: <9f9107c06f7d065ae6581e5290ef5d72f7298fd1.1646132835.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH V2 00/11] perf intel-pt: Add perf event clocks to better
- support VM tracing
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <4eaf42fd-f30f-e8ac-03f5-a364f7e28461@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <4eaf42fd-f30f-e8ac-03f5-a364f7e28461@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 08:54, Adrian Hunter wrote:
-> On 14/02/2022 13:09, Adrian Hunter wrote:
->> Hi
->>
->> These patches add 2 new perf event clocks based on TSC for use with VMs.
->>
->> The first patch is a minor fix, the next 2 patches add each of the 2 new
->> clocks.  The remaining patches add minimal tools support and are based on
->> top of the Intel PT Event Trace tools' patches.
->>
->> The future work, to add the ability to use perf inject to inject perf
->> events from a VM guest perf.data file into a VM host perf.data file,
->> has yet to be implemented.
->>
->>
->> Changes in V2:
->>       perf/x86: Fix native_perf_sched_clock_from_tsc() with __sched_clock_offset
->> 	  Add __sched_clock_offset unconditionally
->>
->>       perf/x86: Add support for TSC as a perf event clock
->> 	  Use an attribute bit 'ns_clockid' to identify non-standard clockids
->>
->>       perf/x86: Add support for TSC in nanoseconds as a perf event clock
->> 	  Do not affect use of __sched_clock_offset
->> 	  Adjust to use 'ns_clockid'
-> 
-> Any comments on version 2?
+The function soc_device_match() is difficult to read for various
+reasons:
+  - There are two loop conditions using different styles: "while (...)"
+    (which is BTW always true) vs. "if ... break",
+  - The are two return condition using different logic: "if ... return
+    foo" vs. "if ... else return bar".
 
-☺/
+Make the code easier to read by:
+  1. Removing the always-true "!ret" loop condition, and dropping the
+     now unneeded pre-initialization of "ret",
+  2. Converting "if ... break" to a proper "while (...)" loop condition,
+  3. Inverting the logic of the second return condition.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/base/soc.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/base/soc.c b/drivers/base/soc.c
+index 0af5363a582c36dd..22130b5f789d9d7e 100644
+--- a/drivers/base/soc.c
++++ b/drivers/base/soc.c
+@@ -241,15 +241,13 @@ static int soc_device_match_one(struct device *dev, void *arg)
+ const struct soc_device_attribute *soc_device_match(
+ 	const struct soc_device_attribute *matches)
+ {
+-	int ret = 0;
++	int ret;
+ 
+ 	if (!matches)
+ 		return NULL;
+ 
+-	while (!ret) {
+-		if (!(matches->machine || matches->family ||
+-		      matches->revision || matches->soc_id))
+-			break;
++	while (matches->machine || matches->family || matches->revision ||
++	       matches->soc_id) {
+ 		ret = bus_for_each_dev(&soc_bus_type, NULL, (void *)matches,
+ 				       soc_device_match_one);
+ 		if (ret < 0 && early_soc_dev_attr)
+@@ -257,10 +255,10 @@ const struct soc_device_attribute *soc_device_match(
+ 						    matches);
+ 		if (ret < 0)
+ 			return NULL;
+-		if (!ret)
+-			matches++;
+-		else
++		if (ret)
+ 			return matches;
++
++		matches++;
+ 	}
+ 	return NULL;
+ }
+-- 
+2.25.1
+

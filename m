@@ -2,158 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB69E4C955D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928914C9563
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiCAUGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        id S237576AbiCAUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiCAUGU (ORCPT
+        with ESMTP id S237566AbiCAUHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:06:20 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1267A60CCF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:05:39 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id e13so14376808plh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:05:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aC2oMMHQFLdJ/XqP7d9vygv8pntf7KifLNUmGDpGgXc=;
-        b=Rp8+Us/o05ECuRNzQODaQy/2PEmT0m4PhVvuS0TQMQ7/SY+1sul/+Y6HsEVjpo9QoV
-         cHep4QNa67NMaWCv3vjWeedfi1qY82bIMjTMUDc68wVHuMXuLFIOIAOjZZbdnGBCY3PC
-         QyRN7BPqwOCQiS58GCz8QDrSXxgxxcsJE0e8yYOLr1QXHFEsjW3FdZNsoExi26Ir24RQ
-         /ExJQL3Wx5ucVYgE/JwMNWl6grTRDAb5WYFN3KeupcsXlEWqMIApKqihJxALmw7HB0D7
-         rL5bYGRmT50oWjHpzaeIYBiM5w2QUe8C8VLcKU2XCIvfpyQyMgsRA6zL9i9qlJMq0ROR
-         ppgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aC2oMMHQFLdJ/XqP7d9vygv8pntf7KifLNUmGDpGgXc=;
-        b=AAKcBsa0Sg0lpR4DvcnIOSSL72pewRjIwO0dWbwa1SnpiArzQannbbw2R5Rpyf78Ot
-         27hlmV7bl5BioZcyADWoev2jvo1Kf4eO4AcHXAiDo53HGne91W2DAxaZrcJx6UHfirxV
-         OpRkMaT+5YT/ntnCObXEYbJQ1P7S7ieUfAOvx7u5J1+oh0CjLlAotGjE/x4wrSz3VdzS
-         PyPhUFbiDi8czFKIpx0O4zXawBF9CrCys5XEA3cROAvDJc8WYxcJCB2DHIpuxtMhO/Qv
-         bPrhbvZLMJsjeSf4leY5m1XSz7iomz1o49VLW8daDd7fY2u1ag4S1/0nUSvqVZd/YPow
-         ovvg==
-X-Gm-Message-State: AOAM532KvxQ++MQsZnda8Q9239qozCPsi1vCMihf0Ny049/3ellYmuOi
-        fMS9iMRO1IZNsIshQC1tZo2BXA1z7JVIUbih1uRxqg==
-X-Google-Smtp-Source: ABdhPJyot3uCbPG3oShNMDNTdf1a6402955RgMvd/jnl2LORATOaEArR4uLbJRg2d/HeDY/id/hd38IfLPL+799etQ4=
-X-Received: by 2002:a17:90b:d91:b0:1bc:ade1:54e3 with SMTP id
- bg17-20020a17090b0d9100b001bcade154e3mr23532934pjb.8.1646165138605; Tue, 01
- Mar 2022 12:05:38 -0800 (PST)
+        Tue, 1 Mar 2022 15:07:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F22970CD9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:06:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eVE4x0a1uiIp7GVd+oaFA8E1J9Sx4rnnEv4gkvYByB0=; b=ZN/HdjRT+7J2hIUgr0q+Livuys
+        QkRypafQ43BBDMdXZQlP7pOzskxJ/1/ifb50ib6//pE1EI71GUBPGL3sG1q+i4kbTkQZwOsnwvGGs
+        jDSJgxKKwRUxkCWFs9+5KQ+/v8Hv4KgggK5ULt8HCbu0G1Stq2ZcD+QNZFgEDQ6SKkLPrRGSGzkaP
+        ASGFTUTcQcEOyfAqkCObWLB/gwPVk9ATUSFGKKhx7lRjfW1saRjBwqosS3EPZ4ZPs0/flNVih+OZu
+        /YZltR/a8C0iDt7Bj8xVXZ3iSGBVJfD4pfO2/AjlP0J452RmiLrY+9fI4dscoW+BJ/14SGufkLVS6
+        C9sU6Aqw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP8km-009tsg-Qc; Tue, 01 Mar 2022 20:05:48 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5BDE1986271; Tue,  1 Mar 2022 21:05:47 +0100 (CET)
+Date:   Tue, 1 Mar 2022 21:05:47 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
+        rostedt@goodmis.org, samitolvanen@google.com, x86@kernel.org
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-ID: <20220301200547.GK11184@worktop.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.892372059@infradead.org>
+ <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+ <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+ <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
+ <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
+ <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
+ <20220301191245.GI11184@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-42-ira.weiny@intel.com>
- <CAPcyv4h1Q6H6_VApe3eFhEwe0McqbrFGRmy9rzFSPP0ATsTeTw@mail.gmail.com> <Yh535Zqe/GtuF/Xh@iweiny-desk3>
-In-Reply-To: <Yh535Zqe/GtuF/Xh@iweiny-desk3>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 1 Mar 2022 12:05:27 -0800
-Message-ID: <CAPcyv4g+Cbqk5bev8=SNz-8EwzofER0HrTzUiJ87ygdWSsXAiA@mail.gmail.com>
-Subject: Re: [PATCH V8 41/44] kmap: Ensure kmap works for devmap pages
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301191245.GI11184@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 11:45 AM Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Fri, Feb 04, 2022 at 01:07:10PM -0800, Dan Williams wrote:
-> > On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
-> > >
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > >
-> > > Users of devmap pages should not have to know that the pages they are
-> > > operating on are special.
-> >
-> > How about get straight to the point without any ambiguous references:
-> >
-> > Today, kmap_{local_page,atomic} handles granting access to HIGHMEM
-> > pages without the caller needing to know if the page is HIGHMEM, or
-> > not. Use that existing infrastructure to grant access to PKS/PGMAP
-> > access protected pages.
->
-> This sounds better.  Thanks.
->
-> >
-> > > Co-opt the kmap_{local_page,atomic}() to mediate access to PKS protected
-> > > pages via the devmap facility.  kmap_{local_page,atomic}() are both
-> > > thread local mappings so they work well with the thread specific
-> > > protections available.
-> > >
-> > > kmap(), on the other hand, allows for global mappings to be established,
-> > > Which is incompatible with the underlying PKS facility.
-> >
-> > Why is kmap incompatible with PKS? I know why, but this is a claim
-> > without evidence. If you documented that in a previous patch, there's
-> > no harm and copying and pasting into this one. A future git log user
-> > will thank you for not making them go to lore to try to find the one
-> > patch with the  details.
->
-> Good point.
->
-> > Extra credit for creating a PKS theory of
-> > operation document with this detail, unless I missed that?
->
-> Well...  I've documented and mentioned the thread-local'ness of PKS a lot but
-> I'm pretty close to all of this so it is hard for me to remember where and to
-> what degree that is documented.  I've already reworked the PKS documentation a
-> bit.  So I'll review that.
->
-> >
-> > > For this reason
-> > > kmap() is not supported.  Rather than leave the kmap mappings to fault
-> > > at random times when users may access them,
-> >
-> > Is that a problem?
->
-> No.
+On Tue, Mar 01, 2022 at 08:12:45PM +0100, Peter Zijlstra wrote:
+> On Tue, Mar 01, 2022 at 10:49:09PM +0530, Naveen N. Rao wrote:
+> > Peter Zijlstra wrote:
 
-What I meant was how random is random and is it distinguishable from
-direct page_address() usage where there is no explicit early failure
-path?
+> > > But if you really want/need to retain that, then yes, we need that
+> > > else branch unconditionally :/
+> > 
+> > I think we will need this. perf always specifies an offset from _text.
+> 
+> The _text section symbol should have an adequate size, no?
 
->
-> > This instrumentation is also insufficient for
-> > legitimate usages of page_address().
->
-> True.  Although with this protection those access' are no longer legitimate.
-> And it sounds like it may be worth putting a call in page_address() as well.
->
-> > Might as well rely on the kernel
-> > developer community being able to debug PKS WARN() splats back to the
-> > source because that will need to be done regardless, given kmap() is
-> > not the only source of false positive access violations.
->
-> I disagree but I'm happy to drop pgmap_protection_flag_invalid() if that is the
-> consensus.
->
-> The reason I disagree is that it is generally better to catch errors early
-> rather than later.  Furthermore, this does not change the permissions.  Which
-> means the actual invalid access will also get flagged at the point of use.
-> This allows more debugging information for the user.
->
-> Do you feel that strongly about removing pgmap_protection_flag_invalid()?
+n/m, I should really go get some sleep it seems. Even if the size is
+correct, that isn't relevant.
 
-You haven't convinced me that it matters yet. Do you have an example
-of a kmap() pointer dereference PKS splat where it's not clear from
-the backtrace from the fault handler that a kmap path was involved?
+> > Also, I just noticed:
+> 
+> > > +		if (!kallsyms_lookup_size_offset((unsigned long)addr + offset,
+> > > +						 NULL, &offset))
+> > > +			return ERR_PTR(-ENOENT);
+> > > +		addr = (kprobe_opcode_t *)((unsigned long)addr - offset);
+> > >  	}
+> > 
+> > This looks wrong. I think you need to retain offset to calculate the proper
+> > function entry address so that you can do:
+> > 	addr = (kprobe_opcode_t *)((unsigned long)(addr + offset) - func_offset);
+> > 	offset = func_offset;
+> 
+> 
+> Right you are, it needs to be:
+> 
+> 	addr += offset;
+> 	kallsyms_lookup_size_offset(addr, &size, &offset);
+> 	addr -= offset;
+> 
+> with all the extra unreadable casts on.
 
-At a minimum if it stays it seems like something that should be
-wrapped by VM_WARN_ON_ONCE_PAGE() like other page relative memory
-debugging extra checks that get disabled by CONFIG_DEBUG_VM, but the
-assertion that "early is better" needs evidence that "later is too
-ambiguous".
+How does this look?
+
+--- a/arch/powerpc/kernel/kprobes.c
++++ b/arch/powerpc/kernel/kprobes.c
+@@ -105,6 +105,27 @@ kprobe_opcode_t *kprobe_lookup_name(cons
+ 	return addr;
+ }
+ 
++static bool arch_kprobe_on_func_entry(unsigned long offset)
++{
++#ifdef PPC64_ELF_ABI_v2
++#ifdef CONFIG_KPROBES_ON_FTRACE
++	return offset <= 16;
++#else
++	return offset <= 8;
++#endif
++#else
++	return !offset;
++#endif
++}
++
++/* XXX try and fold the magic of kprobe_lookup_name() in this */
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
++					 bool *on_func_entry)
++{
++	*on_func_entry = arch_kprobe_on_func_entry(offset);
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
+ void *alloc_insn_page(void)
+ {
+ 	void *page;
+@@ -218,19 +239,6 @@ static nokprobe_inline void set_current_
+ 	kcb->kprobe_saved_msr = regs->msr;
+ }
+ 
+-bool arch_kprobe_on_func_entry(unsigned long offset)
+-{
+-#ifdef PPC64_ELF_ABI_v2
+-#ifdef CONFIG_KPROBES_ON_FTRACE
+-	return offset <= 16;
+-#else
+-	return offset <= 8;
+-#endif
+-#else
+-	return !offset;
+-#endif
+-}
+-
+ void arch_prepare_kretprobe(struct kretprobe_instance *ri, struct pt_regs *regs)
+ {
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->link;
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -52,6 +52,7 @@
+ #include <asm/insn.h>
+ #include <asm/debugreg.h>
+ #include <asm/set_memory.h>
++#include <asm/ibt.h>
+ 
+ #include "common.h"
+ 
+@@ -301,6 +302,22 @@ static int can_probe(unsigned long paddr
+ 	return (addr == paddr);
+ }
+ 
++/* If the x86 support IBT (ENDBR) it must be skipped. */
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
++					 bool *on_func_entry)
++{
++	if (is_endbr(*(u32 *)addr)) {
++		*on_func_entry = !offset || offset == 4;
++		if (*on_func_entry)
++			offset = 4;
++
++	} else {
++		*on_func_entry = !offset;
++	}
++
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
+ /*
+  * Copy an instruction with recovering modified instruction by kprobes
+  * and adjust the displacement if the instruction uses the %rip-relative
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
+ extern void kprobes_inc_nmissed_count(struct kprobe *p);
+ extern bool arch_within_kprobe_blacklist(unsigned long addr);
+ extern int arch_populate_kprobe_blacklist(void);
+-extern bool arch_kprobe_on_func_entry(unsigned long offset);
+ extern int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset);
+ 
+ extern bool within_kprobe_blacklist(unsigned long addr);
+@@ -384,6 +383,8 @@ static inline struct kprobe_ctlblk *get_
+ }
+ 
+ kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
++kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset, bool *on_func_entry);
++
+ int register_kprobe(struct kprobe *p);
+ void unregister_kprobe(struct kprobe *p);
+ int register_kprobes(struct kprobe **kps, int num);
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1489,24 +1489,68 @@ bool within_kprobe_blacklist(unsigned lo
+ }
+ 
+ /*
++ * arch_adjust_kprobe_addr - adjust the address
++ * @addr: symbol base address
++ * @offset: offset within the symbol
++ * @on_func_entry: was this @addr+@offset on the function entry
++ *
++ * Typically returns @addr + @offset, except for special cases where the
++ * function might be prefixed by a CFI landing pad, in that case any offset
++ * inside the landing pad is mapped to the first 'real' instruction of the
++ * symbol.
++ *
++ * Specifically, for things like IBT/BTI, skip the resp. ENDBR/BTI.C
++ * instruction at +0.
++ */
++kprobe_opcode_t *__weak arch_adjust_kprobe_addr(unsigned long addr,
++						unsigned long offset,
++						bool *on_func_entry)
++{
++	*on_func_entry = !offset;
++	return (kprobe_opcode_t *)(addr + offset);
++}
++
++/*
+  * If 'symbol_name' is specified, look it up and add the 'offset'
+  * to it. This way, we can specify a relative address to a symbol.
+  * This returns encoded errors if it fails to look up symbol or invalid
+  * combination of parameters.
+  */
+-static kprobe_opcode_t *_kprobe_addr(kprobe_opcode_t *addr,
+-			const char *symbol_name, unsigned int offset)
++static kprobe_opcode_t *
++_kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
++	     unsigned long offset, bool *on_func_entry)
+ {
+ 	if ((symbol_name && addr) || (!symbol_name && !addr))
+ 		goto invalid;
+ 
+ 	if (symbol_name) {
++		/*
++		 * Input: @sym + @offset
++		 * Output: @addr + @offset
++		 *
++		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
++		 *       argument into it's output!
++		 */
+ 		addr = kprobe_lookup_name(symbol_name, offset);
+ 		if (!addr)
+ 			return ERR_PTR(-ENOENT);
+ 	}
+ 
+-	addr = (kprobe_opcode_t *)(((char *)addr) + offset);
++	/*
++	 * So here we have @addr + @offset, displace it into a new
++	 * @addr' + @offset' where @addr' is the symbol start address.
++	 */
++	addr = (void *)addr + offset;
++	if (!kallsyms_lookup_size_offset((unsigned long)addr, NULL, &offset))
++		return ERR_PTR(-ENOENT);
++	addr = (void *)addr - offset;
++
++	/*
++	 * Then ask the architecture to re-combine them, taking care of
++	 * magical function entry details while telling us if this was indeed
++	 * at the start of the function.
++	 */
++	addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
+ 	if (addr)
+ 		return addr;
+ 
+@@ -1516,7 +1560,8 @@ static kprobe_opcode_t *_kprobe_addr(kpr
+ 
+ static kprobe_opcode_t *kprobe_addr(struct kprobe *p)
+ {
+-	return _kprobe_addr(p->addr, p->symbol_name, p->offset);
++	bool on_func_entry;
++	return _kprobe_addr(p->addr, p->symbol_name, p->offset, &on_func_entry);
+ }
+ 
+ /*
+@@ -2067,15 +2112,13 @@ bool __weak arch_kprobe_on_func_entry(un
+  */
+ int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset)
+ {
+-	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset);
++	bool on_func_entry;
++	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset, &on_func_entry);
+ 
+ 	if (IS_ERR(kp_addr))
+ 		return PTR_ERR(kp_addr);
+ 
+-	if (!kallsyms_lookup_size_offset((unsigned long)kp_addr, NULL, &offset))
+-		return -ENOENT;
+-
+-	if (!arch_kprobe_on_func_entry(offset))
++	if (!on_func_entry)
+ 		return -EINVAL;
+ 
+ 	return 0;

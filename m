@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746B84C8EAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1834C8EB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbiCAPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S235588AbiCAPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiCAPPh (ORCPT
+        with ESMTP id S235585AbiCAPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:15:37 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BC442A25
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:14:57 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id t28so10161096qtc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 07:14:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=N+utyRYCNuKyU7IWkP2AJL9he7LLd2jQiK5Xa3sCqIM=;
-        b=pMkLwqmyG0yMcGiVdouydBtN/0qZHBLpEkdACyTw204h15TyZEKz8Vf6iI2+BuTIRp
-         yjU+0IPDwpd9KzkUxX7/X5gdqhFV8bFDWU/f562YiJGD5pxEtuw2RK8o9XZO8igzjA3Q
-         Fqv6sT+PnzO1yaO3lNZkP++tjKl144Lq0VIFHCzBpEgdZeVxlq3f7Sl3w/YnLgmVsyeg
-         BcKD2NEhHMekl/WegBWX81z2hxONIjeljr2hqGdL6//Shvyk1h/+FTgbV+PGLiv9ACML
-         j2XpdOH0w5i35AOrprgvsPTl9IMoA+JyQmL/le/QrvfOTsArXDKUkqjGrj0JQ12ji/xL
-         RiJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=N+utyRYCNuKyU7IWkP2AJL9he7LLd2jQiK5Xa3sCqIM=;
-        b=Q5G0BvIwjOVXkXctA/gG2YsAEyEFMPrc7ar+OmTuEhVGKoLlY9NMUvNj9KNCPLA6lZ
-         q7Ccw87n0ueqLtG74qmsI84RxJ6XNFmX7W3dv4xhInvWmj8Z+tBsh75SsWzOj/CGA6Sm
-         aM7aUY5j7pbyPs2vZOprJPTMizGsFINTgCxxStaNpGf8iSBpWXDF2RfF1b7MqUeAokXq
-         WX3rIes4yJuUNKU8Iwnd2qactQnPZVOEOtzMpnePgW12S2WDiMks2J40qKK8AvdlO3vj
-         S4HDyc2QFMdU03NH4DFDq8iGdWMG/3aKLl78p4joLvS2hvMpXN6+lTS6/KEp9gAE8n51
-         ByhA==
-X-Gm-Message-State: AOAM533NLi8DrYQ03z/th4x5OJCZdndQJB9t54EwLB+zdHtvV7hwSEbK
-        6IH/5AO+OjcZVUQAXvfgO9Q/urAysIEWiQ==
-X-Google-Smtp-Source: ABdhPJyH3VSAZEjc3vJl6+Hf4xRfPKvZWeCzcEM4wjJKgrH9xREgvBNTxNa0yJLenZQvRnsMMGT5MA==
-X-Received: by 2002:a05:622a:3ce:b0:2df:6da9:1b58 with SMTP id k14-20020a05622a03ce00b002df6da91b58mr15407852qtx.438.1646147696165;
-        Tue, 01 Mar 2022 07:14:56 -0800 (PST)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id n13-20020ac85b4d000000b002de6fe91d2fsm9360012qtw.68.2022.03.01.07.14.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 07:14:55 -0800 (PST)
-Received: by mail-yb1-f180.google.com with SMTP id h126so12892312ybc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 07:14:55 -0800 (PST)
-X-Received: by 2002:a05:6902:102a:b0:614:105b:33a6 with SMTP id
- x10-20020a056902102a00b00614105b33a6mr24189687ybt.457.1646147694685; Tue, 01
- Mar 2022 07:14:54 -0800 (PST)
+        Tue, 1 Mar 2022 10:16:06 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D165A089
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:15:22 -0800 (PST)
+X-QQ-mid: bizesmtp88t1646147703temkr52f
+Received: from leo.localdomain (unknown [103.144.149.54])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 01 Mar 2022 23:14:40 +0800 (CST)
+X-QQ-SSF: 0140000000800040B000000A0000000
+X-QQ-FEAT: eTtJes0duVstZc8gVtcc01w8JsC2Oa/wyMO1xRzCWSJTvfuFj/wdRfI4Fxr9/
+        4PqsjgGkwfG5zqrKDECD3OdDxjj8GtzqJUCXw9bAqz/1NUuqF4phzsZSt3veKnWnTJZr7kP
+        jiFXuOBIB3sMI/HvPEpwg6z8bQwugTjh5n51rNlxlwpE/UvhJFLwRLPd/M9+2t3ZI1yFTHI
+        4IdsihFpjjJT9sS3VCDCpAcSzzuihjb9F8+BvCoABL3TNg4kXksMlZL0SN6TOU0EU4DVf1U
+        AZi9y01z1L+DvVaFLBhdt2C62CVLf0MQpUOc/LmdouslGVeSApK7JoXTBfw+JX7neu304dk
+        Xn0C5xFI2gIR6jcdBLMHOts4V43Iz9UW8MApWjK
+X-QQ-GoodBg: 2
+From:   Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     sfr@canb.auug.org.au, caoyixuan2019@email.szu.edu.cn,
+        hanshenghong2019@email.szu.edu.cn,
+        zhaochongxi2019@email.szu.edu.cn, weizhenliang@huawei.com,
+        zhangyinan2019@email.szu.edu.cn, linux-kernel@vger.kernel.org,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+Subject: [PATCH 1/3] tools/vm/page_owner_sort.c: fix comments
+Date:   Tue,  1 Mar 2022 23:14:36 +0800
+Message-Id: <20220301151438.166118-1-yejiajian2018@email.szu.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220301144453.snstwdjy3kmpi4zf@begin> <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
- <20220301150028.romzjw2b4aczl7kf@begin>
-In-Reply-To: <20220301150028.romzjw2b4aczl7kf@begin>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 1 Mar 2022 10:14:18 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSeZw228fsDj+YoSpu5sLaXsp+uR+N+qHrzZ4e3yMWhPKw@mail.gmail.com>
-Message-ID: <CA+FuTSeZw228fsDj+YoSpu5sLaXsp+uR+N+qHrzZ4e3yMWhPKw@mail.gmail.com>
-Subject: Re: [PATCH] SO_ZEROCOPY should rather return -ENOPROTOOPT
-To:     Samuel Thibault <samuel.thibault@labri.fr>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        willemb@google.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 10:00 AM Samuel Thibault
-<samuel.thibault@labri.fr> wrote:
->
-> Willem de Bruijn, le mar. 01 mars 2022 09:51:45 -0500, a ecrit:
-> > On Tue, Mar 1, 2022 at 9:44 AM Samuel Thibault <samuel.thibault@labri.fr> wrote:
-> > >
-> > > ENOTSUPP is documented as "should never be seen by user programs", and
-> > > is not exposed in <errno.h>, so applications cannot safely check against
-> > > it. We should rather return the well-known -ENOPROTOOPT.
-> > >
-> > > Signed-off-by: Samuel Thibault <samuel.thibault@labri.fr>
-> > >
-> > > diff --git a/net/core/sock.c b/net/core/sock.c
-> > > index 4ff806d71921..6e5b84194d56 100644
-> > > --- a/net/core/sock.c
-> > > +++ b/net/core/sock.c
-> > > @@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
-> > >                         if (!(sk_is_tcp(sk) ||
-> > >                               (sk->sk_type == SOCK_DGRAM &&
-> > >                                sk->sk_protocol == IPPROTO_UDP)))
-> > > -                               ret = -ENOTSUPP;
-> > > +                               ret = -ENOPROTOOPT;
-> > >                 } else if (sk->sk_family != PF_RDS) {
-> > > -                       ret = -ENOTSUPP;
-> > > +                       ret = -ENOPROTOOPT;
-> > >                 }
-> > >                 if (!ret) {
-> > >                         if (val < 0 || val > 1)
-> >
-> > That should have been a public error code. Perhaps rather EOPNOTSUPP.
-> >
-> > The problem with a change now is that it will confuse existing
-> > applications that check for -524 (ENOTSUPP).
->
-> They were not supposed to hardcord -524...
->
-> Actually, they already had to check against EOPNOTSUPP to support older
-> kernels, so EOPNOTSUPP is not supposed to pose a problem.
+Two adjustments are made:
 
-Which older kernels returned EOPNOTSUPP on SO_ZEROCOPY?
+1. Correct a grammatical error: replace the "what" in
+"Do the job what you want to debug" with "that".
 
-There is prior art in changing this error code when it leaks to
-userspace, such as commit 2230a7ef5198 ("drop_monitor: Use correct
-error code") and commit 4a5cdc604b9c ("net/tls: Fix return values to
-avoid ENOTSUPP").
+2. Replace "has not been" with "has been" in the description
+of the -f option: According to Commit b1c9ba071e7d
+("tools/vm/page_owner_sort.c: fix the instructions for use"),
+the description of the "-f" option is "Filter out the information
+of blocks whose memory has been released."
 
-I certainly wrote code in the past that explicitly checks for 524
-(ENOTSUPP). But do not immediately see public code that does this.
-Indeed, udpgso_bench_tx checks for both these codes.
+Signed-off-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+---
+ Documentation/vm/page_owner.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-So it's probably fine. Note that there is some risk. But no more than
-with those prior commits.
+diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+index 6591e518819f..2ddb632d847b 100644
+--- a/Documentation/vm/page_owner.rst
++++ b/Documentation/vm/page_owner.rst
+@@ -78,7 +78,7 @@ Usage
+ 
+ 2) Enable page owner: add "page_owner=on" to boot cmdline.
+ 
+-3) Do the job what you want to debug
++3) Do the job that you want to debug.
+ 
+ 4) Analyze information from page owner::
+ 
+@@ -126,4 +126,4 @@ Usage
+ 		-c		Cull by comparing stacktrace instead of total block.
+ 
+ 	Filter:
+-		-f		Filter out the information of blocks whose memory has not been released.
++		-f		Filter out the information of blocks whose memory has been released.
+-- 
+2.25.1
+
+
+

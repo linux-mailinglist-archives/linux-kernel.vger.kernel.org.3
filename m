@@ -2,155 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61BA4C832F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 06:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E154E4C8332
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 06:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiCAFfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 00:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S232417AbiCAFf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 00:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiCAFfN (ORCPT
+        with ESMTP id S232387AbiCAFfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 00:35:13 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03E770CF3;
-        Mon, 28 Feb 2022 21:34:31 -0800 (PST)
-Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Tue, 1 Mar 2022
- 13:34:28 +0800
-From:   Yu Tu <yu.tu@amlogic.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Tu <yu.tu@amlogic.com>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH V3] tty: serial: meson: Fix the compile link error reported by kernel test robot
-Date:   Tue, 1 Mar 2022 13:33:44 +0800
-Message-ID: <20220301053344.29171-1-yu.tu@amlogic.com>
-X-Mailer: git-send-email 2.33.1
+        Tue, 1 Mar 2022 00:35:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F2970F48;
+        Mon, 28 Feb 2022 21:35:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30C3A61030;
+        Tue,  1 Mar 2022 05:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C4AC340EE;
+        Tue,  1 Mar 2022 05:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646112911;
+        bh=yulE+IPxlxYpmFDBcItH84VTpVmoVAp0vgR2CalT8kg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IQD7RnFkDQQL95isKBUCzdpglKb0EPoZWgJ5GdfK615LtXWMBtGWte16tgVW6xvfu
+         waqMQe6yTk3QCbkfLUHhzMJvzGYIiAXdozqBKboqXRlP8CC2rsfCcqNl9TdHPdcYdB
+         ioVYeAb5LnbdsEvBVepDl0n7MAr9ogEfopbHxSocbX9ejgymlGVLj/8eBuGnX/u5pJ
+         ad5isNMNwTewzqRltc3UZrgS2v25Nd44aDg4Rqrz5nuGsTIBAheWOjMSk0BKvcoPLb
+         VlR9VRjsTRuGFhiB2Y3ICl+ri9FSiO4AwNpsBIMpMSg/qtGhYqyT6TXum/lFsZkp5/
+         QlnI/2U0YbspQ==
+Date:   Mon, 28 Feb 2022 21:35:09 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, bjorn.andersson@linaro.org, mka@chromium.org,
+        evgreen@chromium.org, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, elder@kernel.org, lkp@intel.com,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: ipa: add an interconnect dependency
+Message-ID: <20220228213509.64434f4b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220226195747.231133-1-elder@linaro.org>
+References: <20220226195747.231133-1-elder@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.11.248]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describes the calculation of the UART baud rate clock using a clock
-frame. Forgot to add in Kconfig kernel test Robot compilation error
-due to COMMON_CLK dependency.
+On Sat, 26 Feb 2022 13:57:47 -0600 Alex Elder wrote:
+> In order to function, the IPA driver very clearly requires the
+> interconnect framework to be enabled in the kernel configuration.
+> State that dependency in the Kconfig file.
+> 
+> This became a problem when CONFIG_COMPILE_TEST support was added.
+> Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 38a4066f593c5 ("net: ipa: support COMPILE_TEST")
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> ---
+>  drivers/net/ipa/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/ipa/Kconfig b/drivers/net/ipa/Kconfig
+> index d037682fb7adb..3e0da1e764718 100644
+> --- a/drivers/net/ipa/Kconfig
+> +++ b/drivers/net/ipa/Kconfig
+> @@ -2,6 +2,7 @@ config QCOM_IPA
+>  	tristate "Qualcomm IPA support"
+>  	depends on NET && QCOM_SMEM
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on INTERCONNECT
+>  	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
+>  	select QCOM_MDT_LOADER if ARCH_QCOM
+>  	select QCOM_SCM
 
-Fixes: ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Yu Tu <yu.tu@amlogic.com>
----
- drivers/tty/serial/Kconfig      |  1 +
- drivers/tty/serial/meson_uart.c | 37 +++++++++++++++++++++++----------
- 2 files changed, 27 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e952ec5c7a7c..a0f2b82fc18b 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -200,6 +200,7 @@ config SERIAL_KGDB_NMI
- config SERIAL_MESON
- 	tristate "Meson serial port support"
- 	depends on ARCH_MESON || COMPILE_TEST
-+	depends on COMMON_CLK
- 	select SERIAL_CORE
- 	help
- 	  This enables the driver for the on-chip UARTs of the Amlogic
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index bf6be5468aaf..972f210f3492 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -780,28 +780,37 @@ static int meson_uart_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_out_clk_disable;
-+	}
- 
- 	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
- 
- 	if (meson_ports[pdev->id]) {
- 		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto err_out_clk_disable;
- 	}
- 
- 	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
--	if (!port)
--		return -ENOMEM;
-+	if (!port) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
--	if (IS_ERR(port->membase))
--		return PTR_ERR(port->membase);
-+	if (IS_ERR(port->membase)) {
-+		ret = PTR_ERR(port->membase);
-+		goto err_out_clk_disable;
-+	}
- 
- 	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
- 				    GFP_KERNEL);
--	if (!private_data)
--		return -ENOMEM;
-+	if (!private_data) {
-+		ret = -ENOMEM;
-+		goto err_out_clk_disable;
-+	}
- 
- 	if (device_get_match_data(&pdev->dev))
- 		private_data->use_xtal_clk = true;
-@@ -822,7 +831,7 @@ static int meson_uart_probe(struct platform_device *pdev)
- 
- 	ret = meson_uart_probe_clocks(port);
- 	if (ret)
--		return ret;
-+		goto err_out_clk_disable;
- 
- 	meson_ports[pdev->id] = port;
- 	platform_set_drvdata(pdev, port);
-@@ -831,9 +840,15 @@ static int meson_uart_probe(struct platform_device *pdev)
- 	meson_uart_reset(port);
- 
- 	ret = uart_add_one_port(&meson_uart_driver, port);
--	if (ret)
-+	if (ret) {
- 		meson_ports[pdev->id] = NULL;
-+		goto err_out_clk_disable;
-+	}
-+
-+	return 0;
- 
-+err_out_clk_disable:
-+	clk_disable_unprepare(pclk);
- 	return ret;
- }
- 
-
-base-commit: c2faf737abfb10f88f2d2612d573e9edc3c42c37
--- 
-2.33.1
-
+Looks like this patch was based on a tree without the QCOM_AOSS_QMP
+dependency patch, please rebase and repost.

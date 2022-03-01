@@ -2,132 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C804C8EDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21494C8EDB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbiCAPXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S235628AbiCAPXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235573AbiCAPXB (ORCPT
+        with ESMTP id S235684AbiCAPW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:23:01 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337C3A8ED0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:22:20 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id bm39so13197684qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 07:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=M9/JEVnJvWyMcgf/Ei/JoJH8yPdXLZfORGjH2dloKRc=;
-        b=NlFrEJ1dEuJ0AcQqwJ+8p+coXsH+g3uANH4LRahRbKynTBadd3VdN0RcXP1ghojOle
-         tE9Kgv2zAd0yYCpKyuQBM9lG2eFfhP+HbxVgiFno05OM9JQHe3bW+IADYKvg1QsCGqnq
-         4gj8JuYK0VDWuZe8RkvlX4QR0DpiNyS0VRylU+1Clo+MORzKL/COJiwD8s8cXmsPg5dT
-         qPPcUjSJJ2fthuorYka64tXuJeAw5WOx32b51sPBPc6kfsrz+vEVoTsKB5QMpcNqdyxJ
-         R0u3xVoagGg2ymjsEk7GjKgEOScHogR7qJVS6Q1P4QLWQirnJv33b2/im9mAV062Hz5K
-         IYSA==
+        Tue, 1 Mar 2022 10:22:58 -0500
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DD2A8ECB;
+        Tue,  1 Mar 2022 07:22:17 -0800 (PST)
+Received: by mail-io1-f46.google.com with SMTP id c23so18816992ioi.4;
+        Tue, 01 Mar 2022 07:22:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=M9/JEVnJvWyMcgf/Ei/JoJH8yPdXLZfORGjH2dloKRc=;
-        b=flDT8iF8LsSrAocVCyAc+Aidh72BVccOma/wUhnGQMEWHRfz8c5o2oZiO8rH7E0B91
-         q+XErcoxbTrhM6KDrlO605NFSuXLivc9ym1UWjFL1J52CeLWBSrE22XjwvZOvx04YPNg
-         FYs5aoES0moJRqg7wzf+GD1FLHDuLI7SqAAxMJU0631k3SM+WafXE6Y/SeGmbx1Oo2U9
-         0CMK5SZkvprELz58Yr+H9xC0gANVFi+06GIbYvTpaQdz6d9nLjnJC4x3MsbweNfANSIX
-         bZ/94tbdKw5gcXzrTKinUP5JOUBzTbwUTrNzjr4RYe/wFCn16s2JA7iZu/zTmSuKGXxY
-         xTtA==
-X-Gm-Message-State: AOAM532nrMB2ZKqhcKaEGlYurT4yHUM8fA0QHOoamhgA2Hm7JrTX+MJc
-        3p3SRZHvXSd0eRpOWwStwrW1hDyKtcI=
-X-Google-Smtp-Source: ABdhPJxg6oGTTO/c5hQBYMTa9gEtc1P0YXV0IdS9WLiJRp3hUxJdVybxpylb8lJ0NtDxcvZw9HSO2Q==
-X-Received: by 2002:a37:b95:0:b0:5f1:91da:6aa9 with SMTP id 143-20020a370b95000000b005f191da6aa9mr13627341qkl.760.1646148139358;
-        Tue, 01 Mar 2022 07:22:19 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id j10-20020ac85f8a000000b002dde6288fa7sm9551633qta.83.2022.03.01.07.22.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 07:22:18 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2d07ae0b1c0so148407417b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 07:22:18 -0800 (PST)
-X-Received: by 2002:a81:6603:0:b0:2d6:d166:8c31 with SMTP id
- a3-20020a816603000000b002d6d1668c31mr24869128ywc.351.1646148137765; Tue, 01
- Mar 2022 07:22:17 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=17fHYdPQFVzWsknAFNwdkyV3QN+tMAp7sQTqvIqbS7s=;
+        b=IaZFvg964ul2FFm04dJ4aVilVwSkq3tNtuRZzNQIZ1qy34DAa2M2mcIOTH9Efz8oma
+         ltfQcTLuTQOBdmykSXRgNgPxwNeMUVN7W1k1AtWuiI8KBYAdQksdDam/auDc93EXE5SX
+         Yz958K2iZ/NUq57qDWpcgrHt01um+1f3boVVUMRSq7bB7QDFd0qIt28q23RbNW4rqZMR
+         h7NsDZu0IG5aJxEEAFPugIjsh4mMtAjYE4ATwKCchQvMSn0K4TtvT1flUwVHog/UhgMj
+         sGP1i/KusXbgRP9EtxV7FcwgH8b2Q8bKxsFJ2D/mom3Yy/v7so44ZVQS3CIQ+hV5rV3u
+         IqIw==
+X-Gm-Message-State: AOAM53343AW0gBC1O8bnJwAH1+WuH4eh0LrzI8ODfzGO0nejT3732Qtw
+        xLhJeQTFCeCC6/jBnq7pgPwEVHYdRyujO/NsrXn1jF+a
+X-Google-Smtp-Source: ABdhPJwwt2otdbvGNqCJmsFuIaGpQ01LI6O8Nu7sQwI+o09PhY45pwqGbpMVXhO5pdjizwKGVRPETvFiyJ73sQfZXAQ=
+X-Received: by 2002:a02:9f86:0:b0:311:b694:ef5c with SMTP id
+ a6-20020a029f86000000b00311b694ef5cmr21638604jam.96.1646148136942; Tue, 01
+ Mar 2022 07:22:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220301144453.snstwdjy3kmpi4zf@begin> <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
- <20220301150028.romzjw2b4aczl7kf@begin> <CA+FuTSeZw228fsDj+YoSpu5sLaXsp+uR+N+qHrzZ4e3yMWhPKw@mail.gmail.com>
- <20220301152017.jkx7amcbfqkoojin@begin>
-In-Reply-To: <20220301152017.jkx7amcbfqkoojin@begin>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 1 Mar 2022 10:21:41 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSfVBVr_q6p+HcBL4NAX4z2BS0ZNaSfFF0yxO3QqeNX75Q@mail.gmail.com>
-Message-ID: <CA+FuTSfVBVr_q6p+HcBL4NAX4z2BS0ZNaSfFF0yxO3QqeNX75Q@mail.gmail.com>
-Subject: Re: [PATCH] SO_ZEROCOPY should rather return -ENOPROTOOPT
-To:     Samuel Thibault <samuel.thibault@labri.fr>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        willemb@google.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
+References: <20220215033750.104952-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220215033750.104952-1-jiapeng.chong@linux.alibaba.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 16:22:05 +0100
+Message-ID: <CAJZ5v0gU7WDQyPWefydeg6=40ugdo7FenJyKMd18m=HodMQvMA@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: Fix non-kernel-doc comment
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 10:20 AM Samuel Thibault
-<samuel.thibault@labri.fr> wrote:
+On Tue, Feb 15, 2022 at 4:38 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> Willem de Bruijn, le mar. 01 mars 2022 10:14:18 -0500, a ecrit:
-> > On Tue, Mar 1, 2022 at 10:00 AM Samuel Thibault
-> > <samuel.thibault@labri.fr> wrote:
-> > >
-> > > Willem de Bruijn, le mar. 01 mars 2022 09:51:45 -0500, a ecrit:
-> > > > On Tue, Mar 1, 2022 at 9:44 AM Samuel Thibault <samuel.thibault@labri.fr> wrote:
-> > > > >
-> > > > > ENOTSUPP is documented as "should never be seen by user programs", and
-> > > > > is not exposed in <errno.h>, so applications cannot safely check against
-> > > > > it. We should rather return the well-known -ENOPROTOOPT.
-> > > > >
-> > > > > Signed-off-by: Samuel Thibault <samuel.thibault@labri.fr>
-> > > > >
-> > > > > diff --git a/net/core/sock.c b/net/core/sock.c
-> > > > > index 4ff806d71921..6e5b84194d56 100644
-> > > > > --- a/net/core/sock.c
-> > > > > +++ b/net/core/sock.c
-> > > > > @@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
-> > > > >                         if (!(sk_is_tcp(sk) ||
-> > > > >                               (sk->sk_type == SOCK_DGRAM &&
-> > > > >                                sk->sk_protocol == IPPROTO_UDP)))
-> > > > > -                               ret = -ENOTSUPP;
-> > > > > +                               ret = -ENOPROTOOPT;
-> > > > >                 } else if (sk->sk_family != PF_RDS) {
-> > > > > -                       ret = -ENOTSUPP;
-> > > > > +                       ret = -ENOPROTOOPT;
-> > > > >                 }
-> > > > >                 if (!ret) {
-> > > > >                         if (val < 0 || val > 1)
-> > > >
-> > > > That should have been a public error code. Perhaps rather EOPNOTSUPP.
-> > > >
-> > > > The problem with a change now is that it will confuse existing
-> > > > applications that check for -524 (ENOTSUPP).
-> > >
-> > > They were not supposed to hardcord -524...
-> > >
-> > > Actually, they already had to check against EOPNOTSUPP to support older
-> > > kernels, so EOPNOTSUPP is not supposed to pose a problem.
-> >
-> > Which older kernels returned EOPNOTSUPP on SO_ZEROCOPY?
+> Fixes the following W=1 kernel build warning:
 >
-> Sorry, bad copy/paste, I meant ENOPROTOOPT.
+> kernel/power/swap.c:120: warning: This comment starts with '/**', but
+> isn't a kernel-doc comment. Refer
+> Documentation/doc-guide/kernel-doc.rst.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+> Changes in v2:
+>   -Modify subject 'block' to 'PM: hibernate'.
+>
+>  kernel/power/swap.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index 6c4f983cbacc..91fffdd2c7fb 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -88,7 +88,7 @@ struct swap_map_page_list {
+>         struct swap_map_page_list *next;
+>  };
+>
+> -/**
+> +/*
+>   *     The swap_map_handle structure is used for handling swap in
+>   *     a file-alike way
+>   */
+> @@ -116,7 +116,7 @@ struct swsusp_header {
+>
+>  static struct swsusp_header *swsusp_header;
+>
+> -/**
+> +/*
+>   *     The following functions are used for tracing the allocated
+>   *     swap pages, so that they can be freed in case of an error.
+>   */
+> @@ -170,7 +170,7 @@ static int swsusp_extents_insert(unsigned long swap_offset)
+>         return 0;
+>  }
+>
+> -/**
+> +/*
+>   *     alloc_swapdev_block - allocate a swap page and register that it has
+>   *     been allocated, so that it can be freed in case of an error.
+>   */
+> @@ -189,7 +189,7 @@ sector_t alloc_swapdev_block(int swap)
+>         return 0;
+>  }
+>
+> -/**
+> +/*
+>   *     free_all_swap_pages - free swap pages allocated for saving image data.
+>   *     It also frees the extents used to register which swap entries had been
+>   *     allocated.
+> --
 
-Same point though, right? These are not legacy concerns, but specific
-to applications written to SO_ZEROCOPY.
+Applied as 5.18 material with adjustments in the subject and changelog.
 
-I expect that most will just ignore the exact error code and will work
-with either.
+Thanks!

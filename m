@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA494C8442
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A504C8447
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbiCAGns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        id S232701AbiCAGo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiCAGnq (ORCPT
+        with ESMTP id S229529AbiCAGo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:43:46 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2348E7E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:43:04 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id x5so20612539edd.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:43:04 -0800 (PST)
+        Tue, 1 Mar 2022 01:44:27 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5FC70CD6;
+        Mon, 28 Feb 2022 22:43:46 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id l9so12254206pls.6;
+        Mon, 28 Feb 2022 22:43:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8IqwMuZ8fxt+QmrdqHOlImG77CSzeOXAfU3F7s/g1es=;
-        b=Zt7ADjjg4rQdQMZupIjoQnW8OZzkrW1QqynxdshmIEkct/PUWuc8mHmtaLMl7SRf4j
-         O/SsyFxp+cXtdodgFZY1yMgZ2bgTQgu4U8POD6AExh1V8MJIq3bb7qef796sT4BUC6Vq
-         2dGy0L5SzrT/5p9DN1SjVbc8UkJUnWYEDpsOv6Fszv3rzZ728aXUFTHimB0CAxkBX4DX
-         xrufVPSLR9vwBy1h/CSAOqSR+pgCZyQ+7DUcXmZjFeG9I0KcBRC82y7KxWo00HF556jR
-         M4UWSK1tWyrR/CgjgF6TF8QOCgtuVLdDxoUX7rPxIEp1+gTuWTERDx1fKUxHvoWeI9qA
-         5XoA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+owYc1beiZNdVQWI5pfer3AMJMG+Sa0wwOUcL3jCg/M=;
+        b=mhNIm7K8HCmmestlFa3eFuBAsCUtvPUG4FIZlkQTSacPCQpagAAGbpAhZM/0yeiXv5
+         EFWSoPXHVye+yv0CPoK6KGmkv6kJxr9Cfcy9ZFjI7eIiz8+t+Nc5hN68yZ3yK/NyAvOa
+         oxl3XgUyX3PSDqZ/Ma+n0BsEq+G99hVUwCDKTia0IuOnZqIK923uqAnUJj/gdLpizGHl
+         +N15qzdLMnQoNn9s8LDDKGfGxN1Twuidp2iSKW8ewXBvD7XAPiWdMNvhdD7dPadMLAFT
+         eYEV6H28YBmoJxUfIZQ+F8y8q12MXYDDNZ6FF6SDiRoHKGHUKHWg/gsfbVAhBU313ETp
+         sI3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8IqwMuZ8fxt+QmrdqHOlImG77CSzeOXAfU3F7s/g1es=;
-        b=oUjx4f9L07eijD7DsJ0Qo1VZ2AixIV0gRCZWMHVSIvHMkycOpatFlocZsztDZ7i0pU
-         ePNZ3Q2Yp3ZHoPTbH6O4OvyUFGfkuL1d2ySE6i0xBhNb8WUgEKRdRjNCSImkgkwRha0Q
-         TYLkM0HxnxFM/A6A3BVC78BftnZyClKgc1dBeZKnkJsOGwBPjDRy0raJIN3Y06KB+WRO
-         l7a+6HAK0pwneksc0HxDILXZ10Rltjn2JH6WlD9tOABI2WmPqJQTt2Fjq1teT/CIjPZM
-         RHctql4wq8u0wVu4UKZT9Rj1wgP70Ow6Qg8Jwrus7pXP5gMm2SBdetDwGRkrCsWdJgiy
-         igWw==
-X-Gm-Message-State: AOAM531+56XWuSLUxCCLR8q0v017EU1k5zHnmUCUGwzlwvZs7tD+523R
-        8Skmkmd0Ehc6uwGXLE47tNAPP7Vdbveb+HElQ/rcLw==
-X-Google-Smtp-Source: ABdhPJzgEhCVEPSEh42pl5bgolf24c2VjNrVdrJH7yCpF+rJiuGUvKUvHAmfssDpqzWoeXIVZ0eqJZpsefLLCWPpQLc=
-X-Received: by 2002:a05:6402:375:b0:404:c2be:3b8c with SMTP id
- s21-20020a056402037500b00404c2be3b8cmr22490537edw.247.1646116983110; Mon, 28
- Feb 2022 22:43:03 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+owYc1beiZNdVQWI5pfer3AMJMG+Sa0wwOUcL3jCg/M=;
+        b=LRfUjXYAh6QQy68+VA/ks1ZJyqtWWabLuUYqF/9StSxgFi22/0SAZfjCyvIOp2RVH7
+         O8TdtR2I2oTo9o0iqul3Q6GzkEVol9anT9vh00+7pRC4mTDxvNEEKgn9ge+bJrkxP2/8
+         EzMJBdLtfuHKeaprftOyCRgmQ50PbT4/KG5TGj3rUt5sGuDMfuDr1Asua4L4vOr/C36G
+         mU82QT7HUMGfaR7OeWHhVm+eynYgMPdSb0POC6LYKLb9G2bcxQhbdnDdMaN8Qp2gMGBU
+         ZthsFRCJu0JMmGFdwFN9Kf+ESKjSaZ+Xe740vNv21Y8tpxXsPrEtE6NemmIrcC65l75m
+         7eNA==
+X-Gm-Message-State: AOAM533dQuku4wYq9ZV4tPwoSLxQuR/UE3RfGIypkukxArrfY2JY/hTp
+        tqVueWVcTgV5pdP+A29gwko5kDNOrqbVOGRW
+X-Google-Smtp-Source: ABdhPJzzjKHZ4eMqpTkMRQtO2BodQZzivbsPo3+4bXmKPse4ZCebcpTrEUMZm0j7p2XARGe2hTwy5Q==
+X-Received: by 2002:a17:90a:67c3:b0:1bc:9cdf:1ee9 with SMTP id g3-20020a17090a67c300b001bc9cdf1ee9mr20506471pjm.203.1646117026083;
+        Mon, 28 Feb 2022 22:43:46 -0800 (PST)
+Received: from localhost.localdomain ([157.255.44.217])
+        by smtp.gmail.com with ESMTPSA id m14-20020a056a00164e00b004cd92ccbaa3sm15757586pfc.170.2022.02.28.22.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 22:43:45 -0800 (PST)
+From:   Harold Huang <baymaxhuang@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     jasowang@redhat.com, edumazet@google.com,
+        Harold Huang <baymaxhuang@gmail.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org (open list),
+        kvm@vger.kernel.org (open list:VIRTIO HOST (VHOST)),
+        virtualization@lists.linux-foundation.org (open list:VIRTIO HOST
+        (VHOST)), bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
+Subject: [PATCH net-next] tuntap: add sanity checks about msg_controllen in sendmsg
+Date:   Tue,  1 Mar 2022 14:43:14 +0800
+Message-Id: <20220301064314.2028737-1-baymaxhuang@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220224054332.1852813-1-keescook@chromium.org>
- <CAGS_qxp8cjG5jCX-7ziqHcy2gq_MqL8kU01-joFD_W9iPG08EA@mail.gmail.com>
- <202202232208.B416701@keescook> <20220224091550.2b7e8784@gandalf.local.home>
- <CAGS_qxoXXkp2rVGrwa4h7bem-sgHikpMufrPXQaSzOW2N==tQw@mail.gmail.com> <20220228232131.4b9cee32@rorschach.local.home>
-In-Reply-To: <20220228232131.4b9cee32@rorschach.local.home>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 28 Feb 2022 22:42:51 -0800
-Message-ID: <CAGS_qxprS1e_f_K6bi-RvVESoPJ2yQgQVszcmcRFq_VQWduyAA@mail.gmail.com>
-Subject: Re: [PATCH] binfmt_elf: Introduce KUnit test
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        David Gow <davidgow@google.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        =?UTF-8?B?TWFnbnVzIEdyb8Of?= <magnus.gross@rwth-aachen.de>,
-        kunit-dev@googlegroups.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,52 +80,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 8:21 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 28 Feb 2022 17:48:27 -0800
-> Daniel Latypov <dlatypov@google.com> wrote:
->
-> > He also prototyped a more intrusive alternative to using ftrace and
-> > kernel livepatch since they don't work on all arches, like UML.
->
-> Perhaps instead of working on a intrusive alternative on archs that do
-> not support live kernel patching, implement live kernel patching on
-> those archs! ;-)
->
-> It's probably the same amount of work. Well, really, you only need to
-> implement the klp_arch_set_pc(fregs, new_function); part.
+In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
+tun_sendmsg. Although we donot use msg_controllen in this path, we should
+check msg_controllen to make sure the caller pass a valid msg_ctl.
 
-Yeah, that's the only bit we'd need to get working.
-I called this out in "Open questions:" bit on
-https://kunit-review.googlesource.com/c/linux/+/5109
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
 
-As for the amount of work, I know how to do KUnit-y things, I have no
-idea how to do livepatch things :)
-Also, we're not aiming for something as "magic" as the ftrace one.
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Suggested-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+---
+ drivers/net/tap.c   | 3 ++-
+ drivers/net/tun.c   | 3 ++-
+ drivers/vhost/net.c | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-David's patch is here: https://kunit-review.googlesource.com/c/linux/+/5129
-Here's a snippet from the example in that one:
+diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+index 8e3a28ba6b28..ba2ef5437e16 100644
+--- a/drivers/net/tap.c
++++ b/drivers/net/tap.c
+@@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
+ 	struct xdp_buff *xdp;
+ 	int i;
+ 
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		for (i = 0; i < ctl->num; i++) {
+ 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
+ 			tap_get_user_xdp(q, xdp);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 969ea69fd29d..2a0d8a5d7aec 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -2501,7 +2501,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 	if (!tun)
+ 		return -EBADFD;
+ 
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		struct tun_page tpage;
+ 		int n = ctl->num;
+ 		int flush = 0, queued = 0;
+diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+index 28ef323882fb..792ab5f23647 100644
+--- a/drivers/vhost/net.c
++++ b/drivers/vhost/net.c
+@@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
+ 		goto signal_used;
+ 
+ 	msghdr->msg_control = &ctl;
++	msghdr->msg_controllen = sizeof(ctl);
+ 	err = sock->ops->sendmsg(sock, msghdr, 0);
+ 	if (unlikely(err < 0)) {
+ 		vq_err(&nvq->vq, "Fail to batch sending packets\n");
+-- 
+2.27.0
 
-static int add_one(int i)
-{
-/* This will trigger the stub if active. */
-KUNIT_TRIGGER_STATIC_STUB(add_one, i);
-
-return i + 1;
-}
-
-i.e. users just add this one macro in with <func> and <args>.
-It internally expands to roughly
-
-  if (<check if current test has registered a replacement>)
-      <invoke replacement with <args>
-
-So it's all quite simple.
-
-But it'd definitely be interesting to try and get klp_arch_set_pc()
-working on UML if that's a possibility!
-Speaking from ignorance, I can see this either being somewhat simple
-or very painful.
-
->
-> -- Steve

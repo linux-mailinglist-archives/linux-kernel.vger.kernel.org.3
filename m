@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A54C8123
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEF64C8125
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiCACrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 21:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S231310AbiCACtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 21:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiCACrK (ORCPT
+        with ESMTP id S231265AbiCACtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 21:47:10 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C173BF95
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:46:30 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id i1so12337610plr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:46:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references;
-        bh=Oh77CwmcM8TqQGwRDvYrvPiyyCBaVXCwM96gKvsyh0c=;
-        b=cKgQn+iSiUti9x7VYjmZIZ10o8SAl7Y55nkiuo/+bpRiPYT1stJ6ggJklb6u8XoRXz
-         Et4saEOaAACuxUhA1LAMv3LrHG0QnCibU1WHYFFXRcTuEVUXSTwfOJWC9J9rM5JBoaGy
-         lO6aMbnnF8nD5xgx3LfQT30MOoGHCyhEMGEdl3wV72ofW+zuFdNtIHBO596XSNBiBIz3
-         0EQsVSJppoMLizuOB+7u12dFxO5D2ViwDzDcjYgQXoOYDBS5pHW1YaeipwaEUHqVZKTe
-         yT9HyrNfXmv7O+FY+O1N/Gp8dPlSc6ViSO8LnEerMvzDovesI7Rqj4gtLgFX48UNUfNd
-         1bzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references;
-        bh=Oh77CwmcM8TqQGwRDvYrvPiyyCBaVXCwM96gKvsyh0c=;
-        b=ndcVEmY5lgvtW54WRL/N3zB7IKTxURRjzaWhpgaTVTeCOf+LYNtMgPUDKXVz9rwLva
-         mni9E240TcsrCVV5dzpUbL4SLuGWNr9IzeotBDr3MtOtYNj652AmzB2Z41fddpmgwLQY
-         Z3j1bUKJrOcB5m83iZZUqdRAxfl6IZl0GwR3V+lKdE0ExzGCAqlfIEpOVK8e//Fa3xrW
-         fs4BqRz583D3Cp7q9cYHrJbs0kbWZxSL37kYZ47P4PK82MqKszkZUNizSnSLl07wLe6p
-         qiN3oRbIryfK77+Ki1ZiPEPZ8DqKq3BACtBFnBhBznKdynwxYrfZrPZySvdaB31CSsgw
-         UW3w==
-X-Gm-Message-State: AOAM531j9rmnD8/MDhoUN/v+yfyGQF03dJRAQtywuoVGvozLeST9YyWF
-        h1jGUg5R37OBMuGbsDwu6o0=
-X-Google-Smtp-Source: ABdhPJxuyzzCqyPsxftZG5kik28R9flxKAT1VMHHtF755Tw/FboWjZE+mIlnRbvPeZonXtIveEVwPQ==
-X-Received: by 2002:a17:90a:a78f:b0:1bc:8042:9330 with SMTP id f15-20020a17090aa78f00b001bc80429330mr19438763pjq.229.1646102789999;
-        Mon, 28 Feb 2022 18:46:29 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id t8-20020a6549c8000000b00372eb3a7fb3sm11399940pgs.92.2022.02.28.18.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 18:46:29 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] phy: mapphone-mdm6600: Fix PM error handling in phy_mdm6600_probe
-Date:   Tue,  1 Mar 2022 02:46:11 +0000
-Message-Id: <20220301024615.31899-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220105123947.17946-1-linmq006@gmail.com>
-References: <20220105123947.17946-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 21:49:06 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E4E434B1;
+        Mon, 28 Feb 2022 18:48:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V5r3Dlx_1646102902;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V5r3Dlx_1646102902)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 01 Mar 2022 10:48:23 +0800
+Date:   Tue, 1 Mar 2022 10:48:19 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] xfs: add missing cmap->br_state = XFS_EXT_NORM update
+Message-ID: <Yh2Jc5DeF9D7jp8r@B-P7TQMD6M-0146.local>
+Mail-Followup-To: "Darrick J. Wong" <djwong@kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220217095542.68085-1-hsiangkao@linux.alibaba.com>
+ <20220218054032.GO8313@magnolia>
+ <Yg802fTm0n31FC+T@B-P7TQMD6M-0146.local>
+ <Yg+DYkuTayILe5YA@B-P7TQMD6M-0146.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yg+DYkuTayILe5YA@B-P7TQMD6M-0146.local>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pm_runtime_enable will increase power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable(). And use pm_runtime_dont_use_autosuspend() to
-undo pm_runtime_use_autosuspend()
-In the PM Runtime docs:
-    Drivers in ->remove() callback should undo the runtime PM changes done
-    in ->probe(). Usually this means calling pm_runtime_disable(),
-    pm_runtime_dont_use_autosuspend() etc.
+On Fri, Feb 18, 2022 at 07:30:42PM +0800, Gao Xiang wrote:
+> On Fri, Feb 18, 2022 at 01:55:37PM +0800, Gao Xiang wrote:
+> > Hi Darrick,
+> > 
+> > On Thu, Feb 17, 2022 at 09:40:32PM -0800, Darrick J. Wong wrote:
+> > > On Thu, Feb 17, 2022 at 05:55:42PM +0800, Gao Xiang wrote:
+> > > > COW extents are already converted into written real extents after
+> > > > xfs_reflink_convert_cow_locked(), therefore cmap->br_state should
+> > > > reflect it.
+> > > > 
+> > > > Otherwise, there is another necessary unwritten convertion
+> > > > triggered in xfs_dio_write_end_io() for direct I/O cases.
+> > > > 
+> > > > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > > 
+> > > I /think/ this looks ok.  Does it test ok too?  AFAICT nothing in the
+> > > iomap/writeback machinery cares the incorrect state because we always
+> > > set IOMAP_F_SHARED (which triggers COW) so I think this is simply a fix
+> > > for directio, like you said?
+> > 
+> > Yeah, I think so, from the code logic buffered i/o seems no impacted...
+> > And the unnecessary unwritten convertion under direct i/o takes
+> > noticeable extra overhead in our workloads...
+> > 
+> > I checked my last night xfstests, it seems it stops unexpectedly (maybe
+> > due to some environmental problem). I will rerun tests today and
+> > feedback later.
+> 
+> On my test environment machine, with linux 5.17-rc4,
+> both w/ and w/o the patch, it fails:
+> 
+> generic/594 generic/600 xfs/158 xfs/160
+> 
+> I think no issue with this patch.
 
-We should do this in error handling.
+ping.. it seems a simple fix for direct I/O..
 
-Fixes: f7f50b2 ("phy: mapphone-mdm6600: Add runtime PM support for n_gsm on USB suspend")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- remove unused label
-- add pm_runtime_dont_use_autosuspend
----
- drivers/phy/motorola/phy-mapphone-mdm6600.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks,
+Gao Xiang
 
-diff --git a/drivers/phy/motorola/phy-mapphone-mdm6600.c b/drivers/phy/motorola/phy-mapphone-mdm6600.c
-index 5172971f4c36..3cd4d51c247c 100644
---- a/drivers/phy/motorola/phy-mapphone-mdm6600.c
-+++ b/drivers/phy/motorola/phy-mapphone-mdm6600.c
-@@ -629,7 +629,8 @@ static int phy_mdm6600_probe(struct platform_device *pdev)
- cleanup:
- 	if (error < 0)
- 		phy_mdm6600_device_power_off(ddata);
--
-+	pm_runtime_disable(ddata->dev);
-+	pm_runtime_dont_use_autosuspend(ddata->dev);
- 	return error;
- }
- 
--- 
-2.17.1
-
+> 
+> Thanks,
+> Gao Xiang

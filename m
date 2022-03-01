@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BA04C94F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9B24C94FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbiCATte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S237472AbiCATt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbiCATrs (ORCPT
+        with ESMTP id S237429AbiCATtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:47:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69F46D397;
-        Tue,  1 Mar 2022 11:46:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80DB2B81D16;
-        Tue,  1 Mar 2022 19:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 194BAC340F5;
-        Tue,  1 Mar 2022 19:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646164004;
-        bh=+9HZiL4PgVygGkKP1IEV0igcRDO9JBJc55Hjhj12zzc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=g6+9CfAAyuhOYZ9F5azKH2kQ2WDaMY76/PCiG88JcRnO/QDnEv1fucab997NJjey1
-         alc/dt3SrHyRWaleV/7vn3al/4UPiFkhF0daHtWDwW54oIVVv4NsTE+CIXrCd95AeN
-         cWjyopLrJJyEL+cyXUgffl16RlJmQG0C65ZpV9fVQuf24CTz/ixflFi0kGde78MU9+
-         lvJAMvYbcfrw3HF2R8SPWR4sErjAb5PPgD7p2kmysUtxOAKERvtc+qfUIYdiODvafh
-         nYMZ3WkauU0YkMr34yM8MG7R5aAa+Q3+RDJK2JEai/4tGYMjud+e8UgN4PaitkE4Ne
-         AV3dUf2CrCvJw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8033E6D44B;
-        Tue,  1 Mar 2022 19:46:43 +0000 (UTC)
-Subject: Re: [GIT PULL] binfmt_elf fix for v5.17-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <202203011032.7D3F2719@keescook>
-References: <202203011032.7D3F2719@keescook>
-X-PR-Tracked-List-Id: <linux-mm.kvack.org>
-X-PR-Tracked-Message-Id: <202203011032.7D3F2719@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/binfmt_elf-v5.17-rc7
-X-PR-Tracked-Commit-Id: 439a8468242b313486e69b8cc3b45ddcfa898fbf
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 575115360652e9920cc56a028a286ebe9bf82694
-Message-Id: <164616400387.4081.18262832231088368446.pr-tracker-bot@kernel.org>
-Date:   Tue, 01 Mar 2022 19:46:43 +0000
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        matoro <matoro_bugzilla_kernel@matoro.tk>,
-        matoro <matoro_mailinglist_kernel@matoro.tk>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 14:49:49 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01E25A084;
+        Tue,  1 Mar 2022 11:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JTjpHIBNzbqDknQ+Nbv4Mia7f/qQBAKZ0P9X14dcOCY=; b=TS3MjJTjjyWVrc0Vzjy/hLdTS0
+        jyfpowb4SXry/qUrvbLRPPOPxa3DvgdnjL/DG5wgQZpGLBNgRxarZ+/gnJzYC3B09gBFqJbG6W4iK
+        2AjGYnTviAgEE8FBbfAL1UrzgpP9j6ZZPHcYnRtou9brufHwSOgjQ+4y0Vd0NsCk0y7/kPXkRlFyl
+        EsApvHdgTaZLxKlmCKUZXHk//Rsh5HCbVfrX+Y3VBkxE/9X6aY2IH0tGVvNUkt/+i2jk5JScWYLP1
+        hRxB8w/PxNXJnYdIYis/UafmXUBALsnFwuaxj7BW9X0yYZ2SPmrltfu4/uv//vvITzfexi9OBqZIo
+        QR9Q+ErQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP8Sv-00EMCU-Sv; Tue, 01 Mar 2022 19:47:22 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9FBDE986271; Tue,  1 Mar 2022 20:47:20 +0100 (CET)
+Date:   Tue, 1 Mar 2022 20:47:20 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        bpf@vger.kernel.org, Radoslaw Burny <rburny@google.com>
+Subject: Re: [PATCH 3/4] locking/mutex: Pass proper call-site ip
+Message-ID: <20220301194720.GJ11184@worktop.programming.kicks-ass.net>
+References: <20220301010412.431299-1-namhyung@kernel.org>
+ <20220301010412.431299-4-namhyung@kernel.org>
+ <Yh3hyIIHLJEXZND3@hirez.programming.kicks-ass.net>
+ <20220301095354.0c2b7008@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301095354.0c2b7008@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 1 Mar 2022 10:35:07 -0800:
+On Tue, Mar 01, 2022 at 09:53:54AM -0500, Steven Rostedt wrote:
+> On Tue, 1 Mar 2022 10:05:12 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Mon, Feb 28, 2022 at 05:04:11PM -0800, Namhyung Kim wrote:
+> > > The __mutex_lock_slowpath() and friends are declared as noinline and
+> > > _RET_IP_ returns its caller as mutex_lock which is not meaningful.
+> > > Pass the ip from mutex_lock() to have actual caller info in the trace.  
+> > 
+> > Blergh, can't you do a very limited unwind when you do the tracing
+> > instead? 3 or 4 levels should be plenty fast and sufficient.
+> 
+> Is there a fast and sufficient way that works across architectures?
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/binfmt_elf-v5.17-rc7
+The normal stacktrace API? Or the fancy new arch_stack_walk() which is
+already available on most architectures you actually care about and
+risc-v :-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/575115360652e9920cc56a028a286ebe9bf82694
+Remember, this is the contention path, we're going to stall anyway,
+doing a few levels of unwind shouldn't really hurt at that point.
 
-Thank you!
+Anyway; when I wrote that this morning, I was thinking:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+	unsigned long ips[4];
+	stack_trace_save(ips, 4, 0);
+
+
+> Could objtool help here?
+
+There's a contradition there... objtool is still x86_64 only :-/
+
+IIRC there's been work on s390, arm64 and power objtool, but so far none
+of them actually made it in.

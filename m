@@ -2,189 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2911C4C7F29
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C4A4C7F21
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbiCAA0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 19:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S231737AbiCAAXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiCAA0U (ORCPT
+        with ESMTP id S229477AbiCAAXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 19:26:20 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2064CD48
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:25:40 -0800 (PST)
+        Mon, 28 Feb 2022 19:23:42 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DEE2A266;
+        Mon, 28 Feb 2022 16:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646094340; x=1677630340;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=F60nCeJxhMM1qvPB/Mi0kNCoGRaaxp9NNgVcv/Ja1v4=;
-  b=DXuS9uBhXr9rKjQYIPljFDpLOzOdpiq5skOwN7wnV64WkK+BUjbUF8fw
-   59L8dlkI982/PrV/bubwwq8YTskH8F+NevYsRX6sWauUtqNZF2hrR12jX
-   FlZfxD67sxkQ3qKC+n7CAJ5xWVad0J20rsO0dX0KselsmXZMr1McK7EOn
-   UtjgBa8Q1J6EmUlwFTBR07PbLlPiUqR7Ls9epqqli81rE2sVCVzQ9XxxU
-   6OPPR0O1pX7Q7FCfmxUj9VD4n5to7gAo/eLB9lH2v9OjI1ro63GKdFCuB
-   Nkjk4emB7pXODvBElv7Uzk+HOtLAqb/g38IQLqgX3koBM1frV7ciV85+J
+  t=1646094179; x=1677630179;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=XUmmuHjG8G/Dw4YcsSBZoSmwvfmIIN75R1y/yRMIssk=;
+  b=OdwjHFtAtp466VNc7gwPerSsgNihQ4xP9p+j4QKdTsfOjFsP4GVHinDg
+   vXWFJIE6q/ZCn6jwYR9rolDW7PpsGfh4jEtKXnh3KPJmXeraT1iYKaGrU
+   9uUDGCEuexyk3FlJFjCtgZJcgueqz4VP+waFMoXajSWC2xL1yQGAg6wV0
+   uyYZYqhqf3LcZxut/QW7jM1aZDhU770ygNvFnih8+n0jM0T81cAJjrsMN
+   oNgMpJ+IcOWMlXDvvbW3igVXutOauvKnBq+z/6TIV/KaGIU+zTlHSSIjP
+   ZblNG8wAlOj/+7QuPrzssR2w8mqKNIS0wJqDtTckT52aEFbcI69rwUBuG
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253212641"
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277682743"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="253212641"
+   d="scan'208";a="277682743"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:25:39 -0800
-X-ExtLoop1: 1
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="510297676"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 16:25:38 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOqKf-0007w0-C9; Tue, 01 Mar 2022 00:25:37 +0000
-Date:   Tue, 1 Mar 2022 08:24:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wang Qing <wangqing@vivo.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:netdev/net-next/master 81/85]
- drivers/net/hamradio/dmascc.c:1357:83: error: expected ')' before '{' token
-Message-ID: <202203010813.uYqLFxOY-lkp@intel.com>
+   d="scan'208";a="510296877"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
+Date:   Mon, 28 Feb 2022 16:25:03 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     "Wu, Hao" <hao.wu@intel.com>
+cc:     Tom Rix <trix@redhat.com>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Grier, Aaron J" <aaron.j.grier@intel.com>
+Subject: RE: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+In-Reply-To: <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
+Message-ID: <alpine.DEB.2.22.394.2202281618480.103377@rhweight-WRK1>
+References: <20220214112619.219761-1-tianfei.zhang@intel.com> <20220214112619.219761-8-tianfei.zhang@intel.com> <ed8f4b5f-5c92-f555-ed2d-c5b8f38d5372@redhat.com> <BN9PR11MB5483BC7EE52A47CEAEFC58A0E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <3c9fce03-ef29-d80f-6639-0c237c28cf58@redhat.com> <alpine.DEB.2.22.394.2202210934570.117064@rhweight-WRK1> <e5580849-c137-fb61-0599-198c341bf688@redhat.com> <BN9PR11MB54835A454A34ECE13349B555E33B9@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <d6cf0f48-e90a-6441-6096-5b87122a0bb6@redhat.com> <alpine.DEB.2.22.394.2202240932380.634457@rhweight-WRK1> <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-604420537-1646094309=:103377"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
-head:   0b9e69e1a1e4d60473486d15217845ae1e151d4a
-commit: 61c4fb9c4d09dfb6f33690169560862d5d0e42f7 [81/85] net: hamradio: use time_is_after_jiffies() instead of open coding it
-config: alpha-buildonly-randconfig-r005-20220227 (https://download.01.org/0day-ci/archive/20220301/202203010813.uYqLFxOY-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/61c4fb9c4d09dfb6f33690169560862d5d0e42f7
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
-        git checkout 61c4fb9c4d09dfb6f33690169560862d5d0e42f7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/hamradio/
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/hamradio/dmascc.c: In function 'es_isr':
->> drivers/net/hamradio/dmascc.c:1357:83: error: expected ')' before '{' token
-    1357 |                     time_is_after_jiffies(priv->tx_start + priv->param.txtimeout) {
-         |                                                                                   ^
-   drivers/net/hamradio/dmascc.c:1356:20: note: to match this '('
-    1356 |                 if (priv->tx_count &&
-         |                    ^
->> drivers/net/hamradio/dmascc.c:1364:9: error: expected expression before '}' token
-    1364 |         }
-         |         ^
+--8323328-604420537-1646094309=:103377
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
 
-vim +1357 drivers/net/hamradio/dmascc.c
 
-  1305	
-  1306	
-  1307	static void es_isr(struct scc_priv *priv)
-  1308	{
-  1309		int i, rr0, drr0, res;
-  1310		unsigned long flags;
-  1311	
-  1312		/* Read status, reset interrupt bit (open latches) */
-  1313		rr0 = read_scc(priv, R0);
-  1314		write_scc(priv, R0, RES_EXT_INT);
-  1315		drr0 = priv->rr0 ^ rr0;
-  1316		priv->rr0 = rr0;
-  1317	
-  1318		/* Transmit underrun (2.4.9.6). We can't check the TxEOM flag, since
-  1319		   it might have already been cleared again by AUTOEOM. */
-  1320		if (priv->state == TX_DATA) {
-  1321			/* Get remaining bytes */
-  1322			i = priv->tx_tail;
-  1323			if (priv->param.dma >= 0) {
-  1324				disable_dma(priv->param.dma);
-  1325				flags = claim_dma_lock();
-  1326				res = get_dma_residue(priv->param.dma);
-  1327				release_dma_lock(flags);
-  1328			} else {
-  1329				res = priv->tx_len[i] - priv->tx_ptr;
-  1330				priv->tx_ptr = 0;
-  1331			}
-  1332			/* Disable DREQ / TX interrupt */
-  1333			if (priv->param.dma >= 0 && priv->type == TYPE_TWIN)
-  1334				outb(0, priv->card_base + TWIN_DMA_CFG);
-  1335			else
-  1336				write_scc(priv, R1, EXT_INT_ENAB | WT_FN_RDYFN);
-  1337			if (res) {
-  1338				/* Update packet statistics */
-  1339				priv->dev->stats.tx_errors++;
-  1340				priv->dev->stats.tx_fifo_errors++;
-  1341				/* Other underrun interrupts may already be waiting */
-  1342				write_scc(priv, R0, RES_EXT_INT);
-  1343				write_scc(priv, R0, RES_EXT_INT);
-  1344			} else {
-  1345				/* Update packet statistics */
-  1346				priv->dev->stats.tx_packets++;
-  1347				priv->dev->stats.tx_bytes += priv->tx_len[i];
-  1348				/* Remove frame from FIFO */
-  1349				priv->tx_tail = (i + 1) % NUM_TX_BUF;
-  1350				priv->tx_count--;
-  1351				/* Inform upper layers */
-  1352				netif_wake_queue(priv->dev);
-  1353			}
-  1354			/* Switch state */
-  1355			write_scc(priv, R15, 0);
-  1356			if (priv->tx_count &&
-> 1357			    time_is_after_jiffies(priv->tx_start + priv->param.txtimeout) {
-  1358				priv->state = TX_PAUSE;
-  1359				start_timer(priv, priv->param.txpause, 0);
-  1360			} else {
-  1361				priv->state = TX_TAIL;
-  1362				start_timer(priv, priv->param.txtail, 0);
-  1363			}
-> 1364		}
-  1365	
-  1366		/* DCD transition */
-  1367		if (drr0 & DCD) {
-  1368			if (rr0 & DCD) {
-  1369				switch (priv->state) {
-  1370				case IDLE:
-  1371				case WAIT:
-  1372					priv->state = DCD_ON;
-  1373					write_scc(priv, R15, 0);
-  1374					start_timer(priv, priv->param.dcdon, 0);
-  1375				}
-  1376			} else {
-  1377				switch (priv->state) {
-  1378				case RX_ON:
-  1379					rx_off(priv);
-  1380					priv->state = DCD_OFF;
-  1381					write_scc(priv, R15, 0);
-  1382					start_timer(priv, priv->param.dcdoff, 0);
-  1383				}
-  1384			}
-  1385		}
-  1386	
-  1387		/* CTS transition */
-  1388		if ((drr0 & CTS) && (~rr0 & CTS) && priv->type != TYPE_TWIN)
-  1389			tm_isr(priv);
-  1390	
+On Mon, 28 Feb 2022, Wu, Hao wrote:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>>
+>>> On 2/21/22 7:11 PM, Zhang, Tianfei wrote:
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: Tom Rix <trix@redhat.com>
+>>>>> Sent: Tuesday, February 22, 2022 2:10 AM
+>>>>> To: matthew.gerlach@linux.intel.com
+>>>>> Cc: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
+>> <hao.wu@intel.com>;
+>>>>> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
+>>>>> linux-fpga@vger.kernel.org;
+>>>>> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; corbet@lwn.net
+>>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+>>>>>
+>>>>>
+>>>>> On 2/21/22 9:50 AM, matthew.gerlach@linux.intel.com wrote:
+>>>>>>
+>>>>>> On Fri, 18 Feb 2022, Tom Rix wrote:
+>>>>>>
+>>>>>>> On 2/18/22 1:03 AM, Zhang, Tianfei wrote:
+>>>>>>>>> -----Original Message-----
+>>>>>>>>> From: Tom Rix <trix@redhat.com>
+>>>>>>>>> Sent: Wednesday, February 16, 2022 12:16 AM
+>>>>>>>>> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
+>>>>>>>>> <hao.wu@intel.com>; mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
+>>>>>>>>> linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org;
+>>>>>>>>> linux-kernel@vger.kernel.org
+>>>>>>>>> Cc: corbet@lwn.net; Matthew Gerlach
+>>>>>>>>> <matthew.gerlach@linux.intel.com>
+>>>>>>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 2/14/22 3:26 AM, Tianfei zhang wrote:
+>>>>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>>>>>>>>
+>>>>>>>>>> Add the PCI product id for an Open FPGA Stack PCI card.
+>>>>>>>>> Is there a URL to the card ?
+>>>>>>>> This PCIe Device IDs have registered by Intel.
+>>>>>>> A URL is useful to introduce the board, Is there one ?
+>>>>>>>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>>>>>>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+>>>>>>>>>> ---
+>>>>>>>>>>     drivers/fpga/dfl-pci.c | 4 ++++
+>>>>>>>>>>     1 file changed, 4 insertions(+)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
+>>>>>>>>>> 83b604d6dbe6..cb2fbf3eb918 100644
+>>>>>>>>>> --- a/drivers/fpga/dfl-pci.c
+>>>>>>>>>> +++ b/drivers/fpga/dfl-pci.c
+>>>>>>>>>> @@ -76,12 +76,14 @@ static void cci_pci_free_irq(struct pci_dev
+>>>>>>>>>> *pcidev)
+>>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005        0x0B2B
+>>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5010    0x1000
+>>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5011    0x1001
+>>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS        0xbcce
+>>>>>>>>> INTEL_OFS is a generic name, pci id's map to specific cards
+>>>>>>>>>
+>>>>>>>>> Is there a more specific name for this card ?
+>>>>>>>> I think using INTEL_OFS is better, because INTEL_OFS is the Generic
+>>>>>>>> development platform can support multiple cards which using OFS
+>>>>>>>> specification, like Intel PAC N6000 card.
+>>>>>>> I would prefer something like PCIE_DEVICE_ID_INTEL_PAC_N6000
+>> because
+>>>>>>> it follows an existing pattern.  Make it easy on a developer, they
+>>>>>>> will look at their board or box, see X and try to find something
+>>>>>>> similar in the driver source.
+>>>>>>>
+>>>>>>> To use OSF_ * the name needs a suffix to differentiate it from future
+>>>>>>> cards that will also use ofs.
+>>>>>>>
+>>>>>>> If this really is a generic id please explain in the doc patch how
+>>>>>>> every future board with use this single id and how a driver could
+>>>>>>> work around a hw problem in a specific board with a pci id covering
+>>>>>>> multiple boards.
+>>>>>>>
+>>>>>>> Tom
+>>>>>> Hi Tom,
+>>>>>>
+>>>>>> The intent is to have a generic device id that can be used with many
+>>>>>> different boards.  Currently, we have FPGA implementations for 3
+>>>>>> different boards using this generic id.  We may need a better name for
+>>>>>> device id than OFS.  More precisely this generic device id means a PCI
+>>>>>> function that is described by a Device Feature List (DFL).  How about
+>>>>>> PCIE_DEVICE_ID_INTEL_DFL?
+>>>>>>
+>>>>>> With a DFL device id, the functionality of the PF/VF is determined by
+>>>>>> the contents of the DFL.  Each Device Feature Header (DFH) in the DFL
+>>>>>> has a revision field that can be used identify "broken" hw, or new
+>>>>>> functionality added to a feature.  Additionally, since the DFL is
+>>>>>> typically used in a FPGA, the broken hardware, can and should be fixed
+>>>>>> in most cases.
+>>>>> How is lspci supposed to work ?
+>>>> There is an example for one card using IOFS and DFL.
+>>>>
+>>>> # lspci | grep acc
+>>>> b1:00.0 Processing accelerators: Intel Corporation Device bcce (rev 01)
+>>>> b1:00.1 Processing accelerators: Intel Corporation Device bcce
+>>>> b1:00.2 Processing accelerators: Intel Corporation Device bcce
+>>>> b1:00.3 Processing accelerators: Red Hat, Inc. Virtio network device
+>>>> b1:00.4 Processing accelerators: Intel Corporation Device bcce
+>>>>
+>>>> Note: There 5 PFs in this card, it exports the management functions via
+>>>> PF0(b1:00.0),
+>>>> Other PFs like b1:00.1, b1:00.2, b1:00.4, are using for testing, which
+>>>> depends on RTL designer
+>>>> or project requirement. The PF3 instance a VirtIO net device for example,
+>>>> will bind with virtio-net driver
+>>>> presenting itself as a network interface to the OS.
+>>
+>> Hi Tom,
+>>
+>> These are very good questions, and the answers will be addressed in the
+>> documentation associated with a v2 submission of this patch.
+>>
+>>>
+>>> What I mean there is heterogeneous set of cards in one machine, how do you
+>>> tell which card is which ?
+>>
+>> If the PCI PID/VID is generic, indicating only that there is one or more
+>> DFL, then some other mechanism must be used to differentiate the cards.
+>> One could use unique PCI sub-PID/sub-VIDs to differentiate specific
+>> implementations.  One could also use some register in BAR space to help
+>> identify the card, or one could use PCI Vital Product Data (VPD) to
+>> provide detailed information about the running FPGA design on the card.
+>
+> Ideally DFL has different scope than PCI. DFL is a higher layer concept than
+> PCI, as DFL can be applied to PCI device, platform device or even other devices.
+> If some PCI level quirks need to be applied before accessing BAR for one card,
+> then DFL may not be able to help at all. Use PCI level solution should be better,
+> and different VID/DID may be the easiest solution.
+>
+> Hao
+
+Very good point Hao.  DFL is a higher layer than PCI.  So PCI level quirks 
+would need to be handled at the PCI level.  The VID/DID, optionally 
+in conjuction with the Subsytem Vendor ID and Substem ID, would be used to 
+determine how the quirks were applied.
+
+Matthew
+
+
+>>
+>>>
+>>> Or in a datacenter where the machines are all remote and admin has to flash
+>>> just the n6000's ?
+>>
+>> This problem exists with the N3000 cards.  Depending on the FPGA
+>> configuration, the line side of the card could be very different (e.g.
+>> 4x10Gb or 2x2x25Gb).  The network operator must make sure to update a
+>> particular N3000 card with the correct FPGA image type.  In the case of
+>> the N3000 there is a register exposed through sysfs containing the
+>> "Bitstream ID" which contains the line side configuration of the FPGA.
+>>
+>>>
+>>> How could she find just the n6000's with lspci ?
+>>
+>> If you only wanted to use lspci to determine the card, then
+>> differentiating PCI sub-VID/sub-PID could be used or VPD could be used.
+>>
+>>>
+>>> How would the driver know ?
+>>
+>> The dfl-pci driver is fairly generic in that it doesn't really care about
+>> the PCI PID/VID because all it really does enumerate the DFLs.  It is the
+>> individual dfl drivers that may need to know hw differences/bugs for that
+>> component IP.
+>>
+>>>
+>>> Tom
+>>>
+>>>>
+>>>>> A dfl set can change with fw updates and in theory different boards could
+>>>>> have
+>>>>> the same set.
+>>>>>
+>>>>> Tom
+>>>>>
+>>>>>> Matthew
+>>>>>>>>> Tom
+>>>>>>>>>
+>>>>>>>>>>     /* VF Device */
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_5_X        0xBCBF
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_6_X        0xBCC1
+>>>>>>>>>>     #define PCIE_DEVICE_ID_VF_DSC_1_X        0x09C5
+>>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF    0x0B2C
+>>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS_VF        0xbccf
+>>>>>>>>>>
+>>>>>>>>>>     static struct pci_device_id cci_pcie_id_tbl[] = {
+>>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>>> PCIE_DEVICE_ID_PF_INT_5_X),},
+>>>>>>>>> @@
+>>>>>>>>>> -95,6 +97,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+>>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>> PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
+>>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
+>>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
+>>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
+>>>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
+>>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>> PCIE_DEVICE_ID_INTEL_OFS),},
+>>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
+>>>>>>>>> PCIE_DEVICE_ID_INTEL_OFS_VF),},
+>>>>>>>>>>         {0,}
+>>>>>>>>>>     };
+>>>>>>>>>>     MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
+>>>>>>>
+>>>
+>>>
+>
+--8323328-604420537-1646094309=:103377--

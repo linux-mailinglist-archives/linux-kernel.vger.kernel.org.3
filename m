@@ -2,205 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251554C9260
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615B74C926A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236754AbiCAR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S236337AbiCAR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiCAR6t (ORCPT
+        with ESMTP id S236773AbiCAR7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:58:49 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310F3CA7B;
-        Tue,  1 Mar 2022 09:58:06 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1F34E5801D0;
-        Tue,  1 Mar 2022 12:58:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 01 Mar 2022 12:58:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=1b8nHfrBOcjPGYcB+Q6wr00uk1GmKX3v3ZNCnj
-        2Fc4I=; b=ZBUT+xBEPIHuw8jHImLNH+x52gankwE7MJd8sDFwnEoy45z1BwbhNh
-        xKsOdQ1yD9u7q0d/6DIUtrg535wnOmT4Lvdd1apo2YuuhLLDVkYx1vSgNyoTE5fJ
-        ofsW7j8uCMJyXK6Loz8rrLOzHyzxWsYiemruNwAl4gNUMe4M/NVtyIVhNAgsOfjy
-        b/w/wzWa4VwoEUleGhkhNF3kRyKpQ3Usq/8Ca14buwUMr/k/0v+gPaqGXYzqUKuv
-        KllGIGlPN88CAydfwqCLzM8aK7V+EiOvYiI4kF7OI9OB3TO949n6Hy8EMtjF8IqZ
-        MBlpj07s0Rnbq4GNXj6M7/3IgLXdvpRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1b8nHfrBOcjPGYcB+
-        Q6wr00uk1GmKX3v3ZNCnj2Fc4I=; b=EY31l7G2XfgL9rSC/gwvRf8zFgwtBT7xS
-        zGIS7YVvo/KA/v9LCSJOIARDHfRqiRvn2gTz078tIpwk3oIxG21buWNUxNQmSUyy
-        MyYKa/Xe0zh4/DCiQIRNMfBLOEXackhRaibWR2bFKht/sqIYkVYfZsf6JTqkc8aS
-        N/+KxLe8dnTTbLIJQe4lQN4jxuybvA2M70S25Fv9b7VdN/aPfJftqSYQ4WVfyPqY
-        0tbQrYevVZ6RBtubRdYtr3gnZBflyWFJSH5G+LkmECZ7pFmQ2xcqosvgp1dXRrwM
-        GXM5n5s+pyNtUs5gG+ueV8296EmUoxyY6tuEcr0WZBCuK4oOvJTLg==
-X-ME-Sender: <xms:rF4eYt_khXW9JUELKd3sbskivfb6p9VNYJ9HJTNdiVa20a5SzZwcHg>
-    <xme:rF4eYhvpLP3jG67Y92AJSSlOEm5MH8cOme-q_WmBEiKHi2-d33bdpDbAgKuSlQzhv
-    bEXTTYYFzUc5A>
-X-ME-Received: <xmr:rF4eYrDa0WtfQIncLyLiGZ2_QzeJH36bSCyCi0g3L7auz9QrwNL4PuRbLUYhHGofRJvw4tCnLgWVuPYzt-8dyqU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:rF4eYhep9_FqzdGryzLUlkyDm8oB4NZlyIpp5U2aPsiBO5Uc_pu1KA>
-    <xmx:rF4eYiNt1Zd7p4zbskEHRd607PiISY-ihvHig6bYJF7awgzM4cA48A>
-    <xmx:rF4eYjmGF931qz2wbkLW14iXG2GvWL_-CIczc4jJ1wtvDsjYWSRagQ>
-    <xmx:rl4eYkl7_n3lofGsDcutmkSMBLsPYoIzfmJgc1TjOF9wAZv0ieQERQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Mar 2022 12:58:03 -0500 (EST)
-Date:   Tue, 1 Mar 2022 18:58:02 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Message-ID: <Yh5eqmAv0P2nnSq0@kroah.com>
-References: <20220228110822.491923-3-jakobkoschel@gmail.com>
- <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
- <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
- <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
- <Yh5ZmwiH5AxtQ69K@kroah.com>
- <4B1AFAD9-C1B3-499C-945A-C259361ABA8C@gmail.com>
+        Tue, 1 Mar 2022 12:59:21 -0500
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635C53EF02;
+        Tue,  1 Mar 2022 09:58:35 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id b35so28713136ybi.13;
+        Tue, 01 Mar 2022 09:58:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MBGf7BonI3ap2E4zIN9sAwq7uxa0Dhwh8KKVMelMOeA=;
+        b=CdOSnmeMgMbVSw5IWnIKpJdYtsGofY8fCZSIBOpiB6ExycYtUW0mMgCfLW0ekw8Cnz
+         4n2frtLHl0BpzqLIx2xL4UXBveaK1QhS3T6+IgX8MAi+4QNtxAIad2KizbN8Fn2uUD+F
+         f/HeYAzxxLYVmCFh4TLVi8q15sAB2kSDxJMc/uhnfU/9ByhVwn4lhe+s5Xvgu1vcDAMi
+         JXtYVOtMMz8PFYvPSfhhrwjVL1x/Go1LffP+wEpWUufDgz0QJWGdeF1JzcQwhiU4R2bX
+         EG2NHgKh0bozrC3zIWx97UoP9iJBp/RQzIQbFHSYIdL/Dab6yQMdYNfEF4po3Qnz9jBI
+         PMBA==
+X-Gm-Message-State: AOAM530UUy3I8EkJX83ICJbGQ1kPjplQQDofKbZhmvXsRaC5p7KSJ4tA
+        abpBUSIB5Wi3aC+dRvlrHxbK2McJYnGXSbACZFxlKtis
+X-Google-Smtp-Source: ABdhPJz5SZhw0CpuWATFioDafwyrSWmIvZN1RYk6r8PiHn3hcphDNq4zDYVsLeEr0gv7HOVI7tgDAvIIHoyQqSMVLXQ=
+X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
+ h62-20020a253a41000000b0062886a20dbcmr2572961yba.633.1646157513220; Tue, 01
+ Mar 2022 09:58:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4B1AFAD9-C1B3-499C-945A-C259361ABA8C@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <202203011104.TkmvSjFD-lkp@intel.com> <20220301032854.GA65991@baa819af95e9>
+In-Reply-To: <20220301032854.GA65991@baa819af95e9>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 18:58:22 +0100
+Message-ID: <CAJZ5v0jQcNUN-mQPu9+tsb=cfdrCaH16U77yMoAPZ2Si2gKX2Q@mail.gmail.com>
+Subject: Re: [RFC PATCH linux-next] powercap/drivers/dtpm: dtpm_node_callback[]
+ can be static
+To:     kernel test robot <lkp@intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 06:40:04PM +0100, Jakob Koschel wrote:
-> 
-> 
-> > On 1. Mar 2022, at 18:36, Greg KH <greg@kroah.com> wrote:
-> > 
-> > On Tue, Mar 01, 2022 at 12:28:15PM +0100, Jakob Koschel wrote:
-> >> 
-> >> 
-> >>> On 1. Mar 2022, at 01:41, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >>> 
-> >>> On Mon, Feb 28, 2022 at 1:47 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
-> >>>> 
-> >>>> The goal of this is to get compiler warnings right? This would indeed be great.
-> >>> 
-> >>> Yes, so I don't mind having a one-time patch that has been gathered
-> >>> using some automated checker tool, but I don't think that works from a
-> >>> long-term maintenance perspective.
-> >>> 
-> >>> So if we have the basic rule being "don't use the loop iterator after
-> >>> the loop has finished, because it can cause all kinds of subtle
-> >>> issues", then in _addition_ to fixing the existing code paths that
-> >>> have this issue, I really would want to (a) get a compiler warning for
-> >>> future cases and (b) make it not actually _work_ for future cases.
-> >>> 
-> >>> Because otherwise it will just happen again.
-> >>> 
-> >>>> Changing the list_for_each_entry() macro first will break all of those cases
-> >>>> (e.g. the ones using 'list_entry_is_head()).
-> >>> 
-> >>> So I have no problems with breaking cases that we basically already
-> >>> have a patch for due to  your automated tool. There were certainly
-> >>> more than a handful, but it didn't look _too_ bad to just make the
-> >>> rule be "don't use the iterator after the loop".
-> >>> 
-> >>> Of course, that's just based on that patch of yours. Maybe there are a
-> >>> ton of other cases that your patch didn't change, because they didn't
-> >>> match your trigger case, so I may just be overly optimistic here.
-> >> 
-> >> Based on the coccinelle script there are ~480 cases that need fixing
-> >> in total. I'll now finish all of them and then split them by
-> >> submodules as Greg suggested and repost a patch set per submodule.
-> >> Sounds good?
-> > 
-> > Sounds good to me!
-> > 
-> > If you need help carving these up and maintaining them over time as
-> > different subsystem maintainers accept/ignore them, just let me know.
-> > Doing large patchsets like this can be tough without a lot of
-> > experience.
-> 
-> Very much appreciated!
-> 
-> There will probably be some cases that do not match one of the pattern
-> we already discussed and need separate attention.
-> 
-> I was planning to start with one subsystem and adjust the coming ones
-> according to the feedback gather there instead of posting all of them
-> in one go.
+On Tue, Mar 1, 2022 at 4:29 AM kernel test robot <lkp@intel.com> wrote:
+>
+> drivers/powercap/dtpm.c:525:22: warning: symbol 'dtpm_node_callback' was not declared. Should it be static?
+>
+> Fixes: 3759ec678e89 ("powercap/drivers/dtpm: Add hierarchy creation")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> ---
+>  drivers/powercap/dtpm.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index 414826a1509b6..6d890d8cf9169 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -522,7 +522,7 @@ static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+>
+>  typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+>
+> -dtpm_node_callback_t dtpm_node_callback[] = {
+> +static dtpm_node_callback_t dtpm_node_callback[] = {
+>         [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
+>         [DTPM_NODE_DT] = dtpm_setup_dt,
+>  };
 
-That seems wise.  Feel free to use USB as a testing ground for this if
-you want to :)
-
-thanks,
-
-greg k-h
+Applied, thanks!

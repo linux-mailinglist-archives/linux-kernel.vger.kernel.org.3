@@ -2,361 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC3F4C8596
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9B54C855A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiCAHyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S233065AbiCAHl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiCAHxz (ORCPT
+        with ESMTP id S233061AbiCAHl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:53:55 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 23:53:11 PST
-Received: from esa3.fujitsucc.c3s2.iphmx.com (esa3.fujitsucc.c3s2.iphmx.com [68.232.151.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35574ECF4;
-        Mon, 28 Feb 2022 23:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1646121192; x=1677657192;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=NQ1WfT+Ug1olONi4vG8JO7wqrKKa86SJVeTkQ21snv4=;
-  b=uk7KXrc0zN5KkJbTfHW9aoMiREVUNJf724c4QyVPeFxVni5W0gWdaNTZ
-   0jNqO9BrjLbLNkicZGU5TO3wZvLkpAVHPnNrNnBvxDJKt+/3mQw8PPg8Q
-   IxqbR0lHh4o0ilfq6mTX0ZU7HoOWsiiByxW36mWQPMWcRnHr4+G4oGBOD
-   1508uATlDaSkuXuIo5M1xHqlUAzlo98y9EYNrusLdYiYgn4cYl5uXCnZi
-   r7MWOsG5QNYIzRGWo7K+28BmOwLlZ3Vfy5dMrOfFMPYAkwnVC5AbzJCaM
-   xysIGYSSr5ElNhimZ2Mt+N+SI66tQf4+t8wQm+BbWvbDOH+OwfHCmhDC1
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="58782886"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643641200"; 
-   d="scan'208";a="58782886"
-Received: from mail-tycjpn01lp2175.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.175])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 16:52:02 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q76z4IzW/3uD9mQh/q4xzxcy04GKpp/tW1FOm+EWan5FbRSVesOP46CPbR18nA9NLtOQycyMderjwgyem+Fk3hWvej5uEOM5lqBy3wvBk8SNhi1J7fI0+MIZ7RZWSFmECANvzoIpHEOCB35qDcDRdII3omigKBxwsboCqCViGKOpDy4NCYm43Mx3LkxMXo+mhYqndYwwPFuT4tuSR40UJrSZNCoD04lTAlLOEh74WPQkdoQ9UFBigzD10SN3+jLxjcBkVRaCrJmISRrHMW4KRtaHbSfJpxUroXj2dSfP9b0fMetBHEop5kLtx7s6CKXkJW5fr+RiH8/Fp1Cqfu+SqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q8feBRcSWkZ6BDJxEWTw3HItnd4+yjrIjlwaoOuQZlk=;
- b=kznOwgL/4wXCrqNinfgg+0IOpJsG+be9DjiQCZXyYX4ZwQx3P+wEU9QfX3WEaV9mDOJCEtruLK7WPQeiDtD/hwB4uEKP8m307xiBSiuVlHBNu6BYH04LfnkE+VicDxIK5D7hbP8b80YkcJJWY9eYbdWVgvZz1j46akYfWbse1muuNqT/MYrTQbukrkUcltS8qM9JlTOo0LZGLxQS/BzivE3WPf+PZvijrlGr9e7swCVA4zQwnp6k2e+gWiLAXwJSk4fb3TyIScR8JX7QqYLrvBKLHqZ5H38sVN9k8rnuR01aIWctYO7G7KOB8cLqOKtS5zLq0FvFp5+E0InVo39g0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q8feBRcSWkZ6BDJxEWTw3HItnd4+yjrIjlwaoOuQZlk=;
- b=RKgCKpu5GDmVj63bwsxWQ1lbkLjlTZK4HUEHsBCLgoziVTQY4LIpOeuGN4Prq3cZJ9rODIXOC9dxGNEe3LCXSaiEh04ViKHDL1TojdQzzQunkuZqdRdTrDpaCv4YS4EH4v6iIGp5/bynJBlWqC4LAB7ANOt9WSxmfUVJN9NuWE4=
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
- by OSBPR01MB2888.jpnprd01.prod.outlook.com (2603:1096:604:1f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Tue, 1 Mar
- 2022 07:51:56 +0000
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::bddf:b81c:fc55:3bbb]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::bddf:b81c:fc55:3bbb%8]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 07:51:56 +0000
-From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-To:     'Shuah Khan' <skhan@linuxfoundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-Thread-Topic: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-Thread-Index: AQHYItzk2ZSlsGQE1kGaxUOyn+5ZpayZxhMAgAV2X6CAAqR9gIACFABAgACuKQCABZjKwA==
-Date:   Tue, 1 Mar 2022 07:51:56 +0000
-Message-ID: <TYAPR01MB6330BC6417D2DC139B62916A8B029@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
- <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
- <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <5200cb0b-6417-d97b-7f17-eae4bf4b0901@linuxfoundation.org>
- <TYAPR01MB6330E0C641FC7F0EEE0DCA688B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <04c4e4b1-b499-8d35-2eb6-9914cc579c0b@linuxfoundation.org>
-In-Reply-To: <04c4e4b1-b499-8d35-2eb6-9914cc579c0b@linuxfoundation.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-03-01T07:48:57Z;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=230bda17-cc0f-4fe9-8942-ea4d618f6e9a;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d9e39268-5c10-4b30-8098-08d9fb585b8d
-x-ms-traffictypediagnostic: OSBPR01MB2888:EE_
-x-microsoft-antispam-prvs: <OSBPR01MB2888A7D77AACC903D8454C5B8B029@OSBPR01MB2888.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: stdbsAYm9pkSs2fNslxCEn2KXXpSSG5ns4oraTQXieJwpuBwh3OIvGQs73e2MJxuJEGbYQpLneX12k7V1jPlrX7KuxrBmyghRf5e4cQUbmerNl0sKJ3uK/SLagXG08vYK7Og1jilZlZ5rR+YnT5B7GjqGiPvJ9fbi6dFi4NR4MxZNlByGmxRDm+v5gkXOK1BncbY+i7Z4Ew4qzZaKcQNwyJuKP25eQgsD7tKkPWCZSpRK4B3RG73XH/XpcO7PLvsiM7TMBW0Rs2ldtGrnGcmmZfLsU8HeOaA8fCcBWr0TwG2TzizjAOVVo+3Mna7sLyJUGRH3TMh1zsSZyOjLCZklB0dCs69XcFCE7Arkym3pOs+vbyoIhitIyi8ymUG2ZqIj9bAKLKh9m40DFuVZpLVv2YkXjJJvQx+7usqXhv3HBgxrGP8/UvSSm9kwUfSGnsAicXo9cMonlRnldQVa99A7cJORkxVcwxAtfqY5q1p0wgbXuM+IQfpdqhvjDMC16eL5SnkjQ2noHcj+n0EE5m3kBGv+a3if2GPyY0dxgUlckJV2r86B2ho6dtKjjrn14VO4Kxo8X0kbP787+4vI25dSlbHH8hOKBwIUAOel37NqP21S3CjxsbDIYILCTL00NMyZbWRx2PLQlEOYP/zPVbVV3MBLrVhZFV8UtViuEvaVpJBaGEuZJbKHKZ5Nhs49Ig3ngTQ+OuBsonQfQW7ChLsfGJ/6WKvRgx56HQZPza2lW7F6s4RGhy/ZnT/WBYUaJIiWhR9Aq4KI6Gn5WTulyDQbiLqw/5uyd+IFp5fZkwLD/zWe/YT/zCChrFYQ+qmOzPoaH6i2GwNyn3uMzxaFKB9fw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(9686003)(6506007)(7696005)(2906002)(64756008)(33656002)(66476007)(76116006)(8676002)(66446008)(4326008)(66556008)(53546011)(110136005)(966005)(122000001)(38070700005)(82960400001)(508600001)(54906003)(38100700002)(86362001)(316002)(8936002)(71200400001)(186003)(26005)(5660300002)(83380400001)(52536014)(55016003)(85182001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?TEhPVk5xdmE4enJZcElHUEQ4eUhvQW1iQm9rTmJZeXY1cUtVNzk4OWpZ?=
- =?iso-2022-jp?B?VzVPUWxLUXNXWllycTZ5eDJMOEZtaGJGWlZ0SzhnK0FiVVZJckVTUWJG?=
- =?iso-2022-jp?B?SGRqNjdCb0N3eGM4dHlvQ2lUYURQRkdzNmllcDBBY3F5V0dsdEN0L3VN?=
- =?iso-2022-jp?B?aUJucXYyM1V6Tk9SUS9TYXpZMFAxMmgvQ1pPMnV3Qkkxc3dNRW0xb2RH?=
- =?iso-2022-jp?B?NFkwczBqUFBaMVlkVTkvM2g4VmtJWlRlWE4xQ2w3RDJCa25tSEpYZDdq?=
- =?iso-2022-jp?B?RXVoeFJ0eTJHTXRNMGNTRnR6ZnJqajlBWG8xakdnTnAyRlZTQmVHZG5k?=
- =?iso-2022-jp?B?YVNNc1VQSEJVYitnY3FoZFR4SThsUVZYREJBa3poS3AzKzhWdllvMFFy?=
- =?iso-2022-jp?B?aWE5L1liOGE0TzZFZmZ2WG5XMjAxT1JtbmFzVkdjNERtZUF6ajlJOFg2?=
- =?iso-2022-jp?B?R2xYaEp0ZmE5YTFXdEV3KzhSN1FqNXJHakFGb0YvSEtWZSs2R2RYNGk0?=
- =?iso-2022-jp?B?TEQwL0liMmt0Mk9ucG03MGNwcnFZbWNTZDdOVEs1VzRTdWM3M29TK1lG?=
- =?iso-2022-jp?B?MjNjZkJ2ZmN5ODM5d2JSeUhWZEV6SmgzanRsbHJmQTJBWGY1L29Qd1hZ?=
- =?iso-2022-jp?B?L3Uzd1FpdGV5ejdGZFZhcEJ4bFMxdlRaQ2dwNHMrVGU2YU1tZGE5RUhJ?=
- =?iso-2022-jp?B?T1ZIVTh3YUI2RTJONU1GbzJkTnQ4ckQzMmpyeFY4SS9mRWZJZ0d6RkxD?=
- =?iso-2022-jp?B?MVgrT3RPMkNhenFaZitSOFpGNTVYMno5MSsvUVRPWWJzYUh1MTdIMzhF?=
- =?iso-2022-jp?B?UUN5Z080b0htY0Rrb3hBK0NyUGlXVnl4YVNhZUYzUUdjMWR2RVRQZ2RW?=
- =?iso-2022-jp?B?eGs2VXpJdmdGTTU1UitJWDZ1Y3dwL3BycjV6SzJTN1hVdzdJT0Ftck1S?=
- =?iso-2022-jp?B?Nm1zWWJnbENMZUg3a29qbHlqRkZIYlZuZ2VwQ2J0OEg4eWlqSVBCVWZu?=
- =?iso-2022-jp?B?c2JrWjZQczkyVjB0b1dNYldpYUpmbmJDSk5tUHVQU1UzakltQ1hZUmNm?=
- =?iso-2022-jp?B?TXcvdml3aXpCMkxQNEd0NEtDRGJrMjBDdTJpYnBVZzlXN3NLZGljQ1NL?=
- =?iso-2022-jp?B?b1ZZaysySTFPTjdXMFJETXp6QWpVaHlCWlQwRjJ5TkNXTXZIYmNBRmNi?=
- =?iso-2022-jp?B?bXJWc2VKOFV1eTErVnEwb0JHajBIM21VS3h4NThyZ2Rnc1ZqdmlXenht?=
- =?iso-2022-jp?B?TDFrbG5RY0JwTHdrY0prSjZYdVFHQUJaU0RjQkFvdzZqL25DQU03OXh3?=
- =?iso-2022-jp?B?WURYc3p3TU01RGY0eWVkZFFGYmNZdjFyZk5ITTFsbXRqZFJ4NU9BVTk3?=
- =?iso-2022-jp?B?ZER4SnkwQnNkUXU2enJCOUNUald1ZEJ6eDl5cCtmUmlZTi95dVFtMUZ5?=
- =?iso-2022-jp?B?WUhWa1IyQzJwbGIyL1RLQS9IWHM0bkFGRGFwczhSd1NJbFJiRDhQTVFo?=
- =?iso-2022-jp?B?bmR5Rm5wYTFhUHhUVW82Y2dBcUhHeDRhNFcwNHBHaEE2Y3dvcGNuS2xK?=
- =?iso-2022-jp?B?UGg0SHRscXl1VDc4R2hFYzhhd1BrdkFzc25BQWdSVGh6NFR5RStFbTJq?=
- =?iso-2022-jp?B?UVU3ZmFZSVpYbFlJZDFQQVp2TjlXbTNQOHRWcHFTMkRPcUpEdjVqS2lO?=
- =?iso-2022-jp?B?alhRMStDbHFlcXR0VUx2eXlqRFpKTTdmREJHTVBtbHZGUUQzR3U4UVgz?=
- =?iso-2022-jp?B?QUVNUGNURE0xcXY5cXYxSUEvdjJWZ3hJanJ6VFEybzMzcDM0eXNhcmpQ?=
- =?iso-2022-jp?B?UlRkbU9haWdWMktDMlcwK3ptOVVoOGNqb0thMWM5V3R5S0R6RU1qMUtG?=
- =?iso-2022-jp?B?Z3JIR0tOcG1ZVFdPbzNGejlpQUlNcHRFck1vL0lxNnBTKzI1N2E5cmZk?=
- =?iso-2022-jp?B?cmt6d1ZqaEN4dmhOSHdDeStmcG1oT09zeGh1eGN6MHc4R2hweDBjbENP?=
- =?iso-2022-jp?B?WldXTkUzUVRnZVZGOCtsMXhkL25RbUFNb0hUY2tObGFsVnVzMjJPVWIr?=
- =?iso-2022-jp?B?U3NkRGlKTXpDUHJlb3VDSGhmR21idXFDZDZCdDdZemR4ejNzK1M2MzFL?=
- =?iso-2022-jp?B?L3drKzB2M1VMbU51V09hb0RnQmNQcGxrUFkwdGNjb21IWHZ3aXVtSDJL?=
- =?iso-2022-jp?B?a1dDMUI2cDhMMDUyQXRFMTRwS0sxalhtNW9BYThJTDVtMWsxSHZNWS9D?=
- =?iso-2022-jp?B?RTdaUkVHdVY0SGdxYkloNThGdWk5VFBZbmRxd3AvTFp5T3FkRkNnemQr?=
- =?iso-2022-jp?B?bXA1em40czZYZGdGMHd6SUZZM2EwcjVVczliZTB3ZGhzOHlEMkx1VGxV?=
- =?iso-2022-jp?B?UHdVVHNwTE9VQ3RJektZUFQyWU5FcTN2dU8xSC9DdkpFNnVSeElJcElq?=
- =?iso-2022-jp?B?V0xYRkVBPT0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 1 Mar 2022 02:41:26 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543F274DD2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:40:41 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220301074035epoutp0314f3b41f4c63388061aba3fb696adc7d~YMdCh2NDl0376203762epoutp03e
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:40:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220301074035epoutp0314f3b41f4c63388061aba3fb696adc7d~YMdCh2NDl0376203762epoutp03e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646120435;
+        bh=s6hP65nYa7TlVceThfCQxX+SbM7LXQfHiNW5LQqKHGk=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=kfCO/akMdMmBveI3irJ11vatbN2rCetfxxvVOQ7ZBNx16ROPbqApnWrEm5AMcVSNk
+         ko915LErmhGuqu9xNdLSmgz9kfQ5TnsYai+uPnMHHHZwVCU/5bEVklZqBeU67Mm7kr
+         O6QsO+MiBg4/6QHvUM5wZxScRIFyj2UnwZzrNtHQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220301074034epcas1p4ba8b93d614bf7de02eb51338d6fb60e9~YMdBYpJHw2477924779epcas1p4F;
+        Tue,  1 Mar 2022 07:40:34 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.232]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4K78L61S9Fz4x9Pv; Tue,  1 Mar
+        2022 07:40:30 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C0.A9.09592.DEDCD126; Tue,  1 Mar 2022 16:40:30 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220301074029epcas1p2f38b9efd5825ae57b8e9ed802954ad04~YMc8JrWAb1403814038epcas1p2T;
+        Tue,  1 Mar 2022 07:40:29 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220301074029epsmtrp11fd6c8835375f5c5bdad551daeb638a2~YMc8IzbXp1486414864epsmtrp19;
+        Tue,  1 Mar 2022 07:40:29 +0000 (GMT)
+X-AuditID: b6c32a37-28fff70000002578-d9-621dcded0677
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7C.54.29871.CEDCD126; Tue,  1 Mar 2022 16:40:28 +0900 (KST)
+Received: from [10.113.221.211] (unknown [10.113.221.211]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220301074028epsmtip28189d62a8a58bd024bef8ce88ec29a0f~YMc7ripAr1545115451epsmtip2O;
+        Tue,  1 Mar 2022 07:40:28 +0000 (GMT)
+Message-ID: <45867b37-1fb0-2f09-5961-6f099a1ed611@samsung.com>
+Date:   Tue, 1 Mar 2022 16:52:20 +0900
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9e39268-5c10-4b30-8098-08d9fb585b8d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2022 07:51:56.0548
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8kw6RnvAtH3wEmjislgr5jQtfRPkpljnH99J8S6PP7IR/2aQDh862igI/0lf6kt/ps6uTIYf1PbXpTwHj23kXtyoGD18pUaGUl4LWPjSoPk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2888
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/exynos: fimd: add BGR support for exynos4/5
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>
+Cc:     Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Inki Dae <inki.dae@samsung.com>
+In-Reply-To: <20220225093313.GA87542@adroid>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDJsWRmVeSWpSXmKPExsWy7bCmge67s7JJBi3LGC16z51ksvi/bSKz
+        xZWv79ksXty7yGKx8e0PJouzTW/YLTY9vsZqcXnXHDaLGef3MVmc+TeVxWLG5JdsDtwesxp6
+        2Tz2flvA4rFz1l12j+3fHrB63O8+zuSxeUm9R9+WVYwenzfJBXBEZdtkpCampBYppOYl56dk
+        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
+        LUlVyMgvLrFVSi1IySkwLdArTswtLs1L18tLLbEyNDAwMgUqTMjO6F+zna3gg1fF3UvHmRsY
+        22y7GDk5JARMJJat7GLuYuTiEBLYwSjxYOUPdgjnE6PE+Sc72SCcb4wSX+/fZ4FpeXZoMTOI
+        LSSwl1Hi1jQtiKL3jBI3Hu4EK+IVsJPY/PE2WBGLgIpE34YP7BBxQYmTM5+A1YgKREi8PPKX
+        CcQWFnCRmLPoMFicWUBc4taT+WBxEQFbifMH+lhBFjAL9DBL7Nq1mg0kwSagKjFxxX0wm1NA
+        R+L37MOsEM3yEs1bZ4M9JCFwhEPi67JbTBBnu0h8mXqPDcIWlnh1fAs7hC0l8bK/jR2iYTKj
+        xJ3rK1ggnBmMEod/XmeEqDKW2L90MtAkDqAVmhLrd+lDhBUldv6eywixmU/i3dceVpASCQFe
+        iY42IYgSJYljF29ATZGQuLBkItQNHhI/jp1jncCoOAspYGYhBcAsJP/MQli8gJFlFaNYakFx
+        bnpqsWGBMTy+k/NzNzGCk7GW+Q7GaW8/6B1iZOJgPMQowcGsJMJ78adMkhBvSmJlVWpRfnxR
+        aU5q8SFGU2D0TGSWEk3OB+aDvJJ4QxNLAxMzI2MTC0MzQyVx3lXTTicKCaQnlqRmp6YWpBbB
+        9DFxcEo1MInsPrmhOd9WdQk/Y9vcy0oT0vvCRf1y90dWZxQe26sio3/qetj8f6+3pW31nHTG
+        5RGbtMis9N4L/htv5sucm2fTlDfdhmeBbMonlmxhVk0h36WlDGL/gnLX97V4vXsaOsf26ywG
+        ve3fgqTez1hi83FW/G7p4z5/+BpMQh7/P7viyfayjLwtO7Z15gdIsDF0tGdUOnb/0Z1ewmpj
+        yPuwkTfY/uTZLWxZapMb+5NEkp2f/To43zh1e9rWk4Hyd7fP7W/t/7v1wPLZDD2nfuc/b9b4
+        LBaUu3/C8r/VDKnG3idCqhv+f+1y5ttbOc83haOAc01stMrs+W/rNkXpPD6p9++jQ4TPOZGZ
+        JhJFO8RilFiKMxINtZiLihMBX6KBC08EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsWy7bCSvO6bs7JJBhNWm1v0njvJZPF/20Rm
+        iytf37NZvLh3kcVi49sfTBZnm96wW2x6fI3V4vKuOWwWM87vY7I4828qi8WMyS/ZHLg9ZjX0
+        snns/baAxWPnrLvsHtu/PWD1uN99nMlj85J6j74tqxg9Pm+SC+CI4rJJSc3JLEst0rdL4Mro
+        X7OdreCDV8XdS8eZGxjbbLsYOTkkBEwknh1azNzFyMUhJLCbUeLgkZlsXYwcQAkJiS1bOSBM
+        YYnDh4shSt4ySuy++IUdpJdXwE5i88fbzCA2i4CKRN+GD1BxQYmTM5+wgNiiAhESbcumgNUI
+        C7hIzFl0GCzOLCAucevJfCYQW0TAVuL8gT5WkAXMAn3MEqfmLGGB2LaOSeLtiXlgHWwCqhIT
+        V9xnA7E5BXQkfs8+zApyHbOAusT6eUIQQ+UlmrfOZp7AKDQLyR2zkOybhdAxC0nHAkaWVYyS
+        qQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwXGnpbmDcfuqD3qHGJk4GA8xSnAwK4nwXvwp
+        kyTEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDE+P2/nJJ
+        czH+uxVmbp6cxjXOphP5tte3eczT05a889XwksJnr10Ob/iLD3Tp/DGKtfsjP2FT7J8NCs5M
+        LeujimMKA5nz2lTO9hUtj7dds8vqidtGp/0hCq82yTknCgSf1Nn4fuPVffdeRnd91p596pr4
+        26REYeaPEh1Jy1zmdRv6rWIIzNarme9+6/iPBis/ha038m9cPyvcs9PDbsGaVy5vTMW0+KVW
+        CRaxzxFvPD4z7RyvTNHKKZZOPIfOixsZzrv9ij0jf/UP1Zx7/RuDAt68r9qWP+lng/LDf1X+
+        d6JOh1cfeBAia9Nytt3x849tLrzbLJmdEzOkynkyJkRuORHPdVf7yRL+7GfaBeeVWIozEg21
+        mIuKEwF30Z4HKgMAAA==
+X-CMS-MailID: 20220301074029epcas1p2f38b9efd5825ae57b8e9ed802954ad04
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566
+References: <CGME20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566@epcas1p2.samsung.com>
+        <20220129220153.GA33165@adroid>
+        <5e18705f-79c1-18a7-57f2-74866abe21e9@samsung.com>
+        <20220224232723.GA133007@adroid>
+        <b9650211-2e98-5e1f-1dc9-9c5c3571f359@samsung.com>
+        <20220225093313.GA87542@adroid>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuah,
+Hi Martin,
 
-> On 2/25/22 1:02 AM, tan.shaopeng@fujitsu.com wrote:
-> > Hi Shuah,
-> >
-> >> On 2/22/22 12:55 AM, tan.shaopeng@fujitsu.com wrote:
-> >>> Hi Khan,
-> >>>
-> >>>> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> >>>>> In kselftest framework, all tests can be build/run at a time, and
-> >>>>> a sub test also can be build/run individually. As follows:
-> >>>>> $ make -C tools/testing/selftests run_tests $ make -C
-> >>>>> tools/testing/selftests TARGETS=3Dptrace run_tests
-> >>>>>
-> >>>>> However, resctrl_tests cannot be run using kselftest framework,
-> >>>>> users have to change directory to
-> >>>>> tools/testing/selftests/resctrl/, run "make" to build executable
-> >>>>> file "resctrl_tests", and run "sudo ./resctrl_tests" to execute the=
- test.
-> >>>>>
-> >>>>> To build/run resctrl_tests using kselftest framework.
-> >>>>> Modify tools/testing/selftests/Makefile and
-> >>>>> tools/testing/selftests/resctrl/Makefile.
-> >>>>>
-> >>>>> Even after this change, users can still build/run resctrl_tests
-> >>>>> without using framework as before.
-> >>>>>
-> >>>>> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> >>>>> ---
-> >>>>> Some important feedbacks from v1&v2 are addressed as follows:
-> >>>>>
-> >>>>> - The changelog mentions that changes were made to the resctrl
-> >>>>>      selftest Makefile but it does not describe what the change
-> >> accomplish
-> >>>>>      or why they are needed.
-> >>>>>      =3D> By changing the Makefile, resctrl_tests can use kselftest
-> >>>>>         framework like other sub tests. I described this in changel=
-og.
-> >>>>>
-> >>>>> - The changelog did not describe how a user may use the kselftest
-> >>>>>      framework to run the resctrl tests nor the requested informati=
-on
-> >>>>>      on how existing workflows are impacted.
-> >>>>>      =3D> I described how to build/run resctrl_tests with kselftest
-> >> framework,
-> >>>>>         and described the existing workflows are not impacted that
-> >>>>> users
-> >> can
-> >>>>>         build/run resctrl_tests without using kselftest framework
-> >>>>> as
-> >> before.
-> >>>>>
-> >>>>> - tools/testing/selftests/resctrl/README should be updated.
-> >>>>>      =3D> I separate the update of README to a new patch.[patch v3
-> >>>>> 3/5]
-> >>>>>
-> >>>>> - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
-> >>>>>      why is "SRCS" no longer sufficient?
-> >>>>>      =3D> I referred to other Makefiles, and found "SRCS" is better
-> >>>>>         than "EXTRA_SOURCES". So, I updated it to use "SRCS".
-> >>>>>
-> >>>>>     tools/testing/selftests/Makefile         |  1 +
-> >>>>>     tools/testing/selftests/resctrl/Makefile | 20
-> ++++++--------------
-> >>>>>     2 files changed, 7 insertions(+), 14 deletions(-)
-> >>>>>
-> >>>>> diff --git a/tools/testing/selftests/Makefile
-> >>>>> b/tools/testing/selftests/Makefile
-> >>>>> index c852eb40c4f7..7df397c6893c 100644
-> >>>>> --- a/tools/testing/selftests/Makefile
-> >>>>> +++ b/tools/testing/selftests/Makefile
-> >>>>> @@ -51,6 +51,7 @@ TARGETS +=3D proc
-> >>>>>     TARGETS +=3D pstore
-> >>>>>     TARGETS +=3D ptrace
-> >>>>>     TARGETS +=3D openat2
-> >>>>> +TARGETS +=3D resctrl
-> >>>>>     TARGETS +=3D rlimits
-> >>>>>     TARGETS +=3D rseq
-> >>>>>     TARGETS +=3D rtc
-> >>>>> diff --git a/tools/testing/selftests/resctrl/Makefile
-> >>>>> b/tools/testing/selftests/resctrl/Makefile
-> >>>>> index 6bcee2ec91a9..de26638540ba 100644
-> >>>>> --- a/tools/testing/selftests/resctrl/Makefile
-> >>>>> +++ b/tools/testing/selftests/resctrl/Makefile
-> >>>>> @@ -1,17 +1,9 @@
-> >>>>> -CC =3D $(CROSS_COMPILE)gcc
-> >>>>> -CFLAGS =3D -g -Wall -O2 -D_FORTIFY_SOURCE=3D2
-> -SRCS=3D$(wildcard *.c)
-> >>>>> -OBJS=3D$(SRCS:.c=3D.o)
-> >>>>> +CFLAGS +=3D -g -Wall -O2 -D_FORTIFY_SOURCE=3D2
-> >>>>>
-> >>>>> -all: resctrl_tests
-> >>>>> +TEST_GEN_PROGS :=3D resctrl_tests
-> >>>>> +SRCS :=3D $(wildcard *.c)
-> >>>>>
-> >>>>> -$(OBJS): $(SRCS)
-> >>>>> -	$(CC) $(CFLAGS) -c $(SRCS)
-> >>>>> +all: $(TEST_GEN_PROGS)
-> >>>>>
-> >>>>> -resctrl_tests: $(OBJS)
-> >>>>> -	$(CC) $(CFLAGS) -o $@ $^
-> >>>>> -
-> >>>>> -.PHONY: clean
-> >>>>> -
-> >>>>> -clean:
-> >>>>> -	$(RM) $(OBJS) resctrl_tests
-> >>>>> +$(TEST_GEN_PROGS): $(SRCS)
-> >>>>
-> >>>> This patch breaks the test build - the below use-cases fail
-> >>>>
-> >>>> make kselftest-all TARGETS=3Dresctrl
-> >>>> make -C  tools/testing/selftests/ TARGETS=3Dresctrl
-> >>>>
-> >>>> Also a simple make in tools/testing/selftests/resctr
-> >>>
-> >>> Thanks for your feedbacks.
-> >>> I applied these patches to the source below and built resctrl_tests
-> >>> successfully using above use-cases on x86/arm machine.
-> >>> (1)
-> >>>    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >>>    Tag: v5.16
-> >>> (2)
-> >>>    https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.gi=
-t
-> >>>    Tag: next-20220217
-> >>>
-> >>> Could you tell me which kernel source you used to build and what
-> >>> error message you got?
-> >>>
-> >>
-> >> I tried this on Linux 5.17-rc4
-> >
-> > I tried these patches on Linux 5.17-rc4 with gcc version 8.4.1 and
-> > resctrl_tests is still built successfully.
-> >
-> > Could you tell me what error message you got when you built it?
->=20
-> Here it is:
->=20
-> make
-> gcc   resctrl_tests.o cache.c cat_test.c cmt_test.c fill_buf.c mba_test.c
-> mbm_test.c resctrlfs.c resctrl_tests.c resctrl_val.c   -o resctrl_tests
-> /usr/bin/ld: /tmp/ccoarGr4.o:(.bss+0x0): multiple definition of `is_amd';
-> resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl=
-_tests.c
-> :16: first defined here
-> /usr/bin/ld: /tmp/ccoarGr4.o: in function `detect_amd':
-> resctrl_tests.c:(.text+0x63b): multiple definition of `detect_amd';
-> resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl=
-_tests.c
-> :19: first defined here
-> /usr/bin/ld: /tmp/ccoarGr4.o: in function `tests_cleanup':
-> resctrl_tests.c:(.text+0x780): multiple definition of `tests_cleanup';
-> resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl=
-_tests.c
-> :50: first defined here
-> /usr/bin/ld: /tmp/ccoarGr4.o: in function `main':
-> resctrl_tests.c:(.text+0xadd): multiple definition of `main';
-> resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl=
-_tests.c
-> :129: first defined here
-> collect2: error: ld returned 1 exit status
-> make: *** [<builtin>: resctrl_tests] Error 1
+22. 2. 25. 18:33에 Martin Jücker 이(가) 쓴 글:
+> Hello Inki,
+> 
+> On Fri, Feb 25, 2022 at 12:52:56PM +0900, Inki Dae wrote:
+>> Hi Martin,
+>>
+>> 22. 2. 25. 08:27에 Martin Jücker 이(가) 쓴 글:
+>>> Hello Inki,
+>>>
+>>> On Thu, Feb 24, 2022 at 10:41:04AM +0900, Inki Dae wrote:
+>>>> Hi Martin.
+>>>>
+>>>> I found that exynos4 and 5 data sheet include documented same register.
+>>>> RGB_ORDER_E field of VIDCONx registers will do same thing.
+>>>
+>>> If I read the manual correctly, this register combined with the
+>>> RGB_ORDER_O makes it possible to map the whole RGB interface output to a
+>>> different order. What my patch provides is a way to configure each
+>>> hardware plane separately while maintaining a consistent output on the
+>>> RGB interface.
+>>>
+>>
+>> Understood. Your patch will allow BGR pixel order per a plane. Seems to be useful because a framebuffer with BGR pixel format can be displayed on screen without any color space conversion. :)
+>>
+>>> Implementing the RGB_ORDER_O and E would need some logic to make sure
+>>> that all planes are always using the same RGB order.
+>>>
+>>>>
+>>>> I'm not sure whether the use of undocumented register is safe or not - maybe some HW bug exists.
+>>>
+>>> I see, that makes sense. Would it be possible then to introduce a new
+>>> compatible, e.g. samsung,exynos4210-fimd-ext which can be used on tested
+>>
+>> Seems providing a new compatible is not a good idea.
+>>
+>>> devices? I know that some other Galaxy Note and S devices with the
+>>> exynos4 chip have the same problem (and solution).
+>>
+>> Could you give me more details about the same problem and its solution on the devices?
+>> It would be useful for us to decide the upstream direction.
+>>
+>> If necessary then we may need to contact HW engineer for clarity.
+> 
+> Here is my current understanding of the situation:
+> 
+> The issue is related to Android and a recovery image having conflicting
+> pixel formats on the same device. There is a solution in Replicant[1]
+> for this using parameters for the fimd driver to force the pixel format
+> to RGB or BGR. It's using the PNRMODE register on VIDCON0, but this
+> solution needs two separate kernels to be built to add the parameter as
+> the boot loader is not adjustable.
+> 
+> This was also discussed in dri-devel irc and it was proposed to expose
+> both formats and fail the atomic commit if userspace tried to use both
+> RGB and BGR formats at the same time. With this approach there should be
+> something on the screen but it might happen that some users can't deal
+> with the failing commits as it's rather difficult to find the cause and
+> fix it on the go.
 
-I think resctrl_tests.o is an old file you left before applying this patch.=
-=20
-Please remove it before rebuilding.
+Thanks for sharing.
 
-Before applying this patch, the resctrl_tests.o file was generated and=20
-saved in the current directory(tools/testing/selftests/resctrl/).
-After applying this patch, the resctrl_tests.o file was not generated and
-the compilation and linking work is done at one time by gcc.
-These errors were caused by the previously left resctrl_tests.o file.
+> 
+> After that I accidentally discovered this undocumented register while
+> reading the old vendor sources and it seems that it fixes all the
 
-> I have gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
->=20
-> Take a look at the changes to
-> tools/testing/selftests/resctrl/Makefile
->=20
-> I don't think you need to make the changes you made. I would start small =
-with
-> including lib.mk and work from there.
+Are the old vendor sources using this undocumented register? If so then the use of the register would be safe.
 
-Thanks for your advice.
-Only the following codes can build resctrl_tests.
- + TEST_GEN_PROGS :=3D resctrl_tests
- + include ../lib.mk
- + $(OUTPUT)/resctrl_tests: $(wildcard *.c)
-I will use these codes in next version(v4).
+> issues. At least if there are no HW bugs as you mentioned.
 
-Best regards,
-Tan Shaopeng
+I will try to contact HW engineer and check if no problem.
+
+Thanks,
+Inki Dae
+
+> 
+
+
+
+> Kind Regards
+> Martin
+> 
+> [1] https://protect2.fireeye.com/v1/url?k=d515db34-b4683348-d514507b-74fe485cc33c-0ee001ffdcafd932&q=1&e=851ccfed-b6fa-4794-8989-27ef28bc7ac6&u=https%3A%2F%2Fgit.replicant.us%2Freplicant-next%2Fkernel_replicant_linux%2Fcommit%2F%3Fh%3Dreplicant-11%26id%3Dcc5a0615b40cd5ede1eb87a60daa50333701a135
+> 
+>>
+>> Thanks,
+>> Inki Dae
+>>
+>>>
+>>>>
+>>>> Anyway, I'd like to recommend you to use documented register only.
+>>>>
+>>>> Sorry for late and thanks,
+>>>> Inki Dae
+>>>
+>>> Kind Regards
+>>> Martin
+>>>
+>>>>
+>>>> 22. 1. 30. 07:01에 Martin Jücker 이(가) 쓴 글:
+>>>>> In the downstream kernels for exynos4 and exynos5 devices, there is an
+>>>>> undocumented register that controls the order of the RGB output. It can
+>>>>> be set to either normal order or reversed, which enables BGR support for
+>>>>> those SoCs.
+>>>>>
+>>>>> This patch enables the BGR support for all the SoCs that were found to
+>>>>> have at least one device with this logic in the corresponding downstream
+>>>>> kernels.
+>>>>>
+>>>>> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
+>>>>> ---
+>>>>>  drivers/gpu/drm/exynos/exynos_drm_fimd.c | 42 ++++++++++++++++++++++--
+>>>>>  include/video/samsung_fimd.h             |  4 +++
+>>>>>  2 files changed, 44 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/exynos/exynos_drm_fimd.c b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+>>>>> index c735e53939d8..cb632360c968 100644
+>>>>> --- a/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+>>>>> +++ b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+>>>>> @@ -109,6 +109,7 @@ struct fimd_driver_data {
+>>>>>  	unsigned int has_dp_clk:1;
+>>>>>  	unsigned int has_hw_trigger:1;
+>>>>>  	unsigned int has_trigger_per_te:1;
+>>>>> +	unsigned int has_bgr_support:1;
+>>>>>  };
+>>>>>  
+>>>>>  static struct fimd_driver_data s3c64xx_fimd_driver_data = {
+>>>>> @@ -138,6 +139,7 @@ static struct fimd_driver_data exynos4_fimd_driver_data = {
+>>>>>  	.lcdblk_bypass_shift = 1,
+>>>>>  	.has_shadowcon = 1,
+>>>>>  	.has_vtsel = 1,
+>>>>> +	.has_bgr_support = 1,
+>>>>>  };
+>>>>>  
+>>>>>  static struct fimd_driver_data exynos5_fimd_driver_data = {
+>>>>> @@ -149,6 +151,7 @@ static struct fimd_driver_data exynos5_fimd_driver_data = {
+>>>>>  	.has_vidoutcon = 1,
+>>>>>  	.has_vtsel = 1,
+>>>>>  	.has_dp_clk = 1,
+>>>>> +	.has_bgr_support = 1,
+>>>>>  };
+>>>>>  
+>>>>>  static struct fimd_driver_data exynos5420_fimd_driver_data = {
+>>>>> @@ -162,6 +165,7 @@ static struct fimd_driver_data exynos5420_fimd_driver_data = {
+>>>>>  	.has_vtsel = 1,
+>>>>>  	.has_mic_bypass = 1,
+>>>>>  	.has_dp_clk = 1,
+>>>>> +	.has_bgr_support = 1,
+>>>>>  };
+>>>>>  
+>>>>>  struct fimd_context {
+>>>>> @@ -226,6 +230,18 @@ static const uint32_t fimd_formats[] = {
+>>>>>  	DRM_FORMAT_ARGB8888,
+>>>>>  };
+>>>>>  
+>>>>> +static const uint32_t fimd_extended_formats[] = {
+>>>>> +	DRM_FORMAT_C8,
+>>>>> +	DRM_FORMAT_XRGB1555,
+>>>>> +	DRM_FORMAT_XBGR1555,
+>>>>> +	DRM_FORMAT_RGB565,
+>>>>> +	DRM_FORMAT_BGR565,
+>>>>> +	DRM_FORMAT_XRGB8888,
+>>>>> +	DRM_FORMAT_XBGR8888,
+>>>>> +	DRM_FORMAT_ARGB8888,
+>>>>> +	DRM_FORMAT_ABGR8888,
+>>>>> +};
+>>>>> +
+>>>>>  static const unsigned int capabilities[WINDOWS_NR] = {
+>>>>>  	0,
+>>>>>  	EXYNOS_DRM_PLANE_CAP_WIN_BLEND | EXYNOS_DRM_PLANE_CAP_PIX_BLEND,
+>>>>> @@ -673,21 +689,25 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
+>>>>>  		val |= WINCONx_BYTSWP;
+>>>>>  		break;
+>>>>>  	case DRM_FORMAT_XRGB1555:
+>>>>> +	case DRM_FORMAT_XBGR1555:
+>>>>>  		val |= WINCON0_BPPMODE_16BPP_1555;
+>>>>>  		val |= WINCONx_HAWSWP;
+>>>>>  		val |= WINCONx_BURSTLEN_16WORD;
+>>>>>  		break;
+>>>>>  	case DRM_FORMAT_RGB565:
+>>>>> +	case DRM_FORMAT_BGR565:
+>>>>>  		val |= WINCON0_BPPMODE_16BPP_565;
+>>>>>  		val |= WINCONx_HAWSWP;
+>>>>>  		val |= WINCONx_BURSTLEN_16WORD;
+>>>>>  		break;
+>>>>>  	case DRM_FORMAT_XRGB8888:
+>>>>> +	case DRM_FORMAT_XBGR8888:
+>>>>>  		val |= WINCON0_BPPMODE_24BPP_888;
+>>>>>  		val |= WINCONx_WSWP;
+>>>>>  		val |= WINCONx_BURSTLEN_16WORD;
+>>>>>  		break;
+>>>>>  	case DRM_FORMAT_ARGB8888:
+>>>>> +	case DRM_FORMAT_ABGR8888:
+>>>>>  	default:
+>>>>>  		val |= WINCON1_BPPMODE_25BPP_A1888;
+>>>>>  		val |= WINCONx_WSWP;
+>>>>> @@ -695,6 +715,18 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
+>>>>>  		break;
+>>>>>  	}
+>>>>>  
+>>>>> +	switch (pixel_format) {
+>>>>> +	case DRM_FORMAT_XBGR1555:
+>>>>> +	case DRM_FORMAT_XBGR8888:
+>>>>> +	case DRM_FORMAT_ABGR8888:
+>>>>> +	case DRM_FORMAT_BGR565:
+>>>>> +		writel(WIN_RGB_ORDER_REVERSE, ctx->regs + WIN_RGB_ORDER(win));
+>>>>> +		break;
+>>>>> +	default:
+>>>>> +		writel(WIN_RGB_ORDER_FORWARD, ctx->regs + WIN_RGB_ORDER(win));
+>>>>> +		break;
+>>>>> +	}
+>>>>> +
+>>>>>  	/*
+>>>>>  	 * Setting dma-burst to 16Word causes permanent tearing for very small
+>>>>>  	 * buffers, e.g. cursor buffer. Burst Mode switching which based on
+>>>>> @@ -1074,8 +1106,14 @@ static int fimd_bind(struct device *dev, struct device *master, void *data)
+>>>>>  	ctx->drm_dev = drm_dev;
+>>>>>  
+>>>>>  	for (i = 0; i < WINDOWS_NR; i++) {
+>>>>> -		ctx->configs[i].pixel_formats = fimd_formats;
+>>>>> -		ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
+>>>>> +		if (ctx->driver_data->has_bgr_support) {
+>>>>> +			ctx->configs[i].pixel_formats = fimd_extended_formats;
+>>>>> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_extended_formats);
+>>>>> +		} else {
+>>>>> +			ctx->configs[i].pixel_formats = fimd_formats;
+>>>>> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
+>>>>> +		}
+>>>>> +
+>>>>>  		ctx->configs[i].zpos = i;
+>>>>>  		ctx->configs[i].type = fimd_win_types[i];
+>>>>>  		ctx->configs[i].capabilities = capabilities[i];
+>>>>> diff --git a/include/video/samsung_fimd.h b/include/video/samsung_fimd.h
+>>>>> index c4a93ce1de48..e6966d187591 100644
+>>>>> --- a/include/video/samsung_fimd.h
+>>>>> +++ b/include/video/samsung_fimd.h
+>>>>> @@ -476,6 +476,10 @@
+>>>>>   * 1111		-none-	 -none-   -none-   -none-    -none-
+>>>>>  */
+>>>>>  
+>>>>> +#define WIN_RGB_ORDER(_win)			(0x2020 + ((_win) * 4))
+>>>>> +#define WIN_RGB_ORDER_FORWARD			(0 << 11)
+>>>>> +#define WIN_RGB_ORDER_REVERSE			(1 << 11)
+>>>>> +
+>>>>>  /* FIMD Version 8 register offset definitions */
+>>>>>  #define FIMD_V8_VIDTCON0	0x20010
+>>>>>  #define FIMD_V8_VIDTCON1	0x20014
+>>>
+> 

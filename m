@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B2D4C88FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C22E4C8904
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiCAKHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S233685AbiCAKMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbiCAKHh (ORCPT
+        with ESMTP id S229830AbiCAKMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:07:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDAC8BF35;
-        Tue,  1 Mar 2022 02:06:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06578B81855;
-        Tue,  1 Mar 2022 10:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84BFC340F1;
-        Tue,  1 Mar 2022 10:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646129213;
-        bh=fYZEvCHUTCzzIGB8L9LcKOsoY2tpWRjSUopTwwDl04A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xx3JkpMGPfR90bvsEfJqssfeOVD4am2Noqa3KOgFZGWbwMPG13nGrRruOPt4zeJk6
-         SBnDTJra4wi+jXHwz3J43NUmeyuMstDhoISZnCGhAY8ROQCVJreeKbMA+nARphIuMh
-         ZgOw1/MouAINJXpZzmXZJwuoNL3TXV+0LHTvNriedKzFyQm0GtT00zdr2LzOsphHMU
-         6ipvcgHIeNmyMATrUY8U009qFXGO94XM75aYICxRWsy+5+krA86NOT5pbSm8ZWOyIQ
-         KR8efYpq0czOCDE/678WEj6ininKhpTtp8FShG/wEs4ASgRLXuHzy96S8SX7m2RobP
-         h2fJWhSnBya6Q==
-Date:   Tue, 1 Mar 2022 15:36:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh3wOYFnN9Q1F68N@matsya>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        Tue, 1 Mar 2022 05:12:17 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596D1723D9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:11:37 -0800 (PST)
+Date:   Tue, 01 Mar 2022 10:11:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646129495;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vLDZ2ZGeaKv7DgTfGhWsFkEQ03ykU2sbDaGZmarJDuw=;
+        b=PGutBT7m20l209ElQoFRtt4dRi3uAsVNotqc9+rx4GRkSSBkCBEPAdbgxTjkMYUzKc+fUo
+        w0MkU0fmhBv+TAAkjSJt/miPpGA47DMEaxAze24kdGez0t6QqMYJXCWvuQbYE/E8RCleUA
+        +AYK5G0fAOix2dPFASezylGhGy/uzos9R3HAop5Zb4WMS9H8FumjxPz41fx+I/GvwXoA2l
+        0vjk145BxeEOIKzyhhgaPnJ3s9Uwu4uerY38dujZjz3SBHwx3BM639+FcroXUfzpQsYOAv
+        /dSnDs3VRp9TivKwGvf2EmmJycxsKJYphvtgMC8S6d2Z7k0PJukQlbN3tiIiug==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646129495;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vLDZ2ZGeaKv7DgTfGhWsFkEQ03ykU2sbDaGZmarJDuw=;
+        b=EVeZVuEigFk+3QeXWxm0eM/iBZ8MKDAME5Zk1X6yWa+W+6/oHcxffqRWQdDG3vBRFCDNka
+        1uCXPqd8weuhzUDg==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/qcom-pdc: Drop open coded version
+ of __assign_bit()
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>, tglx@linutronix.de
+In-Reply-To: <20220224101226.88373-6-maz@kernel.org>
+References: <20220224101226.88373-6-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164612949361.16921.12329905462890853308.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-02-22, 15:38, Rob Herring wrote:
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
-> 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-...
+Commit-ID:     d2febf6bbec5466824432e3d8850fc49e4343572
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d2febf6bbec5466824432e3d8850fc49e4343572
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Thu, 24 Feb 2022 10:12:26 
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 01 Mar 2022 10:06:25 
 
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
+irqchip/qcom-pdc: Drop open coded version of __assign_bit()
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+The driver uses what looks like an open-coded version of __assign_bit().
+Replace it with the real thing.
 
--- 
-~Vinod
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Maulik Shah <quic_mkshah@quicinc.com>
+Link: https://lore.kernel.org/r/20220224101226.88373-6-maz@kernel.org
+---
+ drivers/irqchip/qcom-pdc.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
+index 0cd20dd..d96916c 100644
+--- a/drivers/irqchip/qcom-pdc.c
++++ b/drivers/irqchip/qcom-pdc.c
+@@ -23,9 +23,6 @@
+ 
+ #define PDC_MAX_GPIO_IRQS	256
+ 
+-#define CLEAR_INTR(reg, intr)	(reg & ~(1 << intr))
+-#define ENABLE_INTR(reg, intr)	(reg | (1 << intr))
+-
+ #define IRQ_ENABLE_BANK		0x10
+ #define IRQ_i_CFG		0x110
+ 
+@@ -55,16 +52,16 @@ static u32 pdc_reg_read(int reg, u32 i)
+ static void pdc_enable_intr(struct irq_data *d, bool on)
+ {
+ 	int pin_out = d->hwirq;
++	unsigned long enable;
+ 	unsigned long flags;
+ 	u32 index, mask;
+-	u32 enable;
+ 
+ 	index = pin_out / 32;
+ 	mask = pin_out % 32;
+ 
+ 	raw_spin_lock_irqsave(&pdc_lock, flags);
+ 	enable = pdc_reg_read(IRQ_ENABLE_BANK, index);
+-	enable = on ? ENABLE_INTR(enable, mask) : CLEAR_INTR(enable, mask);
++	__assign_bit(mask, &enable, on);
+ 	pdc_reg_write(IRQ_ENABLE_BANK, index, enable);
+ 	raw_spin_unlock_irqrestore(&pdc_lock, flags);
+ }

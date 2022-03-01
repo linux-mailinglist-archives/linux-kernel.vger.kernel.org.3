@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8864C905C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B884C9061
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbiCAQb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S235197AbiCAQdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiCAQb4 (ORCPT
+        with ESMTP id S233397AbiCAQdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:31:56 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713115C34F
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:31:15 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso193795pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6jVdVhZ/PX1RQ+F2J/N7Wi0Epu+QUrcTFuFOjJu3yvg=;
-        b=EiyC3jiQYZWgQziJlTfFIb9km0pyKksaEl018V+KwL+9NwfefWny7QIjtTju1hcH8E
-         zFFC5tdrAieXovAiXyYHe5OloYzfsUeLYK/ZWFZ4IgOShHk+G0nRzG/G7+XBU4oj/LM6
-         m864fHcNwh3qt303r6oTcwO0x2KWNruxeCWQfmyElTro4rroTBoUd9FyfVmyLZXsePQB
-         Dl55BFoPqpsUbyyDo6B3U2m66AVEabkaRCCKM7c8wcqRCTuWiDzV8i3dZTuTa3FKtSqg
-         EZi2+FsqpCP9v0c8LK0bZES6dEiKbTKMbIhA2XywlKzAnYMhYi1H9QJ+lUG/+Z8PmJb7
-         H3GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6jVdVhZ/PX1RQ+F2J/N7Wi0Epu+QUrcTFuFOjJu3yvg=;
-        b=Pr/x6pJBwT/Tz80Gn/WIHf728Zz0VkCNv1d97/JpEISWQ26xhmufSY3lglls9pyrly
-         Wh1SPaqKhnkmCDU4Ye6nb8znq4gG+XQOe6LPjly1Yi2eErFGDIKmG2Kh21/NlRuof7ZG
-         nzkPVXF+ykrDAJ+g6aBbdd6BXWRoBOFrVG7cHm4YwC+loC4GTQmRAL66Vs81J719rLt1
-         yyk/oSQmOAqm2dWZVCFbyjl3/PBCrywz182rPKZwUN1ryz3w2frA0uEnlDb3FSs3FhqQ
-         Rji0boEw0iy+qB00/djt/dXOjzoOMvI6tO5rEA7+QR0JDMWtMpqQVfM2+TShWsrsK76N
-         5zYQ==
-X-Gm-Message-State: AOAM532rbb7K2hcnDH7/96gaWAmJwtZvRL31wy6kRRcZGCNlrWdONFdd
-        0Ikgw85Q0jFymSIYdtrrR7vjpg==
-X-Google-Smtp-Source: ABdhPJwRhnOCWVs+nTyAnV4Bkol2CdMiJ1PzAB3dyOjKWluh1b+oelAli3twkYxK5O5lIJguP3uCNw==
-X-Received: by 2002:a17:903:310d:b0:151:6d4b:a274 with SMTP id w13-20020a170903310d00b001516d4ba274mr9655599plc.130.1646152274727;
-        Tue, 01 Mar 2022 08:31:14 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c7-20020a056a00248700b004e1dc9aeb81sm18836302pfv.71.2022.03.01.08.31.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 08:31:14 -0800 (PST)
-Date:   Tue, 1 Mar 2022 16:31:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH 1/4] KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW
-Message-ID: <Yh5KTtLhRyfmx/ZF@google.com>
-References: <20220301135526.136554-1-mlevitsk@redhat.com>
- <20220301135526.136554-2-mlevitsk@redhat.com>
+        Tue, 1 Mar 2022 11:33:09 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1F6694A9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=qiCg38jybDtK7ip2hwmrJLWVCfFh
+        NKMCiTIU7NlaokM=; b=SocujXex9oOjxybLXmsTLM4a41zHr7eC+n/usNRb6Fzo
+        yIj86Xz4+SFm4XuOD8B88U39zgwzRvF0FeQGVkRca4Pa27ixCxuhs7wocdXkx6E5
+        kGGNsslnh4apc21/5bhofEDx4CfUTM07zArxtr7PeFTFXGhZD3nd1Er0CMLPSoI=
+Received: (qmail 3933236 invoked from network); 1 Mar 2022 17:32:21 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Mar 2022 17:32:21 +0100
+X-UD-Smtp-Session: l3s3148p1@CimRtSrZiNYgAQnoAGI9AP6D0HJXVmR3
+Date:   Tue, 1 Mar 2022 17:32:21 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
+Message-ID: <Yh5KlYezX9kd4Qz0@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>, linux-i2c@vger.kernel.org
+References: <20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yh49IbR4B0m+kh1f@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="S2aq5rdaODxW07+f"
 Content-Disposition: inline
-In-Reply-To: <20220301135526.136554-2-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yh49IbR4B0m+kh1f@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022, Maxim Levitsky wrote:
-> Use a dummy unused vmexit reason to mark the 'VM exit' that is happening
-> when kvm exits to handle SMM, which is not a real VM exit.
 
-Why not use "62h VMEXIT_SMI"?
+--S2aq5rdaODxW07+f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This makes it a bit easier to read the KVM trace, and avoids
-> other potential problems.
 
-What other potential problems?
+> >  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >=20
+>=20
+> Applied, thanks!
 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 7038c76fa8410..c08fd7f4f3414 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4218,7 +4218,7 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
->  	svm->vmcb->save.rsp = vcpu->arch.regs[VCPU_REGS_RSP];
->  	svm->vmcb->save.rip = vcpu->arch.regs[VCPU_REGS_RIP];
->  
-> -	ret = nested_svm_vmexit(svm);
-> +	ret = nested_svm_simple_vmexit(svm, SVM_EXIT_SW);
->  	if (ret)
->  		return ret;
->  
-> -- 
-> 2.26.3
-> 
+There is a V2 of this patch.
+
+
+--S2aq5rdaODxW07+f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIeSpEACgkQFA3kzBSg
+KbbcCA//faBA5KGUKnrvv81tjULSFdvi5LTps1HaEBBciowDsg3IhMgXtig/l4sI
+TgQMF4616wJrWr9QJQFr7PvOUMVGfvMFSEXV+vvfI31ovP50io935TiDv3siFmds
+SU8erxZVcGJIEdvoyqZHLeQ/TPSTuHh5cV2JeovW16/tTF+6Vl5HJx6kFotDGmYJ
+WHgIbjiTJ2mkaRp87INnFOP4uQuEukxriDjBqJGdzYoef8vx2zlM5C/0fcVvCcx/
+BOTneggPjnrzaDHjGMC8tkdMfwkOwh3oBUagm69EAdMyuR9DEs7XMeMnWpO8t9ZP
+AXiJFbckIk8Wrax8WbMoHyLmsOYrwLKSJaueVVP8a9j5RjEXEeaekrKSa4nC4xNi
+1gszhH72a18jASXYsfsx8mivQ/lnEaFXL5mWY+2AK18A7o2jr18KmZib0Ye27dMM
+BTGuyM+1E7NBrljw2FCsgBiOdD+6lB6N9BsgBD0Xgw6rmgWbWsf4nX10OxTyEFmg
+kW2dirAOVIp5U0nT++6HO1Du1oyaqULQ0mRRqY+ZtHozOM8/LcD8R1xkxn7TYcbI
+I6eEFyLO8xdhxLgp5VtH1rHgJ798PG2+wMhX38LJgCEMmiR2Wi7BN9uq5dhlQAi8
+CC80qSwHLXMIum6HIK8j5RMvv1XrArlRCiKL6FPYQqROCZhZi7c=
+=n9X6
+-----END PGP SIGNATURE-----
+
+--S2aq5rdaODxW07+f--

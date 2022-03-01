@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310664C9249
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A824C924F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiCAR5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S236717AbiCAR56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236711AbiCAR5E (ORCPT
+        with ESMTP id S236724AbiCAR5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:57:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318C95D1BA
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:56:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 1 Mar 2022 12:57:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CFC41F8A;
+        Tue,  1 Mar 2022 09:57:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C500861357
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 17:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29497C340EE;
-        Tue,  1 Mar 2022 17:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646157382;
-        bh=KNC5nSGmXjciHrAe+9Qx+SWGJhjMMOyFywU8E99Slbc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JsJfgWlvZ2WOaqmcvElq73WqElR/QNmiFXpoHXSlU/vLesEMovv4vBQzl8F7NIoig
-         oEFaIbmmEKfdXi0ooyvC9f7dIlQHX8gZgWHGyh/wIElP9cVOAQZv1IL0wpBOcj5KdM
-         hxwenR0yWyID3c/h40HisC7G9pKArDdmdHJ0dlJJEVxXqlbS4vK4TewAZ3MZLXSxCJ
-         wL2kKlu/Sh0+NjACG2tf8cJEwcZEiHpZApRVTlhShFFh5okNyGY5WecpIahcHQKiYV
-         91ZgQgLRtyHQUusxeKIlp1XOiVU++9i4XmYpLA8rZKu1LY8xXKVdptsGmXUhBU2ddm
-         I4iU7sQZD5qIw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AC9AB5C0440; Tue,  1 Mar 2022 09:56:21 -0800 (PST)
-Date:   Tue, 1 Mar 2022 09:56:21 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     rostedt@goodmis.org, bristot@kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mtosatti@redhat.com
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Message-ID: <20220301175621.GP4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
- <20220228221154.GN4285@paulmck-ThinkPad-P17-Gen-1>
- <1b388cdc409fdfae75ef2280674d8211e5b6194e.camel@redhat.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6E71A1F39D;
+        Tue,  1 Mar 2022 17:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646157425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=buWeJHt6GiyDyp6c2t6RjOy396An8wRLpBnyIHHufHY=;
+        b=Qa/tlCjNWZWBuQe2pEOePHVesePkJsxgpGAcf+RKInChvZEOpBSOv16KjCk6wN3eB9rRmD
+        GZyyOTwaEbMN0GGXw2Xmw8uaT/U5BevMNkAopM6bozcI14rCPFaheJSxDUirS59knYxmsK
+        6sub2e238Ivp/5yAAgjARKA1omAM1WM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3EA0313B89;
+        Tue,  1 Mar 2022 17:57:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ks7BDXFeHmJXRwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 01 Mar 2022 17:57:05 +0000
+Date:   Tue, 1 Mar 2022 18:57:03 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive
+ codepaths
+Message-ID: <20220301175703.GA10867@blackbody.suse.cz>
+References: <20220226002412.113819-1-shakeelb@google.com>
+ <Yh3h33W45+YaMo92@dhcp22.suse.cz>
+ <CALvZod7aF9xRc+XvY7GPN7OnDyPitt1H6Q4yrwzAXTFzv1LzWQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1b388cdc409fdfae75ef2280674d8211e5b6194e.camel@redhat.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <CALvZod7aF9xRc+XvY7GPN7OnDyPitt1H6Q4yrwzAXTFzv1LzWQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,145 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:00:08AM +0100, Nicolas Saenz Julienne wrote:
-> On Mon, 2022-02-28 at 14:11 -0800, Paul E. McKenney wrote:
-> > On Mon, Feb 28, 2022 at 03:14:23PM +0100, Nicolas Saenz Julienne wrote:
-> > > At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-> > > kernel might have the side effect of extending grace periods too much.
-> > > This will eventually entice RCU to schedule a task on the isolated CPU
-> > > to end the overly extended grace period, adding unwarranted noise to the
-> > > CPU being traced in the process.
+Making decisions based on up to 2 s old information.
 
-Ah, I misread the above paragraph.  Apologies!
+On Tue, Mar 01, 2022 at 09:21:12AM -0800, Shakeel Butt <shakeelb@google.com> wrote:
+> Without flushing the worst that can happen in the refault path is
+> false (or missed) activations of the refaulted page.
 
-Nevertheless, could you please add something explicit to the effect that
-RCU is completing grace periods as required?
+Yeah, this may under- or overestimate workingset size (when it's
+changing), the result is likely only less efficient reclaim.
 
-> > > So, check if we're the only ones running on this isolated CPU and that
-> > > we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
-> > > between measurements.
+> For reclaim code, some heuristics (like deactivating active LRU or
+> cache-trim) may act on old information.
 
-And yes, if you don't want RCU to try to forcibly extract a quiescent
-state from you, you must supply a quiescent state to RCU.  ;-)
+Here, I'd be more careful whether such a delay cannot introduce some
+unstable behavior (permanent oscillation in the worst case).
 
-> > > Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
-> > > loop's cond_resched() will go though a quiescent state for them.
-> > > 
-> > > Note that this same exact problem is what extended quiescent states were
-> > > created for. But adapting them to this specific use-case isn't trivial
-> > > as it'll imply reworking entry/exit and dynticks/context tracking code.
-> > > 
-> > > Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> > > ---
-> > >  kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
-> > >  1 file changed, 19 insertions(+)
-> > > 
-> > > diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> > > index 870a08da5b48..4928358f6e88 100644
-> > > --- a/kernel/trace/trace_osnoise.c
-> > > +++ b/kernel/trace/trace_osnoise.c
-> > > @@ -21,7 +21,9 @@
-> > >  #include <linux/uaccess.h>
-> > >  #include <linux/cpumask.h>
-> > >  #include <linux/delay.h>
-> > > +#include <linux/tick.h>
-> > >  #include <linux/sched/clock.h>
-> > > +#include <linux/sched/isolation.h>
-> > >  #include <uapi/linux/sched/types.h>
-> > >  #include <linux/sched.h>
-> > >  #include "trace.h"
-> > > @@ -1295,6 +1297,7 @@ static int run_osnoise(void)
-> > >  	struct osnoise_sample s;
-> > >  	unsigned int threshold;
-> > >  	u64 runtime, stop_in;
-> > > +	unsigned long flags;
-> > >  	u64 sum_noise = 0;
-> > >  	int hw_count = 0;
-> > >  	int ret = -1;
-> > > @@ -1386,6 +1389,22 @@ static int run_osnoise(void)
-> > >  					osnoise_stop_tracing();
-> > >  		}
-> > >  
-> > > +		/*
-> > > +		 * Check if we're the only ones running on this nohz_full CPU
-> > > +		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
-> > > +		 * QS since there is no way for RCU to know we're not making
-> > > +		 * use of it.
-> > > +		 *
-> > > +		 * Otherwise it'll be done through cond_resched().
-> > > +		 */
-> > > +		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
-> > > +		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
-> > > +		    tick_nohz_tick_stopped()) {
-> > > +			local_irq_save(flags);
-> > > +			rcu_momentary_dyntick_idle();
+> Now, coming to your question, yes, we can remove the flushing from
+> these performance critical codepaths as the stats at most will be 2
+> second old due to periodic flush. 
 
-And yes, rcu_momentary_dyntick_idle() is a good way to supply a quiescent
-state to RCU.  This won't help Tasks RCU or Tasks Rude RCU, but you can
-avoid those by avoiding changing tracing state while running osnoise.
+Another aspect is that people will notice and report such a narrowly
+located performance regression more easily than reduced/less predictable
+reclaim behavior. (IMO the former is better, OTOH, it can also be
+interpreted that noone notices (is able to notice).)
 
-> > > +			local_irq_restore(flags);
-> > 
-> > What is supposed to happen in this case is that RCU figures out that
-> > there is a nohz_full CPU running for an extended period of time in the
-> > kernel and takes matters into its own hands.  This goes as follows on
-> > a HZ=1000 kernel with default RCU settings:
-> > 
-> > o	At about 20 milliseconds into the grace period, RCU makes
-> > 	cond_resched() report quiescent states, among other things.
-> > 	As you say, this does not help for CONFIG_PREEMPT=n kernels.
-> > 
-> > o	At about 30 milliseconds into the grace period, RCU forces an
-> > 	explicit context switch on the wayward CPU.  This should get
-> > 	the CPU's attention even in CONFIG_PREEMPT=y kernels.
-> > 
-> > So what is happening for you instead?
-> 
-> Well, that's exactly what I'm seeing, but it doesn't play well with osnoise.
-
-Whew!!!  ;-)
-
-> Here's a simplified view of what the tracer does:
-> 
-> 	time1 = get_time();
-> 	while(1) {
-> 		time2 = get_time();
-> 		if (time2 - time1 > threshold)
-> 			trace_noise();
-> 		cond_resched();
-> 		time1 = time2;
-> 	}
-> 
-> This is pinned to a specific CPU, and in the most extreme cases is expected to
-> take 100% of CPU time. Eventually, some SMI, NMI/interrupt, or process
-> execution will trigger the threshold, and osnoise will provide some nice traces
-> explaining what happened.
-> 
-> RCU forcing a context switch on the wayward CPU is introducing unwarranted
-> noise as it's triggered by the fact we're measuring and wouldn't happen
-> otherwise.
-> 
-> If this were user-space, we'd be in an EQS, which would make this problem go
-> away. An option would be mimicking this behaviour (assuming irq entry/exit code
-> did the right thing):
-> 
-> 	rcu_eqs_enter(); <--
-> 	time1 = get_time();
-> 	while(1) {
-> 		time2 = get_time();
-> 		if (time2 - time1 > threshold)
-> 			trace_noise();
-> 		rcu_eqs_exit(); <--
-> 		cond_resched();
-> 		rcu_eqs_enter(); <--
-> 		time1 = time2;
-> 	}
-> 
-> But given the tight loop this isn't much different than what I'm proposing at
-> the moment, isn't it? rcu_momentary_dyntick_idle() just emulates a really fast
-> EQS entry/exit.
-
-And that is in fact exactly what rcu_momentary_dyntick_idle() was
-intended for:
-
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Michal

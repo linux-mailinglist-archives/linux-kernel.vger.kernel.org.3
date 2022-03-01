@@ -2,320 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F144C857D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEFC4C8587
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbiCAHvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S233141AbiCAHwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiCAHvI (ORCPT
+        with ESMTP id S232923AbiCAHwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:51:08 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072F165839;
-        Mon, 28 Feb 2022 23:50:28 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d3so19053914wrf.1;
-        Mon, 28 Feb 2022 23:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ncaBgOYHVHyX562hJ+dSZXG5SoGXqG/UuIq2nR2m4Ds=;
-        b=posku0yAYAZ8Q7U6hzwy/v5OpkmWndRqp33Jjkoaw/Oq7onxRCi7jD1qn1P329zn4u
-         3nBjiUhHmSpgrmqMsjAXqkzmvmLIEiEigZRHFAgwztMqKPK0cLQ3TQQh/2PZIcRAGsP2
-         gcqqS004c9CIK614nvAnivYjXiNHr7ZoWqnxoE6W8y+XBQmmVUnzLnC906QPhIAy29Ju
-         VRw5yWLIBu5BUI+6TIWDRJNWCgGlctbnPhFx1WwEVjs521ccmOYip3IE0QOteKOBIkYF
-         bpcmMotTmLeBTV7MSVVGL2GiLO9/SY/1xGLUzg3xPPrFqEYXUtAO1qMqyMe0z5NybcTo
-         h7tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ncaBgOYHVHyX562hJ+dSZXG5SoGXqG/UuIq2nR2m4Ds=;
-        b=txvzDatlET0kbH1abB1mDhoaWubtM5j53CmfqeI0SMV5y4CwKQMa3QGrXcdxPPUL85
-         404q1A+rdQby4YGMZRgQ4Rltz/Hr1GhTCqyVxQlp1H7DiA+5hcv0bX8Mh9dzUEnoTvBo
-         aekM9LYQlzWq4MIVzH5l86gZxnKim5j0zlsR6IhAA8fzKeKJlovM/7ENoWDDVEr1lDDW
-         RQqa7COtkWkS9RlAdtKPIvdkrQwZIaP8boqfgq03zvB+mN5jYZW+osZpSTC9hTICSt52
-         bMSE2nVfG97I/IDFibrbHUZ5LF+z1+6kvlmg2E6W4HSCVL3+t9PqQfGjWOWZsI6D1jbS
-         qHGQ==
-X-Gm-Message-State: AOAM5328j6XV7Lon1NkYbuOo0D0UtYz7Nxcqs9Wrt3lmxqKzoEWKDeqK
-        pNVanYLFbpQ/KBIwY7zq7HI=
-X-Google-Smtp-Source: ABdhPJyemxdHJ9Az+Ep1C+iGVaYqqNCM/xE0+JQuhKHn+ThMhopwCbRS4EE9kztTc3Kgfso04bPDbA==
-X-Received: by 2002:adf:90e2:0:b0:1e3:f5a:553c with SMTP id i89-20020adf90e2000000b001e30f5a553cmr18027194wri.476.1646121026453;
-        Mon, 28 Feb 2022 23:50:26 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id r1-20020a5d4941000000b001ed89dcacbbsm12622004wrs.23.2022.02.28.23.50.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 23:50:25 -0800 (PST)
-Message-ID: <908437cd-1f9c-2ef2-eb70-94e409d252e0@gmail.com>
-Date:   Tue, 1 Mar 2022 08:50:24 +0100
+        Tue, 1 Mar 2022 02:52:06 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939FB7E597
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:51:25 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K78Xb2Zb5zBrMb;
+        Tue,  1 Mar 2022 15:49:35 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 1 Mar 2022 15:51:23 +0800
+Subject: Re: [PATCH -V13 2/3] NUMA balancing: optimize page placement for
+ memory tiering system
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220221084529.1052339-1-ying.huang@intel.com>
+ <20220221084529.1052339-3-ying.huang@intel.com>
+ <4652446e-2089-a3c4-fbdb-321322887392@huawei.com>
+ <874k4i2mp5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <d777f1d7-7649-72be-8b77-420f17e35c0f@huawei.com>
+Date:   Tue, 1 Mar 2022 15:51:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [v5] arm64: dts: mediatek: Add mt8192 power domains controller
+In-Reply-To: <874k4i2mp5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
 Content-Language: en-US
-To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-References: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 25/08/2021 03:04, Chun-Jie Chen wrote:
-> Add power domains controller node for SoC mt8192
+On 2022/3/1 14:47, Huang, Ying wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
 > 
-> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
-> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-
-Applied thanks!
-
-> ---
-> This patch is base on v5.14-rc1,
-> series "Mediatek MT8192 clock support"[1] and [2].
-> No changes compare v4
+>> On 2022/2/21 16:45, Huang Ying wrote:
+>>> With the advent of various new memory types, some machines will have
+>>> multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
+>>> memory subsystem of these machines can be called memory tiering
+>>> system, because the performance of the different types of memory are
+>>> usually different.
+>>>
+>>> In such system, because of the memory accessing pattern changing etc,
+>>> some pages in the slow memory may become hot globally.  So in this
+>>> patch, the NUMA balancing mechanism is enhanced to optimize the page
+>>> placement among the different memory types according to hot/cold
+>>> dynamically.
+>>>
+>>> In a typical memory tiering system, there are CPUs, fast memory and
+>>> slow memory in each physical NUMA node.  The CPUs and the fast memory
+>>> will be put in one logical node (called fast memory node), while the
+>>> slow memory will be put in another (faked) logical node (called slow
+>>> memory node).  That is, the fast memory is regarded as local while the
+>>> slow memory is regarded as remote.  So it's possible for the recently
+>>> accessed pages in the slow memory node to be promoted to the fast
+>>> memory node via the existing NUMA balancing mechanism.
+>>>
+>>> The original NUMA balancing mechanism will stop to migrate pages if
+>>> the free memory of the target node becomes below the high watermark.
+>>> This is a reasonable policy if there's only one memory type.  But this
+>>> makes the original NUMA balancing mechanism almost do not work to
+>>> optimize page placement among different memory types.  Details are as
+>>> follows.
+>>>
+>>> It's the common cases that the working-set size of the workload is
+>>> larger than the size of the fast memory nodes.  Otherwise, it's
+>>> unnecessary to use the slow memory at all.  So, there are almost
+>>> always no enough free pages in the fast memory nodes, so that the
+>>> globally hot pages in the slow memory node cannot be promoted to the
+>>> fast memory node.  To solve the issue, we have 2 choices as follows,
+>>>
+>>> a. Ignore the free pages watermark checking when promoting hot pages
+>>>    from the slow memory node to the fast memory node.  This will
+>>>    create some memory pressure in the fast memory node, thus trigger
+>>>    the memory reclaiming.  So that, the cold pages in the fast memory
+>>>    node will be demoted to the slow memory node.
+>>>
+>>> b. Make kswapd of the fast memory node to reclaim pages until the free
+>>>    pages are a little more than the high watermark (named as promo
+>>>    watermark).  Then, if the free pages of the fast memory node reaches
+>>>    high watermark, and some hot pages need to be promoted, kswapd of the
+>>>    fast memory node will be waken up to demote more cold pages in the
+>>>    fast memory node to the slow memory node.  This will free some extra
+>>>    space in the fast memory node, so the hot pages in the slow memory
+>>>    node can be promoted to the fast memory node.
+>>>
+>>> The choice "a" may create high memory pressure in the fast memory
+>>> node.  If the memory pressure of the workload is high, the memory
+>>> pressure may become so high that the memory allocation latency of the
+>>> workload is influenced, e.g. the direct reclaiming may be triggered.
+>>>
+>>> The choice "b" works much better at this aspect.  If the memory
+>>> pressure of the workload is high, the hot pages promotion will stop
+>>> earlier because its allocation watermark is higher than that of the
+>>
+>> Many thanks for your path. The patch looks good to me but I have a question.
+>> WMARK_PROMO is only used inside pgdat_balanced when NUMA_BALANCING_MEMORY_TIERING
+>> is set. So its allocation watermark seems to be as same as the normal memory
+>> allocation. How should I understand the above sentence? Am I miss something?
 > 
-> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=521127
-> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20210727023205.20319-2-chun-jie.chen@mediatek.com/
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 201 +++++++++++++++++++++++
->   1 file changed, 201 insertions(+)
+> Before allocating pages for promotion, the watermark of the fast node
+> will be checked (please refer to migrate_balanced_pgdat()).  If the
+> watermark is going to be lower than the high watermark, promotion will
+> abort.
+
+I see. The hot pages promotion watermark is "nr_migrate_pages" more than that of the
+normal memory allocation not "_watermark[WMARK_PROMO] - _watermark[WMARK_HIGH]".
+
+Many thanks for your kindly explanation. :)
+
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index c7c7d4e017ae..a0084a7a5bcd 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -9,6 +9,7 @@
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/interrupt-controller/irq.h>
->   #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
-> +#include <dt-bindings/power/mt8192-power.h>
->   
->   / {
->   	compatible = "mediatek,mt8192";
-> @@ -301,6 +302,206 @@
->   			#interrupt-cells = <2>;
->   		};
->   
-> +		scpsys: syscon@10006000 {
-> +			compatible = "syscon", "simple-mfd";
-> +			reg = <0 0x10006000 0 0x1000>;
-> +			#power-domain-cells = <1>;
-> +
-> +			/* System Power Manager */
-> +			spm: power-controller {
-> +				compatible = "mediatek,mt8192-power-controller";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				#power-domain-cells = <1>;
-> +
-> +				/* power domain of the SoC */
-> +				power-domain@MT8192_POWER_DOMAIN_AUDIO {
-> +					reg = <MT8192_POWER_DOMAIN_AUDIO>;
-> +					clocks = <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
-> +						 <&infracfg CLK_INFRA_AUDIO_26M_B>,
-> +						 <&infracfg CLK_INFRA_AUDIO>;
-> +					clock-names = "audio", "audio1", "audio2";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_CONN {
-> +					reg = <MT8192_POWER_DOMAIN_CONN>;
-> +					clocks = <&infracfg CLK_INFRA_PMIC_CONN>;
-> +					clock-names = "conn";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_MFG0 {
-> +					reg = <MT8192_POWER_DOMAIN_MFG0>;
-> +					clocks = <&topckgen CLK_TOP_MFG_PLL_SEL>;
-> +					clock-names = "mfg";
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_MFG1 {
-> +						reg = <MT8192_POWER_DOMAIN_MFG1>;
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG2 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG2>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG3 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG3>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG4 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG4>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG5 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG5>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG6 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG6>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_DISP {
-> +					reg = <MT8192_POWER_DOMAIN_DISP>;
-> +					clocks = <&topckgen CLK_TOP_DISP_SEL>,
-> +						 <&mmsys CLK_MM_SMI_INFRA>,
-> +						 <&mmsys CLK_MM_SMI_COMMON>,
-> +						 <&mmsys CLK_MM_SMI_GALS>,
-> +						 <&mmsys CLK_MM_SMI_IOMMU>;
-> +					clock-names = "disp", "disp-0", "disp-1", "disp-2",
-> +						      "disp-3";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_IPE {
-> +						reg = <MT8192_POWER_DOMAIN_IPE>;
-> +						clocks = <&topckgen CLK_TOP_IPE_SEL>,
-> +							 <&ipesys CLK_IPE_LARB19>,
-> +							 <&ipesys CLK_IPE_LARB20>,
-> +							 <&ipesys CLK_IPE_SMI_SUBCOM>,
-> +							 <&ipesys CLK_IPE_GALS>;
-> +						clock-names = "ipe", "ipe-0", "ipe-1", "ipe-2",
-> +							      "ipe-3";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_ISP {
-> +						reg = <MT8192_POWER_DOMAIN_ISP>;
-> +						clocks = <&topckgen CLK_TOP_IMG1_SEL>,
-> +							 <&imgsys CLK_IMG_LARB9>,
-> +							 <&imgsys CLK_IMG_GALS>;
-> +						clock-names = "isp", "isp-0", "isp-1";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_ISP2 {
-> +						reg = <MT8192_POWER_DOMAIN_ISP2>;
-> +						clocks = <&topckgen CLK_TOP_IMG2_SEL>,
-> +							 <&imgsys2 CLK_IMG2_LARB11>,
-> +							 <&imgsys2 CLK_IMG2_GALS>;
-> +						clock-names = "isp2", "isp2-0", "isp2-1";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_MDP {
-> +						reg = <MT8192_POWER_DOMAIN_MDP>;
-> +						clocks = <&topckgen CLK_TOP_MDP_SEL>,
-> +							 <&mdpsys CLK_MDP_SMI0>;
-> +						clock-names = "mdp", "mdp-0";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_VENC {
-> +						reg = <MT8192_POWER_DOMAIN_VENC>;
-> +						clocks = <&topckgen CLK_TOP_VENC_SEL>,
-> +							 <&vencsys CLK_VENC_SET1_VENC>;
-> +						clock-names = "venc", "venc-0";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_VDEC {
-> +						reg = <MT8192_POWER_DOMAIN_VDEC>;
-> +						clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_LARB1>;
-> +						clock-names = "vdec", "vdec-0", "vdec-1", "vdec-2";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_VDEC2 {
-> +							reg = <MT8192_POWER_DOMAIN_VDEC2>;
-> +							clocks = <&vdecsys CLK_VDEC_VDEC>,
-> +								 <&vdecsys CLK_VDEC_LAT>,
-> +								 <&vdecsys CLK_VDEC_LARB1>;
-> +							clock-names = "vdec2-0", "vdec2-1",
-> +								      "vdec2-2";
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_CAM {
-> +						reg = <MT8192_POWER_DOMAIN_CAM>;
-> +						clocks = <&topckgen CLK_TOP_CAM_SEL>,
-> +							 <&camsys CLK_CAM_LARB13>,
-> +							 <&camsys CLK_CAM_LARB14>,
-> +							 <&camsys CLK_CAM_CCU_GALS>,
-> +							 <&camsys CLK_CAM_CAM2MM_GALS>;
-> +						clock-names = "cam", "cam-0", "cam-1", "cam-2",
-> +							      "cam-3";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWA {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWA>;
-> +							clocks = <&camsys_rawa CLK_CAM_RAWA_LARBX>;
-> +							clock-names = "cam_rawa-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWB {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWB>;
-> +							clocks = <&camsys_rawb CLK_CAM_RAWB_LARBX>;
-> +							clock-names = "cam_rawb-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWC {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWC>;
-> +							clocks = <&camsys_rawc CLK_CAM_RAWC_LARBX>;
-> +							clock-names = "cam_rawc-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->   		apmixedsys: syscon@1000c000 {
->   			compatible = "mediatek,mt8192-apmixedsys", "syscon";
->   			reg = <0 0x1000c000 0 0x1000>;
+> Best Regards,
+> Huang, Ying
+> .
+> 
+

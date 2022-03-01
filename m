@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615B74C926A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A914C926F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbiCAR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
+        id S236248AbiCASAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236773AbiCAR7V (ORCPT
+        with ESMTP id S229583AbiCASAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:59:21 -0500
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635C53EF02;
-        Tue,  1 Mar 2022 09:58:35 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id b35so28713136ybi.13;
-        Tue, 01 Mar 2022 09:58:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MBGf7BonI3ap2E4zIN9sAwq7uxa0Dhwh8KKVMelMOeA=;
-        b=CdOSnmeMgMbVSw5IWnIKpJdYtsGofY8fCZSIBOpiB6ExycYtUW0mMgCfLW0ekw8Cnz
-         4n2frtLHl0BpzqLIx2xL4UXBveaK1QhS3T6+IgX8MAi+4QNtxAIad2KizbN8Fn2uUD+F
-         f/HeYAzxxLYVmCFh4TLVi8q15sAB2kSDxJMc/uhnfU/9ByhVwn4lhe+s5Xvgu1vcDAMi
-         JXtYVOtMMz8PFYvPSfhhrwjVL1x/Go1LffP+wEpWUufDgz0QJWGdeF1JzcQwhiU4R2bX
-         EG2NHgKh0bozrC3zIWx97UoP9iJBp/RQzIQbFHSYIdL/Dab6yQMdYNfEF4po3Qnz9jBI
-         PMBA==
-X-Gm-Message-State: AOAM530UUy3I8EkJX83ICJbGQ1kPjplQQDofKbZhmvXsRaC5p7KSJ4tA
-        abpBUSIB5Wi3aC+dRvlrHxbK2McJYnGXSbACZFxlKtis
-X-Google-Smtp-Source: ABdhPJz5SZhw0CpuWATFioDafwyrSWmIvZN1RYk6r8PiHn3hcphDNq4zDYVsLeEr0gv7HOVI7tgDAvIIHoyQqSMVLXQ=
-X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
- h62-20020a253a41000000b0062886a20dbcmr2572961yba.633.1646157513220; Tue, 01
- Mar 2022 09:58:33 -0800 (PST)
+        Tue, 1 Mar 2022 13:00:40 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D2B3ED3F;
+        Tue,  1 Mar 2022 09:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646157599; x=1677693599;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YNeHmdRGaQLAxxHHm0icgDjR5GUsQ65k7RpZGnymZEg=;
+  b=ZIKfiSUr6pnV2g0oIyYmSRBOitP06Ck+5Iz/UpMqin5CxxFpsCyV1Hvl
+   ta0S7k/2XfapLMI5SnYznWb+yzoSui//U7iYIrnT5AWRlXsnbAzcn/41u
+   W7Wa9NSxxI4IS/1zgTNSYe93ucQQG8g9f7/5p3kxM+7LQJxUfw8g9+Fcc
+   xIlsqre/x8d4Mael1SJ62zy/GZjQnlmxPa35yb5FVm8RH1Nw56wn0p22B
+   7sqh2Cx933/HE0fMmEfemLFLF9fP8queiWBo7C6huK1UK94Q+LUL4mF3D
+   yzQzblFjayIrKnrd4iUXiD/CsasAJfqypvCZyKcsxRTtwpvfV/wzK6Osu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="240613341"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="240613341"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:59:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="507891417"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2022 09:59:55 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP6mx-0000ps-3d; Tue, 01 Mar 2022 17:59:55 +0000
+Date:   Wed, 2 Mar 2022 01:59:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        torvalds@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, arnd@arndb.de, jakobkoschel@gmail.com,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        keescook@chromium.org, jannh@google.com,
+        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: Re: [PATCH 1/6] Kbuild: compile kernel with gnu11 std
+Message-ID: <202203020135.5duGpXM2-lkp@intel.com>
+References: <20220301075839.4156-2-xiam0nd.tong@gmail.com>
 MIME-Version: 1.0
-References: <202203011104.TkmvSjFD-lkp@intel.com> <20220301032854.GA65991@baa819af95e9>
-In-Reply-To: <20220301032854.GA65991@baa819af95e9>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 18:58:22 +0100
-Message-ID: <CAJZ5v0jQcNUN-mQPu9+tsb=cfdrCaH16U77yMoAPZ2Si2gKX2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH linux-next] powercap/drivers/dtpm: dtpm_node_callback[]
- can be static
-To:     kernel test robot <lkp@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301075839.4156-2-xiam0nd.tong@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 4:29 AM kernel test robot <lkp@intel.com> wrote:
->
-> drivers/powercap/dtpm.c:525:22: warning: symbol 'dtpm_node_callback' was not declared. Should it be static?
->
-> Fixes: 3759ec678e89 ("powercap/drivers/dtpm: Add hierarchy creation")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/powercap/dtpm.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> index 414826a1509b6..6d890d8cf9169 100644
-> --- a/drivers/powercap/dtpm.c
-> +++ b/drivers/powercap/dtpm.c
-> @@ -522,7 +522,7 @@ static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
->
->  typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
->
-> -dtpm_node_callback_t dtpm_node_callback[] = {
-> +static dtpm_node_callback_t dtpm_node_callback[] = {
->         [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
->         [DTPM_NODE_DT] = dtpm_setup_dt,
->  };
+Hi Xiaomeng,
 
-Applied, thanks!
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linux/master]
+[also build test WARNING on vkoul-dmaengine/next soc/for-next linus/master v5.17-rc6 next-20220301]
+[cannot apply to hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: mips-rb532_defconfig (https://download.01.org/0day-ci/archive/20220302/202203020135.5duGpXM2-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/84ec4077430a7e8c23ea1ebc7b69e254fda25cb1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
+        git checkout 84ec4077430a7e8c23ea1ebc7b69e254fda25cb1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> cc1: warning: result of '-117440512 << 16' requires 44 bits to represent, but 'int' only has 32 bits [-Wshift-overflow=]
+   arch/mips/pci/pci-rc32434.c: In function 'rc32434_pcibridge_init':
+   arch/mips/pci/pci-rc32434.c:111:22: warning: variable 'dummyread' set but not used [-Wunused-but-set-variable]
+     111 |         unsigned int dummyread, pcicntlval;
+         |                      ^~~~~~~~~
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,94 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C0A4C8808
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7994C880F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiCAJeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S233076AbiCAJe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbiCAJd6 (ORCPT
+        with ESMTP id S233087AbiCAJev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:33:58 -0500
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F9C5EDCD;
-        Tue,  1 Mar 2022 01:33:02 -0800 (PST)
-Received: by mail-vs1-f43.google.com with SMTP id d11so15893995vsm.5;
-        Tue, 01 Mar 2022 01:33:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lf33iephp6ug1P/9SN9wHQyO21IddGLRrW3tOM/qrS8=;
-        b=fbRFJ+x8/XWb03ujSpC2UUOsui//z6C/0XHY18N+e6CEbhgV75hyBeq9acDLRBZWuO
-         a+hpoKA4XgO22DpmC/KcNI8I0LySzpU+PqDzKPNEkmeiT0U4wJxgxnk3HvNlqm0FgEHj
-         FasxKk2N/1BRvnX0+GZtitfmQuawsC62dq2GswiN5McFLuQm4mzjNV+VME0sL+6XNRLy
-         iXXZq+u+59F+HvmVGSMw2LCoALtCXEDWnH8WfGiM6PT0TPw4e6Zmn2L9HOul6KIJldHi
-         0VKhSVBkZR9SmS2aQhIpTnKADLEW3NhPHqnk0TLM+YsdsX1f/PzDhHPWG+I+zMba1dyC
-         Kpag==
-X-Gm-Message-State: AOAM533qRZmC3TzHd3+CAyCvmN5fberyqP64OuxTMvCe224Nf2Knrami
-        rzASRcxxFPzsCjAGaJs2nUYLNAsK+oV3NQ==
-X-Google-Smtp-Source: ABdhPJxLT6uZi5gkC7PSIWIsqg57BGgz65kyGhj855AKoYFdeM6eEUsg2hIkDsj4FAwIEz2JKrZkyg==
-X-Received: by 2002:a67:c80c:0:b0:31b:4428:73ea with SMTP id u12-20020a67c80c000000b0031b442873eamr9502557vsk.54.1646127181922;
-        Tue, 01 Mar 2022 01:33:01 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac5ce08000000b00333295130d5sm1532533vki.0.2022.03.01.01.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 01:33:01 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id q9so15906456vsg.2;
-        Tue, 01 Mar 2022 01:33:01 -0800 (PST)
-X-Received: by 2002:a67:b00e:0:b0:30d:dc98:6024 with SMTP id
- z14-20020a67b00e000000b0030ddc986024mr10340990vse.57.1646127181303; Tue, 01
- Mar 2022 01:33:01 -0800 (PST)
+        Tue, 1 Mar 2022 04:34:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4719ADEC;
+        Tue,  1 Mar 2022 01:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646127234; x=1677663234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=048tbWG3NAZMNu9WZUi/GCpvqCa2ZO3Gyg1+Y/iqdfs=;
+  b=AkjUEnRR3/dpseIbwAu0+GnatluPc2cSWR9Hste7EpQvkq3JNlR/dxRp
+   FOfWDU1oen0qgU0tyrNewJzQN3XGFJwyzF36cFqHvX8m+d9wbaZ3pYM1H
+   n7c99x2fEc9KdZQ9IHAC+yiV7ySdpAewHsjteIHhkI13Us+lWiPma8D4U
+   ITwDUmP/bEiLvWFfF5DEyuD4drZ8XYm0V/uRPX0uYtSJBTIgITlNSB8ex
+   JjP+aww5usYRwqOvEP8oZQB59diX8s+zWBN2LZ3UuUvFtaxCxXnDn/b17
+   Q0rZk1hW7C2ERohDQ0AzHJ2iGfpcGNN91E0zkgFGpew3ThvEFQsVqfxOV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250679807"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="250679807"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 01:33:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="685662305"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 01 Mar 2022 01:33:51 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Mar 2022 11:33:50 +0200
+Date:   Tue, 1 Mar 2022 11:33:50 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
+ physical location
+Message-ID: <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
+References: <20220301022625.469446-1-wonchung@google.com>
 MIME-Version: 1.0
-References: <20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220227203744.18355-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227203744.18355-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 1 Mar 2022 10:32:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXggJm39DkL-DjX7UsGSkzfLOuJoQcvb-XG7vpjgT8O9w@mail.gmail.com>
-Message-ID: <CAMuHMdXggJm39DkL-DjX7UsGSkzfLOuJoQcvb-XG7vpjgT8O9w@mail.gmail.com>
-Subject: Re: [PATCH 12/12] arm64: dts: renesas: r9a07g054: Add SPI{0,2} nodes
- and fillup SPI1 stub node
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220301022625.469446-1-wonchung@google.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 9:38 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add SPI{0,2} nodes and fillup SPI1 stub node in RZ/V2L (R9A07G054)
-> SoC DTSI.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Hi Won,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.19.
+On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
+> When ACPI table includes _PLD field for a Type C connector, share _PLD
+> values in its sysfs. _PLD stands for physical location of device.
+> 
+> Currently without connector's location information, when there are
+> multiple Type C ports, it is hard to distinguish which connector
+> corresponds to which physical port at which location. For example, when
+> there are two Type C connectors, it is hard to find out which connector
+> corresponds to the Type C port on the left panel versus the Type C port
+> on the right panel. With location information provided, we can determine
+> which specific device at which location is doing what.
+> 
+> _PLD output includes much more fields, but only generic fields are added
+> and exposed to sysfs, so that non-ACPI devices can also support it in
+> the future. The minimal generic fields needed for locating a port are
+> the following.
+> - panel
+> - vertical_position
+> - horizontal_position
+> - dock
+> - lid
+> 
+> Signed-off-by: Won Chung <wonchung@google.com>
+> ---
+> 
+> Changes in v2:
+> - Use string for location.
+> - Clarify get_pld() with naming and return type.
+> 
+>  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
+>  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
+>  drivers/usb/typec/class.h                   |   3 +
+>  3 files changed, 151 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 75088ecad202..4497a5aeb063 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -141,6 +141,41 @@ Description:
+>  		- "reverse": CC2 orientation
+>  		- "unknown": Orientation cannot be determined.
+>  
+> +What:		/sys/class/typec/<port>/location/panel
+> +Date:		March 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes which panel surface of the system’s housing the
+> +		port resides on.
+> +
+> +What:		/sys/class/typec/<port>/location/vertical_position
+> +Date:		March 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes vertical position of the port on the panel surface.
+> +		Valid values: upper, center, lower
+> +
+> +What:		/sys/class/typec/<port>/location/horizontal_position
+> +Date:		March 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes horizontal position of the port on the panel surface.
+> +		Valid values: left, center, right
+> +
+> +What:		/sys/class/typec/<port>/location/dock
+> +Date:		March 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Set as "yes" if the port resides in a docking station or a port
+> +		replicator, otherwise set as "no".
+> +
+> +What:		/sys/class/typec/<port>/location/lid
+> +Date:		March 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Set as "yes" if the port resides on the lid of laptop system,
+> +		otherwise set as "no".
+> +
 
-Gr{oetje,eeting}s,
+I've probable lost track of the topic during my winter break, I'm
+sorry about that, but why are you proposing now that this should be
+made Type-C specific?
+This information is not Type-C specific, so it definitely does not
+belong here.
 
-                        Geert
+Br,
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+heikki

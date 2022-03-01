@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9847E4C8F33
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD4F4C8F35
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235780AbiCAPgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S235810AbiCAPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235763AbiCAPgO (ORCPT
+        with ESMTP id S233590AbiCAPgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:36:14 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF889A9976;
-        Tue,  1 Mar 2022 07:35:31 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id l21-20020a056830239500b005afd2a7eaa2so9647230ots.9;
-        Tue, 01 Mar 2022 07:35:31 -0800 (PST)
+        Tue, 1 Mar 2022 10:36:43 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E3BA9962
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:36:02 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id d17so14601447pfl.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 07:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jUOsJO0Kh4op4ysiBpAZaJEjcEJRjoValu/KGpdNufI=;
+        b=Xx/fToonpb0BLFsiJYajJg5bmf9rg6IkQTVt3S2dztqjE74NoV3y6ZAu+8QUwe57Ho
+         yBtU7cxUQs7WbULkkg3MVcP0Qnp3G2k6WD1bawRHA4NPXirp8TmOyJ83BWCufpPvN2xK
+         Mmms2hWOAEhgr7ZUjf9RBd0Id20pNThct9EWADODJyPTT5bdvzYsPzi6iGXuH9EZlnod
+         Q1R0puyPWOa58YzCjkwHWv+5gHc8UkwjenIRpQoj7w6lqOkAgqc39lO574Y7ffpOlJ2+
+         fxOT3SHB/pyJdoNnTf+vg4CGc2X5TfZllqNC1d/HiHhIo963WD5kx4UX/iG16dGunXoF
+         p4GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=p9+B3rwm2FRmUHYugNPrh2s7Ox5TZPPsbWIJUn8Olyk=;
-        b=a5fPN0fAsBgPO+S42i5Xm1b4SQyc3Q5h3+rd99YedJtGoUWxsBgO6lOHLu2CVimrtx
-         J8tiEI1XD0Ma3NUq9fxMbNIfVdvyqHhfK8liuzNXD39h7z8XmEAcjnOtxtiFHz4Wb6t7
-         khH29n2TkJLOjbYVI5VNuqZr8Ee22e0H907elXjkS4WJ9TOqUsWN+SxVQxQtWS59Kutd
-         l3S5MB/EsF8myQxReaxO1O9CES9x/taI0FmD+GjpQhM5cFOnmYyZ8n0FhhdQiCi3E20/
-         WwKeeDtOWzdWN7jhcyUaVL8Fu6bAz+EfdLHPRnh65sxiVW4uHEybupyp3lgyR9NVnVln
-         huZg==
-X-Gm-Message-State: AOAM533GDnE/wlN4Bqer1Fi3/CheKeUfo7V5ONBJ5SEFJauO00daJHyQ
-        C4EEQ/YJ5/yzdCuyUAp5fA==
-X-Google-Smtp-Source: ABdhPJzIu/fU31pUN2P41QKbMEvoWDJQcVzYI8t7f9ROGjwBDYoLMhHNIvqlVXC1duTP29Vytk+2Lw==
-X-Received: by 2002:a05:6830:1687:b0:5ad:4b8f:a3bf with SMTP id k7-20020a056830168700b005ad4b8fa3bfmr12511602otr.365.1646148931167;
-        Tue, 01 Mar 2022 07:35:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a69-20020a4a4c48000000b0031bec1608fbsm6359117oob.17.2022.03.01.07.35.29
+        bh=jUOsJO0Kh4op4ysiBpAZaJEjcEJRjoValu/KGpdNufI=;
+        b=HE6AGXt0m4wx6/RxK/oOSt1zHKdhCWsnol/HyAD/uak1HFjZ4R8PbQTEmKTrFW4+oq
+         4eGpp5kclxdU0CPEQiChSlIH7LUiltjzrwBpstAePAIiGe5koNcCZUrQhMOPFxn1/yTJ
+         lkHI68GnYZnZwmaIMPT0y2MWxTa9cMGC4qkQi/TDa3PKqqutyqwBjHIuhcyZ6yQNCwTl
+         rfcs9n3vN6DVvgliYFxESeoe3QMM9vhDQLqGPMo6C2oTtRxaQkSPVg3wUxWyIjHvgn9l
+         81odD9m6Wv/F6ezXtpO+zWukNyWqQSmCn38SVmtaOs6KUDZxvE0HssaH5vo+JLX92HIK
+         wJoQ==
+X-Gm-Message-State: AOAM530HGfvjVvoVtcvs4hYYd7hJpleKqMCmNL27/hP2cCk9p9In1ULp
+        OjO8+05TkIrWMedCd456goVU2nVpRFXLDw==
+X-Google-Smtp-Source: ABdhPJwfTxSMRJIEVSZW5P0MeCJh888AvLZ+3mjfn41HW4RdLcUjEGXvFimCPbn2krTT5qZhI1Curw==
+X-Received: by 2002:a63:f912:0:b0:372:bac6:b92d with SMTP id h18-20020a63f912000000b00372bac6b92dmr21836548pgi.265.1646148961137;
+        Tue, 01 Mar 2022 07:36:01 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k20-20020a056a00135400b004ecc81067b8sm19037987pfu.144.2022.03.01.07.36.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 07:35:30 -0800 (PST)
-Received: (nullmailer pid 1289289 invoked by uid 1000);
-        Tue, 01 Mar 2022 15:35:29 -0000
-Date:   Tue, 1 Mar 2022 09:35:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH] dt-bindings: timer: renesas: ostm: Document Renesas
- RZ/V2L OSTM
-Message-ID: <Yh49QXQ2phIoIFJp@robh.at.kernel.org>
-References: <20220227224845.27348-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 01 Mar 2022 07:36:00 -0800 (PST)
+Date:   Tue, 1 Mar 2022 15:35:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v2 7/7] KVM: WARN if is_unsync_root() is called on a root
+ without a shadow page
+Message-ID: <Yh49XaSR88HZCmQa@google.com>
+References: <20220225182248.3812651-1-seanjc@google.com>
+ <20220225182248.3812651-8-seanjc@google.com>
+ <CANgfPd_zdQAu7m1M_g0wy0wsUpyHDtbE+tUZOKQN59y0ABpvPw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220227224845.27348-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CANgfPd_zdQAu7m1M_g0wy0wsUpyHDtbE+tUZOKQN59y0ABpvPw@mail.gmail.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 22:48:44 +0000, Lad Prabhakar wrote:
-> Document the General Timer Module(a.k.a OSTM) found on the RZ/V2L SoC.
-> OSTM module is identical to one found RZ/G2L SoC. No driver changes are
-> required as generic compatible string "renesas,ostm" will be used as a
-> fallback.
+On Mon, Feb 28, 2022, Ben Gardon wrote:
+> On Fri, Feb 25, 2022 at 10:23 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > WARN and bail if is_unsync_root() is passed a root for which there is no
+> > shadow page, i.e. is passed the physical address of one of the special
+> > roots, which do not have an associated shadow page.  The current usage
+> > squeaks by without bug reports because neither kvm_mmu_sync_roots() nor
+> > kvm_mmu_sync_prev_roots() calls the helper with pae_root or pml4_root,
+> > and 5-level AMD CPUs are not generally available, i.e. no one can coerce
+> > KVM into calling is_unsync_root() on pml5_root.
+> >
+> > Note, this doesn't fix the mess with 5-level nNPT, it just (hopefully)
+> > prevents KVM from crashing.
+> >
+> > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 825996408465..3e7c8ad5bed9 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3634,6 +3634,14 @@ static bool is_unsync_root(hpa_t root)
+> >          */
+> >         smp_rmb();
+> >         sp = to_shadow_page(root);
+> > +
+> > +       /*
+> > +        * PAE roots (somewhat arbitrarily) aren't backed by shadow pages, the
+> > +        * PDPTEs for a given PAE root need to be synchronized individually.
+> > +        */
+> > +       if (WARN_ON_ONCE(!sp))
+> > +               return false;
+> > +
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> DTSI changes have been posted as part of series [0]
-> 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220227203744.18355-8-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> ---
->  Documentation/devicetree/bindings/timer/renesas,ostm.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+> I was trying to figure out if this should be returning true or false,
+> but neither really seems correct. Since we never expect this to fire,
+> perhaps it doesn't matter and it's easier to just return false so the
+> callers don't need to be changed.
 
-Applied, thanks!
+Yep, neither is correct.
+
+> If this did fire in a production scenario, I'd want it to terminate the VM
+> too.
+
+Me too, but practically speaking this should never get anywhere near production.
+IMO, it's not worth plumbing in @kvm just to be able to do KVM_BUG_ON.

@@ -2,65 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990C64C8897
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6334C88A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiCAJ6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S234058AbiCAJ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbiCAJ6d (ORCPT
+        with ESMTP id S231555AbiCAJ7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:58:33 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21D1DA67
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:57:52 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2db2add4516so105768977b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:57:52 -0800 (PST)
+        Tue, 1 Mar 2022 04:59:20 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5AC6EB0C
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:58:39 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so1023322wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Qee/3ouJ9DM4ILqUhdVC3wPnlUxhQ79bmhKE0E3lC+E=;
-        b=kmm0zokZtwPnaJC25cBoWna+2xXHOg5cJOmIF5g7nM7SWhRyVmGu9QVjLtZASCmGMu
-         PTB//f5VTwuU+u2wba6qTm5tdm12g7VsktrC5t8+lZCv8mQAxp2FQRdgNR7UjvTClg0/
-         w0+8o2piKHXotEBLss8NEz+7SvbL9h6kE/95fiRFDaaWfHpJbACTBOt+cicR7s/4Q4jd
-         8uzVVz2i0c+e7Y5BfrcaT/My4XfUQr28JWnoiiGbRT2PfUxodEXIkHQQsw86991hdLBS
-         zdvtR3VdndofP5UBeib5BhDmYUxx5Ab/E/7Ya9C7lroFPYKWW24XpjmG6Z7LgohuBMbz
-         P27g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=V2OTBoFu/3u2MYQvlXN4XFA5Mpc0sw3VVP6kB35gAmpBt4CBakEr+BEajFVumt4As4
+         0YJzO8ZkJSWBwhRj8Uy59RUU3v/hwzbgxduT2I1y1xX6HI1gg41aETpQIUdjxh7ZnBz4
+         HhdMQcg8+L7O8eux9r9AapKed4y6D46u2n+k9nwiZpMaa2tu8mfi2s4ZCxAcFvaUN+tp
+         HrzR1JisJxyRdZ3wNr04C/4Vuj0omTcfD+rfi5DwD/mU4leNbAbXNJMtNPKsu3bNCRus
+         eGsPP4EAXhwGxUe8HQ9DLeSwcxn2uyLPYqzmE2imgxG0kXR+Hov/16dL3PxdUfxU3h53
+         VE0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Qee/3ouJ9DM4ILqUhdVC3wPnlUxhQ79bmhKE0E3lC+E=;
-        b=hEommpdjPLng+MV8A6FNxhcW3dIsvzFU5piWYpOZ/syZOtzZgBAMV9LlpYytaRLbhz
-         Iuyw4fL8nxFEu6X2+kIO5SdwSrUbQCzOYGnK7CVlamvF1S6yaV44QlYePWo8Y67WyuAU
-         neq4SKOdbNJoWodkhDPkjQPs8NeseChXEFjIO9rCyuwTaQRW7Khqawc5oWTPRtBN9yTr
-         l03avfpyNeLgXDlRv5pi3YZqs49ZNxupaZzbWp6H1ziE0VMl/Nt+a7xjuFPRYCh8Tek6
-         Ap46owsx8L+G8jIs/WXWvqckd8DGmJug9X5KI7Q8Ht6mAQsl0tJbTM4uloG4Olr/1GqH
-         LXng==
-X-Gm-Message-State: AOAM531h4az0nHkzKe2HOCzEYlbOvsfQAEc9ZOK6GqH9wBcFlxoyPvYz
-        fXc1eO0YOXqC1G9t8Z3OyMKbdhQZ+7YJinhk61jv4w==
-X-Google-Smtp-Source: ABdhPJyrIJssRcdkYlbUMZS+1C716nMO9jZFhr4Nr3oJZzh/jhmwZdVZCrmm1B0x8jZcM+3+pNXODlucAQcEdFIkoO4=
-X-Received: by 2002:a81:642:0:b0:2d6:baf8:ee52 with SMTP id
- 63-20020a810642000000b002d6baf8ee52mr23809916ywg.36.1646128671619; Tue, 01
- Mar 2022 01:57:51 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=LF5TVAuuNtAmmrYPZxNmqQJlm6qigQII4vPeR6qu39x8oujj6YsSIsKSCo3W4MZDmv
+         kVpALgD3DpCoozG0ti0P5J26B04Bk4qXebIQfHklBpWefSMlsYoN3HSC8W/RT8OEgRBb
+         rniIJA7E7z+kD5hHc6e22cMN/ypA2vxTiH4ezfEHCr2QC/KulT8QoQGy18Zio+3Xge83
+         uU2ddc4l7/urSFQF+NEn7OLB5N0YBwHWjBykhDNcsORVZJa/FeygWFxg3eARgddBDm47
+         PrM7IeQ76F/7XQEulZbxgORmohHXCbEGBkkZBWxY/w+up14838vLiGzcmysdaZzqBQ4k
+         tdnA==
+X-Gm-Message-State: AOAM530raMzSrnWjc9SWDG1UGpneWmAgK5gDiXWgBD08n9p59ELN3Tzx
+        +5+/FNVhGgucwDS74htsHsmEGQ==
+X-Google-Smtp-Source: ABdhPJyd3JL277KFZFJnNY8vNt+J/UADyqWySP9nrfMl9nw+JMafV9kv9enuyMZSjvJi9JFM8u0lYg==
+X-Received: by 2002:a1c:29c6:0:b0:381:51d6:9afe with SMTP id p189-20020a1c29c6000000b0038151d69afemr9268826wmp.0.1646128718201;
+        Tue, 01 Mar 2022 01:58:38 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r186-20020a1c2bc3000000b0037bdd94a4e5sm1955820wmr.39.2022.03.01.01.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 01:58:37 -0800 (PST)
+Date:   Tue, 1 Mar 2022 09:58:34 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <Yh3uSifwByjQWpyO@google.com>
+References: <20220228213802.1639658-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20220228172311.789892158@linuxfoundation.org>
-In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Mar 2022 15:27:40 +0530
-Message-ID: <CA+G9fYtXWn-U=rojccfrb9jK=eK8d8-+Qrk7j-KGahefa5e+Pw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/80] 5.10.103-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,176 +98,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 23:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.103 release.
-> There are 80 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.103-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, 28 Feb 2022, Rob Herring wrote:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+> 
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
+> 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/connector/usb-connector.yaml         |  3 +--
+>  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
+>  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
+>  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
+>  .../bindings/display/panel/display-timings.yaml   |  3 +--
+>  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
+>  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
+>  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
+>  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
 
-## Build
-* kernel: 5.10.103-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 3a000049e6a1d04d2e57cd3de7783075811d62e8
-* git describe: v5.10.102-81-g3a000049e6a1
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.102-81-g3a000049e6a1
+Go for it.
 
-## Test Regressions (compared to v5.10.101-122-g6c935cea31db)
-No test regressions found.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-## Metric Regressions (compared to v5.10.101-122-g6c935cea31db)
-No metric regressions found.
+>  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
+>  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
+>  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
+>  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
+>  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
+>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+>  .../devicetree/bindings/soc/ti/ti,pruss.yaml      | 15 +++------------
+>  .../devicetree/bindings/sound/st,stm32-sai.yaml   |  3 +--
+>  .../devicetree/bindings/sound/tlv320adcx140.yaml  | 13 ++++++-------
+>  .../devicetree/bindings/spi/spi-controller.yaml   |  4 +---
+>  .../devicetree/bindings/usb/st,stusb160x.yaml     |  4 +---
+>  21 files changed, 39 insertions(+), 74 deletions(-)
 
-## Test Fixes (compared to v5.10.101-122-g6c935cea31db)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.101-122-g6c935cea31db)
-No metric fixes found.
-
-## Test result summary
-total: 97503, pass: 84163, fail: 521, skip: 12008, xfail: 811
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 39 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 24 total, 15 passed, 9 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

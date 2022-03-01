@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2734C8EF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2974C8EF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbiCAPZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S235716AbiCAPZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235649AbiCAPZ0 (ORCPT
+        with ESMTP id S235679AbiCAPZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Mar 2022 10:25:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09408A6FB;
-        Tue,  1 Mar 2022 07:24:42 -0800 (PST)
-Date:   Tue, 01 Mar 2022 15:24:40 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E748AE6A;
+        Tue,  1 Mar 2022 07:24:44 -0800 (PST)
+Date:   Tue, 01 Mar 2022 15:24:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646148281;
+        s=2020; t=1646148283;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FoQkJlJvDfgiRoKCX0Fk6KgKKpnLQ12b+KEj3XNXjUc=;
-        b=Yvd7PmngceusHBnARhBBjdvePjqqeNu+OeXLJWNO1qaW537xjmidXVTnW7psRqAXDeV7o5
-        syD1LeIAWwAETHtH9DBq/J9UEcum9Bp97RX6H6hd93cpHI11IHIaEhLPg5tFmJz2J6UvYo
-        L6M5ds6iXSAiqwn7YECtHhpnslvjYZOxpWBA3tewc4nE1lEErF0R+5GVXkPrcN+WRHjJ6i
-        D+1R+MtRQ2Jr6pfW/3uC62z+E1rJdZi56Em4g9YH9wRCrgLR5p5a2XiVVLl7a9ciBu0HBI
-        jKP33+jA/Wi6F8zrqceXHrecStocRT5CXm8dPlWfnPUGbvzfg+lU/gqjfcWdnw==
+        bh=Hd7tXxubAvDRFWkEM5saPUusFfGJxYdpuYbN9VmGSls=;
+        b=q/T3tpMIR+haeZEP6OOIVUp1atGeX715n3DmaXQyWQA5dH/abc9MnRW5bvEF+ImptPR28S
+        kTw6hwQ+snJsA0xwkcdaiXVhf5j7kkLkhA0nc+Kvut2IwZHVE3GvhKbLOYqTRB0GE7wiPm
+        OtSv42VulVcwKXHMpFZyiSK0GyKjnht470r9nPLdpkNORoz7t8mfpC62vgs8II/H9C0P5a
+        66AgASJ/lOrhmK9QpsOovQA2bg+DOXWeLiyO24/3GIGc3ZblvHiErsCV+DBQgDRXnXKltP
+        qembwS4d6oPoNwa16UpxXuwFFwHIgpMuhKoppdqNMVMSdydAi2JPfsxg1P9A/A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646148281;
+        s=2020e; t=1646148283;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FoQkJlJvDfgiRoKCX0Fk6KgKKpnLQ12b+KEj3XNXjUc=;
-        b=3L9jjX32NYXbvxIWz6pYg+zdq/gSIpjQ7eicKLfHV5sxR52cCdErOhFW4XUM4dqyqAlN+a
-        SUT8bkCbMu2E1UBQ==
-From:   "tip-bot2 for Valentin Schneider" <tip-bot2@linutronix.de>
+        bh=Hd7tXxubAvDRFWkEM5saPUusFfGJxYdpuYbN9VmGSls=;
+        b=P5tYTrBvIPxZz6qWpH8M/zUh1qtF5WPO1XoHOdjWKNz2Qv1iPAZZKj3NUcOw+fBCAeYAAK
+        SFEUKRxaF8iobvCg==
+From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
-Cc:     John Keeping <john@metanate.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
+Subject: [tip: sched/core] sched/cpuacct: Optimize away RCU read lock
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Chengming Zhou <zhouchengming@bytedance.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220127154059.974729-1-valentin.schneider@arm.com>
-References: <20220127154059.974729-1-valentin.schneider@arm.com>
+In-Reply-To: <20220220051426.5274-2-zhouchengming@bytedance.com>
+References: <20220220051426.5274-2-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <164614828021.16921.6242853659792543118.tip-bot2@tip-bot2>
+Message-ID: <164614828189.16921.12676564993932566366.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,149 +67,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     49bef33e4b87b743495627a529029156c6e09530
-Gitweb:        https://git.kernel.org/tip/49bef33e4b87b743495627a529029156c6e09530
-Author:        Valentin Schneider <valentin.schneider@arm.com>
-AuthorDate:    Thu, 27 Jan 2022 15:40:59 
+Commit-ID:     dc6e0818bc9a0336d9accf3ea35d146d72aa7a18
+Gitweb:        https://git.kernel.org/tip/dc6e0818bc9a0336d9accf3ea35d146d72aa7a18
+Author:        Chengming Zhou <zhouchengming@bytedance.com>
+AuthorDate:    Sun, 20 Feb 2022 13:14:25 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 01 Mar 2022 16:18:38 +01:00
 
-sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+sched/cpuacct: Optimize away RCU read lock
 
-John reported that push_rt_task() can end up invoking
-find_lowest_rq(rq->curr) when curr is not an RT task (in this case a CFS
-one), which causes mayhem down convert_prio().
+Since cpuacct_charge() is called from the scheduler update_curr(),
+we must already have rq lock held, then the RCU read lock can
+be optimized away.
 
-This can happen when current gets demoted to e.g. CFS when releasing an
-rt_mutex, and the local CPU gets hit with an rto_push_work irqwork before
-getting the chance to reschedule. Exactly who triggers this work isn't
-entirely clear to me - switched_from_rt() only invokes rt_queue_pull_task()
-if there are no RT tasks on the local RQ, which means the local CPU can't
-be in the rto_mask.
+And do the same thing in it's wrapper cgroup_account_cputime(),
+but we can't use lockdep_assert_rq_held() there, which defined
+in kernel/sched/sched.h.
 
-My current suspected sequence is something along the lines of the below,
-with the demoted task being current.
-
-  mark_wakeup_next_waiter()
-    rt_mutex_adjust_prio()
-      rt_mutex_setprio() // deboost originally-CFS task
-	check_class_changed()
-	  switched_from_rt() // Only rt_queue_pull_task() if !rq->rt.rt_nr_running
-	  switched_to_fair() // Sets need_resched
-      __balance_callbacks() // if pull_rt_task(), tell_cpu_to_push() can't select local CPU per the above
-      raw_spin_rq_unlock(rq)
-
-       // need_resched is set, so task_woken_rt() can't
-       // invoke push_rt_tasks(). Best I can come up with is
-       // local CPU has rt_nr_migratory >= 2 after the demotion, so stays
-       // in the rto_mask, and then:
-
-       <some other CPU running rto_push_irq_work_func() queues rto_push_work on this CPU>
-	 push_rt_task()
-	   // breakage follows here as rq->curr is CFS
-
-Move an existing check to check rq->curr vs the next pushable task's
-priority before getting anywhere near find_lowest_rq(). While at it, add an
-explicit sched_class of rq->curr check prior to invoking
-find_lowest_rq(rq->curr). Align the DL logic to also reschedule regardless
-of next_task's migratability.
-
-Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
-Reported-by: John Keeping <john@metanate.com>
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Tested-by: John Keeping <john@metanate.com>
-Link: https://lore.kernel.org/r/20220127154059.974729-1-valentin.schneider@arm.com
+Link: https://lore.kernel.org/r/20220220051426.5274-2-zhouchengming@bytedance.com
 ---
- kernel/sched/deadline.c | 12 ++++++------
- kernel/sched/rt.c       | 32 ++++++++++++++++++++++----------
- 2 files changed, 28 insertions(+), 16 deletions(-)
+ include/linux/cgroup.h | 2 --
+ kernel/sched/cpuacct.c | 4 +---
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d2c072b..62f0cf8 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2240,12 +2240,6 @@ static int push_dl_task(struct rq *rq)
- 		return 0;
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 75c1514..9a109c6 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -791,11 +791,9 @@ static inline void cgroup_account_cputime(struct task_struct *task,
  
- retry:
--	if (is_migration_disabled(next_task))
--		return 0;
+ 	cpuacct_charge(task, delta_exec);
+ 
+-	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(task);
+ 	if (cgroup_parent(cgrp))
+ 		__cgroup_account_cputime(cgrp, delta_exec);
+-	rcu_read_unlock();
+ }
+ 
+ static inline void cgroup_account_cputime_field(struct task_struct *task,
+diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
+index 3078005..f79f884 100644
+--- a/kernel/sched/cpuacct.c
++++ b/kernel/sched/cpuacct.c
+@@ -337,12 +337,10 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+ 	unsigned int cpu = task_cpu(tsk);
+ 	struct cpuacct *ca;
+ 
+-	rcu_read_lock();
++	lockdep_assert_rq_held(cpu_rq(cpu));
+ 
+ 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+ 		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
 -
--	if (WARN_ON(next_task == rq->curr))
--		return 0;
--
- 	/*
- 	 * If next_task preempts rq->curr, and rq->curr
- 	 * can move away, it makes sense to just reschedule
-@@ -2258,6 +2252,12 @@ retry:
- 		return 0;
- 	}
+-	rcu_read_unlock();
+ }
  
-+	if (is_migration_disabled(next_task))
-+		return 0;
-+
-+	if (WARN_ON(next_task == rq->curr))
-+		return 0;
-+
- 	/* We might release rq lock */
- 	get_task_struct(next_task);
- 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 7b4f4fb..14f273c 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
- 		return 0;
- 
- retry:
-+	/*
-+	 * It's possible that the next_task slipped in of
-+	 * higher priority than current. If that's the case
-+	 * just reschedule current.
-+	 */
-+	if (unlikely(next_task->prio < rq->curr->prio)) {
-+		resched_curr(rq);
-+		return 0;
-+	}
-+
- 	if (is_migration_disabled(next_task)) {
- 		struct task_struct *push_task = NULL;
- 		int cpu;
-@@ -2033,6 +2043,18 @@ retry:
- 		if (!pull || rq->push_busy)
- 			return 0;
- 
-+		/*
-+		 * Invoking find_lowest_rq() on anything but an RT task doesn't
-+		 * make sense. Per the above priority check, curr has to
-+		 * be of higher priority than next_task, so no need to
-+		 * reschedule when bailing out.
-+		 *
-+		 * Note that the stoppers are masqueraded as SCHED_FIFO
-+		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
-+		 */
-+		if (rq->curr->sched_class != &rt_sched_class)
-+			return 0;
-+
- 		cpu = find_lowest_rq(rq->curr);
- 		if (cpu == -1 || cpu == rq->cpu)
- 			return 0;
-@@ -2057,16 +2079,6 @@ retry:
- 	if (WARN_ON(next_task == rq->curr))
- 		return 0;
- 
--	/*
--	 * It's possible that the next_task slipped in of
--	 * higher priority than current. If that's the case
--	 * just reschedule current.
--	 */
--	if (unlikely(next_task->prio < rq->curr->prio)) {
--		resched_curr(rq);
--		return 0;
--	}
--
- 	/* We might release rq lock */
- 	get_task_struct(next_task);
- 
+ /*

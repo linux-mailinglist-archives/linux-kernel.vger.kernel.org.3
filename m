@@ -2,111 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DA14C96F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65FE4C96FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbiCAUbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
+        id S231453AbiCAUcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238474AbiCAUa6 (ORCPT
+        with ESMTP id S238323AbiCAUby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:30:58 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EB2A8ED1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:26:50 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b9so28877916lfv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:26:49 -0800 (PST)
+        Tue, 1 Mar 2022 15:31:54 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CB7B12EC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:28:56 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id t14so23407338ljh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:28:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q0BgGo1ww1zXMv3icvmdb4s/nVhZf98/LvSTi+5q+FA=;
-        b=G8b7GKJySDFW8nC9U9hYJDCHe3mjYX0MquQCoo12l0s+y49L2KB3HN/rflwOcI4KZX
-         qXhr/Gp4DBTxALWsrb4zNl3feYAYvp7kuhoILb2i5neimafRo4oVwyo30eaJSe2XCIDr
-         /E6qCHHQiT2jIFqGycIQLCLfBWIycJBdP1KNA=
+        bh=xd7zhNWTAbsjcup8ovj0bhbEUHVo9VN2YG5iXSmKuGY=;
+        b=AXUNohphNBaqg4Ym0QvnB7ovOxC0qHBwQQTkvDU09LsSmaqliomVWRZBWSH9rA/NdX
+         mggO8k84CHtaDmY5vc6klMZugRCimckzfjt5ruN87TRJQCG97xdfs7M+rGBCx/iITiho
+         m3WSdHrV71StH8wJGQD2H6zmXpefAi4NA1HM50JkQz1wBh8FPbo2JL0PJbfCiWj+flF5
+         VPizIjc+dyyhgd2d0QTocmiEr7TKxUjrxGCsDGzMcimHkmBPd+NZjW2RI4B879m3tzhe
+         7OsVy6+c5Q5sdBrzGsalxEeXKu7lIv3BuaHd0Vn77MJW4nH68YFqeea7l79i24g7mXhe
+         HpWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q0BgGo1ww1zXMv3icvmdb4s/nVhZf98/LvSTi+5q+FA=;
-        b=THs22Woa96Kg2SeWT5VxjYVQFgen/dErrmADoQ1egQvAXYlPcpeLNV3KZVL0CdqqZw
-         3B1uJ83SyXsECeB2PP+btF2/LeHTInkUKNo39Mn0tuHfRHkfkaQ9O2q8UWtW6efGzxSh
-         6o3CEH2qhZIzJndjrAoLcTSaa4xbh7l7hnEUxG3cQbtrEl6pGi6xlmNet/cL2w/LE/qz
-         3M5mi2NJ5rZ5Xa08bKLCWFWTi/zrwdBs4e/X+7IBTrkubpeaSNRYRdvINbrhA2US0V9Q
-         ut2GlNoG2VXoTCjwHhXSVeIPtVcNqT0QFzvNZkbws7b+8dCZDQsNzSKnF6DeGaDGmRMG
-         jD1A==
-X-Gm-Message-State: AOAM533HMsvSN9RBdyhl2s5fY+6Z2PnzBSAKGUj+pPIv+yxkiHM3l89h
-        d+xqhenMXhHMFHW1R0pMauYLN1fYKXGkuXLn6Ho=
-X-Google-Smtp-Source: ABdhPJzdmOv5AvGHShFBBgMS+Y4kFtSLZjJx+u2TfooXckbYooEPRR3Ip4v84v+zq+bhzf/e4fNobw==
-X-Received: by 2002:ac2:5f84:0:b0:445:b86d:d0ea with SMTP id r4-20020ac25f84000000b00445b86dd0eamr855729lfe.386.1646166394588;
-        Tue, 01 Mar 2022 12:26:34 -0800 (PST)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id x23-20020a056512047700b00445474c4b05sm1654884lfd.173.2022.03.01.12.26.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:26:34 -0800 (PST)
-Received: by mail-lj1-f180.google.com with SMTP id y24so4431303ljh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:26:33 -0800 (PST)
-X-Received: by 2002:a2e:aa1f:0:b0:244:c2ea:7f20 with SMTP id
- bf31-20020a2eaa1f000000b00244c2ea7f20mr18290380ljb.164.1646166393330; Tue, 01
- Mar 2022 12:26:33 -0800 (PST)
+        bh=xd7zhNWTAbsjcup8ovj0bhbEUHVo9VN2YG5iXSmKuGY=;
+        b=M5FDkRxCBI8lF2S6kJEJWQ9mAhwy6eEcSOr4kR7DxH3Ddz/yOyMC+in119e9cNCve/
+         iMGFvK7qYxh/sSa88hSZKYEj7Ple6fseVgEfh38l4qub0bmd4cH09OBKOCFtVql0Ije8
+         DFOREe5TJ8gLsE8u6BwTyKyYsNXKODUQPtx15fcuLqEUEbX9CM71WD0AMn8IdFj0LQi6
+         Z60pAy6+J99y76DN5vJ/g+7ygOElcmvLpJwJqIXy3LATJUdZT6yqApI7+sFJJUFE0AVO
+         F12BXl2WG7nlt8xllU7Ys4U/5rJJcvpYOcdJvaNS5vm9GpHRjZIUH1TuI8ZjL6F4imPZ
+         9x8w==
+X-Gm-Message-State: AOAM533QE70P1di27UkTStO/+QCoM4e7XO8XCDHjC2/TQ99Dk6MJCEiE
+        A86wF/hUtO70CsdlsPCJ9p073LlGPZs/ugn0r7Pmbw==
+X-Google-Smtp-Source: ABdhPJz45aoPYRnC0P6aRihQR7uE1J/WWQWC3IT9GukIQheAZ9K3oSg9y9PHLUJG3F+nspjRI+QY5wqfA1AwR9GjK5Q=
+X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
+ y2-20020a05651c154200b002338ff5eb80mr18018505ljp.352.1646166529822; Tue, 01
+ Mar 2022 12:28:49 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
- <bd43bd47c8eaa4c22c1a1549cee66f7ef960b1fc.camel@med.uni-goettingen.de>
- <CAHk-=whFMxks63sfMQ-0_YO1GsTmoLfsO4ciMtoiCHNgaG_+GA@mail.gmail.com>
- <979af7ae9b7e8baf080ef6f8d42d48d7f5d2c5b4.camel@tugraz.at>
- <CANiq72k_PUBPVL1Fx4HLm_WO66RuSsi0oSsKRhssCYRNGbY84Q@mail.gmail.com>
- <dc52af7ebc044c94337e138f6e1ae807559b4825.camel@tugraz.at> <CANiq72mcuXDRM-xMDPuL7uDLUfXDhARTBJJsVj4fnR15T1v=TA@mail.gmail.com>
-In-Reply-To: <CANiq72mcuXDRM-xMDPuL7uDLUfXDhARTBJJsVj4fnR15T1v=TA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 12:26:16 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi+sjd8FT_FeJ2UOU2Ti7ws1i7hDweAW2gp8a-JpO-Tbg@mail.gmail.com>
-Message-ID: <CAHk-=wi+sjd8FT_FeJ2UOU2Ti7ws1i7hDweAW2gp8a-JpO-Tbg@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Martin Uecker <uecker@tugraz.at>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-2-arnd@kernel.org>
+ <CAKwvOdnkfuT_w_0RNCb+WTKJ+282zLKmhB9UNG=D-UFz9VkUng@mail.gmail.com>
+ <CAKwvOdn-PrCUPe2WzLv18AH3=9DjtFES+r=M1DhoQivy8sHm-g@mail.gmail.com> <CAHk-=wh4OdQANe7TLYGdPWUub0MEdbGDr72wpATHxypaSEGAyg@mail.gmail.com>
+In-Reply-To: <CAHk-=wh4OdQANe7TLYGdPWUub0MEdbGDr72wpATHxypaSEGAyg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 1 Mar 2022 12:28:38 -0800
+Message-ID: <CAKwvOd=TpqiSSh3yqQ2Z44nJArBACvfohVCgd6Ej32rGQMvShA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        llvm@lists.linux.dev,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 5:50 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Tue, Mar 1, 2022 at 12:20 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> But making it non-UB in the standard does not force a project to
-> consider it "not an error", which is what actually matters for being
-> able to use UBSan effectively or not.
+> On Tue, Mar 1, 2022 at 12:06 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > That said, there's a few additional places that reset KBUILD_CFLAGS.
+>
+> Yeah, the boot code and vdso code often sets its own private flags,
+> because it's _so_ different.
+>
+> The generic kernel CFLAGS often don't work at all, because that code
+> may be doing some truly horrendous things.
+>
+> So I agree that this may not catch all the kernel code, but I don't
+> think it's much of a problem.
 
-Absolutely.
-
-I think people should treat UBsan and friends a bit like "runtime lint".
-
-"lint" traditionally doesn't necessarily check for just *incorrect* C.
-
-It checks for things that can be confusing to humans, even if they are
-100% completely conforming standard C.
-
-Classic example: indentation. Having the wrong indentation is not in
-any shape of form "undefined behavior" from a C standpoint, but it
-sure is something that makes sense checking for anyway.
-
-I think "integer overflow" should be considered the exact same thing.
-It should *not* be treated as "undefined behavior", and it should not
-give the compiler the option to generate code that doesn't match what
-the programmer wrote.
-
-But having a checking tool that says "This looks wrong - you just had
-an integer overflow"? THAT makes 100% sense.
-
-The C standard rules "undefined behavior" really is a problem in the standard.
-
-                     Linus
+Agreed; they can still mirror the style imposed by
+-Wdeclaration-after-statement like the rest of the codebase though.
+-- 
+Thanks,
+~Nick Desaulniers

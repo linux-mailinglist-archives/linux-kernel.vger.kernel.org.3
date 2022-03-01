@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74524C84E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41614C84EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbiCAHZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S232413AbiCAH0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiCAHZR (ORCPT
+        with ESMTP id S231197AbiCAH0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:25:17 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C527C7A9A2;
-        Mon, 28 Feb 2022 23:24:36 -0800 (PST)
-Received: from integral2.. (unknown [182.2.70.248])
-        by gnuweeb.org (Postfix) with ESMTPSA id 6FA437EDA2;
-        Tue,  1 Mar 2022 07:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646119476;
-        bh=oduq7UbWH4yY7hi8T5IT1C8abw9Vor905WGb4sLdUnQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TBp3j/Fqcss/3NXNfLhqpiGq5+F0a9kmmYlsNW76kM7KmCFmclci5SUTGrefVy4hI
-         nHCjc50jwNtfVCX20O/xJ6TgHUdOsXLmtoymbV7hlCwZjeplUEUrYqFh9ldjzay1oB
-         cXEoeHFXVHtC/fqYGbtYQS4j0PH+q7siofvBQfXlmLTdZJRYc+CuAEDXezp5zwSFQ+
-         4YyZz/XcQph1EBDf35eeLE1gvCX9agwvxrUMJUdrMPcFjHq3mNaluHQmEMRTV1DqID
-         MbPTqDd8DfVbV6dOPNlNbFpgHI++HPnzTuYTImQIyipG7jhrGgbYt0IuLJ44mesSWE
-         P04lgLLNjtOTA==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        x86@kernel.org, stable@vger.kernel.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH 2/2] x86/mce/amd: Fix memory leak when `threshold_create_bank()` fails
-Date:   Tue,  1 Mar 2022 14:23:53 +0700
-Message-Id: <20220301072353.95749-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220301072353.95749-1-ammarfaizi2@gnuweeb.org>
-References: <20220301072353.95749-1-ammarfaizi2@gnuweeb.org>
+        Tue, 1 Mar 2022 02:26:11 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087617B558
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:25:30 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id e2so368193pls.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fq9+hKXE2B25/q7SGHJTgmlpE5pNGMn67wmPQ/2AfFA=;
+        b=gw+AgpqERSMLyvVAkktbZBdBQAxCpln9+7y5E4lCT6UDIE8RSSZw3sHef0pgS+cDcP
+         0CSs/PdWEOtNhMq+K42nTRPmww08VKf9MHYaOwy7QRMoo5/yAZry4qWzXkJWuf86v9Fa
+         ZJPTuWFy5R4R0DZeqlZKsIAztbRIHQOgdOnTofkoNFQ7XQvrsW7xRPYnx5R72vMROM/B
+         oYE4pAxMVK1aCdg9OYq+zGOS9qXSQ429BqHYAbDf12OeRrwscs0AxHrzehBFOejwaDse
+         2xzfkpQf6u8PIIv5EYYaSi8iHkVBRzlwItd49jGo5CNE+HJEbiWgFC8J/HhCHU/T/kmo
+         XMOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fq9+hKXE2B25/q7SGHJTgmlpE5pNGMn67wmPQ/2AfFA=;
+        b=5FeCTUb3ElUovacMyd6S3HsLVLwlv73HCkI8TXzLbRnQspynk8W8GZuElWKMfiRr/M
+         tQnerpY83wTcaLvfPVdEg2rSw9300W+kW+9gs7mNR3RnK0bMNrJ62rMcg3DsnpMK0PcV
+         Sh3ca+u1Xqe/0cUsKyCy7zWhgXgCqDii96KQRqfE724S1RcYL7JVfO+WHb8tmZh5Hih+
+         U64vqH2+tNwjFG6MXQAIA84oljGn2FR4QK4+DOvJ/Xh2+gcOcx8nPkXimPvbTlafrPvq
+         89/h8tdgAD1+wN1gZ1Kw0sTnIWYaQ7GU3XFbwYYpPzN/qgFftofuvdBlUPPVYlTjMDY1
+         GvIw==
+X-Gm-Message-State: AOAM531caiYR0jksKzsSNrnc4LRXfzMScZpcFDy3cVX8r7BuxgsiY07P
+        oXBirileN75BMyyburSspHvkVQ==
+X-Google-Smtp-Source: ABdhPJyQpoHq58XxxDiH1vNEtJGyB3ROg2E9nRNb6DbulnTpMJjY+JTpp9jWTnRHJzb8qLKPuHtgwQ==
+X-Received: by 2002:a17:90a:9306:b0:1bc:9256:5477 with SMTP id p6-20020a17090a930600b001bc92565477mr20937679pjo.170.1646119529474;
+        Mon, 28 Feb 2022 23:25:29 -0800 (PST)
+Received: from localhost.localdomain ([223.179.136.225])
+        by smtp.gmail.com with ESMTPSA id m6-20020a62f206000000b004e152bc0527sm15680445pfh.153.2022.02.28.23.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 23:25:29 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        lorenzo.pieralisi@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v2 0/7] Add PCIe support for SM8150 SoC
+Date:   Tue,  1 Mar 2022 12:55:04 +0530
+Message-Id: <20220301072511.117818-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@bp is a local variable, calling mce_threshold_remove_device() when
-threshold_create_bank() fails will not free the @bp. Note that
-mce_threshold_remove_device() frees the @bp only if it's already
-stored in the @threshold_banks per-CPU variable.
+Changes since v1:
+-----------------
+- v1 can be found here: https://lore.kernel.org/linux-arm-msm/20220223192946.473172-1-bhupesh.sharma@linaro.org/T/
+- Collected ACKs on [PATCH 1/7], [PATCH 2/7] and [PATCH 4/7] from Rob
+  and Dmitry.
+- Broke down another separately sent out PATCH (see [1]), into a 3 patches (one each for emac, pci
+  and ufs gdsc defines) - one of which is carried as [PATCH 3/7]
+  in this series, which fixes a compilation error.
+  The rest of the gdsc defines have been sent out as separate patch(es).
+[1]. https://patchwork.kernel.org/project/netdevbpf/patch/20220126221725.710167-4-bhupesh.sharma@linaro.org/
+- Rob's bot reported a number of 'dtbs_check' errors with the v1 series,
+  which are been fixed with a separate series now (see [2]), to ease the
+  review of this series.
+[2]. https://lore.kernel.org/linux-arm-msm/20220228123019.382037-1-bhupesh.sharma@linaro.org/T/
 
-At that point, the @threshold_banks per-CPU variable is still NULL,
-so the mce_threshold_remove_device() will just be a no-op and the
-@bp is leaked.
 
-Fix this by calling kfree() and early returning when we fail.
+This series adds PCIe support for Qualcomm SM8150 SoC with relevant PHYs.
+There are 2 PCIe instances on this SoC each with different PHYs. The PCIe
+controller and PHYs are mostly compatible with the ones found on SM8250
+SoC, hence the old drivers are modified to add the support.
 
-This bug is introduced by commit 6458de97fc15530b544 ("x86/mce/amd:
-Straighten CPU hotplug path") [1].
+This series has been tested on SA8155p ADP board with QCA6696 chipset connected
+onboard.
 
-Link: https://lore.kernel.org/all/20200403161943.1458-6-bp@alien8.de [1]
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
 
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Fixes: 6458de97fc15530b54477c4e2b70af653e8ac3d9 ("x86/mce/amd: Straighten CPU hotplug path")
-Cc: stable@vger.kernel.org # v5.8+
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- arch/x86/kernel/cpu/mce/amd.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Bhupesh Sharma (7):
+  dt-bindings: pci: qcom: Document PCIe bindings for SM8150 SoC
+  dt-bindings: phy: qcom,qmp: Add SM8150 PCIe PHY bindings
+  clk: qcom: gcc: Add PCIE_0_GDSC and PCIE_1_GDSC for SM8150
+  phy: qcom-qmp: Add SM8150 PCIe QMP PHYs
+  PCI: qcom: Add SM8150 SoC support
+  arm64: dts: qcom: sm8150: Add pcie nodes for SM8150
+  arm64: dts: qcom: sa8155: Enable pcie nodes
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9f4b508886dd..75d019dfe8d6 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1350,15 +1350,14 @@ int mce_threshold_create_device(unsigned int cpu)
- 		if (!(this_cpu_read(bank_map) & (1 << bank)))
- 			continue;
- 		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			kfree(bp);
-+			return err;
-+		}
- 	}
- 	this_cpu_write(threshold_banks, bp);
- 
- 	if (thresholding_irq_en)
- 		mce_threshold_vector = amd_threshold_interrupt;
- 	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
- }
+ .../devicetree/bindings/pci/qcom,pcie.txt     |   5 +-
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml |   4 +
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts      |  42 +++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 243 ++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-qcom.c        |  16 ++
+ drivers/phy/qualcomm/phy-qcom-qmp.c           |  90 +++++++
+ include/dt-bindings/clock/qcom,gcc-sm8150.h   |   2 +
+ 7 files changed, 400 insertions(+), 2 deletions(-)
+
 -- 
-2.32.0
+2.35.1
 

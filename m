@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9BB4C8F08
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1417D4C8F0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiCAP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S235773AbiCAP0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbiCAPZ4 (ORCPT
+        with ESMTP id S235742AbiCAPZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:25:56 -0500
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FA78BE0B;
-        Tue,  1 Mar 2022 07:24:49 -0800 (PST)
+        Tue, 1 Mar 2022 10:25:57 -0500
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE768A6E9;
+        Tue,  1 Mar 2022 07:24:51 -0800 (PST)
 Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout2.routing.net (Postfix) with ESMTP id 5B8445FD47;
-        Tue,  1 Mar 2022 15:24:48 +0000 (UTC)
+        by mxout3.routing.net (Postfix) with ESMTP id 55CA1604D9;
+        Tue,  1 Mar 2022 15:24:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1646148288;
+        s=20200217; t=1646148289;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O4mDNDnNrc2l6l2KQYpl88DRF0oS2RB4UmRhs1zBpaA=;
-        b=HprEB0730UH3XpwJHwa8vjTm1DZo+5lXhkA2Eb9BgsafDAOCIzFCOytOvgdxmNiLibaQnF
-        FMgYDRzyjmbCcwIshFpAZ1w3/SeKCmaWO4RE37zSSNssdkDM0gKH5Oz+QN3P6Y+maJow7P
-        A/iep4XYWCT4I8SG3tV4KG5vWfnZTAs=
+        bh=oeojDkbixb+3+AqcShTPnuHWz+1GrcPznWJUJt5Sy3k=;
+        b=mCD9IItZHz/nvNSw+9nUHqW7k4ury82ESpc+eia4AE3SjgYsDGOTXqNBNJCDoI++q0jcmL
+        pFOS+9nkJPmLxef1LhJfTfApHMkumNJ+3emH6O4B/x8/+bS5jOjgG7/nyyxud1fYDBIJoh
+        ajA9m00XiJaKcMBdHTvxXlzp4x5U3gw=
 Received: from localhost.localdomain (fttx-pool-80.245.77.190.bambit.de [80.245.77.190])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 47D3C10011C;
-        Tue,  1 Mar 2022 15:24:47 +0000 (UTC)
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 50CC71005DD;
+        Tue,  1 Mar 2022 15:24:48 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     devicetree@vger.kernel.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -46,15 +46,15 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH v4 4/5] dt-bindings: Add rk3568-dwc3-ahci compatible
-Date:   Tue,  1 Mar 2022 16:24:20 +0100
-Message-Id: <20220301152421.57281-5-linux@fw-web.de>
+Subject: [PATCH v4 5/5] arm64: dts: rockchip: Add sata nodes to rk356x
+Date:   Tue,  1 Mar 2022 16:24:21 +0100
+Message-Id: <20220301152421.57281-6-linux@fw-web.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220301152421.57281-1-linux@fw-web.de>
 References: <20220301152421.57281-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 6258418b-4d96-4beb-b093-528b24be8dfe
+X-Mail-ID: ca1f5b53-0846-4b9d-9ef4-c9539ffd73ec
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,29 +66,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Add SoC specific compatible for rk3568 ahci controller
+RK356x supports up to 3 sata controllers which were compatible with the
+existing snps,dwc-ahci binding.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
-v4: new Patch
- Documentation/devicetree/bindings/ata/ahci-platform.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+changes in v4:
+ - drop newline in dts
+ - re-add clock-names
+ - add soc specific compatible
+changes in v3:
+ - fix combphy error by moving sata0 to rk3568.dtsi
+ - remove clock-names and interrupt-names
+changes in v2:
+ - added sata0 + 1, but have only tested sata2
+---
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 28 ++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-index ea1af283d125..7111cf448f45 100644
---- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-+++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-@@ -29,6 +29,10 @@ properties:
-           - marvell,armada-8k-ahci
-           - marvell,berlin2q-ahci
-         - const: generic-ahci
-+      - items:
-+        - enum:
-+          - rockchip,rk3568-dwc-ahci
-+        - const: snps,dwc-ahci
-       - enum:
-         - brcm,iproc-ahci
-         - cavium,octeon-7130-ahci
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+index 5b0f528d6818..3e07d9f6a2d1 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+@@ -8,6 +8,20 @@
+ / {
+ 	compatible = "rockchip,rk3568";
+ 
++	sata0: sata@fc000000 {
++		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
++		reg = <0 0xfc000000 0 0x1000>;
++		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
++			 <&cru CLK_SATA0_RXOOB>;
++		clock-names = "sata", "pmalive", "rxoob";
++		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++		phys = <&combphy0 PHY_TYPE_SATA>;
++		phy-names = "sata-phy";
++		ports-implemented = <0x1>;
++		power-domains = <&power RK3568_PD_PIPE>;
++		status = "disabled";
++	};
++
+ 	pipe_phy_grf0: syscon@fdc70000 {
+ 		compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
+ 		reg = <0x0 0xfdc70000 0x0 0x1000>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 7cdef800cb3c..264dd030e703 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -230,6 +230,34 @@ scmi_shmem: sram@0 {
+ 		};
+ 	};
+ 
++	sata1: sata@fc400000 {
++		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
++		reg = <0 0xfc400000 0 0x1000>;
++		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
++			 <&cru CLK_SATA1_RXOOB>;
++		clock-names = "sata", "pmalive", "rxoob";
++		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++		phys = <&combphy1 PHY_TYPE_SATA>;
++		phy-names = "sata-phy";
++		ports-implemented = <0x1>;
++		power-domains = <&power RK3568_PD_PIPE>;
++		status = "disabled";
++	};
++
++	sata2: sata@fc800000 {
++		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
++		reg = <0 0xfc800000 0 0x1000>;
++		clocks = <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
++			 <&cru CLK_SATA2_RXOOB>;
++		clock-names = "sata", "pmalive", "rxoob";
++		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
++		phys = <&combphy2 PHY_TYPE_SATA>;
++		phy-names = "sata-phy";
++		ports-implemented = <0x1>;
++		power-domains = <&power RK3568_PD_PIPE>;
++		status = "disabled";
++	};
++
+ 	gic: interrupt-controller@fd400000 {
+ 		compatible = "arm,gic-v3";
+ 		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
 -- 
 2.25.1
 

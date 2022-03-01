@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690474C8C44
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD43B4C8C4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiCANJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S234928AbiCANLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiCANJE (ORCPT
+        with ESMTP id S229784AbiCANLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:09:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 946541EAF4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:08:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646140101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=G47XnttoMjqU/tQxN3E9pOF1GgvxHfmes01K+EO8oi0=;
-        b=IHnnxXbIXRYAI3M8TAryoqID4t/aBCg8XuCco8S4z/WGSZXXGyazmAIaiAVa2RaAdRVOR2
-        fonlktCFv7ioLUBOMSCQBmSRqqD3kW59BIUFX0vnApxk7T4s+CLOPX4qAa6DRXF//4lpEz
-        sDFMY4OKHsUUOr0OPTMvCdYE2SFeN0M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-80-onNUPhVdMhaFdFUkDab97A-1; Tue, 01 Mar 2022 08:08:18 -0500
-X-MC-Unique: onNUPhVdMhaFdFUkDab97A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F517800422;
-        Tue,  1 Mar 2022 13:08:17 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB9FF78363;
-        Tue,  1 Mar 2022 13:08:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM changes for 5.17-rc7
-Date:   Tue,  1 Mar 2022 08:08:15 -0500
-Message-Id: <20220301130815.151511-1-pbonzini@redhat.com>
+        Tue, 1 Mar 2022 08:11:37 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E41EAF4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:10:56 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so2171390pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 05:10:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DV6f3J2QIRehyEDByQEpoJ2xwDbM5hUK+3WRGSJAWlw=;
+        b=YbuwEXN/UFumml2CqM42Aahs6NNSgs9Fax2qrLKsWK3mw8JfHkq7DpjMyrbU0N1Usx
+         bmHQu6FoE6V/joJwRIjThReEFs/kkPktEhABl7uNtKNe1ufj8eTNvGoE/AsPxa9tN0MH
+         YD2Vl0UrWh2AjVEa4A9t8oUMSSxRRk0ZSqcVsJea+OVqKXhqaDB7GRkUSKj/Nz/SRAAw
+         VdmyNV4CpfsY3QB28aRqjKtc+LtehkS1v37iQzSUSkodUzze9ZLvTqTekeE7yyzHrLvr
+         rDRrBC5VxnEFbnwtevr9seYx/NO/F3H4YESG9A5RcOi0srsUnLX2JDcq7Iij3SDDxdVy
+         u9ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DV6f3J2QIRehyEDByQEpoJ2xwDbM5hUK+3WRGSJAWlw=;
+        b=BEO8ftDfgCIyOVc11uO4rrmiFlF5cw7XZQ4IwoYlmV3t/1M6UteU4OqAVGCCY6ITqY
+         yGk2+q396eN6yQLYOThFcWkCbbNl8VK7TdS8TL6ChRbt0tZa5adGn5yjKz6CsWNAWdXQ
+         VXVhRpxOBx5E5IyAxlNgzBYwvAt2H8802w7BsNGKpgt8V65/8xdsV2hxLmajgYGMYN1a
+         mztgqAcxs+vXXVrinrykQtIghxSO0e+sOw/Dmsz5/y29tQ9by9y7Lrul98D1Y8L75Lp2
+         Zx9K6y2bs4mXUqEV66COJgC0NchpMcnp2wXsAlJOBR2dK7lB1Lo51r5l8KT8Q5rUB1lt
+         pSeA==
+X-Gm-Message-State: AOAM533EWNhDr0q02TtkjMkTaVrQoHhgA614o6NPUfrHfKP6kM3RLvjR
+        v6cM6uuYb5eeC6lmvHUzCyzXXze44AGJWdsgIYHbmA==
+X-Google-Smtp-Source: ABdhPJyUTJreTDgP0C9OseilZ4NmT99vFUTYPcMXphbUrL9wNDsClw+KYh7/yJsMqqSZ7ZrQKj8DidkIMvcpRyd1WSY=
+X-Received: by 2002:a17:902:c94f:b0:151:3cd8:efe3 with SMTP id
+ i15-20020a170902c94f00b001513cd8efe3mr18961096pla.117.1646140255853; Tue, 01
+ Mar 2022 05:10:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220301060530.5870-1-jrdr.linux@gmail.com>
+In-Reply-To: <20220301060530.5870-1-jrdr.linux@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 1 Mar 2022 14:10:44 +0100
+Message-ID: <CAG3jFyugksy60Sgjg5U+E4ZGEH3mNpZmLJB_aZ=uncb7kg7zAA@mail.gmail.com>
+Subject: Re: [PATCH] media: camss: Replace hard coded value with parameter
+To:     Souptick Joarder <jrdr.linux@gmail.com>
+Cc:     todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
+        mchehab@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Tue, 1 Mar 2022 at 07:05, Souptick Joarder <jrdr.linux@gmail.com> wrote:
+>
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>
+> Kernel test robot reported below warning ->
+> drivers/media/platform/qcom/camss/camss-csid-gen2.c:407:3:
+> warning: Value stored to 'val' is never read
+> [clang-analyzer-deadcode.DeadStores]
+>
+> Replace hard coded value with val.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+> ---
+>  drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+> index abbfbf448893..2031bde13a93 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
+> @@ -405,7 +405,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+>                 writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
+>
+>                 val = 0;
+> -               writel_relaxed(0, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
+> +               writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
+>
+>                 val = 1;
+>                 writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
+> --
+> 2.25.1
+>
 
-The following changes since commit e910a53fb4f20aa012e46371ffb4c32c8da259b4:
-
-  KVM: x86: nSVM: disallow userspace setting of MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled (2022-02-24 13:04:47 -0500)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-
-for you to fetch changes up to ece32a75f003464cad59c26305b4462305273d70:
-
-  Merge tag 'kvmarm-fixes-5.17-4' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-02-25 09:49:30 -0500)
-
-----------------------------------------------------------------
-The bigger part of the change is a revert for x86 hosts.  Here the
-second patch was supposed to fix the first, but in reality it was
-just as broken, so both have to go.
-
-x86 host:
-
-* Revert incorrect assumption that cr3 changes come with preempt notifier
-  callbacks (they don't when static branches are changed, for example)
-
-ARM host:
-
-* Correctly synchronise PMR and co on PSCI CPU_SUSPEND
-
-* Skip tests that depend on GICv3 when the HW isn't available
-
-----------------------------------------------------------------
-Mark Brown (1):
-      KVM: selftests: aarch64: Skip tests if we can't create a vgic-v3
-
-Oliver Upton (1):
-      KVM: arm64: Don't miss pending interrupts for suspended vCPU
-
-Paolo Bonzini (1):
-      Merge tag 'kvmarm-fixes-5.17-4' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-
-Sean Christopherson (2):
-      Revert "KVM: VMX: Save HOST_CR3 in vmx_set_host_fs_gs()"
-      Revert "KVM: VMX: Save HOST_CR3 in vmx_prepare_switch_to_guest()"
-
- arch/arm64/kvm/psci.c                            |  3 +--
- arch/x86/kvm/vmx/nested.c                        | 11 +++++++---
- arch/x86/kvm/vmx/vmx.c                           | 28 ++++++++++++++----------
- arch/x86/kvm/vmx/vmx.h                           |  5 ++---
- tools/testing/selftests/kvm/aarch64/arch_timer.c |  7 +++++-
- tools/testing/selftests/kvm/aarch64/vgic_irq.c   |  4 ++++
- tools/testing/selftests/kvm/lib/aarch64/vgic.c   |  4 +++-
- 7 files changed, 41 insertions(+), 21 deletions(-)
-
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

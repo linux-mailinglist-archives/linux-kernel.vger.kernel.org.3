@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3268C4C943C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4014C943F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbiCATaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S235404AbiCATaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235057AbiCATaD (ORCPT
+        with ESMTP id S235057AbiCATaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:30:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E7A43EE3
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646162961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=b+msLQunHEcmiuuu7B6KPaPcoKHsejBtZdFml9n1AXs=;
-        b=OVKvkIRDPw3LHKGovHjAzOnRksEoKBhk4PIFnl0m1Th2tbnZ7UcSt50/MyKuThZWjeixBC
-        GVBHKgJFGTNejWh0kR5BS3kAEZpyf0p21TAWuN3h5clJt+toeDEzOf+32LNv2wYlpoYTjr
-        vX3SvzdHTk0cOtw6+uCIVMuF1MKSRx4=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-670-wbCBHDenPcOyA80RKxrvBQ-1; Tue, 01 Mar 2022 14:29:20 -0500
-X-MC-Unique: wbCBHDenPcOyA80RKxrvBQ-1
-Received: by mail-ot1-f72.google.com with SMTP id g24-20020a9d6a18000000b005af04eaa543so11896691otn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:29:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=b+msLQunHEcmiuuu7B6KPaPcoKHsejBtZdFml9n1AXs=;
-        b=PxcCPNwksEvzXhgEyzNsD7toQcvS58nm4nvmAcAbhug0IQuEwxQKkakk64KKk8x9Ev
-         4PE+cciKPpjCcT2fRtohzD30mI/vQfyUYgWu7qmWoc6tDbyJy4Do8JnP9eCn2+TFRMi4
-         yADVsEEBbxNVJnwUX8FWEb+SLGO6QEdyqIXWaYAIZNjTZJyRspv7Vnkpn9dfUYrJHdhJ
-         ionUP7W/8OmOTdVwnC7dR5w6G9rX+nWlKxDuDh84Ur9jZCmBlq9Mm4w+BgNZzuuaV596
-         BgU3xeQ7MJT07cPP4L9OaTDW2jjgFub6GbcyCGzXrHiHJNGAibwDLwIReTYsJVNTEuYP
-         2mVA==
-X-Gm-Message-State: AOAM533HGeTjQPHY7VqqC6Rs7yTzyiYpqp78XjR7izUFg+AoYV91uiNB
-        Jbya1rTCken4NT1E2FncwopXF0rztuwlmhwCn0ab7pI2LOsI+sTMX9524gl1dRWwuekiv5+rDLC
-        ThNXbRsXWWMDncU6WOtAkUiho
-X-Received: by 2002:a05:6870:87c4:b0:bc:4b13:b0c0 with SMTP id s4-20020a05687087c400b000bc4b13b0c0mr5039313oam.136.1646162959407;
-        Tue, 01 Mar 2022 11:29:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxpLY9TTBQgKSPEKTWZlSp5xirp8uo7AKtiTGqXvhErF6hETfzSvsXuEhplLz2OX8xyyVD/vQ==
-X-Received: by 2002:a05:6870:87c4:b0:bc:4b13:b0c0 with SMTP id s4-20020a05687087c400b000bc4b13b0c0mr5039301oam.136.1646162959171;
-        Tue, 01 Mar 2022 11:29:19 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id t7-20020a9d5907000000b005afa4058a4csm7019270oth.1.2022.03.01.11.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 11:29:18 -0800 (PST)
-From:   trix@redhat.com
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        corbet@lwn.net, bhelgaas@google.com
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] vgaarbiter: fix vgaarbiter doc build break
-Date:   Tue,  1 Mar 2022 11:29:09 -0800
-Message-Id: <20220301192909.294900-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Tue, 1 Mar 2022 14:30:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB8245789;
+        Tue,  1 Mar 2022 11:29:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEC5FB81C00;
+        Tue,  1 Mar 2022 19:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0ADC340EE;
+        Tue,  1 Mar 2022 19:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646162960;
+        bh=uNrsfjrvwxmS4fwU6brFrs/8dvSzhgafz38Pv0bO1Wg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=odbmiyXgcNFBnO53zdYtqp6fuu34H7vuSe/DmFIDD8CdkrQKubApQ3GL7mF9LjbJI
+         etWrcr9uo+b6ekp/vdSATrxoLCOF3pGmbNHdGbG3f+ko9pf/o++GPZK/W0ZBhMunUe
+         nzquL8kbd/1m7cT9krZMg3cJ6fu/NkePrYn3titjWmsOCuceRM+sS+W3KAp5HcxHhC
+         6Dr7vkEhzrKEp+rSaZdtJWnifIHsoly9hPZDwS4bkXTHPxji5zjA8/pzqmMnnDGqUs
+         lI1zk7VVM8UI65qVD4hlPt+5d8CdJOdQTIVMVYFHF8nqRf2U7+woscOKgYoJtBOk+X
+         5NJXoaiuIJcdQ==
+Date:   Tue, 1 Mar 2022 20:29:17 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>, upstream@semihalf.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
+Message-ID: <Yh50DUUYXRMEIua0@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>, upstream@semihalf.com,
+        kernel test robot <lkp@intel.com>
+References: <20220218133348.628962-1-jsd@semihalf.com>
+ <Yh44rYi6m9csyF28@ninjato>
+ <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aHBu2wCgS9t/xhcV"
+Content-Disposition: inline
+In-Reply-To: <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-make htmldocs fails with
-Error: Cannot open file ./drivers/gpu/vga/vgaarb.c
+--aHBu2wCgS9t/xhcV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The location of the file changed
-drivers/gpu/vga/vgaarb.c -> drivers/pci/vgaarb.c
-So update the docs with the new location.
 
-Fixes: d6e1898bfa5b ("PCI/VGA: Move vgaarb to drivers/pci")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- Documentation/gpu/vgaarbiter.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> So actually I've already added myself as a R:eviewer for
+> i2c-designware-* files in one of the previous patches with the purpose
 
-diff --git a/Documentation/gpu/vgaarbiter.rst b/Documentation/gpu/vgaarbiter.rst
-index 339ed5fecd2e4..bde3c0afb0590 100644
---- a/Documentation/gpu/vgaarbiter.rst
-+++ b/Documentation/gpu/vgaarbiter.rst
-@@ -100,7 +100,7 @@ In-kernel interface
- .. kernel-doc:: include/linux/vgaarb.h
-    :internal:
- 
--.. kernel-doc:: drivers/gpu/vga/vgaarb.c
-+.. kernel-doc:: drivers/pci/vgaarb.c
-    :export:
- 
- libpciaccess
--- 
-2.26.3
+Ah, this is perfect then. I was only grepping for amdpsp, so I missed
+it. Thanks for the heads up!
 
+
+--aHBu2wCgS9t/xhcV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIedAgACgkQFA3kzBSg
+Kbbqgw//YYPl9qrWmVGvIzu+FySDmA1/5MwonKQv4nwS7a4EYSUDOvQVbPtOh2Yx
+MxG3NMTGiPX/yJfRWKQXYG8GEGV3Ghc9cuzR+dTebepkJZh3/E+0PPmEbyItVQ2r
+7nopuiZ6UpOWd3KF8kT3kEh5ewRXokdzb3iVGURwX1MfIT9/mYczox6HelNhgxMX
+d+f9MeZDbuuCdxuv7eL8B9pxoP+vAljmAOUnrw9DqIE6tkHjppW2OI9vMB42vjZJ
+09r8+3/vG17B7DBNPxSzEnNYQcVHCPBfHziRYnXQGBFj67S7QQWMyg+MKc0IKzjt
+/tpQJYFvxhqRklAefP0mSY6WMLvUUfy3/MJbrhphW9ypDIf+t5nwALhOAwBkZ+4p
+JH4rMYV/SgT1NMatSLfcfgFSRDMjSXzly9S45C7DFjNAK/gGW3A4zDXnGZXhgr5/
+zpsbqIo7cgh3wkJUuBoLO5fZeacGYmoY0rvCLq7+JxRFQhzTEutVaTQC03oodTeu
+0OHhrSyxqJ8j88eOOrqmw9mTVe6pSHWYpzXn6QhUczpisDShJlunaSzbIYq3htgs
+H5Qxm+aKKNjMQo8FD9hkSNjc7JzA0EmyRQesSuekJMk1UXxtCOkn08Ga9Cb39TRf
+ok8mdEoujDmEcjRuAkgwXQ5vYYYnUshnAVKXsi0UxdnrxVqExEc=
+=hOS2
+-----END PGP SIGNATURE-----
+
+--aHBu2wCgS9t/xhcV--

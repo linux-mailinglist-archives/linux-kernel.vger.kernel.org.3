@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1754C8639
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03164C863A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiCAISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S233354AbiCAISo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbiCAIS1 (ORCPT
+        with ESMTP id S233332AbiCAISk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:18:27 -0500
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 623DCBCBB
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:17:44 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowABXX8eP1h1iVVHwAQ--.63688S2;
-        Tue, 01 Mar 2022 16:17:20 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Julia.Lawall@inria.fr
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] ASoC: mxs-saif: Handle errors for clk_enable
-Date:   Tue,  1 Mar 2022 16:17:17 +0800
-Message-Id: <20220301081717.3727190-1-jiasheng@iscas.ac.cn>
+        Tue, 1 Mar 2022 03:18:40 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC69E0DB;
+        Tue,  1 Mar 2022 00:17:57 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id jr3so1776914qvb.11;
+        Tue, 01 Mar 2022 00:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0/9cWyhTY1JANz1X29vJp7nAVb49B2jaNSOIGWS3uGg=;
+        b=BSY4T9+Lwm/mgKh/qJKEDXLM7olKe9GbgVkog27IJ1Gn1PwRQ32L/1zREs9959WUnW
+         i8VfcrDGYFa/FfvHJvICfayzrhf+yIUzYEdpfnvW8FN2SCNpaqWYdroKFQccBPtcQfJa
+         YSA2X8Lsoj42B6loBUaUPg32zo/ud3+U3+60CkwQjOvJi4LcgdlEhPSa4RzZXMSutCzg
+         8aMbRX1AzZZaXKojfXJNo9aZLqF5ULjjnvjqXIOzRC8f27DOZ4QRCFxbgeL6zZ7FkRMR
+         RHe0gPhtEEmCNXBhp73wBHwVm2zmsDBBdd9tFg0nXkAJNUl5KLJ3bH69Ig5khtpsnhTW
+         3FTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0/9cWyhTY1JANz1X29vJp7nAVb49B2jaNSOIGWS3uGg=;
+        b=Y36gux5JBiErcfLkIetz7RG66l7klMf0zyXSGeGml9x4KsG9g2Qt3DPVN2kX4ZjVDR
+         LzJqVknj1qs1Mz49Iea4RpEE+aSKk2tEou0Ki9w0hDJ4esaUbMjRPdNOvhdLt1ADvRU3
+         nVMyye7AMCIvBkKW6/yA/vXy4/7CPMZ3tFq+S0SWrNshsJ3xQR6voq4QdPwenZFb7EU/
+         3lgJodlZMg0ye48LMyiTXd5X5nJf/Co+7dEZUQPG6PdAXSRzroq8eQ2j8Oh6e2oXc8GK
+         unct3WCcmif2GLz4Bj49jly/4Z65VGoEZdw6pD4yOatSNVcCJNV5z/xCQRZ/TLkF9FFr
+         Lqiw==
+X-Gm-Message-State: AOAM530Qd5nGcdpl7RbTedrqH5se03KebT1XyADJWAGox7KnGt8wMzoC
+        Nj3/KLihuqh5rBymhEMDDEs=
+X-Google-Smtp-Source: ABdhPJymlE8dqN2UNAK/SYjTXYrYRw9T67dkeL3D1Qmx79ZUJDl+/Yfu0KSRS5fbAagvKv9yIObG8w==
+X-Received: by 2002:a0c:9029:0:b0:431:37ad:c8d2 with SMTP id o38-20020a0c9029000000b0043137adc8d2mr16269242qvo.71.1646122676895;
+        Tue, 01 Mar 2022 00:17:56 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d15-20020a05622a15cf00b002de711a190bsm8815112qty.71.2022.03.01.00.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 00:17:56 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     krzysztof.kozlowski@canonical.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] net/nfc/nci: use memset avoid infoleaks
+Date:   Tue,  1 Mar 2022 08:17:50 +0000
+Message-Id: <20220301081750.2053246-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowABXX8eP1h1iVVHwAQ--.63688S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF18GF17Kry8Gw1UGFg_yoWfXrc_ta
-        92kw4DZrWYvFZa9r1DJr4DAr40gwsrAw1rWa4FqrnxtFyfJF13urZFqrZxur90vr1vvFyf
-        GryjvrZ7ArW29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-        XdbUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the clk_enable(),
-it should be better to check it, like mxs_saif_trigger().
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Fixes: d0ba4c014934 ("ASoC: mxs-saif: set a base clock rate for EXTMASTER mode work")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Use memset to initialize structs to preventing infoleaks
+in nci_set_config
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- sound/soc/mxs/mxs-saif.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/nfc/nci/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index 6a2d24d48964..879c1221a809 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -455,7 +455,10 @@ static int mxs_saif_hw_params(struct snd_pcm_substream *substream,
- 		* basic clock which should be fast enough for the internal
- 		* logic.
- 		*/
--		clk_enable(saif->clk);
-+		ret = clk_enable(saif->clk);
-+		if (ret)
-+			return ret;
-+
- 		ret = clk_set_rate(saif->clk, 24000000);
- 		clk_disable(saif->clk);
- 		if (ret)
+diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
+index d2537383a3e8..32be42be1152 100644
+--- a/net/nfc/nci/core.c
++++ b/net/nfc/nci/core.c
+@@ -641,6 +641,7 @@ int nci_set_config(struct nci_dev *ndev, __u8 id, size_t len, const __u8 *val)
+ 	if (!val || !len)
+ 		return 0;
+ 
++	memset(&param, 0x0, sizeof(param));
+ 	param.id = id;
+ 	param.len = len;
+ 	param.val = val;
 -- 
 2.25.1
 

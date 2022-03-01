@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA9E4C8CAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5A54C8CB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiCANcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S235058AbiCANfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiCANcd (ORCPT
+        with ESMTP id S233631AbiCANfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:32:33 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675169D4D4;
-        Tue,  1 Mar 2022 05:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646141512; x=1677677512;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rPEZC56dHt+xxnN1y+l9smG/XUeEeiafGJU3lPYFGa0=;
-  b=nFS8d1wStxk888XmkmJ/0qhByfXhaytsX1BOfy5xOpI35NH5KGpHp/FR
-   B9FXdORb/zYEMu9wufpXJ++WT6KrnKEhjbvuQMpP374PxjYjWewb6N75i
-   pjiMwG24aRotfAGPwL2/aIZ9d+U6iVhCjAZd8+6jRRDXpDmr1G8a8BRcH
-   kdOspaMZFDmAUtPbSxeWFSFYk7kuqWbNNH/qCNPiDEf51/S5GPc5DmAPH
-   AQr12qq2O6d0uGmfiRavLWjDifVP9SthQ7nhYZBuvy8uKhZXz/nPeaw09
-   et864GC2/mQEvVJClr7RYRms2/UisN88IyEzM2vdn2vUs99LmK0JmQdlf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250711634"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="250711634"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 05:31:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="534894424"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 01 Mar 2022 05:31:51 -0800
-Received: from sradha3-mobl1.amr.corp.intel.com (sradha3-mobl1.amr.corp.intel.com [10.212.250.139])
-        by linux.intel.com (Postfix) with ESMTP id 8659A580BE9;
-        Tue,  1 Mar 2022 05:31:51 -0800 (PST)
-Message-ID: <ba9128b499b243f5c08f855018a37cd1484211b6.camel@linux.intel.com>
-Subject: Re: [PATCH V6 1/3] PCI/ASPM: Add pci_enable_default_link_state()
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 01 Mar 2022 05:31:51 -0800
-In-Reply-To: <Yh3Vt6/WzoAasPxZ@infradead.org>
-References: <20220301041943.2935892-1-david.e.box@linux.intel.com>
-         <20220301041943.2935892-2-david.e.box@linux.intel.com>
-         <Yh3Vt6/WzoAasPxZ@infradead.org>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 1 Mar 2022 08:35:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 876353A198;
+        Tue,  1 Mar 2022 05:34:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27B571042;
+        Tue,  1 Mar 2022 05:34:23 -0800 (PST)
+Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 94B393F70D;
+        Tue,  1 Mar 2022 05:34:21 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH] perf test arm64: Test unwinding using fame-pointer (fp) mode
+Date:   Tue,  1 Mar 2022 13:34:13 +0000
+Message-Id: <20220301133414.11766-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 00:13 -0800, Christoph Hellwig wrote:
-> On Mon, Feb 28, 2022 at 08:19:41PM -0800, David E. Box wrote:
-> > +	down_read(&pci_bus_sem);
-> > +	mutex_lock(&aspm_lock);
-> > +	link->aspm_default = 0;
-> > +	if (state & PCIE_LINK_STATE_L0S)
-> > +		link->aspm_default |= ASPM_STATE_L0S;
-> > +	if (state & PCIE_LINK_STATE_L1)
-> > +		/* L1 PM substates require L1 */
-> > +		link->aspm_default |= ASPM_STATE_L1 | ASPM_STATE_L1SS;
-> > +	if (state & PCIE_LINK_STATE_L1_1)
-> > +		link->aspm_default |= ASPM_STATE_L1_1;
-> > +	if (state & PCIE_LINK_STATE_L1_2)
-> > +		link->aspm_default |= ASPM_STATE_L1_2;
-> > +	if (state & PCIE_LINK_STATE_L1_1_PCIPM)
-> > +		link->aspm_default |= ASPM_STATE_L1_1_PCIPM;
-> > +	if (state & PCIE_LINK_STATE_L1_2_PCIPM)
-> > +		link->aspm_default |= ASPM_STATE_L1_2_PCIPM;
-> > +	pcie_config_aspm_link(link, policy_to_aspm_state(link));
-> 
-> Is there any reason the ASPM_* values aren't passed directly to this
-> function?
+Add a shell script to check that the call-graphs generated using frame
+pointers (--call-graph fp) are complete and not missing leaf functions:
 
-The ASPM_* macors aren't visible outside of aspm.c whereas the
-PCIE_LINK_STATE_* macros are defined in pci.h. This is similar to what
-is done for pci_disable_link_state().
+  | $ perf test 88 -v
+  |  88: Check Arm64 callgraphs are complete in fp mode                  :
+  | --- start ---
+  | test child forked, pid 8734
+  |  + Compiling test program (/tmp/test_program.Cz3yL)...
+  |  + Recording (PID=8749)...
+  |  + Stopping perf-record...
+  | test_program.Cz
+  | 		     728 leaf
+  | 		     753 parent
+  | 		     76c main
+  | test child finished with 0
+  | ---- end ----
+  | Check Arm SPE callgraphs are complete in fp mode: Ok
 
-David
+Fixes: b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
+Suggested-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: German Gomez <german.gomez@arm.com>
+---
+ .../perf/tests/shell/test_arm_callgraph_fp.sh | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_arm_callgraph_fp.sh
+
+diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+new file mode 100755
+index 000000000..c4fa9255b
+--- /dev/null
++++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+@@ -0,0 +1,65 @@
++#!/bin/sh
++# Check Arm64 callgraphs are complete in fp mode
++# SPDX-License-Identifier: GPL-2.0
++
++lscpu | grep -q "aarch64" || exit 2
++
++if ! [ -x "$(command -v cc)" ]; then
++	echo "failed: no compiler, install gcc"
++	exit 2
++fi
++
++PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
++TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
++
++cleanup_files()
++{
++	rm -f $PERF_DATA
++	rm -f $TEST_PROGRAM_SOURCE
++	rm -f $TEST_PROGRAM
++}
++
++trap cleanup_files exit term int
++
++cat << EOF > $TEST_PROGRAM_SOURCE
++int a = 0;
++void leaf(void) {
++  for (;;)
++    a += a;
++}
++void parent(void) {
++  leaf();
++}
++int main(void) {
++  parent();
++  return 0;
++}
++EOF
++
++echo " + Compiling test program ($TEST_PROGRAM)..."
++CFLAGS="-O0 -fno-inline -fno-omit-frame-pointer"
++cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
++
++# Add a 1 second delay to skip samples that are not in the leaf() function
++perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
++PID=$!
++echo " + Recording (PID=$PID)..."
++sleep 2
++echo " + Stopping perf-record..."
++kill $PID
++wait $PID
++
++# example perf-script output:
++#
++# program 
++# 	728 leaf
++# 	753 parent
++# 	76c main
++# ...
++
++perf script -i $PERF_DATA -F comm,ip,sym | head -n4
++perf script -i $PERF_DATA -F comm,ip,sym | head -n4 |
++	awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
++						       sym[1] != "parent" ||
++						       sym[2] != "main") exit 1 }'
+-- 
+2.25.1
 

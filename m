@@ -2,190 +2,489 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319F44C98A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931BF4C98BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 00:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238616AbiCAW7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S232166AbiCAXC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 18:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiCAW7A (ORCPT
+        with ESMTP id S229572AbiCAXCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:59:00 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04ABD29CBA
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:58:16 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-115-iQhP_KcpMfqbKr15oucLPQ-1; Tue, 01 Mar 2022 22:58:13 +0000
-X-MC-Unique: iQhP_KcpMfqbKr15oucLPQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 22:58:11 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 22:58:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-CC:     linux-wireless <linux-wireless@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        KVM list <kvm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Arnd Bergman" <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-        "Mike Rapoport" <rppt@kernel.org>
-Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Index: AQHYLZ9++DU/OogLf0+tiSFmjztyUKyrHL5A
-Date:   Tue, 1 Mar 2022 22:58:11 +0000
-Message-ID: <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com>
- <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
- <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
- <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
- <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
- <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-In-Reply-To: <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Mar 2022 18:02:25 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADF375E4C
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:01:43 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f37so29375093lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 15:01:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=cl84KQHG0kLY2Y1AtHoZnag+g1VBQ0lA/b0TTIEWUMA=;
+        b=G4WQZPeuJ67KYxH1iyEWWP4afXHP1DbiGn9Z2EQAVY++9Bd2jTNI3gWI23hCxH5iw3
+         45Fx7Kx7ly0icPGy2Hjrkg+H8hekUuUVJRbrEqqg3e/27nqiJu29wGP46VuLOi6dYvD+
+         zcHmlv+zJhkgtutgJDrU2+3STeJo0LeUG5u/1TWT0b2Rr5v27VW7IZeyJeuIeRtO0Jze
+         YH5zEk8x5yjLrefzFqaWwHEw1cZUxDZnwZLfAY6GCvp9kyJ+wYaAm8nKqNpu0Ye2zMHm
+         F/RRP4AtnfD7vbeZ2W8HOIvb4MHj4E8FoOr1WHtdolp9yk/6iIz2QqikTnZ8bXu093By
+         t8dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=cl84KQHG0kLY2Y1AtHoZnag+g1VBQ0lA/b0TTIEWUMA=;
+        b=6hn7IkZdxhEOP6EZLU6GYAcH1PMaFzo5/W0K80cyaAsruVJuBCjOhNYu+wqfINTnJQ
+         1+X7hf/GB13OUxvM9YSbWxF12Q5mo0du9QnRibu++L1OO3NbVujvCex4YRPQeSpVSC3g
+         tsMAhs3089run2/6wbhSRIKuJEIz1REokBO5JDXGiANIyeCA8WINIXmylqJWa5p6jtCa
+         ot8RhHnqfvlS0Pe05M+sHMpOyLpcw+IQUU3xtn9k4SJdsqo0I/KQ2zy1WRgeiuVmcMMV
+         OX5lLaaBqRtQSqlkPPfQyZ1L6fu1QY/nKJZJDCtZNIANJVvlfu5dsmqFEHRmaPElZpEO
+         sHZw==
+X-Gm-Message-State: AOAM532IXkhUB1jOMURYRuz8C1epyOknZ7YZPC3VX/X//Y2zWyFf37zc
+        rYoUUuIULgOGA+tls+3cK2Y+qQ==
+X-Google-Smtp-Source: ABdhPJxQ4JMSCSkSO78IaZpn2Bf+VQiNDpA9o7TInu20Yo5kUTIFzX29rSOt1v2eolCCumvckSygLA==
+X-Received: by 2002:a05:6512:2614:b0:445:777d:3530 with SMTP id bt20-20020a056512261400b00445777d3530mr14575512lfb.647.1646175694556;
+        Tue, 01 Mar 2022 15:01:34 -0800 (PST)
+Received: from [127.0.0.1] ([213.239.67.158])
+        by smtp.gmail.com with ESMTPSA id g7-20020a19e047000000b0044395c894d2sm1718784lfj.163.2022.03.01.15.01.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 15:01:34 -0800 (PST)
+Date:   Wed, 02 Mar 2022 00:01:31 +0100
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+CC:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_net-next_01/10=5D_net=3A_bridg?= =?US-ASCII?Q?e=3A_mst=3A_Multiple_Spanning_Tree_=28MST=29_mode?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220301100321.951175-2-tobias@waldekranz.com>
+References: <20220301100321.951175-1-tobias@waldekranz.com> <20220301100321.951175-2-tobias@waldekranz.com>
+Message-ID: <F908AE50-EDF4-4B83-98BD-ECB872CAD776@blackwall.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDEgTWFyY2ggMjAyMiAxOTowNw0KPiBPbiBN
-b24sIEZlYiAyOCwgMjAyMiBhdCAyOjI5IFBNIEphbWVzIEJvdHRvbWxleQ0KPiA8SmFtZXMuQm90
-dG9tbGV5QGhhbnNlbnBhcnRuZXJzaGlwLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBIb3dldmVyLCBp
-ZiB0aGUgZGVzaXJlIGlzIHJlYWxseSB0byBwb2lzb24gdGhlIGxvb3AgdmFyaWFibGUgdGhlbiB3
-ZQ0KPiA+IGNhbiBkbw0KPiA+DQo+ID4gI2RlZmluZSBsaXN0X2Zvcl9lYWNoX2VudHJ5KHBvcywg
-aGVhZCwgbWVtYmVyKSAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+ICAgICAgICAgZm9y
-IChwb3MgPSBsaXN0X2ZpcnN0X2VudHJ5KGhlYWQsIHR5cGVvZigqcG9zKSwgbWVtYmVyKTsgICAg
-ICAgIFwNCj4gPiAgICAgICAgICAgICAgIWxpc3RfZW50cnlfaXNfaGVhZChwb3MsIGhlYWQsIG1l
-bWJlcikgJiYgKChwb3MgPSBOVUxMKSA9PSBOVUxMOyAgICAgICAgICAgICAgICAgICBcDQo+ID4g
-ICAgICAgICAgICAgIHBvcyA9IGxpc3RfbmV4dF9lbnRyeShwb3MsIG1lbWJlcikpDQo+ID4NCj4g
-PiBXaGljaCB3b3VsZCBhdCBsZWFzdCBzZXQgcG9zIHRvIE5VTEwgd2hlbiB0aGUgbG9vcCBjb21w
-bGV0ZXMuDQo+IA0KPiBUaGF0IHdvdWxkIGFjdHVhbGx5IGhhdmUgYmVlbiBleGNlbGxlbnQgaWYg
-d2UgaGFkIGRvbmUgdGhhdA0KPiBvcmlnaW5hbGx5LiBJdCB3b3VsZCBub3Qgb25seSBhdm9pZCB0
-aGUgc3RhbGUgYW5kIGluY29ycmVjdGx5IHR5cGVkDQo+IGhlYWQgZW50cnkgbGVmdC1vdmVyIHR1
-cmQsIGl0IHdvdWxkIGFsc28gaGF2ZSBtYWRlIGl0IHZlcnkgZWFzeSB0bw0KPiB0ZXN0IGZvciAi
-ZGlkIEkgZmluZCBhbiBlbnRyeSBpbiB0aGUgbG9vcCIuDQo+IA0KPiBCdXQgSSBkb24ndCBtdWNo
-IGxpa2UgaXQgaW4gdGhlIHNpdHVhdGlvbiB3ZSBhcmUgbm93Lg0KPiANCj4gV2h5PyBNYWlubHkg
-YmVjYXVzZSBpdCBiYXNpY2FsbHkgY2hhbmdlcyB0aGUgc2VtYW50aWNzIG9mIHRoZSBsb29wDQo+
-IF93aXRob3V0XyBhbnkgd2FybmluZ3MgYWJvdXQgaXQuICBBbmQgd2UgZG9uJ3QgYWN0dWFsbHkg
-Z2V0IHRoZQ0KPiBhZHZhbnRhZ2Ugb2YgdGhlIG5pY2VyIHNlbWFudGljcywgYmVjYXVzZSB3ZSBj
-YW4ndCBhY3R1YWxseSBtYWtlIGNvZGUNCj4gZG8NCj4gDQo+ICAgICAgICAgbGlzdF9mb3JfZWFj
-aF9lbnRyeShlbnRyeSwgLi4uLikgew0KPiAgICAgICAgICAgICAgICAgLi4NCj4gICAgICAgICB9
-DQo+ICAgICAgICAgaWYgKCFlbnRyeSkNCj4gICAgICAgICAgICAgICAgIHJldHVybiAtRVNSQ0g7
-DQo+ICAgICAgICAgLi4gdXNlIHRoZSBlbnRyeSB3ZSBmb3VuZCAuLg0KPiANCj4gYmVjYXVzZSB0
-aGF0IHdvdWxkIGJlIGEgZGlzYXN0ZXIgZm9yIGJhY2stcG9ydGluZywgcGx1cyBpdCB3b3VsZCBi
-ZSBhDQo+IGZsYWctZGF5IGlzc3VlIChpZSB3ZSdkIGhhdmUgdG8gY2hhbmdlIHRoZSBzZW1hbnRp
-Y3Mgb2YgdGhlIGxvb3AgYXQNCj4gdGhlIHNhbWUgdGltZSB3ZSBjaGFuZ2UgZXZlcnkgc2luZ2xl
-IHVzZXIpLg0KPiANCj4gU28gaW5zdGVhZCBvZiB0aGF0IHNpbXBsZSAiaWYgKCFlbnRyeSkiLCB3
-ZSdkIGVmZmVjdGl2ZWx5IGhhdmUgdG8NCj4gY29udGludWUgdG8gdXNlIHNvbWV0aGluZyB0aGF0
-IHN0aWxsIHdvcmtzIHdpdGggdGhlIG9sZCB3b3JsZCBvcmRlcg0KPiAoaWUgdGhhdCAiaWYgKGxp
-c3RfZW50cnlfaXNfaGVhZCgpKSIgbW9kZWwpLg0KPiANCj4gU28gd2UgY291bGRuJ3QgcmVhbGx5
-IHRha2UgX2FkdmFudGFnZV8gb2YgdGhlIG5pY2VyIHNlbWFudGljcywgYW5kDQo+IHdlJ2Qgbm90
-IGV2ZW4gZ2V0IGEgd2FybmluZyBpZiBzb21lYm9keSBkb2VzIGl0IHdyb25nIC0gdGhlIGNvZGUg
-d291bGQNCj4ganVzdCBzaWxlbnRseSBkbyB0aGUgd3JvbmcgdGhpbmcuDQo+IA0KPiBJT1c6IEkg
-ZG9uJ3QgdGhpbmsgeW91IGFyZSB3cm9uZyBhYm91dCB0aGF0IHBhdGNoOiBpdCB3b3VsZCBzb2x2
-ZSB0aGUNCj4gcHJvYmxlbSB0aGF0IEpha29iIHdhbnRzIHRvIHNvbHZlLCBhbmQgaXQgd291bGQg
-aGF2ZSBhYnNvbHV0ZWx5IGJlZW4NCj4gbXVjaCBiZXR0ZXIgaWYgd2UgaGFkIGRvbmUgdGhpcyBm
-cm9tIHRoZSBiZWdpbm5pbmcuIEJ1dCBJIHRoaW5rIHRoYXQNCj4gaW4gb3VyIGN1cnJlbnQgc2l0
-dWF0aW9uLCBpdCdzIGFjdHVhbGx5IGEgcmVhbGx5IGZyYWdpbGUgc29sdXRpb24gdG8NCj4gdGhl
-ICJkb24ndCBkbyB0aGF0IHRoZW4iIHByb2JsZW0gd2UgaGF2ZS4NCg0KQ2FuIGl0IGJlIHJlc29s
-dmVkIGJ5IG1ha2luZzoNCiNkZWZpbmUgbGlzdF9lbnRyeV9pc19oZWFkKHBvcywgaGVhZCwgbWVt
-YmVyKSAoKHBvcykgPT0gTlVMTCkNCmFuZCBkb3VibGUtY2hlY2tpbmcgdGhhdCBpdCBpc24ndCB1
-c2VkIGFueXdoZXJlIGVsc2UgKGV4Y2VwdCBpbg0KdGhlIGxpc3QgbWFjcm9zIHRoZW1zZWx2ZXMp
-Lg0KDQpUaGUgb2RkIG9uZXMgSSBqdXN0IGZvdW5kIGFyZSBmcy9sb2Nrcy5jIG1tL3BhZ2VfcmVw
-b3J0aW5nLmMNCnNlY3VyaXR5L2FwcGFybW9yL2FwcGFybW9yZnMuYyAoMyB0aW1lcykNCg0KbmV0
-L3hmcm0veGZybV9pcGNvbXAuYyNMMjQ0IGlzIGJ1Z2d5Lg0KKFRoZXJlIGlzIGEgV0FSTl9PTigp
-IHRoZW4gaXQganVzdCBjYXJyaWVzIG9uIHJlZ2FyZGxlc3MhKQ0KDQpUaGVyZSBhcmUgb25seSBh
-Ym91dCAyNSB1c2VzIG9mIGxpc3RfZW50cnlfaXNfaGVhZCgpLg0KDQpUaGVyZSBhcmUgYSBsb3Qg
-bW9yZSBwbGFjZXMgd2hlcmUgdGhlc2UgbGlzdHMgc2VlbSB0byBiZSBzY2FubmVkIGJ5IGhhbmQu
-DQpJIGJldCBhIGZldyBvZiB0aG9zZSBhcmVuJ3QgYWN0dWFsbHkgcmlnaHQgZWl0aGVyLg0KDQoo
-T2ggYXQgM2FtIHRoaXMgbW9ybmluZyBJIHRob3VnaHQgaXQgd2FzIGEgZGlmZmVyZW50IGxpc3Qg
-dHlwZQ0KdGhhdCBjb3VsZCBoYXZlIG11Y2ggdGhlIHNhbWUgcHJvYmxlbSEpDQoNCkFub3RoZXIg
-cGxhdXNpYmxlIHNvbHV0aW9uIGlzIGEgdmFyaWFudCBvZiBsaXN0X2ZvcmVhY2hfZW50cnkoKQ0K
-dGhhdCBkb2VzIHNldCB0aGUgJ2VudHJ5JyB0byBOVUxMIGF0IHRoZSBlbmQuDQpUaGVuIGNvZGUg
-Y2FuIGJlIG1vdmVkIG92ZXIgaW4gc3RhZ2VzLg0KSSdkIHJlb3JkZXIgdGhlIGFyZ3VtZW50cyBh
-cyB3ZWxsIGFzIGNoYW5naW5nIHRoZSBuYW1lIQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBB
-ZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMs
-IE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 1 March 2022 11:03:12 CET, Tobias Waldekranz <tobias@waldekranz=2Ecom> w=
+rote:
+>Allow the user to switch from the current per-VLAN STP mode to an MST
+>mode=2E
+>
+>Up to this point, per-VLAN STP states where always isolated from each
+>other=2E This is in contrast to the MSTP standard (802=2E1Q-2018, Clause
+>13=2E5), where VLANs are grouped into MST instances (MSTIs), and the
+>state is managed on a per-MSTI level, rather that at the per-VLAN
+>level=2E
+>
+>Perhaps due to the prevalence of the standard, many switching ASICs
+>are built after the same model=2E Therefore, add a corresponding MST
+>mode to the bridge, which we can later add offloading support for in a
+>straight-forward way=2E
+>
+>For now, all VLANs are fixed to MSTI 0, also called the Common
+>Spanning Tree (CST)=2E That is, all VLANs will follow the port-global
+>state=2E
+>
+>Upcoming changes will make this actually useful by allowing VLANs to
+>be mapped to arbitrary MSTIs and allow individual MSTI states to be
+>changed=2E
+>
+>Signed-off-by: Tobias Waldekranz <tobias@waldekranz=2Ecom>
+>---
+> include/uapi/linux/if_link=2Eh |  1 +
+> net/bridge/Makefile          |  2 +-
+> net/bridge/br_input=2Ec        | 17 +++++++-
+> net/bridge/br_mst=2Ec          | 83 ++++++++++++++++++++++++++++++++++++
+> net/bridge/br_netlink=2Ec      | 14 +++++-
+> net/bridge/br_private=2Eh      | 26 +++++++++++
+> net/bridge/br_stp=2Ec          |  3 ++
+> net/bridge/br_vlan=2Ec         | 20 ++++++++-
+> net/bridge/br_vlan_options=2Ec |  5 +++
+> 9 files changed, 166 insertions(+), 5 deletions(-)
+> create mode 100644 net/bridge/br_mst=2Ec
+>
+
+Hi,
+As I mentioned in another review, I'm currently traveling and will have pc=
+ access
+end of this week (Sun), I'll try to review the set as much as I can throug=
+h my phone in the
+meantime=2E Thanks for reworking it, generally looks good=2E
+A few comments below,
+
+
+>diff --git a/include/uapi/linux/if_link=2Eh b/include/uapi/linux/if_link=
+=2Eh
+>index e315e53125f4=2E=2E7e0a653aafa3 100644
+>--- a/include/uapi/linux/if_link=2Eh
+>+++ b/include/uapi/linux/if_link=2Eh
+>@@ -482,6 +482,7 @@ enum {
+> 	IFLA_BR_VLAN_STATS_PER_PORT,
+> 	IFLA_BR_MULTI_BOOLOPT,
+> 	IFLA_BR_MCAST_QUERIER_STATE,
+>+	IFLA_BR_MST_ENABLED,
+
+Please use the boolopt api for new bridge boolean options like this one=2E
+
+> 	__IFLA_BR_MAX,
+> };
+>=20
+>diff --git a/net/bridge/Makefile b/net/bridge/Makefile
+>index 7fb9a021873b=2E=2E24bd1c0a9a5a 100644
+>--- a/net/bridge/Makefile
+>+++ b/net/bridge/Makefile
+>@@ -20,7 +20,7 @@ obj-$(CONFIG_BRIDGE_NETFILTER) +=3D br_netfilter=2Eo
+>=20
+> bridge-$(CONFIG_BRIDGE_IGMP_SNOOPING) +=3D br_multicast=2Eo br_mdb=2Eo b=
+r_multicast_eht=2Eo
+>=20
+>-bridge-$(CONFIG_BRIDGE_VLAN_FILTERING) +=3D br_vlan=2Eo br_vlan_tunnel=
+=2Eo br_vlan_options=2Eo
+>+bridge-$(CONFIG_BRIDGE_VLAN_FILTERING) +=3D br_vlan=2Eo br_vlan_tunnel=
+=2Eo br_vlan_options=2Eo br_mst=2Eo
+>=20
+> bridge-$(CONFIG_NET_SWITCHDEV) +=3D br_switchdev=2Eo
+>=20
+>diff --git a/net/bridge/br_input=2Ec b/net/bridge/br_input=2Ec
+>index e0c13fcc50ed=2E=2E196417859c4a 100644
+>--- a/net/bridge/br_input=2Ec
+>+++ b/net/bridge/br_input=2Ec
+>@@ -78,13 +78,22 @@ int br_handle_frame_finish(struct net *net, struct so=
+ck *sk, struct sk_buff *skb
+> 	u16 vid =3D 0;
+> 	u8 state;
+>=20
+>-	if (!p || p->state =3D=3D BR_STATE_DISABLED)
+>+	if (!p)
+> 		goto drop;
+>=20
+> 	br =3D p->br;
+>+
+>+	if (br_mst_is_enabled(br)) {
+>+		state =3D BR_STATE_FORWARDING;
+>+	} else {
+>+		if (p->state =3D=3D BR_STATE_DISABLED)
+>+			goto drop;
+>+
+>+		state =3D p->state;
+>+	}
+>+
+> 	brmctx =3D &p->br->multicast_ctx;
+> 	pmctx =3D &p->multicast_ctx;
+>-	state =3D p->state;
+> 	if (!br_allowed_ingress(p->br, nbp_vlan_group_rcu(p), skb, &vid,
+> 				&state, &vlan))
+> 		goto out;
+>@@ -370,9 +379,13 @@ static rx_handler_result_t br_handle_frame(struct sk=
+_buff **pskb)
+> 		return RX_HANDLER_PASS;
+>=20
+> forward:
+>+	if (br_mst_is_enabled(p->br))
+>+		goto defer_stp_filtering;
+>+
+> 	switch (p->state) {
+> 	case BR_STATE_FORWARDING:
+> 	case BR_STATE_LEARNING:
+>+defer_stp_filtering:
+> 		if (ether_addr_equal(p->br->dev->dev_addr, dest))
+> 			skb->pkt_type =3D PACKET_HOST;
+>=20
+>diff --git a/net/bridge/br_mst=2Ec b/net/bridge/br_mst=2Ec
+>new file mode 100644
+>index 000000000000=2E=2Ead6e91670fa8
+>--- /dev/null
+>+++ b/net/bridge/br_mst=2Ec
+>@@ -0,0 +1,83 @@
+>+// SPDX-License-Identifier: GPL-2=2E0-or-later
+>+/*
+>+ *	Bridge Multiple Spanning Tree Support
+>+ *
+>+ *	Authors:
+>+ *	Tobias Waldekranz		<tobias@waldekranz=2Ecom>
+>+ */
+>+
+>+#include <linux/kernel=2Eh>
+>+
+>+#include "br_private=2Eh"
+>+
+>+DEFINE_STATIC_KEY_FALSE(br_mst_used);
+>+
+>+void br_mst_vlan_set_state(struct net_bridge_port *p, struct net_bridge_=
+vlan *v,
+>+			   u8 state)
+>+{
+>+	struct net_bridge_vlan_group *vg =3D nbp_vlan_group(p);
+>+
+>+	if (v->state =3D=3D state)
+>+		return;
+>+
+>+	br_vlan_set_state(v, state);
+>+
+>+	if (v->vid =3D=3D vg->pvid)
+>+		br_vlan_set_pvid_state(vg, state);
+>+}
+>+
+>+void br_mst_set_state(struct net_bridge_port *p, u16 msti, u8 state)
+>+{
+>+	struct net_bridge_vlan_group *vg;
+>+	struct net_bridge_vlan *v;
+>+
+>+	vg =3D nbp_vlan_group(p);
+>+	if (!vg)
+>+		return;
+>+
+>+	list_for_each_entry(v, &vg->vlan_list, vlist) {
+>+		if (v->brvlan->msti !=3D msti)
+>+			continue;
+>+
+>+		br_mst_vlan_set_state(p, v, state);
+>+	}
+>+}
+>+
+>+void br_mst_vlan_init_state(struct net_bridge_vlan *v)
+>+{
+>+	/* VLANs always start out in MSTI 0 (CST) */
+>+	v->msti =3D 0;
+>+
+>+	if (br_vlan_is_master(v))
+>+		v->state =3D BR_STATE_FORWARDING;
+>+	else
+>+		v->state =3D v->port->state;
+>+}
+>+
+>+int br_mst_set_enabled(struct net_bridge *br, unsigned long val)
+>+{
+>+	struct net_bridge_vlan_group *vg;
+>+	struct net_bridge_port *p;
+>+
+>+	/* Mode may only be changed when there are no port VLANs=2E */
+>+	list_for_each_entry(p, &br->port_list, list) {
+>+		vg =3D nbp_vlan_group(p);
+>+
+>+		if (vg->num_vlans)
+>+			return -EBUSY;
+>+	}
+>+
+>+	if (val > 1)
+>+		return -EINVAL;
+>+
+>+	if (!!val =3D=3D br_opt_get(br, BROPT_MST_ENABLED))
+>+		return 0;
+>+
+>+	if (val)
+>+		static_branch_enable(&br_mst_used);
+>+	else
+>+		static_branch_disable(&br_mst_used);
+>+
+>+	br_opt_toggle(br, BROPT_MST_ENABLED, !!val);
+>+	return 0;
+>+}
+>diff --git a/net/bridge/br_netlink=2Ec b/net/bridge/br_netlink=2Ec
+>index 7d4432ca9a20=2E=2Ea17a0fe25a58 100644
+>--- a/net/bridge/br_netlink=2Ec
+>+++ b/net/bridge/br_netlink=2Ec
+>@@ -1163,6 +1163,7 @@ static const struct nla_policy br_policy[IFLA_BR_MA=
+X + 1] =3D {
+> 	[IFLA_BR_MCAST_IGMP_VERSION] =3D { =2Etype =3D NLA_U8 },
+> 	[IFLA_BR_MCAST_MLD_VERSION] =3D { =2Etype =3D NLA_U8 },
+> 	[IFLA_BR_VLAN_STATS_PER_PORT] =3D { =2Etype =3D NLA_U8 },
+>+	[IFLA_BR_MST_ENABLED] =3D { =2Etype =3D NLA_U8 },
+> 	[IFLA_BR_MULTI_BOOLOPT] =3D
+> 		NLA_POLICY_EXACT_LEN(sizeof(struct br_boolopt_multi)),
+> };
+>@@ -1255,6 +1256,14 @@ static int br_changelink(struct net_device *brdev,=
+ struct nlattr *tb[],
+> 		if (err)
+> 			return err;
+> 	}
+>+
+>+	if (data[IFLA_BR_MST_ENABLED]) {
+>+		__u8 mst =3D nla_get_u8(data[IFLA_BR_MST_ENABLED]);
+>+
+>+		err =3D br_mst_set_enabled(br, mst);
+>+		if (err)
+>+			return err;
+>+	}
+> #endif
+>=20
+> 	if (data[IFLA_BR_GROUP_FWD_MASK]) {
+>@@ -1475,6 +1484,7 @@ static size_t br_get_size(const struct net_device *=
+brdev)
+> 	       nla_total_size(sizeof(u16)) +    /* IFLA_BR_VLAN_DEFAULT_PVID */
+> 	       nla_total_size(sizeof(u8)) +     /* IFLA_BR_VLAN_STATS_ENABLED *=
+/
+> 	       nla_total_size(sizeof(u8)) +	/* IFLA_BR_VLAN_STATS_PER_PORT */
+>+	       nla_total_size(sizeof(u8)) +	/* IFLA_BR_MST_ENABLED */
+> #endif
+> 	       nla_total_size(sizeof(u16)) +    /* IFLA_BR_GROUP_FWD_MASK */
+> 	       nla_total_size(sizeof(struct ifla_bridge_id)) +   /* IFLA_BR_ROO=
+T_ID */
+>@@ -1572,7 +1582,9 @@ static int br_fill_info(struct sk_buff *skb, const =
+struct net_device *brdev)
+> 	    nla_put_u8(skb, IFLA_BR_VLAN_STATS_ENABLED,
+> 		       br_opt_get(br, BROPT_VLAN_STATS_ENABLED)) ||
+> 	    nla_put_u8(skb, IFLA_BR_VLAN_STATS_PER_PORT,
+>-		       br_opt_get(br, BROPT_VLAN_STATS_PER_PORT)))
+>+		       br_opt_get(br, BROPT_VLAN_STATS_PER_PORT)) ||
+>+	    nla_put_u8(skb, IFLA_BR_MST_ENABLED,
+>+		       br_opt_get(br, BROPT_MST_ENABLED)))
+> 		return -EMSGSIZE;
+> #endif
+> #ifdef CONFIG_BRIDGE_IGMP_SNOOPING
+>diff --git a/net/bridge/br_private=2Eh b/net/bridge/br_private=2Eh
+>index 48bc61ebc211=2E=2Eaf50ad036b06 100644
+>--- a/net/bridge/br_private=2Eh
+>+++ b/net/bridge/br_private=2Eh
+>@@ -178,6 +178,7 @@ enum {
+>  * @br_mcast_ctx: if MASTER flag set, this is the global vlan multicast =
+context
+>  * @port_mcast_ctx: if MASTER flag unset, this is the per-port/vlan mult=
+icast
+>  *                  context
+>+ * @msti: if MASTER flag set, this holds the VLANs MST instance
+>  * @vlist: sorted list of VLAN entries
+>  * @rcu: used for entry destruction
+>  *
+>@@ -210,6 +211,8 @@ struct net_bridge_vlan {
+> 		struct net_bridge_mcast_port	port_mcast_ctx;
+> 	};
+>=20
+>+	u16				msti;
+>+
+> 	struct list_head		vlist;
+>=20
+> 	struct rcu_head			rcu;
+>@@ -445,6 +448,7 @@ enum net_bridge_opts {
+> 	BROPT_NO_LL_LEARN,
+> 	BROPT_VLAN_BRIDGE_BINDING,
+> 	BROPT_MCAST_VLAN_SNOOPING_ENABLED,
+>+	BROPT_MST_ENABLED,
+> };
+>=20
+> struct net_bridge {
+>@@ -1765,6 +1769,28 @@ static inline bool br_vlan_state_allowed(u8 state,=
+ bool learn_allow)
+> }
+> #endif
+>=20
+>+/* br_mst=2Ec */
+>+#ifdef CONFIG_BRIDGE_VLAN_FILTERING
+>+DECLARE_STATIC_KEY_FALSE(br_mst_used);
+>+static inline bool br_mst_is_enabled(struct net_bridge *br)
+>+{
+>+	return static_branch_unlikely(&br_mst_used) &&
+>+		br_opt_get(br, BROPT_MST_ENABLED);
+>+}
+>+
+>+void br_mst_set_state(struct net_bridge_port *p, u16 msti, u8 state);
+>+void br_mst_vlan_init_state(struct net_bridge_vlan *v);
+>+int br_mst_set_enabled(struct net_bridge *br, unsigned long val);
+>+#else
+>+static inline bool br_mst_is_enabled(struct net_bridge *br)
+>+{
+>+	return false;
+>+}
+>+
+>+static inline void br_mst_set_state(struct net_bridge_port *p,
+>+				    u16 msti, u8 state) {}
+>+#endif
+>+
+> struct nf_br_ops {
+> 	int (*br_dev_xmit_hook)(struct sk_buff *skb);
+> };
+>diff --git a/net/bridge/br_stp=2Ec b/net/bridge/br_stp=2Ec
+>index 1d80f34a139c=2E=2E82a97a021a57 100644
+>--- a/net/bridge/br_stp=2Ec
+>+++ b/net/bridge/br_stp=2Ec
+>@@ -43,6 +43,9 @@ void br_set_state(struct net_bridge_port *p, unsigned i=
+nt state)
+> 		return;
+>=20
+> 	p->state =3D state;
+>+	if (br_opt_get(p->br, BROPT_MST_ENABLED))
+>+		br_mst_set_state(p, 0, state);
+>+
+> 	err =3D switchdev_port_attr_set(p->dev, &attr, NULL);
+> 	if (err && err !=3D -EOPNOTSUPP)
+> 		br_warn(p->br, "error setting offload STP state on port %u(%s)\n",
+>diff --git a/net/bridge/br_vlan=2Ec b/net/bridge/br_vlan=2Ec
+>index 7557e90b60e1=2E=2E0f5e75ccac79 100644
+>--- a/net/bridge/br_vlan=2Ec
+>+++ b/net/bridge/br_vlan=2Ec
+>@@ -226,6 +226,24 @@ static void nbp_vlan_rcu_free(struct rcu_head *rcu)
+> 	kfree(v);
+> }
+>=20
+>+static void br_vlan_init_state(struct net_bridge_vlan *v)
+>+{
+>+	struct net_bridge *br;
+>+
+>+	if (br_vlan_is_master(v))
+>+		br =3D v->br;
+>+	else
+>+		br =3D v->port->br;
+>+
+>+	if (br_opt_get(br, BROPT_MST_ENABLED)) {
+>+		br_mst_vlan_init_state(v);
+>+		return;
+>+	}
+>+
+>+	v->state =3D BR_STATE_FORWARDING;
+>+	v->msti =3D 0;
+>+}
+>+
+> /* This is the shared VLAN add function which works for both ports and b=
+ridge
+>  * devices=2E There are four possible calls to this function in terms of=
+ the
+>  * vlan entry type:
+>@@ -322,7 +340,7 @@ static int __vlan_add(struct net_bridge_vlan *v, u16 =
+flags,
+> 	}
+>=20
+> 	/* set the state before publishing */
+>-	v->state =3D BR_STATE_FORWARDING;
+>+	br_vlan_init_state(v);
+>=20
+> 	err =3D rhashtable_lookup_insert_fast(&vg->vlan_hash, &v->vnode,
+> 					    br_vlan_rht_params);
+>diff --git a/net/bridge/br_vlan_options=2Ec b/net/bridge/br_vlan_options=
+=2Ec
+>index a6382973b3e7=2E=2E09112b56e79c 100644
+>--- a/net/bridge/br_vlan_options=2Ec
+>+++ b/net/bridge/br_vlan_options=2Ec
+>@@ -99,6 +99,11 @@ static int br_vlan_modify_state(struct net_bridge_vlan=
+_group *vg,
+> 		return -EBUSY;
+> 	}
+>=20
+>+	if (br_opt_get(br, BROPT_MST_ENABLED)) {
+>+		NL_SET_ERR_MSG_MOD(extack, "Can't modify vlan state directly when MST =
+is enabled");
+>+		return -EBUSY;
+>+	}
+>+
+> 	if (v->state =3D=3D state)
+> 		return 0;
+>=20
 

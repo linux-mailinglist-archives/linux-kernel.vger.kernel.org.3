@@ -2,159 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994764C8915
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DA54C8930
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbiCAKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S229817AbiCAKZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiCAKP5 (ORCPT
+        with ESMTP id S234127AbiCAKY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:15:57 -0500
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438398CDB2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:15:16 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K7Cmd6DjQzMq5kH;
-        Tue,  1 Mar 2022 11:15:13 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K7CmZ5H8YzljTgL;
-        Tue,  1 Mar 2022 11:15:10 +0100 (CET)
-Message-ID: <f6b63133-d555-a77c-0847-de15a9302283@digikod.net>
-Date:   Tue, 1 Mar 2022 11:15:09 +0100
+        Tue, 1 Mar 2022 05:24:59 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 02:24:18 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3477358830;
+        Tue,  1 Mar 2022 02:24:17 -0800 (PST)
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MmU9X-1o6Xg02KI5-00iRlQ; Tue, 01 Mar 2022 11:19:13 +0100
+Received: by mail-wr1-f47.google.com with SMTP id j17so19731748wrc.0;
+        Tue, 01 Mar 2022 02:19:13 -0800 (PST)
+X-Gm-Message-State: AOAM532h+TSsT7XvTtltQpow3PwSn4+2uzT8xgz1pYiE3i8l451g41cf
+        UNXRvarmF9I01/AqayURu6IwTnPEVV950GaoALM=
+X-Google-Smtp-Source: ABdhPJzzPOquGV619/Ft2Hlid0sPxXMa9f5QyUk3acsgXWRETaM+gTfyx5RKFPDTTgU6lhKUdNltea8NVoyAewfh61A=
+X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
+ c2-20020a5d63c2000000b001ef840ee139mr11569532wrw.192.1646129952971; Tue, 01
+ Mar 2022 02:19:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Eric Paris <eparis@parisplace.org>,
-        James Morris <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20220228215935.748017-1-mic@digikod.net>
- <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
-In-Reply-To: <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
+ <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
+ <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
+ <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
+ <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
+ <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
+ <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
+ <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com> <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
+In-Reply-To: <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 1 Mar 2022 11:18:56 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2wF2XA8wCFtP9RNTNQf3W9D8fKOuQ704yE+dRSS5aCVw@mail.gmail.com>
+Message-ID: <CAK8P3a2wF2XA8wCFtP9RNTNQf3W9D8fKOuQ704yE+dRSS5aCVw@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:XStCGZX/ROQSePDe1dyXr69F8I2kJSDcoRYdgl9fhDF89FNNCW1
+ nl7YRK11Fp/q7Y2u5OU7dCpbyI0QK7AQ9lUDGcY0XS7/J3ubQpMAGQA7zTGx1I8haebHYrh
+ Al/vYhQKudbTknC/RGK+Q07kfD3/1SETShIQeF6bkDlvbciFXCm1ftcmZvuAEm8HSodfAP5
+ KlQpqVR5YoPF1QJu6+RbA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9IFbU8ZQfYw=:X3PrtjVhlasVZ4xhIuFgqS
+ R846WvDKkxFkaQq8faDAZlJJr4vCSNQygFIGKs9/SQRVyjiCahjK7OznSWWDKPvrmWUdYPBlV
+ /DFUEoWDV4F4zCynGjzruVcV/zgvTwyDPx/jt36L4Ej+m3GvSqfH0faZC2GYOl7rvpupYvaoh
+ HnETPwquGI/+P3JZa+kclWRQuGJ5uNlvGEXetauIMpZBb21V5QEGAtZRl0cEY6f3WlLHd2KwS
+ UuUv0xvCsYHsGjYq+FRGeI+QWOoI3KjJ3trcxM32quHX6gmGlygpqe+VSQnJiygGldXzObWe2
+ ZyRqsAKx3CjezilRrJhm744CtfXjxf500DT669nClml+zMghEhBjOhO8iT9N0WYlgMxkNnhKH
+ 1d1gYeLVmyXmo75eNKHj/VAeq0P/PYrV6qyHQImBbzFAudXZQfcvC97Xzl/7TaP5BeOVMOKJx
+ kp5mTm/Wl7whgeIkS1JTtjBVubif1t/aKNIXs3WrM/cFTy8jDJW/axfBTAann8sOxVUFNSXmO
+ 9fCzAKIrOdgvMWt5B1lIUwupQ6xcsPxLgUybsQ1/I4JRSDAWJ3AuGYvx290BpM/A94SjN0b4k
+ Fo2Bxh9b3lntP0AD2Iwl5mBd7jfEswUpGkoorY9YG1TmEvzXQkfmjtvp3APeNMy2bE5iUt0+t
+ qjv+17daBS/GHKNwx8b2EzUtUcBrWhqSte8+pz1K96oGsXft+fzzELAY7yB8i/PhyIW4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 1, 2022 at 5:17 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Mon, Feb 28, 2022 at 7:35 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > Can't you just use the UEFI protocol for kernel entry regardless
+> > > of the bootloader? It seems odd to use a different protocol for loading
+> > > grub and the kernel, especially if that means you end up having to
+> > > support both protocols inside of u-boot and grub, in order to chain-load
+> > > a uefi application like grub.
+> > >
+> >
+> > I think this would make sense. Now that the EFI stub has generic
+> > support for loading the initrd via a UEFI specific protocol (of which
+> > u-boot already carries an implementation), booting via UEFI only would
+> > mean that no Linux boot protocol would need to be defined outside of
+> > the kernel at all (i.e., where to load the kernel, where to put the
+> > command line, where to put the initrd, other arch specific rules etc
+> > etc) UEFI already supports both ACPI and DT boot
+>
+> After one night thinking, I agree with Ard that we can use RISCV-style
+> fdt to support the raw elf kernel at present, and add efistub support
+> after new UEFI SPEC released.
 
-On 01/03/2022 10:22, Christian Brauner wrote:
-> On Mon, Feb 28, 2022 at 10:59:35PM +0100, Mickaël Salaün wrote:
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> While transitionning to ACC_MODE() with commit 5300990c0370 ("Sanitize
->> f_flags helpers") and then fixing it with commit 6d125529c6cb ("Fix
->> ACC_MODE() for real"), we lost an open flags consistency check.  Opening
->> a file with O_WRONLY | O_RDWR leads to an f_flags containing MAY_READ |
->> MAY_WRITE (thanks to the ACC_MODE() helper) and an empty f_mode.
->> Indeed, the OPEN_FMODE() helper transforms 3 (an incorrect value) to 0.
->>
->> Fortunately, vfs_read() and vfs_write() both check for FMODE_READ, or
->> respectively FMODE_WRITE, and return an EBADF error if it is absent.
->> Before commit 5300990c0370 ("Sanitize f_flags helpers"), opening a file
->> with O_WRONLY | O_RDWR returned an EINVAL error.  Let's restore this safe
->> behavior.
-> 
-> That specific part seems a bit risky at first glance. Given that the
-> patch referenced is from 2009 this means we've been allowing O_WRONLY |
-> O_RDWR to succeed for almost 13 years now.
+I think that is the opposite of what Ard and I discussed above.
 
-Yeah, it's an old bug, but we should keep in mind that a file descriptor 
-created with such flags cannot be used to read nor write. However, 
-unfortunately, it can be used for things like ioctl, fstat, chdir… I 
-don't know if there is any user of this trick.
+> If I'm right, it seems that RISC-V passes a0 (hartid) and a1 (fdt
+> pointer, which contains cmdline, initrd, etc.) to the raw elf kernel.
+> And in my opinion, the main drawback of current LoongArch method
+> (a0=argc a1=argv a2=bootparamsinterface pointer) is it uses a
+> non-standard method to pass kernel args and initrd. So, can the below
+> new solution be acceptable?
+>
+> a0=bootparamsinterface pointer (the same as a2 in current method)
+> a1=fdt pointer (contains cmdline, initrd, etc., like RISC-V, I think
+> this is the standard method)
 
-Either way, there is an inconsistency between those using ACC_MODE() and 
-those using OPEN_FMODE(). If we decide to take a side for the behavior 
-of one or the other, without denying to create such FD, it could also 
-break security policies. We have to choose what to potentially break…
+It would seem more logical to me to keep those details as part of the
+interface between the EFI stub and the kernel, rather than the
+documented boot interface.
 
+You said that there is already grub support using the UEFI
+loader, so I assume you have a working draft of the boot
+protocol. Are there still open questions about the interface
+definition for that preventing you from using it as the only
+way to enter the kernel from a bootloader?
 
-> 
->>
->> To make it consistent with ACC_MODE(), this patch also changes
->> OPEN_FMODE() to return FMODE_READ | FMODE_WRITE for O_WRONLY | O_RDWR.
->> This may help protect from potential spurious issues.
->>
->> This issue could result in inconsistencies with AppArmor, Landlock and
->> SELinux, but the VFS checks would still forbid read and write accesses.
->> Tomoyo uses the ACC_MODE() transformation which is correct, and Smack
->> doesn't check the file mode.  Filesystems using OPEN_FMODE() should also
->> be protected by the VFS checks.
->>
->> Fixes: 5300990c0370 ("Sanitize f_flags helpers")
->> Cc: Al Viro <viro@zeniv.linux.org.uk>
->> Cc: Casey Schaufler <casey@schaufler-ca.com>
->> Cc: Darrick J. Wong <djwong@kernel.org>
->> Cc: Eric Paris <eparis@parisplace.org>
->> Cc: John Johansen <john.johansen@canonical.com>
->> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
->> Cc: Miklos Szeredi <miklos@szeredi.hu>
->> Cc: Paul Moore <paul@paul-moore.com>
->> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
->> Cc: Steve French <sfrench@samba.org>
->> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20220228215935.748017-1-mic@digikod.net
->> ---
->>   fs/file_table.c    | 3 +++
->>   include/linux/fs.h | 5 +++--
->>   2 files changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/file_table.c b/fs/file_table.c
->> index 7d2e692b66a9..b936f69525d0 100644
->> --- a/fs/file_table.c
->> +++ b/fs/file_table.c
->> @@ -135,6 +135,9 @@ static struct file *__alloc_file(int flags, const struct cred *cred)
->>   	struct file *f;
->>   	int error;
->>   
->> +	if ((flags & O_ACCMODE) == O_ACCMODE)
->> +		return ERR_PTR(-EINVAL);
->> +
->>   	f = kmem_cache_zalloc(filp_cachep, GFP_KERNEL);
->>   	if (unlikely(!f))
->>   		return ERR_PTR(-ENOMEM);
->> diff --git a/include/linux/fs.h b/include/linux/fs.h
->> index e2d892b201b0..83bc5aaf1c41 100644
->> --- a/include/linux/fs.h
->> +++ b/include/linux/fs.h
->> @@ -3527,8 +3527,9 @@ int __init list_bdev_fs_names(char *buf, size_t size);
->>   #define __FMODE_NONOTIFY	((__force int) FMODE_NONOTIFY)
->>   
->>   #define ACC_MODE(x) ("\004\002\006\006"[(x)&O_ACCMODE])
->> -#define OPEN_FMODE(flag) ((__force fmode_t)(((flag + 1) & O_ACCMODE) | \
->> -					    (flag & __FMODE_NONOTIFY)))
->> +#define OPEN_FMODE(flag) ((__force fmode_t)( \
->> +			(((flag + 1) & O_ACCMODE) ?: O_ACCMODE) | \
->> +			(flag & __FMODE_NONOTIFY)))
->>   
->>   static inline bool is_sxid(umode_t mode)
->>   {
->>
->> base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
->> -- 
->> 2.35.1
->>
+        Arnd

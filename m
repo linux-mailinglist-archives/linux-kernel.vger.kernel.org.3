@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885864C8071
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19B54C8075
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiCABrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S232014AbiCABs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiCABrk (ORCPT
+        with ESMTP id S232007AbiCABsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:47:40 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B51184
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:46:58 -0800 (PST)
-X-UUID: 6f33e31bd00749f998d87b09d184cfc6-20220301
-X-UUID: 6f33e31bd00749f998d87b09d184cfc6-20220301
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1245295757; Tue, 01 Mar 2022 09:46:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 1 Mar 2022 09:46:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Mar 2022 09:46:42 +0800
-Message-ID: <fa9a04263ed0b1aa54a140e7eec47e838d3e5587.camel@mediatek.com>
-Subject: Re: [PATCH v4 2/2] drm/mediatek: add devlink to cmdq dev
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <tzungbi@google.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fei Shao" <fshao@chromium.org>,
-        Nancy Lin <nancy.lin@mediatek.com>, <singo.chang@mediatek.com>
-Date:   Tue, 1 Mar 2022 09:46:42 +0800
-In-Reply-To: <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
-References: <20211202064039.20797-1-jason-jh.lin@mediatek.com>
-         <20211202064039.20797-3-jason-jh.lin@mediatek.com>
-         <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 28 Feb 2022 20:48:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3B0011A2B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:47:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646099262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=luuUiMnqhEGGpxdu/95KFzZYsnUnE9Pq8uUGjugbrlY=;
+        b=BUYu3uoHJT7hzqWzqywIDHjyGpod0vNeja7MYerL52/SBFk0ttPzK0k2o+w4J7AdPqWJ86
+        6AZiC4Q8zcrutpGLfxcN+mKkWCN66j6gFiKO8PkFuorv6QzyKxpMlxOgDAk9sJi5gZKtzj
+        23cwjAMdVkgg5GzDAOZ8LZ4HFb+xkbI=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-R_KWCpx1O2CFzeX0Jejmjg-1; Mon, 28 Feb 2022 20:47:41 -0500
+X-MC-Unique: R_KWCpx1O2CFzeX0Jejmjg-1
+Received: by mail-lj1-f199.google.com with SMTP id b27-20020a2ebc1b000000b00246209c497dso6561986ljf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:47:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=luuUiMnqhEGGpxdu/95KFzZYsnUnE9Pq8uUGjugbrlY=;
+        b=XhkTtKTcGSIBtzQC8MccnmMUDVWAl3I2UG40sAGbzgU5Fm2FXMKV/gKHJONUHSroCW
+         QaXdXKHd1x3w/VC2wLsCaMQBPLfyjg/IlcOtt1D4ROD2aIh+JE8eFHiasbMym4NvLbsM
+         zwahVLXdNGbxD0E3lOAB2Yxfe6boj+Ihbj8WT9UAzZ73tjqwdmrKojm7lwcsPkI60svN
+         35IpikcK4tU841KlGEj7Mpl3l8dFGb1P97IN+qUTuVC4NVpdsdfKl7U/m4zDMBtp0hSa
+         SPKzmno0Dy8GVhBRnI/Wb0rHRztBUpqw1pA8bDR0QXQdR2TKnVat3Y9AlYs+AWe/zu5n
+         I1fQ==
+X-Gm-Message-State: AOAM532QoK472GTBbzD8o10ACDIF3Lk7rN0kXfkql/1LYhA9j8Gy1+B2
+        oneOYX2T28Wo1BVm6nswvylymh8GPrAqI3nfoVWj+cxKXVGRh2JzSgHV7FLze0rtQ2WolqifbVD
+        L3J/TIaB63MQw44SAbeQyBV2AM0zaqHZj2A/w7iMr
+X-Received: by 2002:a05:651c:90b:b0:244:c4a4:d5d8 with SMTP id e11-20020a05651c090b00b00244c4a4d5d8mr15365306ljq.97.1646099259986;
+        Mon, 28 Feb 2022 17:47:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzJ5hCTbfyBOqrRW7yCVhA13lM9sJi5Vxe5wjHoF/hQ4fvPwxZrUmAPDewdu4KFv9hll3xHVZ0CbU9/hV+Sprk=
+X-Received: by 2002:a05:651c:90b:b0:244:c4a4:d5d8 with SMTP id
+ e11-20020a05651c090b00b00244c4a4d5d8mr15365294ljq.97.1646099259773; Mon, 28
+ Feb 2022 17:47:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224103852.311369-1-baymaxhuang@gmail.com>
+ <20220228033805.1579435-1-baymaxhuang@gmail.com> <CACGkMEtFFe3mVkXYjYJZtGdU=tAB+T5TYCqySzSxR2N5e4UV1A@mail.gmail.com>
+ <20220228091539.057c80ef@hermes.local>
+In-Reply-To: <20220228091539.057c80ef@hermes.local>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 1 Mar 2022 09:47:28 +0800
+Message-ID: <CACGkMEsqKQD_mBRB5FQwoOTR-gq1Br1oEdtEoxBLhbCSt4SRgA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3] tun: support NAPI for packets received from
+ batched XDP buffs
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Harold Huang <baymaxhuang@gmail.com>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Kuang,
+On Tue, Mar 1, 2022 at 1:15 AM Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Mon, 28 Feb 2022 15:46:56 +0800
+> Jason Wang <jasowang@redhat.com> wrote:
+>
+> > On Mon, Feb 28, 2022 at 11:38 AM Harold Huang <baymaxhuang@gmail.com> wrote:
+> > >
+> > > In tun, NAPI is supported and we can also use NAPI in the path of
+> > > batched XDP buffs to accelerate packet processing. What is more, after
+> > > we use NAPI, GRO is also supported. The iperf shows that the throughput of
+> > > single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
+> > > Gbps nearly reachs the line speed of the phy nic and there is still about
+> > > 15% idle cpu core remaining on the vhost thread.
+> > >
+> > > Test topology:
+> > > [iperf server]<--->tap<--->dpdk testpmd<--->phy nic<--->[iperf client]
+> > >
+> > > Iperf stream:
+> > > iperf3 -c 10.0.0.2  -i 1 -t 10
+> > >
+> > > Before:
+> > > ...
+> > > [  5]   5.00-6.00   sec   558 MBytes  4.68 Gbits/sec    0   1.50 MBytes
+> > > [  5]   6.00-7.00   sec   556 MBytes  4.67 Gbits/sec    1   1.35 MBytes
+> > > [  5]   7.00-8.00   sec   556 MBytes  4.67 Gbits/sec    2   1.18 MBytes
+> > > [  5]   8.00-9.00   sec   559 MBytes  4.69 Gbits/sec    0   1.48 MBytes
+> > > [  5]   9.00-10.00  sec   556 MBytes  4.67 Gbits/sec    1   1.33 MBytes
+> > > - - - - - - - - - - - - - - - - - - - - - - - - -
+> > > [ ID] Interval           Transfer     Bitrate         Retr
+> > > [  5]   0.00-10.00  sec  5.39 GBytes  4.63 Gbits/sec   72          sender
+> > > [  5]   0.00-10.04  sec  5.39 GBytes  4.61 Gbits/sec               receiver
+> > >
+> > > After:
+> > > ...
+> > > [  5]   5.00-6.00   sec  1.07 GBytes  9.19 Gbits/sec    0   1.55 MBytes
+> > > [  5]   6.00-7.00   sec  1.08 GBytes  9.30 Gbits/sec    0   1.63 MBytes
+> > > [  5]   7.00-8.00   sec  1.08 GBytes  9.25 Gbits/sec    0   1.72 MBytes
+> > > [  5]   8.00-9.00   sec  1.08 GBytes  9.25 Gbits/sec   77   1.31 MBytes
+> > > [  5]   9.00-10.00  sec  1.08 GBytes  9.24 Gbits/sec    0   1.48 MBytes
+> > > - - - - - - - - - - - - - - - - - - - - - - - - -
+> > > [ ID] Interval           Transfer     Bitrate         Retr
+> > > [  5]   0.00-10.00  sec  10.8 GBytes  9.28 Gbits/sec  166          sender
+> > > [  5]   0.00-10.04  sec  10.8 GBytes  9.24 Gbits/sec               receiver
+> > >
+> > > Reported-at: https://lore.kernel.org/all/CACGkMEvTLG0Ayg+TtbN4q4pPW-ycgCCs3sC3-TF8cuRTf7Pp1A@mail.gmail.com
+> > > Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+> >
+> > Acked-by: Jason Wang <jasowang@redhat.com>
+>
+> Would this help when using sendmmsg and recvmmsg on the TAP device?
 
-Thanks for the reviews.
+We haven't exported the socket object of tuntap to userspace. So we
+can't use sendmmsg()/recvmsg() now.
 
-I forgot to add the comment that the patch should be based on [1].
-We can only apply it after applying [1].
+> Asking because interested in speeding up another use of TAP device, and wondering
+> if this would help.
+>
 
-So please apply it after that. Thank you very much!
+Yes, it would be interesting. We need someone to work on that.
 
-Regards,
-Jason-JH.Lin
----
-[1] drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
-
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220222100741.30138-21-nancy.lin@mediatek.com/
----
-
-On Sun, 2022-02-27 at 11:33 +0800, Chun-Kuang Hu wrote:
-> Hi, Jason:
-> 
-> Build error:
-> 
-> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c: In function
-> ‘mtk_drm_crtc_create’:
-> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:902:26: error: ‘struct
-> mtk_drm_private’ has no member named ‘dev’
->   mtk_crtc->drm_dev = priv->dev;
->                           ^
-> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:974:30: error: ‘struct
-> mtk_drm_private’ has no member named ‘dev’
->    link = device_link_add(priv->dev, mtk_crtc->cmdq_client.chan-
-> >mbox->dev,
->                               ^
-> In file included from ../include/linux/device.h:15:0,
->                  from ../include/linux/dma-mapping.h:7,
->                  from ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:7:
-> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:977:16: error: ‘struct
-> mtk_drm_private’ has no member named ‘dev’
->     dev_err(priv->dev, "Unable to link dev=%s\n",
->                 ^
-> Regards,
-> Chun-Kuang.
-
+Thanks
 

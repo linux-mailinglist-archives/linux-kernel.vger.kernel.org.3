@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CE84C8892
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8557D4C8894
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiCAJy4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Mar 2022 04:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S234040AbiCAJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiCAJyx (ORCPT
+        with ESMTP id S231742AbiCAJ4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:54:53 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5351F7D016
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:54:11 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-17-WIsvEzCdOj6XxcsfQ7uUIw-1; Tue, 01 Mar 2022 09:54:08 +0000
-X-MC-Unique: WIsvEzCdOj6XxcsfQ7uUIw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 09:54:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 09:54:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>,
-        Borislav Petkov <bp@alien8.de>
-CC:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gwml@vger.gnuweeb.org" <gwml@vger.gnuweeb.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Alviro Iskandar Setiawan" <alviro.iskandar@gnuweeb.org>,
-        Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: RE: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
-Thread-Topic: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
-Thread-Index: AQHYLVFHQzUkKsf/ZkuVhNGB2yFzFqyqSHaQ
-Date:   Tue, 1 Mar 2022 09:54:07 +0000
-Message-ID: <0642444da1844f8dae2dc98b34b8ab74@AcuMS.aculab.com>
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Mar 2022 04:56:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D3B7C784;
+        Tue,  1 Mar 2022 01:55:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFC5EB81850;
+        Tue,  1 Mar 2022 09:55:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5F9C340EE;
+        Tue,  1 Mar 2022 09:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646128521;
+        bh=8YjTRp7NuUv65z90+NN5SmTpZZtNhw5jeBiXRggxlOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DQgKSnJwn0l0I3BAOltTsJBNcSxl6GThPSHqvZTrMtG6vLn7K0TWQp55sepHrgWYM
+         FaWeEUl39+Q3V6gV4f816/foCdaz52QegnFGvDy3OwX5vbWefq9SDBieVs3iR/tS3w
+         TdObEGBaWClFRA2pjr2oF4Kr56dDV/dyCXJg8KlOlFoBnEO1elGSkVEEiYzNac6+j0
+         JBGu5BTq0xUAgqidKRXGvyW0VOvAonuD2IxhL4FBHvdGNLRIpwdu0pOEDVPvF+UBO3
+         rw2sSBUHw1EYUvjbpxTG+bp2zvp3ZBjVesUryTsfizAZ7RgPnOq+7/jdbMy1ztLck6
+         AY3caNkCuWQJA==
+Date:   Tue, 1 Mar 2022 11:55:14 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+Message-ID: <Yh3tgr+g/6IElq0P@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi
-> Sent: 01 March 2022 09:46
+Hi,
+
+On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
+> In the current code, the kernel command-line parameter mem= and memmap=
+> can not work well on MIPS, this patchset refactors the related code to
+> fix them.
 > 
-> The asm constraint does not reflect that the asm statement can modify
-> the value of @loops. But the asm statement in delay_loop() does change
-> the @loops.
+> For kdump on MIPS, if the users want to limit the memory region for the
+> capture kernel to avoid corrupting the memory image of the panic kernel,
+> use the parameter memmap=limit@base is the proper way, I will submit a
+> patch to use memmap=limit@base for kexec-tools after this patchset is
+> applied.
+
+Sorry, apparently I misread the prevoius version.
+What's wrong with the current implementation of mem=limit@base for the
+kdump case?
+ 
+> v4: Fix some build warnings reported by kernel test robot
 > 
-> If by any chance the compiler inlines this function, it may clobber
-> random stuff (e.g. local variable, important temporary value in reg,
-> etc.).
+> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+>     commented by Mike Rapoport, thank you
 > 
-> Fortunately, delay_loop() is only called indirectly (so it can't
-> inline), and then the register it clobbers is %rax (which is by the
-> nature of the calling convention, it's a caller saved register), so it
-> didn't yield any bug.
+> v2: Add some new patches to support memmap=limit@base
+> 
+> Tiezhu Yang (4):
+>   MIPS: Refactor early_parse_mem() to fix mem= parameter
+>   memblock: Introduce memblock_mem_range_remove_map()
+>   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+>   MIPS: Remove not used variable usermem
+> 
+>  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+>  include/linux/memblock.h |  1 +
+>  mm/memblock.c            |  9 +++++--
+>  3 files changed, 40 insertions(+), 39 deletions(-)
+> 
+> -- 
+> 2.1.0
+> 
 
-Both the function pointers in that code need killing.
-They only have two options (each) so conditional branches
-will almost certainly always have been better.
-
-I also wonder how well the comment
-   The additional jump magic is needed to get the timing stable
-   on all the CPU' we have to worry about.
-applies to any modern cpu!
-The code is unchanged since (at least) 2.6.27.
-(It might have been moved from another file.)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Sincerely yours,
+Mike.

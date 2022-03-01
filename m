@@ -2,184 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EDB4C9876
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467E54C9879
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbiCAWpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S238502AbiCAWpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiCAWpT (ORCPT
+        with ESMTP id S233513AbiCAWpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:45:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E823A77AB2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:44:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646174677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mGMUuYb5facBAKE4BWWQblYiu2u5yGmxdG+wUrk0CNE=;
-        b=FjugHSiEu2II5ASuzqYYDZmH9dCqLikwyfInSKZsc3mxiHlyFc2Dd9yY+4lUiFJmj1ab+c
-        KDtBYVGytliI36LOyiBVZ9c0gvC1mixO8dPw7GKTwsDqTYbLU1IVMJJf7/2ytb1Lalk94P
-        P/Qjlh6xPrVTbhQx7wrFj6cqSGNcv78=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-QAJITvLEPYOmxmJudhhHzw-1; Tue, 01 Mar 2022 17:44:34 -0500
-X-MC-Unique: QAJITvLEPYOmxmJudhhHzw-1
-Received: by mail-oo1-f70.google.com with SMTP id r18-20020a056820039200b0031d6f9170eeso5023165ooj.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 14:44:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=mGMUuYb5facBAKE4BWWQblYiu2u5yGmxdG+wUrk0CNE=;
-        b=jl+c68hgdtDM5b6g9kRpRSY2dYpRKaCJNmHgAcJZ51y7sxBbfJopOzEQMAkF73WMt4
-         87/n5eiscxpPReoM8jLLsZxozlEywHL/8licFZ0GNJtuRq8vZVazEichlpgpxDB7eTON
-         q5Xq10B2U46EWQ9rUc5O9FX5Sa8r25baDMws8Y2hgAal5bRvFl2de7flZqkZTG+nHbso
-         HnXp/XSBRAuncVRczZKesnT7dAqjzp5GIaM7ZHjeRAcO78cYTuFcKjitrGCIpmhu7o1h
-         yqLl+YyUJAptUff22R03/sk6aLduwKhMwQlcG0UUW7HCiNvkzh6T6DegYBUj1v9OKor5
-         foqg==
-X-Gm-Message-State: AOAM5308yhWn3rcTl0RCZAeF50Jvhma9FrWHQUIjXLEn5C55tACL4gaS
-        jmfNnZvudu7GLGkKiRag5QErQ1cgcHkz5cQyXliwtGSEL7NWv3byTCtvw7r+Y7YbrqQBUyKW7eU
-        V765LBPabs2SfyZEEOvvtc1Fr
-X-Received: by 2002:a05:6870:65a0:b0:d7:547:3c0b with SMTP id fp32-20020a05687065a000b000d705473c0bmr10477952oab.79.1646174673347;
-        Tue, 01 Mar 2022 14:44:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw0+uzXIFvxXkkhsLvg5Psp36LJMpZFA1kLIP23iFYOblelNGSikei+BKT4/FUoBnmsURZE9Q==
-X-Received: by 2002:a05:6870:65a0:b0:d7:547:3c0b with SMTP id fp32-20020a05687065a000b000d705473c0bmr10477943oab.79.1646174673084;
-        Tue, 01 Mar 2022 14:44:33 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id f10-20020a9d5e8a000000b0059fa2fa9b4bsm6918556otl.13.2022.03.01.14.44.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 14:44:32 -0800 (PST)
-Date:   Tue, 1 Mar 2022 15:44:31 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Message-ID: <20220301154431.42b27278.alex.williamson@redhat.com>
-In-Reply-To: <20220301203938.GY219866@nvidia.com>
-References: <20220228145731.GH219866@nvidia.com>
-        <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
-        <20220228180520.GO219866@nvidia.com>
-        <20220228131614.27ad37dc.alex.williamson@redhat.com>
-        <20220228202919.GP219866@nvidia.com>
-        <20220228142034.024e7be6.alex.williamson@redhat.com>
-        <20220228234709.GV219866@nvidia.com>
-        <20220228214110.4deb551f.alex.williamson@redhat.com>
-        <20220301131528.GW219866@nvidia.com>
-        <20220301123047.1171c730.alex.williamson@redhat.com>
-        <20220301203938.GY219866@nvidia.com>
-Organization: Red Hat
+        Tue, 1 Mar 2022 17:45:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB047804D;
+        Tue,  1 Mar 2022 14:44:58 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221LcOgN005050;
+        Tue, 1 Mar 2022 22:44:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ykvyyLl7q6ghJb9019sxdtjUtMUQwiVAHjJjIiX4Ags=;
+ b=Gal5gJe9fq4uQoYJ7Rmezl/Re69zOHkSyBxGjb/BG87AY540K7vDIXihyuVTY8NGvOZA
+ kP11WyBunqq89cWTBlvjZM9CrSjWBn26GR6i76vnidV/08DO4UwUSLJx5zgWKLeOaTzE
+ 1+XEhfvNeT50oXeVhrRyfgCNREdj2VY23q1Nj84pVCELpR+r6/kK8byScSNX5c++ud7C
+ X74vILqTYXHA7Y4cuF90W39IqtCgVfvef47q0ewFS/yPWeeVgJCEoisXWmWdgkeHYRj9
+ o258SsBy0wr+/uQv3fJ4hohl6o6SZGNMirozHopF+Zp65pQO7V2TsD3YyKA05alAmG8K Bw== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehu7tsb28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 22:44:54 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221McckK016596;
+        Tue, 1 Mar 2022 22:44:53 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02dal.us.ibm.com with ESMTP id 3efbuafsn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 22:44:53 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221MiqeQ48496908
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 22:44:52 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC9322805C;
+        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0709728059;
+        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.40.70])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Mar 2022 22:44:51 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, johan@kernel.org,
+        gregkh@linuxfoundation.org, Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>
+Subject: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
+Date:   Tue,  1 Mar 2022 16:44:46 -0600
+Message-Id: <20220301224446.21236-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
+X-Proofpoint-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203010111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Mar 2022 16:39:38 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+IBM manufactures a PL2303 device for UPS communications. Add the vendor
+and product IDs so that the PL2303 driver binds to the device.
 
-> On Tue, Mar 01, 2022 at 12:30:47PM -0700, Alex Williamson wrote:
-> > Wouldn't it make more sense if initial-bytes started at QM_MATCH_SIZE
-> > and dirty-bytes was always sizeof(vf_data) - QM_MATCH_SIZE?  ie. QEMU
-> > would know that it has sizeof(vf_data) - QM_MATCH_SIZE remaining even
-> > while it's getting ENOMSG after reading QM_MATCH_SIZE bytes of data.  
-> 
-> The purpose of this ioctl is to help userspace guess when moving on to
-> STOP_COPY is a good idea ie when the device has done almost all the
-> work it is going to be able to do in PRE_COPY. ENOMSG is a similar
-> indicator.
-> 
-> I expect all devices to have some additional STOP_COPY trailer_data in
-> addition to their PRE_COPY initial_data and dirty_data
-> 
-> There is a choice to make if we report the trailer_data during
-> PRE_COPY or not. As this is all estimates, it doesn't matter unless
-> the trailer_data is very big.
-> 
-> Having all devices trend toward a 0 dirty_bytes to say they are are
-> done all the pre-copy they can do makes sense from an API
-> perspective. If one device trends toward 10MB due to a big
-> trailer_data and one trends toward 0 bytes, how will qemu consistently
-> decide when best to trigger STOP_COPY? It makes the API less useful.
->
-> So, I would not include trailer_data in the dirty_bytes.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+Changes since v1:
+ - Fix commit message Signed-off-by ordering.
 
-That assumes that it's possible to keep up with the device dirty rate.
-It seems like a better approach for userspace would be to look at how
-dirty_bytes is trending.  A zero value and a steady state value are
-equivalent, there's nothing more to be gained by further iterations.  If
-the value is trending down, it might be worthwhile to iterate in
-PRE_COPY a while longer.  If the value is trending up, it might be time
-to cut to STOP_COPY or abort the migration.
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 3 +++
+ 2 files changed, 4 insertions(+)
 
-If we exclude STOP_COPY trailing data from the VFIO_DEVICE_MIG_PRECOPY
-ioctl, it seems even more of a disconnect that when we enter the
-STOP_COPY state, suddenly we start getting new data out of a PRECOPY
-ioctl.
-
-BTW, "VFIO_DEVICE" should be reserved for ioctls and data structures
-relative to the device FD, appending it with _MIG is too subtle for me.
-This is also a GET operation for INFO, so I'd think for consistency
-with the existing vfio uAPI we'd name this something like
-VFIO_MIG_GET_PRECOPY_INFO where the structure might be named
-vfio_precopy_info.
-
-> Estimating when to move on to STOP_COPY and trying to enforce a SLA on
-> STOP_COPY are different tasks and will probably end up with different
-> interfaces.
-> 
-> I still think the right way to approach the SLA is to inform the
-> driver what the permitted time and data size target is for STOP_COPY
-> and the driver can proceed or not based on its own internal
-> calculation.
-
-So if we don't think this is the right approach for STOP_COPY, then why
-are we pushing that it has any purpose outside of PRECOPY or might be
-implemented by a non-PRECOPY driver for use in STOP_COPY?
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index a70fd86f735c..e2ef761ed39c 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -116,6 +116,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(ADLINK_VENDOR_ID, ADLINK_ND6530GC_PRODUCT_ID) },
+ 	{ USB_DEVICE(SMART_VENDOR_ID, SMART_PRODUCT_ID) },
+ 	{ USB_DEVICE(AT_VENDOR_ID, AT_VTKIT3_PRODUCT_ID) },
++	{ USB_DEVICE(IBM_VENDOR_ID, IBM_PRODUCT_ID) },
+ 	{ }					/* Terminating entry */
+ };
  
-> > useful yet and you don't want to add dead kernel code, then let's
-> > define that this ioctl is only available in the PRE_COPY* states and
-> > returns -errno in the STOP_COPY state.  
-> 
-> I'm OK with that, in acc it is done by checking migf->total_bytes >
-> QM_MATCH_SIZE during the read fop
-> 
-> > devices in STOP_COPY and let's also define if there's actually anything
-> > userspace can infer about remaining STOP_COPY data size while in
-> > PRE_COPY* via this ioctl.  For example, is dirty-bytes zero or the
-> > remaining data structure size?  
-> 
-> If we keep it then I would say it doesn't matter, userspace has to sum
-> the two values to get the total remaining length estimate, it is just
-> a bit quirky.
-
-For the reasons above, I just can't figure out why wouldn't decide that
-use of this outside of PRECOPY is too quirky to bother with.  Thanks,
-
-Alex
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index 6097ee8fccb2..c5406452b774 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -35,6 +35,9 @@
+ #define ATEN_PRODUCT_UC232B	0x2022
+ #define ATEN_PRODUCT_ID2	0x2118
+ 
++#define IBM_VENDOR_ID		0x04b3
++#define IBM_PRODUCT_ID		0x4016
++
+ #define IODATA_VENDOR_ID	0x04bb
+ #define IODATA_PRODUCT_ID	0x0a03
+ #define IODATA_PRODUCT_ID_RSAQ5	0x0a0e
+-- 
+2.27.0
 

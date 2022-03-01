@@ -2,93 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4039B4C9779
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBF64C9777
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238473AbiCAVFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S238465AbiCAVEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236415AbiCAVFN (ORCPT
+        with ESMTP id S236415AbiCAVEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:05:13 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEEB70337
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646168671; x=1677704671;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JkBpiGS9qT2A5/AO8ZoQHW0JjgI9k0Vg9Eiwm+kBaEU=;
-  b=T80kjfOwWDXOidMtxI9TOh3GIX2AzvLqmWHjj7OOjb3sS1sGIydpmftX
-   6371v5p0DXAis3WjCpiWG6jvYqGA5Hq3Ii7a+8hoDmbooZG6e8Hn6Uchy
-   gr4KrEHUTq7+JNOmA8QAYENt0WDKOPnWCr2t1K1KhdcmzYtkVFOXsmrvu
-   4YmVFIWPXNLcS2f/nM3SfZtlbHxns0bWbNC1oZTi69uo/hCwafIUFGGUf
-   MPGfWuVv4QG16t7vVxs/8eJG05aitTgRLw1gvmVX/Em/wHdhvPR1MZEcg
-   o7ZqMRgZgGNOEe+BlOsaauYwnXQn9JnCmJpro5Y3+4MW9NEhyrY2J2yS2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="313961779"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="313961779"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 13:04:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="641421998"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2022 13:04:30 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP9fZ-00011o-8l; Tue, 01 Mar 2022 21:04:29 +0000
-Date:   Wed, 2 Mar 2022 05:03:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 80/96] Error:
- arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9
- Label or path pm_uart not found
-Message-ID: <202203020419.Kj7avg87-lkp@intel.com>
+        Tue, 1 Mar 2022 16:04:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 262D16662F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:04:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646168643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EwCm6HAyJrAYvXTnRc2PbVlW2m0OLPVQ/bg97TmXFeY=;
+        b=CBraVGD838wdKu23FTg3o2iTgFFQFoJbJ68OAzQ5Sx1zWGY1/sMjK1Kt69Y3Z1VA14teRj
+        BOTnV6BV20d30cWRnzSPuleeFLYu9zEwyC2uswi3h42irSOGDDJdeD7gE0rRr6Wjb1Wb17
+        c41hAYTC1lzfQy2wVdpPw7uoZ6Bvlnc=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-167-AW5mTfQ6OkW7Lb6WkZOPFw-1; Tue, 01 Mar 2022 16:04:02 -0500
+X-MC-Unique: AW5mTfQ6OkW7Lb6WkZOPFw-1
+Received: by mail-ej1-f70.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so7365741ejw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:04:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EwCm6HAyJrAYvXTnRc2PbVlW2m0OLPVQ/bg97TmXFeY=;
+        b=UfGa2ov5b3fIFoApZfLlTDViO7Sn+sdSgLg8+JSz2VCGte89NhGyfNtOWXwPxSrmy8
+         ZmZJprg1welV/+JZOphis4vU0wpCEceDjKO6o2aiEeU1dWs6lvvYlHscPGM9VVECMVSV
+         1LAlG7k52+t3vZrFth9mxM1F61SjjOU5nHQb4Brgz/0ZudgD9iyRmzD+bwfS0xk/dmx7
+         sU6n3/NfomVp/3h0009Y/r6g9jD7/iwU+gdFuMTDeEKpWPMihNEHYs2+Nb9h8KLu2r48
+         iVgb7bbTISQp6RYztin3koXmd50w1jRvEArhR3jn+uTLsVzxDURdgvui5Lctg2zYDeXK
+         XOpw==
+X-Gm-Message-State: AOAM532aXgu9ofLeePFvsU9LwocHMkwINcexMBbQaUtXBgFBBWWJeFFC
+        NktI1UCNt+gi6Y3L5M0MiY901NL2NvsYjRQ+ngc+NhwUKtW8G4g0B68g+88aWWXTrpjO75cx4n7
+        A6O7DTCnzbGcLZPyDLmhZe7Hp
+X-Received: by 2002:a17:907:2d0c:b0:6d6:f8ce:795b with SMTP id gs12-20020a1709072d0c00b006d6f8ce795bmr2864729ejc.54.1646168640836;
+        Tue, 01 Mar 2022 13:04:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0RTvkFChTKb/q9VHrVf39kxe1ZV8LMhVilXAHXmtmj60uhFwOT7VSChcj27v1P+er0blTog==
+X-Received: by 2002:a17:907:2d0c:b0:6d6:f8ce:795b with SMTP id gs12-20020a1709072d0c00b006d6f8ce795bmr2864713ejc.54.1646168640617;
+        Tue, 01 Mar 2022 13:04:00 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id qh23-20020a170906ecb700b006d6e97b94aesm754300ejb.9.2022.03.01.13.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 13:04:00 -0800 (PST)
+Message-ID: <7eb134f9-a633-70f4-0089-c864e5add4d2@redhat.com>
+Date:   Tue, 1 Mar 2022 22:03:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] platform/surface: surfacepro3_button: don't load on
+ amd variant
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Sachi King <nakato@nakato.io>, Chen Yu <yu.c.chen@intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211109081125.41410-1-nakato@nakato.io>
+ <20211109081125.41410-2-nakato@nakato.io>
+ <CAHp75Vcw-ARNZCRRJGzbQ7xc3ZB=98eFCuEFc4cj5W3vAj5EZw@mail.gmail.com>
+ <Yh6Joy2HDnsuK6LN@google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Yh6Joy2HDnsuK6LN@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   8ac61fd8fe35232e1061ab5e3e7b665cac918068
-commit: a129af18616a3b5ad4c4af70458703a052da2d63 [80/96] ARM: dts: mstar: Add top level dts for ssd201-som2d01
-config: arm-randconfig-r006-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020419.Kj7avg87-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/linux-chenxing/linux/commit/a129af18616a3b5ad4c4af70458703a052da2d63
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout a129af18616a3b5ad4c4af70458703a052da2d63
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi All,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 3/1/22 22:01, Dmitry Torokhov wrote:
+> On Tue, Nov 09, 2021 at 11:12:34AM +0200, Andy Shevchenko wrote:
+>> On Tue, Nov 9, 2021 at 10:11 AM Sachi King <nakato@nakato.io> wrote:
+>>>
+>>> The AMD variant of the Surface Laptop report 0 for their OEM platform
+>>> revision.  The Surface devices that require the surfacepro3_button
+>>> driver do not have the _DSM that gets the OEM platform revision.  If the
+>>> method does not exist, load surfacepro3_button.
+>>
+>> ...
+>>
+>>>   * Surface Pro 4 and Surface Book 2 / Surface Pro 2017 use the same device
+>>>   * ID (MSHW0040) for the power/volume buttons. Make sure this is the right
+>>> - * device by checking for the _DSM method and OEM Platform Revision.
+>>> + * device by checking for the _DSM method and OEM Platform Revision DSM
+>>> + * function.
+>>
+>> Not sure what this change means (not a native speaker).
+>>
+>> ...
+>>
+>>> -       dev_dbg(&dev->dev, "OEM Platform Revision %llu\n", oem_platform_rev);
+>>
+>> I think this is useful to have.
+>>
+>> What about leaving it as is for debugging purposes and just replacing
+>> the last test?
+> 
+> I agree it is nice to be able to print it for debug purposes, but it has
+> to be fetched separately, as with the proposed change we are not reading
+> it.
+> 
+> If I am understanding the change it wants to call acpi_dsm_check()
+> to verify whether MSHW0040_DSM_GET_OMPR function exists at all (which is
+> done by reading _DSM MSHW0040_DSM_UUID, revision MSHW0040_DSM_REVISION,
+> function 0. Only if function 0 indicates that function
+> MSHW0040_DSM_GET_OMPR is supported in this _DSM, we can read it to get
+> the real version number, which can be 0.
+> 
+> Treating 0 as an invalid version as it was done in original change is
+> wrong.
+> 
+> I propose we combine the old and new code, call acpi_dsm_check() and
+> bail if it returns false, otherwise proceed to calling
+> acpi_evaluate_dsm_typed() and dev_dbg() the version.
+> 
+> Sachi, are you going to update the patch? You do not need to adjust the
+> surface driver as Hans is getting rid of it.
 
-All errors (new ones prefixed by >>):
+Right, for more info on that see:
 
->> Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
->> FATAL ERROR: Syntax error parsing input tree
+https://lore.kernel.org/linux-input/20220224110241.9613-1-hdegoede@redhat.com/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+
+Hans
+

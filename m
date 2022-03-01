@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4044C8F5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFE84C8FB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiCAPqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
+        id S235239AbiCAQJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiCAPp7 (ORCPT
+        with ESMTP id S235966AbiCAQJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:45:59 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E554ECC8;
-        Tue,  1 Mar 2022 07:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646149518; x=1677685518;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C/BjzGXxbcQNucZ4IX+eGwpvmWxMB4jt2HQM1WP1dbg=;
-  b=MQteWPZW0dA6PEbnQ5k5EHn4JgBDd7WOjqwTiipPVWNnfCOXrbhz0n+8
-   5+edV8OxUj1I/3SYDgeGMGbKlcWdwABaxiroXsncX082w68AM5tyaF/d6
-   9IAaK1bxygdDKQyFrSVx50oppQTCwSdDdUDW+sTszrVPVZVyBWt2F6rRQ
-   A=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Mar 2022 07:45:17 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:45:07 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 1 Mar 2022 07:45:07 -0800
-Received: from [10.216.24.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 1 Mar 2022
- 07:45:00 -0800
-Message-ID: <134a64a9-abab-df25-a613-2d01ac7e5ee5@quicinc.com>
-Date:   Tue, 1 Mar 2022 21:14:56 +0530
+        Tue, 1 Mar 2022 11:09:35 -0500
+X-Greylist: delayed 1413 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 08:08:54 PST
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7E1BC02
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:08:51 -0800 (PST)
+Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 0F7C480349F2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:45:18 +0000 (UTC)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 5F7C410047D88
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:45:17 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id P4genkULi2s5dP4gfnRZBE; Tue, 01 Mar 2022 15:45:17 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=BOh2EHcG c=1 sm=1 tr=0 ts=621e3f8d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KqpHs7Nh02SWGSpjywmAjr+REmd1BHHxvQF7C3T6jFE=; b=hOTwORVHg/VCx4dQHTwgpUmzXk
+        Qq0EnrvvjpDi9fQiv33x/lTMBUw8CYK9uyelLkYBV4+NVO/99F6SH0R1CCllOAZ6r+jdLrLmQC0GH
+        RkcT3GOpI75c+W8eSbNgV6ejw;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58490 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nP4gd-000Vwe-T1; Tue, 01 Mar 2022 08:45:15 -0700
+Subject: Re: [PATCH 5.16 000/164] 5.16.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220228172359.567256961@linuxfoundation.org>
+In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <68b24ee5-b3c9-c56e-bd2f-d09ec1e4cdd6@w6rz.net>
+Date:   Tue, 1 Mar 2022 07:45:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 1/2] soundwire: qcom: Add compatible name for v1.6.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <alsa-devel@alsa-project.org>, <bgoswami@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>, <judyhsiao@chromium.org>,
-        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <perex@perex.cz>,
-        <pierre-louis.bossart@linux.intel.com>, <quic_plai@quicinc.com>,
-        <robh+dt@kernel.org>, <rohitkr@codeaurora.org>,
-        <sanyog.r.kale@intel.com>, <srinivas.kandagatla@linaro.org>,
-        <tiwai@suse.com>, <yung-chuan.liao@linux.intel.com>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1646030377-12092-1-git-send-email-quic_srivasam@quicinc.com>
- <1646030377-12092-2-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n53XVfXeVHFhokw7pwSOnL4MQAzDg-83OaH=FB=cB2gqdA@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAE-0n53XVfXeVHFhokw7pwSOnL4MQAzDg-83OaH=FB=cB2gqdA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nP4gd-000Vwe-T1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:58490
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,47 +93,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/28/22 9:22 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.12 release.
+> There are 164 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On 3/1/2022 2:32 AM, Stephen Boyd wrote:
-> Quoting Srinivasa Rao Mandadapu (2022-02-27 22:39:36)
->> Update compatible string and master data information in soundwire driver
->> to support v1.6.0 in lpass sc7280 based platform.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   drivers/soundwire/qcom.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
->> index 9eb31ba..fb183bd 100644
->> --- a/drivers/soundwire/qcom.c
->> +++ b/drivers/soundwire/qcom.c
->> @@ -175,6 +175,11 @@ static struct qcom_swrm_data swrm_v1_5_data = {
->>          .default_cols = 16,
->>   };
->>
->> +static struct qcom_swrm_data swrm_v1_6_data = {
-> Why not const?
-Okay.
->
->> +       .default_rows = 50,
->> +       .default_cols = 16,
-> This is the same as swrm_v1_5_data so just use that struct again?
-Okay. Will use  swrm_v1_5_data.
->
->> +};
->> +
->>   #define to_qcom_sdw(b) container_of(b, struct qcom_swrm_ctrl, bus)
->>
->>   static int qcom_swrm_ahb_reg_read(struct qcom_swrm_ctrl *ctrl, int reg,
->> @@ -1343,6 +1348,7 @@ static int qcom_swrm_remove(struct platform_device *pdev)
->>   static const struct of_device_id qcom_swrm_of_match[] = {
->>          { .compatible = "qcom,soundwire-v1.3.0", .data = &swrm_v1_3_data },
->>          { .compatible = "qcom,soundwire-v1.5.1", .data = &swrm_v1_5_data },
-> These other structs for v1.5 and v1.3 could also be const.
-Okay. Will add const and re post.
->
->> +       { .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_6_data },
->>          {/* sentinel */},
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+

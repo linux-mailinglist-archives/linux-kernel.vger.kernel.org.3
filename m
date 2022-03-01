@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4964C93FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7308F4C9404
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiCATMA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Mar 2022 14:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S231807AbiCATOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiCATL7 (ORCPT
+        with ESMTP id S230016AbiCATOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:11:59 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27656582F;
-        Tue,  1 Mar 2022 11:11:17 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id bt13so29203229ybb.2;
-        Tue, 01 Mar 2022 11:11:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nmWK2BW2x6xyV74EFPtWDeE7bgfe1HOlsD2rX10CEvs=;
-        b=DvvsKonyb7fR2c7QzbCJ+8FjvBu/8nZUAADqg3dgj1/R+x5wEhlEn178U0JhkVzG1u
-         Rn3YxJoeallf3Q/C91iIzhnqMQN47cp4tCun0pTWGwCkXbleJyxQ/oHbb+1YMh+kFfnD
-         7N/rz/D7NGgqH7EBIkHJiy1RE+VeXz5z9zxYs44nXix+s8hLikcGhexfUvuGe0y6i4oM
-         s+VVkV5NA9DFrf5dRx9z5B79QWkT1GC+ewvMLS8KipIEfaiAm85prTsu6gvZWUvc9cvi
-         LHRNgFAaOVdZlOEHW9gXzyOXckFlNb5Xvq0K+xtzETqI9CEHd4cb2kxClDIjWXEgZ/eF
-         Tq8g==
-X-Gm-Message-State: AOAM530QZdzPVEGqVc54atBz32ANZX2GAU2h0sKfhQ7dOWVcpg3rhPsf
-        QK8q9jf8TTtKrCIbzj/hn5rX7nivHCqf0sR/5Pw=
-X-Google-Smtp-Source: ABdhPJzdznA9JoxWBukbJH/P/CqzYOu5SA6WPHkv5lA2ZdqzTyBxETRORZtwqbCo1uWpT/gTyW0yXaWw+GTJrcOTYTs=
-X-Received: by 2002:a25:bbc1:0:b0:610:b4ce:31db with SMTP id
- c1-20020a25bbc1000000b00610b4ce31dbmr25343371ybk.482.1646161877152; Tue, 01
- Mar 2022 11:11:17 -0800 (PST)
+        Tue, 1 Mar 2022 14:14:03 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3CE4C7B5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3cfe6qkGcSTk1RLLa+OWFN4fepuY3Vm0o//7NItg80k=; b=ZDHeGa6sGg2fhed+n3/g+w7foh
+        /0d+DSHa2vtmAZDb8nGYRBXH4MC8O2HeTavX0MEGL+cEaf8APOKP5rVsRE9pjz33xg+DO74KIW6wG
+        gA/ubCLBSoSONsAnzav2ktAJ6BpVFXZWHiIShd58iax1wBy+cOGQXpzFARPBADdVIyaO9E5Cx1jVz
+        LUxL6qlN/LCKiDSRK09bMpHALfZwVn9cHx23NlyMphmschKDJ+OEiI1N6Q7hR0nPoZG7g47TT4zjz
+        FgVlgfuz+/XHwt9oUfTr1wA27/GYB8M2YKZymadyurPXSY13wBKbqTo7PelLeXJHur1wc61TWzblv
+        aapZIZ7g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP7vS-00ELny-N8; Tue, 01 Mar 2022 19:12:47 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2409B986271; Tue,  1 Mar 2022 20:12:45 +0100 (CET)
+Date:   Tue, 1 Mar 2022 20:12:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
+        rostedt@goodmis.org, samitolvanen@google.com, x86@kernel.org
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-ID: <20220301191245.GI11184@worktop.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.892372059@infradead.org>
+ <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+ <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+ <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
+ <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
+ <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
- <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
-In-Reply-To: <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 20:11:06 +0100
-Message-ID: <CAJZ5v0ipcdUqTEFn075NeioyHRDKy2j_pYZOBKgqnx_c1=q5Pw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-To:     Won Chung <wonchung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 7:57 PM Won Chung <wonchung@google.com> wrote:
->
-> On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi Won,
-> >
-> > On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> > > When ACPI table includes _PLD field for a Type C connector, share _PLD
-> > > values in its sysfs. _PLD stands for physical location of device.
-> > >
-> > > Currently without connector's location information, when there are
-> > > multiple Type C ports, it is hard to distinguish which connector
-> > > corresponds to which physical port at which location. For example, when
-> > > there are two Type C connectors, it is hard to find out which connector
-> > > corresponds to the Type C port on the left panel versus the Type C port
-> > > on the right panel. With location information provided, we can determine
-> > > which specific device at which location is doing what.
-> > >
-> > > _PLD output includes much more fields, but only generic fields are added
-> > > and exposed to sysfs, so that non-ACPI devices can also support it in
-> > > the future. The minimal generic fields needed for locating a port are
-> > > the following.
-> > > - panel
-> > > - vertical_position
-> > > - horizontal_position
-> > > - dock
-> > > - lid
-> > >
-> > > Signed-off-by: Won Chung <wonchung@google.com>
-> > > ---
-> > >
-> > > Changes in v2:
-> > > - Use string for location.
-> > > - Clarify get_pld() with naming and return type.
-> > >
-> > >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
-> > >  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
-> > >  drivers/usb/typec/class.h                   |   3 +
-> > >  3 files changed, 151 insertions(+)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > > index 75088ecad202..4497a5aeb063 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > @@ -141,6 +141,41 @@ Description:
-> > >               - "reverse": CC2 orientation
-> > >               - "unknown": Orientation cannot be determined.
-> > >
-> > > +What:                /sys/class/typec/<port>/location/panel
-> > > +Date:                March 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Describes which panel surface of the system’s housing the
-> > > +             port resides on.
-> > > +
-> > > +What:                /sys/class/typec/<port>/location/vertical_position
-> > > +Date:                March 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Describes vertical position of the port on the panel surface.
-> > > +             Valid values: upper, center, lower
-> > > +
-> > > +What:                /sys/class/typec/<port>/location/horizontal_position
-> > > +Date:                March 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Describes horizontal position of the port on the panel surface.
-> > > +             Valid values: left, center, right
-> > > +
-> > > +What:                /sys/class/typec/<port>/location/dock
-> > > +Date:                March 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set as "yes" if the port resides in a docking station or a port
-> > > +             replicator, otherwise set as "no".
-> > > +
-> > > +What:                /sys/class/typec/<port>/location/lid
-> > > +Date:                March 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set as "yes" if the port resides on the lid of laptop system,
-> > > +             otherwise set as "no".
-> > > +
-> >
-> > I've probable lost track of the topic during my winter break, I'm
-> > sorry about that, but why are you proposing now that this should be
-> > made Type-C specific?
-> > This information is not Type-C specific, so it definitely does not
-> > belong here.
-> >
-> > Br,
-> >
-> > --
-> > heikki
->
-> Hi Heikki,
->
-> Thank you for the comment. Sorry that my description was not clear.
-> This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
-> support for _PLD" in which Rafael suggested to have generic location
-> in Type C connector than adding PLD specifically to ACPI device.
+On Tue, Mar 01, 2022 at 10:49:09PM +0530, Naveen N. Rao wrote:
+> Peter Zijlstra wrote:
+> > On Tue, Mar 01, 2022 at 11:49:05AM +0900, Masami Hiramatsu wrote:
+> > 
+> > > - the 'offset' is NOT limited under the symbol size.
+> > >   (e.g. symbol_name = "_text" and @offset points the offset of target symbol from _text)
+> > > 
+> > > This means we need to call kallsyms_lookup_size_offset() in this case too.
+> > 
+> > I'm feeling we should error out in that case. Using sym+offset beyond
+> > the limits of sym is just daft.
+> > 
+> > But if you really want/need to retain that, then yes, we need that
+> > else branch unconditionally :/
+> 
+> I think we will need this. perf always specifies an offset from _text.
 
-Well, this doesn't have to be /sys/class/typec/<port>/location/ though.
+The _text section symbol should have an adequate size, no?
 
-For example, the device location information can be exposed in a more
-generic way is /sys/devices/.../location/ for all devices for which it
-is available, somewhat in analogy to /sys/devices/.../power/.
+> Also, I just noticed:
+
+> > +		if (!kallsyms_lookup_size_offset((unsigned long)addr + offset,
+> > +						 NULL, &offset))
+> > +			return ERR_PTR(-ENOENT);
+> > +		addr = (kprobe_opcode_t *)((unsigned long)addr - offset);
+> >  	}
+> 
+> This looks wrong. I think you need to retain offset to calculate the proper
+> function entry address so that you can do:
+> 	addr = (kprobe_opcode_t *)((unsigned long)(addr + offset) - func_offset);
+> 	offset = func_offset;
+
+
+Right you are, it needs to be:
+
+	addr += offset;
+	kallsyms_lookup_size_offset(addr, &size, &offset);
+	addr -= offset;
+
+with all the extra unreadable casts on.

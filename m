@@ -2,189 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2F04C8053
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C494C8057
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiCABZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S229781AbiCAB1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiCABY6 (ORCPT
+        with ESMTP id S229540AbiCAB1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:24:58 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018801C11A;
-        Mon, 28 Feb 2022 17:24:13 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21SLnRfp010129;
-        Tue, 1 Mar 2022 01:24:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=WP1QTQiPTnxY3hTSdwfKg7ebLQYsCIpfnpAQmCwWe18=;
- b=AaF52TTs4YBIg1CTueAlJa5RaBxH5/KRnoUsIgHu5SqokGxX61EARJY6aMfdcfd8DF5/
- +RW2OcTDkBbTrCd44B9rpjecP5ANOIqe6CoK2qHYMJtIEPMCHXQaxi8gwUErSbrv6sPV
- V5+sxu2FkFfj47f/tZop/jtgpFfh7svuYxnY6NjhdfUbkBFJOBXl3Qe8jcSVMqQY3kXh
- LK3D6c5V8MpX/4dcyAeBLH9+RFR8eBI2LZ9GT9w3pd9SlgRlZzUxd1MFd2w+tpxFFakU
- Glse+tEyjLMPq42DS+T0qx6/fh36LsJcnO9SnxttMZHs8oQXFVEGnl2mudCixZOp8DGg Gg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh1k418pt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Mar 2022 01:24:06 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2211L1uE151095;
-        Tue, 1 Mar 2022 01:24:05 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
-        by aserp3020.oracle.com with ESMTP id 3efc13mu3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Mar 2022 01:24:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KdzrQkPWqwrsMA6x2Zm+1S9umKUBVXWzfH76uNVXLqPMpMjYb4gxcqusxXyTyZZyC42aLKotJ29r3giKljLu0DfRZzyM/CDPgEls4E5gLbEpsjL6K0/EJlC1zlu4eif11xfrqODZTSjISqa3lnX4/GAmQIs9wSk++7/voxRvaIvX+HDB8qgCzVGeLQZ1mojDMI90bsC7X2iRgsrsiHnJafYx7fq+5chL1SueB2vltTvfKTWhsD+SUpDCDdcaHhMw/90c3+uk80y4YBGzMl6Wyq4dvK8imtuBnsjOdnAnLrcwlaO2t+2g2sPKy4cY+vkfB7qdV11QzRQ67iB5MjGdqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WP1QTQiPTnxY3hTSdwfKg7ebLQYsCIpfnpAQmCwWe18=;
- b=O4oUh7kZk5SkfiC8caoit9jlbdkyIYYK8T47/nsZCWCdsCcl5Uk7N38Cvcg6nj+pUm57cjVuptWn/mgY3eLMrDUPXRMjdcHCgZWwdMv0WZAdUq3BofeBdFArw+ypi1RIeL/tjHk6+hLQV1v/ubHzrXkRgx/Ea0PdfsMRnnXwBVAXBsSvmfiPyhrniOzU6HaF2kWedZTt1oyoixHZkb/XkhIMpPINIyCM+wmzvOY0AKn7Q8Mo14zca+E0Xjh0boITDChr0h3vt5tz5nXfXrVet/9G6yWd5YBXrqkONTD45ixt/yVxh9It2KEdpX/YxCtnd+em3NMwGZS4vI9SxhDDUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WP1QTQiPTnxY3hTSdwfKg7ebLQYsCIpfnpAQmCwWe18=;
- b=qB8LY+4UUKkUPRv8cOAMdhruatJ7H3RFT8vS+9kpcOOiZEzQ++OAJIVNKiHvyrO54WZtqTaB/6AiX3g2y3Csqvs8D6PfMxAx2c3hKJmVC1xR8HzXkwEcnEiU7NhMwD22YIhqbfxpVt8GkB53FJFt5naUpnSwTlTJbuSWmOCpTIQ=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- MW5PR10MB5764.namprd10.prod.outlook.com (2603:10b6:303:190::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Tue, 1 Mar
- 2022 01:24:02 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3dd8:6b8:e2e6:c3a2]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3dd8:6b8:e2e6:c3a2%12]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 01:24:01 +0000
-Message-ID: <a7e1f13e-326f-fdba-5272-9cbc7ba2a3cf@oracle.com>
-Date:   Mon, 28 Feb 2022 19:23:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] target/iscsi: Fix detection of excess number of login
- exchanges
-Content-Language: en-US
-To:     Petr Pavlu <ppavlu@suse.cz>, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
-References: <20220222124217.21715-1-ppavlu@suse.cz>
-From:   Mike Christie <michael.christie@oracle.com>
-In-Reply-To: <20220222124217.21715-1-ppavlu@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM5PR07CA0028.namprd07.prod.outlook.com
- (2603:10b6:3:16::14) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        Mon, 28 Feb 2022 20:27:23 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788BCF5;
+        Mon, 28 Feb 2022 17:26:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646098003; x=1677634003;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W0/EHxfz/6Tlchl0IZZvUXnUObXdh0ufI9V1QGUN19E=;
+  b=RPcXNOszFI+ClTsZPv7FWhtTDCehO424FF/RxxNehn44VWz6Mz94jTgs
+   te5MQUjra1CEJ2Rjxr66dUdpLPCp0po9dUni+Wu7xMWuRFWCTNgkqa0DY
+   e4dvuXjJPArq75xwBrBTLDOZrS+z4LulXfSrUEejhwcDm7vyB26kLqPUK
+   eB7DOCEp/1ZGYceSKRIu9sESfi9jB3TSilESC0gs3x1iia/Y5yaKKGEh3
+   U3krI/UAzELv7Bzp+RhFrq01EstgOmnZijTfGewYiRy6FSI3IWZFUfOKi
+   KVQ8/ya/x9hzWiN++5ubG/u8gSyau3rfkkE2e/1TDSznBUPUucYcDvtJs
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253221374"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="253221374"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 17:26:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="492931197"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2022 17:26:40 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOrHj-0007yk-Fs; Tue, 01 Mar 2022 01:26:39 +0000
+Date:   Tue, 1 Mar 2022 09:26:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
+        herbert@gondor.apana.org.au, krzysztof.kozlowski@canonical.com,
+        robh+dt@kernel.org
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH 10/16] crypto: rockchip: rework by using crypto_engine
+Message-ID: <202203010927.TpnG5TzB-lkp@intel.com>
+References: <20220228194037.1600509-11-clabbe@baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: acae97d6-5d6a-4fe6-a232-08d9fb22290b
-X-MS-TrafficTypeDiagnostic: MW5PR10MB5764:EE_
-X-Microsoft-Antispam-PRVS: <MW5PR10MB5764B8E37549F91024DA6783F1029@MW5PR10MB5764.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YjSSN3lXWI+TQ7ZqQB7zDegqpk5faBovEhKaMetTKME+fb7gb+SPE3b1tfsV92oHe1lOBqAxu2VFH8USdLkrW3YCh3HdKFrsP7N6PkmQVDefgG9YykNBg4ExvvuuV1G0CDSZ4T9bLkrM6AoBi+1Dd327iMhZ0Dw/jn5MrR/gwp+R7HpP7b4mggbXsv3VbHwSa4g9wtiKaNI7wmIX2SIXzi4T5NDkgtPayHQH5WLyU6bRrS/fh2PXrTODmRd+O5s6lb5wNn2Gp1D7bdQcd54NS0wK4Bb/p1Trmtr/KW4x5+yLYfG4zIpynig7uuITIGUiC2Dp2DRvbhvmlNKYjl+0WJkYOXcBhr48PI7xY3lEEgpyx3p4WNkgsAZoutDfsuMNbgscUXYVvD1cXuQ9eRGmldRpGBQWwy5any0LpeHZh/gcUQ7FC6Mp9cpiFWu77sBJK/670CMiHD7nau+eMEWhXXNiup+94Zlk8jZfeqJIWFWkJBVrCP7Uaz0vbPVmpdvGSuyuZeIOzfZPDow2t4Rb2pq5eW0iehnGvkP2xKgHMYBdS/k98o5C1ouD06VWz5sraJUj3nYPmW0cyW8keEViEwZ8cAs13aicRlprsjwZvIEnwHWY+PaRF4HuaddK9TMVl30qyvgZKzAMETbAQsA5/pnQE1ebPdrvvy/kvkik0N89Vs8EKUVDKwB2Ko4h3oFrxQ7wo2j4dgvG0iDGlyrb16NEufLHczRrlec5P//ILs50UKVYcUG3PHZKlYWeCMET
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(36756003)(2906002)(316002)(31696002)(6636002)(31686004)(6486002)(4326008)(86362001)(38100700002)(26005)(66556008)(66946007)(66476007)(8936002)(2616005)(6506007)(6666004)(6512007)(53546011)(5660300002)(83380400001)(8676002)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWlrQXJqUy9CSW5CdncrMFFVNzFNbWlqT0FTSnk3cWJLUHdqZk5yVjdFUXNH?=
- =?utf-8?B?NE13bElhekZNS0hxQXRyTHVIVEJ0WHNyMHdGVm1xNUw2L245d0dkTDB5UXl1?=
- =?utf-8?B?UzZnaEU3TjI3bDVxckQyR0x3R0grV2kvWU1vRkFVemowQ1M3SDE1THA3bjRy?=
- =?utf-8?B?MXpDODUxcEQ4eFZ0SXo3ZUQxbjlSdjVud1lSdHhFanAzWWRFRSt3ZWlUbGY2?=
- =?utf-8?B?Qnd3V3Q4RGtLa0U5M3JaVDNBUGh0V1ZSWGFHelpoamtlRGJGMWhxOHNENVhm?=
- =?utf-8?B?a29ORDZwQzV2VjNPdUd3bmtvMWdSTjIyTm42N3Q3VWQwaDdlRDRVUzJndUd1?=
- =?utf-8?B?bHVPYWQ5eVdsWnl1YisxLzV1TERYUVFuMGxCQVlyK3Z4ejF6Qy9lazZwMWxI?=
- =?utf-8?B?RjdjYjRsYjFialpWN2wrTmpBR1gxY3ZBZ2xWYjlPbVB2eGQ5blFqcWNYTi9V?=
- =?utf-8?B?djVqWHlvVDh4N2czY21iSnJWQVh5UWhCMGtiZ0VXUnB3VFltVW8xdUtROW5z?=
- =?utf-8?B?a05xbTg5Q2JxWTJySkpxNmo5VXFwL0wvOWxXM2VmNFJJcTQ0UTFGZ0lBWUxo?=
- =?utf-8?B?czZmMnlrVmY3blpnTWhiamdDZHA4V2RmdkV5S0tSZU5OTTFOUHZ5TkZNQmUw?=
- =?utf-8?B?eWp1Zk44ck9IdmpRYkVndlUxakIyTG9Zc2svaERWSDJieEhiMmlENGFBVFJM?=
- =?utf-8?B?SjQ5VE93em01RUFGbmV3R0dzMk9WOTNseGJLaWlFcFVvVjJ5c2h1Qmp3ZUp6?=
- =?utf-8?B?VURISEhOMHRVMjZsa2hJd1VmV1YxM25yd3NMdXQ3T2NzYm4wTjNWdVhOZzZH?=
- =?utf-8?B?dXJ6SzJWSERxKytsV2luRURTQUlaWkN5eDg1bmV2VkdFVlc1alF1TG92Tmpa?=
- =?utf-8?B?NTRzS3VXYWxrejZIZ1hrREk2WXZreUhPbzNaSWY3ZkFmcVpJRHdKV2tHakNB?=
- =?utf-8?B?bGpxdjA3ZTJTeGF1cWVyNVZURC9samc1SXFhKzY2ejFpOUNSdk05RENHWnd5?=
- =?utf-8?B?UUVtZHlJSUdDZkduQU1LMzVKeldMSVJzREY4TUYwRTdrWHpzdnJpSjhCMXA3?=
- =?utf-8?B?NkxjUUZlZ2hSbDZMaGVKV0VzenJvemRNSkF0b3BLNlJoQ1Zib0JuN3NIN25y?=
- =?utf-8?B?dzcvT1hjRGNzc0ZXcjY3ZFYzZVFOWXdxRE16N1dSbU5ydzh2eHJrRzFKU3JH?=
- =?utf-8?B?amhMZjFybXZ5RU9GdkFvVjBxbUNVdmhhS1dzWWdCSVVkV0I0SC95NzN3bUVx?=
- =?utf-8?B?ZVhQMkZMd3hBeGpRTGp0a0JmTXNPc3dSb3cySzNhdnF1dm1vVmxKcUNhNjNP?=
- =?utf-8?B?aFRHUm9md1N6T05hT2lQMnlCai9ZQlRkbmhrd2orZkkyTjVHaGE4SDl5MG9p?=
- =?utf-8?B?Z3ZkRld5eGZ3bW8rR09oZFByeFFhN0JzSUwxS3hmYVlwblBIbit1Wnd4S0Ns?=
- =?utf-8?B?cytvUDA0VHJHUjNNd1c1SVBLejZ6VHZ4NEpNN01pdzlZanVPcE9adU83bVp4?=
- =?utf-8?B?M0JzUWg5eDMzWFhSUlVJVm9sakFCeXZMeEtoSVd6WjhBa0dRNGo2UFJRQmM4?=
- =?utf-8?B?NmpCQ1lCMStZMnQyU0k5Nno3bzhZbm5TaGhibk9mTkRBNDVnSEtRdXFMSkxC?=
- =?utf-8?B?MEs3NDBjMElDT0VzVWpabjg5MzRoQjJCOERrSkhnSW83VUVGc1dNL2lvWitD?=
- =?utf-8?B?OEN6M0JmbUpXc09aWGRsazh3eDV2WE5YaTlkZlp3NVZiQ1lxVWs1aDZTM1Bo?=
- =?utf-8?B?MVhJQXRLekZ4bThOcEZRMXIyU2VWMlQ4ZFk4L0FYVFVMNjRwL2NPVllsTG9F?=
- =?utf-8?B?VGR3MWhnSXhQOFpqT2NIc0xOeDA1L25BWkZPTmtOcnFCaWI0aGcwMGhkTG1p?=
- =?utf-8?B?MHIxdUp6N3ZtNlZrTi9DOFZ0d2lOczVFSUNkMGJrTFNkbWhqL3RzUUxGaUtz?=
- =?utf-8?B?QWNHdlBGVS9Ib1dqa3FuWlFNeEJFSUxsOThYODhKR0U2LzRnOHlKZzNpMzFM?=
- =?utf-8?B?TUJuMUJ6MWhUUmFvN1F0a0Q1eDI1NmJwUDdVbklUUEdpTEkwQ0hNNzZXNXRU?=
- =?utf-8?B?N1hQcWd1UklPKy96dWNUWEU4eFRTcWhXUkY2ZmVDVzIyL3N0bUhxTWhEYVpG?=
- =?utf-8?B?bmU3emhlbUd6V0paUG1oQ1QrVFZXdlpqU1JnM2pTWCthNHQ3cjVtMmFVREp4?=
- =?utf-8?B?d1BvSnJySms0SFVqMW51UUphRmhYeU1KalFneXRET1NZc2NRY3RmZDlGMnRn?=
- =?utf-8?B?cjJLd3dUdFlrSlpTdTVjUm9WVjVRPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acae97d6-5d6a-4fe6-a232-08d9fb22290b
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 01:24:01.3380
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7l96HLv8YVDcU51WAO0gKPLOeqyRYguU2f9tPbybPmqs8BAaTP9ziASQCO2dqJylWfdqgZD+kHpvlwGga59usl/J7nDu1papnXT2cTZNltQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5764
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10272 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203010005
-X-Proofpoint-ORIG-GUID: xCFpVwBfAIY20h0q6TQGpsdW0OdkrPPf
-X-Proofpoint-GUID: xCFpVwBfAIY20h0q6TQGpsdW0OdkrPPf
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228194037.1600509-11-clabbe@baylibre.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 6:42 AM, Petr Pavlu wrote:
-> From: Petr Pavlu <petr.pavlu@suse.com>
-> 
-> Function iscsi_target_do_login() attempts to cancel a connection when
-> a number of login exchanges reaches MAX_LOGIN_PDUS (7). This is done by
-> having a local counter and incrementing+checking it as the function
-> processes requests in a loop. A problem is that since the login rework in
-> back in 2013, the function always processes only a single request and the
-> loop is terminated at the end of the first iteration. This means the
-> counter reaches only value 1 and any excess number of login requests is
-> never rejected.
-> 
-> Fix the problem by introducing iscsi_login.negotiation_exchanges counter
-> and update the logic to count exchanges per each login phase as described
-> in RFC 7143:
->> 6.2. Text Mode Negotiation:
->> [...]
->> In the Login Phase (see Section 6.3), every stage is a separate
->> negotiation. [...]
->> [...]
->> An iSCSI initiator or target MAY terminate a negotiation that does
->> not terminate within an implementation-specific reasonable time or
->> number of exchanges but SHOULD allow at least six (6) exchanges.
-> 
+Hi Corentin,
 
-It wasn't clear to me what this fixes. Today, are initiators sending more
-than 6 exchanges and if so what happens to the target? Is it crashing or
-annoying to user or cause some sort of endless login so we run out of
-resources? Or is this more of code cleanup?
+I love your patch! Perhaps something to improve:
 
-When does this happen and with what initiators?
+[auto build test WARNING on rockchip/for-next]
+[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17-rc6 next-20220228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220301/202203010927.TpnG5TzB-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7e5f8e4a5f09473643937e0ecff342bf336793fb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220301-035430
+        git checkout 7e5f8e4a5f09473643937e0ecff342bf336793fb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/crypto/rockchip/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from drivers/crypto/rockchip/rk3288_crypto_skcipher.c:11:
+   drivers/crypto/rockchip/rk3288_crypto_skcipher.c: In function 'rk_cipher_run':
+>> drivers/crypto/rockchip/rk3288_crypto_skcipher.c:383:40: warning: format '%x' expects argument of type 'unsigned int', but argument 12 has type 'long unsigned int' [-Wformat=]
+     383 |                 dev_dbg(ctx->dev->dev, "LEN=%d/%d/%u ivsize=%d mode=%x n=%d BI=%d todo=%u way=%x\n",
+         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                         ^~~
+   include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
+     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+         |                                             ^~~~~~~
+   drivers/crypto/rockchip/rk3288_crypto_skcipher.c:383:17: note: in expansion of macro 'dev_dbg'
+     383 |                 dev_dbg(ctx->dev->dev, "LEN=%d/%d/%u ivsize=%d mode=%x n=%d BI=%d todo=%u way=%x\n",
+         |                 ^~~~~~~
+   drivers/crypto/rockchip/rk3288_crypto_skcipher.c:383:96: note: format string is defined here
+     383 |                 dev_dbg(ctx->dev->dev, "LEN=%d/%d/%u ivsize=%d mode=%x n=%d BI=%d todo=%u way=%x\n",
+         |                                                                                               ~^
+         |                                                                                                |
+         |                                                                                                unsigned int
+         |                                                                                               %lx
+   drivers/crypto/rockchip/rk3288_crypto_skcipher.c: In function 'rk_ablk_exit_tfm':
+   drivers/crypto/rockchip/rk3288_crypto_skcipher.c:474:31: warning: unused variable 'ctx' [-Wunused-variable]
+     474 |         struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
+         |                               ^~~
+
+
+vim +383 drivers/crypto/rockchip/rk3288_crypto_skcipher.c
+
+   311	
+   312	static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
+   313	{
+   314		struct skcipher_request *areq = container_of(async_req, struct skcipher_request, base);
+   315		struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
+   316		struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
+   317		struct rk_cipher_rctx *rctx = skcipher_request_ctx(areq);
+   318		struct scatterlist *sgs, *sgd;
+   319		int err = 0;
+   320		int n = 0;
+   321		int ivsize = crypto_skcipher_ivsize(tfm);
+   322		int offset;
+   323		u8 iv[AES_BLOCK_SIZE];
+   324		u8 biv[AES_BLOCK_SIZE];
+   325		u8 *ivtouse = areq->iv;
+   326		unsigned int len = areq->cryptlen;
+   327		unsigned int todo;
+   328	
+   329		ivsize = crypto_skcipher_ivsize(tfm);
+   330		if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
+   331			if (rctx->mode & RK_CRYPTO_DEC) {
+   332				offset = areq->cryptlen - ivsize;
+   333				scatterwalk_map_and_copy(rctx->backup_iv, areq->src,
+   334							 offset, ivsize, 0);
+   335			}
+   336		}
+   337	
+   338		sgs = areq->src;
+   339		sgd = areq->dst;
+   340	
+   341		while (sgs && sgd && len) {
+   342			if (!sgs->length) {
+   343				sgs = sg_next(sgs);
+   344				sgd = sg_next(sgd);
+   345				continue;
+   346			}
+   347			if (rctx->mode & RK_CRYPTO_DEC) {
+   348				/* we backup last block of source to be used as IV at next step */
+   349				offset = sgs->length - ivsize;
+   350				scatterwalk_map_and_copy(biv, sgs, offset, ivsize, 0);
+   351			}
+   352			if (sgs == sgd) {
+   353				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
+   354				if (err <= 0) {
+   355					err = -EINVAL;
+   356					goto theend_iv;
+   357				}
+   358			} else {
+   359				err = dma_map_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
+   360				if (err <= 0) {
+   361					err = -EINVAL;
+   362					goto theend_iv;
+   363				}
+   364				err = dma_map_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
+   365				if (err <= 0) {
+   366					err = -EINVAL;
+   367					goto theend_sgs;
+   368				}
+   369			}
+   370			err = 0;
+   371			rk_ablk_hw_init(ctx->dev, areq);
+   372			if (ivsize) {
+   373				if (ivsize == DES_BLOCK_SIZE)
+   374					memcpy_toio(ctx->dev->reg + RK_CRYPTO_TDES_IV_0, ivtouse, ivsize);
+   375				else
+   376					memcpy_toio(ctx->dev->reg + RK_CRYPTO_AES_IV_0, ivtouse, ivsize);
+   377			}
+   378			reinit_completion(&ctx->dev->complete);
+   379			ctx->dev->status = 0;
+   380	
+   381			todo = min(sg_dma_len(sgs), len);
+   382			len -= todo;
+ > 383			dev_dbg(ctx->dev->dev, "LEN=%d/%d/%u ivsize=%d mode=%x n=%d BI=%d todo=%u way=%x\n",
+   384				sg_dma_len(sgs), sg_dma_len(sgd), areq->cryptlen,
+   385				ivsize, rctx->mode, n, sgs == sgd,
+   386				todo, rctx->mode & RK_CRYPTO_DEC);
+   387			crypto_dma_start(ctx->dev, sgs, sgd, todo / 4);
+   388			wait_for_completion_interruptible_timeout(&ctx->dev->complete,
+   389								  msecs_to_jiffies(2000));
+   390			if (!ctx->dev->status) {
+   391				dev_err(ctx->dev->dev, "DMA timeout\n");
+   392				err = -EFAULT;
+   393				goto theend;
+   394			}
+   395			if (sgs == sgd) {
+   396				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
+   397			} else {
+   398				dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
+   399				dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
+   400			}
+   401			if (rctx->mode & RK_CRYPTO_DEC) {
+   402				memcpy(iv, biv, ivsize);
+   403				ivtouse = iv;
+   404			} else {
+   405				offset = sgd->length - ivsize;
+   406				scatterwalk_map_and_copy(iv, sgd, offset, ivsize, 0);
+   407				ivtouse = iv;
+   408			}
+   409			sgs = sg_next(sgs);
+   410			sgd = sg_next(sgd);
+   411			n++;
+   412		}
+   413	
+   414		if (areq->iv && ivsize > 0) {
+   415			offset = areq->cryptlen - ivsize;
+   416			if (rctx->mode & RK_CRYPTO_DEC) {
+   417				memcpy(areq->iv, rctx->backup_iv, ivsize);
+   418				memzero_explicit(rctx->backup_iv, ivsize);
+   419			} else {
+   420				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
+   421							 ivsize, 0);
+   422			}
+   423		}
+   424	
+   425	theend:
+   426		local_bh_disable();
+   427		crypto_finalize_skcipher_request(engine, areq, err);
+   428		local_bh_enable();
+   429		return 0;
+   430	
+   431	theend_sgs:
+   432		if (sgs == sgd) {
+   433			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_BIDIRECTIONAL);
+   434		} else {
+   435			dma_unmap_sg(ctx->dev->dev, sgs, 1, DMA_TO_DEVICE);
+   436			dma_unmap_sg(ctx->dev->dev, sgd, 1, DMA_FROM_DEVICE);
+   437		}
+   438	theend_iv:
+   439		return err;
+   440	}
+   441	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

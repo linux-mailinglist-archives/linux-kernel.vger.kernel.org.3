@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E294C8199
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71A34C81A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiCADXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S231738AbiCADaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiCADXF (ORCPT
+        with ESMTP id S229491AbiCADa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:23:05 -0500
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E30DCA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:22:24 -0800 (PST)
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2213LLqS016660
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 28 Feb 2022 19:21:21 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 2213LKnt013911
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Feb 2022 19:21:20 -0800 (PST)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Mon, 28 Feb 2022 19:21:20 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Feb 2022 19:21:19 -0800
-Received: from pek-lpd-ccm4.wrs.com (128.224.153.194) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Mon, 28 Feb 2022 19:21:16 -0800
-From:   Yun Zhou <yun.zhou@windriver.com>
-To:     <akpm@linux-foundation.org>, <corbet@lwn.net>
-CC:     <peterx@redhat.com>, <tiberiu.georgescu@nutanix.com>,
-        <florian.schmidt@nutanix.com>, <ivan.teterevkov@nutanix.com>,
-        <sj@kernel.org>, <shy828301@gmail.com>, <david@redhat.com>,
-        <axelrasmussen@google.com>, <linmiaohe@huawei.com>,
-        <aarcange@redhat.com>, <ccross@google.com>, <apopple@nvidia.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-Subject: [PATCH] proc: fix documentation and description of mmap
-Date:   Tue, 1 Mar 2022 11:21:15 +0800
-Message-ID: <20220301032115.384277-1-yun.zhou@windriver.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 28 Feb 2022 22:30:28 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892026E8CD;
+        Mon, 28 Feb 2022 19:29:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646105388; x=1677641388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sb+osfrcvZS2El/NBGqKsGRy9fYRkfIxjpOnZRPdc4M=;
+  b=SIFxQ1u82fJQzdY7bc+4mcDctEoQZvectaTnrEutPSj1bq4ncnGDEzPo
+   ueYYKg68SY5x/n1Zcggb7w5Fcul6hDIV2tHe6cBQi5N1VYDU2uQe5rcgd
+   EpTOY/gl8t2QFoj6e1n5q1vkhVd0LgYkxSCf/LQezK96l8s7R19z9HW1l
+   LhREPv3gE06i83nDGMbvaD3CYf/BI/X/SWctDkUyYRH2wI3tKIbZnxbDV
+   ieAk4h3BlmLIihPfW8ekVUmMFUmCPFBa60CCalhGscZvta4fU97K/7zQZ
+   F3vuDrnsib9PvTGOl557sqFTjDptenBfUodGAiptXzXnYvUFvjj3dRQc+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316261415"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="316261415"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 19:29:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="575559283"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 19:29:46 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOtCr-00083t-LN; Tue, 01 Mar 2022 03:29:45 +0000
+Date:   Tue, 1 Mar 2022 11:28:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH linux-next] powercap/drivers/dtpm: dtpm_node_callback[]
+ can be static
+Message-ID: <20220301032854.GA65991@baa819af95e9>
+References: <202203011104.TkmvSjFD-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203011104.TkmvSjFD-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,42 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since bit 57 was exported for uffd-wp write-protected(commit fb8e37f35a2f),
-fixing it can reduce some unnecessary confusion.
+drivers/powercap/dtpm.c:525:22: warning: symbol 'dtpm_node_callback' was not declared. Should it be static?
 
-Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
+Fixes: 3759ec678e89 ("powercap/drivers/dtpm: Add hierarchy creation")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- Documentation/admin-guide/mm/pagemap.rst | 2 +-
- fs/proc/task_mmu.c                       | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/powercap/dtpm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-index bfc28704856c..6e2e416af783 100644
---- a/Documentation/admin-guide/mm/pagemap.rst
-+++ b/Documentation/admin-guide/mm/pagemap.rst
-@@ -23,7 +23,7 @@ There are four components to pagemap:
-     * Bit  56    page exclusively mapped (since 4.2)
-     * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
-       :ref:`Documentation/admin-guide/mm/userfaultfd.rst <userfaultfd>`)
--    * Bits 57-60 zero
-+    * Bits 58-60 zero
-     * Bit  61    page is file-page or shared-anon (since 3.5)
-     * Bit  62    page swapped
-     * Bit  63    page present
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 78125ef20255..75511f78075f 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1596,7 +1596,8 @@ static const struct mm_walk_ops pagemap_ops = {
-  * Bits 5-54  swap offset if swapped
-  * Bit  55    pte is soft-dirty (see Documentation/admin-guide/mm/soft-dirty.rst)
-  * Bit  56    page exclusively mapped
-- * Bits 57-60 zero
-+ * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
-+ * Bits 58-60 zero
-  * Bit  61    page is file-page or shared-anon
-  * Bit  62    page swapped
-  * Bit  63    page present
--- 
-2.27.0
-
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 414826a1509b6..6d890d8cf9169 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -522,7 +522,7 @@ static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+ 
+ typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+ 
+-dtpm_node_callback_t dtpm_node_callback[] = {
++static dtpm_node_callback_t dtpm_node_callback[] = {
+ 	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
+ 	[DTPM_NODE_DT] = dtpm_setup_dt,
+ };

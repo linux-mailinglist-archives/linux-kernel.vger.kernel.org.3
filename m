@@ -2,100 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1124C8F0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B184C8EE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbiCAP0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S235671AbiCAPZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235830AbiCAP02 (ORCPT
+        with ESMTP id S234830AbiCAPZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:26:28 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8C1AB477;
-        Tue,  1 Mar 2022 07:25:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646148329; x=1677684329;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5ftasERfPWft19zS17zOLUbt1jzgVyJZSI+ggCwhMkc=;
-  b=PLppDpAf+4DeQmEUVelEIfDscXRIm5xgBZV2UnEkfXiUUa7S+QTugrZR
-   t7YYueV0HpdZzrMZI/X7s+r/SpY6nwkQwGkZi/wB0xOkd3kqBlJrYMhm9
-   RBjT/vVpGalXPU+JhgS8FDt5nzij3liGxsqBCnu3hcNI/ooKTfhl4OYT7
-   EgU3o5xyRdUrxOR1c5me1PFJgS33ZxYD3ZiqZ837S9BI7Synjqj2eTEKi
-   LIRf5q9mQTVR3nYcr2Ii6jkTgOu70O8R5+v+2uEMp+eHqSAkepuP4dJpe
-   PjRVAF8a7uY26DidE/oVs9bMrRIpnU9Day7nvnuCwVyMOMadQJn08uCb0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339585200"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="339585200"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:25:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="507834698"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2022 07:25:25 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP4NQ-0000c9-6U; Tue, 01 Mar 2022 15:25:24 +0000
-Date:   Tue, 1 Mar 2022 23:24:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Veerasenareddy Burru <vburru@marvell.com>, davem@davemloft.net,
-        kuba@kernel.org, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Abhijit Ayarekar <aayarekar@marvell.com>,
-        Satananda Burla <sburla@marvell.com>
-Subject: Re: [PATCH v2 1/7] octeon_ep: Add driver framework and device
- initialization
-Message-ID: <202203012301.wRb7tB6D-lkp@intel.com>
-References: <20220301050359.19374-2-vburru@marvell.com>
+        Tue, 1 Mar 2022 10:25:18 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B7D8A6E9;
+        Tue,  1 Mar 2022 07:24:34 -0800 (PST)
+Date:   Tue, 01 Mar 2022 15:24:32 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646148273;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GVJhdb2BS4mYDpLqZdxym+SAAYZWFezHhoTiZiDZMO8=;
+        b=zgC4GlhMFUt7XMJ0ft04Yo1Ehv+fENoDdxTJOSPOXwBUCVd9q6jb72yc5+QjA0KYKs7uk9
+        zPFUXo3IT+zvh+F/B1w8Mh59nlK3+GybzIIYm/A2/GMJL/TTS4m4yEB0i8Q6GT/E+/9IXs
+        IUXVXxqLPUjCGLEV1r2izpXORAyViVYKfBMwXb8ylvxqn773/OACHmGYO4aU1Clq+n6YAq
+        hWZ1jYl3yN0ET1RZHgRJQoL1V1GRdYVhYmG2XaOKs8aj/Knqbs/o88aNERlZbYa4/aN6Rp
+        XH/jAmDXisIvdZ96CfPyP1W2/UPZmv61GKaLHTkj1ti5cKFonN2QnKiWKmqrLg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646148273;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GVJhdb2BS4mYDpLqZdxym+SAAYZWFezHhoTiZiDZMO8=;
+        b=UfQpL3L9XLcUjEl8FVpMYE7watjlZvtdDjIs7usO9C+s67PzCE4zglSr95u8OCiYbmkzee
+        920CHaQHxXFflgBg==
+From:   "tip-bot2 for Steve Wahl" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/intel/uncore: Make uncore_discovery clean
+ for 64 bit addresses
+Cc:     Steve Wahl <steve.wahl@hpe.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220218175418.421268-1-steve.wahl@hpe.com>
+References: <20220218175418.421268-1-steve.wahl@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301050359.19374-2-vburru@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164614827209.16921.9067840905142821813.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Veerasenareddy,
+The following commit has been merged into the perf/core branch of tip:
 
-I love your patch! Yet something to improve:
+Commit-ID:     71a412ed4c104bcc239b1a8e06f90b58a4aee0bb
+Gitweb:        https://git.kernel.org/tip/71a412ed4c104bcc239b1a8e06f90b58a4aee0bb
+Author:        Steve Wahl <steve.wahl@hpe.com>
+AuthorDate:    Fri, 18 Feb 2022 11:54:18 -06:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 01 Mar 2022 16:19:01 +01:00
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc6 next-20220301]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+perf/x86/intel/uncore: Make uncore_discovery clean for 64 bit addresses
 
-url:    https://github.com/0day-ci/linux/commits/Veerasenareddy-Burru/Add-octeon_ep-driver/20220301-130525
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 719fce7539cd3e186598e2aed36325fe892150cf
-reproduce: make htmldocs
+Support 64-bit BAR size for discovery, and do not truncate return from
+generic_uncore_mmio_box_ctl() to 32 bits.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst:3: (SEVERE/4) Title overline & underline mismatch.
-
-vim +3 Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-
-     2	
-   > 3	===================================================================
-     4	Linux kernel networking driver for Marvell's Octeon PCI Endpoint NIC
-     5	====================================================================
-     6	
-
+Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Link: https://lore.kernel.org/r/20220218175418.421268-1-steve.wahl@hpe.com
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/events/intel/uncore_discovery.c | 16 +++++++++++-----
+ arch/x86/events/intel/uncore_discovery.h |  2 --
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/events/intel/uncore_discovery.c b/arch/x86/events/intel/uncore_discovery.c
+index 6ddadb4..61185d1 100644
+--- a/arch/x86/events/intel/uncore_discovery.c
++++ b/arch/x86/events/intel/uncore_discovery.c
+@@ -210,15 +210,21 @@ static int parse_discovery_table(struct pci_dev *dev, int die,
+ 	void __iomem *io_addr;
+ 	resource_size_t addr;
+ 	unsigned long size;
+-	u32 val;
++	u32 val, val2;
+ 	int i;
+ 
+ 	pci_read_config_dword(dev, bar_offset, &val);
+ 
+-	if (val & UNCORE_DISCOVERY_MASK)
++	if (val & ~PCI_BASE_ADDRESS_MEM_MASK & ~PCI_BASE_ADDRESS_MEM_TYPE_64)
+ 		return -EINVAL;
+ 
+-	addr = (resource_size_t)(val & ~UNCORE_DISCOVERY_MASK);
++	addr = (resource_size_t)(val & PCI_BASE_ADDRESS_MEM_MASK);
++#ifdef CONFIG_PHYS_ADDR_T_64BIT
++	if ((val & PCI_BASE_ADDRESS_MEM_TYPE_MASK) == PCI_BASE_ADDRESS_MEM_TYPE_64) {
++		pci_read_config_dword(dev, bar_offset + 4, &val2);
++		addr |= ((resource_size_t)val2) << 32;
++	}
++#endif
+ 	size = UNCORE_DISCOVERY_GLOBAL_MAP_SIZE;
+ 	io_addr = ioremap(addr, size);
+ 	if (!io_addr)
+@@ -444,7 +450,7 @@ static struct intel_uncore_ops generic_uncore_pci_ops = {
+ 
+ #define UNCORE_GENERIC_MMIO_SIZE		0x4000
+ 
+-static unsigned int generic_uncore_mmio_box_ctl(struct intel_uncore_box *box)
++static u64 generic_uncore_mmio_box_ctl(struct intel_uncore_box *box)
+ {
+ 	struct intel_uncore_type *type = box->pmu->type;
+ 
+@@ -456,7 +462,7 @@ static unsigned int generic_uncore_mmio_box_ctl(struct intel_uncore_box *box)
+ 
+ void intel_generic_uncore_mmio_init_box(struct intel_uncore_box *box)
+ {
+-	unsigned int box_ctl = generic_uncore_mmio_box_ctl(box);
++	u64 box_ctl = generic_uncore_mmio_box_ctl(box);
+ 	struct intel_uncore_type *type = box->pmu->type;
+ 	resource_size_t addr;
+ 
+diff --git a/arch/x86/events/intel/uncore_discovery.h b/arch/x86/events/intel/uncore_discovery.h
+index cfaf558..f443935 100644
+--- a/arch/x86/events/intel/uncore_discovery.h
++++ b/arch/x86/events/intel/uncore_discovery.h
+@@ -18,8 +18,6 @@
+ #define UNCORE_DISCOVERY_BIR_BASE		0x10
+ /* Discovery table BAR step */
+ #define UNCORE_DISCOVERY_BIR_STEP		0x4
+-/* Mask of the discovery table offset */
+-#define UNCORE_DISCOVERY_MASK			0xf
+ /* Global discovery table size */
+ #define UNCORE_DISCOVERY_GLOBAL_MAP_SIZE	0x20
+ 

@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98D94C8BF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919E14C8C00
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234817AbiCAMue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S234854AbiCAMvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiCAMud (ORCPT
+        with ESMTP id S233451AbiCAMvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:50:33 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722F39318A;
-        Tue,  1 Mar 2022 04:49:52 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id p8so14110301pfh.8;
-        Tue, 01 Mar 2022 04:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hIkTawNE48vxd1UfJnuejiaVGdnJ+bvfpuNmqFHDU1Y=;
-        b=YdGPuKWb4tm6kp1cE1tVsBGFHpk129c368SFydDXdLuDzPkikjr3QoyAAIi16xGx/d
-         zHiXvTjfuFvGxiuE8ZU2+YMPsHLf1sAKfa1cRZ6SG4N9lrf0qwA07qTZB+gmsUjNk4mQ
-         d3qfU5b98eQbcUBo6CKfdCcCc+NLRu92IIRRZSJbWV5aBKeKqWc0mlmj8VfeIh31nvyL
-         odhM/6Ihd5pUw3p/6Yj0AMbhOZ2eSc4PC6wk22PRgG18A+AyA3yXE528fXOzN/rAxT6Y
-         lzLhhU/KudinidH3seOLqwxG75BwKXGQ/jQIWl8SXBRjhCROVl7D+4ezAoQxS2ywK1+7
-         5zfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hIkTawNE48vxd1UfJnuejiaVGdnJ+bvfpuNmqFHDU1Y=;
-        b=HlDmv+yoNyywLcrank46MKQSso+MlvxtufjSCbsuTF1li5VNSWWw2QOdmay+TqdwZM
-         /9LSCS6IK2/vGR28pqhou3TpEjTdzpDeMg+N6nGqh2/7hzN+x3E1R4xRWcGhZ00rT1k5
-         +qD3QH2jf+yd9QZt3zTdvv3tkCgwBSCcj3jz+SG6fk51hP8OkB7n4Awc8oom1x/Knctx
-         UdOgoUh1vyZD90kACVueJBkn9tMnz1bP4eXXwVyoNe6exCU7nyzuSp7PHwYLzUb5FJNW
-         t6HcZb5p2x/zn4vCCUb3cyDbNS4gq7OBR5vDDVFpKqmuOjva63bpvjMC5ZkIFOXYHcRh
-         +vTQ==
-X-Gm-Message-State: AOAM5328qu4Ukc0ue/hFCBcUYJS5JZD9Iw7jJkv0iBvi2/qy1U8UZTZz
-        42zCFb3dS4giT/FmQi6wVaw=
-X-Google-Smtp-Source: ABdhPJy3kd18BXQ2G6PTaZCp2dThZJbNI67UD5cd1pm/J1dXl84UzYbQA3DskahUEuuo8u1qqjn0mw==
-X-Received: by 2002:a63:cf01:0:b0:374:2979:8407 with SMTP id j1-20020a63cf01000000b0037429798407mr21080578pgg.521.1646138992038;
-        Tue, 01 Mar 2022 04:49:52 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u19-20020a056a00099300b004e16e381696sm17532252pfg.195.2022.03.01.04.49.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 04:49:51 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/mmu: Passing up the error state of mmu_alloc_shadow_roots()
-Date:   Tue,  1 Mar 2022 20:49:41 +0800
-Message-Id: <20220301124941.48412-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 07:51:36 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F073931BA;
+        Tue,  1 Mar 2022 04:50:54 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,146,1643641200"; 
+   d="scan'208";a="111989007"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 01 Mar 2022 21:50:54 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id EE83A4000931;
+        Tue,  1 Mar 2022 21:50:51 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
+Date:   Tue,  1 Mar 2022 12:50:46 +0000
+Message-Id: <20220301125046.17737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Document RZ/V2L I2C bindings. RZ/V2L I2C is identical to one found on the
+RZ/G2L and RZ/A SoC's. No driver changes are required as the generic
+compatible string "renesas,riic-rz" will be used as a fallback.
 
-Just like on the optional mmu_alloc_direct_roots() path, once shadow
-path reaches "r = -EIO" somewhere, the caller needs to know the actual
-state in order to enter error handling and avoid something worse.
+While at it, drop the comment "# RZ/A or RZ/G2L" for "renesas,riic-rz"
+compatible string as this will avoid changing the line for every new
+SoC addition.
 
-Fixes: 4a38162ee9f1 ("KVM: MMU: load PDPTRs outside mmu_lock")
-Signed-off-by: Like Xu <likexu@tencent.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/x86/kvm/mmu/mmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1->v2
+* Included Ack and RB tags
+* Dropped the comment from generic string as suggested by Geert.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b2c1c4eb6007..304bfdc50fea 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3533,7 +3533,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- out_unlock:
- 	write_unlock(&vcpu->kvm->mmu_lock);
+v1:
+https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+---
+ Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+index 402fd125e010..26d523f3f420 100644
+--- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
++++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+@@ -20,7 +20,8 @@ properties:
+           - renesas,riic-r7s72100   # RZ/A1H
+           - renesas,riic-r7s9210    # RZ/A2M
+           - renesas,riic-r9a07g044  # RZ/G2{L,LC}
+-      - const: renesas,riic-rz      # RZ/A or RZ/G2L
++          - renesas,riic-r9a07g054  # RZ/V2L
++      - const: renesas,riic-rz
  
--	return 0;
-+	return r;
- }
- 
- static int mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
+   reg:
+     maxItems: 1
+@@ -75,6 +76,7 @@ if:
+       contains:
+         enum:
+           - renesas,riic-r9a07g044
++          - renesas,riic-r9a07g054
+ then:
+   required:
+     - resets
 -- 
-2.35.1
+2.17.1
 

@@ -2,86 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AFC4C946A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB154C946F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236752AbiCATgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S236875AbiCAThx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235896AbiCATgr (ORCPT
+        with ESMTP id S235896AbiCAThv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:36:47 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C3D6AA6A;
-        Tue,  1 Mar 2022 11:36:06 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 625E55801D9;
-        Tue,  1 Mar 2022 14:36:05 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Tue, 01 Mar 2022 14:36:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=djy3FSIgjWgk6u
-        Qp8oGemluAFFOUKmtv+rqQ2OOqfbI=; b=O/uNAMPK5rrCQcjaYovDA0kGFl1XAV
-        1zhbcT3OLGibsbhMqQt9aF60gGgUiwSrkMpY6N/NtEYgGoMvks1PpmdxsmFEAz32
-        dKEGRQ/l653YrbGNcPvmGAUKXOngbFM4deob6sI9WdA7+sK74bk8ZIV4w+Qhxidj
-        XnUPfYcFz9zkppOSBk5gGPp9+mwH5gX63scmc2BXz8dcqmN5KPcLMnbAM8mH1huh
-        2ojMD852PEb9znFbHN/1FsjaXQOFfPK3MKIG6fvsntv+pGGiu8gfEnTa+TruYRUa
-        3ISmhezmNVc7nFZ/mOsN30R0epSl3xShc8d0Qs3AUlGduuxvpvW8IZ2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=djy3FSIgjWgk6uQp8
-        oGemluAFFOUKmtv+rqQ2OOqfbI=; b=on14u6QB9ZKnQPxE9GDsck0AO95NorCb9
-        p3W23ak94LrAEVqjaFwl0rervirvWqGMawUJ0wR6p5CJH1X0R/oPa5+8KIAHoLS4
-        EDwCScMwKXhLfhHS+bgG3y1XuDaJQM0LRzHLHtcBXhN8nPo3KMsRsYU2eIu/FpRU
-        rglsI/KgfffsR5URnzee+r/CXGaQa/CTcs2mEjQRTvtY2gtTYApeqcV6sarhrTGE
-        2oAQstXXEUomr2C99FVdVlCxf8VI/riQk7IlljrqO0sQkWSjexW4UjoZboBT5GL1
-        9nLi1MGOKHvtq7DAwnWfCZk2CtKp4aNOdLbbUDgfVgQ1FvJPCOk3g==
-X-ME-Sender: <xms:pXUeYvPGoZiyOCK928MvFdOiXl92Wf6UZI3TCBvc-onFXExR32BpMw>
-    <xme:pXUeYp8jmr-RLo6_RUaLvUVzGG-ohvUqjnQg3oWG2lsYeF16QAkMA5Vk-9iQJmoDt
-    achD3c-OpdPIpH27Yk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhl
-    rgguvgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteeh
-    tdetleegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-X-ME-Proxy: <xmx:pXUeYuRclsAG0DHzPP0HZEd-AijBjFFxFPguU1wNGDQTebX23W5Hyg>
-    <xmx:pXUeYjvRjbaURrKVV6gs_n_OGaUP7pVDBowYDgxbtx-Kn2_k4Z_D9w>
-    <xmx:pXUeYnfcBG0wENLJVQWgwdcIM3E8Nf8UOSE3TuZMqpF02Gl-IUpxyQ>
-    <xmx:pXUeYoV6R87P0agazwzJUduGM3IFPPBh2XQSxpgSunyNuZzu315Gox0ZggU>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 13448F6007E; Tue,  1 Mar 2022 14:36:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <1e64938a-4f49-47fe-91e3-438e7d37c5c9@www.fastmail.com>
-In-Reply-To: <20220228172207.090703467@linuxfoundation.org>
-References: <20220228172207.090703467@linuxfoundation.org>
-Date:   Tue, 01 Mar 2022 14:36:05 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH 4.19 00/34] 4.19.232-rc1 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 1 Mar 2022 14:37:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555876AA6A;
+        Tue,  1 Mar 2022 11:37:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF5DE615FF;
+        Tue,  1 Mar 2022 19:37:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06E6C340F1;
+        Tue,  1 Mar 2022 19:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646163429;
+        bh=nuOYLNOEKJ/PgEM06VBZtI0/ROOjPa0AMzbnmjnXZG0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k47vvtrEf+u2glkkwutfQGlA8hUowEAKkYEVj6qlJEfZdvtek2kyF8GT/7fBkt6gZ
+         BlMJTyYjcyZuIDN47yQkLegbf5O2lC7TTiZSHkaghmaXeqwVT3gV4foiF6PtqRH/Y/
+         2xtBNTGHdtHwj17qQyTv4fhRTIu7qUufcXKXP/ZvSo/lqTTtn7rH0hC53AwiLE4T2B
+         g093inN/1KUYC8Tj8LvlOyDOin2g1NxPx5SYYuZeVXKhnxBeKyibellRGi3iL6xPRT
+         taUXTNywzDmVib1lGI3PCSj+4ipH5+PfRzdRQDyBw5+oxs2vjUI6X/rQ+oSXnO1CqF
+         RLeZYMRcbfAKQ==
+Date:   Tue, 1 Mar 2022 20:37:06 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        mperttunen@nvidia.com, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com
+Subject: Re: [PATCH RESEND] i2c: tegra: Add SMBus block read function
+Message-ID: <Yh514tXfut9w9Ol+@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, mperttunen@nvidia.com,
+        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com
+References: <20220210153603.61894-1-akhilrajeev@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="T4xbMA2NOxe4BtNR"
+Content-Disposition: inline
+In-Reply-To: <20220210153603.61894-1-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,18 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022, at 12:24 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.232 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
 
-4.19.232-rc1 compiled and booted with no errors or regressions on my x86_64 test system.
+--T4xbMA2NOxe4BtNR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
+On Thu, Feb 10, 2022 at 09:06:03PM +0530, Akhil R wrote:
+> Emulate SMBus block read using ContinueXfer to read the length byte
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Cheers, 
-Slade
+Applied to for-next, thanks!
+
+
+--T4xbMA2NOxe4BtNR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIedeEACgkQFA3kzBSg
+Kbbl0A/9EQo5qWJTSPRQsEU4fPR14AHkeiO5c/SbikbpUPzOgj9OS+mRuB24Mj52
+SfR0uo1lw+8zINim8HK0duRzNB4JBQWe1HwzirYefs4WpygMpvsSCrFqzSxPKw1V
+B9X/iCz/b+ose2S6nNaZe6lljN1QXEEscOlC+39yKMwGdO65b2DcmeL7ufVGige4
+TaF/Q71/Mmjyka0cTl2J65RcWQA2AhZPztxQ/JSuyoQ26TMnsoYi5bdpVMnQOdad
+DlThRB6kXwniP4OFay9CppKBdk/QPVINWFqdaGOiv0veCaaGiN0AFuAn9KZFkUmt
+0boQ+dq0fX5ONbUdhSU3JPkQhjBd9xOOrcyM41z9JAIuAZfhXPYvbJ0tudp0pYks
+zLJWSghbm9hmlee5TY8Op6PMxNX2nGmDXjt9AOMZW7d9gLblmzagGhuU5TWfCPfm
+yjP41J2UtFbQUpOt9m9vxBwc5BxqgRdBngKwt7TYzGNOFudHeD0+1NXy3oHbi4pP
+UDh6ZQJn/Iapqkn0kzgrWlvS5R7akgCegrBwmhpZwyt+jrn6aqnYtUzeqHt5AuDA
+VJO2FUgsG/n0mwDUEs3ap+4Fjj+o8AeFKylXBExKgIytbPJIsAaAYCVsnhlZmv1f
+m85JjekGc6FrsHcTtKLohwf6K6eWqE0RMS+Y+XCUYXrUI2fAIJo=
+=eiDr
+-----END PGP SIGNATURE-----
+
+--T4xbMA2NOxe4BtNR--

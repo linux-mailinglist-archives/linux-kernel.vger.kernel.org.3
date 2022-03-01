@@ -2,131 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EFA4C9893
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B3C4C9898
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238588AbiCAW5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S237908AbiCAW62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiCAW5B (ORCPT
+        with ESMTP id S229980AbiCAW60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:57:01 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC00D63BE3
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:56:19 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221LhblS000538;
-        Tue, 1 Mar 2022 22:56:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=sylPMh1mjENPweOfTDXuIVEt+Izg0ICZgR+K1C9ozkI=;
- b=RV42jCxYRAQFFeq1jNPkS5ZtQCLqg/9SAl+505p5hqAgSJhEL67ixbvVbfyNp43k5fvK
- iDJOqlFzPByUmneza2i8FTgQT92Zk9886G/TYBTpmSuRhIZ6pUR47V3369All8tZ6o29
- rN+CKr8QnCQPB0XmQv6wfONcLquDVGrOXfhUledKrERNPhKnCfCvrTfKoAkoYYqWP4n/
- aFgyBpjv0aIfPiKsm44qDfEYGNKyzb2SHmyh2sDzxHA8FBlzEMroS+w4rd2N0Bnn6dZ9
- EWmGxYda3oiejCeuX6lufJXn8m4dwaAJv3wCkpbtIg+F3VTU5JQ0NHj81luGsfJ3S+CR dQ== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ehunj15cu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 22:56:11 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221Mmelg013311;
-        Tue, 1 Mar 2022 22:56:09 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3efbu9bqen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 22:56:09 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221MjC4644564810
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Mar 2022 22:45:12 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7219942041;
-        Tue,  1 Mar 2022 22:56:06 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2657842045;
-        Tue,  1 Mar 2022 22:56:06 +0000 (GMT)
-Received: from localhost (unknown [9.171.95.195])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  1 Mar 2022 22:56:06 +0000 (GMT)
-Date:   Tue, 1 Mar 2022 23:56:04 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [PATCH v6 08/71] Maple Tree: Add new data structure
-Message-ID: <your-ad-here.call-01646175364-ext-8714@work.hours>
-References: <20220215143728.3810954-1-Liam.Howlett@oracle.com>
- <20220215144241.3812052-1-Liam.Howlett@oracle.com>
- <20220215144241.3812052-8-Liam.Howlett@oracle.com>
- <your-ad-here.call-01645924312-ext-0398@work.hours>
- <20220228143633.r4zoemgtmrq4uzvb@revolver>
- <your-ad-here.call-01646100074-ext-8278@work.hours>
- <20220301203935.r74qjc7p6qbno4xw@revolver>
- <your-ad-here.call-01646175058-ext-9349@work.hours>
+        Tue, 1 Mar 2022 17:58:26 -0500
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7373463C9;
+        Tue,  1 Mar 2022 14:57:43 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id bg16-20020a05600c3c9000b00380f6f473b0so2184109wmb.1;
+        Tue, 01 Mar 2022 14:57:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JpAXOTURWqHul9DmLjuZI2b96sOIIpns+4hIROH1Uz4=;
+        b=KDFsTIJfRfqMmFBKv9ARC4wtvWSPW1eg5xo9zPgCCmuQFDcR9Xe8w55sVirZYegyZJ
+         riKYQA27bYzSUJ7Y2g93ZJbE3LJLfzOQwkxH7KQx93KBTbZl3KVjF9muzGAxIZZgZCv2
+         pSGBxwIEUvTEzMB1rOJFPZNByPzneKILBYb0+idg09eUkiwGWC0BzHez1UYImyKKf0bS
+         Ygbd3eSzPI8kgE53ns2Cr0EQ3abB5DanMCJ3VUwJp7xy5+wnKxT6S1gJ+sxHoSS7mbG+
+         LooTZOxBTNtwUx1W0xIXBDAfrXwwXKJaYflb/cQ6FLogyVu15jZS0jTryyark7VuRnzT
+         6j2A==
+X-Gm-Message-State: AOAM5313+nO8cFj7DHTW2qps2Gg75hfi/ia5Pr2vD/ohkTKxKVOtiizP
+        dn2FCPZHr6djqC90PqLwgnM=
+X-Google-Smtp-Source: ABdhPJyt6LuvSvDaLczFggZ6xS0goostNIyZjV4qyzKbtpncLrymUmgXlJnYODk49vzoqLLX37L2ag==
+X-Received: by 2002:a05:600c:384b:b0:381:10bc:9e43 with SMTP id s11-20020a05600c384b00b0038110bc9e43mr13840234wmr.181.1646175462041;
+        Tue, 01 Mar 2022 14:57:42 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id k15-20020adff28f000000b001f018230b86sm3064767wro.44.2022.03.01.14.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 14:57:41 -0800 (PST)
+Date:   Tue, 1 Mar 2022 22:57:40 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v3 03/30] drivers: hv: dxgkrnl: Add VM bus message
+ support, initialize VM bus channels.
+Message-ID: <20220301225740.ued3v26oez5lcuqf@liuwe-devbox-debian-v2>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <fde2024f8cd2d2ca2ed9a461298b7914c78226e6.1646163378.git.iourit@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Q68bSM7Ycu6FN28Q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <your-ad-here.call-01646175058-ext-9349@work.hours>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 29fBxCnU8Xd2bqFg5Mh_TVX5Ho0Okft2
-X-Proofpoint-GUID: 29fBxCnU8Xd2bqFg5Mh_TVX5Ho0Okft2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- bulkscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
- phishscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203010111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fde2024f8cd2d2ca2ed9a461298b7914c78226e6.1646163378.git.iourit@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The subject line is too long. Also, no period at the end please.
 
---Q68bSM7Ycu6FN28Q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+You can write it as:
 
-On Tue, Mar 01, 2022 at 11:50:58PM +0100, Vasily Gorbik wrote:
-> I use it the following way:
-> $ ./fuzz-maple
-> $ ./fuzz-maple -minimize_crash=1 ./crash-abdc5d14045d52b920d17c6818db7383e1a3ac84
-> $ V= ./fuzz-maple ./minimized-from-351a4f19a3b166974009662f657daba183e1ff0e
+drivers: hv: dxgkrnl: Add VMBus message support and initialize channels
 
-I'll attach couple of repros, but it doesn't take long to get some.
+On Tue, Mar 01, 2022 at 11:45:50AM -0800, Iouri Tarassov wrote:
+[...]
+> +
+> +struct dxgvmbusmsgres {
+> +/* Points to the allocated buffer */
+> +	struct dxgvmb_ext_header	*hdr;
+> +/* Points to dxgkvmb_command_vm_to_host or dxgkvmb_command_vgpu_to_host */
+> +	void				*msg;
+> +/* The vm bus channel, used to pass the message to the host */
+> +	struct dxgvmbuschannel		*channel;
+> +/* Message size in bytes including the header, the payload and the result */
+> +	u32				size;
+> +/* Result buffer size in bytes */
+> +	u32				res_size;
+> +/* Points to the result within the allocated buffer */
+> +	void				*res;
 
---Q68bSM7Ycu6FN28Q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename=minimized-from-351a4f19a3b166974009662f657daba183e1ff0e
+Please align the comments with their fields.
 
-8 88 8 84 8 2 8 4 8 14 8 7 8 12 8 18 24 8 18
---Q68bSM7Ycu6FN28Q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename=minimized-from-b348fbddfff54ced341b78c953182f47b9e53c67
-Content-Transfer-Encoding: quoted-printable
+> +};
+> +
+[...]
+> +static void process_inband_packet(struct dxgvmbuschannel *channel,
+> +				  struct vmpacket_descriptor *desc)
+> +{
+> +	u32 packet_length = hv_pkt_datalen(desc);
+> +	struct dxgkvmb_command_host_to_vm *packet;
+> +
+> +	if (packet_length < sizeof(struct dxgkvmb_command_host_to_vm)) {
+> +		pr_err("Invalid global packet");
+> +	} else {
+> +		packet = hv_pkt_data(desc);
+> +		pr_debug("global packet %d",
+> +				packet->command_type);
 
-8
- 9n 4=FF 78 8=F0=1A 83 8 978
- =FF=FF=FF=FF=FF=FF=FF=FF	91   59=8C
- 1 5
-C=FF 1=20
-C=FF 1  8
- 4=FF 89 8=F0
- 66 8 97=3D 5=FF 78 8=F0
- 83 8=20
---Q68bSM7Ycu6FN28Q--
+Unnecessary line wrap.
 
+> +		switch (packet->command_type) {
+> +		case DXGK_VMBCOMMAND_SIGNALGUESTEVENT:
+> +		case DXGK_VMBCOMMAND_SIGNALGUESTEVENTPASSIVE:
+> +			break;
+> +		case DXGK_VMBCOMMAND_SENDWNFNOTIFICATION:
+> +			break;
+> +		default:
+> +			pr_err("unexpected host message %d",
+> +					packet->command_type);
+> +		}
+> +	}
+> +}
+> +
+[...]
+> +
+> +/* Receive callback for messages from the host */
+> +void dxgvmbuschannel_receive(void *ctx)
+> +{
+> +	struct dxgvmbuschannel *channel = ctx;
+> +	struct vmpacket_descriptor *desc;
+> +	u32 packet_length = 0;
+> +
+> +	foreach_vmbus_pkt(desc, channel->channel) {
+> +		packet_length = hv_pkt_datalen(desc);
+> +		pr_debug("next packet (id, size, type): %llu %d %d",
+> +			desc->trans_id, packet_length, desc->type);
+> +		if (desc->type == VM_PKT_COMP) {
+> +			process_completion_packet(channel, desc);
+> +		} else {
+> +			if (desc->type != VM_PKT_DATA_INBAND)
+> +				pr_err("unexpected packet type");
+
+This can potentially flood the guest if the backend is misbehaving.
+We've seen flooding before so would definitely not want more of it.
+Please consider using the ratelimit version pr_err.
+
+The same comment goes for all other pr calls in repeatedly called paths.
+I can see the value of having precise output from the pr_debug a few
+lines above though.
+
+> +			else
+> +				process_inband_packet(channel, desc);
+> +		}
+> +	}
+> +}
+> +
+[...]
+> +int dxgvmb_send_set_iospace_region(u64 start, u64 len,
+> +	struct vmbus_gpadl *shared_mem_gpadl)
+> +{
+> +	int ret;
+> +	struct dxgkvmb_command_setiospaceregion *command;
+> +	struct dxgvmbusmsg msg;
+> +
+> +	ret = init_message(&msg, NULL, sizeof(*command));
+> +	if (ret)
+> +		return ret;
+> +	command = (void *)msg.msg;
+> +
+> +	ret = dxgglobal_acquire_channel_lock();
+> +	if (ret < 0)
+> +		goto cleanup;
+> +
+> +	command_vm_to_host_init1(&command->hdr,
+> +				 DXGK_VMBCOMMAND_SETIOSPACEREGION);
+> +	command->start = start;
+> +	command->length = len;
+> +	if (command->shared_page_gpadl)
+> +		command->shared_page_gpadl = shared_mem_gpadl->gpadl_handle;
+
+shared_mem_gpadl should be checked to be non-null. There is at least one
+call site passes 0 to it.
+
+> +	ret = dxgvmb_send_sync_msg_ntstatus(&dxgglobal->channel, msg.hdr,
+> +					    msg.size);
+> +	if (ret < 0)
+> +		pr_err("send_set_iospace_region failed %x", ret);
+> +
+> +	dxgglobal_release_channel_lock();
+> +cleanup:
+> +	free_message(&msg, NULL);
+> +	if (ret)
+> +		pr_debug("err: %s %d", __func__, ret);
+> +	return ret;
+> +}
+> +
+[...]
+> +
+> +
+> +#define NT_SUCCESS(status)				(status.v >= 0)
+> +
+> +#ifndef DEBUG
+> +
+> +#define DXGKRNL_ASSERT(exp)
+> +
+> +#else
+> +
+> +#define DXGKRNL_ASSERT(exp)	\
+> +do {				\
+> +	if (!(exp)) {		\
+> +		dump_stack();	\
+> +		BUG_ON(true);	\
+> +	}			\
+> +} while (0)
+
+
+You can just use BUG_ON(exp), right? BUG_ON calls panic, which already
+dumps the stack when CONFIG_DEBUG_VERBOSE is set.
+
+Thanks,
+Wei.

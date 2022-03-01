@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1764C88E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAEA4C88E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234196AbiCAKFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
+        id S233228AbiCAKFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiCAKEh (ORCPT
+        with ESMTP id S234149AbiCAKEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:04:37 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72058BF2C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:03:54 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id s25so21145420lji.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:03:54 -0800 (PST)
+        Tue, 1 Mar 2022 05:04:38 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C658BF67
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:03:55 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id t13so13956156lfd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:03:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:organization:content-transfer-encoding;
-        bh=9f7PbMRM1byMWVKRPVH2DH+qKFogCebwnAS9gVQDC5I=;
-        b=LfKQcjKEK5wI+sNFr+DRYqUk+bAEDYWDniCP2ki23Pban4lZywbpkNO37WC9287GE4
-         GUzTXcC7WfXhifu+HNVLh3hQagN1CsjazTGcN3YY2uq8fGGDGzCdya5i61D0NX15he2/
-         dIiLOrDJZrDvV0yjBETAqcapWu/haPjOuIcTKoDX8Paqo2R7I+0MO1yWX5zT2rZgwihK
-         xKwRYi/rzfgmKXKBSRmq020acgJjGZn41GrlcN2YqxDnHHu1Oip0P2qDOMmjgQYO8OBt
-         L2mkd/8V0lV7bWm+pIbFhLZVdOI+r9Ck9VzcPQJYvLqw/AJ/f7OtO1THeQOLZSPJzWcF
-         +Kkw==
+        bh=dN16fgCTqmhSfWtON594E0vOkCFf2RmkoetWGdp6JJ4=;
+        b=FGP37pZXEBxkL0RxQNnVRGaX5eyOsC22WbmLISe8yfJ43HMUdsFMgaXv9tkRS4DpVG
+         tjGzCvGsTtjeWS+jnvH5B8+Yp0D8sycoVCMC3x1VD+fqlEoJdOXBZAkevk4YU74QVAk1
+         S5ohNO6qfTP38dNJWcXPMuzxIRN7XtdtSoEONxXDoc74FLrZM4zM8X32zs+4tEagEIkD
+         w76Srz/HbjzTAXMO6Jxw6l2CfLw7TcYeWVSyE90AFjDExj1M8DmPp93Em1NJxpYfj38U
+         DbO1BDdxtMQwnqJF6B6W6I7OS/++rHXExExII94jWf2+Ux04FqkA2vPbo1YwpemaydjV
+         5Tug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:organization:content-transfer-encoding;
-        bh=9f7PbMRM1byMWVKRPVH2DH+qKFogCebwnAS9gVQDC5I=;
-        b=MvR92cO+LmiMSMpfkRMmzYwwJhwb5jQ1pRVFjtDaJsBk4nZFsenwsS6K3QqC+TtwVv
-         tJfox+abYAmPIvpe4D+1/7cnMSh2ffG8M9zwL0jaLO54tK82XJvCUGGd2VdTDx5m/rBB
-         MQwKFErHC531BygfocFOO1CnsZzFaS6BthPnMjnFllzrog6arr6hptoUT1JWeM79ojzc
-         X6bfaXv3ME0BvablKDxG7AcJic3vsbtcwXzHwLvWSQEvYvMs6kCM11ugtfzNx+KgzVnm
-         0ZYwfVFnvNOCb5AlcW+25Lq7pFr1vPfSRc6HEmBCnhx4QotqmOPPzkl0zbqhpQ7SFObX
-         UOOA==
-X-Gm-Message-State: AOAM531P0fNfz6lP7110rZvuEiM7XsJOY1DqkQvVOmXZa40XN8oDVtDM
-        ZsRo5xKUuj6u51BMIz7p68JBNA==
-X-Google-Smtp-Source: ABdhPJzMCZtiN5flmK0LILPNyZm7i1BbaUaNC+ytrvpDRyBrkkkb3keXqM+c+OqQ6Jt4nH5EEwLwDg==
-X-Received: by 2002:a2e:bc09:0:b0:246:7327:879b with SMTP id b9-20020a2ebc09000000b002467327879bmr13832354ljf.381.1646129033092;
-        Tue, 01 Mar 2022 02:03:53 -0800 (PST)
+        bh=dN16fgCTqmhSfWtON594E0vOkCFf2RmkoetWGdp6JJ4=;
+        b=S4dJQHdtHwLw0B28lZxRovBgcDgE9lTGXwbFBB02LoxT1wv/xvQIEZlN0OMLiVF0VU
+         4aijf0jgrvchZGqneoanSmw6rbAq3ukA2Bz2brSLVeb/A6sb3yiTT+LFMi3brSJTI58n
+         vr0N9BbewPm4T7t6blCDRZudL81NyJHYECB5D6PfRCcstsA+LtejXFE9U1p+rNQZ6Cyt
+         cyHVTN0/jldFYgperQx9AJNxfZRM7YUESn/z3gqu2FPGmYe+ZHetbMAMdczH2GC12p5V
+         2lvc7LQVX6Ajojg5PAW5oM2KwznuLtPoT9MzU0tOur7f2xy0aCNGwFwXcWuKKFvguJFK
+         envQ==
+X-Gm-Message-State: AOAM5330EKs9ougZrzQBTFmXAvATqZ04FQye127W5xCsAX1KMm7Cl/RD
+        8tbgqNy4WLNsAMNAeejj8pN3gJcbCzULiq0F
+X-Google-Smtp-Source: ABdhPJzd8u7r/RDGEtANGyQfgwedHUl5shTP/BHfpDtp0lTOI/ubmRMWeuVYHto4/ElK6FcsVT7r0g==
+X-Received: by 2002:ac2:5295:0:b0:443:ddce:d283 with SMTP id q21-20020ac25295000000b00443ddced283mr15040074lfm.246.1646129034218;
+        Tue, 01 Mar 2022 02:03:54 -0800 (PST)
 Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id s27-20020a05651c049b00b002460fd4252asm1826822ljc.100.2022.03.01.02.03.52
+        by smtp.gmail.com with ESMTPSA id s27-20020a05651c049b00b002460fd4252asm1826822ljc.100.2022.03.01.02.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 02:03:52 -0800 (PST)
+        Tue, 01 Mar 2022 02:03:53 -0800 (PST)
 From:   Tobias Waldekranz <tobias@waldekranz.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     Andrew Lunn <andrew@lunn.ch>,
@@ -65,9 +65,9 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         Matt Johnston <matt@codeconstruct.com.au>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bridge@lists.linux-foundation.org
-Subject: [PATCH v2 net-next 06/10] net: dsa: Pass VLAN MSTI migration notifications to driver
-Date:   Tue,  1 Mar 2022 11:03:17 +0100
-Message-Id: <20220301100321.951175-7-tobias@waldekranz.com>
+Subject: [PATCH v2 net-next 07/10] net: dsa: Pass MST state changes to driver
+Date:   Tue,  1 Mar 2022 11:03:18 +0100
+Message-Id: <20220301100321.951175-8-tobias@waldekranz.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220301100321.951175-1-tobias@waldekranz.com>
 References: <20220301100321.951175-1-tobias@waldekranz.com>
@@ -84,80 +84,100 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Add the usual trampoline functionality from the generic DSA layer down
-to the drivers for VLAN MSTI migrations.
+to the drivers for MST state changes.
 
 Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- include/net/dsa.h  |  3 +++
- net/dsa/dsa_priv.h |  1 +
- net/dsa/port.c     | 10 ++++++++++
+ include/net/dsa.h  |  2 ++
+ net/dsa/dsa_priv.h |  2 ++
+ net/dsa/port.c     | 30 ++++++++++++++++++++++++++++++
  net/dsa/slave.c    |  6 ++++++
- 4 files changed, 20 insertions(+)
+ 4 files changed, 40 insertions(+)
 
 diff --git a/include/net/dsa.h b/include/net/dsa.h
-index cfedcfb86350..cc8acb01bd9b 100644
+index cc8acb01bd9b..096e6e3a8e1e 100644
 --- a/include/net/dsa.h
 +++ b/include/net/dsa.h
-@@ -962,6 +962,9 @@ struct dsa_switch_ops {
- 				 struct netlink_ext_ack *extack);
- 	int	(*port_vlan_del)(struct dsa_switch *ds, int port,
- 				 const struct switchdev_obj_port_vlan *vlan);
-+	int	(*vlan_msti_set)(struct dsa_switch *ds,
-+				 const struct switchdev_attr *attr);
-+
- 	/*
- 	 * Forwarding database
- 	 */
+@@ -943,6 +943,8 @@ struct dsa_switch_ops {
+ 				     struct dsa_bridge bridge);
+ 	void	(*port_stp_state_set)(struct dsa_switch *ds, int port,
+ 				      u8 state);
++	int	(*port_mst_state_set)(struct dsa_switch *ds, int port,
++				      const struct switchdev_mst_state *state);
+ 	void	(*port_fast_age)(struct dsa_switch *ds, int port);
+ 	int	(*port_pre_bridge_flags)(struct dsa_switch *ds, int port,
+ 					 struct switchdev_brport_flags flags,
 diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
-index 07c0ad52395a..87ec0697e92e 100644
+index 87ec0697e92e..a620e079ebc5 100644
 --- a/net/dsa/dsa_priv.h
 +++ b/net/dsa/dsa_priv.h
-@@ -217,6 +217,7 @@ int dsa_port_vlan_filtering(struct dsa_port *dp, bool vlan_filtering,
- 			    struct netlink_ext_ack *extack);
- bool dsa_port_skip_vlan_configuration(struct dsa_port *dp);
- int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock);
-+int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr);
- int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
- 			bool targeted_match);
- int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+@@ -198,6 +198,8 @@ static inline struct net_device *dsa_master_find_slave(struct net_device *dev,
+ void dsa_port_set_tag_protocol(struct dsa_port *cpu_dp,
+ 			       const struct dsa_device_ops *tag_ops);
+ int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age);
++int dsa_port_set_mst_state(struct dsa_port *dp,
++			   const struct switchdev_mst_state *state);
+ int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy);
+ int dsa_port_enable(struct dsa_port *dp, struct phy_device *phy);
+ void dsa_port_disable_rt(struct dsa_port *dp);
 diff --git a/net/dsa/port.c b/net/dsa/port.c
-index d9da425a17fb..5f45cb7d70ba 100644
+index 5f45cb7d70ba..26cfbc8ab499 100644
 --- a/net/dsa/port.c
 +++ b/net/dsa/port.c
-@@ -778,6 +778,16 @@ int dsa_port_bridge_flags(struct dsa_port *dp,
+@@ -108,6 +108,36 @@ int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age)
  	return 0;
  }
  
-+int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr)
++int dsa_port_set_mst_state(struct dsa_port *dp,
++			   const struct switchdev_mst_state *state)
 +{
 +	struct dsa_switch *ds = dp->ds;
++	int err, port = dp->index;
 +
-+	if (!ds->ops->vlan_msti_set)
++	if (!ds->ops->port_mst_state_set)
 +		return -EOPNOTSUPP;
 +
-+	return ds->ops->vlan_msti_set(ds, attr);
++	err = ds->ops->port_mst_state_set(ds, port, state);
++	if (err)
++		return err;
++
++	if (!dsa_port_can_configure_learning(dp) || dp->learning) {
++		switch (state->state) {
++		case BR_STATE_DISABLED:
++		case BR_STATE_BLOCKING:
++		case BR_STATE_LISTENING:
++			/* Ideally we would only fast age entries
++			 * belonging to VLANs controlled by this
++			 * MST.
++			 */
++			dsa_port_fast_age(dp);
++			break;
++		}
++	}
++
++	return 0;
 +}
 +
- int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
- 			bool targeted_match)
+ static void dsa_port_set_state_now(struct dsa_port *dp, u8 state,
+ 				   bool do_fast_age)
  {
 diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-index 089616206b11..c6ffcd782b5a 100644
+index c6ffcd782b5a..32b006a5b778 100644
 --- a/net/dsa/slave.c
 +++ b/net/dsa/slave.c
-@@ -314,6 +314,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
+@@ -288,6 +288,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
  
- 		ret = dsa_port_bridge_flags(dp, attr->u.brport_flags, extack);
+ 		ret = dsa_port_set_state(dp, attr->u.stp_state, true);
  		break;
-+	case SWITCHDEV_ATTR_ID_VLAN_MSTI:
-+		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
++	case SWITCHDEV_ATTR_ID_PORT_MST_STATE:
++		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
 +			return -EOPNOTSUPP;
 +
-+		ret = dsa_port_vlan_msti(dp, attr);
++		ret = dsa_port_set_mst_state(dp, &attr->u.mst_state);
 +		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
+ 	case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
+ 		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
+ 			return -EOPNOTSUPP;
 -- 
 2.25.1
 

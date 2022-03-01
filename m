@@ -2,164 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6381A4C9483
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 115714C9487
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiCATkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S237100AbiCATlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbiCATkl (ORCPT
+        with ESMTP id S235982AbiCATlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:40:41 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1432A654BC
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:39:59 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso16027051ooi.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iOuftU1chGXMf3eFiOe8yxe1FZrdlpvfysxHIVyleiw=;
-        b=pUUy8AdZ8gUokOkQvTGeZJyMqxOmaQzKxO9YGhxdsUHJvTxK5Ojjx/Hirtfd2GqLl0
-         f08asCK12JIjOPr5syWGB6KJJXmGID+hA5D+rg3LEI2GCYKV0zvhf/xCMkGSYTSnhIVG
-         2amm71llK/Lv88CvvpLul4OH5mtR/2AEUSrWfNaNCUKpTypgY2v+cNp9KYwfC8wbFUqv
-         dNbNDQM5VIk3wgcTRbWb22HijiJ97P4ochH0khPfKxYTZAUC0QGGTXLHdRdYGHepc/Zg
-         jcpo4J0BTsgFhNTVrVxiYCnfAdrh6M4uY9GjsD610VDUI2VWZqInlZ7T6UlCNQO2ggIS
-         GHOg==
+        Tue, 1 Mar 2022 14:41:19 -0500
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318A765494;
+        Tue,  1 Mar 2022 11:40:38 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2d07c4a0d06so156071267b3.13;
+        Tue, 01 Mar 2022 11:40:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iOuftU1chGXMf3eFiOe8yxe1FZrdlpvfysxHIVyleiw=;
-        b=zK9sL7zhui9j+530GnujYd+Rzt5GnM/fdLJW1VeK4m35XkfBcH58WxB6o/Xbfh32yr
-         rhSUODoZacNI1pqsDj7FtcLTWJURHxnbZ5PWoqDGVXBCEMD3jUdwvpffKpi2zpMoi0cg
-         LVO2PXxrV0GXRJnSltaeLq2CYFWwFSJOJpnRPhzPvc3i+Iq4P4JM1FWnm/zgRRrQTFU3
-         gPN5+dpAoCYJpVA+oEYvSHPXr2OaRzSgqLCL0K3ixdo5wXIU4XtWNZLuCiee4HDM8sZx
-         rkEzRTwBgOuB7E2gcr/eBe9r8YHhqZOM3SOdrgz3/Q5f/Jd4V1+mPlfpAXyuDwKIny3E
-         GHog==
-X-Gm-Message-State: AOAM530eoaKh2o+Ueol5rcblAoLNklBpms1TmoIahkI/gLZCQnQ53orP
-        iuc1cjmUlD0rGsfCO20h2qevBbWB1K3byWn0HLwxGg==
-X-Google-Smtp-Source: ABdhPJz/qPuzEZTR9ZljdsTiZ+cLXv57fWdEG6zvfn3JtKxljL5qaf0Sq8My8qOZA9m/u6u+6gFx7s/axlGnWK6sASg=
-X-Received: by 2002:a05:6870:4508:b0:d7:162f:6682 with SMTP id
- e8-20020a056870450800b000d7162f6682mr8083444oao.126.1646163598081; Tue, 01
- Mar 2022 11:39:58 -0800 (PST)
+        bh=rC4BvLXBCXqc68pcQ7m+8z/EJtaEH/MsSh5u4qPMaYc=;
+        b=8EHGEbua/oGeSyQUtI/MrV2CcYEyH/d49+zMmDMvo8umN+6wx3t5kciPpKlA6rS225
+         G3jIUyIJNnFeaLorxKJaJQSRR8mDXcDNnxcLcKeB9dOGzexMychR3xow0PoTzl+oDIdf
+         YMNK7OeP3C5qC0sboLEk+LV1hQ0JeQz8+WjtC9jywXhRl/7U5SKKhkEu+guB6DOaZE+t
+         IbvgNvDSzhZzS4YsUkrezFfAQFlxTIGHacdc4pd/OLOonFjW6cKGMaA3euswl10djTxn
+         mU0Fi3TWf+wyhAzdqThTrcSzSwieOukwUERwQqwWYWLmloxMACCnYpYOVWosU0bsq29z
+         Jo1Q==
+X-Gm-Message-State: AOAM531ztxFb6jy4TYyI6dkfum8eUPuWyQaUPmoJaHt0FK0QCCvOgJLL
+        kDahWjtc/3K7QhTWe8wjW5sDUqtrKm6bVhmwxwM=
+X-Google-Smtp-Source: ABdhPJzqz8NvN2OYlSJ4r049oH9twxzobfp3rZ5a9AqKOhlvAWL0GuQURf4suVyw4zXef72pObOLA5ljD92LHelrPUU=
+X-Received: by 2002:a81:1611:0:b0:2d6:3290:9bd3 with SMTP id
+ 17-20020a811611000000b002d632909bd3mr26858713yww.19.1646163637141; Tue, 01
+ Mar 2022 11:40:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
- <20220126221725.710167-8-bhupesh.sharma@linaro.org> <Yfh4cahRIdkY4KWg@builder.lan>
-In-Reply-To: <Yfh4cahRIdkY4KWg@builder.lan>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 2 Mar 2022 01:09:47 +0530
-Message-ID: <CAH=2NtzQk+sdBgMv5ZKPXQ1vWFrp3TOR1w2Ed1WEw_5U=1i65Q@mail.gmail.com>
-Subject: Re: [PATCH 7/8] clk: qcom: gcc-sm8150: use runtime PM for the clock controller
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org
+References: <20220224113807.91771-1-pmenzel@molgen.mpg.de>
+In-Reply-To: <20220224113807.91771-1-pmenzel@molgen.mpg.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 20:40:26 +0100
+Message-ID: <CAJZ5v0iCwJ10gM0+LsOMU9X3X4ToN_OHBW=9vVsfEP3+cRpudQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] acpi: exsystem: Add units to time variable names
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Bjorn,
-
-Thanks for the review. Sorry for the late reply.
-
-On Tue, 1 Feb 2022 at 05:31, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+On Thu, Feb 24, 2022 at 12:38 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
 >
-> On Wed 26 Jan 16:17 CST 2022, Bhupesh Sharma wrote:
+> `how_long` uses different units in both functions, so make it more
+> clear, what unit they expect.
 >
-> > On sm8150 emac clk registers are powered up by the GDSC power
-> > domain. Use runtime PM calls to make sure that required power domain is
-> > powered on while we access clock controller's registers.
-> >
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  drivers/acpi/acpica/exsystem.c | 20 ++++++++++----------
+
+As ACPICA material, this should be submitted to the upstream project
+via https://github.com/acpica/acpica/.
+
+This applies to the other patches in the series too.
+
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 >
-> Typically the GCC registers need only "cx" enabled for us to much around
-> with its registers and I don't see you add any references to additional
-> resources, so can you please elaborate on how this affects the state of
-> the system to enable you to operate the emac registers?
-
-Indeed. On second thought and further tests, I think we don't need
-this change. Only keeping EMAC GDSC in ON state (always) should fix
-the issue (added via [PATCH 8/8] in this series).
-
-So, I will drop this from v2.
-
-Regards,
-Bhupesh
-
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/clk/qcom/gcc-sm8150.c | 27 +++++++++++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> > index ada755ad55f7..2e71afed81fd 100644
-> > --- a/drivers/clk/qcom/gcc-sm8150.c
-> > +++ b/drivers/clk/qcom/gcc-sm8150.c
-> > @@ -5,6 +5,7 @@
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> > @@ -3792,19 +3793,41 @@ static const struct of_device_id gcc_sm8150_match_table[] = {
-> >  };
-> >  MODULE_DEVICE_TABLE(of, gcc_sm8150_match_table);
-> >
-> > +static void gcc_sm8150_pm_runtime_disable(void *data)
-> > +{
-> > +     pm_runtime_disable(data);
-> > +}
-> > +
-> >  static int gcc_sm8150_probe(struct platform_device *pdev)
-> >  {
-> >       struct regmap *regmap;
-> > +     int ret;
-> > +
-> > +     pm_runtime_enable(&pdev->dev);
-> > +
-> > +     ret = devm_add_action_or_reset(&pdev->dev, gcc_sm8150_pm_runtime_disable, &pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret = pm_runtime_resume_and_get(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> >
-> >       regmap = qcom_cc_map(pdev, &gcc_sm8150_desc);
-> > -     if (IS_ERR(regmap))
-> > +     if (IS_ERR(regmap)) {
-> > +             pm_runtime_put(&pdev->dev);
-> >               return PTR_ERR(regmap);
-> > +     }
-> >
-> >       /* Disable the GPLL0 active input to NPU and GPU via MISC registers */
-> >       regmap_update_bits(regmap, 0x4d110, 0x3, 0x3);
-> >       regmap_update_bits(regmap, 0x71028, 0x3, 0x3);
-> >
-> > -     return qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
-> > +     ret = qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
-> > +
-> > +     pm_runtime_put(&pdev->dev);
-> > +
-> > +     return ret;
-> >  }
-> >
-> >  static struct platform_driver gcc_sm8150_driver = {
-> > --
-> > 2.34.1
-> >
+> diff --git a/drivers/acpi/acpica/exsystem.c b/drivers/acpi/acpica/exsystem.c
+> index 1281c07112de..6bc5b46e6927 100644
+> --- a/drivers/acpi/acpica/exsystem.c
+> +++ b/drivers/acpi/acpica/exsystem.c
+> @@ -107,7 +107,7 @@ acpi_status acpi_ex_system_wait_mutex(acpi_mutex mutex, u16 timeout)
+>   *
+>   * FUNCTION:    acpi_ex_system_do_stall
+>   *
+> - * PARAMETERS:  how_long        - The amount of time to stall,
+> + * PARAMETERS:  how_long_us     - The amount of time to stall,
+>   *                                in microseconds
+>   *
+>   * RETURN:      Status
+> @@ -120,13 +120,13 @@ acpi_status acpi_ex_system_wait_mutex(acpi_mutex mutex, u16 timeout)
+>   *
+>   ******************************************************************************/
+>
+> -acpi_status acpi_ex_system_do_stall(u32 how_long)
+> +acpi_status acpi_ex_system_do_stall(u32 how_long_us)
+>  {
+>         acpi_status status = AE_OK;
+>
+>         ACPI_FUNCTION_ENTRY();
+>
+> -       if (how_long > 255) {   /* 255 microseconds */
+> +       if (how_long_us > 255) {        /* 255 microseconds */
+>                 /*
+>                  * Longer than 255 usec, this is an error
+>                  *
+> @@ -134,10 +134,10 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
+>                  * order to support existing BIOSs)
+>                  */
+>                 ACPI_ERROR((AE_INFO,
+> -                           "Time parameter is too large (%u)", how_long));
+> +                           "Time parameter is too large (%u)", how_long_us));
+>                 status = AE_AML_OPERAND_VALUE;
+>         } else {
+> -               acpi_os_stall(how_long);
+> +               acpi_os_stall(how_long_us);
+>         }
+>
+>         return (status);
+> @@ -147,7 +147,7 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
+>   *
+>   * FUNCTION:    acpi_ex_system_do_sleep
+>   *
+> - * PARAMETERS:  how_long        - The amount of time to sleep,
+> + * PARAMETERS:  how_long_ms     - The amount of time to sleep,
+>   *                                in milliseconds
+>   *
+>   * RETURN:      None
+> @@ -156,7 +156,7 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
+>   *
+>   ******************************************************************************/
+>
+> -acpi_status acpi_ex_system_do_sleep(u64 how_long)
+> +acpi_status acpi_ex_system_do_sleep(u64 how_long_ms)
+>  {
+>         ACPI_FUNCTION_ENTRY();
+>
+> @@ -168,11 +168,11 @@ acpi_status acpi_ex_system_do_sleep(u64 how_long)
+>          * For compatibility with other ACPI implementations and to prevent
+>          * accidental deep sleeps, limit the sleep time to something reasonable.
+>          */
+> -       if (how_long > ACPI_MAX_SLEEP) {
+> -               how_long = ACPI_MAX_SLEEP;
+> +       if (how_long_ms > ACPI_MAX_SLEEP) {
+> +               how_long_ms = ACPI_MAX_SLEEP;
+>         }
+>
+> -       acpi_os_sleep(how_long);
+> +       acpi_os_sleep(how_long_ms);
+>
+>         /* And now we must get the interpreter again */
+>
+> --
+> 2.35.1
+>

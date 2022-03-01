@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467E54C9879
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9144C987D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbiCAWpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S236312AbiCAWsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiCAWpk (ORCPT
+        with ESMTP id S236873AbiCAWsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:45:40 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB047804D;
-        Tue,  1 Mar 2022 14:44:58 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221LcOgN005050;
-        Tue, 1 Mar 2022 22:44:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=ykvyyLl7q6ghJb9019sxdtjUtMUQwiVAHjJjIiX4Ags=;
- b=Gal5gJe9fq4uQoYJ7Rmezl/Re69zOHkSyBxGjb/BG87AY540K7vDIXihyuVTY8NGvOZA
- kP11WyBunqq89cWTBlvjZM9CrSjWBn26GR6i76vnidV/08DO4UwUSLJx5zgWKLeOaTzE
- 1+XEhfvNeT50oXeVhrRyfgCNREdj2VY23q1Nj84pVCELpR+r6/kK8byScSNX5c++ud7C
- X74vILqTYXHA7Y4cuF90W39IqtCgVfvef47q0ewFS/yPWeeVgJCEoisXWmWdgkeHYRj9
- o258SsBy0wr+/uQv3fJ4hohl6o6SZGNMirozHopF+Zp65pQO7V2TsD3YyKA05alAmG8K Bw== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehu7tsb28-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 22:44:54 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221McckK016596;
-        Tue, 1 Mar 2022 22:44:53 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02dal.us.ibm.com with ESMTP id 3efbuafsn7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 22:44:53 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221MiqeQ48496908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Mar 2022 22:44:52 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC9322805C;
-        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0709728059;
-        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.40.70])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Mar 2022 22:44:51 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, johan@kernel.org,
-        gregkh@linuxfoundation.org, Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>
-Subject: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
-Date:   Tue,  1 Mar 2022 16:44:46 -0600
-Message-Id: <20220301224446.21236-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 1 Mar 2022 17:48:12 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 774EE1006;
+        Tue,  1 Mar 2022 14:47:30 -0800 (PST)
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CF2DB20B7178;
+        Tue,  1 Mar 2022 14:47:29 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CF2DB20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646174849;
+        bh=S6SRPI0pzF1hjnbAwFpvZmH6Qkngwy3kEvZqlm+bSFo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hkYuRV0F3NwZHInUasPgj0Ci4zD8mGkLdNzsFT/8FMJlEhd10EXkNT4hmxYng6BOU
+         WT7Tzf/oK6ykIVhyQI88ohiXEMHKBRG3TJ/GmfvjD2nzytddUWQNSEOYMA0p6jAi1F
+         lB6qGtln2/xGSsR5XpPrAPhUrw0HHpmbziJEEJIQ=
+Message-ID: <208d42df-3dbf-a9b0-6c68-7cded8e2007d@linux.microsoft.com>
+Date:   Tue, 1 Mar 2022 14:47:28 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
-X-Proofpoint-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203010111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>, Greg KH <gregkh@linuxfoundation.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +57,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IBM manufactures a PL2303 device for UPS communications. Add the vendor
-and product IDs so that the PL2303 driver binds to the device.
+On 3/1/2022 2:23 PM, Wei Liu wrote:
+> On Tue, Mar 01, 2022 at 09:45:41PM +0100, Greg KH wrote:
+> > On Tue, Mar 01, 2022 at 11:45:49AM -0800, Iouri Tarassov wrote:
+> > > - Create skeleton and add basic functionality for the
+> > > hyper-v compute device driver (dxgkrnl).
+> > > 
+> > > - Register for PCI and VM bus driver notifications and
+> > > handle initialization of VM bus channels.
+> > > 
+> > > - Connect the dxgkrnl module to the drivers/hv/ Makefile and Kconfig
+> > > 
+> > > - Create a MAINTAINERS entry
+> > > 
+> > > A VM bus channel is a communication interface between the hyper-v guest
+> > > and the host. The are two type of VM bus channels, used in the driver:
+> > >   - the global channel
+> > >   - per virtual compute device channel
+> > > 
+> > > A PCI device is created for each virtual compute device, projected
+> > > by the host. The device vendor is PCI_VENDOR_ID_MICROSOFT and device
+> > > id is PCI_DEVICE_ID_VIRTUAL_RENDER. dxg_pci_probe_device handles
+> > > arrival of such devices. The PCI config space of the virtual compute
+> > > device has luid of the corresponding virtual compute device VM
+> > > bus channel. This is how the compute device adapter objects are
+> > > linked to VM bus channels.
+> > > 
+> > > VM bus interface version is exchanged by reading/writing the PCI config
+> > > space of the virtual compute device.
+> > > 
+> > > The IO space is used to handle CPU accessible compute device
+> > > allocations. Hyper-v allocates IO space for the global VM bus channel.
+> > > 
+> > > Signed-off-by: Iouri Tarassov <iourit@linux.microsoft.com>
+> > 
+> > Please work with internal developers to get reviews from them first,
+> > before requiring the kernel community to point out basic issues.  It
+> > will save you a lot of time and stop us from feeling like we are having
+> > our time wasted.
+> > 
+> > Some simple examples below that your coworkers should have caught:
+> > 
+> > > --- /dev/null
+> > > +++ b/drivers/hv/dxgkrnl/dxgkrnl.h
+> > > @@ -0,0 +1,119 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +
+> > > +/*
+> > > + * Copyright (c) 2019, Microsoft Corporation.
+> > 
+> > It is now 2022 :)
+> > 
+> > > +void init_ioctls(void);
+> > 
+> > That is a horrible global function name you just added to the kernel's
+> > namespace for a single driver :(
+> > 
+> > > +long dxgk_unlocked_ioctl(struct file *f, unsigned int p1, unsigned long p2);
+> > > +
+> > > +static inline void guid_to_luid(guid_t *guid, struct winluid *luid)
+> > > +{
+> > > +	*luid = *(struct winluid *)&guid->b[0];
+> > 
+> > Why is the cast needed?  Shouldn't you use real types in your
+> > structures?
+> > 
+> > > +/*
+> > > + * The interface version is used to ensure that the host and the guest use the
+> > > + * same VM bus protocol. It needs to be incremented every time the VM bus
+> > > + * interface changes. DXGK_VMBUS_LAST_COMPATIBLE_INTERFACE_VERSION is
+> > > + * incremented each time the earlier versions of the interface are no longer
+> > > + * compatible with the current version.
+> > > + */
+> > > +#define DXGK_VMBUS_INTERFACE_VERSION_OLD		27
+> > > +#define DXGK_VMBUS_INTERFACE_VERSION			40
+> > > +#define DXGK_VMBUS_LAST_COMPATIBLE_INTERFACE_VERSION	16
+> > 
+> > Where do these numbers come from, the hypervisor specification?
+> > 
+> > > +/*
+> > > + * Pointer to the global device data. By design
+> > > + * there is a single vGPU device on the VM bus and a single /dev/dxg device
+> > > + * is created.
+> > > + */
+> > > +struct dxgglobal *dxgglobal;
+> > 
+> > No, make this per-device, NEVER have a single device for your driver.
+> > The Linux driver model makes it harder to do it this way than to do it
+> > correctly.  Do it correctly please and have no global structures like
+> > this.
+> > 
+>
+> This may not be as big an issue as you thought. The device discovery is
+> still done via the normal VMBus probing routine. For all intents and
+> purposes the dxgglobal structure can be broken down into per device
+> fields and a global structure which contains the protocol versioning
+> information -- my understanding is there will always be a global
+> structure to hold information related to the backend, regardless of how
+> many devices there are.
+>
+> I definitely think splitting is doable, but I also understand why Iouri
+> does not want to do it _now_ given there is no such a model for multiple
+> devices yet, so anything we put into the per-device structure could be
+> incomplete and it requires further changing when such a model arrives
+> later.
+>
+> Iouri, please correct me if I have the wrong mental model here.
+>
+> All in all, I hope this is not going to be a deal breaker for the
+> acceptance of this driver.
+>
+> Thanks,
+> Wei.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
-Changes since v1:
- - Fix commit message Signed-off-by ordering.
+I agree with Wei that there always be global driver data.
 
- drivers/usb/serial/pl2303.c | 1 +
- drivers/usb/serial/pl2303.h | 3 +++
- 2 files changed, 4 insertions(+)
+The driver reflects what the host offers and also it must provide the same
+interface to user mode as the host driver does. This is because we want the
+user mode clients to use the same device interface as if they are working on
+the host directly.
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index a70fd86f735c..e2ef761ed39c 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -116,6 +116,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(ADLINK_VENDOR_ID, ADLINK_ND6530GC_PRODUCT_ID) },
- 	{ USB_DEVICE(SMART_VENDOR_ID, SMART_PRODUCT_ID) },
- 	{ USB_DEVICE(AT_VENDOR_ID, AT_VTKIT3_PRODUCT_ID) },
-+	{ USB_DEVICE(IBM_VENDOR_ID, IBM_PRODUCT_ID) },
- 	{ }					/* Terminating entry */
- };
- 
-diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-index 6097ee8fccb2..c5406452b774 100644
---- a/drivers/usb/serial/pl2303.h
-+++ b/drivers/usb/serial/pl2303.h
-@@ -35,6 +35,9 @@
- #define ATEN_PRODUCT_UC232B	0x2022
- #define ATEN_PRODUCT_ID2	0x2118
- 
-+#define IBM_VENDOR_ID		0x04b3
-+#define IBM_PRODUCT_ID		0x4016
-+
- #define IODATA_VENDOR_ID	0x04bb
- #define IODATA_PRODUCT_ID	0x0a03
- #define IODATA_PRODUCT_ID_RSAQ5	0x0a0e
--- 
-2.27.0
+By design a single global VMBus channel is offered by the host and a single
+/dev/dxg device is created. The /dev/dxg device provides interface to enumerate
+virtual compute devices via an ioctl.
+
+If we are to change this model, we would need to make changes to user mode
+clients, which is a big re-design change, affecting many hardware vendors.
+
+Thanks
+Iouri
+  
 

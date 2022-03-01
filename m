@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DA34C9084
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BDD4C9086
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbiCAQi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S236258AbiCAQi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236170AbiCAQi1 (ORCPT
+        with ESMTP id S233634AbiCAQi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:38:27 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582762C5
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646152665; x=1677688665;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xq8o1OwGrWrJswtfuIbrlg6hnMIFmFyMHnjBYysagQs=;
-  b=Ot9jpbtjBIkkmHbJiU19nzh23VMfZmd/7K26e9HLlvA9V7qzUXK0nfgP
-   wusMgKiPMvPXUk9y/sx4lC4AHxa4gQDHdW9JWFvSfFeJKTqu0IiOH6yj7
-   fRYxGpPE5qkR6NMcU1LkuIA30S3vdNGY4n18/MzG7RFASTVMIS3JHoaRl
-   RnaDlmu0p6ktErOvgBsUqCoD1Y5Lc+wnlBD0XE0a6krdhdE5gQYIs7ncT
-   nvXJiISEb05F93OoZiz0tSJMW/+MRE6SQr9Prwc/I9Hzn9jEOqwFSjPVM
-   6ICM71Es8x9fSitxhBCPoGz0fiF5ijkL2Ml/qDwNOaAEecwgEhmCV77fM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="316389267"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="316389267"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:37:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="593652839"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Mar 2022 08:37:43 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP5VP-0000iz-9o; Tue, 01 Mar 2022 16:37:43 +0000
-Date:   Wed, 2 Mar 2022 00:37:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/30]
- drivers/vfio/vfio.c:1800:24: error: implicit declaration of function
- 'iommufd_vfio_set_iommu'
-Message-ID: <202203020047.jhfhUk35-lkp@intel.com>
+        Tue, 1 Mar 2022 11:38:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C340483BD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:38:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFA37B81B46
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 16:38:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD0FC340F0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 16:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646152692;
+        bh=o0GEpUU5lCIEFkss9VdE1n+5jj+Irmt9ZGLtnqZXuxY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=F/pgVlo+fHbXRTSbXgWdNaiDIdor7BP32yQ954X5N3tCI2AXcZMOlN05ioC4ggLuS
+         hbBMtUHHclrT2yBXOBPUx3LKLN5NqSoNWfMfMI629l6jHUHbbh2JgSi8vj7jSumXGa
+         3R7z2eKAuaT3kgQSP08wSsUClYU7gVBdB85FuCdu4vpyrcfIh7LEmgrFalW235vhvk
+         Nu6UnKH1j4kAPoOfkIBbCkD4pJDKZWtgUUEUAi5wRxt/rPD/WBjjR+mQryfiQP7a8D
+         QGgQVC/HiCnhiCkHeqe+CNgNJZ8WnZJEC1v1WVcKRM/MUR3MAe2ayuCrl+Aci+yQAK
+         TvV/HFWsrDEkQ==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2dbfe58670cso9211827b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:38:12 -0800 (PST)
+X-Gm-Message-State: AOAM531atLubq4iAmQUhByRDsOFhKu7uS9ASBg6H6/d1HhE24G8SJgVe
+        EWk5X8v6KBB4CWpvsHDpx+q3q3e+/epg4rQgjNQ=
+X-Google-Smtp-Source: ABdhPJx7H9z9CiGthKSa+ZkFp2GOZZvI/rJ0lPpOzIRe07DAsT1OlEia/NoCLmOJvzh4QW6uuSRaCFIxzeh9tIkz6eE=
+X-Received: by 2002:a81:84d5:0:b0:2d1:e85:bf04 with SMTP id
+ u204-20020a8184d5000000b002d10e85bf04mr26274102ywf.465.1646152691456; Tue, 01
+ Mar 2022 08:38:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <Yh5ASXVoWoMj7/Rr@Red> <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
+In-Reply-To: <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 1 Mar 2022 17:37:59 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+Message-ID: <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+Subject: Re: boot flooded with unwind: Index not found
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,72 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   2bca5fa75dad57f41002a93861a950d35d55e568
-commit: f8fb748995b4e1156fd76a3860da5ea897536a3c [29/30] vfio: Fix kernel panic in vfio_ioctl_check_extension()
-config: mips-randconfig-r015-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020047.jhfhUk35-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/f8fb748995b4e1156fd76a3860da5ea897536a3c
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout f8fb748995b4e1156fd76a3860da5ea897536a3c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+On Tue, 1 Mar 2022 at 16:52, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
+> > Hello
+> >
+> > I booted today linux-next (20220301) and my boot is flooded with:
+> > [    0.000000] unwind: Index not found c0f0c440
+> > [    0.000000] unwind: Index not found 00000000
+> > [    0.000000] unwind: Index not found c0f0c440
+> > [    0.000000] unwind: Index not found 00000000
+> >
+> > This happen on a sun8i-a83t-bananapi-m3
+>
+> Have you enabled vmapped stacks?
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is probably related to
 
-All errors (new ones prefixed by >>):
+538b9265c063 ARM: unwind: track location of LR value in stack frame
 
-   drivers/vfio/vfio.c: In function '__vfio_group_unset_container':
-   drivers/vfio/vfio.c:1088:17: error: too many arguments to function 'vfio_group_unset_iommufd'
-    1088 |                 vfio_group_unset_iommufd(group->iommufd, &group->device_list);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/vfio/vfio.c:35:
-   include/linux/iommufd.h:57:20: note: declared here
-      57 | static inline void vfio_group_unset_iommufd(void *iommufd)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vfio/vfio.c: In function 'vfio_group_set_container':
-   drivers/vfio/vfio.c:1166:49: error: passing argument 2 of 'vfio_group_set_iommufd' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    1166 |                                                 &group->device_list);
-         |                                                 ^~~~~~~~~~~~~~~~~~~
-         |                                                 |
-         |                                                 struct list_head *
-   In file included from drivers/vfio/vfio.c:35:
-   include/linux/iommufd.h:51:70: note: expected 'struct iommu_group *' but argument is of type 'struct list_head *'
-      51 | static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
-         |                                                  ~~~~~~~~~~~~~~~~~~~~^~~~~
-   drivers/vfio/vfio.c:1165:26: error: too few arguments to function 'vfio_group_set_iommufd'
-    1165 |         group->iommufd = vfio_group_set_iommufd(container_fd,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/vfio/vfio.c:35:
-   include/linux/iommufd.h:51:19: note: declared here
-      51 | static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/vfio/vfio.c: In function 'vfio_external_check_extension':
->> drivers/vfio/vfio.c:1800:24: error: implicit declaration of function 'iommufd_vfio_set_iommu' [-Werror=implicit-function-declaration]
-    1800 |                 return iommufd_vfio_set_iommu(group->iommufd, arg);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+which removes a kernel_text_address() check on frame->pc as it is
+essentially redundant, given that we won't find unwind data otherwise.
+Unfortunately, I failed to realise that the other check carries a
+pr_warn(), which may apparently fire spuriously in some cases.
 
+The 0x0 value can easily be filtered out, but i would be interesting
+where the other value originates from. We might be able to solve this
+with a simple .nounwind directive in a asm routine somewhere.
 
-vim +/iommufd_vfio_set_iommu +1800 drivers/vfio/vfio.c
-
-  1796	
-  1797	long vfio_external_check_extension(struct vfio_group *group, unsigned long arg)
-  1798	{
-  1799		if (group->iommufd)
-> 1800			return iommufd_vfio_set_iommu(group->iommufd, arg);
-  1801	
-  1802		return vfio_ioctl_check_extension(group->container, arg);
-  1803	}
-  1804	EXPORT_SYMBOL_GPL(vfio_external_check_extension);
-  1805	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I'll prepare a patch that disregards the 0x0 value - could you check
+in the mean time what the address 0xcf0c440 coincides with in your
+build?

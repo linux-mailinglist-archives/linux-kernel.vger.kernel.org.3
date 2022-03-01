@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00BF4C8D56
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2B04C8D6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbiCAOJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S235211AbiCAON6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiCAOJd (ORCPT
+        with ESMTP id S235195AbiCAONy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:09:33 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943411D0EF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:08:52 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d17so14352462pfl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 06:08:52 -0800 (PST)
+        Tue, 1 Mar 2022 09:13:54 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664077B546;
+        Tue,  1 Mar 2022 06:13:12 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id h15so22163121edv.7;
+        Tue, 01 Mar 2022 06:13:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+EXe7kCkvoVySWS7NDybEWGjJI7VTkRTM5K2XTeA48M=;
-        b=BnU3SGJbHdN3D2WYcP41BQh0jc/9FhwlQ6R6WZaEaAgS9KAo3pZ/5usqTELZf3m6nl
-         XP8S3ynDO2vQTblrp8fv7x+65QPQem4s9ITfvrrzTOqj0VSUjyockkKba98UnFlwEjA/
-         Us4Q0ie0b4UUlUfkOc2Bm0GEf6yyGD7BDbQvrB3WoqYlpTYXHrgYHHg+dHs9K/qSbgO3
-         3FuFYMECTJYdkNTrXAGBG+yBQIPxRuNO+3dxJcRV815UKSj1aCQ+d1iJFhd3i0mQVmee
-         wwAl0cPRe0NFzhCvAzC+dJ5YA61MfcpNdmDZm0U9AR8430Vk+A+6OhNSfwd3LXqBWQyj
-         Nvpg==
+        bh=XbBh6y93WJCYOvDM+EJo5FnNHZVWpJseZ0yP8iYWZjM=;
+        b=fqZEtVsw5rl7Bz7p190YAW0lU17YEGBHKeYRlulUChvlYfA9iWrdOg/S5o0HRtufm1
+         2OCQfBKCTZVS948bFOJZL6d0OxZ/IzPmkHoSCQW0xXSuUaTizzmU8kUqNOepxqb1sXkw
+         0ziB0E7drug+XroNZAJciOBFtw6TSpXipHhawLAihu4s/TcHC601OmEWVl96vQ6pJ+bK
+         MFvhc/W74C/HKCt1mt5ujCiS6JSegf92fxZ+y8Zrif4ZYFgSZETA2mi6z7OpHY5pr33t
+         CRJB4q/LpKba0PfvCjd0fRjNYrsclJCiQDYhRCVKJNgACv7FEsE5tijsdVZkV1YDjzrt
+         d4QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+EXe7kCkvoVySWS7NDybEWGjJI7VTkRTM5K2XTeA48M=;
-        b=0JwslAHwL4Ck/zFn1sVGBrIw5Esy05COVCRlOyGIvF59Z4YULY0uT3JvwKQ7FyW6sF
-         S0e7Zr6BHu23WCI1WYurKwizKriDwJS6zs/Z1mO3/MAv3K6oRdl/ZkJZSid4HsTkDPmf
-         DgW70LBw81Ikf0PJINmmgubyJTm8DtUyFKMd2ESVl/S91WL3Np5LIzPUeJpoQ4yX9MKj
-         +cOTBksxM+BgmbFFBcfGWscbl7qWx4zXuNv+kCqq7UNcwpWX2YWsA6Sa+/XkPIn1qWOJ
-         h5Beg7zdV1QjFEzGsze3fe4FAzdAbfCFY6JFoXkmlASYnjzum52cJaRFFIB34Lif2TEx
-         TySQ==
-X-Gm-Message-State: AOAM532MxAe0RtDLqhmaJk0hELvBHyfnIgGVe+Z4EdWVkpWkLt7J+GNZ
-        zvnphr9I+7qEKZWWem3/OJ7VJA==
-X-Google-Smtp-Source: ABdhPJzXPDrukQGTza7+DOawnjWJWVOY67CPIgDYANP1SXI2mtt/5N9lBLvXpLy2FuBE4dw1bE0vsQ==
-X-Received: by 2002:a63:4a44:0:b0:372:db13:5583 with SMTP id j4-20020a634a44000000b00372db135583mr21596475pgl.210.1646143731686;
-        Tue, 01 Mar 2022 06:08:51 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id q24-20020aa79618000000b004e0e89985eesm16310318pfg.156.2022.03.01.06.08.47
+        bh=XbBh6y93WJCYOvDM+EJo5FnNHZVWpJseZ0yP8iYWZjM=;
+        b=2QlmWi20FQmCmSFrJ4WBSkWWRWlCAEBcPfnx5cQZbTeoJxdeSq3JkGSwSmc4JRM5tu
+         QVrcwBe2vw1mLdCJmfVCdN20GxuYxqIAU4d8hPSrF4UsOil8lks/ZKT5pwh7FbDuPH18
+         8WapY6+zdoQbpwIPFYA5uuLWGkF5VIehm8IBtgQDgx1iMHVRnD1Bc0Kte1Xxg3o8Hy5j
+         luGEtd/oz5WN7Bspd195fyYu3DwV5VkLY5bcaVT4hbV7yvimzwOh++c+0bKzwoCnxzgT
+         AJ56et/Ak/3oL0UJkgO2FvLgdffKswBlJ7qnQXpp3AtqPt6M4VldARGW8ULTaWDm6poM
+         QGTA==
+X-Gm-Message-State: AOAM530P5MP4ug8VzC1afBEb+a6Q0nAxAyoEDML5CaU4rlQGf0fm9vk0
+        8cFM3kj0N4EashlZU/TC7CCvKFSkVsFeJQ==
+X-Google-Smtp-Source: ABdhPJw8aOpymS6iF6Ox0SQpfa+KhaPOqAMVl/aiX/VlJCy1CcCch+rEnnvQbu68VYUp7C27sUIxcg==
+X-Received: by 2002:a05:6402:11ce:b0:412:f162:28e8 with SMTP id j14-20020a05640211ce00b00412f16228e8mr24577969edw.341.1646143990829;
+        Tue, 01 Mar 2022 06:13:10 -0800 (PST)
+Received: from anparri.mshome.net ([87.13.191.110])
+        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm5341883eji.67.2022.03.01.06.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 06:08:51 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, joe.lawrence@redhat.com
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, qirui.001@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] livepatch: Only block the removal of KLP_UNPATCHED forced transition patch
-Date:   Tue,  1 Mar 2022 22:08:40 +0800
-Message-Id: <20220301140840.29345-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 01 Mar 2022 06:13:10 -0800 (PST)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [PATCH] Drivers: hv: vmbus: Deactivate sysctl_record_panic_msg by default in isolated guests
+Date:   Tue,  1 Mar 2022 15:11:35 +0100
+Message-Id: <20220301141135.2232-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-module_put() is currently never called for a patch with forced flag, to block
-the removal of that patch module that might still be in use after a forced
-transition.
+hv_panic_page might contain guest-sensitive information, do not dump it
+over to Hyper-V by default in isolated guests.
 
-But klp_force_transition() will flag all patches on the list to be forced, since
-commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
-has removed stack ordering of the livepatches, it will cause all other patches can't
-be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
+While at it, update some comments in hyperv_{panic,die}_event().
 
-In fact, we don't need to flag a patch to forced if it's a KLP_PATCHED forced
-transition. It can still be unloaded only if it has passed through the consistency
-model in KLP_UNPATCHED transition.
-
-So this patch only set forced flag and block the removal of a KLP_UNPATCHED forced
-transition livepatch.
-
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Reported-by: Dexuan Cui <decui@microsoft.com>
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 ---
- kernel/livepatch/transition.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hv/vmbus_drv.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index 5683ac0d2566..8b296ad9e407 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -641,6 +641,6 @@ void klp_force_transition(void)
- 	for_each_possible_cpu(cpu)
- 		klp_update_patch_state(idle_task(cpu));
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 12a2b37e87f30..a963b970ffb2f 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -77,8 +77,8 @@ static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
  
--	klp_for_each_patch(patch)
--		patch->forced = true;
-+	if (klp_target_state == KLP_UNPATCHED)
-+		klp_transition_patch->forced = true;
- }
+ 	/*
+ 	 * Hyper-V should be notified only once about a panic.  If we will be
+-	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
+-	 * the notification here.
++	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
++	 * here.
+ 	 */
+ 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE
+ 	    && hyperv_report_reg()) {
+@@ -100,8 +100,8 @@ static int hyperv_die_event(struct notifier_block *nb, unsigned long val,
+ 
+ 	/*
+ 	 * Hyper-V should be notified only once about a panic.  If we will be
+-	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
+-	 * the notification here.
++	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
++	 * here.
+ 	 */
+ 	if (hyperv_report_reg())
+ 		hyperv_report_panic(regs, val, true);
+@@ -1546,14 +1546,20 @@ static int vmbus_bus_init(void)
+ 	if (ret)
+ 		goto err_connect;
+ 
++	if (hv_is_isolation_supported())
++		sysctl_record_panic_msg = 0;
++
+ 	/*
+ 	 * Only register if the crash MSRs are available
+ 	 */
+ 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+ 		u64 hyperv_crash_ctl;
+ 		/*
+-		 * Sysctl registration is not fatal, since by default
+-		 * reporting is enabled.
++		 * Panic message recording (sysctl_record_panic_msg)
++		 * is enabled by default in non-isolated guests and
++		 * disabled by default in isolated guests; the panic
++		 * message recording won't be available in isolated
++		 * guests should the following registration fail.
+ 		 */
+ 		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
+ 		if (!hv_ctl_table_hdr)
 -- 
-2.20.1
+2.25.1
 

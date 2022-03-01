@@ -2,166 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C304C942F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791D94C943A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiCATYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S235303AbiCAT1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiCATYx (ORCPT
+        with ESMTP id S235057AbiCAT1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:24:53 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7E6140CC;
-        Tue,  1 Mar 2022 11:24:10 -0800 (PST)
-Message-ID: <d96528a9-ae1e-d09c-f3e2-1cba0a88c483@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646162648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fso8h5lyoc1XbXbWlpMD5KMQHPxcp2kQ/qyBvjy+VZA=;
-        b=AEPe+60dmQl601WU8/W2rlDSJBjC/nwgZyxPkL2X8lcz65hlirA02vIrqiuuu/HQLNWud1
-        VNmK12Frz3n7FdQoKktQaR+PFZwM6240540CQUjFTpb2ySjWo6urgtGa6x/KIoi4uxmzzG
-        4ZUSNB538s0A/FkOd7rZDNEQaZlZ99A=
-Date:   Tue, 1 Mar 2022 12:24:06 -0700
+        Tue, 1 Mar 2022 14:27:51 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C287069CFA;
+        Tue,  1 Mar 2022 11:27:09 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3143766pjb.0;
+        Tue, 01 Mar 2022 11:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sjfszq0s6rA1DoiuWgRAAaEXXX3ctOb/kx6v17T7+bs=;
+        b=BUf/UxXV9ZTYi6bHIcNSeiVmUkwhpOMtCQdiWC+ay4Z9S5wpiOYuCXCIxzehzgVk+o
+         W1Tz6uC//wm7JDPdHnohPUL8ayfoRdAEJXWOuhp93F6AdjS5zhsdIRdXcMl7LoOxgL5S
+         cQ30ZduAtMTvuIT0IWAMAwvVyturUwj7e81GnYaWkgLwpGQx/29YuWDIvgD88vu2/cB6
+         lIW0y9fMxEHGPAxzIoTAq6cd1acGDgmWfhBtF0rb1zYTJ9wsVCsqlUD6L5WIt+Ny+URQ
+         qK/qz8orT5hZdWRoZ/8JDnt+u1fh9VpSE+nS2ipRNMJp4cJoUQCsCZ7QfPYtwzh2NcxW
+         Yddw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sjfszq0s6rA1DoiuWgRAAaEXXX3ctOb/kx6v17T7+bs=;
+        b=5mJ9AYED6j+w2OH8ffop1Ob7J8Mp1YCNk+fqKEPXibEWIGxUcKXEm9zwHxQVI26kDE
+         FKvKjEL5/ji+nHsuWEmhl2aZoO5jhizCAU+k45ZOBifIupq9ZRU3V69DTIHCxoVmlsBW
+         dwQeD2jBgORBejHQV/ZTW6jh2hiftr52WTdYiFQGgQr/zZZ01GUA4dgqmxK0ztuSuYwv
+         k8W2arnbeJS1+GtVrwRmM2vQJozCcwS+WkkSt8XKN1kBoDjaVBcROvyM+2/lgeGlvwpM
+         bZUHVu6GLqQaZOXOqqMwZfqN2AWUKvf/oSrPAwqZvbJvCfc07xpH/dju+w45t4euSVye
+         JPuQ==
+X-Gm-Message-State: AOAM531CjYnwsB4GLqq7u6i4F+EuMOF+50gfTH8Z2F2cMt+ZKgQ3lPOM
+        Pd7UFHD+5A6VLB2qO2EzVxPv9BDet04lNA==
+X-Google-Smtp-Source: ABdhPJzLhA38IVBgeS0jS6fmXrfvYXbSfkWLFcH+ksuu9OxckKZQpge4EPfXA8PI1btrQvPsQzH6hA==
+X-Received: by 2002:a17:90b:4001:b0:1bc:68ec:ce48 with SMTP id ie1-20020a17090b400100b001bc68ecce48mr23182579pjb.133.1646162828937;
+        Tue, 01 Mar 2022 11:27:08 -0800 (PST)
+Received: from kitty ([12.231.191.170])
+        by smtp.gmail.com with ESMTPSA id u9-20020a056a00158900b004de90b164d0sm19309394pfk.9.2022.03.01.11.27.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 11:27:08 -0800 (PST)
+From:   10maurycy10@gmail.com
+X-Google-Original-From: mz@kitty
+Date:   Tue, 1 Mar 2022 11:27:16 -0800
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
+Subject: Re: Re: [PATCH RFC v0] random: block in /dev/urandom
+Message-ID: <Yh5zA1T9GRBFi5H9@kitty>
+References: <20220211210757.612595-1-Jason@zx2c4.com>
+ <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] PCI: vmd: Prevent recursive locking on interrupt
- allocation
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "Surendrakumar Upadhyay, TejaskumarX" 
-        <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        "Meena, Mahesh" <mahesh.meena@intel.com>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Marc Zyngier <maz@kernel.org>
-References: <87a6euub2a.ffs@tglx>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <87a6euub2a.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is how it used to be before I removed the member to better
-cache align the vmd_irq_list struct, but then the scru_struct grew
-to negate that benefit.
+On Sat, Feb 12, 2022 at 06:05:54PM -0500, Joshua Kinard wrote:
+> On 2/11/2022 16:07, Jason A. Donenfeld wrote:
+> > This is very much an RFC patch, or maybe even an RFG -- request for
+> > grumbles. This topic has come up a million times, and usually doesn't go
+> > anywhere. This time I thought I'd bring it up with a slightly narrower
+> > focus. Before you read further, realize that I do not intend to merge
+> > this without there being an appropriate amount of consensus for it and
+> > discussion about it.
+> > 
+> > Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
+> > rather than passively wait for it"), the RNG does a haveged-style jitter
+> > dance around the scheduler, in order to produce entropy (and credit it)
+> > for the case when we're stuck in wait_for_random_bytes(). How ever you
+> > feel about the Linus Jitter Dance is beside the point: it's been there
+> > for three years and usually gets the RNG initialized in a second or so.
+> >
 
-So this is good
-Reviewed-by: Jon Derrick <jonathan.derrick@linux.dev>
+What about the case where a small amount of entropy is avalable?
 
-On 2/13/2022 6:54 AM, Thomas Gleixner wrote:
-> Tejas reported the following recursive locking issue:
+> > 
+> > As a matter of fact, this is what happens currently when people use
+> > getrandom(2).
+> > 
+> > So, given that the kernel has grown this mechanism for seeding itself
+> > from nothing, and that this procedure happens pretty fast, maybe there's
+> > no point any longer in having /dev/urandom give insecure bytes. In the
+> > past we didn't want the boot process to deadlock, which was
+> > understandable. But now, in the worst case, a second goes by, and the
+> > problem is resolved. It seems like maybe we're finally at a point when
+> > we can get rid of the infamous "urandom read hole".
+> >
+
+Why not keep the distinction between /dev/random and /dev/urandom when a
+good entropy source is not avalable?
+
+> > 
+> > Maybe. And this is why this is a request for grumbles patch: the Linus
+> > Jitter Dance relies on random_get_entropy() returning a cycle counter
+> > value. The first lines of try_to_generate_entropy() are:
+> > 
+> > 	stack.now = random_get_entropy();
+> > 	/* Slow counter - or none. Don't even bother */
+> > 	if (stack.now == random_get_entropy())
+> > 		return;
+> > 
+> > So it would appear that what seemed initially like a panacea does not in
+> > fact work everywhere. Where doesn't it work?
+> > 
+> > On every platform, random_get_entropy() is connected to get_cycles(),
+> > except for three: m68k, MIPS, and RISC-V.
+> > 
 > 
->   swapper/0/1 is trying to acquire lock:
->   ffff8881074fd0a0 (&md->mutex){+.+.}-{3:3}, at: msi_get_virq+0x30/0xc0
->   
->   but task is already holding lock:
->   ffff8881017cd6a0 (&md->mutex){+.+.}-{3:3}, at: __pci_enable_msi_range+0xf2/0x290
->   
->   stack backtrace:
->    __mutex_lock+0x9d/0x920
->    msi_get_virq+0x30/0xc0
->    pci_irq_vector+0x26/0x30
->    vmd_msi_init+0xcc/0x210
->    msi_domain_alloc+0xbf/0x150
->    msi_domain_alloc_irqs_descs_locked+0x3e/0xb0
->    __pci_enable_msi_range+0x155/0x290
->    pci_alloc_irq_vectors_affinity+0xba/0x100
->    pcie_port_device_register+0x307/0x550
->    pcie_portdrv_probe+0x3c/0xd0
->    pci_device_probe+0x95/0x110
+> [snip]
 > 
-> This is caused by the VMD MSI code which does a lookup of the Linux
-> interrupt number for an VMD managed MSI[X] vector. The lookup function
-> tries to acquire the already held mutex.
+> > 
+> > I think what this adds up to is that this change would positively affect
+> > everybody, except for _possibly_ negatively affecting poorly configured
+> > non-Amiga m68k systems and the MIPS R6000 and R6000A. Does that analysis
+> > seem correct to folks reading, or did I miss something?
+> > 
+> > Are there other cases where the cycle counter does exist but is simply
+> > too slow? Perhaps some computer historians can chime in here.
+> > 
+> > [snip]
+
+
+This should realy be a config flag. (URANDOM_SECURE_RANDOM?).
+
 > 
-> Avoid that by caching the Linux interrupt number at initialization time
-> instead of looking it up over and over.
 > 
-> Fixes: 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
-> Reported-by: "Surendrakumar Upadhyay, TejaskumarX" <tejaskumarx.surendrakumar.upadhyay@intel.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> -- 
+> Joshua Kinard
+> Gentoo/MIPS
+> kumba@gentoo.org
+> rsa6144/5C63F4E3F5C6C943 2015-04-27
+> 177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
 > 
-> ---
->   drivers/pci/controller/vmd.c |   14 +++++++-------
->   1 file changed, 7 insertions(+), 7 deletions(-)
+> "The past tempts us, the present confuses us, the future frightens us.  And
+> our lives slip away, moment by moment, lost in that vast, terrible in-between."
 > 
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -99,11 +99,13 @@ struct vmd_irq {
->    * @srcu:	SRCU struct for local synchronization.
->    * @count:	number of child IRQs assigned to this vector; used to track
->    *		sharing.
-> + * @virq:	The underlying VMD Linux interrupt number
->    */
->   struct vmd_irq_list {
->   	struct list_head	irq_list;
->   	struct srcu_struct	srcu;
->   	unsigned int		count;
-> +	unsigned int		virq;
->   };
->   
->   struct vmd_dev {
-> @@ -253,7 +255,6 @@ static int vmd_msi_init(struct irq_domai
->   	struct msi_desc *desc = arg->desc;
->   	struct vmd_dev *vmd = vmd_from_bus(msi_desc_to_pci_dev(desc)->bus);
->   	struct vmd_irq *vmdirq = kzalloc(sizeof(*vmdirq), GFP_KERNEL);
-> -	unsigned int index, vector;
->   
->   	if (!vmdirq)
->   		return -ENOMEM;
-> @@ -261,10 +262,8 @@ static int vmd_msi_init(struct irq_domai
->   	INIT_LIST_HEAD(&vmdirq->node);
->   	vmdirq->irq = vmd_next_irq(vmd, desc);
->   	vmdirq->virq = virq;
-> -	index = index_from_irqs(vmd, vmdirq->irq);
-> -	vector = pci_irq_vector(vmd->dev, index);
->   
-> -	irq_domain_set_info(domain, virq, vector, info->chip, vmdirq,
-> +	irq_domain_set_info(domain, virq, vmdirq->irq->virq, info->chip, vmdirq,
->   			    handle_untracked_irq, vmd, NULL);
->   	return 0;
->   }
-> @@ -685,7 +684,8 @@ static int vmd_alloc_irqs(struct vmd_dev
->   			return err;
->   
->   		INIT_LIST_HEAD(&vmd->irqs[i].irq_list);
-> -		err = devm_request_irq(&dev->dev, pci_irq_vector(dev, i),
-> +		vmd->irqs[i].virq = pci_irq_vector(dev, i);
-> +		err = devm_request_irq(&dev->dev, vmd->irqs[i].virq,
->   				       vmd_irq, IRQF_NO_THREAD,
->   				       vmd->name, &vmd->irqs[i]);
->   		if (err)
-> @@ -969,7 +969,7 @@ static int vmd_suspend(struct device *de
->   	int i;
->   
->   	for (i = 0; i < vmd->msix_count; i++)
-> -		devm_free_irq(dev, pci_irq_vector(pdev, i), &vmd->irqs[i]);
-> +		devm_free_irq(dev, vmd->irqs[i].virq, &vmd->irqs[i]);
->   
->   	return 0;
->   }
-> @@ -981,7 +981,7 @@ static int vmd_resume(struct device *dev
->   	int err, i;
->   
->   	for (i = 0; i < vmd->msix_count; i++) {
-> -		err = devm_request_irq(dev, pci_irq_vector(pdev, i),
-> +		err = devm_request_irq(dev, vmd->irqs[i].virq,
->   				       vmd_irq, IRQF_NO_THREAD,
->   				       vmd->name, &vmd->irqs[i]);
->   		if (err)
+> --Emperor Turhan, Centauri Republic

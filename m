@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0594C8AE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5EC4C8AE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbiCALf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S234597AbiCALgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiCALfZ (ORCPT
+        with ESMTP id S229603AbiCALgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:35:25 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1131E91AD8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:34:45 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id y5so12267428ill.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cwyH7ZYCvlxkzfpPo5L0/LxHzysOdr2qf7q8v1soS3k=;
-        b=kIOl7bIGsVLFNMv/BXknkeQPTiy/gkcCOZJnBwFP8cxdutucakq9RYnfvYGFF08Ygc
-         RKgQMoo6nOE8nNOpjp7B3OHtLPI9Cmno3sB10VnViM0lv15TZFIJT7biuV6xfYVdiFnE
-         SofnK0R2GzmYOJDE0/uSI7/V3XZecKTaOjfIvKzI48pnjSX5pjb94dTk5V3bfQ+4x8bl
-         Lm1Raf7OCW0ZAUtMgXlOeu9+fnbrig9emesRvUcb01tCzDPTNq2CxOnlfHFwgybFEQu9
-         FWSeLoHcsNElxY7OoZgaEZVx+r9wGRMtHFhwChm7EdaSKjTQwUlkxdEXS6grHkIJzCzR
-         YLkQ==
+        Tue, 1 Mar 2022 06:36:45 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679091AD4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:36:01 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 176AB3F1A7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646134560;
+        bh=FR+SbHRa0KC8qQpAb/sagwLABgKAHd7lv9qTbcr0XM0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Q8iO6kBWTS8gsLGw+O0aetXjEQItnmRenQdKR6JylMt9w/ghPdhMIdCaXJUk4PmHN
+         Bs0yAvcR8w6/ZpRBV0oQhVoZhQSARgvVti4oxUGRXr6psilKuvNlLl1cGNFHOVY1l3
+         kdmzj7O09W8DUMhfnYtAWQuqf5dZmM0QiOEhEKJDQxMm+bhn79g5sRBFgunYBSdz+e
+         jIcgi2zU+gFm6ZpKt59vL87RtDQ05i2tzmauukGnnDOIdsDYwYBgsNMWdIK45Uzmc0
+         GMeI7dOFHargywAvvONpFrvyH/O+GEAElsOAPWOQI9nuLN1JMn2TQWJRgo2WkVCiOu
+         b1TenU+3r6gow==
+Received: by mail-ej1-f72.google.com with SMTP id hq34-20020a1709073f2200b006d677c94909so3575362ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:36:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cwyH7ZYCvlxkzfpPo5L0/LxHzysOdr2qf7q8v1soS3k=;
-        b=67OAswQssfVQ/tkuL3zmr/Kt869+kYd3f5szLtzG96Agv7oFvYMn7u4za+FWV7ezh5
-         OKxzIlk+cq/UHLLDShStiOmfO+DvyuE6tC2yBQubbfl8JUjAXt31B2icKtKt1o3tS1Gc
-         88ZpoGCRqhUADpoSdxQEJ2SQsFb5CyTEp11Yrjzmbm92NDSSyRLC0YC9b/FYXVXIPq5E
-         vXNxvPBBnEz70dCu7+LMkplAFUtbrqV/IzJ5+O7r9Rp+QSk2lPUpersrr1p7neePiY+d
-         9rlAKj+0n1gztmbcXOLWCi59N66ZWJAJ2F0nTJ5ChhD1VMXdRGG/QR43CCja6faGQt/C
-         AUxw==
-X-Gm-Message-State: AOAM530Kx/1BWzhwRQ8mwXNb4kCN+BBmXHhj28go25vXpNrodwqIfWeE
-        fPdOfovVGaKUHs0LXDwBikYoxQ==
-X-Google-Smtp-Source: ABdhPJx8yMOOHfptYCj2Jy1tgUKGNNI8YILty5etWM3S9F5gJUvU4HPXR4bEwhu1xTEYIoR+9Z8Isg==
-X-Received: by 2002:a05:6e02:17c9:b0:2c2:a5b3:36fc with SMTP id z9-20020a056e0217c900b002c2a5b336fcmr20967860ilu.303.1646134484337;
-        Tue, 01 Mar 2022 03:34:44 -0800 (PST)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id a2-20020a056e02120200b002c21a18437csm7610374ilq.40.2022.03.01.03.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 03:34:43 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        lkp@intel.com, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] net: ipa: add an interconnect dependency
-Date:   Tue,  1 Mar 2022 05:34:40 -0600
-Message-Id: <20220301113440.257916-1-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        bh=FR+SbHRa0KC8qQpAb/sagwLABgKAHd7lv9qTbcr0XM0=;
+        b=hZZiDEzt1y5mOhFPX66vyhQBGVkiPjxcNWx2uNOQOPn0MQEkQoI0UEvzQtFd+Uv1jX
+         8LN3r/BveTyN3K/vUFDpA9N6FQVgoO9QsTTeshFBXz/VLue7Ru97Yd6obUhQRRKbMnZl
+         0P0AGZXsO30S92cFVUKrHTv8ZIDTzVVty8NPRtaIelyxrtfmyhWwOcoWv7JerBgPWW1k
+         dk3YT8iGyFCkgrTXeqaH7t2/UJRHtB0NPU1ek4BYmDhRVFO7FORWXLe1oGklqyx69lno
+         Tu4CezY5J0cBtI81yTPQllCxLT81hA0tkP6YSruPTTFIgWgWJ+nKaAntpUk1Nlmze8bB
+         rZTQ==
+X-Gm-Message-State: AOAM5318/m/QEaaQnx3Z3Q5U69lPs/RfRB9rbL6ssxvMb7VtEJXzRpBp
+        fXBZDJiI9UpTMLZTQjiaCdW9sVWVTaYMpqzMKFW8V8XJfZhIM3lJSuirTlRLDknjW8Y2ycmZ2xg
+        rnOspOXqb66xpVLeBAwl69hUCYos4mM70T6XUDS7ezQ==
+X-Received: by 2002:aa7:d2da:0:b0:410:b9f1:ff35 with SMTP id k26-20020aa7d2da000000b00410b9f1ff35mr24361358edr.217.1646134559805;
+        Tue, 01 Mar 2022 03:35:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxO1Re57fRymXGOQld9AekbmcAN8BBIo9RFZ7jtwa+7Mxv++/eT4zsN40e6JUE1cz8Fwj5FFQ==
+X-Received: by 2002:aa7:d2da:0:b0:410:b9f1:ff35 with SMTP id k26-20020aa7d2da000000b00410b9f1ff35mr24361344edr.217.1646134559639;
+        Tue, 01 Mar 2022 03:35:59 -0800 (PST)
+Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id gg38-20020a17090689a600b006ba4896f2d7sm5253927ejc.140.2022.03.01.03.35.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 03:35:59 -0800 (PST)
+Message-ID: <02d97f5a-b711-6e7e-abd5-ab2387dc3bca@canonical.com>
+Date:   Tue, 1 Mar 2022 12:35:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V1] arm64: dts: qcom: sc7280: Add GCC hardware register dt
+ entry
+Content-Language: en-US
+To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, robh+dt@kernel.org
+Cc:     quic_asutoshd@quicinc.com, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1646133123-22256-1-git-send-email-quic_c_sbhanu@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1646133123-22256-1-git-send-email-quic_c_sbhanu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to function, the IPA driver very clearly requires the
-interconnect framework to be enabled in the kernel configuration.
-State that dependency in the Kconfig file.
+On 01/03/2022 12:12, Shaik Sajida Bhanu wrote:
+> Add GCC hardware register dt entry for eMMC and SD card.
 
-This became a problem when CONFIG_COMPILE_TEST support was added.
-Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
+Aren't you adding reset, not a hardware register? The same in subject.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 38a4066f593c5 ("net: ipa: support COMPILE_TEST")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-v2: Rebased as requested.
+> 
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index c07765d..2b8461d 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -881,6 +881,9 @@
+>  			mmc-hs400-1_8v;
+>  			mmc-hs400-enhanced-strobe;
+>  
+> +			/* Add dt entry for gcc hw reset */
 
- drivers/net/ipa/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+This comment seems unrelated and duplicating commit msg. Basically you
+wrote same sentence four times: subject, commit msg and twice here...
 
-diff --git a/drivers/net/ipa/Kconfig b/drivers/net/ipa/Kconfig
-index e0164a55c1e66..6782c2cbf542f 100644
---- a/drivers/net/ipa/Kconfig
-+++ b/drivers/net/ipa/Kconfig
-@@ -2,6 +2,7 @@ config QCOM_IPA
- 	tristate "Qualcomm IPA support"
- 	depends on NET && QCOM_SMEM
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on INTERCONNECT
- 	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
- 	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
- 	select QCOM_MDT_LOADER if ARCH_QCOM
--- 
-2.32.0
+> +			resets = <&gcc GCC_SDCC1_BCR>;
+> +			reset-names = "core_reset";
+>  			sdhc1_opp_table: opp-table {
+>  				compatible = "operating-points-v2";
+>  
+> @@ -2686,6 +2689,9 @@
+>  
+>  			qcom,dll-config = <0x0007642c>;
+>  
+> +			/* Add dt entry for gcc hw reset */
 
+Ditto.
+
+> +			resets = <&gcc GCC_SDCC2_BCR>;
+> +			reset-names = "core_reset";
+>  			sdhc2_opp_table: opp-table {
+>  				compatible = "operating-points-v2";
+>  
+
+
+Best regards,
+Krzysztof

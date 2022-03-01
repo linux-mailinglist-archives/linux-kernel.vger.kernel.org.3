@@ -2,222 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B404C9251
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251554C9260
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236516AbiCAR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S236754AbiCAR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236724AbiCAR57 (ORCPT
+        with ESMTP id S231947AbiCAR6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:57:59 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E1D5D1BA
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:57:18 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id p15so33078240ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c3WCe6YPhsNPb86+PhZQBxqhegDCQ92RBMVqRrYASCk=;
-        b=e2WGmHy/xxXYHLCJ/oIMEfHRKsLuoZmGMOs1Ijld4Omd1nthuwT3jT9VSQHp94ZqE5
-         YYdiVN142wywas8WXfbTI/aVNuxt4PblNsrFWjm8kt1KKsII61eSE9NKbHbHC/lupsBV
-         RRS39ecuzrYw7DqRaSUgg/oEBYArzbmaXpSu2Osst+YIOQ8KQ09/R+PH5/V9gBZs/Cod
-         FHipZPJzT+0FJqZTXBqmL8BrzmQzu6nHdsFf9/aj73CnfQ+z03pQ/Doxkf3mNkPFUUTr
-         meT7LcAzSbG3i4ifUxrJ1px1ImToMCw446+fev+auqQ7/eo/cgTprGefShtgF2q0lAHu
-         SCWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c3WCe6YPhsNPb86+PhZQBxqhegDCQ92RBMVqRrYASCk=;
-        b=OvLaW7qzW0VkxRV+9+OkX7kCKks3Wt8yGxtywUFhuzj/Hnl164q1yw5ZgwWxOIIPEr
-         IFcOMO3Qrbzyd8n2O0f01+7W5JNi1sEs5F/Ub1XRkoFZNe77KXUNiH/u5nS4S/kvM90t
-         lLTdlkiNl4elL8q5VPDT3kJddC3sprMLvJR5LenzGCaOj2KOPcNSaYA2gqpk/FiHLSZJ
-         QkuS4u8W/WqfmJ0rrTRkpt6yXmmWSh7kmIHiBvu7zgNVjzAje4I+CrO7aqa2HSae8nh2
-         3uvXCZpDPE0GRsi1bQWo5KabE8E43IgKx1oTd57loAB8rOQTyx2cTMuHOueDeO/Wga7d
-         8Bog==
-X-Gm-Message-State: AOAM530QmFZkAHYz9BncKFn89dh57Y6ezIgypPkRgzN9WK6ij4UG0AX4
-        72VjkYamOmivI1CFewW2uKN2pmrxKZYnSgL60xeBeA==
-X-Google-Smtp-Source: ABdhPJx6NiC03eLaiOd1JPH1zj5W1HAY6SVMujo6GDIuCDgujZ1ZYbC3sF1PQDRMmwWIwyavFsgMIhHwPDZoiNS+Ugg=
-X-Received: by 2002:a17:906:459:b0:6cd:2d6d:2f4c with SMTP id
- e25-20020a170906045900b006cd2d6d2f4cmr19302374eja.687.1646157436628; Tue, 01
- Mar 2022 09:57:16 -0800 (PST)
+        Tue, 1 Mar 2022 12:58:49 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310F3CA7B;
+        Tue,  1 Mar 2022 09:58:06 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1F34E5801D0;
+        Tue,  1 Mar 2022 12:58:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 01 Mar 2022 12:58:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=1b8nHfrBOcjPGYcB+Q6wr00uk1GmKX3v3ZNCnj
+        2Fc4I=; b=ZBUT+xBEPIHuw8jHImLNH+x52gankwE7MJd8sDFwnEoy45z1BwbhNh
+        xKsOdQ1yD9u7q0d/6DIUtrg535wnOmT4Lvdd1apo2YuuhLLDVkYx1vSgNyoTE5fJ
+        ofsW7j8uCMJyXK6Loz8rrLOzHyzxWsYiemruNwAl4gNUMe4M/NVtyIVhNAgsOfjy
+        b/w/wzWa4VwoEUleGhkhNF3kRyKpQ3Usq/8Ca14buwUMr/k/0v+gPaqGXYzqUKuv
+        KllGIGlPN88CAydfwqCLzM8aK7V+EiOvYiI4kF7OI9OB3TO949n6Hy8EMtjF8IqZ
+        MBlpj07s0Rnbq4GNXj6M7/3IgLXdvpRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1b8nHfrBOcjPGYcB+
+        Q6wr00uk1GmKX3v3ZNCnj2Fc4I=; b=EY31l7G2XfgL9rSC/gwvRf8zFgwtBT7xS
+        zGIS7YVvo/KA/v9LCSJOIARDHfRqiRvn2gTz078tIpwk3oIxG21buWNUxNQmSUyy
+        MyYKa/Xe0zh4/DCiQIRNMfBLOEXackhRaibWR2bFKht/sqIYkVYfZsf6JTqkc8aS
+        N/+KxLe8dnTTbLIJQe4lQN4jxuybvA2M70S25Fv9b7VdN/aPfJftqSYQ4WVfyPqY
+        0tbQrYevVZ6RBtubRdYtr3gnZBflyWFJSH5G+LkmECZ7pFmQ2xcqosvgp1dXRrwM
+        GXM5n5s+pyNtUs5gG+ueV8296EmUoxyY6tuEcr0WZBCuK4oOvJTLg==
+X-ME-Sender: <xms:rF4eYt_khXW9JUELKd3sbskivfb6p9VNYJ9HJTNdiVa20a5SzZwcHg>
+    <xme:rF4eYhvpLP3jG67Y92AJSSlOEm5MH8cOme-q_WmBEiKHi2-d33bdpDbAgKuSlQzhv
+    bEXTTYYFzUc5A>
+X-ME-Received: <xmr:rF4eYrDa0WtfQIncLyLiGZ2_QzeJH36bSCyCi0g3L7auz9QrwNL4PuRbLUYhHGofRJvw4tCnLgWVuPYzt-8dyqU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:rF4eYhep9_FqzdGryzLUlkyDm8oB4NZlyIpp5U2aPsiBO5Uc_pu1KA>
+    <xmx:rF4eYiNt1Zd7p4zbskEHRd607PiISY-ihvHig6bYJF7awgzM4cA48A>
+    <xmx:rF4eYjmGF931qz2wbkLW14iXG2GvWL_-CIczc4jJ1wtvDsjYWSRagQ>
+    <xmx:rl4eYkl7_n3lofGsDcutmkSMBLsPYoIzfmJgc1TjOF9wAZv0ieQERQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 1 Mar 2022 12:58:03 -0500 (EST)
+Date:   Tue, 1 Mar 2022 18:58:02 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <Yh5eqmAv0P2nnSq0@kroah.com>
+References: <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
+ <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+ <Yh5ZmwiH5AxtQ69K@kroah.com>
+ <4B1AFAD9-C1B3-499C-945A-C259361ABA8C@gmail.com>
 MIME-Version: 1.0
-References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-23-seanjc@google.com>
-In-Reply-To: <20220226001546.360188-23-seanjc@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 1 Mar 2022 09:57:05 -0800
-Message-ID: <CANgfPd_JXJOYhMGKTHfZM0f1x_KpOzJi8fKVv9awLbbpoHdOMw@mail.gmail.com>
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous worker
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4B1AFAD9-C1B3-499C-945A-C259361ABA8C@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Zap defunct roots, a.k.a. roots that have been invalidated after their
-> last reference was initially dropped, asynchronously via the system work
-> queue instead of forcing the work upon the unfortunate task that happened
-> to drop the last reference.
->
-> If a vCPU task drops the last reference, the vCPU is effectively blocked
-> by the host for the entire duration of the zap.  If the root being zapped
-> happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
-> being active, the zap can take several hundred seconds.  Unsurprisingly,
-> most guests are unhappy if a vCPU disappears for hundreds of seconds.
->
-> E.g. running a synthetic selftest that triggers a vCPU root zap with
-> ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
-> Offloading the zap to a worker drops the block time to <100ms.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Tue, Mar 01, 2022 at 06:40:04PM +0100, Jakob Koschel wrote:
+> 
+> 
+> > On 1. Mar 2022, at 18:36, Greg KH <greg@kroah.com> wrote:
+> > 
+> > On Tue, Mar 01, 2022 at 12:28:15PM +0100, Jakob Koschel wrote:
+> >> 
+> >> 
+> >>> On 1. Mar 2022, at 01:41, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> >>> 
+> >>> On Mon, Feb 28, 2022 at 1:47 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> >>>> 
+> >>>> The goal of this is to get compiler warnings right? This would indeed be great.
+> >>> 
+> >>> Yes, so I don't mind having a one-time patch that has been gathered
+> >>> using some automated checker tool, but I don't think that works from a
+> >>> long-term maintenance perspective.
+> >>> 
+> >>> So if we have the basic rule being "don't use the loop iterator after
+> >>> the loop has finished, because it can cause all kinds of subtle
+> >>> issues", then in _addition_ to fixing the existing code paths that
+> >>> have this issue, I really would want to (a) get a compiler warning for
+> >>> future cases and (b) make it not actually _work_ for future cases.
+> >>> 
+> >>> Because otherwise it will just happen again.
+> >>> 
+> >>>> Changing the list_for_each_entry() macro first will break all of those cases
+> >>>> (e.g. the ones using 'list_entry_is_head()).
+> >>> 
+> >>> So I have no problems with breaking cases that we basically already
+> >>> have a patch for due to  your automated tool. There were certainly
+> >>> more than a handful, but it didn't look _too_ bad to just make the
+> >>> rule be "don't use the iterator after the loop".
+> >>> 
+> >>> Of course, that's just based on that patch of yours. Maybe there are a
+> >>> ton of other cases that your patch didn't change, because they didn't
+> >>> match your trigger case, so I may just be overly optimistic here.
+> >> 
+> >> Based on the coccinelle script there are ~480 cases that need fixing
+> >> in total. I'll now finish all of them and then split them by
+> >> submodules as Greg suggested and repost a patch set per submodule.
+> >> Sounds good?
+> > 
+> > Sounds good to me!
+> > 
+> > If you need help carving these up and maintaining them over time as
+> > different subsystem maintainers accept/ignore them, just let me know.
+> > Doing large patchsets like this can be tough without a lot of
+> > experience.
+> 
+> Very much appreciated!
+> 
+> There will probably be some cases that do not match one of the pattern
+> we already discussed and need separate attention.
+> 
+> I was planning to start with one subsystem and adjust the coming ones
+> according to the feedback gather there instead of posting all of them
+> in one go.
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+That seems wise.  Feel free to use USB as a testing ground for this if
+you want to :)
 
-> ---
->  arch/x86/kvm/mmu/mmu_internal.h |  8 +++-
->  arch/x86/kvm/mmu/tdp_mmu.c      | 65 ++++++++++++++++++++++++++++-----
->  2 files changed, 63 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index be063b6c91b7..1bff453f7cbe 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -65,7 +65,13 @@ struct kvm_mmu_page {
->                 struct kvm_rmap_head parent_ptes; /* rmap pointers to parent sptes */
->                 tdp_ptep_t ptep;
->         };
-> -       DECLARE_BITMAP(unsync_child_bitmap, 512);
-> +       union {
-> +               DECLARE_BITMAP(unsync_child_bitmap, 512);
-> +               struct {
-> +                       struct work_struct tdp_mmu_async_work;
-> +                       void *tdp_mmu_async_data;
-> +               };
-> +       };
+thanks,
 
-At some point (probably not in this series since it's so long already)
-it would be good to organize kvm_mmu_page. It looks like we've got
-quite a few anonymous unions in there for TDP / Shadow MMU fields.
-
->
->         struct list_head lpage_disallowed_link;
->  #ifdef CONFIG_X86_32
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index ec28a88c6376..4151e61245a7 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -81,6 +81,38 @@ static void tdp_mmu_free_sp_rcu_callback(struct rcu_head *head)
->  static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
->                              bool shared);
->
-> +static void tdp_mmu_zap_root_async(struct work_struct *work)
-> +{
-> +       struct kvm_mmu_page *root = container_of(work, struct kvm_mmu_page,
-> +                                                tdp_mmu_async_work);
-> +       struct kvm *kvm = root->tdp_mmu_async_data;
-> +
-> +       read_lock(&kvm->mmu_lock);
-> +
-> +       /*
-> +        * A TLB flush is not necessary as KVM performs a local TLB flush when
-> +        * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
-> +        * to a different pCPU.  Note, the local TLB flush on reuse also
-> +        * invalidates any paging-structure-cache entries, i.e. TLB entries for
-> +        * intermediate paging structures, that may be zapped, as such entries
-> +        * are associated with the ASID on both VMX and SVM.
-> +        */
-> +       tdp_mmu_zap_root(kvm, root, true);
-> +
-> +       /*
-> +        * Drop the refcount using kvm_tdp_mmu_put_root() to test its logic for
-> +        * avoiding an infinite loop.  By design, the root is reachable while
-> +        * it's being asynchronously zapped, thus a different task can put its
-> +        * last reference, i.e. flowing through kvm_tdp_mmu_put_root() for an
-> +        * asynchronously zapped root is unavoidable.
-> +        */
-> +       kvm_tdp_mmu_put_root(kvm, root, true);
-> +
-> +       read_unlock(&kvm->mmu_lock);
-> +
-> +       kvm_put_kvm(kvm);
-> +}
-> +
->  void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
->                           bool shared)
->  {
-> @@ -142,15 +174,26 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
->         refcount_set(&root->tdp_mmu_root_count, 1);
->
->         /*
-> -        * Zap the root, then put the refcount "acquired" above.   Recursively
-> -        * call kvm_tdp_mmu_put_root() to test the above logic for avoiding an
-> -        * infinite loop by freeing invalid roots.  By design, the root is
-> -        * reachable while it's being zapped, thus a different task can put its
-> -        * last reference, i.e. flowing through kvm_tdp_mmu_put_root() for a
-> -        * defunct root is unavoidable.
-> +        * Attempt to acquire a reference to KVM itself.  If KVM is alive, then
-> +        * zap the root asynchronously in a worker, otherwise it must be zapped
-> +        * directly here.  Wait to do this check until after the refcount is
-> +        * reset so that tdp_mmu_zap_root() can safely yield.
-> +        *
-> +        * In both flows, zap the root, then put the refcount "acquired" above.
-> +        * When putting the reference, use kvm_tdp_mmu_put_root() to test the
-> +        * above logic for avoiding an infinite loop by freeing invalid roots.
-> +        * By design, the root is reachable while it's being zapped, thus a
-> +        * different task can put its last reference, i.e. flowing through
-> +        * kvm_tdp_mmu_put_root() for a defunct root is unavoidable.
->          */
-> -       tdp_mmu_zap_root(kvm, root, shared);
-> -       kvm_tdp_mmu_put_root(kvm, root, shared);
-> +       if (kvm_get_kvm_safe(kvm)) {
-> +               root->tdp_mmu_async_data = kvm;
-> +               INIT_WORK(&root->tdp_mmu_async_work, tdp_mmu_zap_root_async);
-> +               schedule_work(&root->tdp_mmu_async_work);
-> +       } else {
-> +               tdp_mmu_zap_root(kvm, root, shared);
-> +               kvm_tdp_mmu_put_root(kvm, root, shared);
-> +       }
->  }
->
->  enum tdp_mmu_roots_iter_type {
-> @@ -954,7 +997,11 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
->
->         /*
->          * Zap all roots, including invalid roots, as all SPTEs must be dropped
-> -        * before returning to the caller.
-> +        * before returning to the caller.  Zap directly even if the root is
-> +        * also being zapped by a worker.  Walking zapped top-level SPTEs isn't
-> +        * all that expensive and mmu_lock is already held, which means the
-> +        * worker has yielded, i.e. flushing the work instead of zapping here
-> +        * isn't guaranteed to be any faster.
->          *
->          * A TLB flush is unnecessary, KVM zaps everything if and only the VM
->          * is being destroyed or the userspace VMM has exited.  In both cases,
-> --
-> 2.35.1.574.g5d30c73bfb-goog
->
+greg k-h

@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3C44C8A7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5448A4C8AA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbiCALRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S234488AbiCALYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiCALRb (ORCPT
+        with ESMTP id S234402AbiCALYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:17:31 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A33E91AD7;
-        Tue,  1 Mar 2022 03:16:50 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 221BGfso031519;
-        Tue, 1 Mar 2022 05:16:41 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1646133401;
-        bh=4SwLAH88JnJT5PZJ5YWyDguLyFBhuOkYKFjfGfwc2B8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=CttWfzwly6dommpD31OHhZN+B9vKKXN21pE4YBt441OTdy3J7HQhwAWiBgm+PxK+x
-         hnuA9QPHfNPmpU63DMysdeMwoWxbhUpbaNZ5LX2Wg2ZnfSuOJjy3UtBdVg6rShnnnT
-         WGFJfaBS/Lih/G74vvondYJMBVu3ErPEQKycXXVQ=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 221BGfCd023079
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 1 Mar 2022 05:16:41 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 1
- Mar 2022 05:16:40 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 1 Mar 2022 05:16:40 -0600
-Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 221BGMAp116021;
-        Tue, 1 Mar 2022 05:16:37 -0600
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Subject: [PATCH v10 4/4] phy: dt-bindings: Add Cadence D-PHY Rx bindings
-Date:   Tue, 1 Mar 2022 16:46:21 +0530
-Message-ID: <20220301111621.2992275-5-p.yadav@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220301111621.2992275-1-p.yadav@ti.com>
-References: <20220301111621.2992275-1-p.yadav@ti.com>
+        Tue, 1 Mar 2022 06:24:41 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A57D91AC6;
+        Tue,  1 Mar 2022 03:23:58 -0800 (PST)
+X-UUID: 1679023a156949ada20265f131d342a6-20220301
+X-UUID: 1679023a156949ada20265f131d342a6-20220301
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <lena.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2115268812; Tue, 01 Mar 2022 19:23:14 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 1 Mar 2022 19:23:13 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 19:23:12 +0800
+From:   lena wang <lena.wang@mediatek.com>
+To:     <pabeni@redhat.com>, <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Dongseok Yi <dseok.yi@samsung.com>
+CC:     <wsd_upstream@mediatek.com>, lena wang <lena.wang@mediatek.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH net v2] net: fix up skbs delta_truesize in UDP GRO frag_list
+Date:   Tue, 1 Mar 2022 19:17:09 +0800
+Message-ID: <1646133431-8948-1-git-send-email-lena.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,75 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Rx mode DPHY is different from Tx mode DPHY. Add a separate binding
-for it.
+The truesize for a UDP GRO packet is added by main skb and skbs in main
+skb's frag_list:
+skb_gro_receive_list
+        p->truesize += skb->truesize;
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+The commit 53475c5dd856 ("net: fix use-after-free when UDP GRO with
+shared fraglist") introduced a truesize increase for frag_list skbs.
+When uncloning skb, it will call pskb_expand_head and trusesize for
+frag_list skbs may increase. This can occur when allocators uses
+__netdev_alloc_skb and not jump into __alloc_skb. This flow does not
+use ksize(len) to calculate truesize while pskb_expand_head uses.
+skb_segment_list
+err = skb_unclone(nskb, GFP_ATOMIC);
+pskb_expand_head
+        if (!skb->sk || skb->destructor == sock_edemux)
+                skb->truesize += size - osize;
 
+If we uses increased truesize adding as delta_truesize, it will be
+larger than before and even larger than previous total truesize value
+if skbs in frag_list are abundant. The main skb truesize will become
+smaller and even a minus value or a huge value for an unsigned int
+parameter. Then the following memory check will drop this abnormal skb.
+
+To avoid this error we should use the original truesize to segment the
+main skb.
+
+Fixes: 53475c5dd856 ("net: fix use-after-free when UDP GRO with shared fraglist")
+Signed-off-by: lena wang <lena.wang@mediatek.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 ---
+change since v1:
+1) add the fix tag.
+2) add net subtree to the subject
+---
+---
+ net/core/skbuff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-(no changes since v8)
-
-Changes in v8:
-- Add Rob and Laurent's R-by.
-
-Changes in v6:
-- Add a new binding for DPHY Rx.
-
- .../devicetree/bindings/phy/cdns,dphy-rx.yaml | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-new file mode 100644
-index 000000000000..07be031d82e6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/cdns,dphy-rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence DPHY Rx Device Tree Bindings
-+
-+maintainers:
-+  - Pratyush Yadav <p.yadav@ti.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: cdns,dphy-rx
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+
-+    dphy0: phy@4580000 {
-+        compatible = "cdns,dphy-rx";
-+        reg = <0x4580000 0x1100>;
-+        #phy-cells = <0>;
-+        power-domains = <&k3_pds 147 TI_SCI_PD_EXCLUSIVE>;
-+    };
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 9d0388bed0c1..8b7356cffea7 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3876,6 +3876,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		list_skb = list_skb->next;
+ 
+ 		err = 0;
++		delta_truesize += nskb->truesize;
+ 		if (skb_shared(nskb)) {
+ 			tmp = skb_clone(nskb, GFP_ATOMIC);
+ 			if (tmp) {
+@@ -3900,7 +3901,6 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		tail = nskb;
+ 
+ 		delta_len += nskb->len;
+-		delta_truesize += nskb->truesize;
+ 
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
+ 
 -- 
-2.34.1
+2.18.0
 

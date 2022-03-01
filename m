@@ -2,155 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639654C857B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F144C857D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiCAHuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S233112AbiCAHvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiCAHuM (ORCPT
+        with ESMTP id S232923AbiCAHvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:50:12 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A28D43AE8;
-        Mon, 28 Feb 2022 23:49:26 -0800 (PST)
-X-UUID: 5ddf81f3816d4d73888bb7d609c8aac6-20220301
-X-UUID: 5ddf81f3816d4d73888bb7d609c8aac6-20220301
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 555010733; Tue, 01 Mar 2022 15:49:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 1 Mar 2022 15:49:20 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Mar 2022 15:49:18 +0800
-Message-ID: <5ed9278fa0b72b993512cff2316218ab88cafe50.camel@mediatek.com>
-Subject: Re: [PATCH v5 00/34] MT8195 IOMMU SUPPORT
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
-        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
-        <yen-chang.chen@mediatek.com>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <libo.kang@mediatek.com>,
-        <chengci.xu@mediatek.com>
-Date:   Tue, 1 Mar 2022 15:49:18 +0800
-In-Reply-To: <7ba0ee87-c193-9834-d0b4-ff3e06ced82b@collabora.com>
-References: <20220217113453.13658-1-yong.wu@mediatek.com>
-         <YhzBSsn/zUlGg5JE@8bytes.org>
-         <7ba0ee87-c193-9834-d0b4-ff3e06ced82b@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 1 Mar 2022 02:51:08 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072F165839;
+        Mon, 28 Feb 2022 23:50:28 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id d3so19053914wrf.1;
+        Mon, 28 Feb 2022 23:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ncaBgOYHVHyX562hJ+dSZXG5SoGXqG/UuIq2nR2m4Ds=;
+        b=posku0yAYAZ8Q7U6hzwy/v5OpkmWndRqp33Jjkoaw/Oq7onxRCi7jD1qn1P329zn4u
+         3nBjiUhHmSpgrmqMsjAXqkzmvmLIEiEigZRHFAgwztMqKPK0cLQ3TQQh/2PZIcRAGsP2
+         gcqqS004c9CIK614nvAnivYjXiNHr7ZoWqnxoE6W8y+XBQmmVUnzLnC906QPhIAy29Ju
+         VRw5yWLIBu5BUI+6TIWDRJNWCgGlctbnPhFx1WwEVjs521ccmOYip3IE0QOteKOBIkYF
+         bpcmMotTmLeBTV7MSVVGL2GiLO9/SY/1xGLUzg3xPPrFqEYXUtAO1qMqyMe0z5NybcTo
+         h7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ncaBgOYHVHyX562hJ+dSZXG5SoGXqG/UuIq2nR2m4Ds=;
+        b=txvzDatlET0kbH1abB1mDhoaWubtM5j53CmfqeI0SMV5y4CwKQMa3QGrXcdxPPUL85
+         404q1A+rdQby4YGMZRgQ4Rltz/Hr1GhTCqyVxQlp1H7DiA+5hcv0bX8Mh9dzUEnoTvBo
+         aekM9LYQlzWq4MIVzH5l86gZxnKim5j0zlsR6IhAA8fzKeKJlovM/7ENoWDDVEr1lDDW
+         RQqa7COtkWkS9RlAdtKPIvdkrQwZIaP8boqfgq03zvB+mN5jYZW+osZpSTC9hTICSt52
+         bMSE2nVfG97I/IDFibrbHUZ5LF+z1+6kvlmg2E6W4HSCVL3+t9PqQfGjWOWZsI6D1jbS
+         qHGQ==
+X-Gm-Message-State: AOAM5328j6XV7Lon1NkYbuOo0D0UtYz7Nxcqs9Wrt3lmxqKzoEWKDeqK
+        pNVanYLFbpQ/KBIwY7zq7HI=
+X-Google-Smtp-Source: ABdhPJyemxdHJ9Az+Ep1C+iGVaYqqNCM/xE0+JQuhKHn+ThMhopwCbRS4EE9kztTc3Kgfso04bPDbA==
+X-Received: by 2002:adf:90e2:0:b0:1e3:f5a:553c with SMTP id i89-20020adf90e2000000b001e30f5a553cmr18027194wri.476.1646121026453;
+        Mon, 28 Feb 2022 23:50:26 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r1-20020a5d4941000000b001ed89dcacbbsm12622004wrs.23.2022.02.28.23.50.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 23:50:25 -0800 (PST)
+Message-ID: <908437cd-1f9c-2ef2-eb70-94e409d252e0@gmail.com>
+Date:   Tue, 1 Mar 2022 08:50:24 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [v5] arm64: dts: mediatek: Add mt8192 power domains controller
+Content-Language: en-US
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+References: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-28 at 14:50 +0100, AngeloGioacchino Del Regno wrote:
-> Il 28/02/22 13:34, Joerg Roedel ha scritto:
-> > Hi Yong Wu,
-> > 
-> > On Thu, Feb 17, 2022 at 07:34:19PM +0800, Yong Wu wrote:
-> > > Yong Wu (34):
-> > >    dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
-> > >    dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
-> > >    iommu/mediatek: Fix 2 HW sharing pgtable issue
-> > >    iommu/mediatek: Add list_del in mtk_iommu_remove
-> > >    iommu/mediatek: Remove clk_disable in mtk_iommu_remove
-> > >    iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
-> > >    iommu/mediatek: Add mutex for data in the mtk_iommu_domain
-> > >    iommu/mediatek: Adapt sharing and non-sharing pgtable case
-> > >    iommu/mediatek: Add 12G~16G support for multi domains
-> > >    iommu/mediatek: Add a flag DCM_DISABLE
-> > >    iommu/mediatek: Add a flag NON_STD_AXI
-> > >    iommu/mediatek: Remove the granule in the tlb flush
-> > >    iommu/mediatek: Always enable output PA over 32bits in isr
-> > >    iommu/mediatek: Add SUB_COMMON_3BITS flag
-> > >    iommu/mediatek: Add IOMMU_TYPE flag
-> > >    iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
-> > >    iommu/mediatek: Adjust device link when it is sub-common
-> > >    iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
-> > >    iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
-> > >    iommu/mediatek: Add infra iommu support
-> > >    iommu/mediatek: Add PCIe support
-> > >    iommu/mediatek: Add mt8195 support
-> > >    iommu/mediatek: Only adjust code about register base
-> > >    iommu/mediatek: Just move code position in hw_init
-> > >    iommu/mediatek: Separate mtk_iommu_data for v1 and v2
-> > >    iommu/mediatek: Remove mtk_iommu.h
-> > >    iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
-> > >    iommu/mediatek: Add mtk_iommu_bank_data structure
-> > >    iommu/mediatek: Initialise bank HW for each a bank
-> > >    iommu/mediatek: Change the domid to iova_region_id
-> > >    iommu/mediatek: Get the proper bankid for multi banks
-> > >    iommu/mediatek: Initialise/Remove for multi bank dev
-> > >    iommu/mediatek: Backup/restore regsiters for multi banks
-> > >    iommu/mediatek: mt8195: Enable multi banks for infra iommu
-> > 
-> > This doesn't apply cleanly, can you please send a version rebased
-> > to
-> > v5.17-rc4?
 
-As in the cover letter, this patchset doesn't base on v5.17-rc4, it
-bases on next-20220216 which has contained [1] and Dafna's patchset
-below.
 
-By the way, It still conflicts with the latest next-20220228 which has
-just contained[2].
-
-In this case, How should I do? Send a version base on the latest next?
-
-[1] 
-https://lore.kernel.org/linux-iommu/20220117070510.17642-1-yong.wu@mediatek.com/
-
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?h=next-20220228&qt=grep&q=component_compare
-
-Thanks.
-
-> > 
-> > Thanks,
-> > 
-> > 	Joerg
+On 25/08/2021 03:04, Chun-Jie Chen wrote:
+> Add power domains controller node for SoC mt8192
 > 
-> Hello Joerg,
-> 
-> this series depends on the following series:
-> 
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=592275
-> 
-> ...which is also well tested and ready to be merged in.
-> 
-> Applying Yong's series without the mentioned series from Dafna would
-> not work.
+> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
 
-Yes. Thanks.
+Applied thanks!
 
+> ---
+> This patch is base on v5.14-rc1,
+> series "Mediatek MT8192 clock support"[1] and [2].
+> No changes compare v4
 > 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=521127
+> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20210727023205.20319-2-chun-jie.chen@mediatek.com/
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 201 +++++++++++++++++++++++
+>   1 file changed, 201 insertions(+)
 > 
-> Thanks,
-> Angelo
-
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index c7c7d4e017ae..a0084a7a5bcd 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -9,6 +9,7 @@
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/interrupt-controller/irq.h>
+>   #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
+> +#include <dt-bindings/power/mt8192-power.h>
+>   
+>   / {
+>   	compatible = "mediatek,mt8192";
+> @@ -301,6 +302,206 @@
+>   			#interrupt-cells = <2>;
+>   		};
+>   
+> +		scpsys: syscon@10006000 {
+> +			compatible = "syscon", "simple-mfd";
+> +			reg = <0 0x10006000 0 0x1000>;
+> +			#power-domain-cells = <1>;
+> +
+> +			/* System Power Manager */
+> +			spm: power-controller {
+> +				compatible = "mediatek,mt8192-power-controller";
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				#power-domain-cells = <1>;
+> +
+> +				/* power domain of the SoC */
+> +				power-domain@MT8192_POWER_DOMAIN_AUDIO {
+> +					reg = <MT8192_POWER_DOMAIN_AUDIO>;
+> +					clocks = <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
+> +						 <&infracfg CLK_INFRA_AUDIO_26M_B>,
+> +						 <&infracfg CLK_INFRA_AUDIO>;
+> +					clock-names = "audio", "audio1", "audio2";
+> +					mediatek,infracfg = <&infracfg>;
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8192_POWER_DOMAIN_CONN {
+> +					reg = <MT8192_POWER_DOMAIN_CONN>;
+> +					clocks = <&infracfg CLK_INFRA_PMIC_CONN>;
+> +					clock-names = "conn";
+> +					mediatek,infracfg = <&infracfg>;
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8192_POWER_DOMAIN_MFG0 {
+> +					reg = <MT8192_POWER_DOMAIN_MFG0>;
+> +					clocks = <&topckgen CLK_TOP_MFG_PLL_SEL>;
+> +					clock-names = "mfg";
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					#power-domain-cells = <1>;
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_MFG1 {
+> +						reg = <MT8192_POWER_DOMAIN_MFG1>;
+> +						mediatek,infracfg = <&infracfg>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_MFG2 {
+> +							reg = <MT8192_POWER_DOMAIN_MFG2>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_MFG3 {
+> +							reg = <MT8192_POWER_DOMAIN_MFG3>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_MFG4 {
+> +							reg = <MT8192_POWER_DOMAIN_MFG4>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_MFG5 {
+> +							reg = <MT8192_POWER_DOMAIN_MFG5>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_MFG6 {
+> +							reg = <MT8192_POWER_DOMAIN_MFG6>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				power-domain@MT8192_POWER_DOMAIN_DISP {
+> +					reg = <MT8192_POWER_DOMAIN_DISP>;
+> +					clocks = <&topckgen CLK_TOP_DISP_SEL>,
+> +						 <&mmsys CLK_MM_SMI_INFRA>,
+> +						 <&mmsys CLK_MM_SMI_COMMON>,
+> +						 <&mmsys CLK_MM_SMI_GALS>,
+> +						 <&mmsys CLK_MM_SMI_IOMMU>;
+> +					clock-names = "disp", "disp-0", "disp-1", "disp-2",
+> +						      "disp-3";
+> +					mediatek,infracfg = <&infracfg>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					#power-domain-cells = <1>;
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_IPE {
+> +						reg = <MT8192_POWER_DOMAIN_IPE>;
+> +						clocks = <&topckgen CLK_TOP_IPE_SEL>,
+> +							 <&ipesys CLK_IPE_LARB19>,
+> +							 <&ipesys CLK_IPE_LARB20>,
+> +							 <&ipesys CLK_IPE_SMI_SUBCOM>,
+> +							 <&ipesys CLK_IPE_GALS>;
+> +						clock-names = "ipe", "ipe-0", "ipe-1", "ipe-2",
+> +							      "ipe-3";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_ISP {
+> +						reg = <MT8192_POWER_DOMAIN_ISP>;
+> +						clocks = <&topckgen CLK_TOP_IMG1_SEL>,
+> +							 <&imgsys CLK_IMG_LARB9>,
+> +							 <&imgsys CLK_IMG_GALS>;
+> +						clock-names = "isp", "isp-0", "isp-1";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_ISP2 {
+> +						reg = <MT8192_POWER_DOMAIN_ISP2>;
+> +						clocks = <&topckgen CLK_TOP_IMG2_SEL>,
+> +							 <&imgsys2 CLK_IMG2_LARB11>,
+> +							 <&imgsys2 CLK_IMG2_GALS>;
+> +						clock-names = "isp2", "isp2-0", "isp2-1";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_MDP {
+> +						reg = <MT8192_POWER_DOMAIN_MDP>;
+> +						clocks = <&topckgen CLK_TOP_MDP_SEL>,
+> +							 <&mdpsys CLK_MDP_SMI0>;
+> +						clock-names = "mdp", "mdp-0";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_VENC {
+> +						reg = <MT8192_POWER_DOMAIN_VENC>;
+> +						clocks = <&topckgen CLK_TOP_VENC_SEL>,
+> +							 <&vencsys CLK_VENC_SET1_VENC>;
+> +						clock-names = "venc", "venc-0";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_VDEC {
+> +						reg = <MT8192_POWER_DOMAIN_VDEC>;
+> +						clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+> +							 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+> +							 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
+> +							 <&vdecsys_soc CLK_VDEC_SOC_LARB1>;
+> +						clock-names = "vdec", "vdec-0", "vdec-1", "vdec-2";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_VDEC2 {
+> +							reg = <MT8192_POWER_DOMAIN_VDEC2>;
+> +							clocks = <&vdecsys CLK_VDEC_VDEC>,
+> +								 <&vdecsys CLK_VDEC_LAT>,
+> +								 <&vdecsys CLK_VDEC_LARB1>;
+> +							clock-names = "vdec2-0", "vdec2-1",
+> +								      "vdec2-2";
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +
+> +					power-domain@MT8192_POWER_DOMAIN_CAM {
+> +						reg = <MT8192_POWER_DOMAIN_CAM>;
+> +						clocks = <&topckgen CLK_TOP_CAM_SEL>,
+> +							 <&camsys CLK_CAM_LARB13>,
+> +							 <&camsys CLK_CAM_LARB14>,
+> +							 <&camsys CLK_CAM_CCU_GALS>,
+> +							 <&camsys CLK_CAM_CAM2MM_GALS>;
+> +						clock-names = "cam", "cam-0", "cam-1", "cam-2",
+> +							      "cam-3";
+> +						mediatek,infracfg = <&infracfg>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWA {
+> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWA>;
+> +							clocks = <&camsys_rawa CLK_CAM_RAWA_LARBX>;
+> +							clock-names = "cam_rawa-0";
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWB {
+> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWB>;
+> +							clocks = <&camsys_rawb CLK_CAM_RAWB_LARBX>;
+> +							clock-names = "cam_rawb-0";
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWC {
+> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWC>;
+> +							clocks = <&camsys_rawc CLK_CAM_RAWC_LARBX>;
+> +							clock-names = "cam_rawc-0";
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>   		apmixedsys: syscon@1000c000 {
+>   			compatible = "mediatek,mt8192-apmixedsys", "syscon";
+>   			reg = <0 0x1000c000 0 0x1000>;

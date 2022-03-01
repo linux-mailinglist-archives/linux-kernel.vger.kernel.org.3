@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593054C9462
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E1C4C9466
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbiCATfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S236539AbiCATgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiCATf2 (ORCPT
+        with ESMTP id S236202AbiCATgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:35:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D65054FA2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:34:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB0EC61602
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475EBC340EF;
-        Tue,  1 Mar 2022 19:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646163286;
-        bh=9B9eVbUKHgHFZe2GUw1uyhd2gTOzh/us5AsO2bpkbmw=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=ryZKcO5jrHX4eKN2DigtbbPXj3xKaSHVeLuNNQy9v9QAYAbm+yEm0QKZ/zHueSF5L
-         iA63c20TsgCinFb+dZk1Gksc6Ea5OT4uMR7nWzo8VmrWnWduYXQIAJhzluZSJAyCHl
-         KDHQl1NaRM+22bygQFS0BZwbIYnJkFjCCpbyCChBe7v4tVDDlpAxXJyNUN8aF4gfKz
-         YpxqKUKt6EHmOFUwfy+UicM2ARUfs3ad6J4i8G23TtZysvdvYNYuMirpPM/LOIjwMr
-         EPrRGdBJCUpWnpTWP1bo0BNrHO6ZTKabpwV7jwfduJjAKB11mdConWYC+u5vWrPw5z
-         R/q5ZpD6KuTHA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D928C5C0440; Tue,  1 Mar 2022 11:34:45 -0800 (PST)
-Date:   Tue, 1 Mar 2022 11:34:45 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, mingo@kernel.org, tglx@linutronix.de,
-        bigeasy@linutronix.de, jgross@suse.com, riel@surriel.com,
-        urezki@gmail.com
-Subject: [PATCH RFC smp] Provide boot-time timeout for CSD lock diagnostics
-Message-ID: <20220301193445.GA4074635@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 1 Mar 2022 14:36:14 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60FC54FA2;
+        Tue,  1 Mar 2022 11:35:32 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 65C4C580265;
+        Tue,  1 Mar 2022 14:35:29 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Tue, 01 Mar 2022 14:35:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=16mwQIckypkkqp
+        Ecjd2L22L8yuEv2z/uqTwpc3kfpMY=; b=iZ3UGHNDWGSInQqU9onFl8YBofqUYA
+        TQAN/zqkfvHlUeoiBWdntO9kt5UhVZY4l3FLWzL0VYIH9rggSLM9rZCGA4aYE7wH
+        GFgm52JlUq7cMKKjrvve3WRehCRMzjhdusMEwWhHGK2t5TCU6QAZSYPmxOS9xkV9
+        9OmXDqZmUTJvxxrDGgDpPHPh04cVh2B+K9fRbUH7FVtzlf/E/h2Sf2siGm8Fu5nA
+        5sAlKKykMLFApl+7PqgQ9X4O5AT4MF3+W0ZnPbUX6ZeInTiG6tmRNE9TCxlmgOMm
+        rIB9VLBpTXveId4vA08hdQAyg2PelZgSC1Cn/7ps6MoUvw5XaRUqseUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=16mwQIckypkkqpEcj
+        d2L22L8yuEv2z/uqTwpc3kfpMY=; b=gWloxiBXsMqFj612AXala6iNuNwnPbedy
+        Kgxae0vj2PdNJ/TwK924OLpUVD/BFj/UTHjzNNiaNSTbxG5lWzuWBfoQKyBE8dQY
+        jct+v/eojkOl8TZ48IJ5eBCCIC/cSMa7jVMa5ImZ4PDXU8wSlkxZK64FNjhTi+4q
+        XpY45PLiUzKRy1QB+aCdydfF88WuE/1B1afWbL8XtJSyNz+SbRvaxik0uL5PPSfJ
+        Mugc7P1488f/8hWDfHraynxnQncK64b0nOhJfmMsn54rQi114hwrX+r9TcYa/K9V
+        UjhL2lXlY1E1vJTw8MbnKkGRcb6ZJj85wggJTxUlg92DLBivGPP5A==
+X-ME-Sender: <xms:gHUeYj2H99Jy0weNpQTN2xnK0o7VGuIfa4La4kfnYjL3gflzpFWA6w>
+    <xme:gHUeYiF_FxGHt4yRrFBsvQ1xu0F1Ex2fQ5wqW3Da3AAEDPl5JYiIsUvsS6OduXq2o
+    _DPosxGmAVU24hLF9k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhl
+    rgguvgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteeh
+    tdetleegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:gHUeYj4fBSvwechFjCe1_I0Ke1dPJSPVzH7AQCfp-QjSW__3QIBMTA>
+    <xmx:gHUeYo1tS8HUHgMw1U5N80mhmY7PjGe6PpUSLG2HkxEYurhwASAMMg>
+    <xmx:gHUeYmEXypFvOUwO0xDPxRTyBBz3P2_TraaL6FUt6UadjohCzdur-g>
+    <xmx:gXUeYu9D2SC-XZUqFwV23UtE2mR88wp0J0Wt3qFJUS4vSJNg0LWCLlGLZTs>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3E4C0F6007E; Tue,  1 Mar 2022 14:35:28 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <ccfd6922-560b-4965-be14-cb212e2f7928@www.fastmail.com>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+References: <20220228172141.744228435@linuxfoundation.org>
+Date:   Tue, 01 Mar 2022 14:35:28 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 4.9 00/29] 4.9.304-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Debugging of problems involving insanely long-running SMI handlers
-proceeds better if the CSD-lock timeout can be adjusted.  This commit
-therefore provides a new smp.csd_lock_timeout kernel boot parameter
-that specifies the timeout in milliseconds.  The default remains at the
-previously hard-coded value of five seconds.
+On Mon, Feb 28, 2022, at 12:23 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.304 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
 
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Juergen Gross <jgross@suse.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+4.9.304-rc1 compiled and booted with no errors or regressions on my x86_64 test system.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 2ac18d36805cf..6e38727af2552 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5333,6 +5333,17 @@
- 	smart2=		[HW]
- 			Format: <io1>[,<io2>[,...,<io8>]]
- 
-+	smp.csd_lock_timeout= [KNL]
-+			Specify the period of time in milliseconds
-+			that smp_call_function() and friends will wait
-+			for a CPU to release the CSD lock.  This is
-+			useful when diagnosing bugs involving CPUs
-+			disabling interrupts for extended periods
-+			of time.  Defaults to 5,000 milliseconds, and
-+			setting a value of zero disables this feature.
-+			This feature may be more efficiently disabled
-+			using the csdlock_debug- kernel parameter.
-+
- 	smsc-ircc2.nopnp	[HW] Don't use PNP to discover SMC devices
- 	smsc-ircc2.ircc_cfg=	[HW] Device configuration I/O port
- 	smsc-ircc2.ircc_sir=	[HW] SIR base I/O port
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 01a7c1706a58b..d82439bac4016 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -183,7 +183,9 @@ static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
- static DEFINE_PER_CPU(void *, cur_csd_info);
- static DEFINE_PER_CPU(struct cfd_seq_local, cfd_seq_local);
- 
--#define CSD_LOCK_TIMEOUT (5ULL * NSEC_PER_SEC)
-+static ulong csd_lock_timeout = 5000;  /* CSD lock timeout in milliseconds. */
-+module_param(csd_lock_timeout, ulong, 0444);
-+
- static atomic_t csd_bug_count = ATOMIC_INIT(0);
- static u64 cfd_seq;
- 
-@@ -329,6 +331,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
- 	u64 ts2, ts_delta;
- 	call_single_data_t *cpu_cur_csd;
- 	unsigned int flags = READ_ONCE(csd->node.u_flags);
-+	unsigned long long csd_lock_timeout_ns = csd_lock_timeout * NSEC_PER_MSEC;
- 
- 	if (!(flags & CSD_FLAG_LOCK)) {
- 		if (!unlikely(*bug_id))
-@@ -341,7 +344,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
- 
- 	ts2 = sched_clock();
- 	ts_delta = ts2 - *ts1;
--	if (likely(ts_delta <= CSD_LOCK_TIMEOUT))
-+	if (likely(ts_delta <= csd_lock_timeout_ns || csd_lock_timeout_ns <= 0))
- 		return false;
- 
- 	firsttime = !*bug_id;
+Tested-by: Slade Watkins <slade@sladewatkins.com>
+
+Cheers, 
+Slade

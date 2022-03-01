@@ -2,164 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31754C8B69
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8A34C8BCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbiCAMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S234798AbiCAMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbiCAMVZ (ORCPT
+        with ESMTP id S231470AbiCAMkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:21:25 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A7957170;
-        Tue,  1 Mar 2022 04:20:43 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K7GWx17dbzdZj5;
-        Tue,  1 Mar 2022 20:19:25 +0800 (CST)
-Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 1 Mar 2022 20:20:41 +0800
-Received: from huawei.com (10.175.124.27) by dggpemm500004.china.huawei.com
- (7.185.36.219) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 1 Mar
- 2022 20:20:40 +0800
-From:   Laibin Qiu <qiulaibin@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next v2] blk-throttle: Set BIO_THROTTLED when bio has been throttled
-Date:   Tue, 1 Mar 2022 20:39:19 +0800
-Message-ID: <20220301123919.2381579-1-qiulaibin@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        Tue, 1 Mar 2022 07:40:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D5E2983B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:39:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DD51612AE
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:39:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C16C340EE;
+        Tue,  1 Mar 2022 12:39:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646138397;
+        bh=hv62MHfq4rzzCEl2fTmyE2lMMF0TTQx9kHnlP0mZ57Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hCkTo8BNi0iiE3Mh2y/NkqcWKbhqtCehGr0gcy3/Ip1/62ExDHQWn726l5rzSAa9Y
+         C3rzMpEH6DeQ1/AYJ2dF/hMRRnWiytpnIWliRwxTHII7NIuVtmsTU2cvouHe7JE7TV
+         2IDQQKw10mgW2PggXEDAM+Srdev+vDTDpAKSBAfWc5Bm8sMgvdV6V+FmoEftpKfwgg
+         jwaYdK/BF9wueTa8Vl3FBOQhJx0K3moy0yExuvVxw6h3dyjpCTl+ucjjo5h0rddDSZ
+         /9UARZPdb4NWMkxlUCAfrxgDU60pWKE6g4sZOiLeLU9wHPraEFFgWCVk3nCPsmWLV1
+         wqaN0q/nZ/JSA==
+Date:   Tue, 1 Mar 2022 12:39:52 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        tangmeng@uniontech.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] ASoC: amd: Fix an ignored error return from
+ platform_get_irq_byname()
+Message-ID: <Yh4UGGuspsc/gAyY@sirena.org.uk>
+References: <20220301064920.37788-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500004.china.huawei.com (7.185.36.219)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uxmg+A5/E9EeDZt4"
+Content-Disposition: inline
+In-Reply-To: <20220301064920.37788-1-yang.lee@linux.alibaba.com>
+X-Cookie: You have a message from the operator.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1.In current process, all bio will set the BIO_THROTTLED flag
-after __blk_throtl_bio().
 
-2.If bio needs to be throttled, it will start the timer and
-stop submit bio directly. Bio will submit in
-blk_throtl_dispatch_work_fn() when the timer expires.But in
-the current process, if bio is throttled. The BIO_THROTTLED
-will be set to bio after timer start. If the bio has been
-completed, it may cause use-after-free blow.
+--uxmg+A5/E9EeDZt4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-BUG: KASAN: use-after-free in blk_throtl_bio+0x12f0/0x2c70
-Read of size 2 at addr ffff88801b8902d4 by task fio/26380
+On Tue, Mar 01, 2022 at 02:49:20PM +0800, Yang Li wrote:
 
- dump_stack+0x9b/0xce
- print_address_description.constprop.6+0x3e/0x60
- kasan_report.cold.9+0x22/0x3a
- blk_throtl_bio+0x12f0/0x2c70
- submit_bio_checks+0x701/0x1550
- submit_bio_noacct+0x83/0xc80
- submit_bio+0xa7/0x330
- mpage_readahead+0x380/0x500
- read_pages+0x1c1/0xbf0
- page_cache_ra_unbounded+0x471/0x6f0
- do_page_cache_ra+0xda/0x110
- ondemand_readahead+0x442/0xae0
- page_cache_async_ra+0x210/0x300
- generic_file_buffered_read+0x4d9/0x2130
- generic_file_read_iter+0x315/0x490
- blkdev_read_iter+0x113/0x1b0
- aio_read+0x2ad/0x450
- io_submit_one+0xc8e/0x1d60
- __se_sys_io_submit+0x125/0x350
- do_syscall_64+0x2d/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> -	adata->i2s_irq = platform_get_irq_byname(pdev, "acp_dai_irq");
+> -	if (adata->i2s_irq < 0)
+> +	adata->i2s_irq = ret = platform_get_irq_byname(pdev, "acp_dai_irq");
+> +	if (ret < 0)
+>  		return -ENODEV;
 
-Allocated by task 26380:
- kasan_save_stack+0x19/0x40
- __kasan_kmalloc.constprop.2+0xc1/0xd0
- kmem_cache_alloc+0x146/0x440
- mempool_alloc+0x125/0x2f0
- bio_alloc_bioset+0x353/0x590
- mpage_alloc+0x3b/0x240
- do_mpage_readpage+0xddf/0x1ef0
- mpage_readahead+0x264/0x500
- read_pages+0x1c1/0xbf0
- page_cache_ra_unbounded+0x471/0x6f0
- do_page_cache_ra+0xda/0x110
- ondemand_readahead+0x442/0xae0
- page_cache_async_ra+0x210/0x300
- generic_file_buffered_read+0x4d9/0x2130
- generic_file_read_iter+0x315/0x490
- blkdev_read_iter+0x113/0x1b0
- aio_read+0x2ad/0x450
- io_submit_one+0xc8e/0x1d60
- __se_sys_io_submit+0x125/0x350
- do_syscall_64+0x2d/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+If an error code is being returned we should report that error code
+rather than squashing it down to -ENODEV.
 
-Freed by task 0:
- kasan_save_stack+0x19/0x40
- kasan_set_track+0x1c/0x30
- kasan_set_free_info+0x1b/0x30
- __kasan_slab_free+0x111/0x160
- kmem_cache_free+0x94/0x460
- mempool_free+0xd6/0x320
- bio_free+0xe0/0x130
- bio_put+0xab/0xe0
- bio_endio+0x3a6/0x5d0
- blk_update_request+0x590/0x1370
- scsi_end_request+0x7d/0x400
- scsi_io_completion+0x1aa/0xe50
- scsi_softirq_done+0x11b/0x240
- blk_mq_complete_request+0xd4/0x120
- scsi_mq_done+0xf0/0x200
- virtscsi_vq_done+0xbc/0x150
- vring_interrupt+0x179/0x390
- __handle_irq_event_percpu+0xf7/0x490
- handle_irq_event_percpu+0x7b/0x160
- handle_irq_event+0xcc/0x170
- handle_edge_irq+0x215/0xb20
- common_interrupt+0x60/0x120
- asm_common_interrupt+0x1e/0x40
+--uxmg+A5/E9EeDZt4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fix this by move BIO_THROTTLED set into the queue_lock.
+-----BEGIN PGP SIGNATURE-----
 
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
----
- block/blk-throttle.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIeFBcACgkQJNaLcl1U
+h9CFbgf/UYP8faM7a5tWC5+cSxh/9F9ahjHk7TXhiiQvjPIoYkrlThUWycOcaTSX
+HJieKH2i6j9k3IjeZZcz37jTDi7xrczrqDXCe4KKEd8yx3+Ez7fnVdZIf71ffzKI
+mZfaVT4VxwwImIaJRoDnHbx1a607Yj1AjiJz6fCA+s9LpXq8bF/cGd9TDtbdLm25
+ya7GoTU3S/tasM1nU30vcvqXc0hBbZtwvt6I99WM24B5V1dxyUw0SUO4lXj59hSe
+HipddydH6lpW/GojwROrEyaxawBNaB0W6GXhXkaXOFHw+nUzrILNp+Okjgf1HUS7
+w8ZY4LHBFQ70HxHCzWC5/CRChrVCCw==
+=rnGn
+-----END PGP SIGNATURE-----
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index a3b3ebc72dd4..9d4ad9317509 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -2145,13 +2145,14 @@ bool __blk_throtl_bio(struct bio *bio)
- 	}
- 
- out_unlock:
--	spin_unlock_irq(&q->queue_lock);
- 	bio_set_flag(bio, BIO_THROTTLED);
- 
- #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
- 	if (throttled || !td->track_bio_latency)
- 		bio->bi_issue.value |= BIO_ISSUE_THROTL_SKIP_LATENCY;
- #endif
-+	spin_unlock_irq(&q->queue_lock);
-+
- 	rcu_read_unlock();
- 	return throttled;
- }
--- 
-2.22.0
-
+--uxmg+A5/E9EeDZt4--

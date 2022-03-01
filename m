@@ -2,337 +2,558 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FC24C8DFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A3E4C8DE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiCAOj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S234797AbiCAOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235326AbiCAOjO (ORCPT
+        with ESMTP id S229780AbiCAOhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:39:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9172E5622E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646145477;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0tWrE2ecUAeuayWTb6qWiE2IZ32+GPry/OrGiauA+5A=;
-        b=H/8vPkbLUL9amYD9t5HAIc53N7QPAcCKt1Wlasx+17lIqUXWjtq9U2HYb9bCQDWMIvNCDM
-        r0d6Gmo7pzRqyvtmlgXrIvqjJKnEcbSCDg/uHjLybE1WeP0QyySDr1RlByGYGaDxy4iFyY
-        Hu9LKibGwjg9AZjA8D3nuHHD/MrI2LE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-6h4I2hSTOm6QLva9BWCYOQ-1; Tue, 01 Mar 2022 09:37:52 -0500
-X-MC-Unique: 6h4I2hSTOm6QLva9BWCYOQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 1 Mar 2022 09:37:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B49A1BE7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:37:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 79D89801DDB;
-        Tue,  1 Mar 2022 14:37:50 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 99C8E842C9;
-        Tue,  1 Mar 2022 14:37:39 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EA4FB81A31
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B61C340EE;
+        Tue,  1 Mar 2022 14:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646145421;
+        bh=irkWJT8/ZLr+fxlu6Qj278EE4XweUHQcnlXn48/Y3co=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SNhbpgA9Ngu+KhFXolqQKv4Bt3ffDPR6lodITHB4ulcNeWnBEik3rPPTuvc61swKu
+         ZDFXoDYnaV+KAf0uAfnXGOQDp0hefwS64qMeozEMOsO9Ky0gA+3QN84IYDtlnwhMv3
+         AfMNw3oeg74DbGL3MX0DurL0/inOUZYfJ/hKH1YiZPRIEGVEe0amblS8DQNuNWBip2
+         g/5jGI6il1xIcUwdZCrjG4GHIsrdFJCPI+pPUqpRF02DTkiQrLSKy9F1uw9ZcW8YF+
+         Akrn1SxNbYZ5mN7D6d0gqLKZc5s4FH5SkZSuHXPeIp4+O0SyNp+HYJylyQLf2mYboR
+         lGFF+rq7DyyPA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nP3cY-00BQec-4X; Tue, 01 Mar 2022 14:36:58 +0000
+Date:   Tue, 01 Mar 2022 14:36:57 +0000
+Message-ID: <87czj53fjq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH v3 7/7] KVM: x86: SVM: allow AVIC to co-exist with a nested guest running
-Date:   Tue,  1 Mar 2022 16:36:50 +0200
-Message-Id: <20220301143650.143749-8-mlevitsk@redhat.com>
-In-Reply-To: <20220301143650.143749-1-mlevitsk@redhat.com>
-References: <20220301143650.143749-1-mlevitsk@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] RISC-V: Treat IPIs as normal Linux IRQs
+In-Reply-To: <20220301042722.401113-4-apatel@ventanamicro.com>
+References: <20220301042722.401113-1-apatel@ventanamicro.com>
+        <20220301042722.401113-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inhibit the AVIC of the vCPU that is running nested for the duration of the
-nested run, so that all interrupts arriving from both its vCPU siblings
-and from KVM are delivered using normal IPIs and cause that vCPU to vmexit.
+On Tue, 01 Mar 2022 04:27:19 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> Currently, the RISC-V kernel provides arch specific hooks (i.e.
+> struct riscv_ipi_ops) to register IPI handling methods. The stats
+> gathering of IPIs is also arch specific in the RISC-V kernel.
+> 
+> Other architectures (such as ARM, ARM64, and MIPS) have moved away
+> from custom arch specific IPI handling methods. Currently, these
+> architectures have Linux irqchip drivers providing a range of Linux
+> IRQ numbers to be used as IPIs and IPI triggering is done using
+> generic IPI APIs. This approach allows architectures to treat IPIs
+> as normal Linux IRQs and IPI stats gathering is done by the generic
+> Linux IRQ subsystem.
+> 
+> We extend the RISC-V IPI handling as-per above approach so that arch
+> specific IPI handling methods (struct riscv_ipi_ops) can be removed
+> and the IPI handling is done through the Linux IRQ subsystem.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/Kconfig                |   1 +
+>  arch/riscv/include/asm/ipi-mux.h  |  43 ++++++
+>  arch/riscv/include/asm/sbi.h      |   2 +
+>  arch/riscv/include/asm/smp.h      |  35 +++--
+>  arch/riscv/kernel/Makefile        |   1 +
+>  arch/riscv/kernel/cpu-hotplug.c   |   3 +-
+>  arch/riscv/kernel/ipi-mux.c       | 222 ++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/irq.c           |   3 +-
+>  arch/riscv/kernel/sbi.c           |  13 +-
+>  arch/riscv/kernel/smp.c           | 153 ++++++++++----------
+>  arch/riscv/kernel/smpboot.c       |   5 +-
+>  drivers/clocksource/timer-clint.c |   8 +-
+>  drivers/irqchip/irq-riscv-intc.c  |  55 ++++----
+>  13 files changed, 405 insertions(+), 139 deletions(-)
 
-Note that unlike normal AVIC inhibition, there is no need to
-update the AVIC mmio memslot, because the nested guest uses its
-own set of paging tables.
-That also means that AVIC doesn't need to be inhibited VM wide.
+This patch is huge and touches way too many things to be reviewed as
+such. Please split arch-specific stuff from clocksource and irqchip,
+going through a transition phase.
 
-Note that in the theory when a nested guest doesn't intercept
-physical interrupts, we could continue using AVIC to deliver them
-to it but don't bother doing so for now. Plus when nested AVIC
-is implemented, the nested guest will likely use it, which will
-not allow this optimization to be used
+More below.
 
-(can't use real AVIC to support both L1 and L2 at the same time)
+>  create mode 100644 arch/riscv/include/asm/ipi-mux.h
+>  create mode 100644 arch/riscv/kernel/ipi-mux.c
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 5adcbd9b5e88..167681d6d3f8 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -54,6 +54,7 @@ config RISCV
+>  	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
+>  	select GENERIC_IDLE_POLL_SETUP
+>  	select GENERIC_IOREMAP if MMU
+> +	select GENERIC_IRQ_IPI
+>  	select GENERIC_IRQ_MULTI_HANDLER
+>  	select GENERIC_IRQ_SHOW
+>  	select GENERIC_IRQ_SHOW_LEVEL
+> diff --git a/arch/riscv/include/asm/ipi-mux.h b/arch/riscv/include/asm/ipi-mux.h
+> new file mode 100644
+> index 000000000000..988e2bba372a
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/ipi-mux.h
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#ifndef _ASM_RISCV_IPI_MUX_H
+> +#define _ASM_RISCV_IPI_MUX_H
+> +
+> +struct cpumask;
+> +
+> +#ifdef CONFIG_SMP
+> +
+> +/* Handle muxed IPIs */
+> +void riscv_ipi_mux_handle_irq(void);
+> +
+> +/* Create irq_domain for muxed IPIs */
+> +struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
+> +			void (*clear_ipi)(void),
+> +			void (*send_ipi)(const struct cpumask *mask));
+> +
+> +/* Destroy irq_domain for muxed IPIs */
+> +void riscv_ipi_mux_destroy(struct irq_domain *d);
+> +
+> +#else
+> +
+> +static inline void riscv_ipi_mux_handle_irq(void)
+> +{
+> +}
+> +
+> +static inline struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
+> +			void (*clear_ipi)(void),
+> +			void (*send_ipi)(const struct cpumask *mask))
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline void riscv_ipi_mux_destroy(struct irq_domain *d)
+> +{
+> +}
+> +
+> +#endif
+> +
+> +#endif /* _ASM_RISCV_IPI_MUX_H */
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index 06133b4f8e20..edd2c3135b4a 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -133,6 +133,7 @@ struct sbiret {
+>  };
+>  
+>  void sbi_init(void);
+> +void sbi_ipi_init(void);
+>  struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+>  			unsigned long arg1, unsigned long arg2,
+>  			unsigned long arg3, unsigned long arg4,
+> @@ -202,6 +203,7 @@ static inline unsigned long sbi_mk_version(unsigned long major,
+>  int sbi_err_map_linux_errno(int err);
+>  #else /* CONFIG_RISCV_SBI */
+>  static inline int sbi_remote_fence_i(const struct cpumask *cpu_mask) { return -1; }
+> +static inline void sbi_ipi_init(void) { }
+>  static inline void sbi_init(void) {}
+>  #endif /* CONFIG_RISCV_SBI */
+>  #endif /* _ASM_RISCV_SBI_H */
+> diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
+> index 23170c933d73..178fe4ada592 100644
+> --- a/arch/riscv/include/asm/smp.h
+> +++ b/arch/riscv/include/asm/smp.h
+> @@ -15,11 +15,6 @@
+>  struct seq_file;
+>  extern unsigned long boot_cpu_hartid;
+>  
+> -struct riscv_ipi_ops {
+> -	void (*ipi_inject)(const struct cpumask *target);
+> -	void (*ipi_clear)(void);
+> -};
+> -
+>  #ifdef CONFIG_SMP
+>  /*
+>   * Mapping between linux logical cpu index and hartid.
+> @@ -33,9 +28,6 @@ void show_ipi_stats(struct seq_file *p, int prec);
+>  /* SMP initialization hook for setup_arch */
+>  void __init setup_smp(void);
+>  
+> -/* Called from C code, this handles an IPI. */
+> -void handle_IPI(struct pt_regs *regs);
+> -
+>  /* Hook for the generic smp_call_function_many() routine. */
+>  void arch_send_call_function_ipi_mask(struct cpumask *mask);
+>  
+> @@ -44,11 +36,17 @@ void arch_send_call_function_single_ipi(int cpu);
+>  
+>  int riscv_hartid_to_cpuid(int hartid);
+>  
+> -/* Set custom IPI operations */
+> -void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
+> +/* Enable IPI for CPU hotplug */
+> +void riscv_ipi_enable(void);
+> +
+> +/* Disable IPI for CPU hotplug */
+> +void riscv_ipi_disable(void);
+>  
+> -/* Clear IPI for current CPU */
+> -void riscv_clear_ipi(void);
+> +/* Check if IPI interrupt numbers are available */
+> +bool riscv_ipi_have_virq_range(void);
+> +
+> +/* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
+> +void riscv_ipi_set_virq_range(int virq, int nr_irqs);
+>  
+>  /* Secondary hart entry */
+>  asmlinkage void smp_callin(void);
+> @@ -82,11 +80,20 @@ static inline unsigned long cpuid_to_hartid_map(int cpu)
+>  	return boot_cpu_hartid;
+>  }
+>  
+> -static inline void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
+> +static inline void riscv_ipi_enable(void)
+>  {
+>  }
+>  
+> -static inline void riscv_clear_ipi(void)
+> +static inline void riscv_ipi_disable(void)
+> +{
+> +}
+> +
+> +static inline bool riscv_ipi_have_virq_range(void)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline void riscv_ipi_set_virq_range(int virq, int nr)
+>  {
+>  }
+>  
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index ffc87e76b1dd..5047723e5527 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -42,6 +42,7 @@ obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
+>  obj-$(CONFIG_FPU)		+= fpu.o
+>  obj-$(CONFIG_SMP)		+= smpboot.o
+>  obj-$(CONFIG_SMP)		+= smp.o
+> +obj-$(CONFIG_SMP)		+= ipi-mux.o
+>  obj-$(CONFIG_SMP)		+= cpu_ops.o
+>  
+>  obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
+> diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
+> index f7a832e3a1d1..39235cf50652 100644
+> --- a/arch/riscv/kernel/cpu-hotplug.c
+> +++ b/arch/riscv/kernel/cpu-hotplug.c
+> @@ -13,7 +13,7 @@
+>  #include <asm/irq.h>
+>  #include <asm/cpu_ops.h>
+>  #include <asm/numa.h>
+> -#include <asm/sbi.h>
+> +#include <asm/smp.h>
+>  
+>  bool cpu_has_hotplug(unsigned int cpu)
+>  {
+> @@ -43,6 +43,7 @@ int __cpu_disable(void)
+>  	remove_cpu_topology(cpu);
+>  	numa_remove_cpu(cpu);
+>  	set_cpu_online(cpu, false);
+> +	riscv_ipi_disable();
+>  	irq_migrate_all_off_this_cpu();
+>  
+>  	return ret;
+> diff --git a/arch/riscv/kernel/ipi-mux.c b/arch/riscv/kernel/ipi-mux.c
+> new file mode 100644
+> index 000000000000..3a0405f0e0de
+> --- /dev/null
+> +++ b/arch/riscv/kernel/ipi-mux.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Multiplex several IPIs over a single HW IPI.
+> + *
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "riscv-ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/smp.h>
+> +#include <asm/ipi-mux.h>
+> +
+> +struct ipi_mux {
+> +	struct irq_domain *domain;
+> +	int parent_virq;
+> +	void (*clear_ipi)(void);
+> +	void (*send_ipi)(const struct cpumask *mask);
+> +};
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/include/asm/kvm-x86-ops.h |  1 +
- arch/x86/include/asm/kvm_host.h    |  7 ++++++-
- arch/x86/kvm/svm/avic.c            |  6 +++++-
- arch/x86/kvm/svm/nested.c          | 15 ++++++++++-----
- arch/x86/kvm/svm/svm.c             | 31 +++++++++++++++++++-----------
- arch/x86/kvm/svm/svm.h             |  1 +
- arch/x86/kvm/x86.c                 | 15 +++++++++++++--
- 7 files changed, 56 insertions(+), 20 deletions(-)
+Why do you need this in the arch code? It really looks like something
+that is irqchip specific (single IPI signal on which actual IPIs are
+overlayed). It is also something that other irqchips are already
+implementing, so there is potential for consolidation.
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 29affccb353cd..eb16e32117610 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -126,6 +126,7 @@ KVM_X86_OP_OPTIONAL(migrate_timers)
- KVM_X86_OP(msr_filter_changed)
- KVM_X86_OP(complete_emulated_msr)
- KVM_X86_OP(vcpu_deliver_sipi_vector)
-+KVM_X86_OP_OPTIONAL_RET0(vcpu_has_apicv_inhibit_condition);
- 
- #undef KVM_X86_OP
- #undef KVM_X86_OP_OPTIONAL
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index ccec837e520d8..efe7414361de8 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1039,7 +1039,6 @@ struct kvm_x86_msr_filter {
- 
- #define APICV_INHIBIT_REASON_DISABLE    0
- #define APICV_INHIBIT_REASON_HYPERV     1
--#define APICV_INHIBIT_REASON_NESTED     2
- #define APICV_INHIBIT_REASON_IRQWIN     3
- #define APICV_INHIBIT_REASON_PIT_REINJ  4
- #define APICV_INHIBIT_REASON_X2APIC	5
-@@ -1490,6 +1489,12 @@ struct kvm_x86_ops {
- 	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
- 
- 	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
-+
-+	/*
-+	 * Returns true if for some reason APICv (e.g guest mode)
-+	 * must be inhibited on this vCPU
-+	 */
-+	bool (*vcpu_has_apicv_inhibit_condition)(struct kvm_vcpu *vcpu);
- };
- 
- struct kvm_x86_nested_ops {
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index aea0b13773fd3..d5ce0868c5a74 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -357,6 +357,11 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
- 	return 1;
- }
- 
-+bool avic_has_vcpu_inhibit_condition(struct kvm_vcpu *vcpu)
-+{
-+	return is_guest_mode(vcpu);
-+}
-+
- static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
- {
- 	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
-@@ -859,7 +864,6 @@ bool avic_check_apicv_inhibit_reasons(ulong bit)
- 	ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
- 			  BIT(APICV_INHIBIT_REASON_ABSENT) |
- 			  BIT(APICV_INHIBIT_REASON_HYPERV) |
--			  BIT(APICV_INHIBIT_REASON_NESTED) |
- 			  BIT(APICV_INHIBIT_REASON_IRQWIN) |
- 			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
- 			  BIT(APICV_INHIBIT_REASON_X2APIC) |
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 4f8b5a330096e..573e0be84e874 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -616,11 +616,6 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
- 	 * exit_int_info, exit_int_info_err, next_rip, insn_len, insn_bytes.
- 	 */
- 
--	/*
--	 * Also covers avic_vapic_bar, avic_backing_page, avic_logical_id,
--	 * avic_physical_id.
--	 */
--	WARN_ON(kvm_apicv_activated(svm->vcpu.kvm));
- 
- 
- 
-@@ -746,6 +741,9 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
- 
- 	svm_set_gif(svm, true);
- 
-+	if (kvm_vcpu_apicv_active(vcpu))
-+		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-+
- 	return 0;
- }
- 
-@@ -1018,6 +1016,13 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 	if (unlikely(svm->vmcb->save.rflags & X86_EFLAGS_TF))
- 		kvm_queue_exception(&(svm->vcpu), DB_VECTOR);
- 
-+	/*
-+	 * Un-inhibit the AVIC right away, so that other vCPUs can start
-+	 * to benefit from VM-exit less IPI right away
-+	 */
-+	if (kvm_apicv_activated(vcpu->kvm))
-+		kvm_vcpu_update_apicv(vcpu);
-+
- 	return 0;
- }
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index a26b4c899899e..ed620d6f68b91 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1474,7 +1474,8 @@ static void svm_set_vintr(struct vcpu_svm *svm)
- 	/*
- 	 * The following fields are ignored when AVIC is enabled
- 	 */
--	WARN_ON(kvm_apicv_activated(svm->vcpu.kvm));
-+	if (!is_guest_mode(&svm->vcpu))
-+		WARN_ON(kvm_apicv_activated(svm->vcpu.kvm));
- 
- 	svm_set_intercept(svm, INTERCEPT_VINTR);
- 
-@@ -2968,10 +2969,16 @@ static int interrupt_window_interception(struct kvm_vcpu *vcpu)
- 	svm_clear_vintr(to_svm(vcpu));
- 
- 	/*
--	 * For AVIC, the only reason to end up here is ExtINTs.
-+	 * If not running nested, for AVIC, the only reason to end up here is ExtINTs.
- 	 * In this case AVIC was temporarily disabled for
- 	 * requesting the IRQ window and we have to re-enable it.
-+	 *
-+	 * If running nested, still uninhibit the AVIC in case irq window
-+	 * was requested when it was not running nested.
-+	 * All vCPUs which run nested will have their AVIC still
-+	 * inhibited due to AVIC inhibition override for that.
- 	 */
-+
- 	kvm_request_apicv_update(vcpu->kvm, true, APICV_INHIBIT_REASON_IRQWIN);
- 
- 	++vcpu->stat.irq_window_exits;
-@@ -3569,8 +3576,16 @@ static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
- 		 * unless we have pending ExtINT since it cannot be injected
- 		 * via AVIC. In such case, we need to temporarily disable AVIC,
- 		 * and fallback to injecting IRQ via V_IRQ.
-+		 *
-+		 * If running nested, this vCPU will use separate page tables
-+		 * which don't have L1's AVIC mapped, and the AVIC is
-+		 * already inhibited thus there is no need for global
-+		 * AVIC inhibition.
- 		 */
--		kvm_request_apicv_update(vcpu->kvm, false, APICV_INHIBIT_REASON_IRQWIN);
-+
-+		if (!is_guest_mode(vcpu))
-+			kvm_request_apicv_update(vcpu->kvm, false, APICV_INHIBIT_REASON_IRQWIN);
-+
- 		svm_set_vintr(svm);
- 	}
- }
-@@ -4041,14 +4056,6 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		if (guest_cpuid_has(vcpu, X86_FEATURE_X2APIC))
- 			kvm_request_apicv_update(vcpu->kvm, false,
- 						 APICV_INHIBIT_REASON_X2APIC);
--
--		/*
--		 * Currently, AVIC does not work with nested virtualization.
--		 * So, we disable AVIC when cpuid for SVM is set in the L1 guest.
--		 */
--		if (nested && guest_cpuid_has(vcpu, X86_FEATURE_SVM))
--			kvm_request_apicv_update(vcpu->kvm, false,
--						 APICV_INHIBIT_REASON_NESTED);
- 	}
- 	init_vmcb_after_set_cpuid(vcpu);
- }
-@@ -4710,6 +4717,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.complete_emulated_msr = svm_complete_emulated_msr,
- 
- 	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
-+	.vcpu_has_apicv_inhibit_condition = avic_has_vcpu_inhibit_condition,
- };
- 
- /*
-@@ -4912,6 +4920,7 @@ static __init int svm_hardware_setup(void)
- 	} else {
- 		svm_x86_ops.vcpu_blocking = NULL;
- 		svm_x86_ops.vcpu_unblocking = NULL;
-+		svm_x86_ops.vcpu_has_apicv_inhibit_condition = NULL;
- 	}
- 
- 	if (vls) {
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 7e2f9bddf47dd..641f3bb23217d 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -618,6 +618,7 @@ int avic_pi_update_irte(struct kvm *kvm, unsigned int host_irq,
- void avic_vcpu_blocking(struct kvm_vcpu *vcpu);
- void avic_vcpu_unblocking(struct kvm_vcpu *vcpu);
- void avic_ring_doorbell(struct kvm_vcpu *vcpu);
-+bool avic_has_vcpu_inhibit_condition(struct kvm_vcpu *vcpu);
- 
- /* sev.c */
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index c712c33c1521f..14b964eb079e7 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9681,6 +9681,11 @@ void kvm_make_scan_ioapic_request(struct kvm *kvm)
- 	kvm_make_all_cpus_request(kvm, KVM_REQ_SCAN_IOAPIC);
- }
- 
-+static bool vcpu_has_apicv_inhibit_condition(struct kvm_vcpu *vcpu)
-+{
-+	return static_call(kvm_x86_vcpu_has_apicv_inhibit_condition)(vcpu);
-+}
-+
- void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
- {
- 	bool activate;
-@@ -9690,7 +9695,9 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
- 
- 	down_read(&vcpu->kvm->arch.apicv_update_lock);
- 
--	activate = kvm_apicv_activated(vcpu->kvm);
-+	activate = kvm_apicv_activated(vcpu->kvm) &&
-+		   !vcpu_has_apicv_inhibit_condition(vcpu);
-+
- 	if (vcpu->arch.apicv_active == activate)
- 		goto out;
- 
-@@ -10091,7 +10098,11 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 		 * per-VM state, and responsing vCPUs must wait for the update
- 		 * to complete before servicing KVM_REQ_APICV_UPDATE.
- 		 */
--		WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-+		if (vcpu_has_apicv_inhibit_condition(vcpu))
-+			WARN_ON_ONCE(kvm_vcpu_apicv_active(vcpu));
-+		else
-+			WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-+
- 
- 		exit_fastpath = static_call(kvm_x86_vcpu_run)(vcpu);
- 		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+> +
+> +static struct ipi_mux ipi_mux_priv;
+> +static DEFINE_PER_CPU(unsigned long, ipi_mux_bits);
+> +
+> +static void ipi_mux_dummy(struct irq_data *d)
+> +{
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	int cpu;
+> +
+> +	/* Barrier before doing atomic bit update to IPI bits */
+> +	smp_mb__before_atomic();
+> +
+> +	for_each_cpu(cpu, mask)
+> +		set_bit(d->hwirq, per_cpu_ptr(&ipi_mux_bits, cpu));
+> +
+> +	/* Barrier after doing atomic bit update to IPI bits */
+> +	smp_mb__after_atomic();
+> +
+> +	if (ipi_mux_priv.send_ipi)
+> +		ipi_mux_priv.send_ipi(mask);
+> +}
+> +
+> +static struct irq_chip ipi_mux_chip = {
+> +	.name		= "RISC-V IPI Mux",
+> +	.irq_mask	= ipi_mux_dummy,
+> +	.irq_unmask	= ipi_mux_dummy,
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
+> +
+> +static int ipi_mux_domain_map(struct irq_domain *d, unsigned int irq,
+> +			      irq_hw_number_t hwirq)
+> +{
+> +	irq_set_percpu_devid(irq);
+> +	irq_domain_set_info(d, irq, hwirq, &ipi_mux_chip, d->host_data,
+> +			    handle_percpu_devid_irq, NULL, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	int i, ret;
+> +	irq_hw_number_t hwirq;
+> +	unsigned int type = IRQ_TYPE_NONE;
+> +	struct irq_fwspec *fwspec = arg;
+> +
+> +	ret = irq_domain_translate_onecell(d, fwspec, &hwirq, &type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		ret = ipi_mux_domain_map(d, virq + i, hwirq + i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.translate	= irq_domain_translate_onecell,
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +void riscv_ipi_mux_handle_irq(void)
+> +{
+> +	int err;
+> +	unsigned long irqs, *bits = this_cpu_ptr(&ipi_mux_bits);
+> +	irq_hw_number_t hwirq;
+> +
+> +	while (true) {
+> +		if (ipi_mux_priv.clear_ipi)
+> +			ipi_mux_priv.clear_ipi();
+> +
+> +		/* Order bit clearing and data access. */
+> +		mb();
+> +
+> +		irqs = xchg(bits, 0);
+> +		if (!irqs)
+> +			break;
+> +
+> +		for_each_set_bit(hwirq, &irqs, BITS_PER_LONG) {
+> +			err = generic_handle_domain_irq(ipi_mux_priv.domain,
+> +							hwirq);
+> +			if (unlikely(err))
+> +				pr_warn_ratelimited(
+> +					"can't find mapping for hwirq %lu\n",
+> +					hwirq);
+> +		}
+> +	}
+> +}
+> +
+> +static void ipi_mux_handle_irq(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +
+> +	chained_irq_enter(chip, desc);
+> +	riscv_ipi_mux_handle_irq();
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static int ipi_mux_dying_cpu(unsigned int cpu)
+> +{
+> +	if (ipi_mux_priv.parent_virq)
+> +		disable_percpu_irq(ipi_mux_priv.parent_virq);
+> +	return 0;
+> +}
+> +
+> +static int ipi_mux_starting_cpu(unsigned int cpu)
+> +{
+> +	if (ipi_mux_priv.parent_virq)
+> +		enable_percpu_irq(ipi_mux_priv.parent_virq,
+> +			irq_get_trigger_type(ipi_mux_priv.parent_virq));
+> +	return 0;
+> +}
+> +
+> +struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
+> +			void (*clear_ipi)(void),
+> +			void (*send_ipi)(const struct cpumask *mask))
+> +{
+
+There really shouldn't be a need for such a registration interface
+anyway (the current idiom is to allocate IPIs in the root irqchip, and
+pass them to the arch code).
+
+Why can't you model it after the existing architectures?
+
+> +	int virq, parent_virq = 0;
+> +	struct irq_domain *domain;
+> +	struct irq_fwspec ipi;
+> +
+> +	if (ipi_mux_priv.domain || riscv_ipi_have_virq_range())
+> +		return NULL;
+> +
+> +	if (use_soft_irq) {
+> +		domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
+> +						  DOMAIN_BUS_ANY);
+> +		if (!domain) {
+> +			pr_err("unable to find INTC IRQ domain\n");
+> +			return NULL;
+> +		}
+> +
+> +		parent_virq = irq_create_mapping(domain, RV_IRQ_SOFT);
+> +		if (!parent_virq) {
+> +			pr_err("unable to create INTC IRQ mapping\n");
+> +			return NULL;
+> +		}
+> +	}
+> +
+> +	domain = irq_domain_add_linear(NULL, BITS_PER_LONG,
+> +				       &ipi_mux_domain_ops, NULL);
+> +	if (!domain) {
+> +		pr_err("unable to add IPI Mux domain\n");
+> +		goto fail_dispose_mapping;
+> +	}
+> +
+> +	ipi.fwnode = domain->fwnode;
+> +	ipi.param_count = 1;
+> +	ipi.param[0] = 0;
+> +	virq = __irq_domain_alloc_irqs(domain, -1, BITS_PER_LONG,
+> +				       NUMA_NO_NODE, &ipi, false, NULL);
+> +	if (virq <= 0) {
+> +		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> +		goto fail_domain_remove;
+> +	}
+> +
+> +	ipi_mux_priv.domain = domain;
+> +	ipi_mux_priv.parent_virq = parent_virq;
+> +	ipi_mux_priv.clear_ipi = clear_ipi;
+> +	ipi_mux_priv.send_ipi = send_ipi;
+> +
+> +	if (parent_virq)
+> +		irq_set_chained_handler(parent_virq, ipi_mux_handle_irq);
+> +
+> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +			  "irqchip/riscv/ipi-mux:starting",
+> +			  ipi_mux_starting_cpu, ipi_mux_dying_cpu);
+> +
+> +	riscv_ipi_set_virq_range(virq, BITS_PER_LONG);
+> +
+> +	return ipi_mux_priv.domain;
+> +
+> +fail_domain_remove:
+> +	irq_domain_remove(domain);
+> +fail_dispose_mapping:
+> +	if (parent_virq)
+> +		irq_dispose_mapping(parent_virq);
+> +	return NULL;
+> +}
+> +
+> +void riscv_ipi_mux_destroy(struct irq_domain *d)
+> +{
+> +	if (!d || ipi_mux_priv.domain != d)
+> +		return;
+> +
+> +	irq_domain_remove(ipi_mux_priv.domain);
+> +	if (ipi_mux_priv.parent_virq)
+> +		irq_dispose_mapping(ipi_mux_priv.parent_virq);
+> +	memset(&ipi_mux_priv, 0, sizeof(ipi_mux_priv));
+> +}
+
+Err... Under which circumstances do you destroy such an irqdomain?
+Once all the CPUs have been removed from the machine?
+
+I really think you should aim for a simpler abstraction. The arch code
+should deal with the interrupts themselves, and leave the
+*implementation* of the IPI to the driver code, potentially shared
+across irqchips. This would avoid creating more new interfaces that
+are specific to one architecture or another.
+
+	M.
+
 -- 
-2.26.3
-
+Without deviation from the norm, progress is not possible.

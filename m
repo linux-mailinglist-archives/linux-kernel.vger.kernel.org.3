@@ -2,120 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851D74C8527
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48784C852C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiCAH3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        id S232966AbiCAHaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbiCAH3f (ORCPT
+        with ESMTP id S232199AbiCAHaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:29:35 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EA944740;
-        Mon, 28 Feb 2022 23:28:55 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so1485879pjb.0;
-        Mon, 28 Feb 2022 23:28:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ux6f0w+/rugl91b1fITi77MXLqhRABNU0vOsRDVUGr8=;
-        b=YTabYLTKvQUeycuTSVEF/GiCuWpt3dgzOnXmHVGIW5yXqUpnGHRl3YRcr38JpbcBBW
-         Dm772Fy0OzObt5rK9mLNV/0VXmDdFEYx+mI41ROMORsvCAd9He+WqFpMQr1bYIavmPLw
-         MsiK3pf7qxNeYndwU8tfJFmIoagPMRRwyMoshRqDaKmolGlQzEuZmumkFKJ7ibMY2Bny
-         IualYTy+dBZltLnDYQuMSVA5Mh2jeC+pIz5I9HFRprbwHNScxq5H7NQ/17cwatg/WdG5
-         UTlzxG8bk0JAp800rnrOmHSkmoTAZHmXw1NALtBdORhqF6bU/ldszfPZ7nLinp9vLLPH
-         bwgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ux6f0w+/rugl91b1fITi77MXLqhRABNU0vOsRDVUGr8=;
-        b=f5xcHe7zCxCMCpuXuT3PWLuFayFczaVgAuNsZZbNJCIA4EGqCa8s1TfD9CHIo3IEHE
-         upwBrfvb5unNwklALK3aHB4QN/zpDacRnof7mUbSihqy5Ikl6vcasFe+RrKX0kTzKw5q
-         vOM63mZtDpwd/vHnN7V9GaPcRgaVHr+LR62UGcUo1aSd1ynH56DLay0v1FYvY6FBM/1U
-         BLBUiR2I900kFgP126LJ75pHsrgX0IGpJUZPzHrA2KoxUHOsUg6tKk3lnhwl/PgNNE8D
-         4xuXrgYThbvGLcg/NsnYws448xjd3JtFFW5vTqDLAM4bhOoolXy1vo/My4oo9+7xEXC9
-         2Ppw==
-X-Gm-Message-State: AOAM5322Fd0SD2m9L3884mPKFj3qqxAkeGqFnwA0uQDReS8Uni2kddPL
-        +j+txx98akkJQ2iB4vbDkKQ=
-X-Google-Smtp-Source: ABdhPJyCTEG7fLlL28LAVzdKcGkZaYShISnGyiIPsrN+MzQul1f6SxT7Vb0F786PVAqpULT+rWwcRQ==
-X-Received: by 2002:a17:903:1206:b0:151:7d67:2924 with SMTP id l6-20020a170903120600b001517d672924mr2920678plh.45.1646119734656;
-        Mon, 28 Feb 2022 23:28:54 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:c174:264:5e49:f2cb])
-        by smtp.gmail.com with ESMTPSA id w17-20020a056a0014d100b004f1063290basm15953880pfu.15.2022.02.28.23.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 23:28:53 -0800 (PST)
-Date:   Mon, 28 Feb 2022 23:28:51 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     William Mahon <wmahon@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        William Mahon <wmahon@google.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
-Subject: Re: [PATCH v2] HID: Add mapping for KEY_ALL_APPLICATIONS
-Message-ID: <Yh3LMzmru8cngoGT@google.com>
-References: <20220218233350.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
+        Tue, 1 Mar 2022 02:30:15 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFF0443F2;
+        Mon, 28 Feb 2022 23:29:34 -0800 (PST)
+X-UUID: cf31f9fe476b4219a27bd1188e711ac2-20220301
+X-UUID: cf31f9fe476b4219a27bd1188e711ac2-20220301
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 360376086; Tue, 01 Mar 2022 15:29:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 1 Mar 2022 15:29:28 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 15:29:27 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>
+CC:     <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH 0/2] ASoC: mediatek: mt8192-mt6359: support machine
+Date:   Tue, 1 Mar 2022 15:29:22 +0800
+Message-ID: <20220301072924.24814-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218233350.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 11:35:49PM +0000, William Mahon wrote:
-> This patch adds a new key definition for KEY_ALL_APPLICATIONS
-> which is an alias of KEY_DASHBOARD.
-> 
-> It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
+The series reuses mt8192-mt6359-rt1015-rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-Jiri, Benjamin, OK for me to pick it up?
+Jiaxin Yu (2):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible for using rt1015p
+    and rt5682
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
 
-> 
-> Signed-off-by: William Mahon <wmahon@google.com>
-> ---
-> 
->  drivers/hid/hid-input.c                | 2 ++
->  include/uapi/linux/input-event-codes.h | 1 +
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index eccd89b5ea9f..c3e303c1d8d1 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -1162,6 +1162,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
->  
->  		case 0x29d: map_key_clear(KEY_KBD_LAYOUT_NEXT);	break;
->  
-> +		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
-> +
->  		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
->  		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
->  		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
-> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-> index 311a57f3e01a..e520f22c1b8d 100644
-> --- a/include/uapi/linux/input-event-codes.h
-> +++ b/include/uapi/linux/input-event-codes.h
-> @@ -279,6 +279,7 @@
->  #define KEY_PROG3		202
->  #define KEY_PROG4		203
->  #define KEY_DASHBOARD		204	/* AL Dashboard */
-> +#define KEY_ALL_APPLICATIONS KEY_DASHBOARD
->  #define KEY_SUSPEND		205
->  #define KEY_CLOSE		206	/* AC Close */
->  #define KEY_PLAY		207
-> -- 
-> 2.35.1.473.g83b2b277ed-goog
-> 
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |  1 +
+ sound/soc/mediatek/Kconfig                    |  1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 87 +++++++++++++++++--
+ 3 files changed, 84 insertions(+), 5 deletions(-)
 
 -- 
-Dmitry
+2.18.0
+

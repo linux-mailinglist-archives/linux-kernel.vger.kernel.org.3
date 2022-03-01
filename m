@@ -2,121 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5AB4C800C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6524C7FF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiCABFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S231321AbiCABDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbiCABFg (ORCPT
+        with ESMTP id S231255AbiCABDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:05:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C575DB849
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:04:47 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id u20so24355954lff.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:04:46 -0800 (PST)
+        Mon, 28 Feb 2022 20:03:40 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5DAA9E2B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:03:00 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id u7so19752542ljk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:03:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+UrwimTIhzKiU9pJv3o5X6bf+6FXMWBGxz+Z+GIIGDc=;
-        b=avIYh8aQ2dDobwKAVUmxzj/7dS14/rGtEVGY0pMiaJUsHbP3qIU6kno3XMfBz/RlQM
-         DBr9tOtZ8iqO/uKNwSujAwo9mle8zBl2HT1HDuvvvRH+Bqr8BYPzCJojUUOk2VYbR5wW
-         hMzIeM3di7snjNNfrAaBZvtX47IfluwYB/RPY=
+        bh=Q8NmAcmdqU26V8OH3cYuAlO8sk2yRxtmZWE3w58gSKE=;
+        b=MKcB+oboBz5eIjBKGm5s3zVzKk8DOQZGjA7/z4rwsM0NpL91uMsgCG04CXKj6F1XIv
+         14Hlb2vQWsXVHInjCCAvtjKzoYQPTTDOCMCVO5I6hBp6i/LKTHKe2j5+XGPPwZKc5qUW
+         ezNp7Y8TrpCDsaoFABroafoi19z3NHRD2LkRs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+UrwimTIhzKiU9pJv3o5X6bf+6FXMWBGxz+Z+GIIGDc=;
-        b=yaur6Y7bhbKfA7ThE/pwsYLefDAbc3UwqoKdc9KGx4HtN0R2sLtY5huWsudV3onrpk
-         l49OUKQ9i/PD7yzS8mtfreE8a2xAO7s5bWgFd5vtqf/WdRKpOBJCoa19A6paYH+QU2KL
-         1eOPff4qBUW5j6FfR6smr99l5lgESUsQMBv5SHJFehHJchKY0a5mqVxzdsuap4GqdY2/
-         EdZYRcl8XV1M27Wz+hj5QiewCPqMYWMrJSa7HW/Ho893fJzHCPF4j9+1N/A8txJrTKCS
-         zaYjeqC8drEjSbRQvz/8KcdHtLWByrPVYrs2HLbN8keyB5LDT74A+v5Alfq1nSy7Wf5X
-         oeaA==
-X-Gm-Message-State: AOAM532IEeNOxQfAf0qDt0KKrvtP1KAZNgnAbJesHuNLdc2Ze4tjaZ18
-        Bo8vB3cwtzfjhWlCtT3ipsE3C+C4W2lV4Onagcg=
-X-Google-Smtp-Source: ABdhPJzJ2Xwwlh+Ho717gG4h5gV0YCF1uw9+QLVQ3jWcumRt0A3Ro9nUKy9dSIw0G1GBhGyD0c9cAg==
-X-Received: by 2002:ac2:5e8e:0:b0:43f:ed00:423a with SMTP id b14-20020ac25e8e000000b0043fed00423amr14941285lfq.668.1646096685242;
-        Mon, 28 Feb 2022 17:04:45 -0800 (PST)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac248b4000000b0044341a3cd34sm1214801lfg.124.2022.02.28.17.04.44
+        bh=Q8NmAcmdqU26V8OH3cYuAlO8sk2yRxtmZWE3w58gSKE=;
+        b=6loYUPfKa63LHlVy+cT+VXmy19bZKmEB416dwb+4aO4fDFg3cTlNagwpHIcotoYNqm
+         tkDP0DgT9EKyvJzBpz6Xjw0eampPtsLqZchYjgeWNHNPcCKUI41ZYtNfeEEbiqqpBYmT
+         dFPoBvtPuh2UqsmFYvQoOyi502ndvJYoexU8hBgBBLOdHV0Z6W1nsMwX3tHPT6i0okqF
+         Vm2ZsTar3ujS+6OpEOC6GjbBZi0b2kNH6JHHY+KcXOLdmPhkws85cwdXokIKomIMX+dC
+         sBgmriOpGorAp+sxf35MdK8tbyX27NBpanqZbiACvzKCyaS8KS8BftanSnfXZT6grUic
+         4PBQ==
+X-Gm-Message-State: AOAM530WFTEPaRqjvWDs9Gpt9L2AWJpQxyA/QcoMqTLxDtf0FXh0dIA8
+        pFnBt1v7rfXEG5WVVsMsuIF/c050KvhRvz1Yv5o=
+X-Google-Smtp-Source: ABdhPJz4m+XnYVsIDXtxByYUsXYzSusFBCIwOMUIp2pOXlUQBIFKXFiO922mZbtwu4qMk349s/5VjQ==
+X-Received: by 2002:a2e:7809:0:b0:23a:fb4f:2358 with SMTP id t9-20020a2e7809000000b0023afb4f2358mr14949027ljc.224.1646096578325;
+        Mon, 28 Feb 2022 17:02:58 -0800 (PST)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id v21-20020a2e2f15000000b002456e6cdab2sm1616753ljv.93.2022.02.28.17.02.57
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 17:04:45 -0800 (PST)
-Received: by mail-lj1-f182.google.com with SMTP id p20so19856763ljo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:04:44 -0800 (PST)
-X-Received: by 2002:a05:6512:3042:b0:437:96f5:e68a with SMTP id
- b2-20020a056512304200b0043796f5e68amr14803965lfb.449.1646096282839; Mon, 28
- Feb 2022 16:58:02 -0800 (PST)
+        Mon, 28 Feb 2022 17:02:57 -0800 (PST)
+Received: by mail-lj1-f171.google.com with SMTP id u7so19752496ljk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:02:57 -0800 (PST)
+X-Received: by 2002:a2e:924d:0:b0:246:370c:5618 with SMTP id
+ v13-20020a2e924d000000b00246370c5618mr15672702ljg.358.1646096577046; Mon, 28
+ Feb 2022 17:02:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org> <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
- <Yh1aMm3hFe/j9ZbI@casper.infradead.org> <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
-In-Reply-To: <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
+References: <CACRpkdYM21hcH5d9rXyvjMPHQp429OZ1Zcy7uLU2tndoJcOmUQ@mail.gmail.com>
+ <CAHk-=whg3eRY1nOJjHam+jORmVymU539CxhBUjp4=tGoFitotw@mail.gmail.com>
+ <CACRpkdbWkm1WDY30qoGLEQba+G2cDEhT+M8nCdJbcD=ZQiu6uw@mail.gmail.com>
+ <CAHk-=wjNdW6Tdei6+6OJy6jGqY=PCJ2TWFKpV+g0projUC1eag@mail.gmail.com> <CACRpkdY-8D8ZYy9VichQmJHTJCSskFs=e0qpbYssf7tED_9dLw@mail.gmail.com>
+In-Reply-To: <CACRpkdY-8D8ZYy9VichQmJHTJCSskFs=e0qpbYssf7tED_9dLw@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 16:57:46 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whqJmCZ+VHTJPwsHYc1YNNEvWS7=ukqGKfBxcBYAToAkw@mail.gmail.com>
-Message-ID: <CAHk-=whqJmCZ+VHTJPwsHYc1YNNEvWS7=ukqGKfBxcBYAToAkw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
+Date:   Mon, 28 Feb 2022 17:02:40 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whcOPRHS-mWaCk3_anVPZheCbkE4E0dLWRD9YbiaTLAqA@mail.gmail.com>
+Message-ID: <CAHk-=whcOPRHS-mWaCk3_anVPZheCbkE4E0dLWRD9YbiaTLAqA@mail.gmail.com>
+Subject: Re: [GIT PULL] pin control fixes for the v5.17 series
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -128,15 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 4:45 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Feb 28, 2022 at 2:50 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> Yeah, except that's ugly beyond belief, plus it's literally not what
-> we do in the kernel.
+> I'll take these two:
+>
+> pinctrl-sunxi: sunxi_pinctrl_gpio_direction_in/output: use correct offset
+> pinctrl: sunxi: Use unique lockdep classes for IRQs
+>
+> and put them into fixes, that should nail it.
 
-(Of course, I probably shouldn't have used 'min()' as an example,
-because that is actually one of the few places where we do exactly
-that, using our __UNIQUE_ID() macros. Exactly because people _have_
-tried to do -Wshadow when doing W=2).
+Thanks. One down, two more of Guenter's reports to go. But iirc they
+both at least had fixes pending too.
 
-                 Linus
+Let's hope they aren't in the wrong queue as well ;)
+
+                Linus

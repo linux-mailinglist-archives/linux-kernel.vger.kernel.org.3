@@ -2,266 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79414C8D5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A7B4C8D64
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbiCAOMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S235187AbiCAONw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiCAOMj (ORCPT
+        with ESMTP id S229730AbiCAONt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:12:39 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6852649
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:11:57 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id gb39so31764329ejc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 06:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MfimAMOL9WrDUaU8ysDXEywlIYs/LjUgbSBpoFo63aY=;
-        b=diqOb2yAU+tqO43un6fTJiInrvAguRgXo6fKbg98DcAITNF7Gl/ir+uwUFM4exGOnE
-         YWlZD/j93Kus3CV+xQR5OC5IMibNE7XQ2pB/aTfiI/1KZNPNXcOO3N9Wf3Vm40eucwnf
-         KCZsoDpcY3RlPvtOsdJvp3hvhWagp6mK0k8X9hB4q0IxoucacjoWQi8jZW0I4mBzsyy9
-         n6oZMx4YJlf1gFF12Wsy9ZDaGuUem8Mt98GLD1DxF50P0y5ScMfaySWjOjxxNE6G+z7v
-         xyulVL4kfYG9fG3Wd3tJMX78+QbEpgZ8N6/qMfJwekH8lawM05Io640S/r6Xl6082e7W
-         cILg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MfimAMOL9WrDUaU8ysDXEywlIYs/LjUgbSBpoFo63aY=;
-        b=EGEJF8hLep1NOdF0hgJ0bfhINBM6pZtSbAb0OPKN2JsL5suwAydNiRiXSJKSIazR1u
-         6G4pTYJ9piTadCVNClcOXTm2wMBVNWiTgrMyl1HqJOwwCVaYb+NdhqAvvwZQXkLStuU2
-         wBn1LLsm3og3JdGsyTjRDWmgWDEr0CnFlq83sE6uLJJRyzsnSddfpec+uxLJLDQivH8x
-         Oa2sdy64n9wKLLQaWzG1THGsFXUJhRFpEbEp6utPa6/A9VohbX4RlpR6FSG10FH90tsj
-         6t7ti1qaVaHBKQmuN1ekzRiRbnpvqtbeuS6nrGMgM7Oie24xA9JGhTtTkj3oTueRNJiC
-         HaCw==
-X-Gm-Message-State: AOAM531qbiKAhTeitl1t9boiZykauLvZU08Axk0ZCDll5+LU5Wa0+Y2+
-        o77693KVh8E/f3T8d5jqMgQRi8IlQwVtZVZBwsfTdA==
-X-Google-Smtp-Source: ABdhPJyQzWax9/NRtsMdZsexRmcWnD7j8+o1lWNAilFPrZ3u8SDBbGi9pMoyHhZ+JtbcuqS+XYYSjU6RcqlDOS3fzRU=
-X-Received: by 2002:a17:906:2ecd:b0:6d3:d7c9:8fa4 with SMTP id
- s13-20020a1709062ecd00b006d3d7c98fa4mr18884616eji.144.1646143916142; Tue, 01
- Mar 2022 06:11:56 -0800 (PST)
+        Tue, 1 Mar 2022 09:13:49 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C03860057;
+        Tue,  1 Mar 2022 06:13:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QFwpr/4rxxshPS/JdiOyt34Ljxm9flxg11FA8QHQ4XUHp2VduLBSprAfGAuu47fDNVqD4sx4rrCyWoYaG12PZZAOi+W51XBMLoudv9CUkgvulIonBdN+CW5f7vPDnq/08NkV8w1UZhbW0apxbjcQE4tm+2o0nFr4H0NQwjoNhi0pWx8VznKXK4x9/TvIF9QVjKYACWpcMcJQuVGLTLTSH+2Yaph+BGatS47I5bey6h9UMB2lFDDMyxB42y3aMPlTKiFQPz6ZQPmemA/CPV7jV7holrKrhQgflz4+Ca2we2pOSaqVEPfTRmCgF/F9zJ8XfIPFcAlb03bK3JoayPWXnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s5fjFiDqjq1cxCrQLjPXrNnlc4GD4iSqoQCAe4IxQn0=;
+ b=HhfBG+ZjVUmQk6c6pfPfF7MyquJllsitOQXtkgS9MWedUT48atI++cGJ0t/OoTLUrVNr0jJvFOGHTncaMIUb8vWuhHca9ZWj7u4lOOPaomNIUD/VdoKyLTopv8MqanjYqdsu1tP0zSs6V3epfyfHfB91uGZqCbl4Kv06CL8lgzCb4avLE+5H2A3yiLMPN9Dw2clR6jPlH/l0smtJ165AcOQiHkg9h8EZ7utrXWQUBZFuCMGZRPMx9nZas3UIUQNgVlXOTWEKs8xlV99pgNNwF+iM+OEEyypF8hr1sKnK9X5W65seOg0QGaeku6bfiY860T7kPPQeNqojMHskNDRH4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s5fjFiDqjq1cxCrQLjPXrNnlc4GD4iSqoQCAe4IxQn0=;
+ b=n3xMa7cbtNkVLL+M/PTlqUPXy0OPWfqDWZPSqRAl6qpHglH9JkhARIrbxAEQKhZRMVA9leGANdfwNauPsrX8B684hHXyhfrp7oyCvX47dC4Ofz+8XBXUAHvh6vW7Igw3X3dhAanMduWuk3ZPDbXhQoWkWn3DiIXxu/bc7CbLbKY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by MN2PR12MB4781.namprd12.prod.outlook.com (2603:10b6:208:38::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Tue, 1 Mar
+ 2022 14:13:04 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817%5]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 14:13:04 +0000
+Message-ID: <77bdaf1e-4003-0ccc-cddb-8fc634abbcd3@amd.com>
+Date:   Tue, 1 Mar 2022 08:12:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH Part2 v5 14/45] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Content-Language: en-US
+To:     Alper Gun <alpergun@google.com>
+References: <20210820155918.7518-1-brijesh.singh@amd.com>
+ <20210820155918.7518-15-brijesh.singh@amd.com>
+ <CABpDEu=jm43jHhv2mA+C1Sz00xuzH_C-Cn9fRYrFkOCM_em1Fw@mail.gmail.com>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+In-Reply-To: <CABpDEu=jm43jHhv2mA+C1Sz00xuzH_C-Cn9fRYrFkOCM_em1Fw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR04CA0102.namprd04.prod.outlook.com
+ (2603:10b6:610:75::17) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
 MIME-Version: 1.0
-References: <20211028140009.23331-1-etienne.carriere@linaro.org>
- <58a0e791-9573-99c2-0cc5-3920a1048113@pengutronix.de> <CAN5uoS_DQNkG8J0C-oT8aC-Xfozy9hgwAge_x2e4S-HOhSn5=w@mail.gmail.com>
-In-Reply-To: <CAN5uoS_DQNkG8J0C-oT8aC-Xfozy9hgwAge_x2e4S-HOhSn5=w@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Tue, 1 Mar 2022 15:11:44 +0100
-Message-ID: <CAN5uoS8QotrsoWYX3rCjxCKQFJNhFBXHc6JDYAn1rcX6N5mj4w@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] dt-bindings: arm: Add OP-TEE transport for SCMI
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ccfb663a-cc8f-4a6b-d959-08d9fb8d9a01
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4781:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB478111F38CFFCCA26118CECEE5029@MN2PR12MB4781.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GDBrBKgL8JfIc51D9pyDlKgHA+fyDkagz5UfLtKYeW0eJ4nBTG7QkpsYWdqQYrLzjKrYoxSCatHf66aNcaGD1m4MgcjoRowr7gnQGl5gQXAhOXByxspofhafHw/j3ItyXBZJFiw+sOHspIPDzjhtt+F8MnE+XsaSV9CPQcuPbd4swa+h10gbXsNAehzysIyT3b+Zq8IwsmuM8VAebv1gAIrUkQGxEcBcy+56NhJRxwVG3djsLVmlGxULleS/1XyD07XJ3rzSwdzoiqjrW3rzERdh8XIaFB25v3cY6PcDfHEqSwnn0RlHzzvAxReMIihqfJPL97YSJInFNXDSZoI8GOIJ3tjGuBROtquC3PSci6Gnyn7ZMPCLovNbrUluOt369N3MAzJZkGZIVdmhCikSkPsCaRueQcOCGmdIdXCyNto3r074plLSAdWzsDp3g0t1mxV+fz8wnl1Safw/igdihPV/U2tAoh2IU97n6V0E+wH8dMMyTwaPIrJDXRz58vdFL1CUGxcfBH/nH8gzunTlUIBNiS/ZEL23svhXxHBfAmdSIZp4FBlB1oSx9xUFjOVj7VlzyadHOl3/NxtTepxP2Uh+DQBMXNyPGvLAmGYjOz0IUJ3fNEfoQzYikbsHS/GinpTU9zDwG94JAoMrXRXkZx16zyxrr/ddR0hs3iVr204Cz7kbb7P0Od14XcKjAIKvQ6xBx8hwFx1RjvWEFjYTdQbVFt7x5IEkLicS9RlVPKw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7406005)(7416002)(53546011)(38100700002)(44832011)(4744005)(2616005)(6506007)(6666004)(2906002)(86362001)(31696002)(6512007)(83380400001)(4326008)(316002)(8676002)(66556008)(66476007)(66946007)(6916009)(54906003)(5660300002)(186003)(26005)(8936002)(508600001)(6486002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2VZZ3NkWFJKVkxnVlMrTVJKeGhjbWk1WUlUa0NhNkZXa2R6aGJKeEtMUmZY?=
+ =?utf-8?B?Tk5SQXhhdSttYS9XdU5idlQ2VUxVaStvV0FzQnBmdjFOa0cvWWFncktZWjVR?=
+ =?utf-8?B?NjhZVExVZW1SeVdQUVlNNjQ5Vks1aHpFMnYwZU00NHE5WmxXb2xBa3cyL2V3?=
+ =?utf-8?B?eEdUZkFwUkFSRkdROUYyQmpPbFJmSWJGQkE1YjFqYm9hMnV3di9qS0NTWm1z?=
+ =?utf-8?B?VktibDBqVVNZcE02ZUFaWXorcG55THpjaFQwcXRuVXlSTEdpVnNmZTU0RVFx?=
+ =?utf-8?B?WGVraFhZTmRpaVEzRGFaNVQvYVdIaUppVlo3bVdxRDF6aGV4akg5eUsxWWJR?=
+ =?utf-8?B?ZEkrUWc3Y1VqdFB4RUVXMmgwc2V3Vit1bWF6SlhENE1CbXhXNUVrUzBCUXN1?=
+ =?utf-8?B?UlpIM1I4TE5XUDVnRDNSbXJacXVta0EvOVZyVzBjOWJqN3RNTHduaklOVVlZ?=
+ =?utf-8?B?Z0l5eVhOY3JuemtnY2NaMWRkMFJxMEhlMEt6R3k5RHdJeTBRZ2JQbC9qWFNX?=
+ =?utf-8?B?TzhySjljaTVJb21lRzRkdW1MSW9scmNmUnVEY2hjaFN1SWljR1YzcW8zaHVh?=
+ =?utf-8?B?QWZGeFg0bi80anJqUXdZZ1F6bXhrdlJwSGd1S0lDRGkrMXZQVzFvU1hEKzMw?=
+ =?utf-8?B?TmdTNmQ4Q2NGeGc1WXBVWXp4Q2VnalVCajYweG5hYldLeExjS1lrUWhEVDFQ?=
+ =?utf-8?B?Zml3UTJiNXhvaDFpVHFESTZJb3FndUt6bm94ZzZHZWRjY0E4bWxJY2Y3cnJV?=
+ =?utf-8?B?ZW04QUxSa1NaSHFwc3FsM0FvbzNCM0JYaWRMcWNDNjQwV1N4aGZYQjNrM0Fp?=
+ =?utf-8?B?TGVpTGJrcDdFOURUOE9XMkhlbDJObWFDZ2FmakNhWmh4L3pSeklhQk9wSnVl?=
+ =?utf-8?B?czRDVktvdEZOTVRaWGtlVS81YktEbGM2Y0RhUFczVE5Qb00zYzZWNGxoSnJP?=
+ =?utf-8?B?UUNEdXJiWFp3WStKdzJMTHZCVG1yckEwd0ZjKzJndy9LdUFBVERCTDJmWTNm?=
+ =?utf-8?B?ODY4SURCNGd1WVYrVjhNUjlieFVPajlDSkpNaEtET0tiL3RraWM1YmVOdmdz?=
+ =?utf-8?B?MkgvbWt2aGt1RjVocWxjTjZRZ0xiSHVMcHA5cmNiejJ6cC85VnRBSk5XenR4?=
+ =?utf-8?B?aXhtN3N6MFhUb2d0cjdSeGU4Q0NGdDI4blpoSWVVVzVNTXZzUHZHRG5rbnV3?=
+ =?utf-8?B?bFlYckZzcDVNTDdxZW9Uai9zQ0ZtOXgwSW9xMkNPWm93RDVjN04xM3I1b0w3?=
+ =?utf-8?B?MWJqdlgwOEtXcitGT3Z6UmNIYUtQOUZhZjFYUG9sWGFqejczcFk2S3NydGM3?=
+ =?utf-8?B?YjFUS3JDRTBwK21qNENzMjVaTzB5YUJUZEE1NjBnT3hveE0yQXhQZ21wdVBo?=
+ =?utf-8?B?dzFrZGEvdDlBZ0RmR004Q3ZDVHhHUHhucjROcDBLV3hXNm5CTFp6aDd1WDB1?=
+ =?utf-8?B?ckZKU0xSTytJSnlzWWRTdE1VRVFGcllPd3lwQnpQSDlaK1d1ZGc4dlNrams4?=
+ =?utf-8?B?ZjhMaXJ2Ym11dmdzdDI0SHhSL3NYY1M4VGY1RWN2MC8yczFQcUFHcU5GdWFF?=
+ =?utf-8?B?ZTBDWXpRUkRXKzZaM3VhK1VQdmZqWFZiRjk1SWF6S1VtT1lxMCt0TlRYQnFw?=
+ =?utf-8?B?Wjc0ZmhkWUJVeW1mUXNKZGI4QkZQTFpEem40dTc2cGNTaDV5aE1YOGYxdExl?=
+ =?utf-8?B?OWp1aHFMNkR4bDYzZG1va3RlakMxTCswazNYOUlwdC93Q2MxQkoxREhKUkpk?=
+ =?utf-8?B?WjQ5bjJNMGYyS1BFbTJ3RVJIaDNXNGczblRodEpaRWR6bU1EM0tIYlFwSXFt?=
+ =?utf-8?B?UHhhRmJrbmw4NEJWU3Y5M05uRmpqK3ZacmRsV2IydXZBMEU3VEd6VFBXamVT?=
+ =?utf-8?B?aG4wRXNxOUR4KzZKTlkzSktnUkpqQXZ1ZXJNVFM4Vm9KQU56SFdvYWNWcUFp?=
+ =?utf-8?B?bURVT3NCVDRWaVgxUkl1am4yTWJDTWZBeGRVV3Q5Z1BqZkpxSWNaWXR3YlJB?=
+ =?utf-8?B?dWNKRDRXZnY2dVA5aWVpdWZOTGRwTlVPY2hCWVZNYVNwZ2xGY0YyeTNTampy?=
+ =?utf-8?B?aThHY2V3K1hFWTdZMFFJK3h0aUxJMGp5M1FkeHI5NHRhL0NKdjU5T1FYK3M4?=
+ =?utf-8?B?ZlN0VjBlWHB0WFlzSzRhNURNbjFUMWZDSWY2ZC9SSWlNUy9HVTFjSHlVLy8x?=
+ =?utf-8?Q?TMe8po0+diDLaXER1nRlb9M=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccfb663a-cc8f-4a6b-d959-08d9fb8d9a01
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 14:13:04.6158
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FBK9nN0IvivzruFXDINyFp6BuhZt4oybBC8SJBZA/zQX7cglv75GJhYaunM9sRrFHqIem97wWBfz8UjPZLSFsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4781
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi sorry,
+Hi Alper,
 
-I sent the mail while i was still typing it...
-Here is with the full answer.
+On 2/25/22 12:03, Alper Gun wrote:
 
+>>
+>> -               free_pages((unsigned long)sev_es_tmr,
+>> -                          get_order(SEV_ES_TMR_SIZE));
+>> +               __snp_free_firmware_pages(virt_to_page(sev_es_tmr),
+>> +                                         get_order(sev_es_tmr_size),
+>> +                                         false);
+> Shouldn't there be a check here for snp_inited before calling rmpupdate.
+> TMR page can exist even if the SNP is not supported.
+> 
 
-On Tue, 1 Mar 2022 at 15:05, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Hello Ahmad,
->
-> On Mon, 28 Feb 2022 at 17:01, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
-> >
-> > Hello Etienne,
-> >
-> > On 28.10.21 16:00, Etienne Carriere wrote:
-> > > Introduce compatible "linaro,scmi-optee" for SCMI transport channel
-> > > based on an OP-TEE service invocation. The compatible mandates a
-> > > channel ID defined with property "linaro,optee-channel-id".
-> >
-> > I just found this thread via the compatible in the STM32MP131 patch set:
-> > https://lore.kernel.org/all/20220225133137.813919-1-gabriel.fernandez@foss.st.com/
-> >
-> > Linux doesn't care whether PSCI is provided by TF-A, OP-TEE or something
-> > else, so there is just the arm,psci* compatible.
-> >
-> > What's different about SCMI that this is not possible? Why couldn't the
-> > existing binding and driver be used to communicate with OP-TEE as secure
-> > monitor as well?
->
-> Compatible "linaro,scmi-optee" denote a alternate SCMI transport to
-> those already in v5.16.
+Yes, I have this fix in my WIP branch and will be included in the v6.
 
-It is names scmi-optee because the interface exposed to access SCMI services is
-based on TEE's interface (UUID to open a session with and invoke commands).
-
-The compatible is described in the Linux Documentation but not yet
-merged in the linux-next.
-It can be found in the tree of arm_scmi driver maintainers:
-https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-linux-next
-
-This commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/commit/?h=for-linux-next&id=b7d2cf7c817b86e705b97f72c6be192a6760a14f
-
-Br,
-Etienne
-
->
->
-> >
-> > Cheers,
-> > Ahmad
-> >
-> > >
-> > > Cc: devicetree@vger.kernel.org
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > > ---
-> > > Changes since v6:
-> > >  - Remove maxItems from linaro,optee-channel-id description
-> > >
-> > > No change since v5
-> > >
-> > > Changes since v4:
-> > >  - Fix sram node name in DTS example: s/-shm-/-sram-/
-> > >
-> > > Changes since v3:
-> > >  - Add description for linaro,optee-channel-id in patternProperties
-> > >    specifying protocol can optionaly define a dedicated channel id.
-> > >  - Fix DTS example (duplicated phandles issue, subnodes ordering)
-> > >  - Fix typo in DTS example and description comments.
-> > >
-> > > Changes since v2:
-> > >  - Define mandatory property linaro,optee-channel-id
-> > >  - Rebased on yaml description file
-> > >
-> > > Changes since v1:
-> > >  - Removed modification regarding mboxes property description.
-> > > ---
-> > >  .../bindings/firmware/arm,scmi.yaml           | 65 +++++++++++++++++++
-> > >  1 file changed, 65 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > > index 5c4c6782e052..eae15df36eef 100644
-> > > --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > > +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > > @@ -38,6 +38,9 @@ properties:
-> > >                       The virtio transport only supports a single device.
-> > >          items:
-> > >            - const: arm,scmi-virtio
-> > > +      - description: SCMI compliant firmware with OP-TEE transport
-> > > +        items:
-> > > +          - const: linaro,scmi-optee
-> > >
-> > >    interrupts:
-> > >      description:
-> > > @@ -83,6 +86,11 @@ properties:
-> > >      description:
-> > >        SMC id required when using smc or hvc transports
-> > >
-> > > +  linaro,optee-channel-id:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description:
-> > > +      Channel specifier required when using OP-TEE transport.
-> > > +
-> > >    protocol@11:
-> > >      type: object
-> > >      properties:
-> > > @@ -195,6 +203,12 @@ patternProperties:
-> > >          minItems: 1
-> > >          maxItems: 2
-> > >
-> > > +      linaro,optee-channel-id:
-> > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > +        description:
-> > > +          Channel specifier required when using OP-TEE transport and
-> > > +          protocol has a dedicated communication channel.
-> > > +
-> > >      required:
-> > >        - reg
-> > >
-> > > @@ -226,6 +240,16 @@ else:
-> > >        - arm,smc-id
-> > >        - shmem
-> > >
-> > > +  else:
-> > > +    if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            const: linaro,scmi-optee
-> > > +    then:
-> > > +      required:
-> > > +        - linaro,optee-channel-id
-> > > +
-> > >  examples:
-> > >    - |
-> > >      firmware {
-> > > @@ -340,7 +364,48 @@ examples:
-> > >                  reg = <0x11>;
-> > >                  #power-domain-cells = <1>;
-> > >              };
-> > > +        };
-> > > +    };
-> > > +
-> > > +  - |
-> > > +    firmware {
-> > > +        scmi {
-> > > +            compatible = "linaro,scmi-optee";
-> > > +            linaro,optee-channel-id = <0>;
-> > > +
-> > > +            #address-cells = <1>;
-> > > +            #size-cells = <0>;
-> > > +
-> > > +            scmi_dvfs1: protocol@13 {
-> > > +                reg = <0x13>;
-> > > +                linaro,optee-channel-id = <1>;
-> > > +                shmem = <&cpu_optee_lpri0>;
-> > > +                #clock-cells = <1>;
-> > > +            };
-> > > +
-> > > +            scmi_clk0: protocol@14 {
-> > > +                reg = <0x14>;
-> > > +                #clock-cells = <1>;
-> > > +            };
-> > > +        };
-> > > +    };
-> > >
-> > > +    soc {
-> > > +        #address-cells = <2>;
-> > > +        #size-cells = <2>;
-> > > +
-> > > +        sram@51000000 {
-> > > +            compatible = "mmio-sram";
-> > > +            reg = <0x0 0x51000000 0x0 0x10000>;
-> > > +
-> > > +            #address-cells = <1>;
-> > > +            #size-cells = <1>;
-> > > +            ranges = <0 0x0 0x51000000 0x10000>;
-> > > +
-> > > +            cpu_optee_lpri0: optee-sram-section@0 {
-> > > +                compatible = "arm,scmi-shmem";
-> > > +                reg = <0x0 0x80>;
-> > > +            };
-> > >          };
-> > >      };
-> > >
-> >
-> >
-> > --
-> > Pengutronix e.K.                           |                             |
-> > Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> > 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+thanks

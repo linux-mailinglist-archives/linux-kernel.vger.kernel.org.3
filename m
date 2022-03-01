@@ -2,150 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636FD4C7EEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 00:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0E4C7EFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiB1X72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 18:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
+        id S230397AbiCAABd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiB1X7L (ORCPT
+        with ESMTP id S229634AbiCAABa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:59:11 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7969E38798;
-        Mon, 28 Feb 2022 15:58:31 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id x18so12542322pfh.5;
-        Mon, 28 Feb 2022 15:58:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lpJtQjEfn/J2FKfZSO5FEN5nDVRpWWfEH9M+CcSvJbU=;
-        b=VLRQXiy3wvMknW7AOO7IVvKT7MqkbdlU3FLw3ClWWTqHa1MhRB+cT54O6woccfVv23
-         bPVM9qXq6z9fQnsc1ZNinyshivIpU9XgnlE6GxxVR1pVJGieloj7NEL4/9Y56UqfEefA
-         nt0ayjMOUb9cb5rL/nilpAkiprwoLdMwikh2BzDI0fmBq2RU3iHJb5syWs73VxIvmf8s
-         vaJN5zmC0ipjUwAO6ioaulNabDVSklq6nQ0EHwtl1muE1bO4Tn2al5xuHpb3H/mVmLqH
-         zt4VDKst1elD4wKiZ07Ed36eOtFfAxmYtn6WW6JoTyUtsIPpcErbDYEt5qorV2Crwkr8
-         TRUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lpJtQjEfn/J2FKfZSO5FEN5nDVRpWWfEH9M+CcSvJbU=;
-        b=6Apbuw3lvV/Z5fx0GMn/HTF/OQCtS4bzuTgzmOrHWdGjhUgs69nQXq5Jb2NIzCAJjV
-         dj5JSIxVQZwUsnSecfnyfaRArtCPYTGfvqz22zuaey04WOhcH3AqBCwpZz3+ZzIUKajV
-         LzXfhJpAcFvk0+OePaQZkpWEw4DoQLwl3FnDcAd5ybtN2dWxR57aJYIOH+uO8pksxrQS
-         0mwjLjhigX10N6JryCqnsTtR7qf58nUznYj+SqzpnDtbhjFEPdsJ8NbyEQ23w61I7MdD
-         0rihIycoSwwspo+KCSZhATZFTKg6mOWyyPNxnpTfx6IwjFZRYQOUuqGnScU7XcKRPkhQ
-         A5Iw==
-X-Gm-Message-State: AOAM530jeoODsO2AD0KSe61e0X11XDHHEInbD0Ih6Ahi9SLiKj5Cake+
-        OzkN48zFtY+NRpwkS1qOMfk=
-X-Google-Smtp-Source: ABdhPJzyv0UQbz9tZczy02j/XLMhXWEhyZDVPmYSr4FxI3UgPBCDu42TpFtDCT4zx3Gb1O0sASg6pA==
-X-Received: by 2002:a05:6a00:22d3:b0:4f3:d439:7189 with SMTP id f19-20020a056a0022d300b004f3d4397189mr18780779pfj.79.1646092711038;
-        Mon, 28 Feb 2022 15:58:31 -0800 (PST)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id on15-20020a17090b1d0f00b001b9d1b5f901sm396963pjb.47.2022.02.28.15.58.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 15:58:30 -0800 (PST)
-From:   Yang Shi <shy828301@gmail.com>
-To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        songliubraving@fb.com, linmiaohe@huawei.com, riel@surriel.com,
-        willy@infradead.org, ziy@nvidia.com, akpm@linux-foundation.org,
-        tytso@mit.edu, adilger.kernel@dilger.ca, darrick.wong@oracle.com
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] fs: register suitable readonly vmas for khugepaged
-Date:   Mon, 28 Feb 2022 15:57:41 -0800
-Message-Id: <20220228235741.102941-9-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20220228235741.102941-1-shy828301@gmail.com>
-References: <20220228235741.102941-1-shy828301@gmail.com>
+        Mon, 28 Feb 2022 19:01:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA30638798;
+        Mon, 28 Feb 2022 16:00:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F9BAD6E;
+        Mon, 28 Feb 2022 16:00:50 -0800 (PST)
+Received: from [10.163.50.231] (unknown [10.163.50.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52833F66F;
+        Mon, 28 Feb 2022 16:00:43 -0800 (PST)
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
+ <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+Date:   Tue, 1 Mar 2022 05:30:41 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The readonly FS THP relies on khugepaged to collapse THP for suitable
-vmas.  But it is kind of "random luck" for khugepaged to see the
-readonly FS vmas (https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/)
-since currently the vmas are registered to khugepaged when:
-  - Anon huge pmd page fault
-  - VMA merge
-  - MADV_HUGEPAGE
-  - Shmem mmap
 
-If the above conditions are not met, even though khugepaged is enabled
-it won't see readonly FS vmas at all.  MADV_HUGEPAGE could be specified
-explicitly to tell khugepaged to collapse this area, but when khugepaged
-mode is "always" it should scan suitable vmas as long as VM_NOHUGEPAGE
-is not set.
 
-So make sure readonly FS vmas are registered to khugepaged to make the
-behavior more consistent.
+On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
+> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+>> This defines and exports a platform specific custom vm_get_page_prot() via
+>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>> macros can be dropped which are no longer needed.
+> 
+> What I would really like to know is why having to run _code_ to work out
+> what the page protections need to be is better than looking it up in a
+> table.
+> 
+> Not only is this more expensive in terms of CPU cycles, it also brings
+> additional code size with it.
+> 
+> I'm struggling to see what the benefit is.
+> 
 
-Registering the vmas in mmap path seems more preferred from performance
-point of view since page fault path is definitely hot path.
+Currently vm_get_page_prot() is also being _run_ to fetch required page
+protection values. Although that is being run in the core MM and from a
+platform perspective __SXXX, __PXXX are just being exported for a table.
+Looking it up in a table (and applying more constructs there after) is
+not much different than a clean switch case statement in terms of CPU
+usage. So this is not more expensive in terms of CPU cycles.
 
-Reported-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- fs/ext4/file.c    | 4 ++++
- fs/xfs/xfs_file.c | 4 ++++
- 2 files changed, 8 insertions(+)
+--------------------------
+pgprot_t protection_map[16] __ro_after_init = {
+        __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
+        __S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+};
 
-diff --git a/fs/ext4/file.c b/fs/ext4/file.c
-index 8cc11715518a..b894cd5aff44 100644
---- a/fs/ext4/file.c
-+++ b/fs/ext4/file.c
-@@ -30,6 +30,7 @@
- #include <linux/uio.h>
- #include <linux/mman.h>
- #include <linux/backing-dev.h>
-+#include <linux/khugepaged.h>
- #include "ext4.h"
- #include "ext4_jbd2.h"
- #include "xattr.h"
-@@ -782,6 +783,9 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
- 	} else {
- 		vma->vm_ops = &ext4_file_vm_ops;
- 	}
-+
-+	khugepaged_enter_file(vma, vma->vm_flags);
-+
- 	return 0;
- }
- 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 5bddb1e9e0b3..d94144b1fb0f 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -30,6 +30,7 @@
- #include <linux/mman.h>
- #include <linux/fadvise.h>
- #include <linux/mount.h>
-+#include <linux/khugepaged.h>
- 
- static const struct vm_operations_struct xfs_file_vm_ops;
- 
-@@ -1407,6 +1408,9 @@ xfs_file_mmap(
- 	vma->vm_ops = &xfs_file_vm_ops;
- 	if (IS_DAX(inode))
- 		vma->vm_flags |= VM_HUGEPAGE;
-+
-+	khugepaged_enter_file(vma, vma->vm_flags);
-+
- 	return 0;
- }
- 
--- 
-2.26.3
+#ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
+static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
+{
+        return prot;
+}
+#endif
 
+pgprot_t vm_get_page_prot(unsigned long vm_flags)
+{
+        pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
+                                (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
+                        pgprot_val(arch_vm_get_page_prot(vm_flags)));
+
+        return arch_filter_pgprot(ret);
+}
+EXPORT_SYMBOL(vm_get_page_prot)
+----------------------------
+
+There will be a single vm_get_page_prot() instance on a given platform
+just like before. So this also does not bring any additional code size
+with it.
+
+As mentioned earlier on a previous version.
+
+Remove multiple 'core MM <--> platform' abstraction layers to map
+vm_flags access permission combination into page protection.
+
+From the cover letter ......
+
+----------
+Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+, protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+between the platform and generic MM, finally defining vm_get_page_prot().
+
+Hence this series proposes to drop all these abstraction levels and instead
+just move the responsibility of defining vm_get_page_prot() to the platform
+itself making it clean and simple.
+----------
+
+Benefits
+
+1. For platforms using arch_vm_get_page_prot() and/or arch_filter_pgprot()
+
+	- A simplified vm_get_page_prot()
+	- Dropped arch_vm_get_page_prot() and arch_filter_pgprot()
+	- Dropped __SXXX, __PXXX macros
+
+2. For platforms which just exported __SXXX, __PXXX
+
+	- A simplified vm_get_page_prot()
+	- Dropped __SXXX, __PXXX macros
+
+3. For core MM
+
+	- Dropped a complex vm_get_page_prot() with multiple layers
+ 	  of abstraction i.e __SXXX/__PXXX macros, protection_map[],
+	  arch_vm_get_page_prot(), arch_filter_pgprot() etc.
+
+- Anshuman

@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876DE4C9700
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF94C9708
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbiCAUdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S238312AbiCAUea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiCAUdX (ORCPT
+        with ESMTP id S237975AbiCAUeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:33:23 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907BF1AD82;
-        Tue,  1 Mar 2022 12:32:40 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id n14so22300758wrq.7;
-        Tue, 01 Mar 2022 12:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
-        b=gwPNVZYiRqm/ONMrZpXb5c/9raUwfFAFa5xWtypoXxpNWHjRwbdBrN7ce1jsSnUi5E
-         qu4tjsQE+/eFRINGfuAAC8fxvuigawD6NshWh2jJsNbNyD5ncd4CGkmQN7fiCcvHqNJv
-         hpt8YYho7cEwf6o+a4lgCnCb7BgzNWGqovXSt3wU93Kr5yG8/ajgaZ6H5Du/HTLG/mEF
-         VY+xszOpxm1UffGR4FrA3BcWhCSDC6tSNi9zV7kFRamiK9cNTlrMkhP+LqXD0yl/nv4E
-         h4ZZYlUUsYobbY33WFhIOejaEVjjSnXLyiXi29U2rgYN+KGhINIWsTc8QGkdYlRtEWuW
-         RZPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
-        b=M2xravbuQW0cnUBQnhz/aYdOgpm0H/62iv03JDukhyCpVlVsZteDyiXp8+mUU6SCtW
-         vjjh6aDOxOb0JmwxgyNeDRPkWcP9Mus8tsnENvmgaYg/u7kZtvZtZRJWbaKDunE9d1zH
-         JlBkh31v+TqUJrfS1J59vDnDoNFSpKb7MZ/09SQUbb6/QgHwH1+SRsfIsoQYfEo/Iyxa
-         o6W/fleGXk1dNTmRIWc4aUAOQPfmZ49Fe68OrFIKq1zcaw+7zgkVS5ZtDr/uPei4+Wye
-         /W4IwE+uuPJKE+dhvH5ht97okzmRyVmRzRGRNgj2LIe96daWbNlg5b615JqTvpmF+/sa
-         3IyQ==
-X-Gm-Message-State: AOAM530ZQyStTUG5qPuqp/nlnI/1hC6DAKIgMF/WNtr76jJwJ2kcLiZj
-        W3ARBmAUOHcbvyAHpyMnhUiAShWzxm8bVH9C/cST+vusmBgGrw==
-X-Google-Smtp-Source: ABdhPJyOyqrAmq0du9j8vJye29kK1c8pmM58hk4zrpISMGQfTykc6McfVWvFM94evxgpJmtoTmCcTROBwR2hlAwTSlk=
-X-Received: by 2002:adf:efc6:0:b0:1ed:f546:bd94 with SMTP id
- i6-20020adfefc6000000b001edf546bd94mr19989617wrp.33.1646166758969; Tue, 01
- Mar 2022 12:32:38 -0800 (PST)
+        Tue, 1 Mar 2022 15:34:23 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C9E46B1A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646166817; x=1677702817;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iCNIPVkX2GyKP5ILGD+3Dhc3XAWw9XSqvoVhaNIDTro=;
+  b=W64Emnm2MtGG2WKEyoj6HvA+TarHDHVfBFtFVMzxRg+5yhdULlD1wSm1
+   td5rZfDxr3KAuOQ2XoqvKfpXX8EJiezj/mKSg2682+LrFRlJOYR4vV74M
+   4bf6xcD4HUUE0FYOE84l3HuyJT6fzCjb5SDkMCk0CqD0Z8fWXEaSBgI9D
+   EV6KaKKKrHInQjDRcxYV/kf+O0LDb8IqJwdopsj9WOwj2s/A49ndNqYhm
+   sxnSQnIOZ/dDu++wNiH6MvYpbcIWN3SX28YpGZu/Xl4SaO0q27nhCCZGJ
+   tEx/D1noLpAANSEYZ9VTSaLTUSxKWUDxLDsYFz76ZNtwGSQgfX3EH/j08
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="250814862"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="250814862"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 12:33:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="535052110"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 Mar 2022 12:33:14 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP9BJ-0000yu-0Z; Tue, 01 Mar 2022 20:33:13 +0000
+Date:   Wed, 2 Mar 2022 04:32:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 26/30] ld.lld: error: undefined
+ symbol: interval_tree_iter_first
+Message-ID: <202203020423.iVetVOKB-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220215163926.894-1-paweldembicki@gmail.com> <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
-In-Reply-To: <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
-From:   =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
-Date:   Tue, 1 Mar 2022 21:32:27 +0100
-Message-ID: <CAJN1KkygDrGPzJj4nobS-ZFSRqP+g9LQ49tbcLA8V7KvPhfYOQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: kirkwood: Add Ctera C-200 V1 board
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Hao Fang <fanghao11@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +62,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wt., 1 mar 2022 o 00:43 Linus Walleij <linus.walleij@linaro.org> napisa=C5=
-=82(a):
->
-> On Tue, Feb 15, 2022 at 5:40 PM Pawel Dembicki <paweldembicki@gmail.com> =
-wrote:
->
-> > +&i2c0 {
-> > +       status =3D "okay";
-> > +
-> > +       rtc@30 {
-> > +               compatible =3D "s35390a";
-> > +               reg =3D <0x30>;
-> > +       };
-> > +
-> > +       lm63@4c {
-> > +               compatible =3D "national,lm63";
-> > +               reg =3D <0x4c>;
-> > +       };
->
-> Think about adding chassis thermal zone for this sensor,
->
-> I suppose you don't have any active control of cooling (fan)?
-> This often sits on GPIO...
->
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   2bca5fa75dad57f41002a93861a950d35d55e568
+commit: 9cf512778a76b8a63b429c0cf0c34b534f5577b9 [26/30] vfio: Select iommufd
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220302/202203020423.iVetVOKB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/9cf512778a76b8a63b429c0cf0c34b534f5577b9
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout 9cf512778a76b8a63b429c0cf0c34b534f5577b9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Hi Linus,
-It has a fan controlled by the lm63: PWM controller. But the fan blows
-only on disks, board temperature won't change even when PWM =3D 100%.
-It should be controlled by hdd temperature.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> In that case just add a critical temperature so it can't burn
-> down the house.
->
+All errors (new ones prefixed by >>):
 
-Patch it's merged now, I will add critical temperatures in a separate patch=
-.
+>> ld.lld: error: undefined symbol: interval_tree_iter_first
+   >>> referenced by io_pagetable.c:537 (drivers/iommu/iommufd/io_pagetable.c:537)
+   >>> vmlinux.o:(iommufd_device_detach)
+   >>> referenced by io_pagetable.c:537 (drivers/iommu/iommufd/io_pagetable.c:537)
+   >>> vmlinux.o:(iommufd_device_attach)
+   >>> referenced by io_pagetable.c:161 (drivers/iommu/iommufd/io_pagetable.c:161)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced 22 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_iter_next
+   >>> referenced by io_pagetable.c:543 (drivers/iommu/iommufd/io_pagetable.c:543)
+   >>> vmlinux.o:(iommufd_device_detach)
+   >>> referenced by io_pagetable.c:543 (drivers/iommu/iommufd/io_pagetable.c:543)
+   >>> vmlinux.o:(iommufd_device_attach)
+   >>> referenced by io_pagetable.h:99 (drivers/iommu/iommufd/io_pagetable.h:99)
+   >>> vmlinux.o:(iopt_access_pages)
+   >>> referenced 12 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_remove
+   >>> referenced by io_pagetable.c:546 (drivers/iommu/iommufd/io_pagetable.c:546)
+   >>> vmlinux.o:(iommufd_device_detach)
+   >>> referenced by io_pagetable.c:546 (drivers/iommu/iommufd/io_pagetable.c:546)
+   >>> vmlinux.o:(iommufd_device_attach)
+   >>> referenced by io_pagetable.c:192 (drivers/iommu/iommufd/io_pagetable.c:192)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced 9 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_first
+   >>> referenced by io_pagetable.c:89 (drivers/iommu/iommufd/io_pagetable.c:89)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced by io_pagetable.c:97 (drivers/iommu/iommufd/io_pagetable.c:97)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced by ioas.c:93 (drivers/iommu/iommufd/ioas.c:93)
+   >>> vmlinux.o:(iommufd_ioas_iova_ranges)
+   >>> referenced 8 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_next
+   >>> referenced by io_pagetable.c:92 (drivers/iommu/iommufd/io_pagetable.c:92)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced by io_pagetable.c:101 (drivers/iommu/iommufd/io_pagetable.c:101)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced by ioas.c:96 (drivers/iommu/iommufd/ioas.c:96)
+   >>> vmlinux.o:(iommufd_ioas_iova_ranges)
+   >>> referenced 8 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_insert
+   >>> referenced by io_pagetable.c:179 (drivers/iommu/iommufd/io_pagetable.c:179)
+   >>> vmlinux.o:(iopt_map_pages)
+   >>> referenced by io_pagetable.c:528 (drivers/iommu/iommufd/io_pagetable.c:528)
+   >>> vmlinux.o:(iopt_reserve_iova)
+   >>> referenced by io_pagetable.c:678 (drivers/iommu/iommufd/io_pagetable.c:678)
+   >>> vmlinux.o:(iopt_table_add_domain)
+   >>> referenced 2 more times
 
-> See:
-> arch/arm/boot/dts/gemini-dlink-dns-313.dts
-> node thermal-zones {} for an example of how to do this
-> quick and easy. You need CONFIG_THERMAL and
-> CONFIG_THERMAL_HWMON for this to work.
->
-> Yours,
-> Linus Walleij
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for IOMMUFD
+   Depends on IOMMU_SUPPORT
+   Selected by
+   - VFIO && MMU && (X86 || S390 || ARM || ARM64)
 
-Best Regards,
-Pawel Dembicki
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,223 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106594C980D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF944C9811
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbiCAV6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S238614AbiCAV6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiCAV57 (ORCPT
+        with ESMTP id S229664AbiCAV6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:57:59 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274455F4DD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:57:17 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPAUT-000784-AN; Tue, 01 Mar 2022 22:57:05 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPAUO-0025cA-NW; Tue, 01 Mar 2022 22:57:00 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPAUN-006MiB-Cs; Tue, 01 Mar 2022 22:56:59 +0100
-Date:   Tue, 1 Mar 2022 22:56:59 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, lee.jones@linaro.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        elder@ieee.org
-Subject: Re: [PATCH v3] staging: greybus: introduce pwm_ops::apply
-Message-ID: <20220301215659.kj2wwrijkdmkmces@pengutronix.de>
-References: <1645780561-18481-1-git-send-email-chensong_2000@189.cn>
+        Tue, 1 Mar 2022 16:58:46 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AB83151A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:58:04 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id a7-20020a9d5c87000000b005ad1467cb59so13377809oti.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:58:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=osJEiazF+j+70r0nxx8W83ZcWYa5eX3qUrje5oSjKKI=;
+        b=eYuUMSWqJSobnkSf8t2+SSBRYOeVXr4r5YcdnuqeuPGLpzL6RKLZ3YWAr01pI7yIrx
+         zLXYazw0H2qvNCX/kwJ8I2jiGSVEbdt+KG4urm/G3+J9C5GkUeXueRSivtLEy1tLzqOg
+         WCkGQypbdc3SOD7hQzesw8oydJy0gbJPzks+A3Vht76Axtz09Zq4wngQ6nyTlK56nYb8
+         LRwRcVQhjS1PvVvqU0p/+c1Y7zwlmrte9t4UCXBfFI62WMTC9Av5B+cQQ0xkUgExbEz3
+         T6YglGVe/O9XHvfqY2L+T2diQe7+zEV6Oz6PExl9VLE/AEhRg/ZrrqaMeT69aSoHmeJn
+         ASKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=osJEiazF+j+70r0nxx8W83ZcWYa5eX3qUrje5oSjKKI=;
+        b=LSdzPnJZuy+0SHpA8x4Nopn2M2iKlASoFkcqTbRba7qbKbt6dx8QHAtaE8hCY0lcOb
+         mIWBjIzzbovv1KDoQEFCGsGMdE/TKQ0lT8AmhB/G1ZScFxYhpcLS42rLMbNplVyBBfRd
+         Xi+iDOwNv3ONwbbMT6E2kRyyCr53CIeSbCxaBmwn0HsnMwcRtjLkHYEtJwkX3rjhTWS4
+         x8oyENdXuzglnhGiWuLz6gnWKhp9sqXsPYbn/cGnx2HT3/09QsSSvFFe+qb/JIMVNiGM
+         1HwG0PI7jFGg0pevrhwVuAL5X08fCVG4AbJccm+h04XyMBFzJG2JOo34RsvL/GtGOYnC
+         jz6g==
+X-Gm-Message-State: AOAM530m2OiEFqfVjndiw4/OUmyjq33sNa3KNu4fti38aXOGijGb/y/4
+        b9EDzO6BqfzfsVqCt9rlSvm316h20rbSY7nQtam9+g==
+X-Google-Smtp-Source: ABdhPJzJDTsXI/+W86nzvWNFovaIXk/hYv4kJB2ZEJHmmzMjP2ZeCsheXLIfpUvEoXoM1lJT7gLwKZjJAMGOGZghu/E=
+X-Received: by 2002:a9d:8b5:0:b0:5a4:9db6:92b4 with SMTP id
+ 50-20020a9d08b5000000b005a49db692b4mr13546379otf.14.1646171883328; Tue, 01
+ Mar 2022 13:58:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r726a4xrd7fvdsa6"
-Content-Disposition: inline
-In-Reply-To: <1645780561-18481-1-git-send-email-chensong_2000@189.cn>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220223062412.22334-1-chenyi.qiang@intel.com>
+ <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
+ <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
+ <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com> <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
+ <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
+ <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
+ <71736b9d-9ed4-ea02-e702-74cae0340d66@intel.com> <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
+ <4b2ddc09-f68d-1cc3-3d10-f7651d811fc3@intel.com> <CALMp9eQj4Xr9VAdHw4BfPEskQYptEYYHRrpmFfVU1TCQJmHwug@mail.gmail.com>
+ <1cca344e-1c2d-8ebf-87ae-d9298a73306a@intel.com> <CALMp9eR_gPSAkSHtgOjAqJDEXF-=8aaoV0nXP3GmZ_J9sTBJFg@mail.gmail.com>
+ <91859fc0-82e0-cb74-e519-68f08c9c796d@intel.com>
+In-Reply-To: <91859fc0-82e0-cb74-e519-68f08c9c796d@intel.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 1 Mar 2022 13:57:52 -0800
+Message-ID: <CALMp9eSJgGJxSjej85yYvTav-n=KHNEPo4m2hEqsET+bHrXLew@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 28, 2022 at 9:30 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+>
+> On 3/1/2022 12:32 PM, Jim Mattson wrote:
+> > On Mon, Feb 28, 2022 at 5:41 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+> >>
+> >> On 2/28/2022 10:30 PM, Jim Mattson wrote:
+> >>> On Sun, Feb 27, 2022 at 11:10 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+> >>>>
+> >>>> On 2/26/2022 10:24 PM, Jim Mattson wrote:
+> >>>>> On Fri, Feb 25, 2022 at 10:24 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+> >>>>>>
+> >>>>>> On 2/26/2022 12:53 PM, Jim Mattson wrote:
+> >>>>>>> On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
+> >>>>>>>>
+> >>>>>>>> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+> >>>>>>>>>
+> >>>>>>>>> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
+> >>>>>>>>>> On 2/25/22 16:12, Xiaoyao Li wrote:
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> I don't like the idea of making things up without notifying userspace
+> >>>>>>>>>>>>> that this is fictional. How is my customer running nested VMs supposed
+> >>>>>>>>>>>>> to know that L2 didn't actually shutdown, but L0 killed it because the
+> >>>>>>>>>>>>> notify window was exceeded? If this information isn't reported to
+> >>>>>>>>>>>>> userspace, I have no way of getting the information to the customer.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> Then, maybe a dedicated software define VM exit for it instead of
+> >>>>>>>>>>>> reusing triple fault?
+> >>>>>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>> Second thought, we can even just return Notify VM exit to L1 to tell
+> >>>>>>>>>>> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
+> >>>>>>>>>>> to L1.
+> >>>>>>>>>>
+> >>>>>>>>>> That might cause NULL pointer dereferences or other nasty occurrences.
+> >>>>>>>>>
+> >>>>>>>>> IMO, a well written VMM (in L1) should handle it correctly.
+> >>>>>>>>>
+> >>>>>>>>> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
+> >>>>>>>>> setting Notify VM exit. If a L2 causes notify_vm_exit with
+> >>>>>>>>> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
+> >>>>>>>>> support of Notify VM Exit from VMX MSR capability. Following L1 handler
+> >>>>>>>>> is possible:
+> >>>>>>>>>
+> >>>>>>>>> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
+> >>>>>>>>>                     handle in b)
+> >>>>>>>>>             } else {
+> >>>>>>>>>                     report unexpected vm exit reason to userspace;
+> >>>>>>>>>             }
+> >>>>>>>>>
+> >>>>>>>>> b)      similar handler like we implement in KVM:
+> >>>>>>>>>             if (!vm_context_invalid)
+> >>>>>>>>>                     re-enter guest;
+> >>>>>>>>>             else
+> >>>>>>>>>                     report to userspace;
+> >>>>>>>>>
+> >>>>>>>>> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
+> >>>>>>>>> unsupported exit reason
+> >>>>>>>>>
+> >>>>>>>>> As long as it belongs to any case above, I think L1 can handle it
+> >>>>>>>>> correctly. Any nasty occurrence should be caused by incorrect handler in
+> >>>>>>>>> L1 VMM, in my opinion.
+> >>>>>>>>
+> >>>>>>>> Please test some common hypervisors (e.g. ESXi and Hyper-V).
+> >>>>>>>
+> >>>>>>> I took a look at KVM in Linux v4.9 (one of our more popular guests),
+> >>>>>>> and it will not handle this case well:
+> >>>>>>>
+> >>>>>>>             if (exit_reason < kvm_vmx_max_exit_handlers
+> >>>>>>>                 && kvm_vmx_exit_handlers[exit_reason])
+> >>>>>>>                     return kvm_vmx_exit_handlers[exit_reason](vcpu);
+> >>>>>>>             else {
+> >>>>>>>                     WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
+> >>>>>>>                     kvm_queue_exception(vcpu, UD_VECTOR);
+> >>>>>>>                     return 1;
+> >>>>>>>             }
+> >>>>>>>
+> >>>>>>> At least there's an L1 kernel log message for the first unexpected
+> >>>>>>> NOTIFY VM-exit, but after that, there is silence. Just a completely
+> >>>>>>> inexplicable #UD in L2, assuming that L2 is resumable at this point.
+> >>>>>>
+> >>>>>> At least there is a message to tell L1 a notify VM exit is triggered in
+> >>>>>> L2. Yes, the inexplicable #UD won't be hit unless L2 triggers Notify VM
+> >>>>>> exit with invalid_context, which is malicious to L0 and L1.
+> >>>>>
+> >>>>> There is only an L1 kernel log message *the first time*. That's not
+> >>>>> good enough. And this is just one of the myriad of possible L1
+> >>>>> hypervisors.
+> >>>>>
+> >>>>>> If we use triple_fault (i.e., shutdown), then no info to tell L1 that
+> >>>>>> it's caused by Notify VM exit with invalid context. Triple fault needs
+> >>>>>> to be extended and L1 kernel needs to be enlightened. It doesn't help
+> >>>>>> old guest kernel.
+> >>>>>>
+> >>>>>> If we use Machine Check, it's somewhat same inexplicable to L2 unless
+> >>>>>> it's enlightened. But it doesn't help old guest kernel.
+> >>>>>>
+> >>>>>> Anyway, for Notify VM exit with invalid context from L2, I don't see a
+> >>>>>> good solution to tell L1 VMM it's a "Notify VM exit with invalid context
+> >>>>>> from L2" and keep all kinds of L1 VMM happy, especially for those with
+> >>>>>> old kernel versions.
+> >>>>>
+> >>>>> I agree that there is no way to make every conceivable L1 happy.
+> >>>>> That's why the information needs to be surfaced to the L0 userspace. I
+> >>>>> contend that any time L0 kvm violates the architectural specification
+> >>>>> in its emulation of L1 or L2, the L0 userspace *must* be informed.
+> >>>>
+> >>>> We can make the design to exit to userspace on notify vm exit
+> >>>> unconditionally with exit_qualification passed, then userspace can take
+> >>>> the same action like what this patch does in KVM that
+> >>>>
+> >>>>     - re-enter guest when context_invalid is false;
+> >>>>     - stop running the guest if context_invalid is true; (userspace can
+> >>>> definitely re-enter the guest in this case, but it needs to take the
+> >>>> fall on this)
+> >>>>
+> >>>> Then, for nested case, L0 needs to enable it transparently for L2 if
+> >>>> this feature is enabled for L1 guest (the reason as we all agreed that
+> >>>> cannot allow L1 to escape just by creating a L2). Then what should KVM
+> >>>> do when notify vm exit from L2?
+> >>>>
+> >>>>     - Exit to L0 userspace on L2's notify vm exit. L0 userspace takes the
+> >>>> same action:
+> >>>>           - re-enter if context-invalid is false;
+> >>>>           - kill L1 if context-invalid is true; (I don't know if there is any
+> >>>> interface for L0 userspace to kill L2). Then it opens the potential door
+> >>>> for malicious user to kill L1 by creating a L2 to trigger fatal notify
+> >>>> vm exit. If you guys accept it, we can implement in this way.
+> >>>>
+> >>>>
+> >>>> in conclusion, we have below solution:
+> >>>>
+> >>>> 1. Take this patch as is. The drawback is L1 VMM receives a triple_fault
+> >>>> from L2 when L2 triggers notify vm exit with invalid context. Neither of
+> >>>> L1 VMM, L1 userspace, nor L2 kernel know it's caused due to notify vm
+> >>>> exit. There is only kernel log in L0, which seems not accessible for L1
+> >>>> user or L2 guest.
+> >>>
+> >>> You are correct on that last point, and I feel that I cannot stress it
+> >>> enough. In a typical environment, the L0 kernel log is only available
+> >>> to the administrator of the L0 host.
+> >>>
+> >>>> 2. a) Inject notify vm exit back to L1 if L2 triggers notify vm exit
+> >>>> with invalid context. The drawback is, old L1 hypervisor is not
+> >>>> enlightened of it and maybe misbehave on it.
+> >>>>
+> >>>>       b) Inject a synthesized SHUTDOWN exit to L1, with additional info to
+> >>>> tell it's caused by fatal notify vm exit from L2. It has the same
+> >>>> drawback that old hypervisor has no idea of it and maybe misbehave on it.
+> >>>>
+> >>>> 3. Exit to L0 usersapce unconditionally no matter it's caused from L1 or
+> >>>> L2. Then it may open the door for L1 user to kill L1.
+> >>>>
+> >>>> Do you have any better solution other than above? If no, we need to pick> >> one from above though it cannot make everyone happy.
+> >>>
+> >>> Yes, I believe I have a better solution. We obviously need an API for
+> >>> userspace to synthesize a SHUTDOWN event for a vCPU.
+> >>
+> >> Can you elaborate on it? Do you mean userspace to inject a synthesized
+> >> SHUTDOWN to guest? If so, I have no idea how it will work.
+> >
+> > It can probably be implemented as an extension of KVM_SET_VCPU_EVENTS
+> > that invokes kvm_make_request(KVM_REQ_TRIPLE_FAULT).
+>
+> Then, you mean
+>
+> 1. notify vm exit from guest;
+> 2. exit to userspace on notify vm exit;
+> 3. a. if context_invalid, inject SHUTDOWN to vcpu from userspace to
+> request KVM_REQ_TRIPLE_FAULT; goto step 4;
+>     b. if !context_invalid, re-run vcpu; no step 4 and 5;
+> 4. exit to userspace again with KVM_EXIT_SHUTDOWN due to triple fault;
+> 5. userspace stop running the vcpu/VM
+>
+> Then why not handle it as KVM_EXIT_SHUTDOWN directly in 3.a ? I don't
+> get the point of userspace to inject TRIPLE_FAULT to KVM.
 
---r726a4xrd7fvdsa6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure, that should work, as long as L0 userspace is notified of the
+emulation error.
 
-Hello,
+Going back to something you said previously:
 
-On Fri, Feb 25, 2022 at 05:16:01PM +0800, Song Chen wrote:
-> Introduce apply in pwm_ops to replace legacy operations,
-> like enable, disable, config and set_polarity.
->=20
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
->=20
-> ---
-> v2:
-> 1, define duty_cycle and period as u64 in gb_pwm_config_operation.
-> 2, define duty and period as u64 in gb_pwm_config_request.
-> 3, disable before configuring duty and period if the eventual goal
->    is a disabled state.
->=20
-> v3:
-> Regarding duty_cycle and period, I read more discussion in this thread,
-> min, warn or -EINVAL, seems no perfect way acceptable for everyone.
-> How about we limit their value to INT_MAX and throw a warning at the
-> same time when they are wrong?
+>> In addition, to avoid breaking legacy userspace, the NOTIFY VM-exit should be opt-in.
 
-My position is that the driver should implement the biggest possible
-period not bigger than the requested period. That's how all new drivers
-behave since I care for reviewing PWM stuff. So capping to U32_MAX as is
-(nearly) done below is good in my book.
+> Yes, it's designed as opt-in already that the feature is off by default.
 
-> ---
->  drivers/staging/greybus/pwm.c | 66 +++++++++++++++++++++--------------
->  1 file changed, 40 insertions(+), 26 deletions(-)
->=20
-> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-> index 891a6a672378..3ec5bc54d616 100644
-> --- a/drivers/staging/greybus/pwm.c
-> +++ b/drivers/staging/greybus/pwm.c
-> @@ -204,43 +204,57 @@ static void gb_pwm_free(struct pwm_chip *chip, stru=
-ct pwm_device *pwm)
->  	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
->  }
-> =20
-> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
-> -			 int duty_ns, int period_ns)
-> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> +			const struct pwm_state *state)
->  {
-> +	int err;
-> +	bool enabled =3D pwm->state.enabled;
-> +	u64 period =3D state->period;
-> +	u64 duty_cycle =3D state->duty_cycle;
->  	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
-> =20
-> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
-> -};
-> -
-> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device =
-*pwm,
-> -			       enum pwm_polarity polarity)
-> -{
-> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
-> -
-> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
-> -};
-> +	/* set polarity */
-> +	if (state->polarity !=3D pwm->state.polarity) {
-> +		if (enabled) {
-> +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-
-So polarity can only be switched with the PWM off?
-
-> +			enabled =3D false;
-> +		}
-> +		err =3D gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarit=
-y);
-> +		if (err)
-> +			return err;
-> +	}
-> =20
-> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
-> -{
-> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
-> +	if (!state->enabled) {
-> +		if (enabled)
-> +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-> +		return 0;
-> +	}
-> =20
-> -	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
-> -};
-> +	/* set period and duty cycle*/
-> +	if (period > INT_MAX) {
-
-Given that in gb_pwm_config_operation the parameters are u32, I suggest
-to use U32_MAX here instead of INT_MAX.
-
-> +		period =3D INT_MAX;
-> +		dev_warn(chip->dev, "period is %llu ns, out of range\n", state->period=
-);
-
-Please drop this warning. That's a bad one because it can be triggered
-=66rom userspace.
-
-> +	}
-> +	if (duty_cycle > INT_MAX) {
-> +		duty_cycle =3D INT_MAX;
-> +		dev_warn(chip->dev,
-> +			 "duty cycle is %llu ns, out of range\n", state->duty_cycle);
-> +	}
-> +	err =3D gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
-
-Is it clear how gb_pwm_config_operation rounds? If yes, please document
-this. I also wonder if you could implement (in a separate change)
-=2Eget_state().
-
-> +	if (err)
-> +		return err;
-> =20
-> -static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
-> -{
-> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
-> +	/* enable/disable */
-> +	if (!enabled)
-> +		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
-> =20
-> -	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-> -};
-> +	return 0;
-> +}
-> =20
->  static const struct pwm_ops gb_pwm_ops =3D {
->  	.request =3D gb_pwm_request,
->  	.free =3D gb_pwm_free,
-> -	.config =3D gb_pwm_config,
-> -	.set_polarity =3D gb_pwm_set_polarity,
-> -	.enable =3D gb_pwm_enable,
-> -	.disable =3D gb_pwm_disable,
-> +	.apply =3D gb_pwm_apply,
->  	.owner =3D THIS_MODULE,
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---r726a4xrd7fvdsa6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIelqYACgkQwfwUeK3K
-7Alwdgf8D5edHsZr1Jb77yd52CbV7Xj8gYkfrZr+ooB/WCOoZuP+kcZstYUzHHsR
-C2j7TfDQf5nr+GPyklBi58xyR9UcKazNRi4nxDWApeUauJLnuVfxog0jLv6XuBau
-QhAWJcd7tCgMbXb8/Ca8VcKHWD5xpUqveGomRHfN2tqw/FbCJeHK35JGnOyazXmR
-f1AwLvDaumNGCM4KgizkSmji6v3HWihpm5DbW89feVCSARufNky3BWBmH3xapBH8
-FmZlabb4V+YgP5Je+4+VIX0R1ch425hktZiBFLuo7jMkF/NNtaTahQSad+gITwDH
-TtV0UMkiwvIGGReYUY3qL5be4/BRDw==
-=mFjh
------END PGP SIGNATURE-----
-
---r726a4xrd7fvdsa6--
+I meant that userspace should opt-in, per VM. I believe your design is
+opt-in by system administrator, host-wide.

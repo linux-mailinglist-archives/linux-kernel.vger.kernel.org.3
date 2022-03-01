@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661E54C8F09
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9BB4C8F08
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiCAP0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S235769AbiCAP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbiCAPZd (ORCPT
+        with ESMTP id S235692AbiCAPZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:25:33 -0500
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1208A6EC;
-        Tue,  1 Mar 2022 07:24:48 -0800 (PST)
+        Tue, 1 Mar 2022 10:25:56 -0500
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FA78BE0B;
+        Tue,  1 Mar 2022 07:24:49 -0800 (PST)
 Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout4.routing.net (Postfix) with ESMTP id 60D62100832;
-        Tue,  1 Mar 2022 15:24:47 +0000 (UTC)
+        by mxout2.routing.net (Postfix) with ESMTP id 5B8445FD47;
+        Tue,  1 Mar 2022 15:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1646148287;
+        s=20200217; t=1646148288;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dKqQ8SgsxrWyYtdT8SHp+XC0lZZ/+9zXUrm1XRwXlzw=;
-        b=HEqyQLo3hFzqzMBelwU3OPdgzSO1evVJ2L3xWaLMHyPrM3MItoWTvyUfxOROTgWSF2arbg
-        wtKDDi3ttj0zvf3Uyfwb0FzWLajM/AAPvWf9TOgILqVVWhH1X9BI3SMF3AemieYRckw/dF
-        nGVv6Mc+0h0QKFBgaF0/BAj4LlD0jco=
+        bh=O4mDNDnNrc2l6l2KQYpl88DRF0oS2RB4UmRhs1zBpaA=;
+        b=HprEB0730UH3XpwJHwa8vjTm1DZo+5lXhkA2Eb9BgsafDAOCIzFCOytOvgdxmNiLibaQnF
+        FMgYDRzyjmbCcwIshFpAZ1w3/SeKCmaWO4RE37zSSNssdkDM0gKH5Oz+QN3P6Y+maJow7P
+        A/iep4XYWCT4I8SG3tV4KG5vWfnZTAs=
 Received: from localhost.localdomain (fttx-pool-80.245.77.190.bambit.de [80.245.77.190])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 4798C1007FF;
-        Tue,  1 Mar 2022 15:24:46 +0000 (UTC)
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 47D3C10011C;
+        Tue,  1 Mar 2022 15:24:47 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     devicetree@vger.kernel.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -46,15 +46,15 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH v4 3/5] dt-bindings: Add power-domains property to ahci-platform
-Date:   Tue,  1 Mar 2022 16:24:19 +0100
-Message-Id: <20220301152421.57281-4-linux@fw-web.de>
+Subject: [PATCH v4 4/5] dt-bindings: Add rk3568-dwc3-ahci compatible
+Date:   Tue,  1 Mar 2022 16:24:20 +0100
+Message-Id: <20220301152421.57281-5-linux@fw-web.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220301152421.57281-1-linux@fw-web.de>
 References: <20220301152421.57281-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: a39d56b7-7d33-4a76-8317-54d0db3fad8c
+X-Mail-ID: 6258418b-4d96-4beb-b093-528b24be8dfe
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,31 +66,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Some SoC using power-domains property so add it here
+Add SoC specific compatible for rk3568 ahci controller
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
-changes in v4: none
-changes in v3:
-  - new patch
----
- Documentation/devicetree/bindings/ata/ahci-platform.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+v4: new Patch
+ Documentation/devicetree/bindings/ata/ahci-platform.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-index cf67ddfc6afb..ea1af283d125 100644
+index ea1af283d125..7111cf448f45 100644
 --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
 +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-@@ -89,6 +89,9 @@ properties:
-       some embedded SoCs.
-     maxItems: 1
- 
-+  power-domains:
-+    maxItems: 1
-+
-   reg-names:
-     maxItems: 1
- 
+@@ -29,6 +29,10 @@ properties:
+           - marvell,armada-8k-ahci
+           - marvell,berlin2q-ahci
+         - const: generic-ahci
++      - items:
++        - enum:
++          - rockchip,rk3568-dwc-ahci
++        - const: snps,dwc-ahci
+       - enum:
+         - brcm,iproc-ahci
+         - cavium,octeon-7130-ahci
 -- 
 2.25.1
 

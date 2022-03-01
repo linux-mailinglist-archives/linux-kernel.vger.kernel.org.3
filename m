@@ -2,174 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4942C4C90D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471E04C90E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiCAQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S232155AbiCAQtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236302AbiCAQrr (ORCPT
+        with ESMTP id S236316AbiCAQrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Mar 2022 11:47:47 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A159427CD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:47:00 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id q4so13053836ilt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:47:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EdO1ZIStJEydDaNsVVTQjhQ+J41BBA4J8A/jLwHByaA=;
-        b=dT5dHERfA7NfWxTqoX5UtBav5p4kPFdv7+9TmqWHP2bK+wtMIESMJrFmYKma5Icf0g
-         +7nH1hhjR4WQRsb9PMzzil9FEypu4su5C84YyCt6kDqnr1M6NLcZDGU/SwMSpwj2DFos
-         2vfYqxcM6kV8dFiT0U/ekaSAV9UJ41JUIN8voJPJ/Th/mun4QzZUEITNp47YhjnH1sGf
-         RHg66r1G4QkiH7zmyGmQD42lVmIsQf3Kekrsvrnm5ksV+v6PLwvKvC/5CNI7DJQjGb1P
-         L89SbkL5rK2xjVuAKdrnLoDaf54r35tPdpRGmlTIY1LYozgr3fHBjpLQLrcKRj0+9wPd
-         JzoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EdO1ZIStJEydDaNsVVTQjhQ+J41BBA4J8A/jLwHByaA=;
-        b=YvVKmni7GXcn8PzUt2VHFMqJLCBuiD2ewvDEHLZz0utM6ZbqwBJpeGufaYNLAT0Hgv
-         7xn+NJshx5HOaiCIKRsF2xvK6EyOZJudW4PB3diQUzCscmwEl+zSuTxZNm+Kg9FbnGDn
-         Ub7P0eG40hc6pqQN7hOGY51OWQ0HDoDBf7b43wIXdLkN74gNNhwDCKUidZvuIIE1Qi7g
-         8ztCOQdlEmp2IdTm6fkY3yiFgC/khuQxGykva63By4z0PBa3WOOujbbaMQULeD6cx8mV
-         91mu1jS1PB8+oCg6UYncLR5RrYbyEgjL4vdQSAwPSCFnJyD3ht4buuDNseglgkfTWWAL
-         kZmQ==
-X-Gm-Message-State: AOAM532yp/5Qslvyc5jCXQDOE3qDIHcIn/QtKd7Xar0tOs5CJXfydYnH
-        bk/pRGOqqDKQobh8/TGCjHg=
-X-Google-Smtp-Source: ABdhPJy5GYUXGxdbJtTLoRtjbRmr21Q8zu5mMzrgQM87ZqsoqtWRy3CiT7iy1mU5TW1fmPqVkcyi4A==
-X-Received: by 2002:a05:6e02:1be9:b0:2c2:85a8:50cc with SMTP id y9-20020a056e021be900b002c285a850ccmr24316094ilv.131.1646153219788;
-        Tue, 01 Mar 2022 08:46:59 -0800 (PST)
-Received: from frodo.hsd1.co.comcast.net ([2601:284:8204:2010::f10e])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a6b5a03000000b00640a33c5b0dsm7272411iob.17.2022.03.01.08.46.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 08:46:59 -0800 (PST)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
-        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org
-Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 13/13] drm_print: use DEFINE_DYNAMIC_DEBUG_CLASSBITS for drm.debug
-Date:   Tue,  1 Mar 2022 09:46:29 -0700
-Message-Id: <20220301164629.3814634-14-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220301164629.3814634-1-jim.cromie@gmail.com>
-References: <20220301164629.3814634-1-jim.cromie@gmail.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDF1F41334;
+        Tue,  1 Mar 2022 08:47:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C2DF1042;
+        Tue,  1 Mar 2022 08:47:00 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BF2A3F73D;
+        Tue,  1 Mar 2022 08:47:00 -0800 (PST)
+Date:   Tue, 1 Mar 2022 16:46:58 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sean Kelley <skelley@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/3] arch_topology: obtain cpu capacity using
+ information from CPPC
+Message-ID: <Yh5OAsYVBWWko+CH@arm.com>
+References: <20210824105651.28660-1-ionela.voinescu@arm.com>
+ <20210824105651.28660-3-ionela.voinescu@arm.com>
+ <CAJZ5v0hkgWQqOzfdv4kr6rxz9eMsOgHkMYj0cZpO7yC+=SnQfg@mail.gmail.com>
+ <20210826175138.GA22165@arm.com>
+ <CAJZ5v0i9Ys67E8TvWzJG+NaODKsEMsJiHrF9KM77Lk4L-3OOsA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i9Ys67E8TvWzJG+NaODKsEMsJiHrF9KM77Lk4L-3OOsA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-if CONFIG_DRM_USE_DYNAMIC_DEBUG=y, use new macro to create the sysfs
-bitmap to control drm.debug callsites.
+Hi Rafael,
 
-DEFINE_DYNAMIC_DEBUG_CLASSBITS( debug, __drm_debug, "p",
-	"drm.debug - control summary",
-	/* inline vector of _ddebug.class_id's to be controlled, max 14 vals */
-	DRM_UT_CORE,
-	DRM_UT_DRIVER,
-	DRM_UT_KMS,
-	DRM_UT_PRIME,
-	DRM_UT_ATOMIC,
-	DRM_UT_VBL,
-	DRM_UT_STATE,
-	DRM_UT_LEASE,
-	DRM_UT_DP,
-	DRM_UT_DRMRES );
+Apologies for the delay.
 
-NOTES:
+On Thursday 26 Aug 2021 at 20:32:52 (+0200), Rafael J. Wysocki wrote:
+> On Thu, Aug 26, 2021 at 7:51 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> >
+> > Thanks for the review, Rafael!
+> >
+> > On Wednesday 25 Aug 2021 at 19:54:26 (+0200), Rafael J. Wysocki wrote:
+> > > On Tue, Aug 24, 2021 at 12:57 PM Ionela Voinescu
+> > > <ionela.voinescu@arm.com> wrote:
+> > > >
+> > > > Define topology_init_cpu_capacity_cppc() to use highest performance
+> > > > values from _CPC objects to obtain and set maximum capacity information
+> > > > for each CPU. acpi_cppc_processor_probe() is a good point at which to
+> > > > trigger the initialization of CPU (u-arch) capacity values, as at this
+> > > > point the highest performance values can be obtained from each CPU's
+> > > > _CPC objects. Architectures can therefore use this functionality
+> > > > through arch_init_invariance_cppc().
+> > > >
+> > > > The performance scale used by CPPC is a unified scale for all CPUs in
+> > > > the system. Therefore, by obtaining the raw highest performance values
+> > > > from the _CPC objects, and normalizing them on the [0, 1024] capacity
+> > > > scale, used by the task scheduler, we obtain the CPU capacity of each
+> > > > CPU.
+> > > >
+> > > > While an ACPI Notify(0x85) could alert about a change in the highest
+> > > > performance value, which should in turn retrigger the CPU capacity
+> > > > computations, this notification is not currently handled by the ACPI
+> > > > processor driver. When supported, a call to arch_init_invariance_cppc()
+> > > > would perform the update.
+> > > >
+> > > > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > > Tested-by: Valentin Schneider <valentin.schneider@arm.com>
+> > > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > > > ---
+> > > >  drivers/base/arch_topology.c  | 37 +++++++++++++++++++++++++++++++++++
+> > > >  include/linux/arch_topology.h |  4 ++++
+> > > >  2 files changed, 41 insertions(+)
+> > > >
+> > > > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> > > > index 921312a8d957..358e22cd629e 100644
+> > > > --- a/drivers/base/arch_topology.c
+> > > > +++ b/drivers/base/arch_topology.c
+> > > > @@ -306,6 +306,43 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+> > > >         return !ret;
+> > > >  }
+> > > >
+> > > > +#ifdef CONFIG_ACPI_CPPC_LIB
+> > > > +#include <acpi/cppc_acpi.h>
+> > > > +
+> > > > +void topology_init_cpu_capacity_cppc(void)
+> > > > +{
+> > > > +       struct cppc_perf_caps perf_caps;
+> > > > +       int cpu;
+> > > > +
+> > > > +       if (likely(acpi_disabled || !acpi_cpc_valid()))
+> > > > +               return;
+> > > > +
+> > > > +       raw_capacity = kcalloc(num_possible_cpus(), sizeof(*raw_capacity),
+> > > > +                              GFP_KERNEL);
+> > > > +       if (!raw_capacity)
+> > > > +               return;
+> > > > +
+> > > > +       for_each_possible_cpu(cpu) {
+> > > > +               if (!cppc_get_perf_caps(cpu, &perf_caps)) {
+> > > > +                       raw_capacity[cpu] = perf_caps.highest_perf;
+> > >
+> > > From experience, I would advise doing some sanity checking on the
+> > > per_caps values before using them here.
+> > >
+> >
+> > cppc_get_perf_caps() already returns -EFAULT if highest_perf is 0, and
+> > I'm not sure if I can make any other assumptions about what a sane
+> > highest_perf value would need to be here.
+> 
+> Well, it cannot be less than lowest_perf or nominal_perf or
+> guaranteed_perf, for instance.
+> 
 
-The @_flgs used here is "p", so this bitmap enables input to syslog
-only, matching legacy behavior.
+True! I'll push a v3 with this change tomorrow, after I rebase and
+re-test on 5.17-rc6.
 
-Also, no "fmlt" decorator flags are used here; that is discouraged, as
-it then toggles those flags along with the "p".  This would overwrite
-any customizations a user added since the sysfs-knob was last used.
-Still, there may be cases/reasons.
+I've not checked for guaranteed performance as according to the
+specification it's optional and it's designed to be between lowest_perf and
+nominal_perf. If guaranteed performance is/will be used anywhere, it should
+have its own validation against lower/nominal/highest.
 
-_ddebug.class_id is uint:4, values 0-14 are valid. 15 is reserved for
-non-classified callsites (regular pr_debugs).  Using it terminates the
-scan, don't use it halfway through your list.
+Therefore I think checking that we have a highest_perf value higher or equal
+to both nominal_perf and lowest_perf is the right balance in validation.
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- drivers/gpu/drm/drm_print.c | 20 ++++++++++++++++++--
- include/drm/drm_print.h     |  4 ++--
- 2 files changed, 20 insertions(+), 4 deletions(-)
+> > Did you have anything else in mind for sanity checking?
+> >
+> > > Also note that highest_perf may not be sustainable, so would using
+> > > highest_perf as raw_capacity[] always work as expected?
+> > >
+> >
+> > Yes, in my opinion using it is better than the alternative, using the
+> > nominal performance value. This highest performance value helps obtain
+> > the maximum capacity of a CPU on a scale [0, 1024] when referenced to
+> > the highest performance of the biggest CPU in the system. There is no
+> > assumption in the task scheduler that this capacity is sustainable.
+> 
+> That's true, but there are consequences if it is the case.  Namely,
+> you may find that the big CPUs run at the highest performance for a
+> small fraction of time, so most of the time they may appear to be
+> underutilized no matter how many tasks are packed on them, which then
+> will influence the utilization metrics of those tasks.
+> 
 
-diff --git a/drivers/gpu/drm/drm_print.c b/drivers/gpu/drm/drm_print.c
-index c9b2a2ab0d3d..d916daa384e5 100644
---- a/drivers/gpu/drm/drm_print.c
-+++ b/drivers/gpu/drm/drm_print.c
-@@ -38,7 +38,7 @@
-  * __drm_debug: Enable debug output.
-  * Bitmask of DRM_UT_x. See include/drm/drm_print.h for details.
-  */
--unsigned int __drm_debug;
-+unsigned long __drm_debug;
- EXPORT_SYMBOL(__drm_debug);
- 
- MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug category.\n"
-@@ -50,7 +50,23 @@ MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug cat
- "\t\tBit 5 (0x20)  will enable VBL messages (vblank code)\n"
- "\t\tBit 7 (0x80)  will enable LEASE messages (leasing code)\n"
- "\t\tBit 8 (0x100) will enable DP messages (displayport code)");
--module_param_named(debug, __drm_debug, int, 0600);
-+
-+#if !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
-+module_param_named(debug, __drm_debug, ulong, 0600);
-+#else
-+DEFINE_DYNAMIC_DEBUG_CLASSBITS(debug, __drm_debug, "p",
-+	"enable drm.debug categories - 1 bit per category",
-+	DRM_UT_CORE,
-+	DRM_UT_DRIVER,
-+	DRM_UT_KMS,
-+	DRM_UT_PRIME,
-+	DRM_UT_ATOMIC,
-+	DRM_UT_VBL,
-+	DRM_UT_STATE,
-+	DRM_UT_LEASE,
-+	DRM_UT_DP,
-+	DRM_UT_DRMRES);
-+#endif
- 
- void __drm_puts_coredump(struct drm_printer *p, const char *str)
- {
-diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-index 13d52b60f388..419140bf992d 100644
---- a/include/drm/drm_print.h
-+++ b/include/drm/drm_print.h
-@@ -36,7 +36,7 @@
- #include <drm/drm.h>
- 
- /* Do *not* use outside of drm_print.[ch]! */
--extern unsigned int __drm_debug;
-+extern unsigned long __drm_debug;
- 
- /**
-  * DOC: print
-@@ -527,7 +527,7 @@ __printf(1, 2)
- void __drm_err(const char *format, ...);
- 
- #if !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--#define __drm_dbg(fmt, ...)		___drm_dbg(NULL, fmt, ##__VA_ARGS__)
-+#define __drm_dbg(cat, fmt, ...)	___drm_dbg(NULL, cat, fmt, ##__VA_ARGS__)
- #else
- #define __drm_dbg(cat, fmt, ...)					\
- 	_dynamic_func_call_cls(cat, fmt, ___drm_dbg,			\
--- 
-2.35.1
+Yes, there are no perfect solutions, and whether one exposes nominal or
+highest performance there will be consequences. But I think the task
+scheduler has progressed to cope better with unavailable capacity.
 
+For example, after the PELT changes at [1], CPUs won't seem underutilized
+if they are always running, even if they are not running at the highest
+frequency. Before these changes to PELT, the utilization of a CPU was
+capped to the current capacity of the CPU. So in that case, if the
+nominal_perf was 70% of highest_perf and the CPU was only running at
+nominal_freq, its utilization could not exceed 716 (big CPU). But after
+[1] if the CPU had no idle time, it does exceed 716 and could be marked
+as overutilized. That utilization doesn't really have a meaning (we
+don't know how utilized the CPU would have been if it would have run at
+boosted frequencies) but it does not have to, as long as it signals the
+need of an action: migrate tasks to another CPU, possibly disable EAS.
+
+[1]
+https://lore.kernel.org/lkml/tip-23127296889fe84b0762b191b5d041e8ba6f2599@git.kernel.org/
+
+> It may be better to use guaranteed_perf or some value between it at
+> the highest for this reason.
+> 
+
+Guaranteed performance is a tricky one:
+"
+Guaranteed Performance Register conveys to OSPM a Guaranteed Performance
+level, which is the current maximum sustained performance level of a
+processor, taking into account all known external constraints (power
+budgeting, thermal constraints, AC vs DC power source, etc.). All
+processors are expected to be able to sustain their guaranteed
+performance levels simultaneously. The guaranteed performance level is
+required to fall in the range [Lowest Performance, Nominal performance],
+inclusive.
+"
+
+In my experience everyone interprets this differently and therefore
+platform providers could populate this vastly differently. One could
+argue that the only true guaranteed performance is the lowest
+performance as it's the only one potentially sustainable under any power
+and especially thermal conditions. As well one could argue that it could
+be closer or equal to nominal performance, but that is the case only if
+one considers thermal effects unlikely. Therefore it may be that it's
+highly unreliable as a generic source of capacity information.
+
+
+Therefore, I'm still leaning towards keeping the use of highest_perf in
+this case due to the scheduler's ability to cope with unavailable
+capacity but also because it reflects better u-arch differences between
+CPUs.
+
+Thank you,
+Ionela.
+
+> > Using lower values (nominal performance) would shorten the scale and
+> > make smaller CPUs seem bigger than they are. Also, using highest
+> > performance gives a better indication of micro-architectural
+> > differences in performance between CPUs, which plays a role in scaling
+> > utilization, even if some of the performance levels are not sustainable
+> > (which is platform dependent).

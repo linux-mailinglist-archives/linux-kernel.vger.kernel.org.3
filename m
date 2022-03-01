@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD5D4C8AFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607384C8B10
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiCALlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S234636AbiCALoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiCALlu (ORCPT
+        with ESMTP id S234628AbiCALoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:41:50 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1412939B8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:41:09 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-37-mgVLvuYEMc62HB_eDoossw-1; Tue, 01 Mar 2022 11:41:07 +0000
-X-MC-Unique: mgVLvuYEMc62HB_eDoossw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 11:41:06 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 11:41:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        'Segher Boessenkool' <segher@kernel.crashing.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: RE: [PATCH] net: Remove branch in csum_shift()
-Thread-Topic: [PATCH] net: Remove branch in csum_shift()
-Thread-Index: AQHYHyQqmTo4K/pb5UWdDmTfE7rfRayQxWFwgABxD4CAAIxicIAYqtUAgAAE/lCAAAowAIAABVwg
-Date:   Tue, 1 Mar 2022 11:41:06 +0000
-Message-ID: <10309fa64833418a980a8d950d037357@AcuMS.aculab.com>
-References: <efeeb0b9979b0377cd313311ad29cf0ac060ae4b.1644569106.git.christophe.leroy@csgroup.eu>
- <7f16910a8f63475dae012ef5135f41d1@AcuMS.aculab.com>
- <20220213091619.GY614@gate.crashing.org>
- <476aa649389345db92f86e9103a848be@AcuMS.aculab.com>
- <de560db6-d29a-8565-857b-b42ae35f80f8@csgroup.eu>
- <9cdb4a5243d342efb562bc61d0c1bfcb@AcuMS.aculab.com>
- <c616f9a6-c9db-d3a7-1b23-f827732566bb@csgroup.eu>
-In-Reply-To: <c616f9a6-c9db-d3a7-1b23-f827732566bb@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Mar 2022 06:44:37 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905C154BF3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:43:56 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r20so21530271ljj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SEk3in6d11xvs8mwQBocWYXf/yhdK/EMkyVlgK9A4i8=;
+        b=CswNEEJn4JADhLcX4CAe+MctkNkw32JX9FA1Ik86hWA1dPYwZ9UPTGZjDeXbWcI2y4
+         t84RoTdIrvN8SQtmHUCUMW7FGCVyQrYeG7XJNHyVUaChUmtmSYsVxraD2GbESM2fxGWs
+         PKaNXmLncNnprvELIXil4KzV9JS9W4dLniO3l8RmVVnVA7LDM1eBACs6JEH8jGEA2zJL
+         bl6Bw/Xv56PdiIiK7p3JfQoKUDYgnlIOTFjmxvKeGavoMrauovu37hv0Vf1HsWcNlmxT
+         5Is2TClhySG+Ruvd8WWxusQmWZGzY17UBq7/A2UihfoDDv79jwYIpiXC1s3i/hEaU6fw
+         +v3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SEk3in6d11xvs8mwQBocWYXf/yhdK/EMkyVlgK9A4i8=;
+        b=oatxFRFKSBFfwSq3jRhf5PL/opd3wmhL5u9bE2EkJU2jSYPQFLKgb3nOTZZNm213Os
+         BE024ReZrMzekX/x9snFRmDih0emXOrtx/OSlNuszKILydY6AJ51ROlrzNH6RdQvLGej
+         2FPc//+Gpmx/EVypjk4t+7x6mqy/ArIYW0HgzappAGWu5o6g3v747+SQI1Ztl1wgBnxN
+         lCGcoCiaGtVFCdsA0zh36yA6/D+BdWZN0eyHI+fmkjFSsNtOqjiWyGB5EboVFAUuZkXb
+         dvavoSpGgOMSmotOi6uAJz3y3Ipt2/RxfcRX8Xiz5O0M9NXHYmDYM+2Rm+XgpcHhRgLs
+         vAxA==
+X-Gm-Message-State: AOAM530TeDQfTFokOwjIYmq48Cyj+QHkR/o1ZT7SB9d6RBCbHvjBP6vE
+        pjuPrvFGH+RIuC682zxgCRmSUw==
+X-Google-Smtp-Source: ABdhPJxS4NuiWgStxReQaqrCgjRgur8btsR+rcYdpUwTL+R6piVjHKBkqTSX3xRrZt2GL5n2A94dIQ==
+X-Received: by 2002:a2e:891a:0:b0:246:293f:875e with SMTP id d26-20020a2e891a000000b00246293f875emr16364977lji.204.1646135034865;
+        Tue, 01 Mar 2022 03:43:54 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d11-20020ac25ecb000000b004433d2e6d22sm1443791lfq.132.2022.03.01.03.43.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 03:43:54 -0800 (PST)
+Message-ID: <d51717a2-0a50-f2fb-0d2d-e233c6e75d4b@linaro.org>
+Date:   Tue, 1 Mar 2022 14:43:50 +0300
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 5/7] PCI: qcom: Add SM8150 SoC support
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhupesh.linux@gmail.com, lorenzo.pieralisi@arm.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        svarbanov@mm-sol.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220301072511.117818-1-bhupesh.sharma@linaro.org>
+ <20220301072511.117818-6-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220301072511.117818-6-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwMSBNYXJjaCAyMDIyIDExOjE1DQouLi4N
-Cj4gTG9va3MgbGlrZSBBUk0gYWxzbyBkb2VzIGJldHRlciBjb2RlIHdpdGggdGhlIGdlbmVyaWMg
-aW1wbGVtZW50YXRpb24gYXMNCj4gaXQgc2VlbXMgdG8gaGF2ZSBzb21lIGxvb2tpbmcgbGlrZSBj
-b25kaXRpb25hbCBpbnN0cnVjdGlvbnMgJ3Jvcm5lJyBhbmQNCj4gJ3N0cm5lJy4NCg0KSW4gYXJt
-MzIgKGFuZCBJIHRoaW5rIGFybTY0KSBldmVyeSBpbnN0cnVjdGlvbiBpcyBjb25kaXRpb25hbC4N
-Cg0KPiBzdGF0aWMgX19hbHdheXNfaW5saW5lIF9fd3N1bSBjc3VtX3NoaWZ0KF9fd3N1bSBzdW0s
-IGludCBvZmZzZXQpDQo+IHsNCj4gCS8qIHJvdGF0ZSBzdW0gdG8gYWxpZ24gaXQgd2l0aCBhIDE2
-YiBib3VuZGFyeSAqLw0KPiAJaWYgKG9mZnNldCAmIDEpDQo+ICAgICAgMWQyODoJZTIxMDIwMDEg
-CWFuZHMJcjIsIHIwLCAjMQ0KPiAgICAgIDFkMmM6CWU1OGQzMDA0IAlzdHIJcjMsIFtzcCwgIzRd
-DQo+ICAgKiBAd29yZDogdmFsdWUgdG8gcm90YXRlDQo+ICAgKiBAc2hpZnQ6IGJpdHMgdG8gcm9s
-bA0KPiAgICovDQo+IHN0YXRpYyBpbmxpbmUgX191MzIgcm9yMzIoX191MzIgd29yZCwgdW5zaWdu
-ZWQgaW50IHNoaWZ0KQ0KPiB7DQo+IAlyZXR1cm4gKHdvcmQgPj4gKHNoaWZ0ICYgMzEpKSB8ICh3
-b3JkIDw8ICgoLXNoaWZ0KSAmIDMxKSk7DQo+ICAgICAgMWQzMDoJMTFhMDM0NjMgCXJvcm5lCXIz
-LCByMywgIzgNCj4gICAgICAxZDM0OgkxNThkMzAwNCAJc3RybmUJcjMsIFtzcCwgIzRdDQo+IAlp
-ZiAodW5saWtlbHkoaW92X2l0ZXJfaXNfcGlwZShpKSkpDQoNClRoZXJlIGlzIGEgc3BhcmUgJ3N0
-cicgdGhhdCBhIG1pbm9yIGNvZGUgY2hhbmdlIHdvdWxkDQpwcm9iYWJseSByZW1vdmUuDQpMaWtl
-bHkgbm90IGhlbHBlZCBieSByZWdpc3RlcnMgYmVpbmcgc3BpbGxlZCB0byBzdGFjay4NCg0KSVNU
-UiBhcm0zMiBoYXZpbmcgYSByZWFzb25hYmxlIG51bWJlciBvZiByZWdpc3RlcnMgYW5kIHRoZW4N
-CmEgd2hvbGUgbG9hZCBvZiB0aGVtIGJlaW5nIHN0b2xlbiBieSB0aGUgaW1wbGVtZW50YXRpb24u
-DQooSSdtIHN1cmUgSSByZW1lbWJlciBzdGFjayBsaW1pdCBhbmQgdGhyZWFkIGJhc2UuLi4pDQpT
-byB0aGUgY29tcGlsZXIgZG9lc24ndCBnZXQgdGhhdCBtYW55IHRvIHBsYXkgd2l0aC4NCg0KTm90
-IHF1aXRlIGFzIGJhZCBhcyBuaW9zMiAtIHdoZXJlIHIyIGFuZCByMyBhcmUgJ3Jlc2VydmVkIGZv
-cg0KdGhlIGFzc2VtYmxlcicgKGFzIHRoZXkgcHJvYmFibHkgYXJlIG9uIE1JUFMpIGJ1dCB0aGUg
-bmlvczINCmFzc2VtYmxlciBkb2Vzbid0IGV2ZXIgbmVlZCB0byB1c2UgdGhlbSENCg0KPiAuLi4N
-Cj4gT2ssIHNvIHRoZSBzb2x1dGlvbiB3b3VsZCBiZSB0byBoYXZlIGFuIGFyY2ggc3BlY2lmaWMg
-dmVyc2lvbiBvZg0KPiBjc3VtX3NoaWZ0KCkgaW4gdGhlIHNhbWUgcHJpbmNpcGxlIGFzIGNzdW1f
-YWRkKCkuDQoNClByb2JhYmx5Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 01/03/2022 10:25, Bhupesh Sharma wrote:
+> The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
+> SM8250. Hence the support is added reusing the members of ops_2_7_0.
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom.c | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index c19cd506ed3f..66fbc0234888 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1487,6 +1487,17 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
+>   	.config_sid = qcom_pcie_config_sid_sm8250,
+>   };
+>   
+> +/* Qcom IP rev.: 1.5.0 */
+> +static const struct qcom_pcie_ops ops_1_5_0 = {
+> +	.get_resources = qcom_pcie_get_resources_2_7_0,
+> +	.init = qcom_pcie_init_2_7_0,
+> +	.deinit = qcom_pcie_deinit_2_7_0,
+> +	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> +	.post_init = qcom_pcie_post_init_2_7_0,
+> +	.post_deinit = qcom_pcie_post_deinit_2_7_0,
+> +	.config_sid = qcom_pcie_config_sid_sm8250,
+> +};
+> +
 
+This duplicates the ops_1_9_0, doesn't it?
+I'd suggest to reuse 1.9.0 structure and add a comment that it's also 
+used for 1.5.0.
+
+>   static const struct qcom_pcie_cfg apq8084_cfg = {
+>   	.ops = &ops_1_0_0,
+>   };
+> @@ -1511,6 +1522,10 @@ static const struct qcom_pcie_cfg sdm845_cfg = {
+>   	.ops = &ops_2_7_0,
+>   };
+>   
+> +static const struct qcom_pcie_cfg sm8150_cfg = {
+> +	.ops = &ops_1_5_0,
+> +};
+> +
+>   static const struct qcom_pcie_cfg sm8250_cfg = {
+>   	.ops = &ops_1_9_0,
+>   };
+> @@ -1626,6 +1641,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>   	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
+>   	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
+>   	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
+> +	{ .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
+>   	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+>   	{ .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
+>   	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+
+
+-- 
+With best wishes
+Dmitry

@@ -2,131 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFFD4C937B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5224C939D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237214AbiCASqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S237098AbiCASzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237205AbiCASpw (ORCPT
+        with ESMTP id S236620AbiCASzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:45:52 -0500
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AECB6A06F
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:44:43 -0800 (PST)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id B25D211B400
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:44:42 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id P7UIn3tVVHnotP7UInejSJ; Tue, 01 Mar 2022 12:44:42 -0600
-X-Authority-Reason: nr=8
-Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:40042 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nP7UI-004D9R-1S; Tue, 01 Mar 2022 12:44:42 -0600
-Message-ID: <c3cf7c0c-27fe-4dfa-4249-a7e1747237a5@kernel.org>
-Date:   Tue, 1 Mar 2022 19:44:38 +0100
+        Tue, 1 Mar 2022 13:55:43 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DE7606FD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:55:01 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id qa43so6815181ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:55:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
+        b=ZEWbFFu3eWrZxUgaaScwD4ZJ//Z7mV4SGMyACB20WwCKEMFGKIBMMEXVkM4kZXdOyd
+         EokMKBVyAcoYChV/SvtOh5q5h0Yafm3wlsC3jCGOeoM0h4pn550KTbE+/sUn3z3m8p0V
+         ZL0gG9ZTrYCOlyUURTCDAGrluijISoqXbB1wA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
+        b=58eLvfzcsK3KRitwUUml6n6aZfOykshs5PrDf3aki9xn2147H4PyJGaoih64pdCE/m
+         5z+H+Tpv464UYfPwHMx2PYMVzWv7kUs1IL+tf4yBbegIYlrq+H+eCs9vTxpI6i3NpIZp
+         JjIsYqanWxukp3zaIc2J7Vx+0apSwwyrm6hVMzyJVNaxBzmGM41frVOl3jeTEv15ffxR
+         U7lsOrXPuBzkhzK8/C/IKHV4YDyYug+VjPeucw/foEwjTTSJL/6+Vrud8wRmaNJE8BZ4
+         k2hviq5fIypa6/TX+0ckckZQYQnfdlX8icmD9ZdBIuIAUwh9jCiDJ981C5GsnCQemKKN
+         oc+w==
+X-Gm-Message-State: AOAM532HTL4IHvt84MQA8dYUae8S2BGRdy1gKIY8gjY2yDWJrRdzoMJn
+        wVGdrccuoAAAm0kZxxboN5vNlgPP0Om0QpWnGh4=
+X-Google-Smtp-Source: ABdhPJxnOC3rqTydo5mjTmVLWDnJVRVy1MshWgVxKe0JwJb9zbXktaFeuS+thkHqblJuDuLnn7Gj0w==
+X-Received: by 2002:a17:907:2711:b0:6cf:350:81c3 with SMTP id w17-20020a170907271100b006cf035081c3mr20210146ejk.712.1646160899639;
+        Tue, 01 Mar 2022 10:54:59 -0800 (PST)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id pg27-20020a170907205b00b006d6e5102ca2sm894268ejb.97.2022.03.01.10.54.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 10:54:59 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a8so33386318ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:54:59 -0800 (PST)
+X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
+ s19-20020a056512203300b004433d490dacmr16440784lfs.52.1646160451271; Tue, 01
+ Mar 2022 10:47:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Content-Language: en-US
-To:     paulmck@kernel.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mtosatti@redhat.com
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
- <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
- <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
- <69e92bc6-0917-17e9-1b61-d884d30ba42c@kernel.org>
- <20220301180509.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220301180509.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 95.232.30.176
-X-Source-L: No
-X-Exim-ID: 1nP7UI-004D9R-1S
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:40042
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 2
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <Yh0tl3Lni4weIMkl@casper.infradead.org> <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
+ <Yh1aMm3hFe/j9ZbI@casper.infradead.org> <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
+ <202203011008.AA0B5A2D@keescook>
+In-Reply-To: <202203011008.AA0B5A2D@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 1 Mar 2022 10:47:14 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
+Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 19:05, Paul E. McKenney wrote:
->> I see, as long as it costs < 1 us, I am ok. If it gets > 1us in a reasonably
->> fast machine, we start see HW noise where it does not exist, and that would
->> reduce the resolution of osnoise. AFAICS, it is not causing that problem, but we
->> need to make it as lightweight as possible.
-> In the common case, it is atomically incrementing a local per-CPU counter
-> and doing a store.  This should be quite cheap.
-> 
-> The uncommon case is when the osnoise process was preempted or otherwise
-> interfered with during a recent RCU read-side critical section and
-> preemption was disabled around that critical section's outermost
-> rcu_read_unlock().  This can be quite expensive.  But I would expect
-> you to just not do this.  ;-)
+On Tue, Mar 1, 2022 at 10:14 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> The first big glitch with -Wshadow was with shadowed global variables.
+> GCC 4.8 fixed that, but it still yells about shadowed functions. What
+> _almost_ works is -Wshadow=local.
 
-Getting the expensive call after a preemption is not a problem, it is a side
-effect of the most costly preemption.
+Heh. Yeah, I just have long memories of "-Wshadow was a disaster". You
+looked into the details.
 
-It this case, we should "ping rcu" before reading the time to account the
-overhead for the previous preemption which caused it.
+> Another way to try to catch misused shadow variables is
+> -Wunused-but-set-varible, but it, too, has tons of false positives.
 
-like (using the current code as example):
+That on the face of it should be an easy warning to get technically
+right for a compiler.
 
-------------------------- %< -------------------------------
-static u64
-set_int_safe_time(struct osnoise_variables *osn_var, u64 *time)
-{
-        u64 int_counter;
+So I assume the "false positives" are simply because we end up having
+various variables that really don't end up being used - and
+"intentionally" so).
 
-        do {
-                int_counter = local_read(&osn_var->int_counter);
+Or rather, they might only be used under some config option - perhaps
+the use is even syntactically there and parsed, but the compiler
+notices that it's turned off under some
 
-		------------> HERE <-------------------------------------
+        if (IS_ENABLED(..))
 
-                /* synchronize with interrupts */
-                barrier();
+option? Because yeah, we have a lot of those.
 
-                *time = time_get();
+I think that's a common theme with a lot of compiler warnings: on the
+face of it they sound "obviously sane" and nobody should ever write
+code like that.
 
-                /* synchronize with interrupts */
-                barrier();
-        } while (int_counter != local_read(&osn_var->int_counter));
+A conditional that is always true? Sounds idiotic, and sounds like a
+reasonable thing for a compiler to warn about, since why would you
+have a conditional in the first place for that?
 
-        return int_counter;
-}
-------------------------- >% -------------------------------
+But then you realize that maybe the conditional is a build config
+option, and "always true" suddenly makes sense. Or it's a test for
+something that is always true on _that_architecture_ but not in some
+general sense (ie testing "sizeof()"). Or it's a purely syntactic
+conditional, like "do { } while (0)".
 
-In this way anything that happens before this *time is accounted before it is
-get. If anything happens while this loop is running, it will run again, so it is
-safe to point to the previous case.
+It's why I'm often so down on a lot of the odd warnings that are
+hiding under W=1 and friends. They all may make sense in the trivial
+case ("That is insane") but then in the end they happen for sane code.
 
-We would have to make a copy of this function, and only use the copy for the
-run_osnoise() case. A good name would be something in the lines of
-set_int_safe_time_rcu().
+And yeah, -Wshadow has had tons of history with macro nesting, and
+just being badly done in the first place (eg "strlen" can be a
+perfectly fine local variable).
 
-(Unless the expensive is < than 1us.)
+That said, maybe people could ask the gcc and clan people for a way to
+_mark_ the places where we expect to validly see shadowing. For
+example, that "local variable in a macro expression statement" thing
+is absolutely horrendous to fix with preprocessor tricks to try to
+make for unique identifiers.
 
--- Daniel
+But I think it would be much more syntactically reasonable to add (for
+example) a "shadow" attribute to such a variable exactly to tell the
+compiler "yeah, yeah, I know this identifier could shadow an outer
+one" and turn it off that way.
 
+               Linus

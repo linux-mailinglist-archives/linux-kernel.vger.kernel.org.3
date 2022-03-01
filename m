@@ -2,400 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F6B4C8DD6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E10D4C8DDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiCAOfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S235316AbiCAOh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234969AbiCAOf2 (ORCPT
+        with ESMTP id S234969AbiCAOh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:35:28 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53F48E1B3
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:34:46 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id c7so13020503qka.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 06:34:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=YfgYFmdvjCecxn9h6hICnr9ORgDNXmi56da4QLUNvw8=;
-        b=WZArLX81JCSDckeLQQDIfNH/QNKU0u9XXx9qlhHh64Q3/PwWfcqhGf5enS+iEIkjjw
-         h13pYiJwOu3UWyeK/RFDipp01OT9v3rwj5U59wQUnJt5cnubV0ZOqr6vE3Ij2SFbloCb
-         curdZNpuigdzdFmauSfXRtt0gFz6kjeLJZjc1xQUimIb/UvxiWQYM+QGs6KryWu9pwIt
-         S3NNsNTVyzz0L4+7D8vl9DK19Px+YUXbHGEFtr1hDzmhAr2LXhS23txs3zFuITeYCEDD
-         TPcyWAFWzgYjRDc/fzpAmzAwuaTNB+iPPwPAhT2Y5jJuh7MzvsyUjP6KOwA/Mx1NtSu1
-         mbtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=YfgYFmdvjCecxn9h6hICnr9ORgDNXmi56da4QLUNvw8=;
-        b=caa5YcPM5ro3x5c4PmwJBMbb2XXZ5NNyFzhWFBRIrzvqgIafyafaU8wMZIE2BaGai8
-         A/xFlOOklovCJB2nINDSXVPtxU9E5UhRaaKMipkoIS5tgJ+4FkfzREFjJWsX39XJdX4q
-         mz3Z2eMFyAhfKk3mye04q0bwFLRmGYLmlDrviTK6BOoxiOqwbHDshGcBfwQph/PuRrwK
-         p9HYqlrtn/cG3z3nvByj7PaZReubvOZq6WAaE02guo1QmIsNeF7s6MFAIaajyrfHG8VX
-         QZmSSY2f2wIBbowqMPwzWoHoVN/fmo0Tr8C4Zp06U0lKyTWie6ohYKa87/NLFh/P6Lrm
-         7aKQ==
-X-Gm-Message-State: AOAM533cN1FuuvplcIYMzd3zYoYLK3bH3H4+Atuk85mkevUqnVNgd2hr
-        qHBkAvrVm541G4P9muLo66SF7g==
-X-Google-Smtp-Source: ABdhPJx7lWgps1gKsp51n9DwywDayhxh/TdusjIKACtsKwbvy3sEwFfDLxbIT9UatJHeC4uWNMoL0w==
-X-Received: by 2002:ae9:ebd2:0:b0:4e9:15a5:bdce with SMTP id b201-20020ae9ebd2000000b004e915a5bdcemr14147591qkg.303.1646145285922;
-        Tue, 01 Mar 2022 06:34:45 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id y11-20020a05622a004b00b002dea2052d7dsm9297258qtw.12.2022.03.01.06.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 06:34:45 -0800 (PST)
-Message-ID: <777ced91106f5aba06e7cac6b6b1c80f42d25a1f.camel@ndufresne.ca>
-Subject: Re: [PATCH v7, 07/15] media: mtk-vcodec: Refactor supported vdec
- formats and framesizes
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Tue, 01 Mar 2022 09:34:43 -0500
-In-Reply-To: <20220223034008.15781-8-yunfei.dong@mediatek.com>
-References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
-         <20220223034008.15781-8-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Tue, 1 Mar 2022 09:37:28 -0500
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2162.outbound.protection.outlook.com [40.92.62.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D24CA147D;
+        Tue,  1 Mar 2022 06:36:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jCyUmwavYzNCCVUTRQZj2glPFAsvHyVizT2TDMUXU60yMckbtsT2O9mxGsx3LUtFv8BuJ/E/l7grkAMEDzAsjZVNUWhViMnQU92PC2iZTUWAPZGhfj1hHipRuqS0FDxdYNk8+nRmJ9hFTieqRUajr7uSjHAZfv+D/I5zb1LOtj7YZ0lJMRWJ53XzKIIvfzLgUv/tirGjL/pabggG12WOYzJTb8xC8ODAzZ7UYTam47teKra7wU7Ay9hYZNpQf0hG0fzsrhDj8OH534oC23ShbQYEiJvoLJGj8RbKsTxcYyKEcPmNAXAT5fTtx+uuJQZwwUJiB6NK5HOpCCbOcpLKIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=unQjfd55W5pWsGPF0DgIfnyK6p+y/uD8/BZU9Pp4uQE=;
+ b=O9SCUAZgzaPbCl0VUGfxqlsDGUBPJ8asznkmiwrcsqu+ZwtyO/AH/7MROGhIXqFqqlAdm2KSqSdelU/DjLRCAIdhLZuleTULb39L4UPPFCdM560zJom5jUvrjeugakivQecI83jlNmgeK0C06y+suABKy3QkJ+uiEnQP/kvoS0UnbwrpxFH5UryU99DyWhckSfXe/x2C1C1FgBIFfen7Avyl5GmE5ERVURc/gYB9PCnvkCJH19ypr1T3ooydqTcb/0GYb12gLxqg66A/LgjoS6evdQQROU/xp5VOop5AycaTXq9Gl4MNiBMvtPOAijgZEfIoF6INwJWWSCQzXQZIKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=unQjfd55W5pWsGPF0DgIfnyK6p+y/uD8/BZU9Pp4uQE=;
+ b=RHOagGtZtzYMVHCi96dO7qDqRZv1pNieKqTpyWJQG5yccsWKC9RshD4NbRHsIuYAB3+DvrSFWRcxttCFQ/JXToMHTq8/RUBDyxjtvjgGONHKVSWxtr64/qROlshe5kkoVIYB6+rUH4PJOVWJx76n7FiMlmM5eKF8AFAUFWza+AEZSHbehRIFursHMsNssyUrYuWJd35lNpTVZY83rFwahhj9rPatWeNCzBGnBwmPuD9WaK853htH6hHoarKdGvuvIFbatEvrn3qRfuydBoAfvfKhq9kPUEMrtmnvHvu1IwcXtWl2YVwDCs2ZJvPsfWT5QDtN9MRCBzlc9XWRVUN5pg==
+Received: from SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:16c::18)
+ by ME3P282MB3902.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:1b6::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.23; Tue, 1 Mar
+ 2022 14:36:42 +0000
+Received: from SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::6855:2b32:afdf:7cd0]) by SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::6855:2b32:afdf:7cd0%4]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 14:36:42 +0000
+From:   Tao Chen <chentao3@hotmail.com>
+To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tao Chen <chentao3@hotmail.com>
+Subject: [PATCH v2] tcp: Remove the unused api
+Date:   Tue,  1 Mar 2022 06:35:42 -0800
+Message-ID: <SYZP282MB33317DEE1253B37C0F57231E86029@SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-TMN:  [p3W4J5laGABtap5dHIyIC8Ycxg0qNWaW]
+X-ClientProxiedBy: HK0PR01CA0064.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::28) To SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:16c::18)
+X-Microsoft-Original-Message-ID: <20220301143542.36116-1-chentao3@hotmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6a0c7126-5c33-484e-9402-08d9fb90e510
+X-MS-Exchange-SLBlob-MailProps: vJxI5U0j4N5GrV8Xh0i7CpMlcr4Gx/E4OfmnlGp3SnDbzWkZqlcaAxVBWPa2n+kKBPFuCmGJQp+lhMN6n8T58i5FzYBihO8S2UG7nBMlaSWakKUfbJwaDyFeBqCz7dRdi+TS8Wft93utIGiRzWkVM7Qy4aiFFukDNdQSfBUqZiIfT2EX3Zy0qx3SLSLfa3CcvqMr9ooI7y6Oa2CgebBq1iU9lCuePf+R6V/HR+eP8yw+1t22XKXE7wdsZ92ZOgJ4W85gOD9chjTuMpSYqx94tTMqa5zQ6KoQlNuEoQ2esIILFhFYl7XuYmPmflCb3GfkU8EhXsc8QKf0MuYkgnI2XlNUan3De48929CbtF9mG3QC4TA0rFt8JR43LHH2c1KkpuEDDeIWU31BsCQ0FF/3aKu2KHtLUWnII793YWmyH27xmd8epCV4cUbTOOhPQXwYqlAsm2ceYWS7qyVNYfd7CjzjTZR0FtagW9AeqytIDy8uzYA9HZEDpHfh4b6AGFH4MMmhH2XNesWTKg8d/hbkMpzOMx8ZcNt2kX1P9+wLpuPGgwyJLpfC4h0rjWNoJTQ8O3v3OjhaOdthwip3jjFSbL5K4wUc31u30SEDMA/e38saULSmJsySM3w/f/OygrLU8DSZ/2gczzxDHwgvkA4ylHV4gKwPoSNzkyXDK7TiW9BTX5rWYtCPBJ0/YOGAJpK7AtTdtWB65nvqHJi3M//dW5z+D8XYkyQr
+X-MS-TrafficTypeDiagnostic: ME3P282MB3902:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: arbrvoktAy4B70Yii5JmGaO++QzeAl8IY1qFkUz7bwq+4s9bJrKTskomH2f4ml6gJtE8BkWF6DMy+meQ6O7zYCHdSh4wZjizny0KrZ+4RIsTTMRr/MFSr/BDgJUdLUfcMSAWov05Jh0RewYlN40ug7gsHyl9dyE0VxER+9CcenvOmOxsEcYz1yEnBqPy56nOG5j5/vfaOJfGvtri47s+TFj8BsuZdu44vfgl/3TO+0PLJUb2X898I6707XyBBHWpnYOD5jIk7On1/HVT3hSF/FV8+WWEH2CqMx3AJ5MCMbueDsIJ6U7iEFZWkDEI5IRT4Z40ks65MFFl+a+MvCD0VeCDIBJqIIL+Uhn0PUVwSjSGO1EFjbRMs+sIKY04QAfU8Ldb5KBj6tLxQVfZFurVAqQlE4NUKG8qsz+6t0bkplRK5AohV77FJKRHt6/4rP8UphtLGNQRXjDdV6QgvaZubD508cGE560Zl+j8YHF8cLL13D+zGd4H7xmrHXl+QV57AQnsoIJ69BtRcUBLjKQXiwbJmHBXprrNHaI4RcCCHa0jC/xBM/TFz+ZD2aGKilW1Td1rxSIn23Pcj/JLY3r0nA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WkT914R3YStYJp//d0Bbmr1izrA3LC3smOqhwSDs1Ds0tcLylS2D33ZlVYE3?=
+ =?us-ascii?Q?f6YE2mWk77mCIn4GfCJ9Dz+9CeALRhW/YTcbWNGddV6r3R+60qN8JsGJIl4o?=
+ =?us-ascii?Q?UK1oGBDo5+ot93+AOqq52SsndDnwYs+Elb8yWToE1KSTI9pf1k/2qYacWQKu?=
+ =?us-ascii?Q?dWMfLz/dXMxCQc43E1IbIfbndiyGyFo1+cnm/STIbiniWhpJoTM+Q9xGgnTC?=
+ =?us-ascii?Q?+dQuSUO7xiFCt1jQQ4x85KIw6aH0VWBMOCLNAKyRGpz74wL7HRlJtmkS0HMB?=
+ =?us-ascii?Q?fiXIOUlXGTdvaf4XofmV3ZRU/4UpwXv3M3oK+gcKDV49sLm/R3/mzjIfhAXi?=
+ =?us-ascii?Q?8CSV3/gcOztrq5x6szMYwxMA9q8hxFOMaap0OrZtzq+w5WFe8e1D4gYJ5tx5?=
+ =?us-ascii?Q?yUA1TGRhYQmPznGONKxqgRENuNXHjqaJGg0nzpOnonH5l/4pQolwVUlS2UXe?=
+ =?us-ascii?Q?X4SPiXAl0d1M/T6AHxIzwT+utqLxVKInzrAC72hXb8Ed4GwX+djjZZzXxWAl?=
+ =?us-ascii?Q?LV+5sNpr1NSI4unFDk0g5/8+pHEfoiDqZV9JDjZD2EUzVSPo8PxzAcppzKqL?=
+ =?us-ascii?Q?l072iHd2tSfDZUfCVu5tQ9h7ar959UHYH29Vp6yjJelhvVdehwUfzLsB1IBG?=
+ =?us-ascii?Q?oBfZ3OlWRVCvN8TO4u4zxDwQFc9xxC/C4xSZ2zKDN+D0mZIDSd/dvchkbdmG?=
+ =?us-ascii?Q?xt2F6S2AU2ZS72MtntvbZhe00djRnmSM/whBZZCkyc4PpCuvpvDCFXn0Clpt?=
+ =?us-ascii?Q?7Spm8qdMN4Bzk0dPoQdRr2xvxwaSmnAVqHMNDHbaZLkaWmsgmBlvOsftkTWN?=
+ =?us-ascii?Q?bBKbP3Omcsu9TegFPFRgFtOrs8eGcCisJNmEtteFDx1rjt8pkX5/IzCdcaD8?=
+ =?us-ascii?Q?sbSlLjpSzdTwguumuINJUoePrSMmgE8penbaGUzPHjAlYe4XICWGVljPYw0D?=
+ =?us-ascii?Q?KPhPmOGObRwlxNfy34k9CQ=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a0c7126-5c33-484e-9402-08d9fb90e510
+X-MS-Exchange-CrossTenant-AuthSource: SYZP282MB3331.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 14:36:42.8290
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME3P282MB3902
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 23 février 2022 à 11:40 +0800, Yunfei Dong a écrit :
-> Supported output and capture format types for mt8192 are different
-> with mt8183. Needs to get format types according to decoder capability.
+Last tcp_write_queue_head() use was removed in commit
+114f39feab36 ("tcp: restore autocorking"), so remove it.
 
-This patch is both refactoring and changing the behaviour. Can you please split
-the non-functional changes from the functional one. This ensure we can proceed
-with a good review of the functional changes.
+Signed-off-by: Tao Chen <chentao3@hotmail.com>
+---
+ include/net/tcp.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-regards,
-Nicolas
-
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   8 +-
->  .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  13 +-
->  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 117 +++++++++++++-----
->  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  13 +-
->  4 files changed, 107 insertions(+), 44 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> index 304f5afbd419..bae43938ee37 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> @@ -26,7 +26,7 @@ mtk_vdec_find_format(struct v4l2_format *f,
->  	const struct mtk_video_fmt *fmt;
->  	unsigned int k;
->  
-> -	for (k = 0; k < dec_pdata->num_formats; k++) {
-> +	for (k = 0; k < *dec_pdata->num_formats; k++) {
->  		fmt = &dec_pdata->vdec_formats[k];
->  		if (fmt->fourcc == f->fmt.pix_mp.pixelformat)
->  			return fmt;
-> @@ -525,7 +525,7 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
->  	if (fsize->index != 0)
->  		return -EINVAL;
->  
-> -	for (i = 0; i < dec_pdata->num_framesizes; ++i) {
-> +	for (i = 0; i < *dec_pdata->num_framesizes; ++i) {
->  		if (fsize->pixel_format != dec_pdata->vdec_framesizes[i].fourcc)
->  			continue;
->  
-> @@ -564,7 +564,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
->  	const struct mtk_video_fmt *fmt;
->  	int i, j = 0;
->  
-> -	for (i = 0; i < dec_pdata->num_formats; i++) {
-> +	for (i = 0; i < *dec_pdata->num_formats; i++) {
->  		if (output_queue &&
->  		    dec_pdata->vdec_formats[i].type != MTK_FMT_DEC)
->  			continue;
-> @@ -577,7 +577,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
->  		++j;
->  	}
->  
-> -	if (i == dec_pdata->num_formats)
-> +	if (i == *dec_pdata->num_formats)
->  		return -EINVAL;
->  
->  	fmt = &dec_pdata->vdec_formats[i];
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-> index 7966c132be8f..3f33beb9c551 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-> @@ -37,7 +37,9 @@ static const struct mtk_video_fmt mtk_video_formats[] = {
->  	},
->  };
->  
-> -#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
-> +static const unsigned int num_supported_formats =
-> +	ARRAY_SIZE(mtk_video_formats);
-> +
->  #define DEFAULT_OUT_FMT_IDX 0
->  #define DEFAULT_CAP_FMT_IDX 3
->  
-> @@ -59,7 +61,8 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
->  	},
->  };
->  
-> -#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
-> +static const unsigned int num_supported_framesize =
-> +	ARRAY_SIZE(mtk_vdec_framesizes);
->  
->  /*
->   * This function tries to clean all display buffers, the buffers will return
-> @@ -235,7 +238,7 @@ static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
->  	unsigned int k;
->  
->  	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
-> -	for (k = 0; k < NUM_FORMATS; k++) {
-> +	for (k = 0; k < num_supported_formats; k++) {
->  		fmt = &mtk_video_formats[k];
->  		if (fmt->fourcc == pixelformat) {
->  			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
-> @@ -617,11 +620,11 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
->  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
->  	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
->  	.vdec_formats = mtk_video_formats,
-> -	.num_formats = NUM_FORMATS,
-> +	.num_formats = &num_supported_formats,
->  	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
->  	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
->  	.vdec_framesizes = mtk_vdec_framesizes,
-> -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> +	.num_framesizes = &num_supported_framesize,
->  	.worker = mtk_vdec_worker,
->  	.flush_decoder = mtk_vdec_flush_decoder,
->  	.is_subdev_supported = false,
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> index 6d481410bf89..e51d935bd21d 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> @@ -81,33 +81,23 @@ static const struct mtk_stateless_control mtk_stateless_controls[] = {
->  
->  #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
->  
-> -static const struct mtk_video_fmt mtk_video_formats[] = {
-> -	{
-> -		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-> -		.type = MTK_FMT_DEC,
-> -		.num_planes = 1,
-> -	},
-> -	{
-> -		.fourcc = V4L2_PIX_FMT_MM21,
-> -		.type = MTK_FMT_FRAME,
-> -		.num_planes = 2,
-> -	},
-> +static struct mtk_video_fmt mtk_video_formats[2];
-> +static struct mtk_codec_framesizes mtk_vdec_framesizes[1];
-> +
-> +static struct mtk_video_fmt default_out_format;
-> +static struct mtk_video_fmt default_cap_format;
-> +static unsigned int num_formats;
-> +static unsigned int num_framesizes;
-> +
-> +static struct v4l2_frmsize_stepwise stepwise_fhd = {
-> +	.min_width = MTK_VDEC_MIN_W,
-> +	.max_width = MTK_VDEC_MAX_W,
-> +	.step_width = 16,
-> +	.min_height = MTK_VDEC_MIN_H,
-> +	.max_height = MTK_VDEC_MAX_H,
-> +	.step_height = 16
->  };
->  
-> -#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
-> -#define DEFAULT_OUT_FMT_IDX    0
-> -#define DEFAULT_CAP_FMT_IDX    1
-> -
-> -static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
-> -	{
-> -		.fourcc	= V4L2_PIX_FMT_H264_SLICE,
-> -		.stepwise = {  MTK_VDEC_MIN_W, MTK_VDEC_MAX_W, 16,
-> -				MTK_VDEC_MIN_H, MTK_VDEC_MAX_H, 16 },
-> -	},
-> -};
-> -
-> -#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
-> -
->  static void mtk_vdec_stateless_out_to_done(struct mtk_vcodec_ctx *ctx,
->  					   struct mtk_vcodec_mem *bs, int error)
->  {
-> @@ -350,6 +340,62 @@ const struct media_device_ops mtk_vcodec_media_ops = {
->  	.req_queue	= v4l2_m2m_request_queue,
->  };
->  
-> +static void mtk_vcodec_add_formats(unsigned int fourcc,
-> +				   struct mtk_vcodec_ctx *ctx)
-> +{
-> +	struct mtk_vcodec_dev *dev = ctx->dev;
-> +	const struct mtk_vcodec_dec_pdata *pdata = dev->vdec_pdata;
-> +	int count_formats = *pdata->num_formats;
-> +	int count_framesizes = *pdata->num_framesizes;
-> +
-> +	switch (fourcc) {
-> +	case V4L2_PIX_FMT_H264_SLICE:
-> +			[count_formats].fourcc = fourcc;
-> +		mtk_video_formats[count_formats].type = MTK_FMT_DEC;
-> +		mtk_video_formats[count_formats].num_planes = 1;
-> +
-> +		mtk_vdec_framesizes[count_framesizes].fourcc = fourcc;
-> +		mtk_vdec_framesizes[count_framesizes].stepwise = stepwise_fhd;
-> +		num_framesizes++;
-> +		break;
-> +	case V4L2_PIX_FMT_MM21:
-> +		mtk_video_formats[count_formats].fourcc = fourcc;
-> +		mtk_video_formats[count_formats].type = MTK_FMT_FRAME;
-> +		mtk_video_formats[count_formats].num_planes = 2;
-> +		break;
-> +	default:
-> +		mtk_v4l2_err("Can not add unsupported format type");
-> +		return;
-> +	}
-> +
-> +	num_formats++;
-> +	mtk_v4l2_debug(3, "num_formats: %d num_frames:%d dec_capability: 0x%x",
-> +		       count_formats, count_framesizes, ctx->dev->dec_capability);
-> +}
-> +
-> +static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_ctx *ctx)
-> +{
-> +	int cap_format_count = 0, out_format_count = 0;
-> +
-> +	if (num_formats && num_framesizes)
-> +		return;
-> +
-> +	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_MM21) {
-> +		mtk_vcodec_add_formats(V4L2_PIX_FMT_MM21, ctx);
-> +		cap_format_count++;
-> +	}
-> +	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_H264_SLICE) {
-> +		mtk_vcodec_add_formats(V4L2_PIX_FMT_H264_SLICE, ctx);
-> +		out_format_count++;
-> +	}
-> +
-> +	if (cap_format_count)
-> +		default_cap_format = mtk_video_formats[cap_format_count - 1];
-> +	if (out_format_count)
-> +		default_out_format =
-> +			mtk_video_formats[cap_format_count + out_format_count - 1];
-> +}
-> +
->  static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
->  {
->  	struct vb2_queue *src_vq;
-> @@ -360,6 +406,11 @@ static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
->  	if (ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
->  		v4l2_m2m_set_dst_buffered(ctx->m2m_ctx, 1);
->  
-> +	if (!ctx->dev->vdec_pdata->is_subdev_supported)
-> +		ctx->dev->dec_capability |=
-> +			MTK_VDEC_FORMAT_H264_SLICE | MTK_VDEC_FORMAT_MM21;
-> +	mtk_vcodec_get_supported_formats(ctx);
-> +
->  	/* Support request api for output plane */
->  	src_vq->supports_requests = true;
->  	src_vq->requires_requests = true;
-> @@ -393,11 +444,11 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
->  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
->  	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
->  	.vdec_formats = mtk_video_formats,
-> -	.num_formats = NUM_FORMATS,
-> -	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
-> -	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
-> +	.num_formats = &num_formats,
-> +	.default_out_fmt = &default_out_format,
-> +	.default_cap_fmt = &default_cap_format,
->  	.vdec_framesizes = mtk_vdec_framesizes,
-> -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> +	.num_framesizes = &num_framesizes,
->  	.uses_stateless_api = true,
->  	.worker = mtk_vdec_worker,
->  	.flush_decoder = mtk_vdec_flush_decoder,
-> @@ -413,11 +464,11 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
->  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
->  	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
->  	.vdec_formats = mtk_video_formats,
-> -	.num_formats = NUM_FORMATS,
-> -	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
-> -	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
-> +	.num_formats = &num_formats,
-> +	.default_out_fmt = &default_out_format,
-> +	.default_cap_fmt = &default_cap_format,
->  	.vdec_framesizes = mtk_vdec_framesizes,
-> -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> +	.num_framesizes = &num_framesizes,
->  	.uses_stateless_api = true,
->  	.worker = mtk_vdec_worker,
->  	.flush_decoder = mtk_vdec_flush_decoder,
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> index 9fcaf69549dd..270c73c05285 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> @@ -344,6 +344,15 @@ enum mtk_vdec_hw_arch {
->  	MTK_VDEC_LAT_SINGLE_CORE,
->  };
->  
-> +/*
-> + * struct mtk_vdec_format_types - Structure used to get supported
-> + *		  format types according to decoder capability
-> + */
-> +enum mtk_vdec_format_types {
-> +	MTK_VDEC_FORMAT_MM21 = 0x20,
-> +	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
-> +};
-> +
->  /**
->   * struct mtk_vcodec_dec_pdata - compatible data for each IC
->   * @init_vdec_params: init vdec params
-> @@ -379,12 +388,12 @@ struct mtk_vcodec_dec_pdata {
->  	struct vb2_ops *vdec_vb2_ops;
->  
->  	const struct mtk_video_fmt *vdec_formats;
-> -	const int num_formats;
-> +	const int *num_formats;
->  	const struct mtk_video_fmt *default_out_fmt;
->  	const struct mtk_video_fmt *default_cap_fmt;
->  
->  	const struct mtk_codec_framesizes *vdec_framesizes;
-> -	const int num_framesizes;
-> +	const int *num_framesizes;
->  
->  	enum mtk_vdec_hw_arch hw_arch;
->  
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index b9fc978fb2ca..a4cebb7f6f9b 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1817,11 +1817,6 @@ static inline struct sk_buff *tcp_rtx_queue_tail(const struct sock *sk)
+ 	return skb_rb_last(&sk->tcp_rtx_queue);
+ }
+ 
+-static inline struct sk_buff *tcp_write_queue_head(const struct sock *sk)
+-{
+-	return skb_peek(&sk->sk_write_queue);
+-}
+-
+ static inline struct sk_buff *tcp_write_queue_tail(const struct sock *sk)
+ {
+ 	return skb_peek_tail(&sk->sk_write_queue);
+-- 
+2.17.1
 

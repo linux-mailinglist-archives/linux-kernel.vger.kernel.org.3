@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E426D4C8F83
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3794C8F85
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiCAP7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
+        id S235427AbiCAP7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiCAP7j (ORCPT
+        with ESMTP id S235926AbiCAP7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:59:39 -0500
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957296145;
-        Tue,  1 Mar 2022 07:58:55 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B7AAA20000E;
-        Tue,  1 Mar 2022 15:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646150333;
+        Tue, 1 Mar 2022 10:59:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0A52610A;
+        Tue,  1 Mar 2022 07:59:00 -0800 (PST)
+Date:   Tue, 1 Mar 2022 16:58:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646150339;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p1HaABgS+y/Gfst5xbNMwu8EcDjttBMdhpgl96eHGRE=;
-        b=mHTC1Y9/6NFvBqVq+c4md0DDZ5QMZXHvL/3M4g+DF9wz7peCsLrR8kNNZh7O3gwGc+phhS
-        NIwBzWPE5kUwQuNa0bchxp55FZbws1L5Xy9eWQ0uFrPpj5yW7tXGx64xsKLUU9p21RrFk3
-        wbkX554Dg1I8K6G7XOM2iSu4tbqb4uFn07Sy2rz8hlFRdYiXHO/xyvG0P8x8qAxG9pFw09
-        MeyJMaDwc+v5uMiIrKvEbfQ15i8ixIVXEwueRyo2kwp/ze0Oo7c+S1GjBQ4o1gHDsN7fF3
-        mo3cu7Hgavwy4j7ZZPn6031crTUmXFH/Nlw7J+/M2cWQLC9b6iGi4b2qHa7n5A==
-Date:   Tue, 1 Mar 2022 16:58:51 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 63/66] staging: media: Add support for the Allwinner
- A31 ISP
-Message-ID: <Yh5CuyEJ+WhIAzYm@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
- <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
+        bh=olozTMEtw7DSBnZAX6uhB+q7ita0MNNnbjrwWbcm+f8=;
+        b=UxQgf+lRCB4ogKSWz2pAPxXQw430mRW+XsO2K+VFGAKKR+XkFVhxQjAaGkO2MtrcVQBtCg
+        nybkLJFEJp47oWQVAaD4BbVzqbPsP3sSuXcDg5jLBztLySl1mRyNPHHJZoalkP+cmFeHlm
+        0xV/rYmFzqkrPaPUgQ53HigQnSliIwRYqA5n/isuIFYlihzTbnIH3hZz4nz6z0SLULXjZB
+        1t6WP4I9dFosdjcDaXohbFoIUGSM885WjbtI5wds5T8FIuXPAGw79LXJifK6TkPp4WdpFQ
+        sdo+FaE6JsG6TtV0cNFWMbhUgw3QhYxgP52Z7JBh8Um5PDSQP2uyHaf74xrLxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646150339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=olozTMEtw7DSBnZAX6uhB+q7ita0MNNnbjrwWbcm+f8=;
+        b=TCvZiXR63kHpNETkgEEew+jXDBybQtKVrbGiJmemC69/yDYC6nEVmjZgxpljJJq4af63Ee
+        OiB8yf6mKim25wAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: RFC: Intervals to schedule the worker for
+ mix_interrupt_randomness().
+Message-ID: <Yh5CwQgsdNefs2ZW@linutronix.de>
+References: <Yh0QlQ8aqttjlnKt@linutronix.de>
+ <CAHmME9rqhUcVD+rE5NEcvRu6G79aNkf8RZwXZnWtHNmTf3rfaw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rv9snxutxHS4sJyL"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAHmME9rqhUcVD+rE5NEcvRu6G79aNkf8RZwXZnWtHNmTf3rfaw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,156 +66,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-02-28 19:58:05 [+0100], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
 
---rv9snxutxHS4sJyL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Laurent,
-
-On Mon 07 Feb 22, 18:16, Laurent Pinchart wrote:
-> Hi Paul,
+> I'm actually trying quite hard not to change the details of entropy
+> gathering for 5.18. There are lots of little arguments for why each
+=E2=80=A6
+> random.c. So I'd like to minimize changes to the semantics. Right now,
+> those semantics are:
 >=20
-> Thank you for the patch.
->=20
-> On Sat, Feb 05, 2022 at 07:54:26PM +0100, Paul Kocialkowski wrote:
-> > Some Allwinner platforms come with an Image Signal Processor, which
-> > supports various features in order to enhance and transform data
-> > received by image sensors into good-looking pictures. In most cases,
-> > the data is raw bayer, which gets internally converted to RGB and
-> > finally YUV, which is what the hardware produces.
-> >=20
-> > This driver supports ISPs that are similar to the A31 ISP, which was
-> > the first standalone ISP found in Allwinner platforms. Simpler ISP
-> > blocks were found in the A10 and A20, where they are tied to a CSI
-> > controller. Newer generations of Allwinner SoCs (starting with the
-> > H6, H616, etc) come with a new camera subsystem and revised ISP.
-> > Even though these previous and next-generation ISPs are somewhat
-> > similar to the A31 ISP, they have enough significant differences to
-> > be out of the scope of this driver.
-> >=20
-> > While the ISP supports many features, including 3A and many
-> > enhancement blocks, this implementation is limited to the following:
-> > - V3s (V3/S3) platform support;
-> > - Bayer media bus formats as input;
->=20
-> Greyscale formats would also be nice to have, if the hardware can
-> support that (it mostly just requires the ability to disable the CFA
-> interpolation).
+> A) crng_init=3D=3D0: pre_init_inject after 64 interrupts.
+> B) crng_init!=3D0: mix_pool_bytes after 64 interrupts OR after 1 second
+> has elapsed.
 
-As far as I know there's no support for grayscale, only bayer formats
-and YUV.
+Yes. I double checked, that it was not a recent change during that
+rework. So yes, lets keep it as is, I just wanted to point that out.
+=E2=80=A6
+> But all this brings me to what I'm really wondering when reading your
+> email: do your observations matter? Are you observing a performance or
+> reliability issue or something like that with those workqueues
+> pending? Is this whole workqueue approach a mistake and we should
+> revert it? Or is it still okay, but you were just idly wondering about
+> that time limit? As you can tell, I'm mostly concerned with not
+> breaking something by accident.
 
-> > - Semi-planar YUV (NV12/NV21) as output;
->=20
-> Packed YUV would also be useful if the hardware supports it.
+I noticed it because I backported the required patches (not everything
+=66rom your queue, just the patches I needed to drop mine and have
+everything working). During testing I noticed that the worker is
+scheduled more often than I expected and I looked that it is scheduled
+and not accidentally stops due to a backport that went wrong. And since
+I got the condition wrong=E2=80=A6
 
-Same here, it only supports planar and semi-planar YUV as output.
+But you are asking for performance. I run b.sh which does:
+- unpack a kernel to /dev/shm
+- build allmodconfig
 
-> > - Debayering with per-component gain and offset configuration;
-> > - 2D noise filtering with configurable coefficients.
-> >=20
-> > Since many features are missing from the associated uAPI, the driver
-> > is aimed to integrate staging until all features are properly
-> > described.
-> >=20
-> > On the technical side, it uses the v4l2 and media controller APIs,
-> > with a video node for capture, a processor subdev and a video node
-> > for parameters submission. A specific uAPI structure and associated
-> > v4l2 meta format are used to configure parameters of the supported
-> > modules.
-> >=20
-> > One particular thing about the hardware is that configuration for
-> > module registers needs to be stored in a DMA buffer and gets copied
-> > to actual registers by the hardware at the next vsync, when instructed
-> > by a flag. This is handled by the "state" mechanism in the driver.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > ---
-> >  drivers/staging/media/sunxi/Kconfig           |   1 +
-> >  drivers/staging/media/sunxi/Makefile          |   1 +
-> >  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  13 +
-> >  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
-> >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 572 +++++++++++++
-> >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  86 ++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 751 ++++++++++++++++++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 +++++++++++++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 599 ++++++++++++++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  61 ++
-> >  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
-> >  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
->=20
-> Could you add a TODO file to list the issues that need to be fixed for
-> the driver to move out of staging ? I'll already propose one entry:
->=20
-> - Add support in libcamera
+and then invoked it with "perf stat -r 5 -a --table ./b.sh" to get some
+numbers. I applied your complete queue on top of v5.17-rc6, and the
+result was:
 
-Maybe it would be good to narrow down what level of support you have in mind
-here. Just adding basic support fort the pipeline is probably doable, but
-developing complex 3A algorithms would require very significant effort and
-it would be a shame that this prevents the driver from leaving staging.
+| Performance counter stats for 'system wide' (5 runs):
+|
+|     45.502.822,32 msec cpu-clock                 #   32,014 CPUs utilized=
+            ( +-  0,05% )
+|         9.479.371      context-switches          #  208,419 /sec         =
+            ( +-  0,08% )
+|           839.380      cpu-migrations            #   18,455 /sec         =
+            ( +-  0,38% )
+|       624.839.341      page-faults               #   13,738 K/sec        =
+            ( +-  0,00% )
+|105.297.794.633.131      cycles                    #    2,315 GHz         =
+             ( +-  0,01% )
+|77.238.191.940.405      stalled-cycles-frontend   #   73,37% frontend cycl=
+es idle     ( +-  0,01% )
+|56.724.314.805.475      stalled-cycles-backend    #   53,89% backend cycle=
+s idle      ( +-  0,02% )
+|69.889.082.499.264      instructions              #    0,66  insn per cycl=
+e        =20
+|                                                  #    1,10  stalled cycle=
+s per insn  ( +-  0,00% )
+|14.670.304.314.265      branches                  #  322,550 M/sec        =
+            ( +-  0,00% )
+|   561.326.606.978      branch-misses             #    3,83% of all branch=
+es          ( +-  0,02% )
+|
+|          # Table of individual measurements:
+|          1419,113 (-2,247) #
+|          1422,552 (+1,192) #
+|          1420,773 (-0,587) #
+|          1422,362 (+1,002) #
+|          1422,001 (+0,641) #
+|
+|          # Final result:
+|          1421,360 +- 0,641 seconds time elapsed  ( +-  0,05% )
 
-I think another obvious task would be to have a complete uAPI that reflects
-all modules that are part of the ISP.
+Checked a few commit earlier, before the workqueue rework started
+  "random: rewrite header introductory comment":
+| Performance counter stats for 'system wide' (5 runs):
+|
+|     45.508.013,44 msec cpu-clock                 #   32,034 CPUs utilized=
+            ( +-  0,05% )
+|         9.456.280      context-switches          #  208,017 /sec         =
+            ( +-  0,11% )
+|           837.148      cpu-migrations            #   18,415 /sec         =
+            ( +-  0,30% )
+|       624.851.749      page-faults               #   13,745 K/sec        =
+            ( +-  0,00% )
+|105.289.268.852.002      cycles                    #    2,316 GHz         =
+             ( +-  0,01% )
+|77.233.457.186.415      stalled-cycles-frontend   #   73,38% frontend cycl=
+es idle     ( +-  0,02% )
+|56.740.014.447.074      stalled-cycles-backend    #   53,91% backend cycle=
+s idle      ( +-  0,02% )
+|69.882.802.096.982      instructions              #    0,66  insn per cycle
+|                                                  #    1,10  stalled cycle=
+s per insn  ( +-  0,00% )
+|14.670.395.601.080      branches                  #  322,716 M/sec        =
+            ( +-  0,00% )
+|   560.846.203.691      branch-misses             #    3,82% of all branch=
+es          ( +-  0,01% )
+|
+|          # Table of individual measurements:
+|          1418,288 (-2,347) #
+|          1420,425 (-0,210) #
+|          1420,633 (-0,001) #
+|          1421,665 (+1,030) #
+|          1422,162 (+1,528) #
+|
+|          # Final result:
+|          1420,635 +- 0,669 seconds time elapsed  ( +-  0,05% )
 
-What do you think?
+and then on v5.17-rc6:
+| Performance counter stats for 'system wide' (5 runs):
+|
+|     45.459.406,05 msec cpu-clock                 #   32,009 CPUs utilized=
+            ( +-  0,04% )
+|         9.460.380      context-switches          #  208,171 /sec         =
+            ( +-  0,10% )
+|           837.571      cpu-migrations            #   18,430 /sec         =
+            ( +-  0,30% )
+|       624.859.326      page-faults               #   13,750 K/sec        =
+            ( +-  0,00% )
+|105.247.262.852.106      cycles                    #    2,316 GHz         =
+             ( +-  0,01% )
+|77.185.603.119.285      stalled-cycles-frontend   #   73,34% frontend cycl=
+es idle     ( +-  0,01% )
+|56.688.996.383.094      stalled-cycles-backend    #   53,87% backend cycle=
+s idle      ( +-  0,02% )
+|69.883.077.705.602      instructions              #    0,66  insn per cycl=
+e        =20
+|                                                  #    1,10  stalled cycle=
+s per insn  ( +-  0,00% )
+|14.670.347.661.094      branches                  #  322,813 M/sec        =
+            ( +-  0,00% )
+|   561.066.414.554      branch-misses             #    3,82% of all branch=
+es          ( +-  0,01% )
+|
+|          # Table of individual measurements:
+|          1418,142 (-2,061) #
+|          1420,187 (-0,016) #
+|          1421,242 (+1,039) #
+|          1420,800 (+0,597) #
+|          1420,644 (+0,441) #
+|
+|          # Final result:
+|          1420,203 +- 0,542 seconds time elapsed  ( +-  0,04% )
 
-Paul
+It does not appear that something stands out.
 
-> This isn't required to merge the driver in staging as long as ABI
-> compatibility doesn't need to be preserved until the driver is moved out
-> of staging.
->
-> >  14 files changed, 3109 insertions(+)
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_cap=
-ture.c
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_cap=
-ture.h
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_par=
-ams.c
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_par=
-ams.h
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_pro=
-c.c
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_pro=
-c.h
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg=
-=2Eh
-> >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-is=
-p-config.h
->=20
-> [snip]
->=20
-> --=20
 > Regards,
->=20
-> Laurent Pinchart
+> Jason
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---rv9snxutxHS4sJyL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIeQrsACgkQ3cLmz3+f
-v9H2jgf+N/b7OZxk/ZZM3hYobj15RrI+x8TKse6MSXRy36uwvb7ncA6XvvbKn78m
-fvLBGg4D0y3s7WHU+sMiBYWmHyfp8CUCuMmsK4pP0hL97ATEn+tQJDgYVEbKpyYi
-fsYNYk2f42wsKG/++VqBImcqWNlGKSwVjOIPL+0Tp/PacAjZrQKKQiMj8Ual9zLX
-JdQPMAORdCKsedX6imko0+rCgb7y2lOHslREnI0q+H5doa3XENq6r0bhDlmkjruK
-9OuvzL/JJfaSwqA8Wd6LzoxC/mQq4Tw5DHnotsk1z5rfbDN0/v7IvTh6s16Fq0Ws
-3giosRl9b6nSW2QSxGILv98e7i6WbQ==
-=TKnA
------END PGP SIGNATURE-----
-
---rv9snxutxHS4sJyL--
+Sebastian

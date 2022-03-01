@@ -2,94 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7794C8E76
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A683D4C8E78
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbiCAPBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S235504AbiCAPCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiCAPBO (ORCPT
+        with ESMTP id S232934AbiCAPCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:01:14 -0500
-Received: from v-zimmta03.u-bordeaux.fr (v-zimmta03.u-bordeaux.fr [147.210.215.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2998A20F6E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:00:30 -0800 (PST)
-Received: from v-zimmta03.u-bordeaux.fr (localhost [127.0.0.1])
-        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTP id 0844C1800A88;
-        Tue,  1 Mar 2022 16:00:29 +0100 (CET)
-Received: from begin (nat-inria-interne-54-gw-02-bso.bordeaux.inria.fr [194.199.1.54])
-        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTPSA id AB9541800A86;
-        Tue,  1 Mar 2022 16:00:28 +0100 (CET)
-Received: from samy by begin with local (Exim 4.95)
-        (envelope-from <samuel.thibault@labri.fr>)
-        id 1nP3zI-00BqZC-Fw;
-        Tue, 01 Mar 2022 16:00:28 +0100
-Date:   Tue, 1 Mar 2022 16:00:28 +0100
-From:   Samuel Thibault <samuel.thibault@labri.fr>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     willemb@google.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-Subject: Re: [PATCH] SO_ZEROCOPY should rather return -ENOPROTOOPT
-Message-ID: <20220301150028.romzjw2b4aczl7kf@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@labri.fr>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        willemb@google.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-References: <20220301144453.snstwdjy3kmpi4zf@begin>
- <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
+        Tue, 1 Mar 2022 10:02:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414D9E56E;
+        Tue,  1 Mar 2022 07:01:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C8C66CE1C48;
+        Tue,  1 Mar 2022 15:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD23EC340F2;
+        Tue,  1 Mar 2022 15:01:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646146898;
+        bh=fsaZzr0CCCP6M/dr2U1LFsH9eaJK6vbc1eqyfSLb/Z8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VkPclI6kDUJ0dLw1WIhtpq7EdjRgXY70C5RVnwiqdU/+UFEPxxC5BjXKYf9ihkZrC
+         fb/6pohUXMZ0QY0a64QXnE7DE9ePCNLNYaq8cutbtCXjTnKg7ITZ+kPA/xLFgc9/nY
+         mZjiy3k3CVqC6ych2388Aub3rFIFf5uImJCgdnD0GNIc8/5XK6acYilRnOIkuaxEls
+         bMmmWXQ79IwyZ4LI7Y1vMvf9Z6VlBsTyrIb+KtdVcUjWwarOM2n8AjOowQAoWc9M//
+         h3TyDOGoS6D/H/z6igGBC+vb/IGolYHKaN6EaumaBsoQ6lpjyga3pd7npiiDk4JzWP
+         vKXae5E0Djlng==
+Date:   Tue, 1 Mar 2022 09:01:36 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the pci tree
+Message-ID: <20220301150136.GA609359@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-AV-Checked: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220301135938.4c664beb@canb.auug.org.au>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willem de Bruijn, le mar. 01 mars 2022 09:51:45 -0500, a ecrit:
-> On Tue, Mar 1, 2022 at 9:44 AM Samuel Thibault <samuel.thibault@labri.fr> wrote:
-> >
-> > ENOTSUPP is documented as "should never be seen by user programs", and
-> > is not exposed in <errno.h>, so applications cannot safely check against
-> > it. We should rather return the well-known -ENOPROTOOPT.
-> >
-> > Signed-off-by: Samuel Thibault <samuel.thibault@labri.fr>
-> >
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index 4ff806d71921..6e5b84194d56 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
-> >                         if (!(sk_is_tcp(sk) ||
-> >                               (sk->sk_type == SOCK_DGRAM &&
-> >                                sk->sk_protocol == IPPROTO_UDP)))
-> > -                               ret = -ENOTSUPP;
-> > +                               ret = -ENOPROTOOPT;
-> >                 } else if (sk->sk_family != PF_RDS) {
-> > -                       ret = -ENOTSUPP;
-> > +                       ret = -ENOPROTOOPT;
-> >                 }
-> >                 if (!ret) {
-> >                         if (val < 0 || val > 1)
+On Tue, Mar 01, 2022 at 01:59:38PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> That should have been a public error code. Perhaps rather EOPNOTSUPP.
+> After merging the pci tree, today's linux-next build (htmldocs) produced
+> these warnings:
 > 
-> The problem with a change now is that it will confuse existing
-> applications that check for -524 (ENOTSUPP).
+> Error: Cannot open file drivers/gpu/vga/vgaarb.c
+> Error: Cannot open file drivers/gpu/vga/vgaarb.c
+> 
+> Introduced by commit
+> 
+>   d6e1898bfa5b ("PCI/VGA: Move vgaarb to drivers/pci")
+> 
+> The reference in Documentation/gpu/vgaarbiter.rst needs to be updated.
 
-They were not supposed to hardcord -524...
-
-Actually, they already had to check against EOPNOTSUPP to support older
-kernels, so EOPNOTSUPP is not supposed to pose a problem.
-
-Samuel
+Fixed, thanks!

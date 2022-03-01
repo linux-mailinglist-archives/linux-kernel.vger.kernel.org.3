@@ -2,115 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AAB4C81EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ACD4C81EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiCAEH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S232190AbiCAEIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiCAEH5 (ORCPT
+        with ESMTP id S232184AbiCAEIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:07:57 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F26A4F9EA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:16 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso1019200pjk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:16 -0800 (PST)
+        Mon, 28 Feb 2022 23:08:34 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386A413D0C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:51 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id t21so12104339qkg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DaUtZIJE57Vq9SZxZBhHAxebl5xJ9yYYEaN9hQal+Yc=;
-        b=zkOAS1NuNVVA37+a+9a5ZOpokz2S8PWO35PvVGMMThDauaYUOPsvyVjtc8Zr41iFQi
-         evBontnp0ibEks/7mYoY/YuqsCVhfpUaez7NR3mQ0Sa4AfaUz3NIZ7rvzqT9zXMSljSt
-         jicjvB603m34d1Vm7FPVEsF93+5HqkdpbTJlR8aaCL3RSFn22ck2ctV0flqmUD8K22aX
-         rBn1xW1ZmBx4pBckCgQoMMVFxwuuIu4PoBfFW1nuuS6InmoX/5JQDMz3HQ8pbqIOzO/o
-         WBivj9pQFfdMjgHIT5CIYTmXNNtOvZ+OWI1ZbDsQbvnZOWTjZM6+zR9aSqlKeFTtKg89
-         hDig==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=ATs+2zvlcUXwoOfc2+8pBh5llMbfalOtn8fz/EX5EGc=;
+        b=mIs4rbZH8g7HLklLXX9y95CN8lgS3GadmtId2UZY5I0/bipf9HtA0LJpRg2lbfWZRl
+         GW8hXP1xQGsw8pG2JmuZSD4ZHk+R22EC6C3ZAtY3LMc7133UpaVmEBRAhD4zbZTpDVp2
+         wKAK7ilDsvlZsquKmDdOAtMjcd77UCrnvyZs1ztYwk74gcKEdEf2keRPEhT+Atq6vowX
+         e4dOHD8I3VHm/Jlh53e8mW6q1n1/716mp6QJmyCFzq4QnP1PuI+Px/Rh51tysQbxMU2h
+         9U+JGxIIb5Z696VeXCEM6afXHLY6zmNFPpjdEDzugW3HKtxLuSuvtEdoVOl0UXkR4LmJ
+         VgQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DaUtZIJE57Vq9SZxZBhHAxebl5xJ9yYYEaN9hQal+Yc=;
-        b=qUZM8UgFz3o/FUlpetUMmEfaYamDbUeiiG4t5qtu0TuhYnCIv5A3mJWSTQsS8kQJCx
-         OJY5GwGUXyO5iXiSUzjiAZRbsfFx8De+y3EIT/rEJ6bFvUL6XK9f5Pd7zrxY3xz1xLHh
-         33wQtsEWsytO5iCPSmxzs8iVyupHiGbU+6eDMgE7x2qRUl+gJe0FqkMclBlKP6OABQao
-         3arjbnBsj9WDqZ1ly4PDOe8Cmh2ssBACwFgRqG504qmg1wgfzHqhjACzYkrMGajn6kbX
-         mgruB86pHWQTU4svFosd/btBDYJ8hBlt4x7ATlKirrr4Zo8EZeTstL3GK6O/CAdugqDI
-         Gulw==
-X-Gm-Message-State: AOAM531Z03FIqRj7mm6tgoX4PxIGoYPq2QJO6Bo2WBCV0+2ajX7VFPUa
-        2pBNCc039AXRx4iQfMhKqlH06Q==
-X-Google-Smtp-Source: ABdhPJzWqb7Tsc9wjdCtlNdc3HRUiLy0CedyQh9cebhriMji18nhdC0SewddXyCwWxQiEaQ3kO+ocg==
-X-Received: by 2002:a17:903:2448:b0:151:8173:abf5 with SMTP id l8-20020a170903244800b001518173abf5mr1730249pls.55.1646107636043;
-        Mon, 28 Feb 2022 20:07:16 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id a32-20020a631a20000000b003756899829csm11509153pga.58.2022.02.28.20.07.12
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=ATs+2zvlcUXwoOfc2+8pBh5llMbfalOtn8fz/EX5EGc=;
+        b=xUcFFMqDZr8S4/s8WhuG09aRu5Pi2iv44uz/IEQw+wpR5Edf+eVxr4kBgvsnlvdMRb
+         4tz40k9WO3kDXm0D7D2eqzBnyKknS6T6xgZ+GkjOMGHLyyBw8JGTFjdYnATrbLaIoWWC
+         lNkD9tFM8QeaKr9tQHX03nXKQ1toO3O5z8UyCEnh8xhVnOeuQxOBoHh1RDhrb9Qp7pbV
+         uLdXONbJKVoPE2eD9E8kl2/cp2XmzJ0P4NF7DRQieyTAky/im7MW7kuR/i0Kml1iFXCC
+         GFNNRnk2QaBZ+qWOlxDoAEhzzG3Gut0Qz6vBjgoBFUIo/PBk6HeeTNEDKZ8noQ7TZL+K
+         Lk/A==
+X-Gm-Message-State: AOAM532zDPwtBDL6gF84Tmt7qfiP1ENoATDU0YChdCZaf8N5QvovCd6c
+        wiHWq8s1kB533prOuw/wmNmEYA==
+X-Google-Smtp-Source: ABdhPJyd/fRFEvf6DOsvS0K7H8Fsy6UPyM5KbguSJGGNP2uukSSxaFyONQ5GLew9JibxDb9zTK4uyg==
+X-Received: by 2002:a05:620a:14b7:b0:62c:df91:7798 with SMTP id x23-20020a05620a14b700b0062cdf917798mr12916967qkj.445.1646107670157;
+        Mon, 28 Feb 2022 20:07:50 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 23-20020a370a17000000b00479cd6a3e61sm5912788qkk.113.2022.02.28.20.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 20:07:15 -0800 (PST)
-Date:   Tue, 1 Mar 2022 12:07:09 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org, robh+dt@kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 7/8] dt-bindings: phy: qcom,qmp: Describe phy@ subnode
- properly
-Message-ID: <20220301040709.GF269879@dragon>
-References: <20220228123019.382037-1-bhupesh.sharma@linaro.org>
- <20220228123019.382037-8-bhupesh.sharma@linaro.org>
+        Mon, 28 Feb 2022 20:07:49 -0800 (PST)
+Date:   Mon, 28 Feb 2022 20:07:33 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     cgel.zte@gmail.com, naoya.horiguchi@nec.com, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, rogerq@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        guo.ziliang@zte.com.cn, Zeal Robot <zealci@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH linux-next] mm: swap: get rid of deadloop in swapin
+ readahead
+In-Reply-To: <20220225172440.ec62edf97b405d32061bcb37@linux-foundation.org>
+Message-ID: <b2715e40-dc61-1589-de19-ea4c3bd3f674@google.com>
+References: <20220221111749.1928222-1-cgel.zte@gmail.com> <20220225172440.ec62edf97b405d32061bcb37@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228123019.382037-8-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 06:00:18PM +0530, Bhupesh Sharma wrote:
-> Currently the qcom,qmp-phy dt-binding doesn't describe
-> the 'reg' and '#phy-cells' properties for the phy@ subnode.
+On Fri, 25 Feb 2022, Andrew Morton wrote:
+> On Mon, 21 Feb 2022 11:17:49 +0000 cgel.zte@gmail.com wrote:
+> > From: Guo Ziliang <guo.ziliang@zte.com.cn>
+> > 
+> > In our testing, a deadloop task was found. Through sysrq printing, same 
+> > stack was found every time, as follows:
+> > __swap_duplicate+0x58/0x1a0
+> > swapcache_prepare+0x24/0x30
+> > __read_swap_cache_async+0xac/0x220
+> > read_swap_cache_async+0x58/0xa0
+> > swapin_readahead+0x24c/0x628
+> > do_swap_page+0x374/0x8a0
+> > __handle_mm_fault+0x598/0xd60
+> > handle_mm_fault+0x114/0x200
+> > do_page_fault+0x148/0x4d0
+> > do_translation_fault+0xb0/0xd4
+> > do_mem_abort+0x50/0xb0
+> > 
+> > The reason for the deadloop is that swapcache_prepare() always returns
+> > EEXIST, indicating that SWAP_HAS_CACHE has not been cleared, so that
+> > it cannot jump out of the loop. We suspect that the task that clears
+> > the SWAP_HAS_CACHE flag never gets a chance to run. We try to lower
+> > the priority of the task stuck in a deadloop so that the task that
+> > clears the SWAP_HAS_CACHE flag will run. The results show that the
+> > system returns to normal after the priority is lowered.
+> > 
+> > In our testing, multiple real-time tasks are bound to the same core,
+> > and the task in the deadloop is the highest priority task of the
+> > core, so the deadloop task cannot be preempted.
+> > 
+> > Although cond_resched() is used by __read_swap_cache_async, it is an
+> > empty function in the preemptive system and cannot achieve the purpose
+> > of releasing the CPU. A high-priority task cannot release the CPU
+> > unless preempted by a higher-priority task. But when this task
+> > is already the highest priority task on this core, other tasks
+> > will not be able to be scheduled. So we think we should replace
+> > cond_resched() with schedule_timeout_uninterruptible(1),
+> > schedule_timeout_interruptible will call set_current_state
+> > first to set the task state, so the task will be removed
+> > from the running queue, so as to achieve the purpose of
+> > giving up the CPU and prevent it from running in kernel
+> > mode for too long.
+> > 
+> > ...
+> >
+> > --- a/mm/swap_state.c
+> > +++ b/mm/swap_state.c
+> > @@ -478,7 +478,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+> >  		 * __read_swap_cache_async(), which has set SWAP_HAS_CACHE
+> >  		 * in swap_map, but not yet added its page to swap cache.
+> >  		 */
+> > -		cond_resched();
+> > +		schedule_timeout_uninterruptible(1);
+> >  	}
+> >  
+> >  	/*
 > 
-> Fix the same.
+> Sigh.  I guess yes, we should do this, at least in a short-term,
+> backportable-to-stable way.
 > 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> index 70e7cd75e173..f8a43acd229a 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> @@ -115,6 +115,13 @@ patternProperties:
->        Each device node of QMP phy is required to have as many child nodes as
->        the number of lanes the PHY has.
->      properties:
-> +      reg:
-> +        minItems: 1
-> +        maxItems: 6
-> +
-> +      "#phy-cells":
-> +        const: 0
-> +
->        "#clock-cells":
->          enum: [ 0, 1, 2 ]
+> But busy-waiting while hoping that someone else will save us isn't an
+> attractive design.  Hugh, have you ever thought about something more
+> deterministic in there?
 
-While you are at it, what about these properties?
+Not something more deterministic, no: I think that would entail
+heavier locking, perhaps slowing down hotter paths, just to avoid
+this swap oddity.
 
-	clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-	clock-names = "pipe0";
-	clock-output-names = "usb3_phy_pipe_clk_src";
+This loop was written long before there was a preemptive kernel:
+it was appropriate then, and almost never needed more than one retry
+to complete; but preemption changed the story without us realizing.
 
-Shawn
+Sigh here too.  I commend the thread on it from July 2018:
+https://lore.kernel.org/linux-mm/2018072514403228778860@wingtech.com/
+
+There the 4.9-stable user proposed preempt_disable(), I agreed but
+found the patch provided insufficient, and offered another 4.9 patch
+further down the thread.  Your preference at the time was msleep(1).
+
+I was working on a similar patch for 4.18, but have not completed it
+yet ;) and don't remember how satisfied or not I was with that one;
+and wonder if I'm any more likely to get it finished by 2026.  It's
+clear that I put much more thought into it back then than just now.
+
+Maybe someone else would have a go: my 4.9 patch in that thread
+shows most of it, but might need a lot of work to update to 5.17.
+
+And it also gathered some temporary debug stats on how often this
+happens: I'm not conscious of using RT at all, but was disturbed to see
+how long an ordinary preemptive kernel was sometimes spinning there.
+So I think I agree with you more than Michal on that: RT just makes
+the bad behaviour more obvious.
+
+Hugh

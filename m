@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71A34C81A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BEE4C81A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiCADaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S231777AbiCADas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCADa2 (ORCPT
+        with ESMTP id S229491AbiCADar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:30:28 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892026E8CD;
-        Mon, 28 Feb 2022 19:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646105388; x=1677641388;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sb+osfrcvZS2El/NBGqKsGRy9fYRkfIxjpOnZRPdc4M=;
-  b=SIFxQ1u82fJQzdY7bc+4mcDctEoQZvectaTnrEutPSj1bq4ncnGDEzPo
-   ueYYKg68SY5x/n1Zcggb7w5Fcul6hDIV2tHe6cBQi5N1VYDU2uQe5rcgd
-   EpTOY/gl8t2QFoj6e1n5q1vkhVd0LgYkxSCf/LQezK96l8s7R19z9HW1l
-   LhREPv3gE06i83nDGMbvaD3CYf/BI/X/SWctDkUyYRH2wI3tKIbZnxbDV
-   ieAk4h3BlmLIihPfW8ekVUmMFUmCPFBa60CCalhGscZvta4fU97K/7zQZ
-   F3vuDrnsib9PvTGOl557sqFTjDptenBfUodGAiptXzXnYvUFvjj3dRQc+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316261415"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="316261415"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 19:29:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="575559283"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 19:29:46 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOtCr-00083t-LN; Tue, 01 Mar 2022 03:29:45 +0000
-Date:   Tue, 1 Mar 2022 11:28:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH linux-next] powercap/drivers/dtpm: dtpm_node_callback[]
- can be static
-Message-ID: <20220301032854.GA65991@baa819af95e9>
-References: <202203011104.TkmvSjFD-lkp@intel.com>
+        Mon, 28 Feb 2022 22:30:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4E86E8D6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:30:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0E55E219A6;
+        Tue,  1 Mar 2022 03:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646105405; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=amRql2OSifwDnMAJL8/238tLYYm1geBZTyNb+J/J5JA=;
+        b=GkO1RUbcIRDbBCTKpoHK/XgB7T7pycbqRlZiHjWMyYPtQz799SdXOGArNfPTKDenlvaNhe
+        tp9AZqw7DYsgL9qhnkeDPnVx11SCEjUk77K1volH2Jf5FVwH1+37p9awpQcEb6uioG8Oby
+        d9KUd9rbWXvJ5ZlaShDoKUu8d7v1A+0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646105405;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=amRql2OSifwDnMAJL8/238tLYYm1geBZTyNb+J/J5JA=;
+        b=b/8i+0AkMC/6pODT8F8eIhKH9YDMyi22Q5LdsklgO2aNjgkeJ6fH0yV1kbm0v7Z/chzSQ/
+        Q9XAh8o+OFVO8BAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71B9513AF5;
+        Tue,  1 Mar 2022 03:30:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cBklDTyTHWJ3aQAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Tue, 01 Mar 2022 03:30:04 +0000
+Date:   Tue, 1 Mar 2022 00:30:01 -0300
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-nvme@lists.infradead.org,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: trigger disk activity LED
+Message-ID: <20220301033001.tozk6cakdznww6wi@cyberdelia>
+References: <20220227234258.24619-1-ematsumiya@suse.de>
+ <20220228092215.GA8549@lst.de>
+ <36cfd242-6bb0-0af6-0faf-946c79baa378@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202203011104.TkmvSjFD-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <36cfd242-6bb0-0af6-0faf-946c79baa378@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/powercap/dtpm.c:525:22: warning: symbol 'dtpm_node_callback' was not declared. Should it be static?
+On 02/28, Jens Axboe wrote:
+>On 2/28/22 2:22 AM, Christoph Hellwig wrote:
+>> I don't think we should add code to the absolutel fast path for
+>> blinkenlights.
+>
+>Agree. It'd be a lot better to put the cost on the led trigger
+>side, and not need anything in the fast path for block devices.
+>Monitor disk stats, or something like that.
 
-Fixes: 3759ec678e89 ("powercap/drivers/dtpm: Add hierarchy creation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- drivers/powercap/dtpm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There's been at least 4 attempts to do so, as far as I'm aware (one of
+them being mine). All got rejected due to the complexity it introduced,
+that's how I ended up with this one-liner.
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index 414826a1509b6..6d890d8cf9169 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -522,7 +522,7 @@ static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
- 
- typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
- 
--dtpm_node_callback_t dtpm_node_callback[] = {
-+static dtpm_node_callback_t dtpm_node_callback[] = {
- 	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
- 	[DTPM_NODE_DT] = dtpm_setup_dt,
- };
+Performance-wise, I'm understand the problems, but according to ftrace,
+ledtrig_disk_activity() adds an average of 0.2us overhead, whether an
+LED is assigned or not. Is that really unacceptable?
+
+If so, would introducing a CONFIG_NVME_LED (default =n) and wrap that
+call around it make it better? Then at least there's a chance to inform
+users that desires this feature about performance costs.
+
+
+Cheers,
+
+Enzo

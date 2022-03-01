@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8FE4C8196
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E294C8199
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiCADS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
+        id S231557AbiCADXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiCADSY (ORCPT
+        with ESMTP id S229763AbiCADXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:18:24 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D51532980;
-        Mon, 28 Feb 2022 19:17:44 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id bx5so12933258pjb.3;
-        Mon, 28 Feb 2022 19:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AJ7R/Jj8gxzGwrAPIYC49qFbHxRTMayv2ytYu3k0VX8=;
-        b=OL2gDU/NG8XYqWsX6E05XeCPhqQ01F6MR53UpP/4WOtQmZc7JPoYlLq4UpJTsgxJAn
-         e7f8NoNh1xgITnEMFVvmaDNprpwuTziAkbdDTj9rAI4Lu2b51+55CrM9NKj+guqsuCmX
-         +ZblvnXoh4S+F6w8JAdStv5a5wUJ3tFGIHTMwfCVv56/bKhywcroWFvQ8G88hmZQtNCh
-         H6Mp8P24djLRZK22kiQnD5Ii+l3KZjnclGmNMPTl1jdtcc1aYzrzW8HBlhGurdNrJKfq
-         DK5oLpA9GzHNo9VeVcHHiqmA2fZ7QHQKfguU7NUIHOzZUQok0ysISS++5XfG6fqbgRTA
-         sDag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AJ7R/Jj8gxzGwrAPIYC49qFbHxRTMayv2ytYu3k0VX8=;
-        b=vYPLMG8DzTnuUGzXVZQD7FstgRb7Mtu0/B86MWHU6WI/tYBYMAPh94Gs+Xf0T8UYri
-         yzBrGZMaNcjUkfAQoY2KRejXOhVgcKVVSeBVjgjTubBZDe9JmdyiOqBazPqtHt/hNZ9s
-         TWjwJfUdSAYkmlBYaq87kN5DK8E6rT/9CUKK8RRKeLzmokPi54aLqV/opZsWFRGNtK/4
-         MwYn/zx4YH+iG2Ie26IWVSh0JGHhd2L9bW0GLnKyBM1mjIJliGL0x9VwsFroYaep8gu+
-         IyxdqTuBdOxS19B+vL93mLtz5U8Cz5IxTbyqfb0eoxdKsja+84lbrJkcplLspHBOtQFI
-         hDLw==
-X-Gm-Message-State: AOAM533XiymTuy2EYR24jorHVJhA0WrpPZI51oltjrRSeUwmiwFvNJOh
-        1spQjrzaoVrmcFRn9dHVvUA=
-X-Google-Smtp-Source: ABdhPJyNoW3877/0hsD8r6iIvMM82FOaX9YHXzvRZyd1u4ktR7gdGzkwsERXQfCbnHyk8YAfzYMaBw==
-X-Received: by 2002:a17:90a:ff85:b0:1bc:8062:ac5f with SMTP id hf5-20020a17090aff8500b001bc8062ac5fmr19564392pjb.157.1646104663741;
-        Mon, 28 Feb 2022 19:17:43 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id p34-20020a056a000a2200b004cd49fc15e5sm15738402pfh.59.2022.02.28.19.17.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 19:17:42 -0800 (PST)
-Message-ID: <6d647c70-2559-7c58-16ea-53cea942bab8@gmail.com>
-Date:   Mon, 28 Feb 2022 19:17:41 -0800
+        Mon, 28 Feb 2022 22:23:05 -0500
+Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E30DCA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:22:24 -0800 (PST)
+Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2213LLqS016660
+        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 19:21:21 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 2213LKnt013911
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Feb 2022 19:21:20 -0800 (PST)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 28 Feb 2022 19:21:20 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Feb 2022 19:21:19 -0800
+Received: from pek-lpd-ccm4.wrs.com (128.224.153.194) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Mon, 28 Feb 2022 19:21:16 -0800
+From:   Yun Zhou <yun.zhou@windriver.com>
+To:     <akpm@linux-foundation.org>, <corbet@lwn.net>
+CC:     <peterx@redhat.com>, <tiberiu.georgescu@nutanix.com>,
+        <florian.schmidt@nutanix.com>, <ivan.teterevkov@nutanix.com>,
+        <sj@kernel.org>, <shy828301@gmail.com>, <david@redhat.com>,
+        <axelrasmussen@google.com>, <linmiaohe@huawei.com>,
+        <aarcange@redhat.com>, <ccross@google.com>, <apopple@nvidia.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH] proc: fix documentation and description of mmap
+Date:   Tue, 1 Mar 2022 11:21:15 +0800
+Message-ID: <20220301032115.384277-1-yun.zhou@windriver.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 5.15 000/139] 5.15.26-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220228172347.614588246@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since bit 57 was exported for uffd-wp write-protected(commit fb8e37f35a2f),
+fixing it can reduce some unnecessary confusion.
 
+Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
+---
+ Documentation/admin-guide/mm/pagemap.rst | 2 +-
+ fs/proc/task_mmu.c                       | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 2/28/2022 9:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.26 release.
-> There are 139 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.26-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTb using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+index bfc28704856c..6e2e416af783 100644
+--- a/Documentation/admin-guide/mm/pagemap.rst
++++ b/Documentation/admin-guide/mm/pagemap.rst
+@@ -23,7 +23,7 @@ There are four components to pagemap:
+     * Bit  56    page exclusively mapped (since 4.2)
+     * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
+       :ref:`Documentation/admin-guide/mm/userfaultfd.rst <userfaultfd>`)
+-    * Bits 57-60 zero
++    * Bits 58-60 zero
+     * Bit  61    page is file-page or shared-anon (since 3.5)
+     * Bit  62    page swapped
+     * Bit  63    page present
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 78125ef20255..75511f78075f 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1596,7 +1596,8 @@ static const struct mm_walk_ops pagemap_ops = {
+  * Bits 5-54  swap offset if swapped
+  * Bit  55    pte is soft-dirty (see Documentation/admin-guide/mm/soft-dirty.rst)
+  * Bit  56    page exclusively mapped
+- * Bits 57-60 zero
++ * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
++ * Bits 58-60 zero
+  * Bit  61    page is file-page or shared-anon
+  * Bit  62    page swapped
+  * Bit  63    page present
 -- 
-Florian
+2.27.0
+

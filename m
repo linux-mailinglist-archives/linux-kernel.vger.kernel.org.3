@@ -2,199 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4472A4C8729
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F874C872C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233650AbiCAIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S233644AbiCAI4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbiCAIyl (ORCPT
+        with ESMTP id S233119AbiCAI4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:54:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32E5527D8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646124840; x=1677660840;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Is7PELDrfcn7EzisRyWYLhNpJlmmAB/6lqn+KL4wNd4=;
-  b=GMddQADaZVvOq3+nIrAJvivL+VFysOwq7xoSiX3ihF3I5weFmbANdv21
-   cZZurdWCz2Qn0wlfX1t0FfqYRVRLKYSdLKGBnl5dr8ZKbn1RKwPi2P+Pv
-   +pVA6sQ3j6XRst4cnSUb8NJ5G7j9isJAF48002VKCmU2CSzXMgqxTTa22
-   ADdMfq1VQDTJ//N9aBk/6DoqbuTS81VdwVbt//9a4vpobvA44KzXhmXMb
-   lCiytfcPFL181ZP1zzSMLWFMJfKAONgmNIIYVByoZQLiyuHkrmlE6Jkk3
-   wlLjuRT5kOqVk2kndCOl6SFheKXXfNAkGg3FUMRS/Q2K3imrab5xieQcG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253018801"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="253018801"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 00:53:58 -0800
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="550627144"
-Received: from yhuang6-desk2.sh.intel.com ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 00:53:52 -0800
-From:   Huang Ying <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Feng Tang <feng.tang@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Subject: [PATCH -V14 3/3] memory tiering: skip to scan fast memory
-Date:   Tue,  1 Mar 2022 16:53:29 +0800
-Message-Id: <20220301085329.3210428-4-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220301085329.3210428-1-ying.huang@intel.com>
-References: <20220301085329.3210428-1-ying.huang@intel.com>
+        Tue, 1 Mar 2022 03:56:40 -0500
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24344CD62
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:55:55 -0800 (PST)
+X-QQ-mid: bizesmtp72t1646124947t9a9zs3n
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 01 Mar 2022 16:55:42 +0800 (CST)
+X-QQ-SSF: 0140000000800050D000B00B0000000
+X-QQ-FEAT: Mx1dxJbW4IWBoPudVZz/5q9bo01rO9o9bK3W/8F7ds9vRdzxmheGoY543WGL3
+        jbPXzUhhuCNdKKHuLozaT23OJHKYAt8QW6foFXYvus/lbfbkGhSFRf0+Ug11ZLxDrrxgAGI
+        MySXFsvsgKmWIin8kEafaQpMUNwDokN/yM0XqEhIkiTitC2d7RqD5Vn9m1P2QS8pNIjWds2
+        1ML05bpuRBCLRPUjaPXqL6l2I0IXZr4CXcoL0mxFnlfZTNZKWJmBe8IrUFqnNIidsXUI6U/
+        4v8DBp3FDzsUSF7iB7e3Br5WZXKlSaDT42kf1e/eNphncPDEEnCpOVwsc7n2Baxgv06zEKG
+        5ipd7gNM8FJ0JHe05A=
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH] ALSA: n64: Use platform_get_irq() to get the interrupt
+Date:   Tue,  1 Mar 2022 16:55:36 +0800
+Message-Id: <20220301085536.24599-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the NUMA balancing isn't used to optimize the page placement among
-sockets but only among memory types, the hot pages in the fast memory
-node couldn't be migrated (promoted) to anywhere.  So it's unnecessary
-to scan the pages in the fast memory node via changing their PTE/PMD
-mapping to be PROT_NONE.  So that the page faults could be avoided
-too.
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypassed the hierarchical setup and messed up the
+irq chaining.
 
-In the test, if only the memory tiering NUMA balancing mode is enabled, the
-number of the NUMA balancing hint faults for the DRAM node is reduced to
-almost 0 with the patch.  While the benchmark score doesn't change
-visibly.
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 ---
- mm/huge_memory.c | 30 +++++++++++++++++++++---------
- mm/mprotect.c    | 13 ++++++++++++-
- 2 files changed, 33 insertions(+), 10 deletions(-)
+ sound/mips/snd-n64.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 406a3c28c026..9ce126cb0cfd 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -34,6 +34,7 @@
- #include <linux/oom.h>
- #include <linux/numa.h>
- #include <linux/page_owner.h>
-+#include <linux/sched/sysctl.h>
+diff --git a/sound/mips/snd-n64.c b/sound/mips/snd-n64.c
+index 463a6fe589eb..19365aab15ba 100644
+--- a/sound/mips/snd-n64.c
++++ b/sound/mips/snd-n64.c
+@@ -289,7 +289,7 @@ static int __init n64audio_probe(struct platform_device *pdev)
+ 	struct snd_card *card;
+ 	struct snd_pcm *pcm;
+ 	struct n64audio *priv;
+-	struct resource *res;
++	int irq;
+ 	int err;
  
- #include <asm/tlb.h>
- #include <asm/pgalloc.h>
-@@ -1766,17 +1767,28 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
+ 	err = snd_card_new(&pdev->dev, SNDRV_DEFAULT_IDX1,
+@@ -337,12 +337,12 @@ static int __init n64audio_probe(struct platform_device *pdev)
+ 	strcpy(card->shortname, "N64 Audio");
+ 	strcpy(card->longname, "N64 Audio");
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
+ 		err = -EINVAL;
+ 		goto fail_dma_alloc;
  	}
- #endif
- 
--	/*
--	 * Avoid trapping faults against the zero page. The read-only
--	 * data is likely to be read-cached on the local CPU and
--	 * local/remote hits to the zero page are not interesting.
--	 */
--	if (prot_numa && is_huge_zero_pmd(*pmd))
--		goto unlock;
-+	if (prot_numa) {
-+		struct page *page;
-+		/*
-+		 * Avoid trapping faults against the zero page. The read-only
-+		 * data is likely to be read-cached on the local CPU and
-+		 * local/remote hits to the zero page are not interesting.
-+		 */
-+		if (is_huge_zero_pmd(*pmd))
-+			goto unlock;
- 
--	if (prot_numa && pmd_protnone(*pmd))
--		goto unlock;
-+		if (pmd_protnone(*pmd))
-+			goto unlock;
- 
-+		page = pmd_page(*pmd);
-+		/*
-+		 * Skip scanning top tier node if normal numa
-+		 * balancing is disabled
-+		 */
-+		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
-+		    node_is_toptier(page_to_nid(page)))
-+			goto unlock;
-+	}
- 	/*
- 	 * In case prot_numa, we are under mmap_read_lock(mm). It's critical
- 	 * to not clear pmd intermittently to avoid race with MADV_DONTNEED
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 0138dfcdb1d8..2fe03e695c81 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -29,6 +29,7 @@
- #include <linux/uaccess.h>
- #include <linux/mm_inline.h>
- #include <linux/pgtable.h>
-+#include <linux/sched/sysctl.h>
- #include <asm/cacheflush.h>
- #include <asm/mmu_context.h>
- #include <asm/tlbflush.h>
-@@ -83,6 +84,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 			 */
- 			if (prot_numa) {
- 				struct page *page;
-+				int nid;
- 
- 				/* Avoid TLB flush if possible */
- 				if (pte_protnone(oldpte))
-@@ -109,7 +111,16 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				 * Don't mess with PTEs if page is already on the node
- 				 * a single-threaded process is running on.
- 				 */
--				if (target_node == page_to_nid(page))
-+				nid = page_to_nid(page);
-+				if (target_node == nid)
-+					continue;
-+
-+				/*
-+				 * Skip scanning top tier node if normal numa
-+				 * balancing is disabled
-+				 */
-+				if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
-+				    node_is_toptier(nid))
- 					continue;
- 			}
- 
+-	if (devm_request_irq(&pdev->dev, res->start, n64audio_isr,
++	if (devm_request_irq(&pdev->dev, irq, n64audio_isr,
+ 				IRQF_SHARED, "N64 Audio", priv)) {
+ 		err = -EBUSY;
+ 		goto fail_dma_alloc;
 -- 
-2.30.2
+2.20.1
+
+
 

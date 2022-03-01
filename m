@@ -2,136 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B346C4C8B21
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8B04C8B25
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiCALxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S234644AbiCALy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiCALxs (ORCPT
+        with ESMTP id S232139AbiCALy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:53:48 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EE48AE75
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:53:07 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b11so26376723lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZXthyKuVSmjIK882wlyq5sshJFYrq5Qsz7nD78CwzhY=;
-        b=Two5H4sSOSzb5+mIBBKPmSRlk9b565laQsEBQyAJMnvbPKi/IpQ25SxGu34cvVoT/n
-         57KNMLxKLYv3Hgq5CcTY/WfV4KCWsqfCL4ww77BiMwgCdK3udAltpIyiJxeW0OoDbBC2
-         lwZHE+Vh6qCkbxPrAuz06jxqDFbqwwlrsSrDwjF5Pw4+ApU2hdH9b1FopdqXhX9bCGQZ
-         P03cjVOswbXF8mcgU2eFJsxBup6mBEWblLxxe6JOVS2qSQmKuDcy2KIDS1NePQkq07B5
-         e+Y2lvjc8QZxVlCSdgCH2N3zdvRJr+z/OLavgeUnQ0OVK2dsPhE3Z+KE9ok5+wHTIVhx
-         MKWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZXthyKuVSmjIK882wlyq5sshJFYrq5Qsz7nD78CwzhY=;
-        b=POvMqQEcnpfoMcw31v7bjv2bBwga5XR1KyoQwyh3JrnJT5TpJspY8Ypflh+GaKgLYO
-         jAllFFqzi8dWEQ+uN+roHHRylLzjJ0IZEE5yyYwIZSv1XeyEGjwESyi82Mrtn74qRzfJ
-         x+lqDYbBp3sCR3xzIRgSLqlkuriZgg3MEkhvWgUM0DpEbIg0eSiWExHyCjhyEnHiAxWE
-         soD2jFk5JnwNPqlGZFIGAPG2uxOs8uapLFKmzO9dNwPE25s/j4IcO2c66eiWaLo4t1Mn
-         /01F8GmaLLd8sXgPmB1Wr3t7WTMDRlkg0ADi4aZYvIY+XABQDYtnaWWTmO8NI375D6bG
-         ci/Q==
-X-Gm-Message-State: AOAM531kB7KuPuC4XyL7nWcJJcGfQ/6Yg1XA+AWOTUGZZgMD49IoVgyc
-        H35+wF39OF+ODEYeCNvGFbTmig==
-X-Google-Smtp-Source: ABdhPJyYnEN5oHtzfZA2MsTk80UR1tU02WFkEOdkGpS9wKwJM5My3AVt9J7bxlgIV7L2JcOn+6CLKg==
-X-Received: by 2002:a05:6512:3296:b0:442:f695:ae75 with SMTP id p22-20020a056512329600b00442f695ae75mr15493028lfe.508.1646135586199;
-        Tue, 01 Mar 2022 03:53:06 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac25dd4000000b004415ddbc97esm1457578lfq.212.2022.03.01.03.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 03:53:05 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH] mmc: rtsx: Fix build errors/warnings for unused variable
-Date:   Tue,  1 Mar 2022 12:53:00 +0100
-Message-Id: <20220301115300.64332-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 06:54:26 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51908AE74;
+        Tue,  1 Mar 2022 03:53:45 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id BD48368AFE; Tue,  1 Mar 2022 12:53:40 +0100 (CET)
+Date:   Tue, 1 Mar 2022 12:53:40 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com,
+        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
+Message-ID: <20220301115340.GA3077@lst.de>
+References: <20220214081919.GA18337@lst.de> <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com> <20220214135834.GA30150@lst.de> <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com> <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com> <20220222080543.GA5412@lst.de> <00112505-4999-ac41-877e-49c4cc45312e@gmail.com> <20220222160039.GA13380@lst.de> <40f91949-58fa-4be2-5b01-ea34dda58670@gmail.com> <a80a7efa-f15d-3649-f39f-c24820f9ef2b@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a80a7efa-f15d-3649-f39f-c24820f9ef2b@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct device *dev, is no longer needed at various functions, let's
-therefore drop it to fix the build errors/warnings.
+On Fri, Feb 25, 2022 at 10:28:54PM +0800, Tianyu Lan wrote:
+>      One more perspective is that one device may have multiple queues and 
+> each queues should have independent swiotlb bounce buffer to avoid spin 
+> lock overhead. The number of queues is only available in the device
+> driver. This means new API needs to be called in the device driver 
+> according to queue number.
 
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Fixes: 7570fb41e450 ("mmc: rtsx: Let MMC core handle runtime PM"
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/mmc/host/rtsx_pci_sdmmc.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
-index 265b3889f9d7..f7c384db89bf 100644
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -806,7 +806,6 @@ static void sd_request(struct work_struct *work)
- 	struct mmc_request *mrq = host->mrq;
- 	struct mmc_command *cmd = mrq->cmd;
- 	struct mmc_data *data = mrq->data;
--	struct device *dev = &host->pdev->dev;
- 
- 	unsigned int data_size = 0;
- 	int err;
-@@ -1081,7 +1080,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
--	struct device *dev = &host->pdev->dev;
- 
- 	if (host->eject)
- 		return;
-@@ -1130,7 +1128,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
--	struct device *dev = &host->pdev->dev;
- 	int ro = 0;
- 	u32 val;
- 
-@@ -1156,7 +1153,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
--	struct device *dev = &host->pdev->dev;
- 	int cd = 0;
- 	u32 val;
- 
-@@ -1255,7 +1251,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
--	struct device *dev = &host->pdev->dev;
- 	int err = 0;
- 	u8 voltage;
- 
-@@ -1308,7 +1303,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
--	struct device *dev = &host->pdev->dev;
- 	int err = 0;
- 
- 	if (host->eject)
--- 
-2.25.1
-
+Well, given how hell bent people are on bounce buffering we might
+need some scalability work there anyway.
